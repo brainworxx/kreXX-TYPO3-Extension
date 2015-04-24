@@ -1,0 +1,115 @@
+<f:be.container>
+<style type="text/css">
+/* since addJsFile and addCssFile got removed, I have to resort to adding stuff inline! */
+html {
+  overflow: hidden;
+}
+
+hr {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #ccc;
+  border-right: 0 solid #ccc;
+  border-style: solid;
+  border-width: 1px 0 0;
+  clear: both;
+  height: 0;
+}
+
+ol {
+  list-style: outside none decimal;
+}
+ul {
+  list-style: outside none disc;
+}
+li {
+  margin-left: 30px;
+}
+p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
+  margin-bottom: 20px;
+}
+
+pre {
+  border: 1px solid #cacaca;
+  padding: 10px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #fafafb;
+  color: #393939;
+  margin: 0px;
+  width: 250px;
+}
+
+.docheader-row2-left select {
+  color:#000;
+}
+
+input:disabled{
+  color: #dddddd;
+  border: #dddddd 1px solid;
+  background-color: #fff;
+}
+select:disabled {
+  color: #dddddd;
+}
+
+.krexx-config th {
+  text-align: left;
+}
+
+.krexx-config img {
+  padding: 3px;
+  cursor: help;
+}
+a.krexx-link {
+  background: url('../Icons/link.png') no-repeat;
+  padding-left: 16px;
+}
+a.krexx-link:hover {
+  text-decoration: underline;
+}
+h1 {
+  text-align: left;
+}
+select {
+  display: inline-block;
+  margin: 0 0.5em 0.5em 0!important;
+  vertical-align: middle;
+}
+.typo3-docheader-buttons {
+  background-color: #dadada;
+  line-height: 27px;
+  height: 21px;
+  padding: 3px 24px;
+}
+
+.typo3-docheader-functions {
+  background-color: #585858;
+  height: 22px;
+  padding: 0 24px;
+}
+
+</style>
+  <div class="typo3-fullDoc">
+    <div id="typo3-docheader">
+      <div class="typo3-docheader-functions">
+        <f:be.menus.actionMenu>
+          <f:be.menus.actionMenuItem label="Edit configuration file" controller="Index" action="editConfig" />
+          <f:be.menus.actionMenuItem label="Edit FE configuration" controller="Index" action="editFeConfig" />
+          <f:be.menus.actionMenuItem label="Usage help" controller="Index" action="usageHelp" />
+          <f:be.menus.actionMenuItem label="Config help" controller="Index" action="configHelp" />
+        </f:be.menus.actionMenu>
+      </div>
+      <div class="typo3-docheader-buttons">
+      </div>
+    </div>
+    <div id="typo3-docbody">
+      <div id="typo3-inner-docbody">
+        <f:render section="main" />
+      </div>
+    </div>
+  </div>
+</f:be.container>

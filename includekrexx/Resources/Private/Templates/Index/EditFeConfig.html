@@ -1,0 +1,147 @@
+<f:layout name="BackendSave"/>
+<f:section name="main">
+  <f:form id="editconfig" action="saveFeConfig" >
+    <h1>Edit FE Configuration</h1>
+    <table border="0" class="krexx-config">
+    <tr>
+        <th colspan="3"><b>Here you can edit the frontend configuration form.</b></th>
+      </tr>
+      <tr>
+        <td>full edit</td>
+        <td colspan="2"> = The value can be edited in the frontend.</td>
+      </tr>
+      <tr>
+        <td>display</td>
+        <td colspan="2"> = The value will only be displayed.</td>
+      </tr>
+      <tr>
+        <td>do not display</td>
+        <td colspan="2"> = kreXX will not display the value.</td>
+      </tr>
+      <tr><td colspan="3">&nbsp;</td></tr>
+      <tr>
+        <th colspan="3"><b>Render</b></th>
+      </tr>
+      <tr>
+        <td><label for="skin">Skin</label></td>
+        <td><f:form.select id="skin" name="render[skin]" options="{data.settings}" value="{value.render.skin}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.skin" name="factory" checked="{data.factory.skin}" value="1" /><label for="factory.skin">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="jsLib">Path to jQuery</label></td>
+        <td><f:form.select id="jsLib" name="render[jsLib]" options="{data.settings}" value="{value.render.jsLib}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.jsLib" name="factory" checked="{data.factory.jsLib}" value="1" /><label for="factory.jsLib">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="memoryLeft">Minimum amout of memory [MB]</label></td>
+        <td><f:form.select id="memoryLeft" name="render[memoryLeft]" options="{data.settings}" value="{value.render.memoryLeft}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.memoryLeft" name="factory" checked="{data.factory.memoryLeft}" value="1" /><label for="factory.memoryLeft">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="maxRuntime">Maximum Runtime [Seconds]</label></td>
+        <td><f:form.select id="maxRuntime" name="render[maxRuntime]" options="{data.settings}" value="{value.render.maxRuntime}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.maxRuntime" name="factory" checked="{data.factory.maxRuntime}" value="1" /><label for="factory.maxRuntime">Use factory settings</label></td>
+      </tr>
+      <tr><td colspan="3">&nbsp;</td></tr>
+      <tr>
+        <th colspan="3"><b>Logging</b></th>
+      </tr>
+      <tr>
+        <td><label for="folder">Folder:</label></td>
+        <td><f:form.select id="folder" name="logging[folder]" options="{data.settings}" value="{value.logging.folder}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.folder" name="factory" checked="{data.factory.folder}" value="1" /><label for="factory.folder">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="maxfiles">Maximum files in the logfolder:</label></td>
+        <td><f:form.select id="maxfiles" name="logging[maxfiles]" options="{data.settings}" value="{value.logging.maxfiles}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.maxfiles" name="factory" checked="{data.factory.maxfiles}" value="1" /><label for="factory.maxfiles">Use factory settings</label></td>
+      </tr>
+      <tr><td colspan="3">&nbsp;</td></tr>
+      <tr>
+        <th colspan="3"><b>Output</b></th>
+      </tr>
+      <tr>
+        <td><label for="destination">Destination:</label></td>
+        <td><f:form.select id="destination" name="output[destination]" options="{data.settings}" value="{value.output.destination}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.destination" name="factory" checked="{data.factory.destination}" value="1" /><label for="factory.destination">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="maxCall">Maximum amount of calls:</label></td>
+        <td><f:form.select id="maxCall" name="output[maxCall]" options="{data.settings}" value="{value.output.maxCall}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.maxCall" name="factory" checked="{data.factory.maxCall}" value="1" /><label for="factory.maxCall">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="disabled">Disable output:</label></td>
+        <td><f:form.select id="disabled" name="output[disabled]" options="{data.settings}" value="{value.output.disabled}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.disabled" name="factory" checked="{data.factory.disabled}" value="1" /><label for="factory.disabled">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="detectAjax">Try to detect AJAX requests:</label></td>
+        <td><f:form.select id="detectAjax" name="output[detectAjax]" options="{data.settings}" value="{value.output.detectAjax}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.detectAjax" name="factory" checked="{data.factory.detectAjax}" value="1" /><label for="factory.detectAjax">Use factory settings</label></td>
+      </tr>
+      <tr><td colspan="3">&nbsp;</td></tr>
+      <tr>
+        <th colspan="3"><b>Deep</b></th>
+      </tr>
+      <tr>
+        <td><label for="analyseProtected">Analyse protected properties:</label></td>
+        <td><f:form.select id="analyseProtected" name="deep[analyseProtected]" options="{data.settings}" value="{value.deep.analyseProtected}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.analyseProtected" name="factory" checked="{data.factory.analyseProtected}" value="1" /><label for="factory.analyseProtected">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="analysePrivate">Analyse private properties:</label></td>
+        <td><f:form.select id="analysePrivate" name="deep[analysePrivate]" options="{data.settings}" value="{value.deep.analysePrivate}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.analysePrivate" name="factory" checked="{data.factory.analysePrivate}" value="1" /><label for="factory.analysePrivate">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="analyseTraversable">Analyse traversable data:</label></td>
+        <td><f:form.select  id="analyseTraversable" name="deep[analyseTraversable]" options="{data.settings}" value="{value.deep.analyseTraversable}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.analyseTraversable" name="factory" checked="{data.factory.analyseTraversable}" value="1" /><label for="factory.analyseTraversable">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="debugMethods">List of debug methods to poll for data:</label></td>
+        <td><f:form.select id="debugMethods" name="deep[debugMethods]" options="{data.settings}" value="{value.deep.debugMethods}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.debugMethods" name="factory" checked="{data.factory.debugMethods}" value="1" /><label for="factory.debugMethods">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="level">Maximum nesting level for objects:</label></td>
+        <td><f:form.select id="level" name="deep[level]" options="{data.settings}" value="{value.deep.level}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.level" name="factory" checked="{data.factory.level}" value="1" /><label for="factory.level">Use factory settings</label></td>
+      </tr>
+      <tr><td colspan="3">&nbsp;</td></tr>
+      <tr>
+        <th colspan="3"><b>Methods</b></th>
+      </tr>
+      <tr>
+        <td><label for="analysePublicMethods">Analyse public methods:</label></td>
+        <td><f:form.select id="analysePublicMethods" name="methods[analysePublicMethods]" options="{data.settings}" value="{value.methods.analysePublicMethods}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.analysePublicMethods" name="factory" checked="{data.factory.analysePublicMethods}" value="1" /><label for="factory.analysePublicMethods">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="analyseProtectedMethods">Analyse protected methods:</label></td>
+        <td><f:form.select id="analyseProtectedMethods" name="methods[analyseProtectedMethods]" options="{data.settings}" value="{value.methods.analyseProtectedMethods}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.analyseProtectedMethods" name="factory" checked="{data.factory.analyseProtectedMethods}" value="1" /><label for="factory.analyseProtectedMethods">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="analysePrivateMethods">Analyse private methods:</label></td>
+        <td><f:form.select id="analysePrivateMethods" name="methods[analysePrivateMethods]" options="{data.settings}" value="{value.methods.analysePrivateMethods}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.analysePrivateMethods" name="factory" checked="{data.factory.analysePrivateMethods}" value="1" /><label for="factory.analysePrivateMethods">Use factory settings</label></td>
+      </tr>
+      <tr><td colspan="3">&nbsp;</td></tr>
+      <tr>
+        <th colspan="3"><b>Error Handling and Backtrace</b></th>
+      </tr>
+      <tr>
+        <td><label for="registerAutomatically">Register fatel error handler automatically:</label></td>
+        <td><f:form.select id="registerAutomatically" name="errorHandling[registerAutomatically]" options="{data.settings}" value="{value.errorHandling.registerAutomatically}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.registerAutomatically" name="factory" checked="{data.factory.registerAutomatically}" value="1" /><label for="factory.registerAutomatically">Use factory settings</label></td>
+      </tr>
+      <tr>
+        <td><label for="backtraceAnalysis">Backtrace analysis settings:</label></td>
+        <td><f:form.select id="backtraceAnalysis" name="errorHandling[backtraceAnalysis]" options="{data.settings}" value="{value.errorHandling.backtraceAnalysis}" /></td>
+        <td class="cbx"><f:form.checkbox id="factory.backtraceAnalysis" name="factory" checked="{data.factory.backtraceAnalysis}" value="1" /><label for="factory.backtraceAnalysis">Use factory settings</label></td>
+      </tr>
+    </table>
+  </f:form>
+</f:section>

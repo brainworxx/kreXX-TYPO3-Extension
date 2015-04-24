@@ -1,0 +1,11 @@
+Installation
+
+1.) Upload the whole kreXX directory to your webserver. Put it somewhere,
+    where you are able to include it to your project.
+2.) Include as early as possible the file kreXX.php into your project.
+    Normally this is the index.php.
+
+If you don't want to edit files in your system, you can as well use one of our
+installation modules (as soon as they are available). Basically they do the
+same thing, but since they use framework functionality, kreXX is not available
+before the module loads.

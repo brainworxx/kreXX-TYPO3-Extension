@@ -1,0 +1,49 @@
+<f:layout name="Backend"/>
+<f:section name="main">
+  <h1>Usage</h1>
+  kreXX will be called in the PHP source code:
+  <div class="codeblock">
+    <pre><code>\krexx($myObject);</code></pre>
+  </div>
+  Most of the time you will use this method. kreXX will analyse the $object and give you detailed information about it:
+  <ul>
+    <li>Public attributes of the object</li>
+    <li>Protected attributes of the object (can be toggled)</li>
+    <li>Private attributes of the object (can be toggled)</li>
+    <li>Content of the traversable part of the object (can be toggled)</li>
+    <li>Result of all configured debugging callbacks (can be configured)</li>
+  </ul>
+  In case the variable is not an object, it will simply display its content.
+  <hr/>
+  Start a benchmark:
+  <div class="codeblock">
+    <pre><code>\kreXX::timerStart();</code></pre>
+  </div>
+  <hr/>
+  Define a "moment" during a benchmark test. The $string should be something meaningful, like "Model invoice db call":
+  <div class="codeblock">
+    <pre><code>\kreXX::timerMoment($string);</code></pre>
+  </div>
+  
+  <hr/>
+  End the benchmark test and displays the result:
+  <div class="codeblock">
+    <pre><code>\kreXX::timerEnd();</code></pre>
+  </div>
+  <hr/>
+  Outputs backtrace with sourcecode. When kreXX finds objects inside the backtrace, it will analyse them:
+  <div class="codeblock">
+    <pre><code>\kreXX::backtrace();</code></pre>
+  </div>
+  
+  <hr/>
+  Register the fatal error handler in the system:
+  <div class="codeblock">
+    <pre><code>\krexx::registerFatal();</code></pre>
+  </div>
+  <hr/>
+  Unregister the fatal error handler in the system:
+  <div class="codeblock">
+    <pre><code>\krexx::unregisterFatal();</code></pre>
+  </div>
+</f:section>
