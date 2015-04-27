@@ -103,6 +103,7 @@ class Krexx {
     include_once KREXXDIR . 'Messages.php';
     include_once KREXXDIR . 'Chunks.php';
     include_once KREXXDIR . 'ShutdownHandler.php';
+    include_once KREXXDIR . 'Flection.php';
 
     include_once KREXXDIR . 'errorhandler/AbstractHandler.php';
     include_once KREXXDIR . 'errorhandler/Fatal.php';

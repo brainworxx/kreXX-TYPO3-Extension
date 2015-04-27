@@ -459,7 +459,8 @@ ul.kconfiguration li.kchild {
   margin: 2px;
   padding: 2px 5px;
   width: inherit;
-  background: none repeat scroll 0 0 #f6f6f6;
+  background: none repeat scroll 0 0 #dbdbdb !important;
+  color: #000000 !important;
 }
 .ksearchbutton:hover,
 .ksearch input:hover,

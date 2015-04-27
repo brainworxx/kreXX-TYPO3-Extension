@@ -177,7 +177,6 @@ class Chunks {
 
     // No more chunk keys, we send what is left.
     echo $string;
-    return TRUE;
   }
 
   /**

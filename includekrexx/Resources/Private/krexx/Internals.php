@@ -93,7 +93,7 @@ class Internals {
     if (!self::checkEmergencyBreak()) {
       // No more took too long, or not enough memory is left.
       Messages::addMessage("Emergency break for large output during rendering process.\n\nYou should try to switch to file output.");
-      return;
+      return '';
     }
 
     // Object?
@@ -405,8 +405,8 @@ class Internals {
           $memory_limit = $matches[1] * 1024;
         }
       }
-      // Were we able to determine a limit?
 
+      // Were we able to determine a limit?
       if ($memory_limit > 2) {
         $usage = memory_get_usage();
         $left = $memory_limit - $usage;

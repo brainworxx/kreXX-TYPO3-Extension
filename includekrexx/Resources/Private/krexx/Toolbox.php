@@ -72,7 +72,6 @@ class Toolbox {
    *   TRUE when this is AJAX, FALSE if not
    */
   public static function isRequestAjaxOrCli() {
-    $result = FALSE;
 
     if (Config::getConfigValue('output', 'destination') != 'file') {
       // When we are not going to create a logfile, we send it to the browser.
@@ -257,6 +256,7 @@ class Toolbox {
     }
     else {
       // Do nothing.
+      return '';
     }
   }
 

@@ -30,6 +30,10 @@ class Variables {
    *
    * @param string $name
    *   The Name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
@@ -46,6 +50,10 @@ class Variables {
    *   The data we are analysing.
    * @param string $name
    *   The name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
@@ -68,13 +76,17 @@ class Variables {
    *   The data we are analysing.
    * @param string $name
    *   The name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
    */
   public Static Function analyseResource($data, $name, $additional = '', $connector = '=>') {
     $data = get_resource_type($data);
-    return Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'resource', '',  '', $connector);
+    return Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'resource', '', '', $connector);
   }
 
   /**
@@ -84,6 +96,10 @@ class Variables {
    *   The data we are analysing.
    * @param string $name
    *   The name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
@@ -100,6 +116,10 @@ class Variables {
    *   The data we are analysing.
    * @param string $name
    *   The name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
@@ -115,6 +135,10 @@ class Variables {
    *   The data we are analysing.
    * @param string $name
    *   The name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
@@ -130,6 +154,10 @@ class Variables {
    *   The data we are analysing.
    * @param string $name
    *   The name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
@@ -168,7 +196,7 @@ class Variables {
    * @param bool $code
    *   Do we need to format the string as code?
    *
-   * @return string The encoded string.
+   * @return string
    *   The encoded string.
    */
   public static function encodeString($data, $code = FALSE) {

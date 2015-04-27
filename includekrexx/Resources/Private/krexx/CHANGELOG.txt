@@ -1,4 +1,11 @@
-1.3.1 dev
+1.3.2
+- Bugfix: Removed that annoying "Hidden internal properties"
+  message.
+- Bugfix /Feature: Added a small blacklist of classname/debugfunction
+  combination which may cause problems during object analysis.
+- Removed the old and ugly schablon skin.
+
+1.3.1
 - Bugfix: Local open function is working again.
 - Bugfix: Displaying the local configuration does not
   re-enable kreXX anymore.

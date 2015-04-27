@@ -51,7 +51,7 @@ class Hive {
    * Adds a variable to the hive of arrays and objects which
    * are tracked for whether they have recursive entries.
    *
-   * @param mixed $bee
+   * @param array|object $bee
    *   Either array or object.
    *
    * @return array
@@ -122,7 +122,7 @@ class Hive {
    *   The object or array we want to check for recursion.
    *
    * @return bool
-   *   Boolean which shows weather we are facing a recursion.
+   *   Boolean which shows whether we are facing a recursion.
    */
   public static function isInHive($bee) {
     // Test for references in order to

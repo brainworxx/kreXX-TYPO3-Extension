@@ -48,7 +48,7 @@ class Render extends Help {
    *   The version of kreXX.
    */
   Public Static Function version() {
-    return '1.3.1';
+    return '1.3.2 dev';
   }
 
   /**
@@ -75,9 +75,11 @@ class Render extends Help {
    *   calles this one.
    * @param string $help_id
    *   The id of the helptext we want to display here.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
-   * @return string The generated markup from the template files.
-   * The generated markup from the template files.
+   * @return string
+   *   The generated markup from the template files.
    */
   Public static function renderSingleChild($data, $name = '', $normal = '', $extra = FALSE, $type = '', $strlen = '', $help_id = '', $connector = '=>') {
     // This one is a little bit more complicated than the others,
@@ -133,6 +135,8 @@ class Render extends Help {
    *   We might want to tell the user what this actually is.
    * @param string $dom_id
    *   The id of the analysis data, a click on the recursion should jump to it.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The generated markup from the template files.
@@ -143,7 +147,7 @@ class Render extends Help {
     $template = str_replace('{name}', $name, $template);
     $template = str_replace('{domId}', $dom_id, $template);
     $template = str_replace('{value}', $value, $template);
-    return $template = str_replace('{connector}', $connector, $template);;
+    return $template = str_replace('{connector}', $connector, $template);
   }
 
   /**
@@ -285,8 +289,10 @@ class Render extends Help {
    * @param bool $is_expanded
    *   Is this one expanded from the beginning?
    *   TRUE when we render the settings menu only.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
-   * @return string The generated markup from the template files.
+   * @return string
    *   The generated markup from the template files.
    */
   Public static function renderExpandableChild($name, $type, \Closure $anon_function, &$parameter, $additional = '', $dom_id = '', $help_id = '', $is_expanded = FALSE, $connector = '=>') {

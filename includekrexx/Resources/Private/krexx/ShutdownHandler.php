@@ -48,7 +48,7 @@ class ShutdownHandler {
    * @param string $chunk_string
    *   The chunked output string.
    * @param bool $ignore_local_settings
-   *   Weather or not we ignore local settings.
+   *   Whether or not we ignore local settings.
    */
   public function addChunkString($chunk_string, $ignore_local_settings = FALSE) {
     $this->chunkStrings[] = array($chunk_string, $ignore_local_settings);

@@ -32,6 +32,10 @@ class Objects {
    *   The object we want to analyse.
    * @param string $name
    *   The name of the object.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The generated markup.
@@ -63,41 +67,32 @@ class Objects {
 
       $ref = new \ReflectionClass($data);
 
-      // Dumping public properties
+      // Dumping public properties.
       $ref_props = $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
-      if (count($ref_props)) {
-        $output .= Objects::getReflectionPropertiesData($ref_props, $name, $ref, $data, 'Public properties');
-      }
 
-      // Dumping hidden internal properties
+      // Adding undeclared public properties to the dump.
       // Those are properties which are not visible with
       // $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
       // but can are in get_object_vars();
       // 1. Make a list of all properties
-      // 2. Remove those that are listed in $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
-      // What is left are those special properties that are visible, but not accessible
-      $semi_public_properties = array();
+      // 2. Remove those that are listed in
+      // $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
+      // What is left are those special properties that were dynamically
+      // set during runtime, but were not declared in the class.
       foreach ($ref_props as $ref_prop) {
         $public_props[$ref_prop->name] = $ref_prop->name;
       }
-
       foreach (get_object_vars($data) as $key => $value) {
         if (!isset($public_props[$key])) {
-          $semi_public_properties[$key] = $value;
+          $ref_props[] = new Flection($value, $key);
         }
       }
-      if (count($semi_public_properties)) {
-         $parameter = array($data);
-          $anon_function = function (&$parameter) {
-            $data = $parameter[0];
-            // Standard dump of the vars.
-            return Internals::iterateThrough($data);
-          };
-          $output .= Render::renderExpandableChild($name, 'class internals', $anon_function, $parameter, 'Hidden internal properties', '', 'hiddenInternal');
+      if (count($ref_props)) {
+         $output .= Objects::getReflectionPropertiesData($ref_props, $name, $ref, $data, 'Public properties');
       }
 
 
-      // Dumping protected properties
+      // Dumping protected properties.
       if (Config::getConfigValue('deep', 'analyseProtected') == 'true') {
         $ref_props = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
         if (count($ref_props)) {
@@ -105,7 +100,7 @@ class Objects {
         }
       }
 
-      // Dumping private properties
+      // Dumping private properties.
       if (Config::getConfigValue('deep', 'analysePrivate') == 'true') {
         $ref_props = $ref->getProperties(\ReflectionProperty::IS_PRIVATE);
         if (count($ref_props)) {
@@ -155,7 +150,6 @@ class Objects {
   public static function getReflectionPropertiesData(array $ref_props, $name, \ReflectionClass $ref, $data, $label) {
     // I need to preprocess them, since I do not want to render a
     // reflection property.
-
     $parameter = array($ref_props, $ref, $data);
     $anon_function = function (&$parameter) {
       $ref_props = $parameter[0];
@@ -167,7 +161,7 @@ class Objects {
       foreach ($ref_props as $ref_property) {
         $ref_property->setAccessible(TRUE);
 
-        // Getting our values from the reflection
+        // Getting our values from the reflection.
         $value = $ref_property->getValue($org_object);
         $prop_name = $ref_property->name;
         if (is_null($value) && $ref_property->isDefault()) {
@@ -175,17 +169,18 @@ class Objects {
           $value = $default[$prop_name];
         }
 
-       // Check memory and runtime.
+        // Check memory and runtime.
         if (!Internals::checkEmergencyBreak()) {
           // No more took too long, or not enough memory is left.
           Messages::addMessage("Emergency break for large output during rendering process.\n\nYou should try to switch to file output.");
-          return;
+          return '';
         }
-        // Recursion tests are done in the analyseObject and iterateThrough (for arrays).
+        // Recursion tests are done in the analyseObject and
+        // iterateThrough (for arrays).
         // We will not check them here.
         // Now that we have the key and the value, we can analyse it.
         // Stitch together our additional infos about the data:
-        // public, protected, private, static
+        // public, protected, private, static.
         $additional = '';
         $connector = '->';
         if ($ref_property->isPublic()) {
@@ -197,7 +192,10 @@ class Objects {
         if ($ref_property->isProtected()) {
           $additional .= 'protected ';
         }
-        if ($ref_property->isStatic ()) {
+        if (is_a($ref_property, '\Krexx\Flection')) {
+          $additional .= $ref_property->getWhatAmI() . ' ';
+        }
+        if ($ref_property->isStatic()) {
           $additional .= 'static ';
           $connector = '::';
         }
@@ -266,7 +264,7 @@ class Objects {
     return Render::renderExpandableChild($name, 'class internals', $anon_function, $parameter, $label);
   }
 
-    /**
+  /**
    * Render a dump for the properties of an array or object.
    *
    * @param array|object &$data
@@ -367,6 +365,7 @@ class Objects {
 
       return Render::renderExpandableChild($name, 'class internals', $anon_function, $parameter, 'Methods');
     }
+    return '';
   }
 
   /**
@@ -389,6 +388,7 @@ class Objects {
       };
       return Render::renderExpandableChild($name, 'Foreach', $anon_function, $parameter, 'Traversable Info');
     }
+    return '';
   }
 
   /**
@@ -412,7 +412,7 @@ class Objects {
 
     $func_list = explode(',', Config::getConfigValue('deep', 'debugMethods'));
     foreach ($func_list as $func_name) {
-      if (is_callable(array($data, $func_name))) {
+      if (is_callable(array($data, $func_name)) && config::isAllowedDebugCall($data, $func_name)) {
         // Add a try to prevent the hosting CMS from doing something stupid.
         try {
           $args = array();
@@ -422,7 +422,7 @@ class Objects {
             // Do nothing.
           });
           $parameter = $data->$func_name($args);
-          // Reactivate whatever errorhandling we had previously.
+          // Reactivate whatever error handling we had previously.
           restore_error_handler();
         }
         catch (\Exception $e) {

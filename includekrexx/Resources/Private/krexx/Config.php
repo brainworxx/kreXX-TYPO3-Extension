@@ -156,7 +156,25 @@ class Config {
     'Local open function' => array(
       'type' => 'Input',
       'editable' => 'true',
-    )
+    ),
+  );
+
+  /**
+   * Known Problems with debug functions, which will most likely cause a fatal.
+   *
+   * Used by \Krexx\Objects::pollAllConfiguredDebugMethods() to determine
+   * if we might expect problems.
+   *
+   * @var array
+   */
+  protected static $debugMethodsBlacklist = array(
+
+    // Typo3 viewhelpers dislike this function.
+    // In the TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper the private
+    // $viewHelperNode might not be an object, and trying to render it might
+    // cause a fatal error!
+    'TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper' => '__toString',
+
   );
 
   /**
@@ -434,6 +452,7 @@ class Config {
     if (isset($_config[$group][$name]) && self::evaluateSetting($group, $name, $_config[$group][$name])) {
       return $_config[$group][$name];
     }
+
   }
 
   /**
@@ -854,7 +873,7 @@ class Config {
    *   The string we want to evaluate.
    *
    * @return bool
-   *   Weather it does evaluate or not.
+   *   Whether it does evaluate or not.
    */
   protected static function evalBool($value) {
     if ($value === 'true' || $value === 'false') {
@@ -874,7 +893,7 @@ class Config {
    *   The string we want to evaluate.
    *
    * @return bool
-   *   Weather it does evaluate or not.
+   *   Whether it does evaluate or not.
    */
   protected static function evalInt($value) {
     $value = (int) $value;
@@ -885,4 +904,28 @@ class Config {
       return FALSE;
     }
   }
+
+  /**
+   * Determines if a debug function is blacklisted in s specific class.
+   *
+   * @param object $data
+   *   The class we are analysing.
+   * @param string $call
+   *   The function name we want to call.
+   *
+   * @return bool
+   *   Whether the function is allowed to be called.
+   */
+  public static function isAllowedDebugCall($data, $call) {
+
+    foreach (self::$debugMethodsBlacklist as $classname => $method) {
+      if (is_a($data, $classname) && $call == $method) {
+        // We have a winner, this one is blacklisted!
+        return FALSE;
+      }
+    }
+    // Nothing found?
+    return TRUE;
+  }
+
 }
