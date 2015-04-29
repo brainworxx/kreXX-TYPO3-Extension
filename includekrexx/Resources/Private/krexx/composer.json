@@ -9,7 +9,7 @@
   ],
   "type": "library",
   "homepage": "https://sourceforge.net/projects/krexx/",
-  "license": "LGPL-2.1",
+  "license": ["LGPL-2.1"],
   "authors": [
     {
       "name": "Brainworxx",
