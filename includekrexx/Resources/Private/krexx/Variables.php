@@ -1,19 +1,34 @@
 <?php
 /**
  * @file
- * Variables analysis functions for kreXX
- * kreXX: Krumo eXXtended
+ *   Variables analysis functions for kreXX
+ *   kreXX: Krumo eXXtended
  *
- * kreXX is a debugging tool, which displays structured information
- * about any PHP object. It is a nice replacement for print_r() or var_dump()
- * which are used by a lot of PHP developers.
+ *   kreXX is a debugging tool, which displays structured information
+ *   about any PHP object. It is a nice replacement for print_r() or var_dump()
+ *   which are used by a lot of PHP developers.
+ *
+ *   kreXX is a fork of Krumo, which was originally written by:
+ *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ *
  * @author brainworXX GmbH <info@brainworxx.de>
  *
- * kreXX is a fork of Krumo, which was originally written by:
- * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ * @license http://opensource.org/licenses/LGPL-2.1
+ *   GNU Lesser General Public License Version 2.1
  *
- * @license http://opensource.org/licenses/LGPL-2.1 GNU Lesser General Public License Version 2.1
- * @package Krexx
+ *   kreXX Copyright (C) 2014-2015 Brainworxx GmbH
+ *
+ *   This library is free software; you can redistribute it and/or modify it
+ *   under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation; either version 2.1 of the License, or (at
+ *   your option) any later version.
+ *   This library is distributed in the hope that it will be useful, but WITHOUT
+ *   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ *   for more details.
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with this library; if not, write to the Free Software Foundation,
+ *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
 namespace Krexx;
@@ -30,6 +45,10 @@ class Variables {
    *
    * @param string $name
    *   The Name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
@@ -46,6 +65,10 @@ class Variables {
    *   The data we are analysing.
    * @param string $name
    *   The name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
@@ -68,13 +91,17 @@ class Variables {
    *   The data we are analysing.
    * @param string $name
    *   The name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
    */
   public Static Function analyseResource($data, $name, $additional = '', $connector = '=>') {
     $data = get_resource_type($data);
-    return Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'resource', '',  '', $connector);
+    return Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'resource', '', '', $connector);
   }
 
   /**
@@ -84,6 +111,10 @@ class Variables {
    *   The data we are analysing.
    * @param string $name
    *   The name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
@@ -100,6 +131,10 @@ class Variables {
    *   The data we are analysing.
    * @param string $name
    *   The name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
@@ -115,6 +150,10 @@ class Variables {
    *   The data we are analysing.
    * @param string $name
    *   The name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
@@ -130,6 +169,10 @@ class Variables {
    *   The data we are analysing.
    * @param string $name
    *   The name, what we render here.
+   * @param string $additional
+   *   Information about thedeclaration in the parent class / array.
+   * @param string $connector
+   *   The connector type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
@@ -168,7 +211,7 @@ class Variables {
    * @param bool $code
    *   Do we need to format the string as code?
    *
-   * @return string The encoded string.
+   * @return string
    *   The encoded string.
    */
   public static function encodeString($data, $code = FALSE) {

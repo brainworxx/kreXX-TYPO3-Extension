@@ -1,19 +1,34 @@
 <?php
 /**
  * @file
- * Configfunctions for kreXX
- * kreXX: Krumo eXXtended
+ *   Configfunctions for kreXX
+ *   kreXX: Krumo eXXtended
  *
- * This is a debugging tool, which displays structured information
- * about any PHP object. It is a nice replacement for print_r() or var_dump()
- * which are used by a lot of PHP developers.
+ *   This is a debugging tool, which displays structured information
+ *   about any PHP object. It is a nice replacement for print_r() or var_dump()
+ *   which are used by a lot of PHP developers.
+ *
+ *   kreXX is a fork of Krumo, which was originally written by:
+ *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ *
  * @author brainworXX GmbH <info@brainworxx.de>
  *
- * kreXX is a fork of Krumo, which was originally written by:
- * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ * @license http://opensource.org/licenses/LGPL-2.1
+ *   GNU Lesser General Public License Version 2.1
  *
- * @license http://opensource.org/licenses/LGPL-2.1 GNU Lesser General Public License Version 2.1
- * @package Krexx
+ *   kreXX Copyright (C) 2014-2015 Brainworxx GmbH
+ *
+ *   This library is free software; you can redistribute it and/or modify it
+ *   under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation; either version 2.1 of the License, or (at
+ *   your option) any later version.
+ *   This library is distributed in the hope that it will be useful, but WITHOUT
+ *   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ *   for more details.
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with this library; if not, write to the Free Software Foundation,
+ *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
 namespace Krexx;
@@ -156,7 +171,25 @@ class Config {
     'Local open function' => array(
       'type' => 'Input',
       'editable' => 'true',
-    )
+    ),
+  );
+
+  /**
+   * Known Problems with debug functions, which will most likely cause a fatal.
+   *
+   * Used by \Krexx\Objects::pollAllConfiguredDebugMethods() to determine
+   * if we might expect problems.
+   *
+   * @var array
+   */
+  protected static $debugMethodsBlacklist = array(
+
+    // Typo3 viewhelpers dislike this function.
+    // In the TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper the private
+    // $viewHelperNode might not be an object, and trying to render it might
+    // cause a fatal error!
+    'TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper' => '__toString',
+
   );
 
   /**
@@ -434,6 +467,7 @@ class Config {
     if (isset($_config[$group][$name]) && self::evaluateSetting($group, $name, $_config[$group][$name])) {
       return $_config[$group][$name];
     }
+
   }
 
   /**
@@ -854,7 +888,7 @@ class Config {
    *   The string we want to evaluate.
    *
    * @return bool
-   *   Weather it does evaluate or not.
+   *   Whether it does evaluate or not.
    */
   protected static function evalBool($value) {
     if ($value === 'true' || $value === 'false') {
@@ -874,7 +908,7 @@ class Config {
    *   The string we want to evaluate.
    *
    * @return bool
-   *   Weather it does evaluate or not.
+   *   Whether it does evaluate or not.
    */
   protected static function evalInt($value) {
     $value = (int) $value;
@@ -885,4 +919,28 @@ class Config {
       return FALSE;
     }
   }
+
+  /**
+   * Determines if a debug function is blacklisted in s specific class.
+   *
+   * @param object $data
+   *   The class we are analysing.
+   * @param string $call
+   *   The function name we want to call.
+   *
+   * @return bool
+   *   Whether the function is allowed to be called.
+   */
+  public static function isAllowedDebugCall($data, $call) {
+
+    foreach (self::$debugMethodsBlacklist as $classname => $method) {
+      if (is_a($data, $classname) && $call == $method) {
+        // We have a winner, this one is blacklisted!
+        return FALSE;
+      }
+    }
+    // Nothing found?
+    return TRUE;
+  }
+
 }
