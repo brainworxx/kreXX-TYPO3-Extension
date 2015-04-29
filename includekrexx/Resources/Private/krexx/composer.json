@@ -1,5 +1,5 @@
 {
-  "name": "brainworxx/kreXX",
+  "name": "brainworxx/krexx",
   "description": "kreXX is a php debugger, which displays debug information about objects and variables in it's own draggable debug output.",
   "keywords": [
     "debug",

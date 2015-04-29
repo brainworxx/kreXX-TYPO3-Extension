@@ -1,0 +1,17 @@
+{
+  "name": "brainworxx/includekrexx",
+  "type": "typo3-cms-extension",
+  "description": "kreXX is a php debugger with a fatal error handler. It displays debug information about objects and variables in it\'s own draggable output.",
+  "homepage": "http://sourceforge.net/projects/krexx/",
+  "license": ["LGPL-2.1"],
+  "keywords": [
+    "debug",
+    "debugging",
+    "object",
+    "analysis"
+  ],
+  "support": {
+    "issues": "http://sourceforge.net/p/krexx/bugs"
+  },
+  "version": "1.3.2"
+}

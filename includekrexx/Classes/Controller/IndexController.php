@@ -285,13 +285,13 @@ class Tx_Includekrexx_Controller_IndexController extends Tx_Extbase_MVC_Controll
         $all_ok = FALSE;
         \krexx\Messages::addMessage('Configuration file ' . $filepath . ' is not writeable!');
       }
-      else {
-        $this->addMessage("The settings were saved to: <br /> " . $filepath, "The data was saved.", t3lib_FlashMessage::OK);
-      }
+    }
+    // Something went wrong, we need to tell the user.
+    if (!$all_ok) {
+      $this->addMessage(strip_tags(\krexx\Messages::outputMessages()), "The settings were NOT saved.", t3lib_FlashMessage::ERROR);
     }
     else {
-      // Something went wrong, we need to tell the user.
-      $this->addMessage(strip_tags(\krexx\Messages::outputMessages()), "The settings were NOT saved.", t3lib_FlashMessage::ERROR);
+      $this->addMessage("The settings were saved to: <br /> " . $filepath, "The data was saved.", t3lib_FlashMessage::OK);
     }
     $this->redirect('editConfig');
   }
