@@ -318,7 +318,7 @@ class Toolbox {
   }
 
   /**
-   * Adds source sampels to a backtrace.
+   * Adds source sample to a backtrace.
    *
    * @param array $backtrace
    *   The backtrace from debug_backtrace().

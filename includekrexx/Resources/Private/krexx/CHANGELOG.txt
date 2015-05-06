@@ -1,3 +1,11 @@
+1.3.3 dev
+- Bugfix: No data from the Magento debug() function when uses as a
+  configurable debug function.
+- Change: Moved the class-method analysis to the top.
+- Change: Removed "abstraction level" from the public properties,
+  moving them directly into the "object root", becuase they can be
+  accessed directly.
+
 1.3.2
 - Bugfix: Removed that annoying "Hidden internal properties"
   message.

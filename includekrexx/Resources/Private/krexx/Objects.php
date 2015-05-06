@@ -82,6 +82,9 @@ class Objects {
 
       $ref = new \ReflectionClass($data);
 
+      // Dumping all methods.
+      $output .= Objects::getMethodData($data, $name);
+
       // Dumping public properties.
       $ref_props = $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
 
@@ -122,10 +125,6 @@ class Objects {
           $output .= Objects::getReflectionPropertiesData($ref_props, $name, $ref, $data, 'Private properties');
         }
       }
-
-      // Dumping all methods
-      // but only if we have any.
-      $output .= Objects::getMethodData($data, $name);
 
       // Dumping traversable data.
       if (Config::getConfigValue('deep', 'analyseTraversable') == 'true') {
@@ -276,7 +275,17 @@ class Objects {
 
       return $output;
     };
-    return Render::renderExpandableChild($name, 'class internals', $anon_function, $parameter, $label);
+
+    // We are dumping public properties direct into the main-level, without
+    // any "abstraction level", because they can be accessed directly
+    if (strpos(strtoupper($label),'PUBLIC') === FALSE) {
+      // Protected or private properties.
+      return Render::renderExpandableChild($name, 'class internals', $anon_function, $parameter, $label);
+    }
+    else {
+      // Public properties.
+      return Render::renderExpandableChild('', '', $anon_function, $parameter, $label);
+    }
   }
 
   /**
@@ -430,13 +439,12 @@ class Objects {
       if (is_callable(array($data, $func_name)) && config::isAllowedDebugCall($data, $func_name)) {
         // Add a try to prevent the hosting CMS from doing something stupid.
         try {
-          $args = array();
           // We need to deactivate the current error handling to
           // prevent the host system to do anything stupid.
           set_error_handler(function() {
             // Do nothing.
           });
-          $parameter = $data->$func_name($args);
+          $parameter = $data->$func_name();
           // Reactivate whatever error handling we had previously.
           restore_error_handler();
         }

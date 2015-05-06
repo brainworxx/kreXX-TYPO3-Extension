@@ -360,6 +360,13 @@ class Internals {
       }
     }
 
+    // Now we try to get the context of the kreXX call.
+    // When calling something like krexx($this);
+    // we must treat protected and private properties like public ones, because
+    // they are accessible.
+    $source = Toolbox::readSourcecode($caller['file'], $caller['line'] - 1, 0);
+    // @todo Analyse this part of the sourcecode, to get the context.
+
     return $caller;
   }
 
