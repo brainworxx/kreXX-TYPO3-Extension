@@ -31,8 +31,9 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Krexx;
+namespace Brainworxx\Krexx\Framework;
 
+use Brainworxx\Krexx\View;
 
 /**
  * Sends the kreXX output in the shutdown phase.
@@ -58,7 +59,7 @@ class ShutdownHandler {
   protected $chunkStrings = array();
 
   /**
-   * Adds output to our shutdownhandler.
+   * Adds output to our shutdown handler.
    *
    * @param string $chunk_string
    *   The chunked output string.
@@ -72,14 +73,14 @@ class ShutdownHandler {
   /**
    * The shutdown callback.
    *
-   * It gets called when PHP is sutting down. It will render
-   * out kreXX output, to guarantie minimal interference with
+   * It gets called when PHP is shutting down. It will render
+   * out kreXX output, to guarantee minimal interference with
    * the hosting CMS.
    */
   public function shutdownCallback() {
     // Check for CLI and messages.
     if (php_sapi_name() == "cli") {
-      $messages = Messages::outputMessages();
+      $messages = View\Messages::outputMessages();
       // Since we are in CLI mode, these messages are not in HTML.
       // We can output them right away.
       echo $messages;

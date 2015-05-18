@@ -31,7 +31,9 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Krexx;
+namespace Brainworxx\Krexx\Analysis;
+
+use Brainworxx\Krexx\View;
 
 /**
  * This class hosts the variable analysis functions.
@@ -46,16 +48,18 @@ class Variables {
    * @param string $name
    *   The Name, what we render here.
    * @param string $additional
-   *   Information about thedeclaration in the parent class / array.
-   * @param string $connector
-   *   The connector type to the parent class / array.
+   *   Information about the declaration in the parent class / array.
+   * @param string $connector1
+   *   The connector1 type to the parent class / array.
+   * @param string $connector2
+   *   The connector2 type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
    */
-  public Static Function analyseNull($name, $additional = '', $connector = '=>') {
+  public Static Function analyseNull($name, $additional = '', $connector1 = '=>', $connector2 = '=') {
     $data = 'NULL';
-    return Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'null', '', '', $connector);
+    return View\Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'null', '', '', $connector1, $connector2);
   }
 
   /**
@@ -66,14 +70,16 @@ class Variables {
    * @param string $name
    *   The name, what we render here.
    * @param string $additional
-   *   Information about thedeclaration in the parent class / array.
-   * @param string $connector
-   *   The connector type to the parent class / array.
+   *   Information about the declaration in the parent class / array.
+   * @param string $connector1
+   *   The connector1 type to the parent class / array.
+   * @param string $connector2
+   *   The connector2 type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
    */
-  public Static Function analyseArray(array &$data, $name, $additional = '', $connector = '=>') {
+  public Static Function analyseArray(array &$data, $name, $additional = '', $connector1 = '=>', $connector2 = '=') {
     // Dumping all Properties.
     $parameter = array($data);
     $anon_function = function ($parameter) {
@@ -81,7 +87,7 @@ class Variables {
       return Internals::iterateThrough($data);
     };
 
-    return Render::renderExpandableChild($name, $additional . 'array', $anon_function, $parameter, count($data) . ' elements', '', '', FALSE, $connector);
+    return View\Render::renderExpandableChild($name, $additional . 'array', $anon_function, $parameter, count($data) . ' elements', '', '', FALSE, $connector1, $connector2);
   }
 
   /**
@@ -92,16 +98,18 @@ class Variables {
    * @param string $name
    *   The name, what we render here.
    * @param string $additional
-   *   Information about thedeclaration in the parent class / array.
-   * @param string $connector
-   *   The connector type to the parent class / array.
+   *   Information about the declaration in the parent class / array.
+   * @param string $connector1
+   *   The connector1 type to the parent class / array.
+   * @param string $connector2
+   *   The connector2 type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
    */
-  public Static Function analyseResource($data, $name, $additional = '', $connector = '=>') {
+  public Static Function analyseResource($data, $name, $additional = '', $connector1 = '=>', $connector2 = '=') {
     $data = get_resource_type($data);
-    return Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'resource', '', '', $connector);
+    return View\Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'resource', '', '', $connector1, $connector2);
   }
 
   /**
@@ -112,16 +120,18 @@ class Variables {
    * @param string $name
    *   The name, what we render here.
    * @param string $additional
-   *   Information about thedeclaration in the parent class / array.
-   * @param string $connector
-   *   The connector type to the parent class / array.
+   *   Information about the declaration in the parent class / array.
+   * @param string $connector1
+   *   The connector1 type to the parent class / array.
+   * @param string $connector2
+   *   The connector2 type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
    */
-  public Static Function analyseBoolean($data, $name, $additional = '', $connector = '=>') {
+  public Static Function analyseBoolean($data, $name, $additional = '', $connector1 = '=>', $connector2 = '=') {
     $data = $data ? 'TRUE' : 'FALSE';
-    return Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'boolean', '', '', $connector);
+    return View\Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'boolean', '', '', $connector1, $connector2);
   }
 
   /**
@@ -132,15 +142,17 @@ class Variables {
    * @param string $name
    *   The name, what we render here.
    * @param string $additional
-   *   Information about thedeclaration in the parent class / array.
-   * @param string $connector
-   *   The connector type to the parent class / array.
+   *   Information about the declaration in the parent class / array.
+   * @param string $connector1
+   *   The connector1 type to the parent class / array.
+   * @param string $connector2
+   *   The connector2 type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
    */
-  public Static Function analyseInteger($data, $name, $additional = '', $connector = '=>') {
-    return Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'integer', '', '', $connector);
+  public Static Function analyseInteger($data, $name, $additional = '', $connector1 = '=>', $connector2 = '=') {
+    return View\Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'integer', '', '', $connector1, $connector2);
   }
 
   /**
@@ -151,15 +163,17 @@ class Variables {
    * @param string $name
    *   The name, what we render here.
    * @param string $additional
-   *   Information about thedeclaration in the parent class / array.
-   * @param string $connector
-   *   The connector type to the parent class / array.
+   *   Information about the declaration in the parent class / array.
+   * @param string $connector1
+   *   The connector1 type to the parent class / array.
+   * @param string $connector2
+   *   The connector2 type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
    */
-  public Static Function analyseFloat($data, $name, $additional = '', $connector = '=>') {
-    return Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'float', '', '', $connector);
+  public Static Function analyseFloat($data, $name, $additional = '', $connector1 = '=>', $connector2 = '=') {
+    return View\Render::renderSingleChild($data, $name, $data, FALSE, $additional . 'float', '', '', $connector1, $connector2);
   }
 
   /**
@@ -170,14 +184,16 @@ class Variables {
    * @param string $name
    *   The name, what we render here.
    * @param string $additional
-   *   Information about thedeclaration in the parent class / array.
-   * @param string $connector
-   *   The connector type to the parent class / array.
+   *   Information about the declaration in the parent class / array.
+   * @param string $connector1
+   *   The connector1 type to the parent class / array.
+   * @param string $connector2
+   *   The connector2 type to the parent class / array.
    *
    * @return string
    *   The rendered markup.
    */
-  public Static Function analyseString($data, $name, $additional = '', $connector = '=>') {
+  public Static Function analyseString($data, $name, $additional = '', $connector1 = '=>', $connector2 = '=') {
 
     // Extra ?
     $has_extra = FALSE;
@@ -191,14 +207,14 @@ class Variables {
     $clean_data = self::encodeString($data);
     $cut = self::encodeString($cut);
 
-    // We need to take care for mixed encodungs here.
+    // We need to take care for mixed encodings here.
     $strlen = @mb_strlen($data, @mb_detect_encoding($data));
     if ($strlen === FALSE) {
       // Looks like we have a mixed encoded string.
       $strlen = ' mixed encoded ~ ' . strlen($data);
     }
 
-    return Render::renderSingleChild($clean_data, $name, $cut, $has_extra, $additional . 'string', ' ' . $strlen, '', $connector);
+    return View\Render::renderSingleChild($clean_data, $name, $cut, $has_extra, $additional . 'string', ' ' . $strlen, '', $connector1, $connector2);
   }
 
   /**
@@ -207,7 +223,7 @@ class Variables {
    * Should work with mixed encoding.
    *
    * @param string $data
-   *   The data which nees to be sanitized.
+   *   The data which needs to be sanitized.
    * @param bool $code
    *   Do we need to format the string as code?
    *
@@ -222,8 +238,7 @@ class Variables {
       set_error_handler(function() { /* do nothing. */ });
       $result = @htmlentities($data, NULL, $encoding);
       restore_error_handler();
-      // We are also encodeing @, because we need them for our
-      // chunks.
+      // We are also encoding @, because we need them for our chunks.
       $result = str_replace('@', '&#64;', $result);
     }
     // Check if encoding was successful.
@@ -235,7 +250,7 @@ class Variables {
 
       if ($code) {
         // We are displaying sourcecode, so we need
-        // to do some formating.
+        // to do some formatting.
         $anon_function = function($n){
           if ($n == 9) {
             // Replace TAB with two spaces, it's better readable that way.
@@ -248,7 +263,7 @@ class Variables {
         };
       }
       else {
-        // No formating.
+        // No formatting.
         $anon_function = function($n){
           return "&#$n;";
         };

@@ -1,34 +1,19 @@
 <?php
 /**
  * @file
- *   Installation check for kreXX
- *   kreXX: Krumo eXXtended
+ * Installation check for kreXX
+ * kreXX: Krumo eXXtended
  *
- *   kreXX is a debugging tool, which displays structured information
- *   about any PHP object. It is a nice replacement for print_r() or var_dump()
- *   which are used by a lot of PHP developers.
- *
- *   kreXX is a fork of Krumo, which was originally written by:
- *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
- *
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
  * @author brainworXX GmbH <info@brainworxx.de>
  *
- * @license http://opensource.org/licenses/LGPL-2.1
- *   GNU Lesser General Public License Version 2.1
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
  *
- *   kreXX Copyright (C) 2014-2015 Brainworxx GmbH
- *
- *   This library is free software; you can redistribute it and/or modify it
- *   under the terms of the GNU Lesser General Public License as published by
- *   the Free Software Foundation; either version 2.1 of the License, or (at
- *   your option) any later version.
- *   This library is distributed in the hope that it will be useful, but WITHOUT
- *   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- *   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
- *   for more details.
- *   You should have received a copy of the GNU Lesser General Public License
- *   along with this library; if not, write to the Free Software Foundation,
- *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * @license http://opensource.org/licenses/LGPL-2.1 GNU Lesser General Public License Version 2.1
+ * @package Krexx
  */
 
 if (! defined('TYPO3_MODE')) {
@@ -43,7 +28,7 @@ if (file_exists($filename)) {
 
 // Sanity check to see if the path to the ini file is correct.
 $filename = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/KrexxConfig.ini';
-if (!is_file(\krexx\config::getPathToIni())) {
+if (!is_file(\Brainworxx\Krexx\Framework\config::getPathToIni())) {
   // Huh, the config file does not exist, we need to go through the setup.
   // Looks like we need to delete the KrexxConfig.ini
   if (is_file($filename) && is_writable(dirname($filename))) {

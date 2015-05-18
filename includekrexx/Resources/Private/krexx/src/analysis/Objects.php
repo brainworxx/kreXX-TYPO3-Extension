@@ -31,7 +31,10 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Krexx;
+namespace Brainworxx\Krexx\Analysis;
+
+use Brainworxx\Krexx\Framework;
+use Brainworxx\Krexx\View;
 
 /**
  * This class hosts the object analysis functions.
@@ -48,14 +51,16 @@ class Objects {
    * @param string $name
    *   The name of the object.
    * @param string $additional
-   *   Information about thedeclaration in the parent class / array.
-   * @param string $connector
-   *   The connector type to the parent class / array.
+   *   Information about the declaration in the parent class / array.
+   * @param string $connector1
+   *   The connector1 type to the parent class / array.
+   * @param string $connector2
+   *   The connector2 type to the parent class / array.
    *
    * @return string
    *   The generated markup.
    */
-  public Static Function analyseObject($data, $name, $additional = '', $connector = '=>') {
+  public Static Function analyseObject($data, $name, $additional = '', $connector1 = '=>', $connector2 = '=') {
     static $level = 0;
 
     $output = '';
@@ -65,10 +70,10 @@ class Objects {
     if (Hive::isInHive($data)) {
       // Tell them, we've been here before
       // but also say who we are.
-      $output .= Render::renderRecursion($name, get_class($data), Toolbox::generateDomIdFromObject($data), $connector);
+      $output .= View\Render::renderRecursion($name, get_class($data), Framework\Toolbox::generateDomIdFromObject($data), $connector1, $connector2);
 
       // We will not render this one, but since we
-      // return to wherever we came from, we need to decrese the level.
+      // return to wherever we came from, we need to decrease the level.
       $level--;
       return $output;
     }
@@ -78,12 +83,9 @@ class Objects {
     $anon_function = function (&$parameter) {
       $data = $parameter[0];
       $name = $parameter[1];
-      $output = '';
+      $output = View\Render::renderSingeChildHr();;
 
       $ref = new \ReflectionClass($data);
-
-      // Dumping all methods.
-      $output .= Objects::getMethodData($data, $name);
 
       // Dumping public properties.
       $ref_props = $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
@@ -107,11 +109,13 @@ class Objects {
       }
       if (count($ref_props)) {
          $output .= Objects::getReflectionPropertiesData($ref_props, $name, $ref, $data, 'Public properties');
+        // Adding a HR to reflect that the following stuff are not public
+        // properties anymore.
+        $output .= View\Render::renderSingeChildHr();
       }
 
-
       // Dumping protected properties.
-      if (Config::getConfigValue('deep', 'analyseProtected') == 'true') {
+      if (Framework\Config::getConfigValue('deep', 'analyseProtected') == 'true') {
         $ref_props = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
         if (count($ref_props)) {
           $output .= Objects::getReflectionPropertiesData($ref_props, $name, $ref, $data, 'Protected properties');
@@ -119,27 +123,33 @@ class Objects {
       }
 
       // Dumping private properties.
-      if (Config::getConfigValue('deep', 'analysePrivate') == 'true') {
+      if (Framework\Config::getConfigValue('deep', 'analysePrivate') == 'true') {
         $ref_props = $ref->getProperties(\ReflectionProperty::IS_PRIVATE);
         if (count($ref_props)) {
           $output .= Objects::getReflectionPropertiesData($ref_props, $name, $ref, $data, 'Private properties');
         }
       }
 
+      // Dumping all methods.
+      $output .= Objects::getMethodData($data, $name);
+
       // Dumping traversable data.
-      if (Config::getConfigValue('deep', 'analyseTraversable') == 'true') {
+      if (Framework\Config::getConfigValue('deep', 'analyseTraversable') == 'true') {
         $output .= Objects::getTraversableData($data, $name);
       }
 
       // Dumping all configured debug functions.
       $output .= Objects::pollAllConfiguredDebugMethods($data, $name);
+
+      // Adding a HR for a better readability.
+      $output .= View\Render::renderSingeChildHr();
       return $output;
     };
 
 
     // Output data from the class.
-    $output .= Render::renderExpandableChild($name, $additional . 'class', $anon_function, $parameter, get_class($data), Toolbox::generateDomIdFromObject($data), '', FALSE, $connector);
-    // We've finished this one, and can decrease the levelsetting.
+    $output .= View\Render::renderExpandableChild($name, $additional . 'class', $anon_function, $parameter, get_class($data), Framework\Toolbox::generateDomIdFromObject($data), '', FALSE, $connector1, $connector2);
+    // We've finished this one, and can decrease the level setting.
     $level--;
     return $output;
   }
@@ -167,12 +177,14 @@ class Objects {
     $parameter = array($ref_props, $ref, $data);
     $anon_function = function (&$parameter) {
       $ref_props = $parameter[0];
+      /* @var \ReflectionClass $ref */
       $ref = $parameter[1];
       $org_object = $parameter[2];
       $output = '';
       $default = $ref->getDefaultProperties();
 
       foreach ($ref_props as $ref_property) {
+        /* @var \ReflectionProperty $ref_property */
         $ref_property->setAccessible(TRUE);
 
         // Getting our values from the reflection.
@@ -186,17 +198,17 @@ class Objects {
         // Check memory and runtime.
         if (!Internals::checkEmergencyBreak()) {
           // No more took too long, or not enough memory is left.
-          Messages::addMessage("Emergency break for large output during rendering process.\n\nYou should try to switch to file output.");
+          View\Messages::addMessage("Emergency break for large output during rendering process.\n\nYou should try to switch to file output.");
           return '';
         }
         // Recursion tests are done in the analyseObject and
         // iterateThrough (for arrays).
         // We will not check them here.
         // Now that we have the key and the value, we can analyse it.
-        // Stitch together our additional infos about the data:
+        // Stitch together our additional info about the data:
         // public, protected, private, static.
         $additional = '';
-        $connector = '->';
+        $connector1 = '->';
         if ($ref_property->isPublic()) {
           $additional .= 'public ';
         }
@@ -206,70 +218,71 @@ class Objects {
         if ($ref_property->isProtected()) {
           $additional .= 'protected ';
         }
-        if (is_a($ref_property, '\Krexx\Flection')) {
+        if (is_a($ref_property, '\Brainworxx\Krexx\Analysis\Flection')) {
+          /* @var \Brainworxx\Krexx\Analysis\Flection $ref_property */
           $additional .= $ref_property->getWhatAmI() . ' ';
         }
         if ($ref_property->isStatic()) {
           $additional .= 'static ';
-          $connector = '::';
+          $connector1 = '::';
         }
 
         // Object?
         if (is_object($value)) {
           Internals::$nestingLevel++;
-          if (Internals::$nestingLevel <= (int) Config::getConfigValue('deep', 'level')) {
-            $result = Objects::analyseObject($value, $prop_name, $additional, $connector);
+          if (Internals::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
+            $result = Objects::analyseObject($value, $prop_name, $additional, $connector1);
             Internals::$nestingLevel--;
             $output .= $result;
           }
           else {
             Internals::$nestingLevel--;
-            $output .= Variables::analyseString("Object => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $prop_name, $additional, $connector);
+            $output .= Variables::analyseString("Object => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $prop_name, $additional, $connector1);
           }
         }
 
         // Array?
         if (is_array($value)) {
           Internals::$nestingLevel++;
-          if (Internals::$nestingLevel <= (int) Config::getConfigValue('deep', 'level')) {
-            $result = Variables::analyseArray($value, $prop_name, $additional, $connector);
+          if (Internals::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
+            $result = Variables::analyseArray($value, $prop_name, $additional, $connector1);
             Internals::$nestingLevel--;
             $output .= $result;
           }
           else {
             Internals::$nestingLevel--;
-            $output .= Variables::analyseString("Array => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $prop_name, $additional, $connector);
+            $output .= Variables::analyseString("Array => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $prop_name, $additional, $connector1);
           }
         }
 
         // Resource?
         if (is_resource($value)) {
-          $output .= Variables::analyseResource($value, $prop_name, $additional, $connector);
+          $output .= Variables::analyseResource($value, $prop_name, $additional, $connector1);
         }
 
         // String?
         if (is_string($value)) {
-          $output .= Variables::analyseString($value, $prop_name, $additional, $connector);
+          $output .= Variables::analyseString($value, $prop_name, $additional, $connector1);
         }
 
         // Float?
         if (is_float($value)) {
-          $output .= Variables::analyseFloat($value, $prop_name, $additional, $connector);
+          $output .= Variables::analyseFloat($value, $prop_name, $additional, $connector1);
         }
 
         // Integer?
         if (is_int($value)) {
-          $output .= Variables::analyseInteger($value, $prop_name, $additional, $connector);
+          $output .= Variables::analyseInteger($value, $prop_name, $additional, $connector1);
         }
 
         // Boolean?
         if (is_bool($value)) {
-          $output .= Variables::analyseBoolean($value, $prop_name, $additional, $connector);
+          $output .= Variables::analyseBoolean($value, $prop_name, $additional, $connector1);
         }
 
         // Null ?
         if (is_null($value)) {
-          $output .= Variables::analyseNull($prop_name, $additional, $connector);
+          $output .= Variables::analyseNull($prop_name, $additional, $connector1);
         }
       }
 
@@ -277,14 +290,14 @@ class Objects {
     };
 
     // We are dumping public properties direct into the main-level, without
-    // any "abstraction level", because they can be accessed directly
-    if (strpos(strtoupper($label),'PUBLIC') === FALSE) {
+    // any "abstraction level", because they can be accessed directly.
+    if (strpos(strtoupper($label), 'PUBLIC') === FALSE) {
       // Protected or private properties.
-      return Render::renderExpandableChild($name, 'class internals', $anon_function, $parameter, $label);
+      return View\Render::renderExpandableChild($label, 'class internals', $anon_function, $parameter, '', '', '', FALSE, '', '');
     }
     else {
       // Public properties.
-      return Render::renderExpandableChild('', '', $anon_function, $parameter, $label);
+      return View\Render::renderExpandableChild('', '', $anon_function, $parameter, $label);
     }
   }
 
@@ -307,9 +320,9 @@ class Objects {
       $recursion_marker = Hive::getMarker();
 
       // Recursion detection of objects are
-      // handeld in the hub.
+      // handled in the hub.
       if (is_array($data) && Hive::isInHive($data)) {
-        return Render::renderRecursion();
+        return View\Render::renderRecursion();
       }
 
       // Remember, that we've already been here.
@@ -323,7 +336,7 @@ class Objects {
         $keys = array_keys($data);
       }
 
-      // Itterate through.
+      // Iterate through.
       foreach ($keys as $k) {
 
         // Skip the recursion marker.
@@ -343,11 +356,11 @@ class Objects {
       }
       return $output;
     };
-    return Render::renderExpandableChild('', '', $analysis, $parameter);
+    return View\Render::renderExpandableChild('', '', $analysis, $parameter);
   }
 
   /**
-   * Dumps all infos about the public methods of an object.
+   * Dumps all info about the public methods of an object.
    *
    * @param object $data
    *   The object we want to analyse.
@@ -363,13 +376,13 @@ class Objects {
     $protected = array();
     $private = array();
     $ref = new \ReflectionClass($data);
-    if (Config::getConfigValue('methods', 'analysePublicMethods') == 'true') {
+    if (Framework\Config::getConfigValue('methods', 'analysePublicMethods') == 'true') {
       $public = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
     }
-    if (Config::getConfigValue('methods', 'analyseProtectedMethods') == 'true') {
+    if (Framework\Config::getConfigValue('methods', 'analyseProtectedMethods') == 'true') {
       $protected = $ref->getMethods(\ReflectionMethod::IS_PROTECTED);
     }
-    if (Config::getConfigValue('methods', 'analysePrivateMethods') == 'true') {
+    if (Framework\Config::getConfigValue('methods', 'analysePrivateMethods') == 'true') {
       $private = $ref->getMethods(\ReflectionMethod::IS_PRIVATE);
     }
 
@@ -387,7 +400,7 @@ class Objects {
         return Objects::analyseMethods($parameter[0], $parameter[1]);
       };
 
-      return Render::renderExpandableChild($name, 'class internals', $anon_function, $parameter, 'Methods');
+      return View\Render::renderExpandableChild('Methods', 'class internals', $anon_function, $parameter, '', '', '', FALSE, '', '');
     }
     return '';
   }
@@ -410,7 +423,7 @@ class Objects {
         // This could be anything, we need to examine it first.
         return Internals::analysisHub($data);
       };
-      return Render::renderExpandableChild($name, 'Foreach', $anon_function, $parameter, 'Traversable Info');
+      return View\Render::renderExpandableChild($name, 'Foreach', $anon_function, $parameter, 'Traversable Info');
     }
     return '';
   }
@@ -434,9 +447,9 @@ class Objects {
   public static function pollAllConfiguredDebugMethods($data, $name) {
     $output = '';
 
-    $func_list = explode(',', Config::getConfigValue('deep', 'debugMethods'));
+    $func_list = explode(',', Framework\Config::getConfigValue('deep', 'debugMethods'));
     foreach ($func_list as $func_name) {
-      if (is_callable(array($data, $func_name)) && config::isAllowedDebugCall($data, $func_name)) {
+      if (is_callable(array($data, $func_name)) && Framework\config::isAllowedDebugCall($data, $func_name)) {
         // Add a try to prevent the hosting CMS from doing something stupid.
         try {
           // We need to deactivate the current error handling to
@@ -455,7 +468,7 @@ class Objects {
           $anon_function = function (&$parameter) {
             return Internals::analysisHub($parameter);
           };
-          $output .= Render::renderExpandableChild($name, 'debug method', $anon_function, $parameter, $func_name . ' Info');
+          $output .= View\Render::renderExpandableChild($func_name, 'debug method', $anon_function, $parameter, '. . .', '', '', FALSE, '->', '() =');
           unset($parameter);
         }
       }
@@ -464,7 +477,7 @@ class Objects {
   }
 
   /**
-   * Render a dump for method infos.
+   * Render a dump for method info.
    *
    * @param array $data
    *   The method analysis results in an array.
@@ -481,15 +494,31 @@ class Objects {
       $output = '';
       foreach ($data as $key => $string) {
         if ($key !== 'comments' && $key !== 'declared in') {
-          $output .= Render::renderSingleChild($string, $key, $string, FALSE, 'reflection');
+          $output .= View\Render::renderSingleChild($string, $key, $string, FALSE, 'reflection', '', '', '', '=');
         }
         else {
-          $output .= Render::renderSingleChild($string, $key, '. . .', TRUE, 'reflection');
+          $output .= View\Render::renderSingleChild($string, $key, '. . .', TRUE, 'reflection', '', '', '', '=');
         }
       }
       return $output;
     };
-    return Render::renderExpandableChild($name, $data['declaration keywords'] . ' method', $anon_function, $parameter);
+
+
+    $param_list = '';
+    $connector1 = '->';
+    foreach ($data as $key => $string) {
+      // Getting the parameter list.
+      if (strpos($key, 'Parameter') === 0) {
+        $param_list .= trim(str_replace(array('&lt;optional&gt;', '&lt;required&gt;'), array('', ''), $string))  . ', ';
+      }
+      if (strpos($data['declaration keywords'], 'static') !== FALSE) {
+        $connector1 = '::';
+      }
+    }
+    // Remove the ',' after the last char.
+    $param_list = '<small>' . trim($param_list, ', ') . '</small>';
+
+    return View\Render::renderExpandableChild($name, $data['declaration keywords'] . ' method', $anon_function, $parameter, '', '', '', FALSE, $connector1, '(' . $param_list . ')');
   }
 
   /**
@@ -514,16 +543,20 @@ class Objects {
       // Deep analysis of the methods.
       foreach ($data as $reflection) {
         $method_data = array();
+        /* @var \ReflectionMethod $reflection  */
         $method = $reflection->name;
         // Get the comment from the class, it's parents, interfaces or traits.
-        $method_data['comments'] = Objects::prettifyComment($reflection->getDocComment());
-        $method_data['comments'] = Objects::getParentalComment($method_data['comments'], $ref, $method);
-        $method_data['comments'] = Objects::getInterfaceComment($method_data['comments'], $ref, $method);
-        $method_data['comments'] = Variables::encodeString($method_data['comments'], TRUE);
+        $comments = trim($reflection->getDocComment());
+        if ($comments != '') {
+          $method_data['comments'] = Objects::prettifyComment($comments);
+          $method_data['comments'] = Objects::getParentalComment($method_data['comments'], $ref, $method);
+          $method_data['comments'] = Objects::getInterfaceComment($method_data['comments'], $ref, $method);
+          $method_data['comments'] = Variables::encodeString($method_data['comments'], TRUE);
+        }
         // Get declaration place.
         $declaring_class = $reflection->getDeclaringClass();
         if (is_null($declaring_class->getFileName()) || $declaring_class->getFileName() == '') {
-          $method_data['declared in'] = ':: unable to determine declaration::<br/><br/>Maybe this is a predeclared class?';
+          $method_data['declared in'] = ':: unable to determine declaration ::<br/><br/>Maybe this is a predeclared class?';
         }
         else {
           $method_data['declared in'] = htmlspecialchars($declaring_class->getFileName()) . '<br/>';
@@ -588,7 +621,7 @@ class Objects {
     if (stripos($original_comment, '{@inheritdoc}') !== FALSE) {
       // now we need to get the parentclass and the comment
       // from the parent function
-      /* @var reflectionclass $parent_class */
+      /* @var \ReflectionClass $parent_class */
       $parent_class = $reflection->getParentClass();
       if (!is_object($parent_class)) {
         // we've gone too far
@@ -697,10 +730,10 @@ class Objects {
         // Get the traits from the parent traits.
         foreach ($trait_array as $trait) {
           $parent_traits = $trait->getTraits();
-          // Merge them into our trasit array to get al parents.
+          // Merge them into our trait array to get al parents.
           $trait_array = array_merge($trait_array, $parent_traits);
         }
-        // Now we should have an alrray with reflections of all
+        // Now we should have an array with reflections of all
         // traits in the class we are currently looking at.
         foreach ($trait_array as $trait) {
           try {
@@ -747,7 +780,7 @@ class Objects {
    *   The better readable comment
    */
   public static function prettifyComment($comment) {
-    // We split our comment into sinlge lines and remove the unwanted
+    // We split our comment into single lines and remove the unwanted
     // comment chars with the array_map callback.
     $comment_array = explode("\n", $comment);
     $result = array();

@@ -31,7 +31,10 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Krexx;
+namespace Brainworxx\Krexx\Analysis;
+
+use Brainworxx\Krexx\Framework;
+use Brainworxx\Krexx\View;
 
 /**
  * This class hosts the internal analysis functions.
@@ -45,7 +48,7 @@ class Internals {
   /**
    * Sends the output to the browser during shutdown phase.
    *
-   * @var \Krexx\ShutdownHandler
+   * @var Framework\ShutdownHandler
    */
   public static $shutdownHandler;
 
@@ -71,7 +74,7 @@ class Internals {
    */
   public static function miniBenchTo(array $arg_t) {
     $tttime = round((end($arg_t) - $arg_t['start']) * 1000, 4);
-    $ar_aff['url'] = Toolbox::getCurrentUrl();
+    $ar_aff['url'] = Framework\Toolbox::getCurrentUrl();
     $ar_aff['total_time'] = $tttime;
     $prv_cle = 'start';
     $prv_val = $arg_t['start'];
@@ -80,7 +83,7 @@ class Internals {
       if ($cle != 'start') {
         // Calculate the time.
         $prcnt_t = round(((round(($val - $prv_val) * 1000, 4) / $tttime) * 100), 1);
-        $ar_aff[$prv_cle . ' -> ' . $cle] = $prcnt_t . '%';
+        $ar_aff[$prv_cle . '->' . $cle] = $prcnt_t . '%';
         $prv_val = $val;
         $prv_cle = $cle;
       }
@@ -98,24 +101,35 @@ class Internals {
    *   The variable we are analysing.
    * @param string $name
    *   The name of the variable, if available.
+   * @param string $connector1
+   *   The connector1 type to the parent class / array.
+   * @param string $connector2
+   *   The connector2 type to the parent class / array.
    *
    * @return string
    *   The generated markup.
    */
-  public Static Function analysisHub(&$data, $name = '...') {
+  public Static Function analysisHub(&$data, $name = '', $connector1 = '', $connector2 = '') {
 
-    // Ceck memory and runtime.
+    // Check memory and runtime.
     if (!self::checkEmergencyBreak()) {
       // No more took too long, or not enough memory is left.
-      Messages::addMessage("Emergency break for large output during rendering process.\n\nYou should try to switch to file output.");
+      View\Messages::addMessage("Emergency break for large output during rendering process.\n\nYou should try to switch to file output.");
       return '';
+    }
+
+    // If we are currently analysing an array, we might need to add stuff to
+    // the connector.
+    if ($connector1 == '[' && is_string($name)) {
+      $connector1 = $connector1 . "'";
+      $connector2 = "'" . $connector2;
     }
 
     // Object?
     if (is_object($data)) {
       self::$nestingLevel++;
-      if (self::$nestingLevel <= (int) Config::getConfigValue('deep', 'level')) {
-        $result = Objects::analyseObject($data, $name);
+      if (self::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
+        $result = Objects::analyseObject($data, $name, '', $connector1, $connector2);
         self::$nestingLevel--;
         return $result;
       }
@@ -128,8 +142,8 @@ class Internals {
     // Array?
     if (is_array($data)) {
       self::$nestingLevel++;
-      if (self::$nestingLevel <= (int) Config::getConfigValue('deep', 'level')) {
-        $result = Variables::analyseArray($data, $name);
+      if (self::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
+        $result = Variables::analyseArray($data, $name, '', $connector1, $connector2);
         self::$nestingLevel--;
         return $result;
       }
@@ -141,40 +155,40 @@ class Internals {
 
     // Resource?
     if (is_resource($data)) {
-      return Variables::analyseResource($data, $name);
+      return Variables::analyseResource($data, $name, '', $connector1, $connector2);
     }
 
     // String?
     if (is_string($data)) {
-      return Variables::analyseString($data, $name);
+      return Variables::analyseString($data, $name, '', $connector1, $connector2);
     }
 
     // Float?
     if (is_float($data)) {
-      return Variables::analyseFloat($data, $name);
+      return Variables::analyseFloat($data, $name, '', $connector1, $connector2);
     }
 
     // Integer?
     if (is_int($data)) {
-      return Variables::analyseInteger($data, $name);
+      return Variables::analyseInteger($data, $name, '', $connector1, $connector2);
     }
 
     // Boolean?
     if (is_bool($data)) {
-      return Variables::analyseBoolean($data, $name);
+      return Variables::analyseBoolean($data, $name, '', $connector1, $connector2);
     }
 
     // Null ?
     if (is_null($data)) {
-      return Variables::analyseNull($name);
+      return Variables::analyseNull($name, '', $connector1, $connector2);
     }
   }
 
   /**
    * Render a dump for the properties of an array or object.
    *
-   * @param array|object &$data
-   *   The object or array we want to analyse.
+   * @param array &$data
+   *   The array we want to analyse.
    *
    * @return string
    *   The generated markup.
@@ -188,24 +202,20 @@ class Internals {
 
       $recursion_marker = Hive::getMarker();
 
-      // Recursion detection of objects are
-      // handeld in the hub.
+      // Recursion detection of objects are handled in the hub.
       if (is_array($data) && Hive::isInHive($data)) {
-        return Render::renderRecursion();
+        return View\Render::renderRecursion();
       }
 
       // Remember, that we've already been here.
       Hive::addToHive($data);
 
       // Keys?
-      if ($is_object) {
-        $keys = array_keys(get_object_vars($data));
-      }
-      else {
-        $keys = array_keys($data);
-      }
+      $keys = array_keys($data);
 
-      // Itterate through.
+      $output .= View\Render::renderSingeChildHr();
+
+      // Iterate through.
       foreach ($keys as $k) {
 
         // Skip the recursion marker.
@@ -221,17 +231,18 @@ class Internals {
           $v = & $data[$k];
         }
 
-        $output .= Internals::analysisHub($v, $k);
+        $output .= Internals::analysisHub($v, $k, '[', ']');
       }
+      $output .= View\Render::renderSingeChildHr();
       return $output;
     };
-    return Render::renderExpandableChild('', '', $analysis, $parameter);
+    return View\Render::renderExpandableChild('', '', $analysis, $parameter);
   }
 
   /**
    * Dump information about a variable.
    *
-   * Here erverything starts and ends (well, unless we are only outputting
+   * Here everything starts and ends (well, unless we are only outputting
    * the settings editor).
    *
    * @param mixed $data
@@ -288,13 +299,13 @@ class Internals {
     }
 
     // Start Output.
-    Render::$KrexxCount++;
+    View\Render::$KrexxCount++;
     // We need to get the footer before the generating of the header,
     // because we need to display messages in the header.
-    $footer = Toolbox::outputFooter($caller);
-    $analysis = self::analysisHub($data);
-    self::$shutdownHandler->addChunkString(Toolbox::outputHeader($headline, $ignore_local_settings), $ignore_local_settings);
-    self::$shutdownHandler->addChunkString(Messages::outputMessages(), $ignore_local_settings);
+    $footer = Framework\Toolbox::outputFooter($caller);
+    $analysis = self::analysisHub($data, '...', '', '=>');
+    self::$shutdownHandler->addChunkString(Framework\Toolbox::outputHeader($headline, $ignore_local_settings), $ignore_local_settings);
+    self::$shutdownHandler->addChunkString(View\Messages::outputMessages(), $ignore_local_settings);
     self::$shutdownHandler->addChunkString($analysis, $ignore_local_settings);
     self::$shutdownHandler->addChunkString($footer, $ignore_local_settings);
 
@@ -325,17 +336,17 @@ class Internals {
     }
 
     // Start Output.
-    Render::$KrexxCount++;
+    View\Render::$KrexxCount++;
 
     // Remove the fist step from the backtrace,
-    // because that is the interal function in kreXX.
+    // because that is the internal function in kreXX.
     $backtrace = debug_backtrace();
     unset($backtrace[0]);
-    $footer = Toolbox::outputFooter($caller);
-    $analysis = Toolbox::outputBacktrace($backtrace);
+    $footer = Framework\Toolbox::outputFooter($caller);
+    $analysis = Framework\Toolbox::outputBacktrace($backtrace);
 
-    self::$shutdownHandler->addChunkString(Toolbox::outputHeader($headline));
-    self::$shutdownHandler->addChunkString(Messages::outputMessages());
+    self::$shutdownHandler->addChunkString(Framework\Toolbox::outputHeader($headline));
+    self::$shutdownHandler->addChunkString(View\Messages::outputMessages());
     self::$shutdownHandler->addChunkString($analysis);
     self::$shutdownHandler->addChunkString($footer);
 
@@ -346,7 +357,7 @@ class Internals {
   /**
    * Finds the place in the code from where krexx was called.
    *
-   * @return string
+   * @return array
    *   The code, from where krexx was called
    */
   public static function findCaller() {
@@ -359,14 +370,6 @@ class Internals {
         break;
       }
     }
-
-    // Now we try to get the context of the kreXX call.
-    // When calling something like krexx($this);
-    // we must treat protected and private properties like public ones, because
-    // they are accessible.
-    $source = Toolbox::readSourcecode($caller['file'], $caller['line'] - 1, 0);
-    // @todo Analyse this part of the sourcecode, to get the context.
-
     return $caller;
   }
 
@@ -378,8 +381,8 @@ class Internals {
    */
   protected static function checkMaxCall() {
     $result = FALSE;
-    $max_call = (int) Config::getConfigValue('output', 'maxCall');
-    if (Render::$KrexxCount >= $max_call) {
+    $max_call = (int) Framework\Config::getConfigValue('output', 'maxCall');
+    if (View\Render::$KrexxCount >= $max_call) {
       // Called too often, we might get into trouble here!
       $result = TRUE;
     }
@@ -407,7 +410,7 @@ class Internals {
     }
 
     // Check Runtime.
-    if (self::$timer + (int) Config::getConfigValue('render', 'maxRuntime') <= time()) {
+    if (self::$timer + (int) Framework\Config::getConfigValue('render', 'maxRuntime') <= time()) {
       // This is taking longer than expected.
       $result = FALSE;
     }
@@ -433,7 +436,7 @@ class Internals {
         $usage = memory_get_usage();
         $left = $memory_limit - $usage;
         // Is more left than is configured?
-        $result = $left >= (int) Config::getConfigValue('render', 'memoryLeft') * 1024 * 1024;
+        $result = $left >= (int) Framework\Config::getConfigValue('render', 'memoryLeft') * 1024 * 1024;
       }
     }
 

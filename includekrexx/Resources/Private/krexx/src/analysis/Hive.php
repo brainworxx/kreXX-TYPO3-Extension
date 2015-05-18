@@ -31,7 +31,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Krexx;
+namespace Brainworxx\Krexx\Analysis;
 
 /**
  * This class decides about recursion.
@@ -40,7 +40,7 @@ namespace Krexx;
  */
 class Hive {
   /**
-   * Storeage for arrays ans objects, to prevent recursions.
+   * Storage for arrays ans objects, to prevent recursions.
    *
    * Layout:
    * [0] -> array with markers
@@ -119,7 +119,7 @@ class Hive {
         try {
           unset(self::$recursionHive[0][$i][$recursion_marker]);
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
           // Do nothing.
         }
       }

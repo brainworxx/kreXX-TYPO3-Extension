@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   Configfunctions for kreXX
+ *   Configuration functions for kreXX
  *   kreXX: Krumo eXXtended
  *
  *   This is a debugging tool, which displays structured information
@@ -31,7 +31,9 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Krexx;
+namespace Brainworxx\Krexx\Framework;
+
+use Brainworxx\Krexx\View;
 
 /**
  * This class hosts the kreXX configuration functions.
@@ -175,6 +177,13 @@ class Config {
   );
 
   /**
+   * The directory where kreXX is stored.
+   *
+   * @var string
+   */
+  public static $krexxdir;
+
+  /**
    * Known Problems with debug functions, which will most likely cause a fatal.
    *
    * Used by \Krexx\Objects::pollAllConfiguredDebugMethods() to determine
@@ -216,7 +225,7 @@ class Config {
    *   TRUE when we render the settings menu only.
    *
    * @return bool
-   *   Returns wether kreXX is enabled or not.
+   *   Returns whether kreXX is enabled or not.
    */
   public Static Function isEnabled($state = NULL, $ignore_local_settings = FALSE) {
 
@@ -244,7 +253,7 @@ class Config {
    * Returns values from kreXX's configuration.
    *
    * @param string $group
-   *   The goup inside the ini of the value that we want to read.
+   *   The group inside the ini of the value that we want to read.
    * @param string $name
    *   The name of the config value.
    * @param bool $ignore_local_settings
@@ -329,7 +338,7 @@ class Config {
       else {
         // We have already a value.
         if (is_array($value)) {
-          // Add our array rekursivly.
+          // Add our array recursively.
           self::krexxArrayMerge($old_array[$key], $value);
         }
         else {
@@ -452,12 +461,12 @@ class Config {
     // Not loaded?
     if (empty($_config)) {
       // File is somewhere else.
-      $config_ini = (array) parse_ini_string(Toolbox::getFileContents(KREXXDIR . 'KrexxConfig.ini'), TRUE);
+      $config_ini = (array) parse_ini_string(Toolbox::getFileContents(self::$krexxdir . 'KrexxConfig.ini'), TRUE);
       if (isset($config_ini['pathtoini']['pathtoini'])) {
         self::$pathToIni = $config_ini['pathtoini']['pathtoini'];
       }
       else {
-        self::$pathToIni = KREXXDIR . 'Krexx.ini';
+        self::$pathToIni = self::$krexxdir . 'Krexx.ini';
       }
 
       $_config = (array) parse_ini_string(Toolbox::getFileContents(self::$pathToIni), TRUE);
@@ -543,7 +552,7 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "methods => analysePublicMethods"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "methods => analysePublicMethods"! Expected boolean. The configured setting was not applied!');
           }
           break;
 
@@ -551,7 +560,7 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "methods => analyseProtectedMethods"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "methods => analyseProtectedMethods"! Expected boolean. The configured setting was not applied!');
           }
           break;
 
@@ -559,7 +568,7 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "methods => analysePrivateMethods"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "methods => analysePrivateMethods"! Expected boolean. The configured setting was not applied!');
           }
           break;
 
@@ -567,7 +576,7 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "deep => analyseProtected"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "deep => analyseProtected"! Expected boolean. The configured setting was not applied!');
           }
           break;
 
@@ -575,7 +584,7 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "deep => analysePrivate"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "deep => analysePrivate"! Expected boolean. The configured setting was not applied!');
           }
           break;
 
@@ -583,7 +592,7 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "deep => analyseTraversable"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "deep => analyseTraversable"! Expected boolean. The configured setting was not applied!');
           }
           break;
 
@@ -598,7 +607,7 @@ class Config {
           // We expect an integer.
           $result = self::evalInt($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "deep => level"! Expected integer. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "deep => level"! Expected integer. The configured setting was not applied!');
           }
           break;
 
@@ -606,7 +615,7 @@ class Config {
           // We expect an integer.
           $result = self::evalInt($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "output => maxCall"! Expected integer. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "output => maxCall"! Expected integer. The configured setting was not applied!');
           }
           break;
 
@@ -614,7 +623,7 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "output => disabled"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "output => disabled"! Expected boolean. The configured setting was not applied!');
           }
           break;
 
@@ -622,7 +631,7 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "output => detectAjax"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "output => detectAjax"! Expected boolean. The configured setting was not applied!');
           }
           break;
 
@@ -632,7 +641,7 @@ class Config {
             $result = TRUE;
           }
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "output => destination"! Expected "frontend" or "file". The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "output => destination"! Expected "frontend" or "file". The configured setting was not applied!');
           }
           break;
 
@@ -640,36 +649,36 @@ class Config {
           // We expect an integer.
           $result = self::evalInt($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "output => maxfiles"! Expected integer. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "output => maxfiles"! Expected integer. The configured setting was not applied!');
           }
           break;
 
         case "folder":
           // Directory with writeaccess.
           // We also need to check, if the folder is properly protected.
-          $is_writable = is_writable(KREXXDIR . $value);
-          $is_protected = Toolbox::isFolderProtected(KREXXDIR . $value);
+          $is_writable = is_writable(self::$krexxdir . $value);
+          $is_protected = Toolbox::isFolderProtected(self::$krexxdir . $value);
           if ($is_writable && $is_protected) {
             $result = TRUE;
           }
           if (!$is_writable) {
-            Messages::addMessage('Wrong configuration for: "output => folder"! Directory is not writeable. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "output => folder"! Directory is not writable. The configured setting was not applied!');
           }
           if (!$is_protected) {
-            Messages::addMessage('Wrong configuration for: "output => folder"! Directory is not protected. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "output => folder"! Directory is not protected. The configured setting was not applied!');
           }
           break;
 
         case "jsLib":
           // We expect a path to a jquery library, or an empty value.
-          $is_jquery = strpos(Toolbox::getFileContents(KREXXDIR . 'jsLibs/' . $value), 'jQuery Foundation, Inc.') !== FALSE;
+          $is_jquery = strpos(Toolbox::getFileContents(self::$krexxdir . 'resources/jsLibs/' . $value), 'jQuery Foundation, Inc.') !== FALSE;
 
           // We accept empty values and jquery libraries.
           if (empty($value) || $is_jquery) {
             $result = TRUE;
           }
           else {
-            Messages::addMessage('Wrong configuration for: "render => jsLib"! This is not a jQuery library. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "render => jsLib"! This is not a jQuery library. The configured setting was not applied!');
           }
           break;
 
@@ -680,11 +689,11 @@ class Config {
 
         case "skin":
           // We check the directory and one of the files for readability.
-          if (is_readable(KREXXDIR . 'skins/' . $value . '/header.html')) {
+          if (is_readable(self::$krexxdir . 'resources/skins/' . $value . '/header.html')) {
             $result = TRUE;
           }
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "render => skin"! Skin not found. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "render => skin"! Skin not found. The configured setting was not applied!');
           }
           break;
 
@@ -698,7 +707,7 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "errorHandling => traceFatals"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "errorHandling => traceFatals"! Expected boolean. The configured setting was not applied!');
           }
           break;
 
@@ -706,7 +715,7 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "errorHandling => traceWarnings"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "errorHandling => traceWarnings"! Expected boolean. The configured setting was not applied!');
           }
           break;
 
@@ -714,7 +723,7 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "errorHandling => traceNotices"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "errorHandling => traceNotices"! Expected boolean. The configured setting was not applied!');
           }
           break;
 
@@ -722,7 +731,7 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "errorHandling => registerAutomatically"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "errorHandling => registerAutomatically"! Expected boolean. The configured setting was not applied!');
           }
           break;
 
@@ -732,7 +741,7 @@ class Config {
             $result = TRUE;
           }
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "errorHandling => backtraceAnalysis"! Expected "normal" or "deep". The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "errorHandling => backtraceAnalysis"! Expected "normal" or "deep". The configured setting was not applied!');
           }
           break;
 
@@ -740,7 +749,7 @@ class Config {
           // We expect an integer.
           $result = self::evalInt($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "render => memoryLeft"! Expected integer. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "render => memoryLeft"! Expected integer. The configured setting was not applied!');
           }
           break;
 
@@ -748,7 +757,7 @@ class Config {
           // We expect an integer.
           $result = self::evalInt($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "render => maxRuntime"! Expected integer. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "render => maxRuntime"! Expected integer. The configured setting was not applied!');
           }
           break;
 

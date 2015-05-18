@@ -14,6 +14,10 @@
  *
  * @author brainworXX GmbH <info@brainworxx.de>
  *
+ * @usage
+ *   {namespace krexx=Tx_Includekrexx_ViewHelpers}
+ *   <krexx:debug>{_all}</krexx:debug>
+ *
  * @license http://opensource.org/licenses/LGPL-2.1
  *   GNU Lesser General Public License Version 2.1
  *
