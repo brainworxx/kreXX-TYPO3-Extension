@@ -33,6 +33,7 @@
 
 namespace Brainworxx\Krexx\Analysis;
 
+use Brainworxx\Krexx\Framework\Toolbox;
 use Brainworxx\Krexx\View;
 
 /**
@@ -41,6 +42,35 @@ use Brainworxx\Krexx\View;
  * @package Krexx
  */
 class Variables {
+
+  /**
+   * List of all cahrsets that can be savely encoded via htmlentities().
+   *
+   * @var array
+   */
+  static protected $charsetList = array(
+    'UTF-8',
+    'ISO-8859-1',
+    'ISO-8859-5',
+    'ISO-8859-15',
+    'cp866',
+    'ibm866',
+    'cp1251',
+    'Windows-1251',
+    'cp1252',
+    'Windows-1252',
+    'KOI8-R',
+    'koi8r',
+    'BIG5',
+    'GB2312',
+    'Shift_JIS',
+    'SJIS',
+    'SJIS-win',
+    'cp932',
+    'EUC-JP',
+    'EUCJP',
+    'eucJP-win',
+  );
 
   /**
    * Render a 'dump' for a NULL value.
@@ -233,25 +263,25 @@ class Variables {
   public static function encodeString($data, $code = FALSE) {
     $result = '';
     // Try to encode it.
-    $encoding = mb_detect_encoding($data);
-    if (in_array($encoding, get_html_translation_table(HTML_ENTITIES))) {
-      set_error_handler(function() { /* do nothing. */ });
+    $encoding = mb_detect_encoding($data, self::$charsetList);
+    if ($encoding !== FALSE) {
+      set_error_handler(function () { /* do nothing. */ });
       $result = @htmlentities($data, NULL, $encoding);
       restore_error_handler();
       // We are also encoding @, because we need them for our chunks.
       $result = str_replace('@', '&#64;', $result);
     }
+
     // Check if encoding was successful.
     if (strlen($result) === 0 && strlen($data) !== 0) {
       // Something went wrong with the encoding, we need to
       // completely encode this one to be able to display it at all!
       $data = @mb_convert_encoding($data, 'UTF-32', mb_detect_encoding($data));
-      $char_array = unpack("N*", $data);
 
       if ($code) {
         // We are displaying sourcecode, so we need
         // to do some formatting.
-        $anon_function = function($n){
+        $anon_function = function ($n) {
           if ($n == 9) {
             // Replace TAB with two spaces, it's better readable that way.
             $result = '&nbsp;&nbsp;';
@@ -264,12 +294,23 @@ class Variables {
       }
       else {
         // No formatting.
-        $anon_function = function($n){
+        $anon_function = function ($n) {
           return "&#$n;";
         };
       }
-      $char_array = array_map($anon_function, $char_array);
-      $result = implode("", $char_array);
+
+      // Here we have another SPOF. When the string is large enough
+      // we will run out of memory!
+      // @see https://sourceforge.net/p/krexx/bugs/21/
+      // We will *NOT* return the unescaped string. Se we must check if it
+      // is small enough for the unpack().
+      // 100 kb should be save enough.
+      if (strlen($data) < 102400) {
+        $result = implode("", array_map($anon_function, unpack("N*", $data)));
+      }
+      else {
+        $result = 'This is a very large string with a none-standard encoding.' . "\n\n" . 'For security reasons, we must escape it, but it is too large for this. Sorry.';
+      }
     }
     else {
       if ($code) {

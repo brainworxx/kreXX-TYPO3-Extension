@@ -105,6 +105,12 @@ class Tx_Includekrexx_Controller_IndexController extends Tx_Extbase_MVC_Controll
   }
 
   /**
+   * simply display the kreXX local browser configuration.
+   */
+  public function editLocalBrowserSettingsAction() {
+    \krexx::editSettings();
+  }
+  /**
    * Shows the configuration for the FE editing.
    */
   public function editFeConfigAction() {

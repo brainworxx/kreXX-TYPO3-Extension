@@ -589,5 +589,6 @@ li.kchild.krow hr {
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
   margin-right: 20px;
   margin-top: 0;
+  margin-bottom: 5px;
   background-color: transparent;
 }

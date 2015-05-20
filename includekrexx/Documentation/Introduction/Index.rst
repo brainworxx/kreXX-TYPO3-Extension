@@ -13,7 +13,7 @@ kreXX will be called from within the PHP source code:
 
 .. code-block:: php
 
-	\krexx($myObject);
+	krexx($myObject);
 
 
 
