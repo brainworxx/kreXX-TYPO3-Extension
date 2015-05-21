@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   Loader for the include kreXX extension
+ *   Typo3 installation class for kreXX
  *   kreXX: Krumo eXXtended
  *
  *   kreXX is a debugging tool, which displays structured information
@@ -31,14 +31,41 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-if (! defined('TYPO3_MODE')) {
-  die('Access denied.');
-}
 
-$filename = t3lib_extMgm::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
-if (file_exists($filename) && !class_exists('Krexx')) {
-  // We load the kreXX library.
-  include_once $filename;
+class ext_update {
+
+  /**
+   * Returns wether this script is available in the backend.
+   *
+   * @return bool
+   *   Always TRUE.
+   */
+  public function access() {
+    return TRUE;
+  }
+
+  /**
+   * Main Function.
+   *
+   * @return string
+   *   Gives feedback of what was actually done.
+   */
+  public function main() {
+    // Protect the upload folder.
+    // We create a .htaccess here, as well as a index.php.
+    // The uploadfolder should not be reachable from the outside.
+    $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
+    $destination = PATH_site . 'uploads/tx_includekrexx/.htaccess';
+    if (is_file($source) && !is_file($destination)) {
+      copy($source, $destination);
+    }
+    $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/index.php';
+    $destination = PATH_site . 'uploads/tx_includekrexx/index.php';
+    if (is_file($source) && !is_file($destination)) {
+      copy($source, $destination);
+    }
+
+    return 'Applied protection to the upload folder.';
+  }
+
 }
-// We point kreXX to its ini file.
-\Brainworxx\Krexx\Framework\Config::setPathToIni(PATH_site . 'uploads/tx_includekrexx/Krexx.ini"');

@@ -387,7 +387,7 @@ class Config {
 
     // Get Settings from the cookies. We do not valuate them,
     // so the dev can correct them, in case there are wrong values.
-    $config_ini = (array) parse_ini_string(Toolbox::getFileContents(self::$pathToIni), TRUE);
+    $config_ini = (array) parse_ini_string(Toolbox::getFileContents(self::getPathToIni()), TRUE);
 
     foreach (self::$configFallback as $section_name => $section_data) {
       foreach ($section_data as $parameter_name => $parameter_value) {
@@ -441,7 +441,26 @@ class Config {
    *   The path to the inifile.
    */
   public Static Function getPathToIni() {
+    if (!isset(self::$pathToIni)){
+      $config_ini = (array) parse_ini_string(Toolbox::getFileContents(self::$krexxdir . 'KrexxConfig.ini'), TRUE);
+      if (isset($config_ini['pathtoini']['pathtoini'])) {
+        self::$pathToIni = $config_ini['pathtoini']['pathtoini'];
+      }
+      else {
+        self::$pathToIni = self::$krexxdir . 'Krexx.ini';
+      }
+    }
     return self::$pathToIni;
+  }
+
+  /**
+   * Setter for the path to the ini file.
+   *
+   * @param string $path
+   *   The path to the ini file
+   */
+  public static function setPathToIni($path) {
+    self::$pathToIni = $path;
   }
 
   /**
@@ -460,16 +479,7 @@ class Config {
 
     // Not loaded?
     if (empty($_config)) {
-      // File is somewhere else.
-      $config_ini = (array) parse_ini_string(Toolbox::getFileContents(self::$krexxdir . 'KrexxConfig.ini'), TRUE);
-      if (isset($config_ini['pathtoini']['pathtoini'])) {
-        self::$pathToIni = $config_ini['pathtoini']['pathtoini'];
-      }
-      else {
-        self::$pathToIni = self::$krexxdir . 'Krexx.ini';
-      }
-
-      $_config = (array) parse_ini_string(Toolbox::getFileContents(self::$pathToIni), TRUE);
+      $_config = (array) parse_ini_string(Toolbox::getFileContents(self::getPathToIni()), TRUE);
     }
 
     // Do we have a value in the ini?
