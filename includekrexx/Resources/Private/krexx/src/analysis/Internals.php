@@ -231,7 +231,7 @@ class Internals {
           $v = & $data[$k];
         }
 
-        $output .= Internals::analysisHub($v, $k, '[', ']');
+        $output .= Internals::analysisHub($v, $k, '[', '] =');
       }
       $output .= View\Render::renderSingeChildHr();
       return $output;
