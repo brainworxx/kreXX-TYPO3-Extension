@@ -66,7 +66,7 @@ class Render extends Help {
    *   The version of kreXX.
    */
   Public Static Function version() {
-    return '1.3.3 dev';
+    return '1.3.3';
   }
 
   /**
