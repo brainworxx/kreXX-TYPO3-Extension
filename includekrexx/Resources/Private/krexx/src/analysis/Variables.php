@@ -270,6 +270,8 @@ class Variables {
       restore_error_handler();
       // We are also encoding @, because we need them for our chunks.
       $result = str_replace('@', '&#64;', $result);
+      // We ara also encoding the {, because we use it as markers for the skins.
+      $result = str_replace('{', '&#123;', $result);
     }
 
     // Check if encoding was successful.

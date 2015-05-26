@@ -2,6 +2,7 @@
 - Bugfix: No data from the Magento debug() function when uses as a
   configurable debug function.
 - Bugfix: Escaping of very large strings.
+- Bugfix: Fixed possible mixup of analysis results and skin marker.
 - Change: Restructured the output, to make it (hopefully) better
   readable. The format is now much more similar to the actual code
 
