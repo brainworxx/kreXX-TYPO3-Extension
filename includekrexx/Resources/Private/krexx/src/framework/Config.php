@@ -34,6 +34,7 @@
 namespace Brainworxx\Krexx\Framework;
 
 use Brainworxx\Krexx\View;
+use Krexx\Messages;
 
 /**
  * This class hosts the kreXX configuration functions.
@@ -216,6 +217,13 @@ class Config {
   protected static $pathToIni;
 
   /**
+   * The kreXX version.
+   *
+   * @var string
+   */
+  public static $version = '1.3.3';
+
+  /**
    * Get\Set kreXX state: whether it is enabled or disabled.
    *
    * @param bool $state
@@ -245,7 +253,6 @@ class Config {
     if (Toolbox::isRequestAjaxOrCli()) {
       return FALSE;
     }
-
     return self::$isEnabled;
   }
 
@@ -430,7 +437,7 @@ class Config {
   }
 
   /**
-   * Gets the path to the inifile.
+   * Gets the path to the ini file.
    *
    * In typo3, it is not a good idea to store the config
    * settings inside the module directory. When an update is
@@ -438,10 +445,10 @@ class Config {
    * to point kreXX to another directory for it's config.
    *
    * @return string
-   *   The path to the inifile.
+   *   The path to the ini file.
    */
   public Static Function getPathToIni() {
-    if (!isset(self::$pathToIni)){
+    if (!isset(self::$pathToIni)) {
       $config_ini = (array) parse_ini_string(Toolbox::getFileContents(self::$krexxdir . 'KrexxConfig.ini'), TRUE);
       if (isset($config_ini['pathtoini']['pathtoini'])) {
         self::$pathToIni = $config_ini['pathtoini']['pathtoini'];

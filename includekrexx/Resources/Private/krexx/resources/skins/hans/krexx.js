@@ -520,7 +520,7 @@
       $krexxQuery('.highlight-jumpto').removeClass('highlight-jumpto');
       // Highlight new one.
       $expandableElement.addClass('highlight-jumpto');
-      // The mainproblem here is, I might have 2 different container:
+      // The main problem here is, I might have 2 different container:
       // '.kwrapper' in case of the error handler or
       // 'html, body' in case of a normal output.
       $container = $krexxQuery('.kfatalwrapper-outer');
@@ -641,7 +641,7 @@
    * for that file, and not for the server.
    */
   krexx.disableForms = function () {
-    $krexxQuery('.kwrapper .editable').children().prop('disabled', true);
+    $krexxQuery('.kwrapper .keditable').children().prop('disabled', true);
     $krexxQuery('.kwrapper .resetbutton').prop('disabled', true);
   };
 })();

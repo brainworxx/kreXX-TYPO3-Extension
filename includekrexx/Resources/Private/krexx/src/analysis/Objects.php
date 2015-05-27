@@ -304,7 +304,7 @@ class Objects {
   /**
    * Render a dump for the properties of an array or object.
    *
-   * @param array|object &$data
+   * @param mixed &$data
    *   The object or array we want to analyse.
    *
    * @return string

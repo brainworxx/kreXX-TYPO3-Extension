@@ -170,9 +170,6 @@ class Krexx {
         self::open();
       }
     }
-    else {
-      // Do nothing.
-    }
     self::reFatalAfterKrexx();
   }
 

@@ -33,7 +33,6 @@
 
 namespace Brainworxx\Krexx\Analysis;
 
-use Brainworxx\Krexx\Framework\Toolbox;
 use Brainworxx\Krexx\View;
 
 /**
@@ -44,7 +43,7 @@ use Brainworxx\Krexx\View;
 class Variables {
 
   /**
-   * List of all cahrsets that can be savely encoded via htmlentities().
+   * List of all charsets that can be safely encoded via htmlentities().
    *
    * @var array
    */
@@ -54,7 +53,6 @@ class Variables {
     'ISO-8859-5',
     'ISO-8859-15',
     'cp866',
-    'ibm866',
     'cp1251',
     'Windows-1251',
     'cp1252',

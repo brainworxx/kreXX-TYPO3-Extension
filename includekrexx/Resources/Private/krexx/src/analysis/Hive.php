@@ -66,7 +66,7 @@ class Hive {
    * Adds a variable to the hive of arrays and objects which
    * are tracked for whether they have recursive entries.
    *
-   * @param array|object $bee
+   * @param mixed $bee
    *   Either array or object.
    *
    * @return array

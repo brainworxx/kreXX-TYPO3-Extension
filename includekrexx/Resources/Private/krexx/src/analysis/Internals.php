@@ -304,10 +304,10 @@ class Internals {
     // because we need to display messages in the header.
     $footer = Framework\Toolbox::outputFooter($caller);
     $analysis = self::analysisHub($data, '...', '', '=>');
-    self::$shutdownHandler->addChunkString(Framework\Toolbox::outputHeader($headline, $ignore_local_settings), $ignore_local_settings);
-    self::$shutdownHandler->addChunkString(View\Messages::outputMessages(), $ignore_local_settings);
-    self::$shutdownHandler->addChunkString($analysis, $ignore_local_settings);
-    self::$shutdownHandler->addChunkString($footer, $ignore_local_settings);
+    self::$shutdownHandler->addChunkString(Framework\Toolbox::outputHeader($headline, $ignore_local_settings));
+    self::$shutdownHandler->addChunkString(View\Messages::outputMessages());
+    self::$shutdownHandler->addChunkString($analysis);
+    self::$shutdownHandler->addChunkString($footer);
 
     // Cleanup the hive, this removes all recursion markers.
     Hive::cleanupHive();

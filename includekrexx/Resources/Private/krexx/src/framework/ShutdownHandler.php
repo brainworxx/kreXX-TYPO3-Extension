@@ -64,7 +64,7 @@ class ShutdownHandler {
    * @param string $chunk_string
    *   The chunked output string.
    * @param bool $ignore_local_settings
-   *   Whether or not we ignore local settings.
+   *   Determines if we ignore local settings for this chunk.
    */
   public function addChunkString($chunk_string, $ignore_local_settings = FALSE) {
     $this->chunkStrings[] = array($chunk_string, $ignore_local_settings);
@@ -84,15 +84,23 @@ class ShutdownHandler {
       // Since we are in CLI mode, these messages are not in HTML.
       // We can output them right away.
       echo $messages;
-      // Something went wrong, better to stop right here.
-      return;
     }
 
     // Output our chunks.
     // Every output is split into 4 chunk strings (header, messages,
     // data, footer).
+    // $chunk_string[0] = the string itself
+    // $chunk_string[1] = bool, ignore_local_settings
     foreach ($this->chunkStrings as $chunk_string) {
-      Toolbox::outputNow($chunk_string[0], $chunk_string[1]);
+      if (Config::getConfigValue('output', 'destination', $chunk_string[1]) == 'file') {
+        // Save it to a file.
+        Chunks::saveDechunkedToFile($chunk_string[0]);
+      }
+
+      else {
+        // Send it to the browser.
+        Chunks::sendDechunkedToBrowser($chunk_string[0]);
+      }
     }
   }
 }

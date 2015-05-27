@@ -60,16 +60,6 @@ class Render extends Help {
   public static $skin;
 
   /**
-   * Return kreXX version.
-   *
-   * @return string
-   *   The version of kreXX.
-   */
-  Public Static Function version() {
-    return '1.3.3';
-  }
-
-  /**
    * Renders a "single child", containing a single not expandable value.
    *
    * Depending on how many characters
@@ -189,7 +179,7 @@ class Render extends Help {
   Public static function renderHeader($doctype, $headline, $css_js) {
     $template = self::getTemplateFileContent('header');
     // Replace our stuff in the partial.
-    $template = str_replace('{version}', self::version(), $template);
+    $template = str_replace('{version}', Framework\Config::$version, $template);
     $template = str_replace('{doctype}', $doctype, $template);
     $template = str_replace('{KrexxCount}', self::$KrexxCount, $template);
     $template = str_replace('{headline}', $headline, $template);
@@ -371,10 +361,10 @@ class Render extends Help {
    * Loads a template file from the skin folder.
    *
    * @param string $what
-   *   Filename in the skinfolder without the ".html" at the end.
+   *   Filename in the skin folder without the ".html" at the end.
    *
    * @return string
-   *   The templatefile, without whitespaces.
+   *   The template file, without whitespaces.
    */
   protected static function getTemplateFileContent($what) {
     static $file_cache = array();
@@ -507,7 +497,7 @@ class Render extends Help {
    *   Part of the source code, where the error occurred.
    *
    * @return string
-   *   The templatefile, with all markers replaced.
+   *   The template file, with all markers replaced.
    */
   public static function renderFatalMain($type, $errstr, $errfile, $errline, $source) {
     $template = self::getTemplateFileContent('fatalMain');
@@ -538,7 +528,7 @@ class Render extends Help {
 
     // Insert our values.
     $template = str_replace('{cssJs}', $css_js, $template);
-    $template = str_replace('{version}', self::version(), $template);
+    $template = str_replace('{version}', Framework\Config::$version, $template);
     $template = str_replace('{doctype}', $doctype, $template);
     $template = str_replace('{search}', self::renderSearch(), $template);
 

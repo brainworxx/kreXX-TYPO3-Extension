@@ -81,10 +81,7 @@ class Chunks {
       // Get the key.
       $key = self::genKey();
       // Write the key to the chunks folder.
-      if (is_writable(Framework\Config::$krexxdir . 'chunks/')) {
-        // We only write when we are allowed.
-        file_put_contents(Framework\Config::$krexxdir . 'chunks/' . $key . '.Krexx.tmp', $string);
-      }
+      Toolbox::putFileContents(Framework\Config::$krexxdir . 'chunks/' . $key . '.Krexx.tmp', $string);
       // Return the first part plus the key.
       return '@@@' . $key . '@@@';
     }
@@ -173,7 +170,8 @@ class Chunks {
       if (!Analysis\Internals::checkEmergencyBreak()) {
         if (!$been_here) {
           // We display this only once.
-          echo '<script>alert("Emergency break for large output.\n\nYou should try to switch to file output.");</script>';
+          $message = 'Emergency break for large output.' . "\n\n" . 'You should try to switch to file output.';
+          echo '<script>alert("' . $message . '");</script>';
         }
         $been_here = TRUE;
         // There might be some leftover chunks.
@@ -224,7 +222,8 @@ class Chunks {
 
     while ($chunk_pos !== FALSE) {
       // We have a chunk, we send the html part.
-      file_put_contents($filename, substr($string, 0, $chunk_pos), FILE_APPEND);
+      Toolbox::putFileContents($filename, substr($string, 0, $chunk_pos));
+
       $chunk_part = substr($string, $chunk_pos);
 
       // We translate the first chunk.
@@ -235,8 +234,8 @@ class Chunks {
       $chunk_pos = strpos($string, '@@@');
     }
 
-    // No more chunks, we send what is left.
-    file_put_contents($filename, $string, FILE_APPEND);
+    // No more chunks, we save what is left.
+    Toolbox::putFileContents($filename, $string);
   }
 
   /**
@@ -250,7 +249,8 @@ class Chunks {
       // Clean up leftover files.
       $chunk_list = glob(Framework\Config::$krexxdir . 'chunks/*.Krexx.tmp');
       foreach ($chunk_list as $file) {
-        if (filemtime($file) < time() - 3600) {
+        // We delete everything that is older than one hour.
+        if ((filemtime($file) + 3600) < time()) {
           unlink($file);
         }
       }

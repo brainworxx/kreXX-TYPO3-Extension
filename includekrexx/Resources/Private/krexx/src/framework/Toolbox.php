@@ -43,6 +43,8 @@ use Brainworxx\Krexx\View;
  */
 class Toolbox {
 
+  public static $headerSend = FALSE;
+
   /**
    * Returns the microtime timestamp for file operations.
    *
@@ -125,7 +127,6 @@ class Toolbox {
    *   The generated markup
    */
   public static function outputHeader($headline, $ignore_local_settings = FALSE) {
-    static $doc_type = NULL;
 
     // Do we do an output as file?
     $output_as_file = (Config::getConfigValue('output', 'destination') == 'file');
@@ -136,10 +137,10 @@ class Toolbox {
     // output (frontend and file).
     $dual_output = ($output_as_file && $ignore_local_settings);
 
-    if (!isset($doc_type) || $dual_output == TRUE) {
+    if (!self::$headerSend || $dual_output == TRUE) {
       // Send doctype and css/js only once.
-      $doc_type = '<!DOCTYPE html>';
-      return View\Render::renderHeader($doc_type, $headline, self::outputCssAndJs());
+      self::$headerSend = TRUE;
+      return View\Render::renderHeader('<!DOCTYPE html>', $headline, self::outputCssAndJs());
     }
     else {
       return View\Render::renderHeader('', $headline, '');
@@ -232,12 +233,6 @@ class Toolbox {
    *   The generated markup.
    */
   public Static Function outputCssAndJs() {
-    static $been_here = FALSE;
-
-    if ($been_here) {
-      // We only send JS and CSS once.
-      return '';
-    }
     // Get the css file.
     $css = self::getFileContents(Config::$krexxdir . 'resources/skins/' . View\Render::$skin . '/skin.css');
     // Remove whitespace.
@@ -251,7 +246,6 @@ class Toolbox {
     // Krexx.js is comes directly form the template.
     $js .= self::getFileContents(Config::$krexxdir . 'resources/skins/' . View\Render::$skin . '/krexx.js');
 
-    $been_here = TRUE;
     return View\Render::renderCssJs($css, $js);
   }
 
@@ -279,7 +273,7 @@ class Toolbox {
   }
 
   /**
-   * Simply outputs a formatted var_dump and then dies.
+   * Simply outputs a formatted var_dump.
    *
    * This is an internal debugging function, because it is
    * rather difficult to debug a debugger, when your tool of
@@ -291,7 +285,7 @@ class Toolbox {
   public static function formattedVarDump($data) {
     echo '<pre>';
     var_dump($data);
-    die('</pre>');
+    echo('</pre>');
   }
 
   /**
@@ -489,6 +483,51 @@ class Toolbox {
     }
 
     return $result;
+  }
+
+  /**
+   * Write the content of a string to a file.
+   *
+   * When the file already exists, we will append the content.
+   * Caches weather we are allowed to write, to reduce the overhead.
+   *
+   * @param string $path
+   *   Path and filename.
+   * @param string $string
+   *   The string we want to write.
+   */
+  public static function putFileContents($path, $string) {
+    // Do some caching, so we check a file or dir only once!
+    static $ops = array();
+    static $dir = array();
+
+    // Check the directory.
+    if (!isset($dir[dirname($path)])) {
+      $dir[dirname($path)]['canwrite'] = is_writable(dirname($path));
+    }
+
+    if (!isset($ops[$path])) {
+      // We need to do some checking:
+      $ops[$path]['append'] = is_file($path);
+      $ops[$path]['canwrite'] = is_writable($path);
+    }
+
+    // Do the writing!
+    if ($ops[$path]['append']) {
+      if ($ops[$path]['canwrite']) {
+        // Old file where we are allowed to write.
+        file_put_contents($path, $string, FILE_APPEND);
+      }
+    }
+    else {
+      if ($dir[dirname($path)]['canwrite']) {
+        // New file we can create.
+        file_put_contents($path, $string);
+        // We will append it on the next write attempt!
+        $ops[$path]['append'] = TRUE;
+        $ops[$path]['canwrite'] = TRUE;
+      }
+    }
   }
 
   /**

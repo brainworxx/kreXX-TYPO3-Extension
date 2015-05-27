@@ -93,9 +93,13 @@ abstract class AbstractHandler {
       }
 
       // Get the header.
-      $header = View\Render::renderFatalHeader(
-          Framework\Toolbox::outputCssAndJs(),
-          '<!DOCTYPE html>');
+      if (Framework\Toolbox::$headerSend) {
+        $header = View\Render::renderFatalHeader('', '<!DOCTYPE html>');
+      }
+      else {
+        $header = View\Render::renderFatalHeader(Framework\Toolbox::outputCssAndJs(), '<!DOCTYPE html>');
+      }
+
       // Get the main part.
       $main = View\Render::renderFatalMain(
           $error_data['type'],
@@ -110,7 +114,14 @@ abstract class AbstractHandler {
       // Get the messages.
       $messages = View\Messages::outputMessages();
 
-      Framework\Toolbox::outputNow($header . $messages . $main . $backtrace . $footer);
+      if (Framework\Config::getConfigValue('output', 'destination') == 'file') {
+        // Save it to a file.
+        Framework\Chunks::saveDechunkedToFile($header . $messages . $main . $backtrace . $footer);
+      }
+      else {
+        // Send it to the browser.
+        Framework\Chunks::sendDechunkedToBrowser($header . $messages . $main . $backtrace . $footer);
+      }
 
       // Cleanup the hive, this removes all recursion markers.
       Analysis\Hive::cleanupHive();

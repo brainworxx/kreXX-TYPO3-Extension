@@ -1,10 +1,14 @@
-1.3.2 dev
+1.3.3
 - Bugfix: No data from the Magento debug() function when uses as a
   configurable debug function.
-- Bugfix: Escaping of very large strings.
-- Bugfix: Fixed possible mixup of analysis results and skin marker.
+- Bugfix: String encoding detection now works as intended. This should
+  speed up things a lot.
+- Bugfix: Dual output (file and frontend) works again.
+- Bugfix: CLI detection now respects file output configuration.
 - Change: Restructured the output, to make it (hopefully) better
-  readable. The format is now much more similar to the actual code
+  readable. The format is now much more similar to the actual code.
+- Change: Refactored file handling (chunks and logfiles).
+- Change: Cleaned up the file structure.
 
 1.3.2
 - Bugfix: Removed that annoying "Hidden internal properties"
