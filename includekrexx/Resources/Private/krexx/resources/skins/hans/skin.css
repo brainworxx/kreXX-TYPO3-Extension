@@ -122,7 +122,8 @@ li.kchild {
   cursor: pointer;
 }
 .kexpand:before {
-  content: "\00a0\25BA\00a0\00a0";
+  content: "\00a0\25B6\00a0\00a0";
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
 .kel:hover{
   background-color: #6c6c6c;
@@ -135,6 +136,7 @@ li.kchild {
 }
 .kopened:before {
   content: "\00a0\25BC\00a0\00a0";
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
 a.kname,
 a.kname:hover {
@@ -170,6 +172,7 @@ em.ktype {
 }
 .kmessage:before {
   content: "\00a0\00a0!\00a0\00a0";
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
   background-color: #ffcd00;
   border: 1px solid black;
   font-size: small;

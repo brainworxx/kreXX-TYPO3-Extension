@@ -348,7 +348,7 @@ class Render extends Help {
 
       // Is it expanded?
       if ($is_expanded) {
-        $template = str_replace('{isExpanded}', 'opened', $template);
+        $template = str_replace('{isExpanded}', 'kopened', $template);
       }
       else {
         $template = str_replace('{isExpanded}', '', $template);

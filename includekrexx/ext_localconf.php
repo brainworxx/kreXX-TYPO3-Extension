@@ -41,4 +41,4 @@ if (file_exists($filename) && !class_exists('Krexx')) {
   include_once $filename;
 }
 // We point kreXX to its ini file.
-\Brainworxx\Krexx\Framework\Config::setPathToIni(PATH_site . 'uploads/tx_includekrexx/Krexx.ini"');
+\Brainworxx\Krexx\Framework\Config::setPathToIni(PATH_site . 'uploads/tx_includekrexx/Krexx.ini');

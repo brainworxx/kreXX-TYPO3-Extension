@@ -5,6 +5,7 @@
   speed up things a lot.
 - Bugfix: Dual output (file and frontend) works again.
 - Bugfix: CLI detection now respects file output configuration.
+- Bugfix: X-Browser Adjustments for the Hans skin.
 - Change: Restructured the output, to make it (hopefully) better
   readable. The format is now much more similar to the actual code.
 - Change: Refactored file handling (chunks and logfiles).
