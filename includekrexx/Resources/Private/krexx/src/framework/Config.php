@@ -199,7 +199,7 @@ class Config {
     // $viewHelperNode might not be an object, and trying to render it might
     // cause a fatal error!
     'TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper' => '__toString',
-
+    'ReflectionClass' => '__toString',
   );
 
   /**
