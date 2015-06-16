@@ -375,7 +375,7 @@ class Config {
     $config = array();
     $cookie_config = array();
 
-    // Get Settings from the cookies. We do not valuate them,
+    // Get Settings from the cookies. We do not correct them,
     // so the dev can correct them, in case there are wrong values.
     if (isset($_COOKIE['KrexxDebugSettings'])) {
       $cookie_config = json_decode($_COOKIE['KrexxDebugSettings'], TRUE);
@@ -400,6 +400,10 @@ class Config {
       foreach ($section_data as $parameter_name => $parameter_value) {
         // Get cookie settings.
         if (isset($cookie_config[$parameter_name])) {
+          // We check them, if they are correct. Normally, we would do this,
+          // when we get the value via self::getConfigFromCookies(), but we
+          // should feedback the dev about the settings.
+          self::evaluateSetting('', $parameter_name, $cookie_config[$parameter_name]);
           $config[$section_name][$parameter_name] = htmlspecialchars($cookie_config[$parameter_name]);
           $source[$section_name][$parameter_name] = 'local cookie settings';
         }

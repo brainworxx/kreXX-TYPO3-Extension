@@ -58,6 +58,16 @@ use Brainworxx\Krexx\Framework;
 class Chunks {
 
   /**
+   * Are we using chunks?
+   *
+   * When we do, kreXX will store tempoary files in the chunks folder.
+   * This saves a lot of memory!
+   *
+   * @var bool
+   */
+  protected static $useChunks = TRUE;
+
+  /**
    * The minimum length of the chunk
    *
    * @var int
@@ -77,7 +87,7 @@ class Chunks {
    */
   public static function chunkMe($string) {
 
-    if (strlen($string) > self::$chunkLength) {
+    if (self::$useChunks && strlen($string) > self::$chunkLength) {
       // Get the key.
       $key = self::genKey();
       // Write the key to the chunks folder.
@@ -289,5 +299,18 @@ class Chunks {
     foreach ($chunk_list as $file) {
       unlink($file);
     }
+  }
+
+  /**
+   * Setter for the self::$useChunks.
+   *
+   * When the chunks folder is not writable, we will not use chunks.
+   * This will increase the memory usage significally!
+   *
+   * @param $bool
+   */
+  public static function setUseChunks($bool) {
+    self::$useChunks = $bool;
+
   }
 }
