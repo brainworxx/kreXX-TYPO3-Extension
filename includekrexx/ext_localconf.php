@@ -38,6 +38,8 @@ if (! defined('TYPO3_MODE')) {
 $filename = t3lib_extMgm::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
 if (file_exists($filename) && !class_exists('Krexx')) {
   // We load the kreXX library.
+  // 7.3 is able to autoload krexx before this point.
+  // We will not include it again!
   include_once $filename;
 }
 // We point kreXX to its ini file.

@@ -2,7 +2,16 @@
 <f:section name="main">
   <p>
     <h1>Edit local browser settings</h1>
-    Here you can edit the local browser settings. They are stored in a cookie, and only affect your current browser. Unlike the configuration file, not all settings can be edited here by default. This can be changed in the <i>Edit FE configuration</i> menu. Local browser settings overwrite configuration file settings.<br/><br/>
-    <b>Please note, that these settings only affect your current browser!</b>
+    <f:if condition="{is_disabled}==1">
+      <f:then>
+        Normally, we would display the menu for the local browser settings here. This menu is a part of the kreXX output and located in the footer.<br />
+        The output of kreXX was disabled, so it will not be displayed.
+      </f:then>
+      <f:else>
+        Here you can edit the local browser settings. They are stored in a cookie, and only affect your current browser. Unlike the configuration file, not all settings can be edited here by default. This can be changed in the <i>Edit FE configuration</i> menu. Local browser settings overwrite configuration file settings.<br/><br/>
+        <b>Please note, that these settings only affect your current browser!</b>
+      </f:else>
+    </f:if>
+
   </p>
 </f:section>

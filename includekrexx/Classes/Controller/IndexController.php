@@ -51,6 +51,11 @@ if (!class_exists('t3lib_FlashMessage')) {
   class t3lib_FlashMessage extends \TYPO3\CMS\Core\Messaging\FlashMessage {
   }
 }
+
+// The 7.3'er autoloader tries to include this file twice, probably
+// because of the class mappings above. I need to make sure not to
+// redeclare the Tx_Includekrexx_Controller_IndexController and throw
+// a fatal.
 if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
   class Tx_Includekrexx_Controller_IndexController extends Tx_Extbase_MVC_Controller_ActionController {
 
@@ -107,9 +112,19 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
     }
 
     /**
-     * simply display the kreXX local browser configuration.
+     * Simply display the kreXX local browser configuration.
      */
     public function editLocalBrowserSettingsAction() {
+      if (!Config::isEnabled(NULL, TRUE)) {
+        // kreXX will not display anything, if it was disabled via:
+        // - krexx::disable();
+        // - Disable output --> true in the "Edit configuration file menu
+        // We need to tell the user that krexx was disabled
+        $this->view->assign('is_disabled', TRUE);
+      }
+      else {
+        $this->view->assign('is_disabled', FALSE);
+      }
       \krexx::editSettings();
     }
     /**
@@ -168,6 +183,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      * Shows the edit config screen.
      */
     public function editConfigAction() {
+
       $data = array();
       $value = array();
       // Setting possible form values.
