@@ -31,7 +31,9 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Krexx\Errorhandler;
+namespace Brainworxx\Krexx\Errorhandler;
+
+use Brainworxx\Krexx\Framework;
 
 /**
  * Class Fatal
@@ -60,17 +62,6 @@ class Fatal extends AbstractHandler {
       'analysePrivateMethods' => 'true',
     ),
   );
-
-  /**
-   * Stores if the handler is active.
-   *
-   * Decides if the registered shutdown function should
-   * do anything, in case we decide later that we do not
-   * want to interfere.
-   *
-   * @var bool
-   */
-  protected $isActive = FALSE;
 
   /**
    * The current backtrace from the registered tick callback.
@@ -109,7 +100,7 @@ class Fatal extends AbstractHandler {
   }
 
   /**
-   * The regstered shutdown callback handels fatal errors.
+   * The registered shutdown callback handles fatal errors.
    *
    * In case that this handler is active, it will check whether
    * a fatal error has happened and give additional info like
@@ -140,14 +131,14 @@ class Fatal extends AbstractHandler {
           'errfile' => $error['file'],
           'errline' => $error['line'],
           'handler' => __FUNCTION__,
-          'source' => \Krexx\Toolbox::readSourcecode($error['file'], $error['line'], 5),
+          'source' => Framework\Toolbox::readSourcecode($error['file'], $error['line'], 5),
           'backtrace' => $this->tickedBacktrace,
         );
 
-        if (\Krexx\Config::getConfigValue('errorHandling', 'backtraceAnalysis') == 'deep') {
+        if (Framework\Config::getConfigValue('errorHandling', 'backtraceAnalysis') == 'deep') {
           // We overwrite the local settings, so we can get as much info from
           // analysed objects as possible.
-          \Krexx\Config::overwriteLocalSettings(self::$configFatal);
+          Framework\Config::overwriteLocalSettings(self::$configFatal);
         }
         $this->giveFeedback($error_data);
       }

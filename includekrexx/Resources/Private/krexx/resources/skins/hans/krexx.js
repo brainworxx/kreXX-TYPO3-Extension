@@ -152,7 +152,7 @@
      * Register krexx close button function.
      *
      * @event click
-     *   Displayes a closing animation of the corresponding
+     *   Displays a closing animation of the corresponding
      *   krexx output "window" and then removes it from the markup.
      */
     $krexxQuery('.kwrapper .kversion .kclose').on('click', function (event) {
@@ -165,7 +165,7 @@
     });
 
     /*
-     * Register toggeling to the elements.
+     * Register toggling to the elements.
      *
      * @event click
      *   Expands a krexx node when it is not expanded.
@@ -201,7 +201,7 @@
      * 
      * @event click
      *   When the button is clicked, krexx will display the
-     *   seach menu associated this the same output window.
+     *   search menu associated this the same output window.
      */
     $krexxQuery('.kwrapper .ksearchbutton, .kwrapper .ksearch .kclose').on('click', function (event) {
       // Prevents the default event behavior (ie: click).
@@ -213,10 +213,10 @@
     });
     
     /*
-     * Register the seach event on the next button.
+     * Register the search event on the next button.
      * 
      * @event click
-     *   When the button is clicked, krexx will strart searching.
+     *   When the button is clicked, krexx will start searching.
      */
     $krexxQuery('.kwrapper .ksearchnow').on('click', function (event) {
       // Prevents the default event behavior (ie: click).
@@ -228,7 +228,7 @@
     });
     
     /*
-     * Litsens for a <RETURN> in the searchfield.
+     * Listens for a <RETURN> in the search field.
      * 
      * @event keyup
      *   A <RETURN> will initiate the search.
@@ -273,7 +273,7 @@
   function krexx() {}
   
   /**
-   * When clicked on s recusrion, this function will
+   * When clicked on s recursion, this function will
    * copy the original analysis result there and delete
    * the recursion.
    * 
@@ -305,7 +305,7 @@
   /**
    * Collapses elements for a breadcrumb
    * 
-   * Hides all other elements, exept the one with
+   * Hides all other elements, except the one with
    * the button. This way, we can get a breadcrumb
    * to the element we want to look at.
    * 
@@ -321,12 +321,12 @@
     $krexxQuery('.ktopline').removeClass('ktopline');
     
     // Here we start the hiding, only when clicked on a
-    // none-colapsed button.
+    // none-collapsed button.
     if (!$button.hasClass('collapsed')) {
       $button.parents('div.kbg-wrapper > ul').addClass('kfilterroot');
       // Add the "rootline to all elements between the button and the filterroot
       $button.parents('ul.knode, li.kchild').addClass('krootline');
-      // Add the "topline" to the hightest element in the rootline
+      // Add the "topline" to the highest element in the rootline
       $button.closest('.krootline').addClass('ktopline');
       // Reset the old collapse button.
       $krexxQuery('.collapsed').removeClass('collapsed');
@@ -340,11 +340,11 @@
   };
   
   /**
-   * Here we save the seach results
+   * Here we save the search results
    * 
    * This is multidimensional array:
-   * results[kreXX-instance][seach text][search results]
-   *                                    [pointer]
+   * results[kreXX-instance][search text][search results]
+   *                                     [pointer]
    * The [pointer] is the key of the [search result] where
    * you would jump to when you click "next" 
    * 
@@ -353,7 +353,7 @@
   var results = [];
   
   /**
-   * Inintiates the search.
+   * Initiates the search.
    * 
    * The results are saved in the var results.
    * 
@@ -370,7 +370,7 @@
       var instance = $el.data('instance');
       var direction = $el.data('direction');
       
-      // We need to un-collapse everything, in case it it collpsed.
+      // We need to un-collapse everything, in case it it collapsed.
       $krexxQuery('#' + instance).find('.collapsed').click();
       
       // Are we already having some results?
@@ -428,7 +428,7 @@
    * Display the search dialog
    *
    * @param {HTMLElement} el
-   *   The butten which was pressed
+   *   The button which was pressed
    */
   krexx.displaySearch = function (el) {
     // Get the search menu.
@@ -478,9 +478,9 @@
   };
 
   /**
-   * Hides or displayes the nest under an expandable element.
+   * Hides or displays the nest under an expandable element.
    *
-   * @param {HTMLLiElement} el
+   * @param {HTMLElement} el
    *   The Element you want to expand.
    */
   krexx.toggle = function (el) {
@@ -520,7 +520,7 @@
       $krexxQuery('.highlight-jumpto').removeClass('highlight-jumpto');
       // Highlight new one.
       $expandableElement.addClass('highlight-jumpto');
-      // The mainproblem here is, I might have 2 different container:
+      // The main problem here is, I might have 2 different container:
       // '.kwrapper' in case of the error handler or
       // 'html, body' in case of a normal output.
       $container = $krexxQuery('.kfatalwrapper-outer');
@@ -641,7 +641,7 @@
    * for that file, and not for the server.
    */
   krexx.disableForms = function () {
-    $krexxQuery('.kwrapper .editable').children().prop('disabled', true);
+    $krexxQuery('.kwrapper .keditable').children().prop('disabled', true);
     $krexxQuery('.kwrapper .resetbutton').prop('disabled', true);
   };
 })();

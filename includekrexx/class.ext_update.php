@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- *   Messaging system for kreXX
+ *   Typo3 installation class for kreXX
  *   kreXX: Krumo eXXtended
  *
- *   This is a debugging tool, which displays structured information
+ *   kreXX is a debugging tool, which displays structured information
  *   about any PHP object. It is a nice replacement for print_r() or var_dump()
  *   which are used by a lot of PHP developers.
  *
@@ -31,57 +31,41 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Krexx;
 
-
-/**
- * This class hosts functions, which offer additional services.
- *
- * @package Krexx
- */
-class Messages {
+class ext_update {
 
   /**
-   * Here we store all messages, which gets send to the output.
+   * Returns wether this script is available in the backend.
    *
-   * @var array
+   * @return bool
+   *   Always TRUE.
    */
-  protected static $messages = array();
-
-  /**
-   * The message we want to add. It will be displayed in the output.
-   *
-   * @param string $message
-   *   The message itself.
-   * @param string $class
-   *   The class of the message.
-   */
-  public static function addMessage($message, $class = 'normal') {
-    self::$messages[$message] = array('message' => $message, 'class' => $class);
+  public function access() {
+    return TRUE;
   }
 
   /**
-   * Renders the output of the messages.
+   * Main Function.
    *
    * @return string
-   *   The rendered html output of the messages.
+   *   Gives feedback of what was actually done.
    */
-  public static function outputMessages() {
-    // Simple Wrapper for Render::renderMessages
-    if (php_sapi_name() == "cli") {
-      if (count(self::$messages)) {
-        $result = "\n\nkreXX messages\n";
-        $result .= "==============\n";
-        foreach (self::$messages as $message) {
-          $message = $message['message'];
-          $result .= "$message\n";
-        }
-        $result .= "\n\n";
-        return $result;
-      }
+  public function main() {
+    // Protect the upload folder.
+    // We create a .htaccess here, as well as a index.php.
+    // The uploadfolder should not be reachable from the outside.
+    $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
+    $destination = PATH_site . 'uploads/tx_includekrexx/.htaccess';
+    if (is_file($source) && !is_file($destination)) {
+      copy($source, $destination);
     }
-    else {
-      return Render::renderMessages(self::$messages);
+    $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/index.php';
+    $destination = PATH_site . 'uploads/tx_includekrexx/index.php';
+    if (is_file($source) && !is_file($destination)) {
+      copy($source, $destination);
     }
+
+    return 'Applied protection to the upload folder.';
   }
+
 }

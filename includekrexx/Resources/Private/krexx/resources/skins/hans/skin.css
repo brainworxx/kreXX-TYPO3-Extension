@@ -69,6 +69,7 @@ li.kchild {
 .kel em.karrow {
   font: bold 12px tahoma,verdana;
   background-color: #303030;
+  padding: 0 2px;
 }
 .khidden {
   display: none;
@@ -121,7 +122,8 @@ li.kchild {
   cursor: pointer;
 }
 .kexpand:before {
-  content: "\00a0\25BA\00a0\00a0";
+  content: "\00a0\25B6\00a0\00a0";
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
 .kel:hover{
   background-color: #6c6c6c;
@@ -134,6 +136,7 @@ li.kchild {
 }
 .kopened:before {
   content: "\00a0\25BC\00a0\00a0";
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
 a.kname,
 a.kname:hover {
@@ -169,6 +172,7 @@ em.ktype {
 }
 .kmessage:before {
   content: "\00a0\00a0!\00a0\00a0";
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
   background-color: #ffcd00;
   border: 1px solid black;
   font-size: small;
@@ -419,7 +423,8 @@ ul.kconfiguration li.kchild {
 .kexpand.kstring:before {
   color: #e2db74;
 }
-.kstring em {
+.kstring em,
+.kstring span.kname{
   color: #e2db74;
 }
 
@@ -429,7 +434,8 @@ ul.kconfiguration li.kchild {
 }
 
 .kclass em,
-.kmethod em {
+.kmethod em,
+.kclass span.kname {
   color: #a6e22a;
 }
 .karray {
@@ -441,7 +447,8 @@ ul.kconfiguration li.kchild {
 .karray.kopened {
   background-image: none;
 }
-.karray em {
+.karray em,
+.karray span.kname{
   color: #62d9ef;
 }
 .kel-bg.krecursion {
@@ -452,7 +459,8 @@ ul.kconfiguration li.kchild {
   /* pink line */
   background-color: #d87cd8;
 }
-.kboolean em {
+.kboolean em,
+.kboolean span.kname{
   color: #d87cd8;
 }
 .kfootnote {
@@ -476,7 +484,6 @@ ul.kconfiguration li.kchild {
 .kel input {
   border: inherit;
   border-radius: inherit;
-  color: black;
   font: 11px/1 tahoma,verdana;
   height: inherit;
   line-height: inherit;
@@ -576,4 +583,14 @@ ul.kconfiguration li.kchild {
 .ksearch-found-highlight .kpre,
 .highlight-jumpto .kpre {
   color: #303030!important;
+}
+li.kchild.krow hr {
+  border: 0;
+  height: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  margin-right: 20px;
+  margin-top: 0;
+  margin-bottom: 5px;
+  background-color: transparent;
 }

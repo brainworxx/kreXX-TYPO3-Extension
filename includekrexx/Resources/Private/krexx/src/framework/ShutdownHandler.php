@@ -31,8 +31,9 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Krexx;
+namespace Brainworxx\Krexx\Framework;
 
+use Brainworxx\Krexx\View;
 
 /**
  * Sends the kreXX output in the shutdown phase.
@@ -58,12 +59,12 @@ class ShutdownHandler {
   protected $chunkStrings = array();
 
   /**
-   * Adds output to our shutdownhandler.
+   * Adds output to our shutdown handler.
    *
    * @param string $chunk_string
    *   The chunked output string.
    * @param bool $ignore_local_settings
-   *   Whether or not we ignore local settings.
+   *   Determines if we ignore local settings for this chunk.
    */
   public function addChunkString($chunk_string, $ignore_local_settings = FALSE) {
     $this->chunkStrings[] = array($chunk_string, $ignore_local_settings);
@@ -72,26 +73,34 @@ class ShutdownHandler {
   /**
    * The shutdown callback.
    *
-   * It gets called when PHP is sutting down. It will render
-   * out kreXX output, to guarantie minimal interference with
+   * It gets called when PHP is shutting down. It will render
+   * out kreXX output, to guarantee minimal interference with
    * the hosting CMS.
    */
   public function shutdownCallback() {
     // Check for CLI and messages.
     if (php_sapi_name() == "cli") {
-      $messages = Messages::outputMessages();
+      $messages = View\Messages::outputMessages();
       // Since we are in CLI mode, these messages are not in HTML.
       // We can output them right away.
       echo $messages;
-      // Something went wrong, better to stop right here.
-      return;
     }
 
     // Output our chunks.
     // Every output is split into 4 chunk strings (header, messages,
     // data, footer).
+    // $chunk_string[0] = the string itself
+    // $chunk_string[1] = bool, ignore_local_settings
     foreach ($this->chunkStrings as $chunk_string) {
-      Toolbox::outputNow($chunk_string[0], $chunk_string[1]);
+      if (Config::getConfigValue('output', 'destination', $chunk_string[1]) == 'file') {
+        // Save it to a file.
+        Chunks::saveDechunkedToFile($chunk_string[0]);
+      }
+
+      else {
+        // Send it to the browser.
+        Chunks::sendDechunkedToBrowser($chunk_string[0]);
+      }
     }
   }
 }

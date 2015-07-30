@@ -31,7 +31,10 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Krexx;
+namespace Brainworxx\Krexx\Framework;
+
+use Brainworxx\Krexx\Analysis;
+use Brainworxx\Krexx\View;
 
 /**
  * This class hosts functions, which offer additional services.
@@ -40,10 +43,12 @@ namespace Krexx;
  */
 class Toolbox {
 
+  public static $headerSend = FALSE;
+
   /**
-   * Returns the microtime timestamp for fileoperations.
+   * Returns the microtime timestamp for file operations.
    *
-   * Fileoperations are the logfiles and the chunck handling.
+   * File operations are the logfiles and the chunk handling.
    *
    * @return string
    *   The timestamp itself.
@@ -96,7 +101,7 @@ class Toolbox {
         // cause a js error. But there are moments when you actually
         // want to do this.
         if (Config::getConfigValue('output', 'detectAjax') == 'true') {
-          // We where suppost to detect ajax, and we did it right now.
+          // We were supposed to detect ajax, and we did it right now.
           return TRUE;
         }
       }
@@ -122,32 +127,31 @@ class Toolbox {
    *   The generated markup
    */
   public static function outputHeader($headline, $ignore_local_settings = FALSE) {
-    static $doc_type = NULL;
 
     // Do we do an output as file?
     $output_as_file = (Config::getConfigValue('output', 'destination') == 'file');
-    // When we have a normal fileoutput, and ignore the local settings,
+    // When we have a normal file output, and ignore the local settings,
     // it means we are currently rendering the frontend "Edit local settings"
     // mask but outputting the rest into a file.
     // We need to render the CSS/JS for the frontend, because we have dual
     // output (frontend and file).
     $dual_output = ($output_as_file && $ignore_local_settings);
 
-    if (!isset($doc_type) || $dual_output == TRUE) {
+    if (!self::$headerSend || $dual_output == TRUE) {
       // Send doctype and css/js only once.
-      $doc_type = '<!DOCTYPE html>';
-      return Render::renderHeader($doc_type, $headline, self::outputCssAndJs());
+      self::$headerSend = TRUE;
+      return View\Render::renderHeader('<!DOCTYPE html>', $headline, self::outputCssAndJs());
     }
     else {
-      return Render::renderHeader('', $headline, '');
+      return View\Render::renderHeader('', $headline, '');
     }
   }
 
   /**
    * Simply renders the footer and output current settings.
    *
-   * @param string $caller
-   *   Where was kreXX initially invoced from.
+   * @param array $caller
+   *   Where was kreXX initially invoked from.
    * @param bool $is_expanded
    *   Are we rendering an expanded footer?
    *   TRUE when we render the settings menu only.
@@ -182,21 +186,21 @@ class Toolbox {
 
             if ($type != 'None') {
               if ($editable) {
-                $section_output .= Render::renderSingleEditableChild($parameter_name, htmlspecialchars($parameter_value), $source[$parameter_name], $type, $parameter_name);
+                $section_output .= View\Render::renderSingleEditableChild($parameter_name, htmlspecialchars($parameter_value), $source[$parameter_name], $type, $parameter_name);
               }
               else {
-                $section_output .= Render::renderSingleChild($parameter_value, $parameter_name, htmlspecialchars($parameter_value), FALSE, $source[$parameter_name], '', $parameter_name);
+                $section_output .= View\Render::renderSingleChild($parameter_value, $parameter_name, htmlspecialchars($parameter_value), FALSE, $source[$parameter_name], '', $parameter_name);
               }
             }
           }
           return $section_output;
         };
-        $config_output .= Render::renderExpandableChild($section_name, 'Config', $anonfunction, $params_expandable, '. . .');
+        $config_output .= View\Render::renderExpandableChild($section_name, 'Config', $anonfunction, $params_expandable, '. . .');
       }
       // Render the dev-handle field.
-      $config_output .= Render::renderSingleEditableChild('Local open function', Config::getDevHandler(), '\krexx::', 'Input', 'localFunction');
+      $config_output .= View\Render::renderSingleEditableChild('Local open function', Config::getDevHandler(), '\krexx::', 'Input', 'localFunction');
       // Render the reset-button which will delete the debug-cookie.
-      $config_output .= Render::renderButton('resetbutton', 'Reset local settings', 'resetbutton');
+      $config_output .= View\Render::renderButton('resetbutton', 'Reset local settings', 'resetbutton');
       return $config_output;
     };
 
@@ -204,7 +208,7 @@ class Toolbox {
     // as well as it's path.
     if (!is_readable(Config::getPathToIni())) {
       // Project settings are not accessible
-      // tell the user, that we are using fallback sttings.
+      // tell the user, that we are using fallback settings.
       $path = 'Krexx.ini not found, using factory settings';
       // $config = array();
     }
@@ -218,8 +222,8 @@ class Toolbox {
 
     $parameter = array($config, $source);
 
-    $config_output = Render::renderExpandableChild($path, Config::getPathToIni(), $anon_function, $parameter, '', '', 'currentSettings', $is_expanded);
-    return Render::renderFooter($caller, $config_output);
+    $config_output = View\Render::renderExpandableChild($path, Config::getPathToIni(), $anon_function, $parameter, '', '', 'currentSettings', $is_expanded);
+    return View\Render::renderFooter($caller, $config_output);
   }
 
   /**
@@ -229,35 +233,28 @@ class Toolbox {
    *   The generated markup.
    */
   public Static Function outputCssAndJs() {
-    static $been_here = FALSE;
-
-    if ($been_here) {
-      // We only send JS and CSS once.
-      return '';
-    }
     // Get the css file.
-    $css = self::getFileContents(KREXXDIR . 'skins/' . Render::$skin . '/skin.css');
+    $css = self::getFileContents(Config::$krexxdir . 'resources/skins/' . View\Render::$skin . '/skin.css');
     // Remove whitespace.
     $css = preg_replace('/\s+/', ' ', $css);
 
 
     // Adding JQuery.
-    $js_lib = self::getFileContents(KREXXDIR . 'jsLibs/' . Config::getConfigValue('render', 'jsLib'));
-    $js_wrapper = self::getFileContents(KREXXDIR . 'jsLibs/wrapper.js');
+    $js_lib = self::getFileContents(Config::$krexxdir . 'resources/jsLibs/' . Config::getConfigValue('render', 'jsLib'));
+    $js_wrapper = self::getFileContents(Config::$krexxdir . 'resources/jsLibs/wrapper.js');
     $js = str_replace('{jQueryGoesHere}', $js_lib, $js_wrapper);
     // Krexx.js is comes directly form the template.
-    $js .= self::getFileContents(KREXXDIR . 'skins/' . Render::$skin . '/krexx.js');
+    $js .= self::getFileContents(Config::$krexxdir . 'resources/skins/' . View\Render::$skin . '/krexx.js');
 
-    $been_here = TRUE;
-    return Render::renderCssJs($css, $js);
+    return View\Render::renderCssJs($css, $js);
   }
 
   /**
    * Generates a id for the DOM.
    *
    * This is used to jump from a recursion to the object analysis data.
-   * The ID is the object hash as well as the kruXX call number, to avoit
-   * collusions (even if they are unlikely).
+   * The ID is the object hash as well as the kruXX call number, to avoid
+   * collisions (even if they are unlikely).
    *
    * @param mixed $data
    *   The object from which we want the ID.
@@ -267,7 +264,7 @@ class Toolbox {
    */
   public static function generateDomIdFromObject($data) {
     if (is_object($data)) {
-      return 'k' . Render::$KrexxCount . '_' . spl_object_hash($data);
+      return 'k' . View\Render::$KrexxCount . '_' . spl_object_hash($data);
     }
     else {
       // Do nothing.
@@ -276,19 +273,19 @@ class Toolbox {
   }
 
   /**
-   * Simply outputs a formatted var_dump and then dies.
+   * Simply outputs a formatted var_dump.
    *
    * This is an internal debugging function, because it is
    * rather difficult to debug a debugger, when your tool of
-   * choise is the debugger itself.
+   * choice is the debugger itself.
    *
    * @param mixed $data
    *   The data for the var_dump.
    */
-  public static function formatedVarDump($data) {
+  public static function formattedVarDump($data) {
     echo '<pre>';
     var_dump($data);
-    die('</pre>');
+    echo('</pre>');
   }
 
   /**
@@ -318,7 +315,7 @@ class Toolbox {
   }
 
   /**
-   * Adds source sampels to a backtrace.
+   * Adds source sample to a backtrace.
    *
    * @param array $backtrace
    *   The backtrace from debug_backtrace().
@@ -344,7 +341,7 @@ class Toolbox {
   }
 
   /**
-   * Reads sourcecode from files, in case a fatal error acurred.
+   * Reads sourcecode from files, in case a fatal error occurred.
    *
    * @param string $file
    *   Path to the file you want to read.
@@ -363,7 +360,7 @@ class Toolbox {
       $content_array = file($file);
       $from = $line_no - $space_line;
       $to = $line_no + $space_line;
-      // Correct the value, in case we are exeeding the line numbers.
+      // Correct the value, in case we are exceeding the line numbers.
       if ($from < 0) {
         $from = 0;
       }
@@ -376,7 +373,7 @@ class Toolbox {
           // We are ignoring empty lines.
           $line = preg_replace('/\s+/', '', $content_array[$current_line_no]);
           if (strlen($line) == 0) {
-            // We will need to incease the $to.
+            // We will need to increase the $to.
             if ($to + 1 <= count($content_array)) {
               $to++;
             }
@@ -384,10 +381,10 @@ class Toolbox {
           // Add it to the result.
           $real_line_no = $current_line_no + 1;
           if ($current_line_no == $line_no) {
-            $result .= Render::renderBacktraceSourceLine('highlight', $real_line_no, \Krexx\Variables::encodeString($content_array[$current_line_no], TRUE));
+            $result .= View\Render::renderBacktraceSourceLine('highlight', $real_line_no, Analysis\Variables::encodeString($content_array[$current_line_no], TRUE));
           }
           else {
-            $result .= Render::renderBacktraceSourceLine('source', $real_line_no, \Krexx\Variables::encodeString($content_array[$current_line_no], TRUE));
+            $result .= View\Render::renderBacktraceSourceLine('source', $real_line_no, Analysis\Variables::encodeString($content_array[$current_line_no], TRUE));
           }
         }
         else {
@@ -428,36 +425,36 @@ class Toolbox {
         $step_data = $parameter;
         // File.
         if (isset($step_data['file'])) {
-          $output .= \Krexx\Render::renderSingleChild($step_data['file'], 'File', $step_data['file'], FALSE, 'string ', strlen($step_data['file']));
+          $output .= View\Render::renderSingleChild($step_data['file'], 'File', $step_data['file'], FALSE, 'string ', strlen($step_data['file']));
         }
         // Line.
         if (isset($step_data['line'])) {
-          $output .= \Krexx\Render::renderSingleChild($step_data['line'], 'Line no.', $step_data['line'], FALSE, 'integer');
+          $output .= View\Render::renderSingleChild($step_data['line'], 'Line no.', $step_data['line'], FALSE, 'integer');
         }
         // Sourcecode, is escaped by now.
         if (isset($step_data['sourcecode'])) {
-          $output .= \Krexx\Render::renderSingleChild($step_data['sourcecode'], 'Sourcecode', '. . .', TRUE, 'PHP');
+          $output .= View\Render::renderSingleChild($step_data['sourcecode'], 'Sourcecode', '. . .', TRUE, 'PHP');
         }
         // Function.
         if (isset($step_data['function'])) {
-          $output .= \Krexx\Render::renderSingleChild($step_data['function'], 'Last called function', $step_data['function'], FALSE, 'string ', strlen($step_data['function']));
+          $output .= View\Render::renderSingleChild($step_data['function'], 'Last called function', $step_data['function'], FALSE, 'string ', strlen($step_data['function']));
         }
         // Object.
         if (isset($step_data['object'])) {
-          $output .= \Krexx\Objects::analyseObject($step_data['object'], 'Calling object');
+          $output .= Analysis\Objects::analyseObject($step_data['object'], 'Calling object');
         }
         // Type.
         if (isset($step_data['type'])) {
-          $output .= \Krexx\Render::renderSingleChild($step_data['type'], 'Call type', $step_data['type'], FALSE, 'string ', strlen($step_data['type']));
+          $output .= View\Render::renderSingleChild($step_data['type'], 'Call type', $step_data['type'], FALSE, 'string ', strlen($step_data['type']));
         }
         // Args.
         if (isset($step_data['args'])) {
-          $output .= \Krexx\Variables::analyseArray($step_data['args'], 'Arguments from the call');
+          $output .= Analysis\Variables::analyseArray($step_data['args'], 'Arguments from the call');
         }
 
         return $output;
       };
-      $output .= \Krexx\Render::renderExpandableChild($name, $type, $anon_function, $parameter);
+      $output .= View\Render::renderExpandableChild($name, $type, $anon_function, $parameter);
     }
 
     return $output;
@@ -486,6 +483,51 @@ class Toolbox {
     }
 
     return $result;
+  }
+
+  /**
+   * Write the content of a string to a file.
+   *
+   * When the file already exists, we will append the content.
+   * Caches weather we are allowed to write, to reduce the overhead.
+   *
+   * @param string $path
+   *   Path and filename.
+   * @param string $string
+   *   The string we want to write.
+   */
+  public static function putFileContents($path, $string) {
+    // Do some caching, so we check a file or dir only once!
+    static $ops = array();
+    static $dir = array();
+
+    // Check the directory.
+    if (!isset($dir[dirname($path)])) {
+      $dir[dirname($path)]['canwrite'] = is_writable(dirname($path));
+    }
+
+    if (!isset($ops[$path])) {
+      // We need to do some checking:
+      $ops[$path]['append'] = is_file($path);
+      $ops[$path]['canwrite'] = is_writable($path);
+    }
+
+    // Do the writing!
+    if ($ops[$path]['append']) {
+      if ($ops[$path]['canwrite']) {
+        // Old file where we are allowed to write.
+        file_put_contents($path, $string, FILE_APPEND);
+      }
+    }
+    else {
+      if ($dir[dirname($path)]['canwrite']) {
+        // New file we can create.
+        file_put_contents($path, $string);
+        // We will append it on the next write attempt!
+        $ops[$path]['append'] = TRUE;
+        $ops[$path]['canwrite'] = TRUE;
+      }
+    }
   }
 
   /**
@@ -519,7 +561,7 @@ class Toolbox {
       $port = $s['SERVER_PORT'];
 
       if ((!$ssl && $port == '80') || ($ssl && $port == '443')) {
-        // Normal combo with port and protokol.
+        // Normal combo with port and protocol.
         $port = '';
       }
       else {

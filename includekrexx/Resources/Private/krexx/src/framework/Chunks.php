@@ -31,7 +31,11 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Krexx;
+namespace Brainworxx\Krexx\Framework;
+
+use Brainworxx\Krexx\Analysis;
+use Brainworxx\Krexx\View;
+use Brainworxx\Krexx\Framework;
 
 /**
  * Splitting strings into small tiny chunks.
@@ -54,7 +58,17 @@ namespace Krexx;
 class Chunks {
 
   /**
-   * The minimum length of the chunck
+   * Are we using chunks?
+   *
+   * When we do, kreXX will store tempoary files in the chunks folder.
+   * This saves a lot of memory!
+   *
+   * @var bool
+   */
+  protected static $useChunks = TRUE;
+
+  /**
+   * The minimum length of the chunk
    *
    * @var int
    */
@@ -73,14 +87,11 @@ class Chunks {
    */
   public static function chunkMe($string) {
 
-    if (strlen($string) > self::$chunkLength) {
+    if (self::$useChunks && strlen($string) > self::$chunkLength) {
       // Get the key.
       $key = self::genKey();
       // Write the key to the chunks folder.
-      if (is_writable(KREXXDIR . 'chunks/')) {
-        // We only write when we are allowed.
-        file_put_contents(KREXXDIR . 'chunks/' . $key . '.Krexx.tmp', $string);
-      }
+      Toolbox::putFileContents(Framework\Config::$krexxdir . 'chunks/' . $key . '.Krexx.tmp', $string);
       // Return the first part plus the key.
       return '@@@' . $key . '@@@';
     }
@@ -91,7 +102,7 @@ class Chunks {
   }
 
   /**
-   * Generates the chunck key.
+   * Generates the chunk key.
    *
    * @return string
    *   The generated key.
@@ -111,14 +122,14 @@ class Chunks {
    * nothing more then a wrapper for file_get_contents()
    *
    * @param string $key
-   *   The key of the chunk of wich we want to get the data.
+   *   The key of the chunk of which we want to get the data.
    *
    * @return string
    *   The original date
    *
    */
   protected static function dechunkMe($key) {
-    $filename = KREXXDIR . 'chunks/' . $key . '.Krexx.tmp';
+    $filename = Framework\Config::$krexxdir . 'chunks/' . $key . '.Krexx.tmp';
     if (is_writable($filename)) {
       // Read the file.
       $string = Toolbox::getFileContents($filename);
@@ -128,7 +139,7 @@ class Chunks {
     else {
       // Huh, we can not fully access this one.
       $string = 'Could not access chunk file ' . $filename;
-      Messages::addMessage('Could not access chunk file ' . $filename);
+      View\Messages::addMessage('Could not access chunk file ' . $filename);
     }
 
     return $string;
@@ -140,7 +151,7 @@ class Chunks {
    * Send the output to the browser.
    *
    * @param string $string
-   *   The chunck string.
+   *   The chunk string.
    */
   public static function sendDechunkedToBrowser($string) {
     static $been_here = FALSE;
@@ -158,18 +169,19 @@ class Chunks {
     // - fwrite
     // Looks like we are stuck with this.
     // Writing it to a file produces no noticeable memory peak.
-    // Since we might run into touble here, we need to check the
+    // Since we might run into trouble here, we need to check the
     // remaining memory.
     // Sadly, we will not be able to close the DOM gracefully,
-    // because the render process can not really say where we exacly are.
+    // because the render process can not really say where we exactly are.
     // We are chunking the output always after a node, but that is all that
     // is really sure. The only thing left is a simple JS alert . . .
     while ($chunk_pos !== FALSE) {
       $counter++;
-      if (!Internals::checkEmergencyBreak()) {
+      if (!Analysis\Internals::checkEmergencyBreak()) {
         if (!$been_here) {
           // We display this only once.
-          echo '<script>alert("Emergency break for large output.\n\nYou should try to switch to file output.");</script>';
+          $message = 'Emergency break for large output.' . "\n\n" . 'You should try to switch to file output.';
+          echo '<script>alert("' . $message . '");</script>';
         }
         $been_here = TRUE;
         // There might be some leftover chunks.
@@ -214,25 +226,26 @@ class Chunks {
 
     // Determine the filename.
     $timestamp = Toolbox::fileStamp();
-    $filename = KREXXDIR . $log_dir . $timestamp . '.Krexx.html';
+    $filename = Framework\Config::$krexxdir . $log_dir . $timestamp . '.Krexx.html';
 
     $chunk_pos = strpos($string, '@@@');
 
     while ($chunk_pos !== FALSE) {
       // We have a chunk, we send the html part.
-      file_put_contents($filename, substr($string, 0, $chunk_pos), FILE_APPEND);
+      Toolbox::putFileContents($filename, substr($string, 0, $chunk_pos));
+
       $chunk_part = substr($string, $chunk_pos);
 
       // We translate the first chunk.
-      // Strangely, with a memorypeak of 84MB, explode is
+      // Strangely, with a memory peak of 84MB, explode is
       // 2 mb cheaper than preg_match().
       $result = explode('@@@', $chunk_part, 3);
       $string = str_replace('@@@' . $result[1] . '@@@', self::dechunkMe($result[1]), $chunk_part);
       $chunk_pos = strpos($string, '@@@');
     }
 
-    // No more chunks, we send what is left.
-    file_put_contents($filename, $string, FILE_APPEND);
+    // No more chunks, we save what is left.
+    Toolbox::putFileContents($filename, $string);
   }
 
   /**
@@ -244,9 +257,10 @@ class Chunks {
     // We only do this once.
     if (!$been_here) {
       // Clean up leftover files.
-      $chunk_list = glob(KREXXDIR . 'chunks/*.Krexx.tmp');
+      $chunk_list = glob(Framework\Config::$krexxdir . 'chunks/*.Krexx.tmp');
       foreach ($chunk_list as $file) {
-        if (filemtime($file) < time() - 3600) {
+        // We delete everything that is older than one hour.
+        if ((filemtime($file) + 3600) < time()) {
           unlink($file);
         }
       }
@@ -263,7 +277,7 @@ class Chunks {
    */
   protected static function cleanupOldLogs($log_dir) {
     // Cleanup old logfiles to prevent a overflow.
-    $log_list = glob(KREXXDIR . $log_dir . "*.Krexx.html");
+    $log_list = glob(Framework\Config::$krexxdir . $log_dir . "*.Krexx.html");
     array_multisort(array_map('filemtime', $log_list), SORT_DESC, $log_list);
     $max_file_count = (int) Config::getConfigValue('logging', 'maxfiles');
     $count = 1;
@@ -280,10 +294,23 @@ class Chunks {
    * Deletes all chunks from the current run.
    */
   public static function cleanupNewChunks() {
-    $chunk_list = glob(KREXXDIR . 'chunks/' . Toolbox::fileStamp() . '_*.Krexx.tmp');
+    $chunk_list = glob(Framework\Config::$krexxdir . 'chunks/' . Toolbox::fileStamp() . '_*.Krexx.tmp');
 
     foreach ($chunk_list as $file) {
       unlink($file);
     }
+  }
+
+  /**
+   * Setter for the self::$useChunks.
+   *
+   * When the chunks folder is not writable, we will not use chunks.
+   * This will increase the memory usage significally!
+   *
+   * @param $bool
+   */
+  public static function setUseChunks($bool) {
+    self::$useChunks = $bool;
+
   }
 }

@@ -1,16 +1,22 @@
 <?php
+
 /**
  * @file
+ *   Debug viewhelper to use kreXX in fluid templates
  *   kreXX: Krumo eXXtended
  *
- *   Krexx is a debugging tool, which displays structured information
+ *   kreXX is a debugging tool, which displays structured information
  *   about any PHP object. It is a nice replacement for print_r() or var_dump()
  *   which are used by a lot of PHP developers.
  *
- *   Krexx is a fork of Krumo, which was originally written by:
+ *   kreXX is a fork of Krumo, which was originally written by:
  *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
  *
  * @author brainworXX GmbH <info@brainworxx.de>
+ *
+ * @usage
+ *   {namespace krexx=Tx_Includekrexx_ViewHelpers}
+ *   <krexx:debug>{_all}</krexx:debug>
  *
  * @license http://opensource.org/licenses/LGPL-2.1
  *   GNU Lesser General Public License Version 2.1
@@ -29,3 +35,16 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+
+  /**
+   * A wrapper for kreXX();
+   *
+   * @return string
+   *   Returns an empty string.
+   */
+  public function render() {
+    krexx($this->renderChildren());
+    return '';
+  }
+}

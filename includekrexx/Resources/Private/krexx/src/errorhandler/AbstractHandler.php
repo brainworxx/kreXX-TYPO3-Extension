@@ -31,15 +31,30 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Krexx\Errorhandler;
+namespace Brainworxx\Krexx\Errorhandler;
+
+use Brainworxx\Krexx\Analysis;
+use Brainworxx\Krexx\Framework;
+use Brainworxx\Krexx\View;
 
 /**
  * This class hosts all functions which all error handlers will share
- * (as soon as they are wrttten . . .)
+ * (as soon as they are written . . .)
  *
  * @package Krexx
  */
 abstract class AbstractHandler {
+
+  /**
+   * Stores if the handler is active.
+   *
+   * Decides if the registered shutdown function should
+   * do anything, in case we decide later that we do not
+   * want to interfere.
+   *
+   * @var bool
+   */
+  protected $isActive = FALSE;
 
   /**
    * Decides, if the handler does anything.
@@ -49,7 +64,7 @@ abstract class AbstractHandler {
    *   handler is active
    */
   protected function getIsActive() {
-    if ($this->isActive && \Krexx\Config::isEnabled()) {
+    if ($this->isActive && Framework\Config::isEnabled()) {
       // We will only handle errors when kreXX and the handler
       // itself is enabled.
       return TRUE;
@@ -69,48 +84,59 @@ abstract class AbstractHandler {
    */
   protected function giveFeedback(array $error_data) {
     if ($this->isActive) {
-      \Krexx\Render::$KrexxCount++;
-      \Krexx\Internals::$timer = time();
+      View\Render::$KrexxCount++;
+      Analysis\Internals::$timer = time();
 
       // Setting template info.
-      if (is_null(\Krexx\Render::$skin)) {
-        \Krexx\Render::$skin = \Krexx\Config::getConfigValue('render', 'skin');
+      if (is_null(View\Render::$skin)) {
+        View\Render::$skin = Framework\Config::getConfigValue('render', 'skin');
       }
 
       // Get the header.
-      $header = \Krexx\Render::renderFatalHeader(
-          \Krexx\Toolbox::outputCssAndJs(),
-          '<!DOCTYPE html>');
-      // Get the mainpart.
-      $main = \Krexx\Render::renderFatalMain(
+      if (Framework\Toolbox::$headerSend) {
+        $header = View\Render::renderFatalHeader('', '<!DOCTYPE html>');
+      }
+      else {
+        $header = View\Render::renderFatalHeader(Framework\Toolbox::outputCssAndJs(), '<!DOCTYPE html>');
+      }
+
+      // Get the main part.
+      $main = View\Render::renderFatalMain(
           $error_data['type'],
           $error_data['errstr'],
           $error_data['errfile'],
           $error_data['errline'] + 1,
           $error_data['source']);
       // Get the backtrace.
-      $backtrace = \Krexx\Toolbox::outputBacktrace($error_data['backtrace']);
+      $backtrace = Framework\Toolbox::outputBacktrace($error_data['backtrace']);
       // Get the footer.
-      $footer = \Krexx\Toolbox::outputFooter('');
+      $footer = Framework\Toolbox::outputFooter('');
       // Get the messages.
-      $messages = \Krexx\Messages::outputMessages();
+      $messages = View\Messages::outputMessages();
 
-      \Krexx\Toolbox::outputNow($header . $messages . $main . $backtrace . $footer);
+      if (Framework\Config::getConfigValue('output', 'destination') == 'file') {
+        // Save it to a file.
+        Framework\Chunks::saveDechunkedToFile($header . $messages . $main . $backtrace . $footer);
+      }
+      else {
+        // Send it to the browser.
+        Framework\Chunks::sendDechunkedToBrowser($header . $messages . $main . $backtrace . $footer);
+      }
 
       // Cleanup the hive, this removes all recursion markers.
-      \Krexx\Hive::cleanupHive();
+      Analysis\Hive::cleanupHive();
     }
   }
 
   /**
-   * Translates the errornumber into human readable text.
+   * Translates the error number into human readable text.
    *
-   * It also incudes the corresponding config
+   * It also includes the corresponding config
    * setting, so we can decide if we want to output
    * anything.
    *
    * @param int $error_int
-   *   The errornumber.
+   *   The error number.
    *
    * @return array
    *   The translated type and the setting.
@@ -183,12 +209,12 @@ abstract class AbstractHandler {
         break;
 
       case E_DEPRECATED:
-        $error_name = 'Depricated warning';
+        $error_name = 'Deprecated warning';
         $error_setting = 'traceWarnings';
         break;
 
       case E_USER_DEPRECATED:
-        $error_name = 'User defined depricated warning';
+        $error_name = 'User defined deprecated warning';
         $error_setting = 'traceWarnings';
         break;
 

@@ -18,10 +18,10 @@ jsLib = "jquery-1.11.0.js"
 ; When analysing large objects, there is always the chance that you run out of time
 ; or memory. kreXX checks these values regularly.
 ; kreXX checks regularly how much memory is left. Here you can adjust the amount
-; where it will trigger an emergengy break. Unit of measurement is MB.
+; where it will trigger an emergency break. Unit of measurement is MB.
 memoryLeft = "64"
 ; 'kreXX checks during the analysis how much time has elapsed since start. Here you
-; can adjust the amount where it will trigger an emergengy break. Unit of measurement
+; can adjust the amount where it will trigger an emergency break. Unit of measurement
 ; is seconds.',
 maxRuntime = "60"
 
@@ -29,7 +29,7 @@ maxRuntime = "60"
 [logging]
 ; Logging settings
 ; Where shall kreXX save it's logfiles and how many files should he keep?
-; Files will only get deleted, when he creatres a new one.
+; Files will only get deleted, when he creates a new one.
 folder = "log"
 maxfiles = "10"
 
@@ -75,7 +75,7 @@ analysePrivate = "false"
 analyseTraversable = "true"
 ; analyseTraversable = "false"
 
-; What kind of additional methods shall be called from the oject?
+; What kind of additional methods shall be called from the object?
 ; Comma separated list of functions. They are only called, when they are callable.
 ; These functions are called without parameters. They also might actually do stuff
 ; which might be unwanted.
@@ -97,9 +97,9 @@ analysePrivateMethods = "false"
 
 ; ------------------------------------------------------------------------------------------
 [errorHandling]
-; kreXX comes with an unregisterable fatal error handler, which can be configured here.
+; kreXX comes with an unregistrable fatal error handler, which can be configured here.
 ; When set to "true", kreXX will register the handler as soon as it's included.
-; When a fatal error occures, kreXX will offer a backtrace and a analysis of
+; When a fatal error occurs, kreXX will offer a backtrace and a analysis of
 ; the all objects in it. PHP always clears the stack in case of a fatal error,
 ; so kreXX has to keep track of it. Be warned: This option will dramatically
 ; slow down your requests. Use this only when you have to. It is by far better

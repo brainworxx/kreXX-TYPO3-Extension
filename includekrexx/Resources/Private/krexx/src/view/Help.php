@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   Helptexts for kreXX
+ *   Help texts for kreXX
  *   kreXX: Krumo eXXtended
  *
  *   This is a debugging tool, which displays structured information
@@ -31,17 +31,17 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Krexx;
+namespace Brainworxx\Krexx\View;
 
 /**
- * Helptexts for kreXX.
+ * Help texts for kreXX.
  *
  * @package Krexx
  */
 class Help {
 
-  // A simpe array to hold the values.
-  // There should not be any string collusions.
+  // A simple array to hold the values.
+  // There should not be any string collisions.
   protected static $helpArray = array(
     'localFunction' => 'Here you can enter your own alias function for \krexx::open().<br/> Example: When you enter \'gue\', the function will be \krexx::gue($myObject); [or krexx($myObject, \'gue\');],<br/> which only devs can use who have set the same value.This is useful, to prevent other devs from calling your debug functions.',
     'analyseProtected' => 'Shall kreXX try to analyse the protected properties of a class?<br/> This may result in a lot of output.',
@@ -55,7 +55,7 @@ class Help {
     'disabled' => 'Here you can disable kreXX. Note that this is just a local setting, it does not affect other browsers.',
     'folder' => 'This is the folder where kreXX will store it\'s logfiles.',
     'maxfiles' => 'How many logfiles do you want to store inside your logging folder?<br/> When there are more files than this number, the older files will get deleted.',
-    'skin' => 'Choose a skin here. We have provided kreXX with two skins: "schablon" and "hans".',
+    'skin' => 'Choose a skin here. We have provided kreXX with only one skins: "hans".',
     'jsLib' => 'kreXX uses in the frontend jQuery. We have bundled it with jQuery 1.11.0, but it may interfere<br/> with the library that you use. To use your own libs, you can point kreXX to your jQuery file.<br /> Entering an empty value will prevent kreXX from loading any library.',
     'currentSettings' => 'kreXX\'s configuration can be edited here, changes will be stored in a cookie and overwrite the ini and factory settings.<br/> <strong>Please note, that these are only local settings. They only affect this browser.</strong>',
     'registerAutomatically' => 'This option registers the fatal errorhandler as soon as kreXX is included. When a fatal error occures,<br/> kreXX will offer a backtrace and an analysis of the all objects in it. PHP always clears the stack in case of a fatal error,<br/> so kreXX has to keep track of it. <strong>Be warned:</strong> This option will dramatically slow down your requests. Use this only when you have to.<br/> It is by far better to register the errorhandler yourself with <strong>\krexx::registerFatal();</strong> and later unregister it<br/> with <strong>\krexx::unregisterFatal();</strong> tp prevent a slowdown.',
@@ -70,7 +70,7 @@ class Help {
   );
 
   /**
-   * Returns the helptext when found, otherwise returns an empty string.
+   * Returns the help text when found, otherwise returns an empty string.
    *
    * @param string $what
    *   The help ID from the array above.

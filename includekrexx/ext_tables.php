@@ -47,7 +47,7 @@ if (TYPO3_MODE === 'BE') {
       // Position of the module.
       '',
       // Allowed controller action combinations.
-      array('Index' => 'editConfig,editFeConfig,usageHelp,configHelp,saveConfig,saveFeConfig'),
+      array('Index' => 'editConfig,editFeConfig,usageHelp,configHelp,saveConfig,saveFeConfig,editLocalBrowserSettings'),
       array(
         'access' => 'user,group',
         'icon' => 'EXT:includekrexx/ext_icon.gif',
@@ -65,7 +65,7 @@ if (TYPO3_MODE === 'BE') {
       // Position of the module.
       '',
       // Allowed controller action combinations.
-      array('Index' => 'editConfig,editFeConfig,usageHelp,configHelp,saveConfig,saveFeConfig'),
+      array('Index' => 'editConfig,editFeConfig,usageHelp,configHelp,saveConfig,saveFeConfig,editLocalBrowserSettings'),
       array(
         'access' => 'user,group',
         'icon' => 'EXT:includekrexx/ext_icon.gif',
