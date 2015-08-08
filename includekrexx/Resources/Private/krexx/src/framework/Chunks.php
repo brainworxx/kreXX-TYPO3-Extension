@@ -307,7 +307,8 @@ class Chunks {
    * When the chunks folder is not writable, we will not use chunks.
    * This will increase the memory usage significally!
    *
-   * @param $bool
+   * @param boolean $bool
+   *   Are we using chunks?
    */
   public static function setUseChunks($bool) {
     self::$useChunks = $bool;

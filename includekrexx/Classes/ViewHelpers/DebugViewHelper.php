@@ -14,10 +14,6 @@
  *
  * @author brainworXX GmbH <info@brainworxx.de>
  *
- * @usage
- *   {namespace krexx=Tx_Includekrexx_ViewHelpers}
- *   <krexx:debug>{_all}</krexx:debug>
- *
  * @license http://opensource.org/licenses/LGPL-2.1
  *   GNU Lesser General Public License Version 2.1
  *
@@ -34,6 +30,32 @@
  *   You should have received a copy of the GNU Lesser General Public License
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+
+// The mainproblem with 7.0 is, that compatibility6 may or may not be installed.
+// If not, I have to put his thing here, hoping not to break anything!
+if (!class_exists('Tx_Fluid_Core_ViewHelper_AbstractViewHelper')) {
+  abstract class Tx_Fluid_Core_ViewHelper_AbstractViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {}
+}
+
+/**
+ * Class Tx_Includekrexx_ViewHelpers_DebugViewHelper
+ *
+ * In case that anybody is actually reading this:
+ * Right now, this is just a proof of concept, but we've got plans for it.
+ * The <f:debug> could be a lot better, because it does not show everything
+ * accessible inside the fluid template. Getter functions in classes which
+ * are not declared via TCA will not show up, but can be polled for data.
+ * Also, it contains a debug-output (just like kreXX ;-) ) which may be
+ * confusing for people.
+ *
+ * In case that you are really desperate, use it. It gives the actual PHP
+ * stuff inside the template. Most of this stuff is not reachable from fluid,
+ * so we will implement a filter later on.
+ *
+ * @usage
+ *   {namespace krexx=Tx_Includekrexx_ViewHelpers}
+ *   <krexx:debug>{_all}</krexx:debug>
  */
 class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
 

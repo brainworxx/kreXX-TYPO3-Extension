@@ -144,7 +144,10 @@ class Internals {
     if (is_object($data) && is_a($data, '\Closure')) {
       self::$nestingLevel++;
       if (self::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
-        $result = Objects::analyseClosure($data);
+        if ($connector2 == '] =') {
+          $connector2 = ']';
+        }
+        $result = Objects::analyseClosure($data, $name, '', $connector1, $connector2);
         self::$nestingLevel--;
         return $result;
       }

@@ -466,7 +466,7 @@ class Objects {
     foreach ($func_list as $func_name) {
       if (is_callable(array(
           $data,
-          $func_name
+          $func_name,
         )) && Framework\config::isAllowedDebugCall($data, $func_name)
       ) {
         // Add a try to prevent the hosting CMS from doing something stupid.
@@ -530,7 +530,7 @@ class Objects {
       if (strpos($key, 'Parameter') === 0) {
         $param_list .= trim(str_replace(array(
             '&lt;optional&gt;',
-            '&lt;required&gt;'
+            '&lt;required&gt;',
           ), array('', ''), $string)) . ', ';
       }
       if (strpos($data['declaration keywords'], 'static') !== FALSE) {
@@ -546,13 +546,21 @@ class Objects {
   /**
    * Analyses a closure.
    *
-   * @param $data
-   *   The closure we want to analyse
+   * @param object $data
+   *   The closure we want to analyse.
+   * @param string $prop_name
+   *   The property name
+   * @param string $additional
+   *   Information about the declaration in the parent class / array.
+   * @param string $connector1
+   *   The connector1 type to the parent class / array.
+   * @param string $connector2
+   *   The connector2 type to the parent class / array.
    *
    * @return string
    *   The generated markup.
    */
-  public Static Function analyseClosure($data, $prop_name = 'closure', $additional, $connector1) {
+  public Static Function analyseClosure($data, $prop_name = 'closure', $additional = '', $connector1 = '', $connector2 = '') {
     $ref = new \ReflectionFunction($data);
 
     $result = array();
@@ -593,7 +601,7 @@ class Objects {
       return $output;
     };
 
-    return View\Render::renderExpandableChild($prop_name, $additional . ' closure', $anon_function, $result, '', '', '', FALSE, $connector1, '(' . $param_list . ') =');
+    return View\Render::renderExpandableChild($prop_name, $additional . ' closure', $anon_function, $result, '', '', '', FALSE, $connector1, $connector2 . '(' . $param_list . ') =');
 
   }
 

@@ -94,7 +94,7 @@ class Render extends Help {
    * @return string
    *   The generated markup from the template files.
    */
-  Public static function renderSingleChild($data, $name = '', $normal = '', $extra = FALSE, $type = '', $strlen = '', $help_id = '', $connector1 = '', $connector2 = '', $is_footer = false) {
+  Public static function renderSingleChild($data, $name = '', $normal = '', $extra = FALSE, $type = '', $strlen = '', $help_id = '', $connector1 = '', $connector2 = '', $is_footer = FALSE) {
     // This one is a little bit more complicated than the others,
     // because it assembles some partials and stitches them together.
     $template = self::getTemplateFileContent('singleChild');

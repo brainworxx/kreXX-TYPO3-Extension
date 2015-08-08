@@ -35,10 +35,10 @@
   
   if(!window.$krexxQuery) {
     // Huh, our own jQuery version is not here, we should take the one from the hosting CMS.
-    var $krexxQuery = window.jQuery;
+    var $ = window.jQuery;
   }
   else {
-    var $krexxQuery = window.$krexxQuery;
+    var $ = window.$krexxQuery;
   }
 
   /*
@@ -48,7 +48,7 @@
    *   The jQuery selector for the handle (the element where you click
    *   ans pull the "window".
    */
-  $krexxQuery.fn.draXX = function (handle) {
+  $.fn.draXX = function (handle) {
     var selector = this.selector;
     var $handle = this.find(handle);
 
@@ -60,7 +60,7 @@
      *   The mousedown event from the pulling of the handle.
      */
     return $handle.on("mousedown", function (event) {
-      var $content = $krexxQuery(this).parents(selector);
+      var $content = $(this).parents(selector);
 
       // Calculate original offset.
       var offSetY = $content.offset().top + $content.outerHeight() - event.pageY - $content.outerHeight();
@@ -78,16 +78,16 @@
        * @event mousemove
        *   The actual dragging of the handle.
        */
-      $krexxQuery(document).on("mousemove", function (event) {
+      $(document).on("mousemove", function (event) {
         // Prevents the default event behavior (ie: click).
         event.preventDefault();
         // Prevents the event from propagating (ie: "bubbling").
         event.stopPropagation();
         $content.offset({top : event.pageY + offSetY, left : event.pageX + offSetX});
-        
+
         // The next line is not part of the draXX plugin. You should
         // remove it, in case you want to use draXX.
-        $krexxQuery('.search-wrapper').css('position', 'absolute');
+        $('.search-wrapper').css('position', 'absolute');
       });
       $content.on("mouseup", function () {
         // Prevents the default event behavior (ie: click).
@@ -95,11 +95,11 @@
         // Prevents the event from propagating (ie: "bubbling").
         event.stopPropagation();
         // Unregister to prevent slowdown.
-        $krexxQuery(document).off("mousemove");
-        
+        $(document).off("mousemove");
+
         // The next line is not part of the draXX plugin. You should
         // remove it, in case you want to use draXX.
-        $krexxQuery('.search-wrapper').css('position', 'fixed');
+        $('.search-wrapper').css('position', 'fixed');
       });
     });
   };
@@ -111,10 +111,10 @@
    *   All events are getting registered as soon as the
    *   document is complete.
    */
-  $krexxQuery(document).ready(function () {
+  $(document).ready(function () {
 
     // Initialize the draggable.
-    $krexxQuery('.kwrapper').draXX('.kheadnote');
+    $('.kwrapper').draXX('.kheadnote');
 
     /*
      * Register functions for the local dev-settings.
@@ -123,7 +123,7 @@
      *   Changes on the krexx html forms.
      *   All changes will automatically be written to the browser cookies.
      */
-    $krexxQuery('.kwrapper .keditable select, .kwrapper .keditable input').on("change", function (event) {
+    $('.kwrapper .keditable select, .kwrapper .keditable input').on("change", function (event) {
       // Prevents the default event behavior (ie: click).
       event.preventDefault();
       // Prevents the event from propagating (ie: "bubbling").
@@ -139,7 +139,7 @@
      *   Resets the local settings in the settings cookie,
      *   when the reset button ic clicked.
      */
-    $krexxQuery('.kwrapper .resetbutton').on('click', function (event) {
+    $('.kwrapper .resetbutton').on('click', function (event) {
       // Prevents the default event behavior (ie: click).
       event.preventDefault();
       // Prevents the event from propagating (ie: "bubbling").
@@ -155,7 +155,7 @@
      *   Displays a closing animation of the corresponding
      *   krexx output "window" and then removes it from the markup.
      */
-    $krexxQuery('.kwrapper .kversion .kclose').on('click', function (event) {
+    $('.kwrapper .kversion .kclose').on('click', function (event) {
       // Prevents the default event behavior (ie: click).
       event.preventDefault();
       // Prevents the event from propagating (ie: "bubbling").
@@ -171,7 +171,7 @@
      *   Expands a krexx node when it is not expanded.
      *   When it is already expanded, it closes it.
      */
-    $krexxQuery('.kwrapper .kexpand').on('click', function (event) {
+    $('.kwrapper .kexpand').on('click', function (event) {
       // Prevents the default event behavior (ie: click).
       event.preventDefault();
       // Prevents the event from propagating (ie: "bubbling").
@@ -187,7 +187,7 @@
      *   When a recursion is clicked, krexx tries to locate the
      *   first output of the object and highlight it.
      */
-    $krexxQuery('.kwrapper .kcopyFrom').on('click', function (event) {
+    $('.kwrapper .kcopyFrom').on('click', function (event) {
       // Prevents the default event behavior (ie: click).
       event.preventDefault();
       // Prevents the event from propagating (ie: "bubbling").
@@ -195,66 +195,66 @@
 
       krexx.copyFrom(this);
     });
-    
+
     /*
      * Register the displaying of the search menu
-     * 
+     *
      * @event click
      *   When the button is clicked, krexx will display the
      *   search menu associated this the same output window.
      */
-    $krexxQuery('.kwrapper .ksearchbutton, .kwrapper .ksearch .kclose').on('click', function (event) {
+    $('.kwrapper .ksearchbutton, .kwrapper .ksearch .kclose').on('click', function (event) {
       // Prevents the default event behavior (ie: click).
       event.preventDefault();
       // Prevents the event from propagating (ie: "bubbling").
       event.stopPropagation();
-      
+
       krexx.displaySearch(this);
     });
-    
+
     /*
      * Register the search event on the next button.
-     * 
+     *
      * @event click
      *   When the button is clicked, krexx will start searching.
      */
-    $krexxQuery('.kwrapper .ksearchnow').on('click', function (event) {
+    $('.kwrapper .ksearchnow').on('click', function (event) {
       // Prevents the default event behavior (ie: click).
       event.preventDefault();
       // Prevents the event from propagating (ie: "bubbling").
       event.stopPropagation();
-      
+
       krexx.performSearch(this);
     });
-    
+
     /*
      * Listens for a <RETURN> in the search field.
-     * 
+     *
      * @event keyup
      *   A <RETURN> will initiate the search.
      */
-    $krexxQuery('.kwrapper .ksearchfield').keyup(function (event) {
+    $('.kwrapper .ksearchfield').keyup(function (event) {
       // Prevents the default event behavior (ie: click).
       event.preventDefault();
       // Prevents the event from propagating (ie: "bubbling").
       event.stopPropagation();
-      
+
       // If this is no <RETURN> key, do nothing.
       if (event.which != 13) {
         return;
       }
-      
+
       // Initiate the search.
-      $krexxQuery('.kwrapper .ksearchnow').click();
-      
+      $('.kwrapper .ksearchnow').click();
+
     });
-    
-    $krexxQuery('.kwrapper .kcollapse-me').on('click', function (event) {
+
+    $('.kwrapper .kcollapse-me').on('click', function (event) {
       // Prevents the default event behavior (ie: click).
       event.preventDefault();
       // Prevents the event from propagating (ie: "bubbling").
       event.stopPropagation();
-      
+
       krexx.collapse(this);
     });
 
@@ -271,26 +271,26 @@
    *   It a just a collection of used js routines.
    */
   function krexx() {}
-  
+
   /**
    * When clicked on s recursion, this function will
    * copy the original analysis result there and delete
    * the recursion.
-   * 
+   *
    * @param {HTMLElement} el
    *   The recursion display
    */
   krexx.copyFrom = function(el) {
     // Get the DOM id of the original analysis.
-    var domid = $krexxQuery(el).data('domid');
+    var domid = $(el).data('domid');
     // Get the analysis data.
-    var $orgNest = $krexxQuery('#' + domid);
+    var $orgNest = $('#' + domid);
     // Does the element exist?
     if ($orgNest.length > 0){
       // Get the EL of the data (element with the arrow).
       var $orgEl = $orgNest.prev();
       // Get the old recursion EL.
-      var $el = $krexxQuery(el);
+      var $el = $(el);
       // Clone the analysis data and insert it after the recursion EL.
       $orgNest.clone(true, true).insertAfter(el);
       // Clone the EL of the analysis data and insert it after the recursion EL.
@@ -301,25 +301,26 @@
       $el.remove();
     }
   };
-  
+
   /**
    * Collapses elements for a breadcrumb
-   * 
+   *
    * Hides all other elements, except the one with
    * the button. This way, we can get a breadcrumb
    * to the element we want to look at.
-   * 
+   *
    * @param {HTMLElement} el
    *   The collapse button
    */
   krexx.collapse = function(el) {
-    var $button = $krexxQuery(el);
-    
-    // Remove all old classes.
-    $krexxQuery('.kfilterroot').removeClass('kfilterroot');
-    $krexxQuery('.krootline').removeClass('krootline');
-    $krexxQuery('.ktopline').removeClass('ktopline');
-    
+    var $button = $(el);
+    var $wrapper = $button.parents('.kwrapper');
+    console.log($wrapper.find('.kfilterroot'));
+    // Remove all old classes within this debug "window"
+    $wrapper.find('.kfilterroot').removeClass('kfilterroot');
+    $wrapper.find('.krootline').removeClass('krootline');
+    $wrapper.find('.ktopline').removeClass('ktopline');
+
     // Here we start the hiding, only when clicked on a
     // none-collapsed button.
     if (!$button.hasClass('collapsed')) {
@@ -329,68 +330,68 @@
       // Add the "topline" to the highest element in the rootline
       $button.closest('.krootline').addClass('ktopline');
       // Reset the old collapse button.
-      $krexxQuery('.collapsed').removeClass('collapsed');
+      $wrapper.find('.collapsed').removeClass('collapsed');
       // Highlight the new collapse button.
       $button.addClass('collapsed');
     }
     else {
       // Reset the button, since we are un-collapsing nodes here.
-      $krexxQuery('.collapsed').removeClass('collapsed');
+      $wrapper.find('.collapsed').removeClass('collapsed');
     }
   };
-  
+
   /**
    * Here we save the search results
-   * 
+   *
    * This is multidimensional array:
    * results[kreXX-instance][search text][search results]
    *                                     [pointer]
    * The [pointer] is the key of the [search result] where
-   * you would jump to when you click "next" 
-   * 
+   * you would jump to when you click "next"
+   *
    * @var array
    */
   var results = [];
-  
+
   /**
    * Initiates the search.
-   * 
+   *
    * The results are saved in the var results.
-   * 
+   *
    * @param {HTMLElement} el
    *   The search button.
    */
   krexx.performSearch = function(el) {
-    var $el = $krexxQuery(el);
+    var $el = $(el);
     var searchtext = $el.prevAll('.ksearchfield').val();
-    
+
     // we only search for more than 3 chars.
     if (searchtext.length > 3) {
-    
+
       var instance = $el.data('instance');
       var direction = $el.data('direction');
-      
+
       // We need to un-collapse everything, in case it it collapsed.
-      $krexxQuery('#' + instance).find('.collapsed').click();
-      
+      $('#' + instance).find('.collapsed').click();
+
       // Are we already having some results?
       if (typeof results[instance] != "undefined") {
         if (typeof results[instance][searchtext] == "undefined") {
           // Remove all previous highlights
-          $krexxQuery('.ksearch-found-highlight').removeClass('ksearch-found-highlight');
+          $('.ksearch-found-highlight').removeClass('ksearch-found-highlight');
           // Get a new list of elements
           results[instance][searchtext] = [];
-          results[instance][searchtext]['data'] = $krexxQuery('#' + instance).find("li span:contains('" + searchtext + "'), li div.kpreview:contains('" + searchtext + "')").toggleClass('ksearch-found-highlight');
+          results[instance][searchtext]['data'] = $('#' + instance).find("li span:contains('" + searchtext + "'), li div.kpreview:contains('" + searchtext + "')").toggleClass('ksearch-found-highlight');
           results[instance][searchtext]['pointer'] = -1;
         }
       }
       else {
         // Remove all previous highlights
-        $krexxQuery('.ksearch-found-highlight').removeClass('ksearch-found-highlight');
+        $('.ksearch-found-highlight').removeClass('ksearch-found-highlight');
         // Get a new list of elements
         results[instance] = [];
         results[instance][searchtext] = [];
-        results[instance][searchtext]['data'] = $krexxQuery('#' + instance).find("li span:contains('" + searchtext + "'), li div.kpreview:contains('" + searchtext + "')").toggleClass('ksearch-found-highlight');
+        results[instance][searchtext]['data'] = $('#' + instance).find("li span:contains('" + searchtext + "'), li div.kpreview:contains('" + searchtext + "')").toggleClass('ksearch-found-highlight');
         results[instance][searchtext]['pointer'] = -1;
       }
 
@@ -412,10 +413,10 @@
           results[instance][searchtext]['pointer'] = results[instance][searchtext]['data'].length -1;
         }
       }
-      
+
       // Now we simply jump to the element in the array.
       krexx.jumpTo(results[instance][searchtext]['data'][results[instance][searchtext]['pointer']]);
-      
+
       // Feedback about where we are
       $el.prevAll('.ksearch-state').text(results[instance][searchtext]['pointer'] + ' / ' + (results[instance][searchtext]['data'].length -1));
     }
@@ -423,7 +424,7 @@
       $el.prevAll('.ksearch-state').text('<- must be bigger than 3 characters');
     }
   };
-  
+
   /**
    * Display the search dialog
    *
@@ -432,7 +433,7 @@
    */
   krexx.displaySearch = function (el) {
     // Get the search menu.
-    var $search = $krexxQuery('#search-' + $krexxQuery(el).data('instance'));
+    var $search = $('#search-' + $(el).data('instance'));
     // Toggle display / hidden.
     if ($search.hasClass('hidden')) {
       $search.removeClass('hidden');
@@ -441,8 +442,8 @@
     }
     else {
       // Remove all previous highlights
-      $krexxQuery('.ksearch-found-highlight').removeClass('ksearch-found-highlight');
-      // $krexxQuery('.highlight-jumpto').removeClass('highlight-jumpto');
+      $('.ksearch-found-highlight').removeClass('ksearch-found-highlight');
+      // $('.highlight-jumpto').removeClass('highlight-jumpto');
       results = [];
       $search.addClass('hidden');
       $search.css('position', 'absolute');
@@ -484,8 +485,8 @@
    *   The Element you want to expand.
    */
   krexx.toggle = function (el) {
-    
-      $krexxQuery(el).toggleClass('kopened').next().toggleClass('khidden');
+
+      $(el).toggleClass('kopened').next().toggleClass('khidden');
 
   };
 
@@ -498,16 +499,16 @@
    *   The element you want to focus on.
    */
   krexx.jumpTo = function (el) {
-    var domId = $krexxQuery(el).data('domid');
-    
+    var domId = $(el).data('domid');
+
     if (typeof domId == "undefined") {
       // we have no DOM ID, so we jump to the element!
-      var $nests = $krexxQuery(el).parents('.knest');
-      var $expandableElement = $krexxQuery(el);
+      var $nests = $(el).parents('.knest');
+      var $expandableElement = $(el);
     }
     else {
-      var $nests = $krexxQuery('#' + domId).parents('.knest');
-      var $expandableElement = $krexxQuery('#' + domId).prev();
+      var $nests = $('#' + domId).parents('.knest');
+      var $expandableElement = $('#' + domId).prev();
     }
     var $container;
 
@@ -517,13 +518,13 @@
       $nests.prev().addClass('kopened');
 
       // Remove old highlighting.
-      $krexxQuery('.highlight-jumpto').removeClass('highlight-jumpto');
+      $('.highlight-jumpto').removeClass('highlight-jumpto');
       // Highlight new one.
       $expandableElement.addClass('highlight-jumpto');
       // The main problem here is, I might have 2 different container:
       // '.kwrapper' in case of the error handler or
       // 'html, body' in case of a normal output.
-      $container = $krexxQuery('.kfatalwrapper-outer');
+      $container = $('.kfatalwrapper-outer');
       // Fatal errorhandler scrolling.
       if ($container.length > 0) {
         $container.animate({
@@ -531,7 +532,7 @@
         }, 500);
       }
       // Normal scrolling.
-      $container = $krexxQuery('html, body');
+      $container = $('html, body');
       if ($container.length > 0) {
         $container.animate({
           scrollTop : $expandableElement.offset().top -50
@@ -584,7 +585,7 @@
     var settings = krexx.readSettings('KrexxDebugSettings');
 
     // Get new settings from element.
-    var $this = $krexxQuery(el);
+    var $this = $(el);
     var newValue = $this.val();
     var valueName = $this.prop('name');
     settings[valueName] = newValue;
@@ -624,7 +625,7 @@
    */
   krexx.close = function (el) {
     // Remove it nice and "slow".
-    var $instance = $krexxQuery('#' + $krexxQuery(el).data('instance'));
+    var $instance = $('#' + $(el).data('instance'));
 
     $instance.parent('.kheadnote').off('mousedown');
 
@@ -641,7 +642,7 @@
    * for that file, and not for the server.
    */
   krexx.disableForms = function () {
-    $krexxQuery('.kwrapper .keditable').children().prop('disabled', true);
-    $krexxQuery('.kwrapper .resetbutton').prop('disabled', true);
+    $('.kwrapper .keditable').children().prop('disabled', true);
+    $('.kwrapper .resetbutton').prop('disabled', true);
   };
 })();

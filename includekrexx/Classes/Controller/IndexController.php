@@ -66,7 +66,6 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      */
     protected $allowed_settings_names = array(
       'skin',
-      'jsLib',
       'memoryLeft',
       'maxRuntime',
       'folder',
@@ -141,7 +140,6 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
 
       // See, if we have any values in the configuration file.
       $value['render']['skin'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('skin'));
-      $value['render']['jsLib'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('jsLib'));
       $value['render']['memoryLeft'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('memoryLeft'));
       $value['render']['maxRuntime'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('maxRuntime'));
       $value['logging']['folder'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('folder'));
@@ -209,7 +207,6 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
         'folder' => strip_tags(Help::getHelp('folder')),
         'maxfiles' => strip_tags(Help::getHelp('maxfiles')),
         'skin' => strip_tags(Help::getHelp('skin')),
-        'jsLib' => strip_tags(Help::getHelp('jsLib')),
         'currentSettings' => strip_tags(Help::getHelp('currentSettings')),
         'debugcookie' => strip_tags(Help::getHelp('debugcookie')),
         'registerAutomatically' => strip_tags(Help::getHelp('registerAutomatically')),
@@ -223,7 +220,6 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
 
       // See, if we have any values in the configuration file.
       $value['render']['skin'] = Config::getConfigFromFile('render', 'skin');
-      $value['render']['jsLib'] = Config::getConfigFromFile('render', 'jsLib');
       $value['render']['memoryLeft'] = Config::getConfigFromFile('render', 'memoryLeft');
       $value['render']['maxRuntime'] = Config::getConfigFromFile('render', 'maxRuntime');
       $value['logging']['folder'] = Config::getConfigFromFile('logging', 'folder');

@@ -7,13 +7,6 @@
 ; skin = "schablon"
 skin = "hans"
 
-; The path of the used js libraries.
-; When it is not found, it will not get rendered.
-; Normally, you want to point it to your jQuery file. The standard setting will use
-; the bundled file, but you might want to use the one from your project, or none at all.
-jsLib = "jquery-1.11.0.js"
-; jsLib = "/../../libraries/js/jQuery/jquery-1.11.0.js"
-
 ; Setting up the config for the emergency break.
 ; When analysing large objects, there is always the chance that you run out of time
 ; or memory. kreXX checks these values regularly.
@@ -124,7 +117,6 @@ backtraceAnalysis = "normal"
 ; Since the local configuration is stored in a cookie, settings will be 
 ; ignored, in case a setting can not be edited.
 skin = "full"
-jsLib = "none"
 memoryLeft = "full"
 maxRuntime = "full"
 folder = "none"
