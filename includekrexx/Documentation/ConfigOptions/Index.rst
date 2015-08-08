@@ -21,8 +21,7 @@ Render
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Option                         | Description                                                                                                                            | Possible values / example |
 +================================+========================================================================================================================================+===========================+
-| Skin                           | You can change the CSS/HTML skin.                                                                                                      | - hans                    |
-|                                |                                                                                                                                        | - schablon                |
+| Skin                           | You can change the CSS/HTML skin. We only included the Hans skin                                                                       | - hans                    |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Minimum amout of memory [MB]   | kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergengy break. Unit of       | 64                        |
 |                                | measurement is MB.                                                                                                                     |                           |
