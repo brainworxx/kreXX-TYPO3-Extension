@@ -1,171 +1,202 @@
 <f:be.container>
-<style type="text/css">
-/* since addJsFile and addCssFile got removed in 7.0, I have to resort to adding stuff inline! */
-html {
-  overflow: hidden;
-}
+  <style type="text/css">
+    /* since addJsFile and addCssFile got removed in 7.0, I have to resort to adding stuff inline! */
+    html {
+      overflow: hidden;
+    }
 
-hr {
-  -moz-border-bottom-colors: none;
-  -moz-border-left-colors: none;
-  -moz-border-right-colors: none;
-  -moz-border-top-colors: none;
-  border-color: #ccc;
-  border-right: 0 solid #ccc;
-  border-style: solid;
-  border-width: 1px 0 0;
-  clear: both;
-  height: 0;
-}
+    hr {
+      -moz-border-bottom-colors: none;
+      -moz-border-left-colors: none;
+      -moz-border-right-colors: none;
+      -moz-border-top-colors: none;
+      border-color: #ccc;
+      border-right: 0 solid #ccc;
+      border-style: solid;
+      border-width: 1px 0 0;
+      clear: both;
+      height: 0;
+    }
 
-ol {
-  list-style: outside none decimal;
-}
-ul {
-  list-style: outside none disc;
-}
-li {
-  margin-left: 30px;
-}
-p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
-  margin-bottom: 20px;
-}
+    ol {
+      list-style: outside none decimal;
+    }
 
-pre {
-  border: 1px solid #cacaca;
-  padding: 10px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  background-color: #fafafb;
-  color: #393939;
-  margin: 0px;
-  width: 250px;
-}
+    ul {
+      list-style: outside none disc;
+    }
 
-.docheader-row2-left select {
-  color:#000;
-}
+    li {
+      margin-left: 30px;
+    }
 
-input:disabled{
-  color: #dddddd;
-  border: #dddddd 1px solid;
-  background-color: #fff;
-}
-select:disabled {
-  color: #dddddd;
-}
+    p, dl, hr, h1, h2, h3, h4, h5, h6, ol, ul, pre, table, address, fieldset {
+      margin-bottom: 20px;
+    }
 
-.krexx-config th {
-  text-align: left;
-}
+    pre {
+      border: 1px solid #cacaca;
+      padding: 10px;
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+      background-color: #fafafb;
+      color: #393939;
+      margin: 0px;
+      width: 250px;
+    }
 
-.krexx-config img {
-  margin: 3px;
-  cursor: help;
-}
-a.krexx-link {
-  background: url('../Icons/link.png') no-repeat;
-  padding-left: 16px;
-}
-a.krexx-link:hover {
-  text-decoration: underline;
-}
-h1 {
-  text-align: left;
-}
-select {
-  display: inline-block;
-  margin: 0 0.5em 0.5em 0!important;
-  vertical-align: middle;
-}
-input {
-  margin-right: 3px; 
-}
-label {
-  font-weight: normal;
-}
+    .docheader-row2-left select {
+      color: #000;
+    }
 
-.typo3-docheader-buttons {
-  background-color: #dadada;
-  height: 18px;
-  line-height: 0;
-  padding: 2px 24px;
-}
+    input:disabled {
+      color: #dddddd;
+      border: #dddddd 1px solid;
+      background-color: #fff;
+    }
 
-.typo3-docheader-functions {
-  background-color: #585858;
-  height: 27px;
-  padding: 0 24px;
-}
-td.cbx {
-  width: 330px;
-}
-</style>
-<script type="text/javascript">
-document.observe("dom:loaded", function() {
-  var checkboxes = document.getElementsByName('tx_includekrexx_tools_includekrexxkrexxconfiguration[factory]');
-  var id, element;
-  
-  for(var i=0, n=checkboxes.length; i<n;i++) {
-    toggle(checkboxes[i]);
-    // var checkbox[i] = checkboxes[i]
-    checkboxes[i].addEventListener('click', function() {toggle(this);}, true);
-  }
-  
-  var savebutton = document.getElementById('editconfig_save');
-  if (typeof savebutton === 'object' && savebutton != 'undefined' && savebutton != null) {
-    savebutton.addEventListener('click', function() {
-      var form = document.getElementById('editconfig');
-      if (typeof form === 'object' && form != 'undefined' && form != null) {
-        form.submit();
-      }
-    }, true);
-  }
-  
-});
+    select:disabled {
+      color: #dddddd;
+    }
 
-toggle = function(checkbox) {
-  var id = checkbox.id.split('.');
-  if(id[1] != 'undefined') {
-    var element = document.getElementById(id[1]);
-  }
+    .krexx-config th {
+      text-align: left;
+    }
 
-  if (typeof element === 'object' && element != 'undefined' && element != null) {
-    
-    
-    if (checkbox.checked) {
-      element.disabled = true;
+    .krexx-config img {
+      margin: 3px;
+      cursor: help;
+    }
+
+    a.krexx-link {
+      background: url('../Icons/link.png') no-repeat;
+      padding-left: 16px;
+    }
+
+    a.krexx-link:hover {
+      text-decoration: underline;
+    }
+
+    h1 {
+      text-align: left;
+    }
+
+    select {
+      display: inline-block;
+      margin: 0 0.5em 0.5em 0 !important;
+      vertical-align: middle;
+    }
+
+    input {
+      margin-right: 3px;
+    }
+
+    label {
+      font-weight: normal;
+    }
+
+    .typo3-docheader-buttons {
+      background-color: #dadada;
+      height: 18px;
+      line-height: 0;
+      padding: 2px 24px;
+    }
+
+    .typo3-docheader-functions {
+      background-color: #585858;
+      height: 27px;
+      padding: 0 24px;
+    }
+
+    td.cbx {
+      width: 330px;
+    }
+  </style>
+  <script type="text/javascript">
+
+
+    if (typeof document.observe === "function") {
+      // Looks like we can use the good old backend library
+      document.observe("dom:loaded", function () {
+        formSupport.formReady();
+      });
+
     }
     else {
-      element.disabled = false;
+      // Looks like we are handling a 7.4+ Backend.
+      // IE9 should be able to swallow this.
+      document.addEventListener("DOMContentLoaded", function (event) {
+        formSupport.formReady();
+      });
     }
-  }
-};
-</script>
+
+    function formSupport() {}
+
+
+    formSupport.formReady = function () {
+      var checkboxes = document.getElementsByName('tx_includekrexx_tools_includekrexxkrexxconfiguration[factory]');
+      var id, element;
+
+      for (var i = 0, n = checkboxes.length; i < n; i++) {
+        formSupport.toggle(checkboxes[i]);
+        // var checkbox[i] = checkboxes[i]
+        checkboxes[i].addEventListener('click', function () {
+          formSupport.toggle(this);
+        }, true);
+      }
+
+      var savebutton = document.getElementById('editconfig_save');
+      if (typeof savebutton === 'object' && savebutton != 'undefined' && savebutton != null) {
+        savebutton.addEventListener('click', function () {
+          var form = document.getElementById('editconfig');
+          if (typeof form === 'object' && form != 'undefined' && form != null) {
+            form.submit();
+          }
+        }, true);
+      }
+    };
+
+    formSupport.toggle = function (checkbox) {
+      var id = checkbox.id.split('.');
+      if (id[1] != 'undefined') {
+        var element = document.getElementById(id[1]);
+      }
+
+      if (typeof element === 'object' && element != 'undefined' && element != null) {
+
+        if (checkbox.checked) {
+          element.disabled = true;
+        }
+        else {
+          element.disabled = false;
+        }
+      }
+    };
+  </script>
   <div class="typo3-fullDoc">
     <div id="typo3-docheader">
       <div class="typo3-docheader-functions">
-          <f:be.menus.actionMenu>
-            <f:be.menus.actionMenuItem label="Edit configuration file" controller="Index" action="editConfig" />
-            <f:be.menus.actionMenuItem label="Edit local browser settings" controller="Index" action="editLocalBrowserSettings" />
-            <f:be.menus.actionMenuItem label="Edit FE configuration" controller="Index" action="editFeConfig" />
-            <f:be.menus.actionMenuItem label="Usage help" controller="Index" action="usageHelp" />
-            <f:be.menus.actionMenuItem label="Config help" controller="Index" action="configHelp" />
-          </f:be.menus.actionMenu>
+        <f:be.menus.actionMenu>
+          <f:be.menus.actionMenuItem label="Edit configuration file" controller="Index" action="editConfig"/>
+          <f:be.menus.actionMenuItem label="Edit local browser settings" controller="Index" action="editLocalBrowserSettings"/>
+          <f:be.menus.actionMenuItem label="Edit FE configuration" controller="Index" action="editFeConfig"/>
+          <f:be.menus.actionMenuItem label="Usage help" controller="Index" action="usageHelp"/>
+          <f:be.menus.actionMenuItem label="Config help" controller="Index" action="configHelp"/>
+        </f:be.menus.actionMenu>
       </div>
       <div class="typo3-docheader-buttons">
         <div class="docheader-row2-left left">
           <div id="editconfig_save">
-            <f:image width="16" src="{f:uri.resource(path:'Icons/save.png')}" alt="save settings" />
+            <f:image width="16" src="{f:uri.resource(path:'Icons/save.png')}" alt="save settings"/>
           </div>
         </div>
       </div>
     </div>
     <div id="typo3-docbody">
       <div id="typo3-inner-docbody">
-        <f:flashMessages renderMode="div" />
-        <f:render section="main" />
+        <f:flashMessages renderMode="div"/>
+        <f:render section="main"/>
       </div>
     </div>
   </div>

@@ -126,7 +126,8 @@ class Internals {
     }
 
     // Object?
-    if (is_object($data)) {
+    // Closures are analysed separately.
+    if (is_object($data) && !is_a($data, '\Closure')) {
       self::$nestingLevel++;
       if (self::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
         $result = Objects::analyseObject($data, $name, '', $connector1, $connector2);
@@ -136,6 +137,20 @@ class Internals {
       else {
         self::$nestingLevel--;
         return Variables::analyseString("Object => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $name);
+      }
+    }
+
+    // Closure?
+    if (is_object($data) && is_a($data, '\Closure')) {
+      self::$nestingLevel++;
+      if (self::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
+        $result = Objects::analyseClosure($data);
+        self::$nestingLevel--;
+        return $result;
+      }
+      else {
+        self::$nestingLevel--;
+        return Variables::analyseString("Closure => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $name);
       }
     }
 

@@ -108,7 +108,7 @@ class Objects {
         }
       }
       if (count($ref_props)) {
-         $output .= Objects::getReflectionPropertiesData($ref_props, $name, $ref, $data, 'Public properties');
+        $output .= Objects::getReflectionPropertiesData($ref_props, $name, $ref, $data, 'Public properties');
         // Adding a HR to reflect that the following stuff are not public
         // properties anymore.
         $output .= View\Render::renderSingeChildHr();
@@ -228,7 +228,8 @@ class Objects {
         }
 
         // Object?
-        if (is_object($value)) {
+        // Closures are analysed separately.
+        if (is_object($value) && !is_a($value, '\Closure')) {
           Internals::$nestingLevel++;
           if (Internals::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
             $result = Objects::analyseObject($value, $prop_name, $additional, $connector1);
@@ -238,6 +239,20 @@ class Objects {
           else {
             Internals::$nestingLevel--;
             $output .= Variables::analyseString("Object => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $prop_name, $additional, $connector1);
+          }
+        }
+
+        // Closure?
+        if (is_object($value) && is_a($value, '\Closure')) {
+          Internals::$nestingLevel++;
+          if (Internals::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
+            $result = Objects::analyseClosure($value, $prop_name, $additional, $connector1);
+            Internals::$nestingLevel--;
+            $output .= $result;
+          }
+          else {
+            Internals::$nestingLevel--;
+            $output .= Variables::analyseString("Closure => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $prop_name, $additional, $connector1);
           }
         }
 
@@ -346,10 +361,10 @@ class Objects {
 
         // Get real value.
         if ($is_object) {
-          $v = & $data->$k;
+          $v = &$data->$k;
         }
         else {
-          $v = & $data[$k];
+          $v = &$data[$k];
         }
 
         $output .= Internals::analysisHub($v, $k);
@@ -390,7 +405,7 @@ class Objects {
     $methods = array_merge($public, $protected, $private);
     if (count($methods)) {
       // We need to sort these alphabetically.
-      $sorting_callback = function($a, $b) {
+      $sorting_callback = function ($a, $b) {
         return strcmp($a->name, $b->name);
       };
       usort($methods, $sorting_callback);
@@ -449,12 +464,16 @@ class Objects {
 
     $func_list = explode(',', Framework\Config::getConfigValue('deep', 'debugMethods'));
     foreach ($func_list as $func_name) {
-      if (is_callable(array($data, $func_name)) && Framework\config::isAllowedDebugCall($data, $func_name)) {
+      if (is_callable(array(
+          $data,
+          $func_name
+        )) && Framework\config::isAllowedDebugCall($data, $func_name)
+      ) {
         // Add a try to prevent the hosting CMS from doing something stupid.
         try {
           // We need to deactivate the current error handling to
           // prevent the host system to do anything stupid.
-          set_error_handler(function() {
+          set_error_handler(function () {
             // Do nothing.
           });
           $parameter = $data->$func_name();
@@ -509,7 +528,10 @@ class Objects {
     foreach ($data as $key => $string) {
       // Getting the parameter list.
       if (strpos($key, 'Parameter') === 0) {
-        $param_list .= trim(str_replace(array('&lt;optional&gt;', '&lt;required&gt;'), array('', ''), $string))  . ', ';
+        $param_list .= trim(str_replace(array(
+            '&lt;optional&gt;',
+            '&lt;required&gt;'
+          ), array('', ''), $string)) . ', ';
       }
       if (strpos($data['declaration keywords'], 'static') !== FALSE) {
         $connector1 = '::';
@@ -519,6 +541,60 @@ class Objects {
     $param_list = '<small>' . trim($param_list, ', ') . '</small>';
 
     return View\Render::renderExpandableChild($name, $data['declaration keywords'] . ' method', $anon_function, $parameter, '', '', '', FALSE, $connector1, '(' . $param_list . ')');
+  }
+
+  /**
+   * Analyses a closure.
+   *
+   * @param $data
+   *   The closure we want to analyse
+   *
+   * @return string
+   *   The generated markup.
+   */
+  public Static Function analyseClosure($data, $prop_name = 'closure', $additional, $connector1) {
+    $ref = new \ReflectionFunction($data);
+
+    $result = array();
+
+    // Adding comments from the file.
+    $result['comments'] = Variables::encodeString(Objects::prettifyComment($ref->getDocComment()), TRUE);
+    // Adding the place where it was declared.
+    $result['declared in'] = htmlspecialchars($ref->getFileName()) . '<br/>';
+    $result['declared in'] .= 'in line ' . htmlspecialchars($ref->getStartLine());
+    // Adding the namespace, but only if we have one.
+    $namespace = $ref->getNamespaceName();
+    if (strlen($namespace) > 0) {
+      $result['namespace'] = $namespace;
+    }
+    // Adding the parameters.
+    $parameters = $ref->getParameters();
+    $param_list = '';
+    foreach ($parameters as $parameter) {
+      preg_match('/(.*)(?= \[ )/', $parameter, $key);
+      $parameter = str_replace($key[0], '', $parameter);
+      $result[$key[0]] = htmlspecialchars(trim($parameter, ' []'));
+      $param_list .= trim(str_replace(array('&lt;optional&gt;', '&lt;required&gt;'), array('', ''), $result[$key[0]]))  . ', ';
+    }
+    // Remove the ',' after the last char.
+    $param_list = '<small>' . trim($param_list, ', ') . '</small>';
+
+    $anon_function = function ($parameter) {
+      $data = $parameter;
+      $output = '';
+      foreach ($data as $key => $string) {
+        if ($key !== 'comments' && $key !== 'declared in') {
+          $output .= View\Render::renderSingleChild($string, $key, $string, FALSE, 'reflection', '', '', '', '=');
+        }
+        else {
+          $output .= View\Render::renderSingleChild($string, $key, '. . .', TRUE, 'reflection', '', '', '', '=');
+        }
+      }
+      return $output;
+    };
+
+    return View\Render::renderExpandableChild($prop_name, $additional . ' closure', $anon_function, $result, '', '', '', FALSE, $connector1, '(' . $param_list . ') =');
+
   }
 
   /**
@@ -543,7 +619,7 @@ class Objects {
       // Deep analysis of the methods.
       foreach ($data as $reflection) {
         $method_data = array();
-        /* @var \ReflectionMethod $reflection  */
+        /* @var \ReflectionMethod $reflection */
         $method = $reflection->name;
         // Get the comment from the class, it's parents, interfaces or traits.
         $comments = trim($reflection->getDocComment());

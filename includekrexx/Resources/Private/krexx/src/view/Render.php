@@ -87,11 +87,14 @@ class Render extends Help {
    *   The connector1 type to the parent class / array.
    * @param string $connector2
    *   The connector2 type to the parent class / array.
+   * @param bool $is_footer
+   *   Are we displaying currently the footer? If yes, we will not do the
+   *   callback part.
    *
    * @return string
    *   The generated markup from the template files.
    */
-  Public static function renderSingleChild($data, $name = '', $normal = '', $extra = FALSE, $type = '', $strlen = '', $help_id = '', $connector1 = '', $connector2 = '') {
+  Public static function renderSingleChild($data, $name = '', $normal = '', $extra = FALSE, $type = '', $strlen = '', $help_id = '', $connector1 = '', $connector2 = '', $is_footer = false) {
     // This one is a little bit more complicated than the others,
     // because it assembles some partials and stitches them together.
     $template = self::getTemplateFileContent('singleChild');
@@ -102,7 +105,7 @@ class Render extends Help {
       // We have a lot of text, so we render this one expandable (yellow box).
       $part_expand = self::getTemplateFileContent('singleChildExpand');
     }
-    if (is_callable($data)) {
+    if (is_callable($data) && !$is_footer) {
       // Add callable partial.
       $part_callable = self::getTemplateFileContent('singleChildCallable');
     }

@@ -58,7 +58,6 @@ class Config {
   public static $configFallback = array(
     'render' => array(
       'skin' => 'hans',
-      'jsLib' => 'jquery-1.11.0.js',
       'memoryLeft' => '64',
       'maxRuntime' => '60',
     ),
@@ -143,10 +142,6 @@ class Config {
       'type' => 'None',
       'editable' => 'false',
     ),
-    'jsLib' => array(
-      'type' => 'None',
-      'editable' => 'false',
-    ),
     'skin' => array(
       'type' => 'Select',
       'editable' => 'true',
@@ -221,7 +216,7 @@ class Config {
    *
    * @var string
    */
-  public static $version = '1.3.3';
+  public static $version = '1.3.4 dev';
 
   /**
    * Get\Set kreXX state: whether it is enabled or disabled.
@@ -690,19 +685,6 @@ class Config {
           }
           break;
 
-        case "jsLib":
-          // We expect a path to a jquery library, or an empty value.
-          $is_jquery = strpos(Toolbox::getFileContents(self::$krexxdir . 'resources/jsLibs/' . $value), 'jQuery Foundation, Inc.') !== FALSE;
-
-          // We accept empty values and jquery libraries.
-          if (empty($value) || $is_jquery) {
-            $result = TRUE;
-          }
-          else {
-            View\Messages::addMessage('Wrong configuration for: "render => jsLib"! This is not a jQuery library. The configured setting was not applied!');
-          }
-          break;
-
         case "doctype":
           // We expect a string, could be anything.
           $result = TRUE;
@@ -813,10 +795,6 @@ class Config {
         // We need to translate it to a "real" setting.
         // Get the html control name.
         switch ($parameter_name) {
-          case 'jsLib':
-            $type = 'Input';
-            break;
-
           case 'folder':
             $type = 'Input';
             break;

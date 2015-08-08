@@ -189,7 +189,7 @@ class Toolbox {
                 $section_output .= View\Render::renderSingleEditableChild($parameter_name, htmlspecialchars($parameter_value), $source[$parameter_name], $type, $parameter_name);
               }
               else {
-                $section_output .= View\Render::renderSingleChild($parameter_value, $parameter_name, htmlspecialchars($parameter_value), FALSE, $source[$parameter_name], '', $parameter_name);
+                $section_output .= View\Render::renderSingleChild($parameter_value, $parameter_name, htmlspecialchars($parameter_value), FALSE, $source[$parameter_name], '', $parameter_name, '', '=>', TRUE);
               }
             }
           }
@@ -240,7 +240,7 @@ class Toolbox {
 
 
     // Adding JQuery.
-    $js_lib = self::getFileContents(Config::$krexxdir . 'resources/jsLibs/' . Config::getConfigValue('render', 'jsLib'));
+    $js_lib = self::getFileContents(Config::$krexxdir . 'resources/jsLibs/jquery-1.11.0.js');
     $js_wrapper = self::getFileContents(Config::$krexxdir . 'resources/jsLibs/wrapper.js');
     $js = str_replace('{jQueryGoesHere}', $js_lib, $js_wrapper);
     // Krexx.js is comes directly form the template.

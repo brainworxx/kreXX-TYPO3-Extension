@@ -429,13 +429,15 @@ ul.kconfiguration li.kchild {
 }
 
 .kclass:before,
-.kmethod:before {
+.kmethod:before,
+.kclosure:before {
   color: #a6e22a;
 }
 
 .kclass em,
 .kmethod em,
-.kclass span.kname {
+.kclass span.kname,
+.kclosure em {
   color: #a6e22a;
 }
 .karray {

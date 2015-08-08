@@ -54,12 +54,22 @@ class ext_update {
     // Protect the upload folder.
     // We create a .htaccess here, as well as a index.php.
     // The uploadfolder should not be reachable from the outside.
-    $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
+    if ((int) TYPO3_version < 7) {
+      $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
+    }
+    else {
+      $source =  TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
+    }
     $destination = PATH_site . 'uploads/tx_includekrexx/.htaccess';
     if (is_file($source) && !is_file($destination)) {
       copy($source, $destination);
     }
-    $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/index.php';
+    if ((int) TYPO3_version < 7) {
+      $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/index.php';
+    }
+    else {
+      $source =  TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
+    }
     $destination = PATH_site . 'uploads/tx_includekrexx/index.php';
     if (is_file($source) && !is_file($destination)) {
       copy($source, $destination);
