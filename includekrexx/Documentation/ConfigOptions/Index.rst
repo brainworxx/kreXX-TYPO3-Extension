@@ -24,10 +24,6 @@ Render
 | Skin                           | You can change the CSS/HTML skin.                                                                                                      | - hans                    |
 |                                |                                                                                                                                        | - schablon                |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Path to jQuery                 | | The path of the used js library.                                                                                                     | jquery-1.11.0.js          |
-|                                | When it is not found, it will not get rendered. Normally, you want to point it to your jQuery file. The standard setting will use the  |                           |
-|                                | bundled file, but you might want to use the one from your project, or none at all.                                                     |                           |
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Minimum amout of memory [MB]   | kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergengy break. Unit of       | 64                        |
 |                                | measurement is MB.                                                                                                                     |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
