@@ -107,9 +107,10 @@ class Krexx {
     $krexxdir = dirname(__FILE__) . DIRECTORY_SEPARATOR;;
     include_once $krexxdir . 'src/view/Help.php';
     include_once $krexxdir . 'src/view/Render.php';
+    include_once $krexxdir . 'src/view/Messages.php';
+    include_once $krexxdir . 'src/view/Codegen.php';
     include_once $krexxdir . 'src/framework/Config.php';
     include_once $krexxdir . 'src/framework/Toolbox.php';
-    include_once $krexxdir . 'src/view/Messages.php';
     include_once $krexxdir . 'src/framework/Chunks.php';
     include_once $krexxdir . 'src/framework/ShutdownHandler.php';
     include_once $krexxdir . 'src/analysis/Flection.php';
@@ -119,6 +120,7 @@ class Krexx {
     include_once $krexxdir . 'src/analysis/Variables.php';
     include_once $krexxdir . 'src/errorhandler/AbstractHandler.php';
     include_once $krexxdir . 'src/errorhandler/Fatal.php';
+
     Framework\Config::$krexxdir = $krexxdir;
 
     // Setting template info.

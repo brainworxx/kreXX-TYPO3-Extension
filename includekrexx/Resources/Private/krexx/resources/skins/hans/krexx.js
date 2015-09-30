@@ -32,8 +32,8 @@
 
 (function () {
   "use strict";
-  
-  if(!window.$krexxQuery) {
+
+  if (!window.$krexxQuery) {
     // Huh, our own jQuery version is not here, we should take the one from the hosting CMS.
     var $ = window.jQuery;
   }
@@ -83,7 +83,10 @@
         event.preventDefault();
         // Prevents the event from propagating (ie: "bubbling").
         event.stopPropagation();
-        $content.offset({top : event.pageY + offSetY, left : event.pageX + offSetX});
+        $content.offset({
+          top: event.pageY + offSetY,
+          left: event.pageX + offSetX
+        });
 
         // The next line is not part of the draXX plugin. You should
         // remove it, in case you want to use draXX.
@@ -249,6 +252,11 @@
 
     });
 
+    /**
+     * Register the Collapse-All funfions on it's symbol
+     *
+     * @event click
+     */
     $('.kwrapper .kcollapse-me').on('click', function (event) {
       // Prevents the default event behavior (ie: click).
       event.preventDefault();
@@ -256,6 +264,28 @@
       event.stopPropagation();
 
       krexx.collapse(this);
+    });
+
+    /**
+     * Register the code generator on the P symbol.
+     *
+     * @event click
+     */
+    $('.kwrapper .kgencode').on('click', function (event) {
+      // Prevents the default event behavior (ie: click).
+      event.preventDefault();
+      // Prevents the event from propagating (ie: "bubbling").
+      event.stopPropagation();
+
+      krexx.generateCode(this);
+    });
+    
+    $('.kwrapper .kcodedisplay').on('click', function () {
+      // Do nothing.
+      // Prevents the default event behavior (ie: click).
+      event.preventDefault();
+      // Prevents the event from propagating (ie: "bubbling").
+      event.stopPropagation();
     });
 
     // Disable form-buttons in case a logfile is opened local.
@@ -270,7 +300,8 @@
    * @namespace
    *   It a just a collection of used js routines.
    */
-  function krexx() {}
+  function krexx() {
+  }
 
   /**
    * When clicked on s recursion, this function will
@@ -280,13 +311,13 @@
    * @param {HTMLElement} el
    *   The recursion display
    */
-  krexx.copyFrom = function(el) {
+  krexx.copyFrom = function (el) {
     // Get the DOM id of the original analysis.
     var domid = $(el).data('domid');
     // Get the analysis data.
     var $orgNest = $('#' + domid);
     // Does the element exist?
-    if ($orgNest.length > 0){
+    if ($orgNest.length > 0) {
       // Get the EL of the data (element with the arrow).
       var $orgEl = $orgNest.prev();
       // Get the old recursion EL.
@@ -312,10 +343,10 @@
    * @param {HTMLElement} el
    *   The collapse button
    */
-  krexx.collapse = function(el) {
+  krexx.collapse = function (el) {
     var $button = $(el);
     var $wrapper = $button.parents('.kwrapper');
-    console.log($wrapper.find('.kfilterroot'));
+
     // Remove all old classes within this debug "window"
     $wrapper.find('.kfilterroot').removeClass('kfilterroot');
     $wrapper.find('.krootline').removeClass('krootline');
@@ -361,7 +392,7 @@
    * @param {HTMLElement} el
    *   The search button.
    */
-  krexx.performSearch = function(el) {
+  krexx.performSearch = function (el) {
     var $el = $(el);
     var searchtext = $el.prevAll('.ksearchfield').val();
 
@@ -410,7 +441,7 @@
           results[instance][searchtext]['pointer'] = 0;
         }
         else {
-          results[instance][searchtext]['pointer'] = results[instance][searchtext]['data'].length -1;
+          results[instance][searchtext]['pointer'] = results[instance][searchtext]['data'].length - 1;
         }
       }
 
@@ -418,7 +449,7 @@
       krexx.jumpTo(results[instance][searchtext]['data'][results[instance][searchtext]['pointer']]);
 
       // Feedback about where we are
-      $el.prevAll('.ksearch-state').text(results[instance][searchtext]['pointer'] + ' / ' + (results[instance][searchtext]['data'].length -1));
+      $el.prevAll('.ksearch-state').text(results[instance][searchtext]['pointer'] + ' / ' + (results[instance][searchtext]['data'].length - 1));
     }
     else {
       $el.prevAll('.ksearch-state').text('<- must be bigger than 3 characters');
@@ -486,7 +517,7 @@
    */
   krexx.toggle = function (el) {
 
-      $(el).toggleClass('kopened').next().toggleClass('khidden');
+    $(el).toggleClass('kopened').next().toggleClass('khidden');
 
   };
 
@@ -528,14 +559,14 @@
       // Fatal errorhandler scrolling.
       if ($container.length > 0) {
         $container.animate({
-          scrollTop : $expandableElement.offset().top - $container.offset().top + $container.scrollTop() -50
+          scrollTop: $expandableElement.offset().top - $container.offset().top + $container.scrollTop() - 50
         }, 500);
       }
       // Normal scrolling.
       $container = $('html, body');
       if ($container.length > 0) {
         $container.animate({
-          scrollTop : $expandableElement.offset().top -50
+          scrollTop: $expandableElement.offset().top - 50
         }, 500);
       }
     }
@@ -598,7 +629,6 @@
     document.cookie = 'KrexxDebugSettings=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     // Set the new one.
     document.cookie = 'KrexxDebugSettings=' + JSON.stringify(settings) + '; ' + expires + '; path=/';
-    // console.log(document.cookie);
     // Feedback about update.
     alert(valueName + ' --> ' + newValue + '\n\nPlease reload the page to use the new local settings.');
   };
@@ -607,7 +637,7 @@
    * Resets all values in the local cookie settings.
    */
   krexx.resetSetting = function () {
-     // We do not delete the cookie, we simply remove all settings in it.
+    // We do not delete the cookie, we simply remove all settings in it.
     var settings = {};
     var date = new Date();
     date.setTime(date.getTime() + (99 * 24 * 60 * 60 * 1000));
@@ -645,4 +675,62 @@
     $('.kwrapper .keditable').children().prop('disabled', true);
     $('.kwrapper .resetbutton').prop('disabled', true);
   };
+
+  /**
+   * The kreXX code generator.
+   *
+   * @param {HTMLElement} el
+   *   The P symbol of the code generator.
+   */
+  krexx.generateCode = function (button) {
+    // 1. Collect all data elements down the rootline
+    var $el = $(button).parents('li.kchild');
+    var $codedisplay = $(button).next('.kcodedisplay');
+
+    if (!$codedisplay.is(':visible')) {
+      // 2. Contagate them all.
+      var result = '';
+      var sourcedata;
+      for (var i = $el.length - 1; i >= 0; i--) {
+        sourcedata = $el[i].dataset.source;
+        if (typeof sourcedata !== 'undefined') {
+          result = result.concat(sourcedata);
+        }
+      }
+      // 3. Add the text
+      $codedisplay.html('<code class="kcode-inner">' + result + ';</code>');
+
+    }
+    krexx.SelectText($codedisplay[0]);
+    $codedisplay.toggle();
+
+  };
+
+  /**
+   * Selects some text
+   *
+   * @see http://stackoverflow.com/questions/985272/selecting-text-in-an-element-akin-to-highlighting-with-your-mouse
+   * @autor Jason
+   *
+   * @param element
+   * @constructor
+   */
+  krexx.SelectText = function (element) {
+    var doc = document
+      , text = element
+      , range, selection
+      ;
+    if (doc.body.createTextRange) {
+      range = document.body.createTextRange();
+      range.moveToElementText(text);
+      range.select();
+    } else if (window.getSelection) {
+      selection = window.getSelection();
+      range = document.createRange();
+      range.selectNodeContents(text);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  }
+
 })();

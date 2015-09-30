@@ -562,6 +562,30 @@ ul.kconfiguration li.kchild {
 .kconfiguration .kcollapse-me{
   display: none;
 }
+
+.kchild .kgencode {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  display: table-cell;
+  float: right;
+}
+.kchild .kgencode:before {
+  content: '\02665';
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+}
+.kchild .kgencode:hover {
+  color: #dbdbdb;
+}
+.kwrapper .kcodedisplay {
+  color: #303030;
+  background-color: #dbdbdb;
+  padding: 5px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+}
+
 .kversion .kel {
   display:inline;
 }

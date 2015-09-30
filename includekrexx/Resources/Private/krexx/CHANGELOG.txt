@@ -1,3 +1,9 @@
+1.3.5 dev
+- Added code analysis to determine the name of the variable we are
+  analysing.
+- Added warning to tell the user that we are not starting an other
+  analysis, because we will reach output => maxCall.
+
 1.3.4
 - Added closure analysis.
 - Bugfix: Hans skin tries to close some left-over html tag to get a

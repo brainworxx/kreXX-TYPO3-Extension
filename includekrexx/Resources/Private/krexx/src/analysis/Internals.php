@@ -321,7 +321,9 @@ class Internals {
     // We need to get the footer before the generating of the header,
     // because we need to display messages in the header.
     $footer = Framework\Toolbox::outputFooter($caller);
-    $analysis = self::analysisHub($data, '...', '', '=>');
+    // Start the analysis itself.
+    View\Codegen::resetCounter();
+    $analysis = self::analysisHub($data, $caller['varname'], '', '=');
     self::$shutdownHandler->addChunkString(Framework\Toolbox::outputHeader($headline, $ignore_local_settings));
     self::$shutdownHandler->addChunkString(View\Messages::outputMessages());
     self::$shutdownHandler->addChunkString($analysis);
@@ -388,7 +390,10 @@ class Internals {
         break;
       }
     }
-    return $caller;
+
+    // We will not keep the whole backtrace im memory. We only return what we
+    // actually need.
+    return array('file' => $caller['file'], 'line' => $caller['line'], 'varname' => self::getVarName($caller['file'], $caller['line']));
   }
 
   /**
@@ -404,7 +409,10 @@ class Internals {
       // Called too often, we might get into trouble here!
       $result = TRUE;
     }
-
+    // Give feedback if this is our last call.
+    if (View\Render::$KrexxCount == $max_call - 1) {
+      View\Messages::addMessage('Maximum call-level reached. This is the last analysis for this request. To increase this value, please edit:<br />output => maxCall.','critical');
+    }
     return $result;
   }
 
@@ -464,5 +472,63 @@ class Internals {
     }
 
     return $result;
+  }
+
+  /**
+   * Tries to extract the name of the variable which we try to analyse.
+   *
+   * @param string $file
+   *   Path to the sourcecode file.
+   * @param string $line
+   *   The line from where kreXX was called.
+   *
+   * @return string
+   *   The name of the variable.
+   */
+  protected static function getVarName($file, $line) {
+    // Retrieve the call from the sourcecode file
+    $source = file($file);
+
+    // Now that we have the line where it was called, we must check if
+    // we have several commands in there.
+    $possible_commands = explode(';', $source[$line - 1]);
+    // Now we must weed out the none krexx commands.
+    foreach ($possible_commands as $key => $command) {
+      if (strpos(strtolower($command), 'krexx') === FALSE) {
+        unset($possible_commands[$key]);
+      }
+    }
+    // I have no idea how to determine the actual call of krexx if we
+    // are dealing with several calls per line.
+    if (count($possible_commands) > 1) {
+      // Fallback to '...'.
+      $varname = '...';
+    }
+    else {
+      $source_call = reset($possible_commands);
+
+      // Now that we have our actual call, we must remove the krexx-part
+      // from it.
+      $possible_functionnames = array(
+        'krexx',
+        'krexx::open',
+        'krexx::' . Framework\Config::getDevHandler(),
+      );
+      foreach ($possible_functionnames as $funcname) {
+        preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', $source_call, $name);
+        if (isset($name[1])) {
+          // Gotcha! We escape this one, just in case.
+          $varname = \Brainworxx\Krexx\Analysis\Variables::encodeString($name[1]);
+          break;
+        }
+      }
+    }
+
+    // Check if we have a value.
+    if (!isset($varname) || strlen($varname) == 0) {
+      $varname = '...';
+    }
+
+    return $varname;
   }
 }

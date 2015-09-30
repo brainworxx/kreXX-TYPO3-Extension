@@ -133,6 +133,7 @@ class Render extends Help {
     $template = str_replace('{data}', $data, $template);
     $template = str_replace('{help}', self::renderHelp($help_id), $template);
     $template = str_replace('{connector1}', self::renderConnector($connector1), $template);
+    $template = str_replace('{gensource}', Codegen::generateSource($connector1, $connector2, $type, $name), $template);
     return str_replace('{connector2}', self::renderConnector($connector2), $template);
   }
 
@@ -348,6 +349,7 @@ class Render extends Help {
       $template = str_replace('{help}', self::renderHelp($help_id), $template);
       $template = str_replace('{connector1}', self::renderConnector($connector1), $template);
       $template = str_replace('{connector2}', self::renderConnector($connector2), $template);
+      $template = str_replace('{gensource}', Codegen::generateSource($connector1, $connector2, $type, $name), $template);
 
       // Is it expanded?
       if ($is_expanded) {
@@ -667,6 +669,6 @@ class Render extends Help {
     else {
       return '';
     }
-
   }
+
 }

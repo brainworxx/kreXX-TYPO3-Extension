@@ -93,7 +93,7 @@ class Objects {
       // Adding undeclared public properties to the dump.
       // Those are properties which are not visible with
       // $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
-      // but can are in get_object_vars();
+      // but are in get_object_vars();
       // 1. Make a list of all properties
       // 2. Remove those that are listed in
       // $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
