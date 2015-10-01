@@ -121,6 +121,20 @@ class Render extends Help {
       $type_classes .= $type_class .  ' ';
     }
 
+    // Generating our code and adding the Codegen button, if there is something
+    // to generate
+    $gencode = Codegen::generateSource($connector1, $connector2, $type, $name);
+    if ($gencode == '') {
+       // Remove the markers, because here is nothing to add.
+      $template = str_replace('{gensource}', '', $template);
+      $template = str_replace('{gencode}', '', $template);
+    }
+    else {
+      // We add the buttton and the code
+      $template = str_replace('{gensource}', $gencode, $template);
+      $template = str_replace('{gencode}', self::getTemplateFileContent('gencode'), $template);
+    }
+
     // Stitching it together.
     $template = str_replace('{expand}', $part_expand, $template);
     $template = str_replace('{callable}', $part_callable, $template);
@@ -133,7 +147,7 @@ class Render extends Help {
     $template = str_replace('{data}', $data, $template);
     $template = str_replace('{help}', self::renderHelp($help_id), $template);
     $template = str_replace('{connector1}', self::renderConnector($connector1), $template);
-    $template = str_replace('{gensource}', Codegen::generateSource($connector1, $connector2, $type, $name), $template);
+    $template = str_replace('{gensource}', $gencode, $template);
     return str_replace('{connector2}', self::renderConnector($connector2), $template);
   }
 
@@ -340,8 +354,8 @@ class Render extends Help {
       // Explode the type to get the class names right.
       $types = explode(' ', $type);
       $css_type = '';
-      foreach ($types as $type) {
-        $css_type .= ' k' . $type;
+      foreach ($types as $single_type) {
+        $css_type .= ' k' . $single_type;
       }
       $template = str_replace('{ktype}', $css_type, $template);
 
@@ -349,7 +363,20 @@ class Render extends Help {
       $template = str_replace('{help}', self::renderHelp($help_id), $template);
       $template = str_replace('{connector1}', self::renderConnector($connector1), $template);
       $template = str_replace('{connector2}', self::renderConnector($connector2), $template);
-      $template = str_replace('{gensource}', Codegen::generateSource($connector1, $connector2, $type, $name), $template);
+
+      // Generating our code and adding the Codegen button, if there is
+      // something to generate
+      $gencode = Codegen::generateSource($connector1, $connector2, $type, $name);
+      if ($gencode == '') {
+         // Remove the markers, because here is nothing to add.
+        $template = str_replace('{gensource}', '', $template);
+        $template = str_replace('{gencode}', '', $template);
+      }
+      else {
+        // We add the buttton and the code
+        $template = str_replace('{gensource}', $gencode, $template);
+        $template = str_replace('{gencode}', self::getTemplateFileContent('gencode'), $template);
+      }
 
       // Is it expanded?
       if ($is_expanded) {

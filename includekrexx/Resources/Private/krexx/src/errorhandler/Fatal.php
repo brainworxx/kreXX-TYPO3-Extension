@@ -112,7 +112,10 @@ class Fatal extends AbstractHandler {
 
     // Do we have an error at all?
     if (!is_null($error) && $this->getIsActive()) {
-      // De we need to check this one, according to our settings?
+      // We will not generate any code here!
+      Framework\Config::$allowCodegen = FALSE;
+
+      // Do we need to check this one, according to our settings?
       $translated_error = $this->translateErrorType($error['type']);
       if ($translated_error[1] == 'traceFatals') {
         // We don't want to analyse the errorhandler, that will only

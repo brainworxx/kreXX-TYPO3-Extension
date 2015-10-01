@@ -279,7 +279,7 @@
 
       krexx.generateCode(this);
     });
-    
+
     $('.kwrapper .kcodedisplay').on('click', function () {
       // Do nothing.
       // Prevents the default event behavior (ie: click).
@@ -694,7 +694,17 @@
       for (var i = $el.length - 1; i >= 0; i--) {
         sourcedata = $el[i].dataset.source;
         if (typeof sourcedata !== 'undefined') {
-          result = result.concat(sourcedata);
+          // We msut chack if our value is actually reachable.
+          // '. . .' means this. When a value is not reachable,
+          // we will stop right here and display a comment stating this.
+          if (sourcedata == '. . .') {
+            result= '// Value is either protected or private.<br /> // Sorry . . ';
+            break;
+          }
+          else {
+            // We're good, value canbe reached!
+            result = result.concat(sourcedata);
+          }
         }
       }
       // 3. Add the text
@@ -718,8 +728,8 @@
   krexx.SelectText = function (element) {
     var doc = document
       , text = element
-      , range, selection
-      ;
+      , range, selection;
+
     if (doc.body.createTextRange) {
       range = document.body.createTextRange();
       range.moveToElementText(text);

@@ -323,6 +323,17 @@ class Internals {
     $footer = Framework\Toolbox::outputFooter($caller);
     // Start the analysis itself.
     View\Codegen::resetCounter();
+
+    // Enable code generation only if we were aqble to determine the varname
+    if ($caller['varname'] == '...') {
+      Framework\Config::$allowCodegen = FALSE;
+    }
+    else {
+      // We were able to determine the variable name and can generate some
+      // sourcecode.
+      Framework\Config::$allowCodegen = TRUE;
+    }
+
     $analysis = self::analysisHub($data, $caller['varname'], '', '=');
     self::$shutdownHandler->addChunkString(Framework\Toolbox::outputHeader($headline, $ignore_local_settings));
     self::$shutdownHandler->addChunkString(View\Messages::outputMessages());
@@ -331,6 +342,9 @@ class Internals {
 
     // Cleanup the hive, this removes all recursion markers.
     Hive::cleanupHive();
+
+    // Reset value for the code generation.
+    Framework\Config::$allowCodegen = FALSE;
   }
 
   /**
@@ -344,6 +358,8 @@ class Internals {
     if (self::$timer == 0) {
       self::$timer = time();
     }
+
+    Framework\Config::$allowCodegen = FALSE;
 
     // Find caller.
     $caller = self::findCaller();

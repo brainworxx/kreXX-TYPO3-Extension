@@ -160,7 +160,6 @@ class Toolbox {
    *   The generated markup.
    */
   public static function outputFooter($caller, $is_expanded = FALSE) {
-
     // Wrap an expandable around to save space.
     $anon_function = function ($params) {
       $config = $params[0];

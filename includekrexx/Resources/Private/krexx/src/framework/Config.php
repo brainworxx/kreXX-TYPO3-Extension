@@ -44,6 +44,13 @@ use Krexx\Messages;
 class Config {
 
   /**
+   * Is the code generation allowed? We only allow it during a normal analysis.
+   *
+   * @var bool
+   */
+  public static $allowCodegen = FALSE;
+
+  /**
    * Stores if kreXX is actually enabled.
    *
    * @var bool

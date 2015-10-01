@@ -33,7 +33,7 @@
 
 namespace Brainworxx\Krexx\View;
 use Brainworxx\Krexx\Analysis\Variables;
-use Brainworxx\Krexx\Framework\Toolbox;
+use Brainworxx\Krexx\Framework\Config;
 
 
 /**
@@ -66,13 +66,17 @@ class Codegen {
    */
   public static function generateSource($connector1, $connector2, $type, $name) {
 
+    if (!Config::$allowCodegen) {
+      return '';
+    }
+
     $result = '';
     // We will not generate anything for function analytic data
     $connector2 = trim($connector2, ' = ');
 
     // We handle the first one special
     if (self::$counter == 0) {
-      $connector1 = '$result = ';
+      $connector1 = '$kresult = ';
       $connector2 = '';
     }
 
@@ -83,7 +87,6 @@ class Codegen {
     else {
       // Simply fuse the connectors.
       // The connectors are a representation of the current used "language".
-
       switch (self::analyseType($type)) {
 
         case 'contagination':
@@ -93,12 +96,12 @@ class Codegen {
 
         case 'method':
           // We create a reflection method and then call it.
-          $result = self::reflectFunction($name);
+          $result = self::reflectFunction();
           break;
 
         case 'property':
           // We create a reflection property an set it to public to access it.
-          $result = self::reflectProperty($name);
+          $result = self::reflectProperty();
           break;
       }
     }
@@ -111,26 +114,42 @@ class Codegen {
     return $result;
   }
 
-  protected static function reflectProperty($name) {
+  /**
+   * Returns a '. . .' to tell our js that this property is not reachable.
+   *
+   * @return string
+   *   Always retuns a '. . .'
+   */
+  protected static function reflectProperty() {
     // We stop the current codeline here.
-    $result = ";<br />";
-    // The genereted code at thsi point should look something like this:
-    // $result = $myClass->value1->value2;
-    // This means, that we have the protected/private property inside the
-    // $result object.
-    $result .= '// We are creating a reflection to make this property accessible<br />';
-    $result .= '// Please note, that this is *NOT* a proper way to code.<br />';
-    $result .= '// There is a reason, why this value is protected.<br />';
-    $result .= '$reflection = new \reflectionClass($result);<br />';
-    $result .= '$property = $reflection->getProperty(' . $name . ');<br />';
-    $result .= '$property->setAccessible(true);<br />';
-    $result .= '$result = $property->getValue($result)';
+    // This value is not reachable, and we will *not* create a refletion here.
+    // Some people would abusethis th break open protected and private values.
+    // These values are protected for a reason.
+    // Adding the '. . .' tells out js that is should not search through the
+    // underlying data-source, but simply add a text stating that this value
+    // is not reachable.
+    $result = ". . .";
+
     return $result;
   }
 
+  /**
+   * Returns a '. . .' to tell our js that this function is not reachable.
+   *
+   * @return string
+   *   Always retuns a '. . .'
+   */
+  protected static function reflectFunction() {
+    // We stop the current codeline here.
+    // This value is not reachable, and we will *not* create a refletion here.
+    // Some people would abusethis th break open protected and private values.
+    // These values are protected for a reason.
+    // Adding the '. . .' tells out js that is should not search through the
+    // underlying data-source, but simply add a text stating that this value
+    // is not reachable.
+    $result = ". . .";
 
-  protected static function reflectFunction($name) {
-    return '@todo: Write me!';
+    return $result;
   }
 
   /**
@@ -148,6 +167,8 @@ class Codegen {
     $contagination = 'contagination';
     $method = 'method';
     $property = 'property';
+
+
 
     // Debug methods are always public.
     if ($type == 'debug method' || self::$counter == 0) {
