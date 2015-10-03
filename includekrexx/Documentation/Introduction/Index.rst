@@ -32,7 +32,7 @@ Key features:
 	- Several security measures to prevent prevent hangups with too large memory usage or a timeout.
 	- Benchmarking
 	- Fatal error handler with a full backtrace
-
+	- Code generation to reach the displayed values, if possible.
 
 
 

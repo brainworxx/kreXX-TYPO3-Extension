@@ -62,3 +62,4 @@ Include kreXX
 	ConfigLevels/Index
 	ConfigOptions/Index
 	CookieEditorAdministration/Index
+	LittleHelpers/Index
