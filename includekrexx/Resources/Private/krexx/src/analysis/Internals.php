@@ -200,6 +200,9 @@ class Internals {
     if (is_null($data)) {
       return Variables::analyseNull($name, '', $connector1, $connector2);
     }
+
+    // Still here? This should not happen. Return empty string, just in case.
+    return '';
   }
 
   /**

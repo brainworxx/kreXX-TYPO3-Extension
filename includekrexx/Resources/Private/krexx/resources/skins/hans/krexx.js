@@ -280,7 +280,7 @@
       krexx.generateCode(this);
     });
 
-    $('.kwrapper .kcodedisplay').on('click', function () {
+    $('.kwrapper .kcodedisplay').on('click', function (event) {
       // Do nothing.
       // Prevents the default event behavior (ie: click).
       event.preventDefault();
@@ -300,8 +300,7 @@
    * @namespace
    *   It a just a collection of used js routines.
    */
-  function krexx() {
-  }
+  function krexx() {}
 
   /**
    * When clicked on s recursion, this function will
@@ -313,7 +312,7 @@
    */
   krexx.copyFrom = function (el) {
     // Get the DOM id of the original analysis.
-    var domid = $(el).data('domid');
+    var domid = el.dataset.domid;
     // Get the analysis data.
     var $orgNest = $('#' + domid);
     // Does the element exist?
@@ -328,6 +327,12 @@
       var $newEl = $orgEl.clone(true, true).insertAfter(el);
       // Change the key of the just cloned EL to the one from the recursion.
       $newEl.children('.kname').html($el.children('.kname').html());
+      // We  need to remove the ids from the copy to avoid double ids.
+      $newEl.parent().find('*').removeAttr('id');
+      // Now we add the dom-id to the clone, as a data-field. this way we can
+      // make sure to always produce the right path to this value during source
+      // generation.
+      $newEl.parent()[0].dataset.domid = domid;
       // Remove the recursion EL.
       $el.remove();
     }
@@ -644,7 +649,7 @@
     var expires = 'expires=' + date.toUTCString();
     document.cookie = 'KrexxDebugSettings=' + JSON.stringify(settings) + '; ' + expires + '; path=/';
 
-    alert('All local configuration have been reset.\n\nPlease reload the page to use the global settings.');
+    alert('All local configuration have been reset.\n\nPlease reload the page to use the these settings.');
   };
 
   /**
@@ -679,38 +684,46 @@
   /**
    * The kreXX code generator.
    *
-   * @param {HTMLElement} el
+   * @param {HTMLElement} button
    *   The P symbol of the code generator.
    */
   krexx.generateCode = function (button) {
-    // 1. Collect all data elements down the rootline
-    var $el = $(button).parents('li.kchild');
     var $codedisplay = $(button).next('.kcodedisplay');
+    var result = '';
+    var sourcedata;
+    var domid;
 
-    if (!$codedisplay.is(':visible')) {
-      // 2. Contagate them all.
-      var result = '';
-      var sourcedata;
-      for (var i = $el.length - 1; i >= 0; i--) {
-        sourcedata = $el[i].dataset.source;
-        if (typeof sourcedata !== 'undefined') {
-          // We msut chack if our value is actually reachable.
-          // '. . .' means this. When a value is not reachable,
-          // we will stop right here and display a comment stating this.
-          if (sourcedata == '. . .') {
-            result= '// Value is either protected or private.<br /> // Sorry . . ';
-            break;
-          }
-          else {
-            // We're good, value canbe reached!
-            result = result.concat(sourcedata);
-          }
+    // Get the first element
+    var $el = $(button).parents('li.kchild:first');
+    // Start the loop to collect all the date
+    while ($el.length >0) {
+      // Get the domid
+      domid = $el[0].dataset.domid;
+      if (typeof domid !== 'undefined') {
+        // We need to get a new el, because we are facing a recursion!
+        $el = $('#'+domid).parent();
+      }
+      // Get the source
+      sourcedata = $el[0].dataset.source;
+      if (typeof sourcedata !== 'undefined') {
+        // We must check if our value is actually reachable.
+        // '. . .' means it is not reachable,
+        // we will stop right here and display a comment stating this.
+        if (sourcedata == '. . .') {
+          result= '// Value is either protected or private.<br /> // Sorry . . ';
+          break;
+        }
+        else {
+          // We're good, value can be reached!
+          result = sourcedata + result;
         }
       }
-      // 3. Add the text
-      $codedisplay.html('<code class="kcode-inner">' + result + ';</code>');
-
+      // Get the next el.
+      $el = $el.parents('li.kchild:first');
     }
+    // 3. Add the text
+    $codedisplay.html('<div class="kcode-inner">' + result + ';</div>');
+
     krexx.SelectText($codedisplay[0]);
     $codedisplay.toggle();
 

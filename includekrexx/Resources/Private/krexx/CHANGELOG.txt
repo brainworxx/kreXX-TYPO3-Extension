@@ -3,6 +3,7 @@
   analysing.
 - Added warning to tell the user that we are not starting an other
   analysis, because we will reach output => maxCall.
+- Bugfix: Recursion clicking does not produce double ids anymore.
 
 1.3.4
 - Added closure analysis.
