@@ -223,7 +223,7 @@ class Config {
    *
    * @var string
    */
-  public static $version = '1.3.5';
+  public static $version = '1.3.6 dev';
 
   /**
    * Get\Set kreXX state: whether it is enabled or disabled.

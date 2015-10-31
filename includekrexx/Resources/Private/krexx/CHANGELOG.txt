@@ -1,4 +1,9 @@
-1.3.5 dev
+1.3.6
+- Added scope analysis. Protected an private variables are treated
+  as public in case they are reachable with the called scope.
+- Bugfix added the "$" in front of static properties.
+
+1.3.5
 - Added code analysis to determine the name of the variable we are
   analysing.
 - Added warning to tell the user that we are not starting an other

@@ -43,6 +43,20 @@ use Brainworxx\Krexx\View;
  */
 class Internals {
 
+  /**
+   * The "scope we are starting with. When it is $this in combination with a
+   * nesting level of 1, we treat protected and private variables and functions
+   * as public, because they are reachable from the current scope.
+   *
+   * @var string
+   */
+  protected static $scope = '';
+
+  /**
+   * The current nesting level we are in.
+   *
+   * @var int
+   */
   public static $nestingLevel = 0;
 
   /**
@@ -337,6 +351,10 @@ class Internals {
       Framework\Config::$allowCodegen = TRUE;
     }
 
+    // Set the current scope.
+    Internals::$scope = $caller['varname'];
+
+    // Start the magic.
     $analysis = self::analysisHub($data, $caller['varname'], '', '=');
     self::$shutdownHandler->addChunkString(Framework\Toolbox::outputHeader($headline, $ignore_local_settings));
     self::$shutdownHandler->addChunkString(View\Messages::outputMessages());
@@ -549,5 +567,25 @@ class Internals {
     }
 
     return $varname;
+  }
+
+  /**
+   * We decide if a function is currently within a reachable scope.
+   *
+   * @return bool
+   *   Whether it is within the scope or not.
+   */
+  public static function isInScope($type = '') {
+    // When analysing a class, we have + 1 on our nesting level, when comming
+    // from the code generation. That is, because that class is currently being
+    // analysed.
+    if (strpos($type, 'class') === FALSE) {
+      $nestingLevel =  Internals::$nestingLevel;
+    }
+    else {
+      $nestingLevel =  Internals::$nestingLevel - 1;
+    }
+
+    return $nestingLevel <= 1 && Internals::$scope == '$this';
   }
 }

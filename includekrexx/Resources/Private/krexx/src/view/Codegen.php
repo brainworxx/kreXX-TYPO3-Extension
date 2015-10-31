@@ -32,8 +32,11 @@
  */
 
 namespace Brainworxx\Krexx\View;
+
 use Brainworxx\Krexx\Analysis\Variables;
 use Brainworxx\Krexx\Framework\Config;
+use Brainworxx\Krexx\Analysis\Internals;
+use Brainworxx\Krexx\Framework\Toolbox;
 
 
 /**
@@ -123,7 +126,7 @@ class Codegen {
   protected static function reflectProperty() {
     // We stop the current codeline here.
     // This value is not reachable, and we will *not* create a refletion here.
-    // Some people would abusethis th break open protected and private values.
+    // Some people would abuse this to break open protected and private values.
     // These values are protected for a reason.
     // Adding the '. . .' tells out js that is should not search through the
     // underlying data-source, but simply add a text stating that this value
@@ -142,7 +145,7 @@ class Codegen {
   protected static function reflectFunction() {
     // We stop the current codeline here.
     // This value is not reachable, and we will *not* create a refletion here.
-    // Some people would abusethis th break open protected and private values.
+    // Some people would abuse this tho break open protected and private values.
     // These values are protected for a reason.
     // Adding the '. . .' tells out js that is should not search through the
     // underlying data-source, but simply add a text stating that this value
@@ -168,8 +171,6 @@ class Codegen {
     $method = 'method';
     $property = 'property';
 
-
-
     // Debug methods are always public.
     if ($type == 'debug method' || self::$counter == 0) {
       return $contagination;
@@ -181,6 +182,11 @@ class Codegen {
       return $contagination;
     }
 
+    // Test if we are inside the scope
+    if (Internals::isInScope($type)) {
+      // We are inside the scope, this value, function or class is reachable.
+      return $contagination;
+    }
 
     // We are still here? Must be a protected method or property.
     if (strpos($type, 'method') === FALSE) {
@@ -190,9 +196,6 @@ class Codegen {
     else {
       return $method;
     }
-
-    // Still here ?!? Fallback to contagination.
-    return $contagination;
   }
 
   /**

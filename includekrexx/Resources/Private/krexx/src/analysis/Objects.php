@@ -115,7 +115,7 @@ class Objects {
       }
 
       // Dumping protected properties.
-      if (Framework\Config::getConfigValue('deep', 'analyseProtected') == 'true') {
+      if (Framework\Config::getConfigValue('deep', 'analyseProtected') == 'true' || Internals::isInScope()) {
         $ref_props = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
         if (count($ref_props)) {
           $output .= Objects::getReflectionPropertiesData($ref_props, $name, $ref, $data, 'Protected properties');
@@ -123,7 +123,7 @@ class Objects {
       }
 
       // Dumping private properties.
-      if (Framework\Config::getConfigValue('deep', 'analysePrivate') == 'true') {
+      if (Framework\Config::getConfigValue('deep', 'analysePrivate') == 'true' || Internals::isInScope()) {
         $ref_props = $ref->getProperties(\ReflectionProperty::IS_PRIVATE);
         if (count($ref_props)) {
           $output .= Objects::getReflectionPropertiesData($ref_props, $name, $ref, $data, 'Private properties');
@@ -225,6 +225,8 @@ class Objects {
         if ($ref_property->isStatic()) {
           $additional .= 'static ';
           $connector1 = '::';
+          // There is always a $ in front of a static property
+          $prop_name = '$' . $prop_name;
         }
 
         // Object?
@@ -394,10 +396,10 @@ class Objects {
     if (Framework\Config::getConfigValue('methods', 'analysePublicMethods') == 'true') {
       $public = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
     }
-    if (Framework\Config::getConfigValue('methods', 'analyseProtectedMethods') == 'true') {
+    if (Framework\Config::getConfigValue('methods', 'analyseProtectedMethods') == 'true' || Internals::isInScope()) {
       $protected = $ref->getMethods(\ReflectionMethod::IS_PROTECTED);
     }
-    if (Framework\Config::getConfigValue('methods', 'analysePrivateMethods') == 'true') {
+    if (Framework\Config::getConfigValue('methods', 'analysePrivateMethods') == 'true' || Internals::isInScope()) {
       $private = $ref->getMethods(\ReflectionMethod::IS_PRIVATE);
     }
 

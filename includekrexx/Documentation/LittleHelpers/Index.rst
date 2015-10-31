@@ -6,8 +6,8 @@
 .. include:: ../Includes.txt
 
 
-Little helpers for analysis comprehensibility
-=============================================
+Little helpers
+==============
 
 | kreXX can produce a lot of output. And when you are on the 5'th level of the 7'th object, things will get confusing and hard to read.
 | To minimize confusion, the kreXX output offers two little helpers:

@@ -63,3 +63,4 @@ Include kreXX
 	ConfigOptions/Index
 	CookieEditorAdministration/Index
 	LittleHelpers/Index
+	FatalError/Index
