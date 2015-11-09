@@ -1,6 +1,9 @@
 1.3.6
 - Added scope analysis. Protected an private variables are treated
   as public in case they are reachable with the called scope.
+- Change: Replaced the option analysePublicMethods with
+  analyseMethodsAtall. The old option does not really make sense
+  anymore, since we indtroduced the scope analysis.
 - Bugfix added the "$" in front of static properties.
 
 1.3.5

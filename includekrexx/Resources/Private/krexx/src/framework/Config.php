@@ -86,7 +86,7 @@ class Config {
       'level' => '5',
     ),
     'methods' => array(
-      'analysePublicMethods' => 'true',
+      'analyseMethodsAtall' => 'true',
       'analyseProtectedMethods' => 'false',
       'analysePrivateMethods' => 'false',
     ),
@@ -97,7 +97,7 @@ class Config {
   );
 
   public static $feConfigFallback = array(
-    'analysePublicMethods' => array(
+    'analyseMethodsAtall' => array(
       'type' => 'Select',
       'editable' => 'true',
     ),
@@ -571,11 +571,11 @@ class Config {
       // We must evaluate it.
       $result = FALSE;
       switch ($name) {
-        case "analysePublicMethods":
+        case "analyseMethodsAtall":
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            View\Messages::addMessage('Wrong configuration for: "methods => analysePublicMethods"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addMessage('Wrong configuration for: "methods => analyseMethodsAtall"! Expected boolean. The configured setting was not applied!');
           }
           break;
 

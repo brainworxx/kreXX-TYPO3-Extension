@@ -393,14 +393,15 @@ class Objects {
     $protected = array();
     $private = array();
     $ref = new \ReflectionClass($data);
-    if (Framework\Config::getConfigValue('methods', 'analysePublicMethods') == 'true') {
+    if (Framework\Config::getConfigValue('methods', 'analyseMethodsAtall') == 'true') {
       $public = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
-    }
-    if (Framework\Config::getConfigValue('methods', 'analyseProtectedMethods') == 'true' || Internals::isInScope()) {
-      $protected = $ref->getMethods(\ReflectionMethod::IS_PROTECTED);
-    }
-    if (Framework\Config::getConfigValue('methods', 'analysePrivateMethods') == 'true' || Internals::isInScope()) {
-      $private = $ref->getMethods(\ReflectionMethod::IS_PRIVATE);
+    
+      if (Framework\Config::getConfigValue('methods', 'analyseProtectedMethods') == 'true' || Internals::isInScope()) {
+        $protected = $ref->getMethods(\ReflectionMethod::IS_PROTECTED);
+      }
+      if (Framework\Config::getConfigValue('methods', 'analysePrivateMethods') == 'true' || Internals::isInScope()) {
+        $private = $ref->getMethods(\ReflectionMethod::IS_PRIVATE);
+      }
     }
 
     // Is there anything to analyse?

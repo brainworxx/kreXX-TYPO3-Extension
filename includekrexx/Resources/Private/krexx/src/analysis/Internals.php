@@ -35,6 +35,7 @@ namespace Brainworxx\Krexx\Analysis;
 
 use Brainworxx\Krexx\Framework;
 use Brainworxx\Krexx\View;
+use Drupal\toolbar\Element\Toolbar;
 
 /**
  * This class hosts the internal analysis functions.
@@ -576,10 +577,10 @@ class Internals {
    *   Whether it is within the scope or not.
    */
   public static function isInScope($type = '') {
-    // When analysing a class, we have + 1 on our nesting level, when comming
-    // from the code generation. That is, because that class is currently being
-    // analysed.
-    if (strpos($type, 'class') === FALSE) {
+    // When analysing a class or array, we have + 1 on our nesting level, when
+    // coming from the code generation. That is, because that class is currently
+    // being analysed.
+    if (strpos($type, 'class') === FALSE && strpos($type, 'array') === FALSE) {
       $nestingLevel =  Internals::$nestingLevel;
     }
     else {

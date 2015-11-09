@@ -62,10 +62,9 @@ class Help {
     'backtraceAnalysis' => 'Shall kreXX do a "deep" analysis of  the backtrace? Be warned, a deep analysis can produce a lot of output.<br/> A "normal" analysis will use the configured settings, while a "deep" analysis will get as much data from the objects as possible.',
     'memoryLeft' => 'kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergengy break.<br />Unit of measurement is MB.',
     'maxRuntime' => 'kreXX checks during the analysis how much time has elapsed since start. Here you can adjust the amount where it will trigger an emergengy break.<br />Unit of measurement is seconds.',
-    'analysePublicMethods' => 'Here you can toggle if kreXX shall analyse the public methods of a class.',
-    'analyseProtectedMethods' => 'Here you can toggle if kreXX shall analyse the protected methods of a class.',
-    'analysePrivateMethods' => 'Here you can toggle if kreXX shall analyse the private methods of a class.',
-    'hiddenInternal' => 'These are unreachable internal properties of predefined classes in PHP.<br /> @see: https://bugs.php.net/bug.php?id=49382',
+    'analyseMethodsAtall' => 'Here you can toggle if kreXX shall analyse the methods of a class.',
+    'analyseProtectedMethods' => 'Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
+    'analysePrivateMethods' => 'Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
   );
 
   /**

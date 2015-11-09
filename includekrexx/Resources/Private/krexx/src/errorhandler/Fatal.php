@@ -57,7 +57,7 @@ class Fatal extends AbstractHandler {
       'analyseTraversable' => 'true',
     ),
     'methods' => array(
-      'analysePublicMethods' => 'true',
+      'analyseMethodsAtall' => 'true',
       'analyseProtectedMethods' => 'true',
       'analysePrivateMethods' => 'true',
     ),

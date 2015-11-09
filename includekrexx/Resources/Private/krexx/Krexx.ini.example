@@ -81,9 +81,9 @@ level = "5"
 ; ------------------------------------------------------------------------------------------
 [methods]
 ; Here you can configure, what analysis will be done on class methods.
-analysePublicMethods = "true"
-; analysePublicMethods = "false"
-; analyseProtectedMethods = "true"
+analyseMethodsAtall = "true"
+; analyseMethodsAtall = "false"
+; analyseMethodsAtall = "true"
 analyseProtectedMethods = "false"
 ; analysePrivateMethods = "true"
 analysePrivateMethods = "false"
