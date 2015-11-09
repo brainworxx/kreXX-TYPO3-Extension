@@ -10,7 +10,7 @@ Fatal Error Handler
 ===================
 
 | Normally, when a fatal error happens, php will tell you the name of the error , and filename and the line number.
-| When you look at how typo3 handels other errors, you will clearly see that this is a little bit discreet.
+| When you look at how typo3 handles other errors, you will clearly see that this is a little bit discreet.
 |
 |
 
@@ -24,7 +24,7 @@ Fatal Error Handler
 How to activate it
 ^^^^^^^^^^^^^^^^^^
 
-| When a fatal error occures, the only way to actually do something here is the shutdown function. The main problem here is, that the backtrace will not contain anything useful, you can not rely on php to provide these values.
+| When a fatal error occurs, the only way to actually do something here is the shutdown function. The main problem here is, that the backtrace will not contain anything useful, you can not rely on php to provide these values.
 | Since php won't do this, kreXX will have to keep track of the backtrace. But by doing this, it will slow down your system to the extreme. This is why you will have to activate the handler.
 |
 | There are to ways of doing this:
@@ -32,7 +32,7 @@ How to activate it
 Activation in the php code
 --------------------------
 
-| This is the mos efficiant way to activate the handler, because is it only active where it is needed. The slowdown will be minimal.
+| This is the mos efficient way to activate the handler, because is it only active where it is needed. The slowdown will be minimal.
 
 .. code-block:: php
 
@@ -45,10 +45,11 @@ Activation in the php code
 Activation in the settings
 --------------------------
 
-| When it is activated in the settings, the handler will be registered by kreXX as soon as krexx is incuded into typo3 (whicvh is very early.
+| When it is activated in the settings, the handler will be registered by kreXX as soon as krexx is included into typo3 (which is very early).
 | This will slow down your system very efficiently, so use this only when you have to.
 |
 |
+
 .. figure:: ../Images/FatalError/activate_local.jpg
 	:width: 959px
 	:alt: kreXX fatal error handler
@@ -59,9 +60,9 @@ Activation in the settings
 |
 |
 |
-|
+
 .. figure:: ../Images/FatalError/activate_global.jpg
 	:width: 959px
 	:alt: kreXX fatal error handler
 
-	Activate it globaqlly in yout typo3 installation in the configuration editor.
+	Activate it globally in your typo3 installation in the configuration editor.

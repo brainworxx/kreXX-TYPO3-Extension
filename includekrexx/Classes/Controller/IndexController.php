@@ -79,7 +79,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       'analyseTraversable',
       'debugMethods',
       'level',
-      'analysePublicMethods',
+      'analyseMethodsAtall',
       'analyseProtectedMethods',
       'analysePrivateMethods',
       'registerAutomatically',
@@ -153,7 +153,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       $value['deep']['analyseTraversable'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analyseTraversable'));
       $value['deep']['debugMethods'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('debugMethods'));
       $value['deep']['level'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('level'));
-      $value['methods']['analysePublicMethods'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analysePublicMethods'));
+      $value['methods']['analyseMethodsAtall'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analyseMethodsAtall'));
       $value['methods']['analyseProtectedMethods'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analyseProtectedMethods'));
       $value['methods']['analysePrivateMethods'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analysePrivateMethods'));
       $value['errorHandling']['registerAutomatically'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('registerAutomatically'));
@@ -214,7 +214,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
         'backtraceAnalysis' => strip_tags(Help::getHelp('backtraceAnalysis')),
         'memoryLeft' => strip_tags(Help::getHelp('memoryLeft')),
         'maxRuntime' => strip_tags(Help::getHelp('maxRuntime')),
-        'analysePublicMethods' => strip_tags(Help::getHelp('analysePublicMethods')),
+        'analyseMethodsAtall' => strip_tags(Help::getHelp('analyseMethodsAtall')),
         'analyseProtectedMethods' => strip_tags(Help::getHelp('analyseProtectedMethods')),
         'analysePrivateMethods' => strip_tags(Help::getHelp('analysePrivateMethods')));
 
@@ -233,7 +233,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       $value['deep']['analyseTraversable'] = Config::getConfigFromFile('deep', 'analyseTraversable');
       $value['deep']['debugMethods'] = Config::getConfigFromFile('deep', 'debugMethods');
       $value['deep']['level'] = Config::getConfigFromFile('deep', 'level');
-      $value['methods']['analysePublicMethods'] = Config::getConfigFromFile('methods', 'analysePublicMethods');
+      $value['methods']['analyseMethodsAtall'] = Config::getConfigFromFile('methods', 'analyseMethodsAtall');
       $value['methods']['analyseProtectedMethods'] = Config::getConfigFromFile('methods', 'analyseProtectedMethods');
       $value['methods']['analysePrivateMethods'] = Config::getConfigFromFile('methods', 'analysePrivateMethods');
       $value['errorHandling']['registerAutomatically'] = Config::getConfigFromFile('errorHandling', 'registerAutomatically');
