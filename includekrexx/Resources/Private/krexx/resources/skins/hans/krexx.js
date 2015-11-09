@@ -312,7 +312,7 @@
    */
   krexx.copyFrom = function (el) {
     // Get the DOM id of the original analysis.
-    var domid = el.dataset.domid;
+    var domid = krexx.getDataset(el, 'domid');
     // Get the analysis data.
     var $orgNest = $('#' + domid);
     // Does the element exist?
@@ -332,7 +332,8 @@
       // Now we add the dom-id to the clone, as a data-field. this way we can
       // make sure to always produce the right path to this value during source
       // generation.
-      $newEl.parent()[0].dataset.domid = domid;
+      krexx.setDataset($newEl.parent()[0], 'domid', domid);
+
       // Remove the recursion EL.
       $el.remove();
     }
@@ -696,15 +697,22 @@
     // Get the first element
     var $el = $(button).parents('li.kchild:first');
     // Start the loop to collect all the date
-    while ($el.length >0) {
+    while ($el.length > 0) {
       // Get the domid
-      domid = $el[0].dataset.domid;
-      if (typeof domid !== 'undefined') {
-        // We need to get a new el, because we are facing a recursion!
-        $el = $('#'+domid).parent();
+      domid = krexx.getDataset($el[0], 'domid');
+      sourcedata = krexx.getDataset($el[0], 'source');
+
+      if (typeof sourcedata !== 'undefined' && sourcedata == '. . .') {
+        if (typeof domid !== 'undefined') {
+          // We need to get a new el, because we are facing a recursion, and the
+          // current path is not really reachable.
+          $el = $('#'+domid).parent();
+          // Get the source, again.
+          sourcedata = krexx.getDataset($el[0], 'source');
+        }
       }
-      // Get the source
-      sourcedata = $el[0].dataset.source;
+
+      // Recheck everything.
       if (typeof sourcedata !== 'undefined') {
         // We must check if our value is actually reachable.
         // '. . .' means it is not reachable,
@@ -723,10 +731,8 @@
     }
     // 3. Add the text
     $codedisplay.html('<div class="kcode-inner">' + result + ';</div>');
-
-    krexx.SelectText($codedisplay[0]);
     $codedisplay.toggle();
-
+    krexx.selectText($codedisplay[0]);
   };
 
   /**
@@ -738,7 +744,7 @@
    * @param element
    * @constructor
    */
-  krexx.SelectText = function (element) {
+  krexx.selectText = function (element) {
     var doc = document
       , text = element
       , range, selection;
@@ -753,6 +759,39 @@
       range.selectNodeContents(text);
       selection.removeAllRanges();
       selection.addRange(range);
+    }
+  };
+
+
+  /**
+   * Gets the dataset from en element.
+   *
+   * @param el
+   * @param what
+   */
+  krexx.getDataset = function(el, what) {
+    var result;
+
+    if (typeof el !== 'undefined') {
+      result = el.getAttribute('data-' + what);
+
+      if (result !== null) {
+        return result;
+      }
+    }
+
+  };
+
+  /**
+   * Sets the dataset from en element.
+   *
+   * @param el
+   * @param what
+   * @param value
+   */
+  krexx.setDataset = function(el, what, value) {
+    if (typeof el !== 'undefined') {
+      el.setAttribute('data-' + what, value);
     }
   }
 

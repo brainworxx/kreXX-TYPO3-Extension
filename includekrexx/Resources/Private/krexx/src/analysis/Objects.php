@@ -70,7 +70,7 @@ class Objects {
     if (Hive::isInHive($data)) {
       // Tell them, we've been here before
       // but also say who we are.
-      $output .= View\Render::renderRecursion($name, get_class($data), Framework\Toolbox::generateDomIdFromObject($data), $connector1, $connector2);
+      $output .= View\Render::renderRecursion($name, $additional . 'class', get_class($data), Framework\Toolbox::generateDomIdFromObject($data), $connector1, $connector2);
 
       // We will not render this one, but since we
       // return to wherever we came from, we need to decrease the level.

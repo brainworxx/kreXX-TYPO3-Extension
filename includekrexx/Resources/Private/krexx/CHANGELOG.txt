@@ -4,7 +4,13 @@
 - Change: Replaced the option analysePublicMethods with
   analyseMethodsAtall. The old option does not really make sense
   anymore, since we indtroduced the scope analysis.
-- Bugfix added the "$" in front of static properties.
+- Improved the automatic code generation for recursions.
+- Change: Standard value for 'backtraceAnalysis' is now 'deep'.
+- Bugfix: Added the "$" in front of static properties.
+- Bugfix: Automatic selection of the generated source code now works
+  correct.
+- Bugfix: Code generation now works in IE and Edge.
+- Bugfix: Several JS fixes fpr IE9.
 
 1.3.5
 - Added code analysis to determine the name of the variable we are

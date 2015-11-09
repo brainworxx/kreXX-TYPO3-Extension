@@ -34,7 +34,6 @@
 namespace Brainworxx\Krexx\Framework;
 
 use Brainworxx\Krexx\View;
-use Krexx\Messages;
 
 /**
  * This class hosts the kreXX configuration functions.
@@ -92,7 +91,7 @@ class Config {
     ),
     'errorHandling' => array(
       'registerAutomatically' => 'false',
-      'backtraceAnalysis' => 'normal',
+      'backtraceAnalysis' => 'deep',
     ),
   );
 
@@ -223,7 +222,7 @@ class Config {
    *
    * @var string
    */
-  public static $version = '1.3.6 dev';
+  public static $version = '1.3.6';
 
   /**
    * Get\Set kreXX state: whether it is enabled or disabled.

@@ -105,8 +105,9 @@ registerAutomatically = "false"
 ; can produce a lot of output. A "normal" analysis will use the configured
 ; settings, while a "deep" analysis will get as much data from the object as
 ; possible.
-backtraceAnalysis = "normal"
-; backtraceAnalysis = "deep"
+backtraceAnalysis = "deep"
+; backtraceAnalysis = "normal"
+
 
 ; ------------------------------------------------------------------------------------------
 [feEditing]

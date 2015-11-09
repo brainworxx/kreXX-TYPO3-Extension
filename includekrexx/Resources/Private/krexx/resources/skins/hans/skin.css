@@ -581,6 +581,7 @@ ul.kconfiguration li.kchild {
   color: #303030;
   background-color: #dbdbdb;
   padding: 5px;
+  margin: 5px;
   -webkit-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 8px;

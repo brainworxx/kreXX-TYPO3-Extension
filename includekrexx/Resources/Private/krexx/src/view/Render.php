@@ -118,14 +118,14 @@ class Render extends Help {
     $type_classes = '';
     foreach ($type_array as $type_class) {
       $type_class = 'k' . $type_class;
-      $type_classes .= $type_class .  ' ';
+      $type_classes .= $type_class . ' ';
     }
 
     // Generating our code and adding the Codegen button, if there is something
     // to generate
     $gencode = Codegen::generateSource($connector1, $connector2, $type, $name);
     if ($gencode == '') {
-       // Remove the markers, because here is nothing to add.
+      // Remove the markers, because here is nothing to add.
       $template = str_replace('{gensource}', '', $template);
       $template = str_replace('{gencode}', '', $template);
     }
@@ -159,6 +159,8 @@ class Render extends Help {
    *
    * @param string $name
    *   We might want to tell the user how to actually access it.
+   * @param string $type
+   *   The type of the original object of the recursion.
    * @param string $value
    *   We might want to tell the user what this actually is.
    * @param string $dom_id
@@ -171,8 +173,24 @@ class Render extends Help {
    * @return string
    *   The generated markup from the template files.
    */
-  Public Static Function renderRecursion($name = '', $value = '', $dom_id = '', $connector1 = '', $connector2 = '') {
+  Public Static Function renderRecursion($name = '', $type = '', $value = '', $dom_id = '', $connector1 = '', $connector2 = '') {
     $template = self::getTemplateFileContent('recursion');
+
+    // Generating our code and adding the Codegen button, if there is
+    // something to generate.
+    $gencode = Codegen::generateSource($connector1, $connector2, $type, $name);
+
+    if ($gencode == '') {
+      // Remove the markers, because here is nothing to add.
+      $template = str_replace('{gensource}', '', $template);
+      $template = str_replace('{gencode}', '', $template);
+    }
+    else {
+      // We add the buttton and the code
+      $template = str_replace('{gensource}', $gencode, $template);
+      // $template = str_replace('{gencode}', self::getTemplateFileContent('gencode'), $template);
+    }
+
     // Replace our stuff in the partial.
     $template = str_replace('{name}', $name, $template);
     $template = str_replace('{domId}', $dom_id, $template);
@@ -368,7 +386,7 @@ class Render extends Help {
       // something to generate
       $gencode = Codegen::generateSource($connector1, $connector2, $type, $name);
       if ($gencode == '') {
-         // Remove the markers, because here is nothing to add.
+        // Remove the markers, because here is nothing to add.
         $template = str_replace('{gensource}', '', $template);
         $template = str_replace('{gencode}', '', $template);
       }
@@ -444,8 +462,8 @@ class Render extends Help {
           break;
 
         case "backtraceAnalysis":
-          // Norm al or deep analysis.
-          $value_list = array('normal', 'deep');
+          // Normal or deep analysis.
+          $value_list = array('deep', 'normal');
           break;
 
         case "skin":
@@ -471,9 +489,9 @@ class Render extends Help {
           $selected = '';
         }
         $options .= str_replace(array(
-            '{text}',
-            '{value}',
-            '{selected}',
+          '{text}',
+          '{value}',
+          '{selected}',
         ), array(
           $value,
           $value,
