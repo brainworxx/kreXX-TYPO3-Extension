@@ -342,7 +342,7 @@ class Internals {
     // Start the analysis itself.
     View\Codegen::resetCounter();
 
-    // Enable code generation only if we were aqble to determine the varname
+    // Enable code generation only if we were aqble to determine the varname.
     if ($caller['varname'] == '...') {
       Framework\Config::$allowCodegen = FALSE;
     }
@@ -449,7 +449,7 @@ class Internals {
     }
     // Give feedback if this is our last call.
     if (View\Render::$KrexxCount == $max_call - 1) {
-      View\Messages::addMessage('Maximum call-level reached. This is the last analysis for this request. To increase this value, please edit:<br />output => maxCall.','critical');
+      View\Messages::addMessage('Maximum call-level reached. This is the last analysis for this request. To increase this value, please edit:<br />output => maxCall.', 'critical');
     }
     return $result;
   }
@@ -524,7 +524,7 @@ class Internals {
    *   The name of the variable.
    */
   protected static function getVarName($file, $line) {
-    // Retrieve the call from the sourcecode file
+    // Retrieve the call from the sourcecode file.
     $source = file($file);
 
     // Now that we have the line where it was called, we must check if
@@ -581,12 +581,12 @@ class Internals {
     // coming from the code generation. That is, because that class is currently
     // being analysed.
     if (strpos($type, 'class') === FALSE && strpos($type, 'array') === FALSE) {
-      $nestingLevel =  Internals::$nestingLevel;
+      $nesting_level = Internals::$nestingLevel;
     }
     else {
-      $nestingLevel =  Internals::$nestingLevel - 1;
+      $nesting_level = Internals::$nestingLevel - 1;
     }
 
-    return $nestingLevel <= 1 && Internals::$scope == '$this';
+    return $nesting_level <= 1 && Internals::$scope == '$this';
   }
 }

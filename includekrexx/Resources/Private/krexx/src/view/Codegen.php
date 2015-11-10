@@ -74,10 +74,10 @@ class Codegen {
     }
 
     $result = '';
-    // We will not generate anything for function analytic data
+    // We will not generate anything for function analytic data.
     $connector2 = trim($connector2, ' = ');
 
-    // We handle the first one special
+    // We handle the first one special.
     if (self::$counter == 0) {
       $connector1 = '$kresult = ';
       $connector2 = '';
@@ -159,6 +159,7 @@ class Codegen {
    * Analyses the type and then decides what to do with it
    *
    * @param string $type
+   *   The type we are analysing, for example 'private array'.
    *
    * @return string
    *   Possible values:
@@ -176,13 +177,13 @@ class Codegen {
       return $contagination;
     }
 
-    // Test for protected or private
+    // Test for protected or private.
     if (strpos($type, 'protected') === FALSE && strpos($type, 'private') === FALSE) {
       // Is not protected.
       return $contagination;
     }
 
-    // Test if we are inside the scope
+    // Test if we are inside the scope.
     if (Internals::isInScope($type)) {
       // We are inside the scope, this value, function or class is reachable.
       return $contagination;
@@ -190,7 +191,7 @@ class Codegen {
 
     // We are still here? Must be a protected method or property.
     if (strpos($type, 'method') === FALSE) {
-      // this is not a method
+      // This is not a method.
       return $property;
     }
     else {

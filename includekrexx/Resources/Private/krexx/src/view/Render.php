@@ -122,7 +122,7 @@ class Render extends Help {
     }
 
     // Generating our code and adding the Codegen button, if there is something
-    // to generate
+    // to generate.
     $gencode = Codegen::generateSource($connector1, $connector2, $type, $name);
     if ($gencode == '') {
       // Remove the markers, because here is nothing to add.
@@ -130,7 +130,7 @@ class Render extends Help {
       $template = str_replace('{gencode}', '', $template);
     }
     else {
-      // We add the buttton and the code
+      // We add the buttton and the code.
       $template = str_replace('{gensource}', $gencode, $template);
       $template = str_replace('{gencode}', self::getTemplateFileContent('gencode'), $template);
     }
@@ -186,9 +186,8 @@ class Render extends Help {
       $template = str_replace('{gencode}', '', $template);
     }
     else {
-      // We add the buttton and the code
+      // We add the buttton and the code.
       $template = str_replace('{gensource}', $gencode, $template);
-      // $template = str_replace('{gencode}', self::getTemplateFileContent('gencode'), $template);
     }
 
     // Replace our stuff in the partial.
@@ -383,7 +382,7 @@ class Render extends Help {
       $template = str_replace('{connector2}', self::renderConnector($connector2), $template);
 
       // Generating our code and adding the Codegen button, if there is
-      // something to generate
+      // something to generate.
       $gencode = Codegen::generateSource($connector1, $connector2, $type, $name);
       if ($gencode == '') {
         // Remove the markers, because here is nothing to add.
@@ -391,7 +390,7 @@ class Render extends Help {
         $template = str_replace('{gencode}', '', $template);
       }
       else {
-        // We add the buttton and the code
+        // We add the buttton and the code.
         $template = str_replace('{gensource}', $gencode, $template);
         $template = str_replace('{gencode}', self::getTemplateFileContent('gencode'), $template);
       }

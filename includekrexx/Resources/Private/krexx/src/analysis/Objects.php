@@ -107,7 +107,14 @@ class Objects {
           $ref_props[] = new Flection($value, $key);
         }
       }
+
+      // We will dum the properties alphabetically sorted, via this callback
+      $sorting_callback = function ($a, $b) {
+          return strcmp($a->name, $b->name);
+        };
+
       if (count($ref_props)) {
+        usort($ref_props, $sorting_callback);
         $output .= Objects::getReflectionPropertiesData($ref_props, $name, $ref, $data, 'Public properties');
         // Adding a HR to reflect that the following stuff are not public
         // properties anymore.
@@ -117,6 +124,8 @@ class Objects {
       // Dumping protected properties.
       if (Framework\Config::getConfigValue('deep', 'analyseProtected') == 'true' || Internals::isInScope()) {
         $ref_props = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
+        usort($ref_props, $sorting_callback);
+
         if (count($ref_props)) {
           $output .= Objects::getReflectionPropertiesData($ref_props, $name, $ref, $data, 'Protected properties');
         }
@@ -125,6 +134,7 @@ class Objects {
       // Dumping private properties.
       if (Framework\Config::getConfigValue('deep', 'analysePrivate') == 'true' || Internals::isInScope()) {
         $ref_props = $ref->getProperties(\ReflectionProperty::IS_PRIVATE);
+        usort($ref_props, $sorting_callback);
         if (count($ref_props)) {
           $output .= Objects::getReflectionPropertiesData($ref_props, $name, $ref, $data, 'Private properties');
         }
@@ -225,7 +235,7 @@ class Objects {
         if ($ref_property->isStatic()) {
           $additional .= 'static ';
           $connector1 = '::';
-          // There is always a $ in front of a static property
+          // There is always a $ in front of a static property.
           $prop_name = '$' . $prop_name;
         }
 
@@ -395,7 +405,7 @@ class Objects {
     $ref = new \ReflectionClass($data);
     if (Framework\Config::getConfigValue('methods', 'analyseMethodsAtall') == 'true') {
       $public = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
-    
+
       if (Framework\Config::getConfigValue('methods', 'analyseProtectedMethods') == 'true' || Internals::isInScope()) {
         $protected = $ref->getMethods(\ReflectionMethod::IS_PROTECTED);
       }

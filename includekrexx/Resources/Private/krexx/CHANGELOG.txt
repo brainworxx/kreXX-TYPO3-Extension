@@ -1,16 +1,17 @@
 1.3.6
 - Added scope analysis. Protected an private variables are treated
   as public in case they are reachable with the called scope.
+- Class properties are now sorted alphabetically.
 - Change: Replaced the option analysePublicMethods with
   analyseMethodsAtall. The old option does not really make sense
-  anymore, since we indtroduced the scope analysis.
-- Improved the automatic code generation for recursions.
+  anymore, since we introduced the scope analysis.
+- Change: Improved the automatic code generation for recursions.
 - Change: Standard value for 'backtraceAnalysis' is now 'deep'.
 - Bugfix: Added the "$" in front of static properties.
 - Bugfix: Automatic selection of the generated source code now works
   correct.
 - Bugfix: Code generation now works in IE and Edge.
-- Bugfix: Several JS fixes fpr IE9.
+- Bugfix: Several JS fixes for IE9.
 
 1.3.5
 - Added code analysis to determine the name of the variable we are

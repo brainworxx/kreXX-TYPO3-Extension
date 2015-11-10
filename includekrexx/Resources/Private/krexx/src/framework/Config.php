@@ -81,7 +81,7 @@ class Config {
       'analyseProtected' => 'false',
       'analysePrivate' => 'false',
       'analyseTraversable' => 'true',
-      'debugMethods' => 'debug,__toArray,toArray,__toString,toString,_getProperties',
+      'debugMethods' => 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo',
       'level' => '5',
     ),
     'methods' => array(
