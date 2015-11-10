@@ -10,7 +10,16 @@ Fatal Error Handler
 ===================
 
 | Normally, when a fatal error happens, php will tell you the name of the error , and filename and the line number.
-| When you look at how typo3 handles other errors, you will clearly see that this is a little bit discreet.
+| When you look at the amount of data available from the typo3 error handler, you will clearly see that this is a little bit, ummm discreet.
+|
+
+kreXX will offer you the following information:
+	- Snippet of the sourcecode, where the error has happened
+	- Complete Backtrace of what happened before the error occurred
+	- Snippets of sourcecode is added to each step of the backtrace
+	- Each object in the backtrace is fully analysed with all its data
+	- . . .
+
 |
 |
 

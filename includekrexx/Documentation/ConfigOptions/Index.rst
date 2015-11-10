@@ -110,8 +110,8 @@ Error Handling and Backtrace
 |                                | | :literal:`\krexx::unregisterFatal();`                                                                                                |                           |
 |                                | | to prevent a slowdown.                                                                                                               |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Backtrace analysis settings    | | Shall kreXX do a "deep" analysis of  the backtrace?                                                                                  | - normal                  |
-|                                | Be warned, a deep analysis can produce a lot of output. A "normal" analysis will use the configured settings, while a "deep"           | - deep                    |
+| Backtrace analysis settings    | | Shall kreXX do a "deep" analysis of  the backtrace?                                                                                  | - deep                    |
+|                                |                                                                                                                                        | - normal                  |
+|                                | Be warned, a deep analysis can produce a lot of output. A "normal" analysis will use the configured settings, while a "deep"           |                           |
 |                                | analysis will get as much data from the object as possible.                                                                            |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-

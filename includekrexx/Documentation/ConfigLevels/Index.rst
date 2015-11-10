@@ -16,7 +16,7 @@ There are 3 levels of configuration:
 - Configuration file settings
 - Local browser settings
 
-| The factory settings are hardcoded default settings, in case there is no configuration available
+| The factory settings are hardcoded default settings, in case there is no configuration available.
 | The configuration file settings can be edited in the Typo3 backend.
 | Local browser settings can be changed in the kreXX output window.
 |
