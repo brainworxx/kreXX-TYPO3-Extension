@@ -17,18 +17,18 @@ Main analytic function
 
 	krexx($myObject);
 	// or as an alias:
-	kreXX::open($myObject)
+	\kreXX::open($myObject)
 
 Benchmarking
 ^^^^^^^^^^^^
 .. code-block:: php
 
 	// start the benchmark test
-	kreXX::timerStart();
+	\kreXX::timerStart();
 	// define a "moment" during the test
-	kreXX::timerMoment('meaningful string, like started db query 123');
+	\kreXX::timerMoment('meaningful string, like started db query 123');
 	// display the result
-	kreXX::timerEnd();
+	\kreXX::timerEnd();
 
 
 Backtrace
@@ -43,9 +43,9 @@ Fatal error handler
 .. code-block:: php
 
 	// register the fatal error handler
-	kreXX::registerFatal();
+	\kreXX::registerFatal();
 	// unregister the fatal error handler
-	kreXX::unregisterFatal();
+	\kreXX::unregisterFatal();
 
 
 Edit your settings
@@ -53,7 +53,7 @@ Edit your settings
 .. code-block:: php
 
 	// display the edit settings dialog
-	kreXX::editSettings();
+	\kreXX::editSettings();
 
 
 Scope analysis
