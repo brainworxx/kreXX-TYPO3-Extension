@@ -217,9 +217,10 @@ em.ktype {
   /*position: relative;*/
 }
 .klogo-xx {
-  /*position: absolute;*/
-  padding-left: 3px;
-  vertical-align: -5px;
+  /* Klo go XX? Really? */
+  margin-left: 4px;
+  margin-top: 5px;
+  position: absolute;
 }
 .kheadnote-wraper {
   width: 100%;
