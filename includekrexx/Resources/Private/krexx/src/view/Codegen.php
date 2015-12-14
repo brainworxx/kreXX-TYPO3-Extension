@@ -35,7 +35,7 @@ namespace Brainworxx\Krexx\View;
 
 use Brainworxx\Krexx\Analysis\Variables;
 use Brainworxx\Krexx\Framework\Config;
-use Brainworxx\Krexx\Analysis\Internals;
+use Brainworxx\Krexx\Framework\Internals;
 
 
 /**

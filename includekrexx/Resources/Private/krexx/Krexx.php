@@ -121,6 +121,7 @@ class Krexx {
     include_once $krexxdir . 'src/analysis/Variables.php';
     include_once $krexxdir . 'src/errorhandler/AbstractHandler.php';
     include_once $krexxdir . 'src/errorhandler/Fatal.php';
+    include_once $krexxdir . 'src/legacy/Config.php';
 
 
     Framework\Config::$krexxdir = $krexxdir;
