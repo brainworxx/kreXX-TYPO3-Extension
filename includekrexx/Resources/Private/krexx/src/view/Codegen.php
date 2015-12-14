@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   Render functions for kreXX
+ *   Code generation functions for kreXX
  *   kreXX: Krumo eXXtended
  *
  *   This is a debugging tool, which displays structured information
@@ -36,11 +36,10 @@ namespace Brainworxx\Krexx\View;
 use Brainworxx\Krexx\Analysis\Variables;
 use Brainworxx\Krexx\Framework\Config;
 use Brainworxx\Krexx\Analysis\Internals;
-use Brainworxx\Krexx\Framework\Toolbox;
 
 
 /**
- * This class hosts the internal rendering functions.
+ * This class hosts the code generation functions.
  *
  * @package Krexx
  */

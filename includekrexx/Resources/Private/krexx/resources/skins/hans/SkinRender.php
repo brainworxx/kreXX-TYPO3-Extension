@@ -1,13 +1,14 @@
+<?php
 /**
  * @file
- *   Wrapper file for the jQuery library.
+ *   Render functions for kreXX Hans Skin
  *   kreXX: Krumo eXXtended
  *
- *   Krexx is a debugging tool, which displays structured information
+ *   This is a debugging tool, which displays structured information
  *   about any PHP object. It is a nice replacement for print_r() or var_dump()
  *   which are used by a lot of PHP developers.
  *
- *   Krexx is a fork of Krumo, which was originally written by:
+ *   kreXX is a fork of Krumo, which was originally written by:
  *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
  *
  * @author brainworXX GmbH <info@brainworxx.de>
@@ -29,26 +30,7 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-(function () {
-  
-  // We add our "own" jQuery version, in our own variable to the DOM.
-  // This way, we minimize the interference between several versions
-  // and frameworks!
-  
-  var replace = false;
-  
-  if (window.jQuery) {
-    // Save the old jQuery version.
-    var $oldQuery = window.jQuery;
-    replace = true;
-  }
 
-  {jQueryGoesHere}
+namespace Brainworxx\Krexx\View;
 
-  window.$krexxQuery = jQuery.noConflict();
-
-  if (replace) {
-    // Restore the old jQuery version.
-    window.jQuery = $oldQuery;
-  }
-})();
+class SkinRender extends Render {}

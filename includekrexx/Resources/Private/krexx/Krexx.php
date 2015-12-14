@@ -48,7 +48,7 @@ use Brainworxx\Krexx\View;
  * @param string $handle
  *   The developer handle.
  */
-function krexx($data, $handle = '') {
+function krexx($data = NULL, $handle = '') {
   if ($handle == '') {
     \Krexx::open($data);
   }
@@ -109,29 +109,34 @@ class Krexx {
     include_once $krexxdir . 'src/view/Render.php';
     include_once $krexxdir . 'src/view/Messages.php';
     include_once $krexxdir . 'src/view/Codegen.php';
+    include_once $krexxdir . 'src/view/Output.php';
     include_once $krexxdir . 'src/framework/Config.php';
     include_once $krexxdir . 'src/framework/Toolbox.php';
     include_once $krexxdir . 'src/framework/Chunks.php';
     include_once $krexxdir . 'src/framework/ShutdownHandler.php';
+    include_once $krexxdir . 'src/framework/Internals.php';
     include_once $krexxdir . 'src/analysis/Flection.php';
     include_once $krexxdir . 'src/analysis/Hive.php';
-    include_once $krexxdir . 'src/analysis/Internals.php';
     include_once $krexxdir . 'src/analysis/Objects.php';
     include_once $krexxdir . 'src/analysis/Variables.php';
     include_once $krexxdir . 'src/errorhandler/AbstractHandler.php';
     include_once $krexxdir . 'src/errorhandler/Fatal.php';
 
+
     Framework\Config::$krexxdir = $krexxdir;
 
-    // Setting template info.
+    // Setting the skin info.
     if (is_null(View\Render::$skin)) {
       View\Render::$skin = Framework\Config::getConfigValue('render', 'skin');
     }
+    // Every skin has an own implementation of the render class. We need to
+    // include this one, too.
+    include_once $krexxdir . 'resources/skins/' . Framework\Config::getConfigValue('render', 'skin') . '/SkinRender.php';
 
     // Register our shutdown handler. He will handle the display
     // of kreXX after the hosting CMS is finished.
-    Analysis\Internals::$shutdownHandler = new Framework\ShutdownHandler();
-    register_shutdown_function(array(Analysis\Internals::$shutdownHandler, 'shutdownCallback'));
+    Framework\Internals::$shutdownHandler = new Framework\ShutdownHandler();
+    register_shutdown_function(array(Framework\Internals::$shutdownHandler, 'shutdownCallback'));
 
     // Check if the log and chunk folder are writable.
     // If not, give feedback!
@@ -235,7 +240,7 @@ class Krexx {
     }
     self::timerMoment('end');
     // And we are done. Feedback to the user.
-    Analysis\Internals::dump(Analysis\Internals::miniBenchTo(self::$timekeeping), 'kreXX timer');
+    Framework\Internals::dump(Framework\Internals::miniBenchTo(self::$timekeeping), 'kreXX timer');
     self::reFatalAfterKrexx();
   }
 
@@ -251,7 +256,7 @@ class Krexx {
     if (!Framework\Config::isEnabled()) {
       return;
     }
-    Analysis\Internals::dump($data);
+    Framework\Internals::dump($data);
     self::reFatalAfterKrexx();
   }
 
@@ -268,7 +273,7 @@ class Krexx {
       return;
     }
     // Render it.
-    Analysis\Internals::backtrace();
+    Framework\Internals::backtrace();
     self::reFatalAfterKrexx();
   }
 
@@ -303,17 +308,17 @@ class Krexx {
     if (!Framework\Config::isEnabled(NULL, TRUE)) {
       return;
     }
-    Analysis\Internals::$timer = time();
+    Framework\Internals::$timer = time();
 
     // Find caller.
-    $caller = Analysis\Internals::findCaller();
+    $caller = Framework\Internals::findCaller();
 
     // Render it.
     View\Render::$KrexxCount++;
-    $footer = Framework\Toolbox::outputFooter($caller, TRUE);
-    Analysis\Internals::$shutdownHandler->addChunkString(Framework\Toolbox::outputHeader('Edit local settings', TRUE), TRUE);
-    Analysis\Internals::$shutdownHandler->addChunkString(View\Messages::outputMessages(), TRUE);
-    Analysis\Internals::$shutdownHandler->addChunkString($footer, TRUE);
+    $footer = View\Output::outputFooter($caller, TRUE);
+    Framework\Internals::$shutdownHandler->addChunkString(View\Output::outputHeader('Edit local settings', TRUE), TRUE);
+    Framework\Internals::$shutdownHandler->addChunkString(View\Messages::outputMessages(), TRUE);
+    Framework\Internals::$shutdownHandler->addChunkString($footer, TRUE);
 
     // Cleanup the hive.
     Analysis\Hive::cleanupHive();

@@ -63,7 +63,7 @@ class Config {
    */
   public static $configFallback = array(
     'render' => array(
-      'skin' => 'hans',
+      'skin' => 'smoky-grey',
       'memoryLeft' => '64',
       'maxRuntime' => '60',
     ),
@@ -222,7 +222,7 @@ class Config {
    *
    * @var string
    */
-  public static $version = '1.3.6';
+  public static $version = '1.4.0 dev';
 
   /**
    * Get\Set kreXX state: whether it is enabled or disabled.
@@ -691,11 +691,6 @@ class Config {
           }
           break;
 
-        case "doctype":
-          // We expect a string, could be anything.
-          $result = TRUE;
-          break;
-
         case "skin":
           // We check the directory and one of the files for readability.
           if (is_readable(self::$krexxdir . 'resources/skins/' . $value . '/header.html')) {
@@ -763,10 +758,20 @@ class Config {
           break;
 
         case "maxRuntime":
-          // We expect an integer.
+          // We expect an integer not greater than the max runtime of the server.
           $result = self::evalInt($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "render => maxRuntime"! Expected integer. The configured setting was not applied!');
+          }
+          else {
+            // OK, we got an int, now to see if it is smaller than the
+            // configured max runtime.
+            $max_time = (int) ini_get("max_execution_time");
+            $value = (int) $value;
+            if ($max_time > 0 && $max_time < $value) {
+              // Too big!
+              View\Messages::addMessage('Wrong configuration for: "render => maxRuntime"! Maximum for this server is: ' . $max_time .  ' The configured setting was not applied!');
+            }
           }
           break;
 

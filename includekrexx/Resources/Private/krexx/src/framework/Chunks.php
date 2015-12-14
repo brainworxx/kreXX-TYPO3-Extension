@@ -154,56 +154,35 @@ class Chunks {
    *   The chunk string.
    */
   public static function sendDechunkedToBrowser($string) {
-    static $been_here = FALSE;
 
+    // Do some housekeeping. Unless something dreadfull had appened, there
+    // sould not be anything to cleanup.
     self::cleanupOldChunks();
 
+    // Check for an emergency break.
+    $all_ok = Framework\Internals::checkEmergencyBreak();
+
     $chunk_pos = strpos($string, '@@@');
-    $counter = 0;
-
-    // Here we have our SPOF in memory usage.
-    // I've tried different things here:
-    // - using echo only once
-    // - write to disk and include it
-    // - heredoc
-    // - fwrite
-    // Looks like we are stuck with this.
-    // Writing it to a file produces no noticeable memory peak.
-    // Since we might run into trouble here, we need to check the
-    // remaining memory.
-    // Sadly, we will not be able to close the DOM gracefully,
-    // because the render process can not really say where we exactly are.
-    // We are chunking the output always after a node, but that is all that
-    // is really sure. The only thing left is a simple JS alert . . .
+    
     while ($chunk_pos !== FALSE) {
-      $counter++;
-      if (!Analysis\Internals::checkEmergencyBreak()) {
-        if (!$been_here) {
-          // We display this only once.
-          $message = 'Emergency break for large output.' . "\n\n" . 'You should try to switch to file output.';
-          echo '<script>alert("' . $message . '");</script>';
-        }
-        $been_here = TRUE;
-        // There might be some leftover chunks.
-        // We delete them all!
-        self::cleanupNewChunks();
-        // We stop right here!
-        die();
-      }
-      else {
-        // We have a chunk, we send the html part.
-        echo substr($string, 0, $chunk_pos);
-        $chunk_part = substr($string, $chunk_pos);
+      // We have a chunk, we send the html part.
+      echo substr($string, 0, $chunk_pos);
+      $chunk_part = substr($string, $chunk_pos);
 
-        // We translate the first chunk.
-        $result = explode('@@@', $chunk_part, 3);
-        $string = str_replace('@@@' . $result[1] . '@@@', self::dechunkMe($result[1]), $chunk_part);
-        $chunk_pos = strpos($string, '@@@');
-      }
+      // We translate the first chunk.
+      $result = explode('@@@', $chunk_part, 3);
+      $string = str_replace('@@@' . $result[1] . '@@@', self::dechunkMe($result[1]), $chunk_part);
+      $chunk_pos = strpos($string, '@@@');
     }
 
     // No more chunk keys, we send what is left.
     echo $string;
+
+    if (!$all_ok) {
+      // We had an emergency break. Not everything was send to the browser,
+      // so we need to do some housekeeping.
+      self::cleanupNewChunks();
+    }
   }
 
   /**

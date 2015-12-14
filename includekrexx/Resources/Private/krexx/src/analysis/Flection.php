@@ -177,6 +177,6 @@ class Flection {
    *   Tell the analysis function that I'm undeclared
    */
   public function getWhatAmI() {
-    return 'undeclared ';
+    return '(dynamic property) ';
   }
 }

@@ -84,33 +84,33 @@ abstract class AbstractHandler {
    */
   protected function giveFeedback(array $error_data) {
     if ($this->isActive) {
-      View\Render::$KrexxCount++;
-      Analysis\Internals::$timer = time();
+      View\SkinRender::$KrexxCount++;
+      Framework\Internals::$timer = time();
 
       // Setting template info.
-      if (is_null(View\Render::$skin)) {
-        View\Render::$skin = Framework\Config::getConfigValue('render', 'skin');
+      if (is_null(View\SkinRender::$skin)) {
+        View\SkinRender::$skin = Framework\Config::getConfigValue('render', 'skin');
       }
 
       // Get the header.
-      if (Framework\Toolbox::$headerSend) {
-        $header = View\Render::renderFatalHeader('', '<!DOCTYPE html>');
+      if (View\Output::$headerSend) {
+        $header = View\SkinRender::renderFatalHeader('', '<!DOCTYPE html>');
       }
       else {
-        $header = View\Render::renderFatalHeader(Framework\Toolbox::outputCssAndJs(), '<!DOCTYPE html>');
+        $header = View\SkinRender::renderFatalHeader(View\Output::outputCssAndJs(), '<!DOCTYPE html>');
       }
 
       // Get the main part.
-      $main = View\Render::renderFatalMain(
+      $main = View\SkinRender::renderFatalMain(
           $error_data['type'],
           $error_data['errstr'],
           $error_data['errfile'],
           $error_data['errline'] + 1,
           $error_data['source']);
       // Get the backtrace.
-      $backtrace = Framework\Toolbox::outputBacktrace($error_data['backtrace']);
+      $backtrace = View\Output::outputBacktrace($error_data['backtrace']);
       // Get the footer.
-      $footer = Framework\Toolbox::outputFooter('');
+      $footer = View\Output::outputFooter('');
       // Get the messages.
       $messages = View\Messages::outputMessages();
 

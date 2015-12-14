@@ -1,3 +1,22 @@
+1.4.0
+- Added smoky-grey as the new standard skin.
+- Added some primary formatting to the Hans skin to prevent the host
+  system from messing with the css formatting of the skin.
+- Added the SkinRender class to the skin directory, so every skin can
+  do some special stuff.
+- Change: Cleaned up rendering process.
+- Bugfix: Removed the jQuery library. ReqireJS should now work normally
+  when used on the frontend.
+- Bugfix: Generated sourcecode now works with IteratorAggregate when
+  trying to access a single element from the iterator.
+- Bugfix: Configured debugging methods will not be called anymore,
+  if they require a parameter.
+- Bugfix: Prevent the calling of configured debug methods which are
+  callable, but do not exist thanks to the __call() function.
+- Bugfix / Change: When kreXX encounters an emergency break, the
+  frontend configuration will be accessible, giving the dev the
+  opportunity to change the settings.
+
 1.3.6
 - Added scope analysis. Protected an private variables are treated
   as public in case they are reachable with the called scope.

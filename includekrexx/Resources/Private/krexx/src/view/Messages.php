@@ -32,6 +32,7 @@
  */
 
 namespace Brainworxx\Krexx\View;
+use Brainworxx\Krexx\Framework\Toolbox;
 
 
 /**
@@ -67,7 +68,7 @@ class Messages {
    *   The rendered html output of the messages.
    */
   public static function outputMessages() {
-    // Simple Wrapper for Render::renderMessages
+    // Simple Wrapper for SkinRender::renderMessages
     if (php_sapi_name() == "cli") {
       if (count(self::$messages)) {
         $result = "\n\nkreXX messages\n";
@@ -81,7 +82,9 @@ class Messages {
       }
     }
     else {
-      return Render::renderMessages(self::$messages);
+      return SkinRender::renderMessages(self::$messages);
     }
+    // Still here?
+    return '';
   }
 }

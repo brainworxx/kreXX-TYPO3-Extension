@@ -31,18 +31,27 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analysis;
+namespace Brainworxx\Krexx\Framework;
 
-use Brainworxx\Krexx\Framework;
+use Brainworxx\Krexx\Analysis\Hive;
+use Brainworxx\Krexx\Analysis\Variables;
 use Brainworxx\Krexx\View;
-use Drupal\toolbar\Element\Toolbar;
+
 
 /**
- * This class hosts the internal analysis functions.
+ * This class hosts the internal functions.
  *
  * @package Krexx
  */
 class Internals {
+
+
+  /**
+   * The current nesting level we are in.
+   *
+   * @var int
+   */
+  public static $nestingLevel = 0;
 
   /**
    * The "scope we are starting with. When it is $this in combination with a
@@ -53,17 +62,12 @@ class Internals {
    */
   protected static $scope = '';
 
-  /**
-   * The current nesting level we are in.
-   *
-   * @var int
-   */
-  public static $nestingLevel = 0;
+
 
   /**
    * Sends the output to the browser during shutdown phase.
    *
-   * @var Framework\ShutdownHandler
+   * @var ShutdownHandler
    */
   public static $shutdownHandler;
 
@@ -89,7 +93,7 @@ class Internals {
    */
   public static function miniBenchTo(array $arg_t) {
     $tttime = round((end($arg_t) - $arg_t['start']) * 1000, 4);
-    $ar_aff['url'] = Framework\Toolbox::getCurrentUrl();
+    $ar_aff['url'] = Toolbox::getCurrentUrl();
     $ar_aff['total_time'] = $tttime;
     $prv_cle = 'start';
     $prv_val = $arg_t['start'];
@@ -106,176 +110,7 @@ class Internals {
     return $ar_aff;
   }
 
-  /**
-   * Dump information about a variable.
-   *
-   * This function decides what functions analyse the data
-   * and acts as a hub.
-   *
-   * @param mixed $data
-   *   The variable we are analysing.
-   * @param string $name
-   *   The name of the variable, if available.
-   * @param string $connector1
-   *   The connector1 type to the parent class / array.
-   * @param string $connector2
-   *   The connector2 type to the parent class / array.
-   *
-   * @return string
-   *   The generated markup.
-   */
-  public Static Function analysisHub(&$data, $name = '', $connector1 = '', $connector2 = '') {
-
-    // Check memory and runtime.
-    if (!self::checkEmergencyBreak()) {
-      // No more took too long, or not enough memory is left.
-      View\Messages::addMessage("Emergency break for large output during rendering process.\n\nYou should try to switch to file output.");
-      return '';
-    }
-
-    // If we are currently analysing an array, we might need to add stuff to
-    // the connector.
-    if ($connector1 == '[' && is_string($name)) {
-      $connector1 = $connector1 . "'";
-      $connector2 = "'" . $connector2;
-    }
-
-    // Object?
-    // Closures are analysed separately.
-    if (is_object($data) && !is_a($data, '\Closure')) {
-      self::$nestingLevel++;
-      if (self::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
-        $result = Objects::analyseObject($data, $name, '', $connector1, $connector2);
-        self::$nestingLevel--;
-        return $result;
-      }
-      else {
-        self::$nestingLevel--;
-        return Variables::analyseString("Object => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $name);
-      }
-    }
-
-    // Closure?
-    if (is_object($data) && is_a($data, '\Closure')) {
-      self::$nestingLevel++;
-      if (self::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
-        if ($connector2 == '] =') {
-          $connector2 = ']';
-        }
-        $result = Objects::analyseClosure($data, $name, '', $connector1, $connector2);
-        self::$nestingLevel--;
-        return $result;
-      }
-      else {
-        self::$nestingLevel--;
-        return Variables::analyseString("Closure => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $name);
-      }
-    }
-
-    // Array?
-    if (is_array($data)) {
-      self::$nestingLevel++;
-      if (self::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
-        $result = Variables::analyseArray($data, $name, '', $connector1, $connector2);
-        self::$nestingLevel--;
-        return $result;
-      }
-      else {
-        self::$nestingLevel--;
-        return Variables::analyseString("Array => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $name);
-      }
-    }
-
-    // Resource?
-    if (is_resource($data)) {
-      return Variables::analyseResource($data, $name, '', $connector1, $connector2);
-    }
-
-    // String?
-    if (is_string($data)) {
-      return Variables::analyseString($data, $name, '', $connector1, $connector2);
-    }
-
-    // Float?
-    if (is_float($data)) {
-      return Variables::analyseFloat($data, $name, '', $connector1, $connector2);
-    }
-
-    // Integer?
-    if (is_int($data)) {
-      return Variables::analyseInteger($data, $name, '', $connector1, $connector2);
-    }
-
-    // Boolean?
-    if (is_bool($data)) {
-      return Variables::analyseBoolean($data, $name, '', $connector1, $connector2);
-    }
-
-    // Null ?
-    if (is_null($data)) {
-      return Variables::analyseNull($name, '', $connector1, $connector2);
-    }
-
-    // Still here? This should not happen. Return empty string, just in case.
-    return '';
-  }
-
-  /**
-   * Render a dump for the properties of an array or object.
-   *
-   * @param array &$data
-   *   The array we want to analyse.
-   *
-   * @return string
-   *   The generated markup.
-   */
-  public Static Function iterateThrough(&$data) {
-    $parameter = array($data);
-    $analysis = function (&$parameter) {
-      $output = '';
-      $data = $parameter[0];
-      $is_object = is_object($data);
-
-      $recursion_marker = Hive::getMarker();
-
-      // Recursion detection of objects are handled in the hub.
-      if (is_array($data) && Hive::isInHive($data)) {
-        return View\Render::renderRecursion();
-      }
-
-      // Remember, that we've already been here.
-      Hive::addToHive($data);
-
-      // Keys?
-      $keys = array_keys($data);
-
-      $output .= View\Render::renderSingeChildHr();
-
-      // Iterate through.
-      foreach ($keys as $k) {
-
-        // Skip the recursion marker.
-        if ($k === $recursion_marker) {
-          continue;
-        }
-
-        // Get real value.
-        if ($is_object) {
-          $v = & $data->$k;
-        }
-        else {
-          $v = & $data[$k];
-        }
-
-        $output .= Internals::analysisHub($v, $k, '[', '] =');
-      }
-      $output .= View\Render::renderSingeChildHr();
-      return $output;
-    };
-    return View\Render::renderExpandableChild('', '', $analysis, $parameter);
-  }
-
-  /**
+    /**
    * Dump information about a variable.
    *
    * Here everything starts and ends (well, unless we are only outputting
@@ -337,36 +172,55 @@ class Internals {
     // Start Output.
     View\Render::$KrexxCount++;
     // We need to get the footer before the generating of the header,
-    // because we need to display messages in the header.
-    $footer = Framework\Toolbox::outputFooter($caller);
+    // because we need to display messages in the header from the configuration.
+    self::checkEmergencyBreak(FALSE);
+    $footer = View\Output::outputFooter($caller);
+    self::checkEmergencyBreak(TRUE);
+
     // Start the analysis itself.
     View\Codegen::resetCounter();
 
     // Enable code generation only if we were aqble to determine the varname.
     if ($caller['varname'] == '...') {
-      Framework\Config::$allowCodegen = FALSE;
+      Config::$allowCodegen = FALSE;
     }
     else {
       // We were able to determine the variable name and can generate some
       // sourcecode.
-      Framework\Config::$allowCodegen = TRUE;
+      Config::$allowCodegen = TRUE;
     }
 
     // Set the current scope.
     Internals::$scope = $caller['varname'];
 
     // Start the magic.
-    $analysis = self::analysisHub($data, $caller['varname'], '', '=');
-    self::$shutdownHandler->addChunkString(Framework\Toolbox::outputHeader($headline, $ignore_local_settings));
+    $analysis = Variables::analysisHub($data, $caller['varname'], '', '=');
+    // Now that our analysis is done, we must check if there was an emergency
+    // break.
+    $emergency = FALSE;
+    if (!self::checkEmergencyBreak()) {
+      $emergency = TRUE;
+    }
+    // Disable it, so we can send the "meta" stuff from the template, like
+    // header, messages and footer.
+    self::checkEmergencyBreak(FALSE);
+
+    self::$shutdownHandler->addChunkString(View\Output::outputHeader($headline, $ignore_local_settings));
     self::$shutdownHandler->addChunkString(View\Messages::outputMessages());
-    self::$shutdownHandler->addChunkString($analysis);
+    // We will not send the analysis if we have encountered an emergency break.
+    if (!$emergency) {
+      self::$shutdownHandler->addChunkString($analysis);
+    }
     self::$shutdownHandler->addChunkString($footer);
 
     // Cleanup the hive, this removes all recursion markers.
     Hive::cleanupHive();
 
     // Reset value for the code generation.
-    Framework\Config::$allowCodegen = FALSE;
+    Config::$allowCodegen = FALSE;
+
+    // Enable emergency break for use in further use.
+    self::checkEmergencyBreak(TRUE);
   }
 
   /**
@@ -381,7 +235,7 @@ class Internals {
       self::$timer = time();
     }
 
-    Framework\Config::$allowCodegen = FALSE;
+    Config::$allowCodegen = FALSE;
 
     // Find caller.
     $caller = self::findCaller();
@@ -400,16 +254,35 @@ class Internals {
     // because that is the internal function in kreXX.
     $backtrace = debug_backtrace();
     unset($backtrace[0]);
-    $footer = Framework\Toolbox::outputFooter($caller);
-    $analysis = Framework\Toolbox::outputBacktrace($backtrace);
 
-    self::$shutdownHandler->addChunkString(Framework\Toolbox::outputHeader($headline));
+    self::checkEmergencyBreak(FALSE);
+    $footer = View\Output::outputFooter($caller);
+    self::checkEmergencyBreak(TRUE);
+
+    $analysis = View\Output::outputBacktrace($backtrace);
+    // Now that our analysis is done, we must check if there was an emergency
+    // break.
+    $emergency = FALSE;
+    if (!self::checkEmergencyBreak()) {
+      $emergency = TRUE;
+    }
+    // Disable it, so we can send the "meta" stuff from the template, like
+    // header, messages and footer.
+    self::checkEmergencyBreak(FALSE);
+
+    self::$shutdownHandler->addChunkString(View\Output::outputHeader($headline));
     self::$shutdownHandler->addChunkString(View\Messages::outputMessages());
-    self::$shutdownHandler->addChunkString($analysis);
+    // We will not send the analysis if we have encountered an emergency break.
+    if (!$emergency) {
+      self::$shutdownHandler->addChunkString($analysis);
+    }
     self::$shutdownHandler->addChunkString($footer);
 
     // Cleanup the hive, this removes all recursion markers.
     Hive::cleanupHive();
+
+    // Enable emergency break for use in further use.
+    self::checkEmergencyBreak(TRUE);
   }
 
   /**
@@ -442,7 +315,7 @@ class Internals {
    */
   protected static function checkMaxCall() {
     $result = FALSE;
-    $max_call = (int) Framework\Config::getConfigValue('output', 'maxCall');
+    $max_call = (int) Config::getConfigValue('output', 'maxCall');
     if (View\Render::$KrexxCount >= $max_call) {
       // Called too often, we might get into trouble here!
       $result = TRUE;
@@ -464,22 +337,50 @@ class Internals {
    *   TRUE = all is OK.
    *   FALSE = we have a problem.
    */
-  public static function checkEmergencyBreak() {
-    static $result = TRUE;
 
-    if (!$result) {
+  /**
+   * Checks if there is enough memory and time left on the Server.
+   *
+   * @param mixed $enable
+   *   Enables and disables the check itself. When disabled, it will always
+   *   return TRUE (all is OK).
+   *
+   * @return bool
+   *   Boolean to show if we have enough left.
+   *   TRUE = all is OK.
+   *   FALSE = we have a problem.
+   */
+  public static function checkEmergencyBreak($enable = NULL) {
+    static $result = TRUE;
+    static $is_disabled = FALSE;
+
+    // We are saving the value of being enabled / disabled.
+    if ($enable === TRUE) {
+      $is_disabled = FALSE;
+    }
+    if ($enable === FALSE) {
+      $is_disabled = TRUE;
+    }
+
+    // Tell them everything is fine, when it is disabled.
+    if ($is_disabled) {
+      return TRUE;
+    }
+
+    if ($result === FALSE) {
       // This has failed before!
-      // no need to check again!
-      return $result;
+      // No need to check again!
+      return FALSE;
     }
 
     // Check Runtime.
-    if (self::$timer + (int) Framework\Config::getConfigValue('render', 'maxRuntime') <= time()) {
+    if (self::$timer + (int) Config::getConfigValue('render', 'maxRuntime') <= time()) {
       // This is taking longer than expected.
       $result = FALSE;
     }
 
     if ($result) {
+      // Commence with ste memory check.
       // Check this only, if we have enough time left.
       $limit = strtoupper(ini_get('memory_limit'));
       $memory_limit = 0;
@@ -500,7 +401,7 @@ class Internals {
         $usage = memory_get_usage();
         $left = $memory_limit - $usage;
         // Is more left than is configured?
-        $result = $left >= (int) Framework\Config::getConfigValue('render', 'memoryLeft') * 1024 * 1024;
+        $result = $left >= (int) Config::getConfigValue('render', 'memoryLeft') * 1024 * 1024;
       }
     }
 
@@ -550,7 +451,7 @@ class Internals {
       $possible_functionnames = array(
         'krexx',
         'krexx::open',
-        'krexx::' . Framework\Config::getDevHandler(),
+        'krexx::' . Config::getDevHandler(),
       );
       foreach ($possible_functionnames as $funcname) {
         preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', $source_call, $name);
