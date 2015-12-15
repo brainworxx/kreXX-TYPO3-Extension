@@ -31,13 +31,31 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-if ((int)TYPO3_version < 7) {
-  $filename = t3lib_extMgm::extPath($_EXTKEY, 'bootstrap.php');
-}
-else {
-  $filename = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'bootstrap.php');
+if (! defined('TYPO3_MODE')) {
+  die('Access denied.');
 }
 
-if (file_exists($filename)) {
+if ((int)TYPO3_version < 7) {
+  $filename = t3lib_extMgm::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
+}
+else {
+  $filename = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
+}
+if (file_exists($filename) && !class_exists('Krexx')) {
+  // We load the kreXX library.
+  // 7.3 is able to autoload krexx before this point.
+  // We will not include it again!
   include_once $filename;
+}
+// We point kreXX to its ini file.
+// For some reasons, this class may or may not be declared in 6.2 during an
+// update.
+if (class_exists('Brainworxx\Krexx\Framework\Config')) {
+  \Brainworxx\Krexx\Framework\Config::setPathToIni(PATH_site . 'uploads/tx_includekrexx/Krexx.ini');
+}
+
+// Typo3 7.4 does not autoload our controller anymore, so we do this here.
+if (!class_exists('Tx_Includekrexx_Controller_IndexController') && (int)TYPO3_version > 6) {
+  include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/IndexController.php'));
+  include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/DebugViewHelper.php'));
 }

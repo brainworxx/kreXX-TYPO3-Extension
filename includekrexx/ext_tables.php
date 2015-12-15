@@ -37,10 +37,10 @@ if (!defined('TYPO3_MODE')) {
 
 // Register BE module.
 if (TYPO3_MODE === 'BE') {
-  if ((int)TYPO3_version < 7) {
+  if ((int) TYPO3_version < 7) {
     // Typo3 4.5+
     Tx_Extbase_Utility_Extension::registerModule(
-      // Main area.
+    // Main area.
       $_EXTKEY, 'tools',
       // Name of the module.
       'kreXX configuration',
@@ -58,7 +58,7 @@ if (TYPO3_MODE === 'BE') {
   else {
     // Typo3 7+
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-      // Main area.
+    // Main area.
       $_EXTKEY, 'tools',
       // Name of the module.
       'kreXX configuration',

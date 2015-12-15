@@ -3,7 +3,7 @@
 /***************************************************************
  * Extension Manager/Repository config file for ext "includekrexx".
  *
- * Auto generated 07-08-2015 17:02
+ * Auto generated 14-12-2015 17:12
  *
  * Manual updates:
  * Only the data in the array - everything else is removed by next
@@ -21,17 +21,19 @@ $EM_CONF[$_EXTKEY] = array(
   'author' => 'BRAINWORXX GmbH',
   'author_email' => 'tobias.guelzow@brainworxx.de',
   'author_company' => 'BRAINWORXX GmbH',
-  'constraints' => array(
-    'depends' => array(
-      'typo3' => '4.5.0-7.6.99',
-      'php' => '5.3.0-5.6.99',
-      'extbase' => '1.3.0-0.0.0',
-      'fluid' => '1.3.0-0.0.0',
+  'constraints' =>
+    array(
+      'depends' =>
+        array(
+          'typo3' => '4.5.0-7.6.99',
+          'php' => '5.3.0-5.6.99',
+          'extbase' => '1.3.0-0.0.0',
+          'fluid' => '1.3.0-0.0.0',
+        ),
+      'conflicts' =>
+        array(),
+      'suggests' =>
+        array(),
     ),
-    'conflicts' => array(
-    ),
-    'suggests' => array(
-    ),
-  ),
 );
 
