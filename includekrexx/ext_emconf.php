@@ -11,7 +11,7 @@
  ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = array(
-  'title' => 'Include kreXX',
+  'title' => 'kreXX Debugger',
   'description' => 'kreXX is a php debugger with a fatal error handler. It displays debug information about objects and variables in it\'s own draggable output.',
   'category' => 'fe',
   'version' => '1.4.0',
@@ -21,19 +21,17 @@ $EM_CONF[$_EXTKEY] = array(
   'author' => 'BRAINWORXX GmbH',
   'author_email' => 'tobias.guelzow@brainworxx.de',
   'author_company' => 'BRAINWORXX GmbH',
-  'constraints' =>
-    array(
-      'depends' =>
-        array(
-          'typo3' => '4.5.0-7.6.99',
-          'php' => '5.3.0-5.6.99',
-          'extbase' => '1.3.0-0.0.0',
-          'fluid' => '1.3.0-0.0.0',
-        ),
-      'conflicts' =>
-        array(),
-      'suggests' =>
-        array(),
+  'constraints' => array(
+    'depends' => array(
+      'typo3' => '4.5.0-7.6.99',
+      'php' => '5.3.0-5.6.99',
+      'extbase' => '1.3.0-0.0.0',
+      'fluid' => '1.3.0-0.0.0',
     ),
+    'conflicts' => array(
+    ),
+    'suggests' => array(
+    ),
+  ),
 );
 
