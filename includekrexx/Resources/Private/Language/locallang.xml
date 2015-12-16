@@ -75,6 +75,96 @@
       <label index="render.maxRuntime.error">Wrong configuration for: "render => maxRuntime"! Expected integer. The configured setting was not applied!</label>
       <label index="render.maxRuntime.error.maximum">Wrong configuration for: "render => maxRuntime"! Maximum for this server is: %1$s.  The configured setting was not applied!</label>
 
+      <!-- Fluid layout keys from the template files -->
+      <label index="factory.settings">Use factory settings</label>
+
+      <!-- Both layout files -->
+      <label index="layout.edit.config.file">Edit configuration file</label>
+      <label index="layout.edit.cookie.settings">Edit local cookie settings</label>
+      <label index="layout.edit.config.fe">Edit FE configuration</label>
+      <label index="layout.usage.help">Usage help</label>
+      <label index="layout.config.help">Config help</label>
+
+      <!-- Headlines -->
+      <label index="editconfig.headline">Edit Configuration File</label>
+      <label index="editfeconfig.headline">Edit FE Configuration</label>
+      <label index="subhead.Render">Render</label>
+      <label index="subhead.logging">Logging</label>
+      <label index="subhead.output">Output</label>
+      <label index="subhead.deep">Deep</label>
+      <label index="subhead.methods">Methods</label>
+      <label index="subhead.error">Error Handling and Backtrace</label>
+
+      <!-- Labels -->
+      <label index="label.skin">Skin:</label>
+      <label index="label.memoryLeft">Minimum amout of memory [MB]:</label>
+      <label index="label.maxRuntime">Maximum Runtime [Seconds]:</label>
+      <label index="label.folder">Folder:</label>
+      <label index="label.maxfiles">Maximum files in the logfolder:</label>
+      <label index="label.destination">Destination:</label>
+      <label index="label.maxCall">Maximum amount of calls:</label>
+      <label index="label.disabled">Disable output:</label>
+      <label index="label.detectAjax">Try to detect AJAX requests:</label>
+      <label index="label.analyseProtected">Analyse protected properties:</label>
+      <label index="label.analysePrivate">Analyse private properties:</label>
+      <label index="label.analyseTraversable">Analyse traversable data:</label>
+      <label index="label.debugMethods">List of debug methods to poll for data:</label>
+      <label index="label.level">Maximum nesting level for objects and arrays:</label>
+      <label index="label.analyseMethodsAtall">Analyse class methods at all:</label>
+      <label index="label.analyseProtectedMethods">Analyse protected methods:</label>
+      <label index="label.analysePrivateMethods">Analyse private methods:</label>
+      <label index="label.registerAutomatically">Register fatal error handler automatically:</label>
+      <label index="label.backtraceAnalysis">Backtrace analysis settings:</label>
+
+      <!-- Content stuff  Edit Frontend Settings -->
+      <label index="editfeconfig.help.headline">Here you can edit the frontend configuration form.</label>
+      <label index="full.help"> = The value can be edited in the frontend.</label>
+      <label index="display.help"> = The value will only be displayed.</label>
+      <label index="none.help"> = kreXX will not display the value.</label>
+
+      <!-- Content Edit Cookie Settings -->
+      <label index="editcookie.headline">Edit local cookie settings</label>
+      <label index="editcookie.enabled"><![CDATA[Normally, we would display the menu for the local cookie settings here. This menu is a part of the kreXX output and located in the footer.<br />The output of kreXX was disabled, so it will not be displayed.]]></label>
+      <label index="editcookie.disabled"><![CDATA[Here you can edit the local cookie settings. They are stored in a cookie, and only affect your current browser. Unlike the configuration file, not all settings can be edited here by default. This can be changed in the <i>Edit FE configuration</i> menu. Local cookie settings overwrite configuration file settings.<br/><br/><b>Please note, that these settings only affect your current browser!</b>]]></label>
+
+      <!-- Usage help -->
+      <label index="usage.headline">Usage</label>
+      <label index="usage.calling">kreXX will be called in the PHP source code:</label>
+      <label index="usage.features">Most of the time you will use this method. kreXX will analyse the $object and give you detailed information about it:</label>
+      <label index="usage.features.1">Public attributes of the object</label>
+      <label index="usage.features.2">Protected attributes of the object (can be toggled)</label>
+      <label index="usage.features.3">Private attributes of the object (can be toggled)</label>
+      <label index="usage.features.4">Content of the traversable part of the object (can be toggled)</label>
+      <label index="usage.features.5">Result of all configured debugging callbacks (can be configured)</label>
+      <label index="usage.features.simple">In case the variable is not an object, it will simply display its content.</label>
+      <label index="usage.label.timerStart">Start a benchmark:</label>
+      <label index="usage.label.moment">Define a "moment" during a benchmark test. The $string should be something meaningful, like "Model invoice db call":</label>
+      <label index="usage.label.timerEnd">End the benchmark test and displays the result:</label>
+      <label index="usage.label.backtrace">Outputs backtrace with sourcecode. When kreXX finds objects inside the backtrace, it will analyse them:</label>
+      <label index="usage.label.registerFatal">Register the fatal error handler in the system:</label>
+      <label index="usage.label.unregisterFatal">Unregister the fatal error handler in the system:</label>
+      <label index="usage.links.headline">Mode datailed help</label>
+      <label index="usage.links.typo3">Documentation at Typo3 Docs</label>
+      <label index="usage.links.sourceforge">Documentation at sourceforge</label>
+
+      <!-- Configuration Help -->
+      <label index="config.headline">Configuration</label>
+      <label index="config.headline.text">kreXX is already preconfigured, you don't have to configure it. But there are always moments when you want to change it. There are 3 levels of configuration:</label>
+      <label index="config.factory.headline">1.) Factory settings</label>
+      <label index="config.factory.text">The factory settings are hardcoded fallback settings.</label>
+      <label index="config.file.headline">2.) Configuration file Krexx.ini</label>
+      <label index="config.file.text">The configuration file settings are stored in the file Krexx.ini. kreXX shows in it's output footer where it is searching for this file. In typo3 this is normally:</label>
+      <label index="config.file.link.1">You can edit these settings </label>
+      <label index="config.file.link.2">here</label>
+      <label index="config.file.hierarchy">Configuration file settings overwrite factory settings.</label>
+      <label index="config.cookie.headline">3.) Local cookie settings</label>
+      <label index="config.cookie.text"><![CDATA[You can edit the local cookie settings on the fly in the footer of the kreXX output. They are stored in a cookie, and only affect your current browser. Unlike the configuration file, not all settings can be edited there.<br/>Local cookie settings overwrite configuration file settings.]]></label>
+      <label index="config.cookie.warning">Please note, that these are only local settings, only affecting your current browser.</label>
+      <label index="config.links.headline">kreXX on the WeBB</label>
+      <label index="config.links.1">Documentation</label>
+      <label index="config.links.2">Bug reports</label>
+      <label index="config.links.3">Typo3 kreXX</label>
+      <label index="config.links.4">Magento kreXX</label>
     </languageKey>
   </data>
 </T3locallang>

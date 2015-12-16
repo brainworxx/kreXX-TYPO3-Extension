@@ -1,52 +1,62 @@
 <f:layout name="Backend"/>
 <f:section name="main">
-  <h1>Usage</h1>
-  kreXX will be called in the PHP source code:
+  <h1><f:translate key="usage.headline" /></h1>
+  <f:translate key="usage.calling" />
   <div class="codeblock">
     <pre><code>\krexx($myObject);</code></pre>
   </div>
-  Most of the time you will use this method. kreXX will analyse the $object and give you detailed information about it:
+  <f:translate key="usage.features" />
   <ul>
-    <li>Public attributes of the object</li>
-    <li>Protected attributes of the object (can be toggled)</li>
-    <li>Private attributes of the object (can be toggled)</li>
-    <li>Content of the traversable part of the object (can be toggled)</li>
-    <li>Result of all configured debugging callbacks (can be configured)</li>
+    <li><f:translate key="usage.features.1" /></li>
+    <li><f:translate key="usage.features.2" /></li>
+    <li><f:translate key="usage.features.3" /></li>
+    <li><f:translate key="usage.features.4" /></li>
+    <li><f:translate key="usage.features.5" /></li>
   </ul>
-  In case the variable is not an object, it will simply display its content.
+  <f:translate key="usage.features.simple" />
   <hr/>
-  Start a benchmark:
+  <f:translate key="usage.label.timerStart" />
   <div class="codeblock">
     <pre><code>\kreXX::timerStart();</code></pre>
   </div>
+
   <hr/>
-  Define a "moment" during a benchmark test. The $string should be something meaningful, like "Model invoice db call":
+
+  <f:translate key="usage.label.moment" />
   <div class="codeblock">
     <pre><code>\kreXX::timerMoment($string);</code></pre>
   </div>
-  
+
   <hr/>
-  End the benchmark test and displays the result:
+
+  <f:translate key="usage.label.timerEnd" />
   <div class="codeblock">
     <pre><code>\kreXX::timerEnd();</code></pre>
   </div>
+
   <hr/>
-  Outputs backtrace with sourcecode. When kreXX finds objects inside the backtrace, it will analyse them:
+
+  <f:translate key="usage.label.backtrace" />
   <div class="codeblock">
     <pre><code>\kreXX::backtrace();</code></pre>
   </div>
   
   <hr/>
-  Register the fatal error handler in the system:
+
+  <f:translate key="usage.label.registerFatal" />
   <div class="codeblock">
     <pre><code>\krexx::registerFatal();</code></pre>
   </div>
+
   <hr/>
-  Unregister the fatal error handler in the system:
+
+  <f:translate key="usage.label.unregisterFatal" />
   <div class="codeblock">
     <pre><code>\krexx::unregisterFatal();</code></pre>
   </div>
-  <h4>Mode datailed help</h4>
-  <a class="krexx-link" target="_blank" href="http://docs.typo3.org/typo3cms/extensions/includekrexx/">Documentation at Typo3 Docs</a><br/>
-  <a class="krexx-link" target="_blank" href="http://sourceforge.net/p/krexx/wiki/Overview/">Documentation at sourceforge</a>
+  <br /><br />
+
+  <h1><f:translate key="usage.links.headline" /></h1>
+  <a class="krexx-link" target="_blank" href="http://docs.typo3.org/typo3cms/extensions/includekrexx/"><f:translate key="usage.links.typo3" /></a><br/>
+  <a class="krexx-link" target="_blank" href="http://sourceforge.net/p/krexx/wiki/Overview/"><f:translate key="usage.links.sourceforge" /></a>
 </f:section>
