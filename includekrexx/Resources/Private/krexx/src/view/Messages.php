@@ -49,6 +49,8 @@ class Messages {
    */
   protected static $messages = array();
 
+  protected static $keys = array();
+
   /**
    * The message we want to add. It will be displayed in the output.
    *
@@ -59,6 +61,31 @@ class Messages {
    */
   public static function addMessage($message, $class = 'normal') {
     self::$messages[$message] = array('message' => $message, 'class' => $class);
+  }
+
+  /**
+   * Adds message keys to the key array.
+   *
+   * The same as the addMessage, but we add language keys for a potential
+   * backend integration (includekrexx for example).
+   *
+   * @param string $key
+   *   The key for the translation function.
+   * @param NULL|array
+   *   The parameters for the string replacements inside the translation.
+   */
+  public static function addKey($key, $params = NULL) {
+    self::$keys[$key] = array('key' => $key, 'params' => $params);
+  }
+
+  /**
+   * Getter for the language key array.
+   *
+   * @return array
+   *   The language keys we added beforehand.
+   */
+  public static function getKeys() {
+    return self::$keys;
   }
 
   /**

@@ -2,7 +2,79 @@
 <T3locallang>
   <data type="array">
     <languageKey index="default" type="array">
-      <label index="be.krexx.modulname">kreXX configuration</label>
+      <label index="be.krexx.modulname">kreXX Debugger</label>
+      <!-- General stuff for the configuration file -->
+      <label index="frontend">Frontend</label>
+      <label index="file">File</label>
+      <label index="true">True</label>
+      <label index="false">False</label>
+      <label index="normal">Normal</label>
+      <label index="deep">Deep</label>
+
+      <!-- General stuff for the FE configuration -->
+      <label index="full">Full edit</label>
+      <label index="display">Display only</label>
+      <label index="none">Do not display</label>
+
+      <!-- Help texts -->
+      <label index="localFunction">Here you can enter your own alias function for \krexx::open(). Example: When you enter &apos;gue&apos;, the function will be \krexx::gue($myObject); [or krexx($myObject, &apos;gue&apos;);],  which only devs can use who have set the same value.This is useful, to prevent other devs from calling your debug functions.</label>
+      <label index="analyseProtected">Shall kreXX try to analyse the protected properties of a class? This may result in a lot of output.</label>
+      <label index="analysePrivate">Shall kreXX try to analyse the private properties of a class? This may result in a lot of output.</label>
+      <label index="analyseTraversable">Shall kreXX try to analyse possible traversable data? Depending on the underlying framework this info might be covered by the debug callback functions.</label>
+      <label index="debugMethods">Comma-separated list of used debug callback functions. A lot of frameworks offer these, toArray and toString beeing the most common. kreXX will try to call them, if they are available and display their provided data.</label>
+      <label index="level">Some frameworks have objects inside of objects inside of objects, and so on. Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.</label>
+      <label index="resetbutton">Here you can reset your local settings, which are stored in a cookie. kreXX will then use the global settings (either ini-file or factory settings).</label>
+      <label index="destination">kreXX can save it&apos;s output to a file, instead of outputting it to the frontend. The output will then be stored in the log folder.</label>
+      <label index="maxCall">A lot of output does not only slow down your server, it also slows down your browser. When using kreXX in a loop, it will create output every time the loop is executed. To limit this, you can configure the maximum call settings.</label>
+      <label index="disabled">Here you can disable kreXX without uninstalling the whole module.</label>
+      <label index="folder">This is the folder where kreXX will store it&apos;s logfiles.</label>
+      <label index="maxfiles">How many logfiles do you want to store inside your logging folder? When there are more files than this number, the older files will get deleted.</label>
+      <label index="skin">Choose a skin here. We have provided kreXX with two skins: smoky-grey and hans.</label>
+      <label index="currentSettings">kreXX&apos;s configuration can be edited here, changes will be stored in a cookie and overwrite the ini and factory settings. Please note, that these are only local settings. They only affect this browser.</label>
+      <label index="registerAutomatically">This option registers the fatal errorhandler as soon as kreXX is included. When a fatal error occures, kreXX will offer a backtrace and an analysis of the all objects in it. PHP always clears the stack in case of a fatal error,  so kreXX has to keep track of it. Be warned: This option will dramatically slow down your requests. Use this only when you have to. It is by far better to register the errorhandler yourself with \krexx::registerFatal(); and later unregister it with \krexx::unregisterFatal(); tp prevent a slowdown.</label>
+      <label index="detectAjax">kreXX tries to detect whether a request is made via ajax. When it is detected, it will do no output at all. The AJAX detection can be disabled here.</label>
+      <label index="backtraceAnalysis">Shall kreXX do a "deep" analysis of  the backtrace? Be warned, a deep analysis can produce a lot of output. A "normal" analysis will use the configured settings, while a "deep" analysis will get as much data from the objects as possible.</label>
+      <label index="memoryLeft">kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is MB.</label>
+      <label index="maxRuntime">kreXX checks during the analysis how much time has elapsed since start. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is seconds.</label>
+      <label index="analyseMethodsAtall">Here you can toggle if kreXX shall analyse the methods of a class.</label>
+      <label index="analyseProtectedMethods">Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.</label>
+      <label index="analysePrivateMethods">Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.</label>
+
+      <!-- Messages -->
+      <label index="file.not.writable">Configuration file %1$s is not writable!</label>
+      <label index="value.not.allowed">%1$s is not an allowed value!</label>
+      <label index="save.fail.title">The settings were NOT saved.</label>
+      <label index="save.success.title">The settings were saved.</label>
+      <label index="save.success.text"><![CDATA[The settings were saved to:<br />%1$s]]></label>
+
+      <!--
+        Error messages from the krexx lib
+        @see Brainworxx\Krexx\Framework\Config::evaluateSetting( . . . )
+      -->
+      <label index="methods.analyseMethodsAtall.error">Wrong configuration for: "methods => analyseMethodsAtall"! Expected boolean. The configured setting was not applied!</label>
+      <label index="methods.analyseProtectedMethods.error">Wrong configuration for: "methods => analyseProtectedMethods"! Expected boolean. The configured setting was not applied!</label>
+      <label index="methods.analysePrivateMethods.error">Wrong configuration for: "methods => analysePrivateMethods"! Expected boolean. The configured setting was not applied!</label>
+      <label index="deep.analyseProtected.error">Wrong configuration for: "deep => analyseProtected"! Expected boolean. The configured setting was not applied!</label>
+      <label index="deep.analysePrivate.error">Wrong configuration for: "deep => analysePrivate"! Expected boolean. The configured setting was not applied!</label>
+      <label index="deep.analyseTraversable.error">Wrong configuration for: "deep => analyseTraversable"! Expected boolean. The configured setting was not applied!</label>
+      <label index="deep.level.error">Wrong configuration for: "deep => level"! Expected integer. The configured setting was not applied!</label>
+      <label index="output.maxCall.error">Wrong configuration for: "output => maxCall"! Expected integer. The configured setting was not applied!</label>
+      <label index="output.disabled.error">Wrong configuration for: "output => disabled"! Expected boolean. The configured setting was not applied!</label>
+      <label index="output.detectAjax.error">Wrong configuration for: "output => detectAjax"! Expected boolean. The configured setting was not applied!</label>
+      <label index="output.destination.error">Wrong configuration for: "output => destination"! Expected "frontend" or "file". The configured setting was not applied!</label>
+      <label index="output.maxfiles.error">Wrong configuration for: "output => maxfiles"! Expected integer. The configured setting was not applied!</label>
+      <label index="output.folder.error.writable">Wrong configuration for: "output => folder"! Directory is not writable. The configured setting was not applied!</label>
+      <label index="output.folder.error.protected">Wrong configuration for: "output => folder"! Directory is not protected. The configured setting was not applied!</label>
+      <label index="render.skin.error">Wrong configuration for: "render => skin"! Skin not found. The configured setting was not applied!</label>
+      <label index="errorHandling.traceFatals.error">Wrong configuration for: "errorHandling => traceFatals"! Expected boolean. The configured setting was not applied!</label>
+      <label index="errorHandling.traceWarnings.error">Wrong configuration for: "errorHandling => traceWarnings"! Expected boolean. The configured setting was not applied!</label>
+      <label index="errorHandling.traceNotices.error">Wrong configuration for: "errorHandling => traceNotices"! Expected boolean. The configured setting was not applied!</label>
+      <label index="errorHandling.registerAutomatically.error">Wrong configuration for: "errorHandling => registerAutomatically"! Expected boolean. The configured setting was not applied!</label>
+      <label index="errorHandling.backtraceAnalysis.error">Wrong configuration for: "errorHandling => backtraceAnalysis"! Expected "normal" or "deep". The configured setting was not applied!</label>
+      <label index="render.memoryLeft.error">Wrong configuration for: "render => memoryLeft"! Expected integer. The configured setting was not applied!</label>
+      <label index="render.maxRuntime.error">Wrong configuration for: "render => maxRuntime"! Expected integer. The configured setting was not applied!</label>
+      <label index="render.maxRuntime.error.maximum">Wrong configuration for: "render => maxRuntime"! Maximum for this server is: %1$s.  The configured setting was not applied!</label>
+
     </languageKey>
   </data>
 </T3locallang>

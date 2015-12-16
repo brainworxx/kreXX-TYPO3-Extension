@@ -38,7 +38,7 @@ use \Brainworxx\Krexx\View\Render;
 
 
 // The mainproblem with 7.0 is, that compatibility6 may or may not be installed.
-// If not, I have to put his thing here, hoping not to break anything!
+// If not, I have to put this thing here, hoping not to break anything!
 if (!class_exists('Tx_Extbase_MVC_Controller_ActionController')) {
   class Tx_Extbase_MVC_Controller_ActionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
   }
@@ -60,7 +60,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
   class Tx_Includekrexx_Controller_IndexController extends Tx_Extbase_MVC_Controller_ActionController {
 
     /**
-     * List of all setting-manes for which we are accepting values.
+     * List of all setting-names for which we are accepting values.
      *
      * @var array
      */
@@ -126,6 +126,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       }
       \krexx::editSettings();
     }
+
     /**
      * Shows the configuration for the FE editing.
      */
@@ -134,9 +135,9 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       $value = array();
       // Setting possible form values.
       $data['settings'] = array(
-        'full' => 'full edit',
-        'display' => 'display only',
-        'none' => 'do not display');
+        'full' => $this->LLL('full'),
+        'display' => $this->LLL('display'),
+        'none' => $this->LLL('none'));
 
       // See, if we have any values in the configuration file.
       $value['render']['skin'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('skin'));
@@ -188,35 +189,34 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       foreach (Render::getSkinList() as $skin) {
         $data['skins'][$skin] = $skin;
       }
-      $data['destination'] = array('frontend' => 'frontend', 'file' => 'file');
-      $data['bool'] = array('true' => 'true', 'false' => 'false');
-      $data['backtrace'] = array('normal' => 'normal', 'deep' => 'deep');
+      $data['destination'] = array('frontend' => $this->LLL('frontend'), 'file' => $this->LLL('file'));
+      $data['bool'] = array('true' => $this->LLL('true'), 'false' => $this->LLL('false'));
+      $data['backtrace'] = array('normal' => $this->LLL('normal'), 'deep' => $this->LLL('deep'));
 
       // Setting the form help texts
       $data['title'] = array(
-        'localFunction' => strip_tags(Help::getHelp('localFunction')),
-        'analyseProtected' => strip_tags(Help::getHelp('analyseProtected')),
-        'analysePrivate' => strip_tags(Help::getHelp('analysePrivate')),
-        'analyseTraversable' => strip_tags(Help::getHelp('analysePrivate')),
-        'debugMethods' => 'Comma-separated list of used debug callback functions. A lot of frameworks offer these, toArray and toString beeing the most common. kreXX will try to call them, if they are available and display their provided data.',
-        'level' => strip_tags(Help::getHelp('level')),
-        'resetbutton' => strip_tags(Help::getHelp('resetbutton')),
-        'destination' => strip_tags(Help::getHelp('destination')),
-        'maxCall' => strip_tags(Help::getHelp('maxCall')),
-        'disabled' => 'Here you can disable kreXX without uninstalling the whole module.',
-        'folder' => strip_tags(Help::getHelp('folder')),
-        'maxfiles' => strip_tags(Help::getHelp('maxfiles')),
-        'skin' => strip_tags(Help::getHelp('skin')),
-        'currentSettings' => strip_tags(Help::getHelp('currentSettings')),
-        'debugcookie' => strip_tags(Help::getHelp('debugcookie')),
-        'registerAutomatically' => strip_tags(Help::getHelp('registerAutomatically')),
-        'detectAjax' => strip_tags(Help::getHelp('detectAjax')),
-        'backtraceAnalysis' => strip_tags(Help::getHelp('backtraceAnalysis')),
-        'memoryLeft' => strip_tags(Help::getHelp('memoryLeft')),
-        'maxRuntime' => strip_tags(Help::getHelp('maxRuntime')),
-        'analyseMethodsAtall' => strip_tags(Help::getHelp('analyseMethodsAtall')),
-        'analyseProtectedMethods' => strip_tags(Help::getHelp('analyseProtectedMethods')),
-        'analysePrivateMethods' => strip_tags(Help::getHelp('analysePrivateMethods')));
+        'localFunction' => $this->LLL('localFunction'),
+        'analyseProtected' => $this->LLL('analyseProtected'),
+        'analysePrivate' => $this->LLL('analysePrivate'),
+        'analyseTraversable' => $this->LLL('analysePrivate'),
+        'debugMethods' => $this->LLL('debugMethods'),
+        'level' => $this->LLL('level'),
+        'resetbutton' => $this->LLL('resetbutton'),
+        'destination' => $this->LLL('destination'),
+        'maxCall' => $this->LLL('maxCall'),
+        'disabled' => $this->LLL('disabled'),
+        'folder' => $this->LLL('folder'),
+        'maxfiles' => $this->LLL('maxfiles'),
+        'skin' => $this->LLL('skin'),
+        'currentSettings' => $this->LLL('currentSettings'),
+        'registerAutomatically' => $this->LLL('registerAutomatically'),
+        'detectAjax' => $this->LLL('detectAjax'),
+        'backtraceAnalysis' => $this->LLL('backtraceAnalysis'),
+        'memoryLeft' => $this->LLL('memoryLeft'),
+        'maxRuntime' => $this->LLL('maxRuntime'),
+        'analyseMethodsAtall' => $this->LLL('analyseMethodsAtall'),
+        'analyseProtectedMethods' => $this->LLL('analyseProtectedMethods'),
+        'analysePrivateMethods' => $this->LLL('analysePrivateMethods'));
 
       // See, if we have any values in the configuration file.
       $value['render']['skin'] = Config::getConfigFromFile('render', 'skin');
@@ -268,7 +268,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       // Check for writing permission
       if (!is_writable(dirname($filepath))) {
         $all_ok = FALSE;
-         Messages::addMessage('Configuration file ' . $filepath . ' is not writeable!');
+        Messages::addMessage($this->LLL('file.not.writable', array($filepath)));
       }
 
       // Check if the file does exist.
@@ -322,15 +322,15 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       if ($all_ok) {
         if (file_put_contents($filepath, $ini) === FALSE) {
           $all_ok = FALSE;
-          Messages::addMessage('Configuration file ' . $filepath . ' is not writeable!');
+          Messages::addMessage($this->LLL('file.not.writable', array($filepath)));
         }
       }
       // Something went wrong, we need to tell the user.
       if (!$all_ok) {
-        $this->addMessage(strip_tags(Messages::outputMessages()), "The settings were NOT saved.", t3lib_FlashMessage::ERROR);
+        $this->addMessage($this->getTranslatedMessages(), $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
       }
       else {
-        $this->addMessage("The settings were saved to: <br /> " . $filepath, "The data was saved.", t3lib_FlashMessage::OK);
+        $this->addMessage($this->LLL('save.success.text', array($filepath)), $this->LLL('save.success.title'), t3lib_FlashMessage::OK);
       }
       $this->redirect('editConfig');
     }
@@ -368,7 +368,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
        // Check for writing permission
       if (!is_writable(dirname($filepath))) {
         $all_ok = FALSE;
-        Messages::addMessage('Configuration file ' . $filepath . ' is not writeable!');
+        Messages::addMessage($this->LLL('file.not.writable', array($filepath)));
       }
       // Check if the file does exist.
       if (is_file($filepath)) {
@@ -393,7 +393,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
               else {
                 // Validation failed!
                 $all_ok = FALSE;
-                Messages::addMessage(htmlentities($value) . ' is not an allowed value!');
+                Messages::addMessage($this->LLL('value.not.allowed', array(htmlentities($value))));
               }
             }
           }
@@ -412,16 +412,16 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
         if ($all_ok){
           if (file_put_contents($filepath, $ini) === FALSE) {
             $all_ok = FALSE;
-            Messages::addMessage('Configuration file ' . $filepath . ' is not writeable!');
+            Messages::addMessage($this->LLL('file.not.writable', array($filepath)));
           }
         }
 
         // Something went wrong, we need to tell the user.
         if (!$all_ok) {
-          $this->addMessage(strip_tags(Messages::outputMessages()), "The settings were NOT saved.", t3lib_FlashMessage::ERROR);
+          $this->addMessage($this->getTranslatedMessages(), $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
         }
         else {
-          $this->addMessage("The settings were saved to: <br /> " . $filepath, "The data was saved.", t3lib_FlashMessage::OK);
+          $this->addMessage($this->LLL('save.success.text', array($filepath)), $this->LLL('save.success.title'), t3lib_FlashMessage::OK);
         }
       }
 
@@ -469,6 +469,55 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
           $result = 'display';
         }
       }
+      return $result;
+    }
+
+    /**
+     * Wrapper for the \TYPO3\CMS\Extbase\Utility\LocalizationUtility
+     *
+     * @param string $key
+     *   The key we want to translate
+     * @param null|array $args
+     *   The strings from the controller we want to place inside the
+     *   translation.
+     *
+     * @return string
+     *   The translation itself.
+     */
+    protected function LLL($key, $args = NULL) {
+
+      if ((int) TYPO3_version > 6) {
+        // 7+ version.
+        $result = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($key, 'includekrexx', $args);
+      }
+      else {
+        // Version 4.5 until 6.2
+        $result = Tx_Extbase_Utility_Localization::translate($key, 'includekrexx', $args);
+      }
+      // At least give back the key, and not a NULL.
+//      if (is_null($result)) {
+//        $result = $key;
+//      }
+
+      return $result;
+    }
+
+    /**
+     * Gets all messages from kreXX and translates them.
+     *
+     * @return string
+     *   The translated messages.
+     */
+    protected function getTranslatedMessages() {
+      $result = '';
+      // Get the keys and the args.
+      $keys = Messages::getKeys();
+
+      foreach ($keys as $message) {
+        // And translate them and add a linebreak.
+        $result .= $this->LLL($message['key'], $message['params']) . '<br />';
+      }
+
       return $result;
     }
   }

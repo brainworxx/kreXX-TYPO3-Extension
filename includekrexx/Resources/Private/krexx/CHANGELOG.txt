@@ -4,6 +4,7 @@
   system from messing with the css formatting of the skin.
 - Added the SkinRender class to the skin directory, so every skin can
   do some special stuff.
+- Added rudimentary translation support for the messaging class.
 - Change: Cleaned up rendering process.
 - Bugfix: Removed the jQuery library. ReqireJS should now work normally
   when used on the frontend.

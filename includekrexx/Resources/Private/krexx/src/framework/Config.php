@@ -575,6 +575,7 @@ class Config {
           $result = self::evalBool($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "methods => analyseMethodsAtall"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addKey('methods.analyseMethodsAtall.error');
           }
           break;
 
@@ -583,6 +584,7 @@ class Config {
           $result = self::evalBool($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "methods => analyseProtectedMethods"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addKey('methods.analyseProtectedMethods.error');
           }
           break;
 
@@ -591,6 +593,7 @@ class Config {
           $result = self::evalBool($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "methods => analysePrivateMethods"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addKey('methods.analysePrivateMethods.error');
           }
           break;
 
@@ -599,6 +602,7 @@ class Config {
           $result = self::evalBool($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "deep => analyseProtected"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addKey('deep.analyseProtected.error');
           }
           break;
 
@@ -607,6 +611,7 @@ class Config {
           $result = self::evalBool($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "deep => analysePrivate"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addKey('deep.analysePrivate.error');
           }
           break;
 
@@ -615,6 +620,7 @@ class Config {
           $result = self::evalBool($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "deep => analyseTraversable"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addKey('deep.analyseTraversable.error');
           }
           break;
 
@@ -630,6 +636,7 @@ class Config {
           $result = self::evalInt($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "deep => level"! Expected integer. The configured setting was not applied!');
+            View\Messages::addKey('deep.level.error');
           }
           break;
 
@@ -638,6 +645,7 @@ class Config {
           $result = self::evalInt($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "output => maxCall"! Expected integer. The configured setting was not applied!');
+            View\Messages::addKey('output.maxCall.error');
           }
           break;
 
@@ -646,6 +654,7 @@ class Config {
           $result = self::evalBool($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "output => disabled"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addKey('output.disabled.error');
           }
           break;
 
@@ -654,6 +663,7 @@ class Config {
           $result = self::evalBool($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "output => detectAjax"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addKey('output.detectAjax.error');
           }
           break;
 
@@ -664,6 +674,7 @@ class Config {
           }
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "output => destination"! Expected "frontend" or "file". The configured setting was not applied!');
+            View\Messages::addKey('output.destination.error');
           }
           break;
 
@@ -672,6 +683,7 @@ class Config {
           $result = self::evalInt($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "output => maxfiles"! Expected integer. The configured setting was not applied!');
+            View\Messages::addKey('output.maxfiles.error');
           }
           break;
 
@@ -685,9 +697,11 @@ class Config {
           }
           if (!$is_writable) {
             View\Messages::addMessage('Wrong configuration for: "output => folder"! Directory is not writable. The configured setting was not applied!');
+            View\Messages::addKey('output.folder.error.writable');
           }
           if (!$is_protected) {
             View\Messages::addMessage('Wrong configuration for: "output => folder"! Directory is not protected. The configured setting was not applied!');
+            View\Messages::addKey('output.folder.error.protected');
           }
           break;
 
@@ -698,6 +712,7 @@ class Config {
           }
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "render => skin"! Skin not found. The configured setting was not applied!');
+            View\Messages::addKey('render.skin.error');
           }
           break;
 
@@ -712,6 +727,7 @@ class Config {
           $result = self::evalBool($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "errorHandling => traceFatals"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addKey('errorHandling.traceFatals.error');
           }
           break;
 
@@ -720,6 +736,7 @@ class Config {
           $result = self::evalBool($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "errorHandling => traceWarnings"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addKey('errorHandling.traceWarnings.error');
           }
           break;
 
@@ -728,6 +745,7 @@ class Config {
           $result = self::evalBool($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "errorHandling => traceNotices"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addKey('errorHandling.traceNotices.error');
           }
           break;
 
@@ -736,6 +754,7 @@ class Config {
           $result = self::evalBool($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "errorHandling => registerAutomatically"! Expected boolean. The configured setting was not applied!');
+            View\Messages::addKey('errorHandling.registerAutomatically.error');
           }
           break;
 
@@ -746,6 +765,7 @@ class Config {
           }
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "errorHandling => backtraceAnalysis"! Expected "normal" or "deep". The configured setting was not applied!');
+            View\Messages::addKey('errorHandling.backtraceAnalysis.error');
           }
           break;
 
@@ -754,6 +774,7 @@ class Config {
           $result = self::evalInt($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "render => memoryLeft"! Expected integer. The configured setting was not applied!');
+            View\Messages::addKey('render.memoryLeft.error');
           }
           break;
 
@@ -762,6 +783,7 @@ class Config {
           $result = self::evalInt($value);
           if (!$result) {
             View\Messages::addMessage('Wrong configuration for: "render => maxRuntime"! Expected integer. The configured setting was not applied!');
+            View\Messages::addKey('render.maxRuntime.error');
           }
           else {
             // OK, we got an int, now to see if it is smaller than the
@@ -771,6 +793,8 @@ class Config {
             if ($max_time > 0 && $max_time < $value) {
               // Too big!
               View\Messages::addMessage('Wrong configuration for: "render => maxRuntime"! Maximum for this server is: ' . $max_time .  ' The configured setting was not applied!');
+              View\Messages::addKey('render.maxRuntime.error.maximum', array($max_time));
+              $result = FALSE;
             }
           }
           break;
