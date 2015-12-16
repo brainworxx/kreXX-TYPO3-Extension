@@ -21,7 +21,7 @@
       <label index="analyseProtected">Shall kreXX try to analyse the protected properties of a class? This may result in a lot of output.</label>
       <label index="analysePrivate">Shall kreXX try to analyse the private properties of a class? This may result in a lot of output.</label>
       <label index="analyseTraversable">Shall kreXX try to analyse possible traversable data? Depending on the underlying framework this info might be covered by the debug callback functions.</label>
-      <label index="debugMethods">Comma-separated list of used debug callback functions. A lot of frameworks offer these, toArray and toString beeing the most common. kreXX will try to call them, if they are available and display their provided data.</label>
+      <label index="debugMethods">Comma-separated list of used debug callback functions. A lot of frameworks offer these, toArray and toString being the most common. kreXX will try to call them, if they are available and display their provided data.</label>
       <label index="level">Some frameworks have objects inside of objects inside of objects, and so on. Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.</label>
       <label index="resetbutton">Here you can reset your local settings, which are stored in a cookie. kreXX will then use the global settings (either ini-file or factory settings).</label>
       <label index="destination">kreXX can save it&apos;s output to a file, instead of outputting it to the frontend. The output will then be stored in the log folder.</label>
@@ -124,8 +124,11 @@
 
       <!-- Content Edit Cookie Settings -->
       <label index="editcookie.headline">Edit local cookie settings</label>
-      <label index="editcookie.enabled"><![CDATA[Normally, we would display the menu for the local cookie settings here. This menu is a part of the kreXX output and located in the footer.<br />The output of kreXX was disabled, so it will not be displayed.]]></label>
-      <label index="editcookie.disabled"><![CDATA[Here you can edit the local cookie settings. They are stored in a cookie, and only affect your current browser. Unlike the configuration file, not all settings can be edited here by default. This can be changed in the <i>Edit FE configuration</i> menu. Local cookie settings overwrite configuration file settings.<br/><br/><b>Please note, that these settings only affect your current browser!</b>]]></label>
+      <label index="editcookie.disabled.1">Normally, we would display the menu for the local cookie settings here. This menu is a part of the kreXX output and located in the footer.</label>
+      <label index="editcookie.disabled.2">The output of kreXX was disabled, so it will not be displayed.</label>
+      <label index="editcookie.enabled.1">Here you can edit the local cookie settings. They are stored in a cookie, and only affect your current browser. Unlike the configuration file, not all settings can be edited here by default. This can be changed in the</label>
+      <label index="editcookie.enabled.2">menu. Local cookie settings overwrite configuration file settings.</label>
+      <label index="editcookie.enabled.3">Please note, that these settings only affect your current browser!</label>
 
       <!-- Usage help -->
       <label index="usage.headline">Usage</label>

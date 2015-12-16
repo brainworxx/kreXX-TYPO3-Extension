@@ -4,10 +4,14 @@
     <h1><f:translate key="editcookie.headline" /></h1>
     <f:if condition="{is_disabled}==1">
       <f:then>
-        <f:translate key="editcookie.enabled" />
+        <f:translate key="editcookie.disabled.1" /><br />
+        <f:translate key="editcookie.disabled.2" />
       </f:then>
       <f:else>
-        <f:translate key="editcookie.disabled" />
+        <f:translate key="editcookie.enabled.1" />
+        <i><f:translate key="layout.edit.config.fe" /></i>
+        <f:translate key="editcookie.enabled.2" />
+        <br/><br/><b><f:translate key="editcookie.enabled.3" /></b>
       </f:else>
     </f:if>
 
