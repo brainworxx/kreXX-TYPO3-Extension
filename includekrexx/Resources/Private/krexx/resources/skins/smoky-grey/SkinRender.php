@@ -93,7 +93,7 @@ class SkinRender extends Render {
 
       $template = str_replace('{additional}', $additional, $template);
       // There is not much need for a connector to an empty name.
-      if (empty($name)) {
+      if (empty($name) && $name != 0) {
         $template = str_replace('{connector1}', '', $template);
         $template = str_replace('{connector2}', '', $template);
       }

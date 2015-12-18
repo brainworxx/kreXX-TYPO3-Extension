@@ -65,6 +65,7 @@ class Help {
     'analyseMethodsAtall' => 'Here you can toggle if kreXX shall analyse the methods of a class.',
     'analyseProtectedMethods' => 'Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
     'analysePrivateMethods' => 'Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
+    '_getProperties' => 'Typo3 debug function.<br />It takes the propertioes directly from the model, ignoring the getter function.<br />If the getter function is used to compute this value, the values from this function may be inaccurate.',
   );
 
   /**

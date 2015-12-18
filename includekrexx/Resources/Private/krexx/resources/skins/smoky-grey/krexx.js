@@ -665,9 +665,9 @@
    */
   krexx.setPayloadMaxHeight = function () {
     // Get the height.
-    var height = Math.round(Math.max(document.documentElement.clientHeight, window.innerHeight || 0) * 0.70);
+    var height = Math.round(Math.min(document.documentElement.clientHeight, window.innerHeight || 0) * 0.70);
 
-    if (height > 0) {
+    if (height > 350) {
       var elements = document.querySelectorAll('.krela-wrapper .kpayload');
       for (var i = 0; i < elements.length; i++) {
         elements[i].style.maxHeight = height + 'px';

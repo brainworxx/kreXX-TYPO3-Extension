@@ -305,6 +305,9 @@
      * @param event
      */
     function startDraxx (event) {
+
+      var additionalOffset = parseInt(window.getComputedStyle(document.querySelector('body :first-child')).marginTop, 10);
+
       // The selector has an ID, we only have one of them.
       var elContent = kdt.getParents(this, selector)[0];
       var offset = getElementOffset(elContent);
@@ -351,7 +354,7 @@
         event.stopPropagation();
 
         var left = event.pageX + offSetX;
-        var top = event.pageY + offSetY;
+        var top = event.pageY + offSetY - additionalOffset;
 
         elContent.style.left = left + "px";
         elContent.style.top = top + "px";

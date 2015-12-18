@@ -449,8 +449,9 @@ class Objects {
     if (is_a($data, 'Traversable')) {
       $parameter = iterator_to_array($data);
       $anon_function = function (&$data) {
-        // This could be anything, we need to examine it first.
-        return Variables::analysisHub($data);
+        // This should be an array. Giving it directly to the analysis hub would
+        // create another useless nest.
+        return Variables::iterateThrough($data);
       };
       // If we are facing a IteratorAggregate, we can not access the array
       // directly. To do this, we must get the Iterator from the class.
@@ -539,7 +540,7 @@ class Objects {
             $anon_function = function (&$result) {
               return Variables::analysisHub($result);
             };
-            $output .= View\SkinRender::renderExpandableChild($func_name, 'debug method', $anon_function, $result, '. . .', '', '', FALSE, '->', '() =');
+            $output .= View\SkinRender::renderExpandableChild($func_name, 'debug method', $anon_function, $result, '. . .', '', $func_name, FALSE, '->', '() =');
             unset($result);
           }
         }
