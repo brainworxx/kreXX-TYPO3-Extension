@@ -6,6 +6,8 @@
 .. include:: ../Includes.txt
 
 
+.. _little-helpers:
+
 Little helpers
 ==============
 
@@ -29,6 +31,8 @@ Hide-Everything-Else
 
 	Incomprehensible output with a lot of data. A simple click on the arrow symbol hides the rest of the output
 
+|
+|
 
 .. figure:: ../Images/LittleHelpers/collapsed_datamap.jpg
 	:width: 777px
@@ -36,6 +40,8 @@ Hide-Everything-Else
 
 	Better readable output, because unnecessary data is now hidden.
 
+|
+|
 
 Automatic code generation
 ^^^^^^^^^^^^^^^^^^^^^^^^^

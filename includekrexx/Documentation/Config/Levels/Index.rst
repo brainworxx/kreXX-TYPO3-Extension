@@ -1,0 +1,31 @@
+.. ==================================================
+.. FOR YOUR INFORMATION
+.. --------------------------------------------------
+.. -*- coding: utf-8 -*- with BOM.
+
+.. include:: ../../Includes.txt
+
+
+.. _config_levels:
+
+Configuration levels
+====================
+There are 3 levels of configuration:
+
+| **Factory settings**
+| The factory settings are hardcoded default settings, in case there is no configuration available.
+|
+| **Configuration file settings**
+| The configuration file settings can be edited in the Typo3 backend.
+|
+| **Local cookie settings**
+| Local cookie settings can be changed in the kreXX output window.
+
+
+
+|
+| Exception to this hierarchy rule:
+| Once you disable kreXX on file or local level, it stays disabled.
+| Bur remember: Local settings only apply to your current browser.
+
+

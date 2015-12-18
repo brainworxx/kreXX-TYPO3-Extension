@@ -3,10 +3,10 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-.. include:: ../Includes.txt
+.. include:: ../../Includes.txt
 
 
-.. _cookie-editor-administration:
+.. _fe-configuration:
 
 
 Edit FE Configuration
@@ -26,6 +26,6 @@ For every control, you can set 3 different settings:
 | none    | kreXX will not display this control or it's value. Leftover settings will be ignored.                                         |
 +---------+-------------------------------------------------------------------------------------------------------------------------------+
 
-.. figure:: ../Images/CookieEditorAdministration/t3_backend2.jpg
+.. figure:: ../../Images/Frontend/t3_backend2.jpg
 	:width: 528px
 	:alt: Local cookie settings editor in the frontend

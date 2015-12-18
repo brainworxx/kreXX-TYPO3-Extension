@@ -6,6 +6,9 @@
 .. include:: ../Includes.txt
 
 
+.. _fatal-error:
+
+
 Fatal Error Handler
 ===================
 

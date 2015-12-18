@@ -16,8 +16,6 @@ kreXX will be called from within the PHP source code:
 	krexx($myObject);
 
 
-
-
 Key features:
 	- Dumping of protected variables
 	- Dumping of private variables
@@ -33,12 +31,6 @@ Key features:
 	- Benchmarking
 	- Fatal error handler with a full backtrace
 	- Code generation to reach the displayed values, if possible.
-
-
-
-
-
-
 
 
 .. figure:: ../Images/protected_properties.jpg

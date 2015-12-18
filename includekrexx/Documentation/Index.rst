@@ -30,7 +30,7 @@ Include kreXX
 		debug, debugging, object, analysis
 
 	:Copyright:
-		2015
+		2015 - 2016
 
 	:Author:
 		BRAINWORXX GmbH
@@ -57,10 +57,9 @@ Include kreXX
 	:glob:
 
 	Introduction/Index
-	UsersManual/Index
+	Usage/Index
+	Logging/Index
 	DevHandle/Index
-	ConfigLevels/Index
-	ConfigOptions/Index
-	CookieEditorAdministration/Index
+	Config/Index
 	LittleHelpers/Index
 	FatalError/Index

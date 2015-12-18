@@ -6,7 +6,7 @@
 .. include:: ../Includes.txt
 
 
-.. _users-manual:
+.. _usage:
 
 Usage inside the PHP code
 =========================
@@ -63,7 +63,6 @@ Often enough a kreXX call will look like this:
 
 .. code-block:: php
 
-	// display the edit settings dialog
 	kreXX($this);
 
 Analysing "$this" means, that all protected and private values and methods are reachable from this point inside the code. When kreXX notices this, it will analyse all reachable variables and methods of this class.
