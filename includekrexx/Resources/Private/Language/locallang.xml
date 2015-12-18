@@ -2,7 +2,9 @@
 <T3locallang>
   <data type="array">
     <languageKey index="default" type="array">
-      <label index="be.krexx.modulname">kreXX Debugger</label>
+      <label index="mlang_tabs_tab">kreXX Debugger</label>
+      <label index="mlang_labels_tabdescr">kreXX is a php debugger with a fatal error handler. It displays debug information about objects and variables in it's own draggable output.</label>
+
       <!-- General stuff for the configuration file -->
       <label index="frontend">Frontend</label>
       <label index="file">File</label>

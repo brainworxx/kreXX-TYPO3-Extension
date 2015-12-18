@@ -51,7 +51,7 @@ if (TYPO3_MODE === 'BE') {
       array(
         'access' => 'user,group',
         'icon' => 'EXT:includekrexx/ext_icon.gif',
-        'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml:be.krexx.modulname'
+        'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml'
       )
     );
   }
@@ -69,7 +69,7 @@ if (TYPO3_MODE === 'BE') {
       array(
         'access' => 'user,group',
         'icon' => 'EXT:includekrexx/ext_icon.gif',
-        'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml:be.krexx.modulname'
+        'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml'
       )
     );
   }
