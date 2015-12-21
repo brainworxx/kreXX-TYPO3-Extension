@@ -59,6 +59,10 @@
    */
   krexx.onDocumentReady = function () {
 
+    // Get viewport height to set kreXX data payload to max 75% for debug.
+    // The payload for the fatal error handler is set to the remaining space.
+    krexx.setPayloadMaxHeight();
+
     // Initialize the draggable.
     kdt.draXX('.kwrapper',  '.kheadnote');
 
@@ -91,9 +95,6 @@
      * @event click
      */
     kdt.addEvent('.kwrapper .kgencode', 'click', krexx.generateCode);
-
-    // Get viewport height to set kreXX data payload to max 75%
-    krexx.setPayloadMaxHeight();
 
     /**
      * Register krexx close button function.
@@ -211,10 +212,16 @@
       // Register the events on the new element.
       newEl.addEventListener('click', krexx.toggle);
       newEl.addEventListener('click', krexx.setAdditionalData);
-      newEl.querySelector('.kgencode').addEventListener('click', krexx.generateCode);
+
+      // The code generation may not be possible here, so we need to check this.
+      var kgencode = newEl.querySelector('.kgencode');
+      if (kgencode !== null) {
+        kgencode.addEventListener('click', krexx.generateCode);
+      }
+
       newEl.querySelector('.kcollapse-me').addEventListener('click', krexx.collapse);
 
-      // Register the toggel function.
+      // Register the toggle function.
       var newExpand = newEl.nextElementSibling.querySelectorAll('.kexpand');
       for (i = 0; i < newExpand.length; i++) {
         newExpand[i].addEventListener('click', krexx.toggle);
@@ -666,10 +673,27 @@
   krexx.setPayloadMaxHeight = function () {
     // Get the height.
     var height = Math.round(Math.min(document.documentElement.clientHeight, window.innerHeight || 0) * 0.70);
+    var elements;
+    var i;
 
     if (height > 350) {
-      var elements = document.querySelectorAll('.krela-wrapper .kpayload');
-      for (var i = 0; i < elements.length; i++) {
+      // For the debug display
+      elements = document.querySelectorAll('.krela-wrapper .kpayload');
+      for (i = 0; i < elements.length; i++) {
+        elements[i].style.maxHeight = height + 'px';
+      }
+    }
+
+    // For the fatal error handler.
+    elements = document.querySelectorAll('.kfatalwrapper-outer .kpayload');
+    var header = document.querySelector('.kfatalwrapper-outer ul.knode.kfirst').offsetHeight;
+    var footer = document.querySelector('.kfatalwrapper-outer .kinfo-wrapper').offsetHeight;
+    var handler = document.querySelector('.kfatalwrapper-outer').offsetHeight;
+    // This sets the max payload height to the remaining height of the window,
+    // sending the footer straight to the bottom of the viewport.
+    height = handler - header - footer - 17;
+    if (height > 350) {
+      for (i = 0; i < elements.length; i++) {
         elements[i].style.maxHeight = height + 'px';
       }
     }
@@ -699,9 +723,8 @@
     kdt.addClass([this], 'kcurrent-additional');
 
     // Load the Json.
-
     var json = kdt.getDataset(this, 'addjson');
-    json = JSON.parse(json);
+    json = kdt.parseJson(json);
 
     if (typeof json === 'object') {
       // We've got data!
@@ -722,6 +745,10 @@
     // Meh, IE9 does not allow me to edit the contents of a table. I have to
     // redraw the whole thing.  :-(
     body.parentNode.parentNode.innerHTML = html;
+
+    // Since the additional data table might now be larger or smaller than,
+    // we need to recalculate the height of the payload.
+    krexx.setPayloadMaxHeight();
   };
 
   /**

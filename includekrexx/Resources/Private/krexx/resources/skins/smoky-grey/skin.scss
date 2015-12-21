@@ -805,6 +805,7 @@ $fontLight: lighter 10px tahoma, verdana;
     top: 0;
     //margin: 10px 40px 40px auto;
     background-color: $grey;
+
     .kfatal-headnote {
       font: $fontStandard;
       background-color: $red;
@@ -878,6 +879,7 @@ $fontLight: lighter 10px tahoma, verdana;
         }
       }
     }
+
     .kpreview {
       padding: 15px 0;
     }
@@ -898,10 +900,6 @@ $fontLight: lighter 10px tahoma, verdana;
       }
     }
 
-    .knode.kpayload {
-      max-height: none;
-      overflow-y: auto;
-    }
   }
 
 }

@@ -205,7 +205,13 @@
       this.parentNode.insertBefore(newEl, this.nextSibling);
       // Register the events on the new element.
       newEl.addEventListener('click', krexx.toggle);
-      newEl.querySelector('.kgencode').addEventListener('click', krexx.generateCode);
+
+      // The code generation may not be possible here, so we need to check this.
+      var kgencode = newEl.querySelector('.kgencode');
+      if (kgencode !== null) {
+        kgencode.addEventListener('click', krexx.generateCode);
+      }
+
       newEl.querySelector('.kcollapse-me').addEventListener('click', krexx.collapse);
 
       // Register the toggel function.
@@ -290,8 +296,6 @@
       // Reset the button, since we are un-collapsing nodes here.
       kdt.removeClass('.kcollapsed', 'kcollapsed');
     }
-
-
   };
 
   /**

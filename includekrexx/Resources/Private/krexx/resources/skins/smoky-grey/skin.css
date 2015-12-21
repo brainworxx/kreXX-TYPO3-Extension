@@ -657,8 +657,5 @@
       .kfatalwrapper-outer .kwrapper .kfatal-message .kerror-path {
         color: #ffffff;
         font-weight: bold; }
-    .kfatalwrapper-outer .kwrapper .knode.kpayload {
-      max-height: none;
-      overflow-y: auto; }
 
 /*# sourceMappingURL=skin.css.map */

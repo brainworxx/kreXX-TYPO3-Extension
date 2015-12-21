@@ -479,6 +479,25 @@
     alert('All local configuration have been reset.\n\nPlease reload the page to use the these settings.');
   };
 
+  /**
+   * Wrapper to parse a json, without the danger of an error.
+   *
+   * @param string
+   * @returns {*}
+   */
+  kdt.parseJson = function (string) {
+    var result;
+    try {
+      result = JSON.parse(string);
+    } catch (error) {
+      // No json, no data!
+      return false;
+    }
+    // Return the parsed result.
+    return result;
+
+  };
+
   window.kreXXdomTools = kdt;
 
 })();
