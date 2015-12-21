@@ -686,17 +686,20 @@
 
     // For the fatal error handler.
     elements = document.querySelectorAll('.kfatalwrapper-outer .kpayload');
-    var header = document.querySelector('.kfatalwrapper-outer ul.knode.kfirst').offsetHeight;
-    var footer = document.querySelector('.kfatalwrapper-outer .kinfo-wrapper').offsetHeight;
-    var handler = document.querySelector('.kfatalwrapper-outer').offsetHeight;
-    // This sets the max payload height to the remaining height of the window,
-    // sending the footer straight to the bottom of the viewport.
-    height = handler - header - footer - 17;
-    if (height > 350) {
-      for (i = 0; i < elements.length; i++) {
-        elements[i].style.maxHeight = height + 'px';
+    if (elements.length > 0) {
+      var header = document.querySelector('.kfatalwrapper-outer ul.knode.kfirst').offsetHeight;
+      var footer = document.querySelector('.kfatalwrapper-outer .kinfo-wrapper').offsetHeight;
+      var handler = document.querySelector('.kfatalwrapper-outer').offsetHeight;
+      // This sets the max payload height to the remaining height of the window,
+      // sending the footer straight to the bottom of the viewport.
+      height = handler - header - footer - 17;
+      if (height > 350) {
+        for (i = 0; i < elements.length; i++) {
+          elements[i].style.maxHeight = height + 'px';
+        }
       }
     }
+
   };
 
   /**
