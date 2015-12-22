@@ -19,8 +19,8 @@
 - Bugfix / Change: When kreXX encounters an emergency break, the
   frontend configuration will be accessible, giving the dev the
   opportunity to change the settings.
-- Bugfix: The draggable function (draXX) now takes into account, that
-  the very first element may have a margin-top.
+- Bugfix: Fixed an issue with the benchmarking, when the dev has
+  forgotten to start the timer.
 
 1.3.6
 - Added scope analysis. Protected an private variables are treated

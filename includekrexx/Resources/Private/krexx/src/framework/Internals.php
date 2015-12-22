@@ -92,14 +92,16 @@ class Internals {
    * @author gomodo at free dot fr
    */
   public static function miniBenchTo(array $arg_t) {
-    $tttime = round((end($arg_t) - $arg_t['start']) * 1000, 4);
+    // Get the very first key.
+    $start = key($arg_t);
+    $tttime = round((end($arg_t) - $arg_t[$start]) * 1000, 4);
     $ar_aff['url'] = Toolbox::getCurrentUrl();
     $ar_aff['total_time'] = $tttime;
-    $prv_cle = 'start';
-    $prv_val = $arg_t['start'];
+    $prv_cle = $start;
+    $prv_val = $arg_t[$start];
 
     foreach ($arg_t as $cle => $val) {
-      if ($cle != 'start') {
+      if ($cle != $start) {
         // Calculate the time.
         $prcnt_t = round(((round(($val - $prv_val) * 1000, 4) / $tttime) * 100), 1);
         $ar_aff[$prv_cle . '->' . $cle] = $prcnt_t . '%';
