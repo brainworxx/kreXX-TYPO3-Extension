@@ -503,13 +503,18 @@
 
     container.push(document.querySelector('.kfatalwrapper-outer'));
     if (container.length > 0) {
+      // We need to find out in which direction we must go.
+      // We also must determine the speed we want to travel.
       var step;
       var destination = el.getBoundingClientRect().top - container[0].getBoundingClientRect().top + container[0].scrollTop - 50;
+      var diff = Math.abs(container[0].scrollTop - destination);
       if (container[0].scrollTop < destination) {
-        step = 10;
+        // Forward.
+        step = Math.round(diff / 12);
       }
       else {
-        step = -10;
+        // Backward.
+        step = Math.round(diff / 12) * -1;
       }
 
       // We stop scrolling, since we have a new target;
@@ -520,6 +525,8 @@
         container[0].scrollTop +=  step;
         if (Math.abs(container[0].scrollTop - destination) <= Math.abs(step) || container[0].scrollTop == lastValue) {
           // We are here now, the next step would take us too far.
+          // So we jump there right now and then clear the interval.
+          container[0].scrollTop = destination;
           clearInterval(interval);
         }
         lastValue = container[0].scrollTop;
