@@ -66,7 +66,7 @@ class Help {
     'analyseProtectedMethods' => 'Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
     'analysePrivateMethods' => 'Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
     '_getProperties' => 'Typo3 debug function.<br />It takes the propertioes directly from the model, ignoring the getter function.<br />If the getter function is used to compute this value, the values from this function may be inaccurate.',
-    'php7' => "It looks like you are using PHP7.\r\nSadly our fatal error handler does not work with this version, because register_tick_function() is not reliable and may cause a connection reset with the server.\r\nIf you have any suggestion how to fix this or have any further information about it, please contact us: tobias.guelzow@brainworxx.de.",
+    'php7' => "It looks like you are using PHP7.\r\nFatal errors got removed in PHP7, meaning that they are now catchable like normal errors.",
     'php7yellow' => 'The fatal error handler does not work with PHP7!',
   );
 
