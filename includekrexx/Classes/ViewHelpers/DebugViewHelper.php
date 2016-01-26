@@ -37,6 +37,11 @@
 if (!class_exists('Tx_Fluid_Core_ViewHelper_AbstractViewHelper')) {
   abstract class Tx_Fluid_Core_ViewHelper_AbstractViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {}
 }
+// For some reasons, Typo3 7.6 manages to load this file multiple times, causing
+// a fatal.
+if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
+  return;
+}
 
 /**
  * Class Tx_Includekrexx_ViewHelpers_DebugViewHelper
