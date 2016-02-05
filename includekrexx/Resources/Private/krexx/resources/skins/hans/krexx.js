@@ -168,6 +168,13 @@
      */
     kdt.addEvent('.kwrapper .kgencode', 'click', krexx.generateCode);
 
+    /**
+     * Prevents the click-event-bubbling on the generated code.
+     *
+     * @event click
+     */
+    kdt.addEvent('.kcodedisplay', 'click', kdt.preventBubble);
+
     // Disable form-buttons in case a logfile is opened local.
     if (window.location.protocol === 'file:') {
       krexx.disableForms();
@@ -233,6 +240,15 @@
       var recursions = newEl.nextElementSibling.querySelectorAll('.kwrapper .kcopyFrom');
        for (i = 0; i < recursions.length; i++) {
           recursions[i].addEventListener('click', krexx.copyFrom);
+      }
+      // Prevent the event bubbling on the code generation display.
+      var codedisplay = newEl.nextElementSibling.querySelectorAll('.kwrapper .kcodedisplay');
+      for (i = 0; i < codedisplay.length; i++) {
+        codedisplay[i].addEventListener('click', kdt.preventBubble);
+      }
+      codedisplay = newEl.querySelectorAll('.kwrapper .kcodedisplay');
+      for (i = 0; i < codedisplay.length; i++) {
+        codedisplay[i].addEventListener('click', kdt.preventBubble);
       }
 
       // Change the key of the just cloned EL to the one from the recursion.
@@ -325,7 +341,7 @@
     var searchtext = this.parentNode.querySelector('.ksearchfield').value;
 
     // we only search for more than 3 chars.
-    if (searchtext.length > 3) {
+    if (searchtext.length > 2) {
       var instance = kdt.getDataset(this, 'instance') ;
       var direction = kdt.getDataset(this, 'direction');
       var payload =  document.querySelector('#' + instance + ' .kbg-wrapper');

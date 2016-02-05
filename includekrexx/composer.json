@@ -16,6 +16,11 @@
       "homepage": "http://www.brainworxx.de/"
     }
   ],
+  "autoload": {
+        "psr-4": {
+            "Brainworxx\\Includekrexx\\": "Classes/"
+        }
+    },
   "support": {
     "issues": "http://sourceforge.net/p/krexx/bugs"
   },

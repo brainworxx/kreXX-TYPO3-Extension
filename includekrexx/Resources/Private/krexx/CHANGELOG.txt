@@ -5,6 +5,7 @@
 - Added the SkinRender class to the skin directory, so every skin can
   do some special stuff.
 - Added rudimentary translation support for the messaging class.
+- Added minimized js libraries for smaller frontend output.
 - Change: Cleaned up rendering process.
 - Change: Removed the useless array nest from the traversable info, to
   produce a better readability.
@@ -21,6 +22,7 @@
   opportunity to change the settings.
 - Bugfix: Fixed an issue with the benchmarking, when the dev has
   forgotten to start the timer.
+- Bugfix: A click on the generated php code does not bubble anymore.
 
 1.3.6
 - Added scope analysis. Protected an private variables are treated

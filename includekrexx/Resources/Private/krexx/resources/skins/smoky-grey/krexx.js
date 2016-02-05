@@ -170,6 +170,13 @@
      */
     kdt.addEvent('.kfatalwrapper-outer', 'scroll', krexx.checkSeachInViewport);
 
+    /**
+     * Prevents the click-event-bubbling on the generated code.
+     *
+     * @event click
+     */
+    kdt.addEvent('.kcodedisplay', 'click', kdt.preventBubble);
+
     // Expand the configuration info, we have enough space here!
     krexx.expandConfig();
 
@@ -240,12 +247,21 @@
       // Register the additional json data display function
       var additional = newEl.nextElementSibling.querySelectorAll('.kwrapper .kel');
       for (i = 0; i < additional.length; i++) {
-          additional[i].addEventListener('click', krexx.setAdditionalData);
+        additional[i].addEventListener('click', krexx.setAdditionalData);
       }
       // Register the recursion resolving (this function) on possible recursions
       var recursions = newEl.nextElementSibling.querySelectorAll('.kwrapper .kcopyFrom');
-       for (i = 0; i < recursions.length; i++) {
-          recursions[i].addEventListener('click', krexx.copyFrom);
+      for (i = 0; i < recursions.length; i++) {
+        recursions[i].addEventListener('click', krexx.copyFrom);
+      }
+      // Prevent the event bubbling on the code generation display.
+      var codedisplay = newEl.nextElementSibling.querySelectorAll('.kwrapper .kcodedisplay');
+      for (i = 0; i < codedisplay.length; i++) {
+        codedisplay[i].addEventListener('click', kdt.preventBubble);
+      }
+      codedisplay = newEl.querySelectorAll('.kwrapper .kcodedisplay');
+      for (i = 0; i < codedisplay.length; i++) {
+        codedisplay[i].addEventListener('click', kdt.preventBubble);
       }
 
       // Change the key of the just cloned EL to the one from the recursion.
@@ -341,7 +357,7 @@
     var searchtext = this.parentNode.querySelector('.ksearchfield').value;
 
     // we only search for more than 3 chars.
-    if (searchtext.length > 3) {
+    if (searchtext.length > 2) {
       var instance = kdt.getDataset(this, 'instance') ;
       var direction = kdt.getDataset(this, 'direction');
       var payload =  document.querySelector('#' + instance + ' .kpayload:not(.khidden)');

@@ -338,7 +338,7 @@ class Krexx {
     // As of PHP Version 7.0.2, the register_tick_function() causesPHP to crash,
     // with a connection reset! We need to check the version to avoid this, and
     // then tell the dev what happened.
-    if (version_compare(phpversion(), '7.0.0', '>')) {
+    if (version_compare(phpversion(), '7.0.0', '>=')) {
       // Too high! 420 Method Failure :-(
       View\Messages::addMessage(Brainworxx\Krexx\View\Help::getHelp('php7yellow'));
       krexx(Brainworxx\Krexx\View\Help::getHelp('php7'));

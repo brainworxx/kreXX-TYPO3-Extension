@@ -306,8 +306,6 @@
      */
     function startDraxx (event) {
 
-      var additionalOffset = parseInt(window.getComputedStyle(document.querySelector('body :first-child')).marginTop, 10);
-
       // The selector has an ID, we only have one of them.
       var elContent = kdt.getParents(this, selector)[0];
       var offset = getElementOffset(elContent);
@@ -354,7 +352,7 @@
         event.stopPropagation();
 
         var left = event.pageX + offSetX;
-        var top = event.pageY + offSetY - additionalOffset;
+        var top = event.pageY + offSetY;
 
         elContent.style.left = left + "px";
         elContent.style.top = top + "px";
@@ -496,6 +494,15 @@
     // Return the parsed result.
     return result;
 
+  };
+
+  /**
+   * Prevents the bubbeling of en event, nothing more.
+   *
+   * @param event event
+   */
+  kdt.preventBubble = function (event) {
+    event.stopPropagation();
   };
 
   window.kreXXdomTools = kdt;
