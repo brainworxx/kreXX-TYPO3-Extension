@@ -68,7 +68,7 @@ if (TYPO3_MODE === 'BE') {
       array('Index' => 'editConfig,editFeConfig,usageHelp,configHelp,saveConfig,saveFeConfig,editLocalBrowserSettings'),
       array(
         'access' => 'user,group',
-        'icon' => 'EXT:includekrexx/ext_icon.gif',
+        'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
         'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml'
       )
     );
