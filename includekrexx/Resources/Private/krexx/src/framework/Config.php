@@ -16,7 +16,7 @@
  * @license http://opensource.org/licenses/LGPL-2.1
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2015 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -222,7 +222,7 @@ class Config {
    *
    * @var string
    */
-  public static $version = '1.4.0 dev';
+  public static $version = '1.4.0';
 
   /**
    * Get\Set kreXX state: whether it is enabled or disabled.

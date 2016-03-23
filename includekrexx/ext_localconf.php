@@ -16,7 +16,7 @@
  * @license http://opensource.org/licenses/LGPL-2.1
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2015 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -54,8 +54,16 @@ if (class_exists('Brainworxx\Krexx\Framework\Config')) {
   \Brainworxx\Krexx\Framework\Config::setPathToIni(PATH_site . 'uploads/tx_includekrexx/Krexx.ini');
 }
 
-// Typo3 7.4 does not autoload our controller anymore, so we do this here.
+// Typo3 7.3 / 7.4 does not autoload our classes anymore, so we do this here.
 if (!class_exists('Tx_Includekrexx_Controller_IndexController') && (int)TYPO3_version > 6) {
   include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/IndexController.php'));
+}
+if (!class_exists('Tx_Includekrexx_ViewHelpers_MessagesViewHelper') && (int)TYPO3_version > 6) {
+  include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/MessagesViewHelper.php'));
+}
+if (!class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper') && (int)TYPO3_version > 6) {
   include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/DebugViewHelper.php'));
+}
+if (!class_exists('\\Tx_Includekrexx_ViewHelpers\\MessagesViewHelper') && (int)TYPO3_version >= 8) {
+  include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/MessagesViewHelper8.php'));
 }

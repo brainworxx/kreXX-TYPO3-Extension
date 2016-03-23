@@ -1,3 +1,4 @@
+{namespace krexx=Tx_Includekrexx_ViewHelpers}
 <f:be.container>
   <style type="text/css">
     /* since addJsFile and addCssFile got removed in 7.0, I have to resort to adding stuff inline! */
@@ -195,7 +196,11 @@
     </div>
     <div id="typo3-docbody">
       <div id="typo3-inner-docbody">
-        <f:flashMessages />
+        <!--
+          Our "own" version of the FlashMessagesViewhelper, to provide backend
+          messages from 4.5 to 8.0
+        -->
+        <krexx:messages/>
         <f:render section="main"/>
       </div>
     </div>
