@@ -61,7 +61,11 @@
     background-color: transparent;
     color: inherit;
     border: none;
-    text-align: left; }
+    text-align: left;
+    line-height: normal;
+    float: none; }
+  .kwrapper small, .kfatalwrapper-outer small {
+    line-height: normal; }
   .kwrapper div, .kwrapper ul, .kwrapper hr, .kwrapper option, .kfatalwrapper-outer div, .kfatalwrapper-outer ul, .kfatalwrapper-outer hr, .kfatalwrapper-outer option {
     display: block; }
   .kwrapper span, .kwrapper em, .kwrapper a, .kwrapper input, .kwrapper strong, .kfatalwrapper-outer span, .kfatalwrapper-outer em, .kfatalwrapper-outer a, .kfatalwrapper-outer input, .kfatalwrapper-outer strong {

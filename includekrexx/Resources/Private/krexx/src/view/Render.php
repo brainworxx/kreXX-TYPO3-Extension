@@ -221,6 +221,7 @@ class Render extends Help {
     $template = str_replace('{cssJs}', $css_js, $template);
     $template = str_replace('{KrexxId}', Analysis\Hive::getMarker(), $template);
     $template = str_replace('{search}', self::renderSearch(), $template);
+    $template = str_replace('{messages}', Messages::outputMessages(), $template);
 
     return $template;
   }

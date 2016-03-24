@@ -756,6 +756,16 @@ class Config {
             View\Messages::addMessage('Wrong configuration for: "errorHandling => registerAutomatically"! Expected boolean. The configured setting was not applied!');
             View\Messages::addKey('errorHandling.registerAutomatically.error');
           }
+          // We also expect the php version to be lower than 7.
+          if ($result) {
+            $result = self::evalPhp();
+            if (!$result) {
+              View\Messages::addMessage('Wrong configuration for: "errorHandling => registerAutomatically"! Fatal errors got removed in PHP 7. The handler will not work here!');
+              View\Messages::addKey('errorHandling.registerAutomatically.php7');
+            }
+          }
+
+
           break;
 
         case "backtraceAnalysis":
@@ -939,6 +949,20 @@ class Config {
     }
     else {
       return FALSE;
+    }
+  }
+
+  /**
+   * Checks if the php veriosn is lower then 7.0.0.
+   *
+   * @return bool
+   */
+  protected static function evalPhp() {
+    if (version_compare(phpversion(), '7.0.0', '>=')) {
+      return FALSE;
+    }
+    else {
+      return TRUE;
     }
   }
 

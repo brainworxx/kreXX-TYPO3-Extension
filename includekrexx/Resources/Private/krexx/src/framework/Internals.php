@@ -208,7 +208,6 @@ class Internals {
     self::checkEmergencyBreak(FALSE);
 
     self::$shutdownHandler->addChunkString(View\Output::outputHeader($headline, $ignore_local_settings));
-    self::$shutdownHandler->addChunkString(View\Messages::outputMessages());
     // We will not send the analysis if we have encountered an emergency break.
     if (!$emergency) {
       self::$shutdownHandler->addChunkString($analysis);
@@ -273,7 +272,6 @@ class Internals {
     self::checkEmergencyBreak(FALSE);
 
     self::$shutdownHandler->addChunkString(View\Output::outputHeader($headline));
-    self::$shutdownHandler->addChunkString(View\Messages::outputMessages());
     // We will not send the analysis if we have encountered an emergency break.
     if (!$emergency) {
       self::$shutdownHandler->addChunkString($analysis);

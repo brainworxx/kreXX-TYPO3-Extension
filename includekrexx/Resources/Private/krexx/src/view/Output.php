@@ -47,7 +47,6 @@ class Output {
 
   public static $headerSend = FALSE;
 
-
   /**
    * Outputs a string, either to the browser or file.
    *
@@ -69,7 +68,7 @@ class Output {
     }
   }
 
-    /**
+  /**
    * Simply outputs the Header of kreXX.
    *
    * @param string $headline
@@ -101,7 +100,6 @@ class Output {
       return SkinRender::renderHeader('', $headline, '');
     }
   }
-
 
   /**
    * Simply renders the footer and output current settings.

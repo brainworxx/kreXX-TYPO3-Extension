@@ -72,8 +72,11 @@ div.kwrapper {
   color: inherit;
   border: none;
   text-align: left;
+  line-height: normal;
 }
-
+.kwrapper small {
+  line-height: normal;
+}
 
 .kwrapper div,
 .kwrapper ul,

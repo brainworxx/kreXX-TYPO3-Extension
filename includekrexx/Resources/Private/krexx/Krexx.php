@@ -316,7 +316,6 @@ class Krexx {
     View\Render::$KrexxCount++;
     $footer = View\Output::outputFooter($caller, TRUE);
     Framework\Internals::$shutdownHandler->addChunkString(View\Output::outputHeader('Edit local settings', TRUE), TRUE);
-    Framework\Internals::$shutdownHandler->addChunkString(View\Messages::outputMessages(), TRUE);
     Framework\Internals::$shutdownHandler->addChunkString($footer, TRUE);
 
     // Cleanup the hive.
