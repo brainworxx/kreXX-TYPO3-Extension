@@ -24,8 +24,8 @@ You do not have to edit this file manually. we have provided a backend editor fo
 Configuration Editor
 --------------------
 
-.. figure:: ../Images/Config/t3_backend.jpg
-	:width: 612px
+.. figure:: ../Images/Config/t3_backend.png
+	:width: 678px
 	:alt: Typo3 backend editor for the kreXX settings
 
 	Settings editor in the Typo3 backend

@@ -25,8 +25,8 @@ Hide-Everything-Else
 |
 |
 
-.. figure:: ../Images/LittleHelpers/open_datamap.jpg
-	:width: 777px
+.. figure:: ../Images/LittleHelpers/open_datamap.png
+	:width: 896px
 	:alt: Incomprehensible output with a lot of data
 
 	Incomprehensible output with a lot of data. A simple click on the arrow symbol hides the rest of the output
@@ -34,8 +34,8 @@ Hide-Everything-Else
 |
 |
 
-.. figure:: ../Images/LittleHelpers/collapsed_datamap.jpg
-	:width: 777px
+.. figure:: ../Images/LittleHelpers/collapsed_datamap.png
+	:width: 785px
 	:alt: Better readable output, because unnecessary data is now hidden.
 
 	Better readable output, because unnecessary data is now hidden.
@@ -53,8 +53,8 @@ Automatic code generation
 |
 |
 
-.. figure:: ../Images/LittleHelpers/codegen.jpg
-	:width: 777px
+.. figure:: ../Images/LittleHelpers/codegen.png
+	:width: 978px
 	:alt: Code automatically generated via kreXX
 
 	Code automatically generated

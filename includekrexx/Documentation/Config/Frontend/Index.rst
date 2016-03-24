@@ -26,6 +26,6 @@ For every control, you can set 3 different settings:
 | none    | kreXX will not display this control or it's value. Leftover settings will be ignored.                                         |
 +---------+-------------------------------------------------------------------------------------------------------------------------------+
 
-.. figure:: ../../Images/Frontend/t3_backend2.jpg
-	:width: 528px
-	:alt: Local cookie settings editor in the frontend
+.. figure:: ../../Images/Frontend/t3_backend2.png
+	:width: 604px
+	:alt: Here you can change what options are available in the frontend.

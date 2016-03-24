@@ -12,6 +12,9 @@
 Fatal Error Handler
 ===================
 
+.. important::
+  Fatal errors got removed in PHP7 and became catchable. Typo3 ist very well abe to handle them, so you do not have to resort kreXX for additional data.
+
 | Normally, when a fatal error happens, php will tell you the name of the error , and filename and the line number.
 | When you look at the amount of data available from the typo3 error handler, you will clearly see that this is a little bit, ummm discreet.
 |
@@ -26,7 +29,7 @@ kreXX will offer you the following information:
 |
 |
 
-.. figure:: ../Images/FatalError/fatal.jpg
+.. figure:: ../Images/FatalError/fatal.png
 	:width: 959px
 	:alt: kreXX fatal error handler
 
@@ -62,7 +65,7 @@ Activation in the settings
 |
 |
 
-.. figure:: ../Images/FatalError/activate_local.jpg
+.. figure:: ../Images/FatalError/activate_local.png
 	:width: 959px
 	:alt: kreXX fatal error handler
 
@@ -73,7 +76,7 @@ Activation in the settings
 |
 |
 
-.. figure:: ../Images/FatalError/activate_global.jpg
+.. figure:: ../Images/FatalError/activate_global.png
 	:width: 959px
 	:alt: kreXX fatal error handler
 

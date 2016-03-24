@@ -33,8 +33,8 @@ Key features:
 	- Code generation to reach the displayed values, if possible.
 
 
-.. figure:: ../Images/protected_properties.jpg
-	:width: 770px
+.. figure:: ../Images/protected_properties.png
+	:width: 672px
 	:alt: Analysis of an extbase query result
 
 	Analysis of an extbase query result

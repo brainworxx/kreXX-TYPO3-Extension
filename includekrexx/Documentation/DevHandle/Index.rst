@@ -18,8 +18,8 @@ Setting up a local opening function
 |
 |
 
-.. figure:: ../Images/DevHandle/frontend_configuration_2.jpg
-	:width: 772px
+.. figure:: ../Images/DevHandle/frontend_configuration_2.png
+	:width: 849px
 	:alt: Setting up a Developer Handle to use as a local opening function
 
 	Setting up a Developer Handle to use as a local opening function
