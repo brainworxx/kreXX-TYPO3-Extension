@@ -48,6 +48,7 @@
       <label index="save.fail.title">The settings were NOT saved.</label>
       <label index="save.success.title">The settings were saved.</label>
       <label index="save.success.text"><![CDATA[The settings were saved to:<br />%1$s]]></label>
+      <label index="general.error.title">General error</label>
 
       <!--
         Error messages from the krexx lib
@@ -76,6 +77,9 @@
       <label index="render.memoryLeft.error">Wrong configuration for: "render => memoryLeft"! Expected integer. The configured setting was not applied!</label>
       <label index="render.maxRuntime.error">Wrong configuration for: "render => maxRuntime"! Expected integer. The configured setting was not applied!</label>
       <label index="render.maxRuntime.error.maximum">Wrong configuration for: "render => maxRuntime"! Maximum for this server is: %1$s.  The configured setting was not applied!</label>
+      <label index="protected.folder.log">Logfolder %1$s is not writable !</label>
+      <label index="protected.folder.chunk">Chunksfolder %1$s is not writable!. This will increase the memory usage of kreXX significantly!</label>
+
 
       <!-- Fluid layout keys from the template files -->
       <label index="factory.settings">Use factory settings</label>

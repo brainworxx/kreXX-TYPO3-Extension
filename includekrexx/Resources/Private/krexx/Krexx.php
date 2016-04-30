@@ -144,11 +144,13 @@ class Krexx {
     // If not, give feedback!
     if (!is_writeable($krexxdir . 'chunks' . DIRECTORY_SEPARATOR)) {
       View\Messages::addMessage('Chunksfolder ' . $krexxdir . 'chunks' . DIRECTORY_SEPARATOR . ' is not writable!. This will increase the memory usage of kreXX significantly!', 'critical');
+      View\Messages::addKey('protected.folder.chunk', array($krexxdir . 'chunks' . DIRECTORY_SEPARATOR ));
       // We can work without chunks, but this will require much more memory!
       Brainworxx\Krexx\Framework\Chunks::setUseChunks(FALSE);
     }
-    if (!is_writeable($krexxdir . 'log' . DIRECTORY_SEPARATOR)) {
-      View\Messages::addMessage('Logfolder ' . $krexxdir . 'log' . DIRECTORY_SEPARATOR . ' is not writable !', 'critical');
+    if (!is_writeable($krexxdir . Framework\Config::getConfigValue('logging', 'folder') . DIRECTORY_SEPARATOR)) {
+      View\Messages::addMessage('Logfolder ' . $krexxdir . Framework\Config::getConfigValue('logging', 'folder') . DIRECTORY_SEPARATOR . ' is not writable !', 'critical');
+      View\Messages::addKey('protected.folder.log', array($krexxdir . Framework\Config::getConfigValue('logging', 'folder') . DIRECTORY_SEPARATOR));
     }
     // At this point, we won't inform the user right away. The error message
     // will pop up, when kreXX is actually displayed, no need to bother the

@@ -101,18 +101,25 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      * Simply display the help text from the fluid template.
      */
     public function usageHelpAction() {
+      // Has kreXX something to say? Maybe a writeprotected logfolder?
+      $this->addMessage($this->getTranslatedMessages(), $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
     }
 
     /**
      * Simply display the help text from the fluid template.
      */
     public function configHelpAction() {
+      // Has kreXX something to say? Maybe a writeprotected logfolder?
+      $this->addMessage($this->getTranslatedMessages(), $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
     }
 
     /**
      * Simply display the kreXX local browser configuration.
      */
     public function editLocalBrowserSettingsAction() {
+      // Has kreXX something to say? Maybe a writeprotected logfolder?
+      $this->addMessage($this->getTranslatedMessages(), $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+
       if (!Config::isEnabled(NULL, TRUE)) {
         // kreXX will not display anything, if it was disabled via:
         // - krexx::disable();
@@ -130,6 +137,9 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      * Shows the configuration for the FE editing.
      */
     public function editFeConfigAction() {
+      // Has kreXX something to say? Maybe a writeprotected logfolder?
+      $this->addMessage($this->getTranslatedMessages(), $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+
       $data = array();
       $value = array();
       // Setting possible form values.
@@ -181,6 +191,8 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      * Shows the edit config screen.
      */
     public function editConfigAction() {
+      // Has kreXX something to say? Maybe a writeprotected logfolder?
+      $this->addMessage($this->getTranslatedMessages(), $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
 
       $data = array();
       $value = array();
@@ -326,6 +338,9 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       }
       // Something went wrong, we need to tell the user.
       if (!$all_ok) {
+        // Got to remove some messages. We we will not queue them now.
+        Messages::removeKey('protected.folder.chunk');
+        Messages::removeKey('protected.folder.log');
         $this->addMessage($this->getTranslatedMessages(), $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
       }
       else {
@@ -417,6 +432,9 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
 
         // Something went wrong, we need to tell the user.
         if (!$all_ok) {
+          // Got to remove some messages. We we will not queue them now.
+          Messages::removeKey('protected.folder.chunk');
+          Messages::removeKey('protected.folder.log');
           $this->addMessage($this->getTranslatedMessages(), $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
         }
         else {

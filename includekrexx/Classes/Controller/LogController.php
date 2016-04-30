@@ -34,7 +34,6 @@
 
 use \Brainworxx\Krexx\Framework\Config;
 use \Brainworxx\Krexx\View\Messages;
-use \Brainworxx\Krexx\View\Render;
 
 
 // The mainproblem with 7.0 is, that compatibility6 may or may not be installed.
@@ -88,10 +87,6 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
         // Version 4.5 until 6.2
         $result = Tx_Extbase_Utility_Localization::translate($key, 'includekrexx', $args);
       }
-      // At least give back the key, and not a NULL.
-//      if (is_null($result)) {
-//        $result = $key;
-//      }
 
       return $result;
     }
@@ -139,6 +134,10 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
         $file_list[] = $file_info;
       }
 
+      // 4. Has kreXX something to say? Maybe a writeprotected logfolder?
+      $this->addMessage($this->getTranslatedMessages(), $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+
+      // 5. Assign the flile list.
       $this->view->assign('files', $file_list);
     }
 
@@ -224,6 +223,11 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
       }
     }
 
+    /**
+     * Dispatches a file, using output buffering.
+     *
+     * @param string $path
+     */
     protected function dispatchFile($path) {
       $size = 1024 * 1024;
       $res = fopen($path, "rb");

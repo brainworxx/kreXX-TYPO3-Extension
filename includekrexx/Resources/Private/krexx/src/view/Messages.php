@@ -77,6 +77,16 @@ class Messages {
   }
 
   /**
+   * Removes a key from the key array.
+   *
+   * @param string $key
+   *   The key we want to remove
+   */
+  public static function removeKey($key) {
+    unset(self::$keys[$key]);
+  }
+
+  /**
    * Getter for the language key array.
    *
    * @return array

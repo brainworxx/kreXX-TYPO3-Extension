@@ -58,6 +58,9 @@ if (class_exists('Brainworxx\Krexx\Framework\Config')) {
 if (!class_exists('Tx_Includekrexx_Controller_IndexController') && (int)TYPO3_version > 6) {
   include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/IndexController.php'));
 }
+if (!class_exists('Tx_Includekrexx_Controller_LogController') && (int)TYPO3_version > 6) {
+  include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/LogController.php'));
+}
 if (!class_exists('Tx_Includekrexx_ViewHelpers_MessagesViewHelper') && (int)TYPO3_version > 6) {
   include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/MessagesViewHelper.php'));
 }

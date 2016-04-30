@@ -1,5 +1,6 @@
 1.4.1
 - Added class constants analysis.
+- Added the possibility to remove message keys from the message class
 - Change: Search is now case-insensitive. This should make searching
   much more easy.
 - Change: Output destination can not be changed anymore via the cookie
@@ -7,6 +8,7 @@
   out.
 - Cleanup: Cleaned up the object analysis as well as the namespace
   usage.
+- Bugfix: Removed hardcoded logfolder path in the bootstrap phase.
 
 1.4.0
 - Added smoky-grey as the new standard skin.
