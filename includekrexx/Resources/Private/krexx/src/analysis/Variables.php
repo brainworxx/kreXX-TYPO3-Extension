@@ -33,13 +33,16 @@
 
 namespace Brainworxx\Krexx\Analysis;
 
-use Brainworxx\Krexx\View;
-use Brainworxx\Krexx\Framework;
+use Brainworxx\Krexx\Analysis\Objects\Objects;
+use Brainworxx\Krexx\Framework\Internals;
+use Brainworxx\Krexx\View\Messages;
+use Brainworxx\Krexx\View\SkinRender;
+use Brainworxx\Krexx\Framework\Config;
 
 /**
  * This class hosts the variable analysis functions.
  *
- * @package Krexx
+ * @package Brainworxx\Krexx\Analysis
  */
 class Variables {
 
@@ -71,8 +74,6 @@ class Variables {
     'eucJP-win',
   );
 
-
-
   /**
    * Dump information about a variable.
    *
@@ -94,9 +95,9 @@ class Variables {
   public Static Function analysisHub(&$data, $name = '', $connector1 = '', $connector2 = '') {
 
     // Check memory and runtime.
-    if (!Framework\Internals::checkEmergencyBreak()) {
+    if (!Internals::checkEmergencyBreak()) {
       // No more took too long, or not enough memory is left.
-      View\Messages::addMessage("Emergency break for large output during analysis process.");
+      Messages::addMessage("Emergency break for large output during analysis process.");
       return '';
     }
 
@@ -110,45 +111,45 @@ class Variables {
     // Object?
     // Closures are analysed separately.
     if (is_object($data) && !is_a($data, '\Closure')) {
-      Framework\Internals::$nestingLevel++;
-      if (Framework\Internals::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
+      Internals::$nestingLevel++;
+      if (Internals::$nestingLevel <= (int) Config::getConfigValue('deep', 'level')) {
         $result = Objects::analyseObject($data, $name, '', $connector1, $connector2);
-        Framework\Internals::$nestingLevel--;
+        Internals::$nestingLevel--;
         return $result;
       }
       else {
-        Framework\Internals::$nestingLevel--;
+        Internals::$nestingLevel--;
         return Variables::analyseString("Object => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $name);
       }
     }
 
     // Closure?
     if (is_object($data) && is_a($data, '\Closure')) {
-      Framework\Internals::$nestingLevel++;
-      if (Framework\Internals::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
+      Internals::$nestingLevel++;
+      if (Internals::$nestingLevel <= (int) Config::getConfigValue('deep', 'level')) {
         if ($connector2 == '] =') {
           $connector2 = ']';
         }
         $result = Objects::analyseClosure($data, $name, '', $connector1, $connector2);
-        Framework\Internals::$nestingLevel--;
+        Internals::$nestingLevel--;
         return $result;
       }
       else {
-        Framework\Internals::$nestingLevel--;
+        Internals::$nestingLevel--;
         return Variables::analyseString("Closure => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $name);
       }
     }
 
     // Array?
     if (is_array($data)) {
-      Framework\Internals::$nestingLevel++;
-      if (Framework\Internals::$nestingLevel <= (int) Framework\Config::getConfigValue('deep', 'level')) {
+      Internals::$nestingLevel++;
+      if (Internals::$nestingLevel <= (int) Config::getConfigValue('deep', 'level')) {
         $result = Variables::analyseArray($data, $name, '', $connector1, $connector2);
-        Framework\Internals::$nestingLevel--;
+        Internals::$nestingLevel--;
         return $result;
       }
       else {
-        Framework\Internals::$nestingLevel--;
+        Internals::$nestingLevel--;
         return Variables::analyseString("Array => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $name);
       }
     }
@@ -207,7 +208,7 @@ class Variables {
 
       // Recursion detection of objects are handled in the hub.
       if (is_array($data) && Hive::isInHive($data)) {
-        return View\Render::renderRecursion();
+        return SkinRender::renderRecursion();
       }
 
       // Remember, that we've already been here.
@@ -216,7 +217,7 @@ class Variables {
       // Keys?
       $keys = array_keys($data);
 
-      $output .= View\Render::renderSingeChildHr();
+      $output .= SkinRender::renderSingeChildHr();
 
       // Iterate through.
       foreach ($keys as $k) {
@@ -236,10 +237,10 @@ class Variables {
 
         $output .= Variables::analysisHub($v, $k, '[', '] =');
       }
-      $output .= View\Render::renderSingeChildHr();
+      $output .= SkinRender::renderSingeChildHr();
       return $output;
     };
-    return View\Render::renderExpandableChild('', '', $analysis, $parameter);
+    return SkinRender::renderExpandableChild('', '', $analysis, $parameter);
   }
 
   /**
@@ -262,7 +263,7 @@ class Variables {
     $json['type'] = 'NULL';
 
     $data = 'NULL';
-    return View\SkinRender::renderSingleChild($data, $name, $data, $additional . 'null', '', $connector1, $connector2, $json);
+    return SkinRender::renderSingleChild($data, $name, $data, $additional . 'null', '', $connector1, $connector2, $json);
   }
 
   /**
@@ -294,7 +295,7 @@ class Variables {
       return Variables::iterateThrough($data);
     };
 
-    return View\SkinRender::renderExpandableChild($name, $additional . 'array', $anon_function, $parameter, count($data) . ' elements', '', '', FALSE, $connector1, $connector2, $json);
+    return SkinRender::renderExpandableChild($name, $additional . 'array', $anon_function, $parameter, count($data) . ' elements', '', '', FALSE, $connector1, $connector2, $json);
   }
 
   /**
@@ -319,7 +320,7 @@ class Variables {
     $json['type'] = 'resource';
 
     $data = get_resource_type($data);
-    return View\SkinRender::renderSingleChild($data, $name, $data, $additional . 'resource', '', $connector1, $connector2, $json);
+    return SkinRender::renderSingleChild($data, $name, $data, $additional . 'resource', '', $connector1, $connector2, $json);
   }
 
   /**
@@ -344,7 +345,7 @@ class Variables {
     $json['type'] = 'boolean';
 
     $data = $data ? 'TRUE' : 'FALSE';
-    return View\SkinRender::renderSingleChild($data, $name, $data, $additional . 'boolean', '', $connector1, $connector2, $json);
+    return SkinRender::renderSingleChild($data, $name, $data, $additional . 'boolean', '', $connector1, $connector2, $json);
   }
 
   /**
@@ -368,7 +369,7 @@ class Variables {
     $json = array();
     $json['type'] = 'integer';
 
-    return View\SkinRender::renderSingleChild($data, $name, $data, $additional . 'integer', '', $connector1, $connector2, $json);
+    return SkinRender::renderSingleChild($data, $name, $data, $additional . 'integer', '', $connector1, $connector2, $json);
   }
 
   /**
@@ -392,7 +393,7 @@ class Variables {
     $json = array();
     $json['type'] = 'float';
 
-    return View\SkinRender::renderSingleChild($data, $name, $data, $additional . 'float', '', $connector1, $connector2, $json);
+    return SkinRender::renderSingleChild($data, $name, $data, $additional . 'float', '', $connector1, $connector2, $json);
   }
 
   /**
@@ -436,7 +437,7 @@ class Variables {
       $json['encoding'] = 'broken';
     }
 
-    return View\SkinRender::renderSingleChild($clean_data, $name, $cut, $additional . 'string' . ' ' . $strlen, '', $connector1, $connector2, $json);
+    return SkinRender::renderSingleChild($clean_data, $name, $cut, $additional . 'string' . ' ' . $strlen, '', $connector1, $connector2, $json);
   }
 
   /**

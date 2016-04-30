@@ -33,11 +33,13 @@
 
 namespace Brainworxx\Krexx\Errorhandler;
 
-use Brainworxx\Krexx\Framework;
+use Brainworxx\Krexx\Framework\Config;
+use Brainworxx\Krexx\Framework\Toolbox;
 
 /**
- * Class Fatal
- * @package Krexx\Errorhandler
+ * PHP 5.x fatal error handler.
+ *
+ * @package Brainworxx\Krexx\Errorhandler
  */
 class Fatal extends AbstractHandler {
 
@@ -113,7 +115,7 @@ class Fatal extends AbstractHandler {
     // Do we have an error at all?
     if (!is_null($error) && $this->getIsActive()) {
       // We will not generate any code here!
-      Framework\Config::$allowCodegen = FALSE;
+      Config::$allowCodegen = FALSE;
 
       // Do we need to check this one, according to our settings?
       $translated_error = $this->translateErrorType($error['type']);
@@ -134,14 +136,14 @@ class Fatal extends AbstractHandler {
           'errfile' => $error['file'],
           'errline' => $error['line'],
           'handler' => __FUNCTION__,
-          'source' => Framework\Toolbox::readSourcecode($error['file'], $error['line'], 5),
+          'source' => Toolbox::readSourcecode($error['file'], $error['line'], 5),
           'backtrace' => $this->tickedBacktrace,
         );
 
-        if (Framework\Config::getConfigValue('errorHandling', 'backtraceAnalysis') == 'deep') {
+        if (Config::getConfigValue('errorHandling', 'backtraceAnalysis') == 'deep') {
           // We overwrite the local settings, so we can get as much info from
           // analysed objects as possible.
-          Framework\Config::overwriteLocalSettings(self::$configFatal);
+          Config::overwriteLocalSettings(self::$configFatal);
         }
         $this->giveFeedback($error_data);
       }

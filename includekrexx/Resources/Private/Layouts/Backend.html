@@ -65,7 +65,7 @@ select:disabled {
   cursor: help;
 }
 a.krexx-link {
-  background: url('../Icons/link.png') no-repeat;
+  background: url('../typo3conf/ext/includekrexx/Resources/Public/Icons/link.png') no-repeat;
   padding-left: 16px;
 }
 a.krexx-link:hover {
@@ -109,6 +109,7 @@ td.cbx {
         <f:be.menus.actionMenu>
           <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.config.file')}" controller="Index" action="editConfig" />
           <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.config.fe')}" controller="Index" action="editFeConfig" />
+          <f:be.menus.actionMenuItem label="{f:translate(key:'layout.log.index')}" controller="Log" action="list" />
           <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.cookie.settings')}"  controller="Index" action="editLocalBrowserSettings" />
           <f:be.menus.actionMenuItem label="{f:translate(key:'layout.usage.help')}" controller="Index" action="usageHelp" />
           <f:be.menus.actionMenuItem label="{f:translate(key:'layout.config.help')}" controller="Index" action="configHelp" />

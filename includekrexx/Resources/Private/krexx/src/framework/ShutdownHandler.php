@@ -33,12 +33,13 @@
 
 namespace Brainworxx\Krexx\Framework;
 
-use Brainworxx\Krexx\View;
+use Brainworxx\Krexx\View\Messages;
+
 
 /**
  * Sends the kreXX output in the shutdown phase.
  *
- * @package Krexx
+ * @package Brainworxx\Krexx\Framework
  */
 class ShutdownHandler {
 
@@ -80,7 +81,7 @@ class ShutdownHandler {
   public function shutdownCallback() {
     // Check for CLI and messages.
     if (php_sapi_name() == "cli") {
-      $messages = View\Messages::outputMessages();
+      $messages = Messages::outputMessages();
       // Since we are in CLI mode, these messages are not in HTML.
       // We can output them right away.
       echo $messages;

@@ -34,14 +34,15 @@
 namespace Brainworxx\Krexx\View;
 
 use Brainworxx\Krexx\Framework\Config;
-use Brainworxx\Krexx\Analysis;
 use Brainworxx\Krexx\Framework\Chunks;
 use Brainworxx\Krexx\Framework\Toolbox;
+use Brainworxx\Krexx\Analysis\Objects\Objects;
+use Brainworxx\Krexx\Analysis\Variables;
 
 /**
  * This class hosts the code generation functions.
  *
- * @package Krexx
+ * @package Brainworxx\Krexx\View
  */
 class Output {
 
@@ -256,7 +257,7 @@ class Output {
         }
         // Object.
         if (isset($step_data['object'])) {
-          $output .= Analysis\Objects::analyseObject($step_data['object'], 'Calling object');
+          $output .= Objects::analyseObject($step_data['object'], 'Calling object');
         }
         // Type.
         if (isset($step_data['type'])) {
@@ -264,7 +265,7 @@ class Output {
         }
         // Args.
         if (isset($step_data['args'])) {
-          $output .= Analysis\Variables::analyseArray($step_data['args'], 'Arguments from the call');
+          $output .= Variables::analyseArray($step_data['args'], 'Arguments from the call');
         }
 
         return $output;

@@ -113,6 +113,13 @@
     td.cbx {
       width: 330px;
     }
+
+    table.krexx-logs {
+     text-align: left;
+    }
+    .krexx-logs td {
+      padding-right: 30px;
+    }
   </style>
   <script type="text/javascript">
 
@@ -150,10 +157,7 @@
       var savebutton = document.getElementById('editconfig_save');
       if (typeof savebutton === 'object' && savebutton != 'undefined' && savebutton != null) {
         savebutton.addEventListener('click', function () {
-          var form = document.getElementById('editconfig');
-          if (typeof form === 'object' && form != 'undefined' && form != null) {
-            form.submit();
-          }
+          location.reload();
         }, true);
       }
     };
@@ -190,7 +194,7 @@
       <div class="typo3-docheader-buttons">
         <div class="docheader-row2-left left">
           <div id="editconfig_save">
-            <f:image width="16" src="{f:uri.resource(path:'Icons/save.png')}" alt="save settings"/>
+            <f:image width="16" src="{f:uri.resource(path:'Icons/refresh.png')}" alt="save settings"/>
           </div>
         </div>
       </div>

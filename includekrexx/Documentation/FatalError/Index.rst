@@ -66,7 +66,7 @@ Activation in the settings
 |
 
 .. figure:: ../Images/FatalError/activate_local.png
-	:width: 959px
+	:width: 832px
 	:alt: kreXX fatal error handler
 
 	Activate the fatal error handler via your local cookie settings.
@@ -77,7 +77,7 @@ Activation in the settings
 |
 
 .. figure:: ../Images/FatalError/activate_global.png
-	:width: 959px
+	:width: 613px
 	:alt: kreXX fatal error handler
 
 	Activate it globally in your typo3 installation in the configuration editor.

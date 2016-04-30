@@ -47,7 +47,10 @@ if (TYPO3_MODE === 'BE') {
       // Position of the module.
       '',
       // Allowed controller action combinations.
-      array('Index' => 'editConfig,editFeConfig,usageHelp,configHelp,saveConfig,saveFeConfig,editLocalBrowserSettings'),
+      array(
+        'Index' => 'editConfig,editFeConfig,usageHelp,configHelp,saveConfig,saveFeConfig,editLocalBrowserSettings',
+        'Log' => 'list,getContent',
+      ),
       array(
         'access' => 'user,group',
         'icon' => 'EXT:includekrexx/ext_icon.gif',

@@ -33,4 +33,9 @@
 
 namespace Brainworxx\Krexx\View;
 
+/**
+ * Individual render class for the Hans skin.
+ *
+ * @package Brainworxx\Krexx\View
+ */
 class SkinRender extends Render {}

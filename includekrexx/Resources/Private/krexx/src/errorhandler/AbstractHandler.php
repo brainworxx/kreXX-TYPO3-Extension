@@ -33,15 +33,18 @@
 
 namespace Brainworxx\Krexx\Errorhandler;
 
-use Brainworxx\Krexx\Analysis;
-use Brainworxx\Krexx\Framework;
+use Brainworxx\Krexx\Analysis\Hive;
+use Brainworxx\Krexx\Framework\Internals;
+use Brainworxx\Krexx\Framework\Config;
+use Brainworxx\Krexx\Framework\Chunks;
 use Brainworxx\Krexx\View;
+
 
 /**
  * This class hosts all functions which all error handlers will share
  * (as soon as they are written . . .)
  *
- * @package Krexx
+ * @package Brainworxx\Krexx\Errorhandler
  */
 abstract class AbstractHandler {
 
@@ -64,7 +67,7 @@ abstract class AbstractHandler {
    *   handler is active
    */
   protected function getIsActive() {
-    if ($this->isActive && Framework\Config::isEnabled()) {
+    if ($this->isActive && Config::isEnabled()) {
       // We will only handle errors when kreXX and the handler
       // itself is enabled.
       return TRUE;
@@ -85,11 +88,11 @@ abstract class AbstractHandler {
   protected function giveFeedback(array $error_data) {
     if ($this->isActive) {
       View\SkinRender::$KrexxCount++;
-      Framework\Internals::$timer = time();
+      Internals::$timer = time();
 
       // Setting template info.
       if (is_null(View\SkinRender::$skin)) {
-        View\SkinRender::$skin = Framework\Config::getConfigValue('render', 'skin');
+        View\SkinRender::$skin = Config::getConfigValue('render', 'skin');
       }
 
       // Get the header.
@@ -114,17 +117,17 @@ abstract class AbstractHandler {
       // Get the messages.
       $messages = View\Messages::outputMessages();
 
-      if (Framework\Config::getConfigValue('output', 'destination') == 'file') {
+      if (Config::getConfigValue('output', 'destination') == 'file') {
         // Save it to a file.
-        Framework\Chunks::saveDechunkedToFile($header . $messages . $main . $backtrace . $footer);
+        Chunks::saveDechunkedToFile($header . $messages . $main . $backtrace . $footer);
       }
       else {
         // Send it to the browser.
-        Framework\Chunks::sendDechunkedToBrowser($header . $messages . $main . $backtrace . $footer);
+        Chunks::sendDechunkedToBrowser($header . $messages . $main . $backtrace . $footer);
       }
 
       // Cleanup the hive, this removes all recursion markers.
-      Analysis\Hive::cleanupHive();
+      Hive::cleanupHive();
     }
   }
 

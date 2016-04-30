@@ -86,6 +86,7 @@
       <label index="layout.edit.config.fe">Edit FE configuration</label>
       <label index="layout.usage.help">Usage help</label>
       <label index="layout.config.help">Config help</label>
+      <label index="layout.log.index">Logfiles access</label>
 
       <!-- Headlines -->
       <label index="editconfig.headline">Edit Configuration File</label>
@@ -170,6 +171,17 @@
       <label index="config.links.2">Bug reports</label>
       <label index="config.links.3">Typo3 kreXX</label>
       <label index="config.links.4">Magento kreXX</label>
+
+      <!-- Logging -->
+      <label index="log.headline">Overview file logging</label>
+      <label index="log.filename">Filename</label>
+      <label index="log.time">Last modified</label>
+      <label index="log.size">size</label>
+      <label index="log.fileerror">Error reading logfile</label>
+      <label index="log.notreadable">File %1$s is not readable!</label>
+      <label index="log.headline.text.1">This is an overview of all logfiles that kreXX has created. You can easily access them here, just ba clicking the filename.</label>
+      <label index="log.headline.text.2">You can easily activate file logging on the configuration page found here:</label>
+      <label index="log.noresult">Sorry, there are currently no logfiles.</label>
     </languageKey>
   </data>
 </T3locallang>

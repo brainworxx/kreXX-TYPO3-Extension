@@ -1,3 +1,13 @@
+1.4.1
+- Added class constants analysis.
+- Change: Search is now case-insensitive. This should make searching
+  much more easy.
+- Change: Output destination can not be changed anymore via the cookie
+  editor by default. This should prevent people from locking themselves
+  out.
+- Cleanup: Cleaned up the object analysis as well as the namespace
+  usage.
+
 1.4.0
 - Added smoky-grey as the new standard skin.
 - Added some primary formatting to the Hans skin to prevent the host
@@ -173,7 +183,7 @@
 - All settings are now editable. Added a function to display
   kreXX, despite some local settings to prevent a lockout.
 - Added support for mixed encoding in string analysis.
-- Moved getDebugCookie functionality to the local settings. 
+- Moved getDebugCookie functionality to the local settings.
 - Bugfix: keXX should now use the included jQuery version, in
   case that there are other versions included.
 

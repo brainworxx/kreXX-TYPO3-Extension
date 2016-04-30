@@ -34,6 +34,13 @@ All debug data from one request will be stored inside a single file. When a new 
 To prevent these files from clogging up your system, kreXX will only keep 10 files and automatically delete older ones. This value can also be changed the logging option **Maximum files in the logfolder** to any number bigger than **0**.
 
 |
+
+.. figure:: ../Images/Logging/logfiles.png
+	:width: 782px
+	:alt: Logfiles backend menu
+
+	To make these logfiles easier accessible, we have provided a backend menu, where you can easily view them.
+	
 |
 
 Please remember, that this configuration can also get changed on the frontend via the local cookie settings, unless you change this option inside the **FE configuration** as described in the chapter :ref:`fe-configuration`.

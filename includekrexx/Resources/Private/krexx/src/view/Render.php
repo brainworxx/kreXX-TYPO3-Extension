@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Framework;
  * It get extended by the SkinRender class, so every skin can do some special
  * stuff.
  *
- * @package Krexx
+ * @package Brainworxx\Krexx\View
  */
 class Render extends Help {
 
@@ -83,6 +83,8 @@ class Render extends Help {
    *   The connector1 type to the parent class / array.
    * @param string $connector2
    *   The connector2 type to the parent class / array.
+   * @param array $json
+   *   The additional data table on the bottom.
    *
    * @return string
    *   The generated markup from the template files.
@@ -95,7 +97,7 @@ class Render extends Help {
     $part_callable = '';
     $part_extra = '';
 
-    if (strlen($data) > strlen($normal) ) {
+    if (strlen($data) > strlen($normal)) {
       $extra = TRUE;
     }
     else {
@@ -344,6 +346,8 @@ class Render extends Help {
    *   The connector1 type to the parent class / array.
    * @param string $connector2
    *   The connector2 type to the parent class / array.
+   * @param array $json
+   *   The additional data table on the bottom.
    *
    * @return string
    *   The generated markup from the template files.

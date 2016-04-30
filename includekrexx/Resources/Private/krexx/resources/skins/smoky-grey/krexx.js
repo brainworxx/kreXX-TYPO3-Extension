@@ -354,7 +354,7 @@
     // Prevents the event from propagating (ie: "bubbling").
     event.stopPropagation();
 
-    var searchtext = this.parentNode.querySelector('.ksearchfield').value;
+    var searchtext = this.parentNode.querySelector('.ksearchfield').value.toLowerCase();
 
     // we only search for more than 3 chars.
     if (searchtext.length > 2) {
@@ -377,7 +377,7 @@
       else {
         refreshResultlist();
       }
-      
+
       // Set the pointer to the next or previous element
       if (direction == 'forward') {
         results[instance][searchtext]['pointer']++;
@@ -396,7 +396,7 @@
           results[instance][searchtext]['pointer'] = results[instance][searchtext]['data'].length - 1;
         }
       }
-      
+
       // Feedback about where we are
       this.parentNode.querySelector('.ksearch-state').textContent = results[instance][searchtext]['pointer'] + ' / ' + (results[instance][searchtext]['data'].length - 1);
       // Now we simply jump to the element in the array.
@@ -424,7 +424,7 @@
       var list = payload.querySelectorAll("li span, li div.kpreview");
       for (var i = 0; i < list.length; ++i) {
         // Does it contain our search string?
-        if (list[i].textContent.indexOf(searchtext) > -1) {
+        if (list[i].textContent.toLowerCase().indexOf(searchtext) > -1) {
           kdt.toggleClass(list[i], 'ksearch-found-highlight');
           results[instance][searchtext]['data'].push(list[i]);
         }
@@ -432,7 +432,7 @@
       // Reset our index.
       results[instance][searchtext]['pointer'] = -1;
     }
-    
+
 
   };
 
@@ -767,7 +767,7 @@
     }
 
     // Add it to the DOM.
-    html = '<table><caption class="kheadline">Additional data</caption><tbody class="kdatabody">' + html + '</tbody></table>'
+    html = '<table><caption class="kheadline">Additional data</caption><tbody class="kdatabody">' + html + '</tbody></table>';
     // Meh, IE9 does not allow me to edit the contents of a table. I have to
     // redraw the whole thing.  :-(
     body.parentNode.parentNode.innerHTML = html;

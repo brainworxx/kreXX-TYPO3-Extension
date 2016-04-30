@@ -33,17 +33,15 @@
 
 namespace Brainworxx\Krexx\Framework;
 
-use Brainworxx\Krexx\Analysis;
-use Brainworxx\Krexx\View;
+use Brainworxx\Krexx\Analysis\Variables;
+use Brainworxx\Krexx\View\SkinRender;
 
 /**
  * This class hosts functions, which offer additional services.
  *
- * @package Krexx
+ * @package Brainworxx\Krexx\Framework
  */
 class Toolbox {
-
-
 
   /**
    * Returns the microtime timestamp for file operations.
@@ -107,7 +105,7 @@ class Toolbox {
    */
   public static function generateDomIdFromObject($data) {
     if (is_object($data)) {
-      return 'k' . View\SkinRender::$KrexxCount . '_' . spl_object_hash($data);
+      return 'k' . SkinRender::$KrexxCount . '_' . spl_object_hash($data);
     }
     else {
       // Do nothing.
@@ -224,10 +222,10 @@ class Toolbox {
           // Add it to the result.
           $real_line_no = $current_line_no + 1;
           if ($current_line_no == $line_no) {
-            $result .= View\SkinRender::renderBacktraceSourceLine('highlight', $real_line_no, Analysis\Variables::encodeString($content_array[$current_line_no], TRUE));
+            $result .= SkinRender::renderBacktraceSourceLine('highlight', $real_line_no, Variables::encodeString($content_array[$current_line_no], TRUE));
           }
           else {
-            $result .= View\SkinRender::renderBacktraceSourceLine('source', $real_line_no, Analysis\Variables::encodeString($content_array[$current_line_no], TRUE));
+            $result .= SkinRender::renderBacktraceSourceLine('source', $real_line_no, Variables::encodeString($content_array[$current_line_no], TRUE));
           }
         }
         else {

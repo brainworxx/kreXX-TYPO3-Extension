@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   Backend controller for for kreXX
+ *   Backend controller for the kreXX typo3 extension
  *   kreXX: Krumo eXXtended
  *
  *   kreXX is a debugging tool, which displays structured information
@@ -32,7 +32,6 @@
  */
 
 use \Brainworxx\Krexx\Framework\Config;
-use \Brainworxx\Krexx\View\Help;
 use \Brainworxx\Krexx\View\Messages;
 use \Brainworxx\Krexx\View\Render;
 
@@ -432,7 +431,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      * Injects the arguments
      *
      * @param Tx_Extbase_MVC_Controller_Arguments $arguments
-     *          The arguments from the call to the controller.
+     *   The arguments from the call to the controller.
      */
     public function injectArguments(Tx_Extbase_MVC_Controller_Arguments $arguments) {
       $this->arguments = $arguments;

@@ -338,7 +338,7 @@
     // Prevents the event from propagating (ie: "bubbling").
     event.stopPropagation();
 
-    var searchtext = this.parentNode.querySelector('.ksearchfield').value;
+    var searchtext = this.parentNode.querySelector('.ksearchfield').value.toLowerCase();
 
     // we only search for more than 3 chars.
     if (searchtext.length > 2) {
@@ -408,7 +408,7 @@
       var list = payload.querySelectorAll("li span, li div.kpreview");
       for (var i = 0; i < list.length; ++i) {
         // Does it contain our search string?
-        if (list[i].textContent.indexOf(searchtext) > -1) {
+        if (list[i].textContent.toLowerCase().indexOf(searchtext) > -1) {
           kdt.toggleClass(list[i], 'ksearch-found-highlight');
           results[instance][searchtext]['data'].push(list[i]);
         }

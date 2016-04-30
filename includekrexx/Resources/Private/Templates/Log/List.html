@@ -1,0 +1,42 @@
+<f:layout name="BackendRefresh"/>
+<f:section name="main">
+  <h1><f:translate key="log.headline" /></h1>
+  <p>
+    <f:translate key="log.headline.text.1" /><br/>
+    <f:translate key="log.headline.text.2" /> <f:link.action class="krexx-link" controller="Index" action="editConfig" ><f:translate key="layout.edit.config.file" /></f:link.action>
+  </p>
+
+  <br/>
+  <f:if condition="{f:count(subject: files)}>0">
+    <f:then>
+      <f:render section="table" arguments="{files: '{files}'}" />
+    </f:then>
+    <f:else>
+      <f:translate key="log.noresult" />
+    </f:else>
+  </f:if>
+</f:section>
+
+<f:section name="table">
+  <table border="0" class="krexx-logs">
+    <tr>
+      <th><f:translate key="log.filename" /></th>
+      <th><f:translate key="log.time" /></th>
+      <th><f:translate key="log.size" /></th>
+    </tr>
+    <f:for each="{files}" as="file">
+      <tr>
+        <td>
+          <f:link.action target="_blank" class="krexx-link" controller="Log" action="getContent" arguments="{id: '{file.id}'}">{file.name}</f:link.action>
+        </td>
+        <td>
+          {file.time}
+        </td>
+        <td>
+          {file.size}
+        </td>
+      </tr>
+    </f:for>
+
+  </table>
+</f:section>
