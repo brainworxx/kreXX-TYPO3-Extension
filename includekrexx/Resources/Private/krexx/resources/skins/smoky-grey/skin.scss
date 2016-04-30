@@ -106,6 +106,9 @@ $fontLight: lighter 10px tahoma, verdana;
   span, em, a, input, strong {
     display: inline;
   }
+  br {
+    line-height: normal;
+  }
   li {
     display: list-item;
   }
@@ -153,7 +156,7 @@ $fontLight: lighter 10px tahoma, verdana;
   overflow: hidden;
   * {
     box-sizing: content-box;
-
+    font-family: Tahoma, Verdana;
   }
 
   .krela-wrapper {

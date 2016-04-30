@@ -70,6 +70,8 @@
     display: block; }
   .kwrapper span, .kwrapper em, .kwrapper a, .kwrapper input, .kwrapper strong, .kfatalwrapper-outer span, .kfatalwrapper-outer em, .kfatalwrapper-outer a, .kfatalwrapper-outer input, .kfatalwrapper-outer strong {
     display: inline; }
+  .kwrapper br, .kfatalwrapper-outer br {
+    line-height: normal; }
   .kwrapper li, .kfatalwrapper-outer li {
     display: list-item; }
   .kwrapper table, .kfatalwrapper-outer table {
@@ -94,7 +96,8 @@
     padding-left: 5px;
     padding-right: 5px; }
   .kwrapper *, .kfatalwrapper-outer * {
-    box-sizing: content-box; }
+    box-sizing: content-box;
+    font-family: Tahoma, Verdana; }
   .kwrapper .krela-wrapper, .kfatalwrapper-outer .krela-wrapper {
     position: relative;
     width: 100%; }

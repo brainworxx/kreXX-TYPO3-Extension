@@ -93,6 +93,10 @@ div.kwrapper {
   display: inline;
 }
 
+.kwrapper br {
+  line-height: normal;
+}
+
 .kwrapper li {
   display: list-item;
 }
@@ -133,6 +137,9 @@ div.kwrapper {
   padding-right: 5px;
 }
 
+.kwrapper * {
+  font-family: Tahoma, Verdana;
+}
 
 .kwrapper ul.knode {
   margin: 0;
