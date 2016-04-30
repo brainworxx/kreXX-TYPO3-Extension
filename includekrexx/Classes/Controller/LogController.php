@@ -215,6 +215,10 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
      * @param integer $severity
      */
     protected function addMessage($text, $title, $severity) {
+      if (empty($text)) {
+        // No text, no message.
+        return;
+      }
       if (!isset($this->flashMessageContainer)) {
         $this->addFlashMessage($text, $title, $severity);
       }
