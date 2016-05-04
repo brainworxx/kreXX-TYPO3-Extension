@@ -39,19 +39,31 @@ use \Brainworxx\Krexx\View\Messages;
 // The mainproblem with 7.0 is, that compatibility6 may or may not be installed.
 // If not, I have to put this thing here, hoping not to break anything!
 if (!class_exists('Tx_Extbase_MVC_Controller_ActionController')) {
+  /**
+   * Class Tx_Extbase_MVC_Controller_ActionController
+   */
   class Tx_Extbase_MVC_Controller_ActionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
   }
 }
 if (!class_exists('Tx_Extbase_MVC_Controller_Arguments')) {
+  /**
+   * Class Tx_Extbase_MVC_Controller_Arguments
+   */
   class Tx_Extbase_MVC_Controller_Arguments extends \TYPO3\CMS\Extbase\Mvc\Controller\Arguments {
   }
 }
 if (!class_exists('t3lib_FlashMessage')) {
+  /**
+   * Class t3lib_FlashMessage
+   */
   class t3lib_FlashMessage extends \TYPO3\CMS\Core\Messaging\FlashMessage {
   }
 }
 
 if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
+  /**
+   * Class Tx_Includekrexx_Controller_LogController
+   */
   class Tx_Includekrexx_Controller_LogController extends Tx_Extbase_MVC_Controller_ActionController {
 
     /**
@@ -94,17 +106,17 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
     /**
      * Gets all messages from kreXX and translates them.
      *
-     * @return string
+     * @return array
      *   The translated messages.
      */
     protected function getTranslatedMessages() {
-      $result = '';
+      $result = array();
       // Get the keys and the args.
       $keys = Messages::getKeys();
 
       foreach ($keys as $message) {
         // And translate them and add a linebreak.
-        $result .= $this->LLL($message['key'], $message['params']) . '<br />';
+        $result[] = $this->LLL($message['key'], $message['params']);
       }
 
       return $result;
@@ -114,7 +126,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
      * Lists all kreXX logfiles.
      */
     public function listAction() {
-      // 1. Get the log folder
+      // 1. Get the log folder.
       $dir = Config::$krexxdir . Config::getConfigValue('logging', 'folder') . DIRECTORY_SEPARATOR;
 
       // 2. Get the file list and sort it.
@@ -122,7 +134,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
       // The function filemtime gets cached by php btw.
       usort($files, function($a,$b) {return filemtime($b) - filemtime($a);});
 
-      // 3. Get the file info
+      // 3. Get the file info.
       $file_list = array();
       foreach ($files as $file) {
         $file_info = array();
@@ -135,7 +147,9 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
       }
 
       // 4. Has kreXX something to say? Maybe a writeprotected logfolder?
-      $this->addMessage($this->getTranslatedMessages(), $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+      foreach ($this->getTranslatedMessages() as $message) {
+        $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+      }
 
       // 5. Assign the flile list.
       $this->view->assign('files', $file_list);
@@ -146,18 +160,16 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
      */
     public function getContentAction() {
       // No directory traversal for you!
-      $id = (int)$this->request->getArgument('id');
+      $id = (int) $this->request->getArgument('id');
       // 1. Get the filepath.
       $file = Config::$krexxdir . Config::getConfigValue('logging', 'folder') . DIRECTORY_SEPARATOR . $id . '.Krexx.html';
       if (is_readable($file)) {
         // We open and then send the file.
-        header('content-type text/html charset=utf-8');
-        header('Content-Disposition: inline; filename="' . $id . '.Krexx.html"');
         $this->dispatchFile($file);
         die();
       }
       else {
-        // Error message and redirect to the list action
+        // Error message and redirect to the list action.
         $this->addMessage($this->LLL('log.notreadable', array($id . '.Krexx.html')), $this->LLL('log.fileerror'), t3lib_FlashMessage::ERROR);
         $this->redirect('list');
       }
@@ -167,40 +179,44 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
     /**
      * Converts bytes into human readable file size.
      *
-     * @param string $bytes
-     * @return string human readable file size (2,87 Мб)
      * @author Mogilev Arseny
+     *
+     * @param string $bytes
+     *   The bytes value we want to make readable.
+     *
+     * @return string
+     *   Human readable file size.
      */
     protected function fileSizeConvert($bytes) {
       $bytes = floatval($bytes);
-      $arBytes = array(
+      $ar_bytes = array(
         0 => array(
           "UNIT" => "TB",
-          "VALUE" => pow(1024, 4)
+          "VALUE" => pow(1024, 4),
         ),
         1 => array(
           "UNIT" => "GB",
-          "VALUE" => pow(1024, 3)
+          "VALUE" => pow(1024, 3),
         ),
         2 => array(
           "UNIT" => "MB",
-          "VALUE" => pow(1024, 2)
+          "VALUE" => pow(1024, 2),
         ),
         3 => array(
           "UNIT" => "KB",
-          "VALUE" => 1024
+          "VALUE" => 1024,
         ),
         4 => array(
           "UNIT" => "B",
-          "VALUE" => 1
+          "VALUE" => 1,
         ),
       );
 
       $result = '';
-      foreach ($arBytes as $arItem) {
-        if ($bytes >= $arItem["VALUE"]) {
-          $result = $bytes / $arItem["VALUE"];
-          $result = str_replace(".", ",", strval(round($result, 2))) . " " . $arItem["UNIT"];
+      foreach ($ar_bytes as $ar_item) {
+        if ($bytes >= $ar_item["VALUE"]) {
+          $result = $bytes / $ar_item["VALUE"];
+          $result = str_replace(".", ",", strval(round($result, 2))) . " " . $ar_item["UNIT"];
           break;
         }
       }
@@ -211,8 +227,11 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
      * Wrapper for the FlashMessage, which was changed in 7.0.
      *
      * @param string $text
+     *   The text we want to display.
      * @param string $title
+     *   The title we want to display.
      * @param integer $severity
+     *   The severity of the message.
      */
     protected function addMessage($text, $title, $severity) {
       if (empty($text)) {
@@ -231,6 +250,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
      * Dispatches a file, using output buffering.
      *
      * @param string $path
+     *   The path of the file we want to dispatch to the browser.
      */
     protected function dispatchFile($path) {
       $size = 1024 * 1024;

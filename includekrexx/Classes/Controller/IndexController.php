@@ -39,14 +39,23 @@ use \Brainworxx\Krexx\View\Render;
 // The mainproblem with 7.0 is, that compatibility6 may or may not be installed.
 // If not, I have to put this thing here, hoping not to break anything!
 if (!class_exists('Tx_Extbase_MVC_Controller_ActionController')) {
+  /**
+   * Class Tx_Extbase_MVC_Controller_ActionController
+   */
   class Tx_Extbase_MVC_Controller_ActionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
   }
 }
 if (!class_exists('Tx_Extbase_MVC_Controller_Arguments')) {
+  /**
+   * Class Tx_Extbase_MVC_Controller_Arguments
+   */
   class Tx_Extbase_MVC_Controller_Arguments extends \TYPO3\CMS\Extbase\Mvc\Controller\Arguments {
   }
 }
 if (!class_exists('t3lib_FlashMessage')) {
+  /**
+   * Class t3lib_FlashMessage
+   */
   class t3lib_FlashMessage extends \TYPO3\CMS\Core\Messaging\FlashMessage {
   }
 }
@@ -56,6 +65,9 @@ if (!class_exists('t3lib_FlashMessage')) {
 // redeclare the Tx_Includekrexx_Controller_IndexController and throw
 // a fatal.
 if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
+  /**
+   * Class Tx_Includekrexx_Controller_IndexController
+   */
   class Tx_Includekrexx_Controller_IndexController extends Tx_Extbase_MVC_Controller_ActionController {
 
     /**
@@ -63,7 +75,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      *
      * @var array
      */
-    protected $allowed_settings_names = array(
+    protected $allowedSettingsNames = array(
       'skin',
       'memoryLeft',
       'maxRuntime',
@@ -89,7 +101,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      *
      * @var array
      */
-    protected $allowed_sections = array(
+    protected $allowedSections = array(
       'render',
       'logging',
       'output',
@@ -102,7 +114,9 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      */
     public function usageHelpAction() {
       // Has kreXX something to say? Maybe a writeprotected logfolder?
-      $this->addMessage($this->getTranslatedMessages(), $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+      foreach ($this->getTranslatedMessages() as $message) {
+        $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+      }
     }
 
     /**
@@ -110,7 +124,9 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      */
     public function configHelpAction() {
       // Has kreXX something to say? Maybe a writeprotected logfolder?
-      $this->addMessage($this->getTranslatedMessages(), $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+      foreach ($this->getTranslatedMessages() as $message) {
+        $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+      }
     }
 
     /**
@@ -118,13 +134,15 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      */
     public function editLocalBrowserSettingsAction() {
       // Has kreXX something to say? Maybe a writeprotected logfolder?
-      $this->addMessage($this->getTranslatedMessages(), $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+      foreach ($this->getTranslatedMessages() as $message) {
+        $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+      }
 
       if (!Config::isEnabled(NULL, TRUE)) {
         // kreXX will not display anything, if it was disabled via:
         // - krexx::disable();
         // - Disable output --> true in the "Edit configuration file menu
-        // We need to tell the user that krexx was disabled
+        // We need to tell the user that krexx was disabled.
         $this->view->assign('is_disabled', TRUE);
       }
       else {
@@ -138,7 +156,9 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      */
     public function editFeConfigAction() {
       // Has kreXX something to say? Maybe a writeprotected logfolder?
-      $this->addMessage($this->getTranslatedMessages(), $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+      foreach ($this->getTranslatedMessages() as $message) {
+        $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+      }
 
       $data = array();
       $value = array();
@@ -192,7 +212,9 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      */
     public function editConfigAction() {
       // Has kreXX something to say? Maybe a writeprotected logfolder?
-      $this->addMessage($this->getTranslatedMessages(), $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+      foreach ($this->getTranslatedMessages() as $message) {
+        $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+      }
 
       $data = array();
       $value = array();
@@ -204,7 +226,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       $data['bool'] = array('true' => $this->LLL('true'), 'false' => $this->LLL('false'));
       $data['backtrace'] = array('normal' => $this->LLL('normal'), 'deep' => $this->LLL('deep'));
 
-      // Setting the form help texts
+      // Setting the form help texts.
       $data['title'] = array(
         'localFunction' => $this->LLL('localFunction'),
         'analyseProtected' => $this->LLL('analyseProtected'),
@@ -255,7 +277,8 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
         foreach ($setting as $attribute => $config) {
           if (is_null($config)) {
             $data['factory'][$attribute] = TRUE;
-            // We need to fill these values with the stuff from the factory settings!
+            // We need to fill these values with the stuff from the
+            // factory settings!
             $value[$mainkey][$attribute] = Config::$configFallback[$mainkey][$attribute];
           }
           else {
@@ -276,7 +299,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       $all_ok = TRUE;
       $filepath = Config::getPathToIni();
 
-      // Check for writing permission
+      // Check for writing permission.
       if (!is_writable(dirname($filepath))) {
         $all_ok = FALSE;
         Messages::addMessage($this->LLL('file.not.writable', array($filepath)));
@@ -291,24 +314,26 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       }
 
       // We must preserve the section 'feEditing'.
-      // Everything else will be overwritten
+      // Everything else will be overwritten.
       $old_values = array('feEditing' => $old_values['feEditing']);
 
       if (isset($arguments['action']) && $arguments['action'] == 'saveConfig') {
         // Iterating through the form.
         foreach ($arguments as $section => $data) {
-          if (is_array($data) && in_array($section, $this->allowed_sections)) {
+          if (is_array($data) && in_array($section, $this->allowedSections)) {
             // We've got a section key.
             foreach ($data as $setting_name => $value) {
-              if (in_array($setting_name, $this->allowed_settings_names)) {
-                // We escape the value, just in case, since we can not whitelist it.
+              if (in_array($setting_name, $this->allowedSettingsNames)) {
+                // We escape the value, just in case, since we can not
+                // whitelist it.
                 $value = htmlspecialchars(preg_replace('/\s+/', '', $value));
                 // Evaluate the setting!
-                if (Config::evaluateSetting($section,$setting_name, $value)) {
+                if (Config::evaluateSetting($section, $setting_name, $value)) {
                   $old_values[$section][$setting_name] = $value;
                 }
                 else {
-                  // Validation failed! kreXX will generate a message, which we will display
+                  // Validation failed! kreXX will generate a message,
+                  // which we will display
                   // at the buttom.
                   $all_ok = FALSE;
                 }
@@ -341,7 +366,9 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
         // Got to remove some messages. We we will not queue them now.
         Messages::removeKey('protected.folder.chunk');
         Messages::removeKey('protected.folder.log');
-        $this->addMessage($this->getTranslatedMessages(), $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
+        foreach ($this->getTranslatedMessages() as $message) {
+            $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
+          }
       }
       else {
         $this->addMessage($this->LLL('save.success.text', array($filepath)), $this->LLL('save.success.title'), t3lib_FlashMessage::OK);
@@ -353,8 +380,11 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      * Wrapper for the FlashMessage, which was changed in 7.0.
      *
      * @param string $text
+     *   The text of the message.
      * @param string $title
+     *   The title of the message
      * @param integer $severity
+     *   The severity of the message.
      */
     protected function addMessage($text, $title, $severity) {
       if (empty($text)) {
@@ -383,7 +413,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       // Whitelist of the vales we are accepting.
       $allowed_values = array('full', 'display', 'none');
 
-       // Check for writing permission
+       // Check for writing permission.
       if (!is_writable(dirname($filepath))) {
         $all_ok = FALSE;
         Messages::addMessage($this->LLL('file.not.writable', array($filepath)));
@@ -404,7 +434,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
         foreach ($arguments as $key => $data) {
           if (is_array($data) && $key != '__referrer') {
             foreach ($data as $setting_name => $value) {
-              if (in_array($value, $allowed_values) && in_array($setting_name, $this->allowed_settings_names)) {
+              if (in_array($value, $allowed_values) && in_array($setting_name, $this->allowedSettingsNames)) {
                 // Whitelisted values are ok.
                 $old_values['feEditing'][$setting_name] = $value;
               }
@@ -427,7 +457,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
         }
 
         // Now we should write the file!
-        if ($all_ok){
+        if ($all_ok) {
           if (file_put_contents($filepath, $ini) === FALSE) {
             $all_ok = FALSE;
             Messages::addMessage($this->LLL('file.not.writable', array($filepath)));
@@ -439,7 +469,10 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
           // Got to remove some messages. We we will not queue them now.
           Messages::removeKey('protected.folder.chunk');
           Messages::removeKey('protected.folder.log');
-          $this->addMessage($this->getTranslatedMessages(), $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
+          foreach ($this->getTranslatedMessages() as $message) {
+            $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
+          }
+
         }
         else {
           $this->addMessage($this->LLL('save.success.text', array($filepath)), $this->LLL('save.success.title'), t3lib_FlashMessage::OK);
@@ -467,14 +500,17 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      * original kreXX settings to a more useable form for the editor.
      *
      * @param array $values
+     *   The valuees we want to convert.
      *
      * @return string|null
+     *   The converted values.
      */
     protected function convertKrexxFeSetting($values) {
       // $result = 'none';
       if (is_array($values)) {
-        // full -> is editable and values will be accepted.
-        // display -> we will only display the settings.
+        // Explanation:
+        // full -> is editable and values will be accepted
+        // display -> we will only display the settings
         // The original values include the name of a template partial
         // with the form element.
         if ($values['type'] == 'None') {
@@ -515,10 +551,6 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
         // Version 4.5 until 6.2
         $result = Tx_Extbase_Utility_Localization::translate($key, 'includekrexx', $args);
       }
-      // At least give back the key, and not a NULL.
-//      if (is_null($result)) {
-//        $result = $key;
-//      }
 
       return $result;
     }
@@ -526,17 +558,17 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
     /**
      * Gets all messages from kreXX and translates them.
      *
-     * @return string
+     * @return array
      *   The translated messages.
      */
     protected function getTranslatedMessages() {
-      $result = '';
+      $result = array();
       // Get the keys and the args.
       $keys = Messages::getKeys();
 
       foreach ($keys as $message) {
         // And translate them and add a linebreak.
-        $result .= $this->LLL($message['key'], $message['params']) . '<br />';
+        $result[] = $this->LLL($message['key'], $message['params']);
       }
 
       return $result;

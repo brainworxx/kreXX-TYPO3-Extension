@@ -35,6 +35,9 @@
 // The mainproblem with 7.0 is, that compatibility6 may or may not be installed.
 // If not, I have to put his thing here, hoping not to break anything!
 if (!class_exists('Tx_Fluid_ViewHelpers_FlashMessagesViewHelper')) {
+  /**
+   * Class Tx_Fluid_ViewHelpers_FlashMessagesViewHelper
+   */
   abstract class Tx_Fluid_ViewHelpers_FlashMessagesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\FlashMessagesViewHelper {}
 }
 // For some reasons, Typo3 7.6 manages to load this file multiple times, causing
@@ -64,7 +67,9 @@ class Tx_Includekrexx_ViewHelpers_MessagesViewHelper extends Tx_Fluid_ViewHelper
    * parameters in 4.5 and 4.7
    *
    * @param string $renderMode
+   *   The render mode (div).
    * @return string
+   *   The rendered message.
    * @throws \Tx_Fluid_Core_ViewHelper_Exception
    */
   public function render($renderMode = 'div') {

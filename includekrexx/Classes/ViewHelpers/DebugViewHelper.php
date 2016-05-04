@@ -35,6 +35,9 @@
 // The mainproblem with 7.0 is, that compatibility6 may or may not be installed.
 // If not, I have to put his thing here, hoping not to break anything!
 if (!class_exists('Tx_Fluid_Core_ViewHelper_AbstractViewHelper')) {
+  /**
+   * Class Tx_Fluid_Core_ViewHelper_AbstractViewHelper
+   */
   abstract class Tx_Fluid_Core_ViewHelper_AbstractViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {}
 }
 // For some reasons, Typo3 7.6 manages to load this file multiple times, causing

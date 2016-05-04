@@ -75,7 +75,7 @@ if (TYPO3_MODE === 'BE') {
       array(
         'access' => 'user,group',
         'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
-        'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml'
+        'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml',
       )
     );
   }

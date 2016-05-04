@@ -58,7 +58,7 @@ class ext_update {
       $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
     }
     else {
-      $source =  TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
+      $source = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
     }
     $destination = PATH_site . 'uploads/tx_includekrexx/.htaccess';
     if (is_file($source) && !is_file($destination)) {
@@ -68,7 +68,7 @@ class ext_update {
       $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/index.php';
     }
     else {
-      $source =  TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
+      $source = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
     }
     $destination = PATH_site . 'uploads/tx_includekrexx/index.php';
     if (is_file($source) && !is_file($destination)) {
