@@ -160,8 +160,8 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
      */
     public function getContentAction() {
       // No directory traversal for you!
-      $id = (int) $this->request->getArgument('id');
-      // 1. Get the filepath.
+      $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
+      // Get the filepath.
       $file = Config::$krexxdir . Config::getConfigValue('logging', 'folder') . DIRECTORY_SEPARATOR . $id . '.Krexx.html';
       if (is_readable($file)) {
         // We open and then send the file.
