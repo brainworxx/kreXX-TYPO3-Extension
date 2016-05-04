@@ -47,7 +47,7 @@
       <label index="value.not.allowed">%1$s is not an allowed value!</label>
       <label index="save.fail.title">The settings were NOT saved.</label>
       <label index="save.success.title">The settings were saved.</label>
-      <label index="save.success.text"><![CDATA[The settings were saved to:<br />%1$s]]></label>
+      <label index="save.success.text">The settings were saved to: %1$s</label>
       <label index="general.error.title">General error</label>
 
       <!--
