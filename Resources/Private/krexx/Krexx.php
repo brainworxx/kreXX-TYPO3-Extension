@@ -129,11 +129,11 @@ class Krexx {
 
     // Setting the skin info.
     if (is_null(View\Render::$skin)) {
-      View\Render::$skin = Framework\Config::getConfigValue('render', 'skin');
+      View\Render::$skin = Framework\Config::getConfigValue('output', 'skin');
     }
     // Every skin has an own implementation of the render class. We need to
     // include this one, too.
-    include_once $krexxdir . 'resources/skins/' . Framework\Config::getConfigValue('render', 'skin') . '/SkinRender.php';
+    include_once $krexxdir . 'resources/skins/' . Framework\Config::getConfigValue('output', 'skin') . '/SkinRender.php';
 
     // Register our shutdown handler. He will handle the display
     // of kreXX after the hosting CMS is finished.
@@ -148,15 +148,15 @@ class Krexx {
       // We can work without chunks, but this will require much more memory!
       Brainworxx\Krexx\Framework\Chunks::setUseChunks(FALSE);
     }
-    if (!is_writeable($krexxdir . Framework\Config::getConfigValue('logging', 'folder') . DIRECTORY_SEPARATOR)) {
-      View\Messages::addMessage('Logfolder ' . $krexxdir . Framework\Config::getConfigValue('logging', 'folder') . DIRECTORY_SEPARATOR . ' is not writable !', 'critical');
-      View\Messages::addKey('protected.folder.log', array($krexxdir . Framework\Config::getConfigValue('logging', 'folder') . DIRECTORY_SEPARATOR));
+    if (!is_writeable($krexxdir . Framework\Config::getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR)) {
+      View\Messages::addMessage('Logfolder ' . $krexxdir . Framework\Config::getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR . ' is not writable !', 'critical');
+      View\Messages::addKey('protected.folder.log', array($krexxdir . Framework\Config::getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR));
     }
     // At this point, we won't inform the user right away. The error message
     // will pop up, when kreXX is actually displayed, no need to bother the
     // dev just now.
     // We might need to register our Backtracer.
-    if (Framework\Config::getConfigValue('errorHandling', 'registerAutomatically') == 'true') {
+    if (Framework\Config::getConfigValue('backtraceAndError', 'registerAutomatically') == 'true') {
       self::registerFatal();
     }
 

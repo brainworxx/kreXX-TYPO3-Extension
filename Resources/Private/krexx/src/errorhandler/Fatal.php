@@ -53,10 +53,11 @@ class Fatal extends AbstractHandler {
    * @var array
    */
   protected static $configFatal = array(
-    'deep' => array(
+    'properties' => array(
       'analyseProtected' => 'true',
       'analysePrivate' => 'true',
       'analyseTraversable' => 'true',
+      'analyseConstants' => 'true',
     ),
     'methods' => array(
       'analyseMethodsAtall' => 'true',
@@ -140,7 +141,7 @@ class Fatal extends AbstractHandler {
           'backtrace' => $this->tickedBacktrace,
         );
 
-        if (Config::getConfigValue('errorHandling', 'backtraceAnalysis') == 'deep') {
+        if (Config::getConfigValue('backtraceAndError', 'backtraceAnalysis') == 'deep') {
           // We overwrite the local settings, so we can get as much info from
           // analysed objects as possible.
           Config::overwriteLocalSettings(self::$configFatal);

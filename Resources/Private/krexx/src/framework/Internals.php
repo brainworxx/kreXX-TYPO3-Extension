@@ -315,14 +315,14 @@ class Internals {
    */
   protected static function checkMaxCall() {
     $result = FALSE;
-    $max_call = (int) Config::getConfigValue('output', 'maxCall');
+    $max_call = (int) Config::getConfigValue('runtime', 'maxCall');
     if (SkinRender::$KrexxCount >= $max_call) {
       // Called too often, we might get into trouble here!
       $result = TRUE;
     }
     // Give feedback if this is our last call.
     if (SkinRender::$KrexxCount == $max_call - 1) {
-      Messages::addMessage('Maximum call-level reached. This is the last analysis for this request. To increase this value, please edit:<br />output => maxCall.', 'critical');
+      Messages::addMessage('Maximum call-level reached. This is the last analysis for this request. To increase this value, please edit:<br />runtime => maxCall.', 'critical');
     }
     return $result;
   }
@@ -374,7 +374,7 @@ class Internals {
     }
 
     // Check Runtime.
-    if (self::$timer + (int) Config::getConfigValue('render', 'maxRuntime') <= time()) {
+    if (self::$timer + (int) Config::getConfigValue('runtime', 'maxRuntime') <= time()) {
       // This is taking longer than expected.
       $result = FALSE;
     }
@@ -401,7 +401,7 @@ class Internals {
         $usage = memory_get_usage();
         $left = $memory_limit - $usage;
         // Is more left than is configured?
-        $result = $left >= (int) Config::getConfigValue('render', 'memoryLeft') * 1024 * 1024;
+        $result = $left >= (int) Config::getConfigValue('runtime', 'memoryLeft') * 1024 * 1024;
       }
     }
 

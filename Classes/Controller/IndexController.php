@@ -94,7 +94,9 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       'analyseProtectedMethods',
       'analysePrivateMethods',
       'registerAutomatically',
-      'backtraceAnalysis');
+      'backtraceAnalysis',
+      'analyseConstants',
+    );
 
     /**
      * List of all sections for which we are accepting values
@@ -102,12 +104,12 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
      * @var array
      */
     protected $allowedSections = array(
-      'render',
-      'logging',
+      'runtime',
       'output',
-      'deep',
+      'properties',
       'methods',
-      'errorHandling');
+      'backtraceAndError',
+    );
 
     /**
      * Simply display the help text from the fluid template.
@@ -166,28 +168,30 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       $data['settings'] = array(
         'full' => $this->LLL('full'),
         'display' => $this->LLL('display'),
-        'none' => $this->LLL('none'));
+        'none' => $this->LLL('none')
+      );
 
       // See, if we have any values in the configuration file.
-      $value['render']['skin'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('skin'));
-      $value['render']['memoryLeft'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('memoryLeft'));
-      $value['render']['maxRuntime'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('maxRuntime'));
-      $value['logging']['folder'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('folder'));
-      $value['logging']['maxfiles'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('maxfiles'));
+      $value['output']['skin'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('skin'));
+      $value['runtime']['memoryLeft'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('memoryLeft'));
+      $value['runtime']['maxRuntime'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('maxRuntime'));
+      $value['output']['folder'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('folder'));
+      $value['output']['maxfiles'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('maxfiles'));
       $value['output']['destination'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('destination'));
-      $value['output']['maxCall'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('maxCall'));
-      $value['output']['disabled'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('disabled'));
-      $value['output']['detectAjax'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('detectAjax'));
-      $value['deep']['analyseProtected'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analyseProtected'));
-      $value['deep']['analysePrivate'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analysePrivate'));
-      $value['deep']['analyseTraversable'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analyseTraversable'));
-      $value['deep']['debugMethods'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('debugMethods'));
-      $value['deep']['level'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('level'));
+      $value['runtime']['maxCall'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('maxCall'));
+      $value['runtime']['disabled'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('disabled'));
+      $value['runtime']['detectAjax'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('detectAjax'));
+      $value['properties']['analyseProtected'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analyseProtected'));
+      $value['properties']['analysePrivate'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analysePrivate'));
+      $value['properties']['analyseTraversable'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analyseTraversable'));
+      $value['properties']['analyseConstants'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analyseConstants'));
+      $value['methods']['debugMethods'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('debugMethods'));
+      $value['runtime']['level'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('level'));
       $value['methods']['analyseMethodsAtall'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analyseMethodsAtall'));
       $value['methods']['analyseProtectedMethods'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analyseProtectedMethods'));
       $value['methods']['analysePrivateMethods'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('analysePrivateMethods'));
-      $value['errorHandling']['registerAutomatically'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('registerAutomatically'));
-      $value['errorHandling']['backtraceAnalysis'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('backtraceAnalysis'));
+      $value['backtraceAndError']['registerAutomatically'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('registerAutomatically'));
+      $value['backtraceAndError']['backtraceAnalysis'] = $this->convertKrexxFeSetting(Config::getFeConfigFromFile('backtraceAnalysis'));
 
       // Are these actually set?
       foreach ($value as $mainkey => $setting) {
@@ -222,9 +226,18 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       foreach (Render::getSkinList() as $skin) {
         $data['skins'][$skin] = $skin;
       }
-      $data['destination'] = array('frontend' => $this->LLL('frontend'), 'file' => $this->LLL('file'));
-      $data['bool'] = array('true' => $this->LLL('true'), 'false' => $this->LLL('false'));
-      $data['backtrace'] = array('normal' => $this->LLL('normal'), 'deep' => $this->LLL('deep'));
+      $data['destination'] = array(
+        'frontend' => $this->LLL('frontend'),
+        'file' => $this->LLL('file')
+      );
+      $data['bool'] = array(
+        'true' => $this->LLL('true'),
+        'false' => $this->LLL('false')
+      );
+      $data['backtrace'] = array(
+        'normal' => $this->LLL('normal'),
+        'deep' => $this->LLL('deep')
+      );
 
       // Setting the form help texts.
       $data['title'] = array(
@@ -249,28 +262,31 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
         'maxRuntime' => $this->LLL('maxRuntime'),
         'analyseMethodsAtall' => $this->LLL('analyseMethodsAtall'),
         'analyseProtectedMethods' => $this->LLL('analyseProtectedMethods'),
-        'analysePrivateMethods' => $this->LLL('analysePrivateMethods'));
+        'analysePrivateMethods' => $this->LLL('analysePrivateMethods'),
+        'analyseConstants' => $this->LLL('analyseConstants'),
+      );
 
       // See, if we have any values in the configuration file.
-      $value['render']['skin'] = Config::getConfigFromFile('render', 'skin');
-      $value['render']['memoryLeft'] = Config::getConfigFromFile('render', 'memoryLeft');
-      $value['render']['maxRuntime'] = Config::getConfigFromFile('render', 'maxRuntime');
-      $value['logging']['folder'] = Config::getConfigFromFile('logging', 'folder');
-      $value['logging']['maxfiles'] = Config::getConfigFromFile('logging', 'maxfiles');
+      $value['output']['skin'] = Config::getConfigFromFile('output', 'skin');
+      $value['runtime']['memoryLeft'] = Config::getConfigFromFile('runtime', 'memoryLeft');
+      $value['runtime']['maxRuntime'] = Config::getConfigFromFile('runtime', 'maxRuntime');
+      $value['output']['folder'] = Config::getConfigFromFile('output', 'folder');
+      $value['output']['maxfiles'] = Config::getConfigFromFile('output', 'maxfiles');
       $value['output']['destination'] = Config::getConfigFromFile('output', 'destination');
-      $value['output']['maxCall'] = Config::getConfigFromFile('output', 'maxCall');
-      $value['output']['disabled'] = Config::getConfigFromFile('output', 'disabled');
-      $value['output']['detectAjax'] = Config::getConfigFromFile('output', 'detectAjax');
-      $value['deep']['analyseProtected'] = Config::getConfigFromFile('deep', 'analyseProtected');
-      $value['deep']['analysePrivate'] = Config::getConfigFromFile('deep', 'analysePrivate');
-      $value['deep']['analyseTraversable'] = Config::getConfigFromFile('deep', 'analyseTraversable');
-      $value['deep']['debugMethods'] = Config::getConfigFromFile('deep', 'debugMethods');
-      $value['deep']['level'] = Config::getConfigFromFile('deep', 'level');
+      $value['runtime']['maxCall'] = Config::getConfigFromFile('runtime', 'maxCall');
+      $value['runtime']['disabled'] = Config::getConfigFromFile('runtime', 'disabled');
+      $value['runtime']['detectAjax'] = Config::getConfigFromFile('runtime', 'detectAjax');
+      $value['properties']['analyseProtected'] = Config::getConfigFromFile('properties', 'analyseProtected');
+      $value['properties']['analysePrivate'] = Config::getConfigFromFile('properties', 'analysePrivate');
+      $value['properties']['analyseConstants'] = Config::getConfigFromFile('properties', 'analyseConstants');
+      $value['properties']['analyseTraversable'] = Config::getConfigFromFile('properties', 'analyseTraversable');
+      $value['methods']['debugMethods'] = Config::getConfigFromFile('methods', 'debugMethods');
+      $value['runtime']['level'] = Config::getConfigFromFile('runtime', 'level');
       $value['methods']['analyseMethodsAtall'] = Config::getConfigFromFile('methods', 'analyseMethodsAtall');
       $value['methods']['analyseProtectedMethods'] = Config::getConfigFromFile('methods', 'analyseProtectedMethods');
       $value['methods']['analysePrivateMethods'] = Config::getConfigFromFile('methods', 'analysePrivateMethods');
-      $value['errorHandling']['registerAutomatically'] = Config::getConfigFromFile('errorHandling', 'registerAutomatically');
-      $value['errorHandling']['backtraceAnalysis'] = Config::getConfigFromFile('errorHandling', 'backtraceAnalysis');
+      $value['backtraceAndError']['registerAutomatically'] = Config::getConfigFromFile('backtraceAndError', 'registerAutomatically');
+      $value['backtraceAndError']['backtraceAnalysis'] = Config::getConfigFromFile('backtraceAndError', 'backtraceAnalysis');
 
       // Are these actually set?
       foreach ($value as $mainkey => $setting) {
@@ -367,8 +383,8 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
         Messages::removeKey('protected.folder.chunk');
         Messages::removeKey('protected.folder.log');
         foreach ($this->getTranslatedMessages() as $message) {
-            $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
-          }
+          $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
+        }
       }
       else {
         $this->addMessage($this->LLL('save.success.text', array($filepath)), $this->LLL('save.success.title'), t3lib_FlashMessage::OK);
@@ -413,7 +429,7 @@ if (!class_exists('Tx_Includekrexx_Controller_IndexController')) {
       // Whitelist of the vales we are accepting.
       $allowed_values = array('full', 'display', 'none');
 
-       // Check for writing permission.
+      // Check for writing permission.
       if (!is_writable(dirname($filepath))) {
         $all_ok = FALSE;
         Messages::addMessage($this->LLL('file.not.writable', array($filepath)));

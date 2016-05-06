@@ -112,21 +112,21 @@ class Variables {
     // Closures are analysed separately.
     if (is_object($data) && !is_a($data, '\Closure')) {
       Internals::$nestingLevel++;
-      if (Internals::$nestingLevel <= (int) Config::getConfigValue('deep', 'level')) {
+      if (Internals::$nestingLevel <= (int) Config::getConfigValue('runtime', 'level')) {
         $result = Objects::analyseObject($data, $name, '', $connector1, $connector2);
         Internals::$nestingLevel--;
         return $result;
       }
       else {
         Internals::$nestingLevel--;
-        return Variables::analyseString("Object => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $name);
+        return Variables::analyseString("Object => Maximum for analysis reached. I will not go any further.\n To increase this value, change the runtime => level setting.", $name);
       }
     }
 
     // Closure?
     if (is_object($data) && is_a($data, '\Closure')) {
       Internals::$nestingLevel++;
-      if (Internals::$nestingLevel <= (int) Config::getConfigValue('deep', 'level')) {
+      if (Internals::$nestingLevel <= (int) Config::getConfigValue('runtime', 'level')) {
         if ($connector2 == '] =') {
           $connector2 = ']';
         }
@@ -136,21 +136,21 @@ class Variables {
       }
       else {
         Internals::$nestingLevel--;
-        return Variables::analyseString("Closure => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $name);
+        return Variables::analyseString("Closure => Maximum for analysis reached. I will not go any further.\n To increase this value, change the runtime => level setting.", $name);
       }
     }
 
     // Array?
     if (is_array($data)) {
       Internals::$nestingLevel++;
-      if (Internals::$nestingLevel <= (int) Config::getConfigValue('deep', 'level')) {
+      if (Internals::$nestingLevel <= (int) Config::getConfigValue('runtime', 'level')) {
         $result = Variables::analyseArray($data, $name, '', $connector1, $connector2);
         Internals::$nestingLevel--;
         return $result;
       }
       else {
         Internals::$nestingLevel--;
-        return Variables::analyseString("Array => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $name);
+        return Variables::analyseString("Array => Maximum for analysis reached. I will not go any further.\n To increase this value, change the runtime => level setting.", $name);
       }
     }
 

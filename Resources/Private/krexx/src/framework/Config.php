@@ -63,35 +63,33 @@ class Config {
    * @var array
    */
   public static $configFallback = array(
-    'render' => array(
-      'skin' => 'smoky-grey',
+    'runtime' => array(
+      'disabled' => 'false',
+      'detectAjax' => 'true',
+      'level' => '5',
+      'maxCall' => '10',
       'memoryLeft' => '64',
       'maxRuntime' => '60',
     ),
-    'logging' => array(
+    'output' => array(
+      'skin' => 'smoky-grey',
+      'destination' => 'frontend',
       'folder' => 'log',
       'maxfiles' => '10',
     ),
-    'output' => array(
-      'destination' => 'frontend',
-      'maxCall' => '10',
-      'disabled' => 'false',
-      'detectAjax' => 'true',
-    ),
-    'deep' => array(
+    'properties' => array(
       'analyseProtected' => 'false',
       'analysePrivate' => 'false',
-      'analyseTraversable' => 'true',
       'analyseConstants' => 'true',
-      'debugMethods' => 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo',
-      'level' => '5',
+      'analyseTraversable' => 'true',
     ),
     'methods' => array(
       'analyseMethodsAtall' => 'true',
       'analyseProtectedMethods' => 'false',
       'analysePrivateMethods' => 'false',
+      'debugMethods' => 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo',
     ),
-    'errorHandling' => array(
+    'backtraceAndError' => array(
       'registerAutomatically' => 'false',
       'backtraceAnalysis' => 'deep',
     ),
@@ -207,7 +205,10 @@ class Config {
     // cause a fatal error!
     'TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper' => '__toString',
     'ReflectionClass' => '__toString',
+    // Deleting all rows from the DB via typo3 reopsitory is NOT a good
+    // debug method!
     'RepositoryInterface' => 'removeAll',
+    'Tx_Extbase_Persistence_RepositoryInterface' => 'removeAll',
   );
 
   /**
@@ -229,7 +230,7 @@ class Config {
    *
    * @var string
    */
-  public static $version = '1.4.1';
+  public static $version = '1.4.2 dev';
 
   /**
    * Get\Set kreXX state: whether it is enabled or disabled.
@@ -252,7 +253,7 @@ class Config {
     }
 
     // Disabled in the ini or in the local settings?
-    if (Config::getConfigValue('output', 'disabled', $ignore_local_settings) == 'true') {
+    if (Config::getConfigValue('runtime', 'disabled', $ignore_local_settings) == 'true') {
       // self::$isEnabled = FALSE;
       return FALSE;
     }
@@ -608,8 +609,8 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "deep => analyseProtected"! Expected boolean. The configured setting was not applied!');
-            Messages::addKey('deep.analyseProtected.error');
+            Messages::addMessage('Wrong configuration for: "properties => analyseProtected"! Expected boolean. The configured setting was not applied!');
+            Messages::addKey('properties.analyseProtected.error');
           }
           break;
 
@@ -617,8 +618,8 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "deep => analysePrivate"! Expected boolean. The configured setting was not applied!');
-            Messages::addKey('deep.analysePrivate.error');
+            Messages::addMessage('Wrong configuration for: "properties => analysePrivate"! Expected boolean. The configured setting was not applied!');
+            Messages::addKey('properties.analysePrivate.error');
           }
           break;
 
@@ -626,8 +627,8 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "deep => analyseConstants"! Expected boolean. The configured setting was not applied!');
-            Messages::addKey('deep.analysePrivate.error');
+            Messages::addMessage('Wrong configuration for: "properties => analyseConstants"! Expected boolean. The configured setting was not applied!');
+            Messages::addKey('properties.analyseConstants.error');
           }
           break;
 
@@ -636,8 +637,8 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "deep => analyseTraversable"! Expected boolean. The configured setting was not applied!');
-            Messages::addKey('deep.analyseTraversable.error');
+            Messages::addMessage('Wrong configuration for: "properties => analyseTraversable"! Expected boolean. The configured setting was not applied!');
+            Messages::addKey('properties.analyseTraversable.error');
           }
           break;
 
@@ -652,8 +653,8 @@ class Config {
           // We expect an integer.
           $result = self::evalInt($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "deep => level"! Expected integer. The configured setting was not applied!');
-            Messages::addKey('deep.level.error');
+            Messages::addMessage('Wrong configuration for: "runtime => level"! Expected integer. The configured setting was not applied!');
+            Messages::addKey('runtime.level.error');
           }
           break;
 
@@ -661,8 +662,8 @@ class Config {
           // We expect an integer.
           $result = self::evalInt($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "output => maxCall"! Expected integer. The configured setting was not applied!');
-            Messages::addKey('output.maxCall.error');
+            Messages::addMessage('Wrong configuration for: "runtime => maxCall"! Expected integer. The configured setting was not applied!');
+            Messages::addKey('runtime.maxCall.error');
           }
           break;
 
@@ -670,8 +671,8 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "output => disabled"! Expected boolean. The configured setting was not applied!');
-            Messages::addKey('output.disabled.error');
+            Messages::addMessage('Wrong configuration for: "runtime => disabled"! Expected boolean. The configured setting was not applied!');
+            Messages::addKey('runtime.disabled.error');
           }
           break;
 
@@ -679,8 +680,8 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "output => detectAjax"! Expected boolean. The configured setting was not applied!');
-            Messages::addKey('output.detectAjax.error');
+            Messages::addMessage('Wrong configuration for: "runtime => detectAjax"! Expected boolean. The configured setting was not applied!');
+            Messages::addKey('runtime.detectAjax.error');
           }
           break;
 
@@ -728,8 +729,8 @@ class Config {
             $result = TRUE;
           }
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "render => skin"! Skin not found. The configured setting was not applied!');
-            Messages::addKey('render.skin.error');
+            Messages::addMessage('Wrong configuration for: "output => skin"! Skin not found. The configured setting was not applied!');
+            Messages::addKey('output.skin.error');
           }
           break;
 
@@ -770,15 +771,15 @@ class Config {
           // We expect a bool.
           $result = self::evalBool($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "errorHandling => registerAutomatically"! Expected boolean. The configured setting was not applied!');
-            Messages::addKey('errorHandling.registerAutomatically.error');
+            Messages::addMessage('Wrong configuration for: "backtraceAndError => registerAutomatically"! Expected boolean. The configured setting was not applied!');
+            Messages::addKey('backtraceAndError.registerAutomatically.error');
           }
           // We also expect the php version to be lower than 7.
           if ($result) {
             $result = self::evalPhp();
             if (!$result) {
-              Messages::addMessage('Wrong configuration for: "errorHandling => registerAutomatically"! Fatal errors got removed in PHP 7. The handler will not work here!');
-              Messages::addKey('errorHandling.registerAutomatically.php7');
+              Messages::addMessage('Wrong configuration for: "backtraceAndError => registerAutomatically"! Fatal errors got removed in PHP 7. The handler will not work here!');
+              Messages::addKey('backtraceAndError.registerAutomatically.php7');
             }
           }
 
@@ -791,8 +792,8 @@ class Config {
             $result = TRUE;
           }
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "errorHandling => backtraceAnalysis"! Expected "normal" or "deep". The configured setting was not applied!');
-            Messages::addKey('errorHandling.backtraceAnalysis.error');
+            Messages::addMessage('Wrong configuration for: "backtraceAndError => backtraceAnalysis"! Expected "normal" or "deep". The configured setting was not applied!');
+            Messages::addKey('backtraceAndError.backtraceAnalysis.error');
           }
           break;
 
@@ -800,8 +801,8 @@ class Config {
           // We expect an integer.
           $result = self::evalInt($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "render => memoryLeft"! Expected integer. The configured setting was not applied!');
-            Messages::addKey('render.memoryLeft.error');
+            Messages::addMessage('Wrong configuration for: "runtime => memoryLeft"! Expected integer. The configured setting was not applied!');
+            Messages::addKey('runtime.memoryLeft.error');
           }
           break;
 
@@ -810,8 +811,8 @@ class Config {
           // server.
           $result = self::evalInt($value);
           if (!$result) {
-            Messages::addMessage('Wrong configuration for: "render => maxRuntime"! Expected integer. The configured setting was not applied!');
-            Messages::addKey('render.maxRuntime.error');
+            Messages::addMessage('Wrong configuration for: "runtime => maxRuntime"! Expected integer. The configured setting was not applied!');
+            Messages::addKey('runtime.maxRuntime.error');
           }
           else {
             // OK, we got an int, now to see if it is smaller than the
@@ -820,8 +821,8 @@ class Config {
             $value = (int) $value;
             if ($max_time > 0 && $max_time < $value) {
               // Too big!
-              Messages::addMessage('Wrong configuration for: "render => maxRuntime"! Maximum for this server is: ' . $max_time .  ' The configured setting was not applied!');
-              Messages::addKey('render.maxRuntime.error.maximum', array($max_time));
+              Messages::addMessage('Wrong configuration for: "runtime => maxRuntime"! Maximum for this server is: ' . $max_time . ' The configured setting was not applied!');
+              Messages::addKey('runtime.maxRuntime.error.maximum', array($max_time));
               $result = FALSE;
             }
           }

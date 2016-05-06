@@ -76,7 +76,7 @@ class Toolbox {
         // Appending stuff after a ajax request will most likely
         // cause a js error. But there are moments when you actually
         // want to do this.
-        if (Config::getConfigValue('output', 'detectAjax') == 'true') {
+        if (Config::getConfigValue('runtime', 'detectAjax') == 'true') {
           // We were supposed to detect ajax, and we did it right now.
           return TRUE;
         }

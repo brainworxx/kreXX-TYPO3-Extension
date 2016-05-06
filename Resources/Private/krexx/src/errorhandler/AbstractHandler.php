@@ -92,7 +92,7 @@ abstract class AbstractHandler {
 
       // Setting template info.
       if (is_null(View\SkinRender::$skin)) {
-        View\SkinRender::$skin = Config::getConfigValue('render', 'skin');
+        View\SkinRender::$skin = Config::getConfigValue('output', 'skin');
       }
 
       // Get the header.

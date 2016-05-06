@@ -123,42 +123,42 @@ class Properties {
         // Closures are analysed separately.
         if (is_object($value) && !is_a($value, '\Closure')) {
           Internals::$nestingLevel++;
-          if (Internals::$nestingLevel <= (int) Config::getConfigValue('deep', 'level')) {
+          if (Internals::$nestingLevel <= (int) Config::getConfigValue('runtime', 'level')) {
             $result = Objects::analyseObject($value, $prop_name, $additional, $connector1);
             Internals::$nestingLevel--;
             $output .= $result;
           }
           else {
             Internals::$nestingLevel--;
-            $output .= Variables::analyseString("Object => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $prop_name, $additional, $connector1);
+            $output .= Variables::analyseString("Object => Maximum for analysis reached. I will not go any further.\n To increase this value, change the runtime => level setting.", $prop_name, $additional, $connector1);
           }
         }
 
         // Closure?
         if (is_object($value) && is_a($value, '\Closure')) {
           Internals::$nestingLevel++;
-          if (Internals::$nestingLevel <= (int) Config::getConfigValue('deep', 'level')) {
+          if (Internals::$nestingLevel <= (int) Config::getConfigValue('runtime', 'level')) {
             $result = Objects::analyseClosure($value, $prop_name, $additional, $connector1);
             Internals::$nestingLevel--;
             $output .= $result;
           }
           else {
             Internals::$nestingLevel--;
-            $output .= Variables::analyseString("Closure => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $prop_name, $additional, $connector1);
+            $output .= Variables::analyseString("Closure => Maximum for analysis reached. I will not go any further.\n To increase this value, change the runtime => level setting.", $prop_name, $additional, $connector1);
           }
         }
 
         // Array?
         if (is_array($value)) {
           Internals::$nestingLevel++;
-          if (Internals::$nestingLevel <= (int) Config::getConfigValue('deep', 'level')) {
+          if (Internals::$nestingLevel <= (int) Config::getConfigValue('runtime', 'level')) {
             $result = Variables::analyseArray($value, $prop_name, $additional, $connector1);
             Internals::$nestingLevel--;
             $output .= $result;
           }
           else {
             Internals::$nestingLevel--;
-            $output .= Variables::analyseString("Array => Maximum for analysis reached. I will not go any further.\n To increase this value, change the deep => level setting.", $prop_name, $additional, $connector1);
+            $output .= Variables::analyseString("Array => Maximum for analysis reached. I will not go any further.\n To increase this value, change the runtime => level setting.", $prop_name, $additional, $connector1);
           }
         }
 

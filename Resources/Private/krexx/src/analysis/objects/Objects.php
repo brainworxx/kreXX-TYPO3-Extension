@@ -127,7 +127,7 @@ class Objects {
       }
 
       // Dumping protected properties.
-      if (Config::getConfigValue('deep', 'analyseProtected') == 'true' || Internals::isInScope()) {
+      if (Config::getConfigValue('properties', 'analyseProtected') == 'true' || Internals::isInScope()) {
         $ref_props = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
         usort($ref_props, $sorting_callback);
 
@@ -137,7 +137,7 @@ class Objects {
       }
 
       // Dumping private properties.
-      if (Config::getConfigValue('deep', 'analysePrivate') == 'true' || Internals::isInScope()) {
+      if (Config::getConfigValue('properties', 'analysePrivate') == 'true' || Internals::isInScope()) {
         $ref_props = $ref->getProperties(\ReflectionProperty::IS_PRIVATE);
         usort($ref_props, $sorting_callback);
         if (count($ref_props)) {
@@ -146,7 +146,7 @@ class Objects {
       }
 
       // Dumping class constants.
-      if (Config::getConfigValue('deep', 'analyseConstants') == 'true') {
+      if (Config::getConfigValue('properties', 'analyseConstants') == 'true') {
         $output .= Properties::getReflectionConstantsData($ref);
       }
 
@@ -154,7 +154,7 @@ class Objects {
       $output .= Methods::getMethodData($data);
 
       // Dumping traversable data.
-      if (Config::getConfigValue('deep', 'analyseTraversable') == 'true') {
+      if (Config::getConfigValue('properties', 'analyseTraversable') == 'true') {
         $output .= Objects::getTraversableData($data, $name);
       }
 
@@ -228,7 +228,7 @@ class Objects {
   public static function pollAllConfiguredDebugMethods($data) {
     $output = '';
 
-    $func_list = explode(',', Config::getConfigValue('deep', 'debugMethods'));
+    $func_list = explode(',', Config::getConfigValue('methods', 'debugMethods'));
     foreach ($func_list as $func_name) {
       if (is_callable(array(
           $data,

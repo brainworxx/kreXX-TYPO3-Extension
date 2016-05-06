@@ -1,44 +1,8 @@
-; 
+;
 ; kreXX CONFIGURATION FILE
 ;
-; ------------------------------------------------------------------------------------------
-[render]
-; Change the above value to set the CSS skin used to render kreXX layout.
-; skin = "schablon"
-skin = "hans"
-
-; Setting up the config for the emergency break.
-; When analysing large objects, there is always the chance that you run out of time
-; or memory. kreXX checks these values regularly.
-; kreXX checks regularly how much memory is left. Here you can adjust the amount
-; where it will trigger an emergency break. Unit of measurement is MB.
-memoryLeft = "64"
-; 'kreXX checks during the analysis how much time has elapsed since start. Here you
-; can adjust the amount where it will trigger an emergency break. Unit of measurement
-; is seconds.',
-maxRuntime = "60"
-
-; ------------------------------------------------------------------------------------------
-[logging]
-; Logging settings
-; Where shall kreXX save it's logfiles and how many files should he keep?
-; Files will only get deleted, when he creates a new one.
-folder = "log"
-maxfiles = "10"
-
-
-; ------------------------------------------------------------------------------------------
-[output]
-; Output settings
-; Where shall kreXX put it's data?
-; Is the output the frontend or the logfolder?
-; destination = "file"
-destination = "frontend"
-
-; How often can you call kreXX in one run?
-; kreXX can generate a lot of data, and depending on your settings
-; increasing this number might not be a good idea.
-maxCall = "10"
+; ------------------------------------------------------------------------------
+[runtime]
 
 ; Is kreXX actually active?
 ; Here you can disable kreXX on a global level without uninstalling it.
@@ -46,16 +10,53 @@ disabled = "false"
 ; disabled = "true"
 
 ; Shall kreXX try to detect an AJAX request?
-; If set to true, there will be no output when AJAX is detected, to prevent a js error.
+; If set to true, there will be no output when AJAX is detected, to prevent a
+; js error.
 detectAjax = "true"
 ; detectAjax = "false"
 
+; How deep shall we analyse objects?
+; When we reach a certain level, we simply stop there and won't go any further.
+level = "5"
 
-; ------------------------------------------------------------------------------------------
-[deep]
-; Object analysis settings
-; kreXX can poll a lot of info. Depending on your needs, these might be
-; a little too much. It also increases the output, which might not be a good idea
+; How often can you call kreXX in one run?
+; kreXX can generate a lot of data, and depending on your settings
+; increasing this number might not be a good idea.
+maxCall = "10"
+
+; Setting up the config for the emergency break.
+; When analysing large objects, there is always the chance that you run out of
+; time or memory. kreXX checks these values regularly.
+; kreXX checks regularly how much memory is left. Here you can adjust the amount
+; where it will trigger an emergency break. Unit of measurement is MB.
+memoryLeft = "64"
+
+; kreXX checks during the analysis how much time has elapsed since start. Here
+; you can adjust the amount where it will trigger an emergency break. Unit of
+; measurement is seconds.
+maxRuntime = "60"
+
+; ------------------------------------------------------------------------------
+[output]
+
+; Change the above value to set the CSS skin used to render kreXX layout.
+; skin = "hans"
+skin = "smoky-grey"
+
+; Where shall kreXX put it's data?
+; Is the output the frontend or the logfolder?
+; destination = "file"
+destination = "frontend"
+
+; Where shall kreXX save it's logfiles and how many files should he keep?
+; Files will only get deleted, when he creates a new one.
+folder = "log"
+maxfiles = "10"
+
+; ------------------------------------------------------------------------------
+[properties]
+; kreXX can poll a lot of info. Depending on your needs, these might be a little
+; too much. It also increases the output, which might not be a good idea
 
 ; Shall kreXX create a reflection and poll it for data?
 ; There might be a setter/getter for it somewhere . . .
@@ -64,22 +65,17 @@ analyseProtected = "false"
 ; analysePrivate = "true"
 analysePrivate = "false"
 
+; Shall kreXX analyse the constants of a class?
+analyseConstants = "true"
+; analyseConstants = "true"
+
 ; Shall kreXX try to traverse through the object?
 analyseTraversable = "true"
 ; analyseTraversable = "false"
 
-; What kind of additional methods shall be called from the object?
-; Comma separated list of functions. They are only called, when they are callable.
-; These functions are called without parameters. They also might actually do stuff
-; which might be unwanted.
-debugMethods = "debug,toArray,__toString,toString"
-
-; How deep shall we analyse objects?
-; When we reach a certain level, we simply stop there and won't go any further.
-level = "5"
-
-; ------------------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------
 [methods]
+
 ; Here you can configure, what analysis will be done on class methods.
 analyseMethodsAtall = "true"
 ; analyseMethodsAtall = "false"
@@ -88,16 +84,23 @@ analyseProtectedMethods = "false"
 ; analysePrivateMethods = "true"
 analysePrivateMethods = "false"
 
-; ------------------------------------------------------------------------------------------
-[errorHandling]
-; kreXX comes with an unregistrable fatal error handler, which can be configured here.
-; When set to "true", kreXX will register the handler as soon as it's included.
-; When a fatal error occurs, kreXX will offer a backtrace and a analysis of
-; the all objects in it. PHP always clears the stack in case of a fatal error,
-; so kreXX has to keep track of it. Be warned: This option will dramatically
-; slow down your requests. Use this only when you have to. It is by far better
-; to register the errorhandler yourself with \krexx::registerFatal(); and later
-; unregister it with \krexx::unregisterFatal(); to prevent a slowdown.
+; What kind of additional methods shall be called from the object?
+; Comma separated list of functions. They are only called, when they are
+; callable. These functions are called without parameters. They also might
+; actually do stuff which might be unwanted.
+debugMethods = "debug,toArray,__toString,toString"
+
+; ------------------------------------------------------------------------------
+[backtraceAndError]
+
+; kreXX comes with an unregistrable fatal error handler, which can be configured
+; here. When set to "true", kreXX will register the handler as soon as it's
+; included. When a fatal error occurs, kreXX will offer a backtrace and a
+; analysis of the all objects in it. PHP always clears the stack in case of a
+; fatal error, so kreXX has to keep track of it. Be warned: This option will
+; dramatically slow down your requests. Use this only when you have to. It is by
+; far better to register the errorhandler yourself with \krexx::registerFatal();
+; and later unregister it with \krexx::unregisterFatal(); to prevent a slowdown.
 ; registerAutomatically = "true"
 registerAutomatically = "false"
 
@@ -109,13 +112,14 @@ backtraceAnalysis = "deep"
 ; backtraceAnalysis = "normal"
 
 
+
 ; ------------------------------------------------------------------------------------------
 [feEditing]
 ; Here you can edit the frontend configuration form
 ; full    = can be edited
 ; display = is displayed only
 ; none    = is not displayed at all
-; Since the local configuration is stored in a cookie, settings will be 
+; Since the local configuration is stored in a cookie, settings will be
 ; ignored, in case a setting can not be edited.
 skin = "full"
 memoryLeft = "full"

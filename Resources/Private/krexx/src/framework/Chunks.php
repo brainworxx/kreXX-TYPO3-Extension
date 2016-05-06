@@ -198,7 +198,7 @@ class Chunks {
     // Cleanup old logfiles to prevent a overflow.
     static $log_dir;
     if (is_null($log_dir)) {
-      $log_dir = Config::getConfigValue('logging', 'folder') . DIRECTORY_SEPARATOR;
+      $log_dir = Config::getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR;
     }
     self::cleanupOldLogs($log_dir);
 
@@ -257,7 +257,7 @@ class Chunks {
     // Cleanup old logfiles to prevent a overflow.
     $log_list = glob(Config::$krexxdir . $log_dir . "*.Krexx.html");
     array_multisort(array_map('filemtime', $log_list), SORT_DESC, $log_list);
-    $max_file_count = (int) Config::getConfigValue('logging', 'maxfiles');
+    $max_file_count = (int) Config::getConfigValue('output', 'maxfiles');
     $count = 1;
     // Cleanup logfiles.
     foreach ($log_list as $file) {
