@@ -33,7 +33,6 @@
 
 use \Brainworxx\Krexx\View\Messages;
 
-
 // The mainproblem with 7.0 is, that compatibility6 may or may not be installed.
 // If not, I have to put this thing here, hoping not to break anything!
 if (!class_exists('Tx_Extbase_MVC_Controller_ActionController')) {
@@ -187,6 +186,31 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
       }
 
       return $result;
+    }
+
+    /**
+     * Assigns the content of a css file as a variable to the view.
+     *
+     * Since addJsFile and addCssFile got removed in 7.0, I have to resort to
+     * adding stuff inline.
+     *
+     * @see
+     *   All the template layouts renders the css.
+     *
+     * @param string $file
+     *   Filename of the css file, located in the resource public dir.
+     */
+    protected function addCssToView($file) {
+      if (class_exists('TYPO3\CMS\Core\Utility\GeneralUtility')) {
+        $uri = TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/' . $file);
+      }
+      else {
+        $uri = \t3lib_div::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/' . $file);
+      }
+
+      if (is_readable($uri)) {
+        $this->view->assign('css', file_get_contents($uri));
+      }
     }
   }
 

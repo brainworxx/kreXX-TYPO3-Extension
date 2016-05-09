@@ -50,6 +50,7 @@ if (!class_exists('Tx_Includekrexx_Controller_HelpController')) {
       foreach ($this->getTranslatedMessages() as $message) {
         $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
       }
+      $this->addCssToView('Backend.css');
     }
 
     /**
@@ -60,6 +61,7 @@ if (!class_exists('Tx_Includekrexx_Controller_HelpController')) {
       foreach ($this->getTranslatedMessages() as $message) {
         $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
       }
+      $this->addCssToView('Backend.css');
     }
   }
 }

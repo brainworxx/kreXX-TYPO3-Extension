@@ -141,6 +141,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
 
       $this->view->assign('data', $data);
       $this->view->assign('value', $value);
+      $this->addCssToView('Backend.css');
     }
 
     /**
@@ -224,7 +225,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
           $this->addMessage($this->LLL('save.success.text', array($filepath)), $this->LLL('save.success.title'), t3lib_FlashMessage::OK);
         }
       }
-      
+
       $this->redirect('edit');
 
 
