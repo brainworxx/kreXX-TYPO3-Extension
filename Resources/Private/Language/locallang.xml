@@ -184,12 +184,17 @@
       <label index="log.headline">Overview file logging</label>
       <label index="log.filename">Filename</label>
       <label index="log.time">Last modified</label>
-      <label index="log.size">size</label>
+      <label index="log.size">Size</label>
       <label index="log.fileerror">Error reading logfile</label>
       <label index="log.notreadable">File %1$s is not readable!</label>
       <label index="log.headline.text.1">This is an overview of all logfiles that kreXX has created. You can easily access them here, just by clicking the filename.</label>
       <label index="log.headline.text.2">You can activate file logging on the configuration page found here:</label>
       <label index="log.noresult">Sorry, there are currently no logfiles.</label>
+      <label index="log.inline">line</label>
+      <label index="log.of">of</label>
+      <label index="log.in">in</label>
+      <label index="log.nodata">No data available.</label>
+      <label index="log.meta">Metadata</label>
     </languageKey>
   </data>
 </T3locallang>

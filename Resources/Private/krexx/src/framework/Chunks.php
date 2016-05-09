@@ -57,6 +57,16 @@ use Brainworxx\Krexx\View\Messages;
 class Chunks {
 
   /**
+   * Here we store the metadata from the call.
+   *
+   * We save this data in a separate file, so that a backend extension can offer
+   * some additional data about the logfiles and their content.
+   *
+   * @var array
+   */
+  protected static $metadata = array();
+
+  /**
    * Are we using chunks?
    *
    * When we do, kreXX will store tempoary files in the chunks folder.
@@ -224,6 +234,12 @@ class Chunks {
 
     // No more chunks, we save what is left.
     Toolbox::putFileContents($filename, $string);
+    // Save our metadata, so a potential backend module can display it.
+    if (!empty(self::$metadata)) {
+      Toolbox::putFileContents($filename . '.json', json_encode(self::$metadata));
+      Toolbox::formattedVarDump(self::$metadata);
+      self::$metadata = array();
+    }
   }
 
   /**
@@ -261,11 +277,17 @@ class Chunks {
     $count = 1;
     // Cleanup logfiles.
     foreach ($log_list as $file) {
-      if (is_writable($file) && $count >= $max_file_count) {
-        unlink($file);
+      if ($count > $max_file_count) {
+        if (is_writable($file)) {
+          unlink($file);
+        }
+        if (is_writable($file . '.json')) {
+          unlink($file . '.json');
+        }
       }
       $count++;
     }
+
   }
 
   /**
@@ -290,6 +312,14 @@ class Chunks {
    */
   public static function setUseChunks($bool) {
     self::$useChunks = $bool;
+  }
 
+  /**
+   * We add some metadata that we will store in a separate file.
+   *
+   * @param array $caller
+   */
+  public static function addMetadata($caller) {
+    self::$metadata[] = $caller;
   }
 }

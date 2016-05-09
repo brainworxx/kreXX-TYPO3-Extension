@@ -118,6 +118,14 @@ abstract class AbstractHandler {
       $messages = View\Messages::outputMessages();
 
       if (Config::getConfigValue('output', 'destination') == 'file') {
+        // Add the caller as metadata to the chunks class. It will be saved as
+        // additional info, in case we are logging to a file.
+        Chunks::addMetadata(array(
+          'file' => $error_data['errfile'],
+          'line' => $error_data['errline'] + 1,
+          'varname' => ' Fatal Error',
+        ));
+
         // Save it to a file.
         Chunks::saveDechunkedToFile($header . $messages . $main . $backtrace . $footer);
       }

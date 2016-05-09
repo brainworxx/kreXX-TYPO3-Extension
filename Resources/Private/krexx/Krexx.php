@@ -36,6 +36,8 @@ use Brainworxx\Krexx\Errorhandler\Fatal;
 use Brainworxx\Krexx\Framework\Config;
 use Brainworxx\Krexx\Framework\Internals;
 use Brainworxx\Krexx\Framework\ShutdownHandler;
+use Brainworxx\Krexx\Framework\Toolbox;
+use Brainworxx\Krexx\Framework\Chunks;
 use Brainworxx\Krexx\View\Render;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Help;
@@ -151,7 +153,7 @@ class Krexx {
       Messages::addMessage('Chunksfolder ' . $krexxdir . 'chunks' . DIRECTORY_SEPARATOR . ' is not writable!. This will increase the memory usage of kreXX significantly!', 'critical');
       Messages::addKey('protected.folder.chunk', array($krexxdir . 'chunks' . DIRECTORY_SEPARATOR));
       // We can work without chunks, but this will require much more memory!
-      Brainworxx\Krexx\Framework\Chunks::setUseChunks(FALSE);
+      Chunks::setUseChunks(FALSE);
     }
     if (!is_writeable($krexxdir . Config::getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR)) {
       Messages::addMessage('Logfolder ' . $krexxdir . Config::getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR . ' is not writable !', 'critical');
@@ -188,25 +190,6 @@ class Krexx {
         self::open();
       }
     }
-    self::reFatalAfterKrexx();
-  }
-
-  /**
-   * Resets the timer and takes a "moment".
-   */
-  public Static function timerStart() {
-    self::noFatalForKrexx();
-    // Disabled ?
-    if (!Config::isEnabled()) {
-      return;
-    }
-
-    // Reset what we had before.
-    self::$timekeeping = array();
-    self::$counterCache = array();
-    self::$timekeeping[] = Framework\Toolbox::getCurrentUrl();
-
-    self::timerMoment('start');
     self::reFatalAfterKrexx();
   }
 
@@ -321,6 +304,8 @@ class Krexx {
 
     // Find caller.
     $caller = Internals::findCaller();
+    $caller['type'] = 'Cookie Configuration';
+    Chunks::addMetadata($caller);
 
     // Render it.
     Render::$KrexxCount++;

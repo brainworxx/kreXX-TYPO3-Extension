@@ -79,7 +79,7 @@ class Internals {
   public static $timer = 0;
 
   /**
-   * The benchmark mainfunction.
+   * The benchmark main function.
    *
    * @param array $arg_t
    *   The timekeeping array.
@@ -136,6 +136,13 @@ class Internals {
 
     // Find caller.
     $caller = self::findCaller();
+    if ($headline != '') {
+      $caller['type'] = $headline;
+    }
+    else {
+      $caller['type'] = 'Analysis';
+    }
+
 
     // Set the headline, if it's not set already.
     if ($headline == '') {
@@ -214,6 +221,12 @@ class Internals {
     }
     self::$shutdownHandler->addChunkString($footer);
 
+    // Add the caller as metadata to the chunks class. It will be saved as
+    // additional info, in case we are logging to a file.
+    if (Config::getConfigValue('output', 'destination') == 'file') {
+      Chunks::addMetadata($caller);
+    }
+
     // Cleanup the hive, this removes all recursion markers.
     Hive::cleanupHive();
 
@@ -240,6 +253,7 @@ class Internals {
 
     // Find caller.
     $caller = self::findCaller();
+    $caller['type'] = 'Backtrace';
 
     $headline = 'Backtrace';
 
@@ -277,6 +291,12 @@ class Internals {
       self::$shutdownHandler->addChunkString($analysis);
     }
     self::$shutdownHandler->addChunkString($footer);
+
+    // Add the caller as metadata to the chunks class. It will be saved as
+    // additional info, in case we are logging to a file.
+    if (Config::getConfigValue('output', 'destination') == 'file') {
+      Chunks::addMetadata($caller);
+    }
 
     // Cleanup the hive, this removes all recursion markers.
     Hive::cleanupHive();

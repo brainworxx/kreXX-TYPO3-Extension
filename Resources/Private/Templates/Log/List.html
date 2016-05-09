@@ -23,6 +23,7 @@
       <th><f:translate key="log.filename" /></th>
       <th><f:translate key="log.time" /></th>
       <th><f:translate key="log.size" /></th>
+      <th><f:translate key="log.meta" /></th>
     </tr>
     <f:for each="{files}" as="file">
       <tr>
@@ -34,6 +35,38 @@
         </td>
         <td>
           {file.size}
+        </td>
+        <td>
+          <table class="noborder"><tbody>
+            <f:if condition="{f:count(subject: file.meta)}==0">
+              <f:then>
+                <tr><td><f:translate key="log.nodata" /></td></tr>
+              </f:then>
+              <f:else>
+                <f:for each="{file.meta}" as="meta">
+                  <tr>
+                    <td>
+                      {meta.type}
+                      <f:if condition="{meta.varname}!='...'">
+                        <f:then>
+                          <f:translate key="log.of" /> <b>{meta.varname}</b>
+                        </f:then>
+                      </f:if>
+                      </td>
+                    <td>
+                      <f:translate key="log.in" /> <b title="{meta.file}">{meta.filename}</b>
+                    </td>
+                    <td>
+                      <f:translate key="log.inline" /> <b>{meta.line}</b>
+                    </td>
+                  </tr>
+                </f:for>
+
+              </f:else>
+            </f:if>
+
+
+          </tbody></table>
         </td>
       </tr>
     </f:for>

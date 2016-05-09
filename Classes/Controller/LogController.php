@@ -58,10 +58,23 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
       $file_list = array();
       foreach ($files as $file) {
         $file_info = array();
+
+        // Getting the basic info.
         $file_info['name'] = basename($file);
         $file_info['size'] = $this->fileSizeConvert(filesize($file));
         $file_info['time'] = date("d.m.y H:i:s", filemtime($file));
         $file_info['id'] = str_replace('.Krexx.html', '', $file_info['name']);
+
+        // Parsing a potentialls 80MB file for it's content is not a good idea.
+        // That is why the kreXX lib provides some meta data. We will open
+        // this file and add it's content to the template.
+        if (is_readable($file . '.json')) {
+          $file_info['meta'] = json_decode(file_get_contents($file . '.json'), TRUE);
+
+          foreach($file_info['meta'] as &$meta) {
+            $meta['filename'] = basename($meta['file']);
+          }
+        }
 
         $file_list[] = $file_info;
       }

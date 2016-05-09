@@ -1,8 +1,11 @@
 1.4.2
+- Added analysis metadata to the file output.
 - Change: Restructured the configuration options. The sorting does now
   make more sense than before.
 - Bugfix: No helptext displayed for readonly cookie config.
-- Bugfix: The Hans skin render their name twice.
+- Bugfix: The Hans skin renders the config option name twice.
+- Bugfix: When setting the logfiles to '10', kreXX will now keep 10
+  files, and not 9.
 
 1.4.1
 - Added class constants analysis.
