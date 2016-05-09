@@ -139,6 +139,8 @@
       <label index="editcookie.enabled.1">Here you can edit the local cookie settings. They are stored in a cookie, and only affect your current browser. Unlike the configuration file, not all settings can be edited here by default. This can be changed in the</label>
       <label index="editcookie.enabled.2">menu. Local cookie settings overwrite configuration file settings.</label>
       <label index="editcookie.enabled.3">Please note, that these settings only affect your current browser!</label>
+      <label index="editcookie.file.1">The output destination of kreXX is set to File, so it will not be displayed here.</label>
+      <label index="editcookie.file.2">You can access all logfiles here:</label>
 
       <!-- Usage help -->
       <label index="usage.headline">Usage</label>

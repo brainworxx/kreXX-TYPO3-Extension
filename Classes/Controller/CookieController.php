@@ -64,6 +64,16 @@ if (!class_exists('Tx_Includekrexx_Controller_CookieController')) {
       else {
         $this->view->assign('is_disabled', FALSE);
       }
+
+      if (Config::getConfigValue('output', 'destination', TRUE) == 'file') {
+        // A file output will also prevent the options from popping ou here.
+        // We need to tell the user that there is nothing to see here.
+        $this->view->assign('is_file', TRUE);
+      }
+      else {
+        // Normal frontend output mode.
+        $this->view->assign('is_file', FALSE);
+      }
       \krexx::editSettings();
     }
 
