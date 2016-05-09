@@ -48,8 +48,11 @@ if (TYPO3_MODE === 'BE') {
       '',
       // Allowed controller action combinations.
       array(
-        'Index' => 'editConfig,editFeConfig,usageHelp,configHelp,saveConfig,saveFeConfig,editLocalBrowserSettings',
+        'Config' => 'edit,save',
+        'FormConfig' => 'edit,save',
         'Log' => 'list,getContent',
+        'Help' => 'usage,config',
+        'Cookie' => 'index',
       ),
       array(
         'access' => 'user,group',
@@ -69,8 +72,11 @@ if (TYPO3_MODE === 'BE') {
       '',
       // Allowed controller action combinations.
       array(
-        'Index' => 'editConfig,editFeConfig,usageHelp,configHelp,saveConfig,saveFeConfig,editLocalBrowserSettings',
+        'Config' => 'edit,save',
+        'FormConfig' => 'edit,save',
         'Log' => 'list,getContent',
+        'Help' => 'usage,config',
+        'Cookie' => 'index',
       ),
       array(
         'access' => 'user,group',

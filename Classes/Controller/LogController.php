@@ -36,91 +36,11 @@ use \Brainworxx\Krexx\Framework\Config;
 use \Brainworxx\Krexx\View\Messages;
 
 
-// The mainproblem with 7.0 is, that compatibility6 may or may not be installed.
-// If not, I have to put this thing here, hoping not to break anything!
-if (!class_exists('Tx_Extbase_MVC_Controller_ActionController')) {
-  /**
-   * Class Tx_Extbase_MVC_Controller_ActionController
-   */
-  class Tx_Extbase_MVC_Controller_ActionController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
-  }
-}
-if (!class_exists('Tx_Extbase_MVC_Controller_Arguments')) {
-  /**
-   * Class Tx_Extbase_MVC_Controller_Arguments
-   */
-  class Tx_Extbase_MVC_Controller_Arguments extends \TYPO3\CMS\Extbase\Mvc\Controller\Arguments {
-  }
-}
-if (!class_exists('t3lib_FlashMessage')) {
-  /**
-   * Class t3lib_FlashMessage
-   */
-  class t3lib_FlashMessage extends \TYPO3\CMS\Core\Messaging\FlashMessage {
-  }
-}
-
 if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
   /**
    * Class Tx_Includekrexx_Controller_LogController
    */
-  class Tx_Includekrexx_Controller_LogController extends Tx_Extbase_MVC_Controller_ActionController {
-
-    /**
-     * Injects the arguments
-     *
-     * @param Tx_Extbase_MVC_Controller_Arguments $arguments
-     *   The arguments from the call to the controller.
-     */
-    public function injectArguments(Tx_Extbase_MVC_Controller_Arguments $arguments) {
-      $this->arguments = $arguments;
-    }
-
-
-    /**
-     * Wrapper for the \TYPO3\CMS\Extbase\Utility\LocalizationUtility
-     *
-     * @param string $key
-     *   The key we want to translate
-     * @param null|array $args
-     *   The strings from the controller we want to place inside the
-     *   translation.
-     *
-     * @return string
-     *   The translation itself.
-     */
-    protected function LLL($key, $args = NULL) {
-
-      if ((int) TYPO3_version > 6) {
-        // 7+ version.
-        $result = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate($key, 'includekrexx', $args);
-      }
-      else {
-        // Version 4.5 until 6.2
-        $result = Tx_Extbase_Utility_Localization::translate($key, 'includekrexx', $args);
-      }
-
-      return $result;
-    }
-
-    /**
-     * Gets all messages from kreXX and translates them.
-     *
-     * @return array
-     *   The translated messages.
-     */
-    protected function getTranslatedMessages() {
-      $result = array();
-      // Get the keys and the args.
-      $keys = Messages::getKeys();
-
-      foreach ($keys as $message) {
-        // And translate them and add a linebreak.
-        $result[] = $this->LLL($message['key'], $message['params']);
-      }
-
-      return $result;
-    }
+  class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controller_CompatibilityController {
 
     /**
      * Lists all kreXX logfiles.
@@ -173,7 +93,6 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
         $this->addMessage($this->LLL('log.notreadable', array($id . '.Krexx.html')), $this->LLL('log.fileerror'), t3lib_FlashMessage::ERROR);
         $this->redirect('list');
       }
-
     }
 
     /**
@@ -221,29 +140,6 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
         }
       }
       return $result;
-    }
-
-    /**
-     * Wrapper for the FlashMessage, which was changed in 7.0.
-     *
-     * @param string $text
-     *   The text we want to display.
-     * @param string $title
-     *   The title we want to display.
-     * @param integer $severity
-     *   The severity of the message.
-     */
-    protected function addMessage($text, $title, $severity) {
-      if (empty($text)) {
-        // No text, no message.
-        return;
-      }
-      if (!isset($this->flashMessageContainer)) {
-        $this->addFlashMessage($text, $title, $severity);
-      }
-      else {
-        $this->flashMessageContainer->add($text, $title, $severity);
-      }
     }
 
     /**

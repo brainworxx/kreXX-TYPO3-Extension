@@ -55,11 +55,23 @@ if (class_exists('Brainworxx\Krexx\Framework\Config')) {
 }
 
 // Typo3 7.3 / 7.4 does not autoload our classes anymore, so we do this here.
-if (!class_exists('Tx_Includekrexx_Controller_IndexController') && (int)TYPO3_version > 6) {
-  include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/IndexController.php'));
+if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController') && (int)TYPO3_version > 6) {
+  include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/CompatibilityController.php'));
+}
+if (!class_exists('Tx_Includekrexx_Controller_FormConfigController') && (int)TYPO3_version > 6) {
+  include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/FormConfigController.php'));
 }
 if (!class_exists('Tx_Includekrexx_Controller_LogController') && (int)TYPO3_version > 6) {
   include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/LogController.php'));
+}
+if (!class_exists('Tx_Includekrexx_Controller_HelpController') && (int)TYPO3_version > 6) {
+  include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/HelpController.php'));
+}
+if (!class_exists('Tx_Includekrexx_Controller_ConfigController') && (int)TYPO3_version > 6) {
+  include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/ConfigController.php'));
+}
+if (!class_exists('Tx_Includekrexx_Controller_CookieController') && (int)TYPO3_version > 6) {
+  include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/CookieController.php'));
 }
 if (!class_exists('Tx_Includekrexx_ViewHelpers_MessagesViewHelper') && (int)TYPO3_version > 6) {
   include_once (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/MessagesViewHelper.php'));

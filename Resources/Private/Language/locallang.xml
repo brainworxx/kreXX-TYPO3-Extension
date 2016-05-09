@@ -150,13 +150,12 @@
       <label index="usage.features.4">Content of the traversable part of the object (can be toggled)</label>
       <label index="usage.features.5">Result of all configured debugging callbacks (can be configured)</label>
       <label index="usage.features.simple">In case the variable is not an object, it will simply display its content.</label>
-      <label index="usage.label.timerStart">Start a benchmark:</label>
       <label index="usage.label.moment">Define a "moment" during a benchmark test. The $string should be something meaningful, like "Model invoice db call":</label>
       <label index="usage.label.timerEnd">End the benchmark test and displays the result:</label>
       <label index="usage.label.backtrace">Outputs backtrace with sourcecode. When kreXX finds objects inside the backtrace, it will analyse them:</label>
       <label index="usage.label.registerFatal">Register the fatal error handler in the system:</label>
       <label index="usage.label.unregisterFatal">Unregister the fatal error handler in the system:</label>
-      <label index="usage.links.headline">Mode datailed help</label>
+      <label index="usage.links.headline">More datailed help</label>
       <label index="usage.links.typo3">Documentation at Typo3 Docs</label>
       <label index="usage.links.sourceforge">Documentation at sourceforge</label>
 
