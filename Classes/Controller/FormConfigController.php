@@ -47,34 +47,6 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
   class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Controller_CompatibilityController {
 
     /**
-     * List of all setting-names for which we are accepting values.
-     *
-     * @var array
-     */
-    protected $allowedSettingsNames = array(
-      'skin',
-      'memoryLeft',
-      'maxRuntime',
-      'folder',
-      'maxfiles',
-      'destination',
-      'maxCall',
-      'disabled',
-      'detectAjax',
-      'analyseProtected',
-      'analysePrivate',
-      'analyseTraversable',
-      'debugMethods',
-      'level',
-      'analyseMethodsAtall',
-      'analyseProtectedMethods',
-      'analysePrivateMethods',
-      'registerAutomatically',
-      'backtraceAnalysis',
-      'analyseConstants',
-    );
-
-    /**
      * Shows the configuration for the FE editing.
      */
     public function editAction() {

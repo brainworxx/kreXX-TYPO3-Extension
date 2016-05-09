@@ -66,9 +66,50 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
    *
    * This is not a real controller. It hosts all those ugly workarounds to keep
    * this extesion compatible back to 4.5. This  makes the other controllers
-   * more (hopefully) readable.
+   * (hopefully) more readable.
    */
   class Tx_Includekrexx_Controller_CompatibilityController extends Tx_Extbase_MVC_Controller_ActionController {
+
+        /**
+     * List of all setting-names for which we are accepting values.
+     *
+     * @var array
+     */
+    protected $allowedSettingsNames = array(
+      'skin',
+      'memoryLeft',
+      'maxRuntime',
+      'folder',
+      'maxfiles',
+      'destination',
+      'maxCall',
+      'disabled',
+      'detectAjax',
+      'analyseProtected',
+      'analysePrivate',
+      'analyseTraversable',
+      'debugMethods',
+      'level',
+      'analyseMethodsAtall',
+      'analyseProtectedMethods',
+      'analysePrivateMethods',
+      'registerAutomatically',
+      'backtraceAnalysis',
+      'analyseConstants',
+    );
+
+    /**
+     * List of all sections for which we are accepting values
+     *
+     * @var array
+     */
+    protected $allowedSections = array(
+      'runtime',
+      'output',
+      'properties',
+      'methods',
+      'backtraceAndError',
+    );
 
     /**
      * Wrapper for the FlashMessage, which was changed in 7.0.

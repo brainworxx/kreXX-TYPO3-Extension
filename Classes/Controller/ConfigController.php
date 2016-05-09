@@ -48,47 +48,6 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
   class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Controller_CompatibilityController {
 
     /**
-     * List of all setting-names for which we are accepting values.
-     *
-     * @var array
-     */
-    protected $allowedSettingsNames = array(
-      'skin',
-      'memoryLeft',
-      'maxRuntime',
-      'folder',
-      'maxfiles',
-      'destination',
-      'maxCall',
-      'disabled',
-      'detectAjax',
-      'analyseProtected',
-      'analysePrivate',
-      'analyseTraversable',
-      'debugMethods',
-      'level',
-      'analyseMethodsAtall',
-      'analyseProtectedMethods',
-      'analysePrivateMethods',
-      'registerAutomatically',
-      'backtraceAnalysis',
-      'analyseConstants',
-    );
-
-    /**
-     * List of all sections for which we are accepting values
-     *
-     * @var array
-     */
-    protected $allowedSections = array(
-      'runtime',
-      'output',
-      'properties',
-      'methods',
-      'backtraceAndError',
-    );
-
-    /**
      * Shows the edit config screen.
      */
     public function editAction() {
@@ -234,39 +193,41 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
             }
           }
         }
-      }
-
-      // Now we must create the ini file.
-      $ini = '';
-      foreach ($old_values as $key => $setting) {
-        $ini .= '[' . $key . ']' . PHP_EOL;
-        if (is_array($setting)) {
-          foreach ($setting as $setting_name => $value) {
-            $ini .= $setting_name . ' = "' . $value . '"' . PHP_EOL;
+        // Now we must create the ini file.
+        $ini = '';
+        foreach ($old_values as $key => $setting) {
+          $ini .= '[' . $key . ']' . PHP_EOL;
+          if (is_array($setting)) {
+            foreach ($setting as $setting_name => $value) {
+              $ini .= $setting_name . ' = "' . $value . '"' . PHP_EOL;
+            }
           }
         }
-      }
 
-      // Now we should write the file!
-      if ($all_ok) {
-        if (file_put_contents($filepath, $ini) === FALSE) {
-          $all_ok = FALSE;
-          Messages::addMessage($this->LLL('file.not.writable', array($filepath)));
+        // Now we should write the file!
+        if ($all_ok) {
+          if (file_put_contents($filepath, $ini) === FALSE) {
+            $all_ok = FALSE;
+            Messages::addMessage($this->LLL('file.not.writable', array($filepath)));
+          }
+        }
+        // Something went wrong, we need to tell the user.
+        if (!$all_ok) {
+          // Got to remove some messages. We we will not queue them now.
+          Messages::removeKey('protected.folder.chunk');
+          Messages::removeKey('protected.folder.log');
+          foreach ($this->getTranslatedMessages() as $message) {
+            $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
+          }
+        }
+        else {
+          $this->addMessage($this->LLL('save.success.text', array($filepath)), $this->LLL('save.success.title'), t3lib_FlashMessage::OK);
         }
       }
-      // Something went wrong, we need to tell the user.
-      if (!$all_ok) {
-        // Got to remove some messages. We we will not queue them now.
-        Messages::removeKey('protected.folder.chunk');
-        Messages::removeKey('protected.folder.log');
-        foreach ($this->getTranslatedMessages() as $message) {
-          $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
-        }
-      }
-      else {
-        $this->addMessage($this->LLL('save.success.text', array($filepath)), $this->LLL('save.success.title'), t3lib_FlashMessage::OK);
-      }
+      
       $this->redirect('edit');
+
+
     }
 
   }
