@@ -1,6 +1,8 @@
 1.4.2
-- Restructured the configuration options. The sorting does now make more
-  sense than before.
+- Change: Restructured the configuration options. The sorting does now
+  make more sense than before.
+- Bugfix: No helptext displayed for readonly cookie config.
+- Bugfix: The Hans skin render their name twice.
 
 1.4.1
 - Added class constants analysis.

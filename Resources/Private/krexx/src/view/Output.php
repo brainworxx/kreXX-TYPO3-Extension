@@ -143,7 +143,7 @@ class Output {
                 $section_output .= SkinRender::renderSingleEditableChild($parameter_name, htmlspecialchars($parameter_value), $source[$parameter_name], $type, $parameter_name);
               }
               else {
-                $section_output .= SkinRender::renderSingleChild($parameter_value, $parameter_name, htmlspecialchars($parameter_value), FALSE, $source[$parameter_name], '', $parameter_name, '', '=>', TRUE);
+                $section_output .= SkinRender::renderSingleChild($parameter_value, $parameter_name, htmlspecialchars($parameter_value), $source[$parameter_name], $parameter_name);
               }
             }
           }
