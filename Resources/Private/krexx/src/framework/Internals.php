@@ -122,10 +122,8 @@ class Internals {
    * @param string $headline
    *   The headline of the markup we want to produce. Most likely the name of
    *   the variable.
-   * @param bool $ignore_local_settings
-   *   Are we ignoring local settings.
    */
-  public Static Function dump($data, $headline = '', $ignore_local_settings = FALSE) {
+  public Static Function dump($data, $headline = '') {
 
     // Start the timer.
     // When a certain time has passed, kreXX will use an
@@ -214,7 +212,7 @@ class Internals {
     // header, messages and footer.
     self::checkEmergencyBreak(FALSE);
 
-    self::$shutdownHandler->addChunkString(Output::outputHeader($headline, $ignore_local_settings));
+    self::$shutdownHandler->addChunkString(Output::outputHeader($headline));
     // We will not send the analysis if we have encountered an emergency break.
     if (!$emergency) {
       self::$shutdownHandler->addChunkString($analysis);

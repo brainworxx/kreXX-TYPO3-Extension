@@ -237,14 +237,11 @@ class Config {
    *
    * @param bool $state
    *   Optional, to enable or disable kreXX manually.
-   * @param bool $ignore_local_settings
-   *   Are we ignoring local cookie settings? Should only be
-   *   TRUE when we render the settings menu only.
    *
    * @return bool
    *   Returns whether kreXX is enabled or not.
    */
-  public Static Function isEnabled($state = NULL, $ignore_local_settings = FALSE) {
+  public Static Function isEnabled($state = NULL) {
 
     // Enable kreXX.
     if (!is_null($state)) {
@@ -253,7 +250,7 @@ class Config {
     }
 
     // Disabled in the ini or in the local settings?
-    if (Config::getConfigValue('runtime', 'disabled', $ignore_local_settings) == 'true') {
+    if (Config::getConfigValue('runtime', 'disabled') == 'true') {
       // self::$isEnabled = FALSE;
       return FALSE;
     }
@@ -272,51 +269,47 @@ class Config {
    *   The group inside the ini of the value that we want to read.
    * @param string $name
    *   The name of the config value.
-   * @param bool $ignore_local_settings
-   *   Are we ignoring local settings.
    *
    * @return string
    *   The value.
    */
-  public Static Function getConfigValue($group, $name, $ignore_local_settings = FALSE) {
+  public Static Function getConfigValue($group, $name) {
     // Do some caching.
     // When we ignore the local settings, we can not rely on the cached value.
-    if (isset(self::$localConfig[$group][$name]) && $ignore_local_settings == FALSE) {
+    if (isset(self::$localConfig[$group][$name])) {
       return self::$localConfig[$group][$name];
     }
 
     // Do we have a value in the cookies?
-    if ($ignore_local_settings == FALSE) {
+    $local_setting = self::getConfigFromCookies($group, $name);
+    // Do we have a value in the ini?
+    $ini_settings = self::getConfigFromFile($group, $name);
 
-      $local_setting = self::getConfigFromCookies($group, $name);
-      if (isset($local_setting)) {
-        // We must not overwrite a disabled=true with local cookie settings!
-        // Otherwise it could get enabled locally,
-        // which might be a security issue.
-        if ($name == 'disabled' && $local_setting == 'false') {
-          // Do nothing.
-          // We ignore this setting.
-        }
-        else {
-          self::$localConfig[$group][$name] = $local_setting;
-          return $local_setting;
-        }
+    if (isset($local_setting)) {
+      // We must not overwrite a disabled=true with local cookie settings!
+      // Otherwise it could get enabled locally,
+      // which might be a security issue.
+      if (
+      ($name == 'disabled' && $local_setting == 'false') ||
+      ($name == 'destination' && !is_null($ini_settings))
+      ) {
+        // Do nothing.
+        // We ignore this setting.
+      }
+      else {
+        self::$localConfig[$group][$name] = $local_setting;
+        return $local_setting;
       }
     }
 
-    // Do we have a value in the ini?
-    $ini_settings = self::getConfigFromFile($group, $name);
+
     if (isset($ini_settings)) {
-      if ($ignore_local_settings == FALSE) {
-        self::$localConfig[$group][$name] = $ini_settings;
-      }
+      self::$localConfig[$group][$name] = $ini_settings;
       return $ini_settings;
     }
 
     // Nothing yet? Give back factory settings.
-    if ($ignore_local_settings == FALSE) {
-      self::$localConfig[$group][$name] = self::$configFallback[$group][$name];
-    }
+    self::$localConfig[$group][$name] = self::$configFallback[$group][$name];
     return self::$configFallback[$group][$name];
   }
 
@@ -401,8 +394,7 @@ class Config {
       }
     }
 
-    // Get Settings from the cookies. We do not valuate them,
-    // so the dev can correct them, in case there are wrong values.
+    // Get Settings from the ini file.
     $config_ini = (array) parse_ini_string(Toolbox::getFileContents(self::getPathToIni()), TRUE);
 
     foreach (self::$configFallback as $section_name => $section_data) {
@@ -517,7 +509,7 @@ class Config {
    * @param string $name
    *   The name of the value.
    *
-   * @return mixed
+   * @return string|null
    *   The value.
    */
   public static function getConfigFromCookies($group, $name) {
@@ -538,7 +530,7 @@ class Config {
     if ($param_config[0] === FALSE) {
       // We act as if we have not found the value. Configurations that are
       // not editable on the frontend will be ignored!
-      return;
+      return NULL;
     }
     // Do we have a value in the cookies?
     if (isset($config[$name]) && self::evaluateSetting($group, $name, $config[$name])) {
@@ -547,6 +539,8 @@ class Config {
 
       return $value;
     }
+    // Still here?
+    return NULL;
   }
 
   /**

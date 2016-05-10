@@ -64,11 +64,9 @@ class ShutdownHandler {
    *
    * @param string $chunk_string
    *   The chunked output string.
-   * @param bool $ignore_local_settings
-   *   Determines if we ignore local settings for this chunk.
    */
-  public function addChunkString($chunk_string, $ignore_local_settings = FALSE) {
-    $this->chunkStrings[] = array($chunk_string, $ignore_local_settings);
+  public function addChunkString($chunk_string) {
+    $this->chunkStrings[] = $chunk_string;
   }
 
   /**
@@ -93,14 +91,14 @@ class ShutdownHandler {
     // $chunk_string[0] = the string itself
     // $chunk_string[1] = bool, ignore_local_settings
     foreach ($this->chunkStrings as $chunk_string) {
-      if (Config::getConfigValue('output', 'destination', $chunk_string[1]) == 'file') {
+      if (Config::getConfigValue('output', 'destination') == 'file') {
         // Save it to a file.
-        Chunks::saveDechunkedToFile($chunk_string[0]);
+        Chunks::saveDechunkedToFile($chunk_string);
       }
 
       else {
         // Send it to the browser.
-        Chunks::sendDechunkedToBrowser($chunk_string[0]);
+        Chunks::sendDechunkedToBrowser($chunk_string);
       }
     }
   }

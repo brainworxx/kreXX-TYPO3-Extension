@@ -49,50 +49,18 @@ class Output {
   public static $headerSend = FALSE;
 
   /**
-   * Outputs a string, either to the browser or file.
-   *
-   * Wrapper for sendOutputToBrowser() and saveOutputToFile()
-   *
-   * @param string $string
-   *   The generated DOM so far, for the output.
-   * @param bool $ignore_local_settings
-   *   Are we ignoring local settings?
-   */
-  public static function outputNow($string, $ignore_local_settings = FALSE) {
-    if (Config::getConfigValue('output', 'destination', $ignore_local_settings) == 'file') {
-      // Save it to a file.
-      Chunks::saveDechunkedToFile($string);
-    }
-    else {
-      // Send it to the browser.
-      Chunks::sendDechunkedToBrowser($string);
-    }
-  }
-
-  /**
    * Simply outputs the Header of kreXX.
    *
    * @param string $headline
    *   The headline, displayed in the header.
-   * @param bool $ignore_local_settings
-   *   Are we ignoring local cookie settings? Should only be
-   *   TRUE when we render the settings menu only.
    *
    * @return string
    *   The generated markup
    */
-  public static function outputHeader($headline, $ignore_local_settings = FALSE) {
+  public static function outputHeader($headline) {
 
     // Do we do an output as file?
-    $output_as_file = (Config::getConfigValue('output', 'destination') == 'file');
-    // When we have a normal file output, and ignore the local settings,
-    // it means we are currently rendering the frontend "Edit local settings"
-    // mask but outputting the rest into a file.
-    // We need to render the CSS/JS for the frontend, because we have dual
-    // output (frontend and file).
-    $dual_output = ($output_as_file && $ignore_local_settings);
-
-    if (!self::$headerSend || $dual_output == TRUE) {
+    if (!self::$headerSend) {
       // Send doctype and css/js only once.
       self::$headerSend = TRUE;
       return SkinRender::renderHeader('<!DOCTYPE html>', $headline, self::outputCssAndJs());
