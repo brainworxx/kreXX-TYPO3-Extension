@@ -25,7 +25,9 @@ There are 3 levels of configuration:
 
 |
 | Exception to this hierarchy rule:
-| Once you disable kreXX on file or local level, it stays disabled.
-| Bur remember: Local settings only apply to your current browser.
+* Once you disable kreXX on file or local level, it stays disabled.
+* If you set the output to file inside the configuration file, it will not be overwritten with any cookie settings.
+
+| But remember: Local settings only apply to your current browser.
 
 

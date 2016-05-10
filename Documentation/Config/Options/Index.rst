@@ -12,14 +12,22 @@
 Configuration options
 =====================
 
-
-Render
-------
+Runtime
+-------
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Option                         | Description                                                                                                                            | Possible values / example |
 +================================+========================================================================================================================================+===========================+
-| Skin                           | You can change the CSS/HTML skin. We included the Hans and Smoky-Grey skin                                                             | - hans                    |
-|                                |                                                                                                                                        | - smoky-grey              |
+| Disable output                 | | Is kreXX actually active?                                                                                                            | - true                    |
+|                                | | Here you can disable kreXX on a global level without uninstalling it.                                                                | - false                   |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Try to detect AJAX requests    | | Shall kreXX try to detect an AJAX request?                                                                                           | - true                    |
+|                                | | If set to true, there will be no output when AJAX is detected, to prevent a js error.                                                | - false                   |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Maximum nesting level          | | How deep shall we analyse objects?                                                                                                   | 5                         |
+|                                | | When kreXX reaches a certain level, it simply stops there and won’t go any further.                                                  |                           |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Maximum amount of calls        | | How often can you call kreXX in one run?                                                                                             | 10                        |
+|                                | | kreXX can generate a lot of data, and depending on your settings increasing this number might not be a good idea.                    |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Minimum amout of memory [MB]   | kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break. Unit of       | 64                        |
 |                                | measurement is MB.                                                                                                                     |                           |
@@ -28,54 +36,35 @@ Render
 |                                | emergency break will be triggered. Unit of measurement is seconds.                                                                     |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 
-Logging
--------
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Option                         | Description                                                                                                                            | Possible values / example |
-+================================+========================================================================================================================================+===========================+
-| Folder                         | Where shall kreXX save it's logfiles?                                                                                                  | log                       |
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Maximum files in the logfolder | How many files should it keep? Files will only get deleted, when a new one is created.                                                 | 10                        |
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-
-
 Output
 ------
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Option                         | Description                                                                                                                            | Possible values / example |
 +================================+========================================================================================================================================+===========================+
+| Skin                           | You can change the CSS/HTML skin. We included the Hans and Smoky-Grey skin                                                             | - hans                    |
+|                                |                                                                                                                                        | - smoky-grey              |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Destination                    | Will the output be sent to the frontend or the logfolder?                                                                              | - file                    |
 |                                |                                                                                                                                        | - frontend                |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Maximum amount of calls        | | How often can you call kreXX in one run?                                                                                             | 10                        |
-|                                | | kreXX can generate a lot of data, and depending on your settings increasing this number might not be a good idea.                    |                           |
+| Folder                         | Where shall kreXX save it's logfiles?                                                                                                  | log                       |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Disable output                 | | Is kreXX actually active?                                                                                                            | - true                    |
-|                                | | Here you can disable kreXX on a global level without uninstalling it.                                                                | - false                   |
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Try to detect AJAX requests    | | Shall kreXX try to detect an AJAX request?                                                                                           | - true                    |
-|                                | | If set to true, there will be no output when AJAX is detected, to prevent a js error.                                                | - false                   |
+| Maximum files in the logfolder | How many files should it keep? Files will only get deleted, when a new one is created.                                                 | 10                        |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 
-Deep
-----
+Properties
+----------
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Option                         | Description                                                                                                                            | Possible values / example |
 +================================+========================================================================================================================================+===========================+
 | Analyse protected properties   | | Shall kreXX create a reflection and poll it for data?                                                                                | - true                    |
 |                                | | kreXX will analyse all protected properties of a class.                                                                              | - false                   |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Analyse private properties     | | Shall kreXX create a reflection and poll it for data?                                                                                | - true                    |
-|                                | | kreXX will analyse all private properties of a class.                                                                                | - false                   |
+| Analyse constants              | | kreXX will analyse all private properties of a class.                                                                                | - true                    |
+|                                |                                                                                                                                        | - false                   |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Analyse traversable data       | Shall kreXX try to traverse through the object?                                                                                        | - true                    |
 |                                |                                                                                                                                        | - false                   |
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| List of debug methods to poll  | | Which additional methods shall be called from the object?                                                                            | debug,toArray,__toString, |
-| for data                       | | Comma separated list of methods. These methods are called without parameters. They also might do stuff which might be unwanted.      | toString                  |
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Maximum nesting level          | | How deep shall we analyse objects?                                                                                                   | 5                         |
-|                                | | When kreXX reaches a certain level, it simply stops there and won’t go any further.                                                  |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 
 Methods
@@ -91,6 +80,9 @@ Methods
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 |Analyse private methods         | Shall kreXX analyse all private methods of an object?                                                                                  | - true                    |
 |                                |                                                                                                                                        | - false                   |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| List of debug methods to poll  | | Which additional methods shall be called from the object?                                                                            | debug,toArray,__toString, |
+| for data                       | | Comma separated list of methods. These methods are called without parameters. They also might do stuff which might be unwanted.      | toString                  |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 
 Error Handling and Backtrace

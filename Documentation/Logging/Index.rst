@@ -40,10 +40,10 @@ To prevent these files from clogging up your system, kreXX will only keep 10 fil
 	:alt: Logfiles backend menu
 
 	To make these logfiles easier accessible, we have provided a backend menu, where you can easily view them.
-	
+
 |
 
-Please remember, that this configuration can also get changed on the frontend via the local cookie settings, unless you change this option inside the **FE configuration** as described in the chapter :ref:`fe-configuration`.
+Once you set the output destination to **file** inside the configuration file, any cookie settings regarding the output destination will be ignored.
 
 |
 |

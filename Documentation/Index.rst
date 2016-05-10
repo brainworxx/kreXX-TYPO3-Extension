@@ -58,8 +58,8 @@ kreXX Debugger
 
 	Introduction/Index
 	Usage/Index
+	Config/Index
 	Logging/Index
 	DevHandle/Index
-	Config/Index
 	LittleHelpers/Index
 	FatalError/Index
