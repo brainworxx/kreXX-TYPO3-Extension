@@ -237,7 +237,6 @@ class Chunks {
     // Save our metadata, so a potential backend module can display it.
     if (!empty(self::$metadata)) {
       Toolbox::putFileContents($filename . '.json', json_encode(self::$metadata));
-      Toolbox::formattedVarDump(self::$metadata);
       self::$metadata = array();
     }
   }

@@ -75,7 +75,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CookieController')) {
         $this->view->assign('is_file', FALSE);
       }
       $this->addCssToView('Backend.css');
-      \krexx::editSettings();
+      \Krexx::editSettings();
     }
 
   }
