@@ -67,7 +67,7 @@ select:disabled {
 }
 
 a.krexx-link {
-  background: url('../typo3conf/ext/includekrexx/Resources/Public/Icons/link.png') no-repeat;
+  background: url(../typo3conf/ext/includekrexx/Resources/Public/Icons/link.png) no-repeat;
   padding-left: 16px;
 }
 
