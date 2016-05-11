@@ -47,15 +47,13 @@
   /**
    * kreXX JS Class.
    *
-   * @namespace
+   * @namespace krexx
    *   It a just a collection of used js routines.
    */
   function krexx() {}
 
   /**
    * Executed on document ready
-   *
-   * @event documentready
    */
   krexx.onDocumentReady = function () {
 
@@ -64,7 +62,7 @@
     krexx.setPayloadMaxHeight();
 
     // Initialize the draggable.
-    kdt.draXX('.kwrapper',  '.kheadnote');
+    kdt.draXX('.kwrapper',  '.ktool-tabs');
 
     /**
      * Register toggling to the elements.
@@ -103,7 +101,7 @@
      *   Displays a closing animation of the corresponding
      *   krexx output "window" and then removes it from the markup.
      */
-    kdt.addEvent('.kwrapper .kheadnote-wrapper .kclose', 'click', krexx.close);
+    kdt.addEvent('.kwrapper .ktool-tabs .kclose', 'click', krexx.close);
 
     /**
      * Register the click on the tabs.
@@ -192,7 +190,7 @@
    * copy the original analysis result there and delete
    * the recursion.
    *
-   * @param event
+   * @param {Event} event
    */
   krexx.copyFrom = function (event) {
     // Prevents the default event behavior (ie: click).
@@ -291,7 +289,7 @@
    * the button. This way, we can get a breadcrumb
    * to the element we want to look at.
    *
-   * @param event
+   * @param {Event} event
    */
   krexx.collapse = function (event) {
     // Prevents the default event behavior (ie: click).
@@ -346,7 +344,7 @@
    *
    * The results are saved in the var results.
    *
-   * @param event
+   * @param {Event} event
    */
   krexx.performSearch = function (event) {
     // Prevents the default event behavior (ie: click).
@@ -439,7 +437,7 @@
   /**
    * Display the search dialog
    *
-   * @param event
+   * @param {Event} event
    */
   krexx.displaySearch = function (event) {
     // Prevents the default event behavior (ie: click).
@@ -471,7 +469,7 @@
   /**
    * Hides or displays the nest under an expandable element.
    *
-   * @param event
+   * @param {Event} event
    */
   krexx.toggle = function (event) {
     // Prevents the default event behavior (ie: click).
@@ -494,7 +492,7 @@
    *
    * It is used when we are facing a recursion in our analysis.
    *
-   * @param {HTMLElement} el
+   * @param {Element} el
    *   The element you want to focus on.
    */
   krexx.jumpTo = function (el) {
@@ -553,7 +551,7 @@
   /**
    * Shows a "fast" closing animation and then removes the krexx window from the markup.
    *
-   * @param event
+   * @param {Event} event
    */
   krexx.close = function (event) {
 
@@ -596,8 +594,7 @@
   /**
    * The kreXX code generator.
    *
-   * @event click
-   * @param event
+   * @param {Event} event
    */
   krexx.generateCode = function (event) {
     // Prevents the default event behavior (ie: click).
@@ -661,8 +658,7 @@
   /**
    * Sets the kactive on the clicked element and removes it from the others.
    *
-   * @event click
-   * @param event
+   * @param {Event} event
    */
   krexx.switchTab = function (event) {
     // Prevents the default event behavior (ie: click).
@@ -690,8 +686,6 @@
 
   /**
    * Sets the max-height on the payload elements, depending on the viewport.
-   *
-   * @event document ready
    */
   krexx.setPayloadMaxHeight = function () {
     // Get the height.
@@ -728,8 +722,7 @@
   /**
    * Displays the additional data and marks the row that is displayed.
    *
-   * @event click
-   * @param event
+   * @param {Event} event
    */
   krexx.setAdditionalData = function (event) {
 
@@ -781,8 +774,7 @@
    * Checks if the search form is inside the viewport. If not, fixes it on top.
    * Gets triggered on,y when scolling the fatel error handler.
    *
-   * @event scroll
-   * @param event
+   * @param {Event} event
    */
   krexx.checkSeachInViewport = function (event) {
     // Get the search
@@ -803,8 +795,7 @@
   /**
    * Listens for a <RETURN> in the search field.
    *
-   * @event keyup
-   * @param event
+   * @param {Event} event
    */
   krexx.searchfieldReturn = function (event) {
     // Prevents the default event behavior (ie: click).

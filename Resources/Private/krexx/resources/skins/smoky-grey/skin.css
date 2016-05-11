@@ -101,13 +101,25 @@
   .kwrapper .krela-wrapper, .kfatalwrapper-outer .krela-wrapper {
     position: relative;
     width: 100%; }
-  .kwrapper .kbg-wrapper.knormal, .kfatalwrapper-outer .kbg-wrapper.knormal {
-    background-color: #B2B2B2;
-    padding: 0 2px 2px;
+  .kwrapper .kbg-wrapper, .kfatalwrapper-outer .kbg-wrapper {
     position: relative; }
-  .kwrapper .kbg-wrapper.kfatal, .kfatalwrapper-outer .kbg-wrapper.kfatal {
-    background-color: #B2B2B2;
-    margin-bottom: 25px; }
+    .kwrapper .kbg-wrapper.knormal, .kfatalwrapper-outer .kbg-wrapper.knormal {
+      background-color: #B2B2B2;
+      padding: 0 2px 2px;
+      position: relative; }
+    .kwrapper .kbg-wrapper.kfatal, .kfatalwrapper-outer .kbg-wrapper.kfatal {
+      background-color: #B2B2B2;
+      margin-bottom: 25px; }
+    .kwrapper .kbg-wrapper .kspacer, .kfatalwrapper-outer .kbg-wrapper .kspacer {
+      background-color: #F2F2F2;
+      height: 5px;
+      display: block;
+      top: 0;
+      position: absolute;
+      list-style: none;
+      right: 15px;
+      left: 3px;
+      z-index: 1; }
   .kwrapper .knode, .kfatalwrapper-outer .knode {
     margin: 0;
     padding: 0; }
@@ -115,48 +127,18 @@
       margin-left: 24px; }
     .kwrapper .knode.kfirst, .kfatalwrapper-outer .knode.kfirst {
       font: normal 12px tahoma, verdana; }
-    .kwrapper .knode .kheadnote, .kfatalwrapper-outer .knode .kheadnote {
-      background-color: #919191;
-      padding: 5px 10px 0;
-      list-style: none;
-      cursor: move;
-      margin: 0; }
-      .kwrapper .knode .kheadnote .kheadnote-wrapper, .kfatalwrapper-outer .knode .kheadnote .kheadnote-wrapper {
-        width: 100%;
-        font-size: 20px; }
-        .kwrapper .knode .kheadnote .kheadnote-wrapper .klogo, .kfatalwrapper-outer .knode .kheadnote .kheadnote-wrapper .klogo {
-          display: inline-block;
-          background-color: #FED300;
-          border-radius: 50%;
-          color: #555555;
-          font-size: 14px;
-          font-weight: bold;
-          height: 26px;
-          width: 26px;
-          margin-left: -4px;
-          vertical-align: -1px; }
-          .kwrapper .knode .kheadnote .kheadnote-wrapper .klogo .klogo-xx, .kfatalwrapper-outer .knode .kheadnote .kheadnote-wrapper .klogo .klogo-xx {
-            /* Klo go XX? Really? */
-            margin-left: 4px;
-            margin-top: 4px;
-            position: absolute;
-            font-size: 13px; }
-        .kwrapper .knode .kheadnote .kheadnote-wrapper .ktext, .kfatalwrapper-outer .knode .kheadnote .kheadnote-wrapper .ktext {
-          display: inline-block;
-          color: #ffffff;
-          vertical-align: 5px; }
-        .kwrapper .knode .kheadnote .kheadnote-wrapper .kspace, .kfatalwrapper-outer .knode .kheadnote .kheadnote-wrapper .kspace {
-          padding-left: 15px; }
     .kwrapper .knode .ktool-tabs, .kfatalwrapper-outer .knode .ktool-tabs {
       margin: 0;
       list-style: none;
-      background-color: #B2B2B2; }
+      background-color: #919191;
+      cursor: move; }
       .kwrapper .knode .ktool-tabs .ktab, .kfatalwrapper-outer .knode .ktool-tabs .ktab {
         display: inline-block;
         margin-left: 10px;
+        margin-top: 4px;
         padding: 3px 10px;
         font-size: 20px;
-        background-color: transparent;
+        background-color: #B2B2B2;
         color: #ffffff;
         cursor: pointer;
         height: 26px;
@@ -176,6 +158,29 @@
         .kwrapper .knode .ktool-tabs .ktab.ksearchbutton, .kfatalwrapper-outer .knode .ktool-tabs .ktab.ksearchbutton {
           float: right;
           margin-right: 10px; }
+      .kwrapper .knode .ktool-tabs .klogo, .kfatalwrapper-outer .knode .ktool-tabs .klogo {
+        display: inline-block;
+        background-color: #FED300;
+        border-radius: 50%;
+        color: #555555;
+        font-size: 16px;
+        font-weight: bold;
+        height: 20px;
+        width: 20px;
+        vertical-align: -2px; }
+        .kwrapper .knode .ktool-tabs .klogo .klogo-xx, .kfatalwrapper-outer .knode .ktool-tabs .klogo .klogo-xx {
+          /* Klo go XX? Really? */
+          margin-left: 3px;
+          margin-top: 4px;
+          position: absolute;
+          font-size: 9px; }
+      .kwrapper .knode .ktool-tabs .ktext, .kfatalwrapper-outer .knode .ktool-tabs .ktext {
+        display: inline-block;
+        color: #E0E0E0;
+        vertical-align: 2px;
+        font-size: 16px; }
+      .kwrapper .knode .ktool-tabs .kspace, .kfatalwrapper-outer .knode .ktool-tabs .kspace {
+        padding-left: 10px; }
     .kwrapper .knode.kadditional, .kfatalwrapper-outer .knode.kadditional {
       background-color: #F2F2F2;
       padding: 10px;
@@ -227,7 +232,7 @@
     list-style: outside none none;
     padding: 4px 5px 3px;
     margin: 0;
-    font: bold 12px tahoma,verdana; }
+    font: bold 12px tahoma, verdana; }
     .kwrapper .kmessage:before, .kfatalwrapper-outer .kmessage:before {
       content: "\00a0\00a0!\00a0\00a0";
       font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
@@ -520,7 +525,9 @@
   .kwrapper .keditable input[type=button], .kwrapper .keditable select, .kfatalwrapper-outer .keditable input[type=button], .kfatalwrapper-outer .keditable select {
     cursor: pointer; }
   .kwrapper .kclose, .kfatalwrapper-outer .kclose {
-    float: right; }
+    float: right;
+    margin-right: 10px;
+    margin-top: 5px; }
     .kwrapper .kclose.kfatal, .kfatalwrapper-outer .kclose.kfatal {
       cursor: pointer;
       display: inline-table;
@@ -549,10 +556,11 @@
     .kwrapper .search-wrapper .ksearch, .kfatalwrapper-outer .search-wrapper .ksearch {
       background-color: #FED300;
       color: #555555;
-      padding: 2px 4px;
+      padding: 3px 4px;
       font: normal 12px tahoma, verdana;
       z-index: 10;
-      margin-left: 2px; }
+      margin-left: 2px;
+      margin-top: 2px; }
       .kwrapper .search-wrapper .ksearch .kclose, .kfatalwrapper-outer .search-wrapper .ksearch .kclose {
         cursor: pointer;
         display: inline-table;
