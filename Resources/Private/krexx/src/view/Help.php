@@ -38,53 +38,84 @@ namespace Brainworxx\Krexx\View;
  *
  * @package Brainworxx\Krexx\View
  */
-class Help {
+class Help
+{
 
-  // A simple array to hold the values.
-  // There should not be any string collisions.
-  protected static $helpArray = array(
-    'localFunction' => 'Here you can enter your own alias function for \krexx::open().<br/> Example: When you enter &apos;gue&apos;, the function will be \krexx::gue($myObject); [or krexx($myObject, &apos;gue&apos;);],<br/> which only devs can use who have set the same value.This is useful, to prevent other devs from calling your debug functions.',
-    'analyseProtected' => 'Shall kreXX try to analyse the protected properties of a class?<br/> This may result in a lot of output.',
-    'analysePrivate' => 'Shall kreXX try to analyse the private properties of a class?<br/> This may result in a lot of output.',
-    'analyseTraversable' => 'Shall kreXX try to analyse possible traversable data?<br/> Depending on the underlying framework this info might be covered by the debug callback functions.',
-    'debugMethods' => 'Comma-separated list of used debug callback functions. A lot of frameworks offer these, toArray and toString being the most common.<br/> kreXX will try to call them, if they are available and display their provided data.<br/> You can not change them on the frontend. If you want other settings here, you have to edit the kreXX configuration file.',
-    'level' => 'Some frameworks have objects inside of objects inside of objects, and so on.<br/> Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.',
-    'resetbutton' => 'Here you can reset your local settings, which are stored in a cookie.<br/> kreXX will then use the global settings (either ini-file or factory settings).' ,
-    'destination' => 'kreXX can save it&apos;s output to a file, instead of outputting it to the frontend.<br/> The output will then be stored in the log folder.',
-    'maxCall' => 'A lot of output does not only slow down your server, it also slows down your browser. When using kreXX in a loop,<br/> it will create output every time the loop is executed. To limit this, you can configure the maximum call settings.',
-    'disabled' => 'Here you can disable kreXX. Note that this is just a local setting, it does not affect other browsers.',
-    'folder' => 'This is the folder where kreXX will store it&apos;s logfiles.',
-    'maxfiles' => 'How many logfiles do you want to store inside your logging folder?<br/> When there are more files than this number, the older files will get deleted.',
-    'skin' => 'Choose a skin here. We have provided kreXX with two skins: smoky-grey and hans.',
-    'currentSettings' => 'kreXX&apos;s configuration can be edited here, changes will be stored in a cookie and overwrite the ini and factory settings.<br/> <strong>Please note, that these are only local settings. They only affect this browser.</strong>',
-    'registerAutomatically' => 'This option registers the fatal errorhandler as soon as kreXX is included. When a fatal error occures,<br/> kreXX will offer a backtrace and an analysis of the all objects in it. PHP always clears the stack in case of a fatal error,<br/> so kreXX has to keep track of it. <strong>Be warned:</strong> This option will dramatically slow down your requests. Use this only when you have to.<br/> It is by far better to register the errorhandler yourself with <strong>\krexx::registerFatal();</strong> and later unregister it<br/> with <strong>\krexx::unregisterFatal();</strong> tp prevent a slowdown.',
-    'detectAjax' => 'kreXX tries to detect whether a request is made via ajax. When it is detected, it will do no output at all. The AJAX detection can be disabled here.',
-    'backtraceAnalysis' => 'Shall kreXX do a "deep" analysis of  the backtrace? Be warned, a deep analysis can produce a lot of output.<br/> A "normal" analysis will use the configured settings, while a "deep" analysis will get as much data from the objects as possible.',
-    'memoryLeft' => 'kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break.<br />Unit of measurement is MB.',
-    'maxRuntime' => 'kreXX checks during the analysis how much time has elapsed since start. Here you can adjust the amount where it will trigger an emergency break.<br />Unit of measurement is seconds.',
-    'analyseMethodsAtall' => 'Here you can toggle if kreXX shall analyse the methods of a class.',
-    'analyseProtectedMethods' => 'Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
-    'analysePrivateMethods' => 'Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
-    '_getProperties' => 'Typo3 debug function.<br />It takes the properties directly from the model, ignoring the getter function.<br />If the getter function is used to compute this value, the values from this function may be inaccurate.',
-    'php7' => "It looks like you are using PHP7.\r\nFatal errors got removed in PHP7, meaning that they are now catchable like normal errors.",
-    'php7yellow' => 'The fatal error handler does not work with PHP7!',
-    'analyseConstants' => 'Here you can toggle, if kreXX shall analyse all constants of a class.',
-  );
+    // A simple array to hold the values.
+    // There should not be any string collisions.
+    // @todo the keys here should be the same as the array keys we add.
+    protected static $helpArray = array(
+        'localFunction' => 'Here you can enter your own alias function for \krexx::open().<br/> Example: When you enter &apos;gue&apos;, the function will be \krexx::gue($myObject); [or krexx($myObject, &apos;gue&apos;);],<br/> which only devs can use who have set the same value.This is useful, to prevent other devs from calling your debug functions.',
+        'analyseProtected' => 'Shall kreXX try to analyse the protected properties of a class?<br/> This may result in a lot of output.',
+        'analysePrivate' => 'Shall kreXX try to analyse the private properties of a class?<br/> This may result in a lot of output.',
+        'analyseTraversable' => 'Shall kreXX try to analyse possible traversable data?<br/> Depending on the underlying framework this info might be covered by the debug callback functions.',
+        'debugMethods' => 'Comma-separated list of used debug callback functions. A lot of frameworks offer these, toArray and toString being the most common.<br/> kreXX will try to call them, if they are available and display their provided data.<br/> You can not change them on the frontend. If you want other settings here, you have to edit the kreXX configuration file.',
+        'level' => 'Some frameworks have objects inside of objects inside of objects, and so on.<br/> Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.',
+        'resetbutton' => 'Here you can reset your local settings, which are stored in a cookie.<br/> kreXX will then use the global settings (either ini-file or factory settings).',
+        'destination' => 'kreXX can save it&apos;s output to a file, instead of outputting it to the frontend.<br/> The output will then be stored in the log folder.',
+        'maxCall' => 'A lot of output does not only slow down your server, it also slows down your browser. When using kreXX in a loop,<br/> it will create output every time the loop is executed. To limit this, you can configure the maximum call settings.',
+        'disabled' => 'Here you can disable kreXX. Note that this is just a local setting, it does not affect other browsers.',
+        'folder' => 'This is the folder where kreXX will store it&apos;s logfiles.',
+        'maxfiles' => 'How many logfiles do you want to store inside your logging folder?<br/> When there are more files than this number, the older files will get deleted.',
+        'skin' => 'Choose a skin here. We have provided kreXX with two skins: smoky-grey and hans.',
+        'currentSettings' => 'kreXX&apos;s configuration can be edited here, changes will be stored in a cookie and overwrite the ini and factory settings.<br/> <strong>Please note, that these are only local settings. They only affect this browser.</strong>',
+        'registerAutomatically' => 'This option registers the fatal errorhandler as soon as kreXX is included. When a fatal error occures,<br/> kreXX will offer a backtrace and an analysis of the all objects in it. PHP always clears the stack in case of a fatal error,<br/> so kreXX has to keep track of it. <strong>Be warned:</strong> This option will dramatically slow down your requests. Use this only when you have to.<br/> It is by far better to register the errorhandler yourself with <strong>\krexx::registerFatal();</strong> and later unregister it<br/> with <strong>\krexx::unregisterFatal();</strong> tp prevent a slowdown.',
+        'detectAjax' => 'kreXX tries to detect whether a request is made via ajax. When it is detected, it will do no output at all. The AJAX detection can be disabled here.',
+        'backtraceAnalysis' => 'Shall kreXX do a "deep" analysis of  the backtrace? Be warned, a deep analysis can produce a lot of output.<br/> A "normal" analysis will use the configured settings, while a "deep" analysis will get as much data from the objects as possible.',
+        'memoryLeft' => 'kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break.<br />Unit of measurement is MB.',
+        'maxRuntime' => 'kreXX checks during the analysis how much time has elapsed since start. Here you can adjust the amount where it will trigger an emergency break.<br />Unit of measurement is seconds.',
+        'analyseMethodsAtall' => 'Here you can toggle if kreXX shall analyse the methods of a class.',
+        'analyseProtectedMethods' => 'Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
+        'analysePrivateMethods' => 'Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
+        '_getProperties' => 'Typo3 debug function.<br />It takes the properties directly from the model, ignoring the getter function.<br />If the getter function is used to compute this value, the values from this function may be inaccurate.',
+        'php7' => "It looks like you are using PHP7.\r\nFatal errors got removed in PHP7, meaning that they are now catchable like normal errors.",
+        'php7yellow' => 'The fatal error handler does not work with PHP7!',
+        'analyseConstants' => 'Here you can toggle, if kreXX shall analyse all constants of a class.',
+        'maximumLevelReached' => "Maximum for analysis reached. I will not go any further.\n To increase this value, change the runtime => level setting.",
+        'stringTooLarge' => "This is a very large string with a none-standard encoding.\n\n For security reasons, we must escape it, but it is too large for this. Sorry.",
+        'configErrorMethods' => 'Wrong configuration for: "methods => analyseMethodsAtall"! Expected boolean. The configured setting was not applied!',
+        'configErrorMethodsProtected' => 'Wrong configuration for: "methods => analyseProtectedMethods"! Expected boolean. The configured setting was not applied!',
+        'configErrorMethodsPrivate' => 'Wrong configuration for: "methods => analysePrivateMethods"! Expected boolean. The configured setting was not applied!',
+        'configErrorPropertiesProtected' => 'Wrong configuration for: "properties => analyseProtected"! Expected boolean. The configured setting was not applied!',
+        'configErrorPropertiesPrivate' => 'Wrong configuration for: "properties => analysePrivate"! Expected boolean. The configured setting was not applied!',
+        'configErrorPropertiesConstants' => 'Wrong configuration for: "properties => analyseConstants"! Expected boolean. The configured setting was not applied!',
+        'configErrorTraversable' => 'Wrong configuration for: "properties => analyseTraversable"! Expected boolean. The configured setting was not applied!',
+        'configErrorLevel' => 'Wrong configuration for: "runtime => level"! Expected integer. The configured setting was not applied!',
+        'configErrorMaxCall' => 'Wrong configuration for: "runtime => maxCall"! Expected integer. The configured setting was not applied!',
+        'configErrorDisabled' => 'Wrong configuration for: "runtime => disabled"! Expected boolean. The configured setting was not applied!',
+        'configErrorDetectAjax' => 'Wrong configuration for: "runtime => detectAjax"! Expected boolean. The configured setting was not applied!',
+        'configErrorDestination' => 'Wrong configuration for: "output => destination"! Expected "frontend" or "file". The configured setting was not applied!',
+        'configErrorMaxfiles' => 'Wrong configuration for: "output => maxfiles"! Expected integer. The configured setting was not applied!',
+        'configErrorFolderWritable' => 'Wrong configuration for: "output => folder"! Directory is not writable. The configured setting was not applied!',
+        'configErrorFolderProtection' => 'Wrong configuration for: "output => folder"! Directory is not protected. The configured setting was not applied!',
+        'configErrorSkin' => 'Wrong configuration for: "output => skin"! Skin not found. The configured setting was not applied!',
+        'configErrorTraceFatals' => 'Wrong configuration for: "errorHandling => traceFatals"! Expected boolean. The configured setting was not applied!',
+        'configErrorTraceWarnings' => 'Wrong configuration for: "errorHandling => traceWarnings"! Expected boolean. The configured setting was not applied!',
+        'configErrorTraceNotices' => 'Wrong configuration for: "errorHandling => traceNotices"! Expected boolean. The configured setting was not applied!',
+        'configErrorRegisterAuto' => 'Wrong configuration for: "backtraceAndError => registerAutomatically"! Expected boolean. The configured setting was not applied!',
+        'configErrorPhp7' => 'Wrong configuration for: "backtraceAndError => registerAutomatically"! Fatal errors got removed in PHP 7. The handler will not work here!',
+        'configErrorBacktraceAnalysis' => 'Wrong configuration for: "backtraceAndError => backtraceAnalysis"! Expected "normal" or "deep". The configured setting was not applied!',
+        'configErrorMemory' => 'Wrong configuration for: "runtime => memoryLeft"! Expected integer. The configured setting was not applied!',
+        'configErrorMaxRuntime' => 'Wrong configuration for: "runtime => maxRuntime"! Expected integer. The configured setting was not applied!',
+        'maxCallReached' => 'Maximum call-level reached. This is the last analysis for this request. To increase this value, please edit:<br />runtime => maxCall.',
+        'noSourceAvailable' => 'No sourcecode available. Maybe this was an internal callback (call_user_func for example)?',
+    );
 
-  /**
-   * Returns the help text when found, otherwise returns an empty string.
-   *
-   * @param string $what
-   *   The help ID from the array above.
-   *
-   * @return string
-   *   The help text.
-   */
-  public static function getHelp($what) {
-    $result = '';
-    if (isset(self::$helpArray[$what])) {
-      $result = self::$helpArray[$what];
+    /**
+     * Returns the help text when found, otherwise returns an empty string.
+     *
+     * @param string $what
+     *   The help ID from the array above.
+     *
+     * @return string
+     *   The help text.
+     */
+    public static function getHelp($what)
+    {
+        $result = '';
+        if (isset(self::$helpArray[$what])) {
+            $result = self::$helpArray[$what];
+        }
+        return $result;
     }
-    return $result;
-  }
 }

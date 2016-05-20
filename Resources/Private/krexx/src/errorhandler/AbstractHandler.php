@@ -39,202 +39,202 @@ use Brainworxx\Krexx\Framework\Config;
 use Brainworxx\Krexx\Framework\Chunks;
 use Brainworxx\Krexx\View;
 
-
 /**
  * This class hosts all functions which all error handlers will share
  * (as soon as they are written . . .)
  *
  * @package Brainworxx\Krexx\Errorhandler
  */
-abstract class AbstractHandler {
+abstract class AbstractHandler
+{
 
-  /**
-   * Stores if the handler is active.
-   *
-   * Decides if the registered shutdown function should
-   * do anything, in case we decide later that we do not
-   * want to interfere.
-   *
-   * @var bool
-   */
-  protected $isActive = FALSE;
+    /**
+     * Stores if the handler is active.
+     *
+     * Decides if the registered shutdown function should
+     * do anything, in case we decide later that we do not
+     * want to interfere.
+     *
+     * @var bool
+     */
+    protected $isActive = false;
 
-  /**
-   * Decides, if the handler does anything.
-   *
-   * @return bool
-   *   Returns TRUE when kreXX is active and this
-   *   handler is active
-   */
-  protected function getIsActive() {
-    if ($this->isActive && Config::isEnabled()) {
-      // We will only handle errors when kreXX and the handler
-      // itself is enabled.
-      return TRUE;
-    }
-    else {
-      return FALSE;
-    }
-
-  }
-
-  /**
-   * Renders the info to the error, warning or notice.
-   *
-   * @param array $error_data
-   *   The data frm the error. This should be a backtrace
-   *   with code samples.
-   */
-  protected function giveFeedback(array $error_data) {
-    if ($this->isActive) {
-      View\SkinRender::$KrexxCount++;
-      Internals::$timer = time();
-
-      // Setting template info.
-      if (is_null(View\SkinRender::$skin)) {
-        View\SkinRender::$skin = Config::getConfigValue('output', 'skin');
-      }
-
-      // Get the header.
-      if (View\Output::$headerSend) {
-        $header = View\SkinRender::renderFatalHeader('', '<!DOCTYPE html>');
-      }
-      else {
-        $header = View\SkinRender::renderFatalHeader(View\Output::outputCssAndJs(), '<!DOCTYPE html>');
-      }
-
-      // Get the main part.
-      $main = View\SkinRender::renderFatalMain(
-          $error_data['type'],
-          $error_data['errstr'],
-          $error_data['errfile'],
-          $error_data['errline'] + 1,
-          $error_data['source']);
-      // Get the backtrace.
-      $backtrace = View\Output::outputBacktrace($error_data['backtrace']);
-      // Get the footer.
-      $footer = View\Output::outputFooter('');
-      // Get the messages.
-      $messages = View\Messages::outputMessages();
-
-      if (Config::getConfigValue('output', 'destination') == 'file') {
-        // Add the caller as metadata to the chunks class. It will be saved as
-        // additional info, in case we are logging to a file.
-        Chunks::addMetadata(array(
-          'file' => $error_data['errfile'],
-          'line' => $error_data['errline'] + 1,
-          'varname' => ' Fatal Error',
-        ));
-
-        // Save it to a file.
-        Chunks::saveDechunkedToFile($header . $messages . $main . $backtrace . $footer);
-      }
-      else {
-        // Send it to the browser.
-        Chunks::sendDechunkedToBrowser($header . $messages . $main . $backtrace . $footer);
-      }
-
-      // Cleanup the hive, this removes all recursion markers.
-      Hive::cleanupHive();
-    }
-  }
-
-  /**
-   * Translates the error number into human readable text.
-   *
-   * It also includes the corresponding config
-   * setting, so we can decide if we want to output
-   * anything.
-   *
-   * @param int $error_int
-   *   The error number.
-   *
-   * @return array
-   *   The translated type and the setting.
-   */
-  protected function translateErrorType($error_int) {
-    switch ($error_int) {
-      case E_ERROR:
-        $error_name = 'Fatal';
-        $error_setting = 'traceFatals';
-        break;
-
-      case E_WARNING:
-        $error_name = 'Warning';
-        $error_setting = 'traceWarnings';
-        break;
-
-      case E_PARSE:
-        $error_name = 'Parse error';
-        $error_setting = 'traceFatals';
-        break;
-
-      case E_NOTICE:
-        $error_name = 'Notice';
-        $error_setting = 'traceNotices';
-        break;
-
-      case E_CORE_ERROR:
-        $error_name = 'PHP startup error';
-        $error_setting = 'traceFatals';
-        break;
-
-      case E_CORE_WARNING:
-        $error_name = 'PHP startup warning';
-        $error_setting = 'traceWarnings';
-        break;
-
-      case E_COMPILE_ERROR:
-        $error_name = 'Zend scripting fatal error';
-        $error_setting = 'traceFatals';
-        break;
-
-      case E_COMPILE_WARNING:
-        $error_name = 'Zend scripting warning';
-        $error_setting = 'traceWarnings';
-        break;
-
-      case E_USER_ERROR:
-        $error_name = 'User defined error';
-        $error_setting = 'traceFatals';
-        break;
-
-      case E_USER_WARNING:
-        $error_name = 'User defined warning';
-        $error_setting = 'traceWarnings';
-        break;
-
-      case E_USER_NOTICE:
-        $error_name = 'User defined notice';
-        $error_setting = 'traceNotices';
-        break;
-
-      case E_STRICT:
-        $error_name = 'Strict notice';
-        $error_setting = 'traceNotices';
-        break;
-
-      case E_RECOVERABLE_ERROR:
-        $error_name = 'Catchable fatal error';
-        $error_setting = 'traceFatals';
-        break;
-
-      case E_DEPRECATED:
-        $error_name = 'Deprecated warning';
-        $error_setting = 'traceWarnings';
-        break;
-
-      case E_USER_DEPRECATED:
-        $error_name = 'User defined deprecated warning';
-        $error_setting = 'traceWarnings';
-        break;
-
-      default:
-        $error_name = 'Unknown error';
-        $error_setting = 'unknown';
-        break;
+    /**
+     * Decides, if the handler does anything.
+     *
+     * @return bool
+     *   Returns TRUE when kreXX is active and this
+     *   handler is active
+     */
+    protected function getIsActive()
+    {
+        if ($this->isActive && Config::isEnabled()) {
+            // We will only handle errors when kreXX and the handler
+            // itself is enabled.
+            return true;
+        } else {
+            return false;
+        }
 
     }
-    return array($error_name, $error_setting);
-  }
+
+    /**
+     * Renders the info to the error, warning or notice.
+     *
+     * @param array $errorData
+     *   The data frm the error. This should be a backtrace
+     *   with code samples.
+     */
+    protected function giveFeedback(array $errorData)
+    {
+        if ($this->isActive) {
+            View\SkinRender::$KrexxCount++;
+            Internals::$timer = time();
+
+            // Setting template info.
+            if (is_null(View\SkinRender::$skin)) {
+                View\SkinRender::$skin = Config::getConfigValue('output', 'skin');
+            }
+
+            // Get the header.
+            if (View\Output::$headerSend) {
+                $header = View\SkinRender::renderFatalHeader('', '<!DOCTYPE html>');
+            } else {
+                $header = View\SkinRender::renderFatalHeader(View\Output::outputCssAndJs(), '<!DOCTYPE html>');
+            }
+
+            // Get the main part.
+            $main = View\SkinRender::renderFatalMain(
+                $errorData['type'],
+                $errorData['errstr'],
+                $errorData['errfile'],
+                $errorData['errline'] + 1,
+                $errorData['source']
+            );
+            // Get the backtrace.
+            $backtrace = View\Output::outputBacktrace($errorData['backtrace']);
+            // Get the footer.
+            $footer = View\Output::outputFooter('');
+            // Get the messages.
+            $messages = View\Messages::outputMessages();
+
+            if (Config::getConfigValue('output', 'destination') == 'file') {
+                // Add the caller as metadata to the chunks class. It will be saved as
+                // additional info, in case we are logging to a file.
+                Chunks::addMetadata(array(
+                    'file' => $errorData['errfile'],
+                    'line' => $errorData['errline'] + 1,
+                    'varname' => ' Fatal Error',
+                ));
+
+                // Save it to a file.
+                Chunks::saveDechunkedToFile($header . $messages . $main . $backtrace . $footer);
+            } else {
+                // Send it to the browser.
+                Chunks::sendDechunkedToBrowser($header . $messages . $main . $backtrace . $footer);
+            }
+
+            // Cleanup the hive, this removes all recursion markers.
+            Hive::cleanupHive();
+        }
+    }
+
+    /**
+     * Translates the error number into human readable text.
+     *
+     * It also includes the corresponding config
+     * setting, so we can decide if we want to output
+     * anything.
+     *
+     * @param int $errorint
+     *   The error number.
+     *
+     * @return array
+     *   The translated type and the setting.
+     */
+    protected function translateErrorType($errorint)
+    {
+        switch ($errorint) {
+            case E_ERROR:
+                $errorName = 'Fatal';
+                $errorSetting = 'traceFatals';
+                break;
+
+            case E_WARNING:
+                $errorName = 'Warning';
+                $errorSetting = 'traceWarnings';
+                break;
+
+            case E_PARSE:
+                $errorName = 'Parse error';
+                $errorSetting = 'traceFatals';
+                break;
+
+            case E_NOTICE:
+                $errorName = 'Notice';
+                $errorSetting = 'traceNotices';
+                break;
+
+            case E_CORE_ERROR:
+                $errorName = 'PHP startup error';
+                $errorSetting = 'traceFatals';
+                break;
+
+            case E_CORE_WARNING:
+                $errorName = 'PHP startup warning';
+                $errorSetting = 'traceWarnings';
+                break;
+
+            case E_COMPILE_ERROR:
+                $errorName = 'Zend scripting fatal error';
+                $errorSetting = 'traceFatals';
+                break;
+
+            case E_COMPILE_WARNING:
+                $errorName = 'Zend scripting warning';
+                $errorSetting = 'traceWarnings';
+                break;
+
+            case E_USER_ERROR:
+                $errorName = 'User defined error';
+                $errorSetting = 'traceFatals';
+                break;
+
+            case E_USER_WARNING:
+                $errorName = 'User defined warning';
+                $errorSetting = 'traceWarnings';
+                break;
+
+            case E_USER_NOTICE:
+                $errorName = 'User defined notice';
+                $errorSetting = 'traceNotices';
+                break;
+
+            case E_STRICT:
+                $errorName = 'Strict notice';
+                $errorSetting = 'traceNotices';
+                break;
+
+            case E_RECOVERABLE_ERROR:
+                $errorName = 'Catchable fatal error';
+                $errorSetting = 'traceFatals';
+                break;
+
+            case E_DEPRECATED:
+                $errorName = 'Deprecated warning';
+                $errorSetting = 'traceWarnings';
+                break;
+
+            case E_USER_DEPRECATED:
+                $errorName = 'User defined deprecated warning';
+                $errorSetting = 'traceWarnings';
+                break;
+
+            default:
+                $errorName = 'Unknown error';
+                $errorSetting = 'unknown';
+                break;
+        }
+        return array($errorName, $errorSetting);
+    }
 }

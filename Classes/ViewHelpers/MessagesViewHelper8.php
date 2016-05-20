@@ -31,6 +31,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+
+
 // This is so dirty and evil.
 // Typo3 8.0 tries to resolve the old 4.5'er viewhelpers this way.
 // If someone reads this and knows how to do this properly, please send
@@ -40,10 +42,14 @@
 // And dropping 4.5 support is out ouf the question.
 namespace Tx_Includekrexx_ViewHelpers;
 
+use TYPO3\CMS\Fluid\ViewHelpers\FlashMessagesViewHelper;
+
 /**
  * Since we want to render the original Viewhelper, we can extend it directly.
  *
  * Class MessagesViewHelper
  * @package Tx_Includekrexx_ViewHelpers
  */
-class MessagesViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\FlashMessagesViewHelper {}
+class MessagesViewHelper extends FlashMessagesViewHelper
+{
+}

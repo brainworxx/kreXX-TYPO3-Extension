@@ -31,8 +31,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use \Brainworxx\Krexx\Framework\Config;
-
+use Brainworxx\Krexx\Framework\Config;
 
 // The 7.3'er autoloader tries to include this file twice, probably
 // because of the class mappings above. I need to make sure not to
@@ -40,44 +39,42 @@ use \Brainworxx\Krexx\Framework\Config;
 // a fatal.
 if (!class_exists('Tx_Includekrexx_Controller_CookieController')) {
 
-  /**
-   * Class Tx_Includekrexx_Controller_CookieController
-   */
-  class Tx_Includekrexx_Controller_CookieController extends Tx_Includekrexx_Controller_CompatibilityController {
-
     /**
-     * Simply display the kreXX local browser configuration.
+     * Class Tx_Includekrexx_Controller_CookieController
      */
-    public function indexAction() {
-      // Has kreXX something to say? Maybe a writeprotected logfolder?
-      foreach ($this->getTranslatedMessages() as $message) {
-        $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
-      }
+    class Tx_Includekrexx_Controller_CookieController extends Tx_Includekrexx_Controller_CompatibilityController
+    {
 
-      if (!Config::isEnabled(NULL, TRUE)) {
-        // kreXX will not display anything, if it was disabled via:
-        // - krexx::disable();
-        // - Disable output --> true in the "Edit configuration file menu
-        // We need to tell the user that krexx was disabled.
-        $this->view->assign('is_disabled', TRUE);
-      }
-      else {
-        $this->view->assign('is_disabled', FALSE);
-      }
+        /**
+         * Simply display the kreXX local browser configuration.
+         */
+        public function indexAction()
+        {
+            // Has kreXX something to say? Maybe a writeprotected logfolder?
+            foreach ($this->getTranslatedMessages() as $message) {
+                $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+            }
 
-      if (Config::getConfigValue('output', 'destination', TRUE) == 'file') {
-        // A file output will also prevent the options from popping ou here.
-        // We need to tell the user that there is nothing to see here.
-        $this->view->assign('is_file', TRUE);
-      }
-      else {
-        // Normal frontend output mode.
-        $this->view->assign('is_file', FALSE);
-      }
-      $this->addCssToView('Backend.css');
-      \Krexx::editSettings();
+            if (!Config::isEnabled(null)) {
+                // kreXX will not display anything, if it was disabled via:
+                // - krexx::disable();
+                // - Disable output --> true in the "Edit configuration file menu
+                // We need to tell the user that krexx was disabled.
+                $this->view->assign('is_disabled', true);
+            } else {
+                $this->view->assign('is_disabled', false);
+            }
+
+            if (Config::getConfigValue('output', 'destination') == 'file') {
+                // A file output will also prevent the options from popping ou here.
+                // We need to tell the user that there is nothing to see here.
+                $this->view->assign('is_file', true);
+            } else {
+                // Normal frontend output mode.
+                $this->view->assign('is_file', false);
+            }
+            $this->addCssToView('Backend.css');
+            \Krexx::editSettings();
+        }
     }
-
-  }
-
 }

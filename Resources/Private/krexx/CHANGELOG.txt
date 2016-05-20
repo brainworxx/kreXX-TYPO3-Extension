@@ -5,10 +5,13 @@
 - Change: Removed the whole dual-output mess.
 - Change: When the destination is set to 'file' via config file, this
   value can not be overwritten with local cookie settings.
+- Change: Unclunked the Smokey-Grey skin.
 - Bugfix: No helptext displayed for readonly cookie config.
 - Bugfix: The Hans skin renders the config option name twice.
 - Bugfix: When setting the logfiles to '10', kreXX will now keep 10
   files, and not 9.
+- Bugfix: The debug output might jump around, in some special css
+  environments.
 
 1.4.1
 - Added class constants analysis.

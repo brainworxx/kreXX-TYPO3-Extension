@@ -48,7 +48,7 @@
    * @param {string} selector
    * @returns {Array}
    */
-  kdt.getParents = function(el, selector) {
+  kdt.getParents = function (el, selector) {
     /** @type {Array} */
     var result = [];
     /** @type {Node} */
@@ -93,7 +93,7 @@
    * @param {Element} el
    * @param {string} eventName
    */
-  kdt.trigger = function(el, eventName) {
+  kdt.trigger = function (el, eventName) {
     /** @type {Event} */
     var event = document.createEvent('HTMLEvents');
     event.initEvent(eventName, true, false);
@@ -107,7 +107,7 @@
    * @param {string} className
    * @returns {boolean}
    */
-  kdt.hasClass = function(el, className) {
+  kdt.hasClass = function (el, className) {
     if (el.classList) {
       return el.classList.contains(className);
     }
@@ -124,12 +124,12 @@
    *
    * @returns {Element|null} the element
    */
-  kdt.findInDomlistByClass = function(elements, className) {
+  kdt.findInDomlistByClass = function (elements, className) {
 
     className = " " + className + " ";
     for (var i = 0; i < elements.length; i++) {
-      if ( (" " + elements[i].className + " ").replace(/[\n\t]/g, " ").indexOf(className) > -1 ) {
-        return  elements[i];
+      if ((" " + elements[i].className + " ").replace(/[\n\t]/g, " ").indexOf(className) > -1) {
+        return elements[i];
       }
     }
     return null;
@@ -141,7 +141,7 @@
    * @param {NodeList|string} selector
    * @param {string} className
    */
-  kdt.addClass = function(selector, className) {
+  kdt.addClass = function (selector, className) {
     /** @type {NodeList|null} */
     var elements;
 
@@ -170,8 +170,8 @@
    * @param {NodeList|string} selector
    * @param {string} className
    */
-  kdt.removeClass = function(selector, className) {
-     /** @type {NodeList|null} */
+  kdt.removeClass = function (selector, className) {
+    /** @type {NodeList|null} */
     var elements;
 
     if (typeof selector === 'string') {
@@ -200,7 +200,7 @@
    * @param {Element} el
    * @param {string} className
    */
-  kdt.toggleClass = function(el, className) {
+  kdt.toggleClass = function (el, className) {
 
     if (el.classList) {
       // Just toggle it.
@@ -320,7 +320,7 @@
      * @event mouseDown
      * @param {Event} event
      */
-    function startDraxx (event) {
+    function startDraxx(event) {
 
       // The selector has an ID, we only have one of them.
       /** @type {Element} */
@@ -333,6 +333,45 @@
       var offSetY = offset.top + elContent.offsetHeight - event.pageY - elContent.offsetHeight;
       /** @type {number} */
       var offSetX = offset.left + outerWidth(elContent) - event.pageX - outerWidth(elContent);
+
+      // We might need to add a special offset, in case that:
+      // - body is position: relative;
+      // and there are elements above that have
+      // - margin: top or
+      // - margin: bottom
+      /** @type {CSSStyleDeclaration} */
+      var bodyStyle = getComputedStyle(document.querySelector('body'));
+      if (bodyStyle.position === 'relative') {
+       
+        /** @type {number} */
+        var relOffsetY = 0;
+        /** @type {number} */
+        var relOffsetX = 0;
+
+        // We need to check the body.
+        relOffsetY = parseInt(bodyStyle.marginTop, 10);
+        relOffsetX = parseInt(bodyStyle.marginLeft, 10);
+        if (relOffsetY > 0) {
+          // We take the body offset.
+        }
+        else {
+          // We need to look for another offset.
+          // Now we need to get all elements above the current kreXX element and
+          // get their margins (top and button)
+          /** @type {Element} */
+          var prev = elContent.previousElementSibling;
+          do {
+            relOffsetY = parseInt(getComputedStyle(prev).marginTop, 10);
+            prev = prev.previousElementSibling;
+            // We will stop if we ran out of elements or if we have found the
+            // first offset.
+          } while (prev && relOffsetY === 0);
+        }
+
+        // Correct our initial offset.
+        offSetY -= relOffsetY;
+        offSetX -= relOffsetX;
+      }
 
       // Prevents the default event behavior (ie: click).
       event.preventDefault();
@@ -402,7 +441,7 @@
       var top = box.top + window.pageYOffset - de.clientTop;
       /** @type {number} */
       var left = box.left + window.pageXOffset - de.clientLeft;
-      return { top: top, left: left };
+      return {top: top, left: left};
     }
 
     /**

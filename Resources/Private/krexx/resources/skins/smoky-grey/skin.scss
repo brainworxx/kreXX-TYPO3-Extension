@@ -204,7 +204,9 @@ $fontLight: lighter 10px tahoma, verdana;
       margin: 0;
       list-style: none;
       background-color: $greyDark;
-      cursor: move;
+      &.khandle {
+        cursor: move;
+      }
       .ktab {
         display: inline-block;
         margin-left: 10px;

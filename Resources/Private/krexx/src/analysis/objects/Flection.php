@@ -43,140 +43,151 @@ namespace Brainworxx\Krexx\Analysis\Objects;
  *
  * @package Brainworxx\Krexx\Analysis\Objects
  */
-class Flection {
+class Flection
+{
 
-  /**
-   * The name of the property.
-   *
-   * @var string
-   */
-  public $name;
+    /**
+     * The name of the property.
+     *
+     * @var string
+     */
+    public $name;
 
-  /**
-   * The value of the property.
-   *
-   * @var mixed
-   */
-  protected $value;
+    /**
+     * The value of the property.
+     *
+     * @var mixed
+     */
+    protected $value;
 
-  /**
-   * Constructor for the Flection class.
-   *
-   * Sets the name and the value of the property.
-   *
-   * @param mixed $value
-   *   The value of the attribute.
-   * @param string $name
-   *   The name of the attribute.
-   */
-  public function __construct($value, $name) {
-    $this->value = $value;
-    $this->name = $name;
-  }
+    /**
+     * Constructor for the Flection class.
+     *
+     * Sets the name and the value of the property.
+     *
+     * @param mixed $value
+     *   The value of the attribute.
+     * @param string $name
+     *   The name of the attribute.
+     */
+    public function __construct($value, $name)
+    {
+        $this->value = $value;
+        $this->name = $name;
+    }
 
-  /**
-   * Getter for the value of the property.
-   *
-   * It's stored in the value property :-).
-   *
-   * @return mixed
-   *   The value itself.
-   */
-  public function getValue() {
-    return $this->value;
-  }
+    /**
+     * Getter for the value of the property.
+     *
+     * It's stored in the value property :-).
+     *
+     * @return mixed
+     *   The value itself.
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
 
-  /**
-   * Mockup for the isDefault.
-   *
-   * Undeclared properties do not have a default value.
-   *
-   * @return bool
-   *   It's always FALSE.
-   */
-  public function isDefault() {
-    return FALSE;
-  }
+    /**
+     * Mockup for the isDefault.
+     *
+     * Undeclared properties do not have a default value.
+     *
+     * @return bool
+     *   It's always FALSE.
+     */
+    public function isDefault()
+    {
+        return false;
+    }
 
-  /**
-   * Mockup for the setAccessible.
-   *
-   * Undeclared properties are always accessible, no need to do anything.
-   *
-   * @param bool $bool
-   *   Does nothing. At all.
-   */
-  public function setAccessible($bool) {
-    // Do nothing.
-  }
+    /**
+     * Mockup for the setAccessible.
+     *
+     * Undeclared properties are always accessible, no need to do anything.
+     *
+     * @param bool $bool
+     *   Does nothing. At all.
+     */
+    public function setAccessible($bool)
+    {
+        // Do nothing.
+    }
 
-  /**
-   * Mockup for the isPublic.
-   *
-   * Undeclared properties are always public.
-   *
-   * @return bool
-   *   Always returns TRUE.
-   */
-  public function isPublic() {
-    return TRUE;
-  }
+    /**
+     * Mockup for the isPublic.
+     *
+     * Undeclared properties are always public.
+     *
+     * @return bool
+     *   Always returns TRUE.
+     */
+    public function isPublic()
+    {
+        return true;
+    }
 
-  /**
-   * Mockup for the isPrivate.
-   *
-   * Undeclared properties are never private.
-   *
-   * @return bool
-   *   Always returns FALSE
-   */
-  public function isPrivate() {
-    return FALSE;
-  }
+    /**
+     * Mockup for the isPrivate.
+     *
+     * Undeclared properties are never private.
+     *
+     * @return bool
+     *   Always returns FALSE
+     */
+    public function isPrivate()
+    {
+        return false;
+    }
 
-  /**
-   * Mockup for the isProtected.
-   *
-   * Undeclared properties are never protected.
-   *
-   * @return bool
-   *   Always returns FALSE
-   */
-  public function isProtected() {
-    return FALSE;
-  }
+    /**
+     * Mockup for the isProtected.
+     *
+     * Undeclared properties are never protected.
+     *
+     * @return bool
+     *   Always returns FALSE
+     */
+    public function isProtected()
+    {
+        return false;
+    }
 
-  /**
-   * Mockup for the isStatic.
-   *
-   * Undeclared properties are never static.
-   *
-   * @return bool
-   *   Always returns FALSE
-   */
-  public function isStatic() {
-    return FALSE;
-  }
+    /**
+     * Mockup for the isStatic.
+     *
+     * Undeclared properties are never static.
+     *
+     * @return bool
+     *   Always returns FALSE
+     */
+    public function isStatic()
+    {
+        return false;
+    }
 
-  /**
-   * Mockup for the getDefaultProperties.
-   *
-   * Undeclared properties are never have default properties.
-   *
-   * @return bool
-   *   Always returns an empty array.
-   */
-  public function getDefaultProperties() {
-    return array();
-  }
+    /**
+     * Mockup for the getDefaultProperties.
+     *
+     * Undeclared properties are never have default properties.
+     *
+     * @return bool
+     *   Always returns an empty array.
+     */
+    public function getDefaultProperties()
+    {
+        return array();
+    }
 
-  /**
-   * Tells the analysis function, that this property was not declared.
-   *
-   * @return string
-   *   Tell the analysis function that I'm undeclared
-   */
-  public function getWhatAmI() {
-    return 'dynamic property ';
-  }
+    /**
+     * Tells the analysis function, that this property was not declared.
+     *
+     * @return string
+     *   Tell the analysis function that I'm undeclared
+     */
+    public function getWhatAmI()
+    {
+        return 'dynamic property ';
+    }
 }

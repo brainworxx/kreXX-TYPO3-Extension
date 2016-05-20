@@ -38,4 +38,7 @@ namespace Brainworxx\Krexx\View;
  *
  * @package Brainworxx\Krexx\View
  */
-class SkinRender extends Render {}
+class SkinRender extends Render
+{
+    // Do nothing.
+}

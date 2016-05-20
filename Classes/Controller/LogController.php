@@ -35,143 +35,156 @@
 use \Brainworxx\Krexx\Framework\Config;
 use \Brainworxx\Krexx\View\Messages;
 
-
 if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
-  /**
-   * Class Tx_Includekrexx_Controller_LogController
-   */
-  class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controller_CompatibilityController {
-
     /**
-     * Lists all kreXX logfiles.
+     * Class Tx_Includekrexx_Controller_LogController
      */
-    public function listAction() {
-      // 1. Get the log folder.
-      $dir = Config::$krexxdir . Config::getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR;
+    class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controller_CompatibilityController
+    {
 
-      // 2. Get the file list and sort it.
-      $files = glob($dir . '*.Krexx.html');
-      // The function filemtime gets cached by php btw.
-      usort($files, function($a,$b) {return filemtime($b) - filemtime($a);});
+        /**
+         * Lists all kreXX logfiles.
+         */
+        public function listAction()
+        {
+            // 1. Get the log folder.
+            $dir = Config::$krexxdir . Config::getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR;
 
-      // 3. Get the file info.
-      $file_list = array();
-      foreach ($files as $file) {
-        $file_info = array();
+            // 2. Get the file list and sort it.
+            $files = glob($dir . '*.Krexx.html');
+            // The function filemtime gets cached by php btw.
+            usort($files, function ($a, $b) {
+                return filemtime($b) - filemtime($a);
+            });
 
-        // Getting the basic info.
-        $file_info['name'] = basename($file);
-        $file_info['size'] = $this->fileSizeConvert(filesize($file));
-        $file_info['time'] = date("d.m.y H:i:s", filemtime($file));
-        $file_info['id'] = str_replace('.Krexx.html', '', $file_info['name']);
+            // 3. Get the file info.
+            $file_list = array();
+            foreach ($files as $file) {
+                $file_info = array();
 
-        // Parsing a potentialls 80MB file for it's content is not a good idea.
-        // That is why the kreXX lib provides some meta data. We will open
-        // this file and add it's content to the template.
-        if (is_readable($file . '.json')) {
-          $file_info['meta'] = json_decode(file_get_contents($file . '.json'), TRUE);
+                // Getting the basic info.
+                $file_info['name'] = basename($file);
+                $file_info['size'] = $this->fileSizeConvert(filesize($file));
+                $file_info['time'] = date("d.m.y H:i:s", filemtime($file));
+                $file_info['id'] = str_replace('.Krexx.html', '', $file_info['name']);
 
-          foreach($file_info['meta'] as &$meta) {
-            $meta['filename'] = basename($meta['file']);
-          }
+                // Parsing a potentialls 80MB file for it's content is not a good idea.
+                // That is why the kreXX lib provides some meta data. We will open
+                // this file and add it's content to the template.
+                if (is_readable($file . '.json')) {
+                    $file_info['meta'] = json_decode(file_get_contents($file . '.json'), true);
+
+                    foreach ($file_info['meta'] as &$meta) {
+                        $meta['filename'] = basename($meta['file']);
+                    }
+                }
+
+                $file_list[] = $file_info;
+            }
+
+            // 4. Has kreXX something to say? Maybe a writeprotected logfolder?
+            foreach ($this->getTranslatedMessages() as $message) {
+                $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+            }
+
+            // 5. Assign the flile list.
+            $this->view->assign('files', $file_list);
+            $this->addCssToView('Backend.css');
         }
 
-        $file_list[] = $file_info;
-      }
-
-      // 4. Has kreXX something to say? Maybe a writeprotected logfolder?
-      foreach ($this->getTranslatedMessages() as $message) {
-        $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
-      }
-
-      // 5. Assign the flile list.
-      $this->view->assign('files', $file_list);
-      $this->addCssToView('Backend.css');
-    }
-
-    /**
-     * Gets the content of a logfile
-     */
-    public function getContentAction() {
-      // No directory traversal for you!
-      $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
-      // Get the filepath.
-      $file = Config::$krexxdir . Config::getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR . $id . '.Krexx.html';
-      if (is_readable($file)) {
-        // We open and then send the file.
-        $this->dispatchFile($file);
-        die();
-      }
-      else {
-        // Error message and redirect to the list action.
-        $this->addMessage($this->LLL('log.notreadable', array($id . '.Krexx.html')), $this->LLL('log.fileerror'), t3lib_FlashMessage::ERROR);
-        $this->redirect('list');
-      }
-    }
-
-    /**
-     * Converts bytes into human readable file size.
-     *
-     * @author Mogilev Arseny
-     *
-     * @param string $bytes
-     *   The bytes value we want to make readable.
-     *
-     * @return string
-     *   Human readable file size.
-     */
-    protected function fileSizeConvert($bytes) {
-      $bytes = floatval($bytes);
-      $ar_bytes = array(
-        0 => array(
-          "UNIT" => "TB",
-          "VALUE" => pow(1024, 4),
-        ),
-        1 => array(
-          "UNIT" => "GB",
-          "VALUE" => pow(1024, 3),
-        ),
-        2 => array(
-          "UNIT" => "MB",
-          "VALUE" => pow(1024, 2),
-        ),
-        3 => array(
-          "UNIT" => "KB",
-          "VALUE" => 1024,
-        ),
-        4 => array(
-          "UNIT" => "B",
-          "VALUE" => 1,
-        ),
-      );
-
-      $result = '';
-      foreach ($ar_bytes as $ar_item) {
-        if ($bytes >= $ar_item["VALUE"]) {
-          $result = $bytes / $ar_item["VALUE"];
-          $result = str_replace(".", ",", strval(round($result, 2))) . " " . $ar_item["UNIT"];
-          break;
+        /**
+         * Gets the content of a logfile
+         */
+        public function getContentAction()
+        {
+            // No directory traversal for you!
+            $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
+            // Get the filepath.
+            $file = Config::$krexxdir .
+                Config::getConfigValue('output', 'folder') .
+                DIRECTORY_SEPARATOR .
+                $id .
+                '.Krexx.html';
+            if (is_readable($file)) {
+                // We open and then send the file.
+                $this->dispatchFile($file);
+                die();
+            } else {
+                // Error message and redirect to the list action.
+                $this->addMessage(
+                    $this->LLL('log.notreadable', array($id . '.Krexx.html')),
+                    $this->LLL('log.fileerror'),
+                    t3lib_FlashMessage::ERROR
+                );
+                $this->redirect('list');
+            }
         }
-      }
-      return $result;
-    }
 
-    /**
-     * Dispatches a file, using output buffering.
-     *
-     * @param string $path
-     *   The path of the file we want to dispatch to the browser.
-     */
-    protected function dispatchFile($path) {
-      $size = 1024 * 1024;
-      $res = fopen($path, "rb");
-      while (!feof($res)) {
-        echo fread($res, $size);
-        ob_flush();
-        flush();
-      }
-      fclose($res);
+        /**
+         * Converts bytes into human readable file size.
+         *
+         * @author Mogilev Arseny
+         *
+         * @param string $bytes
+         *   The bytes value we want to make readable.
+         *
+         * @return string
+         *   Human readable file size.
+         */
+        protected function fileSizeConvert($bytes)
+        {
+            $bytes = floatval($bytes);
+            $ar_bytes = array(
+                0 => array(
+                    "UNIT" => "TB",
+                    "VALUE" => pow(1024, 4),
+                ),
+                1 => array(
+                    "UNIT" => "GB",
+                    "VALUE" => pow(1024, 3),
+                ),
+                2 => array(
+                    "UNIT" => "MB",
+                    "VALUE" => pow(1024, 2),
+                ),
+                3 => array(
+                    "UNIT" => "KB",
+                    "VALUE" => 1024,
+                ),
+                4 => array(
+                    "UNIT" => "B",
+                    "VALUE" => 1,
+                ),
+            );
+
+            $result = '';
+            foreach ($ar_bytes as $ar_item) {
+                if ($bytes >= $ar_item["VALUE"]) {
+                    $result = $bytes / $ar_item["VALUE"];
+                    $result = str_replace(".", ",", strval(round($result, 2))) . " " . $ar_item["UNIT"];
+                    break;
+                }
+            }
+            return $result;
+        }
+
+        /**
+         * Dispatches a file, using output buffering.
+         *
+         * @param string $path
+         *   The path of the file we want to dispatch to the browser.
+         */
+        protected function dispatchFile($path)
+        {
+            $size = 1024 * 1024;
+            $res = fopen($path, "rb");
+            while (!feof($res)) {
+                echo fread($res, $size);
+                ob_flush();
+                flush();
+            }
+            fclose($res);
+        }
     }
-  }
 
 }

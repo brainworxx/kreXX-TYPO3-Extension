@@ -13,14 +13,18 @@
       <div class="krela-wrapper">
         <ul class="knode kfirst">
           {search}
-          <li class="ktool-tabs" data-instance="{KrexxId}">
+          <li class="ktool-tabs khandle" data-instance="{KrexxId}">
+
+
+            <div class="ktab {kdebug-classes}" data-what="kdebug">debug</div>
+            <div class="ktab {kconfiguration-classes}" data-what="kconfiguration">config</div>
+            <div class="ktab {klinks-classes}" data-what="klinks">links</div>
+
             <span class="ktext kspace">kre</span>
             <div class="klogo"><div class="klogo-xx">XX</div></div>
             <span class="ktext">{version}</span>
             <span class="ktext kspace">Call no: {KrexxCount}</span>
-            <div class="ktab {kdebug-classes}" data-what="kdebug">debug</div>
-            <div class="ktab {kconfiguration-classes}" data-what="kconfiguration">config</div>
-            <div class="ktab {klinks-classes}" data-what="klinks">links</div>
+            
             <span class="kclose knormal" data-instance="{KrexxId}"></span>
             <div class="ktab ksearchbutton">search</div>
           </li>

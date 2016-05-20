@@ -32,57 +32,51 @@
  */
 
 if (!defined('TYPO3_MODE')) {
-  die ('Access denied.');
+    die('Access denied.');
 }
+use \TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 // Register BE module.
 if (TYPO3_MODE === 'BE') {
-  if ((int) TYPO3_version < 7) {
-    // Typo3 4.5+
-    Tx_Extbase_Utility_Extension::registerModule(
-    // Main area.
-      $_EXTKEY, 'tools',
-      // Name of the module.
-      'kreXX configuration',
-      // Position of the module.
-      '',
-      // Allowed controller action combinations.
-      array(
-        'Config' => 'edit,save',
-        'FormConfig' => 'edit,save',
-        'Log' => 'list,getContent',
-        'Help' => 'usage,config',
-        'Cookie' => 'index',
-      ),
-      array(
-        'access' => 'user,group',
-        'icon' => 'EXT:includekrexx/ext_icon.gif',
-        'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml'
-      )
-    );
-  }
-  else {
-    // Typo3 7+
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-    // Main area.
-      $_EXTKEY, 'tools',
-      // Name of the module.
-      'kreXX configuration',
-      // Position of the module.
-      '',
-      // Allowed controller action combinations.
-      array(
-        'Config' => 'edit,save',
-        'FormConfig' => 'edit,save',
-        'Log' => 'list,getContent',
-        'Help' => 'usage,config',
-        'Cookie' => 'index',
-      ),
-      array(
-        'access' => 'user,group',
-        'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
-        'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml',
-      )
-    );
-  }
+    if ((int)TYPO3_version < 7) {
+        // Typo3 4.5+
+        Tx_Extbase_Utility_Extension::registerModule(// Main area.
+            $_EXTKEY,
+            'tools', // Name of the module.
+            'kreXX configuration', // Position of the module.
+            '', // Allowed controller action combinations.
+            array(
+                'Config' => 'edit,save',
+                'FormConfig' => 'edit,save',
+                'Log' => 'list,getContent',
+                'Help' => 'usage,config',
+                'Cookie' => 'index',
+            ),
+            array(
+                'access' => 'user,group',
+                'icon' => 'EXT:includekrexx/ext_icon.gif',
+                'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml'
+            )
+        );
+    } else {
+        // Typo3 7+
+        ExtensionUtility::registerModule(// Main area.
+            $_EXTKEY,
+            'tools', // Name of the module.
+            'kreXX configuration', // Position of the module.
+            '', // Allowed controller action combinations.
+            array(
+                'Config' => 'edit,save',
+                'FormConfig' => 'edit,save',
+                'Log' => 'list,getContent',
+                'Help' => 'usage,config',
+                'Cookie' => 'index',
+            ),
+            array(
+                'access' => 'user,group',
+                'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
+                'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml',
+            )
+        );
+    }
 }

@@ -33,159 +33,157 @@
 
 namespace Brainworxx\Krexx\Analysis;
 
-
 /**
  * This class decides about recursion.
  *
  * @package Brainworxx\Krexx\Analysis
  */
-class Hive {
+class Hive
+{
 
-  /**
-   * Storage for arrays ans objects, to prevent recursions.
-   *
-   * Layout:
-   * [0] -> array with markers
-   * [1] -> object hashes
-   *
-   * @var array
-   */
-  protected static $recursionHive = array();
+    /**
+     * Storage for arrays ans objects, to prevent recursions.
+     *
+     * Layout:
+     * [0] -> array with markers
+     * [1] -> object hashes
+     *
+     * @var array
+     */
+    protected static $recursionHive = array();
 
-  /**
-   * The recursion marker for the hive.
-   *
-   * It's also used as a unique id to identify the
-   * output "windows" on the frontend.
-   *
-   * @var string
-   */
-  protected static $recursionMarker;
+    /**
+     * The recursion marker for the hive.
+     *
+     * It's also used as a unique id to identify the
+     * output "windows" on the frontend.
+     *
+     * @var string
+     */
+    protected static $recursionMarker;
 
-  /**
-   * Register objects and arrays.
-   *
-   * Adds a variable to the hive of arrays and objects which
-   * are tracked for whether they have recursive entries.
-   *
-   * @param mixed $bee
-   *   Either array or object.
-   *
-   * @return array
-   *   The object we are currently analysing, to prevent an error.
-   */
-  public Static Function &addToHive(&$bee) {
+    /**
+     * Register objects and arrays.
+     *
+     * Adds a variable to the hive of arrays and objects which
+     * are tracked for whether they have recursive entries.
+     *
+     * @param mixed $bee
+     *   Either array or object.
+     *
+     * @return array
+     *   The object we are currently analysing, to prevent an error.
+     */
+    public static function &addToHive(&$bee)
+    {
 
-    // New bee ?
-    if (is_array($bee) || is_object($bee)) {
-
-      if (is_object($bee)) {
-        // We do something else for objects.
-        // Setting a recursion marker inside might trigger a magical function.
-        // Some Zend Framework objects throw an error, while Varien Objects
-        // redirect the recursion value to an internal array.
-        $object_hash = spl_object_hash($bee);
-        if (!isset(self::$recursionHive[1][$object_hash])) {
-          self::$recursionHive[1][$object_hash] = 0;
+        // New bee ?
+        if (is_array($bee) || is_object($bee)) {
+            if (is_object($bee)) {
+                // We do something else for objects.
+                // Setting a recursion marker inside might trigger a magical function.
+                // Some Zend Framework objects throw an error, while Varien Objects
+                // redirect the recursion value to an internal array.
+                $objectHash = spl_object_hash($bee);
+                if (!isset(self::$recursionHive[1][$objectHash])) {
+                    self::$recursionHive[1][$objectHash] = 0;
+                }
+                self::$recursionHive[1][$objectHash]++;
+            } else {
+                // This should be an array.
+                // We are only tracking the $GLOBALS arrays, so we need to check this.
+                // Other array recursions are handled by the nesting level.
+                $recursionMarker = self::getMarker();
+                if (!isset($bee[$recursionMarker])) {
+                    $cleanCopy = $bee;
+                    $bee[$recursionMarker] = 0;
+                    // Check if the copy has the marker.
+                    if (isset($cleanCopy[$recursionMarker])) {
+                        // We have a byRef array, so we keep track of it.
+                        $bee[$recursionMarker]++;
+                        self::$recursionHive[0][] = &$bee;
+                    }
+                }
+            }
         }
-        self::$recursionHive[1][$object_hash]++;
-      }
-      else {
-        // This should be an array.
-        // We are only tracking the $GLOBALS arrays, so we need to check this.
-        // Other array recursions are handled by the nesting level.
-        $recursion_marker = self::getMarker();
-        if (!isset($bee[$recursion_marker])) {
-          $clean_copy = $bee;
-          $bee[$recursion_marker] = 0;
-          // Check if the copy has the marker.
-          if (isset($clean_copy[$recursion_marker])) {
-            // We have a byRef array, so we keep track of it.
-            $bee[$recursion_marker]++;
-            self::$recursionHive[0][] = & $bee;
-          }
+        return $bee;
+    }
+
+    /**
+     * Resets all Arrays inside the recursion array.
+     */
+    public static function cleanupHive()
+    {
+        // Remove all recursion marker inside of arrays.
+        $recursionMarker = self::getMarker();
+        if (isset(self::$recursionHive[0]) && count(self::$recursionHive[0])) {
+            foreach (self::$recursionHive[0] as $i => $bee) {
+                try {
+                    unset(self::$recursionHive[0][$i][$recursionMarker]);
+                } catch (\Exception $e) {
+                    // Do nothing.
+                }
+            }
         }
-      }
+        // Reset the array, to get it clean for the next run.
+        self::$recursionHive = array();
+        // Reset the recursion marker, to get a new ID.
+        self::$recursionMarker = null;
     }
-    return $bee;
-  }
 
-  /**
-   * Resets all Arrays inside the recursion array.
-   */
-  public static function cleanupHive() {
-    // Remove all recursion marker inside of arrays.
-    $recursion_marker = self::getMarker();
-    if (isset(self::$recursionHive[0]) && count(self::$recursionHive[0])) {
-      foreach (self::$recursionHive[0] as $i => $bee) {
-        try {
-          unset(self::$recursionHive[0][$i][$recursion_marker]);
+    /**
+     * Find out if our bee is already in the hive.
+     *
+     * @param mixed $bee
+     *   The object or array we want to check for recursion.
+     *
+     * @return bool
+     *   Boolean which shows whether we are facing a recursion.
+     */
+    public static function isInHive($bee)
+    {
+        // Test for references in order to
+        // prevent endless recursion loops.
+        $recursionValue = 0;
+        $recursionMarker = self::getMarker();
+        if (is_object($bee)) {
+            // Retrieve a possible hash.
+            $objectHash = spl_object_hash($bee);
+            if (isset(self::$recursionHive[1][$objectHash])) {
+                $recursionValue = self::$recursionHive[1][$objectHash];
+            }
+        } else {
+            // Retrieve a possible value.
+            if (isset($bee[$recursionMarker])) {
+                $recursionValue = $bee[$recursionMarker];
+            } else {
+                $recursionValue = 0;
+            }
         }
-        catch (\Exception $e) {
-          // Do nothing.
+
+        $recursionValue = (int)$recursionValue;
+        if ($recursionValue > 0) {
+            return true;
+        } else {
+            return false;
         }
-      }
-    }
-    // Reset the array, to get it clean for the next run.
-    self::$recursionHive = array();
-    // Reset the recursion marker, to get a new ID.
-    self::$recursionMarker = NULL;
-  }
-
-  /**
-   * Find out if our bee is already in the hive.
-   *
-   * @param mixed $bee
-   *   The object or array we want to check for recursion.
-   *
-   * @return bool
-   *   Boolean which shows whether we are facing a recursion.
-   */
-  public static function isInHive($bee) {
-    // Test for references in order to
-    // prevent endless recursion loops.
-    $recursion_value = 0;
-    $recursion_marker = self::getMarker();
-    if (is_object($bee)) {
-      // Retrieve a possible hash.
-      $object_hash = spl_object_hash($bee);
-      if (isset(self::$recursionHive[1][$object_hash])) {
-        $recursion_value = self::$recursionHive[1][$object_hash];
-      }
-    }
-    else {
-      // Retrieve a possible value.
-      if (isset($bee[$recursion_marker])) {
-        $recursion_value = $bee[$recursion_marker];
-      }
-      else {
-        $recursion_value = 0;
-      }
     }
 
-    $recursion_value = (int) $recursion_value;
-    if ($recursion_value > 0) {
-      return TRUE;
-    }
-    else {
-      return FALSE;
-    }
-  }
+    /**
+     * Returns the recursion marker.
+     *
+     * The recursion marker is used to mark arrays as
+     * already iterated, to prevent recursions.
+     *
+     * @return string
+     *   The marker
+     */
+    public static function getMarker()
+    {
+        if (!isset(self::$recursionMarker)) {
+            self::$recursionMarker = 'Krexx' . substr(str_shuffle(md5(microtime())), 0, 10);
+        }
 
-  /**
-   * Returns the recursion marker.
-   *
-   * The recursion marker is used to mark arrays as
-   * already iterated, to prevent recursions.
-   *
-   * @return string
-   *   The marker
-   */
-  public Static Function getMarker() {
-    if (!isset(self::$recursionMarker)) {
-      self::$recursionMarker = 'Krexx' . substr(str_shuffle(md5(microtime())), 0, 10);
+        return self::$recursionMarker;
     }
-
-    return self::$recursionMarker;
-  }
 }

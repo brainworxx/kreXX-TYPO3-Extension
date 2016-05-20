@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  *   Debug viewhelper to use kreXX in fluid templates
@@ -32,18 +31,22 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+
 // The mainproblem with 7.0 is, that compatibility6 may or may not be installed.
 // If not, I have to put his thing here, hoping not to break anything!
 if (!class_exists('Tx_Fluid_Core_ViewHelper_AbstractViewHelper')) {
-  /**
-   * Class Tx_Fluid_Core_ViewHelper_AbstractViewHelper
-   */
-  abstract class Tx_Fluid_Core_ViewHelper_AbstractViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {}
+    /**
+     * Class Tx_Fluid_Core_ViewHelper_AbstractViewHelper
+     */
+    abstract class Tx_Fluid_Core_ViewHelper_AbstractViewHelper extends AbstractViewHelper
+    {
+    }
 }
 // For some reasons, Typo3 7.6 manages to load this file multiple times, causing
 // a fatal.
 if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
-  return;
+    return;
 }
 
 /**
@@ -65,16 +68,18 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  *   {namespace krexx=Tx_Includekrexx_ViewHelpers}
  *   <krexx:debug>{_all}</krexx:debug>
  */
-class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper {
+class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper
+{
 
-  /**
-   * A wrapper for kreXX();
-   *
-   * @return string
-   *   Returns an empty string.
-   */
-  public function render() {
-    krexx($this->renderChildren());
-    return '';
-  }
+    /**
+     * A wrapper for kreXX();
+     *
+     * @return string
+     *   Returns an empty string.
+     */
+    public function render()
+    {
+        krexx($this->renderChildren());
+        return '';
+    }
 }

@@ -31,85 +31,88 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class ext_update {
+/**
+ * Class ext_update
+ */
+class ext_update
+{
 
-  /**
-   * Returns whether this script is available in the backend.
-   *
-   * @return bool
-   *   Always TRUE.
-   */
-  public function access() {
-    return FALSE;
-  }
-
-  /**
-   * Main Function.
-   *
-   * @return string
-   *   Gives feedback of what was actually done.
-   */
-  public function main() {
-    // Protect the upload folder.
-    // We create a .htaccess here, as well as a index.php.
-    // The uploadfolder should not be reachable from the outside.
-    if ((int) TYPO3_version < 7) {
-      $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
-    }
-    else {
-      $source = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
-    }
-    $destination = PATH_site . 'uploads/tx_includekrexx/.htaccess';
-    if (is_file($source) && !is_file($destination)) {
-      copy($source, $destination);
-    }
-    if ((int) TYPO3_version < 6) {
-      $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/index.php';
-    }
-    else {
-      $source = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
-    }
-    $destination = PATH_site . 'uploads/tx_includekrexx/index.php';
-    if (is_file($source) && !is_file($destination)) {
-      copy($source, $destination);
+    /**
+     * Returns whether this script is available in the backend.
+     *
+     * @return bool
+     *   Always TRUE.
+     */
+    public function access()
+    {
+        return false;
     }
 
-    // We flush the caches, just in case. The extension manager does not flush
-    // the ext_localconf cache.
-    $cache_msg = $this->flushCache();
+    /**
+     * Main Function.
+     *
+     * @return string
+     *   Gives feedback of what was actually done.
+     */
+    public function main()
+    {
+        // Protect the upload folder.
+        // We create a .htaccess here, as well as a index.php.
+        // The uploadfolder should not be reachable from the outside.
+        if ((int)TYPO3_version < 7) {
+            $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
+        } else {
+            $source = ExtensionManagementUtility::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
+        }
+        $destination = PATH_site . 'uploads/tx_includekrexx/.htaccess';
+        if (is_file($source) && !is_file($destination)) {
+            copy($source, $destination);
+        }
+        if ((int)TYPO3_version < 6) {
+            $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/index.php';
+        } else {
+            $source = ExtensionManagementUtility::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
+        }
+        $destination = PATH_site . 'uploads/tx_includekrexx/index.php';
+        if (is_file($source) && !is_file($destination)) {
+            copy($source, $destination);
+        }
+
+        // We flush the caches, just in case. The extension manager does not flush
+        // the ext_localconf cache.
+        $cacheMsg = $this->flushCache();
 
 
-    return 'Applied protection to the upload folder.' . $cache_msg;
-  }
-
-  /**
-   * Does a system cache wipe if available, flushes everything if not.
-   */
-  protected function flushCache() {
-    // 1. Get the TCE Main.
-    // 't3lib_TCEmain' => 'TYPO3\\CMS\\Core\\DataHandling\\DataHandler',
-    if ((int) TYPO3_version < 6) {
-      // Oldschool cache management in globals.
-      $cache_manager = $GLOBALS['typo3CacheManager'];
+        return 'Applied protection to the upload folder.' . $cacheMsg;
     }
-    else {
-      $cache_manager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager');
+
+    /**
+     * Does a system cache wipe if available, flushes everything if not.
+     */
+    protected function flushCache()
+    {
+        // 1. Get the TCE Main.
+        // 't3lib_TCEmain' => 'TYPO3\\CMS\\Core\\DataHandling\\DataHandler',
+        if ((int)TYPO3_version < 6) {
+            // Oldschool cache management in globals.
+            $cacheManager = $GLOBALS['typo3CacheManager'];
+        } else {
+            $cacheManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager');
+        }
+
+        // 2. Flush the cache.
+        if (method_exists($cacheManager, 'flushCachesInGroup')) {
+            // Typo3 6+
+            $cacheManager->flushCachesInGroup('system');
+            return '<br />The system cache was flushed.';
+        } else {
+            // Typo3 4.x
+            $cacheManager->flushCaches();
+            return '<br />All caches were flushed.';
+        }
 
     }
-
-    // 2. Flush the cache.
-    if (method_exists($cache_manager, 'flushCachesInGroup')) {
-      // Typo3 6+
-      $cache_manager->flushCachesInGroup('system');
-      return '<br />The system cache was flushed.';
-    }
-    else {
-      // Typo3 4.x
-      $cache_manager->flushCaches();
-      return '<br />All caches were flushed.';
-    }
-
-  }
-
 }

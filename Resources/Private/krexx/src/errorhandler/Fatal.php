@@ -41,114 +41,118 @@ use Brainworxx\Krexx\Framework\Toolbox;
  *
  * @package Brainworxx\Krexx\Errorhandler
  */
-class Fatal extends AbstractHandler {
+class Fatal extends AbstractHandler
+{
 
-  /**
-   * Config for the 'deep' backtrace analysis.
-   *
-   * When we are handling fatal errors, we should display as much
-   * internal info as possible. We will use this config to overwrite
-   * the settings, in case we are handling a fatal error.
-   *
-   * @var array
-   */
-  protected static $configFatal = array(
-    'properties' => array(
-      'analyseProtected' => 'true',
-      'analysePrivate' => 'true',
-      'analyseTraversable' => 'true',
-      'analyseConstants' => 'true',
-    ),
-    'methods' => array(
-      'analyseMethodsAtall' => 'true',
-      'analyseProtectedMethods' => 'true',
-      'analysePrivateMethods' => 'true',
-    ),
-  );
+    /**
+     * Config for the 'deep' backtrace analysis.
+     *
+     * When we are handling fatal errors, we should display as much
+     * internal info as possible. We will use this config to overwrite
+     * the settings, in case we are handling a fatal error.
+     *
+     * @var array
+     */
+    protected static $configFatal = array(
+        'properties' => array(
+            'analyseProtected' => 'true',
+            'analysePrivate' => 'true',
+            'analyseTraversable' => 'true',
+            'analyseConstants' => 'true',
+        ),
+        'methods' => array(
+            'analyseMethodsAtall' => 'true',
+            'analyseProtectedMethods' => 'true',
+            'analysePrivateMethods' => 'true',
+        ),
+    );
 
-  /**
-   * The current backtrace from the registered tick callback.
-   *
-   * PHP deletes it's own stack, when we encounter a fatal error.
-   * The ticked callback solves this, because it will store a
-   * backtrace here.
-   *
-   * @var array
-   *
-   * @see $this->tickCallback().
-   */
-  protected $tickedBacktrace = array();
+    /**
+     * The current backtrace from the registered tick callback.
+     *
+     * PHP deletes it's own stack, when we encounter a fatal error.
+     * The ticked callback solves this, because it will store a
+     * backtrace here.
+     *
+     * @var array
+     *
+     * @see $this->tickCallback().
+     */
+    protected $tickedBacktrace = array();
 
-  /**
-   * Registered tick callback.
-   *
-   * It stores a backtrace in $this->tickedBacktrace.
-   */
-  public function tickCallback() {
-    $this->tickedBacktrace = debug_backtrace();
-  }
-
-  /**
-   * Setter function for $this->isActive.
-   *
-   * We store there whether this handler should do
-   * anything during shutdown, in case we decide after
-   * registering, that we do not want to interfere.
-   *
-   * @param bool $value
-   *   Whether the handler is active or not.
-   */
-  public function setIsActive($value) {
-    $this->isActive = $value;
-  }
-
-  /**
-   * The registered shutdown callback handles fatal errors.
-   *
-   * In case that this handler is active, it will check whether
-   * a fatal error has happened and give additional info like
-   * backtrace, object analysis of the backtrace and code samples
-   * to all stations in the backtrace.
-   */
-  public function shutdownCallback() {
-    $error = error_get_last();
-
-    // Do we have an error at all?
-    if (!is_null($error) && $this->getIsActive()) {
-      // We will not generate any code here!
-      Config::$allowCodegen = FALSE;
-
-      // Do we need to check this one, according to our settings?
-      $translated_error = $this->translateErrorType($error['type']);
-      if ($translated_error[1] == 'traceFatals') {
-        // We don't want to analyse the errorhandler, that will only
-        // be misleading.
-        unset($this->tickedBacktrace[0]);
-
-        // We also need to prepare some Data we want to display.
-        $error_type = $this->translateErrorType($error['type']);
-
-        // We need to correct the error line.
-        $error['line']--;
-
-        $error_data = array(
-          'type' => $error_type[0],
-          'errstr' => $error['message'],
-          'errfile' => $error['file'],
-          'errline' => $error['line'],
-          'handler' => __FUNCTION__,
-          'source' => Toolbox::readSourcecode($error['file'], $error['line'], 5),
-          'backtrace' => $this->tickedBacktrace,
-        );
-
-        if (Config::getConfigValue('backtraceAndError', 'backtraceAnalysis') == 'deep') {
-          // We overwrite the local settings, so we can get as much info from
-          // analysed objects as possible.
-          Config::overwriteLocalSettings(self::$configFatal);
-        }
-        $this->giveFeedback($error_data);
-      }
+    /**
+     * Registered tick callback.
+     *
+     * It stores a backtrace in $this->tickedBacktrace.
+     */
+    public function tickCallback()
+    {
+        $this->tickedBacktrace = debug_backtrace();
     }
-    // Clean exit.
-  }
+
+    /**
+     * Setter function for $this->isActive.
+     *
+     * We store there whether this handler should do
+     * anything during shutdown, in case we decide after
+     * registering, that we do not want to interfere.
+     *
+     * @param bool $value
+     *   Whether the handler is active or not.
+     */
+    public function setIsActive($value)
+    {
+        $this->isActive = $value;
+    }
+
+    /**
+     * The registered shutdown callback handles fatal errors.
+     *
+     * In case that this handler is active, it will check whether
+     * a fatal error has happened and give additional info like
+     * backtrace, object analysis of the backtrace and code samples
+     * to all stations in the backtrace.
+     */
+    public function shutdownCallback()
+    {
+        $error = error_get_last();
+
+        // Do we have an error at all?
+        if (!is_null($error) && $this->getIsActive()) {
+            // We will not generate any code here!
+            Config::$allowCodegen = false;
+
+            // Do we need to check this one, according to our settings?
+            $translatedError = $this->translateErrorType($error['type']);
+            if ($translatedError[1] == 'traceFatals') {
+                // We don't want to analyse the errorhandler, that will only
+                // be misleading.
+                unset($this->tickedBacktrace[0]);
+
+                // We also need to prepare some Data we want to display.
+                $errorType = $this->translateErrorType($error['type']);
+
+                // We need to correct the error line.
+                $error['line']--;
+
+                $errorData = array(
+                    'type' => $errorType[0],
+                    'errstr' => $error['message'],
+                    'errfile' => $error['file'],
+                    'errline' => $error['line'],
+                    'handler' => __FUNCTION__,
+                    'source' => Toolbox::readSourcecode($error['file'], $error['line'], 5),
+                    'backtrace' => $this->tickedBacktrace,
+                );
+
+                if (Config::getConfigValue('backtraceAndError', 'backtraceAnalysis') == 'deep') {
+                    // We overwrite the local settings, so we can get as much info from
+                    // analysed objects as possible.
+                    Config::overwriteLocalSettings(self::$configFatal);
+                }
+                $this->giveFeedback($errorData);
+            }
+        }
+        // Clean exit.
+    }
 }

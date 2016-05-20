@@ -130,8 +130,9 @@
     .kwrapper .knode .ktool-tabs, .kfatalwrapper-outer .knode .ktool-tabs {
       margin: 0;
       list-style: none;
-      background-color: #919191;
-      cursor: move; }
+      background-color: #919191; }
+      .kwrapper .knode .ktool-tabs.khandle, .kfatalwrapper-outer .knode .ktool-tabs.khandle {
+        cursor: move; }
       .kwrapper .knode .ktool-tabs .ktab, .kfatalwrapper-outer .knode .ktool-tabs .ktab {
         display: inline-block;
         margin-left: 10px;

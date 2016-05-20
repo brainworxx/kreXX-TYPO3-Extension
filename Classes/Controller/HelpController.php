@@ -37,31 +37,34 @@
 // a fatal.
 if (!class_exists('Tx_Includekrexx_Controller_HelpController')) {
 
-  /**
-   * Class Tx_Includekrexx_Controller_IndexController
-   */
-  class Tx_Includekrexx_Controller_HelpController extends Tx_Includekrexx_Controller_CompatibilityController {
-
     /**
-     * Simply display the help text from the fluid template.
+     * Class Tx_Includekrexx_Controller_IndexController
      */
-    public function usageAction() {
-      // Has kreXX something to say? Maybe a writeprotected logfolder?
-      foreach ($this->getTranslatedMessages() as $message) {
-        $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
-      }
-      $this->addCssToView('Backend.css');
-    }
+    class Tx_Includekrexx_Controller_HelpController extends Tx_Includekrexx_Controller_CompatibilityController
+    {
 
-    /**
-     * Simply display the help text from the fluid template.
-     */
-    public function configAction() {
-      // Has kreXX something to say? Maybe a writeprotected logfolder?
-      foreach ($this->getTranslatedMessages() as $message) {
-        $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
-      }
-      $this->addCssToView('Backend.css');
+        /**
+         * Simply display the help text from the fluid template.
+         */
+        public function usageAction()
+        {
+            // Has kreXX something to say? Maybe a writeprotected logfolder?
+            foreach ($this->getTranslatedMessages() as $message) {
+                $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+            }
+            $this->addCssToView('Backend.css');
+        }
+
+        /**
+         * Simply display the help text from the fluid template.
+         */
+        public function configAction()
+        {
+            // Has kreXX something to say? Maybe a writeprotected logfolder?
+            foreach ($this->getTranslatedMessages() as $message) {
+                $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+            }
+            $this->addCssToView('Backend.css');
+        }
     }
-  }
 }

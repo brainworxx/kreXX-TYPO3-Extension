@@ -62,7 +62,7 @@
     krexx.setPayloadMaxHeight();
 
     // Initialize the draggable.
-    kdt.draXX('.kwrapper',  '.ktool-tabs');
+    kdt.draXX('.kwrapper',  '.khandle');
 
     /**
      * Register toggling to the elements.
@@ -101,7 +101,7 @@
      *   Displays a closing animation of the corresponding
      *   krexx output "window" and then removes it from the markup.
      */
-    kdt.addEvent('.kwrapper .ktool-tabs .kclose', 'click', krexx.close);
+    kdt.addEvent('.kwrapper .ktool-tabs .kclose, .kwrapper .kheadnote-wrapper .kclose', 'click', krexx.close);
 
     /**
      * Register the click on the tabs.

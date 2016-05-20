@@ -12,7 +12,8 @@
 
 $EM_CONF[$_EXTKEY] = array(
   'title' => 'kreXX Debugger',
-  'description' => 'kreXX is a php debugger with a fatal error handler. It displays debug information about objects and variables in it\'s own draggable output.',
+  'description' => 'kreXX is a php debugger with a fatal error handler.' .
+      'It displays debug information about objects and variables in it\'s own draggable output.',
   'category' => 'misc',
   'version' => '1.4.2',
   'state' => 'stable',
@@ -34,4 +35,3 @@ $EM_CONF[$_EXTKEY] = array(
     ),
   ),
 );
-

@@ -38,88 +38,96 @@ namespace Brainworxx\Krexx\View;
  *
  * @package Brainworxx\Krexx\View
  */
-class Messages {
+class Messages
+{
 
-  /**
-   * Here we store all messages, which gets send to the output.
-   *
-   * @var array
-   */
-  protected static $messages = array();
+    /**
+     * Here we store all messages, which gets send to the output.
+     *
+     * @var array
+     */
+    protected static $messages = array();
 
-  protected static $keys = array();
+    protected static $keys = array();
 
-  /**
-   * The message we want to add. It will be displayed in the output.
-   *
-   * @param string $message
-   *   The message itself.
-   * @param string $class
-   *   The class of the message.
-   */
-  public static function addMessage($message, $class = 'normal') {
-    self::$messages[$message] = array('message' => $message, 'class' => $class);
-  }
+    /**
+     * The message we want to add. It will be displayed in the output.
+     *
+     * @param string $message
+     *   The message itself.
+     * @param string $class
+     *   The class of the message.
+     */
+    public static function addMessage($message, $class = 'normal')
+    {
+        self::$messages[$message] = array(
+            'message' => $message,
+            'class' => $class
+        );
+    }
 
-  /**
-   * Adds message keys to the key array.
-   *
-   * The same as the addMessage, but we add language keys for a potential
-   * backend integration (includekrexx for example).
-   *
-   * @param string $key
-   *   The key for the translation function.
-   * @param NULL|array $params
-   *   The parameters for the string replacements inside the translation.
-   */
-  public static function addKey($key, $params = NULL) {
-    self::$keys[$key] = array('key' => $key, 'params' => $params);
-  }
+    /**
+     * Adds message keys to the key array.
+     *
+     * The same as the addMessage, but we add language keys for a potential
+     * backend integration (includekrexx for example).
+     *
+     * @param string $key
+     *   The key for the translation function.
+     * @param NULL|array $params
+     *   The parameters for the string replacements inside the translation.
+     */
+    public static function addKey($key, $params = null)
+    {
+        self::$keys[$key] = array('key' => $key, 'params' => $params);
+    }
 
-  /**
-   * Removes a key from the key array.
-   *
-   * @param string $key
-   *   The key we want to remove
-   */
-  public static function removeKey($key) {
-    unset(self::$keys[$key]);
-  }
+    /**
+     * Removes a key from the key array.
+     *
+     * @param string $key
+     *   The key we want to remove
+     */
+    public static function removeKey($key)
+    {
+        unset(self::$keys[$key]);
+    }
 
-  /**
-   * Getter for the language key array.
-   *
-   * @return array
-   *   The language keys we added beforehand.
-   */
-  public static function getKeys() {
-    return self::$keys;
-  }
+    /**
+     * Getter for the language key array.
+     *
+     * @return array
+     *   The language keys we added beforehand.
+     */
+    public static function getKeys()
+    {
+        return self::$keys;
+    }
 
-  /**
-   * Renders the output of the messages.
-   *
-   * @return string
-   *   The rendered html output of the messages.
-   */
-  public static function outputMessages() {
-    // Simple Wrapper for SkinRender::renderMessages
-    if (php_sapi_name() == "cli") {
-      if (count(self::$messages)) {
-        $result = "\n\nkreXX messages\n";
-        $result .= "==============\n";
-        foreach (self::$messages as $message) {
-          $message = $message['message'];
-          $result .= "$message\n";
+    /**
+     * Renders the output of the messages.
+     *
+     * @return string
+     *   The rendered html output of the messages.
+     */
+    public static function outputMessages()
+    {
+        // Simple Wrapper for SkinRender::renderMessages
+        if (php_sapi_name() == "cli") {
+            if (count(self::$messages)) {
+                $result = "\n\nkreXX messages\n";
+                $result .= "==============\n";
+                foreach (self::$messages as $message) {
+                    $message = $message['message'];
+                    $result .= "$message\n";
+                }
+                $result .= "\n\n";
+                return $result;
+            }
+        } else {
+            return SkinRender::renderMessages(self::$messages);
         }
-        $result .= "\n\n";
-        return $result;
-      }
+        // Still here?
+        return '';
     }
-    else {
-      return SkinRender::renderMessages(self::$messages);
-    }
-    // Still here?
-    return '';
-  }
 }
