@@ -48,12 +48,6 @@ if (file_exists($filename) && !class_exists('Krexx')) {
     // We will not include it again!
     include_once $filename;
 }
-// We point kreXX to its ini file.
-// For some reasons, this class may or may not be declared in 6.2 during an
-// update.
-if (class_exists('Brainworxx\Krexx\Framework\Config')) {
-    \Brainworxx\Krexx\Framework\Config::setPathToIni(PATH_site . 'uploads/tx_includekrexx/Krexx.ini');
-}
 
 // Typo3 7.3 / 7.4 does not autoload our classes anymore, so we do this here.
 if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController') && (int)TYPO3_version > 6) {

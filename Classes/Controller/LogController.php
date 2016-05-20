@@ -58,28 +58,28 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
             });
 
             // 3. Get the file info.
-            $file_list = array();
+            $fileList = array();
             foreach ($files as $file) {
-                $file_info = array();
+                $fileinfo = array();
 
                 // Getting the basic info.
-                $file_info['name'] = basename($file);
-                $file_info['size'] = $this->fileSizeConvert(filesize($file));
-                $file_info['time'] = date("d.m.y H:i:s", filemtime($file));
-                $file_info['id'] = str_replace('.Krexx.html', '', $file_info['name']);
+                $fileinfo['name'] = basename($file);
+                $fileinfo['size'] = $this->fileSizeConvert(filesize($file));
+                $fileinfo['time'] = date("d.m.y H:i:s", filemtime($file));
+                $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
 
                 // Parsing a potentialls 80MB file for it's content is not a good idea.
                 // That is why the kreXX lib provides some meta data. We will open
                 // this file and add it's content to the template.
                 if (is_readable($file . '.json')) {
-                    $file_info['meta'] = json_decode(file_get_contents($file . '.json'), true);
+                    $fileinfo['meta'] = json_decode(file_get_contents($file . '.json'), true);
 
-                    foreach ($file_info['meta'] as &$meta) {
+                    foreach ($fileinfo['meta'] as &$meta) {
                         $meta['filename'] = basename($meta['file']);
                     }
                 }
 
-                $file_list[] = $file_info;
+                $fileList[] = $fileinfo;
             }
 
             // 4. Has kreXX something to say? Maybe a writeprotected logfolder?
@@ -88,7 +88,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
             }
 
             // 5. Assign the flile list.
-            $this->view->assign('files', $file_list);
+            $this->view->assign('files', $fileList);
             $this->addCssToView('Backend.css');
         }
 
@@ -134,7 +134,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
         protected function fileSizeConvert($bytes)
         {
             $bytes = floatval($bytes);
-            $ar_bytes = array(
+            $arBytes = array(
                 0 => array(
                     "UNIT" => "TB",
                     "VALUE" => pow(1024, 4),
@@ -158,10 +158,10 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
             );
 
             $result = '';
-            foreach ($ar_bytes as $ar_item) {
-                if ($bytes >= $ar_item["VALUE"]) {
-                    $result = $bytes / $ar_item["VALUE"];
-                    $result = str_replace(".", ",", strval(round($result, 2))) . " " . $ar_item["UNIT"];
+            foreach ($arBytes as $aritem) {
+                if ($bytes >= $aritem["VALUE"]) {
+                    $result = $bytes / $aritem["VALUE"];
+                    $result = str_replace(".", ",", strval(round($result, 2))) . " " . $aritem["UNIT"];
                     break;
                 }
             }

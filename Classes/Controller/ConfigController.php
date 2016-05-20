@@ -210,44 +210,46 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
         public function saveAction()
         {
             $arguments = $this->request->getArguments();
-            $all_ok = true;
+            $allOk = true;
             $filepath = Config::getPathToIni();
+
+
 
             // Check for writing permission.
             if (!is_writable(dirname($filepath))) {
-                $all_ok = false;
-                Messages::addMessage($this->LLL('file.not.writable', array($filepath)));
+                $allOk = false;
+                Messages::addKey('file.not.writable', array($filepath));
             }
 
             // Check if the file does exist.
             if (is_file($filepath)) {
-                $old_values = parse_ini_file($filepath, true);
+                $oldValues = parse_ini_file($filepath, true);
             } else {
-                $old_values = array();
+                $oldValues = array();
             }
 
             // We must preserve the section 'feEditing'.
             // Everything else will be overwritten.
-            $old_values = array('feEditing' => $old_values['feEditing']);
+            $oldValues = array('feEditing' => $oldValues['feEditing']);
 
-            if (isset($arguments['action']) && $arguments['action'] == 'save') {
+            if (isset($arguments['action']) && $arguments['action'] == 'save' && $allOk) {
                 // Iterating through the form.
                 foreach ($arguments as $section => $data) {
                     if (is_array($data) && in_array($section, $this->allowedSections)) {
                         // We've got a section key.
-                        foreach ($data as $setting_name => $value) {
-                            if (in_array($setting_name, $this->allowedSettingsNames)) {
+                        foreach ($data as $settingName => $value) {
+                            if (in_array($settingName, $this->allowedSettingsNames)) {
                                 // We escape the value, just in case, since we can not
                                 // whitelist it.
                                 $value = htmlspecialchars(preg_replace('/\s+/', '', $value));
                                 // Evaluate the setting!
-                                if (Config::evaluateSetting($section, $setting_name, $value)) {
-                                    $old_values[$section][$setting_name] = $value;
+                                if (Config::evaluateSetting($section, $settingName, $value)) {
+                                    $oldValues[$section][$settingName] = $value;
                                 } else {
                                     // Validation failed! kreXX will generate a message,
                                     // which we will display
                                     // at the buttom.
-                                    $all_ok = false;
+                                    $allOk = false;
                                 }
                             }
                         }
@@ -255,37 +257,42 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                 }
                 // Now we must create the ini file.
                 $ini = '';
-                foreach ($old_values as $key => $setting) {
+                foreach ($oldValues as $key => $setting) {
                     $ini .= '[' . $key . ']' . PHP_EOL;
                     if (is_array($setting)) {
-                        foreach ($setting as $setting_name => $value) {
-                            $ini .= $setting_name . ' = "' . $value . '"' . PHP_EOL;
+                        foreach ($setting as $settingName => $value) {
+                            $ini .= $settingName . ' = "' . $value . '"' . PHP_EOL;
                         }
                     }
                 }
 
                 // Now we should write the file!
-                if ($all_ok) {
+                if ($allOk) {
                     if (file_put_contents($filepath, $ini) === false) {
-                        $all_ok = false;
-                        Messages::addMessage($this->LLL('file.not.writable', array($filepath)));
+                        $allOk = false;
+                        Messages::addKey('file.not.writable', array($filepath));
                     }
                 }
-                // Something went wrong, we need to tell the user.
-                if (!$all_ok) {
-                    // Got to remove some messages. We we will not queue them now.
-                    Messages::removeKey('protected.folder.chunk');
-                    Messages::removeKey('protected.folder.log');
-                    foreach ($this->getTranslatedMessages() as $message) {
-                        $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
-                    }
-                } else {
+            }
+
+            // Something went wrong, we need to tell the user.
+            if (!$allOk) {
+                // Got to remove some messages. We we will not queue them now.
+                Messages::removeKey('protected.folder.chunk');
+                Messages::removeKey('protected.folder.log');
+                foreach ($this->getTranslatedMessages() as $message) {
                     $this->addMessage(
-                        $this->LLL('save.success.text', array($filepath)),
-                        $this->LLL('save.success.title'),
-                        t3lib_FlashMessage::OK
+                        $message,
+                        $this->LLL('save.fail.title'),
+                        t3lib_FlashMessage::ERROR
                     );
                 }
+            } else {
+                $this->addMessage(
+                    $this->LLL('save.success.text', array($filepath)),
+                    $this->LLL('save.success.title'),
+                    t3lib_FlashMessage::OK
+                );
             }
 
             $this->redirect('edit');

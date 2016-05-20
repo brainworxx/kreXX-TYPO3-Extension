@@ -59,34 +59,9 @@ class ext_update
      */
     public function main()
     {
-        // Protect the upload folder.
-        // We create a .htaccess here, as well as a index.php.
-        // The uploadfolder should not be reachable from the outside.
-        if ((int)TYPO3_version < 7) {
-            $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
-        } else {
-            $source = ExtensionManagementUtility::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
-        }
-        $destination = PATH_site . 'uploads/tx_includekrexx/.htaccess';
-        if (is_file($source) && !is_file($destination)) {
-            copy($source, $destination);
-        }
-        if ((int)TYPO3_version < 6) {
-            $source = t3lib_extMgm::extPath('includekrexx') . 'Resources/Private/krexx/log/index.php';
-        } else {
-            $source = ExtensionManagementUtility::extPath('includekrexx') . 'Resources/Private/krexx/log/.htaccess';
-        }
-        $destination = PATH_site . 'uploads/tx_includekrexx/index.php';
-        if (is_file($source) && !is_file($destination)) {
-            copy($source, $destination);
-        }
-
         // We flush the caches, just in case. The extension manager does not flush
         // the ext_localconf cache.
-        $cacheMsg = $this->flushCache();
-
-
-        return 'Applied protection to the upload folder.' . $cacheMsg;
+        $this->flushCache();
     }
 
     /**
@@ -107,11 +82,9 @@ class ext_update
         if (method_exists($cacheManager, 'flushCachesInGroup')) {
             // Typo3 6+
             $cacheManager->flushCachesInGroup('system');
-            return '<br />The system cache was flushed.';
         } else {
             // Typo3 4.x
             $cacheManager->flushCaches();
-            return '<br />All caches were flushed.';
         }
 
     }

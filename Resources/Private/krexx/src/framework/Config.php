@@ -278,7 +278,6 @@ class Config
     public static function getConfigValue($group, $name)
     {
         // Do some caching.
-        // When we ignore the local settings, we can not rely on the cached value.
         if (isset(self::$localConfig[$group][$name])) {
             return self::$localConfig[$group][$name];
         }
@@ -287,7 +286,6 @@ class Config
         $localSetting = self::getConfigFromCookies($group, $name);
         // Do we have a value in the ini?
         $iniSettings = self::getConfigFromFile($group, $name);
-
         if (isset($localSetting)) {
             // We must not overwrite a disabled=true with local cookie settings!
             // Otherwise it could get enabled locally,

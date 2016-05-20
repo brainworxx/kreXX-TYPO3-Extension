@@ -173,7 +173,7 @@ class Krexx
                 array($krexxdir . Config::getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR)
             );
         }
-        // At this point, we won't inform the user right away. The error message
+        // At this point, we won't inform the dev right away. The error message
         // will pop up, when kreXX is actually displayed, no need to bother the
         // dev just now.
         // We might need to register our Backtracer.
