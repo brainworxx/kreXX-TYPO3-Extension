@@ -36,7 +36,7 @@ To prevent these files from clogging up your system, kreXX will only keep 10 fil
 |
 
 .. figure:: ../Images/Logging/logfiles.png
-	:width: 782px
+	:width: 992px
 	:alt: Logfiles backend menu
 
 	To make these logfiles easier accessible, we have provided a backend menu, where you can easily view them.

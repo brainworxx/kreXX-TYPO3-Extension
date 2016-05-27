@@ -12,6 +12,11 @@
 kreXX Debugger
 =============================================================
 
+.. figure:: Images/krexx.png
+	:width: 270px
+	:align: left
+	:alt: kreXX logo
+
 .. only:: html
 
 	:Classification:
@@ -58,8 +63,7 @@ kreXX Debugger
 
 	Introduction/Index
 	Usage/Index
+	LittleHelpers/Index
 	Config/Index
 	Logging/Index
-	DevHandle/Index
-	LittleHelpers/Index
 	FatalError/Index

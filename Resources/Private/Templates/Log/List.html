@@ -45,14 +45,14 @@
               <f:else>
                 <f:for each="{file.meta}" as="meta">
                   <tr>
-                    <td>
+                    <td class="metatype">
                       {meta.type}
                       <f:if condition="{meta.varname}!='...'">
                         <f:then>
                           <f:translate key="log.of" /> <b>{meta.varname}</b>
                         </f:then>
                       </f:if>
-                      </td>
+                    </td>
                     <td>
                       <f:translate key="log.in" /> <b title="{meta.file}">{meta.filename}</b>
                     </td>

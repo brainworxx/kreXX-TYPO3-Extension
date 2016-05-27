@@ -158,8 +158,9 @@
       <label index="usage.label.registerFatal">Register the fatal error handler in the system:</label>
       <label index="usage.label.unregisterFatal">Unregister the fatal error handler in the system:</label>
       <label index="usage.links.headline">More datailed help</label>
-      <label index="usage.links.typo3">Documentation at Typo3 Docs</label>
+      <label index="usage.links.typo3">Documentation at TYPO3 Docs</label>
       <label index="usage.links.sourceforge">Documentation at sourceforge</label>
+      <label index="usage.links.github">Documentation at GitHub</label>
 
       <!-- Configuration Help -->
       <label index="config.headline">Configuration</label>
@@ -176,9 +177,10 @@
       <label index="config.cookie.warning">Please note, that these are only local settings, only affecting your current browser.</label>
       <label index="config.links.headline">kreXX on the WeBB</label>
       <label index="config.links.1">Documentation</label>
-      <label index="config.links.2">Bug reports</label>
-      <label index="config.links.3">Typo3 kreXX</label>
+      <label index="config.links.2">Bug reports for kreXX</label>
+      <label index="config.links.3">TYPO3 kreXX</label>
       <label index="config.links.4">Magento kreXX</label>
+      <label index="config.links.5">Bug reports for the TYPO3 kreXX extension</label>
 
       <!-- Logging -->
       <label index="log.headline">Overview file logging</label>

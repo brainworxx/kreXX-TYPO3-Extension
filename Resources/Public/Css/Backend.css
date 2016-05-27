@@ -135,3 +135,7 @@ table.noborder {
   padding: 0;
   padding-right: 10px;
 }
+
+td.metatype {
+  min-width: 200px;
+}

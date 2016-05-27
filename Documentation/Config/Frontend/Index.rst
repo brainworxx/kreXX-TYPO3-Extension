@@ -12,9 +12,21 @@
 Edit FE Configuration
 =====================
 
-You can actually change which values can be edited on the frontend. To do this, we've also provided an editor.
+Being able to edit all settings on the fly inside the debug output might not be such a good idea. Like with the configuration, we have provided kreXX with factory settings, disabling the more "dangerous" options.
 
-For every control, you can set 3 different settings:
+With factory settings active, you can not edit the following settings:
+
+- deep --> debugMethods
+- output --> destination
+
+The following settings are not even displayed:
+
+- logging --> maxfiles
+- logging --> folder
+
+kreXX will not accept any cookie settings for these options.
+
+This can also be changed, of course. For every control, you can set 3 different settings:
 
 +---------+-------------------------------------------------------------------------------------------------------------------------------+
 | Value   | meaning                                                                                                                       |
@@ -26,6 +38,9 @@ For every control, you can set 3 different settings:
 | none    | kreXX will not display this control or it's value. Leftover settings will be ignored.                                         |
 +---------+-------------------------------------------------------------------------------------------------------------------------------+
 
-.. figure:: ../../Images/Frontend/t3_backend2.png
-	:width: 604px
+You can change which values can be edited on the frontend. To do this, we've also provided an editor:
+
+.. figure:: ../../Images/Config/typo3_backend_02.png
+	:width: 350px
+	:align: left
 	:alt: Here you can change what options are available in the frontend.

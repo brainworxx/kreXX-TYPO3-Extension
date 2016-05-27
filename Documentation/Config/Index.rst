@@ -12,41 +12,41 @@ Configuration
 =============
 
 | You do not have to configure kreXX. It works very well out of the box.
-| The configuration of kreXX is stored inside the file:
+| There are two ways to configure kreXX:
+
+1. Edit configuration file settings (we have provided an editor for this)
+2. Edit local cookie settings
+
+Factory settings
+----------------
+The factory settings are hardcoded default settings, in case there is no configuration available.
+
+Configuration file settings
+---------------------------
+The configuration file is located here:
 
 .. code-block:: typoscript
 
-	uploads/tx_includekrexx/Krexx.ini
+	typo3conf/ext/includekrexx/Resources/Private/krexx/Krexx.ini
+
+You do not have to edit this file manually. we have provided a backend editor for this: :ref:`config_options`
 
 
-You do not have to edit this file manually. we have provided a backend editor for this.
-
-Configuration Editor
---------------------
-
-.. figure:: ../Images/Config/t3_backend.png
-	:width: 678px
-	:alt: Typo3 backend editor for the kreXX settings
-
-	Settings editor in the Typo3 backend
-
-|
+Local cookie settings
+---------------------
+| Local cookie settings can be changed in the kreXX output window. Not all settings can be edited in the frontend, but that can be changed here: :ref:`fe-configuration`
+| Please note that local cookie settings affect only your current browser.
 |
 
-
-.. figure:: ../Images/Config/local_conf.png
-	:width: 777px
-	:alt: Local cookie settings editor in the frontend
-
-	Editor for the local cookie settings
-
+**Table of Contents**
 
 .. toctree::
    :maxdepth: 1
    :titlesonly:
    :glob:
 
-
+   Levels/Index
    Options/Index
    Frontend/Index
-   Levels/Index
+   AjaxCli/Index
+   DevHandle/Index

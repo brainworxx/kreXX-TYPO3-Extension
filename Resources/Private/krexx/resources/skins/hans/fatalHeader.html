@@ -1,35 +1,34 @@
 {doctype}
-<!-- we might need to close some still open elements to get a proper display here -->
-</script></li></ul></li></ul>
-  <html>
-    <head>
-      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-      <title>Krexx {version}</title>
-      {cssJs}
-    </head>
-    <body>
-      <div class="kfatalwrapper-outer" id="{KrexxId}" >
-       <div class="kwrapper">
-          <noscript>To properly view this debug info, please open it in a browser with enabled javascript.</noscript>
-          {search}
-          <div>
-            <ul class="knode kfirst">
-              <li class="kfatal-headnote">
-                <div class="kstop">
-                  <span>!</span>
-                </div>
-                Fatal Error
-                <span class="kversion">
-                  <span class="kel kexpand">Links for kreXX {version}&nbsp;</span>
-                  <div class="knest klinks khidden">
-                      <a target="_blank" href="http://www.brainworxx.de/">www.brainworxx.de</a><br/>
-                      <a href="https://docs.typo3.org/typo3cms/extensions/includekrexx/" target="_blank">Documentation</a><br/>
-                      <a href="http://sourceforge.net/p/krexx/bugs/" target="_blank">Bug reports</a><br/>
-                      <a href="http://typo3.org/extensions/repository/view/includekrexx" target="_blank">Typo3 kreXX</a><br/>
-                      <a href="http://www.magentocommerce.com/magento-connect/include-krexx.html" target="_blank">Magento kreXX</a>
-                    </div>
-                  <input data-instance="{KrexxId}" class="ksearchbutton" type="button" value="Search">&nbsp;
-                  <span class="kclose kfatal" data-instance="{KrexxId}">&#10005;</span>
-                </span>
-                
-              </li>
+<!-- The only thing I can not handle via js is the script tag (and the comment opening, hence this little text here) -->
+</script>
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Krexx {version}</title>
+    {cssJs}
+  </head>
+  <body>
+    <div class="kfatalwrapper-outer" id="{KrexxId}" >
+     <div class="kwrapper">
+        <noscript>To properly view this debug info, please open it in a browser with enabled javascript.</noscript>
+        {search}
+        <div>
+          <ul class="knode kfirst">
+            <li class="kfatal-headnote">
+              <div class="kstop">
+                <span>!</span>
+              </div>
+              Fatal Error
+              <span class="kversion">
+                <span class="kel kexpand">Links for kreXX {version}&nbsp;</span>
+                <div class="knest klinks khidden">
+                  <a target="_blank" href="http://www.brainworxx.de/">www.brainworxx.de</a><br/>
+                  <a href="https://docs.typo3.org/typo3cms/extensions/includekrexx/" target="_blank">Documentation</a><br/>
+                    <a href="http://sourceforge.net/p/krexx/bugs/" target="_blank">Bug reports</a><br/>
+                    <a href="http://typo3.org/extensions/repository/view/includekrexx" target="_blank">Typo3 kreXX</a><br/>
+                    <a href="http://www.magentocommerce.com/magento-connect/include-krexx.html" target="_blank">Magento kreXX</a>
+                  </div>
+                <input data-instance="{KrexxId}" class="ksearchbutton" type="button" value="Search">&nbsp;
+                <span class="kclose kfatal" data-instance="{KrexxId}">&#10005;</span>
+              </span>
+            </li>

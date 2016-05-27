@@ -18,15 +18,15 @@ Hide-Everything-Else
 ^^^^^^^^^^^^^^^^^^^^
 
 | Modern frameworks tend to have complicated objects.
-| Analysing them with krexx will then produce a lot of output. And the values you are looking for might be buried in there somewhere.
+| Analysing them with kreXX will then produce a lot of output. And the values you are looking for might be buried in there somewhere.
 | The Hide-Everything-Else function does exactly this: It hides all the other values, to make the output more comprehensible.
 | A click on the arrow symbol will hide all other values, except the value itself and it's child-values.
 | Another click on will reset everything.
 |
 |
 
-.. figure:: ../Images/LittleHelpers/open_datamap.png
-	:width: 896px
+.. figure:: ../Images/LittleHelpers/tldr_output.png
+	:width: 1073px
 	:alt: Incomprehensible output with a lot of data
 
 	Incomprehensible output with a lot of data. A simple click on the arrow symbol hides the rest of the output
@@ -34,8 +34,8 @@ Hide-Everything-Else
 |
 |
 
-.. figure:: ../Images/LittleHelpers/collapsed_datamap.png
-	:width: 785px
+.. figure:: ../Images/LittleHelpers/better_output.png
+	:width: 792px
 	:alt: Better readable output, because unnecessary data is now hidden.
 
 	Better readable output, because unnecessary data is now hidden.
@@ -49,12 +49,33 @@ Automatic code generation
 | Displaying only the values you want to know about os one thing. Reaching them via php code is something else entirely.
 | We have included an automatic code generation, which generates php-code to reach these values.
 | There is a limitation, though. Most values you will come across are protected, and there is most likely a reason for this. kreXX will not generate code to make them public.
-| A click on the heart symbol will generate this code.
+| A click on the <php> symbol will generate this code.
 |
 |
 
-.. figure:: ../Images/LittleHelpers/codegen.png
-	:width: 978px
+.. figure:: ../Images/LittleHelpers/code_gen.png
+	:width: 1133
 	:alt: Code automatically generated via kreXX
 
 	Code automatically generated
+
+
+|
+|
+
+Search function
+^^^^^^^^^^^^^^^
+
+Imagine the following scenario: You are searching for a specific value, function or property somewhere deep inside a specific debug output "window".
+
+kreXX offers you here a case insensitive search form, doing the following:
+
+- Marking all appearances
+- Open the collapsed nodes to the output
+- Scrolls down to each finding
+
+.. figure:: ../Images/LittleHelpers/search.png
+	:width: 1073
+	:alt: Code automatically generated via kreXX
+
+	Search function in action

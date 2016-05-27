@@ -2,16 +2,18 @@
 - Added analysis metadata to the file output.
 - Change: Restructured the configuration options. The sorting does now
   make more sense than before.
-- Change: Removed the whole dual-output mess.
+- Bufix / Change: Removed the whole dual-output mess.
 - Change: When the destination is set to 'file' via config file, this
   value can not be overwritten with local cookie settings.
 - Change: Unclunked the Smokey-Grey skin.
+- Change: Adopted PSR-2
 - Bugfix: No helptext displayed for readonly cookie config.
 - Bugfix: The Hans skin renders the config option name twice.
 - Bugfix: When setting the logfiles to '10', kreXX will now keep 10
   files, and not 9.
 - Bugfix: The debug output might jump around, in some special css
   environments.
+- Bufix: Proper handling of broken html output from the hosting CMS.
 
 1.4.1
 - Added class constants analysis.
