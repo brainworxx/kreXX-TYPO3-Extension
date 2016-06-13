@@ -26,32 +26,32 @@
       <tr>
         <td><label for="disabled"><f:translate key="label.disabled" /></label></td>
         <td><f:form.select id="disabled" name="runtime[disabled]" options="{data.settings}" value="{value.runtime.disabled}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.disabled" name="factory" checked="{data.factory.disabled}" value="1" /><label for="factory.disabled">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.disabled" name="factory" checked="{data.factory.disabled}" value="1" /><label for="factory.disabled"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr>
         <td><label for="detectAjax"><f:translate key="label.detectAjax" /></label></td>
         <td><f:form.select id="detectAjax" name="runtime[detectAjax]" options="{data.settings}" value="{value.runtime.detectAjax}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.detectAjax" name="factory" checked="{data.factory.detectAjax}" value="1" /><label for="factory.detectAjax">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.detectAjax" name="factory" checked="{data.factory.detectAjax}" value="1" /><label for="factory.detectAjax"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr>
         <td><label for="level"><f:translate key="label.level" /></label></td>
         <td><f:form.select id="level" name="runtime[level]" options="{data.settings}" value="{value.runtime.level}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.level" name="factory" checked="{data.factory.level}" value="1" /><label for="factory.level">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.level" name="factory" checked="{data.factory.level}" value="1" /><label for="factory.level"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr>
         <td><label for="maxCall"><f:translate key="label.maxCall" /></label></td>
         <td><f:form.select id="maxCall" name="runtime[maxCall]" options="{data.settings}" value="{value.runtime.maxCall}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.maxCall" name="factory" checked="{data.factory.maxCall}" value="1" /><label for="factory.maxCall">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.maxCall" name="factory" checked="{data.factory.maxCall}" value="1" /><label for="factory.maxCall"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr>
         <td><label for="memoryLeft"><f:translate key="label.memoryLeft" /></label></td>
         <td><f:form.select id="memoryLeft" name="runtime[memoryLeft]" options="{data.settings}" value="{value.runtime.memoryLeft}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.memoryLeft" name="factory" checked="{data.factory.memoryLeft}" value="1" /><label for="factory.memoryLeft">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.memoryLeft" name="factory" checked="{data.factory.memoryLeft}" value="1" /><label for="factory.memoryLeft"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr>
         <td><label for="maxRuntime"><f:translate key="label.maxRuntime" /></label></td>
         <td><f:form.select id="maxRuntime" name="runtime[maxRuntime]" options="{data.settings}" value="{value.runtime.maxRuntime}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.maxRuntime" name="factory" checked="{data.factory.maxRuntime}" value="1" /><label for="factory.maxRuntime">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.maxRuntime" name="factory" checked="{data.factory.maxRuntime}" value="1" /><label for="factory.maxRuntime"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr><td colspan="3">&nbsp;</td></tr>
 
@@ -61,24 +61,14 @@
       <tr>
         <td><label for="skin"><f:translate key="label.skin" /></label></td>
         <td><f:form.select id="skin" name="output[skin]" options="{data.settings}" value="{value.output.skin}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.skin" name="factory" checked="{data.factory.skin}" value="1" /><label for="factory.skin">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.skin" name="factory" checked="{data.factory.skin}" value="1" /><label for="factory.skin"><f:translate key="factory.settings" /></label></td>
       </tr>
-       <tr>
-        <td><label for="destination"><f:translate key="label.destination" /></label></td>
-        <td><f:form.select id="destination" name="output[destination]" options="{data.settings}" value="{value.output.destination}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.destination" name="factory" checked="{data.factory.destination}" value="1" /><label for="factory.destination">Use factory settings</label></td>
-      </tr>
-      <tr>
-        <td><label for="folder"><f:translate key="label.folder" /></label></td>
-        <td><f:form.select id="folder" name="output[folder]" options="{data.settings}" value="{value.output.folder}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.folder" name="factory" checked="{data.factory.folder}" value="1" /><label for="factory.folder">Use factory settings</label></td>
-      </tr>
-      <tr>
-        <td><label for="maxfiles"><f:translate key="label.maxfiles" /></label></td>
-        <td><f:form.select id="maxfiles" name="output[maxfiles]" options="{data.settings}" value="{value.output.maxfiles}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.maxfiles" name="factory" checked="{data.factory.maxfiles}" value="1" /><label for="factory.maxfiles">Use factory settings</label></td>
-      </tr>
-      <tr><td colspan="3">&nbsp;</td></tr>
+      
+      <tr><td><f:translate key="label.destination" /></td><td colspan="2"><f:translate key="logging.noteditable"/></td></tr>
+      <tr><td><f:translate key="label.folder" /></td><td colspan="2"><f:translate key="logging.noteditable"/></td></tr>
+      <tr><td><f:translate key="label.maxfiles" /></td><td colspan="2"><f:translate key="logging.noteditable"/></td></tr>
+
+      <tr><td colspan="2">&nbsp;</td></tr>
 
       <tr>
         <th colspan="3"><b><f:translate key="subhead.properties" /></b></th>
@@ -86,22 +76,22 @@
       <tr>
         <td><label for="analyseProtected"><f:translate key="label.analyseProtected" /></label></td>
         <td><f:form.select id="analyseProtected" name="properties[analyseProtected]" options="{data.settings}" value="{value.properties.analyseProtected}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.analyseProtected" name="factory" checked="{data.factory.analyseProtected}" value="1" /><label for="factory.analyseProtected">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.analyseProtected" name="factory" checked="{data.factory.analyseProtected}" value="1" /><label for="factory.analyseProtected"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr>
         <td><label for="analysePrivate"><f:translate key="label.analysePrivate" /></label></td>
         <td><f:form.select id="analysePrivate" name="properties[analysePrivate]" options="{data.settings}" value="{value.properties.analysePrivate}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.analysePrivate" name="factory" checked="{data.factory.analysePrivate}" value="1" /><label for="factory.analysePrivate">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.analysePrivate" name="factory" checked="{data.factory.analysePrivate}" value="1" /><label for="factory.analysePrivate"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr>
         <td><label for="analyseConstants"><f:translate key="label.analyseConstants" /></label></td>
         <td><f:form.select id="analyseConstants" name="properties[analyseConstants]" options="{data.settings}" value="{value.properties.analyseConstants}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.analyseConstants" name="factory" checked="{data.factory.analyseConstants}" value="1" /><label for="factory.analyseConstants">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.analyseConstants" name="factory" checked="{data.factory.analyseConstants}" value="1" /><label for="factory.analyseConstants"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr>
         <td><label for="analyseTraversable"><f:translate key="label.analyseTraversable" /></label></td>
         <td><f:form.select  id="analyseTraversable" name="properties[analyseTraversable]" options="{data.settings}" value="{value.properties.analyseTraversable}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.analyseTraversable" name="factory" checked="{data.factory.analyseTraversable}" value="1" /><label for="factory.analyseTraversable">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.analyseTraversable" name="factory" checked="{data.factory.analyseTraversable}" value="1" /><label for="factory.analyseTraversable"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr><td colspan="3">&nbsp;</td></tr>
 
@@ -111,22 +101,22 @@
       <tr>
         <td><label for="analyseMethodsAtall"><f:translate key="label.analyseMethodsAtall" /></label></td>
         <td><f:form.select id="analyseMethodsAtall" name="methods[analyseMethodsAtall]" options="{data.settings}" value="{value.methods.analyseMethodsAtall}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.analyseMethodsAtall" name="factory" checked="{data.factory.analyseMethodsAtall}" value="1" /><label for="factory.analyseMethodsAtall">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.analyseMethodsAtall" name="factory" checked="{data.factory.analyseMethodsAtall}" value="1" /><label for="factory.analyseMethodsAtall"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr>
         <td><label for="analyseProtectedMethods"><f:translate key="label.analyseProtectedMethods" /></label></td>
         <td><f:form.select id="analyseProtectedMethods" name="methods[analyseProtectedMethods]" options="{data.settings}" value="{value.methods.analyseProtectedMethods}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.analyseProtectedMethods" name="factory" checked="{data.factory.analyseProtectedMethods}" value="1" /><label for="factory.analyseProtectedMethods">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.analyseProtectedMethods" name="factory" checked="{data.factory.analyseProtectedMethods}" value="1" /><label for="factory.analyseProtectedMethods"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr>
         <td><label for="analysePrivateMethods"><f:translate key="label.analysePrivateMethods" /></label></td>
         <td><f:form.select id="analysePrivateMethods" name="methods[analysePrivateMethods]" options="{data.settings}" value="{value.methods.analysePrivateMethods}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.analysePrivateMethods" name="factory" checked="{data.factory.analysePrivateMethods}" value="1" /><label for="factory.analysePrivateMethods">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.analysePrivateMethods" name="factory" checked="{data.factory.analysePrivateMethods}" value="1" /><label for="factory.analysePrivateMethods"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr>
         <td><label for="debugMethods"><f:translate key="label.debugMethods" /></label></td>
         <td><f:form.select id="debugMethods" name="methods[debugMethods]" options="{data.settings}" value="{value.methods.debugMethods}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.debugMethods" name="factory" checked="{data.factory.debugMethods}" value="1" /><label for="factory.debugMethods">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.debugMethods" name="factory" checked="{data.factory.debugMethods}" value="1" /><label for="factory.debugMethods"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr><td colspan="3">&nbsp;</td></tr>
 
@@ -136,12 +126,12 @@
       <tr>
         <td><label for="registerAutomatically"><f:translate key="label.registerAutomatically" /></label></td>
         <td><f:form.select id="registerAutomatically" name="backtraceAndError[registerAutomatically]" options="{data.settings}" value="{value.backtraceAndError.registerAutomatically}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.registerAutomatically" name="factory" checked="{data.factory.registerAutomatically}" value="1" /><label for="factory.registerAutomatically">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.registerAutomatically" name="factory" checked="{data.factory.registerAutomatically}" value="1" /><label for="factory.registerAutomatically"><f:translate key="factory.settings" /></label></td>
       </tr>
       <tr>
         <td><label for="backtraceAnalysis"><f:translate key="label.backtraceAnalysis" /></label></td>
         <td><f:form.select id="backtraceAnalysis" name="backtraceAndError[backtraceAnalysis]" options="{data.settings}" value="{value.backtraceAndError.backtraceAnalysis}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.backtraceAnalysis" name="factory" checked="{data.factory.backtraceAnalysis}" value="1" /><label for="factory.backtraceAnalysis">Use factory settings</label></td>
+        <td class="cbx"><f:form.checkbox id="factory.backtraceAnalysis" name="factory" checked="{data.factory.backtraceAnalysis}" value="1" /><label for="factory.backtraceAnalysis"><f:translate key="factory.settings" /></label></td>
       </tr>
     </table>
   </f:form>

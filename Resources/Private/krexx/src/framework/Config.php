@@ -568,7 +568,25 @@ class Config
         // translate this to the preset with the least privileges (no edit
         // and no display).
         if ($group == 'feEditing') {
-            return true;
+            // Logging options can never be changed in the frontend.
+            switch ($name) {
+                case 'destination':
+                    $result = false;
+                    break;
+
+                case 'folder':
+                    $result = false;
+                    break;
+                
+                case 'maxfiles':
+                    $result = false;
+                    break;
+
+                default:
+                    $result = true;
+                    break;
+            }
+            return $result;
         }
 
         if (!isset($evaluated[$name])) {
