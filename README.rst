@@ -4,7 +4,7 @@
 kreXX Debugger - TYPO3 Backend Extension
 ========================================
 
-This is a Typo3 extension, providing backend configuration masks for kreXX.
+This is a TYPO3 extension, providing backend configuration masks for kreXX.
 
 | kreXX mainlibrary: https://github.com/brainworxx/kreXX
 | Typo3 TER: https://typo3.org/extensions/repository/view/includekrexx
