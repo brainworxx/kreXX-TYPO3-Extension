@@ -76,15 +76,6 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
             $value['runtime']['maxRuntime'] = $this->convertKrexxFeSetting(
                 Config::getFeConfigFromFile('maxRuntime')
             );
-            $value['output']['folder'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('folder')
-            );
-            $value['output']['maxfiles'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('maxfiles')
-            );
-            $value['output']['destination'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('destination')
-            );
             $value['runtime']['maxCall'] = $this->convertKrexxFeSetting(
                 Config::getFeConfigFromFile('maxCall')
             );
@@ -105,9 +96,6 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
             );
             $value['properties']['analyseConstants'] = $this->convertKrexxFeSetting(
                 Config::getFeConfigFromFile('analyseConstants')
-            );
-            $value['methods']['debugMethods'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('debugMethods')
             );
             $value['runtime']['level'] = $this->convertKrexxFeSetting(
                 Config::getFeConfigFromFile('level')
@@ -179,6 +167,12 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
             }
 
             if (isset($arguments['action']) && $arguments['action'] == 'save' && $allOk) {
+                // We need to correct the allowed settings, sinc we do not allow anything.
+                unset($this->allowedSettingsNames['destination']);
+                unset($this->allowedSettingsNames['folder']);
+                unset($this->allowedSettingsNames['maxfiles']);
+                unset($this->allowedSettingsNames['debugMethods']);
+                
                 // Iterating through the form.
                 foreach ($arguments as $key => $data) {
                     if (is_array($data) && $key != '__referrer') {
@@ -252,7 +246,6 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
          */
         protected function convertKrexxFeSetting($values)
         {
-            // $result = 'none';
             if (is_array($values)) {
                 // Explanation:
                 // full -> is editable and values will be accepted

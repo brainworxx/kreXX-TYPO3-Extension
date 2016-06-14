@@ -43,10 +43,6 @@ To prevent these files from clogging up your system, kreXX will only keep 10 fil
 
 |
 
-Once you set the output destination to **file** inside the configuration file, any cookie settings regarding the output destination will be ignored.
-
-|
-|
 
 | And please remember, when it comes to debugging a live server, there is only one rule:
 | **Never ever debug a live server. This will only lead to trouble.**

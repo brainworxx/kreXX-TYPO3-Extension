@@ -14,19 +14,7 @@ Edit FE Configuration
 
 Being able to edit all settings on the fly inside the debug output might not be such a good idea. Like with the configuration, we have provided kreXX with factory settings, disabling the more "dangerous" options.
 
-With factory settings active, you can not edit the following settings:
-
-- deep --> debugMethods
-- output --> destination
-
-The following settings are not even displayed:
-
-- logging --> maxfiles
-- logging --> folder
-
-kreXX will not accept any cookie settings for these options.
-
-This can also be changed, of course. For every control, you can set 3 different settings:
+This can also be changed, of course. For (nearly) every control, you can set 3 different settings:
 
 +---------+-------------------------------------------------------------------------------------------------------------------------------+
 | Value   | meaning                                                                                                                       |
@@ -44,3 +32,12 @@ You can change which values can be edited on the frontend. To do this, we've als
 	:width: 350px
 	:align: left
 	:alt: Here you can change what options are available in the frontend.
+
+
+
+However, the following options will never be editable on the frontend:
+
+- Output --> Destination
+- Output --> Folder
+- Output --> Maximum files in the logfolder
+- Methods --> List of debug methods to poll for data

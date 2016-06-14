@@ -113,7 +113,7 @@ backtraceAnalysis = "deep"
 
 
 
-; ------------------------------------------------------------------------------------------
+; ------------------------------------------------------------------------------
 [feEditing]
 ; Here you can edit the frontend configuration form
 ; full    = can be edited
@@ -121,7 +121,8 @@ backtraceAnalysis = "deep"
 ; none    = is not displayed at all
 ; Since the local configuration is stored in a cookie, settings will be
 ; ignored, in case a setting can not be edited.
-; Please note, that the logging options can never be edited on the frontend.
+; Please note, that the logging  and debug methods options can never be edited
+; on the frontend.
 skin = "full"
 memoryLeft = "full"
 maxRuntime = "full"
@@ -131,7 +132,6 @@ detectAjax = "full"
 analyseProtected = "full"
 analysePrivate = "full"
 analyseTraversable = "full"
-debugMethods = "display"
 level = "full"
 analyseMethodsAtall = "full"
 analyseProtectedMethods = "full"

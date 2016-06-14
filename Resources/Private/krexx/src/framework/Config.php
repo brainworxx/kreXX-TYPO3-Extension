@@ -569,6 +569,7 @@ class Config
         // and no display).
         if ($group == 'feEditing') {
             // Logging options can never be changed in the frontend.
+            // The debug methods will also not be editable.
             switch ($name) {
                 case 'destination':
                     $result = false;
@@ -577,8 +578,12 @@ class Config
                 case 'folder':
                     $result = false;
                     break;
-                
+
                 case 'maxfiles':
+                    $result = false;
+                    break;
+
+                case 'debugMethods':
                     $result = false;
                     break;
 

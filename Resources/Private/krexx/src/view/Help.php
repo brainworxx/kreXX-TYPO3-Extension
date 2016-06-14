@@ -52,7 +52,7 @@ class Help
         'debugMethods' => 'Comma-separated list of used debug callback functions. A lot of frameworks offer these, toArray and toString being the most common.<br/> kreXX will try to call them, if they are available and display their provided data.<br/> You can not change them on the frontend. If you want other settings here, you have to edit the kreXX configuration file.',
         'level' => 'Some frameworks have objects inside of objects inside of objects, and so on.<br/> Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.',
         'resetbutton' => 'Here you can reset your local settings, which are stored in a cookie.<br/> kreXX will then use the global settings (either ini-file or factory settings).',
-        'destination' => 'kreXX can save it&apos;s output to a file, instead of outputting it to the frontend.<br/> The output will then be stored in the log folder.',
+        'destination' => 'kreXX can save it&apos;s output to a file, instead of outputting it to the frontend.<br/> The output will then be stored in the log folder.<br/>You can not change this on the frontend. If you want another destination, you have to edit the kreXX configuration file.',
         'maxCall' => 'A lot of output does not only slow down your server, it also slows down your browser. When using kreXX in a loop,<br/> it will create output every time the loop is executed. To limit this, you can configure the maximum call settings.',
         'disabled' => 'Here you can disable kreXX. Note that this is just a local setting, it does not affect other browsers.',
         'folder' => 'This is the folder where kreXX will store it&apos;s logfiles.',
