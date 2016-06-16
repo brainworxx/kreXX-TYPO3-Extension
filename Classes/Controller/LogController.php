@@ -52,6 +52,9 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
 
             // 2. Get the file list and sort it.
             $files = glob($dir . '*.Krexx.html');
+            if($files === false) {
+                $files = array();
+            }
             // The function filemtime gets cached by php btw.
             usort($files, function ($a, $b) {
                 return filemtime($b) - filemtime($a);
