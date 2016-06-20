@@ -13,7 +13,7 @@ Fatal Error Handler
 ===================
 
 .. important::
-  Fatal errors got removed in PHP7 and became catchable. Typo3 ist very well able to handle them, so you do not have to resort kreXX for additional data.
+  Fatal errors got removed in PHP7 and became catchable. TYPO3 ist very well able to handle them, so you do not have to resort kreXX for additional data.
 
 | Normally, when a fatal error happens, php will tell you the name of the error, the filename and the line number.
 | When you look at the amount of data available from the TYPO3 error handler for example, you will clearly see that this is a little bit, ummm discreet.

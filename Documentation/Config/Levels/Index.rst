@@ -16,7 +16,7 @@ There are 3 levels of configuration:
 | The factory settings are hardcoded default settings, in case there is no configuration available.
 |
 | **Configuration file settings**
-| The configuration file settings can be edited in the Typo3 backend. The file settings overwrite the factory settings.
+| The configuration file settings can be edited in the TYPO3 backend. The file settings overwrite the factory settings.
 |
 | **Local cookie settings**
 | Local cookie settings can be changed in the kreXX output window. The cookie settings overwrite the file settings.

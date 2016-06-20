@@ -33,7 +33,6 @@
 
 
 use \Brainworxx\Krexx\Framework\Config;
-use \Brainworxx\Krexx\View\Messages;
 
 if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
     /**
@@ -52,7 +51,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
 
             // 2. Get the file list and sort it.
             $files = glob($dir . '*.Krexx.html');
-            if($files === false) {
+            if(!is_array($files)) {
                 $files = array();
             }
             // The function filemtime gets cached by php btw.

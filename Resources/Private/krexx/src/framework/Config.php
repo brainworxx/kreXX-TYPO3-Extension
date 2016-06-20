@@ -200,7 +200,7 @@ class Config
      */
     protected static $debugMethodsBlacklist = array(
 
-        // Typo3 viewhelpers dislike this function.
+        // TYPO3 viewhelpers dislike this function.
         // In the TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper the private
         // $viewHelperNode might not be an object, and trying to render it might
         // cause a fatal error!

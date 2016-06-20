@@ -67,7 +67,7 @@ class Help
         'analyseMethodsAtall' => 'Here you can toggle if kreXX shall analyse the methods of a class.',
         'analyseProtectedMethods' => 'Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
         'analysePrivateMethods' => 'Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
-        '_getProperties' => 'Typo3 debug function.<br />It takes the properties directly from the model, ignoring the getter function.<br />If the getter function is used to compute this value, the values from this function may be inaccurate.',
+        '_getProperties' => 'TYPO3 debug function.<br />It takes the properties directly from the model, ignoring the getter function.<br />If the getter function is used to compute this value, the values from this function may be inaccurate.',
         'php7' => "It looks like you are using PHP7.\r\nFatal errors got removed in PHP7, meaning that they are now catchable like normal errors.",
         'php7yellow' => 'The fatal error handler does not work with PHP7!',
         'analyseConstants' => 'Here you can toggle, if kreXX shall analyse all constants of a class.',

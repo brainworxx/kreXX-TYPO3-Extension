@@ -34,7 +34,7 @@
 
 
 // This is so dirty and evil.
-// Typo3 8.0 tries to resolve the old 4.5'er viewhelpers this way.
+// TYPO3 8.0 tries to resolve the old 4.5'er viewhelpers this way.
 // If someone reads this and knows how to do this properly, please send
 // a mail to:
 // tobias.guelzow@brainworxx.de

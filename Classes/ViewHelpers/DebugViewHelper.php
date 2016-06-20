@@ -43,7 +43,7 @@ if (!class_exists('Tx_Fluid_Core_ViewHelper_AbstractViewHelper')) {
     {
     }
 }
-// For some reasons, Typo3 7.6 manages to load this file multiple times, causing
+// For some reasons, TYPO3 7.6 manages to load this file multiple times, causing
 // a fatal.
 if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
     return;

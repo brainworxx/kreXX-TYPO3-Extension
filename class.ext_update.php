@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- *   Typo3 installation class for kreXX
+ *   TYPO3 installation class for kreXX
  *   kreXX: Krumo eXXtended
  *
  *   kreXX is a debugging tool, which displays structured information
@@ -80,10 +80,10 @@ class ext_update
 
         // 2. Flush the cache.
         if (method_exists($cacheManager, 'flushCachesInGroup')) {
-            // Typo3 6+
+            // TYPO3 6+
             $cacheManager->flushCachesInGroup('system');
         } else {
-            // Typo3 4.x
+            // TYPO3 4.x
             $cacheManager->flushCaches();
         }
 

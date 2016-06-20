@@ -40,6 +40,6 @@ Debugging a live server
 ^^^^^^^^^^^^^^^^^^^^^^^
 Using a local open function might tempt you to debug a productive server, since only browsers with this string in their cookie can trigger kreXX.
 
-| When it comes to debugging a productive  server, there is only one rule:
+| **When it comes to debugging a productive  server, there is only one rule:**
 | **Never ever debug a productive server. This will only lead to trouble.**
 
