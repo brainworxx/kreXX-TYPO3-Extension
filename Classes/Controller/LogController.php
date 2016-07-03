@@ -70,7 +70,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
                 $fileinfo['time'] = date("d.m.y H:i:s", filemtime($file));
                 $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
 
-                // Parsing a potentialls 80MB file for it's content is not a good idea.
+                // Parsing a potentially 80MB file for it's content is not a good idea.
                 // That is why the kreXX lib provides some meta data. We will open
                 // this file and add it's content to the template.
                 if (is_readable($file . '.json')) {
@@ -78,6 +78,10 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
 
                     foreach ($fileinfo['meta'] as &$meta) {
                         $meta['filename'] = basename($meta['file']);
+
+                        // Unescape the stuff from the json, to prevent double escaping.
+                        // Meh, there is no f:format.raw in 4.5 . . .
+                        $meta['varname'] = htmlspecialchars_decode($meta['varname']);
                     }
                 }
 
@@ -89,7 +93,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
                 $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
             }
 
-            // 5. Assign the flile list.
+            // 5. Assign the file list.
             $this->view->assign('files', $fileList);
             $this->addCssToView('Backend.css');
         }
