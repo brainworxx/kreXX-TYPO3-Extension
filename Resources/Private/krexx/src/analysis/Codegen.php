@@ -1,19 +1,20 @@
 <?php
 /**
- * @file
- *   Code generation functions for kreXX
- *   kreXX: Krumo eXXtended
+ * kreXX: Krumo eXXtended
  *
- *   This is a debugging tool, which displays structured information
- *   about any PHP object. It is a nice replacement for print_r() or var_dump()
- *   which are used by a lot of PHP developers.
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
  *
- *   kreXX is a fork of Krumo, which was originally written by:
- *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
  *
- * @author brainworXX GmbH <info@brainworxx.de>
+ * @author
+ *   brainworXX GmbH <info@brainworxx.de>
  *
- * @license http://opensource.org/licenses/LGPL-2.1
+ * @license
+ *   http://opensource.org/licenses/LGPL-2.1
+ *
  *   GNU Lesser General Public License Version 2.1
  *
  *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
@@ -31,20 +32,34 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\View;
+namespace Brainworxx\Krexx\Analysis;
 
-use Brainworxx\Krexx\Analysis\Variables;
-use Brainworxx\Krexx\Framework\Config;
-use Brainworxx\Krexx\Framework\Internals;
+use Brainworxx\Krexx\Controller\OutputActions;
+use Brainworxx\Krexx\Config\Config;
+use Brainworxx\Krexx\Model\Simple;
 
 /**
- * This class hosts the code generation functions.
+ * Code generation methods.
  *
  * @package Brainworxx\Krexx\View
  */
 class Codegen
 {
 
+     /**
+     * The "scope" we are starting with. When it is $this in combination with a
+     * nesting level of 1, we treat protected and private variables and functions
+     * as public, because they are reachable from the current scope.
+     *
+     * @var string
+     */
+    public static $scope = '';
+
+    /**
+     * We are counting the level of the object.
+     *
+     * @var int
+     */
     protected static $counter = 0;
 
     /**
@@ -54,45 +69,38 @@ class Codegen
      * we can generate PHP code to actually reach the corresponding value.
      * This function generates this code.
      *
-     * @param string $connector1
-     *   The first PHP connector to the value.
-     * @param string $connector2
-     *   The second PHP connector to the value.
-     * @param string $type
-     *   The type we are handling (static protected property, for example).
-     * @param string $name
-     *   The name of the property or method.
+     * @param \Brainworxx\Krexx\Model\Simple $model
+     *   The model, which hosts all the data we need.
      *
      * @return string
      *   The generated PHP source.
      */
-    public static function generateSource($connector1, $connector2, $type, $name)
+    public static function generateSource(Simple $model)
     {
-
         if (!Config::$allowCodegen) {
             return '';
         }
 
         $result = '';
         // We will not generate anything for function analytic data.
-        $connector2 = trim($connector2, ' = ');
+        $connector2 = trim($model->getConnector2(), ' = ');
 
         // We handle the first one special.
-        if (self::$counter == 0) {
-            $connector1 = '$kresult = ';
-            $connector2 = '';
-        }
-
-        if ($connector1 . $connector2 == '') {
+        if ($model->getConnector1() . $connector2 == '' && self::$counter !== 0) {
             // No connectors mean, we are dealing with some meta stuff, like functions
             // We will not add anything for them.
         } else {
             // Simply fuse the connectors.
             // The connectors are a representation of the current used "language".
-            switch (self::analyseType($type)) {
+            switch (self::analyseType($model->getType())) {
                 case 'contagination':
                     // We simply add the connectors for public access.
-                    $result = $connector1 . $name . $connector2;
+                    // Escape the quotes. This is not done by the model.
+                    // To prevent double escaping-slashes, we ned to un-slash it
+                    // first. Vunterslaush anyone?
+                    $name = str_replace('"', '&#034;', addslashes(stripslashes($model->getName())));
+                    $name = str_replace("'", '&#039;', $name);
+                    $result = $model->getConnector1() . $name . $connector2;
                     break;
 
                 case 'method':
@@ -106,10 +114,6 @@ class Codegen
                     break;
             }
         }
-
-        // We can not simply put anything inside the data element. We need to do
-        // some escaping!
-        $result = Variables::encodeString($result);
 
         self::$counter++;
         return $result;
@@ -185,7 +189,7 @@ class Codegen
         }
 
         // Test if we are inside the scope.
-        if (Internals::isInScope($type)) {
+        if (self::isInScope($type)) {
             // We are inside the scope, this value, function or class is reachable.
             return $contagination;
         }
@@ -211,5 +215,28 @@ class Codegen
     public static function resetCounter()
     {
         self::$counter = 0;
+    }
+
+    /**
+     * We decide if a function is currently within a reachable scope.
+     *
+     * @param string $type
+     *   The type we are looking at, either class or array.
+     *
+     * @return bool
+     *   Whether it is within the scope or not.
+     */
+    public static function isInScope($type = '')
+    {
+        // When analysing a class or array, we have + 1 on our nesting level, when
+        // coming from the code generation. That is, because that class is currently
+        // being analysed.
+        if (strpos($type, 'class') === false && strpos($type, 'array') === false) {
+            $nestingLevel = OutputActions::$nestingLevel;
+        } else {
+            $nestingLevel = OutputActions::$nestingLevel - 1;
+        }
+
+        return $nestingLevel <= 1 && self::$scope == '$this';
     }
 }

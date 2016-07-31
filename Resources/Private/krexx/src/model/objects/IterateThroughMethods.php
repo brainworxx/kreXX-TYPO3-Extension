@@ -1,19 +1,20 @@
 <?php
 /**
- * @file
- *   Comments analysis of object methods for kreXX
- *   kreXX: Krumo eXXtended
+ * kreXX: Krumo eXXtended
  *
- *   This is a debugging tool, which displays structured information
- *   about any PHP object. It is a nice replacement for print_r() or var_dump()
- *   which are used by a lot of PHP developers.
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
  *
- *   kreXX is a fork of Krumo, which was originally written by:
- *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
  *
- * @author brainworXX GmbH <info@brainworxx.de>
+ * @author
+ *   brainworXX GmbH <info@brainworxx.de>
  *
- * @license http://opensource.org/licenses/LGPL-2.1
+ * @license
+ *   http://opensource.org/licenses/LGPL-2.1
+ *
  *   GNU Lesser General Public License Version 2.1
  *
  *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
@@ -31,16 +32,131 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+namespace Brainworxx\Krexx\Model\Objects;
 
-namespace Brainworxx\Krexx\Analysis\Objects;
+use Brainworxx\Krexx\Controller\OutputActions;
+use Brainworxx\Krexx\Framework\Toolbox;
+use Brainworxx\Krexx\Model\Simple;
 
 /**
- * Class Comments
+ * Methods analysis methods. :rolleyes:
  *
- * @package Brainworxx\Krexx\Analysis\Objects
+ * @package Brainworxx\Krexx\Model\Objects
  */
-class Comments
+class IterateThroughMethods extends Simple
 {
+    /**
+     * Simply start to iterate through the methods.
+     *
+     * @return string
+     */
+    public function renderMe()
+    {
+        $result = '';
+
+        // Deep analysis of the methods.
+        foreach ($this->parameters['methods'] as $reflection) {
+            $methodData = array();
+            /* @var \ReflectionMethod $reflection */
+            $method = $reflection->name;
+            // Get the comment from the class, it's parents, interfaces or traits.
+            $comments = trim($reflection->getDocComment());
+            if ($comments != '') {
+                $methodData['comments'] = Toolbox::prettifyComment($comments);
+                $methodData['comments'] = $this->getParentalComment(
+                    $methodData['comments'],
+                    $this->parameters['ref'],
+                    $method
+                );
+                $methodData['comments'] = $this->getInterfaceComment(
+                    $methodData['comments'],
+                    $this->parameters['ref'],
+                    $method
+                );
+            }
+            // Get declaration place.
+            $declaringClass = $reflection->getDeclaringClass();
+            if (is_null($declaringClass->getFileName()) || $declaringClass->getFileName() == '') {
+                $methodData['declared in'] =
+                    ":: unable to determine declaration ::\n\nMaybe this is a predeclared class?";
+            } else {
+                $methodData['declared in'] = $declaringClass->getFileName() . "\n";
+                $methodData['declared in'] .= $declaringClass->getName() . ' ';
+                $methodData['declared in'] .= 'in line ' . $reflection->getStartLine();
+            }
+
+            // Get parameters.
+            $parameters = $reflection->getParameters();
+            foreach ($parameters as $parameter) {
+                preg_match('/(.*)(?= \[ )/', $parameter, $key);
+                $parameter = str_replace($key[0], '', $parameter);
+                $methodData[$key[0]] = trim($parameter, ' []');
+            }
+            // Get visibility.
+            $methodData['declaration keywords'] = '';
+            if ($reflection->isPrivate()) {
+                $methodData['declaration keywords'] .= ' private';
+            }
+            if ($reflection->isProtected()) {
+                $methodData['declaration keywords'] .= ' protected';
+            }
+            if ($reflection->isPublic()) {
+                $methodData['declaration keywords'] .= ' public';
+            }
+            if ($reflection->isStatic()) {
+                $methodData['declaration keywords'] .= ' static';
+            }
+            if ($reflection->isFinal()) {
+                $methodData['declaration keywords'] .= ' final';
+            }
+            if ($reflection->isAbstract()) {
+                $methodData['declaration keywords'] .= ' abstract';
+            }
+            $methodData['declaration keywords'] = trim($methodData['declaration keywords']);
+            $result .= $this->dumpMethodInfo($methodData, $method);
+        }
+        return $result;
+
+    }
+
+    /**
+     * Render a dump for method info.
+     *
+     * @param array $data
+     *   The method analysis results in an array.
+     * @param string $name
+     *   The name of the object.
+     *
+     * @return string
+     *   The generated markup.
+     */
+    protected function dumpMethodInfo(array $data, $name)
+    {
+        $paramList = '';
+        $connector1 = '->';
+        foreach ($data as $key => $string) {
+            // Getting the parameter list.
+            if (strpos($key, 'Parameter') === 0) {
+                $paramList .= trim(str_replace(array(
+                        '&lt;optional&gt;',
+                        '&lt;required&gt;',
+                    ), array('', ''), $string)) . ', ';
+            }
+            if (strpos($data['declaration keywords'], 'static') !== false) {
+                $connector1 = '::';
+            }
+        }
+        // Remove the ',' after the last char.
+        $paramList = '<small>' . trim($paramList, ', ') . '</small>';
+        $model = new AnalyseMethod();
+        $model->setName($name)
+            ->setType($data['declaration keywords'] . ' method')
+            ->setConnector1($connector1)
+            ->setConnector2('(' . $paramList . ')')
+            ->addParameter('data', $data);
+
+        return OutputActions::$render->renderExpandableChild($model);
+    }
 
     /**
      * Gets comments from the reflection.
@@ -58,7 +174,7 @@ class Comments
      * @return string
      *   The generated markup.
      */
-    public static function getParentalComment($originalComment, \ReflectionClass $reflection, $methodName)
+    protected function getParentalComment($originalComment, \ReflectionClass $reflection, $methodName)
     {
         if (stripos($originalComment, '{@inheritdoc}') !== false) {
             // now we need to get the parentclass and the comment
@@ -73,7 +189,7 @@ class Comments
 
             try {
                 $parentMethod = $parentClass->getMethod($methodName);
-                $parentComment = self::prettifyComment($parentMethod->getDocComment());
+                $parentComment = Toolbox::prettifyComment($parentMethod->getDocComment());
             } catch (\ReflectionException $e) {
                 // Looks like we are trying to inherit from a not existing method
                 // maybe a trait?
@@ -82,7 +198,7 @@ class Comments
             // Replace it.
             $originalComment = str_ireplace('{@inheritdoc}', $parentComment, $originalComment);
             // and search for further parental comments . . .
-            return Comments::getParentalComment($originalComment, $parentClass, $methodName);
+            return $this->getParentalComment($originalComment, $parentClass, $methodName);
         } else {
             // We don't need to do anything with it.
             return $originalComment;
@@ -105,7 +221,7 @@ class Comments
      * @return string
      *   The generated markup.
      */
-    public static function getInterfaceComment($originalComment, \ReflectionClass $reflection, $methodName)
+    protected function getInterfaceComment($originalComment, \ReflectionClass $reflection, $methodName)
     {
         if (stripos($originalComment, '{@inheritdoc}') !== false) {
             $interfaceArray = $reflection->getInterfaces();
@@ -123,7 +239,7 @@ class Comments
                                 $originalComment
                             );
                         } else {
-                            $interfacecomment = self::prettifyComment($interfaceMethod->getDocComment());
+                            $interfacecomment = Toolbox::prettifyComment($interfaceMethod->getDocComment());
                             // Replace it.
                             $originalComment = str_ireplace('{@inheritdoc}', $interfacecomment, $originalComment);
                         }
@@ -161,7 +277,7 @@ class Comments
      * @return string
      *   The generated markup.
      */
-    public static function getTraitComment($originalComment, \ReflectionClass $reflection, $methodName)
+    protected function getTraitComment($originalComment, \ReflectionClass $reflection, $methodName)
     {
         if (stripos($originalComment, '{@inheritdoc}') !== false) {
             // We need to check if we can get traits here.
@@ -189,7 +305,7 @@ class Comments
                                 $originalComment
                             );
                         } else {
-                            $traitComment = self::prettifyComment($traitMethod->getDocComment());
+                            $traitComment = Toolbox::prettifyComment($traitMethod->getDocComment());
                             // Replace it.
                             $originalComment = str_ireplace('{@inheritdoc}', $traitComment, $originalComment);
                         }
@@ -208,39 +324,5 @@ class Comments
         } else {
             return $originalComment;
         }
-    }
-
-    /**
-     * Removes the comment-chars from the comment string.
-     *
-     * @param string $comment
-     *   The original comment from the reflection
-     *   (or interface) in case if an inherited comment.
-     *
-     * @return string
-     *   The better readable comment
-     */
-    public static function prettifyComment($comment)
-    {
-        // We split our comment into single lines and remove the unwanted
-        // comment chars with the array_map callback.
-        $commentArray = explode("\n", $comment);
-        $result = array();
-        foreach ($commentArray as $commentLine) {
-            // We skip lines with /** and */
-            if ((strpos($commentLine, '/**') === false) && (strpos($commentLine, '*/') === false)) {
-                // Remove comment-chars, but we need to leave the whitespace intact.
-                $commentLine = trim($commentLine);
-                if (strpos($commentLine, '*') === 0) {
-                    // Remove the * by char position.
-                    $result[] = substr($commentLine, 1);
-                } else {
-                    // We are missing the *, so we just add the line.
-                    $result[] = $commentLine;
-                }
-            }
-        }
-
-        return implode(PHP_EOL, $result);
     }
 }

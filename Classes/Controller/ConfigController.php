@@ -31,9 +31,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use \Brainworxx\Krexx\Framework\Config;
+use \Brainworxx\Krexx\Config\Config;
 use \Brainworxx\Krexx\View\Messages;
-use \Brainworxx\Krexx\View\Render;
 
 // The 7.3'er autoloader tries to include this file twice, probably
 // because of the class mappings above. I need to make sure not to
@@ -60,7 +59,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
             $data = array();
             $value = array();
             // Setting possible form values.
-            foreach (Render::getSkinList() as $skin) {
+            foreach (Config::getSkinList() as $skin) {
                 $data['skins'][$skin] = $skin;
             }
             $data['destination'] = array(

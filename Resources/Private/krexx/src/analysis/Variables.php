@@ -1,19 +1,20 @@
 <?php
 /**
- * @file
- *   Variables analysis functions for kreXX
- *   kreXX: Krumo eXXtended
+ * kreXX: Krumo eXXtended
  *
- *   kreXX is a debugging tool, which displays structured information
- *   about any PHP object. It is a nice replacement for print_r() or var_dump()
- *   which are used by a lot of PHP developers.
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
  *
- *   kreXX is a fork of Krumo, which was originally written by:
- *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
  *
- * @author brainworXX GmbH <info@brainworxx.de>
+ * @author
+ *   brainworXX GmbH <info@brainworxx.de>
  *
- * @license http://opensource.org/licenses/LGPL-2.1
+ * @license
+ *   http://opensource.org/licenses/LGPL-2.1
+ *
  *   GNU Lesser General Public License Version 2.1
  *
  *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
@@ -33,49 +34,25 @@
 
 namespace Brainworxx\Krexx\Analysis;
 
-use Brainworxx\Krexx\Analysis\Objects\Objects;
-use Brainworxx\Krexx\Framework\Internals;
+use Brainworxx\Krexx\Controller\OutputActions;
+use Brainworxx\Krexx\Model\Output\AnalysisBacktrace;
+use Brainworxx\Krexx\Model\Variables\AnalyseArray;
+use Brainworxx\Krexx\Model\Variables\IterateThroughArray;
+use Brainworxx\Krexx\Model\Simple;
 use Brainworxx\Krexx\View\Help;
 use Brainworxx\Krexx\View\Messages;
-use Brainworxx\Krexx\View\SkinRender;
-use Brainworxx\Krexx\Framework\Config;
+use Brainworxx\Krexx\Model\Objects\AnalyseObject;
+use Brainworxx\Krexx\Model\Objects\AnalyseClosure;
+use Brainworxx\Krexx\Framework\Toolbox;
+use Brainworxx\Krexx\Config\Config;
 
 /**
- * This class hosts the variable analysis functions.
+ * Variables analysis functions methods.
  *
- * @package Brainworxx\Krexx\Analysis
+ * @package Brainworxx\Krexx\Framework
  */
 class Variables
 {
-
-    /**
-     * List of all charsets that can be safely encoded via htmlentities().
-     *
-     * @var array
-     */
-    static protected $charsetList = array(
-        'UTF-8',
-        'ISO-8859-1',
-        'ISO-8859-5',
-        'ISO-8859-15',
-        'cp866',
-        'cp1251',
-        'Windows-1251',
-        'cp1252',
-        'Windows-1252',
-        'KOI8-R',
-        'koi8r',
-        'BIG5',
-        'GB2312',
-        'Shift_JIS',
-        'SJIS',
-        'SJIS-win',
-        'cp932',
-        'EUC-JP',
-        'EUCJP',
-        'eucJP-win',
-    );
-
     /**
      * Dump information about a variable.
      *
@@ -96,9 +73,8 @@ class Variables
      */
     public static function analysisHub(&$data, $name = '', $connector1 = '', $connector2 = '')
     {
-
         // Check memory and runtime.
-        if (!Internals::checkEmergencyBreak()) {
+        if (!OutputActions::checkEmergencyBreak()) {
             // No more took too long, or not enough memory is left.
             Messages::addMessage("Emergency break for large output during analysis process.");
             return '';
@@ -114,42 +90,42 @@ class Variables
         // Object?
         // Closures are analysed separately.
         if (is_object($data) && !is_a($data, '\Closure')) {
-            Internals::$nestingLevel++;
-            if (Internals::$nestingLevel <= (int)Config::getConfigValue('runtime', 'level')) {
-                $result = Objects::analyseObject($data, $name, '', $connector1, $connector2);
-                Internals::$nestingLevel--;
+            OutputActions::$nestingLevel++;
+            if (OutputActions::$nestingLevel <= (int)Config::getConfigValue('runtime', 'level')) {
+                $result = self::analyseObject($data, $name, '', $connector1, $connector2);
+                OutputActions::$nestingLevel--;
                 return $result;
             } else {
-                Internals::$nestingLevel--;
+                OutputActions::$nestingLevel--;
                 return Variables::analyseString('Object => ' . Help::getHelp('maximumLevelReached'), $name);
             }
         }
 
         // Closure?
         if (is_object($data) && is_a($data, '\Closure')) {
-            Internals::$nestingLevel++;
-            if (Internals::$nestingLevel <= (int)Config::getConfigValue('runtime', 'level')) {
+            OutputActions::$nestingLevel++;
+            if (OutputActions::$nestingLevel <= (int)Config::getConfigValue('runtime', 'level')) {
                 if ($connector2 == '] =') {
                     $connector2 = ']';
                 }
-                $result = Objects::analyseClosure($data, $name, '', $connector1, $connector2);
-                Internals::$nestingLevel--;
+                $result = self::analyseClosure($data, $name, '', $connector1, $connector2);
+                OutputActions::$nestingLevel--;
                 return $result;
             } else {
-                Internals::$nestingLevel--;
+                OutputActions::$nestingLevel--;
                 return Variables::analyseString('Closure => ' . Help::getHelp('maximumLevelReached'), $name);
             }
         }
 
         // Array?
         if (is_array($data)) {
-            Internals::$nestingLevel++;
-            if (Internals::$nestingLevel <= (int)Config::getConfigValue('runtime', 'level')) {
+            OutputActions::$nestingLevel++;
+            if (OutputActions::$nestingLevel <= (int)Config::getConfigValue('runtime', 'level')) {
                 $result = Variables::analyseArray($data, $name, '', $connector1, $connector2);
-                Internals::$nestingLevel--;
+                OutputActions::$nestingLevel--;
                 return $result;
             } else {
-                Internals::$nestingLevel--;
+                OutputActions::$nestingLevel--;
                 return Variables::analyseString('Array => ' . Help::getHelp('maximumLevelReached'), $name);
             }
         }
@@ -199,47 +175,9 @@ class Variables
      */
     public static function iterateThrough(&$data)
     {
-        $parameter = array($data);
-        $analysis = function (&$parameter) {
-            $output = '';
-            $data = $parameter[0];
-            $isObject = is_object($data);
-
-            $recursionMarker = Hive::getMarker();
-
-            // Recursion detection of objects are handled in the hub.
-            if (is_array($data) && Hive::isInHive($data)) {
-                return SkinRender::renderRecursion();
-            }
-
-            // Remember, that we've already been here.
-            Hive::addToHive($data);
-
-            // Keys?
-            $keys = array_keys($data);
-
-            $output .= SkinRender::renderSingeChildHr();
-
-            // Iterate through.
-            foreach ($keys as $k) {
-                // Skip the recursion marker.
-                if ($k === $recursionMarker) {
-                    continue;
-                }
-
-                // Get real value.
-                if ($isObject) {
-                    $v = &$data->$k;
-                } else {
-                    $v = &$data[$k];
-                }
-
-                $output .= Variables::analysisHub($v, $k, '[', '] =');
-            }
-            $output .= SkinRender::renderSingeChildHr();
-            return $output;
-        };
-        return SkinRender::renderExpandableChild('', '', $analysis, $parameter);
+        $model = new IterateThroughArray();
+        $model->addParameter('data', $data);
+        return OutputActions::$render->renderExpandableChild($model);
     }
 
     /**
@@ -261,18 +199,18 @@ class Variables
     {
         $json = array();
         $json['type'] = 'NULL';
-
         $data = 'NULL';
-        return SkinRender::renderSingleChild(
-            $data,
-            $name,
-            $data,
-            $additional . 'null',
-            '',
-            $connector1,
-            $connector2,
-            $json
-        );
+
+        $model = new Simple();
+        $model->setData($data)
+            ->setName($name)
+            ->setNormal($data)
+            ->setType($additional . 'null')
+            ->setConnector1($connector1)
+            ->setConnector2($connector2)
+            ->setJson($json);
+
+        return OutputActions::$render->renderSingleChild($model);
     }
 
     /**
@@ -299,25 +237,16 @@ class Variables
         $json['count'] = (string)count($data);
 
         // Dumping all Properties.
-        $parameter = array($data);
-        $anonFunction = function ($parameter) {
-            $data = $parameter[0];
-            return Variables::iterateThrough($data);
-        };
+        $model = new AnalyseArray();
+        $model->setName($name)
+            ->setType($additional . 'array')
+            ->setAdditional(count($data) . ' elements')
+            ->setConnector1($connector1)
+            ->setConnector2($connector2)
+            ->setJson($json)
+            ->addParameter('data', $data);
 
-        return SkinRender::renderExpandableChild(
-            $name,
-            $additional . 'array',
-            $anonFunction,
-            $parameter,
-            count($data) . ' elements',
-            '',
-            '',
-            false,
-            $connector1,
-            $connector2,
-            $json
-        );
+        return OutputActions::$render->renderExpandableChild($model);
     }
 
     /**
@@ -341,18 +270,18 @@ class Variables
     {
         $json = array();
         $json['type'] = 'resource';
-
         $data = get_resource_type($data);
-        return SkinRender::renderSingleChild(
-            $data,
-            $name,
-            $data,
-            $additional . 'resource',
-            '',
-            $connector1,
-            $connector2,
-            $json
-        );
+
+        $model = new Simple();
+        $model->setData($data)
+            ->setName($name)
+            ->setNormal($data)
+            ->setType($additional . 'resource')
+            ->setConnector1($connector1)
+            ->setConnector2($connector2)
+            ->setJson($json);
+
+        return OutputActions::$render->renderSingleChild($model);
     }
 
     /**
@@ -376,18 +305,18 @@ class Variables
     {
         $json = array();
         $json['type'] = 'boolean';
-
         $data = $data ? 'TRUE' : 'FALSE';
-        return SkinRender::renderSingleChild(
-            $data,
-            $name,
-            $data,
-            $additional . 'boolean',
-            '',
-            $connector1,
-            $connector2,
-            $json
-        );
+
+        $model = new Simple();
+        $model->setData($data)
+            ->setName($name)
+            ->setNormal($data)
+            ->setType($additional . 'boolean')
+            ->setConnector1($connector1)
+            ->setConnector2($connector2)
+            ->setJson($json);
+
+        return OutputActions::$render->renderSingleChild($model);
     }
 
     /**
@@ -412,16 +341,16 @@ class Variables
         $json = array();
         $json['type'] = 'integer';
 
-        return SkinRender::renderSingleChild(
-            $data,
-            $name,
-            $data,
-            $additional . 'integer',
-            '',
-            $connector1,
-            $connector2,
-            $json
-        );
+        $model = new Simple();
+        $model->setData($data)
+            ->setName($name)
+            ->setNormal($data)
+            ->setType($additional . 'integer')
+            ->setConnector1($connector1)
+            ->setConnector2($connector2)
+            ->setJson($json);
+
+        return OutputActions::$render->renderSingleChild($model);
     }
 
     /**
@@ -446,16 +375,16 @@ class Variables
         $json = array();
         $json['type'] = 'float';
 
-        return SkinRender::renderSingleChild(
-            $data,
-            $name,
-            $data,
-            $additional . 'float',
-            '',
-            $connector1,
-            $connector2,
-            $json
-        );
+        $model = new Simple();
+        $model->setData($data)
+            ->setName($name)
+            ->setNormal($data)
+            ->setType($additional . 'float')
+            ->setConnector1($connector1)
+            ->setConnector2($connector2)
+            ->setJson($json);
+
+        return OutputActions::$render->renderSingleChild($model);
     }
 
     /**
@@ -486,10 +415,6 @@ class Variables
             $cut = substr($data, 0, 50 - 3) . '...';
         }
 
-        // Security, there could be anything inside the string.
-        $cleanData = self::encodeString($data);
-        $cut = self::encodeString($cut);
-
         $json['encoding'] = @mb_detect_encoding($data);
         // We need to take care for mixed encodings here.
         $json['length'] = (string)$strlen = @mb_strlen($data, $json['encoding']);
@@ -500,92 +425,180 @@ class Variables
             $json['encoding'] = 'broken';
         }
 
-        return SkinRender::renderSingleChild(
-            $cleanData,
-            $name,
-            $cut,
-            $additional . 'string' . ' ' . $strlen,
-            '',
-            $connector1,
-            $connector2,
-            $json
-        );
+        $model = new Simple();
+        $model->setData($data)
+            ->setName($name)
+            ->setNormal($cut)
+            ->setType($additional . 'string' . ' ' . $strlen)
+            ->setConnector1($connector1)
+            ->setConnector2($connector2)
+            ->setJson($json);
+
+        return OutputActions::$render->renderSingleChild($model);
     }
 
     /**
-     * Sanitizes a string, by completely encoding it.
+     * Analyses a closure.
      *
-     * Should work with mixed encoding.
-     *
-     * @param string $data
-     *   The data which needs to be sanitized.
-     * @param bool $code
-     *   Do we need to format the string as code?
+     * @param object $data
+     *   The closure we want to analyse.
+     * @param string $propName
+     *   The property name
+     * @param string $additional
+     *   Information about the declaration in the parent class / array.
+     * @param string $connector1
+     *   The connector1 type to the parent class / array.
+     * @param string $connector2
+     *   The connector2 type to the parent class / array.
      *
      * @return string
-     *   The encoded string.
+     *   The generated markup.
      */
-    public static function encodeString($data, $code = false)
+    public static function analyseClosure(
+        $data,
+        $propName = 'closure',
+        $additional = '',
+        $connector1 = '',
+        $connector2 = ''
+    ) {
+        $ref = new \ReflectionFunction($data);
+
+        $result = array();
+
+        // Adding comments from the file.
+        $result['comments'] = Toolbox::prettifyComment($ref->getDocComment());
+
+        // Adding the sourcecode
+
+        $highlight = $ref->getStartLine() -1;
+        $from = $highlight - 3;
+        $to = $ref->getEndLine() -1;
+        $file = $ref->getFileName();
+        $result['source'] = Toolbox::readSourcecode($file, $highlight, $from, $to);
+
+        // Adding the place where it was declared.
+        $result['declared in'] = $ref->getFileName() . "\n";
+        $result['declared in'] .= 'in line ' . $ref->getStartLine();
+
+        // Adding the namespace, but only if we have one.
+        $namespace = $ref->getNamespaceName();
+        if (strlen($namespace) > 0) {
+            $result['namespace'] = $namespace;
+        }
+
+        // Adding the parameters.
+        $parameters = $ref->getParameters();
+        $paramList = '';
+        foreach ($parameters as $parameter) {
+            preg_match('/(.*)(?= \[ )/', $parameter, $key);
+            $parameter = str_replace($key[0], '', $parameter);
+            $result[$key[0]] = trim($parameter, ' []');
+            $paramList .= trim(str_replace(array(
+                    '&lt;optional&gt;',
+                    '&lt;required&gt;'
+                ), array('', ''), $result[$key[0]])) . ', ';
+        }
+        // Remove the ',' after the last char.
+        $paramList = '<small>' . trim($paramList, ', ') . '</small>';
+
+        $model = new AnalyseClosure();
+        $model->setName($propName)
+            ->setType($additional . ' closure')
+            ->setConnector1($connector1)
+            ->setConnector2($connector2 . '(' . $paramList . ') =')
+            ->addParameter('data', $result);
+
+        return OutputActions::$render->renderExpandableChild($model);
+
+    }
+
+    /**
+     * Render a dump for an object.
+     *
+     * @param mixed $data
+     *   The object we want to analyse.
+     * @param string $name
+     *   The name of the object.
+     * @param string $additional
+     *   Information about the declaration in the parent class / array.
+     * @param string $connector1
+     *   The connector1 type to the parent class / array.
+     * @param string $connector2
+     *   The connector2 type to the parent class / array.
+     *
+     * @return string
+     *   The generated markup.
+     */
+    public static function analyseObject($data, $name, $additional = '', $connector1 = '=>', $connector2 = '=')
     {
-        $result = '';
-        // Try to encode it.
-        $encoding = mb_detect_encoding($data, self::$charsetList);
-        if ($encoding !== false) {
-            set_error_handler(function () {
-                /* do nothing. */
-            });
-            $result = @htmlentities($data, null, $encoding);
-            restore_error_handler();
-            // We are also encoding @, because we need them for our chunks.
-            $result = str_replace('@', '&#64;', $result);
-            // We ara also encoding the {, because we use it as markers for the skins.
-            $result = str_replace('{', '&#123;', $result);
-        }
+        static $level = 0;
 
-        // Check if encoding was successful.
-        if (strlen($result) === 0 && strlen($data) !== 0) {
-            // Something went wrong with the encoding, we need to
-            // completely encode this one to be able to display it at all!
-            $data = @mb_convert_encoding($data, 'UTF-32', mb_detect_encoding($data));
+        $output = '';
+        $level++;
 
-            if ($code) {
-                // We are displaying sourcecode, so we need
-                // to do some formatting.
-                $anonFunction = function ($n) {
-                    if ($n == 9) {
-                        // Replace TAB with two spaces, it's better readable that way.
-                        $result = '&nbsp;&nbsp;';
-                    } else {
-                        $result = "&#$n;";
-                    }
-                    return $result;
-                };
-            } else {
-                // No formatting.
-                $anonFunction = function ($n) {
-                    return "&#$n;";
-                };
-            }
+        $model = new AnalyseObject();
+        $model->setName($name)
+            ->setType($additional . 'class')
+            ->addParameter('data', $data)
+            ->addParameter('name', $name)
+            ->setAdditional(get_class($data))
+            ->setDomid(Toolbox::generateDomIdFromObject($data))
+            ->setConnector1($connector1)
+            ->setConnector2($connector2);
 
-            // Here we have another SPOF. When the string is large enough
-            // we will run out of memory!
-            // @see https://sourceforge.net/p/krexx/bugs/21/
-            // We will *NOT* return the unescaped string. So we must check if it
-            // is small enough for the unpack().
-            // 100 kb should be save enough.
-            if (strlen($data) < 102400) {
-                $result = implode("", array_map($anonFunction, unpack("N*", $data)));
-            } else {
-                $result = Help::getHelp('stringTooLarge');
-            }
+        if (OutputActions::$recursionHandler->isInHive($data)) {
+            // Tell them, we've been here before
+            // but also say who we are.
+            $model->setNormal(get_class($data));
+            $output .= OutputActions::$render->renderRecursion($model);
+
+            // We will not render this one, but since we
+            // return to wherever we came from, we need to decrease the level.
+            $level--;
+            return $output;
         } else {
-            if ($code) {
-                // Replace all tabs with 2 spaces to make sourcecode better
-                // readable.
-                $result = str_replace(chr(9), '&nbsp;&nbsp;', $result);
-            }
+            // Remember, that we've been here before.
+            OutputActions::$recursionHandler->addToHive($data);
+
+            // Output data from the class.
+            $output .= OutputActions::$render->renderExpandableChild($model);
+            // We've finished this one, and can decrease the level setting.
+            $level--;
+            return $output;
+        }
+    }
+
+    /**
+     * Analysis a backtrace.
+     *
+     * We need to format this one a little bit different than a
+     * normal array.
+     *
+     * @param array $backtrace
+     *   The backtrace.
+     * @param int $offset
+     *   For some reason, we have an offset of -1 for fatel error backtrace
+     *   line number.
+     *
+     * @return string
+     *   The rendered backtrace.
+     */
+    public static function analysisBacktrace(array $backtrace, $offset = 0)
+    {
+        $output = '';
+
+        // Add the sourcecode to our backtrace.
+        $backtrace = Toolbox::addSourcecodeToBacktrace($backtrace, $offset);
+
+        foreach ($backtrace as $step => $stepData) {
+            $model = new AnalysisBacktrace();
+            $model->setName($step)
+                ->setType('Stack Frame')
+                ->addParameter('stepData', $stepData);
+
+            $output .= OutputActions::$render->renderExpandableChild($model);
         }
 
-        return $result;
+        return $output;
     }
 }

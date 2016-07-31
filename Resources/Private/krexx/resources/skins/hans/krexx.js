@@ -636,7 +636,7 @@
     }
 
     // 3. Add the text
-    codedisplay.innerHTML ='<div class="kcode-inner">' + result + ';</div>';
+    codedisplay.innerHTML ='<div class="kcode-inner">' + result + '</div>';
     if (codedisplay.style.display == 'none') {
       codedisplay.style.display = '';
       kdt.selectText(codedisplay);

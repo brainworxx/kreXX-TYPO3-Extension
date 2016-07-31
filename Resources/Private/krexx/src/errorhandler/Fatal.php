@@ -1,19 +1,20 @@
 <?php
 /**
- * @file
- *   Fatal errorhandler for kreXX
- *   kreXX: Krumo eXXtended
+ * kreXX: Krumo eXXtended
  *
- *   This is a debugging tool, which displays structured information
- *   about any PHP object. It is a nice replacement for print_r() or var_dump()
- *   which are used by a lot of PHP developers.
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
  *
- *   kreXX is a fork of Krumo, which was originally written by:
- *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
  *
- * @author brainworXX GmbH <info@brainworxx.de>
+ * @author
+ *   brainworXX GmbH <info@brainworxx.de>
  *
- * @license http://opensource.org/licenses/LGPL-2.1
+ * @license
+ *   http://opensource.org/licenses/LGPL-2.1
+ *
  *   GNU Lesser General Public License Version 2.1
  *
  *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
@@ -33,7 +34,8 @@
 
 namespace Brainworxx\Krexx\Errorhandler;
 
-use Brainworxx\Krexx\Framework\Config;
+use Brainworxx\Krexx\Config\Config;
+use Brainworxx\Krexx\Controller\OutputActions;
 use Brainworxx\Krexx\Framework\Toolbox;
 
 /**
@@ -41,7 +43,7 @@ use Brainworxx\Krexx\Framework\Toolbox;
  *
  * @package Brainworxx\Krexx\Errorhandler
  */
-class Fatal extends AbstractHandler
+class Fatal extends Error
 {
 
     /**
@@ -134,6 +136,8 @@ class Fatal extends AbstractHandler
 
                 // We need to correct the error line.
                 $error['line']--;
+                
+                OutputActions::loadRendrerer();
 
                 $errorData = array(
                     'type' => $errorType[0],
@@ -141,7 +145,12 @@ class Fatal extends AbstractHandler
                     'errfile' => $error['file'],
                     'errline' => $error['line'],
                     'handler' => __FUNCTION__,
-                    'source' => Toolbox::readSourcecode($error['file'], $error['line'], 5),
+                    'source' => Toolbox::readSourcecode(
+                        $error['file'],
+                        $error['line'],
+                        $error['line'] -5,
+                        $error['line'] +5
+                    ),
                     'backtrace' => $this->tickedBacktrace,
                 );
 

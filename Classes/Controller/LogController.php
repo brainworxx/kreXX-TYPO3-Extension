@@ -32,7 +32,7 @@
  */
 
 
-use \Brainworxx\Krexx\Framework\Config;
+use \Brainworxx\Krexx\Config\Config;
 
 if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
     /**

@@ -31,17 +31,15 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Analysis\Hive;
-use Brainworxx\Krexx\Errorhandler\Fatal;
-use Brainworxx\Krexx\Framework\Config;
-use Brainworxx\Krexx\Framework\Internals;
-use Brainworxx\Krexx\Framework\ShutdownHandler;
 
+use Brainworxx\Krexx\Errorhandler\Fatal;
+use Brainworxx\Krexx\config\Config;
+use Brainworxx\Krexx\Framework\ShutdownHandler;
 use Brainworxx\Krexx\Framework\Chunks;
-use Brainworxx\Krexx\View\Render;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Help;
-use Brainworxx\Krexx\View\Output;
+use Brainworxx\Krexx\Controller\OutputActions;
+use Brainworxx\Krexx\Framework\Toolbox;
 
 /**
  * Alias function for object analysis.
@@ -117,39 +115,46 @@ class Krexx
         include_once $krexxdir . 'src/view/Help.php';
         include_once $krexxdir . 'src/view/Render.php';
         include_once $krexxdir . 'src/view/Messages.php';
-        include_once $krexxdir . 'src/view/Codegen.php';
-        include_once $krexxdir . 'src/view/Output.php';
-        include_once $krexxdir . 'src/framework/Config.php';
+        include_once $krexxdir . 'src/analysis/Codegen.php';
+        include_once $krexxdir . 'src/config/Fallback.php';
+        include_once $krexxdir . 'src/config/Tools.php';
+        include_once $krexxdir . 'src/config/Config.php';
+        include_once $krexxdir . 'src/config/FeConfig.php';
         include_once $krexxdir . 'src/framework/Toolbox.php';
         include_once $krexxdir . 'src/framework/Chunks.php';
         include_once $krexxdir . 'src/framework/ShutdownHandler.php';
-        include_once $krexxdir . 'src/framework/Internals.php';
-        include_once $krexxdir . 'src/analysis/objects/Comments.php';
-        include_once $krexxdir . 'src/analysis/objects/Flection.php';
-        include_once $krexxdir . 'src/analysis/objects/Methods.php';
-        include_once $krexxdir . 'src/analysis/objects/Objects.php';
-        include_once $krexxdir . 'src/analysis/objects/Properties.php';
-        include_once $krexxdir . 'src/analysis/Hive.php';
+        include_once $krexxdir . 'src/analysis/Flection.php';
+        include_once $krexxdir . 'src/analysis/RecursionHandler.php';
         include_once $krexxdir . 'src/analysis/Variables.php';
-        include_once $krexxdir . 'src/errorhandler/AbstractHandler.php';
+        include_once $krexxdir . 'src/model/Simple.php';
+        include_once $krexxdir . 'src/model/output/AnalysisConfig.php';
+        include_once $krexxdir . 'src/model/output/IterateThroughConfig.php';
+        include_once $krexxdir . 'src/model/output/AnalysisBacktrace.php';
+        include_once $krexxdir . 'src/model/variables/AnalyseArray.php';
+        include_once $krexxdir . 'src/model/variables/IterateThroughArray.php';
+        include_once $krexxdir . 'src/model/objects/AnalyseObject.php';
+        include_once $krexxdir . 'src/model/objects/IterateThroughProperties.php';
+        include_once $krexxdir . 'src/model/objects/AnalyseConstants.php';
+        include_once $krexxdir . 'src/model/objects/IterateThroughConstants.php';
+        include_once $krexxdir . 'src/model/objects/IterateThroughMethods.php';
+        include_once $krexxdir . 'src/model/objects/AnalyseMethod.php';
+        include_once $krexxdir . 'src/model/objects/IterateThroughTraversable.php';
+        include_once $krexxdir . 'src/model/objects/AnalyseClosure.php';
+        include_once $krexxdir . 'src/model/objects/IterateThroughDebug.php';
+        include_once $krexxdir . 'src/model/objects/AnalyseConstants.php';
+        include_once $krexxdir . 'src/errorhandler/Error.php';
         include_once $krexxdir . 'src/errorhandler/Fatal.php';
+        include_once $krexxdir . 'src/controller/Internals.php';
+        include_once $krexxdir . 'src/controller/OutputActions.php';
 
         Config::$krexxdir = $krexxdir;
 
-        // Setting the skin info.
-        if (is_null(Render::$skin)) {
-            Render::$skin = Config::getConfigValue('output', 'skin');
-        }
-        // Every skin has an own implementation of the render class. We need to
-        // include this one, too.
-        include_once $krexxdir . 'resources/skins/' . Config::getConfigValue('output', 'skin') . '/SkinRender.php';
-
         // Register our shutdown handler. He will handle the display
         // of kreXX after the hosting CMS is finished.
-        Internals::$shutdownHandler = new ShutdownHandler();
+        OutputActions::$shutdownHandler = new ShutdownHandler();
         register_shutdown_function(array(
-          Internals::$shutdownHandler,
-          'shutdownCallback'
+            OutputActions::$shutdownHandler,
+            'shutdownCallback'
         ));
 
         // Check if the log and chunk folder are writable.
@@ -195,7 +200,7 @@ class Krexx
     {
         self::noFatalForKrexx();
         // Do we gave a handle?
-        $handle = Config::getConfigFromCookies('deep', 'Local open function');
+        $handle = Config::getDevHandler();
         if ($name == $handle) {
             // We do a standard-open.
             if (isset($arguments[0])) {
@@ -218,7 +223,7 @@ class Krexx
     {
         self::noFatalForKrexx();
         // Disabled?
-        if (!Config::isEnabled()) {
+        if (!Config::getEnabled()) {
             return;
         }
 
@@ -242,12 +247,12 @@ class Krexx
     {
         self::noFatalForKrexx();
         // Disabled ?
-        if (!Config::isEnabled()) {
+        if (!Config::getEnabled()) {
             return;
         }
         self::timerMoment('end');
         // And we are done. Feedback to the user.
-        Internals::dump(Internals::miniBenchTo(self::$timekeeping), 'kreXX timer');
+        OutputActions::dumpAction(Toolbox::miniBenchTo(self::$timekeeping), 'kreXX timer');
         self::reFatalAfterKrexx();
     }
 
@@ -261,10 +266,10 @@ class Krexx
     {
         self::noFatalForKrexx();
         // Disabled?
-        if (!Config::isEnabled()) {
+        if (!Config::getEnabled()) {
             return;
         }
-        Internals::dump($data);
+        OutputActions::dumpAction($data);
         self::reFatalAfterKrexx();
     }
 
@@ -278,11 +283,11 @@ class Krexx
     {
         self::noFatalForKrexx();
         // Disabled?
-        if (!Config::isEnabled()) {
+        if (!Config::getEnabled()) {
             return;
         }
         // Render it.
-        Internals::backtrace();
+        OutputActions::backtraceAction();
         self::reFatalAfterKrexx();
     }
 
@@ -292,7 +297,7 @@ class Krexx
     public static function enable()
     {
         self::noFatalForKrexx();
-        Config::isEnabled(true);
+        Config::setEnabled(true);
         self::reFatalAfterKrexx();
     }
 
@@ -302,7 +307,7 @@ class Krexx
     public static function disable()
     {
         self::noFatalForKrexx();
-        Config::isEnabled(false);
+        Config::setEnabled(false);
         // We will not re-enable it afterwards, because kreXX
         // is disabled and the handler would not show up anyway.
     }
@@ -317,24 +322,10 @@ class Krexx
         self::noFatalForKrexx();
         // Disabled?
         // We are ignoring local settings here.
-        if (!Config::isEnabled(null)) {
+        if (!Config::getEnabled()) {
             return;
         }
-        Internals::$timer = time();
-
-        // Find caller.
-        $caller = Internals::findCaller();
-        $caller['type'] = 'Cookie Configuration';
-        Chunks::addMetadata($caller);
-
-        // Render it.
-        Render::$KrexxCount++;
-        $footer = Output::outputFooter($caller, true);
-        Internals::$shutdownHandler->addChunkString(Output::outputHeader('Edit local settings'));
-        Internals::$shutdownHandler->addChunkString($footer);
-
-        // Cleanup the hive.
-        Hive::cleanupHive();
+        OutputActions::editSettingsAction();
         self::reFatalAfterKrexx();
     }
 
@@ -346,7 +337,7 @@ class Krexx
     public static function registerFatal()
     {
         // Disabled?
-        if (!Config::isEnabled()) {
+        if (!Config::getEnabled()) {
             return;
         }
 
@@ -386,7 +377,7 @@ class Krexx
     public static function unregisterFatal()
     {
         // Disabled?
-        if (!Config::isEnabled()) {
+        if (!Config::getEnabled()) {
             return;
         }
 

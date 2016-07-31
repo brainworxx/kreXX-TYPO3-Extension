@@ -1,19 +1,20 @@
 <?php
 /**
- * @file
- *   Abstract errorhandler for kreXX
- *   kreXX: Krumo eXXtended
+ * kreXX: Krumo eXXtended
  *
- *   This is a debugging tool, which displays structured information
- *   about any PHP object. It is a nice replacement for print_r() or var_dump()
- *   which are used by a lot of PHP developers.
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
  *
- *   kreXX is a fork of Krumo, which was originally written by:
- *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
  *
- * @author brainworXX GmbH <info@brainworxx.de>
+ * @author
+ *   brainworXX GmbH <info@brainworxx.de>
  *
- * @license http://opensource.org/licenses/LGPL-2.1
+ * @license
+ *   http://opensource.org/licenses/LGPL-2.1
+ *
  *   GNU Lesser General Public License Version 2.1
  *
  *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
@@ -33,19 +34,15 @@
 
 namespace Brainworxx\Krexx\Errorhandler;
 
-use Brainworxx\Krexx\Analysis\Hive;
-use Brainworxx\Krexx\Framework\Internals;
-use Brainworxx\Krexx\Framework\Config;
-use Brainworxx\Krexx\Framework\Chunks;
-use Brainworxx\Krexx\View;
+use Brainworxx\Krexx\Controller\OutputActions;
+use Brainworxx\Krexx\Config\Config;
 
 /**
  * This class hosts all functions which all error handlers will share
- * (as soon as they are written . . .)
  *
  * @package Brainworxx\Krexx\Errorhandler
  */
-abstract class AbstractHandler
+abstract class Error
 {
 
     /**
@@ -68,7 +65,7 @@ abstract class AbstractHandler
      */
     protected function getIsActive()
     {
-        if ($this->isActive && Config::isEnabled()) {
+        if ($this->isActive && Config::getEnabled()) {
             // We will only handle errors when kreXX and the handler
             // itself is enabled.
             return true;
@@ -87,55 +84,8 @@ abstract class AbstractHandler
      */
     protected function giveFeedback(array $errorData)
     {
-        if ($this->isActive) {
-            View\SkinRender::$KrexxCount++;
-            Internals::$timer = time();
-
-            // Setting template info.
-            if (is_null(View\SkinRender::$skin)) {
-                View\SkinRender::$skin = Config::getConfigValue('output', 'skin');
-            }
-
-            // Get the header.
-            if (View\Output::$headerSend) {
-                $header = View\SkinRender::renderFatalHeader('', '<!DOCTYPE html>');
-            } else {
-                $header = View\SkinRender::renderFatalHeader(View\Output::outputCssAndJs(), '<!DOCTYPE html>');
-            }
-
-            // Get the main part.
-            $main = View\SkinRender::renderFatalMain(
-                $errorData['type'],
-                $errorData['errstr'],
-                $errorData['errfile'],
-                $errorData['errline'] + 1,
-                $errorData['source']
-            );
-            // Get the backtrace.
-            $backtrace = View\Output::outputBacktrace($errorData['backtrace']);
-            // Get the footer.
-            $footer = View\Output::outputFooter('');
-            // Get the messages.
-            $messages = View\Messages::outputMessages();
-
-            if (Config::getConfigValue('output', 'destination') == 'file') {
-                // Add the caller as metadata to the chunks class. It will be saved as
-                // additional info, in case we are logging to a file.
-                Chunks::addMetadata(array(
-                    'file' => $errorData['errfile'],
-                    'line' => $errorData['errline'] + 1,
-                    'varname' => ' Fatal Error',
-                ));
-
-                // Save it to a file.
-                Chunks::saveDechunkedToFile($header . $messages . $main . $backtrace . $footer);
-            } else {
-                // Send it to the browser.
-                Chunks::sendDechunkedToBrowser($header . $messages . $main . $backtrace . $footer);
-            }
-
-            // Cleanup the hive, this removes all recursion markers.
-            Hive::cleanupHive();
+        if ($this->isActive && Config::getEnabled()) {
+            OutputActions::errorAction($errorData);
         }
     }
 

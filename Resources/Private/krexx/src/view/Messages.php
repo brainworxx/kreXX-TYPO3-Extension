@@ -1,19 +1,20 @@
 <?php
 /**
- * @file
- *   Messaging system for kreXX
- *   kreXX: Krumo eXXtended
+ * kreXX: Krumo eXXtended
  *
- *   This is a debugging tool, which displays structured information
- *   about any PHP object. It is a nice replacement for print_r() or var_dump()
- *   which are used by a lot of PHP developers.
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
  *
- *   kreXX is a fork of Krumo, which was originally written by:
- *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
  *
- * @author brainworXX GmbH <info@brainworxx.de>
+ * @author
+ *   brainworXX GmbH <info@brainworxx.de>
  *
- * @license http://opensource.org/licenses/LGPL-2.1
+ * @license
+ *   http://opensource.org/licenses/LGPL-2.1
+ *
  *   GNU Lesser General Public License Version 2.1
  *
  *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
@@ -33,8 +34,10 @@
 
 namespace Brainworxx\Krexx\View;
 
+use Brainworxx\Krexx\Controller\OutputActions;
+
 /**
- * This class hosts functions, which offer additional services.
+ * Messaging system.
  *
  * @package Brainworxx\Krexx\View
  */
@@ -48,6 +51,11 @@ class Messages
      */
     protected static $messages = array();
 
+    /**
+     * The translatable keys for backend integration.
+     *
+     * @var array
+     */
     protected static $keys = array();
 
     /**
@@ -112,7 +120,7 @@ class Messages
      */
     public static function outputMessages()
     {
-        // Simple Wrapper for SkinRender::renderMessages
+        // Simple Wrapper for OutputActions::$render->renderMessages
         if (php_sapi_name() == "cli") {
             if (count(self::$messages)) {
                 $result = "\n\nkreXX messages\n";
@@ -125,7 +133,7 @@ class Messages
                 return $result;
             }
         } else {
-            return SkinRender::renderMessages(self::$messages);
+            return OutputActions::$render->renderMessages(self::$messages);
         }
         // Still here?
         return '';

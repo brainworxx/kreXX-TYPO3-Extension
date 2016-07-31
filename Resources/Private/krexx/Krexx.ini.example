@@ -41,7 +41,7 @@ maxRuntime = "60"
 
 ; Change the above value to set the CSS skin used to render kreXX layout.
 ; skin = "hans"
-skin = "smoky-grey"
+skin = "smokygrey"
 
 ; Where shall kreXX put it's data?
 ; Is the output the frontend or the logfolder?

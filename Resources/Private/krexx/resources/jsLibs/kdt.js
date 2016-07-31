@@ -256,10 +256,13 @@
             result = el.getAttribute('data-' + what);
 
             if (result !== null) {
-                return result;
+                return result.replace(/&/g, "&amp;")
+                     .replace(/</g, "&lt;")
+                     .replace(/>/g, "&gt;")
+                     .replace(/"/g, "&quot;")
+                     .replace(/'/g, "&#039;");
             }
         }
-
     };
 
     /**

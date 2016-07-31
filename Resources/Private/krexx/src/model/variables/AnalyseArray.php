@@ -1,19 +1,20 @@
 <?php
 /**
- * @file
- *   Render functions for kreXX Hans Skin
- *   kreXX: Krumo eXXtended
+ * kreXX: Krumo eXXtended
  *
- *   This is a debugging tool, which displays structured information
- *   about any PHP object. It is a nice replacement for print_r() or var_dump()
- *   which are used by a lot of PHP developers.
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
  *
- *   kreXX is a fork of Krumo, which was originally written by:
- *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
  *
- * @author brainworXX GmbH <info@brainworxx.de>
+ * @author
+ *   brainworXX GmbH <info@brainworxx.de>
  *
- * @license http://opensource.org/licenses/LGPL-2.1
+ * @license
+ *   http://opensource.org/licenses/LGPL-2.1
+ *
  *   GNU Lesser General Public License Version 2.1
  *
  *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
@@ -31,14 +32,25 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\View;
+namespace Brainworxx\Krexx\Model\Variables;
+
+use Brainworxx\Krexx\Model\Simple;
+use Brainworxx\Krexx\Analysis\Variables;
 
 /**
- * Individual render class for the Hans skin.
+ * Array analysis methods (again).
  *
- * @package Brainworxx\Krexx\View
+ * @package Brainworxx\Krexx\Model\Closure
  */
-class SkinRender extends Render
+class AnalyseArray extends Simple
 {
-    // Do nothing.
+    /**
+     * Renders the footer.
+     *
+     * @return string
+     */
+    public function renderMe()
+    {
+        return Variables::iterateThrough($this->parameters['data']);
+    }
 }

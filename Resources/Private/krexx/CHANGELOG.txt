@@ -1,3 +1,17 @@
+1.4.3
+- Added sourcecode to the closure analysis.
+- Prettified the sourcecode display in the smokygrey skin.
+- Change: Removed the code generation for the SplObjectStorage.
+  Generating code for the SplObjectStorage is right now too
+  complicated.
+- Change: Removed the unnecessary stuff from the source generation.
+  Stuff like '$kresult =' is now gone.
+- Change: Refactored pretty much everything and introduced something
+  that looks remotely like MVC.
+- Bugfix: Code generation is now working when krexx is called via
+  'Krexx::'.
+- Bugfix: Wrong line number in the fatal error handler.
+
 1.4.2
 - Added analysis metadata to the file output.
 - Change: Restructured the configuration options. The sorting does now

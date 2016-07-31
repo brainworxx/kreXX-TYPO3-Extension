@@ -31,7 +31,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use \Brainworxx\Krexx\Framework\Config;
+use \Brainworxx\Krexx\Config\Config;
 use \Brainworxx\Krexx\View\Messages;
 use \Brainworxx\Krexx\View\Render;
 

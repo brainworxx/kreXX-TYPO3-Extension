@@ -31,7 +31,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Framework\Config;
+use Brainworxx\Krexx\Config\Config;
 
 // The 7.3'er autoloader tries to include this file twice, probably
 // because of the class mappings above. I need to make sure not to
@@ -55,7 +55,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CookieController')) {
                 $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
             }
 
-            if (!Config::isEnabled(null)) {
+            if (!Config::getEnabled()) {
                 // kreXX will not display anything, if it was disabled via:
                 // - krexx::disable();
                 // - Disable output --> true in the "Edit configuration file menu

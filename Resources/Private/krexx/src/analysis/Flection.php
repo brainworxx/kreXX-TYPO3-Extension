@@ -1,19 +1,20 @@
 <?php
 /**
- * @file
- *   Mockup class of reflection properties for kreXX
- *   kreXX: Krumo eXXtended
+ * kreXX: Krumo eXXtended
  *
- *   This is a debugging tool, which displays structured information
- *   about any PHP object. It is a nice replacement for print_r() or var_dump()
- *   which are used by a lot of PHP developers.
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
  *
- *   kreXX is a fork of Krumo, which was originally written by:
- *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
  *
- * @author brainworXX GmbH <info@brainworxx.de>
+ * @author
+ *   brainworXX GmbH <info@brainworxx.de>
  *
- * @license http://opensource.org/licenses/LGPL-2.1
+ * @license
+ *   http://opensource.org/licenses/LGPL-2.1
+ *
  *   GNU Lesser General Public License Version 2.1
  *
  *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
@@ -31,17 +32,17 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analysis\Objects;
+namespace Brainworxx\Krexx\Analysis;
 
 /**
- * This class is a mockup class for the original reflection property class
+ * Mockup class for the original reflection property class.
  *
  * When a property of a class is set, but not explicitly declared, there is
  * no chance to get a reflection of this property. This class simulates ths
  * reflection, so I can reuse the analysis methods which are based on reflection
  * properties.
  *
- * @package Brainworxx\Krexx\Analysis\Objects
+ * @package Brainworxx\Krexx\Framework
  */
 class Flection
 {
@@ -172,7 +173,7 @@ class Flection
      *
      * Undeclared properties are never have default properties.
      *
-     * @return bool
+     * @return array
      *   Always returns an empty array.
      */
     public function getDefaultProperties()

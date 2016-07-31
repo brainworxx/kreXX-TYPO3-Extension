@@ -362,16 +362,18 @@
         float: right; }
     .kwrapper .kchild .kpreview, .kfatalwrapper-outer .kchild .kpreview {
       padding: 0;
-      margin-bottom: 5px;
-      background-color: #ffffff; }
+      margin-bottom: 5px; }
       .kwrapper .kchild .kpreview .kpre, .kfatalwrapper-outer .kchild .kpreview .kpre {
         font-style: normal;
         overflow: auto;
         color: #919191;
         font: bold 12px tahoma, verdana;
-        white-space: pre; }
+        white-space: pre;
+        background-color: #ffffff; }
       .kwrapper .kchild .kpreview .source, .kfatalwrapper-outer .kchild .kpreview .source {
-        padding: 0 20px; }
+        padding: 1px 20px;
+        background-color: #F2F2F2;
+        margin: 2px 0; }
       .kwrapper .kchild .kpreview .klineno, .kfatalwrapper-outer .kchild .kpreview .klineno {
         font-weight: normal; }
       .kwrapper .kchild .kpreview .highlight, .kfatalwrapper-outer .kchild .kpreview .highlight {
