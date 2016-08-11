@@ -32,8 +32,6 @@
  */
 
 
-use \Brainworxx\Krexx\Config\Config;
-
 if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
     /**
      * Class Tx_Includekrexx_Controller_LogController
@@ -47,7 +45,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
         public function listAction()
         {
             // 1. Get the log folder.
-            $dir = Config::$krexxdir . Config::getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR;
+            $dir = $this->krexxStorage->config->krexxdir . $this->krexxStorage->config->getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR;
 
             // 2. Get the file list and sort it.
             $files = glob($dir . '*.Krexx.html');
@@ -106,8 +104,8 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
             // No directory traversal for you!
             $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
             // Get the filepath.
-            $file = Config::$krexxdir .
-                Config::getConfigValue('output', 'folder') .
+            $file = $this->krexxStorage->config->krexxdir .
+                $this->krexxStorage->config->getConfigValue('output', 'folder') .
                 DIRECTORY_SEPARATOR .
                 $id .
                 '.Krexx.html';

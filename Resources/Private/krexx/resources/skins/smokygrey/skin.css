@@ -278,7 +278,8 @@
     overflow: hidden;
     font: bold 12px tahoma, verdana;
     color: #919191;
-    position: relative; }
+    position: relative;
+    width: 100%; }
     .kwrapper .kchild .kel, .kfatalwrapper-outer .kchild .kel {
       cursor: default;
       display: block;
@@ -307,9 +308,9 @@
         font: lighter 10px tahoma, verdana; }
         .kwrapper .kchild .kel em.karrow, .kfatalwrapper-outer .kchild .kel em.karrow {
           font: bold 12px tahoma, verdana;
-          background-color: #919191;
+          background-color: #E0E0E0;
           padding: 0 2px;
-          color: #F2F2F2 !important;
+          color: #919191 !important;
           margin: 0 10px; }
       .kwrapper .kchild .kel .kel-bg, .kfatalwrapper-outer .kchild .kel .kel-bg {
         /* white line */
@@ -575,9 +576,13 @@
   .kwrapper .ksearch-found-highlight, .kfatalwrapper-outer .ksearch-found-highlight {
     background-color: #fffda5 !important;
     color: #555555; }
+    .kwrapper .ksearch-found-highlight .kpre, .kfatalwrapper-outer .ksearch-found-highlight .kpre {
+      background-color: #fffda5 !important; }
   .kwrapper .highlight-jumpto, .kfatalwrapper-outer .highlight-jumpto {
     background-color: #FED300 !important;
     color: #555555 !important; }
+    .kwrapper .highlight-jumpto .kpre, .kfatalwrapper-outer .highlight-jumpto .kpre {
+      background-color: #FED300 !important; }
   .kwrapper .ksearch-found-highlight .kpre,
   .kwrapper .highlight-jumpto .kpre, .kfatalwrapper-outer .ksearch-found-highlight .kpre,
   .kfatalwrapper-outer .highlight-jumpto .kpre {

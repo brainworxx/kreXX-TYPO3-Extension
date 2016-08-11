@@ -32,14 +32,33 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\View\Hans;
+namespace Brainworxx\Krexx\Model\Callback\Analyse;
+
+use Brainworxx\Krexx\Model\Simple;
+use Brainworxx\Krexx\Model\Callback\AbstractCallback;
 
 /**
- * Individual render class for the Hans skin.
+ * Debug method result analysis methods.
  *
- * @package Brainworxx\Krexx\View\Hans
+ * @package Brainworxx\Krexx\Model\Callback\Analysis
+ *
+ * @uses mixed result
+ *   The result from one single configured debug method.
  */
-class Render extends \Brainworxx\Krexx\Service\View\Render
+class Debug extends AbstractCallback
 {
-    // Do nothing.
+    /**
+     * Iterate though the result of the polled debug methods.
+     *
+     * @return string
+     *   The generated markup.
+     */
+    public function callMe()
+    {
+        $model = new Simple($this->storage);
+        $model->setData($this->parameters['result'])
+            ->setName('result');
+        // This could be anything, we need to route it.
+        return $this->storage->routing->analysisHub($model);
+    }
 }

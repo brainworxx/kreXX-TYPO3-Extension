@@ -31,10 +31,6 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use \Brainworxx\Krexx\Config\Config;
-use \Brainworxx\Krexx\View\Messages;
-use \Brainworxx\Krexx\View\Render;
-
 // The 7.3'er autoloader tries to include this file twice, probably
 // because of the class mappings above. I need to make sure not to
 // redeclare the Tx_Includekrexx_Controller_IndexController and throw
@@ -68,52 +64,52 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
 
             // See, if we have any values in the configuration file.
             $value['output']['skin'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('skin')
+                $this->krexxStorage->config->getFeConfigFromFile('skin')
             );
             $value['runtime']['memoryLeft'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('memoryLeft')
+                $this->krexxStorage->config->getFeConfigFromFile('memoryLeft')
             );
             $value['runtime']['maxRuntime'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('maxRuntime')
+                $this->krexxStorage->config->getFeConfigFromFile('maxRuntime')
             );
             $value['runtime']['maxCall'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('maxCall')
+                $this->krexxStorage->config->getFeConfigFromFile('maxCall')
             );
             $value['runtime']['disabled'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('disabled')
+                $this->krexxStorage->config->getFeConfigFromFile('disabled')
             );
             $value['runtime']['detectAjax'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('detectAjax')
+                $this->krexxStorage->config->getFeConfigFromFile('detectAjax')
             );
             $value['properties']['analyseProtected'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('analyseProtected')
+                $this->krexxStorage->config->getFeConfigFromFile('analyseProtected')
             );
             $value['properties']['analysePrivate'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('analysePrivate')
+                $this->krexxStorage->config->getFeConfigFromFile('analysePrivate')
             );
             $value['properties']['analyseTraversable'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('analyseTraversable')
+                $this->krexxStorage->config->getFeConfigFromFile('analyseTraversable')
             );
             $value['properties']['analyseConstants'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('analyseConstants')
+                $this->krexxStorage->config->getFeConfigFromFile('analyseConstants')
             );
             $value['runtime']['level'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('level')
+                $this->krexxStorage->config->getFeConfigFromFile('level')
             );
             $value['methods']['analyseMethodsAtall'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('analyseMethodsAtall')
+                $this->krexxStorage->config->getFeConfigFromFile('analyseMethodsAtall')
             );
             $value['methods']['analyseProtectedMethods'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('analyseProtectedMethods')
+                $this->krexxStorage->config->getFeConfigFromFile('analyseProtectedMethods')
             );
             $value['methods']['analysePrivateMethods'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('analysePrivateMethods')
+                $this->krexxStorage->config->getFeConfigFromFile('analysePrivateMethods')
             );
             $value['backtraceAndError']['registerAutomatically'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('registerAutomatically')
+                $this->krexxStorage->config->getFeConfigFromFile('registerAutomatically')
             );
             $value['backtraceAndError']['backtraceAnalysis'] = $this->convertKrexxFeSetting(
-                Config::getFeConfigFromFile('backtraceAnalysis')
+                $this->krexxStorage->config->getFeConfigFromFile('backtraceAnalysis')
             );
 
             // Are these actually set?
@@ -123,7 +119,7 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
                         $data['factory'][$attribute] = true;
                         // We need to fill these values with the stuff from the factory settings!
                         $value[$mainkey][$attribute] = $this->convertKrexxFeSetting(
-                            Config::$feConfigFallback[$attribute]
+                            $this->krexxStorage->config->feConfigFallback[$attribute]
                         );
                     } else {
                         $data['factory'][$attribute] = false;
@@ -147,14 +143,14 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
         {
             $arguments = $this->request->getArguments();
             $allOk = true;
-            $filepath = Config::getPathToIni();
+            $filepath = $this->krexxStorage->config->getPathToIni();
             // Whitelist of the vales we are accepting.
             $allowedValues = array('full', 'display', 'none');
 
             // Check for writing permission.
             if (!is_writable(dirname($filepath))) {
                 $allOk = false;
-                Messages::addKey('file.not.writable', array($filepath));
+                $this->krexxStorage->messages->addKey('file.not.writable', array($filepath));
             }
             // Check if the file does exist.
             if (is_file($filepath)) {
@@ -184,7 +180,7 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
                             } else {
                                 // Validation failed!
                                 $allOk = false;
-                                Messages::addKey('value.not.allowed', array(htmlentities($value)));
+                                $this->krexxStorage->messages->addKey('value.not.allowed', array(htmlentities($value)));
                             }
                         }
                     }
@@ -203,7 +199,7 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
                 if ($allOk) {
                     if (file_put_contents($filepath, $ini) === false) {
                         $allOk = false;
-                        Messages::addKey('file.not.writable', array($filepath));
+                        $this->krexxStorage->messages->addKey('file.not.writable', array($filepath));
                     }
                 }
             }
@@ -211,8 +207,8 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
             // Something went wrong, we need to tell the user.
             if (!$allOk) {
                 // Got to remove some messages. We we will not queue them now.
-                Messages::removeKey('protected.folder.chunk');
-                Messages::removeKey('protected.folder.log');
+                $this->krexxStorage->messages->removeKey('protected.folder.chunk');
+                $this->krexxStorage->messages->removeKey('protected.folder.log');
                 foreach ($this->getTranslatedMessages() as $message) {
                     $this->addMessage(
                         $message,

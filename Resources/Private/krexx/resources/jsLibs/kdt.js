@@ -244,10 +244,11 @@
      *
      * @param {Element} el
      * @param {string} what
+     * @param {boolean|null} mustEscape
      *
      * @returns {string|*}
      */
-    kdt.getDataset = function (el, what) {
+    kdt.getDataset = function (el, what, mustEscape) {
 
         /** @type {string|*} */
         var result;
@@ -256,11 +257,19 @@
             result = el.getAttribute('data-' + what);
 
             if (result !== null) {
-                return result.replace(/&/g, "&amp;")
-                     .replace(/</g, "&lt;")
-                     .replace(/>/g, "&gt;")
-                     .replace(/"/g, "&quot;")
-                     .replace(/'/g, "&#039;");
+                if (mustEscape === false) {
+                    return result;
+                } else {
+                    return result.replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;")
+                        .replace(/"/g, "&quot;")
+                        .replace(/'/g, "&#039;")
+                        // <small> is allowed. Parameters are better readable
+                        // this way.
+                        .replace('&lt;small&gt;', '<small>')
+                        .replace('&lt;/small&gt;', '</small>');
+                }
             }
         }
     };

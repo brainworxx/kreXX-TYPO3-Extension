@@ -34,9 +34,7 @@
 
 namespace Brainworxx\Krexx\Errorhandler;
 
-use Brainworxx\Krexx\Config\Config;
 use Brainworxx\Krexx\Controller\OutputActions;
-use Brainworxx\Krexx\Framework\Toolbox;
 
 /**
  * PHP 5.x fatal error handler.
@@ -120,46 +118,35 @@ class Fatal extends Error
         $error = error_get_last();
 
         // Do we have an error at all?
-        if (!is_null($error) && $this->getIsActive()) {
-            // We will not generate any code here!
-            Config::$allowCodegen = false;
-
+        if (!is_null($error) &&
+            $this->getIsActive() &&
+            $this->storage->config->getEnabled()
+        ) {
             // Do we need to check this one, according to our settings?
             $translatedError = $this->translateErrorType($error['type']);
             if ($translatedError[1] == 'traceFatals') {
-                // We don't want to analyse the errorhandler, that will only
-                // be misleading.
-                unset($this->tickedBacktrace[0]);
-
                 // We also need to prepare some Data we want to display.
                 $errorType = $this->translateErrorType($error['type']);
 
-                // We need to correct the error line.
-                $error['line']--;
-                
-                OutputActions::loadRendrerer();
-
+                // We prepare the error as far as we can here.
+                // The adding of the sourcecode happens in the controller.
                 $errorData = array(
                     'type' => $errorType[0],
                     'errstr' => $error['message'],
                     'errfile' => $error['file'],
                     'errline' => $error['line'],
                     'handler' => __FUNCTION__,
-                    'source' => Toolbox::readSourcecode(
-                        $error['file'],
-                        $error['line'],
-                        $error['line'] -5,
-                        $error['line'] +5
-                    ),
+                    'file' => $error['file'],
                     'backtrace' => $this->tickedBacktrace,
                 );
 
-                if (Config::getConfigValue('backtraceAndError', 'backtraceAnalysis') == 'deep') {
+                if ($this->storage->config->getConfigValue('backtraceAndError', 'backtraceAnalysis') == 'deep') {
                     // We overwrite the local settings, so we can get as much info from
                     // analysed objects as possible.
-                    Config::overwriteLocalSettings(self::$configFatal);
+                    $this->storage->config->overwriteLocalSettings(self::$configFatal);
                 }
-                $this->giveFeedback($errorData);
+
+                OutputActions::errorAction($errorData);
             }
         }
         // Clean exit.

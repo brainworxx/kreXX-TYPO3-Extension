@@ -31,7 +31,6 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\View\Messages;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -120,6 +119,20 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
         );
 
         /**
+         * The kreXX framework.
+         *
+         * @var TYPO3\CMS\Extbase\Persistence\Generic\Storage\
+         */
+        protected $krexxStorage;
+
+
+        public function __construct()
+        {
+            parent::__construct();
+            $this->krexxStorage = \Brainworxx\Krexx\Controller\OutputActions::$storage;
+        }
+
+        /**
          * Wrapper for the FlashMessage, which was changed in 7.0.
          *
          * @param string $text
@@ -189,7 +202,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
         {
             $result = array();
             // Get the keys and the args.
-            $keys = Messages::getKeys();
+            $keys = $this->krexxStorage->messages->getKeys();
 
             foreach ($keys as $message) {
                 // And translate them and add a linebreak.

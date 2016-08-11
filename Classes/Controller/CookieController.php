@@ -31,8 +31,6 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Config\Config;
-
 // The 7.3'er autoloader tries to include this file twice, probably
 // because of the class mappings above. I need to make sure not to
 // redeclare the Tx_Includekrexx_Controller_HelpController and throw
@@ -55,7 +53,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CookieController')) {
                 $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
             }
 
-            if (!Config::getEnabled()) {
+            if (!$this->krexxStorage->config->getEnabled()) {
                 // kreXX will not display anything, if it was disabled via:
                 // - krexx::disable();
                 // - Disable output --> true in the "Edit configuration file menu
@@ -65,7 +63,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CookieController')) {
                 $this->view->assign('is_disabled', false);
             }
 
-            if (Config::getConfigValue('output', 'destination') == 'file') {
+            if ($this->krexxStorage->config->getConfigValue('output', 'destination') == 'file') {
                 // A file output will also prevent the options from popping ou here.
                 // We need to tell the user that there is nothing to see here.
                 $this->view->assign('is_file', true);

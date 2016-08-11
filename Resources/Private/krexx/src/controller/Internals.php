@@ -34,27 +34,17 @@
 
 namespace Brainworxx\Krexx\Controller;
 
-use Brainworxx\Krexx\Config\Config;
-use Brainworxx\Krexx\Framework\ShutdownHandler;
-use Brainworxx\Krexx\Framework\Toolbox;
-use Brainworxx\Krexx\Model\Output\IterateThroughConfig;
-use Brainworxx\Krexx\View\Messages;
-use Brainworxx\Krexx\View\Help;
-use Brainworxx\Krexx\View\Render;
+use Brainworxx\Krexx\Service\Misc\Shutdown;
+use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Model\Simple;
 
 /**
- * Controller actions toolbox.
+ * Methods for the "controller" that are not directly "actions".
  *
  * @package Brainworxx\Krexx\Controller
  */
 class Internals
 {
-    /**
-     * Unix timestamp, used to determine if we need to do an emergency break.
-     *
-     * @var int
-     */
-    protected static $timer = 0;
 
     /**
      * Counts how often kreXX was called.
@@ -66,16 +56,9 @@ class Internals
     /**
      * Sends the output to the browser during shutdown phase.
      *
-     * @var ShutdownHandler
+     * @var Shutdown
      */
     public static $shutdownHandler;
-
-    /**
-     * The current nesting level we are in.
-     *
-     * @var int
-     */
-    public static $nestingLevel = 0;
 
     /**
      * Have we already send the CSS and JS?
@@ -85,34 +68,36 @@ class Internals
     protected static $headerSend = false;
 
     /**
-     * An instance of the recursion handler.
+     * Here we store the fatal error handler.
      *
-     * It gets reinstantiated with every new call.
-     *
-     * @var \Brainworxx\Krexx\Analysis\RecursionHandler
+     * @var \Brainworxx\Krexx\Errorhandler\Fatal
      */
-    public static $recursionHandler;
+    protected static $krexxFatal;
 
     /**
-     * The instance of the render class from the skin.
+     * Stores whether out fatal error handler should be active.
      *
-     * Gets loaded in the output footer.
+     * During a kreXX analysis, we deactivate it to improve performance.
+     * Here we save, whether we should reactivate it.
      *
-     * @var Render
+     * @var boolean
      */
-    public static $render;
+    protected static $fatalShouldActive = false;
 
     /**
-     * Loads the renderer from the skin.
+     * Here we save all timekeeping stuff.
+     *
+     * @var string array
      */
-    public static function loadRendrerer()
-    {
-        $skin = Config::getConfigValue('output', 'skin');
-        $path = Config::$krexxdir . 'resources/skins/' . $skin . '/Render.php';
-        $classname = 'Brainworxx\Krexx\View\\' . ucfirst($skin) . '\\Render';
-        include_once $path;
-        self::$render = new $classname;
-    }
+    protected static $timekeeping = array();
+    protected static $counterCache = array();
+
+    /**
+     * Our storage wher we keep al relevant classes.
+     *
+     * @var Storage
+     */
+    public static $storage;
 
     /**
      * Finds the place in the code from where krexx was called.
@@ -171,8 +156,8 @@ class Internals
         // I have no idea how to determine the actual call of krexx if we
         // are dealing with several calls per line.
         if (count($possibleCommands) > 1) {
-            // Fallback to '...'.
-            $varname = '...';
+            // Fallback to '. . .'.
+            $varname = '. . .';
         } else {
             $sourceCall = reset($possibleCommands);
 
@@ -181,9 +166,9 @@ class Internals
             $possibleFunctionnames = array(
                 'krexx',
                 'krexx::open',
-                'krexx::' . Config::getDevHandler(),
+                'krexx::' . self::$storage->config->getDevHandler(),
                 'Krexx::open',
-                'Krexx::' . Config::getDevHandler()
+                'Krexx::' . self::$storage->config->getDevHandler()
             );
             foreach ($possibleFunctionnames as $funcname) {
                 preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', $sourceCall, $name);
@@ -195,8 +180,8 @@ class Internals
         }
 
         // Check if we have a value.
-        if (!isset($varname) || strlen($varname) == 0) {
-            $varname = '...';
+        if (empty($varname)) {
+            $varname = '. . .';
         }
 
         return $varname;
@@ -211,90 +196,16 @@ class Internals
     protected static function checkMaxCall()
     {
         $result = false;
-        $maxCall = (int)Config::getConfigValue('runtime', 'maxCall');
+        $maxCall = (int)self::$storage->config->getConfigValue('runtime', 'maxCall');
         if (self::$KrexxCount >= $maxCall) {
             // Called too often, we might get into trouble here!
             $result = true;
         }
         // Give feedback if this is our last call.
         if (self::$KrexxCount == $maxCall - 1) {
-            Messages::addMessage(Help::getHelp('maxCallReached'), 'critical');
+            self::$storage->messages->addMessage(self::$storage->render->getHelp('maxCallReached'), 'critical');
         }
         self::$KrexxCount++;
-        return $result;
-    }
-
-    /**
-     * Checks if there is enough memory and time left on the Server.
-     *
-     * @param mixed $enable
-     *   Enables and disables the check itself. When disabled, it will always
-     *   return TRUE (all is OK).
-     *
-     * @return bool
-     *   Boolean to show if we have enough left.
-     *   TRUE = all is OK.
-     *   FALSE = we have a problem.
-     */
-    public static function checkEmergencyBreak($enable = null)
-    {
-        static $result = true;
-        static $isDisabled = false;
-
-        // We are saving the value of being enabled / disabled.
-        if ($enable === true) {
-            $isDisabled = false;
-        }
-        if ($enable === false) {
-            $isDisabled = true;
-        }
-
-        // Tell them everything is fine, when it is disabled.
-        if ($isDisabled) {
-            return true;
-        }
-
-        if ($result === false) {
-            // This has failed before!
-            // No need to check again!
-            return false;
-        }
-
-        // Check Runtime.
-        if (self::$timer + (int)Config::getConfigValue('runtime', 'maxRuntime') <= time()) {
-            // This is taking longer than expected.
-            $result = false;
-        }
-
-        if ($result) {
-            // Commence with the memory check.
-            // Check this only, if we have enough time left.
-            $limit = strtoupper(ini_get('memory_limit'));
-            $memoryLimit = 0;
-            if (preg_match('/^(\d+)(.)$/', $limit, $matches)) {
-                if ($matches[2] == 'M') {
-                    // Megabyte.
-                    $memoryLimit = $matches[1] * 1024 * 1024;
-                } elseif ($matches[2] == 'K') {
-                    // Kilobyte.
-                    $memoryLimit = $matches[1] * 1024;
-                }
-            }
-
-            // Were we able to determine a limit?
-            if ($memoryLimit > 2) {
-                $usage = memory_get_usage();
-                $left = $memoryLimit - $usage;
-                // Is more left than is configured?
-                $result = $left >= (int)Config::getConfigValue('runtime', 'memoryLeft') * 1024 * 1024;
-            }
-        }
-
-        if (!$result) {
-            // No more memory or time, we disable kreXX!
-            \Krexx::disable();
-        }
-
         return $result;
     }
 
@@ -313,9 +224,9 @@ class Internals
         if (!self::$headerSend) {
             // Send doctype and css/js only once.
             self::$headerSend = true;
-            return self::$render->renderHeader('<!DOCTYPE html>', $headline, self::outputCssAndJs());
+            return self::$storage->render->renderHeader('<!DOCTYPE html>', $headline, self::outputCssAndJs());
         } else {
-            return self::$render->renderHeader('', $headline, '');
+            return self::$storage->render->renderHeader('', $headline, '');
         }
     }
 
@@ -335,7 +246,7 @@ class Internals
     {
         // Now we need to stitch together the content of the ini file
         // as well as it's path.
-        if (!is_readable(Config::getPathToIni())) {
+        if (!is_readable(self::$storage->config->getPathToIni())) {
             // Project settings are not accessible
             // tell the user, that we are using fallback settings.
             $path = 'Krexx.ini not found, using factory settings';
@@ -344,19 +255,20 @@ class Internals
             $path = 'Current configuration';
         }
 
-        $wholeConfig = Config::getWholeConfiguration();
+        $wholeConfig = self::$storage->config->getWholeConfiguration();
         $source = $wholeConfig[0];
         $config = $wholeConfig[1];
 
-        $model = new IterateThroughConfig();
+        $model = new Simple(self::$storage);
         $model->setName($path)
-            ->setType(Config::getPathToIni())
+            ->setType(self::$storage->config->getPathToIni())
             ->setHelpid('currentSettings')
             ->addParameter('config', $config)
-            ->addParameter('source', $source);
+            ->addParameter('source', $source)
+            ->initCallback('Iterate\ThroughConfig');
 
-        $configOutput = self::$render->renderExpandableChild($model, $isExpanded);
-        return self::$render->renderFooter($caller, $configOutput, $isExpanded);
+        $configOutput = self::$storage->render->renderExpandableChild($model, $isExpanded);
+        return self::$storage->render->renderFooter($caller, $configOutput, $isExpanded);
     }
 
     /**
@@ -367,43 +279,174 @@ class Internals
      */
     protected static function outputCssAndJs()
     {
+        $krexxDir = self::$storage->config->krexxdir;
         // Get the css file.
-        $css = Toolbox::getFileContents(
-            Config::$krexxdir . 'resources/skins/' . Config::getConfigValue('output', 'skin') . '/skin.css'
+        $css = self::$storage->getFileContents(
+            $krexxDir .
+            'resources/skins/' .
+            self::$storage->config->getConfigValue('output', 'skin') .
+            '/skin.css'
         );
         // Remove whitespace.
         $css = preg_replace('/\s+/', ' ', $css);
 
         // Adding our DOM tools to the js.
-        if (is_readable(Config::$krexxdir . 'resources/jsLibs/kdt.min.js')) {
-            $jsFile = Config::$krexxdir . 'resources/jsLibs/kdt.min.js';
+        if (is_readable($krexxDir . 'resources/jsLibs/kdt.min.js')) {
+            $jsFile = $krexxDir . 'resources/jsLibs/kdt.min.js';
         } else {
-            $jsFile = Config::$krexxdir . 'resources/jsLibs/kdt.js';
+            $jsFile = $krexxDir . 'resources/jsLibs/kdt.js';
         }
-        $js = Toolbox::getFileContents($jsFile);
+        $js = self::$storage->getFileContents($jsFile);
 
         // Krexx.js is comes directly form the template.
-        $path = Config::$krexxdir . 'resources/skins/' . Config::getConfigValue('output', 'skin');
+        $path = $krexxDir . 'resources/skins/' . self::$storage->config->getConfigValue('output', 'skin');
         if (is_readable($path . '/krexx.min.js')) {
             $jsFile = $path . '/krexx.min.js';
         } else {
             $jsFile = $path . '/krexx.js';
         }
-        $js .= Toolbox::getFileContents($jsFile);
+        $js .= self::$storage->getFileContents($jsFile);
 
-        return self::$render->renderCssJs($css, $js);
+        return self::$storage->render->renderCssJs($css, $js);
     }
 
     /**
-     * Resets the timer.
+     * Disables the fatal handler and the tick callback.
      *
-     * When a certain time has passed, kreXX will use an emergency break to
-     * prevent too large output (or no output at all (WSOD)).
+     * We disable the tick callback and the error handler during
+     * a analysis, to generate faster output.
      */
-    protected static function resetTimer()
+    public static function noFatalForKrexx()
     {
-        if (self::$timer == 0) {
-            self::$timer = time();
+        if (self::$fatalShouldActive) {
+            self::$krexxFatal->setIsActive(false);
+            unregister_tick_function(array(self::$krexxFatal, 'tickCallback'));
         }
+    }
+
+    /**
+     * Re-enable the fatal handler and the tick callback.
+     *
+     * We disable the tick callback and the error handler during
+     * a analysis, to generate faster output.
+     */
+    public static function reFatalAfterKrexx()
+    {
+        if (self::$fatalShouldActive) {
+            self::$krexxFatal->setIsActive(true);
+            register_tick_function(array(self::$krexxFatal, 'tickCallback'));
+        }
+    }
+
+    /**
+     * The benchmark main function.
+     *
+     * @param array $timeKeeping
+     *   The timekeeping array.
+     *
+     * @return array
+     *   The benchmark array.
+     *
+     * @see http://php.net/manual/de/function.microtime.php
+     * @author gomodo at free dot fr
+     */
+    protected static function miniBenchTo(array $timeKeeping)
+    {
+        // Get the very first key.
+        $start = key($timeKeeping);
+        $totalTime = round((end($timeKeeping) - $timeKeeping[$start]) * 1000, 4);
+        $result['url'] = self::getCurrentUrl();
+        $result['total_time'] = $totalTime;
+        $prevMomentName = $start;
+        $prevMomentStart = $timeKeeping[$start];
+
+        foreach ($timeKeeping as $moment => $time) {
+            if ($moment != $start) {
+                // Calculate the time.
+                $percentageTime = round(((round(($time - $prevMomentStart) * 1000, 4) / $totalTime) * 100), 1);
+                $result[$prevMomentName . '->' . $moment] = $percentageTime . '%';
+                $prevMomentStart = $time;
+                $prevMomentName = $moment;
+            }
+        }
+        return $result;
+    }
+
+        /**
+     * Return the current URL.
+     *
+     * @see http://stackoverflow.com/questions/6768793/get-the-full-url-in-php
+     * @author Timo Huovinen
+     *
+     * @return string
+     *   The current URL.
+     */
+    protected static function getCurrentUrl()
+    {
+        static $result;
+
+        if (!isset($result)) {
+            $s = $_SERVER;
+
+            // SSL or no SSL.
+            if (!empty($s['HTTPS']) && $s['HTTPS'] == 'on') {
+                $ssl = true;
+            } else {
+                $ssl = false;
+            }
+            $sp = strtolower($s['SERVER_PROTOCOL']);
+            $protocol = substr($sp, 0, strpos($sp, '/'));
+            if ($ssl) {
+                $protocol .= 's';
+            }
+
+            $port = $s['SERVER_PORT'];
+
+            if ((!$ssl && $port == '80') || ($ssl && $port == '443')) {
+                // Normal combo with port and protocol.
+                $port = '';
+            } else {
+                // We have a special port here.
+                $port = ':' . $port;
+            }
+
+            if (isset($s['HTTP_HOST'])) {
+                $host = $s['HTTP_HOST'];
+            } else {
+                $host = $s['SERVER_NAME'] . $port;
+            }
+
+            $result = htmlspecialchars($protocol . '://' . $host . $s['REQUEST_URI'], ENT_QUOTES, 'UTF-8');
+        }
+        return $result;
+    }
+
+    protected static function registerShutdown()
+    {
+        // Register our shutdown handler. He will handle the display
+        // of kreXX after the hosting CMS is finished.
+        OutputActions::$shutdownHandler = new Shutdown(self::$storage);
+        register_shutdown_function(array(
+            OutputActions::$shutdownHandler,
+            'shutdownCallback'
+        ));
+    }
+
+    /**
+     * Checks if we need a new storage, or simply need to reset the current one.
+     *
+     * @param string $krexxDir
+     *   The directory where kreXX ist installed.
+     */
+    protected static function initStorage($krexxDir = '')
+    {
+        if (!is_object(self::$storage)) {
+            // We need a new storage.
+            self::$storage = new Storage($krexxDir);
+        } else {
+            // Reset the ones that need to be resetted.
+            self::$storage->reset();
+        }
+
     }
 }

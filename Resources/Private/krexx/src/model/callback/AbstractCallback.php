@@ -32,14 +32,59 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\View\Hans;
+namespace Brainworxx\Krexx\Model\Callback;
+
+use Brainworxx\Krexx\Service\Storage;
 
 /**
- * Individual render class for the Hans skin.
+ * Abstract class for the callback classes inside the model.
  *
- * @package Brainworxx\Krexx\View\Hans
+ * @package Brainworxx\Krexx\Model\Callback
  */
-class Render extends \Brainworxx\Krexx\Service\View\Render
+abstract class AbstractCallback
 {
-    // Do nothing.
+
+    /**
+     * Here we store all relevant data.
+     *
+     * @var Storage
+     */
+    protected $storage;
+
+    /**
+     * The parameters for the callback.
+     *
+     * @var array
+     */
+    protected $parameters = array();
+
+    /**
+     * The actual callback function for the renderer.
+     *
+     * @return string
+     *   The generated markup.
+     */
+    abstract public function callMe();
+
+    /**
+     * Injects the storage.
+     *
+     * @param Storage $storage
+     *   The storage, where we store the classes we need.
+     */
+    public function __construct(Storage $storage)
+    {
+        $this->storage = $storage;
+    }
+
+    /**
+     * Add callback parameters at class construction.
+     *
+     * @param array $params
+     *   The parameters for the callMe() method.
+     */
+    public function setParams(array &$params)
+    {
+        $this->parameters = $params;
+    }
 }

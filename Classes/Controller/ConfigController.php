@@ -31,9 +31,6 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use \Brainworxx\Krexx\Config\Config;
-use \Brainworxx\Krexx\View\Messages;
-
 // The 7.3'er autoloader tries to include this file twice, probably
 // because of the class mappings above. I need to make sure not to
 // redeclare the Tx_Includekrexx_Controller_HelpController and throw
@@ -59,7 +56,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
             $data = array();
             $value = array();
             // Setting possible form values.
-            foreach (Config::getSkinList() as $skin) {
+            foreach ($this->krexxStorage->config->getSkinList() as $skin) {
                 $data['skins'][$skin] = $skin;
             }
             $data['destination'] = array(
@@ -102,84 +99,85 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                 'analyseConstants' => $this->LLL('analyseConstants'),
             );
 
+
             // See, if we have any values in the configuration file.
-            $value['output']['skin'] = Config::getConfigFromFile(
+            $value['output']['skin'] = $this->krexxStorage->config->getConfigFromFile(
                 'output',
                 'skin'
             );
-            $value['runtime']['memoryLeft'] = Config::getConfigFromFile(
+            $value['runtime']['memoryLeft'] = $this->krexxStorage->config->getConfigFromFile(
                 'runtime',
                 'memoryLeft'
             );
-            $value['runtime']['maxRuntime'] = Config::getConfigFromFile(
+            $value['runtime']['maxRuntime'] = $this->krexxStorage->config->getConfigFromFile(
                 'runtime',
                 'maxRuntime'
             );
-            $value['output']['folder'] = Config::getConfigFromFile(
+            $value['output']['folder'] = $this->krexxStorage->config->getConfigFromFile(
                 'output',
                 'folder'
             );
-            $value['output']['maxfiles'] = Config::getConfigFromFile(
+            $value['output']['maxfiles'] = $this->krexxStorage->config->getConfigFromFile(
                 'output',
                 'maxfiles'
             );
-            $value['output']['destination'] = Config::getConfigFromFile(
+            $value['output']['destination'] = $this->krexxStorage->config->getConfigFromFile(
                 'output',
                 'destination'
             );
-            $value['runtime']['maxCall'] = Config::getConfigFromFile(
+            $value['runtime']['maxCall'] = $this->krexxStorage->config->getConfigFromFile(
                 'runtime',
                 'maxCall'
             );
-            $value['runtime']['disabled'] = Config::getConfigFromFile(
+            $value['runtime']['disabled'] = $this->krexxStorage->config->getConfigFromFile(
                 'runtime',
                 'disabled'
             );
-            $value['runtime']['detectAjax'] = Config::getConfigFromFile(
+            $value['runtime']['detectAjax'] = $this->krexxStorage->config->getConfigFromFile(
                 'runtime',
                 'detectAjax'
             );
-            $value['properties']['analyseProtected'] = Config::getConfigFromFile(
+            $value['properties']['analyseProtected'] = $this->krexxStorage->config->getConfigFromFile(
                 'properties',
                 'analyseProtected'
             );
-            $value['properties']['analysePrivate'] = Config::getConfigFromFile(
+            $value['properties']['analysePrivate'] = $this->krexxStorage->config->getConfigFromFile(
                 'properties',
                 'analysePrivate'
             );
-            $value['properties']['analyseConstants'] = Config::getConfigFromFile(
+            $value['properties']['analyseConstants'] = $this->krexxStorage->config->getConfigFromFile(
                 'properties',
                 'analyseConstants'
             );
-            $value['properties']['analyseTraversable'] = Config::getConfigFromFile(
+            $value['properties']['analyseTraversable'] = $this->krexxStorage->config->getConfigFromFile(
                 'properties',
                 'analyseTraversable'
             );
-            $value['methods']['debugMethods'] = Config::getConfigFromFile(
+            $value['methods']['debugMethods'] = $this->krexxStorage->config->getConfigFromFile(
                 'methods',
                 'debugMethods'
             );
-            $value['runtime']['level'] = Config::getConfigFromFile(
+            $value['runtime']['level'] = $this->krexxStorage->config->getConfigFromFile(
                 'runtime',
                 'level'
             );
-            $value['methods']['analyseMethodsAtall'] = Config::getConfigFromFile(
+            $value['methods']['analyseMethodsAtall'] = $this->krexxStorage->config->getConfigFromFile(
                 'methods',
                 'analyseMethodsAtall'
             );
-            $value['methods']['analyseProtectedMethods'] = Config::getConfigFromFile(
+            $value['methods']['analyseProtectedMethods'] = $this->krexxStorage->config->getConfigFromFile(
                 'methods',
                 'analyseProtectedMethods'
             );
-            $value['methods']['analysePrivateMethods'] = Config::getConfigFromFile(
+            $value['methods']['analysePrivateMethods'] = $this->krexxStorage->config->getConfigFromFile(
                 'methods',
                 'analysePrivateMethods'
             );
-            $value['backtraceAndError']['registerAutomatically'] = Config::getConfigFromFile(
+            $value['backtraceAndError']['registerAutomatically'] = $this->krexxStorage->config->getConfigFromFile(
                 'backtraceAndError',
                 'registerAutomatically'
             );
-            $value['backtraceAndError']['backtraceAnalysis'] = Config::getConfigFromFile(
+            $value['backtraceAndError']['backtraceAnalysis'] = $this->krexxStorage->config->getConfigFromFile(
                 'backtraceAndError',
                 'backtraceAnalysis'
             );
@@ -191,7 +189,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                         $data['factory'][$attribute] = true;
                         // We need to fill these values with the stuff from the
                         // factory settings!
-                        $value[$mainkey][$attribute] = Config::$configFallback[$mainkey][$attribute];
+                        $value[$mainkey][$attribute] = $this->krexxStorage->config->configFallback[$mainkey][$attribute];
                     } else {
                         $data['factory'][$attribute] = false;
                     }
@@ -210,14 +208,14 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
         {
             $arguments = $this->request->getArguments();
             $allOk = true;
-            $filepath = Config::getPathToIni();
+            $filepath = $this->krexxStorage->config->getPathToIni();
 
 
 
             // Check for writing permission.
             if (!is_writable(dirname($filepath))) {
                 $allOk = false;
-                Messages::addKey('file.not.writable', array($filepath));
+                $this->krexxStorage->messages->addKey('file.not.writable', array($filepath));
             }
 
             // Check if the file does exist.
@@ -242,7 +240,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                                 // whitelist it.
                                 $value = htmlspecialchars(preg_replace('/\s+/', '', $value));
                                 // Evaluate the setting!
-                                if (Config::evaluateSetting($section, $settingName, $value)) {
+                                if ($this->krexxStorage->config->evaluateSetting($section, $settingName, $value)) {
                                     $oldValues[$section][$settingName] = $value;
                                 } else {
                                     // Validation failed! kreXX will generate a message,
@@ -269,7 +267,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                 if ($allOk) {
                     if (file_put_contents($filepath, $ini) === false) {
                         $allOk = false;
-                        Messages::addKey('file.not.writable', array($filepath));
+                        $this->krexxStorage->messages->addKey('file.not.writable', array($filepath));
                     }
                 }
             }
@@ -277,8 +275,8 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
             // Something went wrong, we need to tell the user.
             if (!$allOk) {
                 // Got to remove some messages. We we will not queue them now.
-                Messages::removeKey('protected.folder.chunk');
-                Messages::removeKey('protected.folder.log');
+                $this->krexxStorage->messages->removeKey('protected.folder.chunk');
+                $this->krexxStorage->messages->removeKey('protected.folder.log');
                 foreach ($this->getTranslatedMessages() as $message) {
                     $this->addMessage(
                         $message,

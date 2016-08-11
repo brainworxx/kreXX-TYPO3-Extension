@@ -373,6 +373,7 @@ $fontLight: lighter 10px tahoma, verdana;
     font: $fontBold;
     color: $greyDark;
     position: relative;
+    width: 100%;
     .kel {
       cursor: default;
       display: block;
@@ -394,9 +395,9 @@ $fontLight: lighter 10px tahoma, verdana;
         font: $fontLight;
         &.karrow {
           font: $fontBold;
-          background-color: $greyDark;
+          background-color: $greyLight;
           padding: 0 2px;
-          color: $whiteDark !important;
+          color: $greyDark !important;
           margin: 0 10px;
         }
       }
@@ -772,11 +773,17 @@ $fontLight: lighter 10px tahoma, verdana;
   .ksearch-found-highlight {
     background-color: $yellow !important;
     color: $blackLight;
+    .kpre {
+      background-color: $yellow !important;
+    }
   }
 
   .highlight-jumpto {
     background-color: $yellowBwx !important;
     color: $blackLight !important;
+    .kpre {
+      background-color: $yellowBwx !important;
+    }
   }
 
   .ksearch-found-highlight .kpre,

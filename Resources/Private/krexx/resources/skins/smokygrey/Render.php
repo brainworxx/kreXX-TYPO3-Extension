@@ -34,18 +34,14 @@
 
 namespace Brainworxx\Krexx\View\Smokygrey;
 
-use Brainworxx\Krexx\Analysis\Codegen;
-use Brainworxx\Krexx\Controller\OutputActions;
-use Brainworxx\Krexx\Framework\Chunks;
 use Brainworxx\Krexx\Model\Simple;
-use Brainworxx\Krexx\View\Messages;
 
 /**
  * Individual render class for the smokey-grey skin.
  *
- * @package Brainworxx\Krexx\View
+ * @package Brainworxx\Krexx\View\Smokygrey
  */
-class Render extends \Brainworxx\Krexx\View\Render
+class Render extends \Brainworxx\Krexx\Service\View\Render
 {
 
     /**
@@ -55,6 +51,7 @@ class Render extends \Brainworxx\Krexx\View\Render
     {
 
         $template = parent::renderSingleChild($model);
+        $json = $model->getJson();
 
         $json['Help'] = $this->getHelp($model->getHelpid());
         // Prepare the json.
@@ -73,72 +70,49 @@ class Render extends \Brainworxx\Krexx\View\Render
     {
 
         // Check for emergency break.
-        if (!OutputActions::checkEmergencyBreak()) {
-            // Normally, this should not show up, because the Chunks class will not
-            // output anything, except a JS alert.
-            Messages::addMessage("Emergency break for large output during analysis process.");
+        if (!$this->storage->emergencyHandler->checkEmergencyBreak()) {
             return '';
         }
 
+        // We need to render this one normally.
+        $template = $this->getTemplateFileContent('expandableChildNormal');
+        // Replace our stuff in the partial.
+        $template = str_replace('{name}', $model->getName(), $template);
+        $template = str_replace('{type}', $model->getType(), $template);
 
-        if ($model->getName() == '' && $model->getType() == '') {
-            // Without a Name or Type I only display the Child with a Node.
-            $template = $this->getTemplateFileContent('expandableChildSimple');
-            // Replace our stuff in the partial.
-            return str_replace('{mainfunction}', Chunks::chunkMe($model->renderMe()), $template);
-        } else {
-            // We need to render this one normally.
-            $template = $this->getTemplateFileContent('expandableChildNormal');
-            // Replace our stuff in the partial.
-            $template = str_replace('{name}', $model->getName(), $template);
-            $template = str_replace('{type}', $model->getType(), $template);
-
-            // Explode the type to get the class names right.
-            $types = explode(' ', $model->getType());
-            $cssType = '';
-            foreach ($types as $singleType) {
-                $cssType .= ' k' . $singleType;
-            }
-            $template = str_replace('{ktype}', $cssType, $template);
-
-            $template = str_replace('{additional}', $model->getAdditional(), $template);
-            // There is not much need for a connector to an empty name.
-            if (empty($model->getName()) && $model->getName() != 0) {
-                $template = str_replace('{connector1}', '', $template);
-                $template = str_replace('{connector2}', '', $template);
-            } else {
-                $template = str_replace('{connector1}', $this->renderConnector($model->getConnector1()), $template);
-                $template = str_replace('{connector2}', $this->renderConnector($model->getConnector2()), $template);
-            }
-
-
-            // Generating our code and adding the Codegen button, if there is
-            // something to generate.
-            $gencode = Codegen::generateSource($model);
-            if ($gencode == '') {
-                // Remove the markers, because here is nothing to add.
-                $template = str_replace('{gensource}', '', $template);
-                $template = str_replace('{gencode}', '', $template);
-            } else {
-                // We add the buttton and the code.
-                $template = str_replace('{gensource}', $gencode, $template);
-                $template = str_replace('{gencode}', $this->getTemplateFileContent('gencode'), $template);
-            }
-
-            // Is it expanded?
-            // This is done in the js.
-            $template = str_replace('{isExpanded}', '', $template);
-
-            $json['Help'] = $this->getHelp($model->getHelpid());
-            $json = json_encode($json);
-            $template = str_replace('{addjson}', $json, $template);
-
-            return str_replace(
-                '{nest}',
-                Chunks::chunkMe($this->renderNest($model, false)),
-                $template
-            );
+        // Explode the type to get the class names right.
+        $types = explode(' ', $model->getType());
+        $cssType = '';
+        foreach ($types as $singleType) {
+            $cssType .= ' k' . $singleType;
         }
+        $template = str_replace('{ktype}', $cssType, $template);
+
+        $template = str_replace('{additional}', $model->getAdditional(), $template);
+
+        // Generating our code and adding the Codegen button, if there is
+        // something to generate.
+        $gencode = $this->storage->codegenHandler->generateSource($model);
+        $template = str_replace('{gensource}', $gencode, $template);
+        if ($gencode == '.stop.' || empty($gencode)) {
+            // Remove the button marker, because here is nothing to add.
+            $template = str_replace('{sourcebutton}', '', $template);
+        } else {
+            // Add the button.
+            $template = str_replace('{sourcebutton}', $this->getTemplateFileContent('sourcebutton'), $template);
+        }
+
+        // Is it expanded?
+        // This is done in the js.
+        $template = str_replace('{isExpanded}', '', $template);
+
+        $json = $model->getJson();
+        $json['Help'] = $this->getHelp($model->getHelpid());
+        $json = json_encode($json);
+        $template = str_replace('{addjson}', $json, $template);
+
+        return str_replace('{nest}', $this->storage->chunks->chunkMe($this->renderNest($model, false)), $template);
+
     }
 
 
@@ -221,12 +195,21 @@ class Render extends \Brainworxx\Krexx\View\Render
     /**
      * {@inheritDoc}
      */
-    public function renderFatalMain($type, $errstr, $errfile, $errline, $source)
+    public function renderFatalMain($type, $errstr, $errfile, $errline)
     {
-        $template = parent::renderFatalMain($type, $errstr, $errfile, $errline, $source);
+        $template = parent::renderFatalMain($type, $errstr, $errfile, $errline);
 
         // Add the search.
         $template = str_replace('{search}', $this->renderSearch(), $template);
-        return str_replace('{KrexxId}', OutputActions::$recursionHandler->getMarker(), $template);
+        return str_replace('{KrexxId}', $this->storage->recursionHandler->getMarker(), $template);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function renderConnector($connector)
+    {
+        // Do nothing. There are no connectors in Smoky-Grey.
+        return '';
     }
 }

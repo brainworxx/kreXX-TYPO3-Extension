@@ -34,7 +34,8 @@
 
 namespace Brainworxx\Krexx\Model;
 
-use Brainworxx\Krexx\Framework\Toolbox;
+use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Model\Callback\AbstractCallback;
 
 /**
  * Model for the view rendering
@@ -43,6 +44,13 @@ use Brainworxx\Krexx\Framework\Toolbox;
  */
 class Simple
 {
+    /**
+     * Here we store all relevant data.
+     *
+     * @var Storage
+     */
+    protected $storage;
+
     /**
      * The object/string/arraqy/whatever we are analysing right now
      *
@@ -126,13 +134,36 @@ class Simple
     protected $parameters = array();
 
     /**
-     * Placeholder for the render function. Overwrite this one
+     * Callback for the renderMe() method.
+     *
+     * @var AbstractCallback
+     */
+    protected $callback;
+
+    /**
+     * Injects the storage.
+     *
+     * @param Storage $storage
+     *   The storage, where we store the classes we need.
+     */
+    public function __construct(Storage $storage)
+    {
+        $this->storage = $storage;
+    }
+
+    /**
+     * Triggers the callback (if set).
      *
      * @return string
      */
     public function renderMe()
     {
-        return '';
+        if (is_object($this->callback)) {
+            $this->callback->setParams($this->parameters);
+            return $this->callback->callMe();
+        } else {
+            return '';
+        }
     }
 
     /**
@@ -140,19 +171,13 @@ class Simple
      *
      * @param mixed $data
      *   The current variable we are rendering.
-     * @param bool $escapeMe
-     *   Sets it the data must be escaped.
      *
-     * @return \Brainworxx\Krexx\Model\Simple
+     * @return Simple
      *   $this, for chaining.
      */
-    public function setData(&$data, $escapeMe = true)
+    public function setData(&$data)
     {
-        if (is_string($data) && $escapeMe) {
-            $this->data = Toolbox::encodeString($data);
-        } else {
-            $this->data = $data;
-        }
+        $this->data = $data;
         return $this;
     }
 
@@ -162,7 +187,7 @@ class Simple
      * @return mixed
      *   The variable, we are currently analysing.
      */
-    public function getData()
+    public function &getData()
     {
         return $this->data;
     }
@@ -172,19 +197,13 @@ class Simple
      *
      * @param int|string $name
      *   The name/key we are analysing.
-     * @param bool $escapeMe
-     *   Sets if the name must be escaped.
      *
-     * @return \Brainworxx\Krexx\Model\Simple
+     * @return Simple
      *   $this, for chaining.
      */
-    public function setName($name, $escapeMe = true)
+    public function setName($name)
     {
-        if (is_string($name) && $escapeMe) {
-            $this->name = Toolbox::encodeString($name);
-        } else {
-            $this->name = $name;
-        }
+        $this->name = $name;
         return $this;
     }
 
@@ -194,7 +213,7 @@ class Simple
      * @return int|string
      *   The name/key we are analysing.
      */
-    public function getName()
+    public function &getName()
     {
         return $this->name;
     }
@@ -204,19 +223,13 @@ class Simple
      *
      * @param string $normal
      *   The short result of the analysis.
-     * @param bool $escapeMe
-     *   Sets if the short result must be escaped.
      *
-     * @return \Brainworxx\Krexx\Model\Simple
+     * @return Simple
      *   $this, for chaining.
      */
-    public function setNormal($normal, $escapeMe = true)
+    public function setNormal($normal)
     {
-        if ($escapeMe) {
-            $this->normal = Toolbox::encodeString($normal);
-        } else {
-            $this->normal = $normal;
-        }
+        $this->normal = $normal;
         return $this;
     }
 
@@ -236,20 +249,13 @@ class Simple
      *
      * @param string $additional
      *   The long result of the analysis.
-     * @param bool $escapeMe
-     *   Sets if the long result must be escaped.
      *
-     * @return \Brainworxx\Krexx\Model\Simple
+     * @return Simple
      *   $this, for chaining.
      */
-    public function setAdditional($additional, $escapeMe = true)
+    public function setAdditional($additional)
     {
-        if ($escapeMe) {
-            $this->additional = Toolbox::encodeString($additional);
-        } else {
-            $this->additional = $additional;
-        }
-
+        $this->additional = $additional;
         return $this;
     }
 
@@ -270,7 +276,7 @@ class Simple
      * @param string $type
      *   The type of the variable we are analysing.
      *
-     * @return \Brainworxx\Krexx\Model\Simple
+     * @return Simple
      *   $this, for chaining.
      */
     public function setType($type)
@@ -297,7 +303,7 @@ class Simple
      * @param string $helpid
      *   The ID of the help text.
      *
-     * @return \Brainworxx\Krexx\Model\Simple
+     * @return Simple
      *   $this, for chaining.
      */
     public function setHelpid($helpid)
@@ -323,7 +329,7 @@ class Simple
      * @param string $connector1
      *   The first connector.
      *
-     * @return \Brainworxx\Krexx\Model\Simple
+     * @return Simple
      *   $this, for chaining.
      */
     public function setConnector1($connector1)
@@ -349,7 +355,7 @@ class Simple
      * @param string $connector2
      *   The second connector.
      *
-     * @return \Brainworxx\Krexx\Model\Simple
+     * @return Simple
      *   $this, for chaining.
      */
     public function setConnector2($connector2)
@@ -375,7 +381,7 @@ class Simple
      * @param array $json
      *   More analysis data.
      *
-     * @return \Brainworxx\Krexx\Model\Simple
+     * @return Simple
      *   $this, for chaining.
      */
     public function setJson($json)
@@ -401,7 +407,7 @@ class Simple
      * @param string $domid
      *   The dom id, of cause.
      *
-     * @return \Brainworxx\Krexx\Model\Simple
+     * @return Simple
      *   $this, for chaining.
      */
     public function setDomid($domid)
@@ -429,12 +435,28 @@ class Simple
      * @param $value
      *   The value of the parameter, by referance.
      *
-     * @return \Brainworxx\Krexx\Model\Simple
+     * @return Simple
      *   $this, for chaining.
      */
     public function addParameter($name, &$value)
     {
         $this->parameters[$name] = $value;
+        return $this;
+    }
+
+    /**
+     * Initializes the callback for the renderMe method
+     *
+     * @param string $name
+     *   The name and part of the namespace of the callback class.
+     *
+     * @return Simple
+     *   $this, for chaining.
+     */
+    public function initCallback($name)
+    {
+        $classname = 'Brainworxx\\Krexx\\Model\\Callback\\' . $name;
+        $this->callback = new $classname($this->storage);
         return $this;
     }
 }

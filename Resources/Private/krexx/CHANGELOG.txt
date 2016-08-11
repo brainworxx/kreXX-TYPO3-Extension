@@ -1,16 +1,16 @@
 1.4.3
 - Added sourcecode to the closure analysis.
 - Prettified the sourcecode display in the smokygrey skin.
-- Change: Removed the code generation for the SplObjectStorage.
-  Generating code for the SplObjectStorage is right now too
-  complicated.
-- Change: Removed the unnecessary stuff from the source generation.
+- Change: Removed the code generation for Traversals that can
+  not be accessed via chaining.
+- Change: Removed the unnecessary fluff from the source generation.
   Stuff like '$kresult =' is now gone.
 - Change: Refactored pretty much everything and introduced something
   that looks remotely like MVC.
 - Bugfix: Code generation is now working when krexx is called via
   'Krexx::'.
 - Bugfix: Wrong line number in the fatal error handler.
+- Bugfix: Code generation for class constants now works properly.
 
 1.4.2
 - Added analysis metadata to the file output.
@@ -18,7 +18,7 @@
   make more sense than before.
 - Change: The logging options can never be changed on the frontend.
 - Change: The debug methods can never be changed on the frontend.
-- Bufix / Change: Removed the whole dual-output mess.
+- Bugfix / Change: Removed the whole dual-output mess.
 - Change: When the destination is set to 'file' via config file, this
   value can not be overwritten with local cookie settings.
 - Change: Unclunked the Smokey-Grey skin.
@@ -29,7 +29,7 @@
   files, and not 9.
 - Bugfix: The debug output might jump around, in some special css
   environments.
-- Bufix: Proper handling of broken html output from the hosting CMS.
+- Bugfix: Proper handling of broken html output from the hosting CMS.
 
 1.4.1
 - Added class constants analysis.

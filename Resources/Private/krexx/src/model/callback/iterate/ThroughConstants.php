@@ -32,14 +32,45 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\View\Hans;
+namespace Brainworxx\Krexx\Model\Callback\Iterate;
+
+use Brainworxx\Krexx\Model\Callback\AbstractCallback;
+use Brainworxx\Krexx\Model\Simple;
 
 /**
- * Individual render class for the Hans skin.
+ * Constant analysis methods.
  *
- * @package Brainworxx\Krexx\View\Hans
+ * @package Brainworxx\Krexx\Model\Callback\Iterate
+ *
+ * @uses array refConst
+ *   Array of constants from the class we are analysing.
+ * @uses string classname
+ *   The classname we are analysing, for code generation purpose.
  */
-class Render extends \Brainworxx\Krexx\Service\View\Render
+class ThroughConstants extends AbstractCallback
 {
-    // Do nothing.
+    /**
+     * Simply iterate though object constants.
+     *
+     * @return string
+     *   The generated markup.
+     */
+    public function callMe()
+    {
+        $output = '';
+
+        // We do not need to check the recursionHandler, this is class
+        // internal stuff. Is it even possible to create a recursion here?
+        // Iterate through.
+        foreach ($this->parameters['refConst'] as $k => &$v) {
+            $model = new Simple($this->storage);
+            $model->setData($v)
+                ->setName($k)
+                ->setConnector1($this->parameters['classname'] . '::');
+            $output .= $this->storage->routing->analysisHub($model);
+        }
+
+        return $output;
+
+    }
 }
