@@ -44,6 +44,13 @@ use Brainworxx\Krexx\Service\Storage;
 class Emergency
 {
     /**
+     * Counts how often kreXX was called.
+     *
+     * @var int
+     */
+    protected $krexxCount = 0;
+
+    /**
      * Unix timestamp, used to determine if we need to do an emergency break.
      *
      * @var int
@@ -116,10 +123,10 @@ class Emergency
         // Cache the server memory limit.
         $limit = strtoupper(ini_get('memory_limit'));
         if (preg_match('/^(\d+)(.)$/', $limit, $matches)) {
-            if ($matches[2] == 'M') {
+            if ($matches[2] === 'M') {
                 // Megabyte.
                 $this->serverMemoryLimit = $matches[1] * 1024 * 1024;
-            } elseif ($matches[2] == 'K') {
+            } elseif ($matches[2] === 'K') {
                 // Kilobyte.
                 $this->serverMemoryLimit = $matches[1] * 1024;
             }
@@ -234,8 +241,41 @@ class Emergency
      */
     public function resetTimer()
     {
-        if ($this->timer == 0) {
+        if (empty($this->timer)) {
             $this->timer = time();
         }
+    }
+
+    /**
+     * Finds out, if krexx was called too often, to prevent large output.
+     *
+     * @return bool
+     *   Whether kreXX was called too often or not.
+     */
+    public function checkMaxCall()
+    {
+        $result = false;
+        $maxCall = (int)$this->storage->config->getConfigValue('runtime', 'maxCall');
+        if ($this->krexxCount >= $maxCall) {
+            // Called too often, we might get into trouble here!
+            $result = true;
+        }
+        // Give feedback if this is our last call.
+        if ($this->krexxCount === $maxCall - 1) {
+            $this->storage->messages->addMessage($this->storage->render->getHelp('maxCallReached'), 'critical');
+        }
+        $this->krexxCount++;
+        return $result;
+    }
+
+    /**
+     * Getter for the krexxCount.
+     *
+     * @return int
+     *   How often kreXX was called.
+     */
+    public function getKrexxCount()
+    {
+        return $this->krexxCount;
     }
 }

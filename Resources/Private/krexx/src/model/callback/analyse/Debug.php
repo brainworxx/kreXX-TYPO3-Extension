@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Model\Callback\AbstractCallback;
  *
  * @package Brainworxx\Krexx\Model\Callback\Analysis
  *
- * @uses mixed result
+ * @uses mixed data
  *   The result from one single configured debug method.
  */
 class Debug extends AbstractCallback
@@ -56,7 +56,7 @@ class Debug extends AbstractCallback
     public function callMe()
     {
         $model = new Simple($this->storage);
-        $model->setData($this->parameters['result'])
+        $model->setData($this->parameters['data'])
             ->setName('result');
         // This could be anything, we need to route it.
         return $this->storage->routing->analysisHub($model);

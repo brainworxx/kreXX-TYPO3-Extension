@@ -176,7 +176,7 @@ class Fallback
         ),
         'registerAutomatically' => array(
             'type' => 'Select',
-            'editable' => 'true',
+            'editable' => 'false',
         ),
         'detectAjax' => array(
             'type' => 'Select',

@@ -31,7 +31,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Controller\OutputActions;
+use Brainworxx\Krexx\Service\Storage;
 
 /**
  * Alias function for object analysis.
@@ -47,7 +47,7 @@ use Brainworxx\Krexx\Controller\OutputActions;
  */
 function krexx($data = null, $handle = '')
 {
-    if ($handle == '') {
+    if (empty($handle)) {
         \Krexx::open($data);
     } else {
         \Krexx::$handle($data);
@@ -64,6 +64,13 @@ function krexx($data = null, $handle = '')
  */
 class Krexx
 {
+    /**
+     * Our storage wher we keep al relevant classes.
+     *
+     * @var Storage
+     */
+    public static $storage;
+
     /**
      * Includes all needed files and sets some internal values.
      */
@@ -101,7 +108,8 @@ class Krexx
         include_once $krexxDir . 'src/controller/Internals.php';
         include_once $krexxDir . 'src/controller/OutputActions.php';
 
-        OutputActions::checkEnvironmentAction($krexxDir);
+        // Create a new storage where we sotre all our classes.
+        self::$storage = new Storage($krexxDir);
     }
 
     /**
@@ -114,10 +122,10 @@ class Krexx
      */
     public static function __callStatic($name, array $arguments)
     {
-        OutputActions::noFatalForKrexx();
+        self::$storage->controller->noFatalForKrexx();
         // Do we gave a handle?
-        $handle = OutputActions::$storage->config->getDevHandler();
-        if ($name == $handle) {
+        $handle = self::$storage->config->getDevHandler();
+        if ($name === $handle) {
             // We do a standard-open.
             if (isset($arguments[0])) {
                 self::open($arguments[0]);
@@ -125,7 +133,7 @@ class Krexx
                 self::open();
             }
         }
-        OutputActions::reFatalAfterKrexx();
+        self::$storage->controller->reFatalAfterKrexx();
     }
 
     /**
@@ -137,13 +145,13 @@ class Krexx
      */
     public static function timerMoment($string)
     {
-        OutputActions::noFatalForKrexx();
+        self::$storage->controller->noFatalForKrexx();
         // Disabled?
-        if (!OutputActions::$storage->config->getEnabled()) {
+        if (!self::$storage->config->getEnabled()) {
             return;
         }
-        OutputActions::timerAction($string);
-        OutputActions::reFatalAfterKrexx();
+        self::$storage->controller->timerAction($string);
+        self::$storage->controller->reFatalAfterKrexx();
     }
 
     /**
@@ -151,13 +159,13 @@ class Krexx
      */
     public static function timerEnd()
     {
-        OutputActions::noFatalForKrexx();
+        self::$storage->controller->noFatalForKrexx();
         // Disabled ?
-        if (!OutputActions::$storage->config->getEnabled()) {
+        if (!self::$storage->config->getEnabled()) {
             return;
         }
-        OutputActions::timerEndAction();
-        OutputActions::reFatalAfterKrexx();
+        self::$storage->controller->timerEndAction();
+        self::$storage->controller->reFatalAfterKrexx();
     }
 
     /**
@@ -168,13 +176,13 @@ class Krexx
      */
     public static function open($data = null)
     {
-        OutputActions::noFatalForKrexx();
+        self::$storage->controller->noFatalForKrexx();
         // Disabled?
-        if (!OutputActions::$storage->config->getEnabled()) {
+        if (!self::$storage->config->getEnabled()) {
             return;
         }
-        OutputActions::dumpAction($data);
-        OutputActions::reFatalAfterKrexx();
+        self::$storage->controller->dumpAction($data);
+        self::$storage->controller->reFatalAfterKrexx();
     }
 
     /**
@@ -185,14 +193,14 @@ class Krexx
      */
     public static function backtrace()
     {
-        OutputActions::noFatalForKrexx();
+        self::$storage->controller->noFatalForKrexx();
         // Disabled?
-        if (!OutputActions::$storage->config->getEnabled()) {
+        if (!self::$storage->config->getEnabled()) {
             return;
         }
         // Render it.
-        OutputActions::backtraceAction();
-        OutputActions::reFatalAfterKrexx();
+        self::$storage->controller->backtraceAction();
+        self::$storage->controller->reFatalAfterKrexx();
     }
 
     /**
@@ -200,9 +208,9 @@ class Krexx
      */
     public static function enable()
     {
-        OutputActions::noFatalForKrexx();
-        OutputActions::$storage->config->setEnabled(true);
-        OutputActions::reFatalAfterKrexx();
+        self::$storage->controller->noFatalForKrexx();
+        self::$storage->config->setEnabled(true);
+        self::$storage->controller->reFatalAfterKrexx();
     }
 
     /**
@@ -210,8 +218,8 @@ class Krexx
      */
     public static function disable()
     {
-        OutputActions::noFatalForKrexx();
-        OutputActions::$storage->config->setEnabled(false);
+        self::$storage->controller->noFatalForKrexx();
+        self::$storage->config->setEnabled(false);
         // We will not re-enable it afterwards, because kreXX
         // is disabled and the handler would not show up anyway.
     }
@@ -223,14 +231,14 @@ class Krexx
      */
     public static function editSettings()
     {
-        OutputActions::noFatalForKrexx();
+        self::$storage->controller->noFatalForKrexx();
         // Disabled?
         // We are ignoring local settings here.
-        if (!OutputActions::$storage->config->getEnabled()) {
+        if (!self::$storage->config->getEnabled()) {
             return;
         }
-        OutputActions::editSettingsAction();
-        OutputActions::reFatalAfterKrexx();
+        self::$storage->controller->editSettingsAction();
+        self::$storage->controller->reFatalAfterKrexx();
     }
 
     /**
@@ -241,10 +249,10 @@ class Krexx
     public static function registerFatal()
     {
         // Disabled?
-        if (!OutputActions::$storage->config->getEnabled()) {
+        if (!self::$storage->config->getEnabled()) {
             return;
         }
-        OutputActions::registerFatalAction();
+        self::$storage->controller->registerFatalAction();
     }
 
     /**
@@ -257,9 +265,9 @@ class Krexx
     public static function unregisterFatal()
     {
         // Disabled?
-        if (!OutputActions::$storage->config->getEnabled()) {
+        if (!self::$storage->config->getEnabled()) {
             return;
         }
-        OutputActions::unregisterFatalAction();
+        self::$storage->controller->unregisterFatalAction();
     }
 }

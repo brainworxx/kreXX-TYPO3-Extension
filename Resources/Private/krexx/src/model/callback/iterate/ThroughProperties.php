@@ -42,12 +42,12 @@ use Brainworxx\Krexx\Model\Callback\AbstractCallback;
  *
  * @package Brainworxx\Krexx\Model\Callback\Iterate
  *
+ * @uses array data
+ *   Array of \reflectionProperties.
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  * @uses object orgObject
  *   The original object we are analysing
- * @uses array refProps
- *   Array of \reflectionProperties.
  */
 class ThroughProperties extends AbstractCallback
 {
@@ -66,7 +66,7 @@ class ThroughProperties extends AbstractCallback
         $output = '';
         $default = $ref->getDefaultProperties();
 
-        foreach ($this->parameters['refProps'] as $refProperty) {
+        foreach ($this->parameters['data'] as $refProperty) {
             /* @var \ReflectionProperty $refProperty */
             $refProperty->setAccessible(true);
 

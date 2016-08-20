@@ -267,10 +267,12 @@ class Chunks
         if (!$beenHere) {
             // Clean up leftover files.
             $chunkList = glob($this->krexxDir . 'chunks/*.Krexx.tmp');
-            foreach ($chunkList as $file) {
-                // We delete everything that is older than one hour.
-                if ((filemtime($file) + 3600) < time()) {
-                    unlink($file);
+            if (!empty($chunkList)) {
+                foreach ($chunkList as $file) {
+                    // We delete everything that is older than one hour.
+                    if ((filemtime($file) + 3600) < time()) {
+                        unlink($file);
+                    }
                 }
             }
         }
@@ -288,22 +290,23 @@ class Chunks
     {
         // Cleanup old logfiles to prevent a overflow.
         $logList = glob($this->krexxDir . $logDir . "*.Krexx.html");
-        array_multisort(array_map('filemtime', $logList), SORT_DESC, $logList);
-        $maxFileCount = (int)$this->storage->config->getConfigValue('output', 'maxfiles');
-        $count = 1;
-        // Cleanup logfiles.
-        foreach ($logList as $file) {
-            if ($count > $maxFileCount) {
-                if (is_writable($file)) {
-                    unlink($file);
+        if (!empty($logList)) {
+            array_multisort(array_map('filemtime', $logList), SORT_DESC, $logList);
+            $maxFileCount = (int)$this->storage->config->getConfigValue('output', 'maxfiles');
+            $count = 1;
+            // Cleanup logfiles.
+            foreach ($logList as $file) {
+                if ($count > $maxFileCount) {
+                    if (is_writable($file)) {
+                        unlink($file);
+                    }
+                    if (is_writable($file . '.json')) {
+                        unlink($file . '.json');
+                    }
                 }
-                if (is_writable($file . '.json')) {
-                    unlink($file . '.json');
-                }
+                $count++;
             }
-            $count++;
         }
-
     }
 
     /**
@@ -342,7 +345,8 @@ class Chunks
     protected function fileStamp()
     {
         static $timestamp = 0;
-        if ($timestamp == 0) {
+
+        if (empty($timestamp)) {
             $timestamp = explode(" ", microtime());
             $timestamp = $timestamp[1] . str_replace("0.", "", $timestamp[0]);
         }

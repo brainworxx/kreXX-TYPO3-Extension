@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Model\Simple;
  *
  * @package Brainworxx\Krexx\Model\Callback\Iterate
  *
- * @uses array methods
+ * @uses array data
  *   Array of reflection methods.
  * @uses \reflectionClass ref
  *   Reflection of the class we are analysing.
@@ -60,7 +60,7 @@ class ThroughMethods extends AbstractCallback
         $result = '';
 
         // Deep analysis of the methods.
-        foreach ($this->parameters['methods'] as $reflection) {
+        foreach ($this->parameters['data'] as $reflection) {
             $methodData = array();
             /* @var \ReflectionMethod $reflection */
             $method = $reflection->name;
@@ -83,7 +83,7 @@ class ThroughMethods extends AbstractCallback
 
             // Get declaration place.
             $declaringClass = $reflection->getDeclaringClass();
-            if (is_null($declaringClass->getFileName()) || $declaringClass->getFileName() == '') {
+            if (is_null($declaringClass->getFileName()) || empty($declaringClass->getFileName())) {
                 $methodData['declared in'] =
                     ":: unable to determine declaration ::\n\nMaybe this is a predeclared class?";
             } else {

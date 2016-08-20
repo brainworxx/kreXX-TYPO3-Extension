@@ -123,7 +123,7 @@ class Codegen
         $connector2 = trim($model->getConnector2(), ' = ');
 
         $isConstants = $model->getType() === 'class internals' && $model->getName() === 'Constants';
-        if ($model->getConnector1() . $connector2 == '' && $this->counter !== 0 && !$isConstants) {
+        if ($model->getConnector1() . $connector2 === '' && $this->counter !== 0 && !$isConstants) {
             // No connectors mean, we are dealing with some meta stuff, like functions
             // We will not add anything for them.
         } else {
@@ -224,12 +224,12 @@ class Codegen
         $stop = 'stop';
 
         // Debug methods are always public.
-        if ($type == 'debug method' || $this->counter == 0) {
+        if ($type === 'debug method' || $this->counter === 0) {
             return $contagination;
         }
 
         // Test for constants.
-        if ($type == 'class internals' && $model->getName() == 'Constants') {
+        if ($type === 'class internals' && $model->getName() === 'Constants') {
             // We must only take the stuff from the constant itself
             return $stop;
         }
@@ -276,7 +276,7 @@ class Codegen
             $nestingLevel = $this->storage->emergencyHandler->getNestingLevel() - 1;
         }
 
-        return $nestingLevel <= 1 && $this->scope == '$this';
+        return $nestingLevel <= 1 && $this->scope === '$this';
     }
 
     public function checkAllowCodegen()

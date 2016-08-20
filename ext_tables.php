@@ -34,37 +34,18 @@
 if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
-use \TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 // Register BE module.
 if (TYPO3_MODE === 'BE') {
-    if ((int)TYPO3_version < 7) {
-        // TYPO3 4.5+
-        Tx_Extbase_Utility_Extension::registerModule(// Main area.
+
+    $registered = false;
+    // 6.0 ++
+    if (class_exists('\TYPO3\CMS\Extbase\Utility\ExtensionUtility')) {
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
             $_EXTKEY,
-            'tools', // Name of the module.
-            'kreXX configuration', // Position of the module.
-            '', // Allowed controller action combinations.
-            array(
-                'Config' => 'edit,save',
-                'FormConfig' => 'edit,save',
-                'Log' => 'list,getContent',
-                'Help' => 'usage,config',
-                'Cookie' => 'index',
-            ),
-            array(
-                'access' => 'user,group',
-                'icon' => 'EXT:includekrexx/ext_icon.gif',
-                'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml'
-            )
-        );
-    } else {
-        // TYPO3 7+
-        ExtensionUtility::registerModule(// Main area.
-            $_EXTKEY,
-            'tools', // Name of the module.
-            'kreXX configuration', // Position of the module.
-            '', // Allowed controller action combinations.
+            'tools',
+            'kreXX configuration',
+            '',
             array(
                 'Config' => 'edit,save',
                 'FormConfig' => 'edit,save',
@@ -78,5 +59,29 @@ if (TYPO3_MODE === 'BE') {
                 'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml',
             )
         );
+        $registered = true;
     }
+
+    // The old way.
+    if (class_exists('Tx_Extbase_Utility_Extension') && !$registered) {
+        Tx_Extbase_Utility_Extension::registerModule(// Main area.
+            $_EXTKEY,
+            'tools',
+            'kreXX configuration',
+            '',
+            array(
+                'Config' => 'edit,save',
+                'FormConfig' => 'edit,save',
+                'Log' => 'list,getContent',
+                'Help' => 'usage,config',
+                'Cookie' => 'index',
+            ),
+            array(
+                'access' => 'user,group',
+                'icon' => 'EXT:includekrexx/ext_icon.gif',
+                'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml'
+            )
+        );
+    }
+
 }

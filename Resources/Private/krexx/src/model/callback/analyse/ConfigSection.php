@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Model\Simple;
  *
  * @package Brainworxx\Krexx\Model\Callback\Analysis
  *
- * @uses array sectionData
+ * @uses array data
  *   The configuration section we are rendering
  * @uses array source
  *   The info of the source if the configuration
@@ -61,7 +61,7 @@ class ConfigSection extends AbstractCallback
     {
         $source = $this->parameters['source'];
         $sectionOutput = '';
-        foreach ($this->parameters['sectionData'] as $parameterName => $parameterValue) {
+        foreach ($this->parameters['data'] as $parameterName => $parameterValue) {
             // Render the single value.
             // We need to find out where the value comes from.
             $config = $this->storage->config->getFeConfig($parameterName);

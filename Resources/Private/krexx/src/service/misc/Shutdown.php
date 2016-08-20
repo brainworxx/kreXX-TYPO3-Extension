@@ -99,7 +99,7 @@ class Shutdown
     public function shutdownCallback()
     {
         // Check for CLI and messages.
-        if (php_sapi_name() == "cli") {
+        if (php_sapi_name() === "cli") {
             $messages = $this->storage->messages->outputMessages();
             // Since we are in CLI mode, these messages are not in HTML.
             // We can output them right away.
@@ -110,7 +110,7 @@ class Shutdown
         // Every output is split into 4 chunk strings (header, messages,
         // data, footer).
         foreach ($this->chunkStrings as $chunkString) {
-            if ($this->storage->config->getConfigValue('output', 'destination') == 'file') {
+            if ($this->storage->config->getConfigValue('output', 'destination') === 'file') {
                 // Save it to a file.
                 $this->storage->chunks->saveDechunkedToFile($chunkString);
             } else {

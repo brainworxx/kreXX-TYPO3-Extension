@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Service\Flow;
 
-use Brainworxx\Krexx\Controller\OutputActions;
 use Brainworxx\Krexx\Model\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Model\Simple;
 use Brainworxx\Krexx\Service\Storage;
@@ -104,9 +103,8 @@ class Routing
         if (is_object($data) || is_array($data)) {
             if ($this->storage->recursionHandler->isInHive($data)) {
                 // Render recursion.
-                $model->setNormal($model->getName())
-                    ->setDomid($this->generateDomIdFromObject($data))
-                    ->setType($model->getAdditional() . 'class');
+                $model->setDomid($this->generateDomIdFromObject($data))
+                    ->setType(get_class($data));
                 $result = $this->storage->render->renderRecursion($model);
                 $this->storage->emergencyHandler->downOneNestingLevel();
                 return $result;
@@ -450,7 +448,7 @@ class Routing
      * @param array $backtrace
      *   The backtrace.
      * @param int $offset
-     *   For some reason, we have an offset of -1 for fatel error backtrace
+     *   For some reason, we have an offset of -1 for fatal error backtrace
      *   line number.
      *
      * @return string
@@ -464,7 +462,7 @@ class Routing
             $model = new Simple($this->storage);
             $model->setName($step)
                 ->setType('Stack Frame')
-                ->addParameter('stepData', $stepData)
+                ->addParameter('data', $stepData)
                 ->addParameter('offset', $offset)
                 ->initCallback('Analyse\BacktraceStep');
 
@@ -490,7 +488,7 @@ class Routing
     protected function generateDomIdFromObject($data)
     {
         if (is_object($data)) {
-            return 'k' . OutputActions::$KrexxCount . '_' . spl_object_hash($data);
+            return 'k' . $this->storage->emergencyHandler->getKrexxCount() . '_' . spl_object_hash($data);
         } else {
             // Do nothing.
             return '';

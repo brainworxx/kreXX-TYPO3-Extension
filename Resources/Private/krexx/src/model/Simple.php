@@ -52,7 +52,7 @@ class Simple
     protected $storage;
 
     /**
-     * The object/string/arraqy/whatever we are analysing right now
+     * The object/string/array/whatever we are analysing right now
      *
      * @var mixed
      */
@@ -433,7 +433,7 @@ class Simple
      * @param $name
      *   The name of the parameter.
      * @param $value
-     *   The value of the parameter, by referance.
+     *   The value of the parameter, by reference.
      *
      * @return Simple
      *   $this, for chaining.

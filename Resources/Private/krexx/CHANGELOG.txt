@@ -11,6 +11,9 @@
   'Krexx::'.
 - Bugfix: Wrong line number in the fatal error handler.
 - Bugfix: Code generation for class constants now works properly.
+- Bugfix: Removed a stupid warning with the glob() function which
+  may occur on some systems.
+- Bugfix: Added a check to the developer handle tp prevent warnings.
 
 1.4.2
 - Added analysis metadata to the file output.

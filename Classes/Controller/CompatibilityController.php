@@ -129,7 +129,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
         public function __construct()
         {
             parent::__construct();
-            $this->krexxStorage = \Brainworxx\Krexx\Controller\OutputActions::$storage;
+            $this->krexxStorage = \Krexx::$storage;
         }
 
         /**

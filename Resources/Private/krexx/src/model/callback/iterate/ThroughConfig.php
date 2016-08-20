@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Model\Simple;
  *
  * @package Brainworxx\Krexx\Model\Callback\Iterate
  *
- * @uses array config
+ * @uses array data
  *   The configuration section we are rendering
  * @uses array source
  *   The info of the source if the configuration
@@ -58,7 +58,7 @@ class ThroughConfig extends AbstractCallback
      */
     public function callMe()
     {
-        $config = $this->parameters['config'];
+        $config = $this->parameters['data'];
         $source = $this->parameters['source'];
         $configOutput = '';
         foreach ($config as $sectionName => $sectionData) {
@@ -67,7 +67,7 @@ class ThroughConfig extends AbstractCallback
             $model->setName($sectionName)
                 ->setType('Config')
                 ->setAdditional('. . .')
-                ->addParameter('sectionData', $sectionData)
+                ->addParameter('data', $sectionData)
                 ->addParameter('source', $source[$sectionName])
                 ->initCallback('Analyse\ConfigSection');
 

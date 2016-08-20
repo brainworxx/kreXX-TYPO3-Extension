@@ -139,8 +139,8 @@ class Messages
     public function outputMessages()
     {
         // Simple Wrapper for OutputActions::$render->renderMessages
-        if (php_sapi_name() == "cli") {
-            if (count($this->messages)) {
+        if (php_sapi_name() === "cli") {
+            if (!empty($this->messages)) {
                 $result = "\n\nkreXX messages\n";
                 $result .= "==============\n";
                 foreach ($this->messages as $message) {

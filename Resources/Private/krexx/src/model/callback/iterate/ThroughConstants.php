@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Model\Simple;
  *
  * @package Brainworxx\Krexx\Model\Callback\Iterate
  *
- * @uses array refConst
+ * @uses array data
  *   Array of constants from the class we are analysing.
  * @uses string classname
  *   The classname we are analysing, for code generation purpose.
@@ -62,7 +62,7 @@ class ThroughConstants extends AbstractCallback
         // We do not need to check the recursionHandler, this is class
         // internal stuff. Is it even possible to create a recursion here?
         // Iterate through.
-        foreach ($this->parameters['refConst'] as $k => &$v) {
+        foreach ($this->parameters['data'] as $k => &$v) {
             $model = new Simple($this->storage);
             $model->setData($v)
                 ->setName($k)

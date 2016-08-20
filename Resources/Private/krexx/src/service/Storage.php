@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Service;
 
+use Brainworxx\Krexx\Controller\OutputActions;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
@@ -111,6 +112,13 @@ class Storage
     public $chunks;
 
     /**
+     * Our output controller.
+     *
+     * @var OutputActions
+     */
+    public $controller;
+
+    /**
      * Initializes all needed classes.
      *
      * @param $krexxDir
@@ -131,10 +139,53 @@ class Storage
         $this->codegenHandler = new Codegen($this);
         // Initializes the messages.
         $this->messages = new Messages($this);
-        // Initializesd the chunks handler
+        // Initializes the chunks handler.
         $this->chunks = new Chunks($this);
+        // Initializes the controller.
+        $this->controller = new OutputActions($this);
         // Initializes the render class.
         $this->initRendrerer();
+        // Check our environment.
+        $this->checkEnvironmentAction($krexxDir);
+    }
+
+    /**
+     * Yes, we do have an output here. We are generation messages to
+     * inform the dev that the environment is not as it should be.
+     *
+     * @param string $krexxDir
+     *   The directory where kreXX ist installed.
+     */
+    protected function checkEnvironmentAction($krexxDir)
+    {
+        // Check chunk folder is writable.
+        // If not, give feedback!
+        $chunkFolder = $krexxDir . 'chunks' . DIRECTORY_SEPARATOR;
+        if (!is_writeable($chunkFolder)) {
+            $this->messages->addMessage(
+                'Chunksfolder ' . $chunkFolder . ' is not writable!' .
+                'This will increase the memory usage of kreXX significantly!',
+                'critical'
+            );
+            $this->messages->addKey('protected.folder.chunk', array($chunkFolder));
+            // We can work without chunks, but this will require much more memory!
+            $this->chunks->setUseChunks(false);
+        }
+
+        // Check if the log folder is writable.
+        // If not, give feedback!
+        $logFolder = $krexxDir . $this->config->getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR;
+        if (!is_writeable($logFolder)) {
+            $this->messages->addMessage('Logfolder ' . $logFolder . ' is not writable !', 'critical');
+            $this->messages->addKey('protected.folder.log', array($logFolder));
+        }
+        // At this point, we won't inform the dev right away. The error message
+        // will pop up, when kreXX is actually displayed, no need to bother the
+        // dev just now.
+        // We might need to register our fatal error handler.
+        if ($this->config->getConfigValue('backtraceAndError', 'registerAutomatically') === 'true') {
+            $this->controller->registerFatalAction();
+        }
     }
 
     /**
@@ -145,6 +196,8 @@ class Storage
         // We need to reset our recursion handler, because
         // the content of classes might change with another run.
         $this->recursionHandler = new Recursion($this);
+        // We also reset our emergency handler timer.
+        $this->emergencyHandler->resetTimer();
     }
 
     /**
@@ -197,7 +250,7 @@ class Storage
                     // Escape it.
                     $contentArray[$currentLineNo] = $this->encodeString($contentArray[$currentLineNo], true);
 
-                    if ($currentLineNo == $highlight) {
+                    if ($currentLineNo === $highlight) {
                         $result .= $this->render->renderBacktraceSourceLine(
                             'highlight',
                             $realLineNo,
@@ -285,7 +338,7 @@ class Storage
                 // We are displaying sourcecode, so we need
                 // to do some formatting.
                 $sortingCallback = function ($n) {
-                    if ($n == 9) {
+                    if ($n === 9) {
                         // Replace TAB with two spaces, it's better readable that way.
                         $result = '&nbsp;&nbsp;';
                     } else {

@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Service\View;
 
-use Brainworxx\Krexx\Controller\OutputActions;
 use Brainworxx\Krexx\Model\Simple;
 
 /**
@@ -97,7 +96,7 @@ class Render extends Help
         // Generating our code and adding the Codegen button, if there is something
         // to generate.
         $gensource = $this->storage->codegenHandler->generateSource($model);
-        if ($gensource == '') {
+        if (empty($gensource)) {
             // Remove the markers, because here is nothing to add.
             $template = str_replace('{gensource}', '', $template);
             $template = str_replace('{sourcebutton}', '', $template);
@@ -142,7 +141,7 @@ class Render extends Help
         // something to generate.
         $gencode = $this->storage->codegenHandler->generateSource($model);
 
-        if ($gencode == '') {
+        if (empty($gencode)) {
             // Remove the markers, because here is nothing to add.
             $template = str_replace('{gensource}', '', $template);
             $template = str_replace('{sourcebutton}', '', $template);
@@ -154,7 +153,7 @@ class Render extends Help
         // Replace our stuff in the partial.
         $template = str_replace('{name}', $model->getName(), $template);
         $template = str_replace('{domId}', $model->getDomid(), $template);
-        $template = str_replace('{value}', $model->getNormal(), $template);
+        $template = str_replace('{normal}', $model->getType(), $template);
         $template = str_replace('{connector1}', $this->renderConnector($model->getConnector1()), $template);
 
         return str_replace('{connector2}', $this->renderConnector($model->getConnector2()), $template);
@@ -179,7 +178,7 @@ class Render extends Help
         // Replace our stuff in the partial.
         $template = str_replace('{version}', $this->storage->config->version, $template);
         $template = str_replace('{doctype}', $doctype, $template);
-        $template = str_replace('{KrexxCount}', OutputActions::$KrexxCount, $template);
+        $template = str_replace('{KrexxCount}', $this->storage->emergencyHandler->getKrexxCount(), $template);
         $template = str_replace('{headline}', $headline, $template);
         $template = str_replace('{cssJs}', $cssJs, $template);
         $template = str_replace('{KrexxId}', $this->storage->recursionHandler->getMarker(), $template);
@@ -322,7 +321,7 @@ class Render extends Help
         // something to generate.
         $gencode = $this->storage->codegenHandler->generateSource($model);
         $template = str_replace('{gensource}', $gencode, $template);
-        if ($gencode == '.stop.' || empty($gencode)) {
+        if ($gencode === '.stop.' || empty($gencode)) {
             // Remove the button marker, because here is nothing to add.
             $template = str_replace('{sourcebutton}', '', $template);
         } else {
@@ -392,7 +391,7 @@ class Render extends Help
         $element = str_replace('{value}', $model->getName(), $element);
 
         // For dropdown elements, we need to render the options.
-        if ($model->getType() == 'Select') {
+        if ($model->getType() === 'Select') {
             $option = $this->getTemplateFileContent('single' . $model->getType() . 'Options');
 
             // Here we store what the list of possible values.
@@ -421,7 +420,7 @@ class Render extends Help
             // Paint it.
             $options = '';
             foreach ($valueList as $value) {
-                if ($value == $model->getName()) {
+                if ($value === $model->getName()) {
                     // This one is selected.
                     $selected = 'selected="selected"';
                 } else {
@@ -496,7 +495,7 @@ class Render extends Help
         $template = str_replace('{errstr}', $errstr, $template);
         $template = str_replace('{file}', $errfile, $template);
         $template = str_replace('{source}', $source, $template);
-        $template = str_replace('{KrexxCount}', OutputActions::$KrexxCount, $template);
+        $template = str_replace('{KrexxCount}', $this->storage->emergencyHandler->getKrexxCount(), $template);
 
         return str_replace('{line}', $errline, $template);
     }

@@ -44,7 +44,7 @@ use Brainworxx\Krexx\Model\Simple;
  *
  * @package Brainworxx\Krexx\Model\Callback\Analysis
  *
- * @uses array stepData
+ * @uses array data
  *   The singe step from a backtrace.
  */
 class BacktraceStep extends AbstractCallback
@@ -60,7 +60,7 @@ class BacktraceStep extends AbstractCallback
         $output = '';
         // We are handling the following values here:
         // file, line, function, object, type, args, sourcecode.
-        $stepData = $this->parameters['stepData'];
+        $stepData = $this->parameters['data'];
         // File.
         if (isset($stepData['file'])) {
             $fileModel = new Simple($this->storage);

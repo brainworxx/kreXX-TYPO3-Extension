@@ -374,7 +374,7 @@
 
             // Are we already having some results?
             if (typeof results[instance] != "undefined") {
-                if (typeof results[instance][searchtext] == "undefined") {
+                if (typeof results[instance][searchtext] === "undefined") {
                     refreshResultlist();
                 }
             }
@@ -383,7 +383,7 @@
             }
 
             // Set the pointer to the next or previous element
-            if (direction == 'forward') {
+            if (direction === 'forward') {
                 results[instance][searchtext]['pointer']++;
             }
             else {
@@ -391,8 +391,8 @@
             }
 
             // Do we have an element?
-            if (typeof results[instance][searchtext]['data'][results[instance][searchtext]['pointer']] == "undefined") {
-                if (direction == 'forward') {
+            if (typeof results[instance][searchtext]['data'][results[instance][searchtext]['pointer']] === "undefined") {
+                if (direction === 'forward') {
                     // There is no next element, we go back to the first one.
                     results[instance][searchtext]['pointer'] = 0;
                 }
@@ -543,7 +543,7 @@
             var lastValue = container[0].scrollTop;
             interval = setInterval(function () {
                 container[0].scrollTop += step;
-                if (Math.abs(container[0].scrollTop - destination) <= Math.abs(step) || container[0].scrollTop == lastValue) {
+                if (Math.abs(container[0].scrollTop - destination) <= Math.abs(step) || container[0].scrollTop === lastValue) {
                     // We are here now, the next step would take us too far.
                     // So we jump there right now and then clear the interval.
                     container[0].scrollTop = destination;
@@ -622,7 +622,7 @@
             domid = kdt.getDataset(el, 'domid');
             sourcedata = kdt.getDataset(el, 'source');
 
-            if (typeof sourcedata !== 'undefined' && sourcedata == '. . .') {
+            if (typeof sourcedata !== 'undefined' && sourcedata === '. . .') {
                 if (typeof domid !== 'undefined') {
                     // We need to get a new el, because we are facing a recursion, and the
                     // current path is not really reachable.
@@ -637,16 +637,16 @@
                 // We must check if our value is actually reachable.
                 // '. . .' means it is not reachable,
                 // we will stop right here and display a comment stating this.
-                if (sourcedata == '. . .') {
+                if (sourcedata === '. . .') {
                     result = '// Value is either protected or private.<br /> // Sorry . . ';
                     break;
                 }
                 // Check if we are facing a .stop. instruction
-                 if (sourcedata == '.stop.') {
+                 if (sourcedata === '.stop.') {
                      // Return, what we've got so far.
                      break;
                  }
-                if (sourcedata == '. . .') {
+                if (sourcedata === '. . .') {
 
                 }
                 // We're good, value can be reached!
@@ -660,7 +660,7 @@
         // 3. Add the text
         console.log(result);
         codedisplay.innerHTML = '<div class="kcode-inner">' + result + '</div>';
-        if (codedisplay.style.display == 'none') {
+        if (codedisplay.style.display === 'none') {
             codedisplay.style.display = '';
             kdt.selectText(codedisplay);
         }
@@ -768,7 +768,7 @@
                 }
             }
         }
-        if (counter == 0) {
+        if (counter === 0) {
             // We have no data. Tell the user that there is nothing to see.
             html = '<tr><td>No data available for this item.</td><td>Sorry.</td></tr>';
         }

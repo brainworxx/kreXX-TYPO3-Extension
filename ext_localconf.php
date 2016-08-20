@@ -35,45 +35,56 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-
-if ((int)TYPO3_version < 7) {
-    $filename = t3lib_extMgm::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
-} else {
-    $filename = ExtensionManagementUtility::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
+$registered = false;
+$filename = 'sdfsdfs';
+// 6.0 ++
+if (class_exists('\TYPO3\CMS\Core\Utility\ExtensionManagementUtility')) {
+    $filename = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
+    $registered = true;
 }
+// The old way.
+if (class_exists('t3lib_extMgm') && !$registered) {
+    $filename = t3lib_extMgm::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
+}
+
 if (file_exists($filename) && !class_exists('Krexx')) {
     // We load the kreXX library.
-    // 7.3 is able to autoload krexx before this point.
+    // 7.3+ is able to autoload krexx before this point.
     // We will not include it again!
     include_once $filename;
 }
 
-// TYPO3 7.3 / 7.4 does not autoload our classes anymore, so we do this here.
-if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController') && (int)TYPO3_version > 6) {
-    include_once(ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/CompatibilityController.php'));
-}
-if (!class_exists('Tx_Includekrexx_Controller_FormConfigController') && (int)TYPO3_version > 6) {
-    include_once(ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/FormConfigController.php'));
-}
-if (!class_exists('Tx_Includekrexx_Controller_LogController') && (int)TYPO3_version > 6) {
-    include_once(ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/LogController.php'));
-}
-if (!class_exists('Tx_Includekrexx_Controller_HelpController') && (int)TYPO3_version > 6) {
-    include_once(ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/HelpController.php'));
-}
-if (!class_exists('Tx_Includekrexx_Controller_ConfigController') && (int)TYPO3_version > 6) {
-    include_once(ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/ConfigController.php'));
-}
-if (!class_exists('Tx_Includekrexx_Controller_CookieController') && (int)TYPO3_version > 6) {
-    include_once(ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/CookieController.php'));
-}
-if (!class_exists('Tx_Includekrexx_ViewHelpers_MessagesViewHelper') && (int)TYPO3_version > 6) {
-    include_once(ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/MessagesViewHelper.php'));
-}
-if (!class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper') && (int)TYPO3_version > 6) {
-    include_once(ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/DebugViewHelper.php'));
-}
-if (!class_exists('\\Tx_Includekrexx_ViewHelpers\\MessagesViewHelper') && (int)TYPO3_version >= 8) {
-    include_once(ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/MessagesViewHelper8.php'));
+// Do some autoloading stuff which may or may not be done by TYPO3 automatically.
+if (version_compare(TYPO3_version, '7.2' ,'>')) {
+    // TYPO3 7.3 / 7.4 does not autoload our classes anymore, so we do this here.
+    if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
+        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/CompatibilityController.php'));
+    }
+    if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
+        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/FormConfigController.php'));
+    }
+    if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
+        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/LogController.php'));
+    }
+    if (!class_exists('Tx_Includekrexx_Controller_HelpController')) {
+        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/HelpController.php'));
+    }
+    if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
+        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/ConfigController.php'));
+    }
+    if (!class_exists('Tx_Includekrexx_Controller_CookieController')) {
+        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/CookieController.php'));
+    }
+    if (!class_exists('Tx_Includekrexx_ViewHelpers_MessagesViewHelper')) {
+        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/MessagesViewHelper.php'));
+    }
+    if (!class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
+        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/DebugViewHelper.php'));
+    }
+    if (version_compare(TYPO3_version, '8.0' ,'>=')) {
+        if (!class_exists('\\Tx_Includekrexx_ViewHelpers\\MessagesViewHelper')) {
+            include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/MessagesViewHelper8.php'));
+        }
+    }
+
 }
