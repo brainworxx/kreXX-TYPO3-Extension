@@ -33,7 +33,7 @@
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
-// The mainproblem with 7.0 is, that compatibility6 may or may not be installed.
+// The main problem with 7.0 is, that compatibility6 may or may not be installed.
 // If not, I have to put his thing here, hoping not to break anything!
 if (!class_exists('Tx_Fluid_Core_ViewHelper_AbstractViewHelper')) {
     /**
@@ -53,33 +53,62 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  * Class Tx_Includekrexx_ViewHelpers_DebugViewHelper
  *
  * In case that anybody is actually reading this:
- * Right now, this is just a proof of concept, but we've got plans for it.
- * The <f:debug> could be a lot better, because it does not show everything
- * accessible inside the fluid template. Getter functions in classes which
- * are not declared via TCA will not show up, but can be polled for data.
- * Also, it contains a debug-output (just like kreXX ;-) ) which may be
- * confusing for people.
+ * Right now, this is just a proof of concept.
  *
  * In case that you are really desperate, use it. It gives the actual PHP
  * stuff inside the template. Most of this stuff is not reachable from fluid,
  * so we will implement a filter later on.
  *
+ * @see https://github.com/brainworxx/kreXX-TYPO3-Extension/issues/4
+ * @see https://forge.typo3.org/issues/72950
+ *
  * @usage
  *   {namespace krexx=Tx_Includekrexx_ViewHelpers}
  *   <krexx:debug>{_all}</krexx:debug>
+ *   or
+ *   <krexx:debug value="{my: 'value', to: 'analyse'}" />
+ *   Use this part if you don't want fluid to escape your string or if you are
+ *   stitching together an array.
  */
 class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper
 {
 
     /**
+     * {@inheritdoc}
+     */
+    public function initializeArguments()
+    {
+        $this->registerArgument('value', 'mixed', 'The variable we want to analyse.', false);
+    }
+
+    /**
      * A wrapper for kreXX();
+     *
+     * @todo
+     *   Analyse rendering context for additional data.
      *
      * @return string
      *   Returns an empty string.
      */
     public function render()
     {
-        krexx($this->renderChildren());
+        $found  = false;
+        if (!is_null($this->arguments['value'])) {
+            krexx($this->arguments['value']);
+            $found = true;
+        }
+
+        $children = $this->renderChildren();
+        if (!is_null($children)) {
+            krexx($children);
+            $found = true;
+        }
+
+        if (!$found) {
+            // Both are NULL, we must tell the dev!
+            krexx(null);
+        }
+
         return '';
     }
 }
