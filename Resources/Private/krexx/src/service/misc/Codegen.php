@@ -133,9 +133,7 @@ class Codegen
                 case 'contagination':
                     // We simply add the connectors for public access.
                     // Escape the quotes. This is not done by the model.
-                    // To prevent double escaping-slashes, we ned to un-slash it
-                    // first. Vunterslaush anyone?
-                    $name = str_replace('"', '&#034;', addslashes(stripslashes($model->getName())));
+                    $name = str_replace('"', '&#034;', $model->getName());
                     $name = str_replace("'", '&#039;', $name);
 
                     $result = $model->getConnector1() . $name . $connector2;

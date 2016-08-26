@@ -1,4 +1,4 @@
-1.4.3
+2.0.0
 - Added sourcecode to the closure analysis.
 - Prettified the sourcecode display in the smokygrey skin.
 - Change: Removed the code generation for Traversals that can
@@ -11,8 +11,8 @@
   'Krexx::'.
 - Bugfix: Wrong line number in the fatal error handler.
 - Bugfix: Code generation for class constants now works properly.
-- Bugfix: Removed a stupid warning with the glob() function which
-  may occur on some systems.
+- Bugfix: Removed a  warning with the glob() function which may
+  occur on some systems.
 - Bugfix: Added a check to the developer handle tp prevent warnings.
 
 1.4.2

@@ -103,8 +103,14 @@ class Routing
         if (is_object($data) || is_array($data)) {
             if ($this->storage->recursionHandler->isInHive($data)) {
                 // Render recursion.
+                if (is_object($data)) {
+                    $type = get_class($data);
+                } else {
+                    // Must be the globals array.
+                    $type = '$GLOBALS';
+                }
                 $model->setDomid($this->generateDomIdFromObject($data))
-                    ->setType(get_class($data));
+                    ->setType($type);
                 $result = $this->storage->render->renderRecursion($model);
                 $this->storage->emergencyHandler->downOneNestingLevel();
                 return $result;

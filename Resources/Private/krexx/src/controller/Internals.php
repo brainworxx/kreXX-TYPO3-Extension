@@ -155,6 +155,8 @@ class Internals
     {
         // Retrieve the call from the sourcecode file.
         $source = file($file);
+        // Fallback to '. . .'.
+        $varname = '. . .';
 
         // Now that we have the line where it was called, we must check if
         // we have several commands in there.
@@ -167,10 +169,7 @@ class Internals
         }
         // I have no idea how to determine the actual call of krexx if we
         // are dealing with several calls per line.
-        if (count($possibleCommands) > 1) {
-            // Fallback to '. . .'.
-            $varname = '. . .';
-        } else {
+        if (count($possibleCommands) === 1) {
             $sourceCall = reset($possibleCommands);
 
             // Now that we have our actual call, we must remove the krexx-part
@@ -183,6 +182,8 @@ class Internals
                 'Krexx::' . $this->storage->config->getDevHandler()
             );
             foreach ($possibleFunctionnames as $funcname) {
+                // This little baby tries to resolve everything inside the
+                // brackets of the kreXX call.
                 preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', $sourceCall, $name);
                 if (isset($name[1])) {
                     $varname = $name[1];
@@ -190,6 +191,8 @@ class Internals
                 }
             }
         }
+
+        $varname = $this->storage->encodeString(trim($varname, " \t\n\r\0\x0B'\""));
 
         // Check if we have a value.
         if (empty($varname)) {

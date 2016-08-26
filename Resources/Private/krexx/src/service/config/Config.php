@@ -163,6 +163,11 @@ class Config extends Fallback
         // so the dev can correct them, in case there are wrong values.
         if (isset($_COOKIE['KrexxDebugSettings'])) {
             $cookieConfig = json_decode($_COOKIE['KrexxDebugSettings'], true);
+            if (!is_array($cookieConfig)) {
+                // Looks like we do not have a valid config here.
+                $cookieConfig = array();
+                $this->storage->messages->addMessage($this->storage->render->getHelp('configErrorLocal'));
+            }
         }
 
         // We must remove the cookie settings for which we do not accept

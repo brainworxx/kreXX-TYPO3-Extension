@@ -267,5 +267,5 @@ class Fallback
      *
      * @var string
      */
-    public $version = '1.4.3 dev';
+    public $version = '2.0.0 dev';
 }

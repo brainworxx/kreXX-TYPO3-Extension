@@ -198,6 +198,8 @@ class Storage
         $this->recursionHandler = new Recursion($this);
         // We also reset our emergency handler timer.
         $this->emergencyHandler->resetTimer();
+        // Initialize the code generation.
+        $this->codegenHandler = new Codegen($this);
     }
 
     /**

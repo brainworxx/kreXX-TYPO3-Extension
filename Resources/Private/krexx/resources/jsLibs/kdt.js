@@ -39,8 +39,7 @@
      * @namespace kdt
      *   Collection of js functions.
      */
-    function kdt() {
-    }
+    function kdt() {}
 
     /**
      * Gets all parents of an element which has the specified class.
@@ -528,9 +527,9 @@
         var settings = kdt.readSettings('KrexxDebugSettings');
         // Get new settings from element.
         /** @type {string|Number} */
-        var newValue = this.value;
+        var newValue = this.value.replace('"', '').replace("'", '');
         /** @type {string} */
-        var valueName = this.name;
+        var valueName = this.name.replace('"', '').replace("'", '');
         settings[valueName] = newValue;
 
         // Save it.
