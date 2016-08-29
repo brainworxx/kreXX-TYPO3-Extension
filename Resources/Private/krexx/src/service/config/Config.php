@@ -34,8 +34,6 @@
 
 namespace Brainworxx\Krexx\Service\Config;
 
-use Brainworxx\Krexx\Controller\OutputActions;
-
 /**
  * Access the debug settings here.
  *
@@ -584,7 +582,8 @@ class Config extends Fallback
                 case 'Local open function':
                     // The Developer handle, we check it for values that are not
                     // a-z and A-Z.
-                    if (empty(preg_match('/[^a-zA-Z]/', $value))) {
+                    $devHandle = preg_match('/[^a-zA-Z]/', $value);
+                    if (empty($devHandle)) {
                         $result = true;
 
                     } else {

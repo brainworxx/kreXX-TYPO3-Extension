@@ -96,7 +96,7 @@ class Krexx
         include_once $krexxDir . 'src/model/callback/analyse/BacktraceStep.php';
         include_once $krexxDir . 'src/model/callback/analyse/ConfigSection.php';
         include_once $krexxDir . 'src/model/callback/analyse/Debug.php';
-        include_once $krexxDir . 'src/model/callback/analyse/Object.php';
+        include_once $krexxDir . 'src/model/callback/analyse/Objects.php';
         include_once $krexxDir . 'src/model/callback/iterate/ThroughArray.php';
         include_once $krexxDir . 'src/model/callback/iterate/ThroughConfig.php';
         include_once $krexxDir . 'src/model/callback/iterate/ThroughConstants.php';

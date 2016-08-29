@@ -48,7 +48,7 @@ use Brainworxx\Krexx\Analysis\Flection;
  * @uses string name
  *   The key of the class from the object/array holding this one.
  */
-class Object extends AbstractCallback
+class Objects extends AbstractCallback
 {
     /**
      * Starts the dump of an object.

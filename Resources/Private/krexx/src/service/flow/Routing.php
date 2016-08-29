@@ -438,7 +438,7 @@ class Routing
             ->addParameter('name', $model->getName())
             ->setAdditional(get_class($model->getData()))
             ->setDomid($this->generateDomIdFromObject($model->getData()))
-            ->initCallback('Analyse\Object');
+            ->initCallback('Analyse\Objects');
 
         // Output data from the class.
         $output .= $this->storage->render->renderExpandableChild($model);

@@ -83,11 +83,12 @@ class ThroughMethods extends AbstractCallback
 
             // Get declaration place.
             $declaringClass = $reflection->getDeclaringClass();
-            if (is_null($declaringClass->getFileName()) || empty($declaringClass->getFileName())) {
+            $filename = $declaringClass->getFileName();
+            if (is_null($filename) || empty($filename)) {
                 $methodData['declared in'] =
                     ":: unable to determine declaration ::\n\nMaybe this is a predeclared class?";
             } else {
-                $methodData['declared in'] = $declaringClass->getFileName() . "\n";
+                $methodData['declared in'] = $filename . "\n";
                 $methodData['declared in'] .= 'in class: ' .$declaringClass->getName() . "\n";
                 $methodData['declared in'] .= 'in line: ' . $reflection->getStartLine();
             }
