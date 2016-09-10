@@ -77,11 +77,18 @@ class Config extends Fallback
         parent::__construct($storage, $krexxdir);
         $this->security = new Security($storage, $krexxdir);
 
-        // Loading the configuration.
+        // Loading the settings.
         foreach ($this->configFallback as $section => $settings) {
             foreach ($settings as $name => $setting) {
                 $this->getConfigValue($section, $name);
             }
+        }
+
+        // Now that our settings are in place, we need to check the
+        // ip to decide if we need to deactivate kreXX.
+        if (!$this->security->isAllowedIp($this->getSetting('iprange'))) {
+            // No kreXX for you!
+            $this->setDisabled(true);
         }
     }
 

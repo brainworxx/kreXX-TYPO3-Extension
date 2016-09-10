@@ -306,6 +306,19 @@ class Security extends Fallback
                 }
                 break;
 
+            case 'iprange':
+                // We expect an array of ip's after an explode.
+                // But we are not vaidationg every singe one of them.
+                // We are just making sure that we get a list.
+                $result = !empty(trim($value));
+                if (!$result) {
+                    $this->storage->messages->addMessage(
+                        $this->storage->messages->getHelp('configErrorIpList')
+                    );
+                    $this->storage->messages->addKey('runtime.iprange.error');
+                }
+                break;
+
             default:
                 // Unknown settings,
                 // return false, just in case.
@@ -418,5 +431,41 @@ class Security extends Fallback
         }
         // Nothing found?
         return true;
+    }
+
+    /**
+     * Checks if the current client ip is allowed.
+     *
+     * @author Chin Leung
+     * @see https://stackoverflow.com/questions/35559119/php-ip-address-whitelist-with-wildcards
+     *
+     * @param string $whitelist
+     *   The ip whitelist.
+     *
+     * @return bool
+     *   Whether the current client ip is allowed or not.
+     */
+    public function isAllowedIp($whitelist){
+
+        $whitelist = explode(',', $whitelist);
+
+        $remote = $_SERVER['REMOTE_ADDR'];
+
+        if (in_array($remote, $whitelist)) {
+            // If the ip is matched, return true.
+            return true;
+        } else {
+            // Check the wildcards.
+            foreach($whitelist as $ip){
+                $ip = trim($ip);
+                $wildcardPos = strpos($ip, "*");
+                # Check if the ip has a wildcard
+                if($wildcardPos !== false && substr($remote, 0, $wildcardPos) . "*" == $ip) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

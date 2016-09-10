@@ -79,6 +79,7 @@ class Fallback
     public $configFallback = array(
         'runtime' => array(
             'disabled' => 'false',
+            'iprange' => '*',
             'detectAjax' => 'true',
             'level' => '5',
             'maxCall' => '10',
@@ -87,6 +88,7 @@ class Fallback
             'skin' => 'smokygrey',
             'destination' => 'frontend',
             'maxfiles' => '10',
+
         ),
         'properties' => array(
             'analyseProtected' => 'false',
@@ -175,6 +177,10 @@ class Fallback
             'type' => 'Select',
             'editable' => 'true',
         ),
+        'iprange' => array(
+            'type' => 'None',
+            'editable' => 'false',
+        ),
         'Local open function' => array(
             'type' => 'Input',
             'editable' => 'true',
@@ -194,6 +200,7 @@ class Fallback
         'destination',
         'maxfiles',
         'debugMethods',
+        'iprange',
     );
 
     /**

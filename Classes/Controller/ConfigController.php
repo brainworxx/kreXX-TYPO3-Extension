@@ -97,6 +97,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                 'analyseProtectedMethods' => $this->LLL('analyseProtectedMethods'),
                 'analysePrivateMethods' => $this->LLL('analysePrivateMethods'),
                 'analyseConstants' => $this->LLL('analyseConstants'),
+                'iprange' => $this->LLL('iprange'),
             );
 
 
@@ -132,6 +133,10 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
             $value['runtime']['disabled'] = $this->krexxStorage->config->getConfigFromFile(
                 'runtime',
                 'disabled'
+            );
+            $value['runtime']['iprange'] = $this->krexxStorage->config->getConfigFromFile(
+                'runtime',
+                'iprange'
             );
             $value['runtime']['detectAjax'] = $this->krexxStorage->config->getConfigFromFile(
                 'runtime',

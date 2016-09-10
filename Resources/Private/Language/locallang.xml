@@ -42,6 +42,7 @@
       <label index="analyseProtectedMethods">Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.</label>
       <label index="analysePrivateMethods">Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.</label>
       <label index="analyseConstants">Here you can toggle, if kreXX shall analyse all constants of a class.</label>
+      <label index="iprange">List of IPs that can trigger kreXX. Wildcards can be used.</label>
 
       <!-- Messages -->
       <label index="file.not.writable">Configuration file %1$s is not writable!</label>
@@ -79,7 +80,8 @@
       <label index="backtraceAndError.backtraceAnalysis.error">Wrong configuration for: "backtraceAndError => backtraceAnalysis"! Expected "normal" or "deep". The configured setting was not applied!</label>
       <label index="runtime.memoryLeft.error">Wrong configuration for: "runtime => memoryLeft"! Expected integer. The configured setting was not applied!</label>
       <label index="runtime.maxRuntime.error">Wrong configuration for: "runtime => maxRuntime"! Expected integer. The configured setting was not applied!</label>
-      <label index="runtime.maxRuntime.error.maximum">Wrong configuration for: "runtime => maxRuntime"! Maximum for this server is: %1$s.  The configured setting was not applied!</label>
+      <label index="runtime.maxRuntime.error.maximum">Wrong configuration for: "runtime => maxRuntime"! Maximum for this server is: %1$s. The configured setting was not applied!</label>
+      <label index="runtime.iprange.error">Wrong configuration for: "output => iprange"! An empty IP list means that noone will be able to use kreXX. The configured setting was not applied!</label>
       <label index="protected.folder.log">Logfolder %1$s is not writable !</label>
       <label index="protected.folder.chunk">Chunksfolder %1$s is not writable!. This will increase the memory usage of kreXX significantly!</label>
 
@@ -125,6 +127,7 @@
       <label index="label.registerAutomatically">Register fatal error handler automatically:</label>
       <label index="label.backtraceAnalysis">Backtrace analysis settings:</label>
       <label index="label.analyseConstants">Analyse constants</label>
+      <label index="label.iprange">IP Range</label>
 
       <!-- Content stuff  Edit Frontend Settings -->
       <label index="editfeconfig.help.headline">Here you can edit the frontend configuration form.</label>

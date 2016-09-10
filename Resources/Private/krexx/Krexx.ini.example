@@ -9,6 +9,10 @@
 disabled = "false"
 ; disabled = "true"
 
+; Comma separated list of ip's taht can access kreXX. Wildcards are supported.
+; iprange = "192.168.0.110,192.168.1.*"
+iprange = "*"
+
 ; Shall kreXX try to detect an AJAX request?
 ; If set to true, there will be no output when AJAX is detected, to prevent a
 ; js error.
@@ -24,18 +28,6 @@ level = "5"
 ; increasing this number might not be a good idea.
 maxCall = "10"
 
-; Setting up the config for the emergency break.
-; When analysing large objects, there is always the chance that you run out of
-; time or memory. kreXX checks these values regularly.
-; kreXX checks regularly how much memory is left. Here you can adjust the amount
-; where it will trigger an emergency break. Unit of measurement is MB.
-memoryLeft = "64"
-
-; kreXX checks during the analysis how much time has elapsed since start. Here
-; you can adjust the amount where it will trigger an emergency break. Unit of
-; measurement is seconds.
-maxRuntime = "60"
-
 ; ------------------------------------------------------------------------------
 [output]
 
@@ -48,9 +40,8 @@ skin = "smokygrey"
 ; destination = "file"
 destination = "frontend"
 
-; Where shall kreXX save it's logfiles and how many files should he keep?
+; how many logfiles will kreXX keep?
 ; Files will only get deleted, when he creates a new one.
-folder = "log"
 maxfiles = "10"
 
 ; ------------------------------------------------------------------------------
@@ -79,7 +70,7 @@ analyseTraversable = "true"
 ; Here you can configure, what analysis will be done on class methods.
 analyseMethodsAtall = "true"
 ; analyseMethodsAtall = "false"
-; analyseMethodsAtall = "true"
+; analyseProtectedMethods = "true"
 analyseProtectedMethods = "false"
 ; analysePrivateMethods = "true"
 analysePrivateMethods = "false"
@@ -104,15 +95,6 @@ debugMethods = "debug,toArray,__toString,toString"
 ; registerAutomatically = "true"
 registerAutomatically = "false"
 
-; Shall kreXX do a "deep" analysis of  the backtrace? Be warned, a deep analysis
-; can produce a lot of output. A "normal" analysis will use the configured
-; settings, while a "deep" analysis will get as much data from the object as
-; possible.
-backtraceAnalysis = "deep"
-; backtraceAnalysis = "normal"
-
-
-
 ; ------------------------------------------------------------------------------
 [feEditing]
 ; Here you can edit the frontend configuration form
@@ -124,8 +106,6 @@ backtraceAnalysis = "deep"
 ; Please note, that the logging  and debug methods options can never be edited
 ; on the frontend.
 skin = "full"
-memoryLeft = "full"
-maxRuntime = "full"
 maxCall = "full"
 disabled = "full"
 detectAjax = "full"
@@ -137,4 +117,3 @@ analyseMethodsAtall = "full"
 analyseProtectedMethods = "full"
 analysePrivateMethods = "full"
 registerAutomatically = "full"
-backtraceAnalysis = "full"

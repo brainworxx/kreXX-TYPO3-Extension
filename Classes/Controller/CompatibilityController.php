@@ -99,6 +99,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             'analysePrivateMethods',
             'registerAutomatically',
             'analyseConstants',
+            'iprange',
         );
 
         /**

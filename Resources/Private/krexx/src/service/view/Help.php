@@ -93,7 +93,8 @@ class Help
         'maxCallReached' => 'Maximum call-level reached. This is the last analysis for this request. To increase this value, please edit:<br />runtime => maxCall.',
         'noSourceAvailable' => 'No sourcecode available. Maybe this was an internal callback (call_user_func for example)?',
         'configErrorHandle' => 'You have entered a wrong developer handle. Please unse only letters between a-z and A-Z.',
-        'configErrorLocal' => 'Coulkd not read the Local Cookie configuration. Sorry :-/',
+        'configErrorLocal' => 'Could not read the Local Cookie configuration. Sorry :-/',
+        'configErrorIpList' => 'Wrong configuration for: "output => iprange"! An empty IP list means that noone will be able to use kreXX. The configured setting was not applied!',
     );
 
     /**

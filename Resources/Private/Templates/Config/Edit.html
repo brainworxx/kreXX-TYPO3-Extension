@@ -13,6 +13,14 @@
         <td><f:form.select id="disabled" name="runtime[disabled]" options="{data.bool}" value="{value.runtime.disabled}" /></td>
         <td><f:form.checkbox id="factory.disabled" name="factory" checked="{data.factory.disabled}" value="1" /><label for="factory.disabled"><f:translate key="factory.settings" /></label></td>
       </tr>
+
+      <tr>
+        <td><label for="iprange"><f:translate key="label.iprange" /></label></td>
+        <td><f:image src="{f:uri.resource(path:'Icons/info.png')}" title="{data.title.iprange}" alt="{data.title.iprange}" /></td>
+        <td><f:form.textfield id="iprange" name="runtime[iprange]"  value="{value.runtime.iprange}" /></td>
+        <td><f:form.checkbox id="factory.iprange" name="factory" checked="{data.factory.iprange}" value="1" /><label for="factory.iprange"><f:translate key="factory.settings" /></label></td>
+      </tr>
+
       <tr>
         <td><label for="detectAjax"><f:translate key="label.detectAjax" /></label></td>
         <td><f:image src="{f:uri.resource(path:'Icons/info.png')}" title="{data.title.detectAjax}" alt="{data.title.detectAjax}" /></td>
