@@ -32,16 +32,16 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Model\Callback\Analyse;
+namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
-use Brainworxx\Krexx\Model\Callback\AbstractCallback;
-use Brainworxx\Krexx\Model\Simple;
-use Brainworxx\Krexx\Analysis\Flection;
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Flection;
 
 /**
  * Object analysis methods.
  *
- * @package Brainworxx\Krexx\Model\Callback\Analysis
+ * @package Brainworxx\Krexx\Analyse\Callback\Analysis
  *
  * @uses object data
  *   The class we are analysing.
@@ -99,7 +99,7 @@ class Objects extends AbstractCallback
         }
 
         // Dumping protected properties.
-        if ($this->storage->config->getConfigValue('properties', 'analyseProtected') === 'true' ||
+        if ($this->storage->config->getSetting('analyseProtected') ||
             $this->storage->codegenHandler->isInScope()) {
             $refProps = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
             usort($refProps, $sortingCallback);
@@ -110,7 +110,7 @@ class Objects extends AbstractCallback
         }
 
         // Dumping private properties.
-        if ($this->storage->config->getConfigValue('properties', 'analysePrivate') === 'true' ||
+        if ($this->storage->config->getSetting('analysePrivate') ||
             $this->storage->codegenHandler->isInScope()) {
             $refProps = $ref->getProperties(\ReflectionProperty::IS_PRIVATE);
             usort($refProps, $sortingCallback);
@@ -120,7 +120,7 @@ class Objects extends AbstractCallback
         }
 
         // Dumping class constants.
-        if ($this->storage->config->getConfigValue('properties', 'analyseConstants') === 'true') {
+        if ($this->storage->config->getSetting('analyseConstants')) {
             $output .= $this->getReflectionConstantsData($ref);
         }
 
@@ -128,7 +128,7 @@ class Objects extends AbstractCallback
         $output .= $this->getMethodData($data);
 
         // Dumping traversable data.
-        if ($this->storage->config->getConfigValue('properties', 'analyseTraversable') === 'true') {
+        if ($this->storage->config->getSetting('analyseTraversable')) {
             $output .= $this->getTraversableData($data, $name);
         }
 
@@ -156,15 +156,15 @@ class Objects extends AbstractCallback
         $protected = array();
         $private = array();
         $ref = new \ReflectionClass($data);
-        if ($this->storage->config->getConfigValue('methods', 'analyseMethodsAtall') === 'true') {
+        if ($this->storage->config->getSetting('analyseMethodsAtall')) {
             $public = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
 
-            if ($this->storage->config->getConfigValue('methods', 'analyseProtectedMethods') === 'true' ||
+            if ($this->storage->config->getSetting('analyseProtectedMethods') ||
                 $this->storage->codegenHandler->isInScope()) {
                 $protected = $ref->getMethods(\ReflectionMethod::IS_PROTECTED);
             }
 
-            if ($this->storage->config->getConfigValue('methods', 'analysePrivateMethods') === 'true' ||
+            if ($this->storage->config->getSetting('analysePrivateMethods') ||
                 $this->storage->codegenHandler->isInScope()) {
                 $private = $ref->getMethods(\ReflectionMethod::IS_PRIVATE);
             }
@@ -178,7 +178,7 @@ class Objects extends AbstractCallback
                 return strcmp($a->name, $b->name);
             };
             usort($methods, $sortingCallback);
-            $model = new Simple($this->storage);
+            $model = new Model($this->storage);
             $model->setName('Methods')
                 ->setType('class internals')
                 ->addParameter('data', $methods)
@@ -208,12 +208,12 @@ class Objects extends AbstractCallback
     {
         $output = '';
 
-        $funcList = explode(',', $this->storage->config->getConfigValue('methods', 'debugMethods'));
+        $funcList = explode(',', $this->storage->config->getSetting('debugMethods'));
         foreach ($funcList as $funcName) {
             if (is_callable(array(
                     $data,
                     $funcName,
-                )) && $this->storage->config->isAllowedDebugCall($data, $funcName)
+                )) && $this->storage->config->security->isAllowedDebugCall($data, $funcName)
             ) {
                 $foundRequired = false;
                 // We need to check if this method actually exists. Just because it is
@@ -255,7 +255,7 @@ class Objects extends AbstractCallback
                         // Do nothing.
                     }
                     if (isset($result)) {
-                        $model = new Simple($this->storage);
+                        $model = new Model($this->storage);
                         $model->setName($funcName)
                             ->setType('debug method')
                             ->setAdditional('. . .')
@@ -322,7 +322,7 @@ class Objects extends AbstractCallback
                 $connector2 = '. . .';
             }
 
-            $model = new Simple($this->storage);
+            $model = new Model($this->storage);
             $parameter = iterator_to_array($data);
             $model->setName($name)
                 ->setType('Foreach')
@@ -353,7 +353,7 @@ class Objects extends AbstractCallback
 
         if (!empty($refConst)) {
             // We've got some values, we will dump them.
-            $model = new Simple($this->storage);
+            $model = new Model($this->storage);
             $classname =$ref->getName();
             // We need to set al least one connector here to activate
             // code generation, even if it is a space.
@@ -389,7 +389,7 @@ class Objects extends AbstractCallback
     {
         // We are dumping public properties direct into the main-level, without
         // any "abstraction level", because they can be accessed directly.
-        $model = new Simple($this->storage);
+        $model = new Model($this->storage);
         $model->addParameter('data', $refProps)
             ->addParameter('ref', $ref)
             ->addParameter('orgObject', $data)

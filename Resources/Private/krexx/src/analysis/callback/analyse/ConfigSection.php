@@ -32,15 +32,15 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Model\Callback\Analyse;
+namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
-use Brainworxx\Krexx\Model\Callback\AbstractCallback;
-use Brainworxx\Krexx\Model\Simple;
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Configuration "analysis" methods. Meh, naming conventions suck sometimes.
  *
- * @package Brainworxx\Krexx\Model\Callback\Analysis
+ * @package Brainworxx\Krexx\Analyse\Callback\Analysis
  *
  * @uses array data
  *   The configuration section we are rendering
@@ -59,31 +59,36 @@ class ConfigSection extends AbstractCallback
      */
     public function callMe()
     {
-        $source = $this->parameters['source'];
         $sectionOutput = '';
-        foreach ($this->parameters['data'] as $parameterName => $parameterValue) {
+        foreach ($this->parameters['data'] as $name => $setting) {
             // Render the single value.
             // We need to find out where the value comes from.
-            $config = $this->storage->config->getFeConfig($parameterName);
-            $editable = $config[0];
-            $type = $config[1];
+            $value = $setting->getValue();
+            if ($setting->getType() != 'None') {
+                // We need to re-translate booleans to something the
+                // frontend can understand.
+                if ($value === true) {
+                    $value = 'true';
+                }
+                if ($value === false) {
+                    $value = 'false';
+                }
 
-            if ($type != 'None') {
-                $model = new Simple($this->storage);
-                if ($editable) {
-                    $model->setData($parameterName)
-                        ->setName($parameterValue)
-                        ->setNormal($source[$parameterName])
-                        ->setType($type)
-                        ->setHelpid($parameterName);
+                $model = new Model($this->storage);
+                if ($setting->getEditable()) {
+                    $model->setData($name)
+                        ->setName($value)
+                        ->setNormal($setting->getSource())
+                        ->setType($setting->getType())
+                        ->setHelpid($name);
 
                     $sectionOutput .= $this->storage->render->renderSingleEditableChild($model);
                 } else {
-                    $model->setData($parameterValue)
-                        ->setName($parameterName)
-                        ->setNormal($parameterValue)
-                        ->setType($source[$parameterName])
-                        ->setHelpid($parameterName);
+                    $model->setData($value)
+                        ->setName($name)
+                        ->setNormal($value)
+                        ->setType($setting->getSource())
+                        ->setHelpid($name);
                     $sectionOutput .= $this->storage->render->renderSingleChild($model);
                 }
             }

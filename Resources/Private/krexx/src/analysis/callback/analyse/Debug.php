@@ -32,15 +32,15 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Model\Callback\Analyse;
+namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
-use Brainworxx\Krexx\Model\Simple;
-use Brainworxx\Krexx\Model\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 
 /**
  * Debug method result analysis methods.
  *
- * @package Brainworxx\Krexx\Model\Callback\Analysis
+ * @package Brainworxx\Krexx\Analyse\Callback\Analysis
  *
  * @uses mixed data
  *   The result from one single configured debug method.
@@ -55,7 +55,7 @@ class Debug extends AbstractCallback
      */
     public function callMe()
     {
-        $model = new Simple($this->storage);
+        $model = new Model($this->storage);
         $model->setData($this->parameters['data'])
             ->setName('result');
         // This could be anything, we need to route it.

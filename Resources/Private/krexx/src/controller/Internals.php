@@ -36,7 +36,7 @@ namespace Brainworxx\Krexx\Controller;
 
 use Brainworxx\Krexx\Service\Misc\Shutdown;
 use Brainworxx\Krexx\Service\Storage;
-use Brainworxx\Krexx\Model\Simple;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Methods for the "controller" that are not directly "actions".
@@ -239,7 +239,7 @@ class Internals
     {
         // Now we need to stitch together the content of the ini file
         // as well as it's path.
-        if (!is_readable($this->storage->config->getPathToIni())) {
+        if (!is_readable($this->storage->config->krexxdir . 'Krexx.ini')) {
             // Project settings are not accessible
             // tell the user, that we are using fallback settings.
             $path = 'Krexx.ini not found, using factory settings';
@@ -248,16 +248,10 @@ class Internals
             $path = 'Current configuration';
         }
 
-        $wholeConfig = $this->storage->config->getWholeConfiguration();
-        $source = $wholeConfig[0];
-        $config = $wholeConfig[1];
-
-        $model = new Simple($this->storage);
+        $model = new Model($this->storage);
         $model->setName($path)
-            ->setType($this->storage->config->getPathToIni())
+            ->setType($this->storage->config->krexxdir . 'Krexx.ini')
             ->setHelpid('currentSettings')
-            ->addParameter('data', $config)
-            ->addParameter('source', $source)
             ->initCallback('Iterate\ThroughConfig');
 
         $configOutput = $this->storage->render->renderExpandableChild($model, $isExpanded);
@@ -277,7 +271,7 @@ class Internals
         $css = $this->storage->getFileContents(
             $krexxDir .
             'resources/skins/' .
-            $this->storage->config->getConfigValue('output', 'skin') .
+            $this->storage->config->getSetting('skin') .
             '/skin.css'
         );
         // Remove whitespace.
@@ -292,7 +286,7 @@ class Internals
         $js = $this->storage->getFileContents($jsFile);
 
         // Krexx.js is comes directly form the template.
-        $path = $krexxDir . 'resources/skins/' . $this->storage->config->getConfigValue('output', 'skin');
+        $path = $krexxDir . 'resources/skins/' . $this->storage->config->getSetting('skin');
         if (is_readable($path . '/krexx.min.js')) {
             $jsFile = $path . '/krexx.min.js';
         } else {

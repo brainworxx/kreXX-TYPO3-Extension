@@ -110,7 +110,7 @@ class Shutdown
         // Every output is split into 4 chunk strings (header, messages,
         // data, footer).
         foreach ($this->chunkStrings as $chunkString) {
-            if ($this->storage->config->getConfigValue('output', 'destination') === 'file') {
+            if ($this->storage->config->getSetting('destination') === 'file') {
                 // Save it to a file.
                 $this->storage->chunks->saveDechunkedToFile($chunkString);
             } else {

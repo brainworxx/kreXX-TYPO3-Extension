@@ -34,7 +34,8 @@
 
 namespace Brainworxx\Krexx\Service\View;
 
-use Brainworxx\Krexx\Model\Simple;
+use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Storage;
 
 /**
  * Render methods.
@@ -44,20 +45,38 @@ use Brainworxx\Krexx\Model\Simple;
  *
  * @package Brainworxx\Krexx\Service\View
  */
-class Render extends Help
+class Render
 {
+
+    /**
+     * Here we store all relevant data.
+     *
+     * @var Storage
+     */
+    protected $storage;
+
+    /**
+     * Injects the storage.
+     *
+     * @param Storage $storage
+     *   The storage, where we store the classes we need.
+     */
+    public function __construct(Storage $storage)
+    {
+        $this->storage = $storage;
+    }
     /**
      * Renders a "single child", containing a single not expandable value.
      *
      * Depending on how many characters are in there, it may be toggelable.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The model, which hosts all the data we need.
      *
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderSingleChild(Simple $model)
+    public function renderSingleChild(Model $model)
     {
         // This one is a little bit more complicated than the others,
         // because it assembles some partials and stitches them together.
@@ -66,12 +85,7 @@ class Render extends Help
         $partCallable = '';
         $partExtra = '';
         $data = $model->getData();
-
-        if (strlen($data) > strlen($model->getNormal())) {
-            $extra = true;
-        } else {
-            $extra = false;
-        }
+        $extra = $model->getHasExtras();
 
         if ($extra) {
             // We have a lot of text, so we render this one expandable (yellow box).
@@ -127,13 +141,13 @@ class Render extends Help
      * If the recursion is an object, a click should jump to the original
      * analysis data.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The model, which hosts all the data we need.
      *
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderRecursion(Simple $model)
+    public function renderRecursion(Model $model)
     {
         $template = $this->getTemplateFileContent('recursion');
 
@@ -231,7 +245,7 @@ class Render extends Help
     /**
      * Renders a nest with a anonymous function in the middle.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The model, which hosts all the data we need.
      * @param bool $isExpanded
      *   The only expanded nest is the settings menu, when we render only the
@@ -240,7 +254,7 @@ class Render extends Help
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderNest(Simple $model, $isExpanded = false)
+    public function renderNest(Model $model, $isExpanded = false)
     {
         $template = $this->getTemplateFileContent('nest');
         // Replace our stuff in the partial.
@@ -282,7 +296,7 @@ class Render extends Help
     /**
      * Renders a expandable child with a callback in the middle.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The model, which hosts all the data we need.
      * @param bool $isExpanded
      *   Is this one expanded from the beginning?
@@ -291,7 +305,7 @@ class Render extends Help
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderExpandableChild(Simple $model, $isExpanded = false)
+    public function renderExpandableChild(Model $model, $isExpanded = false)
     {
         // Check for emergency break.
         if (!$this->storage->emergencyHandler->checkEmergencyBreak()) {
@@ -363,7 +377,7 @@ class Render extends Help
                 $this->storage->getFileContents(
                     $this->storage->config->krexxdir .
                     'resources/skins/' .
-                    $this->storage->config->getConfigValue('output', 'skin') .
+                    $this->storage->config->getSetting('skin') .
                     '/' .
                     $what .
                     '.html'
@@ -376,13 +390,13 @@ class Render extends Help
     /**
      * Renders a simple editable child node.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The model, which hosts all the data we need.
      *
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderSingleEditableChild(Simple $model)
+    public function renderSingleEditableChild(Model $model)
     {
         $template = $this->getTemplateFileContent('singleEditableChild');
         $element = $this->getTemplateFileContent('single' . $model->getType());
@@ -401,14 +415,9 @@ class Render extends Help
                     $valueList = array('frontend', 'file');
                     break;
 
-                case "backtraceAnalysis":
-                    // Normal or deep analysis.
-                    $valueList = array('deep', 'normal');
-                    break;
-
                 case "skin":
                     // Get a list of all skin folders.
-                    $valueList = $this->storage->config->getSkinList();
+                    $valueList = $this->getSkinList();
                     break;
 
                 default:
@@ -452,13 +461,13 @@ class Render extends Help
     /**
      * Renders a simple button.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The model, which hosts all the data we need.
      *
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderButton(Simple $model)
+    public function renderButton(Model $model)
     {
         $template = $this->getTemplateFileContent('singleButton');
         $template = str_replace('{help}', $this->renderHelp($model->getHelpid()), $template);
@@ -577,7 +586,7 @@ class Render extends Help
      */
     protected function renderHelp($helpid)
     {
-        $helpText = $this->getHelp($helpid);
+        $helpText = $this->storage->messages->getHelp($helpid);
         if ($helpText != '') {
             return str_replace('{help}', $helpText, $this->getTemplateFileContent('help'));
         } else {
@@ -635,5 +644,28 @@ class Render extends Help
         } else {
             return '';
         }
+    }
+
+    /**
+     * Gets a list of all available skins for the frontend config.
+     *
+     * @return array
+     *   An array with the skinnames.
+     */
+    public function getSkinList()
+    {
+        // Static cache to make it a little bit faster.
+        static $list = array();
+
+        if (empty($list)) {
+            // Get the list.
+            $list = array_filter(glob($this->storage->config->krexxdir . 'resources/skins/*'), 'is_dir');
+            // Now we need to filter it, we only want the names, not the full path.
+            foreach ($list as &$path) {
+                $path = str_replace($this->storage->config->krexxdir . 'resources/skins/', '', $path);
+            }
+        }
+
+        return $list;
     }
 }

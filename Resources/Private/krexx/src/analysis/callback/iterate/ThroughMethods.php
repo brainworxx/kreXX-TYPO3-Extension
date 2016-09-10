@@ -32,15 +32,15 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Model\Callback\Iterate;
+namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
-use Brainworxx\Krexx\Model\Callback\AbstractCallback;
-use Brainworxx\Krexx\Model\Simple;
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Methods analysis methods. :rolleyes:
  *
- * @package Brainworxx\Krexx\Model\Callback\Iterate
+ * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  *
  * @uses array data
  *   Array of reflection methods.
@@ -156,7 +156,7 @@ class ThroughMethods extends AbstractCallback
         }
         // Remove the ',' after the last char.
         $paramList = '<small>' . trim($paramList, ', ') . '</small>';
-        $model = new Simple($this->storage);
+        $model = new Model($this->storage);
         $model->setName($name)
             ->setType($data['declaration keywords'] . ' method')
             ->setConnector1($connector1)

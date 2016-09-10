@@ -53,7 +53,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CookieController')) {
                 $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
             }
 
-            if (!$this->krexxStorage->config->getEnabled()) {
+            if ($this->krexxStorage->config->getSetting('disabled')) {
                 // kreXX will not display anything, if it was disabled via:
                 // - krexx::disable();
                 // - Disable output --> true in the "Edit configuration file menu
@@ -63,7 +63,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CookieController')) {
                 $this->view->assign('is_disabled', false);
             }
 
-            if ($this->krexxStorage->config->getConfigValue('output', 'destination') == 'file') {
+            if ($this->krexxStorage->config->getSetting('destination') == 'file') {
                 // A file output will also prevent the options from popping ou here.
                 // We need to tell the user that there is nothing to see here.
                 $this->view->assign('is_file', true);

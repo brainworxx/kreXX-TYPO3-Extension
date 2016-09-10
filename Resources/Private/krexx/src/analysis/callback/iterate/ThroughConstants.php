@@ -32,59 +32,45 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Model\Callback;
+namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
-use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Abstract class for the callback classes inside the model.
+ * Constant analysis methods.
  *
- * @package Brainworxx\Krexx\Model\Callback
+ * @package Brainworxx\Krexx\Analyse\Callback\Iterate
+ *
+ * @uses array data
+ *   Array of constants from the class we are analysing.
+ * @uses string classname
+ *   The classname we are analysing, for code generation purpose.
  */
-abstract class AbstractCallback
+class ThroughConstants extends AbstractCallback
 {
-
     /**
-     * Here we store all relevant data.
-     *
-     * @var Storage
-     */
-    protected $storage;
-
-    /**
-     * The parameters for the callback.
-     *
-     * @var array
-     */
-    protected $parameters = array();
-
-    /**
-     * The actual callback function for the renderer.
+     * Simply iterate though object constants.
      *
      * @return string
      *   The generated markup.
      */
-    abstract public function callMe();
-
-    /**
-     * Injects the storage.
-     *
-     * @param Storage $storage
-     *   The storage, where we store the classes we need.
-     */
-    public function __construct(Storage $storage)
+    public function callMe()
     {
-        $this->storage = $storage;
-    }
+        $output = '';
 
-    /**
-     * Add callback parameters at class construction.
-     *
-     * @param array $params
-     *   The parameters for the callMe() method.
-     */
-    public function setParams(array &$params)
-    {
-        $this->parameters = $params;
+        // We do not need to check the recursionHandler, this is class
+        // internal stuff. Is it even possible to create a recursion here?
+        // Iterate through.
+        foreach ($this->parameters['data'] as $k => &$v) {
+            $model = new Model($this->storage);
+            $model->setData($v)
+                ->setName($k)
+                ->setConnector1($this->parameters['classname'] . '::');
+            $output .= $this->storage->routing->analysisHub($model);
+        }
+
+        return $output;
+
     }
 }

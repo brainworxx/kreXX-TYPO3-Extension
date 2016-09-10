@@ -76,7 +76,7 @@ class Emergency
      *
      * @var int
      */
-    protected $maxRuntime = 0;
+    protected $maxRuntime = 60;
 
     /**
      * The server memory limit, coming from the php.ini.
@@ -86,11 +86,11 @@ class Emergency
     protected $serverMemoryLimit = 0;
 
     /**
-     * Cached configuration of the minimum leftover memory.
+     * Cached configuration of the minimum leftover memory (MB).
      *
      * @var int
      */
-    protected $minMemoryLeft = 0;
+    protected $minMemoryLeft = 64;
 
     /**
      * The level inside the object/array hierarchy we are in.
@@ -115,10 +115,6 @@ class Emergency
     public function __construct(Storage $storage)
     {
         $this->storage = $storage;
-        // Cache the configured maximum runtime.
-        $this->maxRuntime = (int)$this->storage->config->getConfigValue('runtime', 'maxRuntime');
-        // Cache the configured minimum left memory.
-        $this->minMemoryLeft = (int)$this->storage->config->getConfigValue('runtime', 'memoryLeft');
 
         // Cache the server memory limit.
         $limit = strtoupper(ini_get('memory_limit'));
@@ -220,7 +216,7 @@ class Emergency
      */
     public function checkNesting()
     {
-        return ($this->nestingLevel > (int)$this->storage->config->getConfigValue('runtime', 'level'));
+        return ($this->nestingLevel > (int)$this->storage->config->getSetting('level'));
     }
 
     /**
@@ -255,14 +251,14 @@ class Emergency
     public function checkMaxCall()
     {
         $result = false;
-        $maxCall = (int)$this->storage->config->getConfigValue('runtime', 'maxCall');
+        $maxCall = (int)$this->storage->config->getSetting('maxCall');
         if ($this->krexxCount >= $maxCall) {
             // Called too often, we might get into trouble here!
             $result = true;
         }
         // Give feedback if this is our last call.
         if ($this->krexxCount === $maxCall - 1) {
-            $this->storage->messages->addMessage($this->storage->render->getHelp('maxCallReached'), 'critical');
+            $this->storage->messages->addMessage($this->storage->messages->getHelp('maxCallReached'), 'critical');
         }
         $this->krexxCount++;
         return $result;

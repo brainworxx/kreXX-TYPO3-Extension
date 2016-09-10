@@ -35,7 +35,7 @@
 namespace Brainworxx\Krexx\Controller;
 
 use Brainworxx\Krexx\Errorhandler\Fatal;
-use Brainworxx\Krexx\Model\Simple;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Controller actions (if you want to call them that).
@@ -44,6 +44,21 @@ use Brainworxx\Krexx\Model\Simple;
  */
 class OutputActions extends Internals
 {
+
+    /**
+     * Config for the 'deep' backtrace analysis.
+     *
+     * @var array
+     */
+    protected $configFatal = array(
+        'analyseProtected' => 'true',
+        'analysePrivate' => 'true',
+        'analyseTraversable' => 'true',
+        'analyseConstants' => 'true',
+        'analyseMethodsAtall' => 'true',
+        'analyseProtectedMethods' => 'true',
+        'analysePrivateMethods' => 'true',
+    );
 
     /**
      * Dump information about a variable.
@@ -115,7 +130,7 @@ class OutputActions extends Internals
         }
 
         // Start the magic.
-        $model = new Simple($this->storage);
+        $model = new Model($this->storage);
         $model->setData($data)
             ->setName($caller['varname'])
             ->setConnector2('=');
@@ -132,7 +147,7 @@ class OutputActions extends Internals
 
         // Add the caller as metadata to the chunks class. It will be saved as
         // additional info, in case we are logging to a file.
-        if ($this->storage->config->getConfigValue('output', 'destination') === 'file') {
+        if ($this->storage->config->getSetting('destination') === 'file') {
             $this->storage->chunks->addMetadata($caller);
         }
     }
@@ -148,6 +163,9 @@ class OutputActions extends Internals
         }
 
         $this->storage->reset();
+        // We overwrite the local settings, so we can get as much info from
+        // analysed objects as possible.
+        $this->storage->config->overwriteLocalSettings($this->configFatal);
 
         // Find caller.
         $caller = $this->findCaller();
@@ -177,10 +195,12 @@ class OutputActions extends Internals
 
         // Add the caller as metadata to the chunks class. It will be saved as
         // additional info, in case we are logging to a file.
-        if ($this->storage->config->getConfigValue('output', 'destination') === 'file') {
+        if ($this->storage->config->getSetting('destination') === 'file') {
             $this->storage->chunks->addMetadata($caller);
         }
 
+        // Reset our configuration for the other analysis calls.
+        $this->storage->resetConfig();
     }
 
     /**
@@ -223,6 +243,10 @@ class OutputActions extends Internals
     {
         $this->storage->reset();
 
+        // We overwrite the local settings, so we can get as much info from
+        // analysed objects as possible.
+        $this->storage->config->overwriteLocalSettings($this->configFatal);
+
         // Get the header.
         if ($this->headerSend) {
             $header = $this->storage->render->renderFatalHeader('', '<!DOCTYPE html>');
@@ -249,7 +273,7 @@ class OutputActions extends Internals
         // Get the messages.
         $messages = $this->storage->messages->outputMessages();
 
-        if ($this->storage->config->getConfigValue('output', 'destination') === 'file') {
+        if ($this->storage->config->getSetting('destination') === 'file') {
             // Add the caller as metadata to the chunks class. It will be saved as
             // additional info, in case we are logging to a file.
             $this->storage->chunks->addMetadata(array(
@@ -277,8 +301,8 @@ class OutputActions extends Internals
         // Not to mention that fatals got removed anyway.
         if (version_compare(phpversion(), '7.0.0', '>=')) {
             // Too high! 420 Method Failure :-(
-            $this->storage->messages->addMessage($this->storage->render->getHelp('php7yellow'));
-            krexx($this->storage->render->getHelp('php7'));
+            $this->storage->messages->addMessage($this->storage->messages->getHelp('php7yellow'));
+            krexx($this->storage->messages->getHelp('php7'));
 
             // Just return, there is nothing more to do here.
             return;

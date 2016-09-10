@@ -32,10 +32,9 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Service\Flow;
+namespace Brainworxx\Krexx\Analyse;
 
-use Brainworxx\Krexx\Model\Callback\Iterate\ThroughMethods;
-use Brainworxx\Krexx\Model\Simple;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Service\Storage;
 
 /**
@@ -45,7 +44,7 @@ use Brainworxx\Krexx\Service\Storage;
  * The other method ara also used, in case it is known how
  * to proceed next.
  *
- * @package Brainworxx\Krexx\Service\Flow
+ * @package Brainworxx\Krexx\Analysis
  */
 class Routing
 {
@@ -74,13 +73,13 @@ class Routing
      * This function decides what functions analyse the data
      * and acts as a hub.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The variable we are analysing.
      *
      * @return string
      *   The generated markup.
      */
-    public function analysisHub(Simple $model)
+    public function analysisHub(Model $model)
     {
         // Check memory and runtime.
         if (!$this->storage->emergencyHandler->checkEmergencyBreak()) {
@@ -93,7 +92,7 @@ class Routing
         if (is_array($data) || is_object($data)) {
             if ($this->storage->emergencyHandler->checkNesting()) {
                 $this->storage->emergencyHandler->downOneNestingLevel();
-                $text = gettype($data) . ' => ' . $this->storage->render->getHelp('maximumLevelReached');
+                $text = gettype($data) . ' => ' . $this->storage->messages->getHelp('maximumLevelReached');
                 $model->setData($text);
                 return $this->analyseString($model);
             }
@@ -186,13 +185,13 @@ class Routing
     /**
      * Render a 'dump' for a NULL value.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The model with the data for the output.
      *
      * @return string
      *   The rendered markup.
      */
-    public function analyseNull(Simple $model)
+    public function analyseNull(Model $model)
     {
         $json = array();
         $json['type'] = 'NULL';
@@ -209,13 +208,13 @@ class Routing
     /**
      * Render a dump for an array.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The data we are analysing.
      *
      * @return string
      *   The rendered markup.
      */
-    public function analyseArray(Simple $model)
+    public function analyseArray(Model $model)
     {
         $json = array();
         $json['type'] = 'array';
@@ -234,13 +233,13 @@ class Routing
     /**
      * Analyses a resource.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The data we are analysing.
      *
      * @return string
      *   The rendered markup.
      */
-    public function analyseResource(Simple $model)
+    public function analyseResource(Model $model)
     {
         $json = array();
         $json['type'] = 'resource';
@@ -257,13 +256,13 @@ class Routing
     /**
      * Render a dump for a bool value.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The data we are analysing.
      *
      * @return string
      *   The rendered markup.
      */
-    public function analyseBoolean(Simple $model)
+    public function analyseBoolean(Model $model)
     {
         $json = array();
         $json['type'] = 'boolean';
@@ -280,13 +279,13 @@ class Routing
     /**
      * Render a dump for a integer value.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The data we are analysing.
      *
      * @return string
      *   The rendered markup.
      */
-    public function analyseInteger(Simple $model)
+    public function analyseInteger(Model $model)
     {
         $json = array();
         $json['type'] = 'integer';
@@ -301,13 +300,13 @@ class Routing
     /**
      * Render a dump for a float value.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The data we are analysing.
      *
      * @return string
      *   The rendered markup.
      */
-    public function analyseFloat(Simple $model)
+    public function analyseFloat(Model $model)
     {
         $json = array();
         $json['type'] = 'float';
@@ -322,13 +321,13 @@ class Routing
     /**
      * Render a dump for a string value.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The data we are analysing.
      *
      * @return string
      *   The rendered markup.
      */
-    public function analyseString(Simple $model)
+    public function analyseString(Model $model)
     {
         $json = array();
         $json['type'] = 'string';
@@ -336,7 +335,8 @@ class Routing
 
         // Extra ?
         if (strlen($data) > 50) {
-            $cut = substr($this->storage->encodeString($data), 0, 50 - 3) . '. . .';
+            $cut = substr($this->storage->encodeString($data), 0, 50) . '. . .';
+            $model->hasExtras();
         } else {
             $cut = $this->storage->encodeString($data);
         }
@@ -364,13 +364,13 @@ class Routing
     /**
      * Analyses a closure.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The closure we want to analyse.
      *
      * @return string
      *   The generated markup.
      */
-    public function analyseClosure(Simple $model)
+    public function analyseClosure(Model $model)
     {
         $ref = new \ReflectionFunction($model->getData());
 
@@ -424,13 +424,13 @@ class Routing
     /**
      * Render a dump for an object.
      *
-     * @param Simple $model
+     * @param Model $model
      *   The object we want to analyse.
      *
      * @return string
      *   The generated markup.
      */
-    public function analyseObject(Simple $model)
+    public function analyseObject(Model $model)
     {
         $output = '';
         $model->setType($model->getAdditional() . 'class')
@@ -465,7 +465,7 @@ class Routing
         $output = '';
 
         foreach ($backtrace as $step => $stepData) {
-            $model = new Simple($this->storage);
+            $model = new Model($this->storage);
             $model->setName($step)
                 ->setType('Stack Frame')
                 ->addParameter('data', $stepData)

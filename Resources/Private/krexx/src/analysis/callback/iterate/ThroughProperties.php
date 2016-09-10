@@ -32,15 +32,15 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Model\Callback\Iterate;
+namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
-use Brainworxx\Krexx\Model\Simple;
-use Brainworxx\Krexx\Model\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 
 /**
  * Class properties analysis methods.
  *
- * @package Brainworxx\Krexx\Model\Callback\Iterate
+ * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  *
  * @uses array data
  *   Array of \reflectionProperties.
@@ -101,7 +101,7 @@ class ThroughProperties extends AbstractCallback
                 $additional .= 'protected ';
             }
             if (is_a($refProperty, '\Brainworxx\Krexx\Analysis\Flection')) {
-                /* @var \Brainworxx\Krexx\Analysis\Flection $refProperty */
+                /* @var \Brainworxx\Krexx\Analyse\Flection $refProperty */
                 $additional .= $refProperty->getWhatAmI() . ' ';
             }
             if ($refProperty->isStatic()) {
@@ -112,7 +112,7 @@ class ThroughProperties extends AbstractCallback
             }
 
             // Stitch together our model
-            $model = new Simple($this->storage);
+            $model = new Model($this->storage);
             $model->setData($value)
                 ->setName($propName)
                 ->setAdditional($additional)

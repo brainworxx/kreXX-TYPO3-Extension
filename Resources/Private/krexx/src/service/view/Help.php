@@ -34,8 +34,6 @@
 
 namespace Brainworxx\Krexx\Service\View;
 
-use Brainworxx\Krexx\Service\Storage;
-
 /**
  * Help texts.
  *
@@ -43,13 +41,6 @@ use Brainworxx\Krexx\Service\Storage;
  */
 class Help
 {
-
-    /**
-     * Here we store all relevant data.
-     *
-     * @var Storage
-     */
-    protected $storage;
 
     // A simple array to hold the values.
     // There should not be any string collisions.
@@ -64,15 +55,11 @@ class Help
         'destination' => 'kreXX can save it&apos;s output to a file, instead of outputting it to the frontend.<br/> The output will then be stored in the log folder.<br/>You can not change this on the frontend. If you want another destination, you have to edit the kreXX configuration file.',
         'maxCall' => 'A lot of output does not only slow down your server, it also slows down your browser. When using kreXX in a loop,<br/> it will create output every time the loop is executed. To limit this, you can configure the maximum call settings.',
         'disabled' => 'Here you can disable kreXX. Note that this is just a local setting, it does not affect other browsers.',
-        'folder' => 'This is the folder where kreXX will store it&apos;s logfiles.',
         'maxfiles' => 'How many logfiles do you want to store inside your logging folder?<br/> When there are more files than this number, the older files will get deleted.',
         'skin' => 'Choose a skin here. We have provided kreXX with two skins: smokygrey and hans.',
         'currentSettings' => 'kreXX&apos;s configuration can be edited here, changes will be stored in a cookie and overwrite the ini and factory settings.<br/> <strong>Please note, that these are only local settings. They only affect this browser.</strong>',
         'registerAutomatically' => 'This option registers the fatal errorhandler as soon as kreXX is included. When a fatal error occures,<br/> kreXX will offer a backtrace and an analysis of the all objects in it. PHP always clears the stack in case of a fatal error,<br/> so kreXX has to keep track of it. <strong>Be warned:</strong> This option will dramatically slow down your requests. Use this only when you have to.<br/> It is by far better to register the errorhandler yourself with <strong>\krexx::registerFatal();</strong> and later unregister it<br/> with <strong>\krexx::unregisterFatal();</strong> tp prevent a slowdown.',
         'detectAjax' => 'kreXX tries to detect whether a request is made via ajax. When it is detected, it will do no output at all. The AJAX detection can be disabled here.',
-        'backtraceAnalysis' => 'Shall kreXX do a "deep" analysis of  the backtrace? Be warned, a deep analysis can produce a lot of output.<br/> A "normal" analysis will use the configured settings, while a "deep" analysis will get as much data from the objects as possible.',
-        'memoryLeft' => 'kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break.<br />Unit of measurement is MB.',
-        'maxRuntime' => 'kreXX checks during the analysis how much time has elapsed since start. Here you can adjust the amount where it will trigger an emergency break.<br />Unit of measurement is seconds.',
         'analyseMethodsAtall' => 'Here you can toggle if kreXX shall analyse the methods of a class.',
         'analyseProtectedMethods' => 'Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
         'analysePrivateMethods' => 'Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
@@ -103,27 +90,11 @@ class Help
         'configErrorTraceNotices' => 'Wrong configuration for: "errorHandling => traceNotices"! Expected boolean. The configured setting was not applied!',
         'configErrorRegisterAuto' => 'Wrong configuration for: "backtraceAndError => registerAutomatically"! Expected boolean. The configured setting was not applied!',
         'configErrorPhp7' => 'Wrong configuration for: "backtraceAndError => registerAutomatically"! Fatal errors got removed in PHP 7. The handler will not work here!',
-        'configErrorBacktraceAnalysis' => 'Wrong configuration for: "backtraceAndError => backtraceAnalysis"! Expected "normal" or "deep". The configured setting was not applied!',
-        'configErrorMemory' => 'Wrong configuration for: "runtime => memoryLeft"! Expected integer. The configured setting was not applied!',
-        'configErrorMaxRuntime' => 'Wrong configuration for: "runtime => maxRuntime"! Expected integer. The configured setting was not applied!',
-        'configErrorMaxRuntimeBig1' => 'Wrong configuration for: "runtime => maxRuntime"! Maximum for this server is: ',
-        'configErrorMaxRuntimeBig2' => ' The configured setting was not applied!',
         'maxCallReached' => 'Maximum call-level reached. This is the last analysis for this request. To increase this value, please edit:<br />runtime => maxCall.',
         'noSourceAvailable' => 'No sourcecode available. Maybe this was an internal callback (call_user_func for example)?',
         'configErrorHandle' => 'You have entered a wrong developer handle. Please unse only letters between a-z and A-Z.',
         'configErrorLocal' => 'Coulkd not read the Local Cookie configuration. Sorry :-/',
     );
-
-    /**
-     * Injects the storage.
-     *
-     * @param Storage $storage
-     *   The storage, where we store the classes we need.
-     */
-    public function __construct(Storage $storage)
-    {
-        $this->storage = $storage;
-    }
 
     /**
      * Returns the help text when found, otherwise returns an empty string.

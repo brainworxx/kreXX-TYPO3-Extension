@@ -32,17 +32,17 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Model\Callback\Analyse;
+namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
-use Brainworxx\Krexx\Model\Callback\AbstractCallback;
-use Brainworxx\Krexx\Model\Simple;
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Backtrace analysis methods.
  *
  * The iterate-part takes place in the OutputActions::backtraceAction()
  *
- * @package Brainworxx\Krexx\Model\Callback\Analysis
+ * @package Brainworxx\Krexx\Analyse\Callback\Analysis
  *
  * @uses array data
  *   The singe step from a backtrace.
@@ -63,7 +63,7 @@ class BacktraceStep extends AbstractCallback
         $stepData = $this->parameters['data'];
         // File.
         if (isset($stepData['file'])) {
-            $fileModel = new Simple($this->storage);
+            $fileModel = new Model($this->storage);
             $fileModel->setData($stepData['file'])
                 ->setName('File')
                 ->setNormal($stepData['file'])
@@ -73,7 +73,7 @@ class BacktraceStep extends AbstractCallback
         }
         // Line.
         if (isset($stepData['line'])) {
-            $lineModel = new Simple($this->storage);
+            $lineModel = new Model($this->storage);
             $lineModel->setData($stepData['line'])
                 ->setName('Line no.')
                 ->setNormal($stepData['line'])
@@ -83,11 +83,11 @@ class BacktraceStep extends AbstractCallback
         }
 
         // Sourcecode, is escaped by now.
-        $sourceModel = new Simple($this->storage);
+        $sourceModel = new Model($this->storage);
         $lineNo = $stepData['line'] + $this->parameters['offset'];
         $source = trim($this->storage->readSourcecode($stepData['file'], $lineNo, $lineNo -5, $lineNo +5));
         if (empty($source)) {
-            $source = $this->storage->render->getHelp('noSourceAvailable');
+            $source = $this->storage->messages->getHelp('noSourceAvailable');
         }
         $sourceModel->setData($source)
             ->setName('Sourcecode')
@@ -97,7 +97,7 @@ class BacktraceStep extends AbstractCallback
 
         // Function.
         if (isset($stepData['function'])) {
-            $functionModel = new Simple($this->storage);
+            $functionModel = new Model($this->storage);
             $functionModel->setData($stepData['function'])
                 ->setName('Last called function')
                 ->setNormal($stepData['function'])
@@ -107,14 +107,14 @@ class BacktraceStep extends AbstractCallback
         }
         // Object.
         if (isset($stepData['object'])) {
-            $objectModel = new Simple($this->storage);
+            $objectModel = new Model($this->storage);
             $objectModel->setData($stepData['object'])
                 ->setName('Calling object');
             $output .= $this->storage->routing->analyseObject($objectModel);
         }
         // Type.
         if (isset($stepData['type'])) {
-            $typeModel = new Simple($this->storage);
+            $typeModel = new Model($this->storage);
             $typeModel->setData($stepData['type'])
                 ->setName('Call type')
                 ->setNormal($stepData['type'])
@@ -124,7 +124,7 @@ class BacktraceStep extends AbstractCallback
         }
         // Args.
         if (isset($stepData['args'])) {
-            $argsModel = new Simple($this->storage);
+            $argsModel = new Model($this->storage);
             $argsModel->setData($stepData['args'])
                 ->setName('Arguments from the call');
             $output .= $this->storage->routing->analyseArray($argsModel);

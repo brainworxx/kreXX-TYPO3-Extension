@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Misc;
 
-use Brainworxx\Krexx\Model\Simple;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Storage;
 
 /**
@@ -106,13 +106,13 @@ class Codegen
      * we can generate PHP code to actually reach the corresponding value.
      * This function generates this code.
      *
-     * @param \Brainworxx\Krexx\Model\Simple $model
+     * @param \Brainworxx\Krexx\Analyse\Model $model
      *   The model, which hosts all the data we need.
      *
      * @return string
      *   The generated PHP source.
      */
-    public function generateSource(Simple $model)
+    public function generateSource(Model $model)
     {
         if (!$this->allowCodegen) {
             return '';
@@ -203,7 +203,7 @@ class Codegen
     /**
      * Analyses the type and then decides what to do with it
      *
-     * @param Simple $model
+     * @param Model $model
      *   The type we are analysing, for example 'private array'.
      *
      * @return string
@@ -212,7 +212,7 @@ class Codegen
      *   - method
      *   - property
      */
-    protected function analyseType(Simple $model)
+    protected function analyseType(Model $model)
     {
         $type = $model->getType();
 

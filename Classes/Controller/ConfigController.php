@@ -56,7 +56,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
             $data = array();
             $value = array();
             // Setting possible form values.
-            foreach ($this->krexxStorage->config->getSkinList() as $skin) {
+            foreach ($this->krexxStorage->render->getSkinList() as $skin) {
                 $data['skins'][$skin] = $skin;
             }
             $data['destination'] = array(
@@ -208,7 +208,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
         {
             $arguments = $this->request->getArguments();
             $allOk = true;
-            $filepath = $this->krexxStorage->config->getPathToIni();
+            $filepath = $this->krexxStorage->config->krexxdir. 'Krexx.ini';
 
 
 
@@ -240,7 +240,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                                 // whitelist it.
                                 $value = htmlspecialchars(preg_replace('/\s+/', '', $value));
                                 // Evaluate the setting!
-                                if ($this->krexxStorage->config->evaluateSetting($section, $settingName, $value)) {
+                                if ($this->krexxStorage->config->security->evaluateSetting($section, $settingName, $value)) {
                                     $oldValues[$section][$settingName] = $value;
                                 } else {
                                     // Validation failed! kreXX will generate a message,

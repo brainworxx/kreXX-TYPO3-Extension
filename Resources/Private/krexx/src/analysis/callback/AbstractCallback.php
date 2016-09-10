@@ -32,45 +32,59 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Model\Callback\Iterate;
+namespace Brainworxx\Krexx\Analyse\Callback;
 
-use Brainworxx\Krexx\Model\Callback\AbstractCallback;
-use Brainworxx\Krexx\Model\Simple;
+use Brainworxx\Krexx\Service\Storage;
 
 /**
- * Constant analysis methods.
+ * Abstract class for the callback classes inside the model.
  *
- * @package Brainworxx\Krexx\Model\Callback\Iterate
- *
- * @uses array data
- *   Array of constants from the class we are analysing.
- * @uses string classname
- *   The classname we are analysing, for code generation purpose.
+ * @package Brainworxx\Krexx\Analyse\Callback
  */
-class ThroughConstants extends AbstractCallback
+abstract class AbstractCallback
 {
+
     /**
-     * Simply iterate though object constants.
+     * Here we store all relevant data.
+     *
+     * @var Storage
+     */
+    protected $storage;
+
+    /**
+     * The parameters for the callback.
+     *
+     * @var array
+     */
+    protected $parameters = array();
+
+    /**
+     * The actual callback function for the renderer.
      *
      * @return string
      *   The generated markup.
      */
-    public function callMe()
+    abstract public function callMe();
+
+    /**
+     * Injects the storage.
+     *
+     * @param Storage $storage
+     *   The storage, where we store the classes we need.
+     */
+    public function __construct(Storage $storage)
     {
-        $output = '';
+        $this->storage = $storage;
+    }
 
-        // We do not need to check the recursionHandler, this is class
-        // internal stuff. Is it even possible to create a recursion here?
-        // Iterate through.
-        foreach ($this->parameters['data'] as $k => &$v) {
-            $model = new Simple($this->storage);
-            $model->setData($v)
-                ->setName($k)
-                ->setConnector1($this->parameters['classname'] . '::');
-            $output .= $this->storage->routing->analysisHub($model);
-        }
-
-        return $output;
-
+    /**
+     * Add callback parameters at class construction.
+     *
+     * @param array $params
+     *   The parameters for the callMe() method.
+     */
+    public function setParams(array &$params)
+    {
+        $this->parameters = $params;
     }
 }

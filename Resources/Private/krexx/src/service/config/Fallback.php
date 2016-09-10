@@ -45,6 +45,12 @@ use Brainworxx\Krexx\Service\Storage;
  */
 class Fallback
 {
+    /**
+     * The directory where kreXX is stored.
+     *
+     * @var string
+     */
+    public $krexxdir;
 
     /**
      * Here we store all relevant data.
@@ -54,21 +60,16 @@ class Fallback
     protected $storage;
 
     /**
-     * Injects the storage.
+     * Injects the storage and initializes the security.
      *
      * @param Storage $storage
+     * @param string $krexxdir
      */
-    public function __construct(Storage $storage)
+    public function __construct(Storage $storage, $krexxdir)
     {
         $this->storage = $storage;
+        $this->krexxdir = $krexxdir;
     }
-
-    /**
-     * Stores if kreXX is actually enabled.
-     *
-     * @var bool
-     */
-    protected $isEnabled = true;
 
     /**
      * Fallback settings, in case there is nothing in the config ini.
@@ -81,13 +82,10 @@ class Fallback
             'detectAjax' => 'true',
             'level' => '5',
             'maxCall' => '10',
-            'memoryLeft' => '64',
-            'maxRuntime' => '60',
         ),
         'output' => array(
             'skin' => 'smokygrey',
             'destination' => 'frontend',
-            'folder' => 'log',
             'maxfiles' => '10',
         ),
         'properties' => array(
@@ -100,11 +98,10 @@ class Fallback
             'analyseMethodsAtall' => 'true',
             'analyseProtectedMethods' => 'false',
             'analysePrivateMethods' => 'false',
-            'debugMethods' => 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo',
+            'debugMethods' => 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo,getProperties',
         ),
         'backtraceAndError' => array(
             'registerAutomatically' => 'false',
-            'backtraceAnalysis' => 'deep',
         ),
     );
 
@@ -166,10 +163,6 @@ class Fallback
             'type' => 'None',
             'editable' => 'false',
         ),
-        'folder' => array(
-            'type' => 'None',
-            'editable' => 'false',
-        ),
         'skin' => array(
             'type' => 'Select',
             'editable' => 'true',
@@ -180,18 +173,6 @@ class Fallback
         ),
         'detectAjax' => array(
             'type' => 'Select',
-            'editable' => 'true',
-        ),
-        'backtraceAnalysis' => array(
-            'type' => 'Select',
-            'editable' => 'true',
-        ),
-        'memoryLeft' => array(
-            'type' => 'Input',
-            'editable' => 'true',
-        ),
-        'maxRuntime' => array(
-            'type' => 'Input',
             'editable' => 'true',
         ),
         'Local open function' => array(
@@ -211,17 +192,9 @@ class Fallback
      */
     protected $feConfigNoEdit = array(
         'destination',
-        'folder',
         'maxfiles',
         'debugMethods',
     );
-
-    /**
-     * The directory where kreXX is stored.
-     *
-     * @var string
-     */
-    public $krexxdir;
 
     /**
      * Known Problems with debug functions, which will most likely cause a fatal.
@@ -249,23 +222,9 @@ class Fallback
     );
 
     /**
-     * Caching for the local settings.
-     *
-     * @var array
-     */
-    protected $localConfig = array();
-
-    /**
-     * Path to the configuration file.
-     *
-     * @var string
-     */
-    protected $pathToIni;
-
-    /**
      * The kreXX version.
      *
      * @var string
      */
-    public $version = '2.0.0';
+    public $version = '2.1.0 dev';
 }

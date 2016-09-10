@@ -81,28 +81,31 @@ class Krexx
         include_once $krexxDir . 'src/service/view/Help.php';
         include_once $krexxDir . 'src/service/view/Render.php';
         include_once $krexxDir . 'src/service/view/Messages.php';
+        include_once $krexxDir . 'src/service/config/Model.php';
         include_once $krexxDir . 'src/service/config/Fallback.php';
+        include_once $krexxDir . 'src/service/config/Security.php';
         include_once $krexxDir . 'src/service/config/Config.php';
         include_once $krexxDir . 'src/service/misc/Codegen.php';
         include_once $krexxDir . 'src/service/misc/Chunks.php';
         include_once $krexxDir . 'src/service/misc/Shutdown.php';
         include_once $krexxDir . 'src/service/Storage.php';
         include_once $krexxDir . 'src/service/flow/Recursion.php';
-        include_once $krexxDir . 'src/service/flow/Routing.php';
+
         include_once $krexxDir . 'src/service/flow/Emergency.php';
-        include_once $krexxDir . 'src/model/Flection.php';
-        include_once $krexxDir . 'src/model/Simple.php';
-        include_once $krexxDir . 'src/model/callback/AbstractCallback.php';
-        include_once $krexxDir . 'src/model/callback/analyse/BacktraceStep.php';
-        include_once $krexxDir . 'src/model/callback/analyse/ConfigSection.php';
-        include_once $krexxDir . 'src/model/callback/analyse/Debug.php';
-        include_once $krexxDir . 'src/model/callback/analyse/Objects.php';
-        include_once $krexxDir . 'src/model/callback/iterate/ThroughArray.php';
-        include_once $krexxDir . 'src/model/callback/iterate/ThroughConfig.php';
-        include_once $krexxDir . 'src/model/callback/iterate/ThroughConstants.php';
-        include_once $krexxDir . 'src/model/callback/iterate/ThroughMethodAnalysis.php';
-        include_once $krexxDir . 'src/model/callback/iterate/ThroughMethods.php';
-        include_once $krexxDir . 'src/model/callback/iterate/ThroughProperties.php';
+        include_once $krexxDir . 'src/analysis/Flection.php';
+        include_once $krexxDir . 'src/analysis/Routing.php';
+        include_once $krexxDir . 'src/analysis/Model.php';
+        include_once $krexxDir . 'src/analysis/callback/AbstractCallback.php';
+        include_once $krexxDir . 'src/analysis/callback/analyse/BacktraceStep.php';
+        include_once $krexxDir . 'src/analysis/callback/analyse/ConfigSection.php';
+        include_once $krexxDir . 'src/analysis/callback/analyse/Debug.php';
+        include_once $krexxDir . 'src/analysis/callback/analyse/Objects.php';
+        include_once $krexxDir . 'src/analysis/callback/iterate/ThroughArray.php';
+        include_once $krexxDir . 'src/analysis/callback/iterate/ThroughConfig.php';
+        include_once $krexxDir . 'src/analysis/callback/iterate/ThroughConstants.php';
+        include_once $krexxDir . 'src/analysis/callback/iterate/ThroughMethodAnalysis.php';
+        include_once $krexxDir . 'src/analysis/callback/iterate/ThroughMethods.php';
+        include_once $krexxDir . 'src/analysis/callback/iterate/ThroughProperties.php';
         include_once $krexxDir . 'src/errorhandler/Error.php';
         include_once $krexxDir . 'src/errorhandler/Fatal.php';
         include_once $krexxDir . 'src/controller/Internals.php';
@@ -147,7 +150,7 @@ class Krexx
     {
         self::$storage->controller->noFatalForKrexx();
         // Disabled?
-        if (!self::$storage->config->getEnabled()) {
+        if (self::$storage->config->getSetting('disabled')) {
             return;
         }
         self::$storage->controller->timerAction($string);
@@ -161,7 +164,7 @@ class Krexx
     {
         self::$storage->controller->noFatalForKrexx();
         // Disabled ?
-        if (!self::$storage->config->getEnabled()) {
+        if (self::$storage->config->getSetting('disabled')) {
             return;
         }
         self::$storage->controller->timerEndAction();
@@ -178,7 +181,7 @@ class Krexx
     {
         self::$storage->controller->noFatalForKrexx();
         // Disabled?
-        if (!self::$storage->config->getEnabled()) {
+        if (self::$storage->config->getSetting('disabled')) {
             return;
         }
         self::$storage->controller->dumpAction($data);
@@ -195,21 +198,11 @@ class Krexx
     {
         self::$storage->controller->noFatalForKrexx();
         // Disabled?
-        if (!self::$storage->config->getEnabled()) {
+        if (self::$storage->config->getSetting('disabled')) {
             return;
         }
         // Render it.
         self::$storage->controller->backtraceAction();
-        self::$storage->controller->reFatalAfterKrexx();
-    }
-
-    /**
-     * Enable kreXX.
-     */
-    public static function enable()
-    {
-        self::$storage->controller->noFatalForKrexx();
-        self::$storage->config->setEnabled(true);
         self::$storage->controller->reFatalAfterKrexx();
     }
 
@@ -219,7 +212,7 @@ class Krexx
     public static function disable()
     {
         self::$storage->controller->noFatalForKrexx();
-        self::$storage->config->setEnabled(false);
+        self::$storage->config->setDisabled(true);
         // We will not re-enable it afterwards, because kreXX
         // is disabled and the handler would not show up anyway.
     }
@@ -234,7 +227,7 @@ class Krexx
         self::$storage->controller->noFatalForKrexx();
         // Disabled?
         // We are ignoring local settings here.
-        if (!self::$storage->config->getEnabled()) {
+        if (self::$storage->config->getSetting('disabled')) {
             return;
         }
         self::$storage->controller->editSettingsAction();
@@ -249,7 +242,7 @@ class Krexx
     public static function registerFatal()
     {
         // Disabled?
-        if (!self::$storage->config->getEnabled()) {
+        if (self::$storage->config->getSetting('disabled')) {
             return;
         }
         self::$storage->controller->registerFatalAction();
@@ -265,7 +258,7 @@ class Krexx
     public static function unregisterFatal()
     {
         // Disabled?
-        if (!self::$storage->config->getEnabled()) {
+        if (self::$storage->config->getSetting('disabled')) {
             return;
         }
         self::$storage->controller->unregisterFatalAction();

@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\View\Smokygrey;
 
-use Brainworxx\Krexx\Model\Simple;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Individual render class for the smokey-grey skin.
@@ -47,13 +47,13 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
     /**
      * {@inheritDoc}
      */
-    public function renderSingleChild(Simple $model)
+    public function renderSingleChild(Model $model)
     {
 
         $template = parent::renderSingleChild($model);
         $json = $model->getJson();
 
-        $json['Help'] = $this->getHelp($model->getHelpid());
+        $json['Help'] = $this->storage->messages->getHelp($model->getHelpid());
         // Prepare the json.
         $json = json_encode($json);
 
@@ -66,7 +66,7 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
     /**
      * {@inheritDoc}
      */
-    public function renderExpandableChild(Simple $model, $isExpanded = false)
+    public function renderExpandableChild(Model $model, $isExpanded = false)
     {
 
         // Check for emergency break.
@@ -107,7 +107,7 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
         $template = str_replace('{isExpanded}', '', $template);
 
         $json = $model->getJson();
-        $json['Help'] = $this->getHelp($model->getHelpid());
+        $json['Help'] = $this->storage->messages->getHelp($model->getHelpid());
         $json = json_encode($json);
         $template = str_replace('{addjson}', $json, $template);
 
@@ -119,14 +119,14 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
     /**
      * {@inheritDoc}
      */
-    public function renderSingleEditableChild(Simple $model)
+    public function renderSingleEditableChild(Model $model)
     {
 
         $template = parent::renderSingleEditableChild($model);
 
         // Prepare the json. Not much do display for form elements.
         $json = json_encode(array(
-            'Help' => $this->getHelp($model->getHelpid()),
+            'Help' => $this->storage->messages->getHelp($model->getHelpid()),
         ));
         $template = str_replace('{addjson}', $json, $template);
 
@@ -136,14 +136,14 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
     /**
      * {@inheritDoc}
      */
-    public function renderButton(Simple $model)
+    public function renderButton(Model $model)
     {
 
         $template = parent::renderButton($model);
 
         // Prepare the json. Not much do display for form elements.
         $json = json_encode(array(
-            'Help' => $this->getHelp($model->getHelpid()),
+            'Help' => $this->storage->messages->getHelp($model->getHelpid()),
         ));
         $template = str_replace('{addjson}', $json, $template);
 

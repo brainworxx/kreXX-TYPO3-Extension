@@ -45,7 +45,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
         public function listAction()
         {
             // 1. Get the log folder.
-            $dir = $this->krexxStorage->config->krexxdir . $this->krexxStorage->config->getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR;
+            $dir = $this->krexxStorage->config->krexxdir . 'log' . DIRECTORY_SEPARATOR;
 
             // 2. Get the file list and sort it.
             $files = glob($dir . '*.Krexx.html');
@@ -104,11 +104,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
             // No directory traversal for you!
             $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
             // Get the filepath.
-            $file = $this->krexxStorage->config->krexxdir .
-                $this->krexxStorage->config->getConfigValue('output', 'folder') .
-                DIRECTORY_SEPARATOR .
-                $id .
-                '.Krexx.html';
+            $file = $this->krexxStorage->config->krexxdir . 'log' . DIRECTORY_SEPARATOR . $id . '.Krexx.html';
             if (is_readable($file)) {
                 // We open and then send the file.
                 $this->dispatchFile($file);

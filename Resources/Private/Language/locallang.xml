@@ -96,13 +96,13 @@
       <label index="layout.log.index">Logfiles access</label>
 
       <!-- Headlines -->
-      <label index="editconfig.headline">Edit Configuration File</label>
-      <label index="editfeconfig.headline">Edit FE Configuration</label>
+      <label index="editconfig.headline">Edit configuration file</label>
+      <label index="editfeconfig.headline">Edit FE configuration</label>
       <label index="subhead.runtime">Runtime</label>
       <label index="subhead.output">Output</label>
       <label index="subhead.properties">Properties</label>
       <label index="subhead.methods">Methods</label>
-      <label index="subhead.backtraceAndError">Error Handling and Backtrace</label>
+      <label index="subhead.backtraceAndError">Fatal error handling</label>
 
       <!-- Labels -->
       <label index="label.skin">Skin:</label>

@@ -41,7 +41,7 @@ use Brainworxx\Krexx\Service\Storage;
  *
  * @package Brainworxx\Krexx\Service\View
  */
-class Messages
+class Messages extends Help
 {
 
     /**

@@ -32,15 +32,15 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Model\Callback\Iterate;
+namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
-use Brainworxx\Krexx\Model\Callback\AbstractCallback;
-use Brainworxx\Krexx\Model\Simple;
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Configuration output methods.
  *
- * @package Brainworxx\Krexx\Model\Callback\Iterate
+ * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  *
  * @uses array data
  *   The configuration section we are rendering
@@ -58,23 +58,28 @@ class ThroughConfig extends AbstractCallback
      */
     public function callMe()
     {
-        $config = $this->parameters['data'];
-        $source = $this->parameters['source'];
         $configOutput = '';
-        foreach ($config as $sectionName => $sectionData) {
+
+        // We need to "explode" our config array into the
+        // sections again, for better readability.
+        $sections = array();
+        foreach ($this->storage->config->settings as $name => $setting) {
+            $sections[$setting->getSection()][$name] = $setting;
+        }
+
+        foreach ($sections as $sectionName => $sectionData) {
             // Render a whole section.
-            $model = new Simple($this->storage);
+            $model = new Model($this->storage);
             $model->setName($sectionName)
                 ->setType('Config')
                 ->setAdditional('. . .')
                 ->addParameter('data', $sectionData)
-                ->addParameter('source', $source[$sectionName])
                 ->initCallback('Analyse\ConfigSection');
 
             $configOutput .= $this->storage->render->renderExpandableChild($model);
         }
         // Render the dev-handle field.
-        $editableModel = new Simple($this->storage);
+        $editableModel = new Model($this->storage);
         $data = 'Local open function';
         $editableModel->setData($data)
             ->setName($this->storage->config->getDevHandler())
@@ -84,7 +89,7 @@ class ThroughConfig extends AbstractCallback
 
         $configOutput .= $this->storage->render->renderSingleEditableChild($editableModel);
         // Render the reset-button which will delete the debug-cookie.
-        $buttonModel = new Simple($this->storage);
+        $buttonModel = new Model($this->storage);
         $buttonModel->setName('resetbutton')
             ->setNormal('Reset local settings')
             ->setHelpid('resetbutton');

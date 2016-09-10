@@ -34,11 +34,11 @@
 
 namespace Brainworxx\Krexx\Service;
 
+use Brainworxx\Krexx\Analyse\Routing;
 use Brainworxx\Krexx\Controller\OutputActions;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
-use Brainworxx\Krexx\Service\Flow\Routing;
 use Brainworxx\Krexx\Service\Misc\Chunks;
 use Brainworxx\Krexx\Service\Misc\Codegen;
 use Brainworxx\Krexx\Service\View\Messages;
@@ -126,9 +126,10 @@ class Storage
      */
     public function __construct($krexxDir)
     {
+        // Initializes the messages.
+        $this->messages = new Messages($this);
         // Initializes the configuration
-        $this->config = new Config($this);
-        $this->config->krexxdir = $krexxDir;
+        $this->config = new Config($this, $krexxDir);
         // Initialize the emergency handler.
         $this->emergencyHandler = new Emergency($this);
         // Initialize the routing.
@@ -137,14 +138,12 @@ class Storage
         $this->recursionHandler = new Recursion($this);
         // Initialize the code generation.
         $this->codegenHandler = new Codegen($this);
-        // Initializes the messages.
-        $this->messages = new Messages($this);
         // Initializes the chunks handler.
         $this->chunks = new Chunks($this);
         // Initializes the controller.
         $this->controller = new OutputActions($this);
         // Initializes the render class.
-        $this->initRendrerer();
+        $this->initRenderer();
         // Check our environment.
         $this->checkEnvironment($krexxDir);
     }
@@ -174,7 +173,7 @@ class Storage
 
         // Check if the log folder is writable.
         // If not, give feedback!
-        $logFolder = $krexxDir . $this->config->getConfigValue('output', 'folder') . DIRECTORY_SEPARATOR;
+        $logFolder = $krexxDir . 'log' . DIRECTORY_SEPARATOR;
         if (!is_writeable($logFolder)) {
             $this->messages->addMessage('Logfolder ' . $logFolder . ' is not writable !', 'critical');
             $this->messages->addKey('protected.folder.log', array($logFolder));
@@ -183,7 +182,7 @@ class Storage
         // will pop up, when kreXX is actually displayed, no need to bother the
         // dev just now.
         // We might need to register our fatal error handler.
-        if ($this->config->getConfigValue('backtraceAndError', 'registerAutomatically') === 'true') {
+        if ($this->config->getSetting('registerAutomatically')) {
             $this->controller->registerFatalAction();
         }
     }
@@ -203,11 +202,19 @@ class Storage
     }
 
     /**
+     * Reload the configuration.
+     */
+    public function resetConfig()
+    {
+        $this->config = new Config($this, $this->config->krexxdir);
+    }
+
+    /**
      * Loads the renderer from the skin.
      */
-    protected function initRendrerer()
+    protected function initRenderer()
     {
-        $skin = $this->config->getConfigValue('output', 'skin');
+        $skin = $this->config->getSetting('skin');
         $path = $this->config->krexxdir . 'resources/skins/' . $skin . '/Render.php';
         $classname = 'Brainworxx\Krexx\View\\' . ucfirst($skin) . '\\Render';
         include_once $path;
@@ -364,7 +371,7 @@ class Storage
             if (strlen($data) < 102400) {
                 $result = implode("", array_map($sortingCallback, unpack("N*", $data)));
             } else {
-                $result = $this->render->getHelp('stringTooLarge');
+                $result = $this->messages->getHelp('stringTooLarge');
             }
         } else {
             if ($code) {

@@ -143,7 +143,7 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
         {
             $arguments = $this->request->getArguments();
             $allOk = true;
-            $filepath = $this->krexxStorage->config->getPathToIni();
+            $filepath = $this->krexxStorage->config->krexxdir . 'Krexx.ini';
             // Whitelist of the vales we are accepting.
             $allowedValues = array('full', 'display', 'none');
 

@@ -43,29 +43,6 @@ class Fatal extends Error
 {
 
     /**
-     * Config for the 'deep' backtrace analysis.
-     *
-     * When we are handling fatal errors, we should display as much
-     * internal info as possible. We will use this config to overwrite
-     * the settings, in case we are handling a fatal error.
-     *
-     * @var array
-     */
-    protected static $configFatal = array(
-        'properties' => array(
-            'analyseProtected' => 'true',
-            'analysePrivate' => 'true',
-            'analyseTraversable' => 'true',
-            'analyseConstants' => 'true',
-        ),
-        'methods' => array(
-            'analyseMethodsAtall' => 'true',
-            'analyseProtectedMethods' => 'true',
-            'analysePrivateMethods' => 'true',
-        ),
-    );
-
-    /**
      * The current backtrace from the registered tick callback.
      *
      * PHP deletes it's own stack, when we encounter a fatal error.
@@ -117,8 +94,7 @@ class Fatal extends Error
 
         // Do we have an error at all?
         if (!is_null($error) &&
-            $this->getIsActive() &&
-            $this->storage->config->getEnabled()
+            $this->getIsActive()
         ) {
             // Do we need to check this one, according to our settings?
             $translatedError = $this->translateErrorType($error['type']);
@@ -137,12 +113,6 @@ class Fatal extends Error
                     'file' => $error['file'],
                     'backtrace' => $this->tickedBacktrace,
                 );
-
-                if ($this->storage->config->getConfigValue('backtraceAndError', 'backtraceAnalysis') === 'deep') {
-                    // We overwrite the local settings, so we can get as much info from
-                    // analysed objects as possible.
-                    $this->storage->config->overwriteLocalSettings(self::$configFatal);
-                }
                 $this->storage->controller->errorAction($errorData);
             }
         }

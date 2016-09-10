@@ -84,9 +84,6 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
          */
         protected $allowedSettingsNames = array(
             'skin',
-            'memoryLeft',
-            'maxRuntime',
-            'folder',
             'maxfiles',
             'destination',
             'maxCall',
@@ -101,7 +98,6 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             'analyseProtectedMethods',
             'analysePrivateMethods',
             'registerAutomatically',
-            'backtraceAnalysis',
             'analyseConstants',
         );
 
