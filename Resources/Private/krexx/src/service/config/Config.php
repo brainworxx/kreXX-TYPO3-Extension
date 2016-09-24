@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Service\Config;
 
-use Brainworxx\Krexx\Controller\OutputActions;
 use Brainworxx\Krexx\Service\Storage;
 
 /**

@@ -152,7 +152,6 @@ class Objects extends AbstractCallback
     protected function getMethodData($data)
     {
         // Dumping all methods but only if we have any.
-        $public = array();
         $protected = array();
         $private = array();
         $ref = new \ReflectionClass($data);

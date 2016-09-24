@@ -8,7 +8,7 @@
 
 .. _ajax_cli:
 
-Ajax CLI and logging
+Ajax, CLI and logging
 ====================
 
 Ajax

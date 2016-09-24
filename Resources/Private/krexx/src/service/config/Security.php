@@ -302,7 +302,8 @@ class Security extends Fallback
                 // We expect an array of ip's after an explode.
                 // But we are not vaidationg every singe one of them.
                 // We are just making sure that we get a list.
-                $result = !empty(trim($value));
+                $result = trim($value);
+                $result = !empty($result);
                 if (!$result) {
                     $this->storage->messages->addMessage(
                         $this->storage->messages->getHelp('configErrorIpList')

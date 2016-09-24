@@ -29,7 +29,7 @@ kreXX Debugger
 		en
 
 	:Description:
-		kreXX is a php debugger with a fatal error handler. It displays debug information about objects and variables in it's own draggable output.
+		kreXX is a feature-rich PHP debugger. It displays a deep analysis of objects and arrays in a neatly arranged output window.
 
 	:Keywords:
 		debug, debugging, object, analysis
