@@ -71,7 +71,16 @@ class ThroughArray extends AbstractCallback
             if (is_string($key)) {
                 $key = $this->storage->encodeString($key);
             }
+
             $model = new Model($this->storage);
+
+            // Are we dealing with multiline code generation?
+            if ($this->parameters['multiline'] === true) {
+                // Here we tel the Codegen service that we need some
+                // special handling.
+                $model->setMultiLineCodeGen('iterator_to_array');
+            }
+
             if (is_string($key)) {
                 $model->setData($value)
                     ->setName($key)

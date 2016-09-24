@@ -38,7 +38,6 @@
       <label index="backtraceAnalysis">Shall kreXX do a "deep" analysis of  the backtrace? Be warned, a deep analysis can produce a lot of output. A "normal" analysis will use the configured settings, while a "deep" analysis will get as much data from the objects as possible.</label>
       <label index="memoryLeft">kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is MB.</label>
       <label index="maxRuntime">kreXX checks during the analysis how much time has elapsed since start. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is seconds.</label>
-      <label index="analyseMethodsAtall">Here you can toggle if kreXX shall analyse the methods of a class.</label>
       <label index="analyseProtectedMethods">Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.</label>
       <label index="analysePrivateMethods">Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.</label>
       <label index="analyseConstants">Here you can toggle, if kreXX shall analyse all constants of a class.</label>
@@ -56,7 +55,6 @@
         Error messages from the krexx lib
         @see Brainworxx\Krexx\Framework\Config::evaluateSetting( . . . )
       -->
-      <label index="methods.analyseMethodsAtall.error">Wrong configuration for: "methods => analyseMethodsAtall"! Expected boolean. The configured setting was not applied!</label>
       <label index="methods.analyseProtectedMethods.error">Wrong configuration for: "methods => analyseProtectedMethods"! Expected boolean. The configured setting was not applied!</label>
       <label index="methods.analysePrivateMethods.error">Wrong configuration for: "methods => analysePrivateMethods"! Expected boolean. The configured setting was not applied!</label>
       <label index="properties.analyseProtected.error">Wrong configuration for: "properties => analyseProtected"! Expected boolean. The configured setting was not applied!</label>
@@ -121,7 +119,6 @@
       <label index="label.analyseTraversable">Analyse traversable data:</label>
       <label index="label.debugMethods">List of debug methods to poll for data:</label>
       <label index="label.level">Maximum nesting level for objects and arrays:</label>
-      <label index="label.analyseMethodsAtall">Analyse class methods at all:</label>
       <label index="label.analyseProtectedMethods">Analyse protected methods:</label>
       <label index="label.analysePrivateMethods">Analyse private methods:</label>
       <label index="label.registerAutomatically">Register fatal error handler automatically:</label>

@@ -96,9 +96,6 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
             $value['runtime']['level'] = $this->convertKrexxFeSetting(
                 $this->krexxStorage->config->getFeConfigFromFile('level')
             );
-            $value['methods']['analyseMethodsAtall'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('analyseMethodsAtall')
-            );
             $value['methods']['analyseProtectedMethods'] = $this->convertKrexxFeSetting(
                 $this->krexxStorage->config->getFeConfigFromFile('analyseProtectedMethods')
             );

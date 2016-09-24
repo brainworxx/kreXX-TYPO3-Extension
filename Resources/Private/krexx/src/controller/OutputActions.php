@@ -55,7 +55,6 @@ class OutputActions extends Internals
         'analysePrivate' => 'true',
         'analyseTraversable' => 'true',
         'analyseConstants' => 'true',
-        'analyseMethodsAtall' => 'true',
         'analyseProtectedMethods' => 'true',
         'analysePrivateMethods' => 'true',
     );

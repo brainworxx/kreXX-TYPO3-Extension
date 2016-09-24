@@ -94,7 +94,6 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             'analyseTraversable',
             'debugMethods',
             'level',
-            'analyseMethodsAtall',
             'analyseProtectedMethods',
             'analysePrivateMethods',
             'registerAutomatically',

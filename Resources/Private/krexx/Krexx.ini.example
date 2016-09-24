@@ -10,6 +10,7 @@ disabled = "false"
 ; disabled = "true"
 
 ; Comma separated list of ip's taht can access kreXX. Wildcards are supported.
+; You can do something like '192.168.1.*', but not something like '192.168.*.110'.
 ; iprange = "192.168.0.110,192.168.1.*"
 iprange = "*"
 
@@ -68,8 +69,6 @@ analyseTraversable = "true"
 [methods]
 
 ; Here you can configure, what analysis will be done on class methods.
-analyseMethodsAtall = "true"
-; analyseMethodsAtall = "false"
 ; analyseProtectedMethods = "true"
 analyseProtectedMethods = "false"
 ; analysePrivateMethods = "true"
@@ -103,7 +102,7 @@ registerAutomatically = "false"
 ; none    = is not displayed at all
 ; Since the local configuration is stored in a cookie, settings will be
 ; ignored, in case a setting can not be edited.
-; Please note, that the logging  and debug methods options can never be edited
+; Please note, that the logging and debug methods options can never be edited
 ; on the frontend.
 skin = "full"
 maxCall = "full"
@@ -113,7 +112,6 @@ analyseProtected = "full"
 analysePrivate = "full"
 analyseTraversable = "full"
 level = "full"
-analyseMethodsAtall = "full"
 analyseProtectedMethods = "full"
 analysePrivateMethods = "full"
 registerAutomatically = "full"

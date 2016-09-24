@@ -1,18 +1,19 @@
 /**
- * @file
- *   Template js functions for kreXX.
- *   kreXX: Krumo eXXtended
+ * kreXX: Krumo eXXtended
  *
- *   This is a debugging tool, which displays structured information
- *   about any PHP object. It is a nice replacement for print_r() or var_dump()
- *   which are used by a lot of PHP developers.
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
  *
- *   kreXX is a fork of Krumo, which was originally written by:
- *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
  *
- * @author brainworXX GmbH <info@brainworxx.de>
+ * @author
+ *   brainworXX GmbH <info@brainworxx.de>
  *
- * @license http://opensource.org/licenses/LGPL-2.1
+ * @license
+ *   http://opensource.org/licenses/LGPL-2.1
+ *
  *   GNU Lesser General Public License Version 2.1
  *
  *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
@@ -50,8 +51,7 @@
      * @namespace krexx
      *   It a just a collection of used js routines.
      */
-    function krexx() {
-    }
+    function krexx() {}
 
     /**
      * Executed on document ready
@@ -609,12 +609,12 @@
         event.stopPropagation();
 
         var codedisplay = event.target.nextElementSibling;
-        var result = '';
+        var resultArray = [];
+        var resultString = '';
         var sourcedata;
         var domid;
         // Get the first element
         var el = kdt.getParents(event.target, 'li.kchild')[0];
-
 
         // Start the loop to collect all the date
         while (el) {
@@ -628,38 +628,45 @@
                     // current path is not really reachable.
                     el = document.querySelector('#' + domid).parentNode;
                     // Get the source, again.
-                    sourcedata = kdt.getDataset(el, 'source');
+                    resultArray.push(kdt.getDataset(el, 'source'));
                 }
             }
-
-            // Recheck everything.
             if (typeof sourcedata !== 'undefined') {
-                // We must check if our value is actually reachable.
-                // '. . .' means it is not reachable,
-                // we will stop right here and display a comment stating this.
-                if (sourcedata === '. . .') {
-                    result = '// Value is either protected or private.<br /> // Sorry . . ';
-                    break;
-                }
-                // Check if we are facing a .stop. instruction
-                 if (sourcedata === '.stop.') {
-                     // Return, what we've got so far.
-                     break;
-                 }
-                if (sourcedata === '. . .') {
-
-                }
-                // We're good, value can be reached!
-                result = sourcedata + result;
-
+                resultArray.push(sourcedata);
             }
             // Get the next el.
             el = kdt.getParents(el, 'li.kchild')[0];
         }
+        // Now we reverse our result, so that we can resolve it from the beginning.
+        resultArray.reverse();
+
+        for (var i = 0; i < resultArray.length; i++) {
+            // We must check if our value is actually reachable.
+                // '. . .' means it is not reachable,
+                // we will stop right here and display a comment stating this.
+            if (resultArray[i] === '. . .') {
+                resultString = '// Value is either protected or private.<br /> // Sorry . . ';
+                break;
+            }
+
+            // Check if we are facing a ;stop; instruction
+            if (resultArray[i] === ';stop;') {
+                resultString = '';
+                resultArray[i] = '';
+            }
+
+            // We're good, value can be reached!
+            if (resultArray[i].indexOf(';firstMarker;') !== -1) {
+                // We add our result sofar into the "source template"
+                resultString = resultArray[i].replace(';firstMarker;', resultString);
+            } else {
+                // Normal concatenation.
+                resultString = resultString + resultArray[i];
+            }
+        }
 
         // 3. Add the text
-        console.log(result);
-        codedisplay.innerHTML = '<div class="kcode-inner">' + result + '</div>';
+        codedisplay.innerHTML = '<div class="kcode-inner">' + resultString + '</div>';
         if (codedisplay.style.display === 'none') {
             codedisplay.style.display = '';
             kdt.selectText(codedisplay);

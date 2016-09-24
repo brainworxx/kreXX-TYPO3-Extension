@@ -92,6 +92,7 @@ class BacktraceStep extends AbstractCallback
         $sourceModel->setData($source)
             ->setName('Sourcecode')
             ->setNormal('. . .')
+            ->hasExtras()
             ->setType('PHP');
         $output .= $this->storage->render->renderSingleChild($sourceModel);
 

@@ -97,7 +97,6 @@ class Fallback
             'analyseTraversable' => 'true',
         ),
         'methods' => array(
-            'analyseMethodsAtall' => 'true',
             'analyseProtectedMethods' => 'false',
             'analysePrivateMethods' => 'false',
             'debugMethods' => 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo,getProperties',
@@ -113,10 +112,6 @@ class Fallback
      * @var array
      */
     public $feConfigFallback = array(
-        'analyseMethodsAtall' => array(
-            'type' => 'Select',
-            'editable' => 'true',
-        ),
         'analyseProtectedMethods' => array(
             'type' => 'Select',
             'editable' => 'true',

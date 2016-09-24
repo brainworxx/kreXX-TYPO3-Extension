@@ -82,8 +82,12 @@ if (version_compare(TYPO3_version, '7.2' ,'>')) {
         include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/DebugViewHelper.php'));
     }
     if (version_compare(TYPO3_version, '8.0' ,'>=')) {
+        // Some special compatibility stuff for 8.0 , Fluid and it's ViewHelpers.
         if (!class_exists('\\Tx_Includekrexx_ViewHelpers\\MessagesViewHelper')) {
             include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/MessagesViewHelper8.php'));
+        }
+        if (!class_exists('\\Tx_Includekrexx_ViewHelpers\\DebugViewHelper')) {
+            include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/DebugViewHelper8.php'));
         }
     }
 

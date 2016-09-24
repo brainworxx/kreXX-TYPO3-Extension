@@ -150,6 +150,13 @@ class Model
     protected $hasExtra = false;
 
     /**
+     * Are we dealing with multiline code generation?
+     *
+     * @var string
+     */
+    protected $multiLineCodeGen = '';
+
+    /**
      * Injects the storage.
      *
      * @param Storage $storage
@@ -482,9 +489,33 @@ class Model
 
     /**
      * "Setter" for the hasExtras property.
+     *
+     * @return Model
+     *   $this, for chaining.
      */
     public function hasExtras()
     {
         $this->hasExtra = true;
+        return $this;
+    }
+
+    /**
+     * Getter for the multiline code generation.
+     *
+     * @return string
+     */
+    public function getMultiLineCodeGen()
+    {
+        return $this->multiLineCodeGen;
+    }
+
+    /**
+     * Setter for the multiline code generation.
+     *
+     * @param string $multiLineCodeGen
+     */
+    public function setMultiLineCodeGen($multiLineCodeGen)
+    {
+        $this->multiLineCodeGen = $multiLineCodeGen;
     }
 }

@@ -219,12 +219,14 @@ class Routing
         $json = array();
         $json['type'] = 'array';
         $json['count'] = (string)count($model->getData());
+        $multiline = false;
 
         // Dumping all Properties.
         $model->setType($model->getAdditional() . 'array')
             ->setAdditional($json['count'] . ' elements')
             ->setJson($json)
             ->addParameter('data', $model->getData())
+            ->addParameter('multiline', $multiline)
             ->initCallback('Iterate\ThroughArray');
 
         return $this->storage->render->renderExpandableChild($model);

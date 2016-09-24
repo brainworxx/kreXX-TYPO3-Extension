@@ -1,10 +1,10 @@
 <?php
 /**
  * @file
- *   Model for the view rendering, hosting the object method info closure.
+ *   Messages viewhelper substitute for the FlashMessagesViewHelper
  *   kreXX: Krumo eXXtended
  *
- *   This is a debugging tool, which displays structured information
+ *   kreXX is a debugging tool, which displays structured information
  *   about any PHP object. It is a nice replacement for print_r() or var_dump()
  *   which are used by a lot of PHP developers.
  *
@@ -31,44 +31,23 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
-use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Model;
+
+// This is so dirty and evil.
+// TYPO3 8.0 tries to resolve the old 4.5'er viewhelpers this way.
+// If someone reads this and knows how to do this properly, please send
+// a mail to:
+// tobias.guelzow@brainworxx.de
+//
+// And dropping 4.5 support is out ouf the question.
+namespace Tx_Includekrexx_ViewHelpers;
 
 /**
- * Class MethodInfo
+ * Since we want to render the original Viewhelper, we can extend it directly.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
- *
- * @uses array data
- *   Associative array, the analysis result.
+ * Class MessagesViewHelper
+ * @package Tx_Includekrexx_ViewHelpers
  */
-class ThroughMethodAnalysis extends AbstractCallback
+class DebugViewHelper extends \Tx_Includekrexx_ViewHelpers_DebugViewHelper
 {
-    /**
-     * Renders the info of a single method.
-     *
-     * @return string
-     *   The generated markup.
-     */
-    public function callMe()
-    {
-        $data = $this->parameters['data'];
-        $output = '';
-        foreach ($data as $key => $string) {
-            $model = new Model($this->storage);
-            $model->setData($string)->setName($key)->setType('reflection')->setConnector2('=');
-
-            if ($key !== 'comments' && $key !== 'declared in' && $key !== 'source') {
-                $model->setNormal($string);
-            } else {
-                $model->setNormal('. . .');
-                $model->hasExtras();
-            }
-
-            $output .= $this->storage->render->renderSingleChild($model);
-        }
-        return $output;
-    }
 }

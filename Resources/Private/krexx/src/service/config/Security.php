@@ -71,14 +71,6 @@ class Security extends Fallback
         // We must evaluate it.
         $result = false;
         switch ($name) {
-            case 'analyseMethodsAtall':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->storage->messages->addMessage($this->storage->messages->getHelp('configErrorMethods'));
-                    $this->storage->messages->addKey('methods.analyseMethodsAtall.error');
-                }
-                break;
 
             case 'analyseProtectedMethods':
                 // We expect a bool.

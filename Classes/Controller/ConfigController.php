@@ -93,7 +93,6 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                 'backtraceAnalysis' => $this->LLL('backtraceAnalysis'),
                 'memoryLeft' => $this->LLL('memoryLeft'),
                 'maxRuntime' => $this->LLL('maxRuntime'),
-                'analyseMethodsAtall' => $this->LLL('analyseMethodsAtall'),
                 'analyseProtectedMethods' => $this->LLL('analyseProtectedMethods'),
                 'analysePrivateMethods' => $this->LLL('analysePrivateMethods'),
                 'analyseConstants' => $this->LLL('analyseConstants'),
@@ -165,10 +164,6 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
             $value['runtime']['level'] = $this->krexxStorage->config->getConfigFromFile(
                 'runtime',
                 'level'
-            );
-            $value['methods']['analyseMethodsAtall'] = $this->krexxStorage->config->getConfigFromFile(
-                'methods',
-                'analyseMethodsAtall'
             );
             $value['methods']['analyseProtectedMethods'] = $this->krexxStorage->config->getConfigFromFile(
                 'methods',

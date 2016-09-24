@@ -130,34 +130,51 @@ class Codegen
             // Simply fuse the connectors.
             // The connectors are a representation of the current used "language".
             switch (self::analyseType($model)) {
-                case 'contagination':
-                    // We simply add the connectors for public access.
-                    // Escape the quotes. This is not done by the model.
-                    $name = str_replace('"', '&#034;', $model->getName());
-                    $name = str_replace("'", '&#039;', $name);
-
-                    $result = $model->getConnector1() . $name . $connector2;
+                case 'concatenation':
+                    $result = $this->concatenation($model);
                     break;
 
                 case 'method':
                     // We create a reflection method and then call it.
-                    $result = self::reflectFunction();
+                    $result = $this->reflectFunction();
                     break;
 
                 case 'property':
                     // We create a reflection property an set it to public to access it.
-                    $result = self::reflectProperty();
+                    $result = $this->reflectProperty();
                     break;
 
                 case 'stop':
                     // This tells the JS to stop iterating for previous gencode.
-                    $result ='.stop.';
+                    $result =';stop;';
+                    break;
+
+                // Multiline code generation starts here.
+                case 'iterator_to_array':
+                    $result = $this->iteratorToArray() . $this->concatenation($model);
                     break;
             }
         }
 
         $this->counter++;
         return $result;
+    }
+
+    /**
+     * Simple concatenation of all parameters.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *
+     * @return string
+     *   The generated code.
+     */
+    protected function concatenation(Model $model)
+    {
+        // We simply add the connectors for public access.
+        // Escape the quotes. This is not done by the model.
+        $name = str_replace('"', '&#034;', $model->getName());
+        $name = str_replace("'", '&#039;', $name);
+        return $model->getConnector1() . $name . trim($model->getConnector2(), ' = ');
     }
 
     /**
@@ -168,7 +185,7 @@ class Codegen
      */
     protected function reflectProperty()
     {
-        // We stop the current codeline here.
+        // We stop the current code line here.
         // This value is not reachable, and we will *not* create a reflection here.
         // Some people would abuse this to break open protected and private values.
         // These values are protected for a reason.
@@ -201,6 +218,19 @@ class Codegen
     }
 
     /**
+     * Generates the code for the iterator_to_array multiline.
+     *
+     * @return string
+     *   The generated code.
+     */
+    protected function iteratorToArray()
+    {
+        $result = 'iterator_to_array(;firstMarker;)';
+
+        return $result;
+    }
+
+    /**
      * Analyses the type and then decides what to do with it
      *
      * @param Model $model
@@ -208,22 +238,23 @@ class Codegen
      *
      * @return string
      *   Possible values:
-     *   - contagination
+     *   - concatenation
      *   - method
      *   - property
      */
     protected function analyseType(Model $model)
     {
         $type = $model->getType();
+        $multiline = $model->getMultiLineCodeGen();
 
-        $contagination = 'contagination';
+        $concatenation = 'concatenation';
         $method = 'method';
         $property = 'property';
         $stop = 'stop';
 
         // Debug methods are always public.
         if ($type === 'debug method' || $this->counter === 0) {
-            return $contagination;
+            return $concatenation;
         }
 
         // Test for constants.
@@ -232,18 +263,24 @@ class Codegen
             return $stop;
         }
 
+        // Test for  multiline code generation.
+        if (!empty($multiline)) {
+            return $multiline;
+        }
+
         // Test for protected or private.
         if (strpos($type, 'protected') === false && strpos($type, 'private') === false) {
             // Is not protected.
-            return $contagination;
+            return $concatenation;
         }
+
+
 
         // Test if we are inside the scope.
         if (self::isInScope($type)) {
             // We are inside the scope, this value, function or class is reachable.
-            return $contagination;
+            return $concatenation;
         }
-
 
         // We are still here? Must be a protected method or property.
         if (strpos($type, 'method') === false) {
