@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\View\Smokygrey;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Controller\OutputActions;
 
 /**
  * Individual render class for the smokey-grey skin.
@@ -89,6 +90,7 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
         $template = str_replace('{ktype}', $cssType, $template);
 
         $template = str_replace('{additional}', $model->getAdditional(), $template);
+        $template = str_replace('{connector2}', $this->renderConnector($model->getConnector2()), $template);
 
         // Generating our code and adding the Codegen button, if there is
         // something to generate.
@@ -209,7 +211,12 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
      */
     public function renderConnector($connector)
     {
-        // Do nothing. There are no connectors in Smoky-Grey.
+        if (strlen($connector) > 17) {
+            // Something big, we should display it.
+            // Most likely the parametes of a method.
+            return parent::renderConnector($connector);
+        }
         return '';
     }
+
 }

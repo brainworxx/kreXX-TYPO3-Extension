@@ -429,31 +429,39 @@ class Security extends Fallback
     /**
      * Checks if the current client ip is allowed.
      *
-     * @author Chin Leung
-     * @see https://stackoverflow.com/questions/35559119/php-ip-address-whitelist-with-wildcards
-     *
      * @param string $whitelist
      *   The ip whitelist.
      *
      * @return bool
      *   Whether the current client ip is allowed or not.
      */
-    public function isAllowedIp($whitelist){
-
-        $whitelist = explode(',', $whitelist);
-
+    public function isAllowedIp($whitelist)
+    {
         $remote = $_SERVER['REMOTE_ADDR'];
 
+        // Use TYPO3 v6+ cmpIP if possible.
+        if (is_callable(array('TYPO3\CMS\Core\Utility\GeneralUtility', 'cmpIP'))) {
+            return \TYPO3\CMS\Core\Utility\GeneralUtility::cmpIP($remote, $whitelist);
+        }
+        // Use TYPO3 v6- cmpIP if possible.
+        if (is_callable(array('t3lib_div', 'cmpIP'))) {
+            return \t3lib_div::cmpIP($remote, $whitelist);
+        }
+
+        // Fallback to the Chin Leung implementation.
+        // @author Chin Leung
+        // @see https://stackoverflow.com/questions/35559119/php-ip-address-whitelist-with-wildcards
+        $whitelist = explode(',', $whitelist);
         if (in_array($remote, $whitelist)) {
             // If the ip is matched, return true.
             return true;
         } else {
             // Check the wildcards.
-            foreach($whitelist as $ip){
+            foreach ($whitelist as $ip) {
                 $ip = trim($ip);
                 $wildcardPos = strpos($ip, "*");
                 # Check if the ip has a wildcard
-                if($wildcardPos !== false && substr($remote, 0, $wildcardPos) . "*" == $ip) {
+                if ($wildcardPos !== false && substr($remote, 0, $wildcardPos) . "*" == $ip) {
                     return true;
                 }
             }

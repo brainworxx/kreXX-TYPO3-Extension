@@ -1,4 +1,4 @@
-2.1.0
+2.0.1
 - Refactored the configuration and introduced models there.
 - Removed the \Krexx::enable() call.
 - Removed configurations, that nobody was editing anyway.
@@ -7,6 +7,8 @@
   now correctly.
 - Bugfix: Sourcecode generation for Traversable classes should
   work now for none ArrayAccess classes.
+- Change: Added the method arguments to the method analysis in the
+  smokygrey skin.
 
 2.0.0
 - Added sourcecode to the closure analysis.

@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Controller\OutputActions;
 
 /**
  * Methods analysis methods. :rolleyes:
@@ -145,15 +146,18 @@ class ThroughMethods extends AbstractCallback
         foreach ($data as $key => $string) {
             // Getting the parameter list.
             if (strpos($key, 'Parameter') === 0) {
-                $paramList .= trim(str_replace(array(
-                        '&lt;optional&gt;',
-                        '&lt;required&gt;',
-                    ), array('', ''), $string)) . ', ';
+                $paramList .= trim($string) . ', ';
             }
             if (strpos($data['declaration keywords'], 'static') !== false) {
                 $connector1 = '::';
             }
         }
+
+        $paramList = str_replace(
+            array('&lt;required&gt; ', '&lt;optional&gt; '),
+            '',
+            $this->storage->encodeString($paramList)
+        );
         // Remove the ',' after the last char.
         $paramList = '<small>' . trim($paramList, ', ') . '</small>';
         $model = new Model($this->storage);

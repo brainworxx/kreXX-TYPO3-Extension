@@ -406,11 +406,14 @@ class Routing
             preg_match('/(.*)(?= \[ )/', $parameter, $key);
             $parameter = str_replace($key[0], '', $parameter);
             $result[$key[0]] = trim($parameter, ' []');
-            $paramList .= trim(str_replace(array(
-                    '&lt;optional&gt;',
-                    '&lt;required&gt;'
-                ), array('', ''), $result[$key[0]])) . ', ';
+            $paramList .= trim($result[$key[0]]) . ', ';
         }
+
+        $paramList = str_replace(
+            array('&lt;required&gt; ', '&lt;optional&gt; '),
+            '',
+            $this->storage->encodeString($paramList)
+        );
         // Remove the ',' after the last char.
         $paramList = '<small>' . trim($paramList, ', ') . '</small>';
         $model->setType($model->getAdditional() . ' closure')

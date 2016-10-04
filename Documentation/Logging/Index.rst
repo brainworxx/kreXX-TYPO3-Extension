@@ -18,7 +18,7 @@ Normally, the output of kreXX is send straight to the browser. But there are alw
 - Sending other developers the kreXX output
 - . . .
 
-You can configure kreXX to output it's data inside a file. How to do this, is explained in the chapter :ref:`config_options`.
+You can configure kreXX to output it's data inside a file instead of trying to send it to the browser. How to do this, is explained in the chapter :ref:`config_options`.
 Just change the output option **Destination** from **frontend** to **file**.
 
 |

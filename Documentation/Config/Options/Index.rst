@@ -27,9 +27,6 @@ Runtime
 | Disable output                 | | Is kreXX actually active?                                                                                                            | - true                    |
 |                                | | Here you can disable kreXX on a global level without uninstalling it.                                                                | - false                   |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| IP Range                       | | IP whitelist (comma separated) with wildcard (*) support.                                                                            | 192.168.0.110,192.168.1.* |
-|                                | | List of IPs who can trigger kreXX. You can do something like '192.168.1.*', but not something like '192.168.*.110'.                  |                           |
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Try to detect AJAX requests    | | Shall kreXX try to detect an AJAX request?                                                                                           | - true                    |
 |                                | | If set to true, there will be no output when AJAX is detected, to prevent a js error.                                                | - false                   |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
@@ -38,6 +35,12 @@ Runtime
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Maximum amount of calls        | | How often can you call kreXX in one run?                                                                                             | 10                        |
 |                                | | kreXX can generate a lot of data, and depending on your settings increasing this number might not be a good idea.                    |                           |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Minimum amout of memory [MB]   | kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break. Unit of       | 64                        |
+|                                | measurement is MB.                                                                                                                     |                           |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Maximum Runtime [Seconds]      | kreXX checks during the analysis how much time has elapsed since start. Here you can adjust how many seconds can pass until an         | 60                        |
+|                                | emergency break will be triggered. Unit of measurement is seconds.                                                                     |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 
 Output
@@ -51,6 +54,8 @@ Output
 | Destination                    | Will the output be sent to the frontend or the logfolder?                                                                              | - file                    |
 |                                |                                                                                                                                        | - frontend                |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Folder                         | Where shall kreXX save it's logfiles?                                                                                                  | log                       |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Maximum files in the logfolder | How many files should it keep? Files will only get deleted, when a new one is created.                                                 | 10                        |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 
@@ -62,10 +67,7 @@ Properties
 | Analyse protected properties   | | Shall kreXX create a reflection and poll it for data?                                                                                | - true                    |
 |                                | | kreXX will analyse all protected properties of a class.                                                                              | - false                   |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Analyse private properties     | | The same as :literal:`Analyse protected properties`, only for private properties.                                                    | - true                    |
-|                                |                                                                                                                                        | - false                   |
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Analyse constants              | | kreXX will analyse all pconstants of a class.                                                                                        | - true                    |
+| Analyse constants              | | kreXX will analyse all private properties of a class.                                                                                | - true                    |
 |                                |                                                                                                                                        | - false                   |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Analyse traversable data       | Shall kreXX try to traverse through the object?                                                                                        | - true                    |
@@ -77,6 +79,9 @@ Methods
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Option                         | Description                                                                                                                            | Possible values / example |
 +================================+========================================================================================================================================+===========================+
+| Analyse class methods at all   | | Shall kreXX analyse all the methods of an object?                                                                                    | - true                    |
+|                                | | If set to yes, kreXX will analyse the methods of a class that are reachable within the scope, from where kreXX was called.           | - false                   |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Analyse protected methods      | Shall kreXX analyse all protected methods of an object?                                                                                | - true                    |
 |                                |                                                                                                                                        | - false                   |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
@@ -101,4 +106,9 @@ Error Handling and Backtrace
 |                                | | and later unregister it with                                                                                                         |                           |
 |                                | | :literal:`\krexx::unregisterFatal();`                                                                                                |                           |
 |                                | | to prevent a slowdown.                                                                                                               |                           |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Backtrace analysis settings    | | Shall kreXX do a "deep" analysis of  the backtrace?                                                                                  | - deep                    |
+|                                |                                                                                                                                        | - normal                  |
+|                                | Be warned, a deep analysis can produce a lot of output. A "normal" analysis will use the configured settings, while a "deep"           |                           |
+|                                | analysis will get as much data from the object as possible.                                                                            |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
