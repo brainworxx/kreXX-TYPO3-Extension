@@ -321,10 +321,6 @@ class Storage
      */
     public function encodeString($data, $code = false)
     {
-        if (empty($data)) {
-            return '';
-        }
-
         // Try to encode it.
         set_error_handler(function () {
             /* do nothing. */
