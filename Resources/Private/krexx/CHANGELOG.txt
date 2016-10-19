@@ -8,6 +8,7 @@
 - Bugfix: Sourcecode generation for Traversable classes should
   work now for none ArrayAccess classes.
 - Bugfix: A string with the value of '0' will get displayed again.
+- Bugfix: Fixed a notice in the \Krexx::backtrace();
 - Change: Added the method arguments to the method analysis in the
   smokygrey skin.
 

@@ -84,11 +84,16 @@ class BacktraceStep extends AbstractCallback
 
         // Sourcecode, is escaped by now.
         $sourceModel = new Model($this->storage);
-        $lineNo = $stepData['line'] + $this->parameters['offset'];
-        $source = trim($this->storage->readSourcecode($stepData['file'], $lineNo, $lineNo -5, $lineNo +5));
-        if (empty($source)) {
+        if (isset($stepData['line'])) {
+            $lineNo = $stepData['line'] + $this->parameters['offset'];
+            $source = trim($this->storage->readSourcecode($stepData['file'], $lineNo, $lineNo -5, $lineNo +5));
+            if (empty($source)) {
+                $source = $this->storage->messages->getHelp('noSourceAvailable');
+            }
+        } else {
             $source = $this->storage->messages->getHelp('noSourceAvailable');
         }
+
         $sourceModel->setData($source)
             ->setName('Sourcecode')
             ->setNormal('. . .')
