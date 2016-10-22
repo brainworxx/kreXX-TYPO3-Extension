@@ -3,7 +3,7 @@
   <data type="array">
     <languageKey index="default" type="array">
       <label index="mlang_tabs_tab">kreXX Debugger</label>
-      <label index="mlang_labels_tabdescr">kreXX is a php debugger with a fatal error handler. It displays debug information about objects and variables in it's own draggable output.</label>
+      <label index="mlang_labels_tabdescr">kreXX is a feature rich php debugger with a neatly arranged debug window, featuring backend access to logfiles, code generation to reach the displayed values and much more.</label>
 
       <!-- General stuff for the configuration file -->
       <label index="frontend">Frontend</label>
