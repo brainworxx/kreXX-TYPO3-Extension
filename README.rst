@@ -12,4 +12,4 @@ This is a TYPO3 extension, providing backend configuration masks for kreXX.
 |
 |
 
-.. figure:: https://cloud.githubusercontent.com/assets/11192910/15530616/cb04ad0a-2255-11e6-8d9b-f26dcfcc1e7c.png
+.. figure:: https://cloud.githubusercontent.com/assets/11192910/19618334/a3aa1df4-9847-11e6-8cb4-250421a5eb31.png
