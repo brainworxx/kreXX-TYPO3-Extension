@@ -71,7 +71,6 @@ class Security extends Fallback
         // We must evaluate it.
         $result = false;
         switch ($name) {
-
             case 'analyseProtectedMethods':
                 // We expect a bool.
                 $result = $this->evalBool($value);
