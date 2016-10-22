@@ -32,27 +32,29 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-
-
-// This is so dirty and evil.
-// TYPO3 8.0 tries to resolve the old 4.5'er viewhelpers this way.
-// If someone reads this and knows how to do this properly, please send
-// a mail to:
-// tobias.guelzow@brainworxx.de
-//
-// And dropping 4.5 support is out ouf the question.
-namespace Tx_Includekrexx_ViewHelpers;
-
-use TYPO3\CMS\Fluid\ViewHelpers\FlashMessagesViewHelper;
+namespace Brainworxx\Includekrexx\Debug;
 
 /**
- * Messages viewhelper substitute for the FlashMessagesViewHelper
+ * Wrapper around the kreXX debug method to use inside the $GLOBALS['error']
  *
- * Since we want to render the original Viewhelper, we can extend it directly.
- *
- * Class MessagesViewHelper
- * @package Tx_Includekrexx_ViewHelpers
+ * @package Brainworxx\Includekrexx\Debug
  */
-class MessagesViewHelper extends FlashMessagesViewHelper
+class ObjectWrapper
 {
+    /**
+     * Simple wrapper for kreXX, for useage via debug();
+     *
+     * @see sysext/core/Resources/PHP/GlobalDebugFunction->debug()
+     *
+     * @param mixed $variable
+     * @param string $name
+     * @param string|integer $line
+     * @param string $file
+     * @param string|integer $recursiveDepth
+     * @param string|integer $debugLevel
+     */
+    public function debug($variable, $name, $line, $file, $recursiveDepth, $debugLevel)
+    {
+        krexx($variable);
+    }
 }

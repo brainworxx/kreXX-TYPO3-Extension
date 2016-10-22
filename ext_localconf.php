@@ -1,19 +1,20 @@
 <?php
 /**
- * @file
- *   Loader for the include kreXX extension
- *   kreXX: Krumo eXXtended
+ * kreXX: Krumo eXXtended
  *
- *   kreXX is a debugging tool, which displays structured information
- *   about any PHP object. It is a nice replacement for print_r() or var_dump()
- *   which are used by a lot of PHP developers.
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
  *
- *   kreXX is a fork of Krumo, which was originally written by:
- *   Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
  *
- * @author brainworXX GmbH <info@brainworxx.de>
+ * @author
+ *   brainworXX GmbH <info@brainworxx.de>
  *
- * @license http://opensource.org/licenses/LGPL-2.1
+ * @license
+ *   http://opensource.org/licenses/LGPL-2.1
+ *
  *   GNU Lesser General Public License Version 2.1
  *
  *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
@@ -36,22 +37,30 @@ if (!defined('TYPO3_MODE')) {
 }
 
 $registered = false;
-$filename = 'sdfsdfs';
+$wrapperFile = $krexxFile = 'sdfsdfs';
 // 6.0 ++
 if (class_exists('\TYPO3\CMS\Core\Utility\ExtensionManagementUtility')) {
-    $filename = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
+    $krexxFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
+    $wrapperFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Debug/ObjectWrapper.php');
     $registered = true;
 }
 // The old way.
 if (class_exists('t3lib_extMgm') && !$registered) {
-    $filename = t3lib_extMgm::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
+    $krexxFile = t3lib_extMgm::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
+    $wrapperFile = t3lib_extMgm::extPath($_EXTKEY, 'Classes/Debug/ObjectWrapper.php');
 }
-
-if (file_exists($filename) && !class_exists('Krexx')) {
+if (file_exists($krexxFile) && !class_exists('Krexx')) {
     // We load the kreXX library.
     // 7.3+ is able to autoload krexx before this point.
     // We will not include it again!
-    include_once $filename;
+    include_once $krexxFile;
+}
+// Register our debugger globally in the system to use via debug();
+if (file_exists($wrapperFile) && !class_exists('\Brainworxx\Includekrexx\Debug\ObjectWrapper')) {
+    include_once $krexxFile;
+}
+if (empty($GLOBALS['error'])) {
+    $GLOBALS['error'] = new Brainworxx\Includekrexx\Debug\ObjectWrapper();
 }
 
 // Do some autoloading stuff which may or may not be done by TYPO3 automatically.
@@ -90,5 +99,4 @@ if (version_compare(TYPO3_version, '7.2' ,'>')) {
             include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/DebugViewHelper8.php'));
         }
     }
-
 }
