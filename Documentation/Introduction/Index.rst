@@ -27,7 +27,7 @@ Key features:
 	- All features can be locally configured in the browser. The settings will be stored in a cookie.
 	- Configurable local opening function, to prevent other developers from calling your debug commands.
 	- Output can be saved to an output folder. Very useful in m2m communication.
-	- Several security measures to prevent prevent hangups with too large memory usage or a timeout.
+	- Several safety measures to prevent prevent hangups with too large memory usage or a timeout.
 	- Benchmarking
 	- Fatal error handler with a full backtrace
 	- Code generation to reach the displayed values, if possible.
