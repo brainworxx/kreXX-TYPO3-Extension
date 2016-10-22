@@ -21,7 +21,7 @@ Key features:
 	- Code generation to reach the displayed values, if possible.
 
 	
-.. figure:: https://cloud.githubusercontent.com/assets/11192910/15508377/7cc49e1a-21cf-11e6-8a9d-e64f3ec84604.png
+.. figure:: https://cloud.githubusercontent.com/assets/11192910/19618053/3e67850a-9840-11e6-96a5-e20ffb67918c.png
   :alt: Analysis of an extbase query result
   
   Analysis of an extbase query result
