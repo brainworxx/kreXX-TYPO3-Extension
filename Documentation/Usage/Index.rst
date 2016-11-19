@@ -16,7 +16,7 @@ Main analytic function
 
 .. code-block:: php
 
-	Krexx($myObject);
+	krexx($myObject);
 	// or as an alias:
 	\kreXX::open($myObject)
 
@@ -74,6 +74,16 @@ Often enough a kreXX call will look like this:
 
 .. code-block:: php
 
-	Krexx($this);
+	krexx($this);
 
 Analysing "$this" means, that all protected and private values and methods are reachable from this point inside the code. When kreXX notices this, it will analyse all reachable variables and methods of this class.
+
+|
+
+TYPO3 debug integration
+^^^^^^^^^^^^^^^^^^^^^^^
+As for Vverion 2.0.2 and above, we've integrated kreXX into the global debug call of typo3. If there is no other extension using this, youcan simply call:
+
+.. code-block:: php
+
+	debug($this);

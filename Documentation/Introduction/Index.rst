@@ -15,6 +15,7 @@ kreXX will be called from within the PHP source code:
 
 	krexx($myObject);
 
+|
 
 Key features:
 	- Dumping of protected variables
@@ -26,7 +27,9 @@ Key features:
 	- All features can be globally configured with a backend editor.
 	- All features can be locally configured in the browser. The settings will be stored in a cookie.
 	- Configurable local opening function, to prevent other developers from calling your debug commands.
+	- IP mask to allow only some IPs (or IP ranges) to trigger kreXX.
 	- Output can be saved to an output folder. Very useful in m2m communication.
+	- Backend access to the logfiles via a file dispatcher.
 	- Several safety measures to prevent prevent hangups with too large memory usage or a timeout.
 	- Benchmarking
 	- Fatal error handler with a full backtrace

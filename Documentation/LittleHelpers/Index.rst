@@ -46,7 +46,7 @@ Hide-Everything-Else
 Automatic code generation
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-| Displaying only the values you want to know about os one thing. Reaching them via php code is something else entirely.
+| Displaying only the values you want to know about is one thing. Reaching them via php code is something else entirely.
 | We have included an automatic code generation, which generates php-code to reach these values.
 | There is a limitation, though. Most values you will come across are protected, and there is most likely a reason for this. kreXX will not generate code to make them public.
 | A click on the <php> symbol will generate this code.
@@ -73,6 +73,7 @@ kreXX offers you here a case insensitive search form, doing the following:
 - Marking all appearances
 - Open the collapsed nodes to the output
 - Scrolls down to each finding
+- A click on the little cog opens the search options
 
 .. figure:: ../Images/LittleHelpers/search.png
 	:width: 1073
