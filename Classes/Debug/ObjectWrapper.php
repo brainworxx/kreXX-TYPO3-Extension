@@ -44,17 +44,49 @@ class ObjectWrapper
     /**
      * Simple wrapper for kreXX, for useage via debug();
      *
+     * Depending on the typo3 version:
+     * @see t3lib/config_default.php
      * @see sysext/core/Resources/PHP/GlobalDebugFunction->debug()
+     * @see sysext/core/Classes/Core/GlobalDebugFunction->debug()
      *
      * @param mixed $variable
+     *   The varialbe we are analysing
      * @param string $name
+     *   The name of the variable will be determined by the caller finder class.
      * @param string|integer $line
+     *   The line number of the call will be determined by the caller finder class.
      * @param string $file
+     *   The file of the call will be determined by the caller finder class.
      * @param string|integer $recursiveDepth
+     *   kreXX does not have a recursive depth. It does have a nesting level
+     *   which is determined in the configuration. Recursions of objects are
+     *   handeled via JS (copy and paste the result). Recursions of arrays
+     *   are handeled via the nesting level.
      * @param string|integer $debugLevel
+     *   I'm not really sure, what this variable may contain. The standard value
+     *   is 'E_DEBUG'. It is not used in the core anywhere and I was not able
+     *   to find any documentation about it.
      */
     public function debug($variable, $name, $line, $file, $recursiveDepth, $debugLevel)
     {
-        krexx($variable);
+        if ($debugLevel !== 'E_DEBUG') {
+            // Do nothing, just to be sure.
+            return;
+        }
+
+        // We need to change the finder serarch pattern to 'debug',
+        // because the actual debug call was 'debug($something)'.
+        // This way we can make sure, that the source generation will work
+        // correctly.
+        $oldPattern = \Krexx::$storage->callerFinder->getPattern();
+        \Krexx::$storage->callerFinder->setPattern('debug');
+        // We ignore the first finding of the pattern.
+
+        // Calling the actual analysis. The pattern from above will be reset
+        // afterwards.
+        \Krexx::open($variable);
+
+        // Resetting to what it was before.
+        \Krexx::$storage->callerFinder->setPattern($oldPattern);
     }
 }

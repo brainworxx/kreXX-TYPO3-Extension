@@ -327,7 +327,7 @@ class Chunks
      * We add some metadata that we will store in a separate file.
      *
      * @param array $caller
-     *   The caller from the OutputActions::findCaller();
+     *   The caller from the caller finder.
      */
     public function addMetadata($caller)
     {

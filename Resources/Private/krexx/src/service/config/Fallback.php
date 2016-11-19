@@ -219,8 +219,11 @@ class Fallback
 
         // Deleting all rows from the DB via typo3 reopsitory is NOT a good
         // debug method!
-        'RepositoryInterface' => 'removeAll',
+        'TYPO3\CMS\Extbase\Persistence\RepositoryInterface' => 'removeAll',
         'Tx_Extbase_Persistence_RepositoryInterface' => 'removeAll',
+
+        // The lazy loading proxy may not have loaded the objewct at this time.
+        'TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy' => '__toString',
     );
 
     /**
@@ -228,5 +231,5 @@ class Fallback
      *
      * @var string
      */
-    public $version = '2.0.1';
+    public $version = '2.0.2 dev';
 }

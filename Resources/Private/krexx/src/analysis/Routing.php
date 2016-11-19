@@ -360,6 +360,13 @@ class Routing
             ->setType($model->getAdditional() . 'string' . ' ' . $strlen)
             ->setJson($json);
 
+        // Check if this is a possible callback.
+        // We are not going to analyse this further, because modern systems
+        // do not use these anymore.
+        if (is_callable($data)) {
+            $model->setIsCallback(true);
+        }
+
         return $this->storage->render->renderSingleChild($model);
     }
 

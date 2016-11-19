@@ -91,7 +91,7 @@ class Render
             // We have a lot of text, so we render this one expandable (yellow box).
             $partExpand = $this->getTemplateFileContent('singleChildExpand');
         }
-        if (is_callable($data)) {
+        if ($model->getIsCallback()) {
             // Add callable partial.
             $partCallable = $this->getTemplateFileContent('singleChildCallable');
         }

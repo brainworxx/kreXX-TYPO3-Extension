@@ -20,12 +20,12 @@ Key features:
 	- Fatal error handler with a full backtrace
 	- Code generation to reach the displayed values, if possible.
 
-	
-.. figure:: https://cloud.githubusercontent.com/assets/11192910/15508377/7cc49e1a-21cf-11e6-8a9d-e64f3ec84604.png
+
+.. figure:: https://cloud.githubusercontent.com/assets/11192910/19618053/3e67850a-9840-11e6-96a5-e20ffb67918c.png
   :alt: Analysis of an extbase query result
-  
+
   Analysis of an extbase query result
-  
+
 Usage inside the PHP code
 =========================
 kreXX will be called from within the PHP source code:
@@ -84,4 +84,4 @@ Often enough a kreXX call will look like this:
 	kreXX($this);
 
 Analysing "$this" means, that all protected and private values and methods are reachable from this point inside the code. When kreXX notices this, it will analyse all reachable variables and methods of this class.
-	
+

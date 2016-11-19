@@ -112,97 +112,6 @@ class Internals
     }
 
     /**
-     * Finds the place in the code from where krexx was called.
-     *
-     * @return array
-     *   The code, from where krexx was called
-     */
-    protected function findCaller()
-    {
-        $backtrace = debug_backtrace();
-        while ($caller = array_pop($backtrace)) {
-            if (isset($caller['function']) && strtolower($caller['function']) === 'krexx') {
-                break;
-            }
-            if (isset($caller['class']) && strtolower($caller['class']) === 'krexx') {
-                break;
-            }
-        }
-
-        // We will not keep the whole backtrace im memory. We only return what we
-        // actually need.
-        return array(
-            'file' => htmlspecialchars($caller['file']),
-            'line' => (int)$caller['line'],
-            // We don't need to escape the varname, this will be done in
-            // the model.
-            'varname' => $this->getVarName($caller['file'], $caller['line']),
-        );
-    }
-
-    /**
-     * Tries to extract the name of the variable which we try to analyse.
-     *
-     * @param string $file
-     *   Path to the sourcecode file.
-     * @param string $line
-     *   The line from where kreXX was called.
-     *
-     * @return string
-     *   The name of the variable.
-     */
-    protected function getVarName($file, $line)
-    {
-        // Retrieve the call from the sourcecode file.
-        $source = file($file);
-        // Fallback to '. . .'.
-        $varname = '. . .';
-
-        // Now that we have the line where it was called, we must check if
-        // we have several commands in there.
-        $possibleCommands = explode(';', $source[$line - 1]);
-        // Now we must weed out the none krexx commands.
-        foreach ($possibleCommands as $key => $command) {
-            if (strpos(strtolower($command), 'krexx') === false) {
-                unset($possibleCommands[$key]);
-            }
-        }
-        // I have no idea how to determine the actual call of krexx if we
-        // are dealing with several calls per line.
-        if (count($possibleCommands) === 1) {
-            $sourceCall = reset($possibleCommands);
-
-            // Now that we have our actual call, we must remove the krexx-part
-            // from it.
-            $possibleFunctionnames = array(
-                'krexx',
-                'krexx::open',
-                'krexx::' . $this->storage->config->getDevHandler(),
-                'Krexx::open',
-                'Krexx::' . $this->storage->config->getDevHandler()
-            );
-            foreach ($possibleFunctionnames as $funcname) {
-                // This little baby tries to resolve everything inside the
-                // brackets of the kreXX call.
-                preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', $sourceCall, $name);
-                if (isset($name[1])) {
-                    $varname = $name[1];
-                    break;
-                }
-            }
-        }
-
-        $varname = $this->storage->encodeString(trim($varname, " \t\n\r\0\x0B'\""));
-
-        // Check if we have a value.
-        if (empty($varname)) {
-            $varname = '. . .';
-        }
-
-        return $varname;
-    }
-
-    /**
      * Simply outputs the Header of kreXX.
      *
      * @param string $headline
@@ -239,7 +148,7 @@ class Internals
     {
         // Now we need to stitch together the content of the ini file
         // as well as it's path.
-        if (!is_readable($this->storage->config->krexxdir . 'Krexx.ini')) {
+        if (!is_readable($this->storage->config->krexxdir . 'config/Krexx.ini')) {
             // Project settings are not accessible
             // tell the user, that we are using fallback settings.
             $path = 'Krexx.ini not found, using factory settings';
@@ -250,7 +159,7 @@ class Internals
 
         $model = new Model($this->storage);
         $model->setName($path)
-            ->setType($this->storage->config->krexxdir . 'Krexx.ini')
+            ->setType($this->storage->config->krexxdir . 'config/Krexx.ini')
             ->setHelpid('currentSettings')
             ->initCallback('Iterate\ThroughConfig');
 

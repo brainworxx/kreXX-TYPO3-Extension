@@ -82,6 +82,19 @@ $fontLight: lighter 10px tahoma, verdana;
   border-bottom-left-radius: $radius;
 }
 
+@mixin border-radius-bottom-right($radius) {
+  -webkit-border-bottom-right-radius: $radius;
+  -moz-border-radius-bottomright: $radius;
+  border-bottom-right-radius: $radius;
+}
+
+@mixin border-radius-top-left($radius) {
+  -webkit-border-top-left-radius: $radius;
+  -moz-border-radius-topleft: $radius;
+  border-top-left-radius: $radius;
+}
+
+
 .kwrapper, .kfatalwrapper-outer {
 
   // We need to secure some initial formating for our elements, to prevent the
@@ -743,7 +756,6 @@ $fontLight: lighter 10px tahoma, verdana;
   // The search
   .search-wrapper {
     list-style: none;
-    position: absolute;
     z-index: 1;
     &.khidden {
       display: none !important;
@@ -757,13 +769,42 @@ $fontLight: lighter 10px tahoma, verdana;
       z-index: 10;
       margin-left: 2px;
       margin-top: 2px;
-
+      position: absolute;
+      @include border-radius-top-left(2px);
+      .ksearchhr {
+        background-color: $blackLight;
+        margin: 10px 5px;
+        height: 1px;
+      }
+      .koptionleft,
+      .koptionright {
+        width: 45%;
+        display: inline-block;
+        margin: 2px;
+        input {
+          margin-right: 5px;
+        }
+      }
       .kclose {
         cursor: pointer;
         display: inline-table;
         font-size: 17px;
         margin: 0 5px;
         float: none;
+        &:hover {
+          color: $white;
+        }
+      }
+      .koptions {
+        height: 24px;
+        width: 24px;
+        margin: 0 5px;
+        cursor: pointer;
+        &:before {
+          content: '\26ED';
+          font-weight: bolder;
+          font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
+        }
         &:hover {
           color: $white;
         }

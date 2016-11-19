@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Service;
 
+use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
+use Brainworxx\Krexx\Analyse\Caller\Php;
 use Brainworxx\Krexx\Analyse\Routing;
 use Brainworxx\Krexx\Controller\OutputActions;
 use Brainworxx\Krexx\Service\Config\Config;
@@ -119,6 +121,13 @@ class Storage
     public $controller;
 
     /**
+     * Finds the script caller.
+     *
+     * @var AbstractCaller
+     */
+    public $callerFinder;
+
+    /**
      * Initializes all needed classes.
      *
      * @param $krexxDir
@@ -142,6 +151,8 @@ class Storage
         $this->chunks = new Chunks($this);
         // Initializes the controller.
         $this->controller = new OutputActions($this);
+        // Initialize the caller finder. We start with the php finder.
+        $this->callerFinder = new Php($this);
         // Initializes the render class.
         $this->initRenderer();
         // Check our environment.

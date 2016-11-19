@@ -157,6 +157,13 @@ class Model
     protected $multiLineCodeGen = '';
 
     /**
+     * Defines it the content of thecariable qualifies as a callback.
+     *
+     * @var bool
+     */
+    protected $isCallback = false;
+
+    /**
      * Injects the storage.
      *
      * @param Storage $storage
@@ -517,5 +524,25 @@ class Model
     public function setMultiLineCodeGen($multiLineCodeGen)
     {
         $this->multiLineCodeGen = $multiLineCodeGen;
+    }
+
+    /**
+     * Getter for the $isCallback.
+     *
+     * @return boolean
+     */
+    public function getIsCallback()
+    {
+        return $this->isCallback;
+    }
+
+    /**
+     * Setter fro the $isCallback.
+     *
+     * @param boolean $isCallback
+     */
+    public function setIsCallback($isCallback)
+    {
+        $this->isCallback = $isCallback;
     }
 }

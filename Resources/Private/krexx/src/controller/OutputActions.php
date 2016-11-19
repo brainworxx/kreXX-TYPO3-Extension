@@ -80,7 +80,7 @@ class OutputActions extends Internals
         $this->storage->reset();
 
         // Find caller.
-        $caller = $this->findCaller();
+        $caller = $this->storage->callerFinder->findCaller();
         if ($headline != '') {
             $caller['type'] = $headline;
         } else {
@@ -167,7 +167,7 @@ class OutputActions extends Internals
         $this->storage->config->overwriteLocalSettings($this->configFatal);
 
         // Find caller.
-        $caller = $this->findCaller();
+        $caller = $this->storage->callerFinder->findCaller();
         $caller['type'] = 'Backtrace';
 
         $this->storage->codegenHandler->setScope($caller['varname']);
@@ -220,7 +220,7 @@ class OutputActions extends Internals
 
 
         // Find caller.
-        $caller = $this->findCaller();
+        $caller = $this->storage->callerFinder->findCaller();
         $caller['type'] = 'Cookie Configuration';
         $this->storage->chunks->addMetadata($caller);
 
