@@ -59,9 +59,6 @@ if (file_exists($krexxFile) && !class_exists('Krexx')) {
 if (file_exists($wrapperFile) && !class_exists('\Brainworxx\Includekrexx\Debug\ObjectWrapper')) {
     include_once $krexxFile;
 }
-if (empty($GLOBALS['error'])) {
-    $GLOBALS['error'] = new Brainworxx\Includekrexx\Debug\ObjectWrapper();
-}
 
 // Do some autoloading stuff which may or may not be done by TYPO3 automatically.
 if (version_compare(TYPO3_version, '7.2' ,'>')) {
