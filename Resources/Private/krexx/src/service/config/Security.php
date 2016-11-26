@@ -239,7 +239,7 @@ class Security extends Fallback
                     $this->storage->messages->addMessage(
                         $this->storage->messages->getHelp('configErrorHandle')
                     );
-                    $this->storage->messages->addKey('output.handle.error');
+                    $this->storage->messages->addKey('output.haqndle.error');
                 }
                 break;
 
@@ -318,7 +318,7 @@ class Security extends Fallback
                     $this->storage->messages->addMessage(
                         $this->storage->messages->getHelp('configErrorAnalyseGetter')
                     );
-                    $this->storage->messages->addKey('methods.analyseGetter.error');
+                    $this->storage->messages->addKey('backtraceAndError.analyseGetter.error');
                 }
                 break;
 

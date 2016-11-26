@@ -1,10 +1,12 @@
 2.0.2
+- Added getter method analysis for models.
 - Added search options to both skins.
 - Bugfix: Added LazyLoadingProxy->__toString() to the debug
   blacklist to prevent a fatal.
 - Bugfix: Fixed the (XX) logo interference with the search box
   in the Hans skin.
 - Bugfix: The search count is not zero-based anymore.
+- Bugfix: Recursion resolving works now for closures.
 - Change: Moved the configuration file to it's own folder.
 - Change: Made the callback display in both skins a little less
   obtrusive

@@ -426,6 +426,7 @@ class Routing
         $model->setType($model->getAdditional() . ' closure')
             ->setAdditional('. . .')
             ->setConnector2($model->getConnector2() . '(' . $paramList . ')')
+            ->setDomid($this->generateDomIdFromObject($model->getData()))
             ->addParameter('data', $result)
             ->initCallback('Iterate\ThroughMethodAnalysis');
 
