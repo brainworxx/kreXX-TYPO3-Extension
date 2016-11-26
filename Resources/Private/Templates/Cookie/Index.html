@@ -4,26 +4,24 @@
     <h1><f:translate key="editcookie.headline" /></h1>
 
     <f:if condition="{is_disabled}==1">
-      <f:then>
-        <f:translate key="editcookie.disabled.1" /><br />
-        <f:translate key="editcookie.disabled.2" />
-      </f:then>
-      <f:else>
-        <f:if condition="{is_file}==1">
-          <f:then>
-            <f:translate key="editcookie.file.1" /><br />
-            <f:translate key="editcookie.file.2" /><f:link.action class="krexx-link" controller="Log" action="list" ><f:translate key="layout.log.index" /></f:link.action>
-          </f:then>
-          <f:else>
-            <f:translate key="editcookie.enabled.1" />
-            <i><f:translate key="layout.edit.config.fe" /></i>
-            <f:translate key="editcookie.enabled.2" />
-            <br/><br/><b><f:translate key="editcookie.enabled.3" /></b>
-          </f:else>
-        </f:if>
-
-      </f:else>
-
+        <f:then>
+            <f:translate key="editcookie.disabled.1" /><br />
+            <f:translate key="editcookie.disabled.2" />
+        </f:then>
+        <f:else>
+            <f:if condition="{is_file}==1">
+                <f:then>
+                    <f:translate key="editcookie.file.1" /><br />
+                    <f:translate key="editcookie.file.2" /><f:link.action class="krexx-link" controller="Log" action="list" ><f:translate key="layout.log.index" /></f:link.action>
+                </f:then>
+                <f:else>
+                    <f:translate key="editcookie.enabled.1" />
+                    <i><f:translate key="layout.edit.config.fe" /></i>
+                    <f:translate key="editcookie.enabled.2" />
+                    <br/><br/><b><f:translate key="editcookie.enabled.3" /></b>
+                </f:else>
+            </f:if>
+        </f:else>
     </f:if>
 
 </f:section>

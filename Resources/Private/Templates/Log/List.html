@@ -1,75 +1,67 @@
 <f:layout name="BackendRefresh"/>
 <f:section name="main">
-  <h1><f:translate key="log.headline" /></h1>
-  <p>
-    <f:translate key="log.headline.text.1" /><br/>
-    <f:translate key="log.headline.text.2" /> <f:link.action class="krexx-link" controller="Config" action="edit" ><f:translate key="layout.edit.config.file" /></f:link.action>
-  </p>
+    <h1><f:translate key="log.headline" /></h1>
+    <p>
+        <f:translate key="log.headline.text.1" /><br/>
+        <f:translate key="log.headline.text.2" /> <f:link.action class="krexx-link" controller="Config" action="edit" ><f:translate key="layout.edit.config.file" /></f:link.action>
+    </p>
 
-  <br/>
-  <f:if condition="{f:count(subject: files)}>0">
-    <f:then>
-      <f:render section="table" arguments="{files: '{files}'}" />
-    </f:then>
-    <f:else>
-      <f:translate key="log.noresult" />
-    </f:else>
-  </f:if>
+    <br/>
+    <f:if condition="{f:count(subject: files)}>0">
+        <f:then>
+            <f:render section="table" arguments="{files: '{files}'}" />
+        </f:then>
+        <f:else>
+            <f:translate key="log.noresult" />
+        </f:else>
+    </f:if>
 </f:section>
 
 <f:section name="table">
-  <table border="0" class="krexx-logs">
-    <tr>
-      <th><f:translate key="log.filename" /></th>
-      <th><f:translate key="log.time" /></th>
-      <th><f:translate key="log.size" /></th>
-      <th><f:translate key="log.meta" /></th>
-    </tr>
-    <f:for each="{files}" as="file">
-      <tr>
-        <td>
-          <f:link.action target="_blank" class="krexx-link" controller="Log" action="getContent" arguments="{id: '{file.id}'}">{file.name}</f:link.action>
-        </td>
-        <td>
-          {file.time}
-        </td>
-        <td>
-          {file.size}
-        </td>
-        <td>
-          <table class="noborder"><tbody>
-            <f:if condition="{f:count(subject: file.meta)}==0">
-              <f:then>
-                <tr><td><f:translate key="log.nodata" /></td></tr>
-              </f:then>
-              <f:else>
-                <f:for each="{file.meta}" as="meta">
-                  <tr>
-                    <td class="metatype">
-                      {meta.type}
-                      <f:if condition="{meta.varname}!='...'">
-                        <f:then>
-                          <f:translate key="log.of" /> <b>{meta.varname}</b>
-                        </f:then>
-                      </f:if>
-                    </td>
-                    <td>
-                      <f:translate key="log.in" /> <b title="{meta.file}">{meta.filename}</b>
-                    </td>
-                    <td>
-                      <f:translate key="log.inline" /> <b>{meta.line}</b>
-                    </td>
-                  </tr>
-                </f:for>
-
-              </f:else>
-            </f:if>
-
-
-          </tbody></table>
-        </td>
-      </tr>
-    </f:for>
-
-  </table>
+    <table border="0" class="krexx-logs">
+        <tr>
+            <th><f:translate key="log.filename" /></th>
+            <th><f:translate key="log.time" /></th>
+            <th><f:translate key="log.size" /></th>
+            <th><f:translate key="log.meta" /></th>
+        </tr>
+        <f:for each="{files}" as="file">
+            <tr>
+                <td><f:link.action target="_blank" class="krexx-link" controller="Log" action="getContent" arguments="{id: '{file.id}'}">{file.name}</f:link.action></td>
+                <td>{file.time}</td>
+                <td>{file.size}</td>
+                <td>
+                    <table class="noborder">
+                        <tbody>
+                            <f:if condition="{f:count(subject: file.meta)}==0">
+                                <f:then>
+                                    <tr><td><f:translate key="log.nodata" /></td></tr>
+                                </f:then>
+                                <f:else>
+                                    <f:for each="{file.meta}" as="meta">
+                                        <tr>
+                                            <td class="metatype">
+                                                {meta.type}
+                                                <f:if condition="{meta.varname}!='...'">
+                                                    <f:then>
+                                                        <f:translate key="log.of" /> <b>{meta.varname}</b>
+                                                    </f:then>
+                                                </f:if>
+                                            </td>
+                                            <td>
+                                                <f:translate key="log.in" /> <b title="{meta.file}">{meta.filename}</b>
+                                            </td>
+                                            <td>
+                                                <f:translate key="log.inline" /> <b>{meta.line}</b>
+                                            </td>
+                                        </tr>
+                                    </f:for>
+                                </f:else>
+                            </f:if>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </f:for>
+    </table>
 </f:section>

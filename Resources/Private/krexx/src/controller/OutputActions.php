@@ -131,8 +131,7 @@ class OutputActions extends Internals
         // Start the magic.
         $model = new Model($this->storage);
         $model->setData($data)
-            ->setName($caller['varname'])
-            ->setConnector2('=');
+            ->setName($caller['varname']);
         $analysis = $this->storage->routing->analysisHub($model);
         // Now that our analysis is done, we must check if there was an emergency
         // break.

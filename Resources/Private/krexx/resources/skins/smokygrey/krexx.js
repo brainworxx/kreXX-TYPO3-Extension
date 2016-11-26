@@ -393,6 +393,9 @@
         // Prevents the event from propagating (ie: "bubbling").
         event.stopPropagation();
 
+        // Hide the search options.
+        kdt.addClass([this.parentNode.nextElementSibling], 'khidden');
+
         // Stitching together our configuration.
         var searchtext = this.parentNode.querySelector('.ksearchfield').value;
         var caseSensitive = this.parentNode.parentNode.querySelector('.ksearchcase').checked;
@@ -442,7 +445,7 @@
             }
 
             // Feedback about where we are
-            this.parentNode.querySelector('.ksearch-state').textContent = results[instance][searchtext]['pointer'] + ' / ' + (results[instance][searchtext]['data'].length - 1);
+            this.parentNode.querySelector('.ksearch-state').textContent = (results[instance][searchtext]['pointer'] + 1) + ' / ' + (results[instance][searchtext]['data'].length);
             // Now we simply jump to the element in the array.
             if (typeof results[instance][searchtext]['data'][results[instance][searchtext]['pointer']] !== 'undefined') {
                 // We got another one!

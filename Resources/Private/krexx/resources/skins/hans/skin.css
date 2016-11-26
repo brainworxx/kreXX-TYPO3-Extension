@@ -698,7 +698,7 @@ div.kwrapper {
 }
 
 .kwrapper .search-wrapper .ksearch {
-    background-color: #ffcd00;
+    background-color: #fffda5;
     color: #303030;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
@@ -706,10 +706,6 @@ div.kwrapper {
     padding: 4px;
     font: 12px tahoma, verdana;
     z-index: 10;
-}
-
-.kwrapper .search-wrapper .ksearch:hover {
-    background-color: #ffcd00;
 }
 
 .kwrapper .kversion a {
@@ -793,7 +789,7 @@ div.kwrapper {
 
 .kwrapper .ksearch-found-highlight {
     background-color: #990100 !important;
-    color: #303030;
+    color: #000000;
 }
 
 .kwrapper .highlight-jumpto {
@@ -802,7 +798,7 @@ div.kwrapper {
 }
 .kwrapper .ksearch-found-highlight .kpre,
 .kwrapper .highlight-jumpto .kpre {
-    color: #303030 !important;
+    color: #000000 !important;
 }
 
 .kwrapper li.kchild.krow hr {

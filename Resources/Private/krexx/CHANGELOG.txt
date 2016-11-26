@@ -4,9 +4,11 @@
   blacklist to prevent a fatal.
 - Bugfix: Fixed the (XX) logo interference with the search box
   in the Hans skin.
+- Bugfix: The search count is not zero-based anymore.
 - Change: Moved the configuration file to it's own folder.
 - Change: Made the callback display in both skins a little less
   obtrusive
+- Change: Added the '=' the the Hans Skin for better readability.
 
 2.0.1
 - Refactored the configuration and introduced models there.
