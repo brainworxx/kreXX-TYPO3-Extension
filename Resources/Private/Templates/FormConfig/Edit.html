@@ -21,6 +21,18 @@
             <tr><td colspan="3">&nbsp;</td></tr>
 
             <tr>
+                <th colspan="3"><b><f:translate key="subhead.output" /></b></th>
+            </tr>
+            <tr>
+                <td><label for="skin"><f:translate key="label.skin" /></label></td>
+                <td><f:form.select id="skin" name="output[skin]" options="{data.settings}" value="{value.output.skin}" /></td>
+                <td class="cbx"><f:form.checkbox id="factory.skin" name="factory" checked="{data.factory.skin}" value="1" /><label for="factory.skin"><f:translate key="factory.settings" /></label></td>
+            </tr>
+            <tr><td><f:translate key="label.destination" /></td><td colspan="2"><f:translate key="logging.noteditable"/></td></tr>
+            <tr><td><f:translate key="label.maxfiles" /></td><td colspan="2"><f:translate key="logging.noteditable"/></td></tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
+
+            <tr>
                 <th colspan="3"><b><f:translate key="subhead.runtime" /></b></th>
             </tr>
             <tr>
@@ -45,20 +57,6 @@
                 <td class="cbx"><f:form.checkbox id="factory.maxCall" name="factory" checked="{data.factory.maxCall}" value="1" /><label for="factory.maxCall"><f:translate key="factory.settings" /></label></td>
             </tr>
             <tr><td colspan="3">&nbsp;</td></tr>
-
-            <tr>
-                <th colspan="3"><b><f:translate key="subhead.output" /></b></th>
-            </tr>
-            <tr>
-                <td><label for="skin"><f:translate key="label.skin" /></label></td>
-                <td><f:form.select id="skin" name="output[skin]" options="{data.settings}" value="{value.output.skin}" /></td>
-                <td class="cbx"><f:form.checkbox id="factory.skin" name="factory" checked="{data.factory.skin}" value="1" /><label for="factory.skin"><f:translate key="factory.settings" /></label></td>
-            </tr>
-
-            <tr><td><f:translate key="label.destination" /></td><td colspan="2"><f:translate key="logging.noteditable"/></td></tr>
-            <tr><td><f:translate key="label.maxfiles" /></td><td colspan="2"><f:translate key="logging.noteditable"/></td></tr>
-
-            <tr><td colspan="2">&nbsp;</td></tr>
 
             <tr>
                 <th colspan="3"><b><f:translate key="subhead.properties" /></b></th>
