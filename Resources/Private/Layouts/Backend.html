@@ -1,33 +1,32 @@
 {namespace krexx=Tx_Includekrexx_ViewHelpers}
 <f:be.container>
-<style type="text/css">
-/* since addJsFile and addCssFile got removed, I have to resort to adding stuff inline! */
-{css}
-</style>
-  <div class="typo3-fullDoc">
-    <div id="typo3-docheader">
-      <div class="typo3-docheader-functions">
-        <f:be.menus.actionMenu>
-          <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.config.file')}" controller="Config" action="edit" />
-          <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.config.fe')}" controller="FormConfig" action="edit" />
-          <f:be.menus.actionMenuItem label="{f:translate(key:'layout.log.index')}" controller="Log" action="list" />
-          <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.cookie.settings')}"  controller="Cookie" action="index" />
-          <f:be.menus.actionMenuItem label="{f:translate(key:'layout.usage.help')}" controller="Help" action="usage" />
-          <f:be.menus.actionMenuItem label="{f:translate(key:'layout.config.help')}" controller="Help" action="config" />
-        </f:be.menus.actionMenu>
-      </div>
-      <div class="typo3-docheader-buttons">
-      </div>
+    <style type="text/css">
+    /* since addJsFile and addCssFile got removed, I have to resort to adding stuff inline! */
+    {css}
+    </style>
+    <div class="typo3-fullDoc">
+        <div id="typo3-docheader">
+            <div class="typo3-docheader-functions">
+                <f:be.menus.actionMenu>
+                    <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.config.file')}" controller="Config" action="edit" />
+                    <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.config.fe')}" controller="FormConfig" action="edit" />
+                    <f:be.menus.actionMenuItem label="{f:translate(key:'layout.log.index')}" controller="Log" action="list" />
+                    <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.cookie.settings')}"  controller="Cookie" action="index" />
+                    <f:be.menus.actionMenuItem label="{f:translate(key:'layout.usage.help')}" controller="Help" action="usage" />
+                    <f:be.menus.actionMenuItem label="{f:translate(key:'layout.config.help')}" controller="Help" action="config" />
+                </f:be.menus.actionMenu>
+            </div>
+            <div class="typo3-docheader-buttons"></div>
+        </div>
+        <div id="typo3-docbody">
+            <div id="typo3-inner-docbody">
+                <!--
+                Our "own" version of the FlashMessagesViewhelper, to provide backend
+                messages from 4.5 to 8.x
+                -->
+                <krexx:messages/>
+                <f:render section="main" />
+            </div>
+        </div>
     </div>
-    <div id="typo3-docbody">
-      <div id="typo3-inner-docbody">
-        <!--
-          Our "own" version of the FlashMessagesViewhelper, to provide backend
-          messages from 4.5 to 8.x
-        -->
-        <krexx:messages/>
-        <f:render section="main" />
-      </div>
-    </div>
-  </div>
 </f:be.container>

@@ -24,6 +24,7 @@
             <th><f:translate key="log.time" /></th>
             <th><f:translate key="log.size" /></th>
             <th><f:translate key="log.meta" /></th>
+            <th><f:translate key="log.delete" /></th>
         </tr>
         <f:for each="{files}" as="file">
             <tr>
@@ -61,6 +62,7 @@
                         </tbody>
                     </table>
                 </td>
+                <td><f:link.action controller="Log" action="delete" arguments="{id: '{file.id}'}"><f:image width="16" src="{f:uri.resource(path:'Icons/delete.png')}" alt="{f:translate(key:'log.delete')}"/></f:link.action></td>
             </tr>
         </f:for>
     </table>

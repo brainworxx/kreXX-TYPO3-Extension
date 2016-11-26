@@ -1,203 +1,206 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
-  <data type="array">
-    <languageKey index="default" type="array">
-      <label index="mlang_tabs_tab">kreXX Debugger</label>
-      <label index="mlang_labels_tabdescr">kreXX is a feature rich php debugger with a neatly arranged debug window, featuring backend access to logfiles, code generation to reach the displayed values and much more.</label>
+    <data type="array">
+        <languageKey index="default" type="array">
+            <label index="mlang_tabs_tab">kreXX Debugger</label>
+            <label index="mlang_labels_tabdescr">kreXX is a feature rich php debugger with a neatly arranged debug window, featuring backend access to logfiles, code generation to reach the displayed values and much more.</label>
 
-      <!-- General stuff for the configuration file -->
-      <label index="frontend">Frontend</label>
-      <label index="file">File</label>
-      <label index="true">True</label>
-      <label index="false">False</label>
-      <label index="normal">Normal</label>
-      <label index="deep">Deep</label>
+            <!-- General stuff for the configuration file -->
+            <label index="frontend">Frontend</label>
+            <label index="file">File</label>
+            <label index="true">True</label>
+            <label index="false">False</label>
+            <label index="normal">Normal</label>
+            <label index="deep">Deep</label>
+            <label index="save_settings">Save settings</label>
+            <label index="refresh">Refresh</label>
 
-      <!-- General stuff for the FE configuration -->
-      <label index="full">Full edit</label>
-      <label index="display">Display only</label>
-      <label index="none">Do not display</label>
+            <!-- General stuff for the FE configuration -->
+            <label index="full">Full edit</label>
+            <label index="display">Display only</label>
+            <label index="none">Do not display</label>
 
-      <!-- Help texts -->
-      <label index="localFunction">Here you can enter your own alias function for \krexx::open(). Example: When you enter &apos;gue&apos;, the function will be \krexx::gue($myObject); [or krexx($myObject, &apos;gue&apos;);],  which only devs can use who have set the same value.This is useful, to prevent other devs from calling your debug functions.</label>
-      <label index="analyseProtected">Shall kreXX try to analyse the protected properties of a class? This may result in a lot of output.</label>
-      <label index="analysePrivate">Shall kreXX try to analyse the private properties of a class? This may result in a lot of output.</label>
-      <label index="analyseTraversable">Shall kreXX try to analyse possible traversable data? Depending on the underlying framework this info might be covered by the debug callback functions.</label>
-      <label index="debugMethods">Comma-separated list of used debug callback functions. A lot of frameworks offer these, toArray and toString being the most common. kreXX will try to call them, if they are available and display their provided data.</label>
-      <label index="level">Some frameworks have objects inside of objects inside of objects, and so on. Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.</label>
-      <label index="resetbutton">Here you can reset your local settings, which are stored in a cookie. kreXX will then use the global settings (either ini-file or factory settings).</label>
-      <label index="destination">kreXX can save it&apos;s output to a file, instead of outputting it to the frontend. The output will then be stored in the log folder.</label>
-      <label index="maxCall">A lot of output does not only slow down your server, it also slows down your browser. When using kreXX in a loop, it will create output every time the loop is executed. To limit this, you can configure the maximum call settings.</label>
-      <label index="disabled">Here you can disable kreXX without uninstalling the whole module.</label>
-      <label index="folder">This is the folder where kreXX will store it&apos;s logfiles.</label>
-      <label index="maxfiles">How many logfiles do you want to store inside your logging folder? When there are more files than this number, the older files will get deleted.</label>
-      <label index="skin">Choose a skin here. We have provided kreXX with two skins: smoky-grey and hans.</label>
-      <label index="currentSettings">kreXX&apos;s configuration can be edited here, changes will be stored in a cookie and overwrite the ini and factory settings. Please note, that these are only local settings. They only affect this browser.</label>
-      <label index="registerAutomatically">This option registers the fatal errorhandler as soon as kreXX is included. When a fatal error occures, kreXX will offer a backtrace and an analysis of the all objects in it. PHP always clears the stack in case of a fatal error,  so kreXX has to keep track of it. Be warned: This option will dramatically slow down your requests. Use this only when you have to. It is by far better to register the errorhandler yourself with \krexx::registerFatal(); and later unregister it with \krexx::unregisterFatal(); tp prevent a slowdown.</label>
-      <label index="detectAjax">kreXX tries to detect whether a request is made via ajax. When it is detected, it will do no output at all. The AJAX detection can be disabled here.</label>
-      <label index="backtraceAnalysis">Shall kreXX do a "deep" analysis of  the backtrace? Be warned, a deep analysis can produce a lot of output. A "normal" analysis will use the configured settings, while a "deep" analysis will get as much data from the objects as possible.</label>
-      <label index="memoryLeft">kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is MB.</label>
-      <label index="maxRuntime">kreXX checks during the analysis how much time has elapsed since start. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is seconds.</label>
-      <label index="analyseProtectedMethods">Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.</label>
-      <label index="analysePrivateMethods">Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.</label>
-      <label index="analyseConstants">Here you can toggle, if kreXX shall analyse all constants of a class.</label>
-      <label index="iprange">List of IPs that can trigger kreXX. Wildcards can be used.</label>
+            <!-- Help texts -->
+            <label index="localFunction">Here you can enter your own alias function for \krexx::open(). Example: When you enter &apos;gue&apos;, the function will be \krexx::gue($myObject); [or krexx($myObject, &apos;gue&apos;);],  which only devs can use who have set the same value.This is useful, to prevent other devs from calling your debug functions.</label>
+            <label index="analyseProtected">Shall kreXX try to analyse the protected properties of a class? This may result in a lot of output.</label>
+            <label index="analysePrivate">Shall kreXX try to analyse the private properties of a class? This may result in a lot of output.</label>
+            <label index="analyseTraversable">Shall kreXX try to analyse possible traversable data? Depending on the underlying framework this info might be covered by the debug callback functions.</label>
+            <label index="debugMethods">Comma-separated list of used debug callback functions. A lot of frameworks offer these, toArray and toString being the most common. kreXX will try to call them, if they are available and display their provided data.</label>
+            <label index="level">Some frameworks have objects inside of objects inside of objects, and so on. Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.</label>
+            <label index="resetbutton">Here you can reset your local settings, which are stored in a cookie. kreXX will then use the global settings (either ini-file or factory settings).</label>
+            <label index="destination">kreXX can save it&apos;s output to a file, instead of outputting it to the frontend. The output will then be stored in the log folder.</label>
+            <label index="maxCall">A lot of output does not only slow down your server, it also slows down your browser. When using kreXX in a loop, it will create output every time the loop is executed. To limit this, you can configure the maximum call settings.</label>
+            <label index="disabled">Here you can disable kreXX without uninstalling the whole module.</label>
+            <label index="folder">This is the folder where kreXX will store it&apos;s logfiles.</label>
+            <label index="maxfiles">How many logfiles do you want to store inside your logging folder? When there are more files than this number, the older files will get deleted.</label>
+            <label index="skin">Choose a skin here. We have provided kreXX with two skins: smoky-grey and hans.</label>
+            <label index="currentSettings">kreXX&apos;s configuration can be edited here, changes will be stored in a cookie and overwrite the ini and factory settings. Please note, that these are only local settings. They only affect this browser.</label>
+            <label index="registerAutomatically">This option registers the fatal errorhandler as soon as kreXX is included. When a fatal error occures, kreXX will offer a backtrace and an analysis of the all objects in it. PHP always clears the stack in case of a fatal error,  so kreXX has to keep track of it. Be warned: This option will dramatically slow down your requests. Use this only when you have to. It is by far better to register the errorhandler yourself with \krexx::registerFatal(); and later unregister it with \krexx::unregisterFatal(); tp prevent a slowdown.</label>
+            <label index="detectAjax">kreXX tries to detect whether a request is made via ajax. When it is detected, it will do no output at all. The AJAX detection can be disabled here.</label>
+            <label index="backtraceAnalysis">Shall kreXX do a "deep" analysis of  the backtrace? Be warned, a deep analysis can produce a lot of output. A "normal" analysis will use the configured settings, while a "deep" analysis will get as much data from the objects as possible.</label>
+            <label index="memoryLeft">kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is MB.</label>
+            <label index="maxRuntime">kreXX checks during the analysis how much time has elapsed since start. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is seconds.</label>
+            <label index="analyseProtectedMethods">Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.</label>
+            <label index="analysePrivateMethods">Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.</label>
+            <label index="analyseConstants">Here you can toggle, if kreXX shall analyse all constants of a class.</label>
+            <label index="iprange">List of IPs that can trigger kreXX. Wildcards can be used.</label>
 
-      <!-- Messages -->
-      <label index="file.not.writable">Configuration file %1$s is not writable!</label>
-      <label index="value.not.allowed">%1$s is not an allowed value!</label>
-      <label index="save.fail.title">The settings were NOT saved.</label>
-      <label index="save.success.title">The settings were saved.</label>
-      <label index="save.success.text">The settings were saved to: %1$s</label>
-      <label index="general.error.title">General error</label>
+            <!-- Messages -->
+            <label index="file.not.writable">Configuration file %1$s is not writable!</label>
+            <label index="value.not.allowed">%1$s is not an allowed value!</label>
+            <label index="save.fail.title">The settings were NOT saved.</label>
+            <label index="save.success.title">The settings were saved.</label>
+            <label index="save.success.text">The settings were saved to: %1$s</label>
+            <label index="general.error.title">General error</label>
 
-      <!--
-        Error messages from the krexx lib
-        @see Brainworxx\Krexx\Framework\Config::evaluateSetting( . . . )
-      -->
-      <label index="methods.analyseProtectedMethods.error">Wrong configuration for: "methods => analyseProtectedMethods"! Expected boolean. The configured setting was not applied!</label>
-      <label index="methods.analysePrivateMethods.error">Wrong configuration for: "methods => analysePrivateMethods"! Expected boolean. The configured setting was not applied!</label>
-      <label index="properties.analyseProtected.error">Wrong configuration for: "properties => analyseProtected"! Expected boolean. The configured setting was not applied!</label>
-      <label index="properties.analysePrivate.error">Wrong configuration for: "properties => analysePrivate"! Expected boolean. The configured setting was not applied!</label>
-      <label index="properties.analyseConstants.error">Wrong configuration for: "properties => analyseConstants"! Expected boolean. The configured setting was not applied!</label>
-      <label index="properties.analyseTraversable.error">Wrong configuration for: "properties => analyseTraversable"! Expected boolean. The configured setting was not applied!</label>
-      <label index="runtime.level.error">Wrong configuration for: "runtime => level"! Expected integer. The configured setting was not applied!</label>
-      <label index="runtime.maxCall.error">Wrong configuration for: "runtime => maxCall"! Expected integer. The configured setting was not applied!</label>
-      <label index="runtime.disabled.error">Wrong configuration for: "runtime => disabled"! Expected boolean. The configured setting was not applied!</label>
-      <label index="runtime.detectAjax.error">Wrong configuration for: "runtime => detectAjax"! Expected boolean. The configured setting was not applied!</label>
-      <label index="output.destination.error">Wrong configuration for: "output => destination"! Expected "frontend" or "file". The configured setting was not applied!</label>
-      <label index="output.maxfiles.error">Wrong configuration for: "output => maxfiles"! Expected integer. The configured setting was not applied!</label>
-      <label index="output.folder.error.writable">Wrong configuration for: "output => folder"! Directory is not writable. The configured setting was not applied!</label>
-      <label index="output.folder.error.protected">Wrong configuration for: "output => folder"! Directory is not protected. The configured setting was not applied!</label>
-      <label index="output.skin.error">Wrong configuration for: "output => skin"! Skin not found. The configured setting was not applied!</label>
-      <label index="errorHandling.traceFatals.error">Wrong configuration for: "errorHandling => traceFatals"! Expected boolean. The configured setting was not applied!</label>
-      <label index="errorHandling.traceWarnings.error">Wrong configuration for: "errorHandling => traceWarnings"! Expected boolean. The configured setting was not applied!</label>
-      <label index="errorHandling.traceNotices.error">Wrong configuration for: "errorHandling => traceNotices"! Expected boolean. The configured setting was not applied!</label>
-      <label index="backtraceAndError.registerAutomatically.error">Wrong configuration for: "backtraceAndError => registerAutomatically"! Expected boolean. The configured setting was not applied!</label>
-      <label index="backtraceAndError.registerAutomatically.php7">Wrong configuration for: "backtraceAndError => registerAutomatically"! Fatal errors got removed in PHP 7. The handler will not work here!</label>
-      <label index="backtraceAndError.backtraceAnalysis.error">Wrong configuration for: "backtraceAndError => backtraceAnalysis"! Expected "normal" or "deep". The configured setting was not applied!</label>
-      <label index="runtime.memoryLeft.error">Wrong configuration for: "runtime => memoryLeft"! Expected integer. The configured setting was not applied!</label>
-      <label index="runtime.maxRuntime.error">Wrong configuration for: "runtime => maxRuntime"! Expected integer. The configured setting was not applied!</label>
-      <label index="runtime.maxRuntime.error.maximum">Wrong configuration for: "runtime => maxRuntime"! Maximum for this server is: %1$s. The configured setting was not applied!</label>
-      <label index="runtime.iprange.error">Wrong configuration for: "output => iprange"! An empty IP list means that noone will be able to use kreXX. The configured setting was not applied!</label>
-      <label index="protected.folder.log">Logfolder %1$s is not writable !</label>
-      <label index="protected.folder.chunk">Chunksfolder %1$s is not writable!. This will increase the memory usage of kreXX significantly!</label>
+            <!--
+                Error messages from the krexx lib
+                @see Brainworxx\Krexx\Framework\Config::evaluateSetting( . . . )
+            -->
+            <label index="methods.analyseProtectedMethods.error">Wrong configuration for: "methods => analyseProtectedMethods"! Expected boolean. The configured setting was not applied!</label>
+            <label index="methods.analysePrivateMethods.error">Wrong configuration for: "methods => analysePrivateMethods"! Expected boolean. The configured setting was not applied!</label>
+            <label index="properties.analyseProtected.error">Wrong configuration for: "properties => analyseProtected"! Expected boolean. The configured setting was not applied!</label>
+            <label index="properties.analysePrivate.error">Wrong configuration for: "properties => analysePrivate"! Expected boolean. The configured setting was not applied!</label>
+            <label index="properties.analyseConstants.error">Wrong configuration for: "properties => analyseConstants"! Expected boolean. The configured setting was not applied!</label>
+            <label index="properties.analyseTraversable.error">Wrong configuration for: "properties => analyseTraversable"! Expected boolean. The configured setting was not applied!</label>
+            <label index="runtime.level.error">Wrong configuration for: "runtime => level"! Expected integer. The configured setting was not applied!</label>
+            <label index="runtime.maxCall.error">Wrong configuration for: "runtime => maxCall"! Expected integer. The configured setting was not applied!</label>
+            <label index="runtime.disabled.error">Wrong configuration for: "runtime => disabled"! Expected boolean. The configured setting was not applied!</label>
+            <label index="runtime.detectAjax.error">Wrong configuration for: "runtime => detectAjax"! Expected boolean. The configured setting was not applied!</label>
+            <label index="output.destination.error">Wrong configuration for: "output => destination"! Expected "frontend" or "file". The configured setting was not applied!</label>
+            <label index="output.maxfiles.error">Wrong configuration for: "output => maxfiles"! Expected integer. The configured setting was not applied!</label>
+            <label index="output.folder.error.writable">Wrong configuration for: "output => folder"! Directory is not writable. The configured setting was not applied!</label>
+            <label index="output.folder.error.protected">Wrong configuration for: "output => folder"! Directory is not protected. The configured setting was not applied!</label>
+            <label index="output.skin.error">Wrong configuration for: "output => skin"! Skin not found. The configured setting was not applied!</label>
+            <label index="errorHandling.traceFatals.error">Wrong configuration for: "errorHandling => traceFatals"! Expected boolean. The configured setting was not applied!</label>
+            <label index="errorHandling.traceWarnings.error">Wrong configuration for: "errorHandling => traceWarnings"! Expected boolean. The configured setting was not applied!</label>
+            <label index="errorHandling.traceNotices.error">Wrong configuration for: "errorHandling => traceNotices"! Expected boolean. The configured setting was not applied!</label>
+            <label index="backtraceAndError.registerAutomatically.error">Wrong configuration for: "backtraceAndError => registerAutomatically"! Expected boolean. The configured setting was not applied!</label>
+            <label index="backtraceAndError.registerAutomatically.php7">Wrong configuration for: "backtraceAndError => registerAutomatically"! Fatal errors got removed in PHP 7. The handler will not work here!</label>
+            <label index="backtraceAndError.backtraceAnalysis.error">Wrong configuration for: "backtraceAndError => backtraceAnalysis"! Expected "normal" or "deep". The configured setting was not applied!</label>
+            <label index="runtime.memoryLeft.error">Wrong configuration for: "runtime => memoryLeft"! Expected integer. The configured setting was not applied!</label>
+            <label index="runtime.maxRuntime.error">Wrong configuration for: "runtime => maxRuntime"! Expected integer. The configured setting was not applied!</label>
+            <label index="runtime.maxRuntime.error.maximum">Wrong configuration for: "runtime => maxRuntime"! Maximum for this server is: %1$s. The configured setting was not applied!</label>
+            <label index="runtime.iprange.error">Wrong configuration for: "output => iprange"! An empty IP list means that noone will be able to use kreXX. The configured setting was not applied!</label>
+            <label index="protected.folder.log">Logfolder %1$s is not writable !</label>
+            <label index="protected.folder.chunk">Chunksfolder %1$s is not writable!. This will increase the memory usage of kreXX significantly!</label>
 
+            <!-- Fluid layout keys from the template files -->
+            <label index="factory.settings">Use factory settings</label>
 
-      <!-- Fluid layout keys from the template files -->
-      <label index="factory.settings">Use factory settings</label>
+            <!-- Both layout files -->
+            <label index="layout.edit.config.file">Edit configuration file</label>
+            <label index="layout.edit.cookie.settings">Edit local cookie settings</label>
+            <label index="layout.edit.config.fe">Edit FE configuration</label>
+            <label index="layout.usage.help">Usage help</label>
+            <label index="layout.config.help">Config help</label>
+            <label index="layout.log.index">Logfiles access</label>
 
-      <!-- Both layout files -->
-      <label index="layout.edit.config.file">Edit configuration file</label>
-      <label index="layout.edit.cookie.settings">Edit local cookie settings</label>
-      <label index="layout.edit.config.fe">Edit FE configuration</label>
-      <label index="layout.usage.help">Usage help</label>
-      <label index="layout.config.help">Config help</label>
-      <label index="layout.log.index">Logfiles access</label>
+            <!-- Headlines -->
+            <label index="editconfig.headline">Edit configuration file</label>
+            <label index="editfeconfig.headline">Edit FE configuration</label>
+            <label index="subhead.runtime">Runtime</label>
+            <label index="subhead.output">Output</label>
+            <label index="subhead.properties">Properties</label>
+            <label index="subhead.methods">Methods</label>
+            <label index="subhead.backtraceAndError">Fatal error handling</label>
 
-      <!-- Headlines -->
-      <label index="editconfig.headline">Edit configuration file</label>
-      <label index="editfeconfig.headline">Edit FE configuration</label>
-      <label index="subhead.runtime">Runtime</label>
-      <label index="subhead.output">Output</label>
-      <label index="subhead.properties">Properties</label>
-      <label index="subhead.methods">Methods</label>
-      <label index="subhead.backtraceAndError">Fatal error handling</label>
+            <!-- Labels -->
+            <label index="label.skin">Skin:</label>
+            <label index="label.memoryLeft">Minimum amout of memory [MB]:</label>
+            <label index="label.maxRuntime">Maximum Runtime [Seconds]:</label>
+            <label index="label.folder">Folder:</label>
+            <label index="label.maxfiles">Maximum files in the logfolder:</label>
+            <label index="label.destination">Destination:</label>
+            <label index="label.maxCall">Maximum amount of calls:</label>
+            <label index="label.disabled">Disable output:</label>
+            <label index="label.detectAjax">Try to detect AJAX requests:</label>
+            <label index="label.analyseProtected">Analyse protected properties:</label>
+            <label index="label.analysePrivate">Analyse private properties:</label>
+            <label index="label.analyseTraversable">Analyse traversable data:</label>
+            <label index="label.debugMethods">List of debug methods to poll for data:</label>
+            <label index="label.level">Maximum nesting level for objects and arrays:</label>
+            <label index="label.analyseProtectedMethods">Analyse protected methods:</label>
+            <label index="label.analysePrivateMethods">Analyse private methods:</label>
+            <label index="label.registerAutomatically">Register fatal error handler automatically:</label>
+            <label index="label.backtraceAnalysis">Backtrace analysis settings:</label>
+            <label index="label.analyseConstants">Analyse constants</label>
+            <label index="label.iprange">IP Range</label>
 
-      <!-- Labels -->
-      <label index="label.skin">Skin:</label>
-      <label index="label.memoryLeft">Minimum amout of memory [MB]:</label>
-      <label index="label.maxRuntime">Maximum Runtime [Seconds]:</label>
-      <label index="label.folder">Folder:</label>
-      <label index="label.maxfiles">Maximum files in the logfolder:</label>
-      <label index="label.destination">Destination:</label>
-      <label index="label.maxCall">Maximum amount of calls:</label>
-      <label index="label.disabled">Disable output:</label>
-      <label index="label.detectAjax">Try to detect AJAX requests:</label>
-      <label index="label.analyseProtected">Analyse protected properties:</label>
-      <label index="label.analysePrivate">Analyse private properties:</label>
-      <label index="label.analyseTraversable">Analyse traversable data:</label>
-      <label index="label.debugMethods">List of debug methods to poll for data:</label>
-      <label index="label.level">Maximum nesting level for objects and arrays:</label>
-      <label index="label.analyseProtectedMethods">Analyse protected methods:</label>
-      <label index="label.analysePrivateMethods">Analyse private methods:</label>
-      <label index="label.registerAutomatically">Register fatal error handler automatically:</label>
-      <label index="label.backtraceAnalysis">Backtrace analysis settings:</label>
-      <label index="label.analyseConstants">Analyse constants</label>
-      <label index="label.iprange">IP Range</label>
+            <!-- Content stuff  Edit Frontend Settings -->
+            <label index="editfeconfig.help.headline">Here you can edit the frontend configuration form.</label>
+            <label index="full.help"> = The value can be edited in the frontend.</label>
+            <label index="display.help"> = The value will only be displayed.</label>
+            <label index="none.help"> = kreXX will not display the value.</label>
+            <label index="logging.noteditable">This setting is not editable on the frontend.</label>
 
-      <!-- Content stuff  Edit Frontend Settings -->
-      <label index="editfeconfig.help.headline">Here you can edit the frontend configuration form.</label>
-      <label index="full.help"> = The value can be edited in the frontend.</label>
-      <label index="display.help"> = The value will only be displayed.</label>
-      <label index="none.help"> = kreXX will not display the value.</label>
-      <label index="logging.noteditable">This setting is not editable on the frontend.</label>
+            <!-- Content Edit Cookie Settings -->
+            <label index="editcookie.headline">Edit local cookie settings</label>
+            <label index="editcookie.disabled.1">Normally, we would display the menu for the local cookie settings here. This menu is a part of the kreXX output and located in the footer.</label>
+            <label index="editcookie.disabled.2">The output of kreXX was disabled, so it will not be displayed.</label>
+            <label index="editcookie.enabled.1">Here you can edit the local cookie settings. They are stored in a cookie, and only affect your current browser. Unlike the configuration file, not all settings can be edited here by default. This can be changed in the</label>
+            <label index="editcookie.enabled.2">menu. Local cookie settings overwrite configuration file settings.</label>
+            <label index="editcookie.enabled.3">Please note, that these settings only affect your current browser!</label>
+            <label index="editcookie.file.1">The output destination of kreXX is set to File, so it will not be displayed here.</label>
+            <label index="editcookie.file.2">You can access all logfiles here:</label>
 
-      <!-- Content Edit Cookie Settings -->
-      <label index="editcookie.headline">Edit local cookie settings</label>
-      <label index="editcookie.disabled.1">Normally, we would display the menu for the local cookie settings here. This menu is a part of the kreXX output and located in the footer.</label>
-      <label index="editcookie.disabled.2">The output of kreXX was disabled, so it will not be displayed.</label>
-      <label index="editcookie.enabled.1">Here you can edit the local cookie settings. They are stored in a cookie, and only affect your current browser. Unlike the configuration file, not all settings can be edited here by default. This can be changed in the</label>
-      <label index="editcookie.enabled.2">menu. Local cookie settings overwrite configuration file settings.</label>
-      <label index="editcookie.enabled.3">Please note, that these settings only affect your current browser!</label>
-      <label index="editcookie.file.1">The output destination of kreXX is set to File, so it will not be displayed here.</label>
-      <label index="editcookie.file.2">You can access all logfiles here:</label>
+            <!-- Usage help -->
+            <label index="usage.headline">Usage</label>
+            <label index="usage.calling">kreXX will be called in the PHP source code:</label>
+            <label index="usage.features">Most of the time you will use this method. kreXX will analyse the $object and give you detailed information about it:</label>
+            <label index="usage.features.1">Public attributes of the object</label>
+            <label index="usage.features.2">Protected attributes of the object (can be toggled)</label>
+            <label index="usage.features.3">Private attributes of the object (can be toggled)</label>
+            <label index="usage.features.4">Content of the traversable part of the object (can be toggled)</label>
+            <label index="usage.features.5">Result of all configured debugging callbacks (can be configured)</label>
+            <label index="usage.features.simple">In case the variable is not an object, it will simply display its content.</label>
+            <label index="usage.label.moment">Define a "moment" during a benchmark test. The $string should be something meaningful, like "Model invoice db call":</label>
+            <label index="usage.label.timerEnd">End the benchmark test and displays the result:</label>
+            <label index="usage.label.backtrace">Outputs backtrace with sourcecode. When kreXX finds objects inside the backtrace, it will analyse them:</label>
+            <label index="usage.label.registerFatal">Register the fatal error handler in the system:</label>
+            <label index="usage.label.unregisterFatal">Unregister the fatal error handler in the system:</label>
+            <label index="usage.links.headline">More datailed help</label>
+            <label index="usage.links.typo3">Documentation at TYPO3 Docs</label>
+            <label index="usage.links.sourceforge">Documentation at sourceforge</label>
+            <label index="usage.links.github">Documentation at GitHub</label>
 
-      <!-- Usage help -->
-      <label index="usage.headline">Usage</label>
-      <label index="usage.calling">kreXX will be called in the PHP source code:</label>
-      <label index="usage.features">Most of the time you will use this method. kreXX will analyse the $object and give you detailed information about it:</label>
-      <label index="usage.features.1">Public attributes of the object</label>
-      <label index="usage.features.2">Protected attributes of the object (can be toggled)</label>
-      <label index="usage.features.3">Private attributes of the object (can be toggled)</label>
-      <label index="usage.features.4">Content of the traversable part of the object (can be toggled)</label>
-      <label index="usage.features.5">Result of all configured debugging callbacks (can be configured)</label>
-      <label index="usage.features.simple">In case the variable is not an object, it will simply display its content.</label>
-      <label index="usage.label.moment">Define a "moment" during a benchmark test. The $string should be something meaningful, like "Model invoice db call":</label>
-      <label index="usage.label.timerEnd">End the benchmark test and displays the result:</label>
-      <label index="usage.label.backtrace">Outputs backtrace with sourcecode. When kreXX finds objects inside the backtrace, it will analyse them:</label>
-      <label index="usage.label.registerFatal">Register the fatal error handler in the system:</label>
-      <label index="usage.label.unregisterFatal">Unregister the fatal error handler in the system:</label>
-      <label index="usage.links.headline">More datailed help</label>
-      <label index="usage.links.typo3">Documentation at TYPO3 Docs</label>
-      <label index="usage.links.sourceforge">Documentation at sourceforge</label>
-      <label index="usage.links.github">Documentation at GitHub</label>
+            <!-- Configuration Help -->
+            <label index="config.headline">Configuration</label>
+            <label index="config.headline.text">kreXX is already preconfigured, you don't have to configure it. But there are always moments when you want to change it. There are 3 levels of configuration:</label>
+            <label index="config.factory.headline">1.) Factory settings</label>
+            <label index="config.factory.text">The factory settings are hardcoded fallback settings.</label>
+            <label index="config.file.headline">2.) Configuration file Krexx.ini</label>
+            <label index="config.file.text">The configuration file settings are stored in the file Krexx.ini. kreXX shows in it's output footer where it is searching for this file. In typo3 this is normally:</label>
+            <label index="config.file.link.1">You can edit these settings </label>
+            <label index="config.file.link.2">here</label>
+            <label index="config.file.hierarchy">Configuration file settings overwrite factory settings.</label>
+            <label index="config.cookie.headline">3.) Local cookie settings</label>
+            <label index="config.cookie.text"><![CDATA[You can edit the local cookie settings on the fly in the footer of the kreXX output. They are stored in a cookie, and only affect your current browser. Unlike the configuration file, not all settings can be edited there.<br/>Local cookie settings overwrite configuration file settings.]]></label>
+            <label index="config.cookie.warning">Please note, that these are only local settings, only affecting your current browser.</label>
+            <label index="config.links.headline">kreXX on the WeBB</label>
+            <label index="config.links.1">Documentation</label>
+            <label index="config.links.2">Bug reports for kreXX</label>
+            <label index="config.links.3">TYPO3 kreXX</label>
+            <label index="config.links.4">Magento kreXX</label>
+            <label index="config.links.5">Bug reports for the TYPO3 kreXX extension</label>
 
-      <!-- Configuration Help -->
-      <label index="config.headline">Configuration</label>
-      <label index="config.headline.text">kreXX is already preconfigured, you don't have to configure it. But there are always moments when you want to change it. There are 3 levels of configuration:</label>
-      <label index="config.factory.headline">1.) Factory settings</label>
-      <label index="config.factory.text">The factory settings are hardcoded fallback settings.</label>
-      <label index="config.file.headline">2.) Configuration file Krexx.ini</label>
-      <label index="config.file.text">The configuration file settings are stored in the file Krexx.ini. kreXX shows in it's output footer where it is searching for this file. In typo3 this is normally:</label>
-      <label index="config.file.link.1">You can edit these settings </label>
-      <label index="config.file.link.2">here</label>
-      <label index="config.file.hierarchy">Configuration file settings overwrite factory settings.</label>
-      <label index="config.cookie.headline">3.) Local cookie settings</label>
-      <label index="config.cookie.text"><![CDATA[You can edit the local cookie settings on the fly in the footer of the kreXX output. They are stored in a cookie, and only affect your current browser. Unlike the configuration file, not all settings can be edited there.<br/>Local cookie settings overwrite configuration file settings.]]></label>
-      <label index="config.cookie.warning">Please note, that these are only local settings, only affecting your current browser.</label>
-      <label index="config.links.headline">kreXX on the WeBB</label>
-      <label index="config.links.1">Documentation</label>
-      <label index="config.links.2">Bug reports for kreXX</label>
-      <label index="config.links.3">TYPO3 kreXX</label>
-      <label index="config.links.4">Magento kreXX</label>
-      <label index="config.links.5">Bug reports for the TYPO3 kreXX extension</label>
+            <!-- Logging -->
+            <label index="log.headline">Overview file logging</label>
+            <label index="log.filename">Filename</label>
+            <label index="log.time">Last modified</label>
+            <label index="log.size">Size</label>
+            <label index="log.fileerror">Error reading logfile</label>
+            <label index="log.notreadable">File %1$s is not readable!</label>
+            <label index="log.headline.text.1">This is an overview of all logfiles that kreXX has created. You can easily access them here, just by clicking the filename.</label>
+            <label index="log.headline.text.2">You can activate file logging on the configuration page found here:</label>
+            <label index="log.noresult">Sorry, there are currently no logfiles.</label>
+            <label index="log.inline">line</label>
+            <label index="log.of">of</label>
+            <label index="log.in">in</label>
+            <label index="log.nodata">No data available.</label>
+            <label index="log.meta">Metadata</label>
+            <label index="log.delete">Delete</label>
 
-      <!-- Logging -->
-      <label index="log.headline">Overview file logging</label>
-      <label index="log.filename">Filename</label>
-      <label index="log.time">Last modified</label>
-      <label index="log.size">Size</label>
-      <label index="log.fileerror">Error reading logfile</label>
-      <label index="log.notreadable">File %1$s is not readable!</label>
-      <label index="log.headline.text.1">This is an overview of all logfiles that kreXX has created. You can easily access them here, just by clicking the filename.</label>
-      <label index="log.headline.text.2">You can activate file logging on the configuration page found here:</label>
-      <label index="log.noresult">Sorry, there are currently no logfiles.</label>
-      <label index="log.inline">line</label>
-      <label index="log.of">of</label>
-      <label index="log.in">in</label>
-      <label index="log.nodata">No data available.</label>
-      <label index="log.meta">Metadata</label>
-    </languageKey>
-  </data>
+        </languageKey>
+    </data>
 </T3locallang>

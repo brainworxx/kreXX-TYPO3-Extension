@@ -50,7 +50,7 @@ if (TYPO3_MODE === 'BE') {
             array(
                 'Config' => 'edit,save',
                 'FormConfig' => 'edit,save',
-                'Log' => 'list,getContent',
+                'Log' => 'list,getContent,delete',
                 'Help' => 'usage,config',
                 'Cookie' => 'index',
             ),
@@ -73,7 +73,7 @@ if (TYPO3_MODE === 'BE') {
             array(
                 'Config' => 'edit,save',
                 'FormConfig' => 'edit,save',
-                'Log' => 'list,getContent',
+                'Log' => 'list,getContent,delete',
                 'Help' => 'usage,config',
                 'Cookie' => 'index',
             ),

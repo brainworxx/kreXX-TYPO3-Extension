@@ -1,117 +1,113 @@
 {namespace krexx=Tx_Includekrexx_ViewHelpers}
 <f:be.container>
-  <style type="text/css">
-    /* since addJsFile and addCssFile got removed in 7.0, I have to resort to adding stuff inline! */
-    {css}
-  </style>
-  <script type="text/javascript">
-    // Since there is no format raw viewhelper in 4.5, I havew to resort to putting this inline.
-    (function () {
-      "use strict";
+    <style type="text/css">
+        /* since addJsFile and addCssFile got removed in 7.0, I have to resort to adding stuff inline! */
+        {css}
+    </style>
+    <script type="text/javascript">
+        // Since there is no format raw viewhelper in 4.5, I havew to resort to putting this inline.
+        (function () {
+            "use strict";
 
-      if (typeof document.observe === "function") {
-        // Looks like we can use the good old backend library
-        document.observe("dom:loaded", function () {
-          formSupport.formReady();
-        });
-      }
-      else {
-        // Looks like we are handling a 7.4+ Backend.
-        // IE9 should be able to swallow this.
-        document.addEventListener("DOMContentLoaded", function () {
-          formSupport.formReady();
-        });
-      }
-
-      /**
-       * @namespace formSupport
-       */
-      function formSupport() {}
-
-      formSupport.formReady = function () {
-        var checkboxes = document.getElementsByName('tx_includekrexx_tools_includekrexxkrexxconfiguration[factory]');
-        var element;
-
-        for (var i = 0, n = checkboxes.length; i < n; i++) {
-          formSupport.toggle(checkboxes[i]);
-          // var checkbox[i] = checkboxes[i]
-          checkboxes[i].addEventListener('click', function () {
-            formSupport.toggle(this);
-          }, true);
-        }
-
-        var saveButton = document.getElementById('editconfig_save');
-        if (typeof saveButton === 'object' && saveButton != 'undefined' && saveButton != null) {
-          saveButton.addEventListener('click', function () {
-            var form = document.getElementById('editconfig');
-            if (typeof form === 'object' && form != 'undefined' && form != null) {
-              form.submit();
+            if (typeof document.observe === "function") {
+                // Looks like we can use the good old backend library
+                document.observe("dom:loaded", function () {
+                    formSupport.formReady();
+                });
+            } else {
+                // Looks like we are handling a 7.4+ Backend.
+                // IE9 should be able to swallow this.
+                document.addEventListener("DOMContentLoaded", function () {
+                    formSupport.formReady();
+                });
             }
-          }, true);
-        }
 
-        var refreshButton = document.getElementById('editconfig_refresh');
-        if (typeof refreshButton === 'object' && refreshButton != 'undefined' && refreshButton != null) {
-          refreshButton.addEventListener('click', function () {
-            location.reload();
-          }, true);
-        }
-      };
+            /**
+            * @namespace formSupport
+            */
+            function formSupport() {}
 
-      /**
-       * When activating the checkbox behind the form element, we deactivat the
-       * form element, belonging to the checkbox.
-       *
-       * @param {HTMLInputElement} checkbox
-       */
-      formSupport.toggle = function (checkbox) {
-        var id = checkbox.id.split('.');
-        if (id[1] != 'undefined') {
-          var element = document.getElementById(id[1]);
-        }
+            formSupport.formReady = function () {
+                var checkboxes = document.getElementsByName('tx_includekrexx_tools_includekrexxkrexxconfiguration[factory]');
+                var element;
 
-        if (typeof element === 'object' && element != 'undefined' && element != null) {
+                for (var i = 0, n = checkboxes.length; i < n; i++) {
+                    formSupport.toggle(checkboxes[i]);
+                    checkboxes[i].addEventListener('click', function () {
+                    formSupport.toggle(this);
+                    }, true);
+                }
 
-          if (checkbox.checked) {
-            element.disabled = true;
-          }
-          else {
-            element.disabled = false;
-          }
-        }
-      };
+                var saveButton = document.getElementById('editconfig_save');
+                if (typeof saveButton === 'object' && saveButton != 'undefined' && saveButton != null) {
+                    saveButton.addEventListener('click', function () {
+                        var form = document.getElementById('editconfig');
+                        if (typeof form === 'object' && form != 'undefined' && form != null) {
+                            form.submit();
+                        }
+                    }, true);
+                }
 
-    })();
-  </script>
-  <div class="typo3-fullDoc">
-    <div id="typo3-docheader">
-      <div class="typo3-docheader-functions">
-        <f:be.menus.actionMenu>
-          <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.config.file')}" controller="Config" action="edit"/>
-          <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.config.fe')}" controller="FormConfig" action="edit"/>
-          <f:be.menus.actionMenuItem label="{f:translate(key:'layout.log.index')}" controller="Log" action="list"/>
-          <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.cookie.settings')}" controller="Cookie" action="index"/>
-          <f:be.menus.actionMenuItem label="{f:translate(key:'layout.usage.help')}" controller="Help" action="usage"/>
-          <f:be.menus.actionMenuItem label="{f:translate(key:'layout.config.help')}" controller="Help" action="config"/>
-        </f:be.menus.actionMenu>
-      </div>
-      <div class="typo3-docheader-buttons">
-        <div class="docheader-row2-left left">
-          <div id="editconfig_refresh">
-            <f:image width="16" src="{f:uri.resource(path:'Icons/refresh.png')}" alt="save settings"/>
-          </div>
+                var refreshButton = document.getElementById('editconfig_refresh');
+                if (typeof refreshButton === 'object' && refreshButton != 'undefined' && refreshButton != null) {
+                    refreshButton.addEventListener('click', function () {
+                        location.reload();
+                    }, true);
+                }
+            };
+
+            /**
+            * When activating the checkbox behind the form element, we deactivat the
+            * form element, belonging to the checkbox.
+            *
+            * @param {HTMLInputElement} checkbox
+            */
+            formSupport.toggle = function (checkbox) {
+                var id = checkbox.id.split('.');
+                if (id[1] != 'undefined') {
+                    var element = document.getElementById(id[1]);
+                }
+
+                if (typeof element === 'object' && element != 'undefined' && element != null) {
+                    if (checkbox.checked) {
+                        element.disabled = true;
+                    } else {
+                        element.disabled = false;
+                    }
+                }
+            };
+        })();
+    </script>
+
+    <div class="typo3-fullDoc">
+        <div id="typo3-docheader">
+            <div class="typo3-docheader-functions">
+                <f:be.menus.actionMenu>
+                    <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.config.file')}" controller="Config" action="edit"/>
+                    <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.config.fe')}" controller="FormConfig" action="edit"/>
+                    <f:be.menus.actionMenuItem label="{f:translate(key:'layout.log.index')}" controller="Log" action="list"/>
+                    <f:be.menus.actionMenuItem label="{f:translate(key:'layout.edit.cookie.settings')}" controller="Cookie" action="index"/>
+                    <f:be.menus.actionMenuItem label="{f:translate(key:'layout.usage.help')}" controller="Help" action="usage"/>
+                    <f:be.menus.actionMenuItem label="{f:translate(key:'layout.config.help')}" controller="Help" action="config"/>
+                </f:be.menus.actionMenu>
+            </div>
+            <div class="typo3-docheader-buttons">
+                <div class="docheader-row2-left left">
+                    <div id="editconfig_refresh">
+                        <f:image width="16" src="{f:uri.resource(path:'Icons/refresh.png')}" alt="{f:translate(key: 'refresh')}"/>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+        <div id="typo3-docbody">
+            <div id="typo3-inner-docbody">
+                <!--
+                    Our "own" version of the FlashMessagesViewhelper, to provide backend
+                    messages from 4.5 to 8.x
+                -->
+                <krexx:messages/>
+                <f:render section="main"/>
+            </div>
+        </div>
     </div>
-    <div id="typo3-docbody">
-      <div id="typo3-inner-docbody">
-        <!--
-          Our "own" version of the FlashMessagesViewhelper, to provide backend
-          messages from 4.5 to 8.x
-        -->
-        <krexx:messages/>
-        <f:render section="main"/>
-      </div>
-    </div>
-  </div>
 </f:be.container>

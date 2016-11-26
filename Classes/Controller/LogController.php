@@ -121,6 +121,25 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
             }
         }
 
+        public function deleteAction() {
+            // No directory traversal for you!
+            $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
+            // Get the filepath.
+            $file = $this->krexxStorage->config->krexxdir . 'log' . DIRECTORY_SEPARATOR . $id . '.Krexx.html';
+            if (is_readable($file)) {
+                // Away with you!
+                unlink($file);
+            } else {
+                // Error message and redirect to the list action.
+                $this->addMessage(
+                    $this->LLL('log.notreadable', array($id . '.Krexx.html')),
+                    $this->LLL('log.fileerror'),
+                    t3lib_FlashMessage::ERROR
+                );
+            }
+            $this->redirect('list');
+        }
+
         /**
          * Converts bytes into human readable file size.
          *
