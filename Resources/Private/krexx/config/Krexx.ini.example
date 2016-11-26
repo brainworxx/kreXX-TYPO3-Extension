@@ -74,6 +74,14 @@ analyseProtectedMethods = "false"
 ; analysePrivateMethods = "true"
 analysePrivateMethods = "false"
 
+; When dealing with models, it'S all about the getter (and setter) methods.
+; kreXX can try to analyse the (possible) result from the getters.
+; These methods will not be called, instead the result will come from the
+; class properties.
+; A proper getter method starts with 'get' and has no parameters.
+analyseGetter = "true"
+; analyseGetter = "false"
+
 ; What kind of additional methods shall be called from the object?
 ; Comma separated list of functions. They are only called, when they are
 ; callable. These functions are called without parameters. They also might
@@ -111,6 +119,7 @@ detectAjax = "full"
 analyseProtected = "full"
 analysePrivate = "full"
 analyseTraversable = "full"
+analyseGetter = "full"
 level = "full"
 analyseProtectedMethods = "full"
 analysePrivateMethods = "full"

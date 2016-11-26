@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Flection;
+use Brainworxx\Krexx\Controller\OutputActions;
 
 /**
  * Object analysis methods.
@@ -96,6 +97,11 @@ class Objects extends AbstractCallback
             // Adding a HR to reflect that the following stuff are not public
             // properties anymore.
             $output .= $this->storage->render->renderSingeChildHr();
+        }
+
+        // Dumping getter methods.
+        if ($this->storage->config->getSetting('analyseGetter')) {
+            $output .= $this->getAllGetterData($ref, $data);
         }
 
         // Dumping protected properties.
@@ -158,11 +164,13 @@ class Objects extends AbstractCallback
 
         $public = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
 
-        if ($this->storage->config->getSetting('analyseProtectedMethods') || $this->storage->codegenHandler->isInScope()) {
+        if ($this->storage->config->getSetting('analyseProtectedMethods') ||
+            $this->storage->codegenHandler->isInScope()) {
             $protected = $ref->getMethods(\ReflectionMethod::IS_PROTECTED);
         }
 
-        if ($this->storage->config->getSetting('analysePrivateMethods') || $this->storage->codegenHandler->isInScope()) {
+        if ($this->storage->config->getSetting('analysePrivateMethods') ||
+            $this->storage->codegenHandler->isInScope()) {
             $private = $ref->getMethods(\ReflectionMethod::IS_PRIVATE);
         }
 
@@ -336,7 +344,7 @@ class Objects extends AbstractCallback
         if (!empty($refConst)) {
             // We've got some values, we will dump them.
             $model = new Model($this->storage);
-            $classname =$ref->getName();
+            $classname = $ref->getName();
             // We need to set al least one connector here to activate
             // code generation, even if it is a space.
             $model->setName('Constants')
@@ -389,5 +397,57 @@ class Objects extends AbstractCallback
             // $model->setAdditional($label);
             return $model->renderMe();
         }
+    }
+
+    /**
+     * Dump the possible result of all getter methods
+     *
+     * @param \ReflectionClass $ref
+     *
+     * @param object $data
+     *   The object we are currently analysing.
+     *
+     * @return string
+     *   The generated markup.
+     */
+    protected function getAllGetterData(\ReflectionClass $ref, $data)
+    {
+        // Get all public mehtods.
+        $methodList = get_class_methods($data);
+
+        if (!empty($methodList)) {
+            // Filter them.
+            foreach ($methodList as $key => $method) {
+                if (strpos($method, 'get') !== 0) {
+                    unset($methodList[$key]);
+                } else {
+                    // We only dump those that have no parameters.
+                    $reflectionMethod = $ref->getMethod($method);
+                    if (!empty($reflectionMethod->getParameters())) {
+                        unset($methodList[$key]);
+                    }
+                }
+            }
+
+            if (!empty($methodList)) {
+                // Got some getters right here.
+                $model = new Model($this->storage);
+                // We need to set al least one connector here to activate
+                // code generation, even if it is a space.
+                $model->setName('Getter')
+                    ->setType('class internals')
+                    ->setHelpid('getterHelpInfo')
+                    ->addParameter('ref', $ref)
+                    ->addParameter('methodList', $methodList)
+                    ->addParameter('data', $data)
+                    ->initCallback('Iterate\ThroughGetter');
+
+                return $this->storage->render->renderExpandableChild($model);
+            }
+        }
+
+        // There are no getter methods in here.
+        return '';
+
     }
 }

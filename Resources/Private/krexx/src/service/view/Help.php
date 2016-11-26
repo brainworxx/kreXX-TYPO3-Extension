@@ -49,6 +49,7 @@ class Help
         'analyseProtected' => 'Shall kreXX try to analyse the protected properties of a class?<br/> This may result in a lot of output.',
         'analysePrivate' => 'Shall kreXX try to analyse the private properties of a class?<br/> This may result in a lot of output.',
         'analyseTraversable' => 'Shall kreXX try to analyse possible traversable data?<br/> Depending on the underlying framework this info might be covered by the debug callback functions.',
+        'analyseGetter' => 'Shall kreXX try to determine the output of getter methods?<br/> These methods will not be called. kreXX will try to get the (possible) result from the class properties, which may lead to false results.',
         'debugMethods' => 'Comma-separated list of used debug callback functions. A lot of frameworks offer these, toArray and toString being the most common.<br/> kreXX will try to call them, if they are available and display their provided data.<br/> You can not change them on the frontend. If you want other settings here, you have to edit the kreXX configuration file.',
         'level' => 'Some frameworks have objects inside of objects inside of objects, and so on.<br/> Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.',
         'resetbutton' => 'Here you can reset your local settings, which are stored in a cookie.<br/> kreXX will then use the global settings (either ini-file or factory settings).',
@@ -62,10 +63,11 @@ class Help
         'detectAjax' => 'kreXX tries to detect whether a request is made via ajax. When it is detected, it will do no output at all. The AJAX detection can be disabled here.',
         'analyseProtectedMethods' => 'Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
         'analysePrivateMethods' => 'Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
-        '_getProperties' => 'TYPO3 debug function.<br />It takes the properties directly from the model, ignoring the getter function.<br />If the getter function is used to compute this value, the values from this function may be inaccurate.',
+        '_getProperties' => 'TYPO3 debug function.<br />It takes the properties directly from the model, ignoring the getter function.<br />If the getter method is used to compute this value, the values from this function may be inaccurate.',
         'php7' => "It looks like you are using PHP7.\r\nFatal errors got removed in PHP7, meaning that they are now catchable like normal errors.",
         'php7yellow' => 'The fatal error handler does not work with PHP7!',
         'analyseConstants' => 'Here you can toggle, if kreXX shall analyse all constants of a class.',
+        'getterHelpInfo' => 'Getter methods will NOT get called to get a result. Instread, kreXX tries to get the (possible) result from the properties of this class.<br/> If the getter method is used to compute this value, the values here may be inaccurate.',
         'maximumLevelReached' => "Maximum for analysis reached. I will not go any further.\n To increase this value, change the runtime => level setting.",
         'stringTooLarge' => "This is a very large string with a none-standard encoding.\n\n For security reasons, we must escape it, but it is too large for this. Sorry.",
         'configErrorMethodsProtected' => 'Wrong configuration for: "methods => analyseProtectedMethods"! Expected boolean. The configured setting was not applied!',
@@ -93,6 +95,7 @@ class Help
         'configErrorHandle' => 'You have entered a wrong developer handle. Please unse only letters between a-z and A-Z.',
         'configErrorLocal' => 'Could not read the Local Cookie configuration. Sorry :-/',
         'configErrorIpList' => 'Wrong configuration for: "output => iprange"! An empty IP list means that noone will be able to use kreXX. The configured setting was not applied!',
+        'configErrorAnalyseGetter' => 'Wrong configuration for: "methods => analyseGetter"! Expected boolean. The configured setting was not applied!',
     );
 
     /**

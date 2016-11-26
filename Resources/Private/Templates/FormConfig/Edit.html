@@ -96,6 +96,11 @@
                 <td><f:form.select id="analysePrivateMethods" name="methods[analysePrivateMethods]" options="{data.settings}" value="{value.methods.analysePrivateMethods}" /></td>
                 <td class="cbx"><f:form.checkbox id="factory.analysePrivateMethods" name="factory" checked="{data.factory.analysePrivateMethods}" value="1" /><label for="factory.analysePrivateMethods"><f:translate key="factory.settings" /></label></td>
             </tr>
+            <tr>
+                <td><label for="analyseGetter"><f:translate key="label.analyseGetter" /></label></td>
+                <td><f:form.select id="analyseGetter" name="methods[analyseGetter]" options="{data.settings}" value="{value.methods.analyseGetter}" /></td>
+                <td class="cbx"><f:form.checkbox id="factory.analyseGetter" name="factory" checked="{data.factory.analyseGetter}" value="1" /><label for="factory.analyseGetter"><f:translate key="factory.settings" /></label></td>
+            </tr>
             <tr><td><f:translate key="label.debugMethods" /></td><td colspan="2"><f:translate key="logging.noteditable"/></td></tr>
             <tr><td colspan="3">&nbsp;</td></tr>
 

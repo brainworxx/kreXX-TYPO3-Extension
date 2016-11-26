@@ -239,7 +239,7 @@ class Security extends Fallback
                     $this->storage->messages->addMessage(
                         $this->storage->messages->getHelp('configErrorHandle')
                     );
-                    $this->storage->messages->addKey('output.haqndle.error');
+                    $this->storage->messages->addKey('output.handle.error');
                 }
                 break;
 
@@ -299,7 +299,7 @@ class Security extends Fallback
 
             case 'iprange':
                 // We expect an array of ip's after an explode.
-                // But we are not vaidationg every singe one of them.
+                // But we are not validating every singe one of them.
                 // We are just making sure that we get a list.
                 $result = trim($value);
                 $result = !empty($result);
@@ -308,6 +308,17 @@ class Security extends Fallback
                         $this->storage->messages->getHelp('configErrorIpList')
                     );
                     $this->storage->messages->addKey('runtime.iprange.error');
+                }
+                break;
+
+            case 'analyseGetter':
+                // We expect a bool.
+                $result = $this->evalBool($value);
+                if (!$result) {
+                    $this->storage->messages->addMessage(
+                        $this->storage->messages->getHelp('configErrorAnalyseGetter')
+                    );
+                    $this->storage->messages->addKey('methods.analyseGetter.error');
                 }
                 break;
 

@@ -105,6 +105,7 @@ class Krexx
         include_once $krexxDir . 'src/analysis/callback/iterate/ThroughMethodAnalysis.php';
         include_once $krexxDir . 'src/analysis/callback/iterate/ThroughMethods.php';
         include_once $krexxDir . 'src/analysis/callback/iterate/ThroughProperties.php';
+        include_once $krexxDir . 'src/analysis/callback/iterate/ThroughGetter.php';
         include_once $krexxDir . 'src/analysis/caller/AbstractCaller.php';
         include_once $krexxDir . 'src/analysis/caller/Php.php';
         include_once $krexxDir . 'src/errorhandler/Error.php';

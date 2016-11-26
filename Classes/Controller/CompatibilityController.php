@@ -100,6 +100,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             'registerAutomatically',
             'analyseConstants',
             'iprange',
+            'analyseGetter',
         );
 
         /**

@@ -98,6 +98,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                 'analysePrivateMethods' => $this->LLL('analysePrivateMethods'),
                 'analyseConstants' => $this->LLL('analyseConstants'),
                 'iprange' => $this->LLL('iprange'),
+                'analyseGetter' => $this->LLL('analyseGetter'),
             );
 
 
@@ -173,6 +174,10 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
             $value['methods']['analysePrivateMethods'] = $this->krexxStorage->config->getConfigFromFile(
                 'methods',
                 'analysePrivateMethods'
+            );
+            $value['methods']['analyseGetter'] = $this->krexxStorage->config->getConfigFromFile(
+                'methods',
+                'analyseGetter'
             );
             $value['backtraceAndError']['registerAutomatically'] = $this->krexxStorage->config->getConfigFromFile(
                 'backtraceAndError',

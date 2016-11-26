@@ -99,6 +99,7 @@ class Fallback
         'methods' => array(
             'analyseProtectedMethods' => 'false',
             'analysePrivateMethods' => 'false',
+            'analyseGetter' => 'true',
             'debugMethods' => 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo,getProperties',
         ),
         'backtraceAndError' => array(
@@ -178,6 +179,10 @@ class Fallback
         ),
         'Local open function' => array(
             'type' => 'Input',
+            'editable' => 'true',
+        ),
+        'analyseGetter' => array(
+            'type' => 'Select',
             'editable' => 'true',
         ),
     );
