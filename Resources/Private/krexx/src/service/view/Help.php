@@ -67,7 +67,7 @@ class Help
         'php7' => "It looks like you are using PHP7.\r\nFatal errors got removed in PHP7, meaning that they are now catchable like normal errors.",
         'php7yellow' => 'The fatal error handler does not work with PHP7!',
         'analyseConstants' => 'Here you can toggle, if kreXX shall analyse all constants of a class.',
-        'getterHelpInfo' => 'Getter methods will NOT get called to get a result. Instread, kreXX tries to get the (possible) result from the properties of this class.<br/> If the getter method is used to compute this value, the values here may be inaccurate.',
+        'getterHelpInfo' => 'Getter methods will NOT get called to get a result. Instead, kreXX tries to get the (possible) result from the properties of this class.<br/> If the getter method is used to compute this value, the values here may be inaccurate.',
         'maximumLevelReached' => "Maximum for analysis reached. I will not go any further.\n To increase this value, change the runtime => level setting.",
         'stringTooLarge' => "This is a very large string with a none-standard encoding.\n\n For security reasons, we must escape it, but it is too large for this. Sorry.",
         'configErrorMethodsProtected' => 'Wrong configuration for: "methods => analyseProtectedMethods"! Expected boolean. The configured setting was not applied!',

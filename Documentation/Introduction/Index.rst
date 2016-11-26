@@ -21,6 +21,7 @@ Key features:
 	- Dumping of protected variables
 	- Dumping of private variables
 	- Dumping of traversable data
+	- Dumping of getter method data
 	- Configurable debug callbacks, which will be called on objects (if present). The output will then be dumped.
 	- Analysis of the methods of objects (comments, where declared, parameters). Comment dumping supports :literal:`{@inheritdoc}`.
 	- Output is draggable and has a closing button.

@@ -80,8 +80,13 @@ Methods
 | Analyse protected methods      | Shall kreXX analyse all protected methods of an object?                                                                                | - true                    |
 |                                |                                                                                                                                        | - false                   |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-|Analyse private methods         | Shall kreXX analyse all private methods of an object?                                                                                  | - true                    |
+| Analyse private methods        | Shall kreXX analyse all private methods of an object?                                                                                  | - true                    |
 |                                |                                                                                                                                        | - false                   |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Analyse getter methods         | | Shall kreXX try to determine the output of getter methods?                                                                           | - true                    |
+|                                | | Getter methods will NOT get called to get a result.                                                                                  | - false                   |
+|                                | Instead, kreXX tries to get the (possible) result from the properties of this class.                                                   |                           |
+|                                | If the getter method is used to compute this value, the values here may be inaccurate.                                                 |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | List of debug methods to poll  | | Which additional methods shall be called from the object?                                                                            | debug,toArray,__toString, |
 | for data                       | | Comma separated list of methods. These methods are called without parameters. They also might do stuff which might be unwanted.      | toString                  |
