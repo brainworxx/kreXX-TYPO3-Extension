@@ -139,3 +139,6 @@ table.noborder {
 td.metatype {
     min-width: 200px;
 }
+img.delete {
+    margin-top: 5px;
+}

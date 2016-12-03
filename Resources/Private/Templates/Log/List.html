@@ -62,7 +62,7 @@
                         </tbody>
                     </table>
                 </td>
-                <td><f:link.action controller="Log" action="delete" arguments="{id: '{file.id}'}"><f:image width="16" src="{f:uri.resource(path:'Icons/delete.png')}" alt="{f:translate(key:'log.delete')}"/></f:link.action></td>
+                <td><f:link.action controller="Log" action="delete" arguments="{id: '{file.id}'}"><f:image width="16" class="delete" src="{f:uri.resource(path:'Icons/delete.png')}" alt="{f:translate(key:'log.delete')}"/></f:link.action></td>
             </tr>
         </f:for>
     </table>
