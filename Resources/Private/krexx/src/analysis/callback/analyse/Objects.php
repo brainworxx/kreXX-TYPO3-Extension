@@ -37,7 +37,6 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Flection;
-use Brainworxx\Krexx\Controller\OutputActions;
 
 /**
  * Object analysis methods.
@@ -412,7 +411,7 @@ class Objects extends AbstractCallback
      */
     protected function getAllGetterData(\ReflectionClass $ref, $data)
     {
-        // Get all public mehtods.
+        // Get all public methods.
         $methodList = get_class_methods($data);
 
         if (!empty($methodList)) {
@@ -423,7 +422,8 @@ class Objects extends AbstractCallback
                 } else {
                     // We only dump those that have no parameters.
                     $reflectionMethod = $ref->getMethod($method);
-                    if (!empty($reflectionMethod->getParameters())) {
+                    $parameters = $reflectionMethod->getParameters();
+                    if (!empty($parameters)) {
                         unset($methodList[$key]);
                     }
                 }

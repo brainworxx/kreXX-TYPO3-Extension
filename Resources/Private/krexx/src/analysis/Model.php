@@ -157,7 +157,7 @@ class Model
     protected $multiLineCodeGen = '';
 
     /**
-     * Defines it the content of thecariable qualifies as a callback.
+     * Defines if the content of the variable qualifies as a callback.
      *
      * @var bool
      */
@@ -410,6 +410,23 @@ class Model
     public function setJson($json)
     {
         $this->json = $json;
+        return $this;
+    }
+
+    /**
+     * We simply add more info to our info json.
+     *
+     * @param $key
+     *   The array key.
+     * @param $value
+     *   The value we want to set.
+     *
+     * @return $this
+     *   $this for chaining.
+     */
+    public function addToJson($key, $value)
+    {
+        $this->json[$key] = $value;
         return $this;
     }
 

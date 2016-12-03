@@ -86,7 +86,7 @@ class Internals
     protected $counterCache = array();
 
     /**
-     * Our storage wher we keep al relevant classes.
+     * Our storage where we keep all relevant classes.
      *
      * @var Storage
      */

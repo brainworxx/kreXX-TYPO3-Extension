@@ -1,4 +1,4 @@
-2.0.2
+2.0.2 dev
 - Added getter method analysis for models.
 - Added search options to both skins.
 - Bugfix: Added LazyLoadingProxy->__toString() to the debug
@@ -11,6 +11,9 @@
 - Change: Made the callback display in both skins a little less
   obtrusive
 - Change: Added the '=' the the Hans Skin for better readability.
+- Change: [runtime]level is now '10' in the factory settings.
+- Change: [runtime]maxCall is now '15' in the factory settings.
+- Refactored code comment analysis.
 
 2.0.1
 - Refactored the configuration and introduced models there.

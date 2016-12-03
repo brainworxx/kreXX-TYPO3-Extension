@@ -86,7 +86,7 @@
         kdt.addEvent('.kwrapper .kel', 'click', krexx.setAdditionalData);
 
         /**
-         * Register the Collapse-All funfions on it's symbol
+         * Register the Collapse-All functions on it's symbol
          *
          * @event click
          */
@@ -316,6 +316,21 @@
             // generation.
             kdt.setDataset(newEl.parentNode, 'domid', domid);
 
+            // Get the json info data of the recursion. We save some data there, in case
+            // we are resolving a getter.
+            var recursionJson = kdt.getDataset(this, 'addjson', false);
+            recursionJson = kdt.parseJson(recursionJson);
+            if (typeof recursionJson !== 'object') {
+               recursionJson = {};
+            }
+            // We need to merge the original json data with the recusion json data.
+            var orgJson = kdt.getDataset(orgEl, 'addjson', false);
+            orgJson = kdt.parseJson(orgJson);
+            if (typeof orgJson !== 'object') {
+               orgJson = {};
+            }
+            kdt.setDataset(newEl, 'addjson', JSON.stringify(kdt.simpleMerge(orgJson, recursionJson)));
+
             // Remove the recursion EL.
             this.parentNode.removeChild(this);
         }
@@ -464,7 +479,7 @@
             // Remove all previous highlights
             kdt.removeClass('.ksearch-found-highlight', 'ksearch-found-highlight');
 
-            // Appy our configuration
+            // Apply our configuration.
             if (caseSensitive === false) {
                 searchtext = searchtext.toLowerCase();
             }

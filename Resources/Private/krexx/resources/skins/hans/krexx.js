@@ -158,7 +158,7 @@
         kdt.addEvent('.kwrapper .ksearchfield', 'keyup', krexx.searchfieldReturn);
 
         /**
-         * Register the Collapse-All funfions on it's symbol
+         * Register the Collapse-All functions on it's symbol
          *
          * @event click
          */
@@ -259,7 +259,7 @@
 
             newEl.querySelector('.kcollapse-me').addEventListener('click', krexx.collapse);
 
-            // Register the toggel function.
+            // Register the toggle function.
             var newExpand = newEl.nextElementSibling.querySelectorAll('.kexpand');
             for (i = 0; i < newExpand.length; i++) {
                 newExpand[i].addEventListener('click', krexx.toggle);
@@ -729,7 +729,7 @@
 
             // We're good, value can be reached!
             if (resultArray[i].indexOf(';firstMarker;') !== -1) {
-                // We add our result sofar into the "source template"
+                // We add our result so far into the "source template"
                 resultString = resultArray[i].replace(';firstMarker;', resultString);
             } else {
                 // Normal concatenation.

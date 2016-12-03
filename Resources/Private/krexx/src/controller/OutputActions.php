@@ -121,7 +121,7 @@ class OutputActions extends Internals
         $footer = $this->outputFooter($caller);
         $this->storage->codegenHandler->checkAllowCodegen();
 
-        // Enable code generation only if we were aqble to determine the varname.
+        // Enable code generation only if we were able to determine the varname.
         if ($caller['varname'] != '. . .') {
             // We were able to determine the variable name and can generate some
             // sourcecode.

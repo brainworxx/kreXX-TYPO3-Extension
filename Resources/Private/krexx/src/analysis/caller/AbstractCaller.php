@@ -40,7 +40,7 @@ use Brainworxx\Krexx\Service\Storage;
 abstract class AbstractCaller
 {
     /**
-     * Our storage wher we keep al relevant classes.
+     * Our storage where we keep al relevant classes.
      *
      * @var Storage
      */
@@ -92,7 +92,7 @@ abstract class AbstractCaller
     {
         return $this->pattern;
     }
-    
+
     /**
      * Finds the place in the code from where krexx was called.
      *

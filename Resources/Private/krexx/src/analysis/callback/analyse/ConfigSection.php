@@ -63,6 +63,7 @@ class ConfigSection extends AbstractCallback
         foreach ($this->parameters['data'] as $name => $setting) {
             // Render the single value.
             // We need to find out where the value comes from.
+            /** @var \Brainworxx\Krexx\Service\Config\Model $setting */
             $value = $setting->getValue();
             if ($setting->getType() != 'None') {
                 // We need to re-translate booleans to something the

@@ -35,7 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Caller;
 
 /**
- * Finder for the script part thet has actually called kreXX.
+ * Finder for the script part that has actually called kreXX.
  * Used for the PHP part.
  *
  * @package Brainworxx\Krexx\Analyse\Caller
@@ -52,7 +52,7 @@ class Php extends AbstractCaller
         $backtrace = debug_backtrace();
         $pattern = strtolower($this->pattern);
 
-        // Going from the firsdt call of the first line up
+        // Going from the first call of the first line up
         // through the first debug call.
         // Using a foreach is definitely faster, but then we
         // would have trouble using our pattern.

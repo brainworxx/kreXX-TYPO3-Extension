@@ -81,8 +81,8 @@ class Fallback
             'disabled' => 'false',
             'iprange' => '*',
             'detectAjax' => 'true',
-            'level' => '5',
-            'maxCall' => '10',
+            'level' => '10',
+            'maxCall' => '20',
         ),
         'output' => array(
             'skin' => 'smokygrey',
@@ -222,12 +222,12 @@ class Fallback
         // Will throw an error.
         'ReflectionClass' => '__toString',
 
-        // Deleting all rows from the DB via typo3 reopsitory is NOT a good
+        // Deleting all rows from the DB via typo3 repository is NOT a good
         // debug method!
         'TYPO3\CMS\Extbase\Persistence\RepositoryInterface' => 'removeAll',
         'Tx_Extbase_Persistence_RepositoryInterface' => 'removeAll',
 
-        // The lazy loading proxy may not have loaded the objewct at this time.
+        // The lazy loading proxy may not have loaded the object at this time.
         'TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy' => '__toString',
     );
 

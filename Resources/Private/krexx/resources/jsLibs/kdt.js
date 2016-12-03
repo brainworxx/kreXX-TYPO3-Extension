@@ -624,6 +624,31 @@
         }
     };
 
+    /**
+     * Simply merges object 2 into object 1, overwriting or adding its properties.
+     * object1 and object2 stay as they are.
+     *
+     * @param {object} object1
+     *   The starting one.
+     * @param {object} object2
+     *   We merge this one into the first one, possibly overwriting it's attributes.
+     *
+     * @returns {object}
+     *   A new object.
+     */
+    kdt.simpleMerge = function(object1, object2){
+        var object3 = {};
+        var attribute;
+
+        for (attribute in object1) {
+            object3[attribute] = object1[attribute];
+        }
+        for (attribute in object2) {
+            object3[attribute] = object2[attribute];
+        }
+        return object3;
+    };
+
     window.kreXXdomTools = kdt;
 
 })();

@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Analyse;
 
-use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Service\Storage;
 
 /**
@@ -193,14 +192,11 @@ class Routing
      */
     public function analyseNull(Model $model)
     {
-        $json = array();
-        $json['type'] = 'NULL';
         $data = 'NULL';
-
         $model->setData($data)
             ->setNormal($data)
             ->setType($model->getAdditional() . 'null')
-            ->setJson($json);
+            ->addToJson('type', 'NULL');
 
         return $this->storage->render->renderSingleChild($model);
     }
@@ -216,15 +212,14 @@ class Routing
      */
     public function analyseArray(Model $model)
     {
-        $json = array();
-        $json['type'] = 'array';
-        $json['count'] = (string)count($model->getData());
         $multiline = false;
+        $count = (string)count($model->getData());
 
         // Dumping all Properties.
         $model->setType($model->getAdditional() . 'array')
-            ->setAdditional($json['count'] . ' elements')
-            ->setJson($json)
+            ->setAdditional($count . ' elements')
+            ->addToJson('type', 'array')
+            ->addToJson('count', $count)
             ->addParameter('data', $model->getData())
             ->addParameter('multiline', $multiline)
             ->initCallback('Iterate\ThroughArray');
@@ -243,14 +238,11 @@ class Routing
      */
     public function analyseResource(Model $model)
     {
-        $json = array();
-        $json['type'] = 'resource';
         $data = get_resource_type($model->getData());
-
         $model->setData($data)
             ->setNormal($data)
             ->setType($model->getAdditional() . 'resource')
-            ->setJson($json);
+            ->addToJson('type', 'resource');
 
         return $this->storage->render->renderSingleChild($model);
     }
@@ -266,14 +258,11 @@ class Routing
      */
     public function analyseBoolean(Model $model)
     {
-        $json = array();
-        $json['type'] = 'boolean';
         $data = $model->getData() ? 'TRUE' : 'FALSE';
-
         $model->setData($data)
             ->setNormal($data)
             ->setType($model->getAdditional() . 'boolean')
-            ->setJson($json);
+            ->addToJson('type', 'boolean');
 
         return $this->storage->render->renderSingleChild($model);
     }
@@ -289,12 +278,9 @@ class Routing
      */
     public function analyseInteger(Model $model)
     {
-        $json = array();
-        $json['type'] = 'integer';
-
         $model->setNormal($model->getData())
             ->setType($model->getAdditional() . 'integer')
-            ->setJson($json);
+            ->addToJson('type', 'integer');
 
         return $this->storage->render->renderSingleChild($model);
     }
@@ -310,12 +296,9 @@ class Routing
      */
     public function analyseFloat(Model $model)
     {
-        $json = array();
-        $json['type'] = 'float';
-
         $model->setNormal($model->getData())
             ->setType($model->getAdditional() . 'float')
-            ->setJson($json);
+            ->addToJson('type', 'float');
 
         return $this->storage->render->renderSingleChild($model);
     }
@@ -331,8 +314,6 @@ class Routing
      */
     public function analyseString(Model $model)
     {
-        $json = array();
-        $json['type'] = 'string';
         $data = $model->getData();
 
         // Extra ?
@@ -343,14 +324,14 @@ class Routing
             $cut = $this->storage->encodeString($data);
         }
 
-        $json['encoding'] = @mb_detect_encoding($data);
         // We need to take care for mixed encodings here.
-        $json['length'] = (string)$strlen = @mb_strlen($data, $json['encoding']);
+        $encoding = @mb_detect_encoding($data);
+        $length = $strlen = @mb_strlen($data, $encoding);
         if ($strlen === false) {
             // Looks like we have a mixed encoded string.
-            $json['length'] = '~ ' . strlen($data);
-            $strlen = ' broken encoding ' . $json['length'];
-            $json['encoding'] = 'broken';
+            $length = '~ ' . strlen($data);
+            $strlen = ' broken encoding ' . $length;
+            $encoding = 'broken';
         }
 
         $data = $this->storage->encodeString($data);
@@ -358,7 +339,9 @@ class Routing
         $model->setData($data)
             ->setNormal($cut)
             ->setType($model->getAdditional() . 'string' . ' ' . $strlen)
-            ->setJson($json);
+            ->addToJson('encoding', $encoding)
+            ->addToJson('length', $length)
+            ->addToJson('type', 'string');
 
         // Check if this is a possible callback.
         // We are not going to analyse this further, because modern systems
@@ -386,8 +369,8 @@ class Routing
         $result = array();
 
         // Adding comments from the file.
-        $methodclass = new ThroughMethods($this->storage);
-        $result['comments'] =  $methodclass->prettifyComment($ref->getDocComment());
+        $comments = new Functions($this->storage);
+        $result['comments'] =  $comments->getComment($ref);
 
         // Adding the sourcecode
         $highlight = $ref->getStartLine() -1;
