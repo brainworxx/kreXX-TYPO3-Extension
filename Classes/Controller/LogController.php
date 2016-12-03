@@ -125,19 +125,29 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
             // No directory traversal for you!
             $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
             // Get the filepath.
-            $file = $this->krexxStorage->config->krexxdir . 'log' . DIRECTORY_SEPARATOR . $id . '.Krexx.html';
-            if (is_readable($file)) {
+            $file = $this->krexxStorage->config->krexxdir . 'log' . DIRECTORY_SEPARATOR . $id . '.Krexx';
+
+            // Delete the logfile.
+            $this->delete($file . '.html');
+            // Delete the meta data json.
+            $this->delete($file . '.html.json');
+            // Going back.
+            $this->redirect('list');
+        }
+
+        protected function delete ($file)
+        {
+            if (is_writeable(dirname(($file))) && file_exists($file)) {
                 // Away with you!
                 unlink($file);
             } else {
-                // Error message and redirect to the list action.
+                // Error message.
                 $this->addMessage(
-                    $this->LLL('log.notreadable', array($id . '.Krexx.html')),
+                    $this->LLL('log.notdeletable', array($file)),
                     $this->LLL('log.fileerror'),
                     t3lib_FlashMessage::ERROR
                 );
             }
-            $this->redirect('list');
         }
 
         /**
