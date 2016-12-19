@@ -698,7 +698,8 @@ div.kwrapper {
 }
 
 .kwrapper .search-wrapper .ksearch {
-    background-color: #fffda5;
+    background-color: #fff;
+    border: 1px solid #303030;
     color: #303030;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;

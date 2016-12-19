@@ -386,6 +386,11 @@
         var searchShort = this.parentNode.parentNode.querySelector('.ksearchshort').checked;
         var searchLong = this.parentNode.parentNode.querySelector('.ksearchlong').checked;
 
+        // Appy our configuration.
+        if (caseSensitive === false) {
+            searchtext = searchtext.toLowerCase();
+        }
+
         // we only search for more than 3 chars.
         if (searchtext.length > 2) {
             var instance = kdt.getDataset(this, 'instance');
@@ -399,7 +404,7 @@
             }
 
             // Are we already having some results?
-            if (typeof results[instance] != "undefined") {
+            if (typeof results[instance] !== "undefined") {
                 if (typeof results[instance][searchtext] === "undefined") {
                     refreshResultlist();
                 }

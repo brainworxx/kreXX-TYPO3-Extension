@@ -59,24 +59,3 @@ Automatic code generation
 
 	Code automatically generated
 
-
-|
-|
-
-Search function
-^^^^^^^^^^^^^^^
-
-Imagine the following scenario: You are searching for a specific value, function or property somewhere deep inside a specific debug output "window".
-
-kreXX offers you here a case insensitive search form, doing the following:
-
-- Marking all appearances
-- Open the collapsed nodes to the output
-- Scrolls down to each finding
-- A click on the little cog opens the search options
-
-.. figure:: ../Images/LittleHelpers/search.png
-	:width: 1073
-	:alt: Code automatically generated via kreXX
-
-	Search function in action

@@ -63,7 +63,9 @@ kreXX Debugger
 
 	Introduction/Index
 	Usage/Index
+	Skins/Index
 	LittleHelpers/Index
+	Search/Index
 	Config/Index
 	Logging/Index
 	FatalError/Index
