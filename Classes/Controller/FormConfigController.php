@@ -49,6 +49,8 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
          */
         public function editAction()
         {
+            $this->addNamespace();
+            
             // Has kreXX something to say? Maybe a writeprotected logfolder?
             foreach ($this->getTranslatedMessages() as $message) {
                 $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);

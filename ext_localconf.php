@@ -61,7 +61,7 @@ if (file_exists($wrapperFile) && !class_exists('\Brainworxx\Includekrexx\Debug\O
 }
 
 // Do some autoloading stuff which may or may not be done by TYPO3 automatically.
-if (version_compare(TYPO3_version, '7.2' ,'>')) {
+if (version_compare(TYPO3_version, '7.2', '>')) {
     // TYPO3 7.3 / 7.4 does not autoload our classes anymore, so we do this here.
     if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
         include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/CompatibilityController.php'));

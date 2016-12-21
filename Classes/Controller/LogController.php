@@ -45,6 +45,8 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
          */
         public function listAction()
         {
+            $this->addNamespace();
+            
             // 1. Get the log folder.
             $dir = $this->krexxStorage->config->krexxdir . 'log' . DIRECTORY_SEPARATOR;
 

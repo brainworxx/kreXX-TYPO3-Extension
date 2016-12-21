@@ -70,6 +70,8 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  *   <krexx:debug value="{my: 'value', to: 'analyse'}" />
  *   Use this part if you don't want fluid to escape your string or if you are
  *   stitching together an array.
+ *   Be aware, that this does NOT work in 8.5 and beyond, because the namespace
+ *   declaration is different.
  */
 class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper
 {

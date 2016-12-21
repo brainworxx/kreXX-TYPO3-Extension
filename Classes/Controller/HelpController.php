@@ -49,6 +49,8 @@ if (!class_exists('Tx_Includekrexx_Controller_HelpController')) {
          */
         public function usageAction()
         {
+            $this->addNamespace();
+
             // Has kreXX something to say? Maybe a writeprotected logfolder?
             foreach ($this->getTranslatedMessages() as $message) {
                 $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
@@ -61,6 +63,8 @@ if (!class_exists('Tx_Includekrexx_Controller_HelpController')) {
          */
         public function configAction()
         {
+            $this->addNamespace();
+            
             // Has kreXX something to say? Maybe a writeprotected logfolder?
             foreach ($this->getTranslatedMessages() as $message) {
                 $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
