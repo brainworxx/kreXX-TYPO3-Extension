@@ -348,7 +348,10 @@ class Config extends Fallback
 
         // Not loaded?
         if (empty($config)) {
-            $config = (array)parse_ini_string($this->storage->getFileContents($this->krexxdir . 'config/Krexx.ini'), true);
+            $config = (array)parse_ini_string(
+                $this->storage->getFileContents($this->krexxdir . 'config/Krexx.ini'),
+                true
+            );
             if (empty($config)) {
                 // Still empty means that there is no ini file. We add a dummy.
                 // This will prevent the failing reload of the ini file.

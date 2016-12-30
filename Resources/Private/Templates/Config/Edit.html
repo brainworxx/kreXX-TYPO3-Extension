@@ -8,6 +8,19 @@
                 <th colspan="4"><b><f:translate key="subhead.output" /></b></th>
             </tr>
             <tr>
+                <td><label for="disabled"><f:translate key="label.disabled" /></label></td>
+                <td><f:image src="{f:uri.resource(path:'Icons/info.png')}" title="{data.title.disabled}" alt="{data.title.disabled}" /></td>
+                <td><f:form.select id="disabled" name="output[disabled]" options="{data.bool}" value="{value.output.disabled}" /></td>
+                <td><f:form.checkbox id="factory.disabled" name="factory" checked="{data.factory.disabled}" value="1" /><label for="factory.disabled"><f:translate key="factory.settings" /></label></td>
+            </tr>
+
+            <tr>
+                <td><label for="iprange"><f:translate key="label.iprange" /></label></td>
+                <td><f:image src="{f:uri.resource(path:'Icons/info.png')}" title="{data.title.iprange}" alt="{data.title.iprange}" /></td>
+                <td><f:form.textfield id="iprange" name="output[iprange]"  value="{value.output.iprange}" /></td>
+                <td><f:form.checkbox id="factory.iprange" name="factory" checked="{data.factory.iprange}" value="1" /><label for="factory.iprange"><f:translate key="factory.settings" /></label></td>
+            </tr>
+            <tr>
                 <td><label for="skin"><f:translate key="label.skin" /></label></td>
                 <td><f:image src="{f:uri.resource(path:'Icons/info.png')}" title="{data.title.skin}" alt="{data.title.skin}" /></td>
                 <td><f:form.select id="skin" name="output[skin]" options="{data.skins}" value="{value.output.skin}" /></td>
@@ -31,20 +44,6 @@
                 <th colspan="4"><b><f:translate key="subhead.runtime" /></b></th>
             </tr>
             <tr>
-                <td><label for="disabled"><f:translate key="label.disabled" /></label></td>
-                <td><f:image src="{f:uri.resource(path:'Icons/info.png')}" title="{data.title.disabled}" alt="{data.title.disabled}" /></td>
-                <td><f:form.select id="disabled" name="runtime[disabled]" options="{data.bool}" value="{value.runtime.disabled}" /></td>
-                <td><f:form.checkbox id="factory.disabled" name="factory" checked="{data.factory.disabled}" value="1" /><label for="factory.disabled"><f:translate key="factory.settings" /></label></td>
-            </tr>
-
-            <tr>
-                <td><label for="iprange"><f:translate key="label.iprange" /></label></td>
-                <td><f:image src="{f:uri.resource(path:'Icons/info.png')}" title="{data.title.iprange}" alt="{data.title.iprange}" /></td>
-                <td><f:form.textfield id="iprange" name="runtime[iprange]"  value="{value.runtime.iprange}" /></td>
-                <td><f:form.checkbox id="factory.iprange" name="factory" checked="{data.factory.iprange}" value="1" /><label for="factory.iprange"><f:translate key="factory.settings" /></label></td>
-            </tr>
-
-            <tr>
                 <td><label for="detectAjax"><f:translate key="label.detectAjax" /></label></td>
                 <td><f:image src="{f:uri.resource(path:'Icons/info.png')}" title="{data.title.detectAjax}" alt="{data.title.detectAjax}" /></td>
                 <td><f:form.select id="detectAjax" name="runtime[detectAjax]" options="{data.bool}" value="{value.runtime.detectAjax}" /></td>
@@ -61,6 +60,18 @@
                 <td><f:image src="{f:uri.resource(path:'Icons/info.png')}" title="{data.title.maxCall}" alt="{data.title.maxCall}" /></td>
                 <td><f:form.textfield id="maxCall" name="runtime[maxCall]" value="{value.runtime.maxCall}" /></td>
                 <td><f:form.checkbox id="factory.maxCall" name="factory" checked="{data.factory.maxCall}" value="1" /><label for="factory.maxCall"><f:translate key="factory.settings" /></label></td>
+            </tr>
+            <tr>
+                <td><label for="memoryLeft"><f:translate key="label.memoryLeft" /></label></td>
+                <td><f:image src="{f:uri.resource(path:'Icons/info.png')}" title="{data.title.memoryLeft}" alt="{data.title.memoryLeft}" /></td>
+                <td><f:form.textfield id="memoryLeft" name="runtime[memoryLeft]" value="{value.runtime.memoryLeft}" /></td>
+                <td><f:form.checkbox id="factory.memoryLeft" name="factory" checked="{data.factory.memoryLeft}" value="1" /><label for="factory.memoryLeft"><f:translate key="factory.settings" /></label></td>
+            </tr>
+            <tr>
+                <td><label for="maxRuntime"><f:translate key="label.maxRuntime" /></label></td>
+                <td><f:image src="{f:uri.resource(path:'Icons/info.png')}" title="{data.title.maxRuntime}" alt="{data.title.maxRuntime}" /></td>
+                <td><f:form.textfield id="maxRuntime" name="runtime[maxRuntime]" value="{value.runtime.maxRuntime}" /></td>
+                <td><f:form.checkbox id="factory.maxRuntime" name="factory" checked="{data.factory.maxRuntime}" value="1" /><label for="factory.maxRuntime"><f:translate key="factory.settings" /></label></td>
             </tr>
             <tr><td colspan="4">&nbsp;</td></tr>
 

@@ -16,13 +16,19 @@
             </tr>
             <tr>
                 <td><f:translate key="none" /></td>
-                <td colspan="2"><f:translate key="display.help" /></td>
+                <td colspan="2"><f:translate key="none.help" /></td>
             </tr>
             <tr><td colspan="3">&nbsp;</td></tr>
 
             <tr>
                 <th colspan="3"><b><f:translate key="subhead.output" /></b></th>
             </tr>
+            <tr>
+                <td><label for="disabled"><f:translate key="label.disabled" /></label></td>
+                <td><f:form.select id="disabled" name="output[disabled]" options="{data.settings}" value="{value.output.disabled}" /></td>
+                <td class="cbx"><f:form.checkbox id="factory.disabled" name="factory" checked="{data.factory.disabled}" value="1" /><label for="factory.disabled"><f:translate key="factory.settings" /></label></td>
+            </tr>
+            <tr><td><f:translate key="label.iprange" /></td><td colspan="2"><f:translate key="logging.noteditable"/></td></tr>
             <tr>
                 <td><label for="skin"><f:translate key="label.skin" /></label></td>
                 <td><f:form.select id="skin" name="output[skin]" options="{data.settings}" value="{value.output.skin}" /></td>
@@ -35,12 +41,6 @@
             <tr>
                 <th colspan="3"><b><f:translate key="subhead.runtime" /></b></th>
             </tr>
-            <tr>
-                <td><label for="disabled"><f:translate key="label.disabled" /></label></td>
-                <td><f:form.select id="disabled" name="runtime[disabled]" options="{data.settings}" value="{value.runtime.disabled}" /></td>
-                <td class="cbx"><f:form.checkbox id="factory.disabled" name="factory" checked="{data.factory.disabled}" value="1" /><label for="factory.disabled"><f:translate key="factory.settings" /></label></td>
-            </tr>
-            <tr><td><f:translate key="label.iprange" /></td><td colspan="2"><f:translate key="logging.noteditable"/></td></tr>
             <tr>
                 <td><label for="detectAjax"><f:translate key="label.detectAjax" /></label></td>
                 <td><f:form.select id="detectAjax" name="runtime[detectAjax]" options="{data.settings}" value="{value.runtime.detectAjax}" /></td>
@@ -55,6 +55,16 @@
                 <td><label for="maxCall"><f:translate key="label.maxCall" /></label></td>
                 <td><f:form.select id="maxCall" name="runtime[maxCall]" options="{data.settings}" value="{value.runtime.maxCall}" /></td>
                 <td class="cbx"><f:form.checkbox id="factory.maxCall" name="factory" checked="{data.factory.maxCall}" value="1" /><label for="factory.maxCall"><f:translate key="factory.settings" /></label></td>
+            </tr>
+            <tr>
+                <td><label for="memoryLeft"><f:translate key="label.memoryLeft" /></label></td>
+                <td><f:form.select id="memoryLeft" name="runtime[memoryLeft]" options="{data.settings}" value="{value.runtime.memoryLeft}" /></td>
+                <td class="cbx"><f:form.checkbox id="factory.memoryLeft" name="factory" checked="{data.factory.memoryLeft}" value="1" /><label for="factory.memoryLeft"><f:translate key="factory.settings" /></label></td>
+            </tr>
+            <tr>
+                <td><label for="maxRuntime"><f:translate key="label.maxRuntime" /></label></td>
+                <td><f:form.select id="maxRuntime" name="runtime[maxRuntime]" options="{data.settings}" value="{value.runtime.maxRuntime}" /></td>
+                <td class="cbx"><f:form.checkbox id="factory.maxRuntime" name="factory" checked="{data.factory.maxRuntime}" value="1" /><label for="factory.maxRuntime"><f:translate key="factory.settings" /></label></td>
             </tr>
             <tr><td colspan="3">&nbsp;</td></tr>
 

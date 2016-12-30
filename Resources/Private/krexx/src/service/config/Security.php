@@ -322,6 +322,44 @@ class Security extends Fallback
                 }
                 break;
 
+            case 'memoryLeft':
+                    // We expect an integer.
+                    $result = $this->evalInt($value);
+                    if (!$result) {
+                        $this->storage->messages->addMessage(
+                            $this->storage->messages->getHelp('configErrorMemory')
+                        );
+                        $this->storage->messages->addKey('runtime.memoryLeft.error');
+                    }
+                    break;
+
+                case 'maxRuntime':
+                    // We expect an integer not greater than the max runtime of the
+                    // server.
+                    $result = $this->evalInt($value);
+                    if (!$result) {
+                        $this->storage->messages->addMessage(
+                            $this->storage->messages->getHelp('configErrorMaxRuntime')
+                        );
+                        $this->storage->messages->addKey('runtime.maxRuntime.error');
+                    } else {
+                        // OK, we got an int, now to see if it is smaller than the
+                        // configured max runtime.
+                        $maxTime = (int)ini_get('max_execution_time');
+                        $value = (int)$value;
+                        if ($maxTime > 0 && $maxTime < $value) {
+                            // Too big!
+                            $this->storage->messages->addMessage(
+                                $this->storage->messages->getHelp('configErrorMaxRuntimeBig1') .
+                                $maxTime .
+                                $this->storage->messages->getHelp('configErrorMaxRuntimeBig2')
+                            );
+                            $this->storage->messages->addKey('runtime.maxRuntime.error.maximum', array($maxTime));
+                            $result = false;
+                        }
+                    }
+                    break;
+
             default:
                 // Unknown settings,
                 // return false, just in case.

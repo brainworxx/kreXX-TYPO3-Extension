@@ -88,10 +88,15 @@ class Php extends AbstractCaller
      */
     protected function getVarName($file, $line)
     {
-        // Retrieve the call from the sourcecode file.
-        $source = file($file);
         // Fallback to '. . .'.
         $varname = '. . .';
+
+        // Retrieve the call from the sourcecode file.
+        if (!is_readable($file)) {
+            return $varname;
+        }
+
+        $source = file($file);
 
         // Now that we have the line where it was called, we must check if
         // we have several commands in there.

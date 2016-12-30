@@ -77,18 +77,19 @@ class Fallback
      * @var array
      */
     public $configFallback = array(
-        'runtime' => array(
+        'output' => array(
             'disabled' => 'false',
             'iprange' => '*',
-            'detectAjax' => 'true',
-            'level' => '10',
-            'maxCall' => '20',
-        ),
-        'output' => array(
             'skin' => 'smokygrey',
             'destination' => 'frontend',
             'maxfiles' => '10',
-
+        ),
+        'runtime' => array(
+            'detectAjax' => 'true',
+            'level' => '10',
+            'maxCall' => '20',
+            'maxRuntime' => '60',
+            'memoryLeft' => '64',
         ),
         'properties' => array(
             'analyseProtected' => 'false',
@@ -185,6 +186,14 @@ class Fallback
             'type' => 'Select',
             'editable' => 'true',
         ),
+        'memoryLeft' => array(
+            'type' => 'Input',
+            'editable' => 'true',
+        ),
+        'maxRuntime' => array(
+            'type' => 'Input',
+            'editable' => 'true',
+        ),
     );
 
     /**
@@ -236,5 +245,5 @@ class Fallback
      *
      * @var string
      */
-    public $version = '2.0.2 dev';
+    public $version = '2.1.1 dev';
 }

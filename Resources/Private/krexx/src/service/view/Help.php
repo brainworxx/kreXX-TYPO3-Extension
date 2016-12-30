@@ -61,6 +61,8 @@ class Help
         'currentSettings' => 'kreXX&apos;s configuration can be edited here, changes will be stored in a cookie and overwrite the ini and factory settings.<br/> <strong>Please note, that these are only local settings. They only affect this browser.</strong>',
         'registerAutomatically' => 'This option registers the fatal errorhandler as soon as kreXX is included. When a fatal error occurs,<br/> kreXX will offer a backtrace and an analysis of the all objects in it. PHP always clears the stack in case of a fatal error,<br/> so kreXX has to keep track of it. <strong>Be warned:</strong> This option will dramatically slow down your requests. Use this only when you have to.<br/> It is by far better to register the errorhandler yourself with <strong>\krexx::registerFatal();</strong> and later unregister it<br/> with <strong>\krexx::unregisterFatal();</strong> tp prevent a slowdown.',
         'detectAjax' => 'kreXX tries to detect whether a request is made via ajax. When it is detected, it will do no output at all. The AJAX detection can be disabled here.',
+        'memoryLeft' => 'kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break.<br />Unit of measurement is MB.',
+        'maxRuntime' => 'kreXX checks during the analysis how much time has elapsed since start. Here you can adjust the amount where it will trigger an emergency break.<br />Unit of measurement is seconds.',
         'analyseProtectedMethods' => 'Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
         'analysePrivateMethods' => 'Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.',
         '_getProperties' => 'TYPO3 debug function.<br />It takes the properties directly from the model, ignoring the getter function.<br />If the getter method is used to compute this value, the values from this function may be inaccurate.',
@@ -97,7 +99,11 @@ class Help
         'configErrorIpList' => 'Wrong configuration for: "output => iprange"! An empty IP list means that no one will be able to use kreXX. The configured setting was not applied!',
         'configErrorAnalyseGetter' => 'Wrong configuration for: "methods => analyseGetter"! Expected boolean. The configured setting was not applied!',
         'getterNull' => 'A NULL value as a result may indicate that this value get computed by the getter method, and does not exist inside the class at the moment of the analysis.',
-        'unknownValue' => 'Getter methods will not get called. kreXX was unable to coax the value from the object properties.<br />Sorry  :-('
+        'unknownValue' => 'Getter methods will not get called. kreXX was unable to coax the value from the object properties.<br />Sorry  :-(',
+        'configErrorMemory' => 'Wrong configuration for: "runtime => memoryLeft"! Expected integer. The configured setting was not applied!',
+        'configErrorMaxRuntime' => 'Wrong configuration for: "runtime => maxRuntime"! Expected integer. The configured setting was not applied!',
+        'configErrorMaxRuntimeBig1' => 'Wrong configuration for: "runtime => maxRuntime"! Maximum for this server is: ',
+        'configErrorMaxRuntimeBig2' => ' The configured setting was not applied!',
     );
 
     /**

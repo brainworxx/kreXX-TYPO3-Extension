@@ -56,7 +56,6 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
         $json['Help'] = $this->storage->messages->getHelp($model->getHelpid());
         // Prepare the json.
         $json = json_encode($json);
-
         $template = str_replace('{addjson}', $json, $template);
 
         return $template;

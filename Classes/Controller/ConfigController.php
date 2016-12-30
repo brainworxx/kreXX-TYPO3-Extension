@@ -117,10 +117,6 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                 'runtime',
                 'maxRuntime'
             );
-            $value['output']['folder'] = $this->krexxStorage->config->getConfigFromFile(
-                'output',
-                'folder'
-            );
             $value['output']['maxfiles'] = $this->krexxStorage->config->getConfigFromFile(
                 'output',
                 'maxfiles'
@@ -133,12 +129,12 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                 'runtime',
                 'maxCall'
             );
-            $value['runtime']['disabled'] = $this->krexxStorage->config->getConfigFromFile(
-                'runtime',
+            $value['output']['disabled'] = $this->krexxStorage->config->getConfigFromFile(
+                'output',
                 'disabled'
             );
-            $value['runtime']['iprange'] = $this->krexxStorage->config->getConfigFromFile(
-                'runtime',
+            $value['output']['iprange'] = $this->krexxStorage->config->getConfigFromFile(
+                'output',
                 'iprange'
             );
             $value['runtime']['detectAjax'] = $this->krexxStorage->config->getConfigFromFile(

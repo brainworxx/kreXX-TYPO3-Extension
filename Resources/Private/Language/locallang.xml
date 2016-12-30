@@ -135,7 +135,7 @@
             <label index="editfeconfig.help.headline">Here you can edit the frontend configuration form.</label>
             <label index="full.help"> = The value can be edited in the frontend.</label>
             <label index="display.help"> = The value will only be displayed.</label>
-            <label index="none.help"> = kreXX will not display the value.</label>
+            <label index="none.help"> = kreXX will not display the value or accept any values for it.</label>
             <label index="logging.noteditable">This setting is not editable on the frontend.</label>
 
             <!-- Content Edit Cookie Settings -->

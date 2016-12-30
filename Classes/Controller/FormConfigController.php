@@ -50,7 +50,7 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
         public function editAction()
         {
             $this->addNamespace();
-            
+
             // Has kreXX something to say? Maybe a writeprotected logfolder?
             foreach ($this->getTranslatedMessages() as $message) {
                 $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
@@ -78,7 +78,7 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
             $value['runtime']['maxCall'] = $this->convertKrexxFeSetting(
                 $this->krexxStorage->config->getFeConfigFromFile('maxCall')
             );
-            $value['runtime']['disabled'] = $this->convertKrexxFeSetting(
+            $value['output']['disabled'] = $this->convertKrexxFeSetting(
                 $this->krexxStorage->config->getFeConfigFromFile('disabled')
             );
             $value['runtime']['detectAjax'] = $this->convertKrexxFeSetting(

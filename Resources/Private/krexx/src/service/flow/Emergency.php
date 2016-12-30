@@ -76,7 +76,7 @@ class Emergency
      *
      * @var int
      */
-    protected $maxRuntime = 60;
+    protected $maxRuntime = 0;
 
     /**
      * The server memory limit, coming from the php.ini.
@@ -90,7 +90,7 @@ class Emergency
      *
      * @var int
      */
-    protected $minMemoryLeft = 64;
+    protected $minMemoryLeft = 0;
 
     /**
      * The level inside the object/array hierarchy we are in.
@@ -127,6 +127,10 @@ class Emergency
                 $this->serverMemoryLimit = $matches[1] * 1024;
             }
         }
+
+        // Cache some settings.
+        $this->maxRuntime = (int) $storage->config->getSetting('maxRuntime');
+        $this->minMemoryLeft = (int) $storage->config->getSetting('memoryLeft');
     }
 
     /**

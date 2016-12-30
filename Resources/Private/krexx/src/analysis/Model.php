@@ -399,21 +399,6 @@ class Model
     }
 
     /**
-     * Setter for json.
-     *
-     * @param array $json
-     *   More analysis data.
-     *
-     * @return Model
-     *   $this, for chaining.
-     */
-    public function setJson($json)
-    {
-        $this->json = $json;
-        return $this;
-    }
-
-    /**
      * We simply add more info to our info json.
      *
      * @param $key
@@ -426,7 +411,10 @@ class Model
      */
     public function addToJson($key, $value)
     {
-        $this->json[$key] = $value;
+        // Our js has some problems with single quotes and escaped quotes.
+        // We remove them as well as linebreaks.
+        $blacklist = array('&quot;', '\'');
+        $this->json[$key] = preg_replace("/\r|\n/", "", str_replace($blacklist, '´', $value));
         return $this;
     }
 

@@ -101,6 +101,8 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             'analyseConstants',
             'iprange',
             'analyseGetter',
+            'maxRuntime',
+            'memoryLeft',
         );
 
         /**

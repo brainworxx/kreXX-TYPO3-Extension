@@ -2,7 +2,7 @@
 ; kreXX CONFIGURATION FILE
 ;
 ; ------------------------------------------------------------------------------
-[runtime]
+[output]
 
 ; Is kreXX actually active?
 ; Here you can disable kreXX on a global level without uninstalling it.
@@ -13,6 +13,22 @@ disabled = "false"
 ; You can do something like '192.168.1.*', but not something like '192.168.*.110'.
 ; iprange = "192.168.0.110,192.168.1.*"
 iprange = "*"
+
+; Change the above value to set the CSS skin used to render kreXX layout.
+; skin = "hans"
+skin = "smokygrey"
+
+; Where shall kreXX put it's data?
+; Is the output the frontend or the logfolder?
+; destination = "file"
+destination = "frontend"
+
+; how many logfiles will kreXX keep?
+; Files will only get deleted, when he creates a new one.
+maxfiles = "10"
+
+; ------------------------------------------------------------------------------
+[runtime]
 
 ; Shall kreXX try to detect an AJAX request?
 ; If set to true, there will be no output when AJAX is detected, to prevent a
@@ -29,21 +45,17 @@ level = "10"
 ; increasing this number might not be a good idea.
 maxCall = "15"
 
-; ------------------------------------------------------------------------------
-[output]
+; Setting up the config for the emergency break.
+; When analysing large objects, there is always the chance that you run out of
+; time or memory. kreXX checks these values regularly.
+; kreXX checks regularly how much memory is left. Here you can adjust the amount
+; where it will trigger an emergency break. Unit of measurement is MB.
+memoryLeft = "64"
 
-; Change the above value to set the CSS skin used to render kreXX layout.
-; skin = "hans"
-skin = "smokygrey"
-
-; Where shall kreXX put it's data?
-; Is the output the frontend or the logfolder?
-; destination = "file"
-destination = "frontend"
-
-; how many logfiles will kreXX keep?
-; Files will only get deleted, when he creates a new one.
-maxfiles = "10"
+; kreXX checks during the analysis how much time has elapsed since start. Here
+; you can adjust the amount where it will trigger an emergency break. Unit of
+; measurement is seconds.
+maxRuntime = "60"
 
 ; ------------------------------------------------------------------------------
 [properties]
