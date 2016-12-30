@@ -36,6 +36,8 @@ Local cookie settings
 ---------------------
 | Local cookie settings can be changed in the kreXX output window. Not all settings can be edited in the frontend, but that can be changed here: :ref:`fe-configuration`
 | Please note that local cookie settings affect only your current browser.
+
+|
 |
 
 **Table of Contents**

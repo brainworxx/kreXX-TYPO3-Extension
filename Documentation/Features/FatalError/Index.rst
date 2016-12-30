@@ -3,7 +3,7 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-.. include:: ../Includes.txt
+.. include:: ../../Includes.txt
 
 
 .. _fatal-error:
@@ -29,7 +29,7 @@ kreXX will offer you the following information:
 |
 |
 
-.. figure:: ../Images/Usage/fatal.png
+.. figure:: ../../Images/Usage/fatal.png
 	:width: 1049px
 	:alt: kreXX fatal error handler
 
@@ -65,7 +65,7 @@ Activation in the settings
 |
 |
 
-.. figure:: ../Images/FatalError/activate_local.png
+.. figure:: ../../Images/FatalError/activate_local.png
 	:width: 887px
 	:alt: kreXX fatal error handler
 
@@ -76,7 +76,7 @@ Activation in the settings
 |
 |
 
-.. figure:: ../Images/FatalError/activate_global.png
+.. figure:: ../../Images/FatalError/activate_global.png
 	:width: 613px
 	:alt: kreXX fatal error handler
 

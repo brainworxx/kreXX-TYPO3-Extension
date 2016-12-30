@@ -3,7 +3,7 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-.. include:: ../Includes.txt
+.. include:: ../../Includes.txt
 
 
 .. _search:
@@ -21,7 +21,7 @@ kreXX offers a somewhat advanced search function:
 - Scrolls down to each finding
 - Each output "window" can be searched individually.
 
-.. figure:: ../Images/Search/search.png
+.. figure:: ../../Images/Search/search.png
 	:width: 1073
 	:alt: Search function in action
 
@@ -33,13 +33,13 @@ Search options
 
 There are 4 options to make searching easier:
 
-- Case sensitive toggels the case sensitive of the search
+- Case sensitive toggles the case sensitive of the search
 - Search keys
 - Search short results
 - Search long results
 
 
-.. figure:: ../Images/Search/search-options.png
+.. figure:: ../../Images/Search/search-options.png
 	:width: 1176
 	:alt: What is what in the options
 

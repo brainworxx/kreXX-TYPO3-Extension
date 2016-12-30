@@ -30,10 +30,9 @@ You can change which values can be edited on the frontend. To do this, we've als
 
 .. figure:: ../../Images/Config/typo3_backend_02.png
 	:width: 350px
-	:align: left
 	:alt: Here you can change what options are available in the frontend.
 
-
+|
 
 However, the following options will never be editable on the frontend:
 

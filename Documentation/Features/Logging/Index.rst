@@ -3,7 +3,7 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-.. include:: ../Includes.txt
+.. include:: ../../Includes.txt
 
 
 .. _logging:
@@ -36,7 +36,7 @@ kreXX will store all logfiles inside the directory
 
 |
 
-.. figure:: ../Images/Logging/logfiles.png
+.. figure:: ../../Images/Logging/logfiles.png
 	:width: 1033px
 	:alt: Logfiles backend menu
 

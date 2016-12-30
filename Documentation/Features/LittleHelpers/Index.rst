@@ -3,7 +3,7 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-.. include:: ../Includes.txt
+.. include:: ../../Includes.txt
 
 
 .. _little-helpers:
@@ -25,7 +25,7 @@ Hide-Everything-Else
 |
 |
 
-.. figure:: ../Images/LittleHelpers/tldr_output.png
+.. figure:: ../../Images/LittleHelpers/tldr_output.png
 	:width: 1073px
 	:alt: Incomprehensible output with a lot of data
 
@@ -34,7 +34,7 @@ Hide-Everything-Else
 |
 |
 
-.. figure:: ../Images/LittleHelpers/better_output.png
+.. figure:: ../../Images/LittleHelpers/better_output.png
 	:width: 792px
 	:alt: Better readable output, because unnecessary data is now hidden.
 
@@ -53,7 +53,7 @@ Automatic code generation
 |
 |
 
-.. figure:: ../Images/LittleHelpers/code_gen.png
+.. figure:: ../../Images/LittleHelpers/code_gen.png
 	:width: 1133
 	:alt: Code automatically generated via kreXX
 

@@ -53,8 +53,10 @@ kreXX Debugger
 	The content of this document is related to TYPO3,
 	a GNU/GPL CMS/Framework available from `www.typo3.org <http://www.typo3.org/>`_.
 
+|
+|
 
-	**Table of Contents**
+**Table of Contents**
 
 .. toctree::
 	:maxdepth: 5
@@ -63,9 +65,7 @@ kreXX Debugger
 
 	Introduction/Index
 	Usage/Index
-	Skins/Index
-	LittleHelpers/Index
-	Search/Index
+	Installation/Index
+	Features/Index
 	Config/Index
-	Logging/Index
-	FatalError/Index
+

@@ -3,7 +3,7 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-.. include:: ../Includes.txt
+.. include:: ../../Includes.txt
 
 
 .. _skins:
@@ -16,7 +16,7 @@ We have provides kreXX with two different skins:
 - Smoky-Grey
 - Hans
 
-.. figure:: ../Images/Skins/smoky-grey.png
+.. figure:: ../../Images/Skins/smoky-grey.png
 	:width: 1073px
 	:alt: Screenshot of the Smoky-Grey skin
 
@@ -24,7 +24,7 @@ We have provides kreXX with two different skins:
 
 
 
-.. figure:: ../Images/Skins/hans.png
+.. figure:: ../../Images/Skins/hans.png
 	:width: 990px
 	:alt: Screenshot of the Smoky-Grey skin
 
