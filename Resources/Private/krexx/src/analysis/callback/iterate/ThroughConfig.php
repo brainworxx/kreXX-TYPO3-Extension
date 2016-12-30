@@ -74,7 +74,7 @@ class ThroughConfig extends AbstractCallback
                 ->setType('Config')
                 ->setAdditional('. . .')
                 ->addParameter('data', $sectionData)
-                ->initCallback('Analyse\ConfigSection');
+                ->initCallback('Analyse\\ConfigSection');
 
             $configOutput .= $this->storage->render->renderExpandableChild($model);
         }

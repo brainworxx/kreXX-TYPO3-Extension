@@ -156,7 +156,7 @@ class ThroughMethods extends AbstractCallback
             ->setConnector1($connector1)
             ->setConnector2('(' . $paramList . ')')
             ->addParameter('data', $data)
-            ->initCallback('Iterate\ThroughMethodAnalysis');
+            ->initCallback('Iterate\\ThroughMethodAnalysis');
 
         return $this->storage->render->renderExpandableChild($model);
     }

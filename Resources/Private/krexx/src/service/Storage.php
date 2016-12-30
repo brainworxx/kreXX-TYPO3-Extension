@@ -227,7 +227,7 @@ class Storage
     {
         $skin = $this->config->getSetting('skin');
         $path = $this->config->krexxdir . 'resources/skins/' . $skin . '/Render.php';
-        $classname = 'Brainworxx\Krexx\View\\' . ucfirst($skin) . '\\Render';
+        $classname = '\\Brainworxx\\Krexx\\View\\' . ucfirst($skin) . '\\Render';
         include_once $path;
         $this->render = new $classname($this);
     }

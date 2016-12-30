@@ -483,7 +483,7 @@ class Model
      */
     public function initCallback($name)
     {
-        $classname = 'Brainworxx\\Krexx\\Analyse\\Callback\\' . $name;
+        $classname = '\\Brainworxx\\Krexx\\Analyse\\Callback\\' . $name;
         $this->callback = new $classname($this->storage);
         return $this;
     }

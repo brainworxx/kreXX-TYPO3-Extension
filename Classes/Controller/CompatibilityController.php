@@ -243,7 +243,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
          */
         protected function addCssToView($file)
         {
-            if (class_exists('TYPO3\CMS\Core\Utility\GeneralUtility')) {
+            if (class_exists('\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) {
                 $uri = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/' . $file);
             } else {
                 $uri = \t3lib_div::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/' . $file);

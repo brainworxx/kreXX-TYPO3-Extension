@@ -186,7 +186,7 @@ class Objects extends AbstractCallback
                 ->setType('class internals')
                 ->addParameter('data', $methods)
                 ->addParameter('ref', $ref)
-                ->initCallback('Iterate\ThroughMethods');
+                ->initCallback('Iterate\\ThroughMethods');
 
             return $this->storage->render->renderExpandableChild($model);
         }
@@ -266,7 +266,7 @@ class Objects extends AbstractCallback
                             ->setConnector1('->')
                             ->setConnector2('()')
                             ->addParameter('data', $result)
-                            ->initCallback('Analyse\Debug');
+                            ->initCallback('Analyse\\Debug');
 
                         $output .= $this->storage->render->renderExpandableChild($model);
                         unset($result);
@@ -318,7 +318,7 @@ class Objects extends AbstractCallback
                 ->setConnector2($connector2)
                 ->addParameter('data', $parameter)
                 ->addParameter('multiline', $multiline)
-                ->initCallback('Iterate\ThroughArray');
+                ->initCallback('Iterate\\ThroughArray');
 
             return $this->storage->render->renderExpandableChild($model);
         }
@@ -350,7 +350,7 @@ class Objects extends AbstractCallback
                 ->setType('class internals')
                 ->addParameter('data', $refConst)
                 ->addParameter('classname', $classname)
-                ->initCallback('Iterate\ThroughConstants');
+                ->initCallback('Iterate\\ThroughConstants');
 
             return $this->storage->render->renderExpandableChild($model);
         }
@@ -382,7 +382,7 @@ class Objects extends AbstractCallback
         $model->addParameter('data', $refProps)
             ->addParameter('ref', $ref)
             ->addParameter('orgObject', $data)
-            ->initCallback('Iterate\ThroughProperties');
+            ->initCallback('Iterate\\ThroughProperties');
 
         if (strpos(strtoupper($label), 'PUBLIC') === false) {
             // Protected or private properties.
@@ -440,7 +440,7 @@ class Objects extends AbstractCallback
                     ->addParameter('ref', $ref)
                     ->addParameter('methodList', $methodList)
                     ->addParameter('data', $data)
-                    ->initCallback('Iterate\ThroughGetter');
+                    ->initCallback('Iterate\\ThroughGetter');
 
                 return $this->storage->render->renderExpandableChild($model);
             }

@@ -226,18 +226,18 @@ class Fallback
         // In the TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper the private
         // $viewHelperNode might not be an object, and trying to render it might
         // cause a fatal error!
-        'TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper' => '__toString',
+        '\\TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractViewHelper' => '__toString',
 
         // Will throw an error.
         'ReflectionClass' => '__toString',
 
         // Deleting all rows from the DB via typo3 repository is NOT a good
         // debug method!
-        'TYPO3\CMS\Extbase\Persistence\RepositoryInterface' => 'removeAll',
+        '\\TYPO3\\CMS\\Extbase\\Persistence\\RepositoryInterface' => 'removeAll',
         'Tx_Extbase_Persistence_RepositoryInterface' => 'removeAll',
 
         // The lazy loading proxy may not have loaded the object at this time.
-        'TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy' => '__toString',
+        '\\TYPO3\\CMS\\Extbase\\Persistence\\Generic\\LazyLoadingProxy' => '__toString',
     );
 
     /**

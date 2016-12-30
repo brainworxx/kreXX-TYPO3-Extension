@@ -161,7 +161,7 @@ class Internals
         $model->setName($path)
             ->setType($this->storage->config->krexxdir . 'config/Krexx.ini')
             ->setHelpid('currentSettings')
-            ->initCallback('Iterate\ThroughConfig');
+            ->initCallback('Iterate\\ThroughConfig');
 
         $configOutput = $this->storage->render->renderExpandableChild($model, $isExpanded);
         return $this->storage->render->renderFooter($caller, $configOutput, $isExpanded);

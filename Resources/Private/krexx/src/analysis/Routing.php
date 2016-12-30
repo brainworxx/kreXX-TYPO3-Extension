@@ -120,14 +120,14 @@ class Routing
 
         // Object?
         // Closures are analysed separately.
-        if (is_object($data) && !is_a($data, '\Closure')) {
+        if (is_object($data) && !is_a($data, '\\Closure')) {
             $result = $this->analyseObject($model);
             $this->storage->emergencyHandler->downOneNestingLevel();
             return $result;
         }
 
         // Closure?
-        if (is_object($data) && is_a($data, '\Closure')) {
+        if (is_object($data) && is_a($data, '\\Closure')) {
             $result = $this->analyseClosure($model);
             $this->storage->emergencyHandler->downOneNestingLevel();
             return $result;
@@ -222,7 +222,7 @@ class Routing
             ->addToJson('count', $count)
             ->addParameter('data', $model->getData())
             ->addParameter('multiline', $multiline)
-            ->initCallback('Iterate\ThroughArray');
+            ->initCallback('Iterate\\ThroughArray');
 
         return $this->storage->render->renderExpandableChild($model);
     }
@@ -411,7 +411,7 @@ class Routing
             ->setConnector2($model->getConnector2() . '(' . $paramList . ')')
             ->setDomid($this->generateDomIdFromObject($model->getData()))
             ->addParameter('data', $result)
-            ->initCallback('Iterate\ThroughMethodAnalysis');
+            ->initCallback('Iterate\\ThroughMethodAnalysis');
 
         return $this->storage->render->renderExpandableChild($model);
 
@@ -434,7 +434,7 @@ class Routing
             ->addParameter('name', $model->getName())
             ->setAdditional(get_class($model->getData()))
             ->setDomid($this->generateDomIdFromObject($model->getData()))
-            ->initCallback('Analyse\Objects');
+            ->initCallback('Analyse\\Objects');
 
         // Output data from the class.
         $output .= $this->storage->render->renderExpandableChild($model);
@@ -466,7 +466,7 @@ class Routing
                 ->setType('Stack Frame')
                 ->addParameter('data', $stepData)
                 ->addParameter('offset', $offset)
-                ->initCallback('Analyse\BacktraceStep');
+                ->initCallback('Analyse\\BacktraceStep');
 
             $output .= $this->storage->render->renderExpandableChild($model);
         }

@@ -488,7 +488,7 @@ class Security extends Fallback
         $remote = $_SERVER['REMOTE_ADDR'];
 
         // Use TYPO3 v6+ cmpIP if possible.
-        if (is_callable(array('TYPO3\CMS\Core\Utility\GeneralUtility', 'cmpIP'))) {
+        if (is_callable(array('\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'cmpIP'))) {
             return \TYPO3\CMS\Core\Utility\GeneralUtility::cmpIP($remote, $whitelist);
         }
         // Use TYPO3 v6- cmpIP if possible.

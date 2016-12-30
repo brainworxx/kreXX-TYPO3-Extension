@@ -41,7 +41,7 @@ if (TYPO3_MODE === 'BE') {
 
     $registered = false;
     // 6.0 ++
-    if (class_exists('\TYPO3\CMS\Extbase\Utility\ExtensionUtility')) {
+    if (class_exists('\\TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility')) {
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
             $_EXTKEY,
             'tools',

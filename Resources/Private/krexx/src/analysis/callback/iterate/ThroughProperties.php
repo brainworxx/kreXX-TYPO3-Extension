@@ -100,7 +100,7 @@ class ThroughProperties extends AbstractCallback
             if ($refProperty->isProtected()) {
                 $additional .= 'protected ';
             }
-            if (is_a($refProperty, '\Brainworxx\Krexx\Analysis\Flection')) {
+            if (is_a($refProperty, '\\Brainworxx\\Krexx\\Analysis\\Flection')) {
                 /* @var \Brainworxx\Krexx\Analyse\Flection $refProperty */
                 $additional .= $refProperty->getWhatAmI() . ' ';
             }

@@ -39,7 +39,7 @@ if (!defined('TYPO3_MODE')) {
 $registered = false;
 $wrapperFile = $krexxFile = 'sdfsdfs';
 // 6.0 ++
-if (class_exists('\TYPO3\CMS\Core\Utility\ExtensionManagementUtility')) {
+if (class_exists('\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility')) {
     $krexxFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
     $wrapperFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Debug/ObjectWrapper.php');
     $registered = true;
@@ -56,7 +56,7 @@ if (file_exists($krexxFile) && !class_exists('Krexx')) {
     include_once $krexxFile;
 }
 // Register our debugger globally in the system to use via debug();
-if (file_exists($wrapperFile) && !class_exists('\Brainworxx\Includekrexx\Debug\ObjectWrapper')) {
+if (file_exists($wrapperFile) && !class_exists('\\Brainworxx\\Includekrexx\\Debug\\ObjectWrapper')) {
     include_once $krexxFile;
 }
 
