@@ -207,6 +207,13 @@
         kdt.addEvent('.ksearchlong', 'change', krexx.clearSearch);
 
         /**
+         * Clear our search results, because we now have new options.
+         *
+         * @event change
+         */
+        kdt.addEvent('.ksearchwhole', 'change', krexx.clearSearch);
+
+        /**
          * Display our search options.
          *
          * @event click
@@ -385,6 +392,7 @@
         var searchKeys = this.parentNode.parentNode.querySelector('.ksearchkeys').checked;
         var searchShort = this.parentNode.parentNode.querySelector('.ksearchshort').checked;
         var searchLong = this.parentNode.parentNode.querySelector('.ksearchlong').checked;
+        var searchWhole = this.parentNode.parentNode.querySelector('.ksearchwhole').checked;
 
         // Appy our configuration.
         if (caseSensitive === false) {
@@ -392,7 +400,7 @@
         }
 
         // we only search for more than 3 chars.
-        if (searchtext.length > 2) {
+        if (searchtext.length > 2 || searchWhole) {
             var instance = kdt.getDataset(this, 'instance');
             var direction = kdt.getDataset(this, 'direction');
             var payload = document.querySelector('#' + instance + ' .kbg-wrapper');
@@ -481,10 +489,18 @@
                 if (caseSensitive === false) {
                     textContent = textContent.toLowerCase();
                 }
-                if (textContent.indexOf(searchtext) > -1) {
-                    kdt.toggleClass(list[i], 'ksearch-found-highlight');
-                    results[instance][searchtext]['data'].push(list[i]);
+                if (searchWhole) {
+                    if (textContent === searchtext) {
+                        kdt.toggleClass(list[i], 'ksearch-found-highlight');
+                        results[instance][searchtext]['data'].push(list[i]);
+                    }
+                } else {
+                    if (textContent.indexOf(searchtext) > -1) {
+                        kdt.toggleClass(list[i], 'ksearch-found-highlight');
+                        results[instance][searchtext]['data'].push(list[i]);
+                    }
                 }
+
             }
             // Reset our index.
             results[instance][searchtext]['pointer'] = -1;

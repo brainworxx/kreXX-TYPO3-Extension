@@ -22,7 +22,7 @@ kreXX offers a somewhat advanced search function:
 - Each output "window" can be searched individually.
 
 .. figure:: ../../Images/Search/search.png
-	:width: 1073
+	:width: 1124
 	:alt: Search function in action
 
 	Search function in action
@@ -37,6 +37,7 @@ There are 4 options to make searching easier:
 - Search keys
 - Search short results
 - Search long results
+- Search for a whole value
 
 
 .. figure:: ../../Images/Search/search-options.png

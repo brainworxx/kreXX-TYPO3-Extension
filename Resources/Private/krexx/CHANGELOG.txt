@@ -1,6 +1,7 @@
 2.1.1
 - Added the info, if a property / method is inherited.
 - Added a configuration for the scope analysis.
+- Added the search option "Search whole value".
 - Bugfix: The comments may break out of the getter analysis
   json.
 - Bugfix: Removed a warning in case kreXX was called fromn eval'd
