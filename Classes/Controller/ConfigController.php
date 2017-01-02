@@ -101,6 +101,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                 'analyseConstants' => $this->LLL('analyseConstants'),
                 'iprange' => $this->LLL('iprange'),
                 'analyseGetter' => $this->LLL('analyseGetter'),
+                'useScopeAnalysis' => $this->LLL('useScopeAnalysis'),
             );
 
 
@@ -181,9 +182,9 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                 'backtraceAndError',
                 'registerAutomatically'
             );
-            $value['backtraceAndError']['backtraceAnalysis'] = $this->krexxStorage->config->getConfigFromFile(
-                'backtraceAndError',
-                'backtraceAnalysis'
+            $value['runtime']['useScopeAnalysis'] = $this->krexxStorage->config->getConfigFromFile(
+                'runtime',
+                'useScopeAnalysis'
             );
 
             // Are these actually set?

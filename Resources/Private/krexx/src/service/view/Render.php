@@ -374,7 +374,7 @@ class Render
             $fileCache[$what] = preg_replace(
                 '/\s+/',
                 ' ',
-                $this->storage->getFileContents(
+                $this->storage->file->getFileContents(
                     $this->storage->config->krexxdir .
                     'resources/skins/' .
                     $this->storage->config->getSetting('skin') .
@@ -497,7 +497,7 @@ class Render
 
         $from = $errline -5;
         $to = $errline +5;
-        $source = $this->storage->readSourcecode($errfile, $errline -1, $from -1, $to -1);
+        $source = $this->storage->file->readSourcecode($errfile, $errline -1, $from -1, $to -1);
 
         // Insert our values.
         $template = str_replace('{type}', $type, $template);

@@ -90,6 +90,7 @@ class Fallback
             'maxCall' => '20',
             'maxRuntime' => '60',
             'memoryLeft' => '64',
+            'useScopeAnalysis' => 'true',
         ),
         'properties' => array(
             'analyseProtected' => 'false',
@@ -192,6 +193,10 @@ class Fallback
         ),
         'maxRuntime' => array(
             'type' => 'Input',
+            'editable' => 'true',
+        ),
+        'useScopeAnalysis' => array(
+            'type' => 'Select',
             'editable' => 'true',
         ),
     );

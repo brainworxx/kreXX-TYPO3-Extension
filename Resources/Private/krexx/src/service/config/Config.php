@@ -349,7 +349,7 @@ class Config extends Fallback
         // Not loaded?
         if (empty($config)) {
             $config = (array)parse_ini_string(
-                $this->storage->getFileContents($this->krexxdir . 'config/Krexx.ini'),
+                $this->storage->file->getFileContents($this->krexxdir . 'config/Krexx.ini'),
                 true
             );
             if (empty($config)) {

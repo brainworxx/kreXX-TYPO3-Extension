@@ -114,6 +114,9 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
             $value['methods']['analyseGetter'] = $this->convertKrexxFeSetting(
                 $this->krexxStorage->config->getFeConfigFromFile('analyseGetter')
             );
+            $value['runtime']['useScopeAnalysis'] = $this->convertKrexxFeSetting(
+                $this->krexxStorage->config->getFeConfigFromFile('useScopeAnalysis')
+            );
 
             // Are these actually set?
             foreach ($value as $mainkey => $setting) {

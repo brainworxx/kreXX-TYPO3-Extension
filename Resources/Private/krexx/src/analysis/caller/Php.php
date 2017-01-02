@@ -62,9 +62,7 @@ class Php extends AbstractCaller
             }
             if (isset($caller['class']) && strtolower($caller['class']) === $pattern) {
                 break;
-
             }
-
         }
         // We will not keep the whole backtrace im memory. We only return what we
         // actually need.

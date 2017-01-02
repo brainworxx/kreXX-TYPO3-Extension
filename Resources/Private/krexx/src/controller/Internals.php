@@ -80,9 +80,15 @@ class Internals
     /**
      * Here we save all timekeeping stuff.
      *
-     * @var string array
+     * @var array
      */
     protected $timekeeping = array();
+
+    /**
+     * More timekeeping stuff.
+     *
+     * @var array
+     */
     protected $counterCache = array();
 
     /**
@@ -177,7 +183,7 @@ class Internals
     {
         $krexxDir = $this->storage->config->krexxdir;
         // Get the css file.
-        $css = $this->storage->getFileContents(
+        $css = $this->storage->file->getFileContents(
             $krexxDir .
             'resources/skins/' .
             $this->storage->config->getSetting('skin') .
@@ -192,7 +198,7 @@ class Internals
         } else {
             $jsFile = $krexxDir . 'resources/jsLibs/kdt.js';
         }
-        $js = $this->storage->getFileContents($jsFile);
+        $js = $this->storage->file->getFileContents($jsFile);
 
         // Krexx.js is comes directly form the template.
         $path = $krexxDir . 'resources/skins/' . $this->storage->config->getSetting('skin');
@@ -201,7 +207,7 @@ class Internals
         } else {
             $jsFile = $path . '/krexx.js';
         }
-        $js .= $this->storage->getFileContents($jsFile);
+        $js .= $this->storage->file->getFileContents($jsFile);
 
         return $this->storage->render->renderCssJs($css, $js);
     }

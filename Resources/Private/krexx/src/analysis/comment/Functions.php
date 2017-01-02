@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Analyse;
 
-
 class Functions extends AbstractComment
 {
     /**

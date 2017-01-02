@@ -77,7 +77,6 @@ class Methods extends AbstractComment
             // Found it!
             return $this->storage->encodeString(trim($comment));
         } else {
-
             // Nothing on this level, we need to take a look at the parent.
             try {
                 $parentReflection = $reflectionClass->getParentClass();
@@ -198,5 +197,4 @@ class Methods extends AbstractComment
         return $originalComment;
 
     }
-
 }

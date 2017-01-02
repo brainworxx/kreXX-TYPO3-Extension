@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Analyse\Caller;
 
-
 use Brainworxx\Krexx\Service\Storage;
 
 abstract class AbstractCaller
@@ -99,6 +98,5 @@ abstract class AbstractCaller
      * @return array
      *   The code, from where krexx was called
      */
-    public abstract function findCaller();
-
+    abstract public function findCaller();
 }

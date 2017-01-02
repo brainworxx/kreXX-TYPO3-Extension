@@ -65,38 +65,7 @@ class Objects extends AbstractCallback
         $ref = new \ReflectionClass($data);
 
         // Dumping public properties.
-        $refProps = $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
-
-        // Adding undeclared public properties to the dump.
-        // Those are properties which are not visible with
-        // $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
-        // but are in get_object_vars();
-        // 1. Make a list of all properties
-        // 2. Remove those that are listed in
-        // $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
-        // What is left are those special properties that were dynamically
-        // set during runtime, but were not declared in the class.
-        foreach ($refProps as $refProp) {
-            $publicProps[$refProp->name] = $refProp->name;
-        }
-        foreach (get_object_vars($data) as $key => $value) {
-            if (!isset($publicProps[$key])) {
-                $refProps[] = new Flection($value, $key);
-            }
-        }
-
-        // We will dump the properties alphabetically sorted, via this callback.
-        $sortingCallback = function ($a, $b) {
-            return strcmp($a->name, $b->name);
-        };
-
-        if (!empty($refProps)) {
-            usort($refProps, $sortingCallback);
-            $output .= $this->getReflectionPropertiesData($refProps, $ref, $data, 'Public properties');
-            // Adding a HR to reflect that the following stuff are not public
-            // properties anymore.
-            $output .= $this->storage->render->renderSingeChildHr();
-        }
+        $output .= $this->getPublicProperties($ref);
 
         // Dumping getter methods.
         if ($this->storage->config->getSetting('analyseGetter')) {
@@ -105,23 +74,14 @@ class Objects extends AbstractCallback
 
         // Dumping protected properties.
         if ($this->storage->config->getSetting('analyseProtected') ||
-            $this->storage->codegenHandler->isInScope()) {
-            $refProps = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
-            usort($refProps, $sortingCallback);
-
-            if (!empty($refProps)) {
-                $output .= $this->getReflectionPropertiesData($refProps, $ref, $data, 'Protected properties');
-            }
+            $this->storage->scope->isInScope()) {
+            $output .= $this->getProtectedProperties($ref);
         }
 
         // Dumping private properties.
         if ($this->storage->config->getSetting('analysePrivate') ||
-            $this->storage->codegenHandler->isInScope()) {
-            $refProps = $ref->getProperties(\ReflectionProperty::IS_PRIVATE);
-            usort($refProps, $sortingCallback);
-            if (!empty($refProps)) {
-                $output .= $this->getReflectionPropertiesData($refProps, $ref, $data, 'Private properties');
-            }
+            $this->storage->scope->isInScope()) {
+            $output .= $this->getPrivateProperties($ref);
         }
 
         // Dumping class constants.
@@ -146,6 +106,131 @@ class Objects extends AbstractCallback
     }
 
     /**
+     * Dumping all private properties.
+     *
+     * @param \ReflectionClass $ref
+     *   The reflection of the class we are currently analysing.
+     * @return string
+     *   The generated HTML markup
+     */
+    protected function getPrivateProperties(\ReflectionClass $ref)
+    {
+        $output = '';
+        $data = $this->parameters['data'];
+        $refProps = array();
+        $reflectionClass = $ref;
+
+        // The main problem here is, that you only get the private properties of
+        // the current class, but not the inherited private properties.
+        // We need to get all parent classes and then poll them for private
+        // properties to get the whole picture.
+        do {
+            $refProps = array_merge($refProps, $reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE));
+            // And now for the parent class.
+            // Inherited private properties are not accessible from inside
+            // the class. We will only dump them, if we are analysing private
+            // properties.
+            if ($this->storage->config->getSetting('analysePrivate')) {
+                $reflectionClass = $reflectionClass->getParentClass();
+            } else {
+                // This should break the do while.
+                $reflectionClass = false;
+            }
+        } while (is_object($reflectionClass));
+
+        usort($refProps, array($this, 'sortingCallback'));
+        if (!empty($refProps)) {
+            $output .= $this->getReflectionPropertiesData($refProps, $ref, $data, 'Private properties');
+        }
+
+        return $output;
+    }
+
+    /**
+     * Dump all protected properties.
+     *
+     * @param \ReflectionClass $ref
+     *   A reflection of the class we are analysing
+     *
+     * @return string
+     *   The generated HTML markup
+     */
+    protected function getProtectedProperties(\ReflectionClass $ref)
+    {
+        $output = '';
+        $data = $this->parameters['data'];
+
+        $refProps = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
+        usort($refProps, array($this, 'sortingCallback'));
+
+        if (!empty($refProps)) {
+            $output .= $this->getReflectionPropertiesData($refProps, $ref, $data, 'Protected properties');
+        }
+
+        return $output;
+    }
+
+    /**
+     * Dump all public properties.
+     *
+     * @param \ReflectionClass $ref
+     *   A reflection of the class we are analysing
+     *
+     * @return string
+     *   The generated HTML markup.
+     */
+    protected function getPublicProperties(\ReflectionClass $ref)
+    {
+        $output = '';
+        $data = $this->parameters['data'];
+
+        $refProps = $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
+
+        // Adding undeclared public properties to the dump.
+        // Those are properties which are not visible with
+        // $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
+        // but are in get_object_vars();
+        // 1. Make a list of all properties
+        // 2. Remove those that are listed in
+        // $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
+        // What is left are those special properties that were dynamically
+        // set during runtime, but were not declared in the class.
+        foreach ($refProps as $refProp) {
+            $publicProps[$refProp->name] = $refProp->name;
+        }
+        foreach (get_object_vars($data) as $key => $value) {
+            if (!isset($publicProps[$key])) {
+                $refProps[] = new Flection($value, $key, $ref);
+            }
+        }
+
+        if (!empty($refProps)) {
+            usort($refProps, array($this, 'sortingCallback'));
+            $output .= $this->getReflectionPropertiesData($refProps, $ref, $data, 'Public properties');
+            // Adding a HR to reflect that the following stuff are not public
+            // properties anymore.
+            $output .= $this->storage->render->renderSingeChildHr();
+        }
+
+        return $output;
+    }
+
+    /**
+     * Sorting callback for usort utilizing reflection properties.
+     *
+     * @param \ReflectionProperty $a
+     *   A string we want to sort.
+     * @param \ReflectionProperty $b
+     *   Another streing for comparioson
+     *
+     * @return int
+     */
+    protected function sortingCallback($a, $b)
+    {
+        return strcmp($a->name, $b->name);
+    }
+
+    /**
      * Decides which methods we want to analyse and then starts the dump.
      *
      * @param object $data
@@ -164,12 +249,12 @@ class Objects extends AbstractCallback
         $public = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
 
         if ($this->storage->config->getSetting('analyseProtectedMethods') ||
-            $this->storage->codegenHandler->isInScope()) {
+            $this->storage->scope->isInScope()) {
             $protected = $ref->getMethods(\ReflectionMethod::IS_PROTECTED);
         }
 
         if ($this->storage->config->getSetting('analysePrivateMethods') ||
-            $this->storage->codegenHandler->isInScope()) {
+            $this->storage->scope->isInScope()) {
             $private = $ref->getMethods(\ReflectionMethod::IS_PRIVATE);
         }
 

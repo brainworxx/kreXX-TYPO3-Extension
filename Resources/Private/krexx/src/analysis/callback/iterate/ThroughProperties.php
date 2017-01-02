@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Controller\OutputActions;
 
 /**
  * Class properties analysis methods.
@@ -100,6 +101,14 @@ class ThroughProperties extends AbstractCallback
             if ($refProperty->isProtected()) {
                 $additional .= 'protected ';
             }
+
+            // Test if the property is inherited or not by testing the
+            // declaring class
+            if ($refProperty->getDeclaringClass()->getName() !== $ref->getName()) {
+                // This one got inherited fom a lower level.
+                $additional .= 'inherited ';
+            }
+
             if (is_a($refProperty, '\\Brainworxx\\Krexx\\Analysis\\Flection')) {
                 /* @var \Brainworxx\Krexx\Analyse\Flection $refProperty */
                 $additional .= $refProperty->getWhatAmI() . ' ';

@@ -861,6 +861,7 @@
         var body = wrapper.querySelector('.kdatabody');
         var html = '';
         var counter = 0;
+        var regex = /\\u([\d\w]{4})/gi;
 
         // Mark the clicked el, clear the others.
         kdt.removeClass(wrapper.querySelectorAll('.kcurrent-additional'), 'kcurrent-additional');
@@ -874,6 +875,10 @@
             // We've got data!
             for (var prop in json) {
                 if (json[prop].length > 0) {
+                    json[prop] = json[prop].replace(regex, function (match, grp) {
+                        return String.fromCharCode(parseInt(grp, 16));
+                    });
+                    json[prop] = decodeURI(json[prop]);
                     html += '<tr><td>' + prop + '</td><td>' + json[prop] + '</td></tr>';
                     counter++;
                 }

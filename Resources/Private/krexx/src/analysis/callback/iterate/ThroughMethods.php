@@ -59,6 +59,8 @@ class ThroughMethods extends AbstractCallback
     public function callMe()
     {
         $result = '';
+        /** @var \ReflectionClass $ref */
+        $ref = $this->parameters['ref'];
 
         // Deep analysis of the methods.
         foreach ($this->parameters['data'] as $reflection) {
@@ -67,9 +69,9 @@ class ThroughMethods extends AbstractCallback
             $method = $reflection->name;
             // Get the comment from the class, it's parents, interfaces or traits.
             $comments = new Methods($this->storage);
-            $methodComment = $comments->getComment($reflection, $this->parameters['ref']);
+            $methodComment = $comments->getComment($reflection, $ref);
             if (!empty($methodComment)) {
-                $methodData['comments'] = $comments->getComment($reflection, $this->parameters['ref']);
+                $methodData['comments'] = $comments->getComment($reflection, $ref);
             }
 
             // Get declaration place.
@@ -101,6 +103,16 @@ class ThroughMethods extends AbstractCallback
             }
             if ($reflection->isPublic()) {
                 $methodData['declaration keywords'] .= ' public';
+            }
+            if ($reflection->getDeclaringClass()->getName() !== $ref->getName()) {
+                $methodData['declaration keywords'] .= ' inherited';
+                // We need to recheck our scope.
+                // Private inherited methods are never within the scope.
+                if (strpos($methodData['declaration keywords'], 'private') !== false &&
+                    $this->storage->config->getSetting('analysePrivate') === false) {
+                    // Do nothing. We ignore this one.
+                    continue;
+                }
             }
             if ($reflection->isStatic()) {
                 $methodData['declaration keywords'] .= ' static';

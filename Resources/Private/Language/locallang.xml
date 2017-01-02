@@ -45,6 +45,7 @@
             <label index="analyseConstants">Here you can toggle, if kreXX shall analyse all constants of a class.</label>
             <label index="iprange">List of IPs that can trigger kreXX. Wildcards can be used.</label>
             <label index="analyseGetter">Shall kreXX try to determine the output of getter methods? These methods will not be called. kreXX will try to get the (possible) result from the class properties, which may lead to false results.</label>
+            <label index="useScopeAnalysis">Shall kreXX analyse all reachable class properties and methods? If set to "TRUE", the default configuration for private and protected stuff is overwritten, in case that value is reachable.</label>
 
             <!-- Messages -->
             <label index="file.not.writable">Configuration file %1$s is not writable!</label>
@@ -87,6 +88,8 @@
             <label index="protected.folder.chunk">Chunksfolder %1$s is not writable!. This will increase the memory usage of kreXX significantly!</label>
             <label index="output.handle.error">You have entered a wrong developer handle. Please unse only letters between a-z and A-Z.</label>
             <label index="methods.analyseGetter.error">Wrong configuration for: "methods => analyseGetter"! Expected boolean. The configured setting was not applied!</label>
+            <label index="runtime.useScopeAnalysis.error">Wrong configuration for: "runtime => useScopeAnalysis"! Expected boolean. The configured setting was not applied!</label>
+
 
             <!-- Fluid layout keys from the template files -->
             <label index="factory.settings">Use factory settings</label>
@@ -130,6 +133,7 @@
             <label index="label.analyseConstants">Analyse constants</label>
             <label index="label.iprange">IP Range</label>
             <label index="label.analyseGetter">Analyse getter methods</label>
+            <label index="label.useScopeAnalysis">Use scope analysis</label>
 
             <!-- Content stuff  Edit Frontend Settings -->
             <label index="editfeconfig.help.headline">Here you can edit the frontend configuration form.</label>

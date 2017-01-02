@@ -1,8 +1,13 @@
 2.1.1
+- Added the info, if a property / method is inherited.
+- Added a configuration for the scope analysis.
 - Bugfix: The comments may break out of the getter analysis
   json.
 - Bugfix: Removed a warning in case kreXX was called fromn eval'd
   code.
+- Bugfix: Dumping of inherited private properties works works now.
+- Bugfix: Inherited properties and methods are now regarded by the
+  scope analysis.
 - Change: Reworked some of the configurations (disable, maxRuntime,
   memoryLeft, iprange)
 

@@ -37,12 +37,14 @@ namespace Brainworxx\Krexx\Service;
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Analyse\Caller\Php;
 use Brainworxx\Krexx\Analyse\Routing;
+use Brainworxx\Krexx\Analyse\Scope;
 use Brainworxx\Krexx\Controller\OutputActions;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Service\Misc\Chunks;
 use Brainworxx\Krexx\Service\Misc\Codegen;
+use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\View\Messages;
 use Brainworxx\Krexx\Service\View\Render;
 
@@ -128,6 +130,20 @@ class Storage
     public $callerFinder;
 
     /**
+     * Fileservice for reading stuff from files.
+     *
+     * @var File
+     */
+    public $file;
+
+    /**
+     * Scope analysis class.
+     *
+     * @var Scope
+     */
+    public $scope;
+
+    /**
      * Initializes all needed classes.
      *
      * @param $krexxDir
@@ -137,6 +153,8 @@ class Storage
     {
         // Initializes the messages.
         $this->messages = new Messages($this);
+        // Initializes the file service.
+        $this->file = new file($this);
         // Initializes the configuration
         $this->config = new Config($this, $krexxDir);
         // Initialize the emergency handler.
@@ -153,6 +171,9 @@ class Storage
         $this->controller = new OutputActions($this);
         // Initialize the caller finder. We start with the php finder.
         $this->callerFinder = new Php($this);
+        // Initializes the scope analysis
+        $this->scope = new Scope($this);
+
         // Initializes the render class.
         $this->initRenderer();
         // Check our environment.
@@ -210,6 +231,7 @@ class Storage
         $this->emergencyHandler->resetTimer();
         // Initialize the code generation.
         $this->codegenHandler = new Codegen($this);
+        $this->scope = new Scope($this);
     }
 
     /**
@@ -226,96 +248,11 @@ class Storage
     protected function initRenderer()
     {
         $skin = $this->config->getSetting('skin');
-        $path = $this->config->krexxdir . 'resources/skins/' . $skin . '/Render.php';
         $classname = '\\Brainworxx\\Krexx\\View\\' . ucfirst($skin) . '\\Render';
-        include_once $path;
+        include_once $this->config->krexxdir . 'resources/skins/' . $skin . '/Render.php';
         $this->render = new $classname($this);
     }
 
-
-    /**
-     * Reads sourcecode from files, for the backtrace.
-     *
-     * @param string $file
-     *   Path to the file you want to read.
-     * @param int $highlight
-     *   The line number you want to highlight
-     * @param int $from
-     *   The start line.
-     * @param int $to
-     *   The end line.
-     *
-     * @return string
-     *   The source code.
-     */
-    public function readSourcecode($file, $highlight, $from, $to)
-    {
-        $result = '';
-        if (is_readable($file)) {
-            // Load content and add it to the backtrace.
-            $contentArray = file($file);
-            // Correct the value, in case we are exceeding the line numbers.
-            if ($from < 0) {
-                $from = 0;
-            }
-            if ($to > count($contentArray)) {
-                $to = count($contentArray);
-            }
-
-            for ($currentLineNo = $from; $currentLineNo <= $to; $currentLineNo++) {
-                if (isset($contentArray[$currentLineNo])) {
-                    // Add it to the result.
-                    $realLineNo = $currentLineNo + 1;
-
-                    // Escape it.
-                    $contentArray[$currentLineNo] = $this->encodeString($contentArray[$currentLineNo], true);
-
-                    if ($currentLineNo === $highlight) {
-                        $result .= $this->render->renderBacktraceSourceLine(
-                            'highlight',
-                            $realLineNo,
-                            $contentArray[$currentLineNo]
-                        );
-                    } else {
-                        $result .= $this->render->renderBacktraceSourceLine(
-                            'source',
-                            $realLineNo,
-                            $contentArray[$currentLineNo]
-                        );
-                    }
-                } else {
-                    // End of the file.
-                    break;
-                }
-            }
-        }
-        return $result;
-    }
-
-    /**
-     * Reads the content of a file.
-     *
-     * @param string $path
-     *   The path to the file.
-     *
-     * @return string
-     *   The content of the file, if readable.
-     */
-    public function getFileContents($path)
-    {
-        $result = '';
-        // Is it readable and does it have any content?
-        if (is_readable($path)) {
-            $size = filesize($path);
-            if ($size > 0) {
-                $file = fopen($path, "r");
-                $result = fread($file, $size);
-                fclose($file);
-            }
-        }
-
-        return $result;
-    }
 
     /**
      * Sanitizes a string, by completely encoding it.

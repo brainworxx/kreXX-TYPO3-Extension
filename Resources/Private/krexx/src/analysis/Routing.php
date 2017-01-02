@@ -377,7 +377,7 @@ class Routing
         $from = $highlight - 3;
         $to = $ref->getEndLine() -1;
         $file = $ref->getFileName();
-        $result['source'] = $this->storage->readSourcecode($file, $highlight, $from, $to);
+        $result['source'] = $this->storage->file->readSourcecode($file, $highlight, $from, $to);
 
         // Adding the place where it was declared.
         $result['declared in'] = $ref->getFileName() . "\n";

@@ -73,6 +73,12 @@
                 <td><f:form.textfield id="maxRuntime" name="runtime[maxRuntime]" value="{value.runtime.maxRuntime}" /></td>
                 <td><f:form.checkbox id="factory.maxRuntime" name="factory" checked="{data.factory.maxRuntime}" value="1" /><label for="factory.maxRuntime"><f:translate key="factory.settings" /></label></td>
             </tr>
+            <tr>
+                <td><label for="useScopeAnalysis"><f:translate key="label.useScopeAnalysis" /></label></td>
+                <td><f:image src="{f:uri.resource(path:'Icons/info.png')}" title="{data.title.useScopeAnalysis}" alt="{data.title.useScopeAnalysis}" /></td>
+                <td><f:form.select id="useScopeAnalysis" name="runtime[useScopeAnalysis]" options="{data.bool}" value="{value.runtime.useScopeAnalysis}" /></td>
+                <td><f:form.checkbox id="factory.useScopeAnalysis" name="factory" checked="{data.factory.useScopeAnalysis}" value="1" /><label for="factory.useScopeAnalysis"><f:translate key="factory.settings" /></label></td>
+            </tr>
             <tr><td colspan="4">&nbsp;</td></tr>
 
             <tr>

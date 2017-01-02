@@ -580,6 +580,7 @@
     kdt.parseJson = function (string) {
         /** @type {*} */
         var result;
+
         try {
             result = JSON.parse(string);
         } catch (error) {

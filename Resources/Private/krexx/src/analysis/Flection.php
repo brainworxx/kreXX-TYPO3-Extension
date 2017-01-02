@@ -62,6 +62,13 @@ class Flection
     protected $value;
 
     /**
+     * The name of the declaring class.
+     *
+     * @var \ReflectionClass
+     */
+    protected $declaringClass;
+
+    /**
      * Constructor for the Flection class.
      *
      * Sets the name and the value of the property.
@@ -70,11 +77,14 @@ class Flection
      *   The value of the attribute.
      * @param string $name
      *   The name of the attribute.
+     * @param \ReflectionClass $declaringClass
+     *   A reflection of the declaring class.
      */
-    public function __construct($value, $name)
+    public function __construct($value, $name, \ReflectionClass $declaringClass)
     {
         $this->value = $value;
         $this->name = $name;
+        $this->declaringClass = $declaringClass;
     }
 
     /**
@@ -190,5 +200,15 @@ class Flection
     public function getWhatAmI()
     {
         return 'dynamic property ';
+    }
+
+    /**
+     * Getter for the declaring class.
+     *
+     * @return string
+     */
+    public function getDeclaringClass()
+    {
+        return $this->declaringClass;
     }
 }

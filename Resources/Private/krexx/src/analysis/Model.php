@@ -413,8 +413,14 @@ class Model
     {
         // Our js has some problems with single quotes and escaped quotes.
         // We remove them as well as linebreaks.
-        $blacklist = array('&quot;', '\'');
-        $this->json[$key] = preg_replace("/\r|\n/", "", str_replace($blacklist, '´', $value));
+        $value = str_replace('"', "\\u0027", $value);
+        $value = str_replace("'", "\\u0022", $value);
+        $value = str_replace('&quot;', "\\u0027", $value);
+        // Unicode greater-than aund smaller-then values.
+        $value = str_replace('&lt;', "\\u276E", $value);
+        $value = str_replace('&gt;', "\\u02C3", $value);
+
+        $this->json[$key] = preg_replace("/\r|\n/", "", $value);
         return $this;
     }
 
