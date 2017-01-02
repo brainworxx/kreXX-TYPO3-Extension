@@ -58,7 +58,7 @@ memoryLeft = "64"
 maxRuntime = "60"
 
 ; When you are using the scope analysis, kreXX will analyse everything that can
-; be reachtd from the point where kreXX was callen in the code. When coming from
+; be reached from the point where kreXX was callen in the code. When coming from
 ; the $this environment, all protected and most private values / methods are
 ; reachable, and kreXX will take this into account.
 useScopeAnalysis = "true"
