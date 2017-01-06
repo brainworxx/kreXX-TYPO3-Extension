@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2017 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -64,7 +64,7 @@ if (!class_exists('Tx_Includekrexx_Controller_HelpController')) {
         public function configAction()
         {
             $this->addNamespace();
-            
+
             // Has kreXX something to say? Maybe a writeprotected logfolder?
             foreach ($this->getTranslatedMessages() as $message) {
                 $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
