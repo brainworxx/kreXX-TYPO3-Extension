@@ -37,17 +37,15 @@ if (!defined('TYPO3_MODE')) {
 }
 
 $registered = false;
-$wrapperFile = $krexxFile = 'sdfsdfs';
+$krexxFile = 'sdfsdfs';
 // 6.0 ++
 if (class_exists('\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility')) {
     $krexxFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
-    $wrapperFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Debug/ObjectWrapper.php');
     $registered = true;
 }
 // The old way.
 if (class_exists('t3lib_extMgm') && !$registered) {
     $krexxFile = t3lib_extMgm::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
-    $wrapperFile = t3lib_extMgm::extPath($_EXTKEY, 'Classes/Debug/ObjectWrapper.php');
 }
 if (file_exists($krexxFile) && !class_exists('Krexx')) {
     // We load the kreXX library.
@@ -55,10 +53,9 @@ if (file_exists($krexxFile) && !class_exists('Krexx')) {
     // We will not include it again!
     include_once $krexxFile;
 }
-// Register our debugger globally in the system to use via debug();
-if (file_exists($wrapperFile) && !class_exists('\\Brainworxx\\Includekrexx\\Debug\\ObjectWrapper')) {
-    include_once $krexxFile;
-}
+
+
+
 
 // Do some autoloading stuff which may or may not be done by TYPO3 automatically.
 if (version_compare(TYPO3_version, '7.2', '>')) {
@@ -87,6 +84,10 @@ if (version_compare(TYPO3_version, '7.2', '>')) {
     if (!class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
         include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/DebugViewHelper.php'));
     }
+    if (!class_exists('Tx_Includekrexx_Rewrite_ServiceConfigSecurity')) {
+        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Rewrite/ServiceConfigSecurity.php'));
+    }
+
     if (version_compare(TYPO3_version, '8.0' ,'>=')) {
         // Some special compatibility stuff for 8.0 , Fluid and it's ViewHelpers.
         if (!class_exists('\\Tx_Includekrexx_ViewHelpers\\MessagesViewHelper')) {
@@ -97,3 +98,10 @@ if (version_compare(TYPO3_version, '7.2', '>')) {
         }
     }
 }
+
+// Register our overwrite in the kreXX lib.
+// We have some special handling for the ip whitelisting in here.
+\krexx::$pool->addRewrite('Brainworxx\\Krexx\\Service\\Config\\Security', 'Tx_Includekrexx_Rewrite_ServiceConfigSecurity');
+// That class is located in the configuration, we need to relaod it.  :-(
+// At least for now.
+\krexx::$pool->resetConfig();

@@ -35,7 +35,7 @@
 namespace Brainworxx\Krexx\Service\Misc;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Code generation methods.
@@ -48,9 +48,9 @@ class Codegen
     /**
      * Here we store all relevant data.
      *
-     * @var Storage
+     * @var Pool
      */
-    protected $storage;
+    protected $pool;
 
     /**
      * Is the code generation allowed? We only allow it during a normal analysis.
@@ -69,12 +69,12 @@ class Codegen
     /**
      * Initializes the code generation.
      *
-     * @param Storage $storage
-     *   The storage, where we store the classes we need.
+     * @param Pool $pool
+     *   The pool, where we store the classes we need.
      */
-    public function __construct(Storage $storage)
+    public function __construct(Pool $pool)
     {
-        $this->storage = $storage;
+        $this->pool = $pool;
     }
 
     /**
@@ -253,7 +253,7 @@ class Codegen
         }
 
         // Test if we are inside the scope.
-        if ($this->storage->scope->testModelForCodegen($model)) {
+        if ($this->pool->scope->testModelForCodegen($model)) {
             // We are inside the scope, this value, function or class is reachable.
             return $concatenation;
         }

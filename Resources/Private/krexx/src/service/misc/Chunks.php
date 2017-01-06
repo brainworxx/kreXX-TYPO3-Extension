@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Misc;
 
-use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Output string handling for kreXX, splitting strings into small tiny chunks.
@@ -48,7 +48,7 @@ use Brainworxx\Krexx\Service\Storage;
  * chunks. We also use this class stitch back together this
  * string for output.
  *
- * @see \Brainworxx\Krexx\Service\Storage->encodeString()
+ * @see \Brainworxx\Krexx\Service\Factory\Pool->encodeString()
  *   We use '@@@' to mark a chunk key. This function escapes the @
  *   so we have no collusion with data from strings.
  *
@@ -59,9 +59,9 @@ class Chunks
     /**
      * Here we store all relevant data.
      *
-     * @var Storage
+     * @var Pool
      */
-    protected $storage;
+    protected $pool;
 
     /**
      * Here we store the metadata from the call.
@@ -96,15 +96,15 @@ class Chunks
     protected $logDir = 'log';
 
     /**
-     * Injects the storage.
+     * Injects the pool.
      *
-     * @param Storage $storage
-     *   The storage, where we store the classes we need.
+     * @param Pool $pool
+     *   The pool, where we store the classes we need.
      */
-    public function __construct(Storage $storage)
+    public function __construct(Pool $pool)
     {
-        $this->storage = $storage;
-        $this->krexxDir = $storage->config->krexxdir;
+        $this->pool = $pool;
+        $this->krexxDir = $pool->krexxDir;
     }
 
     /**
@@ -124,7 +124,7 @@ class Chunks
             // Get the key.
             $key = $this->genKey();
             // Write the key to the chunks folder.
-            $this->putFileContents($this->krexxDir . 'chunks/' . $key . '.Krexx.tmp', $string);
+            $this->pool->file->putFileContents($this->krexxDir . 'chunks/' . $key . '.Krexx.tmp', $string);
             // Return the first part plus the key.
             return '@@@' . $key . '@@@';
         } else {
@@ -144,7 +144,7 @@ class Chunks
         static $counter = 0;
         $counter++;
 
-        return $this->fileStamp() . '_' . $counter;
+        return $this->pool->file->fileStamp() . '_' . $counter;
     }
 
     /**
@@ -166,13 +166,13 @@ class Chunks
         $filename = $this->krexxDir . 'chunks/' . $key . '.Krexx.tmp';
         if (is_writable($filename)) {
             // Read the file.
-            $string = $this->storage->file->getFileContents($filename);
+            $string = $this->pool->file->getFileContents($filename);
             // Delete it, we don't need it anymore.
             unlink($filename);
         } else {
             // Huh, we can not fully access this one.
             $string = 'Could not access chunk file ' . $filename;
-            $this->storage->messages->addMessage('Could not access chunk file ' . $filename);
+            $this->pool->messages->addMessage('Could not access chunk file ' . $filename);
         }
 
         return $string;
@@ -229,13 +229,13 @@ class Chunks
         $this->cleanupOldLogs($this->logDir);
 
         // Determine the filename.
-        $timestamp = $this->fileStamp();
+        $timestamp = $this->pool->file->fileStamp();
         $filename = $this->krexxDir . $this->logDir . DIRECTORY_SEPARATOR . $timestamp . '.Krexx.html';
         $chunkPos = strpos($string, '@@@');
 
         while ($chunkPos !== false) {
             // We have a chunk, we save the html part.
-            $this->putFileContents($filename, substr($string, 0, $chunkPos));
+            $this->pool->file->putFileContents($filename, substr($string, 0, $chunkPos));
 
             $chunkPart = substr($string, $chunkPos);
 
@@ -248,10 +248,10 @@ class Chunks
         }
 
         // No more chunks, we save what is left.
-        $this->putFileContents($filename, $string);
+        $this->pool->file->putFileContents($filename, $string);
         // Save our metadata, so a potential backend module can display it.
         if (!empty($this->metadata)) {
-            $this->putFileContents($filename . '.json', json_encode($this->metadata));
+            $this->pool->file->putFileContents($filename . '.json', json_encode($this->metadata));
             $this->metadata = array();
         }
     }
@@ -292,7 +292,7 @@ class Chunks
         $logList = glob($this->krexxDir . $logDir . DIRECTORY_SEPARATOR . "*.Krexx.html");
         if (!empty($logList)) {
             array_multisort(array_map('filemtime', $logList), SORT_DESC, $logList);
-            $maxFileCount = (int)$this->storage->config->getSetting('maxfiles');
+            $maxFileCount = (int)$this->pool->config->getSetting('maxfiles');
             $count = 1;
             // Cleanup logfiles.
             foreach ($logList as $file) {
@@ -332,70 +332,5 @@ class Chunks
     public function addMetadata($caller)
     {
         $this->metadata[] = $caller;
-    }
-
-    /**
-     * Returns the microtime timestamp for file operations.
-     *
-     * File operations are the logfiles and the chunk handling.
-     *
-     * @return string
-     *   The timestamp itself.
-     */
-    protected function fileStamp()
-    {
-        static $timestamp = 0;
-
-        if (empty($timestamp)) {
-            $timestamp = explode(" ", microtime());
-            $timestamp = $timestamp[1] . str_replace("0.", "", $timestamp[0]);
-        }
-
-        return $timestamp;
-    }
-
-    /**
-     * Write the content of a string to a file.
-     *
-     * When the file already exists, we will append the content.
-     * Caches weather we are allowed to write, to reduce the overhead.
-     *
-     * @param string $path
-     *   Path and filename.
-     * @param string $string
-     *   The string we want to write.
-     */
-    protected function putFileContents($path, $string)
-    {
-        // Do some caching, so we check a file or dir only once!
-        static $ops = array();
-        static $dir = array();
-
-        // Check the directory.
-        if (!isset($dir[dirname($path)])) {
-            $dir[dirname($path)]['canwrite'] = is_writable(dirname($path));
-        }
-
-        if (!isset($ops[$path])) {
-            // We need to do some checking:
-            $ops[$path]['append'] = is_file($path);
-            $ops[$path]['canwrite'] = is_writable($path);
-        }
-
-        // Do the writing!
-        if ($ops[$path]['append']) {
-            if ($ops[$path]['canwrite']) {
-                // Old file where we are allowed to write.
-                file_put_contents($path, $string, FILE_APPEND);
-            }
-        } else {
-            if ($dir[dirname($path)]['canwrite']) {
-                // New file we can create.
-                file_put_contents($path, $string);
-                // We will append it on the next write attempt!
-                $ops[$path]['append'] = true;
-                $ops[$path]['canwrite'] = true;
-            }
-        }
     }
 }

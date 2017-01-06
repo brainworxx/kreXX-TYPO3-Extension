@@ -837,3 +837,12 @@ div.kwrapper {
     content: '\26ED';
     font-weight: bolder;
 }
+
+.kwrapper .khelp .khelprow td {
+    vertical-align: top;
+    padding: 2px 5px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.kwrapper .khelp .khelprow .khelptitle {
+    min-width: 50px;
+}

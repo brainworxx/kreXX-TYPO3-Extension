@@ -1,0 +1,102 @@
+<?php
+/**
+ * kreXX: Krumo eXXtended
+ *
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
+ *
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ *
+ * @author
+ *   brainworXX GmbH <info@brainworxx.de>
+ *
+ * @license
+ *   http://opensource.org/licenses/LGPL-2.1
+ *
+ *   GNU Lesser General Public License Version 2.1
+ *
+ *   kreXX Copyright (C) 2014-2016 Brainworxx GmbH
+ *
+ *   This library is free software; you can redistribute it and/or modify it
+ *   under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation; either version 2.1 of the License, or (at
+ *   your option) any later version.
+ *   This library is distributed in the hope that it will be useful, but WITHOUT
+ *   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ *   for more details.
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with this library; if not, write to the Free Software Foundation,
+ *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+
+namespace Brainworxx\Krexx\Service\Factory;
+
+/**
+ * Simple factory, nothing special. Offers a overwrite method.
+ *
+ * @package Brainworxx\Krexx\Service
+ */
+class Factory
+{
+
+    /**
+     * Rewrite mapping for the getter.
+     *
+     * The get method will deliver these classes instead of the
+     * requested classes.
+     * key = original classname
+     * value = the one we will deliver in that case.
+     *
+     * @var array
+     */
+    protected $rewrite = array();
+
+    /**
+     * Create objects and returns them. Singletons are handled by the pool.
+     *
+     * @param string $classname
+     *
+     * @return mixed
+     *   The requested object.
+     */
+    public function createClass($classname)
+    {
+        // Check for possible overwrite.
+        if (!empty($this->rewrite[$classname])) {
+            $classname = $this->rewrite[$classname];
+        }
+        // The model has no need for the pool.
+        // Meh, that does not sound right   ;-)
+        if ($classname === 'Brainworxx\\Krexx\\Analyse\\Model') {
+            $object = new $classname();
+        } else {
+            $object = new $classname($this);
+        }
+
+        return $object;
+    }
+
+    /**
+     * Adds another value to the overwrite.
+     *
+     * @param $originalClassName
+     *   The original class name, we want to overwrite this one.
+     * @param $newClassName
+     *   The new class name, the factory will then return this class via get();
+     */
+    public function addRewrite($originalClassName, $newClassName)
+    {
+        $this->rewrite[$originalClassName] = $newClassName;
+    }
+
+    /**
+     * Resets the rewrite info.
+     */
+    public function flushRewrite()
+    {
+        $this->rewrite = array();
+    }
+}

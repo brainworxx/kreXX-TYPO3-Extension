@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Analyse;
 
-use Brainworxx\Krexx\Service\Storage;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 
 /**
@@ -44,13 +43,6 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
  */
 class Model
 {
-    /**
-     * Here we store all relevant data.
-     *
-     * @var Storage
-     */
-    protected $storage;
-
     /**
      * The object/string/array/whatever we are analysing right now
      *
@@ -164,14 +156,18 @@ class Model
     protected $isCallback = false;
 
     /**
-     * Injects the storage.
+     * Inject the callback for the renderer
      *
-     * @param Storage $storage
-     *   The storage, where we store the classes we need.
+     * @param AbstractCallback $object
+     *   The callback.
+     *
+     * @return $this
+     *   $this for chaining
      */
-    public function __construct(Storage $storage)
+    public function injectCallback(AbstractCallback $object)
     {
-        $this->storage = $storage;
+        $this->callback = $object;
+        return $this;
     }
 
     /**
@@ -411,15 +407,7 @@ class Model
      */
     public function addToJson($key, $value)
     {
-        // Our js has some problems with single quotes and escaped quotes.
-        // We remove them as well as linebreaks.
-        $value = str_replace('"', "\\u0027", $value);
-        $value = str_replace("'", "\\u0022", $value);
-        $value = str_replace('&quot;', "\\u0027", $value);
-        // Unicode greater-than aund smaller-then values.
-        $value = str_replace('&lt;', "\\u276E", $value);
-        $value = str_replace('&gt;', "\\u02C3", $value);
-
+        // Remove leftover linebreaks.
         $this->json[$key] = preg_replace("/\r|\n/", "", $value);
         return $this;
     }
@@ -479,22 +467,6 @@ class Model
     }
 
     /**
-     * Initializes the callback for the renderMe method
-     *
-     * @param string $name
-     *   The name and part of the namespace of the callback class.
-     *
-     * @return Model
-     *   $this, for chaining.
-     */
-    public function initCallback($name)
-    {
-        $classname = '\\Brainworxx\\Krexx\\Analyse\\Callback\\' . $name;
-        $this->callback = new $classname($this->storage);
-        return $this;
-    }
-
-    /**
      * Getter for the hasExtras property.
      *
      * @return bool
@@ -548,7 +520,7 @@ class Model
     }
 
     /**
-     * Setter fro the $isCallback.
+     * Setter for the $isCallback.
      *
      * @param boolean $isCallback
      */

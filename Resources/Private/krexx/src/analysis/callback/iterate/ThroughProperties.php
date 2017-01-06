@@ -34,9 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
-use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Controller\OutputActions;
 
 /**
  * Class properties analysis methods.
@@ -80,7 +78,7 @@ class ThroughProperties extends AbstractCallback
             }
 
             // Check memory and runtime.
-            if (!$this->storage->emergencyHandler->checkEmergencyBreak()) {
+            if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
                 return '';
             }
 
@@ -121,13 +119,13 @@ class ThroughProperties extends AbstractCallback
             }
 
             // Stitch together our model
-            $model = new Model($this->storage);
-            $model->setData($value)
+            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setData($value)
                 ->setName($propName)
                 ->setAdditional($additional)
                 ->setConnector1($connector1);
 
-            $output .= $this->storage->routing->analysisHub($model);
+            $output .= $this->pool->routing->analysisHub($model);
         }
 
         return $output;

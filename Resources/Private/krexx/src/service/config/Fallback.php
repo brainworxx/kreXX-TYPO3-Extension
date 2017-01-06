@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Config;
 
-use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Configuration fallback settings.
@@ -45,30 +45,22 @@ use Brainworxx\Krexx\Service\Storage;
  */
 class Fallback
 {
-    /**
-     * The directory where kreXX is stored.
-     *
-     * @var string
-     */
-    public $krexxdir;
 
     /**
      * Here we store all relevant data.
      *
-     * @var Storage
+     * @var Pool
      */
-    protected $storage;
+    protected $pool;
 
     /**
-     * Injects the storage and initializes the security.
+     * Injects the pool and initializes the security.
      *
-     * @param Storage $storage
-     * @param string $krexxdir
+     * @param Pool $pool
      */
-    public function __construct(Storage $storage, $krexxdir)
+    public function __construct(Pool $pool)
     {
-        $this->storage = $storage;
-        $this->krexxdir = $krexxdir;
+        $this->pool = $pool;
     }
 
     /**

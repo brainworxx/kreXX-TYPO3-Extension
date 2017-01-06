@@ -35,8 +35,6 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Methods;
-use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Methods analysis methods. :rolleyes:
@@ -68,10 +66,11 @@ class ThroughMethods extends AbstractCallback
             /* @var \ReflectionMethod $reflection */
             $method = $reflection->name;
             // Get the comment from the class, it's parents, interfaces or traits.
-            $comments = new Methods($this->storage);
-            $methodComment = $comments->getComment($reflection, $ref);
+            $methodComment = $this->pool
+                ->createClass('Brainworxx\\Krexx\\Analyse\\Methods')
+                ->getComment($reflection, $ref);
             if (!empty($methodComment)) {
-                $methodData['comments'] = $comments->getComment($reflection, $ref);
+                $methodData['comments'] = $methodComment;
             }
 
             // Get declaration place.
@@ -109,7 +108,7 @@ class ThroughMethods extends AbstractCallback
                 // We need to recheck our scope.
                 // Private inherited methods are never within the scope.
                 if (strpos($methodData['declaration keywords'], 'private') !== false &&
-                    $this->storage->config->getSetting('analysePrivate') === false) {
+                    $this->pool->config->getSetting('analysePrivate') === false) {
                     // Do nothing. We ignore this one.
                     continue;
                 }
@@ -158,18 +157,20 @@ class ThroughMethods extends AbstractCallback
         $paramList = str_replace(
             array('&lt;required&gt; ', '&lt;optional&gt; '),
             '',
-            $this->storage->encodeString($paramList)
+            $this->pool->encodeString($paramList)
         );
         // Remove the ',' after the last char.
         $paramList = '<small>' . trim($paramList, ', ') . '</small>';
-        $model = new Model($this->storage);
-        $model->setName($name)
+        $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+        ->setName($name)
             ->setType($data['declaration keywords'] . ' method')
             ->setConnector1($connector1)
             ->setConnector2('(' . $paramList . ')')
             ->addParameter('data', $data)
-            ->initCallback('Iterate\\ThroughMethodAnalysis');
+            ->injectCallback(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis')
+            );
 
-        return $this->storage->render->renderExpandableChild($model);
+        return $this->pool->render->renderExpandableChild($model);
     }
 }

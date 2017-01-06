@@ -35,7 +35,6 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Configuration "analysis" methods. Meh, naming conventions suck sometimes.
@@ -75,7 +74,7 @@ class ConfigSection extends AbstractCallback
                     $value = 'false';
                 }
 
-                $model = new Model($this->storage);
+                $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model');
                 if ($setting->getEditable()) {
                     $model->setData($name)
                         ->setName($value)
@@ -83,14 +82,14 @@ class ConfigSection extends AbstractCallback
                         ->setType($setting->getType())
                         ->setHelpid($name);
 
-                    $sectionOutput .= $this->storage->render->renderSingleEditableChild($model);
+                    $sectionOutput .= $this->pool->render->renderSingleEditableChild($model);
                 } else {
                     $model->setData($value)
                         ->setName($name)
                         ->setNormal($value)
                         ->setType($setting->getSource())
                         ->setHelpid($name);
-                    $sectionOutput .= $this->storage->render->renderSingleChild($model);
+                    $sectionOutput .= $this->pool->render->renderSingleChild($model);
                 }
             }
         }

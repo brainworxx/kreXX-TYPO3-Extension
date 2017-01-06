@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Misc;
 
-use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Triggers the kreXX output during shutdown phase.
@@ -47,9 +47,9 @@ class Shutdown
     /**
      * Here we store all relevant data.
      *
-     * @var Storage
+     * @var Pool
      */
-    protected $storage;
+    protected $pool;
 
     /**
      * [0] -> The chunkedup string, that we intend to send to
@@ -68,14 +68,14 @@ class Shutdown
     protected $chunkStrings = array();
 
     /**
-     * Injects the storage.
+     * Injects the pool.
      *
-     * @param Storage $storage
-     *   The storage, where we store the classes we need.
+     * @param Pool $pool
+     *   The pool, where we store the classes we need.
      */
-    public function __construct(Storage $storage)
+    public function __construct(Pool $pool)
     {
-        $this->storage = $storage;
+        $this->pool = $pool;
     }
 
     /**
@@ -100,7 +100,7 @@ class Shutdown
     {
         // Check for CLI and messages.
         if (php_sapi_name() === "cli") {
-            $messages = $this->storage->messages->outputMessages();
+            $messages = $this->pool->messages->outputMessages();
             // Since we are in CLI mode, these messages are not in HTML.
             // We can output them right away.
             echo $messages;
@@ -110,12 +110,12 @@ class Shutdown
         // Every output is split into 4 chunk strings (header, messages,
         // data, footer).
         foreach ($this->chunkStrings as $chunkString) {
-            if ($this->storage->config->getSetting('destination') === 'file') {
+            if ($this->pool->config->getSetting('destination') === 'file') {
                 // Save it to a file.
-                $this->storage->chunks->saveDechunkedToFile($chunkString);
+                $this->pool->chunks->saveDechunkedToFile($chunkString);
             } else {
                 // Send it to the browser.
-                $this->storage->chunks->sendDechunkedToBrowser($chunkString);
+                $this->pool->chunks->sendDechunkedToBrowser($chunkString);
             }
         }
     }

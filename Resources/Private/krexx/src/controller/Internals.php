@@ -34,9 +34,10 @@
 
 namespace Brainworxx\Krexx\Controller;
 
+use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
+use Brainworxx\Krexx\Analyse\Caller\Php;
 use Brainworxx\Krexx\Service\Misc\Shutdown;
-use Brainworxx\Krexx\Service\Storage;
-use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Methods for the "controller" that are not directly "actions".
@@ -92,25 +93,33 @@ class Internals
     protected $counterCache = array();
 
     /**
-     * Our storage where we keep all relevant classes.
+     * Our pool where we keep all relevant classes.
      *
-     * @var Storage
+     * @var Pool
      */
-    protected $storage;
+    protected $pool;
 
     /**
-     * Injects the storage.
+     * Finds our caller.
      *
-     * @param Storage $storage
-     *   The storage, where we store the classes we need.
+     * @var AbstractCaller
      */
-    public function __construct(Storage $storage)
+    protected $callerFinder;
+
+    /**
+     * Injects the pool.
+     *
+     * @param Pool $pool
+     *   The pool, where we store the classes we need.
+     */
+    public function __construct(Pool $pool)
     {
-        $this->storage = $storage;
+        $this->pool = $pool;
+        $this->callerFinder = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Caller\\Php');
 
         // Register our shutdown handler. He will handle the display
         // of kreXX after the hosting CMS is finished.
-        $this->shutdownHandler = new Shutdown($this->storage);
+        $this->shutdownHandler = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\Shutdown');
         register_shutdown_function(array(
             $this->shutdownHandler,
             'shutdownCallback'
@@ -132,9 +141,9 @@ class Internals
         if (!$this->headerSend) {
             // Send doctype and css/js only once.
             $this->headerSend = true;
-            return $this->storage->render->renderHeader('<!DOCTYPE html>', $headline, $this->outputCssAndJs());
+            return $this->pool->render->renderHeader('<!DOCTYPE html>', $headline, $this->outputCssAndJs());
         } else {
-            return $this->storage->render->renderHeader('', $headline, '');
+            return $this->pool->render->renderHeader('', $headline, '');
         }
     }
 
@@ -154,7 +163,7 @@ class Internals
     {
         // Now we need to stitch together the content of the ini file
         // as well as it's path.
-        if (!is_readable($this->storage->config->krexxdir . 'config/Krexx.ini')) {
+        if (!is_readable($this->pool->krexxDir . 'config/Krexx.ini')) {
             // Project settings are not accessible
             // tell the user, that we are using fallback settings.
             $path = 'Krexx.ini not found, using factory settings';
@@ -163,14 +172,16 @@ class Internals
             $path = 'Current configuration';
         }
 
-        $model = new Model($this->storage);
-        $model->setName($path)
-            ->setType($this->storage->config->krexxdir . 'config/Krexx.ini')
+        $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+            ->setName($path)
+            ->setType($this->pool->krexxDir . 'config/Krexx.ini')
             ->setHelpid('currentSettings')
-            ->initCallback('Iterate\\ThroughConfig');
+            ->injectCallback(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConfig')
+            );
 
-        $configOutput = $this->storage->render->renderExpandableChild($model, $isExpanded);
-        return $this->storage->render->renderFooter($caller, $configOutput, $isExpanded);
+        $configOutput = $this->pool->render->renderExpandableChild($model, $isExpanded);
+        return $this->pool->render->renderFooter($caller, $configOutput, $isExpanded);
     }
 
     /**
@@ -181,12 +192,12 @@ class Internals
      */
     protected function outputCssAndJs()
     {
-        $krexxDir = $this->storage->config->krexxdir;
+        $krexxDir = $this->pool->krexxDir;
         // Get the css file.
-        $css = $this->storage->file->getFileContents(
+        $css = $this->pool->file->getFileContents(
             $krexxDir .
             'resources/skins/' .
-            $this->storage->config->getSetting('skin') .
+            $this->pool->config->getSetting('skin') .
             '/skin.css'
         );
         // Remove whitespace.
@@ -198,18 +209,18 @@ class Internals
         } else {
             $jsFile = $krexxDir . 'resources/jsLibs/kdt.js';
         }
-        $js = $this->storage->file->getFileContents($jsFile);
+        $js = $this->pool->file->getFileContents($jsFile);
 
         // Krexx.js is comes directly form the template.
-        $path = $krexxDir . 'resources/skins/' . $this->storage->config->getSetting('skin');
+        $path = $krexxDir . 'resources/skins/' . $this->pool->config->getSetting('skin');
         if (is_readable($path . '/krexx.min.js')) {
             $jsFile = $path . '/krexx.min.js';
         } else {
             $jsFile = $path . '/krexx.js';
         }
-        $js .= $this->storage->file->getFileContents($jsFile);
+        $js .= $this->pool->file->getFileContents($jsFile);
 
-        return $this->storage->render->renderCssJs($css, $js);
+        return $this->pool->render->renderCssJs($css, $js);
     }
 
     /**

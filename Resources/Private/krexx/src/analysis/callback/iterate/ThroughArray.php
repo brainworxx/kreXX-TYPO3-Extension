@@ -35,7 +35,6 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Array analysis methods.
@@ -56,8 +55,8 @@ class ThroughArray extends AbstractCallback
     public function callMe()
     {
         $output = '';
-        $recursionMarker = $this->storage->recursionHandler->getMarker();
-        $output .= $this->storage->render->renderSingeChildHr();
+        $recursionMarker = $this->pool->recursionHandler->getMarker();
+        $output .= $this->pool->render->renderSingeChildHr();
 
         // Iterate through.
         foreach ($this->parameters['data'] as $key => &$value) {
@@ -69,10 +68,10 @@ class ThroughArray extends AbstractCallback
                 continue;
             }
             if (is_string($key)) {
-                $key = $this->storage->encodeString($key);
+                $key = $this->pool->encodeString($key);
             }
 
-            $model = new Model($this->storage);
+            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model');
 
             // Are we dealing with multiline code generation?
             if ($this->parameters['multiline'] === true) {
@@ -93,9 +92,9 @@ class ThroughArray extends AbstractCallback
                     ->setConnector2(']');
             }
 
-            $output .= $this->storage->routing->analysisHub($model);
+            $output .= $this->pool->routing->analysisHub($model);
         }
-        $output .= $this->storage->render->renderSingeChildHr();
+        $output .= $this->pool->render->renderSingeChildHr();
 
         return $output;
     }

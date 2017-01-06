@@ -35,7 +35,6 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Backtrace analysis methods.
@@ -63,77 +62,77 @@ class BacktraceStep extends AbstractCallback
         $stepData = $this->parameters['data'];
         // File.
         if (isset($stepData['file'])) {
-            $fileModel = new Model($this->storage);
-            $fileModel->setData($stepData['file'])
+            $fileModel = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setData($stepData['file'])
                 ->setName('File')
                 ->setNormal($stepData['file'])
                 ->setType('string ' . strlen($stepData['file']));
 
-            $output .= $this->storage->render->renderSingleChild($fileModel);
+            $output .= $this->pool->render->renderSingleChild($fileModel);
         }
         // Line.
         if (isset($stepData['line'])) {
-            $lineModel = new Model($this->storage);
-            $lineModel->setData($stepData['line'])
+            $lineModel = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setData($stepData['line'])
                 ->setName('Line no.')
                 ->setNormal($stepData['line'])
                 ->setType('integer');
 
-            $output .= $this->storage->render->renderSingleChild($lineModel);
+            $output .= $this->pool->render->renderSingleChild($lineModel);
         }
 
         // Sourcecode, is escaped by now.
-        $sourceModel = new Model($this->storage);
+
         if (isset($stepData['line'])) {
             $lineNo = $stepData['line'] + $this->parameters['offset'];
-            $source = trim($this->storage->file->readSourcecode($stepData['file'], $lineNo, $lineNo -5, $lineNo +5));
+            $source = trim($this->pool->file->readSourcecode($stepData['file'], $lineNo, $lineNo -5, $lineNo +5));
             if (empty($source)) {
-                $source = $this->storage->messages->getHelp('noSourceAvailable');
+                $source = $this->pool->messages->getHelp('noSourceAvailable');
             }
         } else {
-            $source = $this->storage->messages->getHelp('noSourceAvailable');
+            $source = $this->pool->messages->getHelp('noSourceAvailable');
         }
-
-        $sourceModel->setData($source)
+        $sourceModel = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+            ->setData($source)
             ->setName('Sourcecode')
             ->setNormal('. . .')
             ->hasExtras()
             ->setType('PHP');
-        $output .= $this->storage->render->renderSingleChild($sourceModel);
+        $output .= $this->pool->render->renderSingleChild($sourceModel);
 
         // Function.
         if (isset($stepData['function'])) {
-            $functionModel = new Model($this->storage);
-            $functionModel->setData($stepData['function'])
+            $functionModel = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setData($stepData['function'])
                 ->setName('Last called function')
                 ->setNormal($stepData['function'])
                 ->setType('string ' . strlen($stepData['function']));
 
-            $output .= $this->storage->render->renderSingleChild($functionModel);
+            $output .= $this->pool->render->renderSingleChild($functionModel);
         }
         // Object.
         if (isset($stepData['object'])) {
-            $objectModel = new Model($this->storage);
-            $objectModel->setData($stepData['object'])
+            $objectModel = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setData($stepData['object'])
                 ->setName('Calling object');
-            $output .= $this->storage->routing->analyseObject($objectModel);
+            $output .= $this->pool->routing->analyseObject($objectModel);
         }
         // Type.
         if (isset($stepData['type'])) {
-            $typeModel = new Model($this->storage);
-            $typeModel->setData($stepData['type'])
+            $typeModel = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setData($stepData['type'])
                 ->setName('Call type')
                 ->setNormal($stepData['type'])
                 ->setType('string ' . strlen($stepData['type']));
 
-            $output .= $this->storage->render->renderSingleChild($typeModel);
+            $output .= $this->pool->render->renderSingleChild($typeModel);
         }
         // Args.
         if (isset($stepData['args'])) {
-            $argsModel = new Model($this->storage);
-            $argsModel->setData($stepData['args'])
+            $argsModel = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setData($stepData['args'])
                 ->setName('Arguments from the call');
-            $output .= $this->storage->routing->analyseArray($argsModel);
+            $output .= $this->pool->routing->analyseArray($argsModel);
         }
 
         return $output;

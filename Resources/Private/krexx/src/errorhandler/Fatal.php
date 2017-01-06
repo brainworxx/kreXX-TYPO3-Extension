@@ -113,7 +113,7 @@ class Fatal extends Error
                     'file' => $error['file'],
                     'backtrace' => $this->tickedBacktrace,
                 );
-                $this->storage->controller->errorAction($errorData);
+                $this->pool->controller->errorAction($errorData);
             }
         }
         // Clean exit.

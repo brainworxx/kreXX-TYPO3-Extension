@@ -32,10 +32,9 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Service;
+namespace Brainworxx\Krexx\Service\Factory;
 
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
-use Brainworxx\Krexx\Analyse\Caller\Php;
 use Brainworxx\Krexx\Analyse\Routing;
 use Brainworxx\Krexx\Analyse\Scope;
 use Brainworxx\Krexx\Controller\OutputActions;
@@ -53,7 +52,7 @@ use Brainworxx\Krexx\Service\View\Render;
  *
  * @package Brainworxx\Krexx\Service
  */
-class Storage
+class Pool extends Factory
 {
     /**
      * The routing class.
@@ -144,6 +143,13 @@ class Storage
     public $scope;
 
     /**
+     * The directory where kreXX is installed.
+     *
+     * @var string
+     */
+    public $krexxDir;
+
+    /**
      * Initializes all needed classes.
      *
      * @param $krexxDir
@@ -151,72 +157,43 @@ class Storage
      */
     public function __construct($krexxDir)
     {
-        // Initializes the messages.
-        $this->messages = new Messages($this);
-        // Initializes the file service.
-        $this->file = new file($this);
-        // Initializes the configuration
-        $this->config = new Config($this, $krexxDir);
-        // Initialize the emergency handler.
-        $this->emergencyHandler = new Emergency($this);
-        // Initialize the routing.
-        $this->routing = new Routing($this);
-        // Initialize the recursionHandler.
-        $this->recursionHandler = new Recursion($this);
-        // Initialize the code generation.
-        $this->codegenHandler = new Codegen($this);
-        // Initializes the chunks handler.
-        $this->chunks = new Chunks($this);
-        // Initializes the controller.
-        $this->controller = new OutputActions($this);
-        // Initialize the caller finder. We start with the php finder.
-        $this->callerFinder = new Php($this);
-        // Initializes the scope analysis
-        $this->scope = new Scope($this);
-
-        // Initializes the render class.
-        $this->initRenderer();
-        // Check our environment.
-        $this->checkEnvironment($krexxDir);
+        $this->init($krexxDir);
     }
 
     /**
-     * Yes, we do have an output here. We are generation messages to
-     * inform the dev that the environment is not as it should be.
+     * (Re)initializes everything in the pool, in case in-runtime
+     * factory overwrites.
      *
-     * @param string $krexxDir
-     *   The directory where kreXX ist installed.
+     * @param $krexxDir
+     *   The dir where kreXX is stored.
      */
-    protected function checkEnvironment($krexxDir)
+    public function init($krexxDir)
     {
-        // Check chunk folder is writable.
-        // If not, give feedback!
-        $chunkFolder = $krexxDir . 'chunks' . DIRECTORY_SEPARATOR;
-        if (!is_writeable($chunkFolder)) {
-            $this->messages->addMessage(
-                'Chunksfolder ' . $chunkFolder . ' is not writable!' .
-                'This will increase the memory usage of kreXX significantly!',
-                'critical'
-            );
-            $this->messages->addKey('protected.folder.chunk', array($chunkFolder));
-            // We can work without chunks, but this will require much more memory!
-            $this->chunks->setUseChunks(false);
-        }
+        // Set the directory.
+        $this->krexxDir = $krexxDir;
+        // Initializes the messages.
+        $this->messages = $this->createClass('Brainworxx\\Krexx\\Service\\View\\Messages');
+        // Initializes the file service.
+        $this->file = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
+        // Initializes the configuration
+        $this->config = $this->createClass('Brainworxx\\Krexx\\Service\\Config\\Config');
+        // Initialize the emergency handler.
+        $this->emergencyHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Flow\\Emergency');
+        // Initialize the routing.
+        $this->routing = $this->createClass('Brainworxx\\Krexx\\Analyse\\Routing');
+        // Initialize the recursionHandler.
+        $this->recursionHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Flow\\Recursion');
+        // Initialize the code generation.
+        $this->codegenHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\Codegen');
+        // Initializes the chunks handler.
+        $this->chunks = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\Chunks');
+        // Initializes the controller.
+        $this->controller = $this->createClass('Brainworxx\\Krexx\\Controller\\OutputActions');
+        // Initializes the scope analysis
+        $this->scope = $this->createClass('Brainworxx\\Krexx\\Analyse\\Scope');
 
-        // Check if the log folder is writable.
-        // If not, give feedback!
-        $logFolder = $krexxDir . 'log' . DIRECTORY_SEPARATOR;
-        if (!is_writeable($logFolder)) {
-            $this->messages->addMessage('Logfolder ' . $logFolder . ' is not writable !', 'critical');
-            $this->messages->addKey('protected.folder.log', array($logFolder));
-        }
-        // At this point, we won't inform the dev right away. The error message
-        // will pop up, when kreXX is actually displayed, no need to bother the
-        // dev just now.
-        // We might need to register our fatal error handler.
-        if ($this->config->getSetting('registerAutomatically')) {
-            $this->controller->registerFatalAction();
-        }
+        // Initializes the render class.
+        $this->initRenderer();
     }
 
     /**
@@ -226,12 +203,12 @@ class Storage
     {
         // We need to reset our recursion handler, because
         // the content of classes might change with another run.
-        $this->recursionHandler = new Recursion($this);
+        $this->recursionHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Flow\\Recursion');
+        // Initialize the code generation.
+        $this->codegenHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\Codegen');
+        $this->scope = $this->createClass('Brainworxx\\Krexx\\Analyse\\Scope');
         // We also reset our emergency handler timer.
         $this->emergencyHandler->resetTimer();
-        // Initialize the code generation.
-        $this->codegenHandler = new Codegen($this);
-        $this->scope = new Scope($this);
     }
 
     /**
@@ -239,7 +216,7 @@ class Storage
      */
     public function resetConfig()
     {
-        $this->config = new Config($this, $this->config->krexxdir);
+        $this->config = $this->createClass('Brainworxx\\Krexx\\Service\\Config\\Config');
     }
 
     /**
@@ -249,10 +226,9 @@ class Storage
     {
         $skin = $this->config->getSetting('skin');
         $classname = '\\Brainworxx\\Krexx\\View\\' . ucfirst($skin) . '\\Render';
-        include_once $this->config->krexxdir . 'resources/skins/' . $skin . '/Render.php';
-        $this->render = new $classname($this);
+        include_once $this->krexxDir . 'resources/skins/' . $skin . '/Render.php';
+        $this->render =  $this->createClass($classname);
     }
-
 
     /**
      * Sanitizes a string, by completely encoding it.

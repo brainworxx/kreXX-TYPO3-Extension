@@ -115,9 +115,9 @@ class Php extends AbstractCaller
             $possibleFunctionnames = array(
                 'krexx',
                 'krexx::open',
-                'krexx::' . $this->storage->config->getDevHandler(),
+                'krexx::' . $this->pool->config->getDevHandler(),
                 'Krexx::open',
-                'Krexx::' . $this->storage->config->getDevHandler()
+                'Krexx::' . $this->pool->config->getDevHandler()
             );
 
             // Adding the search pattern to the possible debug function names.
@@ -135,7 +135,7 @@ class Php extends AbstractCaller
             }
         }
 
-        $varname = $this->storage->encodeString(trim($varname, " \t\n\r\0\x0B'\""));
+        $varname = $this->pool->encodeString(trim($varname, " \t\n\r\0\x0B'\""));
 
         // Check if we have a value.
         if (empty($varname)) {

@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Misc;
 
-use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * File access service.
@@ -43,16 +43,16 @@ use Brainworxx\Krexx\Service\Storage;
  */
 class File
 {
-    protected $storage;
+    protected $pool;
 
     /**
-     * Injects the storage.
+     * Injects the pool.
      *
-     * @param Storage $storage
+     * @param Pool $pool
      */
-    public function __construct($storage)
+    public function __construct($pool)
     {
-        $this->storage = $storage;
+        $this->pool = $pool;
     }
 
     /**
@@ -90,16 +90,16 @@ class File
                     $realLineNo = $currentLineNo + 1;
 
                     // Escape it.
-                    $contentArray[$currentLineNo] = $this->storage->encodeString($contentArray[$currentLineNo], true);
+                    $contentArray[$currentLineNo] = $this->pool->encodeString($contentArray[$currentLineNo], true);
 
                     if ($currentLineNo === $highlight) {
-                        $result .= $this->storage->render->renderBacktraceSourceLine(
+                        $result .= $this->pool->render->renderBacktraceSourceLine(
                             'highlight',
                             $realLineNo,
                             $contentArray[$currentLineNo]
                         );
                     } else {
-                        $result .= $this->storage->render->renderBacktraceSourceLine(
+                        $result .= $this->pool->render->renderBacktraceSourceLine(
                             'source',
                             $realLineNo,
                             $contentArray[$currentLineNo]
@@ -137,5 +137,70 @@ class File
         }
 
         return $result;
+    }
+
+    /**
+     * Write the content of a string to a file.
+     *
+     * When the file already exists, we will append the content.
+     * Caches weather we are allowed to write, to reduce the overhead.
+     *
+     * @param string $path
+     *   Path and filename.
+     * @param string $string
+     *   The string we want to write.
+     */
+    public function putFileContents($path, $string)
+    {
+        // Do some caching, so we check a file or dir only once!
+        static $ops = array();
+        static $dir = array();
+
+        // Check the directory.
+        if (!isset($dir[dirname($path)])) {
+            $dir[dirname($path)]['canwrite'] = is_writable(dirname($path));
+        }
+
+        if (!isset($ops[$path])) {
+            // We need to do some checking:
+            $ops[$path]['append'] = is_file($path);
+            $ops[$path]['canwrite'] = is_writable($path);
+        }
+
+        // Do the writing!
+        if ($ops[$path]['append']) {
+            if ($ops[$path]['canwrite']) {
+                // Old file where we are allowed to write.
+                file_put_contents($path, $string, FILE_APPEND);
+            }
+        } else {
+            if ($dir[dirname($path)]['canwrite']) {
+                // New file we can create.
+                file_put_contents($path, $string);
+                // We will append it on the next write attempt!
+                $ops[$path]['append'] = true;
+                $ops[$path]['canwrite'] = true;
+            }
+        }
+    }
+
+    /**
+     * Returns the microtime timestamp for file operations.
+     *
+     * File operations are the logfiles and the chunk handling.
+     *
+     * @return string
+     *   The timestamp itself.
+     */
+    public function fileStamp()
+    {
+        static $timestamp = 0;
+
+        if (empty($timestamp)) {
+            $timestamp = explode(" ", microtime());
+            $timestamp = $timestamp[1] . str_replace("0.", "", $timestamp[0]);
+        }
+
+        return $timestamp;
     }
 }

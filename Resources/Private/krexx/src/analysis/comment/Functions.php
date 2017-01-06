@@ -49,6 +49,6 @@ class Functions extends AbstractComment
      */
     public function getComment($reflection, \ReflectionClass $reflectionClass = null)
     {
-        return $this->storage->encodeString($this->prettifyComment($reflection->getDocComment()));
+        return $this->pool->encodeString($this->prettifyComment($reflection->getDocComment()));
     }
 }

@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\Errorhandler;
 
-use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * This class hosts all functions which all error handlers will share
@@ -47,9 +47,9 @@ abstract class Error
     /**
      * Here we store all relevant data.
      *
-     * @var Storage
+     * @var Pool
      */
-    protected $storage;
+    protected $pool;
 
     /**
      * Stores if the handler is active.
@@ -63,14 +63,14 @@ abstract class Error
     protected $isActive = false;
 
     /**
-     * Injects the storage.
+     * Injects the pool.
      *
-     * @param Storage $storage
-     *   The storage, where we store the classes we need.
+     * @param Pool $pool
+     *   The pool, where we store the classes we need.
      */
-    public function __construct(Storage $storage)
+    public function __construct(Pool $pool)
     {
-        $this->storage = $storage;
+        $this->pool = $pool;
     }
 
     /**
@@ -82,7 +82,7 @@ abstract class Error
      */
     protected function getIsActive()
     {
-        if ($this->isActive && !$this->storage->config->getSetting('disabled')) {
+        if ($this->isActive && !$this->pool->config->getSetting('disabled')) {
             // We will only handle errors when kreXX and the handler
             // itself is enabled.
             return true;

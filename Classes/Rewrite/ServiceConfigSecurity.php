@@ -32,59 +32,27 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback;
+use Brainworxx\Krexx\Service\Config\Security;
 
-use Brainworxx\Krexx\Service\Factory\Pool;
-
-/**
- * Abstract class for the callback classes inside the model.
- *
- * @package Brainworxx\Krexx\Analyse\Callback
- */
-abstract class AbstractCallback
+class Tx_Includekrexx_Rewrite_ServiceConfigSecurity extends Security
 {
-
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
+     * {@inheritdoc}
      */
-    protected $pool;
-
-    /**
-     * The parameters for the callback.
-     *
-     * @var array
-     */
-    protected $parameters = array();
-
-    /**
-     * The actual callback function for the renderer.
-     *
-     * @return string
-     *   The generated markup.
-     */
-    abstract public function callMe();
-
-    /**
-     * Injects the pool.
-     *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
-     */
-    public function __construct(Pool $pool)
+    public function isAllowedIp($whitelist)
     {
-        $this->pool = $pool;
-    }
+        $remote = $_SERVER['REMOTE_ADDR'];
 
-    /**
-     * Add callback parameters at class construction.
-     *
-     * @param array $params
-     *   The parameters for the callMe() method.
-     */
-    public function setParams(array &$params)
-    {
-        $this->parameters = $params;
+        // Use TYPO3 v6+ cmpIP if possible.
+        if (is_callable(array('\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'cmpIP'))) {
+            return \TYPO3\CMS\Core\Utility\GeneralUtility::cmpIP($remote, $whitelist);
+        }
+        // Use TYPO3 v6- cmpIP if possible.
+        if (is_callable(array('t3lib_div', 'cmpIP'))) {
+            return \t3lib_div::cmpIP($remote, $whitelist);
+        }
+
+        // Still here?!? This should not have happened!
+        return parent::isAllowedIp($whitelist);
     }
 }

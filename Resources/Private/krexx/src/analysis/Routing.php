@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse;
 
-use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * "Routing" for kreXX
@@ -51,19 +51,19 @@ class Routing
     /**
      * Here we store all relevant data.
      *
-     * @var Storage
+     * @var Pool
      */
-    protected $storage;
+    protected $pool;
 
     /**
-     * Injects the storage.
+     * Injects the pool.
      *
-     * @param Storage $storage
-     *   The storage, where we store the classes we need.
+     * @param Pool $pool
+     *   The pool, where we store the classes we need.
      */
-    public function __construct(Storage $storage)
+    public function __construct(Pool $pool)
     {
-         $this->storage = $storage;
+         $this->pool = $pool;
     }
 
     /**
@@ -81,17 +81,17 @@ class Routing
     public function analysisHub(Model $model)
     {
         // Check memory and runtime.
-        if (!$this->storage->emergencyHandler->checkEmergencyBreak()) {
+        if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
             return '';
         }
         $data = $model->getData();
 
         // Check nesting level
-        $this->storage->emergencyHandler->upOneNestingLevel();
+        $this->pool->emergencyHandler->upOneNestingLevel();
         if (is_array($data) || is_object($data)) {
-            if ($this->storage->emergencyHandler->checkNesting()) {
-                $this->storage->emergencyHandler->downOneNestingLevel();
-                $text = gettype($data) . ' => ' . $this->storage->messages->getHelp('maximumLevelReached');
+            if ($this->pool->emergencyHandler->checkNesting()) {
+                $this->pool->emergencyHandler->downOneNestingLevel();
+                $text = gettype($data) . ' => ' . $this->pool->messages->getHelp('maximumLevelReached');
                 $model->setData($text);
                 return $this->analyseString($model);
             }
@@ -99,7 +99,7 @@ class Routing
 
         // Check for recursion.
         if (is_object($data) || is_array($data)) {
-            if ($this->storage->recursionHandler->isInHive($data)) {
+            if ($this->pool->recursionHandler->isInHive($data)) {
                 // Render recursion.
                 if (is_object($data)) {
                     $type = get_class($data);
@@ -109,12 +109,12 @@ class Routing
                 }
                 $model->setDomid($this->generateDomIdFromObject($data))
                     ->setType($type);
-                $result = $this->storage->render->renderRecursion($model);
-                $this->storage->emergencyHandler->downOneNestingLevel();
+                $result = $this->pool->render->renderRecursion($model);
+                $this->pool->emergencyHandler->downOneNestingLevel();
                 return $result;
             }
             // Remember that we've been here before.
-            $this->storage->recursionHandler->addToHive($data);
+            $this->pool->recursionHandler->addToHive($data);
         }
 
 
@@ -122,62 +122,62 @@ class Routing
         // Closures are analysed separately.
         if (is_object($data) && !is_a($data, '\\Closure')) {
             $result = $this->analyseObject($model);
-            $this->storage->emergencyHandler->downOneNestingLevel();
+            $this->pool->emergencyHandler->downOneNestingLevel();
             return $result;
         }
 
         // Closure?
         if (is_object($data) && is_a($data, '\\Closure')) {
             $result = $this->analyseClosure($model);
-            $this->storage->emergencyHandler->downOneNestingLevel();
+            $this->pool->emergencyHandler->downOneNestingLevel();
             return $result;
         }
 
         // Array?
         if (is_array($data)) {
             $result = $this->analyseArray($model);
-            $this->storage->emergencyHandler->downOneNestingLevel();
+            $this->pool->emergencyHandler->downOneNestingLevel();
             return $result;
         }
 
         // Resource?
         if (is_resource($data)) {
-            $this->storage->emergencyHandler->downOneNestingLevel();
+            $this->pool->emergencyHandler->downOneNestingLevel();
             return $this->analyseResource($model);
         }
 
         // String?
         if (is_string($data)) {
-            $this->storage->emergencyHandler->downOneNestingLevel();
+            $this->pool->emergencyHandler->downOneNestingLevel();
             return $this->analyseString($model);
         }
 
         // Float?
         if (is_float($data)) {
-            $this->storage->emergencyHandler->downOneNestingLevel();
+            $this->pool->emergencyHandler->downOneNestingLevel();
             return $this->analyseFloat($model);
         }
 
         // Integer?
         if (is_int($data)) {
-            $this->storage->emergencyHandler->downOneNestingLevel();
+            $this->pool->emergencyHandler->downOneNestingLevel();
             return $this->analyseInteger($model);
         }
 
         // Boolean?
         if (is_bool($data)) {
-            $this->storage->emergencyHandler->downOneNestingLevel();
+            $this->pool->emergencyHandler->downOneNestingLevel();
             return $this->analyseBoolean($model);
         }
 
         // Null ?
         if (is_null($data)) {
-            $this->storage->emergencyHandler->downOneNestingLevel();
+            $this->pool->emergencyHandler->downOneNestingLevel();
             return $this->analyseNull($model);
         }
 
         // Still here? This should not happen. Return empty string, just in case.
-        $this->storage->emergencyHandler->downOneNestingLevel();
+        $this->pool->emergencyHandler->downOneNestingLevel();
         return '';
     }
 
@@ -198,7 +198,7 @@ class Routing
             ->setType($model->getAdditional() . 'null')
             ->addToJson('type', 'NULL');
 
-        return $this->storage->render->renderSingleChild($model);
+        return $this->pool->render->renderSingleChild($model);
     }
 
     /**
@@ -222,9 +222,11 @@ class Routing
             ->addToJson('count', $count)
             ->addParameter('data', $model->getData())
             ->addParameter('multiline', $multiline)
-            ->initCallback('Iterate\\ThroughArray');
+            ->injectCallback(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')
+            );
 
-        return $this->storage->render->renderExpandableChild($model);
+        return $this->pool->render->renderExpandableChild($model);
     }
 
     /**
@@ -244,7 +246,7 @@ class Routing
             ->setType($model->getAdditional() . 'resource')
             ->addToJson('type', 'resource');
 
-        return $this->storage->render->renderSingleChild($model);
+        return $this->pool->render->renderSingleChild($model);
     }
 
     /**
@@ -264,7 +266,7 @@ class Routing
             ->setType($model->getAdditional() . 'boolean')
             ->addToJson('type', 'boolean');
 
-        return $this->storage->render->renderSingleChild($model);
+        return $this->pool->render->renderSingleChild($model);
     }
 
     /**
@@ -282,7 +284,7 @@ class Routing
             ->setType($model->getAdditional() . 'integer')
             ->addToJson('type', 'integer');
 
-        return $this->storage->render->renderSingleChild($model);
+        return $this->pool->render->renderSingleChild($model);
     }
 
     /**
@@ -300,7 +302,7 @@ class Routing
             ->setType($model->getAdditional() . 'float')
             ->addToJson('type', 'float');
 
-        return $this->storage->render->renderSingleChild($model);
+        return $this->pool->render->renderSingleChild($model);
     }
 
     /**
@@ -318,10 +320,10 @@ class Routing
 
         // Extra ?
         if (strlen($data) > 50) {
-            $cut = substr($this->storage->encodeString($data), 0, 50) . '. . .';
+            $cut = substr($this->pool->encodeString($data), 0, 50) . '. . .';
             $model->hasExtras();
         } else {
-            $cut = $this->storage->encodeString($data);
+            $cut = $this->pool->encodeString($data);
         }
 
         // We need to take care for mixed encodings here.
@@ -334,7 +336,7 @@ class Routing
             $encoding = 'broken';
         }
 
-        $data = $this->storage->encodeString($data);
+        $data = $this->pool->encodeString($data);
 
         $model->setData($data)
             ->setNormal($cut)
@@ -350,7 +352,7 @@ class Routing
             $model->setIsCallback(true);
         }
 
-        return $this->storage->render->renderSingleChild($model);
+        return $this->pool->render->renderSingleChild($model);
     }
 
     /**
@@ -369,15 +371,16 @@ class Routing
         $result = array();
 
         // Adding comments from the file.
-        $comments = new Functions($this->storage);
-        $result['comments'] =  $comments->getComment($ref);
+        $result['comments'] =  $this->pool
+            ->createClass('Brainworxx\\Krexx\\Analyse\\Functions')
+            ->getComment($ref);
 
         // Adding the sourcecode
         $highlight = $ref->getStartLine() -1;
         $from = $highlight - 3;
         $to = $ref->getEndLine() -1;
         $file = $ref->getFileName();
-        $result['source'] = $this->storage->file->readSourcecode($file, $highlight, $from, $to);
+        $result['source'] = $this->pool->file->readSourcecode($file, $highlight, $from, $to);
 
         // Adding the place where it was declared.
         $result['declared in'] = $ref->getFileName() . "\n";
@@ -402,7 +405,7 @@ class Routing
         $paramList = str_replace(
             array('&lt;required&gt; ', '&lt;optional&gt; '),
             '',
-            $this->storage->encodeString($paramList)
+            $this->pool->encodeString($paramList)
         );
         // Remove the ',' after the last char.
         $paramList = '<small>' . trim($paramList, ', ') . '</small>';
@@ -411,9 +414,11 @@ class Routing
             ->setConnector2($model->getConnector2() . '(' . $paramList . ')')
             ->setDomid($this->generateDomIdFromObject($model->getData()))
             ->addParameter('data', $result)
-            ->initCallback('Iterate\\ThroughMethodAnalysis');
+            ->injectCallback(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis')
+            );
 
-        return $this->storage->render->renderExpandableChild($model);
+        return $this->pool->render->renderExpandableChild($model);
 
     }
 
@@ -434,10 +439,12 @@ class Routing
             ->addParameter('name', $model->getName())
             ->setAdditional(get_class($model->getData()))
             ->setDomid($this->generateDomIdFromObject($model->getData()))
-            ->initCallback('Analyse\\Objects');
+            ->injectCallback(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects')
+            );
 
         // Output data from the class.
-        $output .= $this->storage->render->renderExpandableChild($model);
+        $output .= $this->pool->render->renderExpandableChild($model);
         return $output;
     }
 
@@ -461,14 +468,16 @@ class Routing
         $output = '';
 
         foreach ($backtrace as $step => $stepData) {
-            $model = new Model($this->storage);
-            $model->setName($step)
+            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setName($step)
                 ->setType('Stack Frame')
                 ->addParameter('data', $stepData)
                 ->addParameter('offset', $offset)
-                ->initCallback('Analyse\\BacktraceStep');
+                ->injectCallback(
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep')
+                );
 
-            $output .= $this->storage->render->renderExpandableChild($model);
+            $output .= $this->pool->render->renderExpandableChild($model);
         }
 
         return $output;
@@ -490,7 +499,7 @@ class Routing
     protected function generateDomIdFromObject($data)
     {
         if (is_object($data)) {
-            return 'k' . $this->storage->emergencyHandler->getKrexxCount() . '_' . spl_object_hash($data);
+            return 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_' . spl_object_hash($data);
         } else {
             // Do nothing.
             return '';

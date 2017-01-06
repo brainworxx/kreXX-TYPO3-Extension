@@ -34,8 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse;
 
-use Brainworxx\Krexx\Controller\OutputActions;
-use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Scope analysis decides if a property of method is accessible in the current
@@ -48,9 +47,9 @@ class Scope
     /**
      * Here we store all relevant data.
      *
-     * @var Storage
+     * @var Pool
      */
-    protected $storage;
+    protected $pool;
 
     /**
      * The "scope" we are starting with. When it is $this in combination with a
@@ -64,12 +63,12 @@ class Scope
     /**
      * Initializes the code generation.
      *
-     * @param Storage $storage
-     *   The storage, where we store the classes we need.
+     * @param Pool $pool
+     *   The pool, where we store the classes we need.
      */
-    public function __construct(Storage $storage)
+    public function __construct(Pool $pool)
     {
-        $this->storage = $storage;
+        $this->pool = $pool;
     }
 
     /**
@@ -84,7 +83,7 @@ class Scope
             $this->scope = $scope;
             // Now that we have a scope, we can actually generate code to
             // reach the variables inside the analysis.
-            $this->storage->codegenHandler->setAllowCodegen(true);
+            $this->pool->codegenHandler->setAllowCodegen(true);
         }
     }
 
@@ -106,9 +105,9 @@ class Scope
      */
     public function isInScope()
     {
-        return  $this->storage->emergencyHandler->getNestingLevel() <= 1 &&
+        return  $this->pool->emergencyHandler->getNestingLevel() <= 1 &&
             $this->scope === '$this' &&
-            $this->storage->config->getSetting('useScopeAnalysis');
+            $this->pool->config->getSetting('useScopeAnalysis');
     }
 
     /**
@@ -134,9 +133,9 @@ class Scope
         // coming from the code generation. That is, because that class is currently
         // being analysed.
         if (strpos($model->getType(), 'class') === false && strpos($model->getType(), 'array') === false) {
-            $nestingLevel = $this->storage->emergencyHandler->getNestingLevel();
+            $nestingLevel = $this->pool->emergencyHandler->getNestingLevel();
         } else {
-            $nestingLevel = $this->storage->emergencyHandler->getNestingLevel() - 1;
+            $nestingLevel = $this->pool->emergencyHandler->getNestingLevel() - 1;
         }
 
 

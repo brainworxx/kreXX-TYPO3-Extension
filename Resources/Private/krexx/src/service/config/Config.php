@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Config;
 
-use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Access the debug settings here.
@@ -66,15 +66,14 @@ class Config extends Fallback
     public $settings = array();
 
     /**
-     * Injection the storage and loading the configuration.
+     * Injection the pool and loading the configuration.
      *
-     * @param \Brainworxx\Krexx\Service\Storage $storage
-     * @param string $krexxdir
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
      */
-    public function __construct(Storage $storage, $krexxdir)
+    public function __construct(Pool $pool)
     {
-        parent::__construct($storage, $krexxdir);
-        $this->security = new Security($storage, $krexxdir);
+        parent::__construct($pool);
+        $this->security = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\Security');
 
         // Loading the settings.
         foreach ($this->configFallback as $section => $settings) {
@@ -219,8 +218,9 @@ class Config extends Fallback
         }
 
         $feConfig = $this->getFeConfig($name);
-        $model = new Model();
-        $model->setSection($section)
+        /** @var Model $model */
+        $model = $this->pool->createClass('Brainworxx\\Krexx\\Service\\Config\Model')
+            ->setSection($section)
             ->setEditable($feConfig[0])
             ->setType($feConfig[1]);
 
@@ -349,7 +349,7 @@ class Config extends Fallback
         // Not loaded?
         if (empty($config)) {
             $config = (array)parse_ini_string(
-                $this->storage->file->getFileContents($this->krexxdir . 'config/Krexx.ini'),
+                $this->pool->file->getFileContents($this->pool->krexxDir . 'config/Krexx.ini'),
                 true
             );
             if (empty($config)) {

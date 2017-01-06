@@ -34,16 +34,16 @@
 
 namespace Brainworxx\Krexx\Analyse\Caller;
 
-use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 abstract class AbstractCaller
 {
     /**
-     * Our storage where we keep al relevant classes.
+     * Our pool where we keep al relevant classes.
      *
-     * @var Storage
+     * @var Pool
      */
-    protected $storage;
+    protected $pool;
 
     /**
      * Pattern that we use to identify the caller.
@@ -57,14 +57,14 @@ abstract class AbstractCaller
     protected $pattern = 'krexx';
 
     /**
-     * Injects the storage.
+     * Injects the pool.
      *
-     * @param Storage $storage
-     *   The storage, where we store the classes we need.
+     * @param Pool $pool
+     *   The pool, where we store the classes we need.
      */
-    public function __construct(Storage $storage)
+    public function __construct(Pool $pool)
     {
-        $this->storage = $storage;
+        $this->pool = $pool;
     }
 
     /**

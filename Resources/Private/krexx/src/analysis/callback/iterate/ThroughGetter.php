@@ -70,13 +70,15 @@ class ThroughGetter extends AbstractCallback
             // 1.) We have an actual value
             // 2.) We got NULL as a value
             // 3.) We were unable to get any info at all.
-
-            $commentsAnalysis = new Methods($this->storage);
             $reflectionMethod = $ref->getMethod($methodName);
-            $comments = nl2br($commentsAnalysis->getComment($reflectionMethod, $ref));
+            $comments = nl2br($this
+                ->pool
+                ->createClass('Brainworxx\\Krexx\\Analyse\\Methods')
+                ->getComment($reflectionMethod, $ref));
 
-            $model = new Model($this->storage);
-            $model->setName($methodName)
+            /** @var Model $model */
+            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setName($methodName)
                 ->setConnector2('()')
                 ->addToJson('method comment', $comments);
 
@@ -89,7 +91,7 @@ class ThroughGetter extends AbstractCallback
 
             if (empty($refProp)) {
                 // Found nothing  :-(
-                $value = $this->storage->messages->getHelp('unknownValue');
+                $value = $this->pool->messages->getHelp('unknownValue');
 
                 // We literally have no info. We need to tell the user.
                 $model->setNormal('unknown')
@@ -104,14 +106,14 @@ class ThroughGetter extends AbstractCallback
 
             if (empty($refProp)) {
                 // We render this right away, without any routing.
-                $output .= $this->storage->render->renderSingleChild($model);
+                $output .= $this->pool->render->renderSingleChild($model);
             } else {
                 if (is_null($value)) {
                     // A NULL value might mean that the values does not
                     // exist, until the getter computes it.
-                    $model->addToJson('hint', $this->storage->messages->getHelp('getterNull'));
+                    $model->addToJson('hint', $this->pool->messages->getHelp('getterNull'));
                 }
-                $output .= $this->storage->routing->analysisHub($model);
+                $output .= $this->pool->routing->analysisHub($model);
             }
         }
 

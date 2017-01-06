@@ -2,6 +2,9 @@
 - Added the info, if a property / method is inherited.
 - Added a configuration for the scope analysis.
 - Added the search option "Search whole value".
+- Added the additional info from Smoky-Grey to the Hans, which
+  will be displayed inside the help-box on hover.
+- Introduced a factory.
 - Bugfix: The comments may break out of the getter analysis
   json.
 - Bugfix: Removed a warning in case kreXX was called fromn eval'd

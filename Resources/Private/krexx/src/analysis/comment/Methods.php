@@ -59,7 +59,7 @@ class Methods extends AbstractComment
 
         if ($this->checkComment($comment)) {
             // Found it!
-            return $this->storage->encodeString(trim($comment));
+            return $this->pool->encodeString(trim($comment));
         } else {
             // Check for interfaces.
             $comment = $this->getInterfaceComment($comment, $reflectionClass, $reflectionMethod->name);
@@ -67,7 +67,7 @@ class Methods extends AbstractComment
 
         if ($this->checkComment($comment)) {
             // Found it!
-            return $this->storage->encodeString(trim($comment));
+            return $this->pool->encodeString(trim($comment));
         } else {
             // Check for traits.
             $comment = $this->getTraitComment($comment, $reflectionClass, $reflectionMethod->name);
@@ -75,7 +75,7 @@ class Methods extends AbstractComment
 
         if ($this->checkComment($comment)) {
             // Found it!
-            return $this->storage->encodeString(trim($comment));
+            return $this->pool->encodeString(trim($comment));
         } else {
             // Nothing on this level, we need to take a look at the parent.
             try {
@@ -93,7 +93,7 @@ class Methods extends AbstractComment
 
             // Still here? Tell the dev that we could not resolve the comment.
             $comment = $this->replaceInheritComment($comment, '::could not resolve {@inheritdoc} comment::');
-            return $this->storage->encodeString(trim($comment));
+            return $this->pool->encodeString(trim($comment));
         }
     }
 

@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Flow;
 
-use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Recursion handler, formerly known as Hive.
@@ -52,12 +52,12 @@ class Recursion
     /**
      * Here we store all relevant data.
      *
-     * @var Storage
+     * @var Pool
      */
-    protected $storage;
+    protected $pool;
 
     /**
-     * Storage for arrays ans objects, to prevent recursions.
+     * pool for arrays ans objects, to prevent recursions.
      *
      * Layout:
      * [0] -> array with markers
@@ -80,13 +80,13 @@ class Recursion
     /**
      * Generate the recursion marker during class construction.
      *
-     * @param Storage $storage
-     *   The storage, where we store the classes we need.
+     * @param Pool $pool
+     *   The pool, where we store the classes we need.
      */
-    public function __construct(Storage $storage)
+    public function __construct(Pool $pool)
     {
         $this->recursionMarker = 'Krexx' . substr(str_shuffle(md5(microtime())), 0, 10);
-        $this->storage = $storage;
+        $this->pool = $pool;
     }
 
     /**

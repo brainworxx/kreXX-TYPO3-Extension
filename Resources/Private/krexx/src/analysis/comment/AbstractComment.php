@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse;
 
-use Brainworxx\Krexx\Service\Storage;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Abstract class for the comment analysis.
@@ -45,18 +45,18 @@ abstract class AbstractComment
 {
 
     /**
-     * @var Storage
+     * @var Pool
      */
-    protected $storage;
+    protected $pool;
 
     /**
-     * Inject the storage
+     * Inject the pool
      *
-     * @param \Brainworxx\Krexx\Service\Storage $storage
+     * @param Pool $pool
      */
-    public function __construct(Storage $storage)
+    public function __construct(Pool $pool)
     {
-        $this->storage = $storage;
+        $this->pool = $pool;
     }
 
     /**

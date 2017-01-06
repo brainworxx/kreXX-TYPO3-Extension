@@ -35,7 +35,6 @@
 namespace Brainworxx\Krexx\Controller;
 
 use Brainworxx\Krexx\Errorhandler\Fatal;
-use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Controller actions (if you want to call them that).
@@ -73,14 +72,14 @@ class OutputActions extends Internals
      */
     public function dumpAction($data, $headline = '')
     {
-        if ($this->storage->emergencyHandler->checkMaxCall()) {
+        if ($this->pool->emergencyHandler->checkMaxCall()) {
             // Called too often, we might get into trouble here!
             return;
         }
-        $this->storage->reset();
+        $this->pool->reset();
 
         // Find caller.
-        $caller = $this->storage->callerFinder->findCaller();
+        $caller = $this->callerFinder->findCaller();
         if ($headline != '') {
             $caller['type'] = $headline;
         } else {
@@ -119,7 +118,7 @@ class OutputActions extends Internals
         // We need to get the footer before the generating of the header,
         // because we need to display messages in the header from the configuration.
         $footer = $this->outputFooter($caller);
-        $this->storage->scope->setScope($caller['varname']);
+        $this->pool->scope->setScope($caller['varname']);
 
         // Enable code generation only if we were able to determine the varname.
         if ($caller['varname'] != '. . .') {
@@ -129,13 +128,13 @@ class OutputActions extends Internals
         }
 
         // Start the magic.
-        $model = new Model($this->storage);
-        $model->setData($data)
+        $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+            ->setData($data)
             ->setName($caller['varname']);
-        $analysis = $this->storage->routing->analysisHub($model);
+        $analysis = $this->pool->routing->analysisHub($model);
         // Now that our analysis is done, we must check if there was an emergency
         // break.
-        if (!$this->storage->emergencyHandler->checkEmergencyBreak()) {
+        if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
             return;
         }
 
@@ -145,8 +144,8 @@ class OutputActions extends Internals
 
         // Add the caller as metadata to the chunks class. It will be saved as
         // additional info, in case we are logging to a file.
-        if ($this->storage->config->getSetting('destination') === 'file') {
-            $this->storage->chunks->addMetadata($caller);
+        if ($this->pool->config->getSetting('destination') === 'file') {
+            $this->pool->chunks->addMetadata($caller);
         }
     }
 
@@ -155,21 +154,21 @@ class OutputActions extends Internals
      */
     public function backtraceAction()
     {
-        if ($this->storage->emergencyHandler->checkMaxCall()) {
+        if ($this->pool->emergencyHandler->checkMaxCall()) {
             // Called too often, we might get into trouble here!
             return;
         }
 
-        $this->storage->reset();
+        $this->pool->reset();
         // We overwrite the local settings, so we can get as much info from
         // analysed objects as possible.
-        $this->storage->config->overwriteLocalSettings($this->configFatal);
+        $this->pool->config->overwriteLocalSettings($this->configFatal);
 
         // Find caller.
-        $caller = $this->storage->callerFinder->findCaller();
+        $caller = $this->callerFinder->findCaller();
         $caller['type'] = 'Backtrace';
 
-        $this->storage->scope->setScope($caller['varname']);
+        $this->pool->scope->setScope($caller['varname']);
 
         $headline = 'Backtrace';
 
@@ -180,10 +179,10 @@ class OutputActions extends Internals
 
         $footer = $this->outputFooter($caller);
 
-        $analysis = $this->storage->routing->analysisBacktrace($backtrace, -1);
+        $analysis = $this->pool->routing->analysisBacktrace($backtrace, -1);
         // Now that our analysis is done, we must check if there was an emergency
         // break.
-        if (!$this->storage->emergencyHandler->checkEmergencyBreak()) {
+        if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
             return;
         }
 
@@ -193,12 +192,12 @@ class OutputActions extends Internals
 
         // Add the caller as metadata to the chunks class. It will be saved as
         // additional info, in case we are logging to a file.
-        if ($this->storage->config->getSetting('destination') === 'file') {
-            $this->storage->chunks->addMetadata($caller);
+        if ($this->pool->config->getSetting('destination') === 'file') {
+            $this->pool->chunks->addMetadata($caller);
         }
 
         // Reset our configuration for the other analysis calls.
-        $this->storage->resetConfig();
+        $this->pool->resetConfig();
     }
 
     /**
@@ -206,28 +205,28 @@ class OutputActions extends Internals
      */
     public function editSettingsAction()
     {
-        if ($this->storage->emergencyHandler->checkMaxCall()) {
+        if ($this->pool->emergencyHandler->checkMaxCall()) {
             // Called too often, we might get into trouble here!
             return;
         }
 
-        $this->storage->reset();
+        $this->pool->reset();
 
         // We will not check this for the cookie config, to avoid people locking
         // themselves out.
-        $this->storage->emergencyHandler->setEnable(false);
+        $this->pool->emergencyHandler->setEnable(false);
 
 
         // Find caller.
-        $caller = $this->storage->callerFinder->findCaller();
+        $caller = $this->callerFinder->findCaller();
         $caller['type'] = 'Cookie Configuration';
-        $this->storage->chunks->addMetadata($caller);
+        $this->pool->chunks->addMetadata($caller);
 
         // Render it.
         $footer = $this->outputFooter($caller, true);
         $this->shutdownHandler->addChunkString($this->outputHeader('Edit local settings'));
         $this->shutdownHandler->addChunkString($footer);
-        $this->storage->emergencyHandler->setEnable(true);
+        $this->pool->emergencyHandler->setEnable(true);
     }
 
     /**
@@ -239,21 +238,21 @@ class OutputActions extends Internals
      */
     public function errorAction(array $errorData)
     {
-        $this->storage->reset();
+        $this->pool->reset();
 
         // We overwrite the local settings, so we can get as much info from
         // analysed objects as possible.
-        $this->storage->config->overwriteLocalSettings($this->configFatal);
+        $this->pool->config->overwriteLocalSettings($this->configFatal);
 
         // Get the header.
         if ($this->headerSend) {
-            $header = $this->storage->render->renderFatalHeader('', '<!DOCTYPE html>');
+            $header = $this->pool->render->renderFatalHeader('', '<!DOCTYPE html>');
         } else {
-            $header = $this->storage->render->renderFatalHeader($this->outputCssAndJs(), '<!DOCTYPE html>');
+            $header = $this->pool->render->renderFatalHeader($this->outputCssAndJs(), '<!DOCTYPE html>');
         }
 
         // Get the main part.
-        $main = $this->storage->render->renderFatalMain(
+        $main = $this->pool->render->renderFatalMain(
             $errorData['type'],
             $errorData['errstr'],
             $errorData['errfile'],
@@ -261,30 +260,30 @@ class OutputActions extends Internals
         );
 
         // Get the backtrace.
-        $backtrace = $this->storage->routing->analysisBacktrace($errorData['backtrace'], -1);
-        if (!$this->storage->emergencyHandler->checkEmergencyBreak()) {
+        $backtrace = $this->pool->routing->analysisBacktrace($errorData['backtrace'], -1);
+        if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
             return;
         }
 
         // Get the footer.
         $footer = $this->outputFooter(array());
         // Get the messages.
-        $messages = $this->storage->messages->outputMessages();
+        $messages = $this->pool->messages->outputMessages();
 
-        if ($this->storage->config->getSetting('destination') === 'file') {
+        if ($this->pool->config->getSetting('destination') === 'file') {
             // Add the caller as metadata to the chunks class. It will be saved as
             // additional info, in case we are logging to a file.
-            $this->storage->chunks->addMetadata(array(
+            $this->pool->chunks->addMetadata(array(
                 'file' => $errorData['errfile'],
                 'line' => $errorData['errline'] + 1,
                 'varname' => ' Fatal Error',
             ));
 
             // Save it to a file.
-            $this->storage->chunks->saveDechunkedToFile($header . $messages . $main . $backtrace . $footer);
+            $this->pool->chunks->saveDechunkedToFile($header . $messages . $main . $backtrace . $footer);
         } else {
             // Send it to the browser.
-            $this->storage->chunks->sendDechunkedToBrowser($header . $messages . $main . $backtrace . $footer);
+            $this->pool->chunks->sendDechunkedToBrowser($header . $messages . $main . $backtrace . $footer);
         }
     }
 
@@ -299,16 +298,16 @@ class OutputActions extends Internals
         // Not to mention that fatals got removed anyway.
         if (version_compare(phpversion(), '7.0.0', '>=')) {
             // Too high! 420 Method Failure :-(
-            $this->storage->messages->addMessage($this->storage->messages->getHelp('php7yellow'));
-            krexx($this->storage->messages->getHelp('php7'));
+            $this->pool->messages->addMessage($this->pool->messages->getHelp('php7yellow'));
+            krexx($this->pool->messages->getHelp('php7'));
 
             // Just return, there is nothing more to do here.
             return;
         }
-        $this->storage->reset();
+        $this->pool->reset();
         // Do we need another shutdown handler?
         if (!is_object($this->krexxFatal)) {
-            $this->krexxFatal = new Fatal($this->storage);
+            $this->krexxFatal = $this->pool->createClass('Brainworxx\\Krexx\\Errorhandler\\Fatal');
             declare(ticks = 1);
             register_shutdown_function(array(
               $this->krexxFatal,
