@@ -122,9 +122,9 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
         /**
          * The kreXX framework.
          *
-         * @var TYPO3\CMS\Extbase\Persistence\Generic\Storage\
+         * @var \Brainworxx\Krexx\Service\Factory\Pool
          */
-        protected $krexxStorage;
+        protected $pool;
 
         /**
          * Adding the namespace to the tamplate, because
@@ -147,7 +147,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
         public function __construct()
         {
             parent::__construct();
-            $this->krexxStorage = \Krexx::$storage;
+            $this->pool = \Krexx::$pool;
         }
 
         /**
@@ -220,7 +220,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
         {
             $result = array();
             // Get the keys and the args.
-            $keys = $this->krexxStorage->messages->getKeys();
+            $keys = $this->pool->messages->getKeys();
 
             foreach ($keys as $message) {
                 // And translate them and add a linebreak.

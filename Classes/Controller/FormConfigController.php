@@ -67,55 +67,55 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
 
             // See, if we have any values in the configuration file.
             $value['output']['skin'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('skin')
+                $this->pool->config->getFeConfigFromFile('skin')
             );
             $value['runtime']['memoryLeft'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('memoryLeft')
+                $this->pool->config->getFeConfigFromFile('memoryLeft')
             );
             $value['runtime']['maxRuntime'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('maxRuntime')
+                $this->pool->config->getFeConfigFromFile('maxRuntime')
             );
             $value['runtime']['maxCall'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('maxCall')
+                $this->pool->config->getFeConfigFromFile('maxCall')
             );
             $value['output']['disabled'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('disabled')
+                $this->pool->config->getFeConfigFromFile('disabled')
             );
             $value['runtime']['detectAjax'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('detectAjax')
+                $this->pool->config->getFeConfigFromFile('detectAjax')
             );
             $value['properties']['analyseProtected'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('analyseProtected')
+                $this->pool->config->getFeConfigFromFile('analyseProtected')
             );
             $value['properties']['analysePrivate'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('analysePrivate')
+                $this->pool->config->getFeConfigFromFile('analysePrivate')
             );
             $value['properties']['analyseTraversable'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('analyseTraversable')
+                $this->pool->config->getFeConfigFromFile('analyseTraversable')
             );
             $value['properties']['analyseConstants'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('analyseConstants')
+                $this->pool->config->getFeConfigFromFile('analyseConstants')
             );
             $value['runtime']['level'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('level')
+                $this->pool->config->getFeConfigFromFile('level')
             );
             $value['methods']['analyseProtectedMethods'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('analyseProtectedMethods')
+                $this->pool->config->getFeConfigFromFile('analyseProtectedMethods')
             );
             $value['methods']['analysePrivateMethods'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('analysePrivateMethods')
+                $this->pool->config->getFeConfigFromFile('analysePrivateMethods')
             );
             $value['backtraceAndError']['registerAutomatically'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('registerAutomatically')
+                $this->pool->config->getFeConfigFromFile('registerAutomatically')
             );
             $value['backtraceAndError']['backtraceAnalysis'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('backtraceAnalysis')
+                $this->pool->config->getFeConfigFromFile('backtraceAnalysis')
             );
             $value['methods']['analyseGetter'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('analyseGetter')
+                $this->pool->config->getFeConfigFromFile('analyseGetter')
             );
             $value['runtime']['useScopeAnalysis'] = $this->convertKrexxFeSetting(
-                $this->krexxStorage->config->getFeConfigFromFile('useScopeAnalysis')
+                $this->pool->config->getFeConfigFromFile('useScopeAnalysis')
             );
 
             // Are these actually set?
@@ -125,7 +125,7 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
                         $data['factory'][$attribute] = true;
                         // We need to fill these values with the stuff from the factory settings!
                         $value[$mainkey][$attribute] = $this->convertKrexxFeSetting(
-                            $this->krexxStorage->config->feConfigFallback[$attribute]
+                            $this->pool->config->feConfigFallback[$attribute]
                         );
                     } else {
                         $data['factory'][$attribute] = false;
@@ -149,14 +149,14 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
         {
             $arguments = $this->request->getArguments();
             $allOk = true;
-            $filepath = $this->krexxStorage->config->krexxdir . 'config/Krexx.ini';
+            $filepath = $this->pool->krexxDir . 'config/Krexx.ini';
             // Whitelist of the vales we are accepting.
             $allowedValues = array('full', 'display', 'none');
 
             // Check for writing permission.
             if (!is_writable(dirname($filepath))) {
                 $allOk = false;
-                $this->krexxStorage->messages->addKey('file.not.writable', array($filepath));
+                $this->pool->messages->addKey('file.not.writable', array($filepath));
             }
             // Check if the file does exist.
             if (is_file($filepath)) {
@@ -186,7 +186,7 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
                             } else {
                                 // Validation failed!
                                 $allOk = false;
-                                $this->krexxStorage->messages->addKey('value.not.allowed', array(htmlentities($value)));
+                                $this->pool->messages->addKey('value.not.allowed', array(htmlentities($value)));
                             }
                         }
                     }
@@ -205,7 +205,7 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
                 if ($allOk) {
                     if (file_put_contents($filepath, $ini) === false) {
                         $allOk = false;
-                        $this->krexxStorage->messages->addKey('file.not.writable', array($filepath));
+                        $this->pool->messages->addKey('file.not.writable', array($filepath));
                     }
                 }
             }
@@ -213,8 +213,8 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
             // Something went wrong, we need to tell the user.
             if (!$allOk) {
                 // Got to remove some messages. We we will not queue them now.
-                $this->krexxStorage->messages->removeKey('protected.folder.chunk');
-                $this->krexxStorage->messages->removeKey('protected.folder.log');
+                $this->pool->messages->removeKey('protected.folder.chunk');
+                $this->pool->messages->removeKey('protected.folder.log');
                 foreach ($this->getTranslatedMessages() as $message) {
                     $this->addMessage(
                         $message,

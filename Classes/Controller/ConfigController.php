@@ -59,7 +59,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
             $data = array();
             $value = array();
             // Setting possible form values.
-            foreach ($this->krexxStorage->render->getSkinList() as $skin) {
+            foreach ($this->pool->render->getSkinList() as $skin) {
                 $data['skins'][$skin] = $skin;
             }
             $data['destination'] = array(
@@ -106,83 +106,83 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
 
 
             // See, if we have any values in the configuration file.
-            $value['output']['skin'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['output']['skin'] = $this->pool->config->getConfigFromFile(
                 'output',
                 'skin'
             );
-            $value['runtime']['memoryLeft'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['runtime']['memoryLeft'] = $this->pool->config->getConfigFromFile(
                 'runtime',
                 'memoryLeft'
             );
-            $value['runtime']['maxRuntime'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['runtime']['maxRuntime'] = $this->pool->config->getConfigFromFile(
                 'runtime',
                 'maxRuntime'
             );
-            $value['output']['maxfiles'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['output']['maxfiles'] = $this->pool->config->getConfigFromFile(
                 'output',
                 'maxfiles'
             );
-            $value['output']['destination'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['output']['destination'] = $this->pool->config->getConfigFromFile(
                 'output',
                 'destination'
             );
-            $value['runtime']['maxCall'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['runtime']['maxCall'] = $this->pool->config->getConfigFromFile(
                 'runtime',
                 'maxCall'
             );
-            $value['output']['disabled'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['output']['disabled'] = $this->pool->config->getConfigFromFile(
                 'output',
                 'disabled'
             );
-            $value['output']['iprange'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['output']['iprange'] = $this->pool->config->getConfigFromFile(
                 'output',
                 'iprange'
             );
-            $value['runtime']['detectAjax'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['runtime']['detectAjax'] = $this->pool->config->getConfigFromFile(
                 'runtime',
                 'detectAjax'
             );
-            $value['properties']['analyseProtected'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['properties']['analyseProtected'] = $this->pool->config->getConfigFromFile(
                 'properties',
                 'analyseProtected'
             );
-            $value['properties']['analysePrivate'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['properties']['analysePrivate'] = $this->pool->config->getConfigFromFile(
                 'properties',
                 'analysePrivate'
             );
-            $value['properties']['analyseConstants'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['properties']['analyseConstants'] = $this->pool->config->getConfigFromFile(
                 'properties',
                 'analyseConstants'
             );
-            $value['properties']['analyseTraversable'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['properties']['analyseTraversable'] = $this->pool->config->getConfigFromFile(
                 'properties',
                 'analyseTraversable'
             );
-            $value['methods']['debugMethods'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['methods']['debugMethods'] = $this->pool->config->getConfigFromFile(
                 'methods',
                 'debugMethods'
             );
-            $value['runtime']['level'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['runtime']['level'] = $this->pool->config->getConfigFromFile(
                 'runtime',
                 'level'
             );
-            $value['methods']['analyseProtectedMethods'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['methods']['analyseProtectedMethods'] = $this->pool->config->getConfigFromFile(
                 'methods',
                 'analyseProtectedMethods'
             );
-            $value['methods']['analysePrivateMethods'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['methods']['analysePrivateMethods'] = $this->pool->config->getConfigFromFile(
                 'methods',
                 'analysePrivateMethods'
             );
-            $value['methods']['analyseGetter'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['methods']['analyseGetter'] = $this->pool->config->getConfigFromFile(
                 'methods',
                 'analyseGetter'
             );
-            $value['backtraceAndError']['registerAutomatically'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['backtraceAndError']['registerAutomatically'] = $this->pool->config->getConfigFromFile(
                 'backtraceAndError',
                 'registerAutomatically'
             );
-            $value['runtime']['useScopeAnalysis'] = $this->krexxStorage->config->getConfigFromFile(
+            $value['runtime']['useScopeAnalysis'] = $this->pool->config->getConfigFromFile(
                 'runtime',
                 'useScopeAnalysis'
             );
@@ -194,7 +194,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                         $data['factory'][$attribute] = true;
                         // We need to fill these values with the stuff from the
                         // factory settings!
-                        $value[$mainkey][$attribute] = $this->krexxStorage->config->configFallback[$mainkey][$attribute];
+                        $value[$mainkey][$attribute] = $this->pool->config->configFallback[$mainkey][$attribute];
                     } else {
                         $data['factory'][$attribute] = false;
                     }
@@ -213,14 +213,14 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
         {
             $arguments = $this->request->getArguments();
             $allOk = true;
-            $filepath = $this->krexxStorage->config->krexxdir. 'config/Krexx.ini';
+            $filepath = $this->pool->krexxDir. 'config/Krexx.ini';
 
 
 
             // Check for writing permission.
             if (!is_writable(dirname($filepath))) {
                 $allOk = false;
-                $this->krexxStorage->messages->addKey('file.not.writable', array($filepath));
+                $this->pool->messages->addKey('file.not.writable', array($filepath));
             }
 
             // Check if the file does exist.
@@ -245,7 +245,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                                 // whitelist it.
                                 $value = htmlspecialchars(preg_replace('/\s+/', '', $value));
                                 // Evaluate the setting!
-                                if ($this->krexxStorage->config->security->evaluateSetting($section, $settingName, $value)) {
+                                if ($this->pool->config->security->evaluateSetting($section, $settingName, $value)) {
                                     $oldValues[$section][$settingName] = $value;
                                 } else {
                                     // Validation failed! kreXX will generate a message,
@@ -272,7 +272,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                 if ($allOk) {
                     if (file_put_contents($filepath, $ini) === false) {
                         $allOk = false;
-                        $this->krexxStorage->messages->addKey('file.not.writable', array($filepath));
+                        $this->pool->messages->addKey('file.not.writable', array($filepath));
                     }
                 }
             }
@@ -280,8 +280,8 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
             // Something went wrong, we need to tell the user.
             if (!$allOk) {
                 // Got to remove some messages. We we will not queue them now.
-                $this->krexxStorage->messages->removeKey('protected.folder.chunk');
-                $this->krexxStorage->messages->removeKey('protected.folder.log');
+                $this->pool->messages->removeKey('protected.folder.chunk');
+                $this->pool->messages->removeKey('protected.folder.log');
                 foreach ($this->getTranslatedMessages() as $message) {
                     $this->addMessage(
                         $message,
