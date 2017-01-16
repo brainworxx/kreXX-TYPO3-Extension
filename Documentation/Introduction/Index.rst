@@ -18,8 +18,8 @@ kreXX will be called from within the PHP source code:
 |
 
 Key features:
-	- Dumping of protected variables
-	- Dumping of private variables
+	- Dumping of protected properties
+	- Dumping of private properties
 	- Dumping of traversable data
 	- Dumping of getter method data
 	- Configurable debug callbacks, which will be called on objects (if present). The output will then be dumped.
