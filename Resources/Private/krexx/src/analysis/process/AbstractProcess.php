@@ -32,60 +32,26 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback;
+namespace Brainworxx\Krexx\Analyse\Process;
 
-use Brainworxx\Krexx\Analyse\Routing\Routing;
-use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Abstract class for the callback classes inside the model.
+ * Abstract class for (nearly) all processing classes.
  *
- * @package Brainworxx\Krexx\Analyse\Callback
+ * @package Brainworxx\Krexx\Analyse\Routing
  */
-abstract class AbstractCallback
+abstract class AbstractProcess extends AbstractRouting
 {
 
     /**
-     * Here we store all relevant data.
+     * Processes the model according to the type of the variable.
      *
-     * @var Pool
-     */
-    protected $pool;
-
-    /**
-     * The parameters for the callback.
-     *
-     * @var array
-     */
-    protected $parameters = array();
-
-    /**
-     * The actual callback function for the renderer.
+     * @param \Brainworxx\Krexx\Analyse\Model $model
      *
      * @return string
-     *   The generated markup.
      */
-    abstract public function callMe();
+    abstract public function process(Model $model);
 
-    /**
-     * Injects the pool.
-     *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
-     */
-    public function __construct(Pool $pool)
-    {
-        $this->pool = $pool;
-    }
-
-    /**
-     * Add callback parameters at class construction.
-     *
-     * @param array $params
-     *   The parameters for the callMe() method.
-     */
-    public function setParams(array &$params)
-    {
-        $this->parameters = $params;
-    }
 }

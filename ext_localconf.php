@@ -36,28 +36,8 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-$registered = false;
-$krexxFile = 'sdfsdfs';
-// 6.0 ++
-if (class_exists('\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility')) {
-    $krexxFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
-    $registered = true;
-}
-// The old way.
-if (class_exists('t3lib_extMgm') && !$registered) {
-    $krexxFile = t3lib_extMgm::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
-}
-if (file_exists($krexxFile) && !class_exists('Krexx')) {
-    // We load the kreXX library.
-    // 7.3+ is able to autoload krexx before this point.
-    // We will not include it again!
-    include_once $krexxFile;
-}
-
-
-
-
-// Do some autoloading stuff which may or may not be done by TYPO3 automatically.
+// Do some "autoloading" stuff which may or may not be done by TYPO3
+// automatically, depending on the version.
 if (version_compare(TYPO3_version, '7.2', '>')) {
     // TYPO3 7.3 / 7.4 does not autoload our classes anymore, so we do this here.
     if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
@@ -99,9 +79,32 @@ if (version_compare(TYPO3_version, '7.2', '>')) {
     }
 }
 
-// Register our overwrite in the kreXX lib.
-// We have some special handling for the ip whitelisting in here.
-\krexx::$pool->addRewrite('Brainworxx\\Krexx\\Service\\Config\\Security', 'Tx_Includekrexx_Rewrite_ServiceConfigSecurity');
-// That class is located in the configuration, we need to relaod it.  :-(
-// At least for now.
-\krexx::$pool->resetConfig();
+// Add our specific overwrites.
+// When we include the kreXX mainfile, it gets bootstrapped.
+// But then it is already to late for these overwrites.
+// To prevent a reset of all classes, we store these info here.
+// When overwriting a class at a later date (for example, in our fluid debugger)
+// we may need to reset some of the singletons in the $pool, or even create a
+// new pool.
+$GLOBALS['kreXXoverwrites'] = array(
+    'Brainworxx\\Krexx\\Service\\Config\\Security' => 'Tx_Includekrexx_Rewrite_ServiceConfigSecurity'
+);
+
+
+$registered = false;
+$krexxFile = 'sdfsdfs';
+// 6.0 ++
+if (class_exists('\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility')) {
+    $krexxFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
+    $registered = true;
+}
+// The old way.
+if (class_exists('t3lib_extMgm') && !$registered) {
+    $krexxFile = t3lib_extMgm::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
+}
+if (file_exists($krexxFile) && !class_exists('Krexx')) {
+    // We load the kreXX library.
+    // 7.3+ is able to autoload krexx before this point.
+    // We will not include it again!
+    include_once $krexxFile;
+}

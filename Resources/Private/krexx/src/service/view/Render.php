@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Service\View;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Misc\File;
 
 /**
  * Render methods.
@@ -56,6 +57,13 @@ class Render
     protected $pool;
 
     /**
+     * The filkeservice, used to read and write files.
+     *
+     * @var File
+     */
+    protected $fileService;
+
+    /**
      * Injects the pool.
      *
      * @param Pool $pool
@@ -64,6 +72,7 @@ class Render
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
+        $this->fileService = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
     }
     /**
      * Renders a "single child", containing a single not expandable value.
@@ -375,7 +384,7 @@ class Render
             $fileCache[$what] = preg_replace(
                 '/\s+/',
                 ' ',
-                $this->pool->file->getFileContents(
+                $this->fileService->getFileContents(
                     $this->pool->krexxDir .
                     'resources/skins/' .
                     $this->pool->config->getSetting('skin') .
@@ -498,7 +507,7 @@ class Render
 
         $from = $errline -5;
         $to = $errline +5;
-        $source = $this->pool->file->readSourcecode($errfile, $errline -1, $from -1, $to -1);
+        $source = $this->fileService->readSourcecode($errfile, $errline -1, $from -1, $to -1);
 
         // Insert our values.
         $template = str_replace('{type}', $type, $template);

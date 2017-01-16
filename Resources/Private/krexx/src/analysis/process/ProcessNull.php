@@ -32,60 +32,35 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback;
+namespace Brainworxx\Krexx\Analyse\Process;
 
-use Brainworxx\Krexx\Analyse\Routing\Routing;
-use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Abstract class for the callback classes inside the model.
+ * Processing of NULL values. Really.
  *
- * @package Brainworxx\Krexx\Analyse\Callback
+ * @package Brainworxx\Krexx\Analyse\Process
  */
-abstract class AbstractCallback
+class ProcessNull extends AbstractProcess
 {
 
     /**
-     * Here we store all relevant data.
+     * Render a 'dump' for a NULL value.
      *
-     * @var Pool
-     */
-    protected $pool;
-
-    /**
-     * The parameters for the callback.
-     *
-     * @var array
-     */
-    protected $parameters = array();
-
-    /**
-     * The actual callback function for the renderer.
+     * @param Model $model
+     *   The model with the data for the output.
      *
      * @return string
-     *   The generated markup.
+     *   The rendered markup.
      */
-    abstract public function callMe();
-
-    /**
-     * Injects the pool.
-     *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
-     */
-    public function __construct(Pool $pool)
+    public function process(Model $model)
     {
-        $this->pool = $pool;
-    }
+        $data = 'NULL';
+        $model->setData($data)
+            ->setNormal($data)
+            ->setType($model->getAdditional() . 'null')
+            ->addToJson('type', 'NULL');
 
-    /**
-     * Add callback parameters at class construction.
-     *
-     * @param array $params
-     *   The parameters for the callMe() method.
-     */
-    public function setParams(array &$params)
-    {
-        $this->parameters = $params;
+        return $this->pool->render->renderSingleChild($model);
     }
 }

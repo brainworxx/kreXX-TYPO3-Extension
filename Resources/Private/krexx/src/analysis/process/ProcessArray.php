@@ -32,60 +32,43 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback;
+namespace Brainworxx\Krexx\Analyse\Process;
 
-use Brainworxx\Krexx\Analyse\Routing\Routing;
-use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Abstract class for the callback classes inside the model.
+ * Processing of arrays.
  *
- * @package Brainworxx\Krexx\Analyse\Callback
+ * @package Brainworxx\Krexx\Analyse\Process
  */
-abstract class AbstractCallback
+class ProcessArray extends AbstractProcess
 {
 
     /**
-     * Here we store all relevant data.
+     * Render a dump for an array.
      *
-     * @var Pool
-     */
-    protected $pool;
-
-    /**
-     * The parameters for the callback.
-     *
-     * @var array
-     */
-    protected $parameters = array();
-
-    /**
-     * The actual callback function for the renderer.
+     * @param Model $model
+     *   The data we are analysing.
      *
      * @return string
-     *   The generated markup.
+     *   The rendered markup.
      */
-    abstract public function callMe();
-
-    /**
-     * Injects the pool.
-     *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
-     */
-    public function __construct(Pool $pool)
+    public function process(Model $model)
     {
-        $this->pool = $pool;
-    }
+        $multiline = false;
+        $count = (string)count($model->getData());
 
-    /**
-     * Add callback parameters at class construction.
-     *
-     * @param array $params
-     *   The parameters for the callMe() method.
-     */
-    public function setParams(array &$params)
-    {
-        $this->parameters = $params;
+        // Dumping all Properties.
+        $model->setType($model->getAdditional() . 'array')
+            ->setAdditional($count . ' elements')
+            ->addToJson('type', 'array')
+            ->addToJson('count', $count)
+            ->addParameter('data', $model->getData())
+            ->addParameter('multiline', $multiline)
+            ->injectCallback(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')
+            );
+
+        return $this->pool->render->renderExpandableChild($model);
     }
 }

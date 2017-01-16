@@ -35,7 +35,7 @@
 namespace Brainworxx\Krexx\Controller;
 
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
-use Brainworxx\Krexx\Analyse\Caller\Php;
+use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Misc\Shutdown;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
@@ -46,6 +46,13 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class Internals
 {
+
+    /**
+     * The fileservice, used to read and write files.
+     *
+     * @var File
+     */
+    protected $fileService;
 
     /**
      * Sends the output to the browser during shutdown phase.
@@ -116,6 +123,7 @@ class Internals
     {
         $this->pool = $pool;
         $this->callerFinder = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Caller\\Php');
+        $this->fileService = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
 
         // Register our shutdown handler. He will handle the display
         // of kreXX after the hosting CMS is finished.
@@ -194,7 +202,7 @@ class Internals
     {
         $krexxDir = $this->pool->krexxDir;
         // Get the css file.
-        $css = $this->pool->file->getFileContents(
+        $css = $this->fileService->getFileContents(
             $krexxDir .
             'resources/skins/' .
             $this->pool->config->getSetting('skin') .
@@ -209,7 +217,7 @@ class Internals
         } else {
             $jsFile = $krexxDir . 'resources/jsLibs/kdt.js';
         }
-        $js = $this->pool->file->getFileContents($jsFile);
+        $js = $this->fileService->getFileContents($jsFile);
 
         // Krexx.js is comes directly form the template.
         $path = $krexxDir . 'resources/skins/' . $this->pool->config->getSetting('skin');
@@ -218,7 +226,7 @@ class Internals
         } else {
             $jsFile = $path . '/krexx.js';
         }
-        $js .= $this->pool->file->getFileContents($jsFile);
+        $js .= $this->fileService->getFileContents($jsFile);
 
         return $this->pool->render->renderCssJs($css, $js);
     }

@@ -32,40 +32,24 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback;
+namespace Brainworxx\Krexx\Analyse\Process;
 
-use Brainworxx\Krexx\Analyse\Routing\Routing;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
- * Abstract class for the callback classes inside the model.
+ * Processing of backtraces. No abstract for you, because we are dealing with
+ * an array here.
  *
- * @package Brainworxx\Krexx\Analyse\Callback
+ * @package Brainworxx\Krexx\Analyse\Process
  */
-abstract class AbstractCallback
+class ProcessBacktrace
 {
-
     /**
      * Here we store all relevant data.
      *
      * @var Pool
      */
     protected $pool;
-
-    /**
-     * The parameters for the callback.
-     *
-     * @var array
-     */
-    protected $parameters = array();
-
-    /**
-     * The actual callback function for the renderer.
-     *
-     * @return string
-     *   The generated markup.
-     */
-    abstract public function callMe();
 
     /**
      * Injects the pool.
@@ -75,17 +59,41 @@ abstract class AbstractCallback
      */
     public function __construct(Pool $pool)
     {
-        $this->pool = $pool;
+         $this->pool = $pool;
     }
 
     /**
-     * Add callback parameters at class construction.
+     * Analysis a backtrace.
      *
-     * @param array $params
-     *   The parameters for the callMe() method.
+     * We need to format this one a little bit different than a
+     * normal array.
+     *
+     * @param array $backtrace
+     *   The backtrace.
+     * @param int $offset
+     *   For some reason, we have an offset of -1 for fatal error backtrace
+     *   line number.
+     *
+     * @return string
+     *   The rendered backtrace.
      */
-    public function setParams(array &$params)
+    public function process(array &$backtrace, $offset = 0)
     {
-        $this->parameters = $params;
+        $output = '';
+
+        foreach ($backtrace as $step => $stepData) {
+            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setName($step)
+                ->setType('Stack Frame')
+                ->addParameter('data', $stepData)
+                ->addParameter('offset', $offset)
+                ->injectCallback(
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep')
+                );
+
+            $output .= $this->pool->render->renderExpandableChild($model);
+        }
+
+        return $output;
     }
 }

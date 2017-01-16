@@ -84,11 +84,18 @@ class Chunks
     protected $useChunks = true;
 
     /**
-     * The cached krexx directory
+     * The cached krexx directory.
      *
      * @var string
      */
     protected $krexxDir;
+
+    /**
+     * The file service used to read and write files.
+     *
+     * @var File
+     */
+    protected $fileService;
 
     /**
      * @var string
@@ -105,6 +112,7 @@ class Chunks
     {
         $this->pool = $pool;
         $this->krexxDir = $pool->krexxDir;
+        $this->fileService = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
     }
 
     /**
@@ -124,7 +132,7 @@ class Chunks
             // Get the key.
             $key = $this->genKey();
             // Write the key to the chunks folder.
-            $this->pool->file->putFileContents($this->krexxDir . 'chunks/' . $key . '.Krexx.tmp', $string);
+            $this->fileService->putFileContents($this->krexxDir . 'chunks/' . $key . '.Krexx.tmp', $string);
             // Return the first part plus the key.
             return '@@@' . $key . '@@@';
         } else {
@@ -144,7 +152,7 @@ class Chunks
         static $counter = 0;
         $counter++;
 
-        return $this->pool->file->fileStamp() . '_' . $counter;
+        return $this->fileService->fileStamp() . '_' . $counter;
     }
 
     /**
@@ -166,7 +174,7 @@ class Chunks
         $filename = $this->krexxDir . 'chunks/' . $key . '.Krexx.tmp';
         if (is_writable($filename)) {
             // Read the file.
-            $string = $this->pool->file->getFileContents($filename);
+            $string = $this->fileService->getFileContents($filename);
             // Delete it, we don't need it anymore.
             unlink($filename);
         } else {
@@ -229,13 +237,13 @@ class Chunks
         $this->cleanupOldLogs($this->logDir);
 
         // Determine the filename.
-        $timestamp = $this->pool->file->fileStamp();
+        $timestamp = $this->fileService->fileStamp();
         $filename = $this->krexxDir . $this->logDir . DIRECTORY_SEPARATOR . $timestamp . '.Krexx.html';
         $chunkPos = strpos($string, '@@@');
 
         while ($chunkPos !== false) {
             // We have a chunk, we save the html part.
-            $this->pool->file->putFileContents($filename, substr($string, 0, $chunkPos));
+            $this->fileService->putFileContents($filename, substr($string, 0, $chunkPos));
 
             $chunkPart = substr($string, $chunkPos);
 
@@ -248,10 +256,10 @@ class Chunks
         }
 
         // No more chunks, we save what is left.
-        $this->pool->file->putFileContents($filename, $string);
+        $this->fileService->putFileContents($filename, $string);
         // Save our metadata, so a potential backend module can display it.
         if (!empty($this->metadata)) {
-            $this->pool->file->putFileContents($filename . '.json', json_encode($this->metadata));
+            $this->fileService->putFileContents($filename . '.json', json_encode($this->metadata));
             $this->metadata = array();
         }
     }

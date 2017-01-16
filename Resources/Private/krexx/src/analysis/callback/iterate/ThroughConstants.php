@@ -66,7 +66,10 @@ class ThroughConstants extends AbstractCallback
                 ->setData($v)
                 ->setName($k)
                 ->setConnector1($this->parameters['classname'] . '::');
-            $output .= $this->pool->routing->analysisHub($model);
+
+            $output .= $this->pool
+                ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Routing')
+                ->analysisHub($model);
         }
 
         return $output;

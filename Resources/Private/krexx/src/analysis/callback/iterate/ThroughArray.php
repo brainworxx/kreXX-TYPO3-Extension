@@ -92,7 +92,9 @@ class ThroughArray extends AbstractCallback
                     ->setConnector2(']');
             }
 
-            $output .= $this->pool->routing->analysisHub($model);
+            $output .= $this->pool
+                ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Routing')
+                ->analysisHub($model);
         }
         $output .= $this->pool->render->renderSingeChildHr();
 

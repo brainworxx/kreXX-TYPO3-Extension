@@ -233,7 +233,7 @@ class Objects extends AbstractCallback
     /**
      * Decides which methods we want to analyse and then starts the dump.
      *
-     * @param \ReflectionClass $data
+     * @param \ReflectionClass $ref
      *   The object we want to analyse.
      *
      * @return string

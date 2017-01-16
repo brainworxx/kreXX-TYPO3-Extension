@@ -34,8 +34,6 @@
 
 namespace Brainworxx\Krexx\Controller;
 
-use Brainworxx\Krexx\Errorhandler\Fatal;
-
 /**
  * Controller actions (if you want to call them that).
  *
@@ -131,7 +129,9 @@ class OutputActions extends Internals
         $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
             ->setData($data)
             ->setName($caller['varname']);
-        $analysis = $this->pool->routing->analysisHub($model);
+        $analysis = $this->pool
+            ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Routing')
+            ->analysisHub($model);
         // Now that our analysis is done, we must check if there was an emergency
         // break.
         if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
@@ -178,8 +178,9 @@ class OutputActions extends Internals
         unset($backtrace[0]);
 
         $footer = $this->outputFooter($caller);
-
-        $analysis = $this->pool->routing->analysisBacktrace($backtrace, -1);
+        $analysis = $this->pool
+            ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessBacktrace')
+            ->process($backtrace, -1);
         // Now that our analysis is done, we must check if there was an emergency
         // break.
         if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
@@ -260,7 +261,9 @@ class OutputActions extends Internals
         );
 
         // Get the backtrace.
-        $backtrace = $this->pool->routing->analysisBacktrace($errorData['backtrace'], -1);
+        $backtrace = $this->pool
+            ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessBacktrace')
+            ->process($errorData['backtrace'], -1);
         if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
             return;
         }

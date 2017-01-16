@@ -32,60 +32,40 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback;
+namespace Brainworxx\Krexx\Analyse\Process;
 
-use Brainworxx\Krexx\Analyse\Routing\Routing;
-use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Abstract class for the callback classes inside the model.
+ * Processing of objects.
  *
- * @package Brainworxx\Krexx\Analyse\Callback
+ * @package Brainworxx\Krexx\Analyse\Process
  */
-abstract class AbstractCallback
+class ProcessObject extends AbstractProcess
 {
-
     /**
-     * Here we store all relevant data.
+     * Render a dump for an object.
      *
-     * @var Pool
-     */
-    protected $pool;
-
-    /**
-     * The parameters for the callback.
-     *
-     * @var array
-     */
-    protected $parameters = array();
-
-    /**
-     * The actual callback function for the renderer.
+     * @param Model $model
+     *   The object we want to analyse.
      *
      * @return string
      *   The generated markup.
      */
-    abstract public function callMe();
-
-    /**
-     * Injects the pool.
-     *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
-     */
-    public function __construct(Pool $pool)
+    public function process(Model $model)
     {
-        $this->pool = $pool;
-    }
+        $output = '';
+        $model->setType($model->getAdditional() . 'class')
+            ->addParameter('data', $model->getData())
+            ->addParameter('name', $model->getName())
+            ->setAdditional(get_class($model->getData()))
+            ->setDomid($this->generateDomIdFromObject($model->getData()))
+            ->injectCallback(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects')
+            );
 
-    /**
-     * Add callback parameters at class construction.
-     *
-     * @param array $params
-     *   The parameters for the callMe() method.
-     */
-    public function setParams(array &$params)
-    {
-        $this->parameters = $params;
+        // Output data from the class.
+        $output .= $this->pool->render->renderExpandableChild($model);
+        return $output;
     }
 }

@@ -32,40 +32,18 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback;
+namespace Brainworxx\Krexx\Analyse\Routing;
 
-use Brainworxx\Krexx\Analyse\Routing\Routing;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
-/**
- * Abstract class for the callback classes inside the model.
- *
- * @package Brainworxx\Krexx\Analyse\Callback
- */
-abstract class AbstractCallback
+abstract class AbstractRouting
 {
-
     /**
      * Here we store all relevant data.
      *
      * @var Pool
      */
     protected $pool;
-
-    /**
-     * The parameters for the callback.
-     *
-     * @var array
-     */
-    protected $parameters = array();
-
-    /**
-     * The actual callback function for the renderer.
-     *
-     * @return string
-     *   The generated markup.
-     */
-    abstract public function callMe();
 
     /**
      * Injects the pool.
@@ -75,17 +53,29 @@ abstract class AbstractCallback
      */
     public function __construct(Pool $pool)
     {
-        $this->pool = $pool;
+         $this->pool = $pool;
     }
 
     /**
-     * Add callback parameters at class construction.
+     * Generates a id for the DOM.
      *
-     * @param array $params
-     *   The parameters for the callMe() method.
+     * This is used to jump from a recursion to the object analysis data.
+     * The ID is the object hash as well as the kruXX call number, to avoid
+     * collisions (even if they are unlikely).
+     *
+     * @param mixed $data
+     *   The object from which we want the ID.
+     *
+     * @return string
+     *   The generated id.
      */
-    public function setParams(array &$params)
+    protected function generateDomIdFromObject($data)
     {
-        $this->parameters = $params;
+        if (is_object($data)) {
+            return 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_' . spl_object_hash($data);
+        } else {
+            // Do nothing.
+            return '';
+        }
     }
 }

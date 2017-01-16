@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Service\Config;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Misc\File;
 
 /**
  * Access the debug settings here.
@@ -50,6 +51,13 @@ class Config extends Fallback
      * @var Security
      */
     public $security;
+
+    /**
+     * The file service used for reading and writing files.
+     *
+     * @var File
+     */
+    protected $fileService;
 
     /**
      * The current position of our iterator array.
@@ -74,6 +82,7 @@ class Config extends Fallback
     {
         parent::__construct($pool);
         $this->security = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\Security');
+        $this->fileService = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
 
         // Loading the settings.
         foreach ($this->configFallback as $section => $settings) {
@@ -349,7 +358,7 @@ class Config extends Fallback
         // Not loaded?
         if (empty($config)) {
             $config = (array)parse_ini_string(
-                $this->pool->file->getFileContents($this->pool->krexxDir . 'config/Krexx.ini'),
+                $this->fileService->getFileContents($this->pool->krexxDir . 'config/Krexx.ini'),
                 true
             );
             if (empty($config)) {

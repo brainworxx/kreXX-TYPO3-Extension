@@ -58,6 +58,9 @@ class Debug extends AbstractCallback
             ->setData($this->parameters['data'])
             ->setName('result');
         // This could be anything, we need to route it.
-        return $this->pool->routing->analysisHub($model);
+
+        return $this->pool
+            ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Routing')
+            ->analysisHub($model);
     }
 }

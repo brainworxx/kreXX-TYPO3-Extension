@@ -35,6 +35,8 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Misc\File;
 
 /**
  * Backtrace analysis methods.
@@ -48,6 +50,22 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
  */
 class BacktraceStep extends AbstractCallback
 {
+    /**
+     * The file service, used to readand write files.
+     *
+     * @var File
+     */
+    protected $fileService;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(Pool $pool)
+    {
+        parent::__construct($pool);
+        $this->fileService = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
+    }
+
     /**
      * Renders a backtrace step.
      *
@@ -85,7 +103,7 @@ class BacktraceStep extends AbstractCallback
 
         if (isset($stepData['line'])) {
             $lineNo = $stepData['line'] + $this->parameters['offset'];
-            $source = trim($this->pool->file->readSourcecode($stepData['file'], $lineNo, $lineNo -5, $lineNo +5));
+            $source = trim($this->fileService->readSourcecode($stepData['file'], $lineNo, $lineNo -5, $lineNo +5));
             if (empty($source)) {
                 $source = $this->pool->messages->getHelp('noSourceAvailable');
             }
@@ -115,7 +133,9 @@ class BacktraceStep extends AbstractCallback
             $objectModel = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setData($stepData['object'])
                 ->setName('Calling object');
-            $output .= $this->pool->routing->analyseObject($objectModel);
+            $output .= $this->pool
+                ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessObject')
+                ->process($objectModel);
         }
         // Type.
         if (isset($stepData['type'])) {
@@ -132,7 +152,9 @@ class BacktraceStep extends AbstractCallback
             $argsModel = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setData($stepData['args'])
                 ->setName('Arguments from the call');
-            $output .= $this->pool->routing->analyseArray($argsModel);
+            $output .= $this->pool
+                ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessArray')
+                ->process($argsModel);
         }
 
         return $output;

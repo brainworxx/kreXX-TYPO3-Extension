@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Service\Misc\File;
 
 /**
  * Class properties analysis methods.
@@ -50,6 +51,14 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
  */
 class ThroughProperties extends AbstractCallback
 {
+
+    /**
+     * The file service, used to read and write files.
+     *
+     * @var File
+     */
+    protected $fileService;
+
     /**
      * Renders the properties of a class.
      *
@@ -125,7 +134,9 @@ class ThroughProperties extends AbstractCallback
                 ->setAdditional($additional)
                 ->setConnector1($connector1);
 
-            $output .= $this->pool->routing->analysisHub($model);
+            $output .= $this->pool
+                ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Routing')
+                ->analysisHub($model);
         }
 
         return $output;
