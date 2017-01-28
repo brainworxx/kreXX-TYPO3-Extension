@@ -16,6 +16,7 @@
   memoryLeft, iprange)
 - Change: Refactored what did not makle it into v2.0.0 due to time
   constraints, and introduced a factory.
+- Change: Removed the type-spam in the additional data.
 
 2.1.0
 - Added getter method analysis for models.

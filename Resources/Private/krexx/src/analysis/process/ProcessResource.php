@@ -58,8 +58,7 @@ class ProcessResource extends AbstractProcess
         $data = get_resource_type($model->getData());
         $model->setData($data)
             ->setNormal($data)
-            ->setType($model->getAdditional() . 'resource')
-            ->addToJson('type', 'resource');
+            ->setType($model->getAdditional() . 'resource');
 
         return $this->pool->render->renderSingleChild($model);
     }

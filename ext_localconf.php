@@ -36,48 +36,66 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
+if (class_exists('\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility')) {
+    // 6.0 ++
+    $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY);
+} else {
+    // The old way.
+    $extPath = t3lib_extMgm::extPath($_EXTKEY);
+}
+
+
 // Do some "autoloading" stuff which may or may not be done by TYPO3
 // automatically, depending on the version.
 if (version_compare(TYPO3_version, '7.2', '>')) {
     // TYPO3 7.3 / 7.4 does not autoload our classes anymore, so we do this here.
     if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
-        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/CompatibilityController.php'));
+        include_once($extPath . 'Classes/Controller/CompatibilityController.php');
     }
     if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
-        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/FormConfigController.php'));
+        include_once($extPath . 'Classes/Controller/FormConfigController.php');
     }
     if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
-        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/LogController.php'));
+        include_once($extPath . 'Classes/Controller/LogController.php');
     }
     if (!class_exists('Tx_Includekrexx_Controller_HelpController')) {
-        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/HelpController.php'));
+        include_once($extPath . 'Classes/Controller/HelpController.php');
     }
     if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
-        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/ConfigController.php'));
+        include_once($extPath . 'Classes/Controller/ConfigController.php');
     }
     if (!class_exists('Tx_Includekrexx_Controller_CookieController')) {
-        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Controller/CookieController.php'));
+        include_once($extPath . 'Classes/Controller/CookieController.php');
     }
     if (!class_exists('Tx_Includekrexx_ViewHelpers_MessagesViewHelper')) {
-        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/MessagesViewHelper.php'));
+        include_once($extPath . 'Classes/ViewHelpers/MessagesViewHelper.php');
     }
     if (!class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
-        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/DebugViewHelper.php'));
-    }
-    if (!class_exists('Tx_Includekrexx_Rewrite_ServiceConfigSecurity')) {
-        include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/Rewrite/ServiceConfigSecurity.php'));
+        include_once($extPath . 'Classes/ViewHelpers/DebugViewHelper.php');
     }
 
     if (version_compare(TYPO3_version, '8.0' ,'>=')) {
         // Some special compatibility stuff for 8.0 , Fluid and it's ViewHelpers.
         if (!class_exists('\\Tx_Includekrexx_ViewHelpers\\MessagesViewHelper')) {
-            include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/MessagesViewHelper8.php'));
+            include_once($extPath . 'Classes/ViewHelpers/MessagesViewHelper8.php');
         }
         if (!class_exists('\\Tx_Includekrexx_ViewHelpers\\DebugViewHelper')) {
-            include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Classes/ViewHelpers/DebugViewHelper8.php'));
+            include_once($extPath . 'Classes/ViewHelpers/DebugViewHelper8.php');
         }
     }
 }
+
+if (!class_exists('Brainworxx\\Krexx\\Service\\Config\\Fallback')) {
+    include_once($extPath . 'Resources/Private/krexx/src/service/config/Fallback.php');
+}
+if (!class_exists('Brainworxx\\Krexx\\Service\\Config\\Security')) {
+    include_once($extPath . 'Resources/Private/krexx/src/service/config/Security.php');
+}
+if (!class_exists('Tx_Includekrexx_Rewrite_ServiceConfigSecurity')) {
+    include_once($extPath . 'Classes/Rewrite/ServiceConfigSecurity.php');
+}
+$krexxFile = $extPath . 'Resources/Private/krexx/Krexx.php';
+
 
 // Add our specific overwrites.
 // When we include the kreXX mainfile, it gets bootstrapped.
@@ -90,21 +108,9 @@ $GLOBALS['kreXXoverwrites'] = array(
     'Brainworxx\\Krexx\\Service\\Config\\Security' => 'Tx_Includekrexx_Rewrite_ServiceConfigSecurity'
 );
 
-
-$registered = false;
-$krexxFile = 'sdfsdfs';
-// 6.0 ++
-if (class_exists('\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility')) {
-    $krexxFile = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
-    $registered = true;
-}
-// The old way.
-if (class_exists('t3lib_extMgm') && !$registered) {
-    $krexxFile = t3lib_extMgm::extPath($_EXTKEY, 'Resources/Private/krexx/Krexx.php');
-}
+// We load the kreXX library.
+// The class__existst triggers the composer autoloading, if available.
+// It not, we use the bundeled version wich comes with the externsion.
 if (file_exists($krexxFile) && !class_exists('Krexx')) {
-    // We load the kreXX library.
-    // 7.3+ is able to autoload krexx before this point.
-    // We will not include it again!
     include_once $krexxFile;
 }

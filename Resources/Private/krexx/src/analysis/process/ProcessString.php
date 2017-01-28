@@ -80,8 +80,7 @@ class ProcessString extends AbstractProcess
             ->setNormal($cut)
             ->setType($model->getAdditional() . 'string' . ' ' . $strlen)
             ->addToJson('encoding', $encoding)
-            ->addToJson('length', $length)
-            ->addToJson('type', 'string');
+            ->addToJson('length', $length);
 
         // Check if this is a possible callback.
         // We are not going to analyse this further, because modern systems

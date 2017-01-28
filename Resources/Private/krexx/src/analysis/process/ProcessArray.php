@@ -61,8 +61,6 @@ class ProcessArray extends AbstractProcess
         // Dumping all Properties.
         $model->setType($model->getAdditional() . 'array')
             ->setAdditional($count . ' elements')
-            ->addToJson('type', 'array')
-            ->addToJson('count', $count)
             ->addParameter('data', $model->getData())
             ->addParameter('multiline', $multiline)
             ->injectCallback(
