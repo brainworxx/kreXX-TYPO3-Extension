@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Routing;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Controller\OutputActions;
 
 /**
  * "Routing" for kreXX
@@ -99,24 +100,27 @@ class Routing extends AbstractRouting
             $this->pool->recursionHandler->addToHive($data);
         }
 
-
         // Object?
-        // Closures are analysed separately.
-        if (is_object($data) && !is_a($data, '\\Closure')) {
-            $result = $this->pool
+        if (is_object($data)) {
+            // We need to check if this is an object first.
+            // When calling is_a('myClass', 'anotherClass') the
+            // autoloader is triggered, trying to load 'myClass', although
+            // it is just a string.
+            if (is_a($data, '\\Closure')) {
+                // Closures are handled differntly from normalk objects
+                $result = $this->pool
+                    ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessClosure')
+                    ->process($model);
+                $this->pool->emergencyHandler->downOneNestingLevel();
+                return $result;
+            } else {
+                // Normal object.
+                $result = $this->pool
                 ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessObject')
                 ->process($model);
-            $this->pool->emergencyHandler->downOneNestingLevel();
-            return $result;
-        }
-
-        // Closure?
-        if (is_a($data, '\\Closure')) {
-            $result = $this->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessClosure')
-                ->process($model);
-            $this->pool->emergencyHandler->downOneNestingLevel();
-            return $result;
+                $this->pool->emergencyHandler->downOneNestingLevel();
+                return $result;
+            }
         }
 
         // Array?
