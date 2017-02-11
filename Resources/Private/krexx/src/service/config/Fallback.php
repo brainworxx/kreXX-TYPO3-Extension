@@ -212,8 +212,8 @@ class Fallback
     /**
      * Known Problems with debug functions, which will most likely cause a fatal.
      *
-     * Used by Objects::pollAllConfiguredDebugMethods() to determine
-     * if we might expect problems.
+     * @see \Brainworxx\Krexx\Service\Config\Security->isAllowedDebugCall()
+     * @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects->pollAllConfiguredDebugMethods()
      *
      * @var array
      */
@@ -223,18 +223,39 @@ class Fallback
         // In the TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper the private
         // $viewHelperNode might not be an object, and trying to render it might
         // cause a fatal error!
-        '\\TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractViewHelper' => '__toString',
-
-        // Will throw an error.
-        'ReflectionClass' => '__toString',
+        '\\TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractViewHelper' => array('__toString'),
 
         // Deleting all rows from the DB via typo3 repository is NOT a good
         // debug method!
-        '\\TYPO3\\CMS\\Extbase\\Persistence\\RepositoryInterface' => 'removeAll',
-        'Tx_Extbase_Persistence_RepositoryInterface' => 'removeAll',
+        '\\TYPO3\\CMS\\Extbase\\Persistence\\RepositoryInterface' => array('removeAll'),
+        'Tx_Extbase_Persistence_RepositoryInterface' => array('removeAll'),
 
         // The lazy loading proxy may not have loaded the object at this time.
-        '\\TYPO3\\CMS\\Extbase\\Persistence\\Generic\\LazyLoadingProxy' => '__toString',
+        '\\TYPO3\\CMS\\Extbase\\Persistence\\Generic\\LazyLoadingProxy' => array('__toString'),
+    );
+
+    /**
+     * These classes will never be polled by debug methods, because that would
+     * most likely cause a fatal.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Security->isAllowedDebugCall()
+     * @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects->pollAllConfiguredDebugMethods()
+     *
+     * @var array
+     */
+    protected $debugClassBlacklist = array(
+        // Fun with reflection classes. Not really.
+        '\\ReflectionClass',
+        '\\ReflectionFunction',
+        '\\ReflectionMethod',
+        '\\ReflectionParameter',
+        '\\ReflectionZendExtension',
+        '\\ReflectionExtension',
+        '\\ReflectionFunctionAbstract',
+        '\\ReflectionObject',
+        '\\ReflectionType',
+        '\\ReflectionGenerator',
+        '\\Reflector',
     );
 
     /**

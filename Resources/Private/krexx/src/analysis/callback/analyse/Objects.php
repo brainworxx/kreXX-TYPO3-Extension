@@ -507,17 +507,24 @@ class Objects extends AbstractCallback
     protected function getAllGetterData(\ReflectionClass $ref, $data)
     {
         // Get all public methods.
-        $methodList = get_class_methods($data);
+        $methodList = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
+
+        if ($this->pool->scope->isInScope()) {
+            // Looks like we also need the protected and private methods.
+            $methodList = array_merge(
+                $methodList,
+                $ref->getMethods(\ReflectionMethod::IS_PRIVATE | \ReflectionMethod::IS_PROTECTED)
+            );
+        }
 
         if (!empty($methodList)) {
             // Filter them.
             foreach ($methodList as $key => $method) {
-                if (strpos($method, 'get') !== 0) {
+                if (strpos($method->getName(), 'get') !== 0) {
                     unset($methodList[$key]);
                 } else {
                     // We only dump those that have no parameters.
-                    $reflectionMethod = $ref->getMethod($method);
-                    $parameters = $reflectionMethod->getParameters();
+                    $parameters = $method->getParameters();
                     if (!empty($parameters)) {
                         unset($methodList[$key]);
                     }

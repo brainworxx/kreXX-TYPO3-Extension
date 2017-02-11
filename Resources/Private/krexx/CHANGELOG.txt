@@ -4,18 +4,23 @@
 - Added the search option "Search whole value".
 - Added the additional info from Smoky-Grey to the Hans, which
   will be displayed inside the help-box on hover.
-- Introduced a factory.
-- Bugfix: The comments may break out of the getter analysis json.
-- Bugfix: Removed a warning in case kreXX was called fromn eval'd
+- Bugfix: The comments will not break out of the getter analysis
+  json anymore
+- Bugfix: Removed a warning in case kreXX was called from eval'd
   code.
 - Bugfix: Dumping of inherited private properties works now.
 - Bugfix: Inherited properties and methods are now regarded by the
   scope analysis.
+- Bugfix: Blacklisted all reflection classes for configured debug
+  methods.
+- Bugfix: Getter analysis is now respecting the scope analysis
+  result.
+- Bugfix: Removed the type-spam in the additional data.
 - Change: Reworked some of the configurations (disable, maxRuntime,
   memoryLeft, iprange)
-- Change: Refactored what did not makle it into v2.0.0 due to time
-  constraints, and introduced a factory.
-- Change: Removed the type-spam in the additional data.
+- Change: Refactored what did not make it into v2.0.0 due to time
+  constraints and introduced a factory.
+
 
 2.1.0
 - Added getter method analysis for models.

@@ -8,8 +8,11 @@
 
 .. _installation:
 
+Installation and bugreports
+===========================
+
 Installation
-=========================
+^^^^^^^^^^^^
 
 Installation is very straight forward. You can:
 
@@ -19,7 +22,15 @@ Installation is very straight forward. You can:
 
 There is no typoscript or pageTSconfig at all.
 
-.. important::
-  The extension manager only suggests the version that is knows about. If you have not updated your extension list for some time, it will only offer the versions that it knows about. So far, kreXX has always been under heavy development.
+Bugreports
+^^^^^^^^^^
 
-  In order to get the latest version, you might want to consider updating the extension list, or upload it manually with the extension manager.
+As can be see in :ref:`changelog`, kreXX has been under heavy development. It is by no means bugfree, and like most software will never be.
+If you encounter a bug or other unwanted behavior/feature, please let us know about it. There is a good chance that other
+developers will also encounter it as well. If we don't know about it, there is a good chance that it will not get fixed.
+
+Bugreports can be filed here:
+https://github.com/brainworxx/kreXX-TYPO3-Extension/issues
+
+Or here:
+https://github.com/brainworxx/kreXX/issues

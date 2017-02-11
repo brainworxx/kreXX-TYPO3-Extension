@@ -43,9 +43,11 @@ use Brainworxx\Krexx\Analyse\Model;
  * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  *
  * @uses array methodList
- *   The list of all methods we are analysing
+ *   The list of all reflection methods we are analysing
  * @uses \ReflectionClass $ref
  *   A reflection class of the object we are analysing.
+ * @uses object $data
+ *   The object we are currently analysing
  */
 class ThroughGetter extends AbstractCallback
 {
@@ -62,14 +64,14 @@ class ThroughGetter extends AbstractCallback
         /** @var \reflectionClass $ref */
         $ref = $this->parameters['ref'];
 
-        foreach ($this->parameters['methodList'] as $methodName) {
+        foreach ($this->parameters['methodList'] as $reflectionMethod) {
+            $methodName = $reflectionMethod->getName();
             $refProp = $this->getReflectionProperty($ref, $methodName);
 
             // Now we have three possible outcomes:
             // 1.) We have an actual value
             // 2.) We got NULL as a value
             // 3.) We were unable to get any info at all.
-            $reflectionMethod = $ref->getMethod($methodName);
             $comments = nl2br($this
                 ->pool
                 ->createClass('Brainworxx\\Krexx\\Analyse\\Methods')

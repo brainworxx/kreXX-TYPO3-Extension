@@ -35,7 +35,7 @@ kreXX Debugger
 		debug, debugging, object, analysis
 
 	:Copyright:
-		2015 - 2016
+		2014 - 2017
 
 	:Author:
 		BRAINWORXX GmbH
@@ -65,6 +65,7 @@ kreXX Debugger
 
 	Introduction/Index
 	Usage/Index
+	Changelog/Index
 	Installation/Index
 	Features/Index
 	Config/Index
