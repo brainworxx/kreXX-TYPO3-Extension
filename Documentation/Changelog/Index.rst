@@ -70,10 +70,11 @@ Changelog
     - [Feature] Added metadata to the backend logging
     - [Internals] Adopted PSR-2
     - [Change] Restructured the configuration options. The sorting does now make more sense than before.
-    - [Change] [Bugfix] Removed the whole dual-output mess.
+    - [Change] Removed logging options and debug methods from the frontend editing configuration optins.
     - [Change] When the destination is set to 'file' via config file, this value can not be overwritten with local cookie settings.
     - [Change] Unclunked the Smokey-Grey skin.
-    - [Bugfix] No helptext displayed for readonly cookie config.
+    - [Change] [Bugfix] Removed the whole dual-output mess.
+    - [Bugfix] No help text displayed for readonly cookie config.
     - [Bugfix] The Hans skin renders the config option name twice.
     - [Bugfix] When setting the logfiles to '10', kreXX will now keep 10 files, and not 9.
     - [Bugfix] The debug output might jump around, in some special css environments.
@@ -98,7 +99,7 @@ Changelog
     - [Change] Removed the useless array nest from the traversable info, to produce a better readability.
     - [Change] Changed the extension name to kreXX Debugger
     - [Bugfix] Added some primary formatting to the Hans skin to prevent the host system from messing with the css formatting of the skin.
-    - [Bugfix] Removed the jQuery library. ReqireJS should now work normally when used on the frontend.
+    - [Bugfix] Removed the jQuery library. RequireJS should now work normally when used on the frontend.
     - [Bugfix] Generated sourcecode now works with IteratorAggregate when trying to access a single element from the iterator.
     - [Bugfix] Configured debugging methods will not be called anymore, if they require a parameter.
     - [Bugfix] Prevent the calling of configured debug methods which are callable, but do not exist thanks to the __call() function.
@@ -132,7 +133,7 @@ Changelog
 
 1.3.3
     - [Feature] kreXX will now work without a writable chunks folder, but this will require much more memory.
-    - [Feature] Added a new backend menu to access localcookie settings.
+    - [Feature] Added a new backend menu to access local cookie settings.
     - [Internals] Refactored file handling (chunks and logfiles).
     - [Internals] Cleaned up the file structure.
     - [Internals] kreXX will now evaluate all cookie settings right away, and not when the value is actually needed.

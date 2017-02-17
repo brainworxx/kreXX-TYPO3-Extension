@@ -20,7 +20,7 @@ When kreXX is called from the php code, it tires to analyse all class characteri
 
 	krexx($this);
 
-A lot more stuff can be reached from inside a class, and kreXX will analyse these properties and methods. The scope analysis can be considered as the autoconfig mode. It will automatically overwrite the settings
+A lot more stuff can be reached from inside a class, and kreXX will analyse these properties and methods. The scope analysis can be considered as the auto config mode. It will automatically overwrite the settings
 for protected and private properties/methods. It will not remove analysis results, only add everything that can be reached by normal means.
 
 

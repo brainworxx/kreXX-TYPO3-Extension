@@ -65,7 +65,7 @@ Runtime
 |                                | emergency break will be triggered. Unit of measurement is seconds.                                                                     |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Use scope analysis             | kreXX will analyse all values and methods that can be reached from the point where the analysis was called. This will automatically    | - true                    |
-|                                | overwrite existing configurations, it can be considered the "autoconfig mode".                                                         | - false                   |
+|                                | overwrite existing configurations, it can be considered the "auto config mode".                                                        | - false                   |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 
 Properties
