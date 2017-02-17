@@ -23,8 +23,8 @@ $EM_CONF[$_EXTKEY] = array(
   'author_company' => 'BRAINWORXX GmbH',
   'constraints' => array(
     'depends' => array(
-      'typo3' => '4.5.0-8.5.99',
-      'php' => '5.3.0-7.0.99'
+      'typo3' => '4.5.0-8.6.99',
+      'php' => '5.3.0-7.1.99'
     ),
     'conflicts' => array(
     ),

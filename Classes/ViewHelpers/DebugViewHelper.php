@@ -58,20 +58,24 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  *
  * If that you are really desperate, use it. It gives the actual PHP
  * stuff inside the template. Most of this stuff is not reachable from fluid,
- * so we will implement a filter later on.
+ * so we will implement a filter later on, as well as custom code generation
+ * much more later on.
  *
  * @see https://github.com/brainworxx/kreXX-TYPO3-Extension/issues/4
  * @see https://forge.typo3.org/issues/72950
  *
- * @usage
+ * @namespace
+ *   When using TYPO3 4.5 until 8.5, you need to declare the namespace first:
  *   {namespace krexx=Tx_Includekrexx_ViewHelpers}
+ *   TYPO3 8.5 and beyond don't need to do that anymore  ;-)
+ *
+ * @usage
  *   <krexx:debug>{_all}</krexx:debug>
  *   or
  *   <krexx:debug value="{my: 'value', to: 'analyse'}" />
  *   Use this part if you don't want fluid to escape your string or if you are
  *   stitching together an array.
- *   Be aware, that this does NOT work in 8.5 and beyond, because the namespace
- *   declaration is different.
+ * 
  */
 class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper
 {

@@ -74,8 +74,8 @@ if (version_compare(TYPO3_version, '7.2', '>')) {
         include_once($extPath . 'Classes/ViewHelpers/DebugViewHelper.php');
     }
 
-    if (version_compare(TYPO3_version, '8.0' ,'>=')) {
-        // Some special compatibility stuff for 8.0 , Fluid and it's ViewHelpers.
+    if (version_compare(TYPO3_version, '8.0', '>=')) {
+        // Some special compatibility stuff for 8.0, Fluid and it's ViewHelpers.
         if (!class_exists('\\Tx_Includekrexx_ViewHelpers\\MessagesViewHelper')) {
             include_once($extPath . 'Classes/ViewHelpers/MessagesViewHelper8.php');
         }
@@ -83,6 +83,16 @@ if (version_compare(TYPO3_version, '7.2', '>')) {
             include_once($extPath . 'Classes/ViewHelpers/DebugViewHelper8.php');
         }
     }
+    if (version_compare(TYPO3_version, '8.5', '>=')) {
+        // Register our debug-viewhelper globally, so people don't have to
+        // do it inside the template. 'krexx' as a namespace should be unique enough.
+        if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['krexx'])) {
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['krexx'] = array(
+                0 => 'Tx_Includekrexx_ViewHelpers'
+            );
+        }
+    }
+
 }
 
 if (!class_exists('Brainworxx\\Krexx\\Service\\Config\\Fallback')) {
