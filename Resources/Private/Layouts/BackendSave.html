@@ -101,11 +101,10 @@
         </div>
         <div id="typo3-docbody">
             <div id="typo3-inner-docbody">
-                <!--
-                Our "own" version of the FlashMessagesViewhelper, to provide backend
-                messages from 4.5 to 8.x
-                -->
-                <krexx:messages />
+                <f:if condition="{specialflash}">
+                    <f:then><f:render partial="Specialflash"/></f:then>
+                    <f:else><f:render partial="Normalflash"/></f:else>
+                </f:if>
                 <f:render section="main"/>
             </div>
         </div>

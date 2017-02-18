@@ -76,6 +76,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CookieController')) {
             }
             $this->addCssToView('Backend.css');
             \Krexx::editSettings();
+            $this->assignFlashInfo();
         }
     }
 }

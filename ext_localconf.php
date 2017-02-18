@@ -67,18 +67,12 @@ if (version_compare(TYPO3_version, '7.2', '>')) {
     if (!class_exists('Tx_Includekrexx_Controller_CookieController')) {
         include_once($extPath . 'Classes/Controller/CookieController.php');
     }
-    if (!class_exists('Tx_Includekrexx_ViewHelpers_MessagesViewHelper')) {
-        include_once($extPath . 'Classes/ViewHelpers/MessagesViewHelper.php');
-    }
     if (!class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
         include_once($extPath . 'Classes/ViewHelpers/DebugViewHelper.php');
     }
 
     if (version_compare(TYPO3_version, '8.0', '>=')) {
         // Some special compatibility stuff for 8.0, Fluid and it's ViewHelpers.
-        if (!class_exists('\\Tx_Includekrexx_ViewHelpers\\MessagesViewHelper')) {
-            include_once($extPath . 'Classes/ViewHelpers/MessagesViewHelper8.php');
-        }
         if (!class_exists('\\Tx_Includekrexx_ViewHelpers\\DebugViewHelper')) {
             include_once($extPath . 'Classes/ViewHelpers/DebugViewHelper8.php');
         }

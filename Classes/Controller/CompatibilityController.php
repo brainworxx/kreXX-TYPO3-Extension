@@ -254,6 +254,15 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
                 $this->view->assign('css', file_get_contents($uri));
             }
         }
+
+        protected function assignFlashInfo()
+        {
+            if (version_compare(TYPO3_version, '7.3', '>=')) {
+                $this->view->assign('specialflash', true);
+            } else {
+                $this->view->assign('specialflash', false);
+            }
+        }
     }
 
 }

@@ -97,6 +97,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
             // 5. Assign the file list.
             $this->view->assign('files', $fileList);
             $this->addCssToView('Backend.css');
+            $this->assignFlashInfo();
         }
 
         /**

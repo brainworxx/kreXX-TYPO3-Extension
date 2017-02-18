@@ -56,6 +56,7 @@ if (!class_exists('Tx_Includekrexx_Controller_HelpController')) {
                 $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
             }
             $this->addCssToView('Backend.css');
+            $this->assignFlashInfo();
         }
 
         /**
@@ -70,6 +71,7 @@ if (!class_exists('Tx_Includekrexx_Controller_HelpController')) {
                 $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
             }
             $this->addCssToView('Backend.css');
+            $this->assignFlashInfo();
         }
     }
 }

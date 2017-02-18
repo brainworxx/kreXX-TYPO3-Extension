@@ -12,6 +12,9 @@
 Changelog
 =============================================================
 
+2.1.2
+    - [Bugfix] Fixed that annoying warning with PHP7.
+
 2.1.1
     - [Feature] Added the info, if a property / method is inherited.
     - [Feature] Added a configuration for the scope analysis.
