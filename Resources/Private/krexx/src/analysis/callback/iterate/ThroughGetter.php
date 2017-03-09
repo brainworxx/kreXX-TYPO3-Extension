@@ -36,6 +36,9 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Code\Connectors;
+use Brainworxx\Krexx\Service\Misc\File;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Getter method analysis methods.
@@ -51,6 +54,31 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class ThroughGetter extends AbstractCallback
 {
+    /**
+     * The file service, used for reading sourcecode.
+     *
+     * @var File
+     */
+    protected $fileService;
+
+    /**
+     * Here we momorize how deep we are inside the current deep analysis.
+     *
+     * @var int
+     */
+    protected $deep = 0;
+
+    /**
+     * Injection the pool and getting  the file service.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(Pool $pool)
+    {
+        parent::__construct($pool);
+
+        $this->fileService = $this->pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
+    }
 
     /**
      * Try to get the possible result of all getter methods.
@@ -64,9 +92,12 @@ class ThroughGetter extends AbstractCallback
         /** @var \reflectionClass $ref */
         $ref = $this->parameters['ref'];
 
+        /** @var \ReflectionMethod $reflectionMethod */
         foreach ($this->parameters['methodList'] as $reflectionMethod) {
-            $methodName = $reflectionMethod->getName();
-            $refProp = $this->getReflectionProperty($ref, $methodName);
+            $refProp = $this->getReflectionProperty($ref, $reflectionMethod);
+
+            // Back to level 0, we reset the deep counter.
+            $this->deep = 0;
 
             // Now we have three possible outcomes:
             // 1.) We have an actual value
@@ -77,17 +108,16 @@ class ThroughGetter extends AbstractCallback
                 ->createClass('Brainworxx\\Krexx\\Analyse\\Methods')
                 ->getComment($reflectionMethod, $ref));
 
-            /** @var Model $model */
+            /** @var \Brainworxx\Krexx\Analyse\Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setName($methodName)
-                ->setConnector2('()')
+                ->setName($reflectionMethod->getName())
                 ->addToJson('method comment', $comments);
 
             // We need to decide if we are handling static getters.
             if ($reflectionMethod->isStatic()) {
-                $model->setConnector1('::');
+                $model->setConnectorType(Connectors::STATIC_METHOD);
             } else {
-                $model->setConnector1('->');
+                $model->setConnectorType(Connectors::METHOD);
             }
 
             if (empty($refProp)) {
@@ -128,44 +158,119 @@ class ThroughGetter extends AbstractCallback
      *
      * @param \ReflectionClass $classReflection
      *   The reflection class oof the object we are analysing.
-     * @param string $getterName
-     *   The name of the property that we want to get.
+     * @param \ReflectionMethod $reflectionMethod
+     *   The reflection ot the method of which we want to coax the result from
+     *   the class or sourcecode.
      *
      * @return \ReflectionProperty|null
+     *   Either the reflection of a possibly accosiated Property, or null to
+     *   indicate that we have found nothing.
      */
-    protected function getReflectionProperty(\ReflectionClass $classReflection, $getterName)
+    protected function getReflectionProperty(\ReflectionClass $classReflection, \ReflectionMethod $reflectionMethod)
     {
         // We may be facing different writing styles.
-        // The property we want from getMyProperty() should be named
-        // myProperty, but we can not rely on this.
+        // The property we want from getMyProperty() should be named myProperty,
+        // but we can not rely on this.
+        // Old php 4 coders sometimes add a underscore before a protectred
+        // property.
+
         // We will check:
-        // - MyProperty
         // - myProperty
+        // - _myProperty
+        // - MyProperty
+        // - _MyProperty
         // - myproperty
+        // - _myproperty
         // - my_property
+        // - _my_property
+
+        // Get the name and remove the 'get'.
+        $getterName = $reflectionMethod->getName();
+        if (strpos($getterName, 'get') === 0) {
+            $getterName = substr($getterName, 3);
+        }
+        if (strpos($getterName, '_get') === 0) {
+            $getterName = substr($getterName, 4);
+        }
+
 
         // myProperty
-        $propertyName = lcfirst(substr($getterName, 3));
+        $propertyName = lcfirst($getterName);
+        if ($classReflection->hasProperty($propertyName)) {
+            return $classReflection->getProperty($propertyName);
+        }
+
+        // _myProperty
+        $propertyName = '_' . $propertyName;
         if ($classReflection->hasProperty($propertyName)) {
             return $classReflection->getProperty($propertyName);
         }
 
         // MyProperty
-        $propertyName = ucfirst($propertyName);
+        $propertyName = ucfirst($getterName);
+        if ($classReflection->hasProperty($propertyName)) {
+            return $classReflection->getProperty($propertyName);
+        }
+
+        // _MyProperty
+        $propertyName = '_' . $propertyName;
         if ($classReflection->hasProperty($propertyName)) {
             return $classReflection->getProperty($propertyName);
         }
 
         // myproperty
-        $propertyName = strtolower($propertyName);
+        $propertyName = strtolower($getterName);
+        if ($classReflection->hasProperty($propertyName)) {
+            return $classReflection->getProperty($propertyName);
+        }
+
+        // _myproperty
+        $propertyName = '_' . $propertyName;
         if ($classReflection->hasProperty($propertyName)) {
             return $classReflection->getProperty($propertyName);
         }
 
         // my_property
-        $propertyName = $this->convertToSnakeCase($propertyName);
+        $propertyName = $this->convertToSnakeCase($getterName);
         if ($classReflection->hasProperty($propertyName)) {
             return $classReflection->getProperty($propertyName);
+        }
+
+        // _my_property
+        $propertyName = '_' . $propertyName;
+        if ($classReflection->hasProperty($propertyName)) {
+            return $classReflection->getProperty($propertyName);
+        }
+
+        // Still here?!?
+        // Time to do some deep stuff. We parse the sourcecode via regex!
+         // Read the sourcecode into a string.
+        $sourcecode = $this->fileService->readFile(
+            $reflectionMethod->getFileName(),
+            $reflectionMethod->getStartLine(),
+            $reflectionMethod->getEndLine()
+        );
+        // Execute our search pattern.
+        // Right now, we are trying to get to properties that way.
+        // Later on, we may also try to parse deeper for stuff.
+        $pattern = array('return $this->', ';');
+        $findings = $this->findIt($pattern, $sourcecode);
+
+        foreach ($findings as $propertyName) {
+            // Check if this is a property and return the first we find.
+            if ($classReflection->hasProperty($propertyName)) {
+                return $classReflection->getProperty($propertyName);
+            }
+            // Check if this is a method and go deeper!
+            $methodName = rtrim($propertyName, '()');
+            if ($classReflection->hasMethod($methodName)) {
+                // We need to be carefull not to goo too deep, we might end up
+                // in a loop.
+                $this->deep++;
+                if ($this->deep < 3) {
+                    return $this->getReflectionProperty($classReflection, $classReflection->getMethod($methodName));
+                }
+            }
         }
 
         // Still nothing? Return null, to tell the main method that we were
@@ -188,5 +293,60 @@ class ThroughGetter extends AbstractCallback
     protected function convertToSnakeCase($string)
     {
         return strtolower(preg_replace(array('/([a-z\d])([A-Z])/', '/([^_])([A-Z][a-z])/'), '$1_$2', $string));
+    }
+
+    /**
+     * Searching for stuff via regex.
+     * Yay, dynamic regex stuff for fun and profit!
+     *
+     * @param array $searchArray
+     *   The search definition.
+     * @param string $haystack
+     *   The haystack, obviously.
+     *
+     * @return array
+     *   The findings.
+     */
+    protected function findIt($searchArray, $haystack)
+    {
+
+        // Defining our regex.
+        $regex = '/(?<=###0###).*?(?=###1###)/';
+
+        // Regex escaping our search stuff
+        $searchArray[0] = $this->regexEscaping($searchArray[0]);
+        $searchArray[1] = $this->regexEscaping($searchArray[1]);
+
+        // Add the search stuff to the regex
+        $regex = str_replace('###0###', $searchArray[0], $regex);
+        $regex = str_replace('###1###', $searchArray[1], $regex);
+
+        // Trigger the search.
+        preg_match_all($regex, $haystack, $findings);
+
+        // Return the file name as well as stuff from the path.
+        $result = array();
+        foreach ($findings[0] as $name) {
+            $result[] =  $name;
+        }
+        return $result;
+    }
+
+    /**
+     * Escapes a string for regex usage.
+     *
+     * @param string $string
+     *   The string we want to escape.
+     *
+     * @return string
+     *   The escaped string.
+     */
+    protected function regexEscaping($string)
+    {
+        return str_replace(
+            array('.', '/', '(', ')', '<', '>', '$'),
+            array('\.', '\/', '\(', '\)', '\<', '\>', '\$'),
+            $string
+        );
     }
 }

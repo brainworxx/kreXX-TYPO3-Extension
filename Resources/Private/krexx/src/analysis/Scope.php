@@ -79,7 +79,7 @@ class Scope
      */
     public function setScope($scope)
     {
-        if ($scope != '. . .') {
+        if ($scope !== '. . .') {
             $this->scope = $scope;
             // Now that we have a scope, we can actually generate code to
             // reach the variables inside the analysis.

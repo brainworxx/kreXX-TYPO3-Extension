@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Flection;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Code\Connectors;
 
 /**
  * Object analysis methods.
@@ -344,13 +345,13 @@ class Objects extends AbstractCallback
                         // Do nothing.
                     }
                     if (isset($result)) {
+                        /** @var \Brainworxx\Krexx\Analyse\Model $model */
                         $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                             ->setName($funcName)
                             ->setType('debug method')
                             ->setAdditional('. . .')
                             ->setHelpid($funcName)
-                            ->setConnector1('->')
-                            ->setConnector2('()')
+                            ->setConnectorType(Connectors::METHOD)
                             ->addParameter('data', $result)
                             ->injectCallback(
                                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Debug')
@@ -385,7 +386,6 @@ class Objects extends AbstractCallback
             // $kresult = $kresult[5];
             // So we tell the callback to to that.
             $multiline = true;
-            $connector2 = '';
 
             // Normal ArrayAccess, direct access to the array. Nothing special
             if (is_a($data, 'ArrayAccess')) {
@@ -403,7 +403,6 @@ class Objects extends AbstractCallback
                 ->setName($name)
                 ->setType('Foreach')
                 ->setAdditional('Traversable Info')
-                ->setConnector2($connector2)
                 ->addParameter('data', $parameter)
                 ->addParameter('multiline', $multiline)
                 ->injectCallback(
@@ -520,14 +519,14 @@ class Objects extends AbstractCallback
         if (!empty($methodList)) {
             // Filter them.
             foreach ($methodList as $key => $method) {
-                if (strpos($method->getName(), 'get') !== 0) {
-                    unset($methodList[$key]);
-                } else {
+                if (strpos($method->getName(), 'get') === 0) {
                     // We only dump those that have no parameters.
                     $parameters = $method->getParameters();
                     if (!empty($parameters)) {
                         unset($methodList[$key]);
                     }
+                } else {
+                    unset($methodList[$key]);
                 }
             }
 

@@ -78,12 +78,11 @@ class OutputActions extends Internals
 
         // Find caller.
         $caller = $this->callerFinder->findCaller();
-        if ($headline != '') {
-            $caller['type'] = $headline;
-        } else {
+        if ($headline === '') {
             $caller['type'] = 'Analysis';
+        } else {
+            $caller['type'] = $headline;
         }
-
 
         // Set the headline, if it's not set already.
         if (empty($headline)) {
@@ -119,7 +118,7 @@ class OutputActions extends Internals
         $this->pool->scope->setScope($caller['varname']);
 
         // Enable code generation only if we were able to determine the varname.
-        if ($caller['varname'] != '. . .') {
+        if ($caller['varname'] !== '. . .') {
             // We were able to determine the variable name and can generate some
             // sourcecode.
             $headline = $caller['varname'];
@@ -138,9 +137,9 @@ class OutputActions extends Internals
             return;
         }
 
-        $this->shutdownHandler->addChunkString($this->outputHeader($headline));
-        $this->shutdownHandler->addChunkString($analysis);
-        $this->shutdownHandler->addChunkString($footer);
+        $this->outputService->addChunkString($this->outputHeader($headline));
+        $this->outputService->addChunkString($analysis);
+        $this->outputService->addChunkString($footer);
 
         // Add the caller as metadata to the chunks class. It will be saved as
         // additional info, in case we are logging to a file.
@@ -187,9 +186,9 @@ class OutputActions extends Internals
             return;
         }
 
-        $this->shutdownHandler->addChunkString($this->outputHeader($headline));
-        $this->shutdownHandler->addChunkString($analysis);
-        $this->shutdownHandler->addChunkString($footer);
+        $this->outputService->addChunkString($this->outputHeader($headline));
+        $this->outputService->addChunkString($analysis);
+        $this->outputService->addChunkString($footer);
 
         // Add the caller as metadata to the chunks class. It will be saved as
         // additional info, in case we are logging to a file.
@@ -225,8 +224,8 @@ class OutputActions extends Internals
 
         // Render it.
         $footer = $this->outputFooter($caller, true);
-        $this->shutdownHandler->addChunkString($this->outputHeader('Edit local settings'));
-        $this->shutdownHandler->addChunkString($footer);
+        $this->outputService->addChunkString($this->outputHeader('Edit local settings'));
+        $this->outputService->addChunkString($footer);
         $this->pool->emergencyHandler->setEnable(true);
     }
 

@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Service\Misc;
+namespace Brainworxx\Krexx\Service\Code;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -40,7 +40,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Code generation methods.
  *
- * @package Brainworxx\Krexx\Service\Misc
+ * @package Brainworxx\Krexx\Service\Code
  */
 class Codegen
 {

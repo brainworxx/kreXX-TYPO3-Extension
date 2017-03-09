@@ -35,6 +35,8 @@
 namespace Brainworxx\Krexx\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Code\Connectors;
 
 /**
  * Model for the view rendering
@@ -85,20 +87,6 @@ class Model
      * @var string
      */
     protected $helpid = '';
-
-    /**
-     * The first connector.
-     *
-     * @var string
-     */
-    protected $connector1 = '';
-
-    /**
-     * The second connector.
-     *
-     * @var string
-     */
-    protected $connector2 = '';
 
     /**
      * Additional data, we are sending to the FE vas a json, hence the name.
@@ -154,6 +142,24 @@ class Model
      * @var bool
      */
     protected $isCallback = false;
+
+    /**
+     * @var Pool
+     */
+    protected $pool;
+
+    /**
+     * @var Connectors
+     */
+    protected $connectorService;
+
+    public function __construct(Pool $pool)
+    {
+        $this->pool = $pool;
+        $this->connectorService = $pool->createClass(
+            'Brainworxx\\Krexx\\Service\\Code\\Connectors'
+        );
+    }
 
     /**
      * Inject the callback for the renderer
@@ -343,21 +349,6 @@ class Model
     }
 
     /**
-     * Setter for connector1.
-     *
-     * @param string $connector1
-     *   The first connector.
-     *
-     * @return Model
-     *   $this, for chaining.
-     */
-    public function setConnector1($connector1)
-    {
-        $this->connector1 = $connector1;
-        return $this;
-    }
-
-    /**
      * Getter got connector1.
      *
      * @return string
@@ -365,22 +356,7 @@ class Model
      */
     public function getConnector1()
     {
-        return $this->connector1;
-    }
-
-    /**
-     * Setter for connector2.
-     *
-     * @param string $connector2
-     *   The second connector.
-     *
-     * @return Model
-     *   $this, for chaining.
-     */
-    public function setConnector2($connector2)
-    {
-        $this->connector2 = $connector2;
-        return $this;
+        return $this->connectorService->getConnector1();
     }
 
     /**
@@ -391,7 +367,7 @@ class Model
      */
     public function getConnector2()
     {
-        return $this->connector2;
+        return $this->connectorService->getConnector2();
     }
 
     /**
@@ -527,5 +503,51 @@ class Model
     public function setIsCallback($isCallback)
     {
         $this->isCallback = $isCallback;
+    }
+
+     /**
+     * Setter for the $params. It is used in case we are connection a method or
+     * closure.
+     *
+     * @param string $params
+     *   The parameters as a sting.
+     *
+     * @return $this
+     *   $this for chaining.
+     */
+    public function setConnectorParameters($params)
+    {
+        $this->connectorService->setParameters($params);
+        return $this;
+    }
+
+    /**
+     * Setter for the type we are rendering, using the class constants.
+     *
+     * @param string $type
+     *
+     * @return $this
+     *   Return $this, for chaining.
+     */
+    public function setConnectorType($type)
+    {
+        $this->connectorService->setType($type);
+        return $this;
+    }
+
+    /**
+     * Sets a special and custom connector1. Only used for constants code
+     * generation.
+     *
+     * @param string $string
+     *
+     * @return $this
+     *   Return $this for cjhaining.
+     */
+    public function setCustomConnector1($string)
+    {
+        $this->connectorService->setCustomConnector1($string);
+        return $this;
+
     }
 }

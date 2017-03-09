@@ -847,7 +847,7 @@
         event.stopPropagation();
 
         // If this is no <RETURN> key, do nothing.
-        if (event.which != 13) {
+        if (event.which !== 13) {
             return;
         }
 

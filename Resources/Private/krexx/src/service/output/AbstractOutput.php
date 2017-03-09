@@ -32,48 +32,37 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
+namespace Brainworxx\Krexx\Service\Output;
 
-use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
-/**
- * Constant analysis methods.
- *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
- *
- * @uses array data
- *   Array of constants from the class we are analysing.
- * @uses string classname
- *   The classname we are analysing, for code generation purpose.
- */
-class ThroughConstants extends AbstractCallback
+abstract class AbstractOutput
 {
     /**
-     * Simply iterate though object constants.
+     * Here we store all relevant data.
      *
-     * @return string
-     *   The generated markup.
+     * @var Pool
      */
-    public function callMe()
+    protected $pool;
+
+    /**
+     * Injects the pool.
+     *
+     * @param Pool $pool
+     *   The pool, where we store the classes we need.
+     */
+    public function __construct(Pool $pool)
     {
-        $output = '';
-
-        // We do not need to check the recursionHandler, this is class
-        // internal stuff. Is it even possible to create a recursion here?
-        // Iterate through.
-        foreach ($this->parameters['data'] as $k => &$v) {
-            /** @var \Brainworxx\Krexx\Analyse\Model $model */
-            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setData($v)
-                ->setName($k)
-                ->setCustomConnector1($this->parameters['classname'] . '::');
-
-            $output .= $this->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Routing')
-                ->analysisHub($model);
-        }
-
-        return $output;
-
+        $this->pool = $pool;
     }
+
+    /**
+     * Adds output to our output service.
+     *
+     * @param string $chunkString
+     *   The chunked output string.
+     */
+    abstract public function addChunkString($chunkString);
+
+
 }

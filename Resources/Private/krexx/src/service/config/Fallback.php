@@ -73,7 +73,7 @@ class Fallback
             'disabled' => 'false',
             'iprange' => '*',
             'skin' => 'smokygrey',
-            'destination' => 'frontend',
+            'destination' => 'shutdown',
             'maxfiles' => '10',
         ),
         'runtime' => array(
@@ -263,5 +263,5 @@ class Fallback
      *
      * @var string
      */
-    public $version = '2.1.1';
+    public $version = '2.1.2 dev';
 }

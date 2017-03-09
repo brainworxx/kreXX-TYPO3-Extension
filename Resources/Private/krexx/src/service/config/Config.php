@@ -428,7 +428,7 @@ class Config extends Fallback
      */
     protected function isRequestAjaxOrCli()
     {
-        if ($this->getConfigValue('output', 'destination') != 'file') {
+        if ($this->getConfigValue('output', 'destination') !== 'file') {
             // When we are not going to create a logfile, we send it to the browser.
             // Check for ajax.
             if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&

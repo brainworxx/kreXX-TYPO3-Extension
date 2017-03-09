@@ -100,7 +100,7 @@ class Help
         'configErrorLocal' => 'Could not read the Local Cookie configuration. Sorry :-/',
         'configErrorIpList' => 'Wrong configuration for: "output => iprange"! An empty IP list means that no one will be able to use kreXX. The configured setting was not applied!',
         'configErrorAnalyseGetter' => 'Wrong configuration for: "methods => analyseGetter"! Expected boolean. The configured setting was not applied!',
-        'getterNull' => 'A NULL value as a result may indicate that this value get computed by the getter method, and does not exist inside the class at the moment of the analysis.',
+        'getterNull' => 'A NULL value as a result may indicate that this value gets computed by the getter method, and does not exist inside the class at the moment of the analysis.',
         'unknownValue' => 'Getter methods will not get called. kreXX was unable to coax the value from the object properties.<br />Sorry  :-(',
         'configErrorMemory' => 'Wrong configuration for: "runtime => memoryLeft"! Expected integer. The configured setting was not applied!',
         'configErrorMaxRuntime' => 'Wrong configuration for: "runtime => maxRuntime"! Expected integer. The configured setting was not applied!',

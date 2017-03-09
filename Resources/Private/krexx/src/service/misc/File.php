@@ -68,7 +68,7 @@ class File
      *   The end line.
      *
      * @return string
-     *   The source code.
+     *   The source code, HTML formatted.
      */
     public function readSourcecode($file, $highlight, $from, $to)
     {
@@ -111,6 +111,48 @@ class File
                 }
             }
         }
+        return $result;
+    }
+
+    /**
+     * Simply read a file into a string.
+     *
+     * @param string $filename
+     * @param int $from
+     * @param int $to
+     *
+     * @return string
+     *   The content of the file, between the $from and $to.
+     */
+    public function readFile($filename, $from = 0, $to = 0)
+    {
+        static $cacheArray = array();
+        $result = '';
+
+        // Read the file into our cache array. We may need to reed  this file a
+        // few times.
+        if (empty($cacheArray[$filename])) {
+            if (is_readable($filename)) {
+                $cacheArray[$filename] = file($filename);
+            } else {
+                // Not readable!
+                $cacheArray[$filename] = array();
+            }
+        }
+        if ($from < 0) {
+             $from = 0;
+        }
+        if ($to < 0) {
+            $to = 0;
+        }
+
+        // Do we have enough lines in there?
+        if (count($cacheArray[$filename]) > $to) {
+            for ($currentLineNo = $from; $currentLineNo <= $to; $currentLineNo++) {
+                $result .= $cacheArray[$filename][$currentLineNo];
+            }
+        }
+
         return $result;
     }
 

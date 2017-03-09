@@ -43,7 +43,7 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class ProcessClosure extends AbstractProcess
 {
-   /**
+    /**
      * Analyses a closure.
      *
      * @param Model $model
@@ -101,7 +101,7 @@ class ProcessClosure extends AbstractProcess
         $paramList = '<small>' . trim($paramList, ', ') . '</small>';
         $model->setType($model->getAdditional() . ' closure')
             ->setAdditional('. . .')
-            ->setConnector2($model->getConnector2() . '(' . $paramList . ')')
+            ->setConnectorParameters($paramList)
             ->setDomid($this->generateDomIdFromObject($model->getData()))
             ->addParameter('data', $result)
             ->injectCallback(

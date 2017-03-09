@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Service\Code\Connectors;
 use Brainworxx\Krexx\Service\Misc\File;
 
 /**
@@ -98,7 +99,7 @@ class ThroughProperties extends AbstractCallback
             // Stitch together our additional info about the data:
             // public, protected, private, static.
             $additional = '';
-            $connector1 = '->';
+            $connectorType = Connectors::NORMAL_PROPERTY;
             if ($refProperty->isPublic()) {
                 $additional .= 'public ';
             }
@@ -122,17 +123,18 @@ class ThroughProperties extends AbstractCallback
             }
             if ($refProperty->isStatic()) {
                 $additional .= 'static ';
-                $connector1 = '::';
+                $connectorType = Connectors::STATIC_PROPERTY;
                 // There is always a $ in front of a static property.
                 $propName = '$' . $propName;
             }
 
             // Stitch together our model
+            /** @var \Brainworxx\Krexx\Analyse\Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setData($value)
                 ->setName($propName)
                 ->setAdditional($additional)
-                ->setConnector1($connector1);
+                ->setConnectorType($connectorType);
 
             $output .= $this->pool
                 ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Routing')

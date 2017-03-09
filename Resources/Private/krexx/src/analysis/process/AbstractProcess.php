@@ -53,5 +53,4 @@ abstract class AbstractProcess extends AbstractRouting
      * @return string
      */
     abstract public function process(Model $model);
-
 }

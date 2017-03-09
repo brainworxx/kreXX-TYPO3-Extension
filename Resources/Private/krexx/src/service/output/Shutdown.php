@@ -32,25 +32,17 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Service\Misc;
+namespace Brainworxx\Krexx\Service\Output;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Triggers the kreXX output during shutdown phase.
  *
- * @package rainworxx\Krexx\Service\Misc
+ * @package Brainworxx\Krexx\Service\Output
  */
-class Shutdown
+class Shutdown extends AbstractOutput
 {
-
-    /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected $pool;
-
     /**
      * [0] -> The chunkedup string, that we intend to send to
      *        the browser.
@@ -68,14 +60,14 @@ class Shutdown
     protected $chunkStrings = array();
 
     /**
-     * Injects the pool.
+     * Inject the pool and register the shutdown function.
      *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
      */
     public function __construct(Pool $pool)
     {
-        $this->pool = $pool;
+        parent::__construct($pool);
+        register_shutdown_function(array($this, 'shutdownCallback'));
     }
 
     /**
@@ -110,13 +102,8 @@ class Shutdown
         // Every output is split into 4 chunk strings (header, messages,
         // data, footer).
         foreach ($this->chunkStrings as $chunkString) {
-            if ($this->pool->config->getSetting('destination') === 'file') {
-                // Save it to a file.
-                $this->pool->chunks->saveDechunkedToFile($chunkString);
-            } else {
-                // Send it to the browser.
-                $this->pool->chunks->sendDechunkedToBrowser($chunkString);
-            }
+            // Send it to the browser.
+            $this->pool->chunks->sendDechunkedToBrowser($chunkString);
         }
     }
 }

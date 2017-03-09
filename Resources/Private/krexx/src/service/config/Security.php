@@ -190,8 +190,8 @@ class Security extends Fallback
                 break;
 
             case 'destination':
-                // We expect 'frontend' or 'file'
-                if ($value === 'frontend' || $value === 'file') {
+                // We expect 'frontend', 'file' or 'direct.
+                if ($value === 'shutdown' || $value === 'file' || $value === 'direct') {
                     $result = true;
                 }
                 if (!$result) {
@@ -517,7 +517,7 @@ class Security extends Fallback
                 $ip = trim($ip);
                 $wildcardPos = strpos($ip, "*");
                 # Check if the ip has a wildcard
-                if ($wildcardPos !== false && substr($remote, 0, $wildcardPos) . "*" == $ip) {
+                if ($wildcardPos !== false && substr($remote, 0, $wildcardPos) . "*" === $ip) {
                     return true;
                 }
             }

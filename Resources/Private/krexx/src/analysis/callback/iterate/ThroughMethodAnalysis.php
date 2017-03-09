@@ -62,14 +62,13 @@ class ThroughMethodAnalysis extends AbstractCallback
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setData($string)
                 ->setName($key)
-                ->setType('reflection')
-                ->setConnector2('=');
+                ->setType('reflection');
 
-            if ($key !== 'comments' && $key !== 'declared in' && $key !== 'source') {
-                $model->setNormal($string);
-            } else {
+            if ($key === 'comments' && $key === 'declared in' && $key === 'source') {
                 $model->setNormal('. . .');
                 $model->hasExtras();
+            } else {
+                $model->setNormal($string);
             }
 
             $output .= $this->pool->render->renderSingleChild($model);

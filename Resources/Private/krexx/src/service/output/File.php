@@ -32,48 +32,32 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
-
-use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+namespace Brainworxx\Krexx\Service\Output;
 
 /**
- * Constant analysis methods.
+ * File output, directly after the analysis.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
- *
- * @uses array data
- *   Array of constants from the class we are analysing.
- * @uses string classname
- *   The classname we are analysing, for code generation purpose.
+ * @package Brainworxx\Krexx\Service\Output
  */
-class ThroughConstants extends AbstractCallback
+class File extends AbstractOutput
 {
+
     /**
-     * Simply iterate though object constants.
+     * Adding a chunk string here will result in writing to a logfile.
      *
-     * @return string
-     *   The generated markup.
+     * {@inheritdoc}
      */
-    public function callMe()
+    public function addChunkString($chunkString)
     {
-        $output = '';
-
-        // We do not need to check the recursionHandler, this is class
-        // internal stuff. Is it even possible to create a recursion here?
-        // Iterate through.
-        foreach ($this->parameters['data'] as $k => &$v) {
-            /** @var \Brainworxx\Krexx\Analyse\Model $model */
-            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setData($v)
-                ->setName($k)
-                ->setCustomConnector1($this->parameters['classname'] . '::');
-
-            $output .= $this->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Routing')
-                ->analysisHub($model);
+        // Check for CLI and messages.
+        if (php_sapi_name() === "cli") {
+            $messages = $this->pool->messages->outputMessages();
+            // Since we are in CLI mode, these messages are not in HTML.
+            // We can output them right away.
+            echo $messages;
         }
 
-        return $output;
-
+        // We save them directly after the analysis.
+        $this->pool->chunks->saveDechunkedToFile($chunkString);
     }
 }

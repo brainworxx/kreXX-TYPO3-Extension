@@ -35,7 +35,6 @@
 namespace Brainworxx\Krexx\Analyse\Routing;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Controller\OutputActions;
 
 /**
  * "Routing" for kreXX

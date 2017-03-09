@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Service\Code\Connectors;
 
 /**
  * Array analysis methods.
@@ -71,6 +72,7 @@ class ThroughArray extends AbstractCallback
                 $key = $this->pool->encodeString($key);
             }
 
+            /** @var \Brainworxx\Krexx\Analyse\Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model');
 
             // Are we dealing with multiline code generation?
@@ -83,13 +85,11 @@ class ThroughArray extends AbstractCallback
             if (is_string($key)) {
                 $model->setData($value)
                     ->setName($key)
-                    ->setConnector1('[\'')
-                    ->setConnector2('\']');
+                    ->setConnectorType(Connectors::ASSOCIATIVE_ARRAY);
             } else {
                 $model->setData($value)
                     ->setName($key)
-                    ->setConnector1('[')
-                    ->setConnector2(']');
+                    ->setConnectorType(Connectors::NORMAL_ARRAY);
             }
 
             $output .= $this->pool

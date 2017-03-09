@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Service\Code\Connectors;
 
 /**
  * Methods analysis methods. :rolleyes:
@@ -144,6 +145,7 @@ class ThroughMethods extends AbstractCallback
     {
         $paramList = '';
         $connector1 = '->';
+        $connectorType = Connectors::METHOD;
         foreach ($data as $key => $string) {
             // Getting the parameter list.
             if (strpos($key, 'Parameter') === 0) {
@@ -151,6 +153,7 @@ class ThroughMethods extends AbstractCallback
             }
             if (strpos($data['declaration keywords'], 'static') !== false) {
                 $connector1 = '::';
+                $connectorType = Connectors::STATIC_METHOD;
             }
         }
 
@@ -161,11 +164,12 @@ class ThroughMethods extends AbstractCallback
         );
         // Remove the ',' after the last char.
         $paramList = '<small>' . trim($paramList, ', ') . '</small>';
+        /** @var \Brainworxx\Krexx\Analyse\Model $model */
         $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-        ->setName($name)
+            ->setName($name)
             ->setType($data['declaration keywords'] . ' method')
-            ->setConnector1($connector1)
-            ->setConnector2('(' . $paramList . ')')
+            ->setConnectorType($connectorType)
+            ->setConnectorParameters($paramList)
             ->addParameter('data', $data)
             ->injectCallback(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis')

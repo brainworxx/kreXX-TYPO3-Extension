@@ -35,14 +35,13 @@
 namespace Brainworxx\Krexx\Service\Factory;
 
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
-use Brainworxx\Krexx\Analyse\Routing\Routing;
 use Brainworxx\Krexx\Analyse\Scope;
 use Brainworxx\Krexx\Controller\OutputActions;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Service\Misc\Chunks;
-use Brainworxx\Krexx\Service\Misc\Codegen;
+use Brainworxx\Krexx\Service\Code\Codegen;
 use Brainworxx\Krexx\Service\View\Messages;
 use Brainworxx\Krexx\Service\View\Render;
 
@@ -170,9 +169,9 @@ class Pool extends Factory
         // Initialize the recursionHandler.
         $this->recursionHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Flow\\Recursion');
         // Initialize the code generation.
-        $this->codegenHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\Codegen');
+        $this->codegenHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Code\\Codegen');
         // Initializes the chunks handler.
-        $this->chunks = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\Chunks');
+        $this->chunks = $this->createClass('Brainworxx\\Krexx\\Service\\Output\\Chunks');
         // Initializes the controller.
         $this->controller = $this->createClass('Brainworxx\\Krexx\\Controller\\OutputActions');
         // Initializes the scope analysis
@@ -191,7 +190,7 @@ class Pool extends Factory
         // the content of classes might change with another run.
         $this->recursionHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Flow\\Recursion');
         // Initialize the code generation.
-        $this->codegenHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\Codegen');
+        $this->codegenHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Code\\Codegen');
         $this->scope = $this->createClass('Brainworxx\\Krexx\\Analyse\\Scope');
         // We also reset our emergency handler timer.
         $this->emergencyHandler->resetTimer();

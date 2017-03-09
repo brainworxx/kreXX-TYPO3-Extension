@@ -94,7 +94,7 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
         // something to generate.
         $gencode = $this->pool->codegenHandler->generateSource($model);
         $template = str_replace('{gensource}', $gencode, $template);
-        if ($gencode == ';stop;' || empty($gencode)) {
+        if ($gencode === ';stop;' || empty($gencode)) {
             // Remove the button marker, because here is nothing to add.
             $template = str_replace('{sourcebutton}', '', $template);
         } else {
@@ -171,7 +171,7 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
         // Doing special stuff for smokygrey:
         // We hide the debug-tab when we are displaying the config-only and switch
         // to the config as the current payload.
-        if ($headline == 'Edit local settings') {
+        if ($headline === 'Edit local settings') {
             $template = str_replace('{kdebug-classes}', 'khidden', $template);
             $template = str_replace('{kconfiguration-classes}', 'kactive', $template);
             $template = str_replace('{klinks-classes}', '', $template);

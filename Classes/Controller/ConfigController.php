@@ -63,16 +63,17 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
                 $data['skins'][$skin] = $skin;
             }
             $data['destination'] = array(
-                'frontend' => $this->LLL('frontend'),
-                'file' => $this->LLL('file')
+                'shutdown' => $this->LLL('shutdown'),
+                'file' => $this->LLL('file'),
+                'direct' => $this->LLL('direct'),
             );
             $data['bool'] = array(
                 'true' => $this->LLL('true'),
-                'false' => $this->LLL('false')
+                'false' => $this->LLL('false'),
             );
             $data['backtrace'] = array(
                 'normal' => $this->LLL('normal'),
-                'deep' => $this->LLL('deep')
+                'deep' => $this->LLL('deep'),
             );
 
             // Setting the form help texts.

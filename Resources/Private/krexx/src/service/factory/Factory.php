@@ -68,13 +68,7 @@ class Factory
         if (!empty($this->rewrite[$classname])) {
             $classname = $this->rewrite[$classname];
         }
-        // The model has no need for the pool.
-        // Meh, that does not sound right   ;-)
-        if ($classname === 'Brainworxx\\Krexx\\Analyse\\Model') {
-            $object = new $classname();
-        } else {
-            $object = new $classname($this);
-        }
+        $object = new $classname($this);
 
         return $object;
     }
