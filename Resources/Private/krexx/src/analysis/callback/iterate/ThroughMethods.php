@@ -144,7 +144,6 @@ class ThroughMethods extends AbstractCallback
     protected function dumpMethodInfo(array $data, $name)
     {
         $paramList = '';
-        $connector1 = '->';
         $connectorType = Connectors::METHOD;
         foreach ($data as $key => $string) {
             // Getting the parameter list.
@@ -152,7 +151,6 @@ class ThroughMethods extends AbstractCallback
                 $paramList .= trim($string) . ', ';
             }
             if (strpos($data['declaration keywords'], 'static') !== false) {
-                $connector1 = '::';
                 $connectorType = Connectors::STATIC_METHOD;
             }
         }

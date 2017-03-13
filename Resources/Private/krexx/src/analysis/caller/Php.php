@@ -129,13 +129,11 @@ class Php extends AbstractCaller
                 // brackets of the kreXX call.
                 preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', $sourceCall, $name);
                 if (isset($name[1])) {
-                    $varname = $name[1];
+                    $varname = $this->pool->encodeString(trim($name[1], " \t\n\r\0\x0B'\""));
                     break;
                 }
             }
         }
-
-        $varname = $this->pool->encodeString(trim($varname, " \t\n\r\0\x0B'\""));
 
         // Check if we have a value.
         if (empty($varname)) {

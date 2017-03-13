@@ -40,7 +40,7 @@ use Brainworxx\Krexx\Controller\OutputActions;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
-use Brainworxx\Krexx\Service\Misc\Chunks;
+use Brainworxx\Krexx\Service\Output\Chunks;
 use Brainworxx\Krexx\Service\Code\Codegen;
 use Brainworxx\Krexx\Service\View\Messages;
 use Brainworxx\Krexx\Service\View\Render;
@@ -154,6 +154,9 @@ class Pool extends Factory
      */
     public function init($krexxDir)
     {
+        // Load all files we need.
+
+
         // Get the rewrites from the $GLOBALS.
         if (!empty($GLOBALS['kreXXoverwrites'])) {
             $this->rewrite = $GLOBALS['kreXXoverwrites'];
@@ -176,9 +179,41 @@ class Pool extends Factory
         $this->controller = $this->createClass('Brainworxx\\Krexx\\Controller\\OutputActions');
         // Initializes the scope analysis
         $this->scope = $this->createClass('Brainworxx\\Krexx\\Analyse\\Scope');
-
         // Initializes the render class.
         $this->initRenderer();
+        // Check the environemnt and prepare the feedback, if necessary.
+        $this->checkEnvironment();
+    }
+
+    /**
+     * Check if the environment is as it should be.
+     */
+    protected function checkEnvironment()
+    {
+        // Check chunk folder is writable.
+        // If not, give feedback!
+        $chunkFolder = $this->krexxDir . 'chunks' . DIRECTORY_SEPARATOR;
+        if (!is_writeable($chunkFolder)) {
+            $this->messages->addMessage(
+                'Chunksfolder ' . $chunkFolder . ' is not writable!' .
+                'This will increase the memory usage of kreXX significantly!',
+                'critical'
+            );
+            $this->messages->addKey('protected.folder.chunk', array($chunkFolder));
+            // We can work without chunks, but this will require much more memory!
+            $this->chunks->setUseChunks(false);
+        }
+
+        // Check if the log folder is writable.
+        // If not, give feedback!
+        $logFolder = $this->krexxDir . 'log' . DIRECTORY_SEPARATOR;
+        if (!is_writeable($logFolder)) {
+            $this->messages->addMessage('Logfolder ' . $logFolder . ' is not writable !', 'critical');
+            $this->messages->addKey('protected.folder.log', array($logFolder));
+        }
+        // At this point, we won't inform the dev right away. The error message
+        // will pop up, when kreXX is actually displayed, no need to bother the
+        // dev just now.
     }
 
     /**

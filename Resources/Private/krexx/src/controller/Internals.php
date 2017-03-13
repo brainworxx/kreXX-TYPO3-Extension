@@ -134,9 +134,6 @@ class Internals
         if ($outputSetting === 'file') {
             $this->outputService = $pool->createClass('Brainworxx\\Krexx\\Service\\Output\\File');
         }
-        if ($outputSetting === 'direct') {
-            $this->outputService = $pool->createClass('Brainworxx\\Krexx\\Service\\Output\\Direct');
-        }
     }
 
     /**

@@ -65,9 +65,9 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  * @see https://forge.typo3.org/issues/72950
  *
  * @namespace
- *   When using TYPO3 4.5 until 8.5, you need to declare the namespace first:
+ *   When using TYPO3 4.5 until 8.4, you need to declare the namespace first:
  *   {namespace krexx=Tx_Includekrexx_ViewHelpers}
- *   TYPO3 8.5 and beyond don't need to do that anymore  ;-)
+ *   TYPO3 7.6 and beyond don't need to do that anymore  ;-)
  *
  * @usage
  *   <krexx:debug>{_all}</krexx:debug>
@@ -75,7 +75,7 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  *   <krexx:debug value="{my: 'value', to: 'analyse'}" />
  *   Use this part if you don't want fluid to escape your string or if you are
  *   stitching together an array.
- * 
+ *
  */
 class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper
 {
@@ -91,14 +91,22 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
     /**
      * A wrapper for kreXX();
      *
-     * @todo
-     *   Analyse rendering context for additional data.
-     *
      * @return string
      *   Returns an empty string.
      */
     public function render()
     {
+//        $view = $this->renderingContext->getViewHelperVariableContainer()->getView();
+//        $viewReflection = new \ReflectionClass($view);
+//        $parsedTemplateMethodReflection = $viewReflection->getMethod('getTemplatePathAndFilename');
+        // getTemplateSource
+        // --> Source of the current template file
+        // getTemplatePathAndFilename
+        // --> The actual filename, The only thing missing right now is the line number.
+//        $parsedTemplateMethodReflection->setAccessible(true);
+//        krexx($this->renderingContext);
+//        krexx($parsedTemplateMethodReflection->invoke($view));
+
         $found  = false;
         if (!is_null($this->arguments['value'])) {
             krexx($this->arguments['value']);

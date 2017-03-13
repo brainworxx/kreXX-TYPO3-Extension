@@ -34,27 +34,6 @@
 
 use Brainworxx\Krexx\Service\Factory\Pool;
 
-/**
- * Alias function for object analysis.
- *
- * Register an alias function for object analysis,
- * so you will not have to type \Krexx::open($data);
- * all the time.
- *
- * @param mixed $data
- *   The variable we want to analyse.
- * @param string $handle
- *   The developer handle.
- */
-function krexx($data = null, $handle = '')
-{
-    if (empty($handle)) {
-        \Krexx::open($data);
-    } else {
-        \Krexx::$handle($data);
-    }
-}
-
 // Include some files and set some internal values.
 \Krexx::bootstrapKrexx();
 
@@ -92,7 +71,6 @@ class Krexx
         include_once $krexxDir . 'src/service/output/Chunks.php';
         include_once $krexxDir . 'src/service/output/AbstractOutput.php';
         include_once $krexxDir . 'src/service/output/Shutdown.php';
-        include_once $krexxDir . 'src/service/output/Direct.php';
         include_once $krexxDir . 'src/service/output/File.php';
         include_once $krexxDir . 'src/service/factory/Factory.php';
         include_once $krexxDir . 'src/service/factory/Pool.php';
@@ -136,50 +114,36 @@ class Krexx
         include_once $krexxDir . 'src/controller/Internals.php';
         include_once $krexxDir . 'src/controller/OutputActions.php';
 
+        if (!function_exists('krexx')) {
+            /**
+             * Alias function for object analysis.
+             *
+             * Register an alias function for object analysis,
+             * so you will not have to type \Krexx::open($data);
+             * all the time.
+             *
+             * @param mixed $data
+             *   The variable we want to analyse.
+             * @param string $handle
+             *   The developer handle.
+             */
+            function krexx($data = null, $handle = '')
+            {
+                if (empty($handle)) {
+                    \Krexx::open($data);
+                } else {
+                    \Krexx::$handle($data);
+                }
+            }
+        }
+
         // Create a new pool where we store all our classes.
         self::$pool = new Pool($krexxDir);
-
-        // Check our environment.
-        self::checkEnvironment($krexxDir);
 
         // We might need to register our fatal error handler.
         if (self::$pool->config->getSetting('registerAutomatically')) {
             self::$pool->controller->registerFatalAction();
         }
-    }
-
-    /**
-     * Check if the environment is  as it should be.
-     *
-     * @param string $krexxDir
-     *   The directory where kreXX ist installed.
-     */
-    protected static function checkEnvironment($krexxDir)
-    {
-        // Check chunk folder is writable.
-        // If not, give feedback!
-        $chunkFolder = $krexxDir . 'chunks' . DIRECTORY_SEPARATOR;
-        if (!is_writeable($chunkFolder)) {
-            self::$pool->messages->addMessage(
-                'Chunksfolder ' . $chunkFolder . ' is not writable!' .
-                'This will increase the memory usage of kreXX significantly!',
-                'critical'
-            );
-            self::$pool->messages->addKey('protected.folder.chunk', array($chunkFolder));
-            // We can work without chunks, but this will require much more memory!
-            self::$pool->chunks->setUseChunks(false);
-        }
-
-        // Check if the log folder is writable.
-        // If not, give feedback!
-        $logFolder = $krexxDir . 'log' . DIRECTORY_SEPARATOR;
-        if (!is_writeable($logFolder)) {
-            self::$pool->messages->addMessage('Logfolder ' . $logFolder . ' is not writable !', 'critical');
-            self::$pool->messages->addKey('protected.folder.log', array($logFolder));
-        }
-        // At this point, we won't inform the dev right away. The error message
-        // will pop up, when kreXX is actually displayed, no need to bother the
-        // dev just now.
     }
 
     /**

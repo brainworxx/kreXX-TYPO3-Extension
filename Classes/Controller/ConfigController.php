@@ -65,7 +65,6 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
             $data['destination'] = array(
                 'shutdown' => $this->LLL('shutdown'),
                 'file' => $this->LLL('file'),
-                'direct' => $this->LLL('direct'),
             );
             $data['bool'] = array(
                 'true' => $this->LLL('true'),

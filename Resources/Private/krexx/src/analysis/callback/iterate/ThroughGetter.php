@@ -35,7 +35,6 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Code\Connectors;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Factory\Pool;

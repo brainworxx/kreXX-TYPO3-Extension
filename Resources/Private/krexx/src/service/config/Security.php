@@ -191,7 +191,7 @@ class Security extends Fallback
 
             case 'destination':
                 // We expect 'frontend', 'file' or 'direct.
-                if ($value === 'shutdown' || $value === 'file' || $value === 'direct') {
+                if ($value === 'shutdown' || $value === 'file') {
                     $result = true;
                 }
                 if (!$result) {
@@ -502,7 +502,11 @@ class Security extends Fallback
      */
     public function isAllowedIp($whitelist)
     {
-        $remote = $_SERVER['REMOTE_ADDR'];
+        if (empty($_SERVER['REMOTE_ADDR'])) {
+            $remote = '';
+        } else {
+            $remote = $_SERVER['REMOTE_ADDR'];
+        }
 
         // Fallback to the Chin Leung implementation.
         // @author Chin Leung
