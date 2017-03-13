@@ -32,76 +32,69 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Caller;
+namespace Brainworxx\Krexx\Service\Misc;
 
-use Brainworxx\Krexx\Service\Factory\Pool;
-
-abstract class AbstractCaller
+/**
+ * Registrty class, to store stuff from the outside and inside.
+ *
+ * @package Brainworxx\Krexx\Service\Misc
+ */
+class Registry
 {
     /**
-     * Our pool where we keep al relevant classes.
+     * Here we sture stuff inside.
      *
-     * @var Pool
+     * @var array
      */
-    protected $pool;
+    protected $data = array();
 
     /**
-     * Pattern that we use to identify the caller.
-     * This is normally 'krexx'. With our direct integration
-     * into the debug() method of the TYPO3 core, this may as
-     * well be 'debug' or something else entirely, depending
-     * on the system used and it's internal debug call.
+     * Storing stuff in the registry.
      *
-     * @var string
-     */
-    protected $pattern = 'krexx';
-
-    /**
-     * Injects the pool.
+     * To 'unset' any value, just submit an empty() value.
      *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
-     */
-    public function __construct(Pool $pool)
-    {
-        $this->pool = $pool;
-    }
-
-    /**
-     * Setter for the identifier pattern.
-     *
-     * @param $pattern
-     *   The pattern, duh!
+     * @param string $key
+     *   The key under what we store the $value,
+     * @param mixed $value
+     *   The stuff we want to store.
      *
      * @return $this
-     *   Return this for chaining.
+     *   Return $this for chaining.
      */
-    public function setPattern($pattern)
+    public function set($key, $value)
     {
-        $this->pattern = $pattern;
+        // We don't really care if there is already a value.
+        $this->data[$key] = $value;
+
         return $this;
     }
 
     /**
-     * Getter for the current recognition pattern.
+     * Getter foir the registry.
      *
-     * @return string
+     * @param $key
+     *   The key under what we once stored the $value,
+     *
+     * @return null|mixed
+     *   The value, if available.
      */
-    public function getPattern()
+    public function get($key)
     {
-        return $this->pattern;
+        if (empty($this->data[$key])) {
+            return null;
+        } else {
+            return $this->data[$key];
+        }
     }
 
     /**
-     * Finds the place in the code from where krexx was called.
+     * Check if we actually have a value to this key.
      *
-     * @return array
-     *   The code, from where krexx was called.
-     *   array(
-     *     'file' => 'someFile.php',
-     *     'line' => 123,
-     *     'varname' => '$myVar'
-     *   );
+     * @param $key
+     * @return bool
      */
-    abstract public function findCaller();
+    public function has($key)
+    {
+        return empty($data[$key]);
+    }
 }

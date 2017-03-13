@@ -44,8 +44,21 @@ use Brainworxx\Krexx\Service\Output\AbstractOutput;
  *
  * @package Brainworxx\Krexx\Controller
  */
-class Internals
+abstract class AbstractController
 {
+    /**
+     * Config for the 'deep' backtrace analysis.
+     *
+     * @var array
+     */
+    protected $configFatal = array(
+        'analyseProtected' => 'true',
+        'analysePrivate' => 'true',
+        'analyseTraversable' => 'true',
+        'analyseConstants' => 'true',
+        'analyseProtectedMethods' => 'true',
+        'analysePrivateMethods' => 'true',
+    );
 
     /**
      * The fileservice, used to read and write files.
@@ -66,7 +79,7 @@ class Internals
      *
      * @var bool
      */
-    protected $headerSend = false;
+    protected static $headerSend = false;
 
     /**
      * Here we store the fatal error handler.
@@ -90,14 +103,14 @@ class Internals
      *
      * @var array
      */
-    protected $timekeeping = array();
+    protected static $timekeeping = array();
 
     /**
      * More timekeeping stuff.
      *
      * @var array
      */
-    protected $counterCache = array();
+    protected static $counterCache = array();
 
     /**
      * Our pool where we keep all relevant classes.
@@ -122,7 +135,7 @@ class Internals
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-        $this->callerFinder = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Caller\\Php');
+        $this->callerFinder = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder');
         $this->fileService = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
 
         // Register our output service.
@@ -148,9 +161,9 @@ class Internals
     protected function outputHeader($headline)
     {
         // Do we do an output as file?
-        if (!$this->headerSend) {
+        if (!self::$headerSend) {
             // Send doctype and css/js only once.
-            $this->headerSend = true;
+            self::$headerSend = true;
             return $this->pool->render->renderHeader('<!DOCTYPE html>', $headline, $this->outputCssAndJs());
         } else {
             return $this->pool->render->renderHeader('', $headline, '');
@@ -238,6 +251,9 @@ class Internals
      *
      * We disable the tick callback and the error handler during
      * a analysis, to generate faster output.
+     *
+     * @return $this
+     *   Return $this for chaining.
      */
     public function noFatalForKrexx()
     {
@@ -245,6 +261,8 @@ class Internals
             $this->krexxFatal->setIsActive(false);
             unregister_tick_function(array($this->krexxFatal, 'tickCallback'));
         }
+
+        return $this;
     }
 
     /**
@@ -342,5 +360,22 @@ class Internals
             $result = htmlspecialchars($protocol . '://' . $host . $s['REQUEST_URI'], ENT_QUOTES, 'UTF-8');
         }
         return $result;
+    }
+
+    /**
+     * Simply outputs a formatted var_dump.
+     *
+     * This is an internal debugging function, because it is
+     * rather difficult to debug a debugger, when your tool of
+     * choice is the debugger itself.
+     *
+     * @param mixed $data
+     *   The data for the var_dump.
+     */
+    public static function formattedVarDump($data)
+    {
+        echo '<pre>';
+        var_dump($data);
+        echo('</pre>');
     }
 }

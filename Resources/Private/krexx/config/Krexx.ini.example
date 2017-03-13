@@ -20,13 +20,10 @@ skin = "smokygrey"
 
 ; Where shall kreXX put it's data?
 ; "File" means logfolder.
-; "Direct" means direct echoing to the frontend, which may not be a good idea,
-; because it may interfere with the underlying app.
 ; "Shutdown" means, that the output will be send to the browser as soon as PHP
 ; enters it's shutdown phase. This will minimize the interference with the
 ; underlying app.
 ; destination = "file"
-; destination = "direct"
 destination = "shutdown"
 
 ; how many logfiles will kreXX keep?

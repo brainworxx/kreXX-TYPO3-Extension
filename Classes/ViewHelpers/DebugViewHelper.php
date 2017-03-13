@@ -54,12 +54,41 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  * Class Tx_Includekrexx_ViewHelpers_DebugViewHelper
  *
  * In case that anybody is actually reading this:
- * Right now, this is just a proof of concept.
+ * Right now, this is something like a work in progress.
  *
- * If that you are really desperate, use it. It gives the actual PHP
- * stuff inside the template. Most of this stuff is not reachable from fluid,
- * so we will implement a filter later on, as well as custom code generation
- * much more later on.
+ * Current status:
+ * Very untested.
+ * The kreXX "Framework" (more frame than actual work) should be prepared for
+ * the usage in something else than PHP.
+ * To make this actually work, we will use "overwrites" for the kreXX factory
+ * (which are X-Classes, but we do not call them that).
+ *
+ * First milestone:
+ * - Determine from where the Call was coming from
+ *   --> Done!
+ * - Remove the 'get' from the getter methods
+ *   --> Todo!
+ * - Remove all other method analysis
+ *   --> Todo!
+ * - Remove the configured debug methods
+ *   --> Todo!
+ * - Source generation for fluid
+ *   --> Todo!
+ * - Hide all protected properties
+ *   --> Todo!
+ * - Find a real solution for the "autoloading" of the kreXX library files.
+ *   Sadly, composer is no solution, because it may not be available. ;_;
+ *   --> Todo!
+ * - Test everything from 4.5 till whatever no. is the current sprint release.
+ *   --> Todo!
+ *
+ * Second milestone:
+ * - Add the method analysis and use v:call in the source generation.
+ *   --> Todo!
+ * - Add the protected properties in a expandable nest.
+ *   --> Todo!
+ * - Add the configures debug methods and use v:call in the source generation.
+ *   --> Todo!
  *
  * @see https://github.com/brainworxx/kreXX-TYPO3-Extension/issues/4
  * @see https://forge.typo3.org/issues/72950
@@ -96,16 +125,14 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
      */
     public function render()
     {
-//        $view = $this->renderingContext->getViewHelperVariableContainer()->getView();
-//        $viewReflection = new \ReflectionClass($view);
-//        $parsedTemplateMethodReflection = $viewReflection->getMethod('getTemplatePathAndFilename');
-        // getTemplateSource
-        // --> Source of the current template file
-        // getTemplatePathAndFilename
-        // --> The actual filename, The only thing missing right now is the line number.
-//        $parsedTemplateMethodReflection->setAccessible(true);
-//        krexx($this->renderingContext);
-//        krexx($parsedTemplateMethodReflection->invoke($view));
+        // Registering the fluid caller finder.
+        $GLOBALS['kreXXoverwrites'] = array(
+            'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder' => 'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid'
+        );
+
+
+        Krexx::$pool->registry->set('FluidView', $this->viewHelperVariableContainer->getView());
+        \Krexx::$pool->init(\Krexx::$pool->krexxDir);
 
         $found  = false;
         if (!is_null($this->arguments['value'])) {
@@ -123,6 +150,11 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
             // Both are NULL, we must tell the dev!
             krexx(null);
         }
+
+        // Resetting the caller finder back to the PHP version.
+        unset($GLOBALS['kreXXoverwrites']['Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder']);
+        // Remove the view from the egistry.
+        Krexx::$pool->registry->set('FluidView', '');
 
         return '';
     }

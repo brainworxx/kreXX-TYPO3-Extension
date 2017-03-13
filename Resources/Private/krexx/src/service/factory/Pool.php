@@ -36,10 +36,10 @@ namespace Brainworxx\Krexx\Service\Factory;
 
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Analyse\Scope;
-use Brainworxx\Krexx\Controller\OutputActions;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
+use Brainworxx\Krexx\Service\Misc\Registry;
 use Brainworxx\Krexx\Service\Output\Chunks;
 use Brainworxx\Krexx\Service\Code\Codegen;
 use Brainworxx\Krexx\Service\View\Messages;
@@ -107,13 +107,6 @@ class Pool extends Factory
     public $chunks;
 
     /**
-     * Our output controller.
-     *
-     * @var OutputActions
-     */
-    public $controller;
-
-    /**
      * Finds the script caller.
      *
      * @var AbstractCaller
@@ -126,6 +119,13 @@ class Pool extends Factory
      * @var Scope
      */
     public $scope;
+
+    /**
+     * Our registry. It will not be reset by the init().
+     *
+     * @var Registry
+     */
+    public $registry;
 
     /**
      * The directory where kreXX is installed.
@@ -142,6 +142,7 @@ class Pool extends Factory
      */
     public function __construct($krexxDir)
     {
+        $this->registry = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\Registry');
         $this->init($krexxDir);
     }
 
@@ -154,9 +155,6 @@ class Pool extends Factory
      */
     public function init($krexxDir)
     {
-        // Load all files we need.
-
-
         // Get the rewrites from the $GLOBALS.
         if (!empty($GLOBALS['kreXXoverwrites'])) {
             $this->rewrite = $GLOBALS['kreXXoverwrites'];
@@ -175,8 +173,6 @@ class Pool extends Factory
         $this->codegenHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Code\\Codegen');
         // Initializes the chunks handler.
         $this->chunks = $this->createClass('Brainworxx\\Krexx\\Service\\Output\\Chunks');
-        // Initializes the controller.
-        $this->controller = $this->createClass('Brainworxx\\Krexx\\Controller\\OutputActions');
         // Initializes the scope analysis
         $this->scope = $this->createClass('Brainworxx\\Krexx\\Analyse\\Scope');
         // Initializes the render class.

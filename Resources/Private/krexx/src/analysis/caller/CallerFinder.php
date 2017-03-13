@@ -40,7 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Caller;
  *
  * @package Brainworxx\Krexx\Analyse\Caller
  */
-class Php extends AbstractCaller
+class CallerFinder extends AbstractCaller
 {
 
     /**

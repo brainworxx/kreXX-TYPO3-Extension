@@ -99,6 +99,12 @@ $boot = function ($_EXTKEY) {
     if (!class_exists('Tx_Includekrexx_Rewrite_ServiceConfigSecurity')) {
         include_once($extPath . 'Classes/Rewrite/ServiceConfigSecurity.php');
     }
+    if (!class_exists('Brainworxx\\Krexx\\Analyse\\Caller\\AbstractCaller')) {
+        include_once($extPath . 'Resources/Private/krexx/src/analysis/caller/AbstractCaller.php');
+    }
+    if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid')) {
+        include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderFluid.php');
+    }
     $krexxFile = $extPath . 'Resources/Private/krexx/Krexx.php';
 
 

@@ -4,14 +4,16 @@
 - Added a metatag to both skins to prevent crawler from indexing
   a kreXX output. Remember kids: never debug a productive site.
   This will only lead to trouble.
+- Added a Registry class, so the overwrites can actually access
+  additional data from the outside.
 - Bugfix: Removed a warning in the IP-Whitelisting, in case there
   is no actual IP available.
-- Added the new output type 'direct'.
 - Change: Moved code generation to it's own namespace.
 - Change: Output -> File will now save the logfile directly after
   the analysis.
 - Change: Renamed the Output -> Frontend configuration to
   Output -> shutdown.
+- Change: Splitted the ActionController to several sub classes.
 
 
 2.1.1

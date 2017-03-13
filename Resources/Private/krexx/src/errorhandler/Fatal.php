@@ -39,7 +39,7 @@ namespace Brainworxx\Krexx\Errorhandler;
  *
  * @package Brainworxx\Krexx\Errorhandler
  */
-class Fatal extends Error
+class Fatal extends AbstractError
 {
 
     /**
@@ -113,7 +113,9 @@ class Fatal extends Error
                     'file' => $error['file'],
                     'backtrace' => $this->tickedBacktrace,
                 );
-                $this->pool->controller->errorAction($errorData);
+                $this->pool
+                    ->createClass('Brainworxx\\Krexx\\Controller\\errorController')
+                    ->errorAction($errorData);
             }
         }
         // Clean exit.

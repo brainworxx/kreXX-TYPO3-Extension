@@ -41,7 +41,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Errorhandler
  */
-abstract class Error
+abstract class AbstractError
 {
 
     /**
