@@ -105,6 +105,15 @@ $boot = function ($_EXTKEY) {
     if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid')) {
         include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderFluid.php');
     }
+    if (!class_exists('Brainworxx\\Krexx\\Analyse\\Callback\\AbstractCallback')) {
+        include_once($extPath . 'Resources/Private/krexx/src/analysis/callback/AbstractCallback.php');
+    }
+    if (!class_exists('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\TroughGetter')) {
+        include_once($extPath . 'Resources/Private/krexx/src/analysis/callback/iterate/ThroughGetter.php');
+    }
+    if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter')) {
+        include_once($extPath . 'Classes/Rewrite/AnalysisCallbackIterateTroughGetter.php');
+    }
     $krexxFile = $extPath . 'Resources/Private/krexx/Krexx.php';
 
 

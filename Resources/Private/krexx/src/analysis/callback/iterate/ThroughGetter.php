@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Code\Connectors;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -93,8 +94,6 @@ class ThroughGetter extends AbstractCallback
 
         /** @var \ReflectionMethod $reflectionMethod */
         foreach ($this->parameters['methodList'] as $reflectionMethod) {
-            $refProp = $this->getReflectionProperty($ref, $reflectionMethod);
-
             // Back to level 0, we reset the deep counter.
             $this->deep = 0;
 
@@ -107,7 +106,7 @@ class ThroughGetter extends AbstractCallback
                 ->createClass('Brainworxx\\Krexx\\Analyse\\Methods')
                 ->getComment($reflectionMethod, $ref));
 
-            /** @var \Brainworxx\Krexx\Analyse\Model $model */
+            /** @var Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setName($reflectionMethod->getName())
                 ->addToJson('method comment', $comments);
@@ -119,37 +118,50 @@ class ThroughGetter extends AbstractCallback
                 $model->setConnectorType(Connectors::METHOD);
             }
 
-            if (empty($refProp)) {
-                // Found nothing  :-(
-                $value = $this->pool->messages->getHelp('unknownValue');
-
-                // We literally have no info. We need to tell the user.
-                $model->setNormal('unknown')
-                    ->setType('unknown')
-                    ->hasExtras();
-            } else {
-                // We've got ourselves a possible result!
-                $refProp->setAccessible(true);
-                $value = $refProp->getValue($this->parameters['data']);
-            }
-            $model->setData($value);
-
-            if (empty($refProp)) {
-                // We render this right away, without any routing.
-                $output .= $this->pool->render->renderSingleChild($model);
-            } else {
-                if (is_null($value)) {
-                    // A NULL value might mean that the values does not
-                    // exist, until the getter computes it.
-                    $model->addToJson('hint', $this->pool->messages->getHelp('getterNull'));
-                }
-                $output .= $this->pool
-                    ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Routing')
-                    ->analysisHub($model);
-            }
+            // Get ourselves a possible return value
+            $output .= $this->retrievePropertyValue($reflectionMethod, $model);
         }
 
         return $output;
+    }
+
+    /**
+     * Try to get a possible return value and render the result.
+     *
+     * @param \ReflectionMethod $reflectionMethod
+     *   A reflection ot the method we are analysing
+     * @param Model $model
+     *   The model so far.
+     *
+     * @return string
+     *   The rendered markup.
+     */
+    protected function retrievePropertyValue(\ReflectionMethod $reflectionMethod, $model)
+    {
+        $refProp = $this->getReflectionProperty($this->parameters['ref'], $reflectionMethod);
+
+        if (empty($refProp)) {
+            // Found nothing  :-(
+            // We literally have no info. We need to tell the user.
+            $model->setNormal('unknown')
+                ->setType('unknown')
+                ->setData($this->pool->messages->getHelp('unknownValue'))
+                ->hasExtras();
+            // We render this right away, without any routing.
+            return $this->pool->render->renderSingleChild($model);
+        } else {
+             // We've got ourselves a possible result!
+            $refProp->setAccessible(true);
+            $value = $refProp->getValue($this->parameters['data']);
+            $model->setData($value);
+            if (is_null($value)) {
+                // A NULL value might mean that the values does not
+                // exist, until the getter computes it.
+                $model->addToJson('hint', $this->pool->messages->getHelp('getterNull'));
+            }
+            return $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Routing')
+                    ->analysisHub($model);
+        }
     }
 
     /**

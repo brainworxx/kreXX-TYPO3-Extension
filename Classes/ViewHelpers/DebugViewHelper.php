@@ -67,6 +67,9 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  * - Determine from where the Call was coming from
  *   --> Done!
  * - Remove the 'get' from the getter methods
+ *   --> Done!
+ * - Find a better loading method than simply including files.
+ *   This is getting out of hand at this point, and I've just started.
  *   --> Todo!
  * - Remove all other method analysis
  *   --> Todo!
@@ -125,9 +128,13 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
      */
     public function render()
     {
-        // Registering the fluid caller finder.
+
         $GLOBALS['kreXXoverwrites'] = array(
-            'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder' => 'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid'
+            // Registering the fluid caller finder.
+            'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder' => 'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid',
+            // Registering the alternative getter analysis, without the 'get' in
+            // the functionname.
+            'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter' => 'Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter'
         );
 
 
