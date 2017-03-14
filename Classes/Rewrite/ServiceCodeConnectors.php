@@ -36,6 +36,12 @@ use Brainworxx\Krexx\Service\Code\Connectors;
 
 class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
 {
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $language = 'fluid';
+
     /**
      * Everything is an array. Return the fluid point.
      *

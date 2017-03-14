@@ -80,18 +80,15 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  *   --> Todo!
  *
  * Second milestone:
- *- Find a better loading method than simply including files.
+ * - Find a better loading method than simply including files.
  *   This is getting out of hand at this point, and I've just started.
  *   --> Todo!
- * - Make everything configurable.
- *   We will re-add stuff again, according to the configuration.
+ * - Re-add the method analysis and use v:call in the source generation.
  *   --> Todo!
- * - Add the method analysis and use v:call in the source generation.
- *   --> Todo!
- * - Add the protected properties in a expandable nest.
- *   --> Todo!
- * - Add the configures debug methods and use v:call in the source generation.
- *   --> Todo!
+ * - Re-add the configureable debug methods
+ *   Not really sure about this one, stitching stuff together with v:call may be
+ *   too much.  :-/
+ *   --> Todo?
  *
  * @see https://github.com/brainworxx/kreXX-TYPO3-Extension/issues/4
  * @see https://forge.typo3.org/issues/72950
@@ -165,16 +162,11 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
             krexx(null);
         }
 
-        // Resetting the caller finder back to the PHP version.
-        unset($GLOBALS['kreXXoverwrites']['Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder']);
-        // Remove the view from the egistry.
+        // Remove the view from the registry.
         Krexx::$pool->registry->set('FluidView', '');
 
         // Reset all rewrites to the global ones.
         Krexx::$pool->flushRewrite();
-
-        // Reset the configuration afterwards.
-        Krexx::$pool->resetConfig();
 
         return '';
     }
@@ -194,7 +186,7 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
         $once = true;
         if (version_compare(TYPO3_version, '7.2', '>')) {
             $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx');
-            
+
             if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid')) {
                 include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderFluid.php');
             }

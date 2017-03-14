@@ -51,6 +51,8 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
     {
 
         $template = parent::renderSingleChild($model);
+        // Replace the source button
+        $template = str_replace('{language}', $model->getConnectorLanguage(), $template);
         $json = $model->getJson();
 
         $json['Help'] = $this->pool->messages->getHelp($model->getHelpid());
@@ -100,6 +102,7 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
         } else {
             // Add the button.
             $template = str_replace('{sourcebutton}', $this->getTemplateFileContent('sourcebutton'), $template);
+            $template = str_replace('{language}', $model->getConnectorLanguage(), $template);
         }
 
         // Is it expanded?

@@ -50,6 +50,14 @@ class Connectors
     const STATIC_PROPERTY = 'staticProperty';
 
     /**
+     * The name of the language here. Will be used as the source generation
+     * button inside the SmokyGrey skin.
+     *
+     * @var string
+     */
+    protected $language = 'php';
+
+    /**
      * Parameters, in case we are connectiong a method or closure.
      *
      * @var string
@@ -192,5 +200,15 @@ class Connectors
     public function setCustomConnector1($customConnector1)
     {
         $this->customConnector1 = $customConnector1;
+    }
+
+    /**
+     * Getter for the language value (php)
+     *
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->language;
     }
 }

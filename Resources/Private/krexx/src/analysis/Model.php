@@ -153,6 +153,11 @@ class Model
      */
     protected $connectorService;
 
+    /**
+     * Inject the pool and create the connector service.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
@@ -549,5 +554,15 @@ class Model
         $this->connectorService->setCustomConnector1($string);
         return $this;
 
+    }
+
+    /**
+     * Getter for the Language of the connector service.
+     *
+     * @return string
+     */
+    public function getConnectorLanguage()
+    {
+        return $this->connectorService->getLanguage();
     }
 }
