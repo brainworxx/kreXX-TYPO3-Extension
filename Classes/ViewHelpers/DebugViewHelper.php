@@ -68,24 +68,24 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  *   --> Done!
  * - Remove the 'get' from the getter methods
  *   --> Done!
- * - Find a better loading method than simply including files.
- *   This is getting out of hand at this point, and I've just started.
- *   --> Todo!
  * - Remove all other method analysis
- *   --> Todo!
+ *   --> Done!
  * - Remove the configured debug methods
- *   --> Todo!
+ *   --> Done!
  * - Source generation for fluid
- *   --> Todo!
- * - Hide all protected properties
- *   --> Todo!
- * - Find a real solution for the "autoloading" of the kreXX library files.
- *   Sadly, composer is no solution, because it may not be available. ;_;
- *   --> Todo!
+ *   --> Done!
+ * - Reset the overwrites afterwards
+ *   --> Done!
  * - Test everything from 4.5 till whatever no. is the current sprint release.
  *   --> Todo!
  *
  * Second milestone:
+ *- Find a better loading method than simply including files.
+ *   This is getting out of hand at this point, and I've just started.
+ *   --> Todo!
+ * - Make everything configurable.
+ *   We will re-add stuff again, according to the configuration.
+ *   --> Todo!
  * - Add the method analysis and use v:call in the source generation.
  *   --> Todo!
  * - Add the protected properties in a expandable nest.
@@ -99,7 +99,7 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  * @namespace
  *   When using TYPO3 4.5 until 8.4, you need to declare the namespace first:
  *   {namespace krexx=Tx_Includekrexx_ViewHelpers}
- *   TYPO3 7.6 and beyond don't need to do that anymore  ;-)
+ *   TYPO3 8.5 and beyond don't need to do that anymore  ;-)
  *
  * @usage
  *   <krexx:debug>{_all}</krexx:debug>
@@ -128,18 +128,25 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
      */
     public function render()
     {
-
-        $GLOBALS['kreXXoverwrites'] = array(
+        Krexx::$pool
             // Registering the fluid caller finder.
-            'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder' => 'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid',
+            ->addRewrite('Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder', 'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid')
             // Registering the alternative getter analysis, without the 'get' in
             // the functionname.
-            'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter' => 'Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter'
-        );
+            ->addRewrite('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter', 'Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter')
+            // Registering the object analysis class, without any method
+            // analysis.
+            ->addRewrite('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects', 'Tx_Includekrexx_Rewrite_AnalyseCallbackAnalyseObjects')
+            // Registering the fluid connector class.
+            ->addRewrite('Brainworxx\\Krexx\\Service\\Code\\Connectors', 'Tx_Includekrexx_Rewrite_ServiceCodeConnectors');
 
-
+        // Set the view in the registry, we will retreive it later on.
+        // We will add the info from where the fluid call actually came.
+        // Meh, this will not work in 4.5  :-(
         Krexx::$pool->registry->set('FluidView', $this->viewHelperVariableContainer->getView());
-        \Krexx::$pool->init(\Krexx::$pool->krexxDir);
+
+        // Trigger the file loading, which may or may not be done by TYPO3.
+        $this->fileLoading();
 
         $found  = false;
         if (!is_null($this->arguments['value'])) {
@@ -163,6 +170,43 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
         // Remove the view from the egistry.
         Krexx::$pool->registry->set('FluidView', '');
 
+        // Reset all rewrites to the global ones.
+        Krexx::$pool->flushRewrite();
+
+        // Reset the configuration afterwards.
+        Krexx::$pool->resetConfig();
+
         return '';
+    }
+
+    /**
+     * "Autoloading" for files that do not get autoloaded anymore, but are
+     * needed for the code above.
+     */
+    protected function fileLoading()
+    {
+        static $once = false;
+        // We do this only once.
+        if ($once) {
+            return;
+        }
+
+        $once = true;
+        if (version_compare(TYPO3_version, '7.2', '>')) {
+            $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx');
+            
+            if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid')) {
+                include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderFluid.php');
+            }
+            if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter')) {
+                include_once($extPath . 'Classes/Rewrite/AnalysisCallbackIterateTroughGetter.php');
+            }
+            if (!class_exists('Tx_Includekrexx_Rewrite_AnalyseCallbackAnalyseObjects')) {
+                include_once($extPath . 'Classes/Rewrite/AnalyseCallbackAnalyseObjects.php');
+            }
+            if (!class_exists('Tx_Includekrexx_Rewrite_ServiceCodeConnectors')) {
+                include_once($extPath . 'Classes/Rewrite/ServiceCodeConnectors.php');
+            }
+        }
     }
 }

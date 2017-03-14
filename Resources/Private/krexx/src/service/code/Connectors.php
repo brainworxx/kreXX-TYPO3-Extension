@@ -99,6 +99,7 @@ class Connectors
      * Getting the connector1, according to the type.
      *
      * @return string
+     *   The PHP connector, what else?
      */
     public function getConnector1()
     {
@@ -150,6 +151,7 @@ class Connectors
      * Getting the connector1, according to the type.
      *
      * @return string
+     *   The PHP connector, what else?
      */
     public function getConnector2()
     {

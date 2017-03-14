@@ -156,9 +156,7 @@ class Pool extends Factory
     public function init($krexxDir)
     {
         // Get the rewrites from the $GLOBALS.
-        if (!empty($GLOBALS['kreXXoverwrites'])) {
-            $this->rewrite = $GLOBALS['kreXXoverwrites'];
-        }
+        $this->flushRewrite();
         // Set the directory.
         $this->krexxDir = $krexxDir;
         // Initializes the messages.

@@ -90,6 +90,13 @@ $boot = function ($_EXTKEY) {
 
     }
 
+
+    // Add our specific overwrites.
+    // When we include the kreXX mainfile, it gets bootstrapped.
+    // But then it is already to late for these overwrites.
+    $GLOBALS['kreXXoverwrites'] = array(
+        'Brainworxx\\Krexx\\Service\\Config\\Security' => 'Tx_Includekrexx_Rewrite_ServiceConfigSecurity'
+    );
     if (!class_exists('Brainworxx\\Krexx\\Service\\Config\\Fallback')) {
         include_once($extPath . 'Resources/Private/krexx/src/service/config/Fallback.php');
     }
@@ -99,41 +106,16 @@ $boot = function ($_EXTKEY) {
     if (!class_exists('Tx_Includekrexx_Rewrite_ServiceConfigSecurity')) {
         include_once($extPath . 'Classes/Rewrite/ServiceConfigSecurity.php');
     }
-    if (!class_exists('Brainworxx\\Krexx\\Analyse\\Caller\\AbstractCaller')) {
-        include_once($extPath . 'Resources/Private/krexx/src/analysis/caller/AbstractCaller.php');
-    }
-    if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid')) {
-        include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderFluid.php');
-    }
-    if (!class_exists('Brainworxx\\Krexx\\Analyse\\Callback\\AbstractCallback')) {
-        include_once($extPath . 'Resources/Private/krexx/src/analysis/callback/AbstractCallback.php');
-    }
-    if (!class_exists('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\TroughGetter')) {
-        include_once($extPath . 'Resources/Private/krexx/src/analysis/callback/iterate/ThroughGetter.php');
-    }
-    if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter')) {
-        include_once($extPath . 'Classes/Rewrite/AnalysisCallbackIterateTroughGetter.php');
-    }
-    $krexxFile = $extPath . 'Resources/Private/krexx/Krexx.php';
 
-
-    // Add our specific overwrites.
-    // When we include the kreXX mainfile, it gets bootstrapped.
-    // But then it is already to late for these overwrites.
-    // To prevent a reset of all classes, we store these info here.
-    // When overwriting a class at a later date (for example, in our fluid debugger)
-    // we may need to reset some of the singletons in the $pool, or even create a
-    // new pool.
-    $GLOBALS['kreXXoverwrites'] = array(
-        'Brainworxx\\Krexx\\Service\\Config\\Security' => 'Tx_Includekrexx_Rewrite_ServiceConfigSecurity'
-    );
 
     // We load the kreXX library.
-    // The class__existst triggers the composer autoloading, if available.
-    // It not, we use the bundeled version wich comes with the externsion.
+    // The class__exists triggers the composer autoloading, if available.
+    // It not, we use the bundled version wich comes with the externsion.
+    $krexxFile = $extPath . 'Resources/Private/krexx/Krexx.php';
     if (file_exists($krexxFile) && !class_exists('Krexx')) {
         include_once $krexxFile;
     }
+
 };
 
 $boot($_EXTKEY);

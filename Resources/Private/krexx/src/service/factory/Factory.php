@@ -80,17 +80,25 @@ class Factory
      *   The original class name, we want to overwrite this one.
      * @param $newClassName
      *   The new class name, the factory will then return this class via get();
+     *
+     * @return $this
+     *   Return $this, for chaining.
      */
     public function addRewrite($originalClassName, $newClassName)
     {
         $this->rewrite[$originalClassName] = $newClassName;
+        return $this;
     }
 
     /**
-     * Resets the rewrite info.
+     * Resets the rewrite info and relaods it from the globals.
      */
     public function flushRewrite()
     {
-        $this->rewrite = array();
+        if (is_array($GLOBALS['kreXXoverwrites'])) {
+            $this->rewrite = $GLOBALS['kreXXoverwrites'];
+        } else {
+            $this->rewrite = array();
+        }
     }
 }
