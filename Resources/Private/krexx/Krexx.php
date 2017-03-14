@@ -275,7 +275,7 @@ class Krexx
     {
          /** @var \Brainworxx\Krexx\Controller\EditSettingsController $controller */
         $controller = self::$pool
-            ->createClass('Brainworxx\\Krexx\\Controller\\DumpController')
+            ->createClass('Brainworxx\\Krexx\\Controller\\EditSettingsController')
             ->noFatalForKrexx();
 
         // Disabled?

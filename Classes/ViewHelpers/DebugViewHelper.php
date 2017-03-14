@@ -57,38 +57,10 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  * Right now, this is something like a work in progress.
  *
  * Current status:
- * Very untested.
  * The kreXX "Framework" (more frame than actual work) should be prepared for
  * the usage in something else than PHP.
- * To make this actually work, we will use "overwrites" for the kreXX factory
+ * To make this work, we will use "overwrites" for the kreXX factory
  * (which are X-Classes, but we do not call them that).
- *
- * First milestone:
- * - Determine from where the Call was coming from
- *   --> Done!
- * - Remove the 'get' from the getter methods
- *   --> Done!
- * - Remove all other method analysis
- *   --> Done!
- * - Remove the configured debug methods
- *   --> Done!
- * - Source generation for fluid
- *   --> Done!
- * - Reset the overwrites afterwards
- *   --> Done!
- * - Test everything from 4.5 till whatever no. is the current sprint release.
- *   --> Todo!
- *
- * Second milestone:
- * - Find a better loading method than simply including files.
- *   This is getting out of hand at this point, and I've just started.
- *   --> Todo!
- * - Re-add the method analysis and use v:call in the source generation.
- *   --> Todo!
- * - Re-add the configureable debug methods
- *   Not really sure about this one, stitching stuff together with v:call may be
- *   too much.  :-/
- *   --> Todo?
  *
  * @see https://github.com/brainworxx/kreXX-TYPO3-Extension/issues/4
  * @see https://forge.typo3.org/issues/72950

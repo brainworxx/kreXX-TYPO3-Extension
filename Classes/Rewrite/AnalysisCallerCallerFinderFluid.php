@@ -41,6 +41,35 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCa
      */
     public function findCaller()
     {
+        if (version_compare(TYPO3_version, '8.0', '<')) {
+            // The hacky 4.6 till 7.6 path finder.
+            $path = $this->findCallerByReflection();
+        } else {
+            // The new 8.0 and greater path finder
+            $path = $this->findPathByFramework();
+        }
+
+        return array(
+            'file' => $path,
+            // I have no idae how to get the actual line from the view.
+            'line' => 'n/a',
+            // Without line, there is no real chance to get the varname.
+            // Not to mention, that we may actually face something like
+            // this as a 'varname':
+            // {some:viewHelper(key: '{value}) -> some:anotherHelper(foo: 'bar'))
+            // This would totally complicate things unnecessary.
+            'varname' => 'fluidvar',
+        );
+    }
+
+    /**
+     * Find the path the hacky way, by using reflections to call a protected
+     * method.
+     *
+     * @return string
+     */
+    protected function findCallerByReflection()
+    {
         // Using a reflection to get access to date feels somewhat dirty.
         // Otoh, kreXX does the same thing all the time.
         // If anybody knows how to get the following data from the viewhelper
@@ -62,19 +91,27 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCa
             // I have no idea how to get it from 4.5.
             // The method 'getTemplatePathAndFilename' was introduced in 4.6
             // and I am not going to copy it here.  :-/
-            $path = '';
+            $path = 'calling template path not available';
         }
 
-        return array(
-            'file' => $path,
-            // I have no idae how to get the actual line from the view.
-            'line' => 'n/a',
-            // Without line, there is no real chance to get the varname.
-            // Not to mention, that we may actually face something like
-            // this as a 'varname':
-            // {some:viewHelper(key: '{value}) -> some:anotherHelper(foo: 'bar'))
-            // This would totally complicate things unnecessary.
-            'varname' => 'fluidvar',
-        );
+        return $path;
+    }
+
+    /**
+     * Find the path via the fluid framework.
+     *
+     * @return string
+     */
+    protected function findPathByFramework()
+    {
+        $renderingContext = $this->pool->registry->get('FluidView')->getRenderingContext();
+        $controllerName = $renderingContext->getControllerName();
+        $actionName = $renderingContext->getControllerAction();
+        $format = $renderingContext->getTemplatePaths()->getFormat();
+
+        $path = $renderingContext->getTemplatePaths()
+            ->resolveTemplateFileForControllerAndActionAndFormat($controllerName, $actionName, $format);
+
+        return $path;
     }
 }
