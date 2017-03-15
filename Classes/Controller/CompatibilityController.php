@@ -255,6 +255,35 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             }
         }
 
+        /**
+         * Assigns the content of a js file as a variable to the view.
+         *
+         * Since addJsFile and addCssFile got removed in 7.0, I have to resort to
+         * adding stuff inline.
+         *
+         * @see
+         *   BackendRefresh.html and BackendSave.html layouts
+         *
+         * @param string $file
+         *   Filename of the css file, located in the resource public dir.
+         */
+        protected function addJsToView($file)
+        {
+            if (class_exists('\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) {
+                $uri = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/' . $file);
+            } else {
+                $uri = \t3lib_div::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/' . $file);
+            }
+
+            if (is_readable($uri)) {
+                $this->view->assign('js', file_get_contents($uri));
+            }
+        }
+
+        /**
+         * Due to a change in the attributes of the flashmessage viewhelper,
+         * we are using special partials for it, depending on the TYPO3 version.
+         */
         protected function assignFlashInfo()
         {
             if (version_compare(TYPO3_version, '7.3', '>=')) {

@@ -136,7 +136,8 @@ if (!class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
             $this->view->assign('data', $data);
             $this->view->assign('value', $value);
             $this->addCssToView('Backend.css');
-           $this->assignFlashInfo();
+            $this->addJsToView('Backend.js');
+            $this->assignFlashInfo();
         }
 
         /**

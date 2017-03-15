@@ -6,78 +6,7 @@
     </style>
     <script type="text/javascript">
         // Since there is no format raw viewhelper in 4.5, I havew to resort to putting this inline.
-        (function () {
-            "use strict";
-
-            if (typeof document.observe === "function") {
-                // Looks like we can use the good old backend library
-                document.observe("dom:loaded", function () {
-                    formSupport.formReady();
-                });
-            } else {
-                // Looks like we are handling a 7.4+ Backend.
-                // IE9 should be able to swallow this.
-                document.addEventListener("DOMContentLoaded", function () {
-                    formSupport.formReady();
-                });
-            }
-
-            /**
-            * @namespace formSupport
-            */
-            function formSupport() {}
-
-            formSupport.formReady = function () {
-                var checkboxes = document.getElementsByName('tx_includekrexx_tools_includekrexxkrexxconfiguration[factory]');
-                var element;
-
-                for (var i = 0, n = checkboxes.length; i < n; i++) {
-                    formSupport.toggle(checkboxes[i]);
-                    checkboxes[i].addEventListener('click', function () {
-                    formSupport.toggle(this);
-                    }, true);
-                }
-
-                var saveButton = document.getElementById('editconfig_save');
-                if (typeof saveButton === 'object' && saveButton != 'undefined' && saveButton != null) {
-                    saveButton.addEventListener('click', function () {
-                        var form = document.getElementById('editconfig');
-                        if (typeof form === 'object' && form != 'undefined' && form != null) {
-                            form.submit();
-                        }
-                    }, true);
-                }
-
-                var refreshButton = document.getElementById('editconfig_refresh');
-                if (typeof refreshButton === 'object' && refreshButton != 'undefined' && refreshButton != null) {
-                    refreshButton.addEventListener('click', function () {
-                        location.reload();
-                    }, true);
-                }
-            };
-
-            /**
-             * When activating the checkbox behind the form element, we deactivat the
-             * form element, belonging to the checkbox.
-             *
-             * @param {HTMLInputElement} checkbox
-             */
-            formSupport.toggle = function (checkbox) {
-                var id = checkbox.id.split('.');
-                if (id[1] != 'undefined') {
-                    var element = document.getElementById(id[1]);
-                }
-
-                if (typeof element === 'object' && element != 'undefined' && element != null) {
-                    if (checkbox.checked) {
-                        element.disabled = true;
-                    } else {
-                        element.disabled = false;
-                    }
-                }
-            };
-
-        })();
+        <f:format.html parseFuncTSPath="">{js}</f:format.html>
     </script>
     <div class="typo3-fullDoc">
         <div id="typo3-docheader">
