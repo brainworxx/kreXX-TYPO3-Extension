@@ -186,7 +186,7 @@ abstract class AbstractController
     {
         // Now we need to stitch together the content of the ini file
         // as well as it's path.
-        if (!is_readable($this->pool->krexxDir . 'config/Krexx.ini')) {
+        if (!is_readable($this->pool->config->getPathToIniFile())) {
             // Project settings are not accessible
             // tell the user, that we are using fallback settings.
             $path = 'Krexx.ini not found, using factory settings';
@@ -197,7 +197,7 @@ abstract class AbstractController
 
         $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
             ->setName($path)
-            ->setType($this->pool->krexxDir . 'config/Krexx.ini')
+            ->setType($this->pool->config->getPathToIniFile())
             ->setHelpid('currentSettings')
             ->injectCallback(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConfig')

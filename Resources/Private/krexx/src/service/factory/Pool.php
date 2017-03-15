@@ -186,7 +186,7 @@ class Pool extends Factory
     {
         // Check chunk folder is writable.
         // If not, give feedback!
-        $chunkFolder = $this->krexxDir . 'chunks' . DIRECTORY_SEPARATOR;
+        $chunkFolder = $this->config->getChunkDir();
         if (!is_writeable($chunkFolder)) {
             $this->messages->addMessage(
                 'Chunksfolder ' . $chunkFolder . ' is not writable!' .
@@ -200,7 +200,7 @@ class Pool extends Factory
 
         // Check if the log folder is writable.
         // If not, give feedback!
-        $logFolder = $this->krexxDir . 'log' . DIRECTORY_SEPARATOR;
+        $logFolder = $this->config->getLogDir();
         if (!is_writeable($logFolder)) {
             $this->messages->addMessage('Logfolder ' . $logFolder . ' is not writable !', 'critical');
             $this->messages->addKey('protected.folder.log', array($logFolder));

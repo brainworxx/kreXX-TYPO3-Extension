@@ -95,7 +95,10 @@ $boot = function ($_EXTKEY) {
     // When we include the kreXX mainfile, it gets bootstrapped.
     // But then it is already to late for these overwrites.
     $GLOBALS['kreXXoverwrites'] = array(
-        'Brainworxx\\Krexx\\Service\\Config\\Security' => 'Tx_Includekrexx_Rewrite_ServiceConfigSecurity'
+        'classes' => array(
+            'Brainworxx\\Krexx\\Service\\Config\\Security' => 'Tx_Includekrexx_Rewrite_ServiceConfigSecurity'
+        ),
+        'directories' => array(),
     );
     if (!class_exists('Brainworxx\\Krexx\\Service\\Config\\Fallback')) {
         include_once($extPath . 'Resources/Private/krexx/src/service/config/Fallback.php');
@@ -106,6 +109,46 @@ $boot = function ($_EXTKEY) {
     if (!class_exists('Tx_Includekrexx_Rewrite_ServiceConfigSecurity')) {
         include_once($extPath . 'Classes/Rewrite/ServiceConfigSecurity.php');
     }
+
+
+    // See if we must create a temp directory for kreXX.
+    $tempPaths = array(
+        'main' => PATH_site . 'typo3temp/tx_includekrexx',
+        'log' => PATH_site . 'typo3temp/tx_includekrexx/log',
+        'chunks' => PATH_site . 'typo3temp/tx_includekrexx/chunks',
+        'config' => PATH_site . 'typo3temp/tx_includekrexx/config',
+    );
+    // htAccess to prevent a listing
+    $htAccess = 'order deny,allow' . chr(10) . 'deny from all';
+    // Empty index.html in caqse the htacess is not enough.
+    $indexHtml = '';
+    // Create and protect the temporal folders.
+    if (class_exists(\TYPO3\CMS\Core\Utility\GeneralUtility::class)) {
+        foreach ($tempPaths as $key => $tempPath) {
+            if (!is_dir($tempPath)) {
+                // Create it!
+                \TYPO3\CMS\Core\Utility\GeneralUtility::mkdir($tempPath);
+                // Protect it!
+                \TYPO3\CMS\Core\Utility\GeneralUtility::writeFileToTypo3tempDir($tempPath . '/' . '.htaccess', $htAccess);
+                \TYPO3\CMS\Core\Utility\GeneralUtility::writeFileToTypo3tempDir($tempPath . '/' . 'index.html', $indexHtml);
+            }
+            // Register it!
+            $GLOBALS['kreXXoverwrites']['directories'][$key] = $tempPath;
+        }
+    } else {
+        foreach ($tempPaths as $key => $tempPath) {
+            if (!is_dir($tempPath)) {
+                // Create it!
+                t3lib_div::mkdir($tempPath);
+                // Protect it!
+                t3lib_div::writeFileToTypo3tempDir($tempPath . '/' . '.htaccess', $htAccess);
+                t3lib_div::writeFileToTypo3tempDir($tempPath . '/' . 'index.html', $indexHtml);
+            }
+            // Register it!
+            $GLOBALS['kreXXoverwrites']['directories'][$key] = $tempPath;
+        }
+    }
+
 
 
     // We load the kreXX library.

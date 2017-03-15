@@ -214,7 +214,7 @@ if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
         {
             $arguments = $this->request->getArguments();
             $allOk = true;
-            $filepath = $this->pool->krexxDir. 'config/Krexx.ini';
+            $filepath = $this->pool->config->getPathToIniFile();
 
 
 

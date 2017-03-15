@@ -48,7 +48,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
             $this->addNamespace();
 
             // 1. Get the log folder.
-            $dir = $this->pool->krexxDir . 'log' . DIRECTORY_SEPARATOR;
+            $dir = $this->pool->config->getLogDir();
 
             // 2. Get the file list and sort it.
             $files = glob($dir . '*.Krexx.html');
@@ -108,7 +108,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
             // No directory traversal for you!
             $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
             // Get the filepath.
-            $file = $this->pool->krexxDir . 'log' . DIRECTORY_SEPARATOR . $id . '.Krexx.html';
+            $file = $this->pool->config->getLogDir() . $id . '.Krexx.html';
             if (is_readable($file)) {
                 // We open and then send the file.
                 $this->dispatchFile($file);
@@ -128,7 +128,7 @@ if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
             // No directory traversal for you!
             $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
             // Get the filepath.
-            $file = $this->pool->krexxDir . 'log' . DIRECTORY_SEPARATOR . $id . '.Krexx';
+            $file = $this->pool->config->getLogDir() . $id . '.Krexx';
 
             // Delete the logfile.
             $this->delete($file . '.html');

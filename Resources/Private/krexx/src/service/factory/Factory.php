@@ -95,8 +95,8 @@ class Factory
      */
     public function flushRewrite()
     {
-        if (is_array($GLOBALS['kreXXoverwrites'])) {
-            $this->rewrite = $GLOBALS['kreXXoverwrites'];
+        if (!empty($GLOBALS['kreXXoverwrites']) && is_array($GLOBALS['kreXXoverwrites']['classes'])) {
+            $this->rewrite = $GLOBALS['kreXXoverwrites']['classes'];
         } else {
             $this->rewrite = array();
         }

@@ -84,13 +84,6 @@ class Chunks
     protected $useChunks = true;
 
     /**
-     * The cached krexx directory.
-     *
-     * @var string
-     */
-    protected $krexxDir;
-
-    /**
      * The file service used to read and write files.
      *
      * @var File
@@ -98,9 +91,18 @@ class Chunks
     protected $fileService;
 
     /**
+     * The logfolder.
+     *
      * @var string
      */
-    protected $logDir = 'log';
+    protected $logDir;
+
+    /**
+     * The folder for the output chunks.
+     *
+     * @var string
+     */
+    protected $chunkDir;
 
     /**
      * Injects the pool.
@@ -111,7 +113,8 @@ class Chunks
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-        $this->krexxDir = $pool->krexxDir;
+        $this->chunkDir = $pool->config->getChunkDir();
+        $this->logDir = $pool->config->getLogDir();
         $this->fileService = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
     }
 
@@ -132,7 +135,7 @@ class Chunks
             // Get the key.
             $key = $this->genKey();
             // Write the key to the chunks folder.
-            $this->fileService->putFileContents($this->krexxDir . 'chunks/' . $key . '.Krexx.tmp', $string);
+            $this->fileService->putFileContents($this->chunkDir . $key . '.Krexx.tmp', $string);
             // Return the first part plus the key.
             return '@@@' . $key . '@@@';
         } else {
@@ -171,7 +174,7 @@ class Chunks
      */
     protected function dechunkMe($key)
     {
-        $filename = $this->krexxDir . 'chunks/' . $key . '.Krexx.tmp';
+        $filename = $this->chunkDir . $key . '.Krexx.tmp';
         if (is_writable($filename)) {
             // Read the file.
             $string = $this->fileService->getFileContents($filename);
@@ -238,7 +241,7 @@ class Chunks
 
         // Determine the filename.
         $timestamp = $this->fileService->fileStamp();
-        $filename = $this->krexxDir . $this->logDir . DIRECTORY_SEPARATOR . $timestamp . '.Krexx.html';
+        $filename = $this->logDir . $timestamp . '.Krexx.html';
         $chunkPos = strpos($string, '@@@');
 
         while ($chunkPos !== false) {
@@ -274,7 +277,7 @@ class Chunks
         // We only do this once.
         if (!$beenHere) {
             // Clean up leftover files.
-            $chunkList = glob($this->krexxDir . 'chunks/*.Krexx.tmp');
+            $chunkList = glob($this->chunkDir . '*.Krexx.tmp');
             if (!empty($chunkList)) {
                 foreach ($chunkList as $file) {
                     // We delete everything that is older than one hour.
@@ -297,7 +300,7 @@ class Chunks
     protected function cleanupOldLogs($logDir)
     {
         // Cleanup old logfiles to prevent a overflow.
-        $logList = glob($this->krexxDir . $logDir . DIRECTORY_SEPARATOR . "*.Krexx.html");
+        $logList = glob($this->logDir . "*.Krexx.html");
         if (!empty($logList)) {
             array_multisort(array_map('filemtime', $logList), SORT_DESC, $logList);
             $maxFileCount = (int)$this->pool->config->getSetting('maxfiles');
