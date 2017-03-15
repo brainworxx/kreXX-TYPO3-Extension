@@ -36,270 +36,200 @@
 // because of the class mappings above. I need to make sure not to
 // redeclare the Tx_Includekrexx_Controller_HelpController and throw
 // a fatal.
-if (!class_exists('Tx_Includekrexx_Controller_ConfigController')) {
+if (class_exists('Tx_Includekrexx_Controller_ConfigController')) {
+    return;
+}
+
+/**
+ * Configuration controller for the kreXX typo3 extension
+ */
+class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Controller_CompatibilityController
+{
 
     /**
-     * Configuration controller for the kreXX typo3 extension
+     * Shows the edit config screen.
      */
-    class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Controller_CompatibilityController
+    public function editAction()
     {
-
-        /**
-         * Shows the edit config screen.
-         */
-        public function editAction()
-        {
-            $this->addNamespace();
-
-            // Has kreXX something to say? Maybe a writeprotected logfolder?
-            foreach ($this->getTranslatedMessages() as $message) {
-                $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
-            }
-
-            $data = array();
-            $value = array();
-            // Setting possible form values.
-            foreach ($this->pool->render->getSkinList() as $skin) {
-                $data['skins'][$skin] = $skin;
-            }
-            $data['destination'] = array(
-                'shutdown' => $this->LLL('shutdown'),
-                'file' => $this->LLL('file'),
-            );
-            $data['bool'] = array(
-                'true' => $this->LLL('true'),
-                'false' => $this->LLL('false'),
-            );
-            $data['backtrace'] = array(
-                'normal' => $this->LLL('normal'),
-                'deep' => $this->LLL('deep'),
-            );
-
-            // Setting the form help texts.
-            $data['title'] = array(
-                'localFunction' => $this->LLL('localFunction'),
-                'analyseProtected' => $this->LLL('analyseProtected'),
-                'analysePrivate' => $this->LLL('analysePrivate'),
-                'analyseTraversable' => $this->LLL('analysePrivate'),
-                'debugMethods' => $this->LLL('debugMethods'),
-                'level' => $this->LLL('level'),
-                'resetbutton' => $this->LLL('resetbutton'),
-                'destination' => $this->LLL('destination'),
-                'maxCall' => $this->LLL('maxCall'),
-                'disabled' => $this->LLL('disabled'),
-                'folder' => $this->LLL('folder'),
-                'maxfiles' => $this->LLL('maxfiles'),
-                'skin' => $this->LLL('skin'),
-                'currentSettings' => $this->LLL('currentSettings'),
-                'registerAutomatically' => $this->LLL('registerAutomatically'),
-                'detectAjax' => $this->LLL('detectAjax'),
-                'backtraceAnalysis' => $this->LLL('backtraceAnalysis'),
-                'memoryLeft' => $this->LLL('memoryLeft'),
-                'maxRuntime' => $this->LLL('maxRuntime'),
-                'analyseProtectedMethods' => $this->LLL('analyseProtectedMethods'),
-                'analysePrivateMethods' => $this->LLL('analysePrivateMethods'),
-                'analyseConstants' => $this->LLL('analyseConstants'),
-                'iprange' => $this->LLL('iprange'),
-                'analyseGetter' => $this->LLL('analyseGetter'),
-                'useScopeAnalysis' => $this->LLL('useScopeAnalysis'),
-            );
-
-
-            // See, if we have any values in the configuration file.
-            $value['output']['skin'] = $this->pool->config->getConfigFromFile(
-                'output',
-                'skin'
-            );
-            $value['runtime']['memoryLeft'] = $this->pool->config->getConfigFromFile(
-                'runtime',
-                'memoryLeft'
-            );
-            $value['runtime']['maxRuntime'] = $this->pool->config->getConfigFromFile(
-                'runtime',
-                'maxRuntime'
-            );
-            $value['output']['maxfiles'] = $this->pool->config->getConfigFromFile(
-                'output',
-                'maxfiles'
-            );
-            $value['output']['destination'] = $this->pool->config->getConfigFromFile(
-                'output',
-                'destination'
-            );
-            $value['runtime']['maxCall'] = $this->pool->config->getConfigFromFile(
-                'runtime',
-                'maxCall'
-            );
-            $value['output']['disabled'] = $this->pool->config->getConfigFromFile(
-                'output',
-                'disabled'
-            );
-            $value['output']['iprange'] = $this->pool->config->getConfigFromFile(
-                'output',
-                'iprange'
-            );
-            $value['runtime']['detectAjax'] = $this->pool->config->getConfigFromFile(
-                'runtime',
-                'detectAjax'
-            );
-            $value['properties']['analyseProtected'] = $this->pool->config->getConfigFromFile(
-                'properties',
-                'analyseProtected'
-            );
-            $value['properties']['analysePrivate'] = $this->pool->config->getConfigFromFile(
-                'properties',
-                'analysePrivate'
-            );
-            $value['properties']['analyseConstants'] = $this->pool->config->getConfigFromFile(
-                'properties',
-                'analyseConstants'
-            );
-            $value['properties']['analyseTraversable'] = $this->pool->config->getConfigFromFile(
-                'properties',
-                'analyseTraversable'
-            );
-            $value['methods']['debugMethods'] = $this->pool->config->getConfigFromFile(
-                'methods',
-                'debugMethods'
-            );
-            $value['runtime']['level'] = $this->pool->config->getConfigFromFile(
-                'runtime',
-                'level'
-            );
-            $value['methods']['analyseProtectedMethods'] = $this->pool->config->getConfigFromFile(
-                'methods',
-                'analyseProtectedMethods'
-            );
-            $value['methods']['analysePrivateMethods'] = $this->pool->config->getConfigFromFile(
-                'methods',
-                'analysePrivateMethods'
-            );
-            $value['methods']['analyseGetter'] = $this->pool->config->getConfigFromFile(
-                'methods',
-                'analyseGetter'
-            );
-            $value['backtraceAndError']['registerAutomatically'] = $this->pool->config->getConfigFromFile(
-                'backtraceAndError',
-                'registerAutomatically'
-            );
-            $value['runtime']['useScopeAnalysis'] = $this->pool->config->getConfigFromFile(
-                'runtime',
-                'useScopeAnalysis'
-            );
-
-            // Are these actually set?
-            foreach ($value as $mainkey => $setting) {
-                foreach ($setting as $attribute => $config) {
-                    if (is_null($config)) {
-                        $data['factory'][$attribute] = true;
-                        // We need to fill these values with the stuff from the
-                        // factory settings!
-                        $value[$mainkey][$attribute] = $this->pool->config->configFallback[$mainkey][$attribute];
-                    } else {
-                        $data['factory'][$attribute] = false;
-                    }
-                }
-            }
-
-            $this->view->assign('data', $data);
-            $this->view->assign('value', $value);
-            $this->addCssToView('Backend.css');
-            $this->addJsToView('Backend.js');
-            $this->assignFlashInfo();
+        // Has kreXX something to say? Maybe a writeprotected logfolder?
+        foreach ($this->getTranslatedMessages() as $message) {
+            $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
         }
 
-        /**
-         * Saves the kreXX configuration.
-         */
-        public function saveAction()
-        {
-            $arguments = $this->request->getArguments();
-            $allOk = true;
-            $filepath = $this->pool->config->getPathToIniFile();
+        $data = array();
+        $value = array();
+        // Setting possible form values.
+        foreach ($this->pool->render->getSkinList() as $skin) {
+            $data['skins'][$skin] = $skin;
+        }
+        $data['destination'] = array(
+            'shutdown' => $this->LLL('shutdown'),
+            'file' => $this->LLL('file'),
+        );
+        $data['bool'] = array(
+            'true' => $this->LLL('true'),
+            'false' => $this->LLL('false'),
+        );
+        $data['backtrace'] = array(
+            'normal' => $this->LLL('normal'),
+            'deep' => $this->LLL('deep'),
+        );
+
+        // Setting the form help texts.
+        $data['title'] = array(
+            'localFunction' => $this->LLL('localFunction'),
+            'analyseProtected' => $this->LLL('analyseProtected'),
+            'analysePrivate' => $this->LLL('analysePrivate'),
+            'analyseTraversable' => $this->LLL('analysePrivate'),
+            'debugMethods' => $this->LLL('debugMethods'),
+            'level' => $this->LLL('level'),
+            'resetbutton' => $this->LLL('resetbutton'),
+            'destination' => $this->LLL('destination'),
+            'maxCall' => $this->LLL('maxCall'),
+            'disabled' => $this->LLL('disabled'),
+            'folder' => $this->LLL('folder'),
+            'maxfiles' => $this->LLL('maxfiles'),
+            'skin' => $this->LLL('skin'),
+            'currentSettings' => $this->LLL('currentSettings'),
+            'registerAutomatically' => $this->LLL('registerAutomatically'),
+            'detectAjax' => $this->LLL('detectAjax'),
+            'backtraceAnalysis' => $this->LLL('backtraceAnalysis'),
+            'memoryLeft' => $this->LLL('memoryLeft'),
+            'maxRuntime' => $this->LLL('maxRuntime'),
+            'analyseProtectedMethods' => $this->LLL('analyseProtectedMethods'),
+            'analysePrivateMethods' => $this->LLL('analysePrivateMethods'),
+            'analyseConstants' => $this->LLL('analyseConstants'),
+            'iprange' => $this->LLL('iprange'),
+            'analyseGetter' => $this->LLL('analyseGetter'),
+            'useScopeAnalysis' => $this->LLL('useScopeAnalysis'),
+        );
 
 
+        // See, if we have any values in the configuration file.
+        $value['output']['skin'] = $this->pool->config->getConfigFromFile('output', 'skin');
+        $value['runtime']['memoryLeft'] = $this->pool->config->getConfigFromFile('runtime', 'memoryLeft');
+        $value['runtime']['maxRuntime'] = $this->pool->config->getConfigFromFile('runtime', 'maxRuntime');
+        $value['output']['maxfiles'] = $this->pool->config->getConfigFromFile('output', 'maxfiles');
+        $value['output']['destination'] = $this->pool->config->getConfigFromFile('output', 'destination');
+        $value['runtime']['maxCall'] = $this->pool->config->getConfigFromFile('runtime', 'maxCall');
+        $value['output']['disabled'] = $this->pool->config->getConfigFromFile('output', 'disabled');
+        $value['output']['iprange'] = $this->pool->config->getConfigFromFile('output', 'iprange');
+        $value['runtime']['detectAjax'] = $this->pool->config->getConfigFromFile('runtime', 'detectAjax');
+        $value['properties']['analyseProtected'] = $this->pool->config->getConfigFromFile('properties', 'analyseProtected');
+        $value['properties']['analysePrivate'] = $this->pool->config->getConfigFromFile('properties', 'analysePrivate');
+        $value['properties']['analyseConstants'] = $this->pool->config->getConfigFromFile('properties', 'analyseConstants');
+        $value['properties']['analyseTraversable'] = $this->pool->config->getConfigFromFile('properties', 'analyseTraversable');
+        $value['methods']['debugMethods'] = $this->pool->config->getConfigFromFile('methods', 'debugMethods');
+        $value['runtime']['level'] = $this->pool->config->getConfigFromFile('runtime', 'level');
+        $value['methods']['analyseProtectedMethods'] = $this->pool->config->getConfigFromFile('methods', 'analyseProtectedMethods');
+        $value['methods']['analysePrivateMethods'] = $this->pool->config->getConfigFromFile('methods', 'analysePrivateMethods');
+        $value['methods']['analyseGetter'] = $this->pool->config->getConfigFromFile('methods', 'analyseGetter');
+        $value['backtraceAndError']['registerAutomatically'] = $this->pool->config->getConfigFromFile('backtraceAndError', 'registerAutomatically');
+        $value['runtime']['useScopeAnalysis'] = $this->pool->config->getConfigFromFile('runtime', 'useScopeAnalysis');
 
-            // Check for writing permission.
-            if (!is_writable(dirname($filepath))) {
-                $allOk = false;
-                $this->pool->messages->addKey('file.not.writable', array($filepath));
+        // Are these actually set?
+        foreach ($value as $mainkey => $setting) {
+            foreach ($setting as $attribute => $config) {
+                if (is_null($config)) {
+                    $data['factory'][$attribute] = true;
+                    // We need to fill these values with the stuff from the
+                    // factory settings!
+                    $value[$mainkey][$attribute] = $this->pool->config->configFallback[$mainkey][$attribute];
+                } else {
+                    $data['factory'][$attribute] = false;
+                }
             }
+        }
 
-            // Check if the file does exist.
-            if (is_file($filepath)) {
-                $oldValues = parse_ini_file($filepath, true);
-            } else {
-                $oldValues = array();
-            }
+        $this->view->assign('data', $data);
+        $this->view->assign('value', $value);
+        $this->addCssToView('Backend.css');
+        $this->addJsToView('Backend.js');
+        $this->assignFlashInfo();
+    }
 
-            // We must preserve the section 'feEditing'.
-            // Everything else will be overwritten.
-            $oldValues = array('feEditing' => $oldValues['feEditing']);
+    /**
+     * Saves the kreXX configuration.
+     */
+    public function saveAction()
+    {
+        $arguments = $this->request->getArguments();
+        $allOk = true;
+        $filepath = $this->pool->config->getPathToIniFile();
 
-            if (isset($arguments['action']) && $arguments['action'] == 'save' && $allOk) {
-                // Iterating through the form.
-                foreach ($arguments as $section => $data) {
-                    if (is_array($data) && in_array($section, $this->allowedSections)) {
-                        // We've got a section key.
-                        foreach ($data as $settingName => $value) {
-                            if (in_array($settingName, $this->allowedSettingsNames)) {
-                                // We escape the value, just in case, since we can not
-                                // whitelist it.
-                                $value = htmlspecialchars(preg_replace('/\s+/', '', $value));
-                                // Evaluate the setting!
-                                if ($this->pool->config->security->evaluateSetting($section, $settingName, $value)) {
-                                    $oldValues[$section][$settingName] = $value;
-                                } else {
-                                    // Validation failed! kreXX will generate a message,
-                                    // which we will display
-                                    // at the buttom.
-                                    $allOk = false;
-                                }
+
+        // Check for writing permission.
+        if (!is_writable(dirname($filepath))) {
+            $allOk = false;
+            $this->pool->messages->addKey('file.not.writable', array($filepath));
+        }
+
+        // Check if the file does exist.
+        if (is_file($filepath)) {
+            $oldValues = parse_ini_file($filepath, true);
+        } else {
+            $oldValues = array();
+        }
+
+        // We must preserve the section 'feEditing'.
+        // Everything else will be overwritten.
+        $oldValues = array('feEditing' => $oldValues['feEditing']);
+
+        if (isset($arguments['action']) && $arguments['action'] == 'save' && $allOk) {
+            // Iterating through the form.
+            foreach ($arguments as $section => $data) {
+                if (is_array($data) && in_array($section, $this->allowedSections)) {
+                    // We've got a section key.
+                    foreach ($data as $settingName => $value) {
+                        if (in_array($settingName, $this->allowedSettingsNames)) {
+                            // We escape the value, just in case, since we can not
+                            // whitelist it.
+                            $value = htmlspecialchars(preg_replace('/\s+/', '', $value));
+                            // Evaluate the setting!
+                            if ($this->pool->config->security->evaluateSetting($section, $settingName, $value)) {
+                                $oldValues[$section][$settingName] = $value;
+                            } else {
+                                // Validation failed! kreXX will generate a message,
+                                // which we will display
+                                // at the buttom.
+                                $allOk = false;
                             }
                         }
                     }
                 }
-                // Now we must create the ini file.
-                $ini = '';
-                foreach ($oldValues as $key => $setting) {
-                    $ini .= '[' . $key . ']' . PHP_EOL;
-                    if (is_array($setting)) {
-                        foreach ($setting as $settingName => $value) {
-                            $ini .= $settingName . ' = "' . $value . '"' . PHP_EOL;
-                        }
-                    }
-                }
-
-                // Now we should write the file!
-                if ($allOk) {
-                    if (file_put_contents($filepath, $ini) === false) {
-                        $allOk = false;
-                        $this->pool->messages->addKey('file.not.writable', array($filepath));
+            }
+            // Now we must create the ini file.
+            $ini = '';
+            foreach ($oldValues as $key => $setting) {
+                $ini .= '[' . $key . ']' . PHP_EOL;
+                if (is_array($setting)) {
+                    foreach ($setting as $settingName => $value) {
+                        $ini .= $settingName . ' = "' . $value . '"' . PHP_EOL;
                     }
                 }
             }
 
-            // Something went wrong, we need to tell the user.
-            if (!$allOk) {
-                // Got to remove some messages. We we will not queue them now.
-                $this->pool->messages->removeKey('protected.folder.chunk');
-                $this->pool->messages->removeKey('protected.folder.log');
-                foreach ($this->getTranslatedMessages() as $message) {
-                    $this->addMessage(
-                        $message,
-                        $this->LLL('save.fail.title'),
-                        t3lib_FlashMessage::ERROR
-                    );
+            // Now we should write the file!
+            if ($allOk) {
+                if (file_put_contents($filepath, $ini) === false) {
+                    $allOk = false;
+                    $this->pool->messages->addKey('file.not.writable', array($filepath));
                 }
-            } else {
-                $this->addMessage(
-                    $this->LLL('save.success.text', array($filepath)),
-                    $this->LLL('save.success.title'),
-                    t3lib_FlashMessage::OK
-                );
             }
-
-            $this->redirect('edit');
         }
+
+        // Something went wrong, we need to tell the user.
+        if (!$allOk) {
+            // Got to remove some messages. We we will not queue them now.
+            $this->pool->messages->removeKey('protected.folder.chunk');
+            $this->pool->messages->removeKey('protected.folder.log');
+            foreach ($this->getTranslatedMessages() as $message) {
+                $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
+            }
+        } else {
+            $this->addMessage($this->LLL('save.success.text', array($filepath)), $this->LLL('save.success.title'), t3lib_FlashMessage::OK);
+        }
+
+        $this->redirect('edit');
     }
 }

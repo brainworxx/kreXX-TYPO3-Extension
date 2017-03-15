@@ -126,24 +126,6 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
          */
         protected $pool;
 
-        /**
-         * Adding the namespace to the tamplate, because
-         * {namespace krexx=Tx_Includekrexx_ViewHelpers}
-         * does not work anymore in 8.5 and beyond.
-         *
-         * The controllerContext is NULL during the initializeAction b btw.
-         */
-        protected function addNamespace()
-        {
-            if (version_compare(TYPO3_version, '8.4', '>')) {
-                $this->view
-                    ->getRenderingContext()
-                    ->getViewHelperResolver()
-                    ->addNamespace('krexx', 'Tx_Includekrexx_ViewHelpers');
-            }
-        }
-
-
         public function __construct()
         {
             parent::__construct();

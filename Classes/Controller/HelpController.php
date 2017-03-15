@@ -37,41 +37,38 @@
 // redeclare the Tx_Includekrexx_Controller_HelpController and throw
 // a fatal.
 if (!class_exists('Tx_Includekrexx_Controller_HelpController')) {
+    return;
+}
+
+/**
+ * Backend help controller for the kreXX typo3 extension
+ */
+class Tx_Includekrexx_Controller_HelpController extends Tx_Includekrexx_Controller_CompatibilityController
+{
 
     /**
-     * Backend help controller for the kreXX typo3 extension
+     * Simply display the help text from the fluid template.
      */
-    class Tx_Includekrexx_Controller_HelpController extends Tx_Includekrexx_Controller_CompatibilityController
+    public function usageAction()
     {
-
-        /**
-         * Simply display the help text from the fluid template.
-         */
-        public function usageAction()
-        {
-            $this->addNamespace();
-
-            // Has kreXX something to say? Maybe a writeprotected logfolder?
-            foreach ($this->getTranslatedMessages() as $message) {
-                $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
-            }
-            $this->addCssToView('Backend.css');
-            $this->assignFlashInfo();
+        // Has kreXX something to say? Maybe a writeprotected logfolder?
+        foreach ($this->getTranslatedMessages() as $message) {
+            $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
         }
+        $this->addCssToView('Backend.css');
+        $this->assignFlashInfo();
+    }
 
-        /**
-         * Simply display the help text from the fluid template.
-         */
-        public function configAction()
-        {
-            $this->addNamespace();
-
-            // Has kreXX something to say? Maybe a writeprotected logfolder?
-            foreach ($this->getTranslatedMessages() as $message) {
-                $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
-            }
-            $this->addCssToView('Backend.css');
-            $this->assignFlashInfo();
+    /**
+     * Simply display the help text from the fluid template.
+     */
+    public function configAction()
+    {
+        // Has kreXX something to say? Maybe a writeprotected logfolder?
+        foreach ($this->getTranslatedMessages() as $message) {
+            $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
         }
+        $this->addCssToView('Backend.css');
+        $this->assignFlashInfo();
     }
 }

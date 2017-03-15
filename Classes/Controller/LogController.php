@@ -34,191 +34,183 @@
 
 
 if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
+    return;
+}
+
+/**
+ * Log controller for the kreXX typo3 extension
+ */
+class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controller_CompatibilityController
+{
+
     /**
-     * Log controller for the kreXX typo3 extension
+     * Lists all kreXX logfiles.
      */
-    class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controller_CompatibilityController
+    public function listAction()
     {
+        // 1. Get the log folder.
+        $dir = $this->pool->config->getLogDir();
 
-        /**
-         * Lists all kreXX logfiles.
-         */
-        public function listAction()
-        {
-            $this->addNamespace();
+        // 2. Get the file list and sort it.
+        $files = glob($dir . '*.Krexx.html');
+        if (!is_array($files)) {
+            $files = array();
+        }
+        // The function filemtime gets cached by php btw.
+        usort($files, function ($a, $b) {
+            return filemtime($b) - filemtime($a);
+        });
 
-            // 1. Get the log folder.
-            $dir = $this->pool->config->getLogDir();
+        // 3. Get the file info.
+        $fileList = array();
+        foreach ($files as $file) {
+            $fileinfo = array();
 
-            // 2. Get the file list and sort it.
-            $files = glob($dir . '*.Krexx.html');
-            if(!is_array($files)) {
-                $files = array();
-            }
-            // The function filemtime gets cached by php btw.
-            usort($files, function ($a, $b) {
-                return filemtime($b) - filemtime($a);
-            });
+            // Getting the basic info.
+            $fileinfo['name'] = basename($file);
+            $fileinfo['size'] = $this->fileSizeConvert(filesize($file));
+            $fileinfo['time'] = date("d.m.y H:i:s", filemtime($file));
+            $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
 
-            // 3. Get the file info.
-            $fileList = array();
-            foreach ($files as $file) {
-                $fileinfo = array();
+            // Parsing a potentially 80MB file for it's content is not a good idea.
+            // That is why the kreXX lib provides some meta data. We will open
+            // this file and add it's content to the template.
+            if (is_readable($file . '.json')) {
+                $fileinfo['meta'] = json_decode(file_get_contents($file . '.json'), true);
 
-                // Getting the basic info.
-                $fileinfo['name'] = basename($file);
-                $fileinfo['size'] = $this->fileSizeConvert(filesize($file));
-                $fileinfo['time'] = date("d.m.y H:i:s", filemtime($file));
-                $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
+                foreach ($fileinfo['meta'] as &$meta) {
+                    $meta['filename'] = basename($meta['file']);
 
-                // Parsing a potentially 80MB file for it's content is not a good idea.
-                // That is why the kreXX lib provides some meta data. We will open
-                // this file and add it's content to the template.
-                if (is_readable($file . '.json')) {
-                    $fileinfo['meta'] = json_decode(file_get_contents($file . '.json'), true);
-
-                    foreach ($fileinfo['meta'] as &$meta) {
-                        $meta['filename'] = basename($meta['file']);
-
-                        // Unescape the stuff from the json, to prevent double escaping.
-                        // Meh, there is no f:format.raw in 4.5 . . .
-                        $meta['varname'] = htmlspecialchars_decode($meta['varname']);
-                    }
+                    // Unescape the stuff from the json, to prevent double escaping.
+                    // Meh, there is no f:format.raw in 4.5 . . .
+                    $meta['varname'] = htmlspecialchars_decode($meta['varname']);
                 }
-
-                $fileList[] = $fileinfo;
             }
 
-            // 4. Has kreXX something to say? Maybe a writeprotected logfolder?
-            foreach ($this->getTranslatedMessages() as $message) {
-                $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
-            }
-
-            // 5. Assign the file list.
-            $this->view->assign('files', $fileList);
-            $this->addCssToView('Backend.css');
-            $this->addJsToView('Backend.js');
-            $this->assignFlashInfo();
+            $fileList[] = $fileinfo;
         }
 
-        /**
-         * Gets the content of a logfile
-         */
-        public function getContentAction()
-        {
-            // No directory traversal for you!
-            $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
-            // Get the filepath.
-            $file = $this->pool->config->getLogDir() . $id . '.Krexx.html';
-            if (is_readable($file)) {
-                // We open and then send the file.
-                $this->dispatchFile($file);
-                die();
-            } else {
-                // Error message and redirect to the list action.
-                $this->addMessage(
-                    $this->LLL('log.notreadable', array($id . '.Krexx.html')),
-                    $this->LLL('log.fileerror'),
-                    t3lib_FlashMessage::ERROR
-                );
-                $this->redirect('list');
-            }
+        // 4. Has kreXX something to say? Maybe a writeprotected logfolder?
+        foreach ($this->getTranslatedMessages() as $message) {
+            $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
         }
 
-        public function deleteAction() {
-            // No directory traversal for you!
-            $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
-            // Get the filepath.
-            $file = $this->pool->config->getLogDir() . $id . '.Krexx';
+        // 5. Assign the file list.
+        $this->view->assign('files', $fileList);
+        $this->addCssToView('Backend.css');
+        $this->addJsToView('Backend.js');
+        $this->assignFlashInfo();
+    }
 
-            // Delete the logfile.
-            $this->delete($file . '.html');
-            // Delete the meta data json.
-            $this->delete($file . '.html.json');
-            // Going back.
+    /**
+     * Gets the content of a logfile
+     */
+    public function getContentAction()
+    {
+        // No directory traversal for you!
+        $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
+        // Get the filepath.
+        $file = $this->pool->config->getLogDir() . $id . '.Krexx.html';
+        if (is_readable($file)) {
+            // We open and then send the file.
+            $this->dispatchFile($file);
+            die();
+        } else {
+            // Error message and redirect to the list action.
+            $this->addMessage($this->LLL('log.notreadable', array($id . '.Krexx.html')), $this->LLL('log.fileerror'), t3lib_FlashMessage::ERROR);
             $this->redirect('list');
-        }
-
-        protected function delete ($file)
-        {
-            if (is_writeable(dirname(($file))) && file_exists($file)) {
-                // Away with you!
-                unlink($file);
-            } else {
-                // Error message.
-                $this->addMessage(
-                    $this->LLL('log.notdeletable', array($file)),
-                    $this->LLL('log.fileerror'),
-                    t3lib_FlashMessage::ERROR
-                );
-            }
-        }
-
-        /**
-         * Converts bytes into human readable file size.
-         *
-         * @author Mogilev Arseny
-         *
-         * @param string $bytes
-         *   The bytes value we want to make readable.
-         *
-         * @return string
-         *   Human readable file size.
-         */
-        protected function fileSizeConvert($bytes)
-        {
-            $bytes = floatval($bytes);
-            $arBytes = array(
-                0 => array(
-                    "UNIT" => "TB",
-                    "VALUE" => pow(1024, 4),
-                ),
-                1 => array(
-                    "UNIT" => "GB",
-                    "VALUE" => pow(1024, 3),
-                ),
-                2 => array(
-                    "UNIT" => "MB",
-                    "VALUE" => pow(1024, 2),
-                ),
-                3 => array(
-                    "UNIT" => "KB",
-                    "VALUE" => 1024,
-                ),
-                4 => array(
-                    "UNIT" => "B",
-                    "VALUE" => 1,
-                ),
-            );
-
-            $result = '';
-            foreach ($arBytes as $aritem) {
-                if ($bytes >= $aritem["VALUE"]) {
-                    $result = $bytes / $aritem["VALUE"];
-                    $result = str_replace(".", ",", strval(round($result, 2))) . " " . $aritem["UNIT"];
-                    break;
-                }
-            }
-            return $result;
-        }
-
-        /**
-         * Dispatches a file, using output buffering.
-         *
-         * @param string $path
-         *   The path of the file we want to dispatch to the browser.
-         */
-        protected function dispatchFile($path)
-        {
-            $size = 1024 * 1024;
-            $res = fopen($path, "rb");
-            while (!feof($res)) {
-                echo fread($res, $size);
-                ob_flush();
-                flush();
-            }
-            fclose($res);
         }
     }
 
+    public function deleteAction()
+    {
+        // No directory traversal for you!
+        $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
+        // Get the filepath.
+        $file = $this->pool->config->getLogDir() . $id . '.Krexx';
+
+        // Delete the logfile.
+        $this->delete($file . '.html');
+        // Delete the meta data json.
+        $this->delete($file . '.html.json');
+        // Going back.
+        $this->redirect('list');
+    }
+
+    protected function delete($file)
+    {
+        if (is_writeable(dirname(($file))) && file_exists($file)) {
+            // Away with you!
+            unlink($file);
+        } else {
+            // Error message.
+            $this->addMessage($this->LLL('log.notdeletable', array($file)), $this->LLL('log.fileerror'), t3lib_FlashMessage::ERROR);
+        }
+    }
+
+    /**
+     * Converts bytes into human readable file size.
+     *
+     * @author Mogilev Arseny
+     *
+     * @param string $bytes
+     *   The bytes value we want to make readable.
+     *
+     * @return string
+     *   Human readable file size.
+     */
+    protected function fileSizeConvert($bytes)
+    {
+        $bytes = floatval($bytes);
+        $arBytes = array(
+            0 => array(
+                "UNIT" => "TB",
+                "VALUE" => pow(1024, 4),
+            ),
+            1 => array(
+                "UNIT" => "GB",
+                "VALUE" => pow(1024, 3),
+            ),
+            2 => array(
+                "UNIT" => "MB",
+                "VALUE" => pow(1024, 2),
+            ),
+            3 => array(
+                "UNIT" => "KB",
+                "VALUE" => 1024,
+            ),
+            4 => array(
+                "UNIT" => "B",
+                "VALUE" => 1,
+            ),
+        );
+
+        $result = '';
+        foreach ($arBytes as $aritem) {
+            if ($bytes >= $aritem["VALUE"]) {
+                $result = $bytes / $aritem["VALUE"];
+                $result = str_replace(".", ",", strval(round($result, 2))) . " " . $aritem["UNIT"];
+                break;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Dispatches a file, using output buffering.
+     *
+     * @param string $path
+     *   The path of the file we want to dispatch to the browser.
+     */
+    protected function dispatchFile($path)
+    {
+        $size = 1024 * 1024;
+        $res = fopen($path, "rb");
+        while (!feof($res)) {
+            echo fread($res, $size);
+            ob_flush();
+            flush();
+        }
+        fclose($res);
+    }
 }

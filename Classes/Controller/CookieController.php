@@ -36,47 +36,46 @@
 // because of the class mappings above. I need to make sure not to
 // redeclare the Tx_Includekrexx_Controller_HelpController and throw
 // a fatal.
-if (!class_exists('Tx_Includekrexx_Controller_CookieController')) {
+if (class_exists('Tx_Includekrexx_Controller_CookieController')) {
+    return;
+}
+
+/**
+ * Cookie controller for the kreXX typo3 extension
+ */
+class Tx_Includekrexx_Controller_CookieController extends Tx_Includekrexx_Controller_CompatibilityController
+{
 
     /**
-     * Cookie controller for the kreXX typo3 extension
+     * Simply display the kreXX local browser configuration.
      */
-    class Tx_Includekrexx_Controller_CookieController extends Tx_Includekrexx_Controller_CompatibilityController
+    public function indexAction()
     {
-
-        /**
-         * Simply display the kreXX local browser configuration.
-         */
-        public function indexAction()
-        {
-            $this->addNamespace();
-
-            // Has kreXX something to say? Maybe a writeprotected logfolder?
-            foreach ($this->getTranslatedMessages() as $message) {
-                $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
-            }
-
-            if ($this->pool->config->getSetting('disabled')) {
-                // kreXX will not display anything, if it was disabled via:
-                // - krexx::disable();
-                // - Disable output --> true in the "Edit configuration file menu
-                // We need to tell the user that krexx was disabled.
-                $this->view->assign('is_disabled', true);
-            } else {
-                $this->view->assign('is_disabled', false);
-            }
-
-            if ($this->pool->config->getSetting('destination') == 'file') {
-                // A file output will also prevent the options from popping ou here.
-                // We need to tell the user that there is nothing to see here.
-                $this->view->assign('is_file', true);
-            } else {
-                // Normal frontend output mode.
-                $this->view->assign('is_file', false);
-            }
-            $this->addCssToView('Backend.css');
-            \Krexx::editSettings();
-            $this->assignFlashInfo();
+        // Has kreXX something to say? Maybe a writeprotected logfolder?
+        foreach ($this->getTranslatedMessages() as $message) {
+            $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
         }
+
+        if ($this->pool->config->getSetting('disabled')) {
+            // kreXX will not display anything, if it was disabled via:
+            // - krexx::disable();
+            // - Disable output --> true in the "Edit configuration file menu
+            // We need to tell the user that krexx was disabled.
+            $this->view->assign('is_disabled', true);
+        } else {
+            $this->view->assign('is_disabled', false);
+        }
+
+        if ($this->pool->config->getSetting('destination') == 'file') {
+            // A file output will also prevent the options from popping ou here.
+            // We need to tell the user that there is nothing to see here.
+            $this->view->assign('is_file', true);
+        } else {
+            // Normal frontend output mode.
+            $this->view->assign('is_file', false);
+        }
+        $this->addCssToView('Backend.css');
+        \Krexx::editSettings();
+        $this->assignFlashInfo();
     }
 }
