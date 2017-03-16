@@ -175,7 +175,7 @@ class Pool extends Factory
         $this->scope = $this->createClass('Brainworxx\\Krexx\\Analyse\\Scope');
         // Initializes the render class.
         $this->initRenderer();
-        // Check the environemnt and prepare the feedback, if necessary.
+        // Check the environment and prepare the feedback, if necessary.
         $this->checkEnvironment();
     }
 

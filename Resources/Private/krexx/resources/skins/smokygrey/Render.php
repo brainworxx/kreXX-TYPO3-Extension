@@ -89,7 +89,7 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
         }
         $template = str_replace('{ktype}', $cssType, $template);
 
-        $template = str_replace('{additional}', $model->getAdditional(), $template);
+        $template = str_replace('{normal}', $model->getNormal(), $template);
         $template = str_replace('{connector2}', $this->renderConnector($model->getConnector2()), $template);
 
         // Generating our code and adding the Codegen button, if there is

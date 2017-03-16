@@ -148,7 +148,7 @@ class Config extends Fallback
      * Wrapper around the stored settings array, to intercept settings calls.
      *
      * @param string $name
-     *   The nbame of the setting.
+     *   The name of the setting.
      *
      * @return string|null
      *   The setting.

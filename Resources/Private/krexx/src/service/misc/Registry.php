@@ -35,14 +35,14 @@
 namespace Brainworxx\Krexx\Service\Misc;
 
 /**
- * Registrty class, to store stuff from the outside and inside.
+ * Registry class, to store stuff from the outside and inside.
  *
  * @package Brainworxx\Krexx\Service\Misc
  */
 class Registry
 {
     /**
-     * Here we sture stuff inside.
+     * Here we store stuff inside.
      *
      * @var array
      */
@@ -70,7 +70,7 @@ class Registry
     }
 
     /**
-     * Getter foir the registry.
+     * Getter for the registry.
      *
      * @param $key
      *   The key under what we once stored the $value,

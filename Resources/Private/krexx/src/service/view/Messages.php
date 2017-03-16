@@ -34,8 +34,6 @@
 
 namespace Brainworxx\Krexx\Service\View;
 
-use Brainworxx\Krexx\Service\Factory\Pool;
-
 /**
  * Messaging system.
  *
@@ -43,13 +41,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class Messages extends Help
 {
-
-    /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected $pool;
 
     /**
      * Here we store all messages, which gets send to the output.
@@ -65,16 +56,7 @@ class Messages extends Help
      */
     protected $keys = array();
 
-    /**
-     * Injects the pool.
-     *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
-     */
-    public function __construct(Pool $pool)
-    {
-        $this->pool = $pool;
-    }
+
 
     /**
      * The message we want to add. It will be displayed in the output.

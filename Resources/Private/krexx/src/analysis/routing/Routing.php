@@ -90,7 +90,7 @@ class Routing extends AbstractRouting
                     $type = '$GLOBALS';
                 }
                 $model->setDomid($this->generateDomIdFromObject($data))
-                    ->setType($type);
+                    ->setNormal($type);
                 $result = $this->pool->render->renderRecursion($model);
                 $this->pool->emergencyHandler->downOneNestingLevel();
                 return $result;
@@ -106,7 +106,7 @@ class Routing extends AbstractRouting
             // autoloader is triggered, trying to load 'myClass', although
             // it is just a string.
             if (is_a($data, '\\Closure')) {
-                // Closures are handled differntly from normalk objects
+                // Closures are handled differently than normal objects
                 $result = $this->pool
                     ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessClosure')
                     ->process($model);

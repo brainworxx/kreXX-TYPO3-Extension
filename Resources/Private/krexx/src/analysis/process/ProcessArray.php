@@ -59,8 +59,8 @@ class ProcessArray extends AbstractProcess
         $count = (string)count($model->getData());
 
         // Dumping all Properties.
-        $model->setType($model->getAdditional() . 'array')
-            ->setAdditional($count . ' elements')
+        $model->setType('array')
+            ->setNormal($count . ' elements')
             ->addParameter('data', $model->getData())
             ->addParameter('multiline', $multiline)
             ->injectCallback(

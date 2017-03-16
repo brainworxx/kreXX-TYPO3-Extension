@@ -51,7 +51,7 @@ use Brainworxx\Krexx\Service\Misc\File;
 class BacktraceStep extends AbstractCallback
 {
     /**
-     * The file service, used to readand write files.
+     * The file service, used to read and write files.
      *
      * @var File
      */

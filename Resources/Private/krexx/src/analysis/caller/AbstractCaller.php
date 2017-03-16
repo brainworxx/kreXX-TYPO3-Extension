@@ -93,6 +93,28 @@ abstract class AbstractCaller
     }
 
     /**
+     * We will remove the $_SERVER['DOCUMENT_ROOT'] from the absolute
+     * path of the calling file.
+     * Return the original path, in case we can not determine the
+     * $_SERVER['DOCUMENT_ROOT']
+     *
+     * @param $path
+     *   The path we want to filter
+     *
+     * @return string
+     *   The filtered path to the calling file.
+     */
+    protected function filterFilePath($path)
+    {
+        if (isset($_SERVER['DOCUMENT_ROOT']) && strpos($path, $_SERVER['DOCUMENT_ROOT']) === 0) {
+            // Found it on position 0.
+            $path = '. . ./' . substr($path, strlen($_SERVER['DOCUMENT_ROOT']) + 1);
+        }
+
+        return $path;
+    }
+
+    /**
      * Finds the place in the code from where krexx was called.
      *
      * @return array

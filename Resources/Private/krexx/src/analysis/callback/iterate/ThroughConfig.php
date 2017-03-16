@@ -71,7 +71,7 @@ class ThroughConfig extends AbstractCallback
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setName($sectionName)
                 ->setType('Config')
-                ->setAdditional('. . .')
+                ->setNormal('. . .')
                 ->addParameter('data', $sectionData)
                 ->injectCallback(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\ConfigSection')

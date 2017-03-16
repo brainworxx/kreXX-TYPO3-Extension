@@ -6,14 +6,19 @@
   This will only lead to trouble.
 - Added a Registry class, so the overwrites can actually access
   additional data from the outside.
+- The log chunk and config folder are now configurable.
+- Added a Filter for the server document root from the file path
+  of the calling file.
 - Bugfix: Removed a warning in the IP-Whitelisting, in case there
   is no actual IP available.
-- Change: Moved code generation to it's own namespace.
+- Bugfix: Source generation for resolved recursions works now as
+  expected.
+- Bugfix: Removed a warnings and some notices in case the $_SERVER
+  variable was messed with.
 - Change: Output -> File will now save the logfile directly after
   the analysis.
 - Change: Renamed the Output -> Frontend configuration to
   Output -> shutdown.
-- Change: Splitted the ActionController to several sub classes.
 
 
 2.1.1

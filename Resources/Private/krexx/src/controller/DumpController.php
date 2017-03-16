@@ -125,15 +125,14 @@ class DumpController extends AbstractController
             return $this;
         }
 
+        // Add the caller as metadata to the chunks class. It will be saved as
+        // additional info, in case we are logging to a file.
+        $this->pool->chunks->addMetadata($caller);
+
         $this->outputService->addChunkString($this->outputHeader($headline));
         $this->outputService->addChunkString($analysis);
         $this->outputService->addChunkString($footer);
 
-        // Add the caller as metadata to the chunks class. It will be saved as
-        // additional info, in case we are logging to a file.
-        if ($this->pool->config->getSetting('destination') === 'file') {
-            $this->pool->chunks->addMetadata($caller);
-        }
 
         return $this;
     }

@@ -58,7 +58,7 @@ class Connectors
     protected $language = 'php';
 
     /**
-     * Parameters, in case we are connectiong a method or closure.
+     * Parameters, in case we are connecting a method or closure.
      *
      * @var string
      */
@@ -96,7 +96,7 @@ class Connectors
      * Setter for the type we are rendering, using the class constants.
      *
      * @param string $type
-     *   Tee type, @see constants above
+     *   The type, @see constants above
      */
     public function setType($type)
     {

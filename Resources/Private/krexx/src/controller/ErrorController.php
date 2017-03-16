@@ -87,15 +87,15 @@ class ErrorController extends AbstractController
         // Get the messages.
         $messages = $this->pool->messages->outputMessages();
 
-        if ($this->pool->config->getSetting('destination') === 'file') {
-            // Add the caller as metadata to the chunks class. It will be saved as
-            // additional info, in case we are logging to a file.
-            $this->pool->chunks->addMetadata(array(
-                'file' => $errorData['errfile'],
-                'line' => $errorData['errline'] + 1,
-                'varname' => ' Fatal Error',
-            ));
+        // Add the caller as metadata to the chunks class. It will be saved as
+        // additional info, in case we are logging to a file.
+        $this->pool->chunks->addMetadata(array(
+            'file' => $errorData['errfile'],
+            'line' => $errorData['errline'] + 1,
+            'varname' => ' Fatal Error',
+        ));
 
+        if ($this->pool->config->getSetting('destination') === 'file') {
             // Save it to a file.
             $this->pool->chunks->saveDechunkedToFile($header . $messages . $main . $backtrace . $footer);
         } else {

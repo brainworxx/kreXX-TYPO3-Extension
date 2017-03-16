@@ -44,6 +44,15 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class Codegen
 {
+    /**
+     * Some constants for internal use.
+     */
+    const ITERATOR_TO_ARRAY = 'iterator_to_array';
+    const STOP = 'stop';
+    const PROPERTY = 'property';
+    const METHOD = 'method';
+    const CONCATINATION = 'concatenation';
+
 
     /**
      * Here we store all relevant data.
@@ -108,27 +117,27 @@ class Codegen
             // Simply fuse the connectors.
             // The connectors are a representation of the current used "language".
             switch ($this->analyseType($model)) {
-                case 'concatenation':
+                case self::CONCATINATION:
                     $result = $this->concatenation($model);
                     break;
 
-                case 'method':
+                case self::METHOD:
                     // We create a reflection method and then call it.
                     $result = $this->reflectFunction();
                     break;
 
-                case 'property':
+                case self::PROPERTY:
                     // We create a reflection property an set it to public to access it.
                     $result = $this->reflectProperty();
                     break;
 
-                case 'stop':
+                case self::STOP:
                     // This tells the JS to stop iterating for previous gencode.
                     $result =';stop;';
                     break;
 
                 // Multiline code generation starts here.
-                case 'iterator_to_array':
+                case self::ITERATOR_TO_ARRAY:
                     $result = $this->iteratorToArray() . $this->concatenation($model);
                     break;
             }
@@ -225,20 +234,15 @@ class Codegen
         $type = $model->getType();
         $multiline = $model->getMultiLineCodeGen();
 
-        $concatenation = 'concatenation';
-        $method = 'method';
-        $property = 'property';
-        $stop = 'stop';
-
         // Debug methods are always public.
         if ($type === 'debug method' || $this->counter === 0) {
-            return $concatenation;
+            return self::CONCATINATION;
         }
 
         // Test for constants.
         if ($type === 'class internals' && $model->getName() === 'Constants') {
             // We must only take the stuff from the constant itself
-            return $stop;
+            return self::STOP;
         }
 
         // Test for  multiline code generation.
@@ -249,21 +253,21 @@ class Codegen
         // Test for protected or private.
         if (strpos($type, 'protected') === false && strpos($type, 'private') === false) {
             // Is not protected.
-            return $concatenation;
+            return self::CONCATINATION;
         }
 
         // Test if we are inside the scope.
         if ($this->pool->scope->testModelForCodegen($model)) {
             // We are inside the scope, this value, function or class is reachable.
-            return $concatenation;
+            return self::CONCATINATION;
         }
 
         // We are still here? Must be a protected method or property.
         if (strpos($type, 'method') === false) {
             // This is not a method.
-            return $property;
+            return self::PROPERTY;
         } else {
-            return $method;
+            return self::METHOD;
         }
     }
 

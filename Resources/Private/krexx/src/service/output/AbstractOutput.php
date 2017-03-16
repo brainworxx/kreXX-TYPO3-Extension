@@ -63,6 +63,4 @@ abstract class AbstractOutput
      *   The chunked output string.
      */
     abstract public function addChunkString($chunkString);
-
-
 }

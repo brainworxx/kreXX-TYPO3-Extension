@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Service\Code\Codegen;
 use Brainworxx\Krexx\Service\Code\Connectors;
 
 /**
@@ -79,7 +80,7 @@ class ThroughArray extends AbstractCallback
             if ($this->parameters['multiline'] === true) {
                 // Here we tel the Codegen service that we need some
                 // special handling.
-                $model->setMultiLineCodeGen('iterator_to_array');
+                $model->setMultiLineCodeGen(Codegen::ITERATOR_TO_ARRAY);
             }
 
             if (is_string($key)) {

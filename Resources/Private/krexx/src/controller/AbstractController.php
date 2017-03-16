@@ -313,7 +313,7 @@ abstract class AbstractController
         return $result;
     }
 
-        /**
+    /**
      * Return the current URL.
      *
      * @see http://stackoverflow.com/questions/6768793/get-the-full-url-in-php
@@ -325,6 +325,15 @@ abstract class AbstractController
     protected function getCurrentUrl()
     {
         static $result;
+
+        // Check if someone has been messing with the $_SERVER, to prevent
+        // warnings and notices.
+        if (empty($_SERVER) ||
+            empty($_SERVER['SERVER_PROTOCOL']) ||
+            empty($_SERVER['SERVER_PORT']) ||
+            empty($_SERVER['SERVER_NAME'])) {
+            $result = 'n/a';
+        }
 
         if (!isset($result)) {
             $s = $_SERVER;

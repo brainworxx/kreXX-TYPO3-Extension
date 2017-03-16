@@ -57,7 +57,7 @@ class ProcessBoolean extends AbstractProcess
         $data = $model->getData() ? 'TRUE' : 'FALSE';
         $model->setData($data)
             ->setNormal($data)
-            ->setType($model->getAdditional() . 'boolean');
+            ->setType('boolean');
 
         return $this->pool->render->renderSingleChild($model);
     }

@@ -62,7 +62,7 @@ class ThroughGetter extends AbstractCallback
     protected $fileService;
 
     /**
-     * Here we momorize how deep we are inside the current deep analysis.
+     * Here we memorize how deep we are inside the current deep analysis.
      *
      * @var int
      */
@@ -175,7 +175,7 @@ class ThroughGetter extends AbstractCallback
      *   the class or sourcecode.
      *
      * @return \ReflectionProperty|null
-     *   Either the reflection of a possibly accosiated Property, or null to
+     *   Either the reflection of a possibly associated Property, or null to
      *   indicate that we have found nothing.
      */
     protected function getReflectionProperty(\ReflectionClass $classReflection, \ReflectionMethod $reflectionMethod)
@@ -183,7 +183,7 @@ class ThroughGetter extends AbstractCallback
         // We may be facing different writing styles.
         // The property we want from getMyProperty() should be named myProperty,
         // but we can not rely on this.
-        // Old php 4 coders sometimes add a underscore before a protectred
+        // Old php 4 coders sometimes add a underscore before a protected
         // property.
 
         // We will check:
@@ -276,7 +276,7 @@ class ThroughGetter extends AbstractCallback
             // Check if this is a method and go deeper!
             $methodName = rtrim($propertyName, '()');
             if ($classReflection->hasMethod($methodName)) {
-                // We need to be carefull not to goo too deep, we might end up
+                // We need to be careful not to goo too deep, we might end up
                 // in a loop.
                 $this->deep++;
                 if ($this->deep < 3) {

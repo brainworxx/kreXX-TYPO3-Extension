@@ -50,7 +50,7 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCa
         }
 
         return array(
-            'file' => $path,
+            'file' => $this->filterFilePath($path),
             // I have no idae how to get the actual line from the view.
             'line' => 'n/a',
             // Without line, there is no real chance to get the varname.

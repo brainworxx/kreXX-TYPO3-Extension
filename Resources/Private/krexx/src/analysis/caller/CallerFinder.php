@@ -67,7 +67,7 @@ class CallerFinder extends AbstractCaller
         // We will not keep the whole backtrace im memory. We only return what we
         // actually need.
         return array(
-            'file' => htmlspecialchars($caller['file']),
+            'file' => htmlspecialchars($this->filterFilePath($caller['file'])),
             'line' => (int)$caller['line'],
             'varname' => $this->getVarName($caller['file'], $caller['line']),
         );

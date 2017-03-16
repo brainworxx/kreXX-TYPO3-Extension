@@ -103,9 +103,6 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
             // Registering the alternative getter analysis, without the 'get' in
             // the functionname.
             ->addRewrite('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter', 'Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter')
-            // Registering the object analysis class, without any method
-            // analysis.
-            ->addRewrite('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects', 'Tx_Includekrexx_Rewrite_AnalyseCallbackAnalyseObjects')
             // Registering the fluid connector class.
             ->addRewrite('Brainworxx\\Krexx\\Service\\Code\\Connectors', 'Tx_Includekrexx_Rewrite_ServiceCodeConnectors');
 
@@ -113,6 +110,12 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
         // We will add the info from where the fluid call actually came.
         // Meh, this will not work in 4.5  :-(
         Krexx::$pool->registry->set('FluidView', $this->viewHelperVariableContainer->getView());
+
+        // Disable all configured debug methods, at least for now.
+        Krexx::$pool->config
+            ->settings['debugMethods']
+            ->setValue('')
+            ->setSource('fluid overwrite');
 
         // Trigger the file loading, which may or may not be done by TYPO3.
         $this->fileLoading();
@@ -140,6 +143,9 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
         // Reset all rewrites to the global ones.
         Krexx::$pool->flushRewrite();
 
+        // Reset the configuration.
+        Krexx::$pool->resetConfig();
+
         return '';
     }
 
@@ -164,9 +170,6 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
             }
             if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter')) {
                 include_once($extPath . 'Classes/Rewrite/AnalysisCallbackIterateTroughGetter.php');
-            }
-            if (!class_exists('Tx_Includekrexx_Rewrite_AnalyseCallbackAnalyseObjects')) {
-                include_once($extPath . 'Classes/Rewrite/AnalyseCallbackAnalyseObjects.php');
             }
             if (!class_exists('Tx_Includekrexx_Rewrite_ServiceCodeConnectors')) {
                 include_once($extPath . 'Classes/Rewrite/ServiceCodeConnectors.php');

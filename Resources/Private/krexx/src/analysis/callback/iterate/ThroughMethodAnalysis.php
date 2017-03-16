@@ -64,7 +64,7 @@ class ThroughMethodAnalysis extends AbstractCallback
                 ->setName($key)
                 ->setType('reflection');
 
-            if ($key === 'comments' && $key === 'declared in' && $key === 'source') {
+            if ($key === 'comments' || $key === 'declared in' || $key === 'source') {
                 $model->setNormal('. . .');
                 $model->hasExtras();
             } else {

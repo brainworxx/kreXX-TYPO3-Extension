@@ -67,8 +67,8 @@ class Model
     protected $normal = '';
 
     /**
-     * When the long result of the analysis, used if "normal" does not
-     * provide enough room.
+     * Additional data that gets added to the type. Normally something like
+     * 'protected static final'
      *
      * @var string
      */
@@ -144,11 +144,8 @@ class Model
     protected $isCallback = false;
 
     /**
-     * @var Pool
-     */
-    protected $pool;
-
-    /**
+     * The connector service, used for source generation.
+     *
      * @var Connectors
      */
     protected $connectorService;
@@ -160,7 +157,6 @@ class Model
      */
     public function __construct(Pool $pool)
     {
-        $this->pool = $pool;
         $this->connectorService = $pool->createClass(
             'Brainworxx\\Krexx\\Service\\Code\\Connectors'
         );
@@ -202,7 +198,7 @@ class Model
      * @param mixed $data
      *   The current variable we are rendering.
      *
-     * @return Model
+     * @return $this
      *   $this, for chaining.
      */
     public function setData(&$data)
@@ -228,7 +224,7 @@ class Model
      * @param int|string $name
      *   The name/key we are analysing.
      *
-     * @return Model
+     * @return $this
      *   $this, for chaining.
      */
     public function setName($name)
@@ -254,7 +250,7 @@ class Model
      * @param string $normal
      *   The short result of the analysis.
      *
-     * @return Model
+     * @return $this
      *   $this, for chaining.
      */
     public function setNormal($normal)
@@ -280,7 +276,7 @@ class Model
      * @param string $additional
      *   The long result of the analysis.
      *
-     * @return Model
+     * @return $this
      *   $this, for chaining.
      */
     public function setAdditional($additional)
@@ -292,7 +288,7 @@ class Model
     /**
      * Getter for additional
      *
-     * @return mixed
+     * @return string
      *   The long result of the analysis.
      */
     public function getAdditional()
@@ -306,7 +302,7 @@ class Model
      * @param string $type
      *   The type of the variable we are analysing.
      *
-     * @return Model
+     * @return $this
      *   $this, for chaining.
      */
     public function setType($type)
@@ -324,7 +320,7 @@ class Model
      */
     public function getType()
     {
-        return $this->type;
+        return $this->additional . $this->type;
     }
 
     /**
@@ -333,7 +329,7 @@ class Model
      * @param string $helpid
      *   The ID of the help text.
      *
-     * @return Model
+     * @return $this
      *   $this, for chaining.
      */
     public function setHelpid($helpid)
@@ -410,7 +406,7 @@ class Model
      * @param string $domid
      *   The dom id, of cause.
      *
-     * @return Model
+     * @return $this
      *   $this, for chaining.
      */
     public function setDomid($domid)
@@ -438,7 +434,7 @@ class Model
      * @param $value
      *   The value of the parameter, by reference.
      *
-     * @return Model
+     * @return $this
      *   $this, for chaining.
      */
     public function addParameter($name, &$value)
@@ -461,7 +457,7 @@ class Model
     /**
      * "Setter" for the hasExtras property.
      *
-     * @return Model
+     * @return $this
      *   $this, for chaining.
      */
     public function hasExtras()
@@ -547,7 +543,7 @@ class Model
      * @param string $string
      *
      * @return $this
-     *   Return $this for cjhaining.
+     *   Return $this for chaining.
      */
     public function setCustomConnector1($string)
     {

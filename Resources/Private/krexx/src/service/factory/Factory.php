@@ -91,7 +91,7 @@ class Factory
     }
 
     /**
-     * Resets the rewrite info and relaods it from the globals.
+     * Resets the rewrite info and reloads it from the globals.
      */
     public function flushRewrite()
     {

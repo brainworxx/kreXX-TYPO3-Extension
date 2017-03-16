@@ -68,11 +68,11 @@ class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
                 break;
 
             case $this::METHOD:
-                return '.';
+                return ' ';
                 break;
 
             case $this::STATIC_METHOD:
-                return '.';
+                return ' ';
                 break;
 
             case $this::STATIC_PROPERTY:

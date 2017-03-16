@@ -55,7 +55,7 @@ class ProcessInteger extends AbstractProcess
     public function process(Model $model)
     {
         $model->setNormal($model->getData())
-            ->setType($model->getAdditional() . 'integer');
+            ->setType('integer');
 
         return $this->pool->render->renderSingleChild($model);
     }

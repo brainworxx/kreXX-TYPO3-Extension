@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Service\View;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\File;
 
@@ -77,7 +78,7 @@ class Render
     /**
      * Renders a "single child", containing a single not expandable value.
      *
-     * Depending on how many characters are in there, it may be toggelable.
+     * Depending on how many characters are in there, it may be toggleable.
      *
      * @param Model $model
      *   The model, which hosts all the data we need.
@@ -176,7 +177,7 @@ class Render
         // Replace our stuff in the partial.
         $template = str_replace('{name}', $model->getName(), $template);
         $template = str_replace('{domId}', $model->getDomid(), $template);
-        $template = str_replace('{normal}', $model->getType(), $template);
+        $template = str_replace('{normal}', $model->getNormal(), $template);
         $template = str_replace('{connector1}', $this->renderConnector($model->getConnector1()), $template);
         $template = str_replace('{help}', $this->renderHelp($model), $template);
 
@@ -336,7 +337,7 @@ class Render
         }
         $template = str_replace('{ktype}', $cssType, $template);
 
-        $template = str_replace('{additional}', $model->getAdditional(), $template);
+        $template = str_replace('{normal}', $model->getNormal(), $template);
         $template = str_replace('{help}', $this->renderHelp($model), $template);
         $template = str_replace('{connector1}', $this->renderConnector($model->getConnector1()), $template);
         $template = str_replace('{connector2}', $this->renderConnector($model->getConnector2()), $template);
