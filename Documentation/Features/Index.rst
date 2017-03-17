@@ -62,6 +62,7 @@ A click on the recursion will then copy the original analysis via java script in
    :glob:
 
    Logging/Index
+   FluidDebugger/Index
    Search/Index
    LittleHelpers/Index
    Skins/Index

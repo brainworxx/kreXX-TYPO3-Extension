@@ -12,8 +12,24 @@
 Changelog
 =============================================================
 
+2.1.3
+    - [Feature] Added a fluid debugger viewhelper.
+    - [Feature] Added more search pattern and source code parsing to the getter analysis.
+    - [Feature] Added a metatag to both skins to prevent crawler from indexing a kreXX output. Remember kids: never debug a productive site. This will only lead to trouble.
+    - [Feature] Added a Filter for the server document root from the file path of the calling file.
+    - [Internals] A lot of small changes for the fluid debugger.
+    - [Change] The log chunk and config folder are now residing in the :literal:`typo3temp` folder.
+    - [Change] Output -> File will now save the logfile directly after the analysis.
+    - [Change] Renamed the Output -> Frontend configuration to Output -> shutdown.
+    - [Bugfix] Removed a warning in the IP-Whitelisting, in case there is no actual IP available.
+    - [Bugfix] Source generation for resolved recursions works now as expected.
+    - [Bugfix] Removed a warnings and some notices in case the $_SERVER variable was messed with.
+    - [Bugfix] Prevent a thrown error, in case a class implements some sort of debugger trap by explicitely throwing errors when trying to get the traversable data.
+
+
 2.1.2
     - [Bugfix] Fixed that annoying warning with PHP7.
+    - [Change] :literal:`includekrexx` and :literal:`krexx` version numbers are out of sync (for now).
 
 2.1.1
     - [Feature] Added the info, if a property / method is inherited.

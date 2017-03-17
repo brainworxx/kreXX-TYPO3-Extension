@@ -34,7 +34,6 @@
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Service\Code\Connectors;
-use Brainworxx\Krexx\Analyse\Model;
 
 class Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods extends ThroughMethods
 {

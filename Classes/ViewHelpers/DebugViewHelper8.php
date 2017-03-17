@@ -36,7 +36,7 @@
 
 // This is so dirty and evil.
 // TYPO3 8.0 tries to resolve the old 4.5'er viewhelpers this way.
-// If someone reads this and knows how to do this properly, please send
+// If someone reads this and knows how to do this properly, please
 // open a ticket here:
 // https://github.com/brainworxx/kreXX-TYPO3-Extension/issues
 //

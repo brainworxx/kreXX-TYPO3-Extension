@@ -53,17 +53,8 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
 /**
  * Class Tx_Includekrexx_ViewHelpers_DebugViewHelper
  *
- * In case that anybody is actually reading this:
- * Right now, this is something like a work in progress.
- *
- * Current status:
- * The kreXX "Framework" (more frame than actual work) should be prepared for
- * the usage in something else than PHP.
- * To make this work, we will use "overwrites" for the kreXX factory
- * (which are X-Classes, but we do not call them that).
- *
- * @see https://github.com/brainworxx/kreXX-TYPO3-Extension/issues/4
- * @see https://forge.typo3.org/issues/72950
+ * Works with TYPO§ 4.5 and above. In 4.5, there is no path display of the
+ * calling template file.
  *
  * @namespace
  *   When using TYPO3 4.5 until 8.4, you need to declare the namespace first:
@@ -76,7 +67,6 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  *   <krexx:debug value="{my: 'value', to: 'analyse'}" />
  *   Use this part if you don't want fluid to escape your string or if you are
  *   stitching together an array.
- *
  */
 class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper
 {

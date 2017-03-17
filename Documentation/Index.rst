@@ -41,7 +41,7 @@ kreXX Debugger
 		BRAINWORXX GmbH
 
 	:Email:
-		tobias.guelzow@brainworxx.de
+		info@brainworxx.de
 
 	:License:
 		This document is published under the Open Content License
