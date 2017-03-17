@@ -104,7 +104,10 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
             // the functionname.
             ->addRewrite('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter', 'Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter')
             // Registering the fluid connector class.
-            ->addRewrite('Brainworxx\\Krexx\\Service\\Code\\Connectors', 'Tx_Includekrexx_Rewrite_ServiceCodeConnectors');
+            ->addRewrite('Brainworxx\\Krexx\\Service\\Code\\Connectors', 'Tx_Includekrexx_Rewrite_ServiceCodeConnectors')
+            // Registering the special source generation for methods.
+            ->addRewrite('Brainworxx\\Krexx\\Analyse\Callback\\Iterate\\ThroughMethods', 'Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods')
+            ->addRewrite('Brainworxx\\Krexx\\Service\\Code\\Codegen', 'Tx_Includekrexx_Rewrite_ServiceCodeCodegen');
 
         // Set the view in the registry, we will retreive it later on.
         // We will add the info from where the fluid call actually came.
@@ -173,6 +176,12 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
             }
             if (!class_exists('Tx_Includekrexx_Rewrite_ServiceCodeConnectors')) {
                 include_once($extPath . 'Classes/Rewrite/ServiceCodeConnectors.php');
+            }
+            if (!class_exists('Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods')) {
+                include_once($extPath . 'Classes/Rewrite/AnalyseCallbackIterateThroughMethods.php');
+            }
+            if (!class_exists('Tx_Includekrexx_Rewrite_ServiceCodeCodegen')) {
+                include_once($extPath . 'Classes/Rewrite/ServiceCodeCodegen.php');
             }
         }
     }

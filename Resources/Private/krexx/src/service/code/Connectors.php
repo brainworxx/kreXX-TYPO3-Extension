@@ -93,6 +93,17 @@ class Connectors
     }
 
     /**
+     * Getter for the connection parameters.
+     *
+     * @return string
+     *   The connection parameters.
+     */
+    public function getParameters()
+    {
+        return $this->params;
+    }
+
+    /**
      * Setter for the type we are rendering, using the class constants.
      *
      * @param string $type

@@ -480,10 +480,15 @@ class Model
      * Setter for the multiline code generation.
      *
      * @param string $multiLineCodeGen
+     *   The constant from the Codegen class.
+     *
+     * @return $this
+     *   $this, for chaining.
      */
     public function setMultiLineCodeGen($multiLineCodeGen)
     {
         $this->multiLineCodeGen = $multiLineCodeGen;
+        return $this;
     }
 
     /**
@@ -520,6 +525,17 @@ class Model
     {
         $this->connectorService->setParameters($params);
         return $this;
+    }
+
+    /**
+     * Getter for the connection parameters.
+     *
+     * @return string
+     *   The connection parameters.
+     */
+    public function getConnectorParameters()
+    {
+        return $this->connectorService->getParameters();
     }
 
     /**
@@ -560,5 +576,15 @@ class Model
     public function getConnectorLanguage()
     {
         return $this->connectorService->getLanguage();
+    }
+
+    /**
+     * Getter for all parameters for the internal callback.
+     *
+     * @return array
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
     }
 }

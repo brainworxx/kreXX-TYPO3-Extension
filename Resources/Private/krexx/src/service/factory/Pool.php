@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Service\Factory;
 
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Analyse\Scope;
+use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
@@ -263,19 +264,20 @@ class Pool extends Factory
         set_error_handler(function () {
             /* do nothing. */
         });
-        $result = @htmlentities($data);
+
+        $result = htmlentities($data);
+
         // We are also encoding @, because we need them for our chunks.
         $result = str_replace('@', '&#64;', $result);
         // We are also encoding the {, because we use it as markers for the skins.
         $result = str_replace('{', '&#123;', $result);
-        restore_error_handler();
 
         // Check if encoding was successful.
         // 99.99% of the time, the encoding works.
         if (empty($result)) {
             // Something went wrong with the encoding, we need to
             // completely encode this one to be able to display it at all!
-            $data = @mb_convert_encoding($data, 'UTF-32', mb_detect_encoding($data));
+            $data = mb_convert_encoding($data, 'UTF-32', mb_detect_encoding($data));
 
             if ($code) {
                 // We are displaying sourcecode, so we need
@@ -314,6 +316,9 @@ class Pool extends Factory
                 $result = str_replace(chr(9), '&nbsp;&nbsp;', $result);
             }
         }
+
+        // Reactivate whatever error handling we had previously.
+        restore_error_handler();
 
         return $result;
     }

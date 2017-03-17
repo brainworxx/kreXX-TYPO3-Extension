@@ -339,11 +339,14 @@ class Objects extends AbstractCallback
                             // Do nothing.
                         });
                         $result = $data->$funcName();
-                        // Reactivate whatever error handling we had previously.
-                        restore_error_handler();
+
                     } catch (\Exception $e) {
                         // Do nothing.
                     }
+
+                    // Reactivate whatever error handling we had previously.
+                    restore_error_handler();
+
                     if (isset($result)) {
                         /** @var \Brainworxx\Krexx\Analyse\Model $model */
                         $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
@@ -397,9 +400,24 @@ class Objects extends AbstractCallback
             if (is_a($data, 'SplObjectStorage')) {
                 $multiline = true;
             }
+            
+            // Add a try to prevent the hosting CMS from doing something stupid.
+            try {
+                // We need to deactivate the current error handling to
+                // prevent the host system to do anything stupid.
+                set_error_handler(function () {
+                    // Do nothing.
+                });
+                $parameter = iterator_to_array($data);
+            } catch (\Exception $e) {
+                // Do nothing.
+            }
 
-            $parameter = iterator_to_array($data);
-            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+            // Reactivate whatever error handling we had previously.
+            restore_error_handler();
+
+            if (isset($parameter)) {
+                $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setName($name)
                 ->setType('Foreach')
                 ->setNormal('Traversable Info')
@@ -409,7 +427,8 @@ class Objects extends AbstractCallback
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')
                 );
 
-            return $this->pool->render->renderExpandableChild($model);
+                return $this->pool->render->renderExpandableChild($model);
+            }
         }
         return '';
     }

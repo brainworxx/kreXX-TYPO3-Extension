@@ -60,7 +60,7 @@ class ProcessClosure extends AbstractProcess
 
         // Adding comments from the file.
         $result['comments'] =  $this->pool
-            ->createClass('Brainworxx\\Krexx\\Analyse\\Functions')
+            ->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Functions')
             ->getComment($ref);
 
         // Adding the sourcecode
@@ -83,20 +83,18 @@ class ProcessClosure extends AbstractProcess
         }
 
         // Adding the parameters.
-        $parameters = $ref->getParameters();
         $paramList = '';
-        foreach ($parameters as $parameter) {
-            preg_match('/(.*)(?= \[ )/', $parameter, $key);
-            $parameter = str_replace($key[0], '', $parameter);
-            $result[$key[0]] = trim($parameter, ' []');
-            $paramList .= trim($result[$key[0]]) . ', ';
+
+        foreach ($ref->getParameters() as $key => $reflectionParameter) {
+            $reflectionParameterWrapper = $this->pool
+                ->createClass('Brainworxx\\Krexx\\Service\\Code\\ReflectionParameterWrapper')
+                ->setReflectionParameter($reflectionParameter);
+
+
+            $result['Parameter #' . ($key + 1)] = $reflectionParameterWrapper;
+            $paramList .= $reflectionParameterWrapper . ', ';
         }
 
-        $paramList = str_replace(
-            array('&lt;required&gt; ', '&lt;optional&gt; '),
-            '',
-            $this->pool->encodeString($paramList)
-        );
         // Remove the ',' after the last char.
         $paramList = '<small>' . trim($paramList, ', ') . '</small>';
         $model->setType('closure')

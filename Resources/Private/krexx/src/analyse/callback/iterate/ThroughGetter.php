@@ -103,7 +103,7 @@ class ThroughGetter extends AbstractCallback
             // 3.) We were unable to get any info at all.
             $comments = nl2br($this
                 ->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Methods')
+                ->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Methods')
                 ->getComment($reflectionMethod, $ref));
 
             /** @var Model $model */

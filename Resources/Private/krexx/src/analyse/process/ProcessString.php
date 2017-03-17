@@ -65,8 +65,16 @@ class ProcessString extends AbstractProcess
         }
 
         // We need to take care for mixed encodings here.
-        $encoding = @mb_detect_encoding($data);
-        $length = $strlen = @mb_strlen($data, $encoding);
+        set_error_handler(function () {
+            /* do nothing. */
+        });
+
+        $encoding = mb_detect_encoding($data);
+        $length = $strlen = mb_strlen($data, $encoding);
+
+        // Reactivate whatever error handling we had previously.
+        restore_error_handler();
+
         if ($strlen === false) {
             // Looks like we have a mixed encoded string.
             $length = '~ ' . strlen($data);

@@ -15,6 +15,9 @@
   expected.
 - Bugfix: Removed a warnings and some notices in case the $_SERVER
   variable was messed with.
+- Bugfix: Prevent a thrown error, in case a class implements some
+  sort of debugger trap by explicitely throwing errors when trying
+  to get the traversable data.
 - Change: Output -> File will now save the logfile directly after
   the analysis.
 - Change: Renamed the Output -> Frontend configuration to

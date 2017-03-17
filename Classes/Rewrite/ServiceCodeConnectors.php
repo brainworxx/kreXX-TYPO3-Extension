@@ -68,11 +68,11 @@ class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
                 break;
 
             case $this::METHOD:
-                return ' ';
+                return '.';
                 break;
 
             case $this::STATIC_METHOD:
-                return ' ';
+                return '.';
                 break;
 
             case $this::STATIC_PROPERTY:
@@ -98,6 +98,24 @@ class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
      */
     public function getConnector2()
     {
-        return '';
+        // No params, no cookies!
+        if (empty($this->params)) {
+            return '';
+        }
+
+        switch ($this->type) {
+            case $this::METHOD:
+                return '(' . $this->params . ')';
+                break;
+
+            case $this::STATIC_METHOD:
+                return '(' . $this->params . ')';
+                break;
+
+            default:
+                // Unknown type, return empty string.
+                return '';
+                break;
+        }
     }
 }
