@@ -132,6 +132,30 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             $this->pool = \Krexx::$pool;
         }
 
+        protected function checkProductiveSetting()
+        {
+            $isProductive = false;
+
+            // Check the 'Live' preset (7.6 and above)
+            if (class_exists('TYPO3\\CMS\\Install\\Configuration\\Context\\LivePreset')) {
+                /** @var TYPO3\CMS\Install\Configuration\Context\LivePreset $debugPreset */
+                $productionPreset = $this->objectManager->get('TYPO3\\CMS\\Install\\Configuration\\Context\\LivePreset');
+                $isProductive = $productionPreset->isActive();
+
+            }
+            // Check the 'Production' preset (6.2)
+            if (class_exists('TYPO3\\CMS\\Install\\Configuration\\Context\\ProductionPreset')) {
+                /** @var TYPO3\CMS\Install\Configuration\Context\LivePreset $debugPreset */
+                $productionPreset = $this->objectManager->get('TYPO3\\CMS\\Install\\Configuration\\Context\\LivePreset');
+                $isProductive = $productionPreset->isActive();
+            }
+            
+            if ($isProductive) {
+                //Display a warning, if we are in Productive / Live settings.
+                $this->addMessage($this->LLL('debugpreset.warning.message'), $this->LLL('debugpreset.warning.title'), t3lib_FlashMessage::WARNING);
+            }
+        }
+
         /**
          * Wrapper for the FlashMessage, which was changed in 7.0.
          *

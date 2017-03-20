@@ -51,6 +51,8 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
      */
     public function editAction()
     {
+        $this->checkProductiveSetting();
+
         // Has kreXX something to say? Maybe a writeprotected logfolder?
         foreach ($this->getTranslatedMessages() as $message) {
             $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);

@@ -51,6 +51,8 @@ class Tx_Includekrexx_Controller_HelpController extends Tx_Includekrexx_Controll
      */
     public function usageAction()
     {
+        $this->checkProductiveSetting();
+
         // Has kreXX something to say? Maybe a writeprotected logfolder?
         foreach ($this->getTranslatedMessages() as $message) {
             $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
@@ -64,6 +66,8 @@ class Tx_Includekrexx_Controller_HelpController extends Tx_Includekrexx_Controll
      */
     public function configAction()
     {
+        $this->checkProductiveSetting();
+
         // Has kreXX something to say? Maybe a writeprotected logfolder?
         foreach ($this->getTranslatedMessages() as $message) {
             $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);

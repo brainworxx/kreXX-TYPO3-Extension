@@ -48,6 +48,8 @@ class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controlle
      */
     public function listAction()
     {
+        $this->checkProductiveSetting();
+
         // 1. Get the log folder.
         $dir = $this->pool->config->getLogDir();
 
