@@ -146,10 +146,10 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             // Check the 'Production' preset (6.2)
             if (class_exists('TYPO3\\CMS\\Install\\Configuration\\Context\\ProductionPreset')) {
                 /** @var TYPO3\CMS\Install\Configuration\Context\LivePreset $debugPreset */
-                $productionPreset = $this->objectManager->get('TYPO3\\CMS\\Install\\Configuration\\Context\\LivePreset');
+                $productionPreset = $this->objectManager->get('TYPO3\\CMS\\Install\\Configuration\\Context\\ProductionPreset');
                 $isProductive = $productionPreset->isActive();
             }
-            
+
             if ($isProductive) {
                 //Display a warning, if we are in Productive / Live settings.
                 $this->addMessage($this->LLL('debugpreset.warning.message'), $this->LLL('debugpreset.warning.title'), t3lib_FlashMessage::WARNING);

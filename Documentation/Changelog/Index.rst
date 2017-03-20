@@ -17,6 +17,7 @@ Changelog
     - [Feature] Added more search pattern and source code parsing to the getter analysis.
     - [Feature] Added a metatag to both skins to prevent crawler from indexing a kreXX output. Remember kids: never debug a productive site. This will only lead to trouble.
     - [Feature] Added a Filter for the server document root from the file path of the calling file.
+    - [Feature] Added a warning in the backend, in case that TYPO3 is in productive debug settings.
     - [Internals] A lot of small changes for the fluid debugger.
     - [Change] The log chunk and config folder are now residing in the :literal:`typo3temp` folder.
     - [Change] Output -> File will now save the logfile directly after the analysis.

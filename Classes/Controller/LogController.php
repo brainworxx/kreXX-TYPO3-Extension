@@ -33,7 +33,7 @@
  */
 
 
-if (!class_exists('Tx_Includekrexx_Controller_LogController')) {
+if (class_exists('Tx_Includekrexx_Controller_LogController')) {
     return;
 }
 
