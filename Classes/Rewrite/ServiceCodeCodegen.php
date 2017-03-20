@@ -98,6 +98,25 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
         } else {
             return $firstPart . $model->getName() . $alternativeLastPart;
         }
+    }
+
+    /**
+     * We will not allow code generation for configured debug methods.
+     *
+     * {@inheritdoc}
+     */
+    protected function analyseType(Model $model)
+    {
+        $type = $model->getType();
+
+        // Disalowing code generation for configured debug methods.
+        if ($type === 'debug method') {
+            return self::METHOD;
+        } else {
+            // Not a debug method? We let the parent calss decide what to do
+            // with it.
+            return parent::analyseType($model);
+        }
 
     }
 }

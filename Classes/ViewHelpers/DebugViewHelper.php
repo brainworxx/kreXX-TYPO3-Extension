@@ -104,12 +104,6 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
         // Meh, this will not work in 4.5  :-(
         Krexx::$pool->registry->set('FluidView', $this->viewHelperVariableContainer->getView());
 
-        // Disable all configured debug methods, at least for now.
-        Krexx::$pool->config
-            ->settings['debugMethods']
-            ->setValue('')
-            ->setSource('fluid overwrite');
-
         // Trigger the file loading, which may or may not be done by TYPO3.
         $this->fileLoading();
 
@@ -135,9 +129,6 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
 
         // Reset all rewrites to the global ones.
         Krexx::$pool->flushRewrite();
-
-        // Reset the configuration.
-        Krexx::$pool->resetConfig();
 
         return '';
     }
