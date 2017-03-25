@@ -36,7 +36,7 @@
 // because of the class mappings above. I need to make sure not to
 // redeclare the Tx_Includekrexx_Controller_HelpController and throw
 // a fatal.
-if (class_exists('Tx_Includekrexx_Controller_HelpController')) {
+if (!class_exists('Tx_Includekrexx_Controller_HelpController')) {
     return;
 }
 

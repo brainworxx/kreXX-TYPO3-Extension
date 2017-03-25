@@ -32,12 +32,12 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Service\View;
+namespace Brainworxx\Krexx\View;
 
 /**
  * Messaging system.
  *
- * @package Brainworxx\Krexx\Service\View
+ * @package Brainworxx\Krexx\View
  */
 class Messages extends Help
 {

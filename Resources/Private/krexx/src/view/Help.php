@@ -32,25 +32,60 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Process;
+namespace Brainworxx\Krexx\View;
 
-use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
-use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
- * Abstract class for (nearly) all processing classes.
+ * Help texts.
  *
- * @package Brainworxx\Krexx\Analyse\Routing
+ * @package Brainworxx\Krexx\View
  */
-abstract class AbstractProcess extends AbstractRouting
+class Help
 {
 
+    // A simple array to hold the values.
+    // There should not be any string collisions.
+    protected $helpArray = array();
+
     /**
-     * Processes the model according to the type of the variable.
+     * Here we store all relevant data.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @var Pool
+     */
+    protected $pool;
+
+    /**
+     * Injects the pool a,d reads the language file.
+     *
+     * @param Pool $pool
+     *   The pool, where we store the classes we need.
+     */
+    public function __construct(Pool $pool)
+    {
+        $this->pool = $pool;
+        $file = $pool->krexxDir . 'resources' . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR . 'Help.ini';
+        $fileService = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
+        $this->helpArray = (array)parse_ini_string(
+            $fileService->getFileContents($file)
+        );
+    }
+
+    /**
+     * Returns the help text when found, otherwise returns an empty string.
+     *
+     * @param string $what
+     *   The help ID from the array above.
      *
      * @return string
+     *   The help text.
      */
-    abstract public function process(Model $model);
+    public function getHelp($what)
+    {
+        $result = '';
+        if (isset($this->helpArray[$what])) {
+            $result = $this->helpArray[$what];
+        }
+        return $result;
+    }
 }

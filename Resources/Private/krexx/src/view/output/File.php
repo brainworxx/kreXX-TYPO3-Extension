@@ -32,34 +32,32 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Process;
-
-use Brainworxx\Krexx\Analyse\Model;
+namespace Brainworxx\Krexx\View\Output;
 
 /**
- * Processing of NULL values. Really.
+ * File output, directly after the analysis.
  *
- * @package Brainworxx\Krexx\Analyse\Process
+ * @package Brainworxx\Krexx\View\Output
  */
-class ProcessNull extends AbstractProcess
+class File extends AbstractOutput
 {
 
     /**
-     * Render a 'dump' for a NULL value.
+     * Adding a chunk string here will result in writing to a logfile.
      *
-     * @param Model $model
-     *   The model with the data for the output.
-     *
-     * @return string
-     *   The rendered markup.
+     * {@inheritdoc}
      */
-    public function process(Model $model)
+    public function addChunkString($chunkString)
     {
-        $data = 'NULL';
-        $model->setData($data)
-            ->setNormal($data)
-            ->setType('null');
+        // Check for CLI and messages.
+        if (php_sapi_name() === "cli") {
+            $messages = $this->pool->messages->outputMessages();
+            // Since we are in CLI mode, these messages are not in HTML.
+            // We can output them right away.
+            echo $messages;
+        }
 
-        return $this->pool->render->renderSingleChild($model);
+        // We save them directly after the analysis.
+        $this->pool->chunks->saveDechunkedToFile($chunkString);
     }
 }

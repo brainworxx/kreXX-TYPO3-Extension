@@ -36,8 +36,8 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Flection;
+use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Code\Connectors;
 
 /**
  * Object analysis methods.
@@ -266,16 +266,17 @@ class Objects extends AbstractCallback
                 return strcmp($a->name, $b->name);
             };
             usort($methods, $sortingCallback);
-            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+
+            return $this->pool->render->renderExpandableChild(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setName('Methods')
                 ->setType('class internals')
                 ->addParameter('data', $methods)
                 ->addParameter('ref', $ref)
                 ->injectCallback(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods')
-                );
-
-            return $this->pool->render->renderExpandableChild($model);
+                )
+            );
         }
         return '';
     }
@@ -339,7 +340,6 @@ class Objects extends AbstractCallback
                             // Do nothing.
                         });
                         $result = $data->$funcName();
-
                     } catch (\Exception $e) {
                         // Do nothing.
                     }
@@ -348,19 +348,18 @@ class Objects extends AbstractCallback
                     restore_error_handler();
 
                     if (isset($result)) {
-                        /** @var \Brainworxx\Krexx\Analyse\Model $model */
-                        $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                            ->setName($funcName)
-                            ->setType('debug method')
-                            ->setNormal('. . .')
-                            ->setHelpid($funcName)
-                            ->setConnectorType(Connectors::METHOD)
-                            ->addParameter('data', $result)
-                            ->injectCallback(
-                                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Debug')
-                            );
-
-                        $output .= $this->pool->render->renderExpandableChild($model);
+                        $output .= $this->pool->render->renderExpandableChild(
+                            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                                ->setName($funcName)
+                                ->setType('debug method')
+                                ->setNormal('. . .')
+                                ->setHelpid($funcName)
+                                ->setConnectorType(Connectors::METHOD)
+                                ->addParameter('data', $result)
+                                ->injectCallback(
+                                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Debug')
+                                )
+                        );
                         unset($result);
                     }
                 }
@@ -417,17 +416,17 @@ class Objects extends AbstractCallback
             restore_error_handler();
 
             if (isset($parameter)) {
-                $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setName($name)
-                ->setType('Foreach')
-                ->setNormal('Traversable Info')
-                ->addParameter('data', $parameter)
-                ->addParameter('multiline', $multiline)
-                ->injectCallback(
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')
+                return $this->pool->render->renderExpandableChild(
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->setName($name)
+                        ->setType('Foreach')
+                        ->setNormal('Traversable Info')
+                        ->addParameter('data', $parameter)
+                        ->addParameter('multiline', $multiline)
+                        ->injectCallback(
+                            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')
+                        )
                 );
-
-                return $this->pool->render->renderExpandableChild($model);
             }
         }
         return '';
@@ -453,16 +452,17 @@ class Objects extends AbstractCallback
             // code generation, even if it is a space.
             // We've got some values, we will dump them.
             $classname = $ref->getName();
-            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setName('Constants')
-                ->setType('class internals')
-                ->addParameter('data', $refConst)
-                ->addParameter('classname', $classname)
-                ->injectCallback(
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConstants')
-                );
 
-            return $this->pool->render->renderExpandableChild($model);
+            return $this->pool->render->renderExpandableChild(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    ->setName('Constants')
+                    ->setType('class internals')
+                    ->addParameter('data', $refConst)
+                    ->addParameter('classname', $classname)
+                    ->injectCallback(
+                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConstants')
+                    )
+            );
         }
 
         // Nothing to see here, return an empty string.
@@ -554,18 +554,18 @@ class Objects extends AbstractCallback
 
                 // We need to set al least one connector here to activate
                 // code generation, even if it is a space.
-                $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                    ->setName('Getter')
-                    ->setType('class internals')
-                    ->setHelpid('getterHelpInfo')
-                    ->addParameter('ref', $ref)
-                    ->addParameter('methodList', $methodList)
-                    ->addParameter('data', $data)
-                    ->injectCallback(
-                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter')
-                    );
-
-                return $this->pool->render->renderExpandableChild($model);
+                return $this->pool->render->renderExpandableChild(
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->setName('Getter')
+                        ->setType('class internals')
+                        ->setHelpid('getterHelpInfo')
+                        ->addParameter('ref', $ref)
+                        ->addParameter('methodList', $methodList)
+                        ->addParameter('data', $data)
+                        ->injectCallback(
+                            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter')
+                        )
+                );
             }
         }
 

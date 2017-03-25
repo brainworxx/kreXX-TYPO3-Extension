@@ -32,70 +32,33 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Process;
+namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Processing of strings.
+ * Processing of NULL values. Really.
  *
- * @package Brainworxx\Krexx\Analyse\Process
+ * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessString extends AbstractProcess
+class ProcessNull extends AbstractProcess
 {
+
     /**
-     * Render a dump for a string value.
+     * Render a 'dump' for a NULL value.
      *
      * @param Model $model
-     *   The data we are analysing.
+     *   The model with the data for the output.
      *
      * @return string
      *   The rendered markup.
      */
     public function process(Model $model)
     {
-        $data = $model->getData();
-
-        // Extra ?
-        if (strlen($data) > 50) {
-            $cut = substr($this->pool->encodeString($data), 0, 50) . '. . .';
-            $model->hasExtras();
-        } else {
-            $cut = $this->pool->encodeString($data);
-        }
-
-        // We need to take care for mixed encodings here.
-        set_error_handler(function () {
-            /* do nothing. */
-        });
-
-        $encoding = mb_detect_encoding($data);
-        $length = $strlen = mb_strlen($data, $encoding);
-
-        // Reactivate whatever error handling we had previously.
-        restore_error_handler();
-
-        if ($strlen === false) {
-            // Looks like we have a mixed encoded string.
-            $length = '~ ' . strlen($data);
-            $strlen = ' broken encoding ' . $length;
-            $encoding = 'broken';
-        }
-
-        $data = $this->pool->encodeString($data);
-
+        $data = 'NULL';
         $model->setData($data)
-            ->setNormal($cut)
-            ->setType('string ' . $strlen)
-            ->addToJson('encoding', $encoding)
-            ->addToJson('length', $length);
-
-        // Check if this is a possible callback.
-        // We are not going to analyse this further, because modern systems
-        // do not use these anymore.
-        if (is_callable($data)) {
-            $model->setIsCallback(true);
-        }
+            ->setNormal($data)
+            ->setType('null');
 
         return $this->pool->render->renderSingleChild($model);
     }

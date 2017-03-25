@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Service\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Model;
 
 class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
@@ -82,7 +82,7 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
         $args = '';
 
         foreach ($data['data'] as $resultName => $analysisResultLine) {
-            if (is_a($analysisResultLine, 'Brainworxx\\Krexx\\Service\\Code\\ReflectionParameterWrapper')) {
+            if (is_a($analysisResultLine, 'Brainworxx\\Krexx\\Analyse\\Code\\ReflectionParameterWrapper')) {
                 $args .= 'arg' . $counter . ': \'' . $analysisResultLine->getParameterName() . '\', ';
                 $counter++;
             }

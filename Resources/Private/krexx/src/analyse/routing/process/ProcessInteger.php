@@ -32,40 +32,31 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Process;
+namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Processing of objects.
+ * Processing of integers.
  *
- * @package Brainworxx\Krexx\Analyse\Process
+ * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessObject extends AbstractProcess
+class ProcessInteger extends AbstractProcess
 {
     /**
-     * Render a dump for an object.
+     * Render a dump for a integer value.
      *
      * @param Model $model
-     *   The object we want to analyse.
+     *   The data we are analysing.
      *
      * @return string
-     *   The generated markup.
+     *   The rendered markup.
      */
     public function process(Model $model)
     {
-        $output = '';
-        $model->setType('class')
-            ->addParameter('data', $model->getData())
-            ->addParameter('name', $model->getName())
-            ->setNormal(get_class($model->getData()))
-            ->setDomid($this->generateDomIdFromObject($model->getData()))
-            ->injectCallback(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects')
-            );
+        $model->setNormal($model->getData())
+            ->setType('integer');
 
-        // Output data from the class.
-        $output .= $this->pool->render->renderExpandableChild($model);
-        return $output;
+        return $this->pool->render->renderSingleChild($model);
     }
 }

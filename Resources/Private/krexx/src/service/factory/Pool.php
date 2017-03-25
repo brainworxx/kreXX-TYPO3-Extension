@@ -40,10 +40,11 @@ use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Service\Misc\Registry;
-use Brainworxx\Krexx\Service\Output\Chunks;
-use Brainworxx\Krexx\Service\Code\Codegen;
-use Brainworxx\Krexx\Service\View\Messages;
-use Brainworxx\Krexx\Service\View\Render;
+use Brainworxx\Krexx\View\Output\Chunks;
+use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\View\Messages;
+use Brainworxx\Krexx\View\Render;
+use Brainworxx\Krexx\Analyse\Routing\Routing;
 
 /**
  * Here we store all classes that we need.
@@ -128,6 +129,13 @@ class Pool extends Factory
     public $registry;
 
     /**
+     * The routing of opur analysis.
+     *
+     * @var Routing
+     */
+    public $routing;
+
+    /**
      * The directory where kreXX is installed.
      *
      * @var string
@@ -160,7 +168,7 @@ class Pool extends Factory
         // Set the directory.
         $this->krexxDir = $krexxDir;
         // Initializes the messages.
-        $this->messages = $this->createClass('Brainworxx\\Krexx\\Service\\View\\Messages');
+        $this->messages = $this->createClass('Brainworxx\\Krexx\\View\\Messages');
         // Initializes the configuration
         $this->config = $this->createClass('Brainworxx\\Krexx\\Service\\Config\\Config');
         // Initialize the emergency handler.
@@ -168,11 +176,13 @@ class Pool extends Factory
         // Initialize the recursionHandler.
         $this->recursionHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Flow\\Recursion');
         // Initialize the code generation.
-        $this->codegenHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Code\\Codegen');
+        $this->codegenHandler = $this->createClass('Brainworxx\\Krexx\\Analyse\\Code\\Codegen');
         // Initializes the chunks handler.
-        $this->chunks = $this->createClass('Brainworxx\\Krexx\\Service\\Output\\Chunks');
+        $this->chunks = $this->createClass('Brainworxx\\Krexx\\View\\Output\\Chunks');
         // Initializes the scope analysis
         $this->scope = $this->createClass('Brainworxx\\Krexx\\Analyse\\Scope');
+        // Initializes the routing
+        $this->routing = $this->createClass('Brainworxx\\Krexx\\Analyse\Routing\\Routing');
         // Initializes the render class.
         $this->initRenderer();
         // Check the environment and prepare the feedback, if necessary.
@@ -219,7 +229,7 @@ class Pool extends Factory
         // the content of classes might change with another run.
         $this->recursionHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Flow\\Recursion');
         // Initialize the code generation.
-        $this->codegenHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Code\\Codegen');
+        $this->codegenHandler = $this->createClass('Brainworxx\\Krexx\\Analyse\\Code\\Codegen');
         $this->scope = $this->createClass('Brainworxx\\Krexx\\Analyse\\Scope');
         // We also reset our emergency handler timer.
         $this->emergencyHandler->resetTimer();

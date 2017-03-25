@@ -19,12 +19,9 @@ iprange = "*"
 skin = "smokygrey"
 
 ; Where shall kreXX put it's data?
-; "File" means logfolder.
-; "Shutdown" means, that the output will be send to the browser as soon as PHP
-; enters it's shutdown phase. This will minimize the interference with the
-; underlying app.
+; Is the output the browser or the logfolder?
 ; destination = "file"
-destination = "shutdown"
+destination = "browser"
 
 ; how many logfiles will kreXX keep?
 ; Files will only get deleted, when he creates a new one.

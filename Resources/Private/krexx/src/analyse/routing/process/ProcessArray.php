@@ -32,34 +32,41 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
+namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
-use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Debug method result analysis methods.
+ * Processing of arrays.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analysis
- *
- * @uses mixed data
- *   The result from one single configured debug method.
+ * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class Debug extends AbstractCallback
+class ProcessArray extends AbstractProcess
 {
+
     /**
-     * Iterate though the result of the polled debug methods.
+     * Render a dump for an array.
+     *
+     * @param Model $model
+     *   The data we are analysing.
      *
      * @return string
-     *   The generated markup.
+     *   The rendered markup.
      */
-    public function callMe()
+    public function process(Model $model)
     {
-        // This could be anything, we need to route it.
-        return $this->pool->routing->analysisHub(
-            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setData($this->parameters['data'])
-                ->setName('result')
-        );
+        $multiline = false;
+        $count = (string)count($model->getData());
+
+        // Dumping all Properties.
+        $model->setType('array')
+            ->setNormal($count . ' elements')
+            ->addParameter('data', $model->getData())
+            ->addParameter('multiline', $multiline)
+            ->injectCallback(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')
+            );
+
+        return $this->pool->render->renderExpandableChild($model);
     }
 }

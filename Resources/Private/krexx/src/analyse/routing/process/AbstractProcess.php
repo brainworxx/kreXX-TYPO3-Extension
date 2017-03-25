@@ -32,41 +32,25 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Process;
+namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Processing of arrays.
+ * Abstract class for (nearly) all processing classes.
  *
- * @package Brainworxx\Krexx\Analyse\Process
+ * @package Brainworxx\Krexx\Analyse\Routing
  */
-class ProcessArray extends AbstractProcess
+abstract class AbstractProcess extends AbstractRouting
 {
 
     /**
-     * Render a dump for an array.
+     * Processes the model according to the type of the variable.
      *
-     * @param Model $model
-     *   The data we are analysing.
+     * @param \Brainworxx\Krexx\Analyse\Model $model
      *
      * @return string
-     *   The rendered markup.
      */
-    public function process(Model $model)
-    {
-        $multiline = false;
-        $count = (string)count($model->getData());
-
-        // Dumping all Properties.
-        $model->setType('array')
-            ->setNormal($count . ' elements')
-            ->addParameter('data', $model->getData())
-            ->addParameter('multiline', $multiline)
-            ->injectCallback(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')
-            );
-
-        return $this->pool->render->renderExpandableChild($model);
-    }
+    abstract public function process(Model $model);
 }

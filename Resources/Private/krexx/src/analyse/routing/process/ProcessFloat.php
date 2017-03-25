@@ -32,20 +32,19 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Process;
+namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Processing of resources.
+ * Processing of floats.
  *
- * @package Brainworxx\Krexx\Analyse\Process
+ * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessResource extends AbstractProcess
+class ProcessFloat extends AbstractProcess
 {
-
     /**
-     * Analyses a resource.
+     * Render a dump for a float value.
      *
      * @param Model $model
      *   The data we are analysing.
@@ -55,10 +54,8 @@ class ProcessResource extends AbstractProcess
      */
     public function process(Model $model)
     {
-        $data = get_resource_type($model->getData());
-        $model->setData($data)
-            ->setNormal($data)
-            ->setType('resource');
+        $model->setNormal($model->getData())
+            ->setType('float');
 
         return $this->pool->render->renderSingleChild($model);
     }

@@ -39,7 +39,7 @@ namespace Brainworxx\Krexx\View\Hans;
  *
  * @package Brainworxx\Krexx\View\Hans
  */
-class Render extends \Brainworxx\Krexx\Service\View\Render
+class Render extends \Brainworxx\Krexx\View\Render
 {
     // Do nothing.
 }

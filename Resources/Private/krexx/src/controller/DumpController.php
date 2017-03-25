@@ -113,12 +113,14 @@ class DumpController extends AbstractController
         }
 
         // Start the magic.
-        $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-            ->setData($data)
-            ->setName($caller['varname']);
-        $analysis = $this->pool
-            ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Routing')
-            ->analysisHub($model);
+        $analysis = $this->pool->routing->analysisHub(
+            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setData($data)
+                ->setName($caller['varname'])
+        );
+
+
+
         // Now that our analysis is done, we must check if there was an emergency
         // break.
         if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {

@@ -32,60 +32,34 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Service\View;
+namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
-use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Help texts.
+ * Processing of resources.
  *
- * @package Brainworxx\Krexx\Service\View
+ * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class Help
+class ProcessResource extends AbstractProcess
 {
 
-    // A simple array to hold the values.
-    // There should not be any string collisions.
-    protected $helpArray = array();
-
     /**
-     * Here we store all relevant data.
+     * Analyses a resource.
      *
-     * @var Pool
-     */
-    protected $pool;
-
-    /**
-     * Injects the pool a,d reads the language file.
-     *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
-     */
-    public function __construct(Pool $pool)
-    {
-        $this->pool = $pool;
-        $file = $pool->krexxDir . 'resources' . DIRECTORY_SEPARATOR . 'language' . DIRECTORY_SEPARATOR . 'Help.ini';
-        $fileService = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
-        $this->helpArray = (array)parse_ini_string(
-            $fileService->getFileContents($file)
-        );
-    }
-
-    /**
-     * Returns the help text when found, otherwise returns an empty string.
-     *
-     * @param string $what
-     *   The help ID from the array above.
+     * @param Model $model
+     *   The data we are analysing.
      *
      * @return string
-     *   The help text.
+     *   The rendered markup.
      */
-    public function getHelp($what)
+    public function process(Model $model)
     {
-        $result = '';
-        if (isset($this->helpArray[$what])) {
-            $result = $this->helpArray[$what];
-        }
-        return $result;
+        $data = get_resource_type($model->getData());
+        $model->setData($data)
+            ->setNormal($data)
+            ->setType('resource');
+
+        return $this->pool->render->renderSingleChild($model);
     }
 }

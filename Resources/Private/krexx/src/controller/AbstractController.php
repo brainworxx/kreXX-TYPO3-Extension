@@ -37,7 +37,7 @@ namespace Brainworxx\Krexx\Controller;
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Service\Output\AbstractOutput;
+use Brainworxx\Krexx\View\Output\AbstractOutput;
 
 /**
  * Methods for the "controller" that are not directly "actions".
@@ -142,10 +142,10 @@ abstract class AbstractController
         // Depending on the setting, we use another class here.
         $outputSetting = $pool->config->getSetting('destination');
         if ($outputSetting === 'browser') {
-            $this->outputService = $pool->createClass('Brainworxx\\Krexx\\Service\\Output\\Shutdown');
+            $this->outputService = $pool->createClass('Brainworxx\\Krexx\\View\\Output\\Shutdown');
         }
         if ($outputSetting === 'file') {
-            $this->outputService = $pool->createClass('Brainworxx\\Krexx\\Service\\Output\\File');
+            $this->outputService = $pool->createClass('Brainworxx\\Krexx\\View\\Output\\File');
         }
     }
 

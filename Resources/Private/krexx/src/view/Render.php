@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Service\View;
+namespace Brainworxx\Krexx\View;
 
 use Brainworxx\Krexx\Analyse\Model;
 
@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Analyse\Model;
  * It get extended by the render class of the used skin, so every skin can do
  * some special stuff.
  *
- * @package Brainworxx\Krexx\Service\View
+ * @package Brainworxx\Krexx\View
  */
 class Render extends AbstractRender
 {

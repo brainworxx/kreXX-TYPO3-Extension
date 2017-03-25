@@ -51,6 +51,56 @@ abstract class AbstractRouting
     protected $pool;
 
     /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray
+     */
+    protected $processArray;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace
+     */
+    protected $processBacktrace;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean
+     */
+    protected $processBoolean;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure
+     */
+    protected $processClosure;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat
+     */
+    protected $processFloat;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger
+     */
+    protected $processInteger;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessNull
+     */
+    protected $processNull;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject
+     */
+    protected $processObject;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource
+     */
+    protected $processResource;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString
+     */
+    protected $processString;
+
+    /**
      * Injects the pool.
      *
      * @param Pool $pool

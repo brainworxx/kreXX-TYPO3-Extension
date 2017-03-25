@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Service\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Code\Connectors;
 
 class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
 {

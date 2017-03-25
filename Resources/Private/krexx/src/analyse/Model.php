@@ -36,7 +36,7 @@ namespace Brainworxx\Krexx\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Service\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Code\Connectors;
 
 /**
  * Model for the view rendering
@@ -158,7 +158,7 @@ class Model
     public function __construct(Pool $pool)
     {
         $this->connectorService = $pool->createClass(
-            'Brainworxx\\Krexx\\Service\\Code\\Connectors'
+            'Brainworxx\\Krexx\\Analyse\\Code\\Connectors'
         );
     }
 

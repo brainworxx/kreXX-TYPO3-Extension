@@ -65,7 +65,7 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
             $data['skins'][$skin] = $skin;
         }
         $data['destination'] = array(
-            'shutdown' => $this->LLL('shutdown'),
+            'browser' => $this->LLL('browser'),
             'file' => $this->LLL('file'),
         );
         $data['bool'] = array(

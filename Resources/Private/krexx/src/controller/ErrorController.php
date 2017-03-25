@@ -76,7 +76,7 @@ class ErrorController extends AbstractController
 
         // Get the backtrace.
         $backtrace = $this->pool
-            ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessBacktrace')
+            ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessBacktrace')
             ->process($errorData['backtrace'], -1);
         if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
             return $this;

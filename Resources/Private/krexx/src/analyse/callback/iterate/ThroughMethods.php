@@ -35,7 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Service\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Code\Connectors;
 
 /**
  * Methods analysis methods. :rolleyes:
@@ -83,7 +83,7 @@ class ThroughMethods extends AbstractCallback
             foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
                 $key++;
                 $reflectionParameterWrapper = $this->pool
-                    ->createClass('Brainworxx\\Krexx\\Service\\Code\\ReflectionParameterWrapper')
+                    ->createClass('Brainworxx\\Krexx\\Analyse\\Code\\ReflectionParameterWrapper')
                     ->setReflectionParameter($reflectionParameter);
                 $methodData['Parameter #' . $key] = $reflectionParameterWrapper;
 

@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Process;
+namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
 
@@ -40,7 +40,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * Processing of backtraces. No abstract for you, because we are dealing with
  * an array here.
  *
- * @package Brainworxx\Krexx\Analyse\Process
+ * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
 class ProcessBacktrace
 {
@@ -82,16 +82,16 @@ class ProcessBacktrace
         $output = '';
 
         foreach ($backtrace as $step => $stepData) {
-            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setName($step)
-                ->setType('Stack Frame')
-                ->addParameter('data', $stepData)
-                ->addParameter('offset', $offset)
-                ->injectCallback(
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep')
-                );
-
-            $output .= $this->pool->render->renderExpandableChild($model);
+            $output .= $this->pool->render->renderExpandableChild(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    ->setName($step)
+                    ->setType('Stack Frame')
+                    ->addParameter('data', $stepData)
+                    ->addParameter('offset', $offset)
+                    ->injectCallback(
+                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep')
+                    )
+            );
         }
 
         return $output;

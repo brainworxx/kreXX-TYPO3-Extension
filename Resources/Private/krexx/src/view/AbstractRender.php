@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Service\View;
+namespace Brainworxx\Krexx\View;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -172,7 +172,7 @@ abstract class AbstractRender
      * @return array
      *   An array with the skinnames.
      */
-    protected function getSkinList()
+    public function getSkinList()
     {
         // Static cache to make it a little bit faster.
         static $list = array();

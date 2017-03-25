@@ -75,7 +75,7 @@ class BacktraceController extends AbstractController
 
         $footer = $this->outputFooter($caller);
         $analysis = $this->pool
-            ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessBacktrace')
+            ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessBacktrace')
             ->process($backtrace, -1);
         // Now that our analysis is done, we must check if there was an emergency
         // break.

@@ -35,8 +35,9 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Service\Code\Codegen;
-use Brainworxx\Krexx\Service\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Array analysis methods.
@@ -73,7 +74,7 @@ class ThroughArray extends AbstractCallback
                 $key = $this->pool->encodeString($key);
             }
 
-            /** @var \Brainworxx\Krexx\Analyse\Model $model */
+            /** @var Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model');
 
             // Are we dealing with multiline code generation?
@@ -93,9 +94,7 @@ class ThroughArray extends AbstractCallback
                     ->setConnectorType(Connectors::NORMAL_ARRAY);
             }
 
-            $output .= $this->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Routing')
-                ->analysisHub($model);
+            $output .= $this->pool->routing->analysisHub($model);
         }
         $output .= $this->pool->render->renderSingeChildHr();
 

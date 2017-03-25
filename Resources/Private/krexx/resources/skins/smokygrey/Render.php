@@ -41,7 +41,7 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @package Brainworxx\Krexx\View\Smokygrey
  */
-class Render extends \Brainworxx\Krexx\Service\View\Render
+class Render extends \Brainworxx\Krexx\View\Render
 {
 
     /**

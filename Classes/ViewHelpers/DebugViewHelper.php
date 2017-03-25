@@ -94,10 +94,10 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
             // the functionname.
             ->addRewrite('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter', 'Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter')
             // Registering the fluid connector class.
-            ->addRewrite('Brainworxx\\Krexx\\Service\\Code\\Connectors', 'Tx_Includekrexx_Rewrite_ServiceCodeConnectors')
+            ->addRewrite('Brainworxx\\Krexx\\Analyse\\Code\\Connectors', 'Tx_Includekrexx_Rewrite_ServiceCodeConnectors')
             // Registering the special source generation for methods.
             ->addRewrite('Brainworxx\\Krexx\\Analyse\Callback\\Iterate\\ThroughMethods', 'Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods')
-            ->addRewrite('Brainworxx\\Krexx\\Service\\Code\\Codegen', 'Tx_Includekrexx_Rewrite_ServiceCodeCodegen');
+            ->addRewrite('Brainworxx\\Krexx\\Analyse\\Code\\Codegen', 'Tx_Includekrexx_Rewrite_ServiceCodeCodegen');
 
         // Set the view in the registry, we will retreive it later on.
         // We will add the info from where the fluid call actually came.

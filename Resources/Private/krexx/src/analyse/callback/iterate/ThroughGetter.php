@@ -36,9 +36,9 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Code\Connectors;
-use Brainworxx\Krexx\Service\Misc\File;
+use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Misc\File;
 
 /**
  * Getter method analysis methods.
@@ -136,7 +136,7 @@ class ThroughGetter extends AbstractCallback
      * @return string
      *   The rendered markup.
      */
-    protected function retrievePropertyValue(\ReflectionMethod $reflectionMethod, $model)
+    protected function retrievePropertyValue(\ReflectionMethod $reflectionMethod, Model $model)
     {
         $refProp = $this->getReflectionProperty($this->parameters['ref'], $reflectionMethod);
 
@@ -160,8 +160,7 @@ class ThroughGetter extends AbstractCallback
                 // exist, until the getter computes it.
                 $model->addToJson('hint', $this->pool->messages->getHelp('getterNull'));
             }
-            return $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Routing')
-                    ->analysisHub($model);
+            return $this->pool->routing->analysisHub($model);
         }
     }
 

@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Routing;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * "Routing" for kreXX
@@ -45,6 +46,21 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class Routing extends AbstractRouting
 {
+
+    public function __construct(Pool $pool)
+    {
+        parent::__construct($pool);
+        $this->processArray = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessArray');
+        $this->processBacktrace = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessBacktrace');
+        $this->processBoolean = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessBoolean');
+        $this->processClosure = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessClosure');
+        $this->processFloat = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessFloat');
+        $this->processInteger = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessInteger');
+        $this->processNull = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessNull');
+        $this->processObject = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessObject');
+        $this->processResource = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessResource');
+        $this->processString = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessString');
+    }
 
     /**
      * Dump information about a variable.
@@ -73,9 +89,7 @@ class Routing extends AbstractRouting
                 $this->pool->emergencyHandler->downOneNestingLevel();
                 $text = gettype($data) . ' => ' . $this->pool->messages->getHelp('maximumLevelReached');
                 $model->setData($text);
-                return $this->pool
-                    ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessString')
-                    ->process($model);
+                return $this->processString->process($model);
             }
         }
 
@@ -107,16 +121,12 @@ class Routing extends AbstractRouting
             // it is just a string.
             if (is_a($data, '\\Closure')) {
                 // Closures are handled differently than normal objects
-                $result = $this->pool
-                    ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessClosure')
-                    ->process($model);
+                $result = $this->processClosure->process($model);
                 $this->pool->emergencyHandler->downOneNestingLevel();
                 return $result;
             } else {
                 // Normal object.
-                $result = $this->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessObject')
-                ->process($model);
+                $result = $this->processObject->process($model);
                 $this->pool->emergencyHandler->downOneNestingLevel();
                 return $result;
             }
@@ -124,9 +134,7 @@ class Routing extends AbstractRouting
 
         // Array?
         if (is_array($data)) {
-            $result = $this->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessArray')
-                ->process($model);
+            $result = $this->processArray->process($model);
             $this->pool->emergencyHandler->downOneNestingLevel();
             return $result;
         }
@@ -134,49 +142,37 @@ class Routing extends AbstractRouting
         // Resource?
         if (is_resource($data)) {
             $this->pool->emergencyHandler->downOneNestingLevel();
-            return $this->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessResource')
-                ->process($model);
+            return $this->processResource->process($model);
         }
 
         // String?
         if (is_string($data)) {
             $this->pool->emergencyHandler->downOneNestingLevel();
-            return $this->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessString')
-                ->process($model);
+            return $this->processString->process($model);
         }
 
         // Float?
         if (is_float($data)) {
             $this->pool->emergencyHandler->downOneNestingLevel();
-            return $this->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessFloat')
-                ->process($model);
+            return $this->processFloat->process($model);
         }
 
         // Integer?
         if (is_int($data)) {
             $this->pool->emergencyHandler->downOneNestingLevel();
-            return $this->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessInteger')
-                ->process($model);
+            return $this->processInteger->process($model);
         }
 
         // Boolean?
         if (is_bool($data)) {
             $this->pool->emergencyHandler->downOneNestingLevel();
-            return $this->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessBoolean')
-                ->process($model);
+            return $this->processBoolean->process($model);
         }
 
         // Null ?
         if (is_null($data)) {
             $this->pool->emergencyHandler->downOneNestingLevel();
-             return $this->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Process\\ProcessNull')
-                ->process($model);
+             return $this->processNull->process($model);
         }
 
         // Still here? This should not happen. Return empty string, just in case.

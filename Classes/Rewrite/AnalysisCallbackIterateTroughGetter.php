@@ -34,7 +34,7 @@
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Code\Connectors;
 
 /**
  * Analysing the getter methods, without the actual 'get' word in the method name.
