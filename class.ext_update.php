@@ -54,9 +54,6 @@ class ext_update
 
     /**
      * Main Function.
-     *
-     * @return string
-     *   Gives feedback of what was actually done.
      */
     public function main()
     {

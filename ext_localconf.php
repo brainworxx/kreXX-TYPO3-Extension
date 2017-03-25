@@ -123,7 +123,7 @@ $boot = function ($_EXTKEY) {
     // Empty index.html in caqse the htacess is not enough.
     $indexHtml = '';
     // Create and protect the temporal folders.
-    if (class_exists(\TYPO3\CMS\Core\Utility\GeneralUtility::class)) {
+    if (class_exists('TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) {
         foreach ($tempPaths as $key => $tempPath) {
             if (!is_dir($tempPath)) {
                 // Create it!
