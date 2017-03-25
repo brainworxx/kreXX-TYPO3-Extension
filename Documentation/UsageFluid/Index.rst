@@ -52,17 +52,3 @@ Use this part if you don't want fluid to escape your string or if you are stitch
 
 kreXX will then try to analyse everything inside the variable given to it.
 
-
-f:debug vs. krexx:debug
-^^^^^^^^^^^^^^^^^^^^^^^
-
-f:debug is a great debugger, and shows the values that are used most of the time. But it does not give you everything that there is.
-The great advantages of f:debug are:
-	- Easy to read
-	- Easy to use
-|
-krexx:debug on the other hand tries to give you everything that is analysable, which may be too much.
-The great advantages of krexx:debug are:
-	- Nearly complete list of attributes / methods / properties
-	- Output via backend logging / shutdown function minimises the interference with the TYPO3 output.
-	- Source generation
