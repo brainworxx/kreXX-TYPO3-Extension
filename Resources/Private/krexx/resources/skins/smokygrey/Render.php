@@ -50,17 +50,20 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
     public function renderSingleChild(Model $model)
     {
 
-        $template = parent::renderSingleChild($model);
-        // Replace the source button
-        $template = str_replace('{language}', $model->getConnectorLanguage(), $template);
+
+        // Replace the source button and set the json.
+
         $json = $model->getJson();
 
         $json['Help'] = $this->pool->messages->getHelp($model->getHelpid());
         // Prepare the json.
         $json = $this->encodeJson($json);
-        $template = str_replace('{addjson}', $json, $template);
 
-        return $template;
+        return str_replace(
+            array('{language}', '{addjson}'),
+            array($model->getConnectorLanguage(), $json),
+            parent::renderSingleChild($model)
+        );
     }
 
 
@@ -75,46 +78,59 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
             return '';
         }
 
-        // We need to render this one normally.
-        $template = $this->getTemplateFileContent('expandableChildNormal');
-        // Replace our stuff in the partial.
-        $template = str_replace('{name}', $model->getName(), $template);
-        $template = str_replace('{type}', $model->getType(), $template);
-
         // Explode the type to get the class names right.
         $types = explode(' ', $model->getType());
         $cssType = '';
         foreach ($types as $singleType) {
             $cssType .= ' k' . $singleType;
         }
-        $template = str_replace('{ktype}', $cssType, $template);
-
-        $template = str_replace('{normal}', $model->getNormal(), $template);
-        $template = str_replace('{connector2}', $this->renderConnector($model->getConnector2()), $template);
 
         // Generating our code and adding the Codegen button, if there is
         // something to generate.
         $gencode = $this->pool->codegenHandler->generateSource($model);
-        $template = str_replace('{gensource}', $gencode, $template);
+
         if ($gencode === ';stop;' || empty($gencode)) {
             // Remove the button marker, because here is nothing to add.
-            $template = str_replace('{sourcebutton}', '', $template);
+            $sourcebutton = '';
         } else {
             // Add the button.
-            $template = str_replace('{sourcebutton}', $this->getTemplateFileContent('sourcebutton'), $template);
-            $template = str_replace('{language}', $model->getConnectorLanguage(), $template);
+            $sourcebutton = str_replace(
+                '{language}',
+                $model->getConnectorLanguage(),
+                $this->getTemplateFileContent('sourcebutton')
+            );
         }
-
-        // Is it expanded?
-        // This is done in the js.
-        $template = str_replace('{isExpanded}', '', $template);
 
         $json = $model->getJson();
         $json['Help'] = $this->pool->messages->getHelp($model->getHelpid());
-        $json = $this->encodeJson($json);
-        $template = str_replace('{addjson}', $json, $template);
 
-        return str_replace('{nest}', $this->pool->chunks->chunkMe($this->renderNest($model, false)), $template);
+        return str_replace(
+            array(
+                '{name}',
+                '{type}',
+                '{ktype}',
+                '{normal}',
+                '{connector2}',
+                '{gensource}',
+                '{isExpanded}',
+                '{addjson}',
+                '{nest}',
+                '{sourcebutton}',
+            ),
+            array(
+                $model->getName(),
+                $model->getType(),
+                $cssType,
+                $model->getNormal(),
+                $this->renderConnector($model->getConnector2()),
+                $gencode,
+                '',
+                $this->encodeJson($json),
+                $this->pool->chunks->chunkMe($this->renderNest($model, false)),
+                $sourcebutton,
+            ),
+            $this->getTemplateFileContent('expandableChildNormal')
+        );
     }
 
     /**
@@ -152,16 +168,16 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
      */
     public function renderButton(Model $model)
     {
-
-        $template = parent::renderButton($model);
-
         // Prepare the json. Not much do display for form elements.
         $json = $this->encodeJson(array(
             'Help' => $this->pool->messages->getHelp($model->getHelpid()),
         ));
-        $template = str_replace('{addjson}', $json, $template);
 
-        return str_replace('{class}', $model->getName(), $template);
+        return str_replace(
+            array('{addjson}', '{class}'),
+            array($json, $model->getName()),
+            parent::renderButton($model)
+        );
     }
 
     /**
@@ -169,22 +185,33 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
      */
     public function renderHeader($doctype, $headline, $cssJs)
     {
-        $template = parent::renderHeader($doctype, $headline, $cssJs);
-
         // Doing special stuff for smokygrey:
         // We hide the debug-tab when we are displaying the config-only and switch
         // to the config as the current payload.
         if ($headline === 'Edit local settings') {
-            $template = str_replace('{kdebug-classes}', 'khidden', $template);
-            $template = str_replace('{kconfiguration-classes}', 'kactive', $template);
-            $template = str_replace('{klinks-classes}', '', $template);
+            $debugClass = 'khidden';
+            $configClass = 'kactive';
+            $linkClass = '';
         } else {
-            $template = str_replace('{kdebug-classes}', 'kactive', $template);
-            $template = str_replace('{kconfiguration-classes}', '', $template);
-            $template = str_replace('{klinks-classes}', '', $template);
+            $debugClass = 'kactive';
+            $configClass = '';
+            $linkClass = '';
         }
 
-        return $template;
+        return str_replace(
+            array(
+                '{kdebug-classes}',
+                '{kconfiguration-classes}',
+                '{klinks-classes}',
+            ),
+            array(
+                $debugClass,
+                $configClass,
+                $linkClass,
+            ),
+            parent::renderHeader($doctype, $headline, $cssJs)
+        );
+
     }
 
     /**
@@ -192,15 +219,21 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
      */
     public function renderFooter($caller, $configOutput, $configOnly = false)
     {
-        $template = parent::renderFooter($caller, $configOutput);
-
         // Doing special stuff for smokygrey:
         // We hide the debug-tab when we are displaying the config-only and switch
         // to the config as the current payload.
         if ($configOnly) {
-            $template = str_replace('{kconfiguration-classes}', '', $template);
+            $template = str_replace(
+                '{kconfiguration-classes}',
+                '',
+                parent::renderFooter($caller, $configOutput)
+            );
         } else {
-            $template = str_replace('{kconfiguration-classes}', 'khidden', $template);
+            $template = str_replace(
+                '{kconfiguration-classes}',
+                'khidden',
+                parent::renderFooter($caller, $configOutput)
+            );
         }
 
         return $template;
@@ -211,11 +244,12 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
      */
     public function renderFatalMain($type, $errstr, $errfile, $errline)
     {
-        $template = parent::renderFatalMain($type, $errstr, $errfile, $errline);
-
         // Add the search.
-        $template = str_replace('{search}', $this->renderSearch(), $template);
-        return str_replace('{KrexxId}', $this->pool->recursionHandler->getMarker(), $template);
+        return str_replace(
+            array('{search}', '{KrexxId}'),
+            array($this->renderSearch(), $this->pool->recursionHandler->getMarker()),
+            parent::renderFatalMain($type, $errstr, $errfile, $errline)
+        );
     }
 
     /**
@@ -252,15 +286,28 @@ class Render extends \Brainworxx\Krexx\Service\View\Render
      */
     protected function encodeJson(array $array)
     {
+
         foreach ($array as &$string) {
             // Our js has some problems with single quotes and escaped quotes.
             // We remove them as well as linebreaks.
-            $string = str_replace('"', "\\u0027", $string);
-            $string = str_replace("'", "\\u0022", $string);
-            $string = str_replace('&quot;', "\\u0027", $string);
             // Unicode greater-than aund smaller-then values.
-            $string = str_replace('&lt;', "\\u276E", $string);
-            $string = str_replace('&gt;', "\\u02C3", $string);
+            $string = str_replace(
+                array(
+                    '"',
+                    "'",
+                    '&quot;',
+                    '&lt;',
+                    '&gt;',
+                ),
+                array(
+                    "\\u0027",
+                    "\\u0022",
+                    "\\u0027",
+                    "\\u276E",
+                    "\\u02C3",
+                ),
+                $string
+            );
         }
 
         return json_encode($array);

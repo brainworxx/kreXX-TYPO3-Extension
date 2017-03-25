@@ -59,6 +59,7 @@ class Krexx
     {
         $krexxDir = dirname(__FILE__) . DIRECTORY_SEPARATOR;
         include_once $krexxDir . 'src/service/view/Help.php';
+        include_once $krexxDir . 'src/service/view/AbstractRender.php';
         include_once $krexxDir . 'src/service/view/Render.php';
         include_once $krexxDir . 'src/service/view/Messages.php';
         include_once $krexxDir . 'src/service/config/Model.php';

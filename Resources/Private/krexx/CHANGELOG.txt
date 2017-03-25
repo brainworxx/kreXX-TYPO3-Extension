@@ -21,7 +21,7 @@
 - Change: Output -> File will now save the logfile directly after
   the analysis.
 - Change: Renamed the Output -> Frontend configuration to
-  Output -> shutdown.
+  Output -> browser.
 
 
 2.1.1

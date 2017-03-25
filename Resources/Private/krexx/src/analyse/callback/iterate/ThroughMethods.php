@@ -35,9 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Code\Connectors;
-use Brainworxx\Krexx\Service\Code\ReflectionParameterWrapper;
 
 /**
  * Methods analysis methods. :rolleyes:
@@ -125,10 +123,15 @@ class ThroughMethods extends AbstractCallback
     }
 
     /**
-     * Get the declaration place of theis method.
+     * Get the declaration place of this method.
      *
      * @param \ReflectionMethod $reflectionMethod
+     *   Reflection of the method we are analysing.
      * @param \ReflectionClass $declaringClass
+     *   Reflection of the class we are analysing
+     *
+     * @return string
+     *   The analysis result.
      */
     protected function getDeclarationPlace(\ReflectionMethod $reflectionMethod, \ReflectionClass $declaringClass)
     {

@@ -400,7 +400,7 @@ class Objects extends AbstractCallback
             if (is_a($data, 'SplObjectStorage')) {
                 $multiline = true;
             }
-            
+
             // Add a try to prevent the hosting CMS from doing something stupid.
             try {
                 // We need to deactivate the current error handling to

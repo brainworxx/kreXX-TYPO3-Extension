@@ -141,7 +141,7 @@ abstract class AbstractController
         // Register our output service.
         // Depending on the setting, we use another class here.
         $outputSetting = $pool->config->getSetting('destination');
-        if ($outputSetting === 'shutdown') {
+        if ($outputSetting === 'browser') {
             $this->outputService = $pool->createClass('Brainworxx\\Krexx\\Service\\Output\\Shutdown');
         }
         if ($outputSetting === 'file') {

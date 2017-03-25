@@ -73,7 +73,7 @@ class Fallback
             'disabled' => 'false',
             'iprange' => '*',
             'skin' => 'smokygrey',
-            'destination' => 'shutdown',
+            'destination' => 'browser',
             'maxfiles' => '10',
         ),
         'runtime' => array(
