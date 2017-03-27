@@ -116,6 +116,8 @@ class Render extends \Brainworxx\Krexx\View\Render
                 '{addjson}',
                 '{nest}',
                 '{sourcebutton}',
+                '{codewrapper1}',
+                '{codewrapper2}',
             ),
             array(
                 $model->getName(),
@@ -128,6 +130,8 @@ class Render extends \Brainworxx\Krexx\View\Render
                 $this->encodeJson($json),
                 $this->pool->chunks->chunkMe($this->renderNest($model, false)),
                 $sourcebutton,
+                $this->pool->codegenHandler->generateWrapper1(),
+                $this->pool->codegenHandler->generateWrapper2(),
             ),
             $this->getTemplateFileContent('expandableChildNormal')
         );

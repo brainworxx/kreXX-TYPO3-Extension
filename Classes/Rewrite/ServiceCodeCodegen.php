@@ -101,6 +101,34 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
     }
 
     /**
+     * Warp everything into those fluid brackets, but onlky on the first level.
+     *
+     * @return string
+     */
+    public function generateWrapper1()
+    {
+        if ($this->pool->emergencyHandler->getNestingLevel() === 1) {
+            return '{';
+        } else {
+            return '';
+        }
+    }
+
+    /**
+     * Warp everything into those fluid brackets, but onlky on the first level.
+     *
+     * @return string
+     */
+    public function generateWrapper2()
+    {
+        if ($this->pool->emergencyHandler->getNestingLevel() === 1) {
+            return '}';
+        } else {
+            return '';
+        }
+    }
+
+    /**
      * We will not allow code generation for configured debug methods.
      *
      * {@inheritdoc}

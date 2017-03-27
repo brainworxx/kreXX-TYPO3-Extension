@@ -46,91 +46,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class Render extends AbstractRender
 {
-
-    /**
-     * {@inheritdoc}
-     */
-    public function renderSingleChild(Model $model)
-    {
-        // This one is a little bit more complicated than the others,
-        // because it assembles some partials and stitches them together.
-        $partExpand = '';
-        $partCallable = '';
-        $partExtra = '';
-
-        if ($model->getHasExtras()) {
-            // We have a lot of text, so we render this one expandable (yellow box).
-            $partExpand = 'kexpand';
-            // Add the yellow box for large output text.
-            $partExtra = str_replace(
-                '{data}',
-                $model->getData(),
-                $this->getTemplateFileContent('singleChildExtra')
-            );
-        }
-        if ($model->getIsCallback()) {
-            // Add callable partial.
-            $partCallable = str_replace(
-                '{normal}',
-                $model->getNormal(),
-                $this->getTemplateFileContent('singleChildCallable')
-            );
-        }
-        // Stitching the classes together, depending on the types.
-        $typeArray = explode(' ', $model->getType());
-        $typeClasses = '';
-        foreach ($typeArray as $typeClass) {
-            $typeClass = 'k' . $typeClass;
-            $typeClasses .= $typeClass . ' ';
-        }
-
-        // Generating our code and adding the Codegen button, if there is something
-        // to generate.
-        $gensource = $this->pool->codegenHandler->generateSource($model);
-
-        if (empty($gensource)) {
-            // Remove the markers, because here is nothing to add.
-            $sourcebutton = '';
-        } else {
-            // We add the buttton and the code.
-            $sourcebutton = $this->getTemplateFileContent('sourcebutton');
-        }
-
-        // Stitching it together.
-        return str_replace(
-            array(
-                '{gensource}',
-                '{sourcebutton}',
-                '{expand}',
-                '{callable}',
-                '{extra}',
-                '{name}',
-                '{type}',
-                '{type-classes}',
-                '{normal}',
-                '{help}',
-                '{connector1}',
-                '{connector2}',
-                ),
-            array(
-                $gensource,
-                $sourcebutton,
-                $partExpand,
-                $partCallable,
-                $partExtra,
-                $model->getName(),
-                $model->getType(),
-                $typeClasses,
-                $model->getNormal(),
-                $this->renderHelp($model),
-                $this->renderConnector($model->getConnector1()),
-                $model->getConnector2()
-            ),
-            $this->getTemplateFileContent('singleChild')
-        );
-
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -226,6 +141,94 @@ class Render extends AbstractRender
         );
     }
 
+        /**
+     * {@inheritdoc}
+     */
+    public function renderSingleChild(Model $model)
+    {
+        // This one is a little bit more complicated than the others,
+        // because it assembles some partials and stitches them together.
+        $partExpand = '';
+        $partCallable = '';
+        $partExtra = '';
+
+        if ($model->getHasExtras()) {
+            // We have a lot of text, so we render this one expandable (yellow box).
+            $partExpand = 'kexpand';
+            // Add the yellow box for large output text.
+            $partExtra = str_replace(
+                '{data}',
+                $model->getData(),
+                $this->getTemplateFileContent('singleChildExtra')
+            );
+        }
+        if ($model->getIsCallback()) {
+            // Add callable partial.
+            $partCallable = str_replace(
+                '{normal}',
+                $model->getNormal(),
+                $this->getTemplateFileContent('singleChildCallable')
+            );
+        }
+        // Stitching the classes together, depending on the types.
+        $typeArray = explode(' ', $model->getType());
+        $typeClasses = '';
+        foreach ($typeArray as $typeClass) {
+            $typeClass = 'k' . $typeClass;
+            $typeClasses .= $typeClass . ' ';
+        }
+
+        // Generating our code and adding the Codegen button, if there is something
+        // to generate.
+        $gensource = $this->pool->codegenHandler->generateSource($model);
+
+        if (empty($gensource)) {
+            // Remove the markers, because here is nothing to add.
+            $sourcebutton = '';
+        } else {
+            // We add the buttton and the code.
+            $sourcebutton = $this->getTemplateFileContent('sourcebutton');
+        }
+
+        // Stitching it together.
+        return str_replace(
+            array(
+                '{gensource}',
+                '{sourcebutton}',
+                '{expand}',
+                '{callable}',
+                '{extra}',
+                '{name}',
+                '{type}',
+                '{type-classes}',
+                '{normal}',
+                '{help}',
+                '{connector1}',
+                '{connector2}',
+                '{codewrapper1}',
+                '{codewrapper2}',
+                ),
+            array(
+                $gensource,
+                $sourcebutton,
+                $partExpand,
+                $partCallable,
+                $partExtra,
+                $model->getName(),
+                $model->getType(),
+                $typeClasses,
+                $model->getNormal(),
+                $this->renderHelp($model),
+                $this->renderConnector($model->getConnector1()),
+                $model->getConnector2(),
+                $this->pool->codegenHandler->generateWrapper1(),
+                $this->pool->codegenHandler->generateWrapper2(),
+            ),
+            $this->getTemplateFileContent('singleChild')
+        );
+
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -273,7 +276,9 @@ class Render extends AbstractRender
                 '{gensource}',
                 '{sourcebutton}',
                 '{isExpanded}',
-                '{nest}'
+                '{nest}',
+                '{codewrapper1}',
+                '{codewrapper2}',
             ),
             array(
                 $model->getName(),
@@ -286,7 +291,9 @@ class Render extends AbstractRender
                 $gencode,
                 $sourceButton,
                 $expandedClass,
-                $this->pool->chunks->chunkMe($this->renderNest($model, $isExpanded))
+                $this->pool->chunks->chunkMe($this->renderNest($model, $isExpanded)),
+                $this->pool->codegenHandler->generateWrapper1(),
+                $this->pool->codegenHandler->generateWrapper2(),
             ),
             $this->getTemplateFileContent('expandableChildNormal')
         );

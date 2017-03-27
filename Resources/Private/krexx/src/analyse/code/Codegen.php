@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Code;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -145,6 +146,30 @@ class Codegen
 
         $this->counter++;
         return $result;
+    }
+
+    /**
+     * In case we need to wrap the everything until this point into something.
+     * Right now, this is not used for PHP, only for Fluid.
+     *
+     * @return string
+     *   Return an empty string.
+     */
+    public function generateWrapper1()
+    {
+        return '';
+    }
+
+    /**
+     * In case we need to wrap the everything until this point into something.
+     * Right now, this is not used for PHP, only for Fluid.
+     *
+     * @return string
+     *   Return an empty string.
+     */
+    public function generateWrapper2()
+    {
+        return '';
     }
 
     /**

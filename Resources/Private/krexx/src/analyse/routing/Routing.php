@@ -141,38 +141,44 @@ class Routing extends AbstractRouting
 
         // Resource?
         if (is_resource($data)) {
+            $result = $this->processResource->process($model);
             $this->pool->emergencyHandler->downOneNestingLevel();
-            return $this->processResource->process($model);
+            return $result;
         }
 
         // String?
         if (is_string($data)) {
+            $result = $this->processString->process($model);
             $this->pool->emergencyHandler->downOneNestingLevel();
-            return $this->processString->process($model);
+            return $result;
         }
 
         // Float?
         if (is_float($data)) {
+            $result = $this->processFloat->process($model);
             $this->pool->emergencyHandler->downOneNestingLevel();
-            return $this->processFloat->process($model);
+            return $result;
         }
 
         // Integer?
         if (is_int($data)) {
+            $result = $this->processInteger->process($model);
             $this->pool->emergencyHandler->downOneNestingLevel();
-            return $this->processInteger->process($model);
+            return $result;
         }
 
         // Boolean?
         if (is_bool($data)) {
+            $result = $this->processBoolean->process($model);
             $this->pool->emergencyHandler->downOneNestingLevel();
-            return $this->processBoolean->process($model);
+            return $result;
         }
 
         // Null ?
         if (is_null($data)) {
+            $result = $this->processNull->process($model);
             $this->pool->emergencyHandler->downOneNestingLevel();
-             return $this->processNull->process($model);
+            return $result;
         }
 
         // Still here? This should not happen. Return empty string, just in case.
