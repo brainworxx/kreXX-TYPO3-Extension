@@ -39,49 +39,54 @@ if (!defined('TYPO3_MODE')) {
 // Register BE module.
 if (TYPO3_MODE === 'BE') {
 
-    $registered = false;
-    // 6.0 ++
-    if (class_exists('\\TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility')) {
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-            $_EXTKEY,
-            'tools',
-            'kreXX configuration',
-            '',
-            array(
-                'Config' => 'edit,save',
-                'FormConfig' => 'edit,save',
-                'Log' => 'list,getContent,delete',
-                'Help' => 'usage,config',
-                'Cookie' => 'index',
-            ),
-            array(
-                'access' => 'user,group',
-                'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
-                'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml',
-            )
-        );
-        $registered = true;
-    }
+    $boot = function ($_EXTKEY) {
+        $registered = false;
+        // 6.0 ++
+        if (class_exists('\\TYPO3\\CMS\\Extbase\\Utility\\ExtensionUtility')) {
+            \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+                $_EXTKEY,
+                'tools',
+                'kreXX configuration',
+                '',
+                array(
+                    'Config' => 'edit,save',
+                    'FormConfig' => 'edit,save',
+                    'Log' => 'list,getContent,delete',
+                    'Help' => 'usage,config',
+                    'Cookie' => 'index',
+                ),
+                array(
+                    'access' => 'user,group',
+                    'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
+                    'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml',
+                )
+            );
+            $registered = true;
+        }
 
-    // The old way.
-    if (class_exists('Tx_Extbase_Utility_Extension') && !$registered) {
-        Tx_Extbase_Utility_Extension::registerModule(// Main area.
-            $_EXTKEY,
-            'tools',
-            'kreXX configuration',
-            '',
-            array(
-                'Config' => 'edit,save',
-                'FormConfig' => 'edit,save',
-                'Log' => 'list,getContent,delete',
-                'Help' => 'usage,config',
-                'Cookie' => 'index',
-            ),
-            array(
-                'access' => 'user,group',
-                'icon' => 'EXT:includekrexx/ext_icon.gif',
-                'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml'
-            )
-        );
-    }
+        // The old way.
+        if (class_exists('Tx_Extbase_Utility_Extension') && !$registered) {
+            Tx_Extbase_Utility_Extension::registerModule(// Main area.
+                $_EXTKEY,
+                'tools',
+                'kreXX configuration',
+                '',
+                array(
+                    'Config' => 'edit,save',
+                    'FormConfig' => 'edit,save',
+                    'Log' => 'list,getContent,delete',
+                    'Help' => 'usage,config',
+                    'Cookie' => 'index',
+                ),
+                array(
+                    'access' => 'user,group',
+                    'icon' => 'EXT:includekrexx/ext_icon.gif',
+                    'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml'
+                )
+            );
+        }
+    };
+
+    $boot($_EXTKEY);
+    unset($boot);
 }
