@@ -72,6 +72,20 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
 {
 
     /**
+     * No escaping for the rendered children, we want then as they are.
+     *
+     * @var bool
+     */
+    protected $escapeChildren = false;
+
+    /**
+     * We do not have any output.
+     *
+     * @var bool
+     */
+    protected $escapeOutput = false;
+
+    /**
      * {@inheritdoc}
      */
     public function initializeArguments()
@@ -89,20 +103,31 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
     {
         Krexx::$pool
             // Registering the fluid caller finder.
-            ->addRewrite('Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder', 'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid')
+            // Meh this one will never be able to find anything. At all.
+            ->addRewrite(
+                'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
+                'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid'
+            )
             // Registering the alternative getter analysis, without the 'get' in
             // the functionname.
-            ->addRewrite('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter', 'Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter')
+            ->addRewrite(
+                'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter',
+                'Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter'
+            )
             // Registering the fluid connector class.
-            ->addRewrite('Brainworxx\\Krexx\\Analyse\\Code\\Connectors', 'Tx_Includekrexx_Rewrite_ServiceCodeConnectors')
+            ->addRewrite(
+                'Brainworxx\\Krexx\\Analyse\\Code\\Connectors',
+                'Tx_Includekrexx_Rewrite_ServiceCodeConnectors'
+            )
             // Registering the special source generation for methods.
-            ->addRewrite('Brainworxx\\Krexx\\Analyse\Callback\\Iterate\\ThroughMethods', 'Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods')
-            ->addRewrite('Brainworxx\\Krexx\\Analyse\\Code\\Codegen', 'Tx_Includekrexx_Rewrite_ServiceCodeCodegen');
-
-        // Set the view in the registry, we will retreive it later on.
-        // We will add the info from where the fluid call actually came.
-        // Meh, this will not work in 4.5  :-(
-        Krexx::$pool->registry->set('FluidView', $this->viewHelperVariableContainer->getView());
+            ->addRewrite(
+                'Brainworxx\\Krexx\\Analyse\Callback\\Iterate\\ThroughMethods',
+                'Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods'
+            )
+            ->addRewrite(
+                'Brainworxx\\Krexx\\Analyse\\Code\\Codegen',
+                'Tx_Includekrexx_Rewrite_ServiceCodeCodegen'
+            );
 
         // Trigger the file loading, which may or may not be done by TYPO3.
         $this->fileLoading();
@@ -123,9 +148,6 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
             // Both are NULL, we must tell the dev!
             krexx(null);
         }
-
-        // Remove the view from the registry.
-        Krexx::$pool->registry->set('FluidView', '');
 
         // Reset all rewrites to the global ones.
         Krexx::$pool->flushRewrite();

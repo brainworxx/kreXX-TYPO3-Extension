@@ -34,84 +34,30 @@
 
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 
+/**
+ * "Caller finder" for fluid, without the ability to find anything.
+ *
+ * I tried to get this stable, using a lot of reflections to get access to
+ * what was actually rendered.
+ * Providing a solution from 4.5 till 8.6 proved to be error prone, and before
+ * knowingly adding another potential showstopper, we decided to add nothing.
+ * Not to mention that there are probably other showstoppers in includekrexx
+ * that we have no idea of.
+ */
 class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCaller
 {
     /**
+     * Find nothing.
+     *
      * {@inheritdoc}
      */
     public function findCaller()
     {
-        if (version_compare(TYPO3_version, '8.0', '<')) {
-            // The hacky 4.6 till 7.6 path finder.
-            $path = $this->findCallerByReflection();
-        } else {
-            // The new 8.0 and greater path finder
-            $path = $this->findPathByFramework();
-        }
-
         return array(
-            'file' => $this->filterFilePath($path),
-            // I have no idae how to get the actual line from the view.
+            'file' => 'filename is not available in fluid',
             'line' => 'n/a',
-            // Without line, there is no real chance to get the varname.
-            // Not to mention, that we may actually face something like
-            // this as a 'varname':
-            // {some:viewHelper(key: '{value}) -> some:anotherHelper(foo: 'bar'))
-            // This would totally complicate things unnecessary.
             'varname' => 'fluidvar',
         );
-    }
 
-    /**
-     * Find the path the hacky way, by using reflections to call a protected
-     * method.
-     *
-     * @return string
-     */
-    protected function findCallerByReflection()
-    {
-        // Using a reflection to get access to date feels somewhat dirty.
-        // Otoh, kreXX does the same thing all the time.
-        // If anybody knows how to get the following data from the viewhelper
-        // in a more clean way:
-        // - Path and filename
-        // - Line number
-        // - Variable name
-        // please add an issue at our tracker here:
-        // https://github.com/brainworxx/kreXX-TYPO3-Extension/issues
-        $fluidView = $this->pool->registry->get('FluidView');
-        $viewReflection = new \ReflectionClass($fluidView);
-        if ($viewReflection->hasMethod('getTemplatePathAndFilename')) {
-            // The new way
-            // Get it directly
-            $templatePathAndFilenameReflection = $viewReflection->getMethod('getTemplatePathAndFilename');
-            $templatePathAndFilenameReflection->setAccessible(true);
-            $path = $templatePathAndFilenameReflection->invoke($fluidView);
-        } else {
-            // I have no idea how to get it from 4.5.
-            // The method 'getTemplatePathAndFilename' was introduced in 4.6
-            // and I am not going to copy it here.  :-/
-            $path = 'calling template path not available';
-        }
-
-        return $path;
-    }
-
-    /**
-     * Find the path via the fluid framework.
-     *
-     * @return string
-     */
-    protected function findPathByFramework()
-    {
-        $renderingContext = $this->pool->registry->get('FluidView')->getRenderingContext();
-        $controllerName = $renderingContext->getControllerName();
-        $actionName = $renderingContext->getControllerAction();
-        $format = $renderingContext->getTemplatePaths()->getFormat();
-
-        $path = $renderingContext->getTemplatePaths()
-            ->resolveTemplateFileForControllerAndActionAndFormat($controllerName, $actionName, $format);
-
-        return $path;
     }
 }
