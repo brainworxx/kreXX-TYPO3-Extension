@@ -86,7 +86,7 @@ class Chunks
     /**
      * The file service used to read and write files.
      *
-     * @var File
+     * @var \Brainworxx\Krexx\Service\Misc\File
      */
     protected $fileService;
 
@@ -261,8 +261,11 @@ class Chunks
         // No more chunks, we save what is left.
         $this->fileService->putFileContents($filename, $string);
         // Save our metadata, so a potential backend module can display it.
+        // We may or may not have already some output for this file.
         if (!empty($this->metadata)) {
-            $this->fileService->putFileContents($filename . '.json', json_encode($this->metadata));
+            $oldData = (array) json_decode($this->fileService->getFileContents($filename . '.json'), true);
+            $mergedData = array_merge($oldData, $this->metadata);
+            $this->fileService->putFileContents($filename . '.json', json_encode($mergedData), true);
             $this->metadata = array();
         }
     }

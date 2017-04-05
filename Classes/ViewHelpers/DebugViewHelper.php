@@ -53,9 +53,6 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
 /**
  * Class Tx_Includekrexx_ViewHelpers_DebugViewHelper
  *
- * Works with TYPO§ 4.5 and above. In 4.5, there is no path display of the
- * calling template file.
- *
  * @namespace
  *   When using TYPO3 4.5 until 8.4, you need to declare the namespace first:
  *   {namespace krexx=Tx_Includekrexx_ViewHelpers}
