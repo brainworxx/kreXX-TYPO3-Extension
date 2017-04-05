@@ -8,8 +8,8 @@
 
 .. _ajax_cli:
 
-Ajax CLI and logging
-====================
+Ajax and CLI
+============
 
 Ajax
 ^^^^
@@ -32,8 +32,9 @@ If you want to debug Ajax or CLI requests, it is a good idea to use the followin
 .. code-block:: typoscript
 
     destination = "file"
-    detectAjax = "false"
 
 Logging
 ^^^^^^^
-Unless configured otherwise, all log files will be stored inside the folder krexx/log. kreXX will generate one output file for every request.
+The logging is documented herre: :ref:`logging`. kreXX will generate one output file for every request.
+
+|

@@ -11,31 +11,33 @@
 Configuration
 =============
 
-| You do not have to configure kreXX. It works very well out of the box.
-| There are two ways to configure kreXX:
+You do not have to configure kreXX. It works very well out of the box. There are two ways to configure kreXX:
 
 1. Edit configuration file settings (we have provided an editor for this)
 2. Edit local cookie settings
 
 Factory settings
 ----------------
+
 The factory settings are hardcoded default settings, in case there is no configuration available.
 
 Configuration file settings
 ---------------------------
+
 The configuration file is located here:
 
 .. code-block:: typoscript
 
-	typo3conf/ext/includekrexx/Resources/Private/krexx/Krexx.ini
+	typo3temp/tx_includekrexx/config/Krexx.ini
 
 You do not have to edit this file manually. we have provided a backend editor for this: :ref:`config_options`
 
 
 Local cookie settings
 ---------------------
-| Local cookie settings can be changed in the kreXX output window. Not all settings can be edited in the frontend, but that can be changed here: :ref:`fe-configuration`
-| Please note that local cookie settings affect only your current browser.
+
+Local cookie settings can be changed in the kreXX output window. Not all settings can be edited in the frontend, but that can be changed here: :ref:`fe-configuration`.
+Please note that local cookie settings affect only your current browser.
 
 |
 |

@@ -14,9 +14,9 @@ Setting up a local opening function
 
 Imagine the following situation:
 
-| There are several developers, designers and product owners working on your project, but you do not want them to trigger your kreXX output.
-| To achieve this, you can simply setup your own developer handle.
-|
+There are several developers, designers and product owners working on your project, but you do not want them to trigger your kreXX output.
+To achieve this, you can simply setup your own developer handle.
+
 |
 
 .. figure:: ../../Images/DevHandle/local_open_function.png
@@ -40,6 +40,8 @@ Debugging a live server
 ^^^^^^^^^^^^^^^^^^^^^^^
 Using a local open function might tempt you to debug a productive server, since only browsers with this string in their cookie can trigger kreXX.
 
-| **When it comes to debugging a productive  server, there is only one rule:**
-| **Never ever debug a productive server. This will only lead to trouble.**
+.. important::
+  When it comes to debugging a productive  server, there is only one rule:
+
+  Never ever debug a productive server. This will only lead to trouble.
 

@@ -35,7 +35,7 @@ These getters will **not** get called, and this guessing may fail with the follo
 +---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | NULL    | This means that the property itself exists, but has no value. The getter may create this value and only cache it inside the protected property. But since the method was not called, this value is NULL. |
 +---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| nothing | This means that kreXX was not able to identify the protected value.                                                                                                                                      |
+| nothing | This means that kreXX was not able to get anything from the getter method.                                                                                                                                      |
 +---------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 Recursion handling

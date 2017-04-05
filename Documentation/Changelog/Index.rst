@@ -15,7 +15,7 @@ Changelog
 2.2.0
     - [Feature] Added a fluid debugger viewhelper.
     - [Feature] Added more search pattern and source code parsing to the getter analysis.
-    - [Feature] Added a metatag to both skins to prevent crawler from indexing a kreXX output. Remember kids: never debug a productive site. This will only lead to trouble.
+    - [Feature] Added a metatag to both skins to have a little chance to prevent crawler from indexing a kreXX output. Remember kids: never debug a productive site. This will only lead to trouble.
     - [Feature] Added a Filter for the server document root from the file path of the calling file.
     - [Internals] A lot of small changes for the fluid debugger.
     - [Change] The log chunk and config folder are now residing in the :literal:`typo3temp` folder.

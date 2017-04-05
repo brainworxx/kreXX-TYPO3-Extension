@@ -106,9 +106,13 @@ abstract class AbstractCaller
      */
     protected function filterFilePath($path)
     {
-        if (isset($_SERVER['DOCUMENT_ROOT']) && strpos($path, $_SERVER['DOCUMENT_ROOT']) === 0) {
+        // There may or may not be a trailing '/'.
+        // We remove it, just in case, to make sure that we remove the doc root
+        // completely from the $path variable.
+        $docRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
+        if (isset($docRoot) && strpos($path, $docRoot) === 0) {
             // Found it on position 0.
-            $path = '. . ./' . substr($path, strlen($_SERVER['DOCUMENT_ROOT']) + 1);
+            $path = '. . ./' . substr($path, strlen($docRoot) + 1);
         }
 
         return $path;

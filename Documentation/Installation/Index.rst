@@ -18,3 +18,5 @@ Installation is very straight forward. You can:
 - Require the kreXX library itself with composer :literal:`composer require brainworxx/krexx` and then install the backend extension with the extension manager to get kreXX as early inside your system as possible
 
 There is no typoscript or pageTSconfig at all.
+
+So far, we have had a very active release strategy with kreXX. As soon as a new TYPO3 sprint release came out, we released a new kreXX version. In order to get the latest release of kreXX, you may want to consider updating your extension list.

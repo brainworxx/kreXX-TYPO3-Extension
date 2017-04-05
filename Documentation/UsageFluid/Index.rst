@@ -27,7 +27,7 @@ When using TYPO3 4.5 until 8.4, you need to declare the namespace first. If you 
 Analytic function
 ^^^^^^^^^^^^^^^^^
 
-Then calling the viewhelper is pretty much straight forward:
+Using the viewhelper is pretty much straight forward:
 
 .. code-block:: html
 

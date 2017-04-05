@@ -11,18 +11,19 @@
 Little helpers
 ==============
 
-| kreXX can produce a lot of output. And when you are on the 5'th level of the 7'th object, things will get confusing and hard to read.
-| To minimize confusion, the kreXX output offers two little helpers:
+kreXX can produce a lot of output. And when you are on the 5'th level of the 7'th object, things will get confusing and hard to read.
+To minimize confusion, the kreXX output offers two little helpers:
 
 Hide-Everything-Else
-^^^^^^^^^^^^^^^^^^^^
+--------------------
 
-| Modern frameworks tend to have complicated objects.
-| Analysing them with kreXX will then produce a lot of output. And the values you are looking for might be buried in there somewhere.
-| The Hide-Everything-Else function does exactly this: It hides all the other values, to make the output more comprehensible.
-| A click on the arrow symbol will hide all other values, except the value itself and it's child-values.
-| Another click on will reset everything.
-|
+Modern frameworks tend to have complicated objects.
+Analysing them with kreXX will then produce a lot of output. And the values you are looking for might be buried in there somewhere.
+
+The Hide-Everything-Else function does exactly this: It hides all the other values, to make the output more comprehensible.
+A click on the arrow symbol will hide all other values, except the value itself and it's child-values.
+Another click on will reset everything.
+
 |
 
 .. figure:: ../../Images/LittleHelpers/tldr_output.png
@@ -44,13 +45,12 @@ Hide-Everything-Else
 |
 
 Automatic code generation
-^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------
 
-| Displaying only the values you want to know about is one thing. Reaching them via php code is something else entirely.
-| We have included an automatic code generation, which generates php-code to reach these values.
-| There is a limitation, though. Most values you will come across are protected, and there is most likely a reason for this. kreXX will not generate code to make them public.
-| A click on the <php> symbol will generate this code.
-|
+Displaying only the values you want to know about is one thing. Reaching them via php code is something else entirely.
+
+We have included an automatic code generation, which generates php-code to reach these values. There is a limitation, though. Most values you will come across are protected, and there is most likely a reason for this. kreXX will not generate code to make them public. A click on the <php> symbol will generate this code.
+
 |
 
 .. figure:: ../../Images/LittleHelpers/code_gen.png

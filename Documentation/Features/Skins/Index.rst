@@ -16,6 +16,8 @@ We have provides kreXX with two different skins:
 - Smoky-Grey
 - Hans
 
+|
+
 .. figure:: ../../Images/Skins/smoky-grey.png
 	:width: 1073px
 	:alt: Screenshot of the Smoky-Grey skin
