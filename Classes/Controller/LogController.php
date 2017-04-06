@@ -78,7 +78,7 @@ class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controlle
             // That is why the kreXX lib provides some meta data. We will open
             // this file and add it's content to the template.
             if (is_readable($file . '.json')) {
-                $fileinfo['meta'] = json_decode(file_get_contents($file . '.json'), true);
+                $fileinfo['meta'] = (array) json_decode(file_get_contents($file . '.json'), true);
 
                 foreach ($fileinfo['meta'] as &$meta) {
                     $meta['filename'] = basename($meta['file']);
