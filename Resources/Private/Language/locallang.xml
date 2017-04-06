@@ -24,12 +24,12 @@
             <label index="analysePrivate">Shall kreXX try to analyse the private properties of a class? This may result in a lot of output.</label>
             <label index="analyseTraversable">Shall kreXX try to analyse possible traversable data? Depending on the underlying framework this info might be covered by the debug callback functions.</label>
             <label index="debugMethods">Comma-separated list of used debug callback functions. A lot of frameworks offer these, toArray and toString being the most common. kreXX will try to call them, if they are available and display their provided data.</label>
-            <label index="level">Some frameworks have objects inside of objects inside of objects, and so on. Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.</label>
+            <label index="level">Most frameworks have objects inside of objects inside of objects, and so on. Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.</label>
             <label index="resetbutton">Here you can reset your local settings, which are stored in a cookie. kreXX will then use the global settings (either ini-file or factory settings).</label>
             <label index="destination"><![CDATA['Browser' =  Sending everything to the browser after TYPO3 is finished with everything.
 'File' = Saving everything to the log folder.]]></label>
             <label index="maxCall">A lot of output does not only slow down your server, it also slows down your browser. When using kreXX in a loop, it will create output every time the loop is executed. To limit this, you can configure the maximum call settings.</label>
-            <label index="disabled">Here you can disable kreXX without uninstalling the whole module.</label>
+            <label index="disabled">Here you can disable kreXX without uninstalling the whole extension.</label>
             <label index="folder">This is the folder where kreXX will store it&apos;s logfiles.</label>
             <label index="maxfiles">How many logfiles do you want to store inside your logging folder? When there are more files than this number, the older files will get deleted.</label>
             <label index="skin">Choose a skin here. We have provided kreXX with two skins: smoky-grey and hans.</label>
@@ -39,8 +39,8 @@
             <label index="backtraceAnalysis">Shall kreXX do a "deep" analysis of  the backtrace? Be warned, a deep analysis can produce a lot of output. A "normal" analysis will use the configured settings, while a "deep" analysis will get as much data from the objects as possible.</label>
             <label index="memoryLeft">kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is MB.</label>
             <label index="maxRuntime">kreXX checks during the analysis how much time has elapsed since start. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is seconds.</label>
-            <label index="analyseProtectedMethods">Here you can toggle if kreXX shall analyse the protected methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.</label>
-            <label index="analysePrivateMethods">Here you can toggle if kreXX shall analyse the private methods of a class. Of cause, they will only be analysed if kreXX is analysing class methods at all.</label>
+            <label index="analyseProtectedMethods">Here you can toggle if kreXX shall analyse the protected methods of a class.</label>
+            <label index="analysePrivateMethods">Here you can toggle if kreXX shall analyse the private methods of a class.</label>
             <label index="analyseConstants">Here you can toggle, if kreXX shall analyse all constants of a class.</label>
             <label index="iprange">List of IPs that can trigger kreXX. Wildcards can be used.</label>
             <label index="analyseGetter">Shall kreXX try to determine the output of getter methods? These methods will not be called. kreXX will try to get the (possible) result from the class properties, which may lead to false results.</label>
@@ -139,7 +139,7 @@
             <!-- Content stuff  Edit Frontend Settings -->
             <label index="editfeconfig.help.headline">Here you can edit the frontend configuration form.</label>
             <label index="full.help"> = The value can be edited in the frontend.</label>
-            <label index="display.help"> = The value will only be displayed.</label>
+            <label index="display.help"> = The value will only be displayed. kreXX will not accept any value for it.</label>
             <label index="none.help"> = kreXX will not display the value or accept any values for it.</label>
             <label index="logging.noteditable">This setting is not editable on the frontend.</label>
 
