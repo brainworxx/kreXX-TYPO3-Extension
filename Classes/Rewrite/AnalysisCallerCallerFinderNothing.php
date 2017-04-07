@@ -44,7 +44,7 @@ use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
  * Not to mention that there are probably other showstoppers in includekrexx
  * that we have no idea of.
  */
-class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCaller
+class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderNothing extends AbstractCaller
 {
     /**
      * Find nothing.

@@ -99,12 +99,6 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
     public function render()
     {
         Krexx::$pool
-            // Registering the fluid caller finder.
-            // Meh this one will never be able to find anything. At all.
-            ->addRewrite(
-                'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
-                'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid'
-            )
             // Registering the alternative getter analysis, without the 'get' in
             // the functionname.
             ->addRewrite(
@@ -125,6 +119,31 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
                 'Brainworxx\\Krexx\\Analyse\\Code\\Codegen',
                 'Tx_Includekrexx_Rewrite_ServiceCodeCodegen'
             );
+
+
+        // We need other fluid caller finders, depending on the version.
+        // In case that anybody is actually reading this:
+        // Right now, I have no idea how stable this is. Both rewrites are kind
+        // of hacky, using reflections left and right.
+        // The "old" CallerFinder is still arround. So, if anybody is really using
+        // this code (and reading it), you may want to rollback to:
+//        Krexx::$pool->addRewrite(
+//            'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
+//            'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderNothing'
+//        );
+        Krexx::$pool->registry->set('DebugViewHelper', $this);
+
+        if (version_compare(TYPO3_version, '8.4', '>')) {
+            Krexx::$pool->addRewrite(
+                'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
+                'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid'
+            );
+        } else {
+            Krexx::$pool->addRewrite(
+                'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
+                'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld'
+            );
+        }
 
         // Trigger the file loading, which may or may not be done by TYPO3.
         $this->fileLoading();
@@ -171,6 +190,12 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
             if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid')) {
                 include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderFluid.php');
             }
+            if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderNothing')) {
+                include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderNothing.php');
+            }
+            if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld')) {
+                include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderFluidOld.php');
+            }
             if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter')) {
                 include_once($extPath . 'Classes/Rewrite/AnalysisCallbackIterateTroughGetter.php');
             }
@@ -184,5 +209,25 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
                 include_once($extPath . 'Classes/Rewrite/ServiceCodeCodegen.php');
             }
         }
+    }
+
+    /**
+     * Getter for the view
+     *
+     * @return \TYPO3Fluid\Fluid\View\ViewInterface|\TYPO3\CMS\Fluid\View\AbstractTemplateView
+     */
+    public function getView()
+    {
+        return $this->viewHelperVariableContainer->getView();
+    }
+
+    /**
+     * Getter for the rendering context
+     *
+     * @return \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface|\TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface
+     */
+    public function getRenderingContext()
+    {
+        return $this->renderingContext;
     }
 }
