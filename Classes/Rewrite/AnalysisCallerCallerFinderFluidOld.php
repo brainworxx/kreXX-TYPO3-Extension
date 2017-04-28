@@ -192,6 +192,7 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld extends Abstrac
 
         if ($this->viewReflection->hasMethod('getTemplatePathAndFilename')) {
             $templatePathAndFilenameReflection = $this->viewReflection->getMethod('getTemplatePathAndFilename');
+            $templatePathAndFilenameReflection->setAccessible(true);
             $result = $templatePathAndFilenameReflection->invoke($this->view);
         }
 
