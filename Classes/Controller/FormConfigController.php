@@ -68,23 +68,40 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
         );
 
         // See, if we have any values in the configuration file.
-        $value['output']['skin'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('skin'));
-        $value['runtime']['memoryLeft'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('memoryLeft'));
-        $value['runtime']['maxRuntime'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('maxRuntime'));
-        $value['runtime']['maxCall'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('maxCall'));
-        $value['output']['disabled'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('disabled'));
-        $value['runtime']['detectAjax'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('detectAjax'));
-        $value['properties']['analyseProtected'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('analyseProtected'));
-        $value['properties']['analysePrivate'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('analysePrivate'));
-        $value['properties']['analyseTraversable'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('analyseTraversable'));
-        $value['properties']['analyseConstants'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('analyseConstants'));
-        $value['runtime']['level'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('level'));
-        $value['methods']['analyseProtectedMethods'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('analyseProtectedMethods'));
-        $value['methods']['analysePrivateMethods'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('analysePrivateMethods'));
-        $value['backtraceAndError']['registerAutomatically'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('registerAutomatically'));
-        $value['backtraceAndError']['backtraceAnalysis'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('backtraceAnalysis'));
-        $value['methods']['analyseGetter'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('analyseGetter'));
-        $value['runtime']['useScopeAnalysis'] = $this->convertKrexxFeSetting($this->pool->config->getFeConfigFromFile('useScopeAnalysis'));
+        $value['output']['skin'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('skin'));
+        $value['runtime']['memoryLeft'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('memoryLeft'));
+        $value['runtime']['maxRuntime'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('maxRuntime'));
+        $value['runtime']['maxCall'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('maxCall'));
+        $value['output']['disabled'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('disabled'));
+        $value['runtime']['detectAjax'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('detectAjax'));
+        $value['properties']['analyseProtected'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('analyseProtected'));
+        $value['properties']['analysePrivate'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('analysePrivate'));
+        $value['properties']['analyseTraversable'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('analyseTraversable'));
+        $value['properties']['analyseConstants'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('analyseConstants'));
+        $value['runtime']['level'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('level'));
+        $value['methods']['analyseProtectedMethods'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('analyseProtectedMethods'));
+        $value['methods']['analysePrivateMethods'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('analysePrivateMethods'));
+        $value['backtraceAndError']['registerAutomatically'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('registerAutomatically'));
+        $value['backtraceAndError']['backtraceAnalysis'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('backtraceAnalysis'));
+        $value['methods']['analyseGetter'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('analyseGetter'));
+        $value['runtime']['useScopeAnalysis'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('useScopeAnalysis'));
 
         // Are these actually set?
         foreach ($value as $mainkey => $setting) {
@@ -92,7 +109,8 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
                 if (is_null($config)) {
                     $data['factory'][$attribute] = true;
                     // We need to fill these values with the stuff from the factory settings!
-                    $value[$mainkey][$attribute] = $this->convertKrexxFeSetting($this->pool->config->feConfigFallback[$attribute]);
+                    $value[$mainkey][$attribute] = $this->convertKrexxFeSetting($this->pool->config
+                        ->feConfigFallback[$attribute]);
                 } else {
                     $data['factory'][$attribute] = false;
                 }
@@ -186,7 +204,11 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
                 $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
             }
         } else {
-            $this->addMessage($this->LLL('save.success.text', array($filepath)), $this->LLL('save.success.title'), t3lib_FlashMessage::OK);
+            $this->addMessage(
+                $this->LLL('save.success.text', array($filepath)),
+                $this->LLL('save.success.title'),
+                t3lib_FlashMessage::OK
+            );
         }
 
         $this->redirect('edit');
@@ -207,6 +229,9 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
      */
     protected function convertKrexxFeSetting($values)
     {
+        // Fallback to 'none', just in case.
+        $result = 'none';
+
         if (is_array($values)) {
             // Explanation:
             // full -> is editable and values will be accepted

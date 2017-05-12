@@ -108,26 +108,45 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
 
 
         // See, if we have any values in the configuration file.
-        $value['output']['skin'] = $this->pool->config->getConfigFromFile('output', 'skin');
-        $value['runtime']['memoryLeft'] = $this->pool->config->getConfigFromFile('runtime', 'memoryLeft');
-        $value['runtime']['maxRuntime'] = $this->pool->config->getConfigFromFile('runtime', 'maxRuntime');
-        $value['output']['maxfiles'] = $this->pool->config->getConfigFromFile('output', 'maxfiles');
-        $value['output']['destination'] = $this->pool->config->getConfigFromFile('output', 'destination');
-        $value['runtime']['maxCall'] = $this->pool->config->getConfigFromFile('runtime', 'maxCall');
-        $value['output']['disabled'] = $this->pool->config->getConfigFromFile('output', 'disabled');
-        $value['output']['iprange'] = $this->pool->config->getConfigFromFile('output', 'iprange');
-        $value['runtime']['detectAjax'] = $this->pool->config->getConfigFromFile('runtime', 'detectAjax');
-        $value['properties']['analyseProtected'] = $this->pool->config->getConfigFromFile('properties', 'analyseProtected');
-        $value['properties']['analysePrivate'] = $this->pool->config->getConfigFromFile('properties', 'analysePrivate');
-        $value['properties']['analyseConstants'] = $this->pool->config->getConfigFromFile('properties', 'analyseConstants');
-        $value['properties']['analyseTraversable'] = $this->pool->config->getConfigFromFile('properties', 'analyseTraversable');
-        $value['methods']['debugMethods'] = $this->pool->config->getConfigFromFile('methods', 'debugMethods');
+        $value['output']['skin'] = $this->pool->config
+            ->getConfigFromFile('output', 'skin');
+        $value['runtime']['memoryLeft'] = $this->pool->config
+            ->getConfigFromFile('runtime', 'memoryLeft');
+        $value['runtime']['maxRuntime'] = $this->pool->config
+            ->getConfigFromFile('runtime', 'maxRuntime');
+        $value['output']['maxfiles'] = $this->pool->config
+            ->getConfigFromFile('output', 'maxfiles');
+        $value['output']['destination'] = $this->pool->config
+            ->getConfigFromFile('output', 'destination');
+        $value['runtime']['maxCall'] = $this->pool->config
+            ->getConfigFromFile('runtime', 'maxCall');
+        $value['output']['disabled'] = $this->pool->config
+            ->getConfigFromFile('output', 'disabled');
+        $value['output']['iprange'] = $this->pool->config
+            ->getConfigFromFile('output', 'iprange');
+        $value['runtime']['detectAjax'] = $this->pool->config
+            ->getConfigFromFile('runtime', 'detectAjax');
+        $value['properties']['analyseProtected'] = $this->pool->config
+            ->getConfigFromFile('properties', 'analyseProtected');
+        $value['properties']['analysePrivate'] = $this->pool->config
+            ->getConfigFromFile('properties', 'analysePrivate');
+        $value['properties']['analyseConstants'] = $this->pool->config
+            ->getConfigFromFile('properties', 'analyseConstants');
+        $value['properties']['analyseTraversable'] = $this->pool->config
+            ->getConfigFromFile('properties', 'analyseTraversable');
+        $value['methods']['debugMethods'] = $this->pool->config
+            ->getConfigFromFile('methods', 'debugMethods');
         $value['runtime']['level'] = $this->pool->config->getConfigFromFile('runtime', 'level');
-        $value['methods']['analyseProtectedMethods'] = $this->pool->config->getConfigFromFile('methods', 'analyseProtectedMethods');
-        $value['methods']['analysePrivateMethods'] = $this->pool->config->getConfigFromFile('methods', 'analysePrivateMethods');
-        $value['methods']['analyseGetter'] = $this->pool->config->getConfigFromFile('methods', 'analyseGetter');
-        $value['backtraceAndError']['registerAutomatically'] = $this->pool->config->getConfigFromFile('backtraceAndError', 'registerAutomatically');
-        $value['runtime']['useScopeAnalysis'] = $this->pool->config->getConfigFromFile('runtime', 'useScopeAnalysis');
+        $value['methods']['analyseProtectedMethods'] = $this->pool->config
+            ->getConfigFromFile('methods', 'analyseProtectedMethods');
+        $value['methods']['analysePrivateMethods'] = $this->pool->config
+            ->getConfigFromFile('methods', 'analysePrivateMethods');
+        $value['methods']['analyseGetter'] = $this->pool->config
+            ->getConfigFromFile('methods', 'analyseGetter');
+        $value['backtraceAndError']['registerAutomatically'] = $this->pool->config
+            ->getConfigFromFile('backtraceAndError', 'registerAutomatically');
+        $value['runtime']['useScopeAnalysis'] = $this->pool->config
+            ->getConfigFromFile('runtime', 'useScopeAnalysis');
 
         // Are these actually set?
         foreach ($value as $mainkey => $setting) {
@@ -229,7 +248,11 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
                 $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
             }
         } else {
-            $this->addMessage($this->LLL('save.success.text', array($filepath)), $this->LLL('save.success.title'), t3lib_FlashMessage::OK);
+            $this->addMessage(
+                $this->LLL('save.success.text', array($filepath)),
+                $this->LLL('save.success.title'),
+                t3lib_FlashMessage::OK
+            );
         }
 
         $this->redirect('edit');

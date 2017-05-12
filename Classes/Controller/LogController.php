@@ -119,7 +119,11 @@ class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controlle
             die();
         } else {
             // Error message and redirect to the list action.
-            $this->addMessage($this->LLL('log.notreadable', array($id . '.Krexx.html')), $this->LLL('log.fileerror'), t3lib_FlashMessage::ERROR);
+            $this->addMessage(
+                $this->LLL('log.notreadable', array($id . '.Krexx.html')),
+                $this->LLL('log.fileerror'),
+                t3lib_FlashMessage::ERROR
+            );
             $this->redirect('list');
         }
     }
@@ -146,7 +150,11 @@ class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controlle
             unlink($file);
         } else {
             // Error message.
-            $this->addMessage($this->LLL('log.notdeletable', array($file)), $this->LLL('log.fileerror'), t3lib_FlashMessage::ERROR);
+            $this->addMessage(
+                $this->LLL('log.notdeletable', array($file)),
+                $this->LLL('log.fileerror'),
+                t3lib_FlashMessage::ERROR
+            );
         }
     }
 

@@ -139,20 +139,26 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             // Check the 'Live' preset (7.6 and above)
             if (class_exists('TYPO3\\CMS\\Install\\Configuration\\Context\\LivePreset')) {
                 /** @var TYPO3\CMS\Install\Configuration\Context\LivePreset $debugPreset */
-                $productionPreset = $this->objectManager->get('TYPO3\\CMS\\Install\\Configuration\\Context\\LivePreset');
+                $productionPreset = $this->objectManager
+                    ->get('TYPO3\\CMS\\Install\\Configuration\\Context\\LivePreset');
                 $isProductive = $productionPreset->isActive();
-
             }
+            
             // Check the 'Production' preset (6.2)
             if (class_exists('TYPO3\\CMS\\Install\\Configuration\\Context\\ProductionPreset')) {
                 /** @var TYPO3\CMS\Install\Configuration\Context\LivePreset $debugPreset */
-                $productionPreset = $this->objectManager->get('TYPO3\\CMS\\Install\\Configuration\\Context\\ProductionPreset');
+                $productionPreset = $this->objectManager
+                    ->get('TYPO3\\CMS\\Install\\Configuration\\Context\\ProductionPreset');
                 $isProductive = $productionPreset->isActive();
             }
 
             if ($isProductive) {
                 //Display a warning, if we are in Productive / Live settings.
-                $this->addMessage($this->LLL('debugpreset.warning.message'), $this->LLL('debugpreset.warning.title'), t3lib_FlashMessage::WARNING);
+                $this->addMessage(
+                    $this->LLL('debugpreset.warning.message'),
+                    $this->LLL('debugpreset.warning.title'),
+                    t3lib_FlashMessage::WARNING
+                );
             }
         }
 
@@ -210,7 +216,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
                 $result = LocalizationUtility::translate($key, 'includekrexx', $args);
             } else {
                 // Version 4.5 until 6.2
-                $result = Tx_Extbase_Utility_Localization::translate($key, 'includekrexx', $args);
+                $result = \Tx_Extbase_Utility_Localization::translate($key, 'includekrexx', $args);
             }
 
             return $result;
