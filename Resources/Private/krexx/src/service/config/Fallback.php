@@ -98,6 +98,7 @@ class Fallback
         ),
         'backtraceAndError' => array(
             'registerAutomatically' => 'false',
+            'maxStepNumber' => 10,
         ),
     );
 
@@ -191,6 +192,10 @@ class Fallback
             'type' => 'Select',
             'editable' => 'true',
         ),
+        'maxStepNumber' => array(
+            'type' => 'Input',
+            'editable' => 'true',
+        ),
     );
 
     /**
@@ -263,5 +268,5 @@ class Fallback
      *
      * @var string
      */
-    public $version = '2.2.0';
+    public $version = '2.2.1 dev';
 }

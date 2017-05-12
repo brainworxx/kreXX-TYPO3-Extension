@@ -52,7 +52,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *   We use '@@@' to mark a chunk key. This function escapes the @
  *   so we have no collusion with data from strings.
  *
- * @package Brainworxx\Krexx\Service\Misc
+ * @package Brainworxx\Krexx\View\Output
  */
 class Chunks
 {
@@ -175,11 +175,11 @@ class Chunks
     protected function dechunkMe($key)
     {
         $filename = $this->chunkDir . $key . '.Krexx.tmp';
-        if (is_writable($filename)) {
+        if (is_readable($filename)) {
             // Read the file.
             $string = $this->fileService->getFileContents($filename);
             // Delete it, we don't need it anymore.
-            unlink($filename);
+            $this->fileService->deleteFile($filename);
         } else {
             // Huh, we can not fully access this one.
             $string = 'Could not access chunk file ' . $filename;
@@ -263,10 +263,11 @@ class Chunks
         // Save our metadata, so a potential backend module can display it.
         // We may or may not have already some output for this file.
         if (!empty($this->metadata)) {
-            $oldData = (array) json_decode($this->fileService->getFileContents($filename . '.json'), true);
-            $mergedData = array_merge($oldData, $this->metadata);
-            $this->fileService->putFileContents($filename . '.json', json_encode($mergedData), true);
-            $this->metadata = array();
+            // Remove the old metadata file. We still have all it's content
+            // available in $this->metadata.
+            $this->fileService->deleteFile($filename . '.json');
+            // Create a new metadata file with new infos.
+            $this->fileService->putFileContents($filename . '.json', json_encode($this->metadata));
         }
     }
 
@@ -285,7 +286,7 @@ class Chunks
                 foreach ($chunkList as $file) {
                     // We delete everything that is older than one hour.
                     if ((filemtime($file) + 3600) < time()) {
-                        unlink($file);
+                        $this->fileService->deleteFile($file);
                     }
                 }
             }
@@ -311,12 +312,8 @@ class Chunks
             // Cleanup logfiles.
             foreach ($logList as $file) {
                 if ($count > $maxFileCount) {
-                    if (is_writable($file)) {
-                        unlink($file);
-                    }
-                    if (is_writable($file . '.json')) {
-                        unlink($file . '.json');
-                    }
+                    $this->fileService->deleteFile($file);
+                    $this->fileService->deleteFile($file . '.json');
                 }
                 $count++;
             }

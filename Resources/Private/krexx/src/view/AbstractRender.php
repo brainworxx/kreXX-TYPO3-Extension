@@ -90,7 +90,7 @@ abstract class AbstractRender
      * @param Model $model
      *   The ID of the helptext.
      *
-     * @see Help
+     * @see Usage
      *
      * @return string
      *   The generated markup from the template files.
@@ -432,5 +432,4 @@ abstract class AbstractRender
      *   The generated markup from the template file.
      */
     abstract public function renderSingeChildHr();
-
 }

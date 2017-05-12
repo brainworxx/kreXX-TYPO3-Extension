@@ -64,8 +64,8 @@ class ConfigSection extends AbstractCallback
             // Render the single value.
             // We need to find out where the value comes from.
             /** @var \Brainworxx\Krexx\Service\Config\Model $setting */
-            $value = $setting->getValue();
             if ($setting->getType() !== 'None') {
+                $value = $setting->getValue();
                 // We need to re-translate booleans to something the
                 // frontend can understand.
                 if ($value === true) {
@@ -74,6 +74,7 @@ class ConfigSection extends AbstractCallback
                 if ($value === false) {
                     $value = 'false';
                 }
+
                 /** @var Model $model */
                 $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model');
                 if ($setting->getEditable()) {

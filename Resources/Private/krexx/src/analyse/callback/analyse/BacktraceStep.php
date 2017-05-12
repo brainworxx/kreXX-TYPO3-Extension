@@ -37,7 +37,6 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\File;
-use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Backtrace analysis methods.

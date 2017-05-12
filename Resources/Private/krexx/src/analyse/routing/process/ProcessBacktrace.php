@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -80,13 +81,21 @@ class ProcessBacktrace
     public function process(array &$backtrace, $offset = 0)
     {
         $output = '';
+        $maxStep = (int) $this->pool->config->getSetting('maxStepNumber');
+        $stepCount = count($backtrace);
 
-        foreach ($backtrace as $step => $stepData) {
+        if ($maxStep < $stepCount) {
+            $this->pool->messages->addMessage(
+                'Omitted backtrace steps ' . ($maxStep + 1) . ' until ' . ($stepCount)
+            );
+        }
+
+        for ($step = 1; $step <= $maxStep; $step++) {
             $output .= $this->pool->render->renderExpandableChild(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                     ->setName($step)
                     ->setType('Stack Frame')
-                    ->addParameter('data', $stepData)
+                    ->addParameter('data', $backtrace[$step])
                     ->addParameter('offset', $offset)
                     ->injectCallback(
                         $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep')

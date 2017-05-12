@@ -35,7 +35,6 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Constant analysis methods.

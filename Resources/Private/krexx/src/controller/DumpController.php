@@ -118,9 +118,7 @@ class DumpController extends AbstractController
                 ->setData($data)
                 ->setName($caller['varname'])
         );
-
-
-
+        
         // Now that our analysis is done, we must check if there was an emergency
         // break.
         if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {

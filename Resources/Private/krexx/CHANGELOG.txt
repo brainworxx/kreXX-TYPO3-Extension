@@ -1,3 +1,21 @@
+2.2.1 dev
+- Added a configuration for the backtrace, to limit the analysed
+  steps.
+- Bugfix: Prevent the debug methods from creating new analysis
+  calls, resulting in an infinite loop.
+- Bugfix: Better cleanup of HTML fragments left open from
+  the hosting CMS.
+- Bugfix: Reverted the 'Output -> File' change from 2.2.0
+- Bugfix: Prevent a notice in case a property has a default value
+  which is NULL.
+- Bufix: Fixed a possible endless loop when iterating a traversable
+  object.
+- Bugfix: limit the preview of method analysis with a lot of
+  parameters or long namespaces.
+- Bugfix: Removed a notice, in case krexx was called from normal
+  php and then again from a registered shutdown function.
+- Bugfix: Removed the multiple escaping of inherited comments.
+
 2.2.0
 - Added more search pattern and source code parsing to the
   getter analysis.

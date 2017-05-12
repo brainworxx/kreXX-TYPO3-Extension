@@ -37,7 +37,6 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Service\Misc\File;
-use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Class properties analysis methods.
@@ -83,7 +82,7 @@ class ThroughProperties extends AbstractCallback
             // Getting our values from the reflection.
             $value = $refProperty->getValue($this->parameters['orgObject']);
             $propName = $refProperty->name;
-            if (is_null($value) && $refProperty->isDefault()) {
+            if (is_null($value) && $refProperty->isDefault() && isset($default[$propName])) {
                 // We might want to look at the default value.
                 $value = $default[$propName];
             }

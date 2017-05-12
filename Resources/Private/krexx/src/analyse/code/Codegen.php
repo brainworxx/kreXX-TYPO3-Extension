@@ -35,7 +35,6 @@
 namespace Brainworxx\Krexx\Analyse\Code;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**

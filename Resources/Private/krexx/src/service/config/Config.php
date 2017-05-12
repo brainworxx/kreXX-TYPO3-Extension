@@ -102,18 +102,14 @@ class Config extends Fallback
     /**
      * Setter for the enabling from sourcecode.
      *
-     * Will only set it to true, if the
-     *
      * @param bool $value
      *   Whether it it enabled, or not.
      */
     public function setDisabled($value)
     {
-        if ($value) {
-            $this->settings['disabled']->setValue('true');
-        } else {
-            $this->settings['disabled']->setValue('false');
-        }
+        $this->settings['disabled']
+            ->setValue($value)
+            ->setSource('Internal flow');
     }
 
     /**

@@ -369,6 +369,18 @@ class Security extends Fallback
                 }
                 break;
 
+            case 'maxStepNumber':
+                // We expect an integer.
+                $result = $this->evalInt($value);
+                if (!$result) {
+                    $this->pool->messages->addMessage(
+                        $this->pool->messages->getHelp('configErrorMaxStepNumber')
+                    );
+                    $this->pool->messages->addKey('backtraceAndError.maxStepNumber.error');
+                }
+
+                break;
+
             default:
                 // Unknown settings,
                 // return false, just in case.

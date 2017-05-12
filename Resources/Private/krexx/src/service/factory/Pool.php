@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Service\Factory;
 
-use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Analyse\Scope;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Flow\Emergency;
@@ -45,6 +44,7 @@ use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Render;
 use Brainworxx\Krexx\Analyse\Routing\Routing;
+use Brainworxx\Krexx\Service\Misc\File;
 
 /**
  * Here we store all classes that we need.
@@ -106,13 +106,6 @@ class Pool extends Factory
      * @var Chunks
      */
     public $chunks;
-
-    /**
-     * Finds the script caller.
-     *
-     * @var AbstractCaller
-     */
-    public $callerFinder;
 
     /**
      * Scope analysis class.
@@ -194,10 +187,14 @@ class Pool extends Factory
      */
     protected function checkEnvironment()
     {
+        /** @var File $fileService */
+        $fileService = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
+
         // Check chunk folder is writable.
         // If not, give feedback!
         $chunkFolder = $this->config->getChunkDir();
         if (!is_writeable($chunkFolder)) {
+            $chunkFolder = $fileService->filterFilePath($chunkFolder);
             $this->messages->addMessage(
                 'Chunksfolder ' . $chunkFolder . ' is not writable!' .
                 'This will increase the memory usage of kreXX significantly!',
@@ -212,6 +209,7 @@ class Pool extends Factory
         // If not, give feedback!
         $logFolder = $this->config->getLogDir();
         if (!is_writeable($logFolder)) {
+            $logFolder = $fileService->filterFilePath($logFolder);
             $this->messages->addMessage('Logfolder ' . $logFolder . ' is not writable !', 'critical');
             $this->messages->addKey('protected.folder.log', array($logFolder));
         }

@@ -416,7 +416,16 @@ class Objects extends AbstractCallback
             restore_error_handler();
 
             if (isset($parameter)) {
-                return $this->pool->render->renderExpandableChild(
+                // Check memory and runtime.
+                if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
+                    return '';
+                }
+                // Check nesting level
+                $this->pool->emergencyHandler->upOneNestingLevel();
+                if ($this->pool->emergencyHandler->checkNesting()) {
+                    return '';
+                }
+                $result = $this->pool->render->renderExpandableChild(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                         ->setName($name)
                         ->setType('Foreach')
@@ -427,8 +436,11 @@ class Objects extends AbstractCallback
                             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')
                         )
                 );
+                $this->pool->emergencyHandler->downOneNestingLevel();
+                return $result;
             }
         }
+        // Still here?!? Return an empty string.
         return '';
     }
 

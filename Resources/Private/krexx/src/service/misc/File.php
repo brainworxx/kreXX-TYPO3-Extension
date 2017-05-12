@@ -192,7 +192,7 @@ class File
      * @param string $string
      *   The string we want to write.
      */
-    public function putFileContents($path, $string, $overwrite = false)
+    public function putFileContents($path, $string)
     {
         // Do some caching, so we check a file or dir only once!
         static $ops = array();
@@ -201,15 +201,6 @@ class File
         // Check the directory.
         if (!isset($dir[dirname($path)])) {
             $dir[dirname($path)]['canwrite'] = is_writable(dirname($path));
-        }
-
-        // When we overwrite a file, we need to delete it and remove the
-        // caching.
-        if ($overwrite) {
-            if ($ops[$path]['append']) {
-                unlink($path);
-            }
-            unset($ops[$path]);
         }
 
         if (!isset($ops[$path])) {
@@ -253,5 +244,54 @@ class File
         }
 
         return $timestamp;
+    }
+
+    /**
+     * Tries to delete a file.
+     *
+     * @param string $filename
+     */
+    public function deleteFile($filename)
+    {
+        // Check if it is an actual file and if it is writeable.
+        if (is_file($filename)) {
+            set_error_handler(function () {
+                /* do nothing */
+            });
+            // Make sure it is unlinkable.
+            chmod($filename, 0777);
+            if (!unlink($filename)) {
+                // We have a permission problem here!
+                $this->pool->messages->addMessage('Unable to delete file: ' . $this->filterFilePath($filename));
+            }
+
+            restore_error_handler();
+        }
+    }
+
+    /**
+     * We will remove the $_SERVER['DOCUMENT_ROOT'] from the absolute
+     * path of the calling file.
+     * Return the original path, in case we can not determine the
+     * $_SERVER['DOCUMENT_ROOT']
+     *
+     * @param $path
+     *   The path we want to filter
+     *
+     * @return string
+     *   The filtered path to the calling file.
+     */
+    public function filterFilePath($path)
+    {
+        // There may or may not be a trailing '/'.
+        // We remove it, just in case, to make sure that we remove the doc root
+        // completely from the $path variable.
+        $docRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
+        if (isset($docRoot) && strpos($path, $docRoot) === 0) {
+            // Found it on position 0.
+            $path = '. . ./' . substr($path, strlen($docRoot) + 1);
+        }
+
+        return $path;
     }
 }

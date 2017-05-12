@@ -250,7 +250,9 @@ abstract class AbstractController
      * Disables the fatal handler and the tick callback.
      *
      * We disable the tick callback and the error handler during
-     * a analysis, to generate faster output.
+     * a analysis, to generate faster output. We also disable
+     * other kreeXX calles, which may be caused by the debug callbacks
+     * to prevent kreXX from starting other kreXX calls.
      *
      * @return $this
      *   Return $this for chaining.
@@ -269,7 +271,11 @@ abstract class AbstractController
      * Re-enable the fatal handler and the tick callback.
      *
      * We disable the tick callback and the error handler during
-     * a analysis, to generate faster output.
+     * a analysis, to generate faster output. We reenable kreXX
+     * afterwards, so the dev can use it again.
+     *
+     * @return $this
+     *   Return $this for chaining.
      */
     public function reFatalAfterKrexx()
     {
@@ -277,6 +283,8 @@ abstract class AbstractController
             $this->krexxFatal->setIsActive(true);
             register_tick_function(array($this->krexxFatal, 'tickCallback'));
         }
+
+        return $this;
     }
 
     /**

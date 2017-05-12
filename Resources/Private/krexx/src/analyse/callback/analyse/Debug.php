@@ -35,7 +35,6 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Debug method result analysis methods.

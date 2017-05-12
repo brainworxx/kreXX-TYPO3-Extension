@@ -83,6 +83,9 @@ abstract class AbstractComment
      */
     protected function prettifyComment($comment)
     {
+        if (empty($comment)) {
+            return '';
+        }
         // We split our comment into single lines and remove the unwanted
         // comment chars with the array_map callback.
         $commentArray = explode("\n", $comment);

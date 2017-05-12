@@ -89,6 +89,14 @@ class ThroughMethods extends AbstractCallback
 
                 $paramList .= $reflectionParameterWrapper . ', ';
             }
+            // Limit the list to 256 Chars. A lot of modern __construct mehtods
+            // have a lot of parameters (or really long name spaces.
+            // The complete info will be available after a click on the
+            // function analysis anyway.
+            if (strlen($paramList) > 128) {
+                $paramList = substr($paramList, 0, 128) . ' . . . ';
+            }
+
             // Remove the ',' after the last char.
             $paramList = '<small>' . trim($paramList, ', ') . '</small>';
 

@@ -121,6 +121,11 @@ debugMethods = "debug,toArray,__toString,toString"
 ; registerAutomatically = "true"
 registerAutomatically = "false"
 
+; A backtrace tends to produce a lot of output, and browsers tend to have problems
+; with more than 100MB output in HTML text. Normally it is not unneccessary to go
+; back more than 10 steps, but if you need to, you can increase this number here.
+maxStepNumber = 10
+
 ; ------------------------------------------------------------------------------
 [feEditing]
 ; Here you can edit the frontend configuration form
