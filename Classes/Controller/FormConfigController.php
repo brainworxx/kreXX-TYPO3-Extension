@@ -96,8 +96,8 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
             ->getFeConfigFromFile('analysePrivateMethods'));
         $value['backtraceAndError']['registerAutomatically'] = $this->convertKrexxFeSetting($this->pool->config
             ->getFeConfigFromFile('registerAutomatically'));
-        $value['backtraceAndError']['backtraceAnalysis'] = $this->convertKrexxFeSetting($this->pool->config
-            ->getFeConfigFromFile('backtraceAnalysis'));
+        $value['backtraceAndError']['maxStepNumber'] = $this->convertKrexxFeSetting($this->pool->config
+            ->getFeConfigFromFile('maxStepNumber'));
         $value['methods']['analyseGetter'] = $this->convertKrexxFeSetting($this->pool->config
             ->getFeConfigFromFile('analyseGetter'));
         $value['runtime']['useScopeAnalysis'] = $this->convertKrexxFeSetting($this->pool->config
@@ -157,9 +157,9 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
         if (isset($arguments['action']) && $arguments['action'] == 'save' && $allOk) {
             // We need to correct the allowed settings, since we do not allow anything.
             unset($this->allowedSettingsNames['destination']);
-            unset($this->allowedSettingsNames['folder']);
             unset($this->allowedSettingsNames['maxfiles']);
             unset($this->allowedSettingsNames['debugMethods']);
+            unset($this->allowedSettingsNames['iprange']);
 
             // Iterating through the form.
             foreach ($arguments as $key => $data) {
@@ -229,8 +229,6 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
      */
     protected function convertKrexxFeSetting($values)
     {
-        // Fallback to 'none', just in case.
-        $result = 'none';
 
         if (is_array($values)) {
             // Explanation:

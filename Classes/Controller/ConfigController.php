@@ -77,35 +77,12 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
             'deep' => $this->LLL('deep'),
         );
 
-        // Setting the form help texts.
-        $data['title'] = array(
-            'localFunction' => $this->LLL('localFunction'),
-            'analyseProtected' => $this->LLL('analyseProtected'),
-            'analysePrivate' => $this->LLL('analysePrivate'),
-            'analyseTraversable' => $this->LLL('analysePrivate'),
-            'debugMethods' => $this->LLL('debugMethods'),
-            'level' => $this->LLL('level'),
-            'resetbutton' => $this->LLL('resetbutton'),
-            'destination' => $this->LLL('destination'),
-            'maxCall' => $this->LLL('maxCall'),
-            'disabled' => $this->LLL('disabled'),
-            'folder' => $this->LLL('folder'),
-            'maxfiles' => $this->LLL('maxfiles'),
-            'skin' => $this->LLL('skin'),
-            'currentSettings' => $this->LLL('currentSettings'),
-            'registerAutomatically' => $this->LLL('registerAutomatically'),
-            'detectAjax' => $this->LLL('detectAjax'),
-            'backtraceAnalysis' => $this->LLL('backtraceAnalysis'),
-            'memoryLeft' => $this->LLL('memoryLeft'),
-            'maxRuntime' => $this->LLL('maxRuntime'),
-            'analyseProtectedMethods' => $this->LLL('analyseProtectedMethods'),
-            'analysePrivateMethods' => $this->LLL('analysePrivateMethods'),
-            'analyseConstants' => $this->LLL('analyseConstants'),
-            'iprange' => $this->LLL('iprange'),
-            'analyseGetter' => $this->LLL('analyseGetter'),
-            'useScopeAnalysis' => $this->LLL('useScopeAnalysis'),
-        );
-
+        // Assigning the help stuff to the template.
+        $data['title'] = array();
+        $value = array();
+        foreach ($this->allowedSettingsNames as $settingsName) {
+            $data['title'][$settingsName] = $this->LLL($settingsName);
+        }
 
         // See, if we have any values in the configuration file.
         $value['output']['skin'] = $this->pool->config
@@ -145,6 +122,8 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
             ->getConfigFromFile('methods', 'analyseGetter');
         $value['backtraceAndError']['registerAutomatically'] = $this->pool->config
             ->getConfigFromFile('backtraceAndError', 'registerAutomatically');
+        $value['backtraceAndError']['maxStepNumber'] = $this->pool->config
+            ->getConfigFromFile('backtraceAndError', 'maxStepNumber');
         $value['runtime']['useScopeAnalysis'] = $this->pool->config
             ->getConfigFromFile('runtime', 'useScopeAnalysis');
 

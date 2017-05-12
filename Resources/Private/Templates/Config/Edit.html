@@ -152,6 +152,14 @@
                 <td><f:form.select id="registerAutomatically" name="backtraceAndError[registerAutomatically]" options="{data.bool}" value="{value.backtraceAndError.registerAutomatically}" /></td>
                 <td><f:form.checkbox id="factory.registerAutomatically" name="factory" checked="{data.factory.registerAutomatically}" value="1" /><label for="factory.registerAutomatically"><f:translate key="factory.settings" /></label></td>
             </tr>
+
+
+             <tr>
+                <td><label for="maxStepNumber"><f:translate key="label.maxStepNumber" /></label></td>
+                <td><f:image src="{f:uri.resource(path:'Icons/info.png')}" title="{data.title.maxStepNumber}" alt="{data.title.maxStepNumber}" /></td>
+                <td><f:form.textfield id="maxStepNumber" name="backtraceAndError[maxStepNumber]" value="{value.backtraceAndError.maxStepNumber}" /></td>
+                <td><f:form.checkbox id="factory.maxStepNumber" name="factory" checked="{data.factory.maxStepNumber}" value="1" /><label for="factory.maxStepNumber"><f:translate key="factory.settings" /></label></td>
+            </tr>
         </table>
 
     </f:form>

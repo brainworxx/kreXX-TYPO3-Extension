@@ -171,7 +171,7 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCa
         if ($this->renderingType === 3) {
             $path = $this->getLayoutPath();
         }
-        
+
          return array(
              'file' => $this->fileService->filterFilePath($path),
              'line' => 'n/a',
