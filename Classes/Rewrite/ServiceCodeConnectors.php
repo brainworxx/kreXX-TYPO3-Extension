@@ -34,6 +34,9 @@
 
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 
+/**
+ * Special connectors for fluid. Used by the code generation.
+ */
 class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
 {
 

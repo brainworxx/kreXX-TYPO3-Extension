@@ -34,6 +34,9 @@
 
 use Brainworxx\Krexx\Service\Config\Security;
 
+/**
+ * Using the cmpIP from the GeneralUtility in TYPO3.
+ */
 class Tx_Includekrexx_Rewrite_ServiceConfigSecurity extends Security
 {
     /**

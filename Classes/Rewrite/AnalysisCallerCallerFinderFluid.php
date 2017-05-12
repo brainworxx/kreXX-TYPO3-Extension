@@ -36,8 +36,6 @@ use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 
 /**
  * Trying to coax the current template/layout/partial file out of the fluid framework.
- *
- * Used for TYPO3 8.5 and greater.
  */
 class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCaller
 {
@@ -173,9 +171,9 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCa
         if ($this->renderingType === 3) {
             $path = $this->getLayoutPath();
         }
-
+        
          return array(
-             'file' => $this->filterFilePath($path),
+             'file' => $this->fileService->filterFilePath($path),
              'line' => 'n/a',
              'varname' => 'fluidvar',
          );

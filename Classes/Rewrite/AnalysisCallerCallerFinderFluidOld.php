@@ -36,14 +36,9 @@ use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 
 /**
  * Trying to coax the current template/layout/partial file out of the fluid framework.
- *
- * Used for TYPO3 4.5 until 8.4.
  */
 class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld extends AbstractCaller
 {
-    /**
-     * @var \TYPO3\CMS\Fluid\View\AbstractTemplateView
-     */
     protected $view;
 
     /**
@@ -54,16 +49,23 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld extends Abstrac
     protected $viewReflection;
 
     /**
-     * @var \TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface
+     * The rendering context of the template.
+     *
+     * @var \TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface|\TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface
      */
     protected $renderingContext;
 
     /**
-     * Most of the time, a dynamically compiled class with a dynamic name.
-     *
-     * @var object
+     * @var mixed
      */
     protected $parsedTemplate;
+
+    /**
+     * The kreXX debug viewhelper class
+     *
+     * @var Tx_Includekrexx_ViewHelpers_DebugViewHelper
+     */
+    protected $debugViewhelper;
 
     /**
      * What we are currently rendering.
@@ -92,6 +94,7 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld extends Abstrac
     {
         parent::__construct($pool);
 
+        /** @var \Tx_Includekrexx_ViewHelpers_DebugViewHelper $debugViewhelper */
         $debugViewhelper = $this->pool->registry->get('DebugViewHelper');
 
         $this->view = $debugViewhelper->getView();
@@ -174,7 +177,7 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld extends Abstrac
         }
 
          return array(
-             'file' => $this->filterFilePath($path),
+             'file' => $this->fileService->filterFilePath($path),
              'line' => 'n/a',
              'varname' => 'fluidvar',
          );
@@ -192,7 +195,6 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld extends Abstrac
 
         if ($this->viewReflection->hasMethod('getTemplatePathAndFilename')) {
             $templatePathAndFilenameReflection = $this->viewReflection->getMethod('getTemplatePathAndFilename');
-            $templatePathAndFilenameReflection->setAccessible(true);
             $result = $templatePathAndFilenameReflection->invoke($this->view);
         }
 
@@ -250,14 +252,6 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld extends Abstrac
                     $result = $getPartialPathAndFilenameReflection->invoke($this->view, $fileName);
                     break;
                 }
-            }
-
-            // Still here?
-            if (strpos(get_class($this->parsedTemplate), 'partial') === false && !empty($fileName)) {
-                // This means, that we are rendering a partial, but not from cache.
-                // The class from the rendering stack does not have a hash value,
-                // at least we need to tell he dev.
-                $result = 'rendered a partial without cache, unable to get the filename';
             }
         }
         return $result;

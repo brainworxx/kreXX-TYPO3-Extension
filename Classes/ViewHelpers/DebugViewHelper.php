@@ -122,15 +122,6 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
 
 
         // We need other fluid caller finders, depending on the version.
-        // In case that anybody is actually reading this:
-        // Right now, I have no idea how stable this is. Both rewrites are kind
-        // of hacky, using reflections left and right.
-        // The "old" CallerFinder is still arround. So, if anybody is really using
-        // this code (and reading it), you may want to rollback to:
-//        Krexx::$pool->addRewrite(
-//            'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
-//            'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderNothing'
-//        );
         Krexx::$pool->registry->set('DebugViewHelper', $this);
 
         if (version_compare(TYPO3_version, '8.4', '>')) {

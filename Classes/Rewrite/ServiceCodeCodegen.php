@@ -35,6 +35,9 @@
 use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Special code generation for fluid.
+ */
 class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
 {
     const VHS_CALL_VIEWHELPER = 'vhs_call_viewhelper';
