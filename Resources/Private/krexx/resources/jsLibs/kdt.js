@@ -272,6 +272,9 @@
                 }
             }
         }
+
+        // Stille here?!? No data fount, hence an empty string.
+        return '';
     };
 
     /**

@@ -162,7 +162,7 @@
          *
          * @event click
          */
-        kdt.addEvent('.kwrapper .kcollapse-me', 'click', krexx.collapse);
+        kdt.addEvent('.kwrapper .kolps', 'click', krexx.collapse);
 
         /**
          * Register the code generator on the P symbol.
@@ -176,7 +176,7 @@
          *
          * @event click
          */
-        kdt.addEvent('.kcodedisplay', 'click', kdt.preventBubble);
+        kdt.addEvent('.kodsp', 'click', kdt.preventBubble);
 
         /**
          * Clear our search results, because we now have new options.
@@ -264,7 +264,7 @@
                 kgencode.addEventListener('click', krexx.generateCode);
             }
 
-            newEl.querySelector('.kcollapse-me').addEventListener('click', krexx.collapse);
+            newEl.querySelector('.kolps').addEventListener('click', krexx.collapse);
 
             // Register the toggle function.
             var newExpand = newEl.nextElementSibling.querySelectorAll('.kexpand');
@@ -272,7 +272,7 @@
                 newExpand[i].addEventListener('click', krexx.toggle);
             }
             // Register the Collapse function.
-            var hideEverythingElse = newEl.nextElementSibling.querySelectorAll('.kcollapse-me');
+            var hideEverythingElse = newEl.nextElementSibling.querySelectorAll('.kolps');
             for (i = 0; i < hideEverythingElse.length; i++) {
                 hideEverythingElse[i].addEventListener('click', krexx.collapse);
             }
@@ -287,11 +287,11 @@
                 recursions[i].addEventListener('click', krexx.copyFrom);
             }
             // Prevent the event bubbling on the code generation display.
-            var codedisplay = newEl.nextElementSibling.querySelectorAll('.kwrapper .kcodedisplay');
+            var codedisplay = newEl.nextElementSibling.querySelectorAll('.kwrapper .kodsp');
             for (i = 0; i < codedisplay.length; i++) {
                 codedisplay[i].addEventListener('click', kdt.preventBubble);
             }
-            codedisplay = newEl.querySelectorAll('.kwrapper .kcodedisplay');
+            codedisplay = newEl.querySelectorAll('.kwrapper .kodsp');
             for (i = 0; i < codedisplay.length; i++) {
                 codedisplay[i].addEventListener('click', kdt.preventBubble);
             }

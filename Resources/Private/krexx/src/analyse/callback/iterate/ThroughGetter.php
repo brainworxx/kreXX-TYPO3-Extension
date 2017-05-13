@@ -277,7 +277,7 @@ class ThroughGetter extends AbstractCallback
             if ($classReflection->hasMethod($methodName)) {
                 // We need to be careful not to goo too deep, we might end up
                 // in a loop.
-                $this->deep++;
+                ++$this->deep;
                 if ($this->deep < 3) {
                     return $this->getReflectionProperty($classReflection, $classReflection->getMethod($methodName));
                 }
@@ -336,11 +336,7 @@ class ThroughGetter extends AbstractCallback
         preg_match_all($regex, $haystack, $findings);
 
         // Return the file name as well as stuff from the path.
-        $result = array();
-        foreach ($findings[0] as $name) {
-            $result[] =  $name;
-        }
-        return $result;
+        return $findings[0];
     }
 
     /**

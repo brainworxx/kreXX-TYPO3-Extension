@@ -86,12 +86,12 @@ class ProcessClosure extends AbstractProcess
         $paramList = '';
 
         foreach ($ref->getParameters() as $key => $reflectionParameter) {
+            ++$key;
             $reflectionParameterWrapper = $this->pool
                 ->createClass('Brainworxx\\Krexx\\Analyse\\Code\\ReflectionParameterWrapper')
                 ->setReflectionParameter($reflectionParameter);
 
-
-            $result['Parameter #' . ($key + 1)] = $reflectionParameterWrapper;
+            $result['Parameter #' . $key] = $reflectionParameterWrapper;
             $paramList .= $reflectionParameterWrapper . ', ';
         }
 

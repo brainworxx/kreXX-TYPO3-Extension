@@ -369,7 +369,7 @@ $fontLight: lighter 10px tahoma, verdana;
     .kel:hover .khelp {
       display: block;
     }
-    .kcollapse-me {
+    .kolps {
       display: none !important;
     }
     .kexpand .kname {
@@ -474,7 +474,7 @@ $fontLight: lighter 10px tahoma, verdana;
         }
       }
 
-      .kcodedisplay {
+      .kodsp {
         color: $blackLight;
         background-color: $grey;
         padding: 5px;
@@ -523,7 +523,7 @@ $fontLight: lighter 10px tahoma, verdana;
     }
 
     // Data general
-    .kcollapse-me {
+    .kolps {
       width: 16px;
       height: 16px;
       margin-right: 5px;
@@ -552,7 +552,7 @@ $fontLight: lighter 10px tahoma, verdana;
         }
       }
     }
-    .kcurrent-additional .kcollapse-me.kcollapsed {
+    .kcurrent-additional .kolps.kcollapsed {
       color: $string-current;
       &:hover {
         color: $blackLight;

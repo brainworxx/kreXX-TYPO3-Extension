@@ -201,7 +201,7 @@ class Emergency
      */
     public function upOneNestingLevel()
     {
-        $this->nestingLevel++;
+        ++$this->nestingLevel;
     }
 
     /**
@@ -209,7 +209,7 @@ class Emergency
      */
     public function downOneNestingLevel()
     {
-        $this->nestingLevel--;
+        --$this->nestingLevel;
     }
 
     /**
@@ -264,7 +264,7 @@ class Emergency
         if ($this->krexxCount === $maxCall - 1) {
             $this->pool->messages->addMessage($this->pool->messages->getHelp('maxCallReached'), 'critical');
         }
-        $this->krexxCount++;
+        ++$this->krexxCount;
         return $result;
     }
 

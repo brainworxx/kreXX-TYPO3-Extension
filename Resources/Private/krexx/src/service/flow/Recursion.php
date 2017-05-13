@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Flow;
 
+use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -78,6 +79,13 @@ class Recursion
     protected $recursionMarker;
 
     /**
+     * Here we store, if we have rendered the $GLOBALS array so far.
+     *
+     * @var bool
+     */
+    protected $globalsWereRendered = false;
+
+    /**
      * Generate the recursion marker during class construction.
      *
      * @param Pool $pool
@@ -87,6 +95,7 @@ class Recursion
     {
         $this->recursionMarker = 'Krexx' . substr(str_shuffle(md5(microtime())), 0, 10);
         $this->pool = $pool;
+        $GLOBALS[$this->recursionMarker] = true;
     }
 
     /**
@@ -94,15 +103,7 @@ class Recursion
      */
     public function __destruct()
     {
-        // Remove all recursion marker inside of arrays.
-        // Should only be the $GLOBALS array.
-        if (!empty($this->recursionHive[0])) {
-            foreach ($this->recursionHive[0] as $i => $bee) {
-                if (isset($this->recursionHive[0][$i][$this->recursionMarker])) {
-                    unset($this->recursionHive[0][$i][$this->recursionMarker]);
-                }
-            }
-        }
+        unset($GLOBALS[$this->recursionMarker]);
     }
 
     /**
@@ -111,38 +112,23 @@ class Recursion
      * Adds a variable to the hive of arrays and objects which
      * are tracked for whether they have recursive entries.
      *
-     * @param mixed $bee
-     *   Either array or object.
+     * @param object $bee
+     *   The object we want to check.
      */
-    public function addToHive(&$bee)
+    public function addToHive($bee)
     {
-        if (is_array($bee)) {
-            // We are only tracking the $GLOBALS arrays, so we need to check this.
-            if (!isset($bee[$this->recursionMarker])) {
-                $cleanCopy = $bee;
-                $bee[$this->recursionMarker] = 1;
-                // Check if the copy has the marker.
-                if (isset($cleanCopy[$this->recursionMarker])) {
-                    // We have a byRef array, so we keep track of it.
-                    $this->recursionHive[0][] = &$bee;
-                }
-            }
-        }
-        if (is_object($bee)) {
-            // We do something else for objects.
-            // Setting a recursion marker inside might trigger a magical function.
-
-            $objectHash = spl_object_hash($bee);
-            if (!isset($this->recursionHive[1][$objectHash])) {
-                $this->recursionHive[1][$objectHash] = 1;
-            }
+        // We do something else for objects.
+        // Setting a recursion marker inside might trigger a magical function.
+        $objectHash = spl_object_hash($bee);
+        if (!isset($this->recursionHive[$objectHash])) {
+            $this->recursionHive[$objectHash] = true;
         }
     }
 
     /**
      * Find out if our bee is already in the hive.
      *
-     * @param mixed $bee
+     * @param object|array $bee
      *   The object or array we want to check for recursion.
      *
      * @return bool
@@ -154,20 +140,26 @@ class Recursion
         if (is_object($bee)) {
             // Retrieve a possible hash.
             $objectHash = spl_object_hash($bee);
-            if (isset($this->recursionHive[1][$objectHash])) {
+            if (isset($this->recursionHive[$objectHash])) {
                 return true;
+            } else {
+                return false;
             }
         }
 
         // Check arrays (only the $GLOBAL array may apply).
-        if (is_array($bee)) {
-            // Retrieve a possible value.
-            if (isset($bee[$this->recursionMarker])) {
+        if (isset($bee[$this->recursionMarker])) {
+            // We render the $GLOBALS only once.
+            if ($this->globalsWereRendered) {
                 return true;
+            } else {
+                $this->globalsWereRendered = true;
+                return false;
             }
         }
-        // Still here? This is either not a recursion, or it is
-        // something we do not track.
+
+        // Should be a normalk array. We do not track these, because we can not
+        // resolve them via JS recursion handling.
         return false;
     }
 

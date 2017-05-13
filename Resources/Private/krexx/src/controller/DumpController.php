@@ -118,7 +118,7 @@ class DumpController extends AbstractController
                 ->setData($data)
                 ->setName($caller['varname'])
         );
-        
+
         // Now that our analysis is done, we must check if there was an emergency
         // break.
         if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
@@ -152,7 +152,7 @@ class DumpController extends AbstractController
         // Did we use this one before?
         if (isset(self::$counterCache[$string])) {
             // Add another to the counter.
-            self::$counterCache[$string]++;
+            ++self::$counterCache[$string];
             self::$timekeeping['[' . self::$counterCache[$string] . ']' . $string] = microtime(true);
         } else {
             // First time counter, set it to 1.

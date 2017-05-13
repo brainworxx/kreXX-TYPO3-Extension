@@ -267,7 +267,7 @@
       z-index: 1; }
     .kwrapper .kconfiguration .kel:hover .khelp, .kfatalwrapper-outer .kconfiguration .kel:hover .khelp {
       display: block; }
-    .kwrapper .kconfiguration .kcollapse-me, .kfatalwrapper-outer .kconfiguration .kcollapse-me {
+    .kwrapper .kconfiguration .kolps, .kfatalwrapper-outer .kconfiguration .kolps {
       display: none !important; }
     .kwrapper .kconfiguration .kexpand .kname, .kfatalwrapper-outer .kconfiguration .kexpand .kname {
       margin-left: 0; }
@@ -356,7 +356,7 @@
         display: inline-block; }
         .kwrapper .kchild .kel .kgencode:hover, .kfatalwrapper-outer .kchild .kel .kgencode:hover {
           color: #555555; }
-      .kwrapper .kchild .kel .kcodedisplay, .kfatalwrapper-outer .kchild .kel .kcodedisplay {
+      .kwrapper .kchild .kel .kodsp, .kfatalwrapper-outer .kchild .kel .kodsp {
         color: #555555;
         background-color: #B2B2B2;
         padding: 5px;
@@ -392,7 +392,7 @@
           margin-left: -10px;
           position: absolute;
           margin-top: -5px; }
-    .kwrapper .kchild .kcollapse-me, .kfatalwrapper-outer .kchild .kcollapse-me {
+    .kwrapper .kchild .kolps, .kfatalwrapper-outer .kchild .kolps {
       width: 16px;
       height: 16px;
       margin-right: 5px;
@@ -400,23 +400,23 @@
       display: inline-block;
       float: right;
       color: #919191; }
-      .kwrapper .kchild .kcollapse-me:before, .kfatalwrapper-outer .kchild .kcollapse-me:before {
+      .kwrapper .kchild .kolps:before, .kfatalwrapper-outer .kchild .kolps:before {
         content: '\21D4';
         font-weight: bolder;
         font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif; }
-      .kwrapper .kchild .kcollapse-me:hover, .kfatalwrapper-outer .kchild .kcollapse-me:hover {
+      .kwrapper .kchild .kolps:hover, .kfatalwrapper-outer .kchild .kolps:hover {
         color: #555555; }
-      .kwrapper .kchild .kcollapse-me.kcollapsed, .kfatalwrapper-outer .kchild .kcollapse-me.kcollapsed {
+      .kwrapper .kchild .kolps.kcollapsed, .kfatalwrapper-outer .kchild .kolps.kcollapsed {
         color: #FED300; }
-        .kwrapper .kchild .kcollapse-me.kcollapsed:before, .kfatalwrapper-outer .kchild .kcollapse-me.kcollapsed:before {
+        .kwrapper .kchild .kolps.kcollapsed:before, .kfatalwrapper-outer .kchild .kolps.kcollapsed:before {
           content: '\21D5';
           font-weight: bolder;
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif; }
-        .kwrapper .kchild .kcollapse-me.kcollapsed:hover, .kfatalwrapper-outer .kchild .kcollapse-me.kcollapsed:hover {
+        .kwrapper .kchild .kolps.kcollapsed:hover, .kfatalwrapper-outer .kchild .kolps.kcollapsed:hover {
           color: #555555; }
-    .kwrapper .kchild .kcurrent-additional .kcollapse-me.kcollapsed, .kfatalwrapper-outer .kchild .kcurrent-additional .kcollapse-me.kcollapsed {
+    .kwrapper .kchild .kcurrent-additional .kolps.kcollapsed, .kfatalwrapper-outer .kchild .kcurrent-additional .kolps.kcollapsed {
       color: #AF8C4F; }
-      .kwrapper .kchild .kcurrent-additional .kcollapse-me.kcollapsed:hover, .kfatalwrapper-outer .kchild .kcurrent-additional .kcollapse-me.kcollapsed:hover {
+      .kwrapper .kchild .kcurrent-additional .kolps.kcollapsed:hover, .kfatalwrapper-outer .kchild .kcurrent-additional .kolps.kcollapsed:hover {
         color: #555555; }
     .kwrapper .kchild .krecursion, .kfatalwrapper-outer .kchild .krecursion {
       color: #b1b1b1; }

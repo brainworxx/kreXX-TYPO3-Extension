@@ -186,6 +186,7 @@ class Objects extends AbstractCallback
         $data = $this->parameters['data'];
 
         $refProps = $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $publicProps = array();
 
         // Adding undeclared public properties to the dump.
         // Those are properties which are not visible with
@@ -197,12 +198,12 @@ class Objects extends AbstractCallback
         // What is left are those special properties that were dynamically
         // set during runtime, but were not declared in the class.
         foreach ($refProps as $refProp) {
-            $publicProps[$refProp->name] = $refProp->name;
+            $publicProps[$refProp->name] = true;
         }
-        foreach (get_object_vars($data) as $key => $value) {
-            if (!isset($publicProps[$key])) {
-                $refProps[] = new Flection($value, $key, $ref);
-            }
+        // For every not-declared property, we add a 'flection', which is a
+        // mockup of a reflectionProperty.
+        foreach (array_diff_key(get_object_vars($data), $publicProps) as $key => $value) {
+            $refProps[] = new Flection($value, $key, $ref);
         }
 
         if (!empty($refProps)) {
@@ -322,6 +323,7 @@ class Objects extends AbstractCallback
                             // We've got a required parameter!
                             // We will not call this one.
                             $foundRequired = true;
+                            break;
                         }
                     }
                     unset($ref);

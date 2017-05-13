@@ -445,33 +445,6 @@ class Security extends Fallback
     }
 
     /**
-     * Checks for a .htaccess file with a 'deny from all' statement.
-     *
-     * @param string $path
-     *   The path we want to check.
-     *
-     * @return bool
-     *   Whether the path is protected.
-     */
-    protected function isFolderProtected($path)
-    {
-        $result = false;
-        if (is_readable($path . '/.htaccess')) {
-            $content = file($path . '/.htaccess');
-            foreach ($content as $line) {
-                // We have what we are looking for, a
-                // 'deny from all', not to be confuse with
-                // a '# deny from all'.
-                if (strtolower(trim($line)) === 'deny from all') {
-                    $result = true;
-                    break;
-                }
-            }
-        }
-        return $result;
-    }
-
-    /**
      * Determines if a debug function is blacklisted in s specific class.
      *
      * @param object $data

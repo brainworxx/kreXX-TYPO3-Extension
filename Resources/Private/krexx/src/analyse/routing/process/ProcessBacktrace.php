@@ -90,7 +90,7 @@ class ProcessBacktrace
             );
         }
 
-        for ($step = 1; $step <= $maxStep; $step++) {
+        for ($step = 1; $step <= $maxStep; ++$step) {
             $output .= $this->pool->render->renderExpandableChild(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                     ->setName($step)

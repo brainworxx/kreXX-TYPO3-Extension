@@ -81,7 +81,7 @@ class ThroughMethods extends AbstractCallback
             // Get parameters.
             $paramList = '';
             foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
-                $key++;
+                ++$key;
                 $reflectionParameterWrapper = $this->pool
                     ->createClass('Brainworxx\\Krexx\\Analyse\\Code\\ReflectionParameterWrapper')
                     ->setReflectionParameter($reflectionParameter);
@@ -89,7 +89,7 @@ class ThroughMethods extends AbstractCallback
 
                 $paramList .= $reflectionParameterWrapper . ', ';
             }
-            // Limit the list to 256 Chars. A lot of modern __construct mehtods
+            // Limit the list to 256 Chars. A lot of modern __construct methods
             // have a lot of parameters (or really long name spaces.
             // The complete info will be available after a click on the
             // function analysis anyway.

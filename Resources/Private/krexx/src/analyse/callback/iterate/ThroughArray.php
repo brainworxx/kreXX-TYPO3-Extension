@@ -70,23 +70,20 @@ class ThroughArray extends AbstractCallback
             if ($key === $recursionMarker) {
                 continue;
             }
-            if (is_string($key)) {
-                $key = $this->pool->encodeString($key);
-            }
 
             /** @var Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model');
 
             // Are we dealing with multiline code generation?
-            if ($this->parameters['multiline'] === true) {
-                // Here we tel the Codegen service that we need some
+            if ($this->parameters['multiline']) {
+                // Here we tell the Codegen service that we need some
                 // special handling.
                 $model->setMultiLineCodeGen(Codegen::ITERATOR_TO_ARRAY);
             }
 
             if (is_string($key)) {
                 $model->setData($value)
-                    ->setName($key)
+                    ->setName($this->pool->encodeString($key))
                     ->setConnectorType(Connectors::ASSOCIATIVE_ARRAY);
             } else {
                 $model->setData($value)

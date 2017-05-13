@@ -49,19 +49,16 @@ class Render extends \Brainworxx\Krexx\View\Render
      */
     public function renderSingleChild(Model $model)
     {
-
-
         // Replace the source button and set the json.
-
         $json = $model->getJson();
-
-        $json['Help'] = $this->pool->messages->getHelp($model->getHelpid());
-        // Prepare the json.
-        $json = $this->encodeJson($json);
+        $help = $this->pool->messages->getHelp($model->getHelpid());
+        if (!empty($help)) {
+            $json['Help'] = $this->pool->messages->getHelp($model->getHelpid());
+        }
 
         return str_replace(
             array('{language}', '{addjson}'),
-            array($model->getConnectorLanguage(), $json),
+            array($model->getConnectorLanguage(), $this->generateDataAttribute('addjson', $this->encodeJson($json))),
             parent::renderSingleChild($model)
         );
     }
@@ -102,7 +99,10 @@ class Render extends \Brainworxx\Krexx\View\Render
         }
 
         $json = $model->getJson();
-        $json['Help'] = $this->pool->messages->getHelp($model->getHelpid());
+        $help = $this->pool->messages->getHelp($model->getHelpid());
+        if (!empty($help)) {
+            $json['Help'] = $this->pool->messages->getHelp($model->getHelpid());
+        }
 
         return str_replace(
             array(
@@ -125,13 +125,13 @@ class Render extends \Brainworxx\Krexx\View\Render
                 $cssType,
                 $model->getNormal(),
                 $this->renderConnector($model->getConnector2()),
-                $gencode,
+                $this->generateDataAttribute('source', $gencode),
                 '',
-                $this->encodeJson($json),
+                $this->generateDataAttribute('addjson', $this->encodeJson($json)),
                 $this->pool->chunks->chunkMe($this->renderNest($model, false)),
                 $sourcebutton,
-                $this->pool->codegenHandler->generateWrapper1(),
-                $this->pool->codegenHandler->generateWrapper2(),
+                $this->generateDataAttribute('codewrapper1', $this->pool->codegenHandler->generateWrapper1()),
+                $this->generateDataAttribute('codewrapper2', $this->pool->codegenHandler->generateWrapper2()),
             ),
             $this->getTemplateFileContent('expandableChildNormal')
         );
@@ -145,9 +145,11 @@ class Render extends \Brainworxx\Krexx\View\Render
         $template = parent::renderRecursion($model);
         // We add our json to the output.
         $json = $model->getJson();
-        $json['Help'] = $this->pool->messages->getHelp($model->getHelpid());
-        $json = $this->encodeJson($json);
-        return str_replace('{addjson}', $json, $template);
+        $help = $this->pool->messages->getHelp($model->getHelpid());
+        if (!empty($help)) {
+            $json['Help'] = $this->pool->messages->getHelp($model->getHelpid());
+        }
+        return str_replace('{addjson}', $this->generateDataAttribute('addjson', $this->encodeJson($json)), $template);
     }
 
     /**
@@ -162,7 +164,7 @@ class Render extends \Brainworxx\Krexx\View\Render
         $json = $this->encodeJson(array(
             'Help' => $this->pool->messages->getHelp($model->getHelpid()),
         ));
-        $template = str_replace('{addjson}', $json, $template);
+        $template = str_replace('{addjson}', $this->generateDataAttribute('addjson', $json), $template);
 
         return $template;
     }
@@ -179,7 +181,7 @@ class Render extends \Brainworxx\Krexx\View\Render
 
         return str_replace(
             array('{addjson}', '{class}'),
-            array($json, $model->getName()),
+            array($this->generateDataAttribute('addjson', $json), $model->getName()),
             parent::renderButton($model)
         );
     }
@@ -290,7 +292,10 @@ class Render extends \Brainworxx\Krexx\View\Render
      */
     protected function encodeJson(array $array)
     {
-
+        // No data, no json!
+        if (empty($array)) {
+            return '';
+        }
         foreach ($array as &$string) {
             // Our js has some problems with single quotes and escaped quotes.
             // We remove them as well as linebreaks.

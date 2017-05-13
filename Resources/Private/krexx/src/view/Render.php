@@ -68,7 +68,7 @@ class Render extends AbstractRender
                 $this->renderConnector($model->getConnector1()),
                 $this->renderHelp($model),
                 $this->renderConnector($model->getConnector2()),
-                $this->pool->codegenHandler->generateSource($model),
+                $this->generateDataAttribute('source', $this->pool->codegenHandler->generateSource($model)),
             ),
             $this->getTemplateFileContent('recursion')
         );
@@ -209,7 +209,7 @@ class Render extends AbstractRender
                 '{codewrapper2}',
                 ),
             array(
-                $gensource,
+                $this->generateDataAttribute('source', $gensource),
                 $sourcebutton,
                 $partExpand,
                 $partCallable,
@@ -221,8 +221,8 @@ class Render extends AbstractRender
                 $this->renderHelp($model),
                 $this->renderConnector($model->getConnector1()),
                 $model->getConnector2(),
-                $this->pool->codegenHandler->generateWrapper1(),
-                $this->pool->codegenHandler->generateWrapper2(),
+                $this->generateDataAttribute('codewrapper1', $this->pool->codegenHandler->generateWrapper1()),
+                $this->generateDataAttribute('codewrapper2', $this->pool->codegenHandler->generateWrapper2()),
             ),
             $this->getTemplateFileContent('singleChild')
         );
@@ -288,12 +288,12 @@ class Render extends AbstractRender
                 $this->renderHelp($model),
                 $this->renderConnector($model->getConnector1()),
                 $this->renderConnector($model->getConnector2()),
-                $gencode,
+                $this->generateDataAttribute('source', $gencode),
                 $sourceButton,
                 $expandedClass,
                 $this->pool->chunks->chunkMe($this->renderNest($model, $isExpanded)),
-                $this->pool->codegenHandler->generateWrapper1(),
-                $this->pool->codegenHandler->generateWrapper2(),
+                $this->generateDataAttribute('codewrapper1', $this->pool->codegenHandler->generateWrapper1()),
+                $this->generateDataAttribute('codewrapper1', $this->pool->codegenHandler->generateWrapper2()),
             ),
             $this->getTemplateFileContent('expandableChildNormal')
         );

@@ -153,7 +153,7 @@ class Chunks
     protected function genKey()
     {
         static $counter = 0;
-        $counter++;
+        ++$counter;
 
         return $this->fileService->fileStamp() . '_' . $counter;
     }
@@ -315,7 +315,7 @@ class Chunks
                     $this->fileService->deleteFile($file);
                     $this->fileService->deleteFile($file . '.json');
                 }
-                $count++;
+                ++$count;
             }
         }
     }

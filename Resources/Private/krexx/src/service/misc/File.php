@@ -84,7 +84,7 @@ class File
                 $to = count($contentArray);
             }
 
-            for ($currentLineNo = $from; $currentLineNo <= $to; $currentLineNo++) {
+            for ($currentLineNo = $from; $currentLineNo <= $to; ++$currentLineNo) {
                 if (isset($contentArray[$currentLineNo])) {
                     // Add it to the result.
                     $realLineNo = $currentLineNo + 1;
@@ -148,7 +148,7 @@ class File
 
         // Do we have enough lines in there?
         if (count($cacheArray[$filename]) > $to) {
-            for ($currentLineNo = $from; $currentLineNo <= $to; $currentLineNo++) {
+            for ($currentLineNo = $from; $currentLineNo <= $to; ++$currentLineNo) {
                 $result .= $cacheArray[$filename][$currentLineNo];
             }
         }

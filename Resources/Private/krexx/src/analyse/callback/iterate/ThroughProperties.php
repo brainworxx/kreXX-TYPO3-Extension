@@ -76,6 +76,11 @@ class ThroughProperties extends AbstractCallback
         $default = $ref->getDefaultProperties();
 
         foreach ($this->parameters['data'] as $refProperty) {
+            // Check memory and runtime.
+            if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
+                return '';
+            }
+
             /* @var \ReflectionProperty $refProperty */
             $refProperty->setAccessible(true);
 
@@ -87,27 +92,17 @@ class ThroughProperties extends AbstractCallback
                 $value = $default[$propName];
             }
 
-            // Check memory and runtime.
-            if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
-                return '';
-            }
-
-            // Recursion tests are done in the analyseObject and
-            // iterateThrough (for arrays).
-            // We will not check them here.
             // Now that we have the key and the value, we can analyse it.
             // Stitch together our additional info about the data:
             // public, protected, private, static.
             $additional = '';
             $connectorType = Connectors::NORMAL_PROPERTY;
-            if ($refProperty->isPublic()) {
-                $additional .= 'public ';
-            }
-            if ($refProperty->isPrivate()) {
-                $additional .= 'private ';
-            }
             if ($refProperty->isProtected()) {
                 $additional .= 'protected ';
+            } elseif ($refProperty->isPublic()) {
+                $additional .= 'public ';
+            } elseif ($refProperty->isPrivate()) {
+                $additional .= 'private ';
             }
 
             // Test if the property is inherited or not by testing the

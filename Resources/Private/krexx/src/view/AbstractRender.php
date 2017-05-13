@@ -262,6 +262,28 @@ abstract class AbstractRender
     }
 
     /**
+     * Generates a data attribute, to be inserted into the HTML tags.
+     * If no value is in the data, we return an empty string.
+     *
+     * @param string $name
+     *   The name of the attribute (without the 'data-' in front
+     * @param string $data
+     *   The value. Must be string.
+     *
+     * @return string
+     *   The generated data attribute.
+     */
+    protected function generateDataAttribute($name, $data)
+    {
+        if ($data  === '') {
+            return '';
+        } else {
+            return ' data-' . $name . '=\'' . $data . '\' ';
+        }
+
+    }
+
+    /**
      * Renders a "single child", containing a single not expandable value.
      *
      * Depending on how many characters are in there, it may be toggleable.

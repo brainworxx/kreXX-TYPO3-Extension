@@ -93,18 +93,14 @@ abstract class AbstractComment
         foreach ($commentArray as $commentLine) {
             // We skip lines with /** and */
             if ((strpos($commentLine, '/**') === false) && (strpos($commentLine, '*/') === false)) {
-                // Remove comment-chars, but we need to leave the whitespace intact.
-                $commentLine = trim($commentLine);
-                if (strpos($commentLine, '*') === 0) {
-                    // Remove the * by char position.
-                    $result[] = substr($commentLine, 1);
-                } else {
-                    // We are missing the *, so we just add the line.
-                    $result[] = $commentLine;
-                }
+                // Remove comment-chars and trim the whitespace.
+                $result[] = trim($commentLine, "* \t\n\r\0\x0B");
             }
         }
-
+        // Sadly, we must not escape this here, or glue it with <br /> for a
+        // direct display. The thing is, we may resolve several @inheritdoc
+        // marks. The escaping and nlbr() will be done when everything is
+        // stitched together.
         return implode(PHP_EOL, $result);
     }
 
@@ -142,7 +138,7 @@ abstract class AbstractComment
      */
     protected function checkComment($comment)
     {
-        if (stripos($comment, 'inheritdoc') === false) {
+        if (strpos($comment, 'inheritdoc') === false) {
             // Not found means we have done our job.
             return true;
         } else {

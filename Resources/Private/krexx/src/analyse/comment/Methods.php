@@ -145,8 +145,9 @@ class Methods extends AbstractComment
             foreach ($traitArray as $trait) {
                 if (!$this->checkComment($originalComment)) {
                     if ($trait->hasMethod($methodName)) {
-                        $traitMethod = $trait->getMethod($methodName);
-                        $traitComment = $this->prettifyComment($traitMethod->getDocComment());
+                        $traitComment = $this->prettifyComment(
+                            $trait->getMethod($methodName)->getDocComment()
+                        );
                         // Replace it.
                         $originalComment = $this->replaceInheritComment($originalComment, $traitComment);
                     }
@@ -181,13 +182,13 @@ class Methods extends AbstractComment
      */
     protected function getInterfaceComment($originalComment, \ReflectionClass $reflectionClass, $methodName)
     {
-
         $interfaceArray = $reflectionClass->getInterfaces();
         foreach ($interfaceArray as $interface) {
             if (!$this->checkComment($originalComment)) {
                 if ($interface->hasMethod($methodName)) {
-                    $interfaceMethod = $interface->getMethod($methodName);
-                    $interfaceComment = $this->prettifyComment($interfaceMethod->getDocComment());
+                    $interfaceComment = $this->prettifyComment(
+                        $interface->getMethod($methodName)->getDocComment()
+                    );
                     // Replace it.
                     $originalComment = $this->replaceInheritComment($originalComment, $interfaceComment);
                 }

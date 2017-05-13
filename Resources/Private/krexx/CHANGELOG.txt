@@ -1,6 +1,11 @@
 2.2.1 dev
 - Added a configuration for the backtrace, to limit the analysed
   steps.
+- Change: Optimized data attribute handling, to get a smaller
+  HTML footprint.
+- Change: Renamed some long css class names, to get a smaller
+  HTML footprint.
+- Change: Several performance tweaks for runtime optimization.
 - Bugfix: Prevent the debug methods from creating new analysis
   calls, resulting in an infinite loop.
 - Bugfix: Better cleanup of HTML fragments left open from

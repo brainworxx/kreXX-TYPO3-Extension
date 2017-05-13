@@ -143,7 +143,7 @@ class Codegen
             }
         }
 
-        $this->counter++;
+        ++$this->counter;
         return $result;
     }
 
