@@ -181,9 +181,6 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
             if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid')) {
                 include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderFluid.php');
             }
-            if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderNothing')) {
-                include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderNothing.php');
-            }
             if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld')) {
                 include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderFluidOld.php');
             }
