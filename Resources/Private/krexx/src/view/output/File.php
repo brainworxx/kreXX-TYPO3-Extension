@@ -91,7 +91,7 @@ class File extends AbstractOutput
     public function shutdownCallback()
     {
         // Check for CLI and messages.
-        if (php_sapi_name() === "cli") {
+        if (php_sapi_name() === 'cli') {
             $messages = $this->pool->messages->outputMessages();
             // Since we are in CLI mode, these messages are not in HTML.
             // We can output them right away.

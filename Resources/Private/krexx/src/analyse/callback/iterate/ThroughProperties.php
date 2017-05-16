@@ -77,7 +77,7 @@ class ThroughProperties extends AbstractCallback
 
         foreach ($this->parameters['data'] as $refProperty) {
             // Check memory and runtime.
-            if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
+            if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
                 return '';
             }
 

@@ -105,6 +105,13 @@ class Chunks
     protected $chunkDir;
 
     /**
+     * Microtime stamp for chunk operations.
+     *
+     * @var string
+     */
+    protected $fileStamp;
+
+    /**
      * Injects the pool.
      *
      * @param Pool $pool
@@ -116,6 +123,8 @@ class Chunks
         $this->chunkDir = $pool->config->getChunkDir();
         $this->logDir = $pool->config->getLogDir();
         $this->fileService = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
+        $this->fileStamp = explode(' ', microtime());
+        $this->fileStamp = $this->fileStamp[1] . str_replace('0.', '', $this->fileStamp[0]);
     }
 
     /**
@@ -155,7 +164,7 @@ class Chunks
         static $counter = 0;
         ++$counter;
 
-        return $this->fileService->fileStamp() . '_' . $counter;
+        return $this->fileStamp . '_' . $counter;
     }
 
     /**
@@ -183,7 +192,9 @@ class Chunks
         } else {
             // Huh, we can not fully access this one.
             $string = 'Could not access chunk file ' . $filename;
-            $this->pool->messages->addMessage('Could not access chunk file ' . $filename);
+            $this->pool->messages->addMessage(
+                $this->pool->messages->getHelp('chunkserviceAccess') . $filename
+            );
         }
 
         return $string;
@@ -240,8 +251,7 @@ class Chunks
         $this->cleanupOldLogs($this->logDir);
 
         // Determine the filename.
-        $timestamp = $this->fileService->fileStamp();
-        $filename = $this->logDir . $timestamp . '.Krexx.html';
+        $filename = $this->logDir . $this->fileStamp . '.Krexx.html';
         $chunkPos = strpos($string, '@@@');
 
         while ($chunkPos !== false) {
@@ -304,7 +314,7 @@ class Chunks
     protected function cleanupOldLogs($logDir)
     {
         // Cleanup old logfiles to prevent a overflow.
-        $logList = glob($logDir . "*.Krexx.html");
+        $logList = glob($logDir . '*.Krexx.html');
         if (!empty($logList)) {
             array_multisort(array_map('filemtime', $logList), SORT_DESC, $logList);
             $maxFileCount = (int)$this->pool->config->getSetting('maxfiles');

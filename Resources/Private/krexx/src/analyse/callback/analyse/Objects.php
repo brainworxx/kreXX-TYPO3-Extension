@@ -301,11 +301,9 @@ class Objects extends AbstractCallback
         $output = '';
 
         $funcList = explode(',', $this->pool->config->getSetting('debugMethods'));
+        $security = $this->pool->config->security;
         foreach ($funcList as $funcName) {
-            if (is_callable(array(
-                    $data,
-                    $funcName,
-                )) && $this->pool->config->security->isAllowedDebugCall($data, $funcName)
+            if (is_callable(array($data, $funcName)) && $security->isAllowedDebugCall($data, $funcName)
             ) {
                 $foundRequired = false;
                 // We need to check if this method actually exists. Just because it is
@@ -419,7 +417,7 @@ class Objects extends AbstractCallback
 
             if (isset($parameter)) {
                 // Check memory and runtime.
-                if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
+                if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
                     return '';
                 }
                 // Check nesting level

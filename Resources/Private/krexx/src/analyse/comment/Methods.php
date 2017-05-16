@@ -57,7 +57,18 @@ class Methods extends AbstractComment
      */
     public function getComment($reflectionMethod, \ReflectionClass $reflectionClass = null)
     {
-        return $this->pool->encodeString($this->getMethodComment($reflectionMethod, $reflectionClass));
+        // Do some static caching. The comment will not change during a run.
+        static $cache = array();
+        $cachingKey = $reflectionClass->getName() . '::' . $reflectionMethod->getName();
+
+        if (!isset($cache[$cachingKey])) {
+            // Cache not found. We need to generate this one.
+            $cache[$cachingKey] = $this->pool->encodeString(
+                $this->getMethodComment($reflectionMethod, $reflectionClass)
+            );
+        }
+
+        return $cache[$cachingKey];
     }
 
     /**
@@ -71,7 +82,7 @@ class Methods extends AbstractComment
      * @return string
      *   The prettified comment.
      */
-    protected function getMethodComment($reflectionMethod, \ReflectionClass $reflectionClass = null)
+    protected function getMethodComment(\ReflectionMethod $reflectionMethod, \ReflectionClass $reflectionClass = null)
     {
         // Get a first impression.
         $comment = $this->prettifyComment($reflectionMethod->getDocComment());

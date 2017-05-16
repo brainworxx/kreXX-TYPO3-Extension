@@ -79,7 +79,7 @@ class Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods extends Throu
                 $paramList .= $reflectionParameterWrapper . ', ';
             }
             // Remove the ',' after the last char.
-            $paramList = '<small>' . trim($paramList, ', ') . '</small>';
+            $paramList = trim($paramList, ', ');
 
             // Get declaring keywords.
             $methodData['declaration keywords'] = $this->getDeclarationKeywords(

@@ -121,7 +121,7 @@ class Messages extends Help
     public function outputMessages()
     {
         // Simple Wrapper for OutputActions::$render->renderMessages
-        if (php_sapi_name() === "cli") {
+        if (php_sapi_name() === 'cli') {
             if (!empty($this->messages)) {
                 $result = "\n\nkreXX messages\n";
                 $result .= "==============\n";

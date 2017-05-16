@@ -49,6 +49,14 @@ class Functions extends AbstractComment
      */
     public function getComment($reflection, \ReflectionClass $reflectionClass = null)
     {
-        return $this->pool->encodeString($this->prettifyComment($reflection->getDocComment()));
+        // Do some static caching. The comment will not change during a run.
+        static $cache = array();
+        $cachingKey = $reflection->getName();
+
+        if (!isset($cache[$cachingKey])) {
+            // Cache not found. We need to generate this one.
+            $cache[$cachingKey] = $this->pool->encodeString($this->prettifyComment($reflection->getDocComment()));
+        }
+        return $cache[$cachingKey];
     }
 }

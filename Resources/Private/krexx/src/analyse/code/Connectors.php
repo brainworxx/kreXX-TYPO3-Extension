@@ -169,11 +169,21 @@ class Connectors
     /**
      * Getting the connector1, according to the type.
      *
+     * @param integer $cap
+     *   Maximum length of all parameters. 0 means no cap.
+     *
      * @return string
      *   The PHP connector, what else?
      */
-    public function getConnector2()
+    public function getConnector2($cap)
     {
+        $length = strlen($this->params);
+        if ($cap > 0 && $length > $cap) {
+            $params = substr($this->params, 0, $cap) . ' . . . ';
+        } else {
+            $params = $this->params;
+        }
+
         switch ($this->type) {
             case '':
                 return '';
@@ -188,11 +198,11 @@ class Connectors
                 break;
 
             case $this::METHOD:
-                return '(' . $this->params . ')';
+                return '(<small>' . $params . '</small>)';
                 break;
 
             case $this::STATIC_METHOD:
-                return '(' . $this->params . ')';
+                return '(<small>' . $params . '</small>)';
                 break;
 
             default:

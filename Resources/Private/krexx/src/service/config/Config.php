@@ -439,7 +439,7 @@ class Config extends Fallback
                 }
             }
             // Check for CLI.
-            if (php_sapi_name() === "cli") {
+            if (php_sapi_name() === 'cli') {
                 return true;
             }
         }

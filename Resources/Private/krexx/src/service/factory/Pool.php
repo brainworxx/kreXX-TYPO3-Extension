@@ -294,14 +294,14 @@ class Pool extends Factory
                         // Replace TAB with two spaces, it's better readable that way.
                         $result = '&nbsp;&nbsp;';
                     } else {
-                        $result = "&#$n;";
+                        $result = '&#' . $n . ';';
                     }
                     return $result;
                 };
             } else {
                 // No formatting.
                 $sortingCallback = function ($n) {
-                    return "&#$n;";
+                    return '&#' . $n . ';';
                 };
             }
 

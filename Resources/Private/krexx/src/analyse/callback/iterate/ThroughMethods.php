@@ -89,16 +89,9 @@ class ThroughMethods extends AbstractCallback
 
                 $paramList .= $reflectionParameterWrapper . ', ';
             }
-            // Limit the list to 256 Chars. A lot of modern __construct methods
-            // have a lot of parameters (or really long name spaces.
-            // The complete info will be available after a click on the
-            // function analysis anyway.
-            if (strlen($paramList) > 128) {
-                $paramList = substr($paramList, 0, 128) . ' . . . ';
-            }
 
             // Remove the ',' after the last char.
-            $paramList = '<small>' . trim($paramList, ', ') . '</small>';
+            $paramList = trim($paramList, ', ');
 
             // Get declaring keywords.
             $methodData['declaration keywords'] = $this->getDeclarationKeywords(
@@ -143,9 +136,14 @@ class ThroughMethods extends AbstractCallback
      */
     protected function getDeclarationPlace(\ReflectionMethod $reflectionMethod, \ReflectionClass $declaringClass)
     {
-        $filename = $declaringClass->getFileName();
+        /** @var \Brainworxx\Krexx\Service\Misc\File $fileService */
+
+        $filename = $this->pool
+            ->createClass('Brainworxx\\Krexx\\Service\\Misc\\File')
+            ->filterFilePath($declaringClass->getFileName());
+
         if (is_null($filename) || empty($filename)) {
-            $result = ":: unable to determine declaration ::\n\nMaybe this is a predeclared class?";
+            $result = ':: unable to determine declaration ::\n\nMaybe this is a predeclared class?';
         } else {
             $result = $filename . "\n";
             $result .= 'in class: ' . $declaringClass->getName() . "\n";

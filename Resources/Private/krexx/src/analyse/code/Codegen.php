@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Code;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -122,13 +123,17 @@ class Codegen
                     break;
 
                 case self::METHOD:
-                    // We create a reflection method and then call it.
-                    $result = $this->reflectFunction();
+                    // We will not create a reflection in the generated code.
+                    // The dots tell the js to stop the code concatination right
+                    // there.
+                    $result = '. . .';
                     break;
 
                 case self::PROPERTY:
-                    // We create a reflection property an set it to public to access it.
-                    $result = $this->reflectProperty();
+                    // We will not create a reflection in the generated code.
+                    // The dots tell the js to stop the code concatination right
+                    // there.
+                    $result = '. . .';
                     break;
 
                 case self::STOP:
@@ -138,7 +143,7 @@ class Codegen
 
                 // Multiline code generation starts here.
                 case self::ITERATOR_TO_ARRAY:
-                    $result = $this->iteratorToArray() . $this->concatenation($model);
+                    $result = 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
                     break;
             }
         }
@@ -183,62 +188,13 @@ class Codegen
     {
         // We simply add the connectors for public access.
         // Escape the quotes. This is not done by the model.
-        $name = str_replace('"', '&#034;', $model->getName());
-        $name = str_replace("'", '&#039;', $name);
-        return $model->getConnector1() . $name . trim($model->getConnector2(), ' = ');
-    }
+        $name = str_replace(
+            array('"', '\''),
+            array('&#034;', '&#039;'),
+            $model->getName()
+        );
 
-    /**
-     * Returns a '. . .' to tell our js that this property is not reachable.
-     *
-     * @return string
-     *   Always returns a '. . .'
-     */
-    protected function reflectProperty()
-    {
-        // We stop the current code line here.
-        // This value is not reachable, and we will *not* create a reflection here.
-        // Some people would abuse this to break open protected and private values.
-        // These values are protected for a reason.
-        // Adding the '. . .' tells out js that is should not search through the
-        // underlying data-source, but simply add a text stating that this value
-        // is not reachable.
-        $result = ". . .";
-
-        return $result;
-    }
-
-    /**
-     * Returns a '. . .' to tell our js that this function is not reachable.
-     *
-     * @return string
-     *   Always returns a '. . .'
-     */
-    protected function reflectFunction()
-    {
-        // We stop the current codeline here.
-        // This value is not reachable, and we will *not* create a reflection here.
-        // Some people would abuse this tho break open protected and private values.
-        // These values are protected for a reason.
-        // Adding the '. . .' tells out js that is should not search through the
-        // underlying data-source, but simply add a text stating that this value
-        // is not reachable.
-        $result = ". . .";
-
-        return $result;
-    }
-
-    /**
-     * Generates the code for the iterator_to_array multiline.
-     *
-     * @return string
-     *   The generated code.
-     */
-    protected function iteratorToArray()
-    {
-        $result = 'iterator_to_array(;firstMarker;)';
-
-        return $result;
+        return $model->getConnector1() . $name . $model->getConnector2();
     }
 
     /**

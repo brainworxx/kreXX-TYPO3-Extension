@@ -79,7 +79,7 @@ class BacktraceController extends AbstractController
             ->process($backtrace, -1);
         // Now that our analysis is done, we must check if there was an emergency
         // break.
-        if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
             return $this;
         }
 

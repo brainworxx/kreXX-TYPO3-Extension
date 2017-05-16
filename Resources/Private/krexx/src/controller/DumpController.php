@@ -121,7 +121,7 @@ class DumpController extends AbstractController
 
         // Now that our analysis is done, we must check if there was an emergency
         // break.
-        if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
             return $this;
         }
 

@@ -96,23 +96,33 @@ class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
     /**
      * Do nothing. There is no secornd connector in fluid.
      *
+     * @param integer $cap
+     *   Maximum length of all parameters. 0 means no cap.
+     *
      * @return string
      *   Return an empty string.
      */
-    public function getConnector2()
+    public function getConnector2($cap)
     {
         // No params, no cookies!
         if (empty($this->params)) {
             return '';
         }
 
+        $length = strlen($this->params);
+        if ($cap > 0 && $length > $cap) {
+            $params = substr($this->params, 0, $cap) . ' . . . ';
+        } else {
+            $params = $this->params;
+        }
+
         switch ($this->type) {
             case $this::METHOD:
-                return '(' . $this->params . ')';
+                return '(' . $params . ')';
                 break;
 
             case $this::STATIC_METHOD:
-                return '(' . $this->params . ')';
+                return '(' . $params . ')';
                 break;
 
             default:

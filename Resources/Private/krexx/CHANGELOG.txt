@@ -20,6 +20,9 @@
 - Bugfix: Removed a notice, in case krexx was called from normal
   php and then again from a registered shutdown function.
 - Bugfix: Removed the multiple escaping of inherited comments.
+- Bugfix: Use the filepath filter in the method and function
+  analysis
+- Bugfix: Made use of the language file (nearly) everywhere.
 
 2.2.0
 - Added more search pattern and source code parsing to the

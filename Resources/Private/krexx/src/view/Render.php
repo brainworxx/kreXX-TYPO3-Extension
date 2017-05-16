@@ -174,8 +174,7 @@ class Render extends AbstractRender
         $typeArray = explode(' ', $model->getType());
         $typeClasses = '';
         foreach ($typeArray as $typeClass) {
-            $typeClass = 'k' . $typeClass;
-            $typeClasses .= $typeClass . ' ';
+            $typeClasses .= 'k' . $typeClass . ' ';
         }
 
         // Generating our code and adding the Codegen button, if there is something
@@ -235,7 +234,7 @@ class Render extends AbstractRender
     public function renderExpandableChild(Model $model, $isExpanded = false)
     {
         // Check for emergency break.
-        if (!$this->pool->emergencyHandler->checkEmergencyBreak()) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
             return '';
         }
 
@@ -287,7 +286,7 @@ class Render extends AbstractRender
                 $model->getNormal(),
                 $this->renderHelp($model),
                 $this->renderConnector($model->getConnector1()),
-                $this->renderConnector($model->getConnector2()),
+                $this->renderConnector($model->getConnector2(128)),
                 $this->generateDataAttribute('source', $gencode),
                 $sourceButton,
                 $expandedClass,
@@ -315,12 +314,12 @@ class Render extends AbstractRender
         if ($model->getType() === 'Select') {
             // Here we store what the list of possible values.
             switch ($model->getData()) {
-                case "destination":
+                case 'destination':
                     // At php shutdown, logfile or direct after analysis.
                     $valueList = array('browser', 'file');
                     break;
 
-                case "skin":
+                case 'skin':
                     // Get a list of all skin folders.
                     $valueList = $this->getSkinList();
                     break;

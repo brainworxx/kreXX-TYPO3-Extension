@@ -73,7 +73,9 @@ class ProcessClosure extends AbstractProcess
             ->readSourcecode($file, $highlight, $from, $to);
 
         // Adding the place where it was declared.
-        $result['declared in'] = $ref->getFileName() . "\n";
+        $result['declared in'] = $this->pool
+            ->createClass('Brainworxx\\Krexx\\Service\\Misc\\File')
+            ->filterFilePath($ref->getFileName()) . "\n";
         $result['declared in'] .= 'in line ' . $ref->getStartLine();
 
         // Adding the namespace, but only if we have one.
@@ -96,7 +98,7 @@ class ProcessClosure extends AbstractProcess
         }
 
         // Remove the ',' after the last char.
-        $paramList = '<small>' . trim($paramList, ', ') . '</small>';
+        $paramList = trim($paramList, ', ');
         $model->setType('closure')
             ->setNormal('. . .')
             ->setConnectorParameters($paramList)
