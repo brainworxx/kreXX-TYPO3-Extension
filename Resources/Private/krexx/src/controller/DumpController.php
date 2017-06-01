@@ -133,7 +133,6 @@ class DumpController extends AbstractController
         $this->outputService->addChunkString($analysis);
         $this->outputService->addChunkString($footer);
 
-
         return $this;
     }
 

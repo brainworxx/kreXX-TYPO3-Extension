@@ -721,8 +721,8 @@
             wrapper1 = kdt.getDataset(el, 'codewrapper1');
             wrapper2 = kdt.getDataset(el, 'codewrapper2');
 
-            if (typeof sourcedata !== 'undefined' && sourcedata === '. . .') {
-                if (typeof domid !== 'undefined') {
+            if (sourcedata === '. . .') {
+                if (domid !== '') {
                     // We need to get a new el, because we are facing a recursion, and the
                     // current path is not really reachable.
                     el = document.querySelector('#' + domid).parentNode;
@@ -730,7 +730,7 @@
                     resultArray.push(kdt.getDataset(el, 'source'));
                 }
             }
-            if (typeof sourcedata !== 'undefined') {
+            if (sourcedata !== '') {
                 resultArray.push(sourcedata);
             }
             // Get the next el.

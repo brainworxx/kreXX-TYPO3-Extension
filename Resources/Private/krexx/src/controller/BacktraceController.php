@@ -66,8 +66,6 @@ class BacktraceController extends AbstractController
 
         $this->pool->scope->setScope($caller['varname']);
 
-        $headline = 'Backtrace';
-
         // Remove the fist step from the backtrace,
         // because that is the internal function in kreXX.
         $backtrace = debug_backtrace();
@@ -87,7 +85,7 @@ class BacktraceController extends AbstractController
         // additional info, in case we are logging to a file.
         $this->pool->chunks->addMetadata($caller);
 
-        $this->outputService->addChunkString($this->outputHeader($headline));
+        $this->outputService->addChunkString($this->outputHeader('Backtrace'));
         $this->outputService->addChunkString($analysis);
         $this->outputService->addChunkString($footer);
 

@@ -32,15 +32,16 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse;
+namespace Brainworxx\Krexx\Analyse\Code;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Scope analysis decides if a property of method is accessible in the current
  * analysis scope.
  *
- * @package Brainworxx\Krexx\Analyse
+ * @package Brainworxx\Krexx\Analyse\Code
  */
 class Scope
 {
@@ -119,8 +120,17 @@ class Scope
      * @return bool
      *   Can we allow code generation here?
      */
-    public function testModelForCodegen($model)
+    public function testModelForCodegen(Model $model)
     {
+        $nestingLevel = $this->pool->emergencyHandler->getNestingLevel();
+
+        // If we are too deep at this moment, we will stop right here!
+        // Also, anything not comming fro $this is not reachable, since
+        // we are testing protected stuff here.
+        if ($nestingLevel > 2 || $this->scope !== '$this') {
+            return false;
+        }
+
         // Inherited private properties or methods are not accessible from the
         // $this scope. We need to make sure that we do not generate any code
         // for them.
@@ -132,14 +142,10 @@ class Scope
         // When analysing a class or array, we have + 1 on our nesting level, when
         // coming from the code generation. That is, because that class is currently
         // being analysed.
-        if (strpos($model->getType(), 'class') === false && strpos($model->getType(), 'array') === false) {
-            $nestingLevel = $this->pool->emergencyHandler->getNestingLevel();
-        } else {
-            $nestingLevel = $this->pool->emergencyHandler->getNestingLevel() - 1;
+        if (is_object($model->getData()) || is_array($model->getData())) {
+            --$nestingLevel;
         }
 
-
-
-        return $nestingLevel <= 1 && $this->scope === '$this';
+        return $nestingLevel === 1 && $this->scope === '$this';
     }
 }

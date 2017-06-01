@@ -36,8 +36,12 @@ namespace Brainworxx\Krexx\View;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Service\Misc\File;
 
+/**
+ * Defining what we need for a skin render class.
+ *
+ * @package Brainworxx\Krexx\View
+ */
 abstract class AbstractRender
 {
     /**
@@ -48,11 +52,11 @@ abstract class AbstractRender
     protected $pool;
 
     /**
-     * The file service, used to read and write files.
+     * The name of the current skin.
      *
-     * @var File
+     * @var string
      */
-    protected $fileService;
+    protected $skinPath;
 
     /**
      * Injects the pool.
@@ -63,7 +67,7 @@ abstract class AbstractRender
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-        $this->fileService = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
+        $this->skinPath = $this->pool->krexxDir . 'resources/skins/' . $this->pool->config->getSetting('skin') . '/';
     }
 
 
@@ -95,7 +99,7 @@ abstract class AbstractRender
      * @return string
      *   The generated markup from the template files.
      */
-    protected function renderHelp($model)
+    protected function renderHelp(Model $model)
     {
         $helpId = $model->getHelpid();
         $data = $model->getJson();
@@ -140,15 +144,15 @@ abstract class AbstractRender
      */
     protected function renderConnector($connector)
     {
-        if (!empty($connector)) {
-            return str_replace(
-                '{connector}',
-                $connector,
-                $this->getTemplateFileContent('connector')
-            );
-        } else {
+        if (empty($connector)) {
             return '';
         }
+
+        return str_replace(
+            '{connector}',
+            $connector,
+            $this->getTemplateFileContent('connector')
+        );
     }
 
     /**
@@ -244,26 +248,72 @@ abstract class AbstractRender
     {
         static $fileCache = array();
 
-        if (!isset($fileCache[$what])) {
-            $fileCache[$what] = preg_replace(
-                '/\s+/',
-                ' ',
-                $this->fileService->getFileContents(
-                    $this->pool->krexxDir .
-                    'resources/skins/' .
-                    $this->pool->config->getSetting('skin') .
-                    '/' .
-                    $what .
-                    '.html'
-                )
-            );
+        if (isset($fileCache[$what])) {
+            return $fileCache[$what];
         }
+
+        $fileCache[$what] = preg_replace(
+            '/\s+/',
+            ' ',
+            $this->pool->fileService->getFileContents($this->skinPath . $what . '.html')
+        );
         return $fileCache[$what];
+    }
+
+    /**
+     * Some special escaping for the json output
+     *
+     * @param array $array
+     *   The string we want to special-escape
+     * @return string
+     *   The json from the array.
+     */
+    protected function encodeJson(array $array)
+    {
+        // No data, no json!
+        if (empty($array)) {
+            return '';
+        }
+
+        return json_encode($this->jsonEscape($array));
+    }
+
+    /**
+     * Do some special escaping for the json and data attribute output.
+     *
+     * @param string|array $data
+     *
+     * @return string|array
+     *   The escaped json
+     */
+    protected function jsonEscape($data)
+    {
+        // Our js has some problems with single quotes and escaped quotes.
+        // We remove them as well as linebreaks.
+        // Unicode greater-than and smaller-then values.
+        return str_replace(
+            array(
+                '"',
+                "'",
+                '&quot;',
+                '&lt;',
+                '&gt;',
+            ),
+            array(
+                "\\u0027",
+                "\\u0022",
+                "\\u0027",
+                "\\u276E",
+                "\\u02C3",
+            ),
+            $data
+        );
     }
 
     /**
      * Generates a data attribute, to be inserted into the HTML tags.
      * If no value is in the data, we return an empty string.
+     * Double quotes gets replaced by &#34;
      *
      * @param string $name
      *   The name of the attribute (without the 'data-' in front
@@ -277,10 +327,9 @@ abstract class AbstractRender
     {
         if ($data  === '') {
             return '';
-        } else {
-            return ' data-' . $name . '=\'' . $data . '\' ';
         }
 
+        return ' data-' . $name . '="' . str_replace('"', '&#34;', $data) . '" ';
     }
 
     /**
@@ -417,7 +466,7 @@ abstract class AbstractRender
      *   The configured doctype.
      *
      * @return string
-     *   The templatefile, with all markers replaced.
+     *   The template file, with all markers replaced.
      */
     abstract public function renderFatalHeader($cssJs, $doctype);
 

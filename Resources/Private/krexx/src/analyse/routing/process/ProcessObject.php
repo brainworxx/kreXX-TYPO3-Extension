@@ -54,18 +54,16 @@ class ProcessObject extends AbstractProcess
      */
     public function process(Model $model)
     {
-        $output = '';
-        $model->setType('class')
-            ->addParameter('data', $model->getData())
-            ->addParameter('name', $model->getName())
-            ->setNormal(get_class($model->getData()))
-            ->setDomid($this->generateDomIdFromObject($model->getData()))
-            ->injectCallback(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects')
-            );
-
         // Output data from the class.
-        $output .= $this->pool->render->renderExpandableChild($model);
-        return $output;
+        return $this->pool->render->renderExpandableChild(
+            $model->setType('class')
+                ->addParameter('data', $model->getData())
+                ->addParameter('name', $model->getName())
+                ->setNormal('\\' . get_class($model->getData()))
+                ->setDomid($this->generateDomIdFromObject($model->getData()))
+                ->injectCallback(
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects')
+                )
+        );
     }
 }

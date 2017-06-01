@@ -122,48 +122,49 @@ class Connectors
      */
     public function getConnector1()
     {
-        if (!empty($this->customConnector1)) {
-            return $this->customConnector1;
+        if (empty($this->customConnector1)) {
+            switch ($this->type) {
+                case '':
+                    return '';
+                    break;
+
+                case $this::NORMAL_ARRAY:
+                    return '[';
+                    break;
+
+                case $this::ASSOCIATIVE_ARRAY:
+                    return '[\'';
+                    break;
+
+                case $this::NORMAL_PROPERTY:
+                    return '->';
+                    break;
+
+                case $this::METHOD:
+                    return '->';
+                    break;
+
+                case $this::STATIC_METHOD:
+                    return '::';
+                    break;
+
+                case $this::STATIC_PROPERTY:
+                    return '::';
+                    break;
+
+                case $this::CONSTANT:
+                    return '::';
+                    break;
+
+                default:
+                    // Unknown type, return empty string.
+                    return '';
+                    break;
+            }
         }
 
-        switch ($this->type) {
-            case '':
-                return '';
-                break;
+        return $this->customConnector1;
 
-            case $this::NORMAL_ARRAY:
-                return '[';
-                break;
-
-            case $this::ASSOCIATIVE_ARRAY:
-                return '[\'';
-                break;
-
-            case $this::NORMAL_PROPERTY:
-                return '->';
-                break;
-
-            case $this::METHOD:
-                return '->';
-                break;
-
-            case $this::STATIC_METHOD:
-                return '::';
-                break;
-
-            case $this::STATIC_PROPERTY:
-                return '::';
-                break;
-
-            case $this::CONSTANT:
-                return '::';
-                break;
-
-            default:
-                // Unknown type, return empty string.
-                return '';
-                break;
-        }
     }
 
     /**
@@ -177,8 +178,7 @@ class Connectors
      */
     public function getConnector2($cap)
     {
-        $length = strlen($this->params);
-        if ($cap > 0 && $length > $cap) {
+        if ($cap > 0 && strlen($this->params) > $cap) {
             $params = substr($this->params, 0, $cap) . ' . . . ';
         } else {
             $params = $this->params;
@@ -198,10 +198,16 @@ class Connectors
                 break;
 
             case $this::METHOD:
+                if (empty($params)) {
+                    return '()';
+                }
                 return '(<small>' . $params . '</small>)';
                 break;
 
             case $this::STATIC_METHOD:
+                if (empty($params)) {
+                    return '()';
+                }
                 return '(<small>' . $params . '</small>)';
                 break;
 

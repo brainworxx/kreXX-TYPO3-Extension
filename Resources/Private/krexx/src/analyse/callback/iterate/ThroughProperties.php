@@ -96,7 +96,6 @@ class ThroughProperties extends AbstractCallback
             // Stitch together our additional info about the data:
             // public, protected, private, static.
             $additional = '';
-            $connectorType = Connectors::NORMAL_PROPERTY;
             if ($refProperty->isProtected()) {
                 $additional .= 'protected ';
             } elseif ($refProperty->isPublic()) {
@@ -112,10 +111,7 @@ class ThroughProperties extends AbstractCallback
                 $additional .= 'inherited ';
             }
 
-            if (is_a($refProperty, '\\Brainworxx\\Krexx\\Analysis\\Flection')) {
-                /* @var \Brainworxx\Krexx\Analyse\Flection $refProperty */
-                $additional .= $refProperty->getWhatAmI() . ' ';
-            }
+            $connectorType = Connectors::NORMAL_PROPERTY;
             if ($refProperty->isStatic()) {
                 $additional .= 'static ';
                 $connectorType = Connectors::STATIC_PROPERTY;
@@ -123,11 +119,31 @@ class ThroughProperties extends AbstractCallback
                 $propName = '$' . $propName;
             }
 
+            // The property 'isUndeclared' is not a part of the reflectionProperty.
+            // @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
+            // With isset, we prevent a notice btw.
+            if (isset($refProperty->isUndeclared)) {
+                $additional .= 'dynamic property ';
+                $comment = '';
+                $declarationPlace = '';
+            } else {
+                // Since we are dealing with a declared Property here, we can
+                // get the comment and the declaration place.
+                $comment = $this->pool
+                    ->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Properties')
+                    ->getComment($refProperty);
+                $declarationPlace = $this->pool->fileService->filterFilePath(
+                    $refProperty->getDeclaringClass()->getFileName()
+                );
+            }
+
             // Stitch together our model
             $output .= $this->pool->routing->analysisHub(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                     ->setData($value)
                     ->setName($propName)
+                    ->addToJson('Comment', $comment)
+                    ->addToJson('Declared in', $declarationPlace)
                     ->setAdditional($additional)
                     ->setConnectorType($connectorType)
             );

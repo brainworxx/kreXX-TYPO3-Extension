@@ -56,9 +56,14 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
             return '';
         }
 
+         // Disalowing code generation for configured debug methods.
+        $type = $model->getType();
+        if ($type === 'debug method') {
+            return '. . .';
+        }
+
         // check for VHS values.
         if ($model->getMultiLineCodeGen() === self::VHS_CALL_VIEWHELPER) {
-            $this->counter++;
             return $this->generateVhsCall($model);
         } else {
             // Do the parent generation. [ParentGeneration = Generation X ?]
@@ -84,11 +89,12 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
         $counter = 1;
         $args = '';
 
-        foreach ($data['data'] as $resultName => $analysisResultLine) {
-            if (is_a($analysisResultLine, 'Brainworxx\\Krexx\\Analyse\\Code\\ReflectionParameterWrapper')) {
-                $args .= 'arg' . $counter . ': \'' . $analysisResultLine->getParameterName() . '\', ';
-                $counter++;
-            }
+
+
+        foreach ($data['paramArray'] as $parameter) {
+            $args .= 'arg' . $counter . ': \'' . $parameter . '\', ';
+            $counter++;
+
         }
 
         $firstPart = ' -> v:call(method: \'';
@@ -110,11 +116,7 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
      */
     public function generateWrapper1()
     {
-        if ($this->pool->emergencyHandler->getNestingLevel() === 1) {
-            return '{';
-        } else {
-            return '';
-        }
+        return '{';
     }
 
     /**
@@ -124,30 +126,6 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
      */
     public function generateWrapper2()
     {
-        if ($this->pool->emergencyHandler->getNestingLevel() === 1) {
-            return '}';
-        } else {
-            return '';
-        }
-    }
-
-    /**
-     * We will not allow code generation for configured debug methods.
-     *
-     * {@inheritdoc}
-     */
-    protected function analyseType(Model $model)
-    {
-        $type = $model->getType();
-
-        // Disalowing code generation for configured debug methods.
-        if ($type === 'debug method') {
-            return self::METHOD;
-        } else {
-            // Not a debug method? We let the parent calss decide what to do
-            // with it.
-            return parent::analyseType($model);
-        }
-
+        return '}';
     }
 }

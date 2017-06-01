@@ -36,6 +36,11 @@ namespace Brainworxx\Krexx\View\Output;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
 
+/**
+ * Defining what is needed for an outpur class.
+ *
+ * @package Brainworxx\Krexx\View\Output
+ */
 abstract class AbstractOutput
 {
     /**

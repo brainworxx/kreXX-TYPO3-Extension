@@ -37,7 +37,7 @@ namespace Brainworxx\Krexx\Service\Factory;
 /**
  * Simple factory, nothing special. Offers a overwrite method.
  *
- * @package Brainworxx\Krexx\Service
+ * @package Brainworxx\Krexx\Service\Factory
  */
 class Factory
 {
@@ -65,20 +65,19 @@ class Factory
     public function createClass($classname)
     {
         // Check for possible overwrite.
-        if (!empty($this->rewrite[$classname])) {
+        if (isset($this->rewrite[$classname])) {
             $classname = $this->rewrite[$classname];
         }
-        $object = new $classname($this);
 
-        return $object;
+        return new $classname($this);
     }
 
     /**
      * Adds another value to the overwrite.
      *
-     * @param $originalClassName
+     * @param string $originalClassName
      *   The original class name, we want to overwrite this one.
-     * @param $newClassName
+     * @param string $newClassName
      *   The new class name, the factory will then return this class via get();
      *
      * @return $this
@@ -95,7 +94,7 @@ class Factory
      */
     public function flushRewrite()
     {
-        if (!empty($GLOBALS['kreXXoverwrites']) && is_array($GLOBALS['kreXXoverwrites']['classes'])) {
+        if (isset($GLOBALS['kreXXoverwrites']) && isset($GLOBALS['kreXXoverwrites']['classes'])) {
             $this->rewrite = $GLOBALS['kreXXoverwrites']['classes'];
         } else {
             $this->rewrite = array();

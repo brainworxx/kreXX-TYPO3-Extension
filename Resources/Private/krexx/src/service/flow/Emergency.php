@@ -62,7 +62,7 @@ class Emergency
      *
      * @var bool
      */
-    protected $enabled = true;
+    protected $disabled = false;
 
     /**
      * Has this one failed before?
@@ -100,6 +100,13 @@ class Emergency
     protected $nestingLevel = 0;
 
     /**
+     * Caqching the setting of the maximum nesting level.
+     *
+     * @var int
+     */
+    protected $maxNestingLevel;
+
+    /**
      * The pool, where we store the classes we need.
      *
      * @var Pool
@@ -124,8 +131,7 @@ class Emergency
         $this->pool = $pool;
 
         // Cache the server memory limit.
-        $limit = strtoupper(ini_get('memory_limit'));
-        if (preg_match('/^(\d+)(.)$/', $limit, $matches)) {
+        if (preg_match('/^(\d+)(.)$/', strtoupper(ini_get('memory_limit')), $matches)) {
             if ($matches[2] === 'M') {
                 // Megabyte.
                 $this->serverMemoryLimit = $matches[1] * 1024 * 1024;
@@ -138,7 +144,8 @@ class Emergency
         // Cache some settings.
         $this->maxRuntime = (int) $pool->config->getSetting('maxRuntime');
         $this->minMemoryLeft = ((int) $pool->config->getSetting('memoryLeft'))  * 1024 * 1024;
-        $this->maxCall = (int)$this->pool->config->getSetting('maxCall');
+        $this->maxCall = (int) $this->pool->config->getSetting('maxCall');
+        $this->maxNestingLevel = (int) $this->pool->config->getSetting('level');
     }
 
     /**
@@ -147,9 +154,9 @@ class Emergency
      * @param $bool
      *  Whether it is enabled, or not.
      */
-    public function setEnable($bool)
+    public function setDisable($bool)
     {
-        $this->enabled = $bool;
+        $this->disabled = $bool;
     }
 
     /**
@@ -162,7 +169,7 @@ class Emergency
      */
     public function checkEmergencyBreak()
     {
-        if (!$this->enabled) {
+        if ($this->disabled) {
             // Tell them, everything is OK!
             return false;
         }
@@ -176,9 +183,7 @@ class Emergency
         // Check Runtime.
         if ($this->timer < time()) {
             // This is taking longer than expected.
-            $this->pool->messages->addMessage(
-                $this->pool->messages->getHelp('emergencyTimer')
-            );
+            $this->pool->messages->addMessage('emergencyTimer');
             \Krexx::editSettings();
             \Krexx::disable();
             self::$allIsOk = false;
@@ -192,9 +197,7 @@ class Emergency
             $left = $this->serverMemoryLimit - memory_get_usage();
             // Is more left than is configured?
             if ($left < $this->minMemoryLeft) {
-                $this->pool->messages->addMessage(
-                    $this->pool->messages->getHelp('emergencyMemory')
-                );
+                $this->pool->messages->addMessage('emergencyMemory');
                 // Show settings to give the dev to repair the situation.
                 \Krexx::editSettings();
                 \Krexx::disable();
@@ -231,7 +234,7 @@ class Emergency
      */
     public function checkNesting()
     {
-        return ($this->nestingLevel > (int)$this->pool->config->getSetting('level'));
+        return ($this->nestingLevel > $this->maxNestingLevel);
     }
 
     /**
@@ -271,7 +274,7 @@ class Emergency
         }
         // Give feedback if this is our last call.
         if ($this->krexxCount === ($this->maxCall - 1)) {
-            $this->pool->messages->addMessage($this->pool->messages->getHelp('maxCallReached'), 'critical');
+            $this->pool->messages->addMessage('maxCallReached');
         }
         // Count goes up.
         ++$this->krexxCount;

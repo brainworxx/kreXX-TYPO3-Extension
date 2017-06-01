@@ -82,9 +82,9 @@ class ProcessString extends AbstractProcess
             $encoding = 'broken';
         }
 
-        $data = $this->pool->encodeString($data);
+        $newData = $this->pool->encodeString($data);
 
-        $model->setData($data)
+        $model->setData($newData)
             ->setNormal($cut)
             ->setType('string ' . $strlen)
             ->addToJson('encoding', $encoding)

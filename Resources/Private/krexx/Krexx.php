@@ -71,7 +71,6 @@ class Krexx
     public static function bootstrapKrexx()
     {
         $krexxDir = dirname(__FILE__) . DIRECTORY_SEPARATOR;
-        include_once $krexxDir . 'src/view/Help.php';
         include_once $krexxDir . 'src/view/AbstractRender.php';
         include_once $krexxDir . 'src/view/Render.php';
         include_once $krexxDir . 'src/view/Messages.php';
@@ -89,7 +88,6 @@ class Krexx
         include_once $krexxDir . 'src/service/factory/Pool.php';
         include_once $krexxDir . 'src/service/flow/Recursion.php';
         include_once $krexxDir . 'src/service/flow/Emergency.php';
-        include_once $krexxDir . 'src/analyse/Flection.php';
         include_once $krexxDir . 'src/analyse/routing/AbstractRouting.php';
         include_once $krexxDir . 'src/analyse/routing/Routing.php';
         include_once $krexxDir . 'src/analyse/routing/process/AbstractProcess.php';
@@ -104,13 +102,14 @@ class Krexx
         include_once $krexxDir . 'src/analyse/routing/process/ProcessResource.php';
         include_once $krexxDir . 'src/analyse/routing/process/ProcessString.php';
         include_once $krexxDir . 'src/analyse/Model.php';
-        include_once $krexxDir . 'src/analyse/Scope.php';
+        include_once $krexxDir . 'src/analyse/code/Scope.php';
         include_once $krexxDir . 'src/analyse/callback/AbstractCallback.php';
         include_once $krexxDir . 'src/analyse/callback/analyse/BacktraceStep.php';
         include_once $krexxDir . 'src/analyse/callback/analyse/ConfigSection.php';
         include_once $krexxDir . 'src/analyse/callback/analyse/Debug.php';
         include_once $krexxDir . 'src/analyse/callback/analyse/Objects.php';
         include_once $krexxDir . 'src/analyse/callback/iterate/ThroughArray.php';
+        include_once $krexxDir . 'src/analyse/callback/iterate/ThroughLargeArray.php';
         include_once $krexxDir . 'src/analyse/callback/iterate/ThroughConfig.php';
         include_once $krexxDir . 'src/analyse/callback/iterate/ThroughConstants.php';
         include_once $krexxDir . 'src/analyse/callback/iterate/ThroughMethodAnalysis.php';
@@ -122,6 +121,7 @@ class Krexx
         include_once $krexxDir . 'src/analyse/comment/AbstractComment.php';
         include_once $krexxDir . 'src/analyse/comment/Methods.php';
         include_once $krexxDir . 'src/analyse/comment/Functions.php';
+        include_once $krexxDir . 'src/analyse/comment/Properties.php';
         include_once $krexxDir . 'src/analyse/code/Codegen.php';
         include_once $krexxDir . 'src/analyse/code/Connectors.php';
         include_once $krexxDir . 'src/analyse/code/ReflectionParameterWrapper.php';
@@ -191,8 +191,7 @@ class Krexx
     public static function __callStatic($name, array $arguments)
     {
         // Do we gave a handle?
-        $handle = self::$pool->config->getDevHandler();
-        if ($name === $handle) {
+        if ($name === self::$pool->config->getDevHandler()) {
             // We do a standard-open.
             if (isset($arguments[0])) {
                 self::open($arguments[0]);

@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Service\Flow;
 
-use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -120,9 +119,10 @@ class Recursion
         // We do something else for objects.
         // Setting a recursion marker inside might trigger a magical function.
         $objectHash = spl_object_hash($bee);
-        if (!isset($this->recursionHive[$objectHash])) {
-            $this->recursionHive[$objectHash] = true;
+        if (isset($this->recursionHive[$objectHash])) {
+            return;
         }
+        $this->recursionHive[$objectHash] = true;
     }
 
     /**
@@ -139,12 +139,10 @@ class Recursion
         // Check objects.
         if (is_object($bee)) {
             // Retrieve a possible hash.
-            $objectHash = spl_object_hash($bee);
-            if (isset($this->recursionHive[$objectHash])) {
+            if (isset($this->recursionHive[spl_object_hash($bee)])) {
                 return true;
-            } else {
-                return false;
             }
+            return false;
         }
 
         // Check arrays (only the $GLOBAL array may apply).
@@ -152,13 +150,13 @@ class Recursion
             // We render the $GLOBALS only once.
             if ($this->globalsWereRendered) {
                 return true;
-            } else {
-                $this->globalsWereRendered = true;
-                return false;
             }
+
+            $this->globalsWereRendered = true;
+            return false;
         }
 
-        // Should be a normalk array. We do not track these, because we can not
+        // Should be a normal array. We do not track these, because we can not
         // resolve them via JS recursion handling.
         return false;
     }

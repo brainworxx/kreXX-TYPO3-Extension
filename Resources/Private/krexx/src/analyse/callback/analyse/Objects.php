@@ -35,7 +35,6 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Flection;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
 
@@ -60,7 +59,6 @@ class Objects extends AbstractCallback
     public function callMe()
     {
         $data = $this->parameters['data'];
-        $name = $this->parameters['name'];
         $output = $this->pool->render->renderSingeChildHr();
 
         $ref = new \ReflectionClass($data);
@@ -94,8 +92,8 @@ class Objects extends AbstractCallback
         $output .= $this->getMethodData($ref);
 
         // Dumping traversable data.
-        if ($this->pool->config->getSetting('analyseTraversable')) {
-            $output .= $this->getTraversableData($data, $name);
+        if ($this->pool->config->getSetting('analyseTraversable') && is_a($data, 'Traversable')) {
+            $output .= $this->getTraversableData($data, $this->parameters['name']);
         }
 
         // Dumping all configured debug functions.
@@ -116,10 +114,9 @@ class Objects extends AbstractCallback
      */
     protected function getPrivateProperties(\ReflectionClass $ref)
     {
-        $output = '';
-        $data = $this->parameters['data'];
         $refProps = array();
         $reflectionClass = $ref;
+        $analysePrivate = $this->pool->config->getSetting('analysePrivate');
 
         // The main problem here is, that you only get the private properties of
         // the current class, but not the inherited private properties.
@@ -131,20 +128,25 @@ class Objects extends AbstractCallback
             // Inherited private properties are not accessible from inside
             // the class. We will only dump them, if we are analysing private
             // properties.
-            if ($this->pool->config->getSetting('analysePrivate')) {
+            if ($analysePrivate) {
                 $reflectionClass = $reflectionClass->getParentClass();
             } else {
                 // This should break the do while.
-                $reflectionClass = false;
+                break;
             }
         } while (is_object($reflectionClass));
 
-        usort($refProps, array($this, 'sortingCallback'));
-        if (!empty($refProps)) {
-            $output .= $this->getReflectionPropertiesData($refProps, $ref, $data, 'Private properties');
+        usort($refProps, array($this, 'sortingCallbackProp'));
+        if (empty($refProps)) {
+            return '';
         }
 
-        return $output;
+        return $this->getReflectionPropertiesData(
+            $refProps,
+            $ref,
+            $this->parameters['data'],
+            'Private properties'
+        );
     }
 
     /**
@@ -158,17 +160,19 @@ class Objects extends AbstractCallback
      */
     protected function getProtectedProperties(\ReflectionClass $ref)
     {
-        $output = '';
-        $data = $this->parameters['data'];
-
         $refProps = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
-        usort($refProps, array($this, 'sortingCallback'));
+        usort($refProps, array($this, 'sortingCallbackProp'));
 
-        if (!empty($refProps)) {
-            $output .= $this->getReflectionPropertiesData($refProps, $ref, $data, 'Protected properties');
+        if (empty($refProps)) {
+            return '';
         }
 
-        return $output;
+        return $this->getReflectionPropertiesData(
+            $refProps,
+            $ref,
+            $this->parameters['data'],
+            'Protected properties'
+        );
     }
 
     /**
@@ -182,7 +186,6 @@ class Objects extends AbstractCallback
      */
     protected function getPublicProperties(\ReflectionClass $ref)
     {
-        $output = '';
         $data = $this->parameters['data'];
 
         $refProps = $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
@@ -200,21 +203,23 @@ class Objects extends AbstractCallback
         foreach ($refProps as $refProp) {
             $publicProps[$refProp->name] = true;
         }
-        // For every not-declared property, we add a 'flection', which is a
-        // mockup of a reflectionProperty.
+        // For every not-declared property, we add a another reflection.
+        // Those are simply added during runtime
         foreach (array_diff_key(get_object_vars($data), $publicProps) as $key => $value) {
-            $refProps[] = new Flection($value, $key, $ref);
+            $undeclaredProp = new \ReflectionProperty($data, $key);
+            $undeclaredProp->isUndeclared = true;
+            $refProps[] = $undeclaredProp;
         }
 
-        if (!empty($refProps)) {
-            usort($refProps, array($this, 'sortingCallback'));
-            $output .= $this->getReflectionPropertiesData($refProps, $ref, $data, 'Public properties');
-            // Adding a HR to reflect that the following stuff are not public
-            // properties anymore.
-            $output .= $this->pool->render->renderSingeChildHr();
+        if (empty($refProps)) {
+            return '';
         }
 
-        return $output;
+        usort($refProps, array($this, 'sortingCallbackProp'));
+        // Adding a HR to reflect that the following stuff are not public
+        // properties anymore.
+        return $this->getReflectionPropertiesData($refProps, $ref, $data, 'Public properties') .
+            $this->pool->render->renderSingeChildHr();
     }
 
     /**
@@ -227,7 +232,22 @@ class Objects extends AbstractCallback
      *
      * @return int
      */
-    protected function sortingCallback($a, $b)
+    protected function sortingCallbackProp(\ReflectionProperty $a, \ReflectionProperty $b)
+    {
+        return strcmp($a->name, $b->name);
+    }
+
+     /**
+     * Sorting callback for usort utilizing reflection methods.
+     *
+     * @param \ReflectionMethod $a
+     *   A string we want to sort.
+     * @param \ReflectionMethod $b
+     *   Another string for comparison
+     *
+     * @return int
+     */
+    protected function sortingCallbackMethod(\ReflectionMethod $a, \ReflectionMethod $b)
     {
         return strcmp($a->name, $b->name);
     }
@@ -261,15 +281,14 @@ class Objects extends AbstractCallback
 
         // Is there anything to analyse?
         $methods = array_merge($public, $protected, $private);
-        if (!empty($methods)) {
-            // We need to sort these alphabetically.
-            $sortingCallback = function ($a, $b) {
-                return strcmp($a->name, $b->name);
-            };
-            usort($methods, $sortingCallback);
+        if (empty($methods)) {
+            return '';
+        }
 
-            return $this->pool->render->renderExpandableChild(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+        // We need to sort these alphabetically.
+        usort($methods, array($this, 'sortingCallbackMethod'));
+        return $this->pool->render->renderExpandableChild(
+            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setName('Methods')
                 ->setType('class internals')
                 ->addParameter('data', $methods)
@@ -277,9 +296,7 @@ class Objects extends AbstractCallback
                 ->injectCallback(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods')
                 )
-            );
-        }
-        return '';
+        );
     }
 
     /**
@@ -299,39 +316,33 @@ class Objects extends AbstractCallback
     protected function pollAllConfiguredDebugMethods($data)
     {
         $output = '';
-
-        $funcList = explode(',', $this->pool->config->getSetting('debugMethods'));
         $security = $this->pool->config->security;
-        foreach ($funcList as $funcName) {
-            if (is_callable(array($data, $funcName)) && $security->isAllowedDebugCall($data, $funcName)
+
+        foreach (explode(',', $this->pool->config->getSetting('debugMethods')) as $funcName) {
+            // Check if:
+            // 1.) Method exists
+            // 2.) Method can be called
+            // 3.) It's not blacklisted.
+            if (method_exists($data, $funcName) &&
+                is_callable(array($data, $funcName)) &&
+                $security->isAllowedDebugCall($data, $funcName)
             ) {
-                $foundRequired = false;
-                // We need to check if this method actually exists. Just because it is
-                // callable does not mean it exists!
-                if (method_exists($data, $funcName)) {
-                    // We need to check if the callable function requires any parameters.
-                    // We will not call those, because we simply can not provide them.
-                    // Interestingly, some methods of a class are callable, but are not
-                    // implemented. This means, that when I try to get a reflection,
-                    // it will result in a WSOD.
-                    $ref = new \ReflectionMethod($data, $funcName);
-                    $params = $ref->getParameters();
-                    foreach ($params as $param) {
-                        if (!$param->isOptional()) {
-                            // We've got a required parameter!
-                            // We will not call this one.
-                            $foundRequired = true;
-                            break;
-                        }
+                $onlyOptionalParams = true;
+                // We need to check if the callable function requires any parameters.
+                // We will not call those, because we simply can not provide them.
+                $ref = new \ReflectionMethod($data, $funcName);
+
+                /** @var \ReflectionParameter $param */
+                foreach ($ref->getParameters() as $param) {
+                    if (!$param->isOptional()) {
+                        // We've got a required parameter!
+                        // We will not call this one.
+                        $onlyOptionalParams = false;
+                        break;
                     }
-                    unset($ref);
-                } else {
-                    // It's callable, but does not exist. Looks like a __call fallback.
-                    // We will not poll it for data.
-                    $foundRequired = true;
                 }
 
-                if (!$foundRequired) {
+                if ($onlyOptionalParams) {
                     // Add a try to prevent the hosting CMS from doing something stupid.
                     try {
                         // We need to deactivate the current error handling to
@@ -371,7 +382,7 @@ class Objects extends AbstractCallback
     /**
      * Dumps all available traversable data.
      *
-     * @param \Iterator $data
+     * @param \Traversable $data
      *   The object we are analysing.
      * @param string $name
      *   The name of the object we want to analyse.
@@ -379,66 +390,73 @@ class Objects extends AbstractCallback
      * @return string
      *   The generated markup.
      */
-    protected function getTraversableData($data, $name)
+    protected function getTraversableData(\Traversable $data, $name)
     {
-        if (is_a($data, 'Traversable')) {
-            // Special Array Access here, resulting in multiline source generation.
-            // We need to generate something like:
-            // $kresult = iterator_to_array($data);
-            // $kresult = $kresult[5];
-            // So we tell the callback to to that.
+        // Special Array Access here, resulting in multiline source generation.
+        // We need to generate something like:
+        // $kresult = iterator_to_array($data);
+        // $kresult = $kresult[5];
+        // So we tell the callback to to that.
+        $multiline = true;
+
+        // Normal ArrayAccess, direct access to the array. Nothing special
+        if (is_a($data, 'ArrayAccess')) {
+            $multiline = false;
+        }
+
+        // SplObject pool use the object as keys, so we need some
+        // multiline stuff!
+        if (is_a($data, 'SplObjectStorage')) {
             $multiline = true;
+        }
 
-            // Normal ArrayAccess, direct access to the array. Nothing special
-            if (is_a($data, 'ArrayAccess')) {
-                $multiline = false;
-            }
-
-            // SplObject pool use the object as keys, so we need some
-            // multiline stuff!
-            if (is_a($data, 'SplObjectStorage')) {
-                $multiline = true;
-            }
-
-            // Add a try to prevent the hosting CMS from doing something stupid.
-            try {
-                // We need to deactivate the current error handling to
-                // prevent the host system to do anything stupid.
+        // Add a try to prevent the hosting CMS from doing something stupid.
+        try {
+            // We need to deactivate the current error handling to
+            // prevent the host system to do anything stupid.
                 set_error_handler(function () {
                     // Do nothing.
                 });
                 $parameter = iterator_to_array($data);
-            } catch (\Exception $e) {
-                // Do nothing.
+        } catch (\Exception $e) {
+            // Do nothing.
+        }
+
+        // Reactivate whatever error handling we had previously.
+        restore_error_handler();
+
+        if (isset($parameter)) {
+            // Check memory and runtime.
+            if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
+                return '';
+            }
+            // Check nesting level
+            $this->pool->emergencyHandler->upOneNestingLevel();
+            if ($this->pool->emergencyHandler->checkNesting()) {
+                return '';
             }
 
-            // Reactivate whatever error handling we had previously.
-            restore_error_handler();
-
-            if (isset($parameter)) {
-                // Check memory and runtime.
-                if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
-                    return '';
-                }
-                // Check nesting level
-                $this->pool->emergencyHandler->upOneNestingLevel();
-                if ($this->pool->emergencyHandler->checkNesting()) {
-                    return '';
-                }
-                $result = $this->pool->render->renderExpandableChild(
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                        ->setName($name)
-                        ->setType('Foreach')
-                        ->setNormal('Traversable Info')
-                        ->addParameter('data', $parameter)
-                        ->addParameter('multiline', $multiline)
-                        ->injectCallback(
-                            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')
-                        )
-                );
-                $this->pool->emergencyHandler->downOneNestingLevel();
-                return $result;
+            /** @var Model $model */
+            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setName($name)
+                ->setType('Foreach')
+                ->addParameter('data', $parameter)
+                ->addParameter('multiline', $multiline);
+            // This one is huge!
+            if (count($parameter) > $this->pool->config->arrayCountLimit) {
+                $model->injectCallback(
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray')
+                )->setNormal('Simplified Traversable Info')
+                    ->addToJson('Help', $this->pool->messages->getHelp('simpleArray'));
+            } else {
+                $model->injectCallback(
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')
+                )->setNormal('Traversable Info');
             }
+
+            $result = $this->pool->render->renderExpandableChild($model);
+            $this->pool->emergencyHandler->downOneNestingLevel();
+            return $result;
         }
         // Still here?!? Return an empty string.
         return '';
@@ -459,26 +477,24 @@ class Objects extends AbstractCallback
         // an array, so we need to process it like the return from an iterator.
         $refConst = $ref->getConstants();
 
-        if (!empty($refConst)) {
-            // We need to set al least one connector here to activate
-            // code generation, even if it is a space.
-            // We've got some values, we will dump them.
-            $classname = $ref->getName();
-
-            return $this->pool->render->renderExpandableChild(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                    ->setName('Constants')
-                    ->setType('class internals')
-                    ->addParameter('data', $refConst)
-                    ->addParameter('classname', $classname)
-                    ->injectCallback(
-                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConstants')
-                    )
-            );
+        if (empty($refConst)) {
+            // Nothing to see here, return an empty string.
+            return '';
         }
 
-        // Nothing to see here, return an empty string.
-        return '';
+        // We've got some values, we will dump them.
+        $classname = '\\' . $ref->getName();
+        return $this->pool->render->renderExpandableChild(
+            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setName('Constants')
+                ->setType('class internals')
+                ->setIsMetaConstants(true)
+                ->addParameter('data', $refConst)
+                ->addParameter('classname', $classname)
+                ->injectCallback(
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConstants')
+                )
+        );
     }
 
     /**
@@ -514,13 +530,13 @@ class Objects extends AbstractCallback
             $model->setName($label)
                 ->setType('class internals');
             return $this->pool->render->renderExpandableChild($model);
-        } else {
-            // Public properties.
-            // We render them directly in the object "root", so we call
-            // the render directly.
-            // $model->setAdditional($label);
-            return $model->renderMe();
         }
+
+        // Public properties.
+        // We render them directly in the object "root", so we call
+        // the render directly.
+        // $model->setAdditional($label);
+        return $model->renderMe();
     }
 
     /**
@@ -547,42 +563,44 @@ class Objects extends AbstractCallback
             );
         }
 
-        if (!empty($methodList)) {
-            // Filter them.
-            foreach ($methodList as $key => $method) {
-                if (strpos($method->getName(), 'get') === 0) {
-                    // We only dump those that have no parameters.
-                    $parameters = $method->getParameters();
-                    if (!empty($parameters)) {
-                        unset($methodList[$key]);
-                    }
-                } else {
+        if (empty($methodList)) {
+            // There are no getter methods in here.
+            return '';
+        }
+
+        // Filter them.
+        foreach ($methodList as $key => $method) {
+            if (strpos($method->getName(), 'get') === 0) {
+                // We only dump those that have no parameters.
+                /** @var \ReflectionMethod $method */
+                $parameters = $method->getParameters();
+                if (!empty($parameters)) {
                     unset($methodList[$key]);
                 }
-            }
-
-            if (!empty($methodList)) {
-                // Got some getters right here.
-
-                // We need to set al least one connector here to activate
-                // code generation, even if it is a space.
-                return $this->pool->render->renderExpandableChild(
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                        ->setName('Getter')
-                        ->setType('class internals')
-                        ->setHelpid('getterHelpInfo')
-                        ->addParameter('ref', $ref)
-                        ->addParameter('methodList', $methodList)
-                        ->addParameter('data', $data)
-                        ->injectCallback(
-                            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter')
-                        )
-                );
+            } else {
+                unset($methodList[$key]);
             }
         }
 
-        // There are no getter methods in here.
-        return '';
+        if (empty($methodList)) {
+            // There are no getter methods in here.
+            return '';
+        }
 
+        // Got some getters right here.
+        // We need to set al least one connector here to activate
+        // code generation, even if it is a space.
+        return $this->pool->render->renderExpandableChild(
+            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setName('Getter')
+                ->setType('class internals')
+                ->setHelpid('getterHelpInfo')
+                ->addParameter('ref', $ref)
+                ->addParameter('methodList', $methodList)
+                ->addParameter('data', $data)
+                ->injectCallback(
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter')
+                )
+        );
     }
 }

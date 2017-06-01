@@ -68,7 +68,10 @@ class Render extends AbstractRender
                 $this->renderConnector($model->getConnector1()),
                 $this->renderHelp($model),
                 $this->renderConnector($model->getConnector2()),
-                $this->generateDataAttribute('source', $this->pool->codegenHandler->generateSource($model)),
+                $this->generateDataAttribute(
+                    'source',
+                    $this->pool->codegenHandler->generateSource($model)
+                ),
             ),
             $this->getTemplateFileContent('recursion')
         );
@@ -109,11 +112,11 @@ class Render extends AbstractRender
      */
     public function renderFooter($caller, $configOutput, $configOnly = false)
     {
-        if (!isset($caller['file'])) {
-            // When we have no caller, we will not render it.
-            $caller = '';
-        } else {
+        if (isset($caller['file'])) {
             $caller = $this->renderCaller($caller['file'], $caller['line']);
+        } else {
+             // When we have no caller, we will not render it.
+            $caller = '';
         }
 
         return str_replace(
@@ -171,9 +174,8 @@ class Render extends AbstractRender
             );
         }
         // Stitching the classes together, depending on the types.
-        $typeArray = explode(' ', $model->getType());
         $typeClasses = '';
-        foreach ($typeArray as $typeClass) {
+        foreach (explode(' ', $model->getType()) as $typeClass) {
             $typeClasses .= 'k' . $typeClass . ' ';
         }
 
@@ -239,9 +241,8 @@ class Render extends AbstractRender
         }
 
         // Explode the type to get the class names right.
-        $types = explode(' ', $model->getType());
         $cssType = '';
-        foreach ($types as $singleType) {
+        foreach (explode(' ', $model->getType()) as $singleType) {
             $cssType .= ' k' . $singleType;
         }
 
@@ -393,7 +394,7 @@ class Render extends AbstractRender
     {
         $from = $errline -6;
         $to = $errline +5;
-        $source = $this->fileService->readSourcecode($errfile, $errline -1, $from, $to -1);
+        $source = $this->pool->fileService->readSourcecode($errfile, $errline -1, $from, $to -1);
 
         return str_replace(
             array(
@@ -446,12 +447,9 @@ class Render extends AbstractRender
     public function renderMessages(array $messages)
     {
         $result = '';
+        $messageTemplate = $this->getTemplateFileContent('message');
         foreach ($messages as $message) {
-            $result .= str_replace(
-                array('{class}', '{message}'),
-                array($message['class'], $message['message']),
-                $this->getTemplateFileContent('message')
-            );
+            $result .= str_replace('{message}', $message, $messageTemplate);
         }
         return $result;
     }

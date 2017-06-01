@@ -86,10 +86,9 @@ abstract class AbstractError
             // We will only handle errors when kreXX and the handler
             // itself is enabled.
             return true;
-        } else {
-            return false;
         }
 
+        return false;
     }
 
     /**

@@ -173,7 +173,7 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCa
         }
 
          return array(
-             'file' => $this->fileService->filterFilePath($path),
+             'file' => $this->pool->fileService->filterFilePath($path),
              'line' => 'n/a',
              'varname' => 'fluidvar',
          );

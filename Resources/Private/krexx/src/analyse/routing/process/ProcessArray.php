@@ -56,16 +56,25 @@ class ProcessArray extends AbstractProcess
     public function process(Model $model)
     {
         $multiline = false;
-        $count = (string)count($model->getData());
+        $count = count($model->getData());
 
         // Dumping all Properties.
         $model->setType('array')
             ->setNormal($count . ' elements')
             ->addParameter('data', $model->getData())
-            ->addParameter('multiline', $multiline)
-            ->injectCallback(
+            ->addParameter('multiline', $multiline);
+
+        if ($count > $this->pool->config->arrayCountLimit) {
+            // Budget array analysis.
+            $model->injectCallback(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray')
+            )->addToJson('Help', $this->pool->messages->getHelp('simpleArray'));
+        } else {
+            // Complete array analysis.
+            $model->injectCallback(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')
             );
+        }
 
         return $this->pool->render->renderExpandableChild($model);
     }

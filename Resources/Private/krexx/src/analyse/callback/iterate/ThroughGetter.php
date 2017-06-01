@@ -37,8 +37,6 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
-use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Service\Misc\File;
 
 /**
  * Getter method analysis methods.
@@ -54,12 +52,6 @@ use Brainworxx\Krexx\Service\Misc\File;
  */
 class ThroughGetter extends AbstractCallback
 {
-    /**
-     * The file service, used for reading sourcecode.
-     *
-     * @var File
-     */
-    protected $fileService;
 
     /**
      * Here we memorize how deep we are inside the current deep analysis.
@@ -67,18 +59,6 @@ class ThroughGetter extends AbstractCallback
      * @var int
      */
     protected $deep = 0;
-
-    /**
-     * Injection the pool and getting  the file service.
-     *
-     * @param Pool $pool
-     */
-    public function __construct(Pool $pool)
-    {
-        parent::__construct($pool);
-
-        $this->fileService = $this->pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
-    }
 
     /**
      * Try to get the possible result of all getter methods.
@@ -89,8 +69,8 @@ class ThroughGetter extends AbstractCallback
     public function callMe()
     {
         $output = '';
-        /** @var \reflectionClass $ref */
-        $ref = $this->parameters['ref'];
+        /** @var \Brainworxx\Krexx\Analyse\comment\Methods $commentAnalysis */
+        $commentAnalysis = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Methods');
 
         /** @var \ReflectionMethod $reflectionMethod */
         foreach ($this->parameters['methodList'] as $reflectionMethod) {
@@ -101,10 +81,7 @@ class ThroughGetter extends AbstractCallback
             // 1.) We have an actual value
             // 2.) We got NULL as a value
             // 3.) We were unable to get any info at all.
-            $comments = nl2br($this
-                ->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Methods')
-                ->getComment($reflectionMethod, $ref));
+            $comments = nl2br($commentAnalysis->getComment($reflectionMethod, $this->parameters['ref']));
 
             /** @var Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
@@ -143,25 +120,22 @@ class ThroughGetter extends AbstractCallback
         if (empty($refProp)) {
             // Found nothing  :-(
             // We literally have no info. We need to tell the user.
-            $noInfoMessage = $this->pool->messages->getHelp('unknownValue');
-            $model->setNormal('unknown')
-                ->setType('unknown')
-                ->setData($noInfoMessage)
-                ->hasExtras();
+            $noInfoMessage = 'unknown';
+            $model->setType($noInfoMessage)
+                ->setNormal($noInfoMessage);
             // We render this right away, without any routing.
             return $this->pool->render->renderSingleChild($model);
-        } else {
-             // We've got ourselves a possible result!
-            $refProp->setAccessible(true);
-            $value = $refProp->getValue($this->parameters['data']);
-            $model->setData($value);
-            if (is_null($value)) {
-                // A NULL value might mean that the values does not
-                // exist, until the getter computes it.
-                $model->addToJson('hint', $this->pool->messages->getHelp('getterNull'));
-            }
-            return $this->pool->routing->analysisHub($model);
         }
+        // We've got ourselves a possible result!
+        $refProp->setAccessible(true);
+        $value = $refProp->getValue($this->parameters['data']);
+        $model->setData($value);
+        if (is_null($value)) {
+            // A NULL value might mean that the values does not
+            // exist, until the getter computes it.
+            $model->addToJson('hint', $this->pool->messages->getHelp('getterNull'));
+        }
+        return $this->pool->routing->analysisHub($model);
     }
 
     /**
@@ -256,18 +230,16 @@ class ThroughGetter extends AbstractCallback
         // Still here?!?
         // Time to do some deep stuff. We parse the sourcecode via regex!
          // Read the sourcecode into a string.
-        $sourcecode = $this->fileService->readFile(
+        $sourcecode = $this->pool->fileService->readFile(
             $reflectionMethod->getFileName(),
             $reflectionMethod->getStartLine(),
             $reflectionMethod->getEndLine()
         );
+
         // Execute our search pattern.
         // Right now, we are trying to get to properties that way.
         // Later on, we may also try to parse deeper for stuff.
-        $pattern = array('return $this->', ';');
-        $findings = $this->findIt($pattern, $sourcecode);
-
-        foreach ($findings as $propertyName) {
+        foreach ($this->findIt(array('return $this->', ';'), $sourcecode) as $propertyName) {
             // Check if this is a property and return the first we find.
             if ($classReflection->hasProperty($propertyName)) {
                 return $classReflection->getProperty($propertyName);
@@ -318,7 +290,7 @@ class ThroughGetter extends AbstractCallback
      * @return array
      *   The findings.
      */
-    protected function findIt($searchArray, $haystack)
+    protected function findIt(array $searchArray, $haystack)
     {
 
         // Defining our regex.

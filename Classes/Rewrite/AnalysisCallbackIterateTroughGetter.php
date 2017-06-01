@@ -44,14 +44,16 @@ class Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter extends Throug
     /**
      * Try to get the possible result of all getter methods.
      *
+     * Change: we remove the 'get' from the name, since fluid requires this.
+     *
      * @return string
      *   The generated markup.
      */
     public function callMe()
     {
         $output = '';
-        /** @var \reflectionClass $ref */
-        $ref = $this->parameters['ref'];
+        /** @var \Brainworxx\Krexx\Analyse\comment\Methods $commentAnalysis */
+        $commentAnalysis = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Methods');
 
         /** @var \ReflectionMethod $reflectionMethod */
         foreach ($this->parameters['methodList'] as $reflectionMethod) {
@@ -62,17 +64,11 @@ class Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter extends Throug
             // 1.) We have an actual value
             // 2.) We got NULL as a value
             // 3.) We were unable to get any info at all.
-            $comments = nl2br($this
-                ->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Methods')
-                ->getComment($reflectionMethod, $ref));
-
-            // Remove the 'get' from the name
-            $getterName = lcfirst(substr($reflectionMethod->getName(), 3));
+            $comments = nl2br($commentAnalysis->getComment($reflectionMethod, $this->parameters['ref']));
 
             /** @var Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setName($getterName)
+                ->setName(lcfirst(substr($reflectionMethod->getName(), 3)))
                 ->addToJson('method comment', $comments);
 
             // We need to decide if we are handling static getters.

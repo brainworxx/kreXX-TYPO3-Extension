@@ -35,8 +35,6 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Service\Misc\File;
 
 /**
  * Backtrace analysis methods.
@@ -50,21 +48,6 @@ use Brainworxx\Krexx\Service\Misc\File;
  */
 class BacktraceStep extends AbstractCallback
 {
-    /**
-     * The file service, used to read and write files.
-     *
-     * @var File
-     */
-    protected $fileService;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct(Pool $pool)
-    {
-        parent::__construct($pool);
-        $this->fileService = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
-    }
 
     /**
      * Renders a backtrace step.
@@ -103,7 +86,13 @@ class BacktraceStep extends AbstractCallback
 
         if (isset($stepData['line'])) {
             $lineNo = $stepData['line'] + $this->parameters['offset'];
-            $source = trim($this->fileService->readSourcecode($stepData['file'], $lineNo, $lineNo -5, $lineNo +5));
+            $source = trim($this->pool->fileService->readSourcecode(
+                $stepData['file'],
+                $lineNo,
+                $lineNo -5,
+                $lineNo +5
+            ));
+
             if (empty($source)) {
                 $source = $this->pool->messages->getHelp('noSourceAvailable');
             }

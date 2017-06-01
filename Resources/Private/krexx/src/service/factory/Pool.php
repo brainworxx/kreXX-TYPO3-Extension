@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Factory;
 
-use Brainworxx\Krexx\Analyse\Scope;
+use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
@@ -49,7 +49,7 @@ use Brainworxx\Krexx\Service\Misc\File;
 /**
  * Here we store all classes that we need.
  *
- * @package Brainworxx\Krexx\Service
+ * @package Brainworxx\Krexx\Service\Factory
  */
 class Pool extends Factory
 {
@@ -136,9 +136,14 @@ class Pool extends Factory
     public $krexxDir;
 
     /**
+     * @var File
+     */
+    public $fileService;
+
+    /**
      * Initializes all needed classes.
      *
-     * @param $krexxDir
+     * @param string $krexxDir
      *   The directory, where kreXX is stored.
      */
     public function __construct($krexxDir)
@@ -151,7 +156,7 @@ class Pool extends Factory
      * (Re)initializes everything in the pool, in case in-runtime
      * factory overwrites.
      *
-     * @param $krexxDir
+     * @param string $krexxDir
      *   The dir where kreXX is stored.
      */
     public function init($krexxDir)
@@ -160,6 +165,8 @@ class Pool extends Factory
         $this->flushRewrite();
         // Set the directory.
         $this->krexxDir = $krexxDir;
+        // Initializes the file service.
+        $this->fileService = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
         // Initializes the messages.
         $this->messages = $this->createClass('Brainworxx\\Krexx\\View\\Messages');
         // Initializes the configuration
@@ -172,10 +179,11 @@ class Pool extends Factory
         $this->codegenHandler = $this->createClass('Brainworxx\\Krexx\\Analyse\\Code\\Codegen');
         // Initializes the chunks handler.
         $this->chunks = $this->createClass('Brainworxx\\Krexx\\View\\Output\\Chunks');
-        // Initializes the scope analysis
-        $this->scope = $this->createClass('Brainworxx\\Krexx\\Analyse\\Scope');
-        // Initializes the routing
+        // Initializes the scope analysis.
+        $this->scope = $this->createClass('Brainworxx\\Krexx\\Analyse\\Code\\Scope');
+        // Initializes the routing.
         $this->routing = $this->createClass('Brainworxx\\Krexx\\Analyse\Routing\\Routing');
+
         // Initializes the render class.
         $this->initRenderer();
         // Check the environment and prepare the feedback, if necessary.
@@ -187,20 +195,12 @@ class Pool extends Factory
      */
     protected function checkEnvironment()
     {
-        /** @var File $fileService */
-        $fileService = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
-
         // Check chunk folder is writable.
         // If not, give feedback!
         $chunkFolder = $this->config->getChunkDir();
         if (!is_writeable($chunkFolder)) {
-            $chunkFolder = $fileService->filterFilePath($chunkFolder);
-            $this->messages->addMessage(
-                'Chunksfolder ' . $chunkFolder . ' is not writable!' .
-                'This will increase the memory usage of kreXX significantly!',
-                'critical'
-            );
-            $this->messages->addKey('protected.folder.chunk', array($chunkFolder));
+            $chunkFolder = $this->fileService->filterFilePath($chunkFolder);
+            $this->messages->addMessage('chunksNotWritable', array($chunkFolder));
             // We can work without chunks, but this will require much more memory!
             $this->chunks->setUseChunks(false);
         }
@@ -209,9 +209,11 @@ class Pool extends Factory
         // If not, give feedback!
         $logFolder = $this->config->getLogDir();
         if (!is_writeable($logFolder)) {
-            $logFolder = $fileService->filterFilePath($logFolder);
-            $this->messages->addMessage('Logfolder ' . $logFolder . ' is not writable !', 'critical');
-            $this->messages->addKey('protected.folder.log', array($logFolder));
+            $logFolder = $this->fileService->filterFilePath($logFolder);
+            $this->messages->addMessage('logNotWritable', array($logFolder));
+            // Tell the chunk output that we have no write access in the logging
+            // folder.
+            $this->chunks->setUseLogging(false);
         }
         // At this point, we won't inform the dev right away. The error message
         // will pop up, when kreXX is actually displayed, no need to bother the
@@ -228,7 +230,7 @@ class Pool extends Factory
         $this->recursionHandler = $this->createClass('Brainworxx\\Krexx\\Service\\Flow\\Recursion');
         // Initialize the code generation.
         $this->codegenHandler = $this->createClass('Brainworxx\\Krexx\\Analyse\\Code\\Codegen');
-        $this->scope = $this->createClass('Brainworxx\\Krexx\\Analyse\\Scope');
+        $this->scope = $this->createClass('Brainworxx\\Krexx\\Analyse\\Code\\Scope');
         // We also reset our emergency handler timer.
         $this->emergencyHandler->resetTimer();
     }
@@ -247,7 +249,7 @@ class Pool extends Factory
     protected function initRenderer()
     {
         $skin = $this->config->getSetting('skin');
-        $classname = '\\Brainworxx\\Krexx\\View\\' . ucfirst($skin) . '\\Render';
+        $classname = 'Brainworxx\\Krexx\\View\\' . ucfirst($skin) . '\\Render';
         include_once $this->krexxDir . 'resources/skins/' . $skin . '/Render.php';
         $this->render =  $this->createClass($classname);
     }
@@ -289,20 +291,10 @@ class Pool extends Factory
             if ($code) {
                 // We are displaying sourcecode, so we need
                 // to do some formatting.
-                $sortingCallback = function ($n) {
-                    if ($n === 9) {
-                        // Replace TAB with two spaces, it's better readable that way.
-                        $result = '&nbsp;&nbsp;';
-                    } else {
-                        $result = '&#' . $n . ';';
-                    }
-                    return $result;
-                };
+                $sortingCallback = $sortingCallback = array($this, 'arrayMapCallbackCode');
             } else {
                 // No formatting.
-                $sortingCallback = function ($n) {
-                    return '&#' . $n . ';';
-                };
+                $sortingCallback = array($this, 'arrayMapCallbackNormal');
             }
 
             // Here we have another SPOF. When the string is large enough
@@ -328,5 +320,40 @@ class Pool extends Factory
         restore_error_handler();
 
         return $result;
+    }
+
+    /**
+     * Callback for the complete escaping of strings.
+     * Complete means every single char gets escaped.
+     * This one dies some extra stuff for code display.
+     *
+     * @param integer $n
+     *
+     * @return string
+     *   The extra escaped result for code.
+     */
+    protected function arrayMapCallbackCode($n)
+    {
+        if ($n === 9) {
+            // Replace TAB with two spaces, it's better readable that way.
+            $result = '&nbsp;&nbsp;';
+        } else {
+            $result = '&#' . $n . ';';
+        }
+        return $result;
+    }
+
+    /**
+     * Callback for the complete escaping of strings.
+     * Complete means every single char gets escaped.
+     *
+     * @param integer $n
+     *
+     * @return string
+     *   The extra escaped result.
+     */
+    protected function arrayMapCallbackNormal($n)
+    {
+        return '&#' . $n . ';';
     }
 }

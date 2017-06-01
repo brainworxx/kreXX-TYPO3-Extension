@@ -67,7 +67,7 @@ class CallerFinder extends AbstractCaller
         // We will not keep the whole backtrace im memory. We only return what we
         // actually need.
         return array(
-            'file' => htmlspecialchars($this->fileService->filterFilePath($caller['file'])),
+            'file' => htmlspecialchars($this->pool->fileService->filterFilePath($caller['file'])),
             'line' => (int)$caller['line'],
             'varname' => $this->getVarName($caller['file'], $caller['line']),
         );
@@ -108,8 +108,6 @@ class CallerFinder extends AbstractCaller
         // I have no idea how to determine the actual call of krexx if we
         // are dealing with several calls per line.
         if (count($possibleCommands) === 1) {
-            $sourceCall = reset($possibleCommands);
-
             // Now that we have our actual call, we must remove the krexx-part
             // from it.
             $possibleFunctionnames = array(
@@ -127,7 +125,7 @@ class CallerFinder extends AbstractCaller
             foreach ($possibleFunctionnames as $funcname) {
                 // This little baby tries to resolve everything inside the
                 // brackets of the kreXX call.
-                preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', $sourceCall, $name);
+                preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', reset($possibleCommands), $name);
                 if (isset($name[1])) {
                     $varname = $this->pool->encodeString(trim($name[1], " \t\n\r\0\x0B'\""));
                     break;

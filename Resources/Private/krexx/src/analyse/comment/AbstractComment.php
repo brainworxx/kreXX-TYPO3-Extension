@@ -32,14 +32,14 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\comment;
+namespace Brainworxx\Krexx\Analyse\Comment;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Abstract class for the comment analysis.
  *
- * @package Brainworxx\Krexx\Analyse
+ * @package Brainworxx\Krexx\Analyse\Comment
  */
 abstract class AbstractComment
 {
@@ -48,6 +48,18 @@ abstract class AbstractComment
      * @var Pool
      */
     protected $pool;
+
+    /**
+     * Pattern for the finding of inherited comments.
+     *
+     * @var array
+     */
+    protected $inheritedCommentPattern = array(
+        '{@inheritdoc}',
+        '{inheritdoc}',
+        '@inheritdoc',
+        'inheritdoc'
+    );
 
     /**
      * Inject the pool
@@ -62,15 +74,18 @@ abstract class AbstractComment
     /**
      * We get the comment.
      *
-     * @param $reflection
-     *   A already existing reflection of the method or property.
+     * @param \Reflector $reflection
+     *   A already existing reflection of the method or function.
      * @param \ReflectionClass $reflectionClass
      *   An already existing reflection of the original class.
      *
      * @return @return string
      *   The prettified comment.
      */
-    abstract public function getComment($reflection, \ReflectionClass $reflectionClass = null);
+    abstract public function getComment(
+        \Reflector $reflection,
+        \ReflectionClass $reflectionClass = null
+    );
 
     /**
      * Removes the comment-chars from the comment string.
@@ -88,14 +103,11 @@ abstract class AbstractComment
         }
         // We split our comment into single lines and remove the unwanted
         // comment chars with the array_map callback.
-        $commentArray = explode("\n", $comment);
+        // We skip lines with /** and */
         $result = array();
-        foreach ($commentArray as $commentLine) {
-            // We skip lines with /** and */
-            if ((strpos($commentLine, '/**') === false) && (strpos($commentLine, '*/') === false)) {
-                // Remove comment-chars and trim the whitespace.
-                $result[] = trim($commentLine, "* \t\n\r\0\x0B");
-            }
+        foreach (array_slice(explode("\n", $comment), 1, -1) as $commentLine) {
+            // Remove comment-chars and trim the whitespace.
+            $result[] = trim($commentLine, "* \t\n\r\0\x0B");
         }
         // Sadly, we must not escape this here, or glue it with <br /> for a
         // direct display. The thing is, we may resolve several @inheritdoc
@@ -118,13 +130,7 @@ abstract class AbstractComment
      */
     protected function replaceInheritComment($originalComment, $comment)
     {
-        $search = array(
-            '{@inheritdoc}',
-            '{inheritdoc}',
-            '@inheritdoc',
-            'inheritdoc'
-        );
-        return str_ireplace($search, $comment, $originalComment);
+        return str_ireplace($this->inheritedCommentPattern, $comment, $originalComment);
     }
 
     /**
@@ -134,16 +140,11 @@ abstract class AbstractComment
      *   The comment that we check for {@ inheritdoc}
      *
      * @return bool
-     *   Do we need to check further?
+     *   true = found them all
+     *   false = we need to look further
      */
     protected function checkComment($comment)
     {
-        if (strpos($comment, 'inheritdoc') === false) {
-            // Not found means we have done our job.
-            return true;
-        } else {
-            // We need to go deeper into the rabbit hole.
-            return false;
-        }
+        return (strpos($comment, 'inheritdoc') === false);
     }
 }

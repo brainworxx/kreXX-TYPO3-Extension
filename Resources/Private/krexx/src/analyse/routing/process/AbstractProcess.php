@@ -40,7 +40,7 @@ use Brainworxx\Krexx\Analyse\Model;
 /**
  * Abstract class for (nearly) all processing classes.
  *
- * @package Brainworxx\Krexx\Analyse\Routing
+ * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
 abstract class AbstractProcess extends AbstractRouting
 {

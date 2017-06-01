@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * The analysisHub decides what to do next with the model.
  *
- * @package Brainworxx\Krexx\Analysis
+ * @package Brainworxx\Krexx\Analyse\Routing
  */
 class Routing extends AbstractRouting
 {
@@ -103,9 +103,13 @@ class Routing extends AbstractRouting
 
             if ($this->pool->emergencyHandler->checkNesting()) {
                 $this->pool->emergencyHandler->downOneNestingLevel();
-                $text = gettype($data) . ' => ' . $this->pool->messages->getHelp('maximumLevelReached');
-                $model->setData($text);
-                return $this->processString->process($model);
+                $text = $this->pool->messages->getHelp('maximumLevelReached2');
+                $model->setData($text)
+                    ->setNormal($this->pool->messages->getHelp('maximumLevelReached1'))
+                    ->setType(gettype($data))
+                    ->hasExtras();
+                // Render it directly.
+                return $this->pool->render->renderSingleChild($model);
             }
             // Handle the non simple types like array and object.
             $result = $this->handleNoneSimpleTypes($data, $model);
@@ -153,11 +157,11 @@ class Routing extends AbstractRouting
                 // Must be the globals array.
                 $type = '$GLOBALS';
             }
-            $model->setDomid($this->generateDomIdFromObject($data))
-                ->setNormal($type);
-            $result = $this->pool->render->renderRecursion($model);
 
-            return $result;
+
+            return $this->pool->render->renderRecursion($model
+                ->setDomid($this->generateDomIdFromObject($data))
+                ->setNormal($type));
         }
 
         if (is_object($data)) {
@@ -172,13 +176,13 @@ class Routing extends AbstractRouting
             if (is_a($data, '\\Closure')) {
                 // Closures are handled differently than normal objects
                 return $this->processClosure->process($model);
-            } else {
-                // Normal object.
-                return $this->processObject->process($model);
             }
-        } else {
-            // Array?
-            return $this->processArray->process($model);
+            // Normal object.
+            return $this->processObject->process($model);
         }
+
+        // Must be an array.
+        return $this->processArray->process($model);
+
     }
 }

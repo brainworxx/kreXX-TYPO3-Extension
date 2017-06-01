@@ -58,7 +58,7 @@ class EditSettingsController extends AbstractController
 
         // We will not check this for the cookie config, to avoid people locking
         // themselves out.
-        $this->pool->emergencyHandler->setEnable(false);
+        $this->pool->emergencyHandler->setDisable(true);
 
 
         // Find caller.
@@ -70,7 +70,7 @@ class EditSettingsController extends AbstractController
         $footer = $this->outputFooter($caller, true);
         $this->outputService->addChunkString($this->outputHeader('Edit local settings'));
         $this->outputService->addChunkString($footer);
-        $this->pool->emergencyHandler->setEnable(true);
+        $this->pool->emergencyHandler->setDisable(false);
 
         return $this;
     }

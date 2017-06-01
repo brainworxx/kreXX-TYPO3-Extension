@@ -35,7 +35,6 @@
 namespace Brainworxx\Krexx\Analyse\Code;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -52,7 +51,7 @@ class Codegen
     const STOP = 'stop';
     const PROPERTY = 'property';
     const METHOD = 'method';
-    const CONCATINATION = 'concatenation';
+    const CONCATENATION = 'concatenation';
 
 
     /**
@@ -70,11 +69,12 @@ class Codegen
     protected $allowCodegen = false;
 
     /**
-     * We are counting the level of the object.
+     * We treat the first run of the code generation different, because then we
+     * always generate a value.
      *
-     * @var int
+     * @var bool
      */
-    protected $counter = 0;
+    protected $firstRun = true;
 
     /**
      * Initializes the code generation.
@@ -102,54 +102,60 @@ class Codegen
      */
     public function generateSource(Model $model)
     {
-        if (!$this->allowCodegen) {
-            return '';
-        }
-
-        $result = '';
-        // We will not generate anything for function analytic data.
-        $connector2 = trim($model->getConnector2(), ' = ');
-
-        $isConstants = $model->getType() === 'class internals' && $model->getName() === 'Constants';
-        if ($model->getConnector1() . $connector2 === '' && $this->counter !== 0 && !$isConstants) {
-            // No connectors mean, we are dealing with some meta stuff, like functions
-            // We will not add anything for them.
-        } else {
-            // Simply fuse the connectors.
-            // The connectors are a representation of the current used "language".
-            switch ($this->analyseType($model)) {
-                case self::CONCATINATION:
-                    $result = $this->concatenation($model);
-                    break;
-
-                case self::METHOD:
-                    // We will not create a reflection in the generated code.
-                    // The dots tell the js to stop the code concatination right
-                    // there.
-                    $result = '. . .';
-                    break;
-
-                case self::PROPERTY:
-                    // We will not create a reflection in the generated code.
-                    // The dots tell the js to stop the code concatination right
-                    // there.
-                    $result = '. . .';
-                    break;
-
-                case self::STOP:
-                    // This tells the JS to stop iterating for previous gencode.
-                    $result =';stop;';
-                    break;
-
-                // Multiline code generation starts here.
-                case self::ITERATOR_TO_ARRAY:
-                    $result = 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
-                    break;
+        if ($this->allowCodegen) {
+            // We handle the first one special, because we need to add the original
+            // variable name to the source generation.
+            if ($this->firstRun) {
+                $this->firstRun = false;
+                return $this->concatenation($model);
             }
+
+            // Test for constants.
+            // They have no connectors, but are marked as such.
+            // although this is meta stuff, we need to add the stop info here.
+            if ($model->getIsMetaConstants()) {
+                // We must only take the stuff from the constant itself
+                return ';stop;';
+            }
+
+            $connectors = $model->getConnector1() . $model->getConnector2();
+            if (empty($connectors)) {
+                // No connectors, no nothing. We must be dealing with meta stuff.
+                // We will ignore this one.
+                return '';
+            }
+
+            // Debug methods are always public.
+            $type = $model->getType();
+            if ($type === 'debug method') {
+                return $this->concatenation($model);
+            }
+
+            // Multiline code generation starts here.
+            if ($model->getMultiLineCodeGen() === self::ITERATOR_TO_ARRAY) {
+                return 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
+            }
+
+            // Test for private or protected.
+
+            if (strpos($type, 'protected') === false && strpos($type, 'private') === false) {
+                // Is not protected.
+                return $this->concatenation($model);
+            }
+
+            // Test if we are inside the scope. Everything within our scope is reachable.
+            if ($this->pool->scope->testModelForCodegen($model)) {
+                // We are inside the scope, this value, function or class is reachable.
+                return $this->concatenation($model);
+            }
+
+            // We are still here? Must be a protected method or property.
+            // The '. . .' will tell the code generation to stop in it's tracks
+            // and do nothing.
+            return '. . .';
         }
 
-        ++$this->counter;
-        return $result;
+        return '';
     }
 
     /**
@@ -195,60 +201,6 @@ class Codegen
         );
 
         return $model->getConnector1() . $name . $model->getConnector2();
-    }
-
-    /**
-     * Analyses the type and then decides what to do with it
-     *
-     * @param Model $model
-     *   The type we are analysing, for example 'private array'.
-     *
-     * @return string
-     *   Possible values:
-     *   - concatenation
-     *   - method
-     *   - property
-     */
-    protected function analyseType(Model $model)
-    {
-        $type = $model->getType();
-        $multiline = $model->getMultiLineCodeGen();
-
-        // Debug methods are always public.
-        if ($type === 'debug method' || $this->counter === 0) {
-            return self::CONCATINATION;
-        }
-
-        // Test for constants.
-        if ($type === 'class internals' && $model->getName() === 'Constants') {
-            // We must only take the stuff from the constant itself
-            return self::STOP;
-        }
-
-        // Test for  multiline code generation.
-        if (!empty($multiline)) {
-            return $multiline;
-        }
-
-        // Test for protected or private.
-        if (strpos($type, 'protected') === false && strpos($type, 'private') === false) {
-            // Is not protected.
-            return self::CONCATINATION;
-        }
-
-        // Test if we are inside the scope.
-        if ($this->pool->scope->testModelForCodegen($model)) {
-            // We are inside the scope, this value, function or class is reachable.
-            return self::CONCATINATION;
-        }
-
-        // We are still here? Must be a protected method or property.
-        if (strpos($type, 'method') === false) {
-            // This is not a method.
-            return self::PROPERTY;
-        } else {
-            return self::METHOD;
-        }
     }
 
     /**

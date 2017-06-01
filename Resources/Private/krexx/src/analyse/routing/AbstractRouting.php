@@ -126,11 +126,6 @@ abstract class AbstractRouting
      */
     protected function generateDomIdFromObject($data)
     {
-        if (is_object($data)) {
-            return 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_' . spl_object_hash($data);
-        } else {
-            // Do nothing.
-            return '';
-        }
+        return 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_' . spl_object_hash($data);
     }
 }

@@ -1,11 +1,13 @@
 2.2.1 dev
 - Added a configuration for the backtrace, to limit the analysed
   steps.
-- Change: Optimized data attribute handling, to get a smaller
-  HTML footprint.
-- Change: Renamed some long css class names, to get a smaller
-  HTML footprint.
+- Added property comments to the analysis
+- Added property declaration place to the analysis.
 - Change: Several performance tweaks for runtime optimization.
+- Change: Fallback setting runtime => level set to 5.
+- Change: Fallback setting runtime => maxCall set to 10.
+- Change: Refactored the halfassed messaging implementation.
+- Bugfix: Several tweaks to get a smaller HTML footprint.
 - Bugfix: Prevent the debug methods from creating new analysis
   calls, resulting in an infinite loop.
 - Bugfix: Better cleanup of HTML fragments left open from
@@ -23,6 +25,15 @@
 - Bugfix: Use the filepath filter in the method and function
   analysis
 - Bugfix: Made use of the language file (nearly) everywhere.
+- Bugfix: Make sure that there are no leftover chunks after a run.
+- Bugfix: Prevent large output in case of arrays with more than 100
+  items.
+- Bugfix: Escaped info text about the maximum resting level.
+- Bugfix: Missing leading backslash in classname display in several
+  places.
+- Bugfix: Code generation respects the scope analysis.
+- Bugfix: The method analysis is now displayes the default parameter
+  values correctly (or at all).
 
 2.2.0
 - Added more search pattern and source code parsing to the

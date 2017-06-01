@@ -34,12 +34,17 @@
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Code\ReflectionParameterWrapper;
 
 class Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods extends ThroughMethods
 {
 
     /**
      * Simply start to iterate through the methods.
+     *
+     * Change: We set the multiline code generation to VHS.
+     * Change: We add the name of the parameter fore the VHS code generation
+     *         into the 'paramArray'
      *
      * @return string
      *   The rendered markup.
@@ -50,15 +55,15 @@ class Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods extends Throu
         /** @var \ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters['ref'];
 
+        $commentAnalysis = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Methods');
+
         // Deep analysis of the methods.
         /* @var \ReflectionMethod $reflectionMethod */
         foreach ($this->parameters['data'] as $reflectionMethod) {
             $methodData = array();
 
             // Get the comment from the class, it's parents, interfaces or traits.
-            $methodComment = $this->pool
-                ->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Methods')
-                ->getComment($reflectionMethod, $reflectionClass);
+            $methodComment = $commentAnalysis->getComment($reflectionMethod, $reflectionClass);
             if (!empty($methodComment)) {
                 $methodData['comments'] = $methodComment;
             }
@@ -69,15 +74,19 @@ class Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods extends Throu
 
             // Get parameters.
             $paramList = '';
+            $paramArray = array();
             foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
-                $key++;
+                ++$key;
+                /** @var ReflectionParameterWrapper $reflectionParameterWrapper */
                 $reflectionParameterWrapper = $this->pool
                     ->createClass('Brainworxx\\Krexx\\Analyse\\Code\\ReflectionParameterWrapper')
                     ->setReflectionParameter($reflectionParameter);
-                $methodData['Parameter #' . $key] = $reflectionParameterWrapper;
 
-                $paramList .= $reflectionParameterWrapper . ', ';
+                $methodData['Parameter #' . $key] = $reflectionParameterWrapper->toString();
+                $paramList .= $reflectionParameterWrapper->toString() . ', ';
+                $paramArray[] = $reflectionParameter->getName();
             }
+
             // Remove the ',' after the last char.
             $paramList = trim($paramList, ', ');
 
@@ -103,6 +112,7 @@ class Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods extends Throu
                     ->setConnectorType($connectorType)
                     ->setConnectorParameters($paramList)
                     ->addParameter('data', $methodData)
+                    ->addParameter('paramArray', $paramArray)
                     ->setMultiLineCodeGen(\Tx_Includekrexx_Rewrite_ServiceCodeCodegen::VHS_CALL_VIEWHELPER)
                     ->injectCallback(
                         $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis')

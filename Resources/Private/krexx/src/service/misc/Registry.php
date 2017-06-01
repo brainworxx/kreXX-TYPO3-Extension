@@ -82,9 +82,9 @@ class Registry
     {
         if (empty($this->data[$key])) {
             return null;
-        } else {
-            return $this->data[$key];
         }
+        
+        return $this->data[$key];
     }
 
     /**

@@ -60,11 +60,7 @@ class Security extends Fallback
         if ($group === 'feEditing') {
             // Logging options can never be changed in the frontend.
             // The debug methods will also not be editable.
-            if (in_array($name, $this->feConfigNoEdit)) {
-                return false;
-            } else {
-                return true;
-            }
+            return !in_array($name, $this->feConfigNoEdit);
         }
 
 
@@ -75,10 +71,7 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorMethodsProtected')
-                    );
-                    $this->pool->messages->addKey('methods.analyseProtectedMethods.error');
+                    $this->pool->messages->addMessage('configErrorMethodsProtected');
                 }
                 break;
 
@@ -86,10 +79,7 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorMethodsPrivate')
-                    );
-                    $this->pool->messages->addKey('methods.analysePrivateMethods.error');
+                    $this->pool->messages->addMessage('configErrorMethodsPrivate');
                 }
                 break;
 
@@ -97,10 +87,7 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorPropertiesProtected')
-                    );
-                    $this->pool->messages->addKey('properties.analyseProtected.error');
+                    $this->pool->messages->addMessage('configErrorPropertiesProtected');
                 }
                 break;
 
@@ -108,10 +95,7 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorPropertiesPrivate')
-                    );
-                    $this->pool->messages->addKey('properties.analysePrivate.error');
+                    $this->pool->messages->addMessage('configErrorPropertiesPrivate');
                 }
                 break;
 
@@ -119,10 +103,7 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorPropertiesConstants')
-                    );
-                    $this->pool->messages->addKey('properties.analyseConstants.error');
+                    $this->pool->messages->addMessage('configErrorPropertiesConstants');
                 }
                 break;
 
@@ -131,10 +112,7 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorTraversable')
-                    );
-                    $this->pool->messages->addKey('properties.analyseTraversable.error');
+                    $this->pool->messages->addMessage('configErrorTraversable');
                 }
                 break;
 
@@ -149,10 +127,7 @@ class Security extends Fallback
                 // We expect an integer.
                 $result = $this->evalInt($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorLevel')
-                    );
-                    $this->pool->messages->addKey('runtime.level.error');
+                    $this->pool->messages->addMessage('configErrorLevel');
                 }
                 break;
 
@@ -160,10 +135,7 @@ class Security extends Fallback
                 // We expect an integer.
                 $result = $this->evalInt($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorMaxCall')
-                    );
-                    $this->pool->messages->addKey('runtime.maxCall.error');
+                    $this->pool->messages->addMessage('configErrorMaxCall');
                 }
                 break;
 
@@ -171,10 +143,7 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorDisabled')
-                    );
-                    $this->pool->messages->addKey('runtime.disabled.error');
+                    $this->pool->messages->addMessage('configErrorDisabled');
                 }
                 break;
 
@@ -182,10 +151,7 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorDetectAjax')
-                    );
-                    $this->pool->messages->addKey('runtime.detectAjax.error');
+                    $this->pool->messages->addMessage('configErrorDetectAjax');
                 }
                 break;
 
@@ -195,10 +161,7 @@ class Security extends Fallback
                     $result = true;
                 }
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorDestination')
-                    );
-                    $this->pool->messages->addKey('output.destination.error');
+                    $this->pool->messages->addMessage('configErrorDestination');
                 }
                 break;
 
@@ -206,10 +169,7 @@ class Security extends Fallback
                 // We expect an integer.
                 $result = $this->evalInt($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorMaxfiles')
-                    );
-                    $this->pool->messages->addKey('output.maxfiles.error');
+                    $this->pool->messages->addMessage('configErrorMaxfiles');
                 }
                 break;
 
@@ -219,10 +179,7 @@ class Security extends Fallback
                     $result = true;
                 }
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorSkin')
-                    );
-                    $this->pool->messages->addKey('output.skin.error');
+                    $this->pool->messages->addMessage('configErrorSkin');
                 }
                 break;
 
@@ -230,16 +187,9 @@ class Security extends Fallback
                 // The Developer handle, we check it for values that are not
                 // a-z and A-Z.
                 $devHandle = preg_match('/[^a-zA-Z]/', $value);
-                if (empty($devHandle)) {
-                    $result = true;
-                } else {
-                    $result = false;
-                }
+                $result = empty($devHandle);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorHandle')
-                    );
-                    $this->pool->messages->addKey('output.handle.error');
+                    $this->pool->messages->addMessage('configErrorHandle');
                 }
                 break;
 
@@ -247,10 +197,7 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorTraceFatals')
-                    );
-                    $this->pool->messages->addKey('errorHandling.traceFatals.error');
+                    $this->pool->messages->addMessage('configErrorTraceFatals');
                 }
                 break;
 
@@ -258,10 +205,7 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorTraceWarnings')
-                    );
-                    $this->pool->messages->addKey('errorHandling.traceWarnings.error');
+                    $this->pool->messages->addMessage('configErrorTraceWarnings');
                 }
                 break;
 
@@ -269,10 +213,7 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorTraceNotices')
-                    );
-                    $this->pool->messages->addKey('errorHandling.traceNotices.error');
+                    $this->pool->messages->addMessage('configErrorTraceNotices');
                 }
                 break;
 
@@ -280,19 +221,13 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorRegisterAuto')
-                    );
-                    $this->pool->messages->addKey('backtraceAndError.registerAutomatically.error');
+                    $this->pool->messages->addMessage('configErrorRegisterAuto');
                 }
                 // We also expect the php version to be lower than 7.
                 if ($result) {
                     $result = $this->evalPhp();
                     if (!$result) {
-                        $this->pool->messages->addMessage(
-                            $this->pool->messages->getHelp('configErrorPhp7')
-                        );
-                        $this->pool->messages->addKey('backtraceAndError.registerAutomatically.php7');
+                        $this->pool->messages->addMessage('configErrorPhp7');
                     }
                 }
                 break;
@@ -304,10 +239,7 @@ class Security extends Fallback
                 $result = trim($value);
                 $result = !empty($result);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorIpList')
-                    );
-                    $this->pool->messages->addKey('runtime.iprange.error');
+                    $this->pool->messages->addMessage('configErrorIpList');
                 }
                 break;
 
@@ -315,10 +247,7 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorAnalyseGetter')
-                    );
-                    $this->pool->messages->addKey('backtraceAndError.analyseGetter.error');
+                    $this->pool->messages->addMessage('configErrorAnalyseGetter');
                 }
                 break;
 
@@ -326,10 +255,7 @@ class Security extends Fallback
                 // We expect an integer.
                 $result = $this->evalInt($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorMemory')
-                    );
-                    $this->pool->messages->addKey('runtime.memoryLeft.error');
+                    $this->pool->messages->addMessage('configErrorMemory');
                 }
                 break;
 
@@ -338,8 +264,7 @@ class Security extends Fallback
                 // server.
                 $result = $this->evalInt($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage($this->pool->messages->getHelp('configErrorMaxRuntime'));
-                    $this->pool->messages->addKey('runtime.maxRuntime.error');
+                    $this->pool->messages->addMessage('configErrorMaxRuntime');
                 } else {
                     // OK, we got an int, now to see if it is smaller than the
                     // configured max runtime.
@@ -347,12 +272,7 @@ class Security extends Fallback
                     $value = (int)$value;
                     if ($maxTime > 0 && $maxTime < $value) {
                         // Too big!
-                        $this->pool->messages->addMessage(
-                            $this->pool->messages->getHelp('configErrorMaxRuntimeBig1') .
-                            $maxTime .
-                            $this->pool->messages->getHelp('configErrorMaxRuntimeBig2')
-                        );
-                        $this->pool->messages->addKey('runtime.maxRuntime.error.maximum', array($maxTime));
+                        $this->pool->messages->addMessage('configErrorMaxRuntimeBig', array($maxTime));
                         $result = false;
                     }
                 }
@@ -362,10 +282,7 @@ class Security extends Fallback
                 // We expect a bool.
                 $result = $this->evalBool($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorUseScopeAnalysis')
-                    );
-                    $this->pool->messages->addKey('runtime.useScopeAnalysis.error');
+                    $this->pool->messages->addMessage('configErrorUseScopeAnalysis');
                 }
                 break;
 
@@ -373,10 +290,7 @@ class Security extends Fallback
                 // We expect an integer.
                 $result = $this->evalInt($value);
                 if (!$result) {
-                    $this->pool->messages->addMessage(
-                        $this->pool->messages->getHelp('configErrorMaxStepNumber')
-                    );
-                    $this->pool->messages->addKey('backtraceAndError.maxStepNumber.error');
+                    $this->pool->messages->addMessage('configErrorMaxStepNumber');
                 }
 
                 break;
@@ -401,11 +315,7 @@ class Security extends Fallback
      */
     protected function evalBool($value)
     {
-        if ($value === 'true' || $value === 'false') {
-            return true;
-        } else {
-            return false;
-        }
+        return ($value === 'true' || $value === 'false');
     }
 
     /**
@@ -418,9 +328,9 @@ class Security extends Fallback
     {
         if (version_compare(phpversion(), '7.0.0', '>=')) {
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**
@@ -436,12 +346,7 @@ class Security extends Fallback
      */
     protected function evalInt($value)
     {
-        $value = (int)$value;
-        if ($value > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return ((int) $value > 0);
     }
 
     /**
@@ -500,15 +405,15 @@ class Security extends Fallback
         if (in_array($remote, $whitelist)) {
             // If the ip is matched, return true.
             return true;
-        } else {
-            // Check the wildcards.
-            foreach ($whitelist as $ip) {
-                $ip = trim($ip);
-                $wildcardPos = strpos($ip, '*');
-                # Check if the ip has a wildcard
-                if ($wildcardPos !== false && substr($remote, 0, $wildcardPos) . '*' === $ip) {
-                    return true;
-                }
+        }
+
+        // Check the wildcards.
+        foreach ($whitelist as $ip) {
+            $ip = trim($ip);
+            $wildcardPos = strpos($ip, '*');
+            # Check if the ip has a wildcard
+            if ($wildcardPos !== false && substr($remote, 0, $wildcardPos) . '*' === $ip) {
+                return true;
             }
         }
 

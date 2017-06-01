@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
-use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -84,10 +83,14 @@ class ProcessBacktrace
         $maxStep = (int) $this->pool->config->getSetting('maxStepNumber');
         $stepCount = count($backtrace);
 
+        // Remove steps according to the configuration.
         if ($maxStep < $stepCount) {
-            $this->pool->messages->addMessage(
-                'Omitted backtrace steps ' . ($maxStep + 1) . ' until ' . ($stepCount)
-            );
+            $this->pool->messages->addMessage('omittedBacktrace', array(($maxStep + 1), $stepCount));
+        }
+
+        // We will not analyse more steps than we actually have.
+        if ($maxStep > $stepCount) {
+            $maxStep = $stepCount;
         }
 
         for ($step = 1; $step <= $maxStep; ++$step) {
