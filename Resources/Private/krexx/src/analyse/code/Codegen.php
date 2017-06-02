@@ -212,4 +212,77 @@ class Codegen
     {
         $this->allowCodegen = $bool;
     }
+
+        /**
+     * Setter for the reflection parameter, it also calculates the
+     * toString() return value.
+     *
+     * @param \ReflectionParameter $reflectionParameter
+     *   The reflection parameter we want to wrap.
+     *
+     * @return string
+     *   The parameter dada in a human readable form.
+     */
+    public function parameterToString(\ReflectionParameter $reflectionParameter)
+    {
+        // Fun fact:
+        // I tried to add a static cache here, but it was counter productive.
+        // Things were not faster, memory usage went up!
+        $parameterType = '';
+        $result = '';
+
+        // Check for type value
+        if ($reflectionParameter->isArray()) {
+            $parameterType = 'array';
+        } elseif (!is_null($reflectionParameter->getClass())) {
+            // We got ourselves an object!
+            $parameterType = $reflectionParameter->getClass()->name;
+        }
+
+        $result .= $parameterType . ' $' . $reflectionParameter->getName();
+
+        // Check for default value.
+        if ($reflectionParameter->isDefaultValueAvailable()) {
+            $result .= ' = ' . $this->prepareDefaultValue($reflectionParameter->getDefaultValue());
+        }
+
+        return $result;
+    }
+
+    /**
+     * Convert the default value into a human readabla form.
+     *
+     * @param mixed $default
+     * The default value we need to bring into a human readable form.
+     *
+     * @return string
+     *  The human readable form.
+     */
+    protected function prepareDefaultValue($default)
+    {
+        if (is_string($default)) {
+            // We need to escape this one.
+            return '\'' . $this->pool->encodeString($default) . '\'';
+        }
+
+        if (is_null($default)) {
+            return 'NULL';
+        }
+
+        if (is_array($default)) {
+            return 'array()';
+        }
+
+        if (is_bool($default)) {
+            // Transform it to readable values.
+            if ($default === true) {
+                return 'TRUE';
+            } else {
+                return 'FALSE';
+            }
+        }
+
+        // Still here ?!?
+        return (string) $default;
+    }
 }

@@ -34,7 +34,6 @@
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
-use Brainworxx\Krexx\Analyse\Code\ReflectionParameterWrapper;
 
 class Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods extends ThroughMethods
 {
@@ -77,14 +76,10 @@ class Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods extends Throu
             $paramArray = array();
             foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
                 ++$key;
-                /** @var ReflectionParameterWrapper $reflectionParameterWrapper */
-                $reflectionParameterWrapper = $this->pool
-                    ->createClass('Brainworxx\\Krexx\\Analyse\\Code\\ReflectionParameterWrapper')
-                    ->setReflectionParameter($reflectionParameter);
-
-                $methodData['Parameter #' . $key] = $reflectionParameterWrapper->toString();
-                $paramList .= $reflectionParameterWrapper->toString() . ', ';
-                $paramArray[] = $reflectionParameter->getName();
+                $paramList .= $methodData['Parameter #' . $key] = $this->pool
+                    ->codegenHandler
+                    ->parameterToString($reflectionParameter);
+                $paramArray[] = $reflectionParameter->getName();                // xx
             }
 
             // Remove the ',' after the last char.
@@ -112,8 +107,8 @@ class Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods extends Throu
                     ->setConnectorType($connectorType)
                     ->setConnectorParameters($paramList)
                     ->addParameter('data', $methodData)
-                    ->addParameter('paramArray', $paramArray)
-                    ->setMultiLineCodeGen(\Tx_Includekrexx_Rewrite_ServiceCodeCodegen::VHS_CALL_VIEWHELPER)
+                    ->addParameter('paramArray', $paramArray)   // xx
+                    ->setMultiLineCodeGen(\Tx_Includekrexx_Rewrite_ServiceCodeCodegen::VHS_CALL_VIEWHELPER) // xx
                     ->injectCallback(
                         $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis')
                     )

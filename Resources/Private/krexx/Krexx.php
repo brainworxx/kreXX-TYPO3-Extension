@@ -124,7 +124,6 @@ class Krexx
         include_once $krexxDir . 'src/analyse/comment/Properties.php';
         include_once $krexxDir . 'src/analyse/code/Codegen.php';
         include_once $krexxDir . 'src/analyse/code/Connectors.php';
-        include_once $krexxDir . 'src/analyse/code/ReflectionParameterWrapper.php';
         include_once $krexxDir . 'src/errorhandler/AbstractError.php';
         include_once $krexxDir . 'src/errorhandler/Fatal.php';
         include_once $krexxDir . 'src/controller/AbstractController.php';
