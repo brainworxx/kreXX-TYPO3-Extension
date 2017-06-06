@@ -142,7 +142,7 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
         // Check for writing permission.
         if (!is_writable(dirname($filepath))) {
             $allOk = false;
-            $this->pool->messages->addKey('file.not.writable', array($filepath));
+            $this->pool->messages->addMessage('file.not.writable', array($filepath));
         }
         // Check if the file does exist.
         if (is_file($filepath)) {
@@ -171,7 +171,7 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
                         } else {
                             // Validation failed!
                             $allOk = false;
-                            $this->pool->messages->addKey('value.not.allowed', array(htmlentities($value)));
+                            $this->pool->messages->addMessage('value.not.allowed', array(htmlentities($value)));
                         }
                     }
                 }
@@ -190,7 +190,7 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
             if ($allOk) {
                 if (file_put_contents($filepath, $ini) === false) {
                     $allOk = false;
-                    $this->pool->messages->addKey('file.not.writable', array($filepath));
+                    $this->pool->messages->addMessage('file.not.writable', array($filepath));
                 }
             }
         }

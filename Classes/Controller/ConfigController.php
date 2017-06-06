@@ -161,7 +161,7 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
         // Check for writing permission.
         if (!is_writable(dirname($filepath))) {
             $allOk = false;
-            $this->pool->messages->addKey('file.not.writable', array($filepath));
+            $this->pool->messages->addMessage('file.not.writable', array($filepath));
         }
 
         // Check if the file does exist.
@@ -213,7 +213,7 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
             if ($allOk) {
                 if (file_put_contents($filepath, $ini) === false) {
                     $allOk = false;
-                    $this->pool->messages->addKey('file.not.writable', array($filepath));
+                    $this->pool->messages->addMessage('file.not.writable', array($filepath));
                 }
             }
         }
