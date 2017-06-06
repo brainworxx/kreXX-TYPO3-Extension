@@ -70,4 +70,5 @@ kreXX Debugger
 	Installation/Index
 	Features/Index
 	Config/Index
+	T3settings/Index
 

@@ -12,6 +12,35 @@
 Changelog
 =============================================================
 
+2.2.1
+    - [Feature] Added a configuration for the backtrace, to limit the analysed steps.
+    - [Feature] Added property comments to the analysis
+    - [Feature] Added property declaration place to the analysis.
+    - [Change] Several performance tweaks for runtime optimization.
+    - [Change] Fallback setting runtime => level set to 5.
+    - [Change] Fallback setting runtime => maxCall set to 10.
+    - [Change] Refactored the half-assed messaging implementation.
+    - [Bugfix] Several tweaks to get a smaller HTML footprint.
+    - [Bugfix] Prevent the debug methods from creating new analysis calls, resulting in an infinite loop.
+    - [Bugfix] Better cleanup of HTML fragments left open from the hosting CMS.
+    - [Bugfix] Reverted the 'Output -> File' change from 2.2.0
+    - [Bugfix] Prevent a notice in case a property has a default value which is NULL.
+    - [Bugfix] Fixed a possible endless loop when iterating a traversable object.
+    - [Bugfix] Limit the preview of method analysis with a lot of parameters or long namespaces.
+    - [Bugfix] Removed a notice, in case krexx was called from normal php and then again from a registered shutdown function.
+    - [Bugfix] Removed the multiple escaping of inherited comments.
+    - [Bugfix] Use the filepath filter in the method and function analysis.
+    - [Bugfix] Made use of the language file (nearly) everywhere.
+    - [Bugfix] Make sure that there are no leftover chunks after a run.
+    - [Bugfix] Prevent large output in case of arrays with more than 100 items.
+    - [Bugfix] Escaped info text about the maximum resting level.
+    - [Bugfix] Missing leading backslash in classname display in several places.
+    - [Bugfix] Code generation respects the scope analysis.
+    - [Bugfix] The method analysis now displays the default parameter values correctly (or at all).
+    - [Bugfix] No more getter analysis for internal php classes.
+    - [Bugfix] The registry now can really tell if a value was set, or not.
+    - [Bugfix] The short text of an expandable child is now searchable.
+
 2.2.0
     - [Feature] Added a fluid debugger viewhelper.
     - [Feature] Added more search pattern and source code parsing to the getter analysis.

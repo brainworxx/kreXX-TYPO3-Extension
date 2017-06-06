@@ -123,3 +123,6 @@ Error Handling and Backtrace
 |                                | | :literal:`\krexx::unregisterFatal();`                                                                                                |                           |
 |                                | | to prevent a slowdown.                                                                                                               |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Maximum steps in the backtrace | A backtrace tends to produce a lot of output, and browsers tend to have problems with more than 100MB output in HTML text.             | 10                        |
+|                                | Normally it is not unneccessary to go back more than 10 steps, but if you need to, you can increase this number here.                  |                           |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
