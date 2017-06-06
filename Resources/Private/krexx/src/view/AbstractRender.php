@@ -84,8 +84,17 @@ abstract class AbstractRender
      */
     protected function renderCaller($file, $line)
     {
-        $result = str_replace('{callerFile}', $file, $this->getTemplateFileContent('caller'));
-        return str_replace('{callerLine}', $line, $result);
+        return str_replace(
+            array(
+                '{callerFile}',
+                '{callerLine}',
+            ),
+            array(
+                $file,
+                $line,
+            ),
+            $this->getTemplateFileContent('caller')
+        );
     }
 
     /**

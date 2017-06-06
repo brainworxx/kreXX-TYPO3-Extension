@@ -274,12 +274,9 @@ class Pool extends Factory
             /* do nothing. */
         });
 
-        $result = htmlentities($data);
-
         // We are also encoding @, because we need them for our chunks.
-        $result = str_replace('@', '&#64;', $result);
-        // We are also encoding the {, because we use it as markers for the skins.
-        $result = str_replace('{', '&#123;', $result);
+        // The { are needed in the marker of the skin.
+        $result = str_replace(array('@', '{'), array('&#64;', '&#123;'), htmlentities($data));
 
         // Check if encoding was successful.
         // 99.99% of the time, the encoding works.

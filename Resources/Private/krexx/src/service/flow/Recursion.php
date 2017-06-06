@@ -50,22 +50,11 @@ class Recursion
 {
 
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected $pool;
-
-    /**
      * pool for arrays ans objects, to prevent recursions.
      *
-     * Layout:
-     * [0] -> array with markers
-     * [1] -> object hashes
-     *
-     * @var array
+     * @var \SplObjectStorage
      */
-    protected $recursionHive = array();
+    protected $recursionHive;
 
     /**
      * The recursion marker for the hive.
@@ -93,8 +82,9 @@ class Recursion
     public function __construct(Pool $pool)
     {
         $this->recursionMarker = 'Krexx' . substr(str_shuffle(md5(microtime())), 0, 10);
-        $this->pool = $pool;
+        // Mark the $GLOBALS array.
         $GLOBALS[$this->recursionMarker] = true;
+        $this->recursionHive = new \SplObjectStorage();
     }
 
     /**
@@ -102,27 +92,19 @@ class Recursion
      */
     public function __destruct()
     {
+        // Remove our mark from the $GLOBALS.
         unset($GLOBALS[$this->recursionMarker]);
     }
 
     /**
-     * Register objects and arrays.
-     *
-     * Adds a variable to the hive of arrays and objects which
-     * are tracked for whether they have recursive entries.
+     * Simple wrapper around the SplObjectStorage->attach().
      *
      * @param object $bee
-     *   The object we want to check.
+     *   The object we want to track.
      */
     public function addToHive($bee)
     {
-        // We do something else for objects.
-        // Setting a recursion marker inside might trigger a magical function.
-        $objectHash = spl_object_hash($bee);
-        if (isset($this->recursionHive[$objectHash])) {
-            return;
-        }
-        $this->recursionHive[$objectHash] = true;
+        $this->recursionHive->attach($bee);
     }
 
     /**
@@ -138,11 +120,7 @@ class Recursion
     {
         // Check objects.
         if (is_object($bee)) {
-            // Retrieve a possible hash.
-            if (isset($this->recursionHive[spl_object_hash($bee)])) {
-                return true;
-            }
-            return false;
+            return $this->recursionHive->contains($bee);
         }
 
         // Check arrays (only the $GLOBAL array may apply).
@@ -151,7 +129,6 @@ class Recursion
             if ($this->globalsWereRendered) {
                 return true;
             }
-
             $this->globalsWereRendered = true;
             return false;
         }

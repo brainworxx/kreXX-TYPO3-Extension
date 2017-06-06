@@ -229,7 +229,7 @@ class ThroughGetter extends AbstractCallback
 
         // Still here?!?
         // Time to do some deep stuff. We parse the sourcecode via regex!
-         // Read the sourcecode into a string.
+        // Read the sourcecode into a string.
         $sourcecode = $this->pool->fileService->readFile(
             $reflectionMethod->getFileName(),
             $reflectionMethod->getStartLine(),

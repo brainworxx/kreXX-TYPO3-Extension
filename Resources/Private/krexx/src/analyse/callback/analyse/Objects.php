@@ -67,7 +67,8 @@ class Objects extends AbstractCallback
         $output .= $this->getPublicProperties($ref);
 
         // Dumping getter methods.
-        if ($this->pool->config->getSetting('analyseGetter')) {
+        // We will not dump the getters for internal values, though.
+        if ($this->pool->config->getSetting('analyseGetter') && $ref->isUserDefined()) {
             $output .= $this->getAllGetterData($ref, $data);
         }
 

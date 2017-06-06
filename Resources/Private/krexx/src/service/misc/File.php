@@ -43,19 +43,13 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class File
 {
-    /**
-     * The cache for the reading of files.
-     *
-     * @var array
-     */
-    protected $fileCache = array();
 
     /**
      * Here we cache, if a file exists and is readable.
      *
      * @var array
      */
-    protected $isReadableCache = array();
+    protected static $isReadableCache = array();
 
     /**
      * @var Pool
@@ -174,20 +168,24 @@ class File
      * @param string $filename
      *   The path to the file we want to read.
      *
-     * @return array
-     *   The file array.
+     * @return \SplFixedArray
+     *   The file in a \SplFixedArray.
      */
     protected function getFileContentsArray($filename)
     {
-        if (isset($this->fileCache[$filename])) {
-            return $this->fileCache[$filename];
+        static $filecache = array();
+
+        if (isset($filecache[$filename])) {
+            return $filecache[$filename];
         }
 
+        // Using \SplFixedArray to save some memory, as it can get
+        // quire huge, depending on your system. 4mb is nothing here.
         if ($this->fileIsReadable($filename)) {
-            return $this->fileCache[$filename] = file($filename);
+            return $filecache[$filename] = \SplFixedArray::fromArray(file($filename));
         } else {
             // Not readable!
-            return $this->fileCache[$filename] = array();
+            return $filecache[$filename] = new \SplFixedArray(0);
         }
     }
 
@@ -239,7 +237,7 @@ class File
         }
         // New file. We tell the caching, that we have read access here.
         file_put_contents($path, $string, FILE_APPEND);
-        $this->isReadableCache[$path] = true;
+        self::$isReadableCache[$path] = true;
 
     }
 
@@ -305,11 +303,11 @@ class File
     protected function fileIsReadable($filePath)
     {
         // Return the cache, if we have any.
-        if (isset($this->isReadableCache[$filePath])) {
-            return $this->isReadableCache[$filePath];
+        if (isset(self::$isReadableCache[$filePath])) {
+            return self::$isReadableCache[$filePath];
         }
 
         // Set the cache and return it.
-        return $this->isReadableCache[$filePath] = is_readable($filePath) && is_file($filePath);
+        return self::$isReadableCache[$filePath] = is_readable($filePath) && is_file($filePath);
     }
 }
