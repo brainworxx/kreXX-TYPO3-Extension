@@ -178,7 +178,7 @@ class ThroughMethods extends AbstractCallback
         }
 
         if ($reflectionMethod->isPrivate()) {
-                $result .= ' private';
+            $result .= ' private';
         }
 
         if ($reflectionMethod->isProtected()) {

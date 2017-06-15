@@ -236,7 +236,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             $keys = $this->pool->messages->getKeys();
 
             foreach ($keys as $message) {
-                // And translate them and add a linebreak.
+                // And translate them.
                 $result[] = $this->LLL($message['key'], $message['params']);
             }
 

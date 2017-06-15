@@ -172,7 +172,7 @@ class Fallback
             'type' => 'None',
             'editable' => 'false',
         ),
-        'Local open function' => array(
+        'devHandle' => array(
             'type' => 'Input',
             'editable' => 'true',
         ),
@@ -217,8 +217,8 @@ class Fallback
     /**
      * Known Problems with debug functions, which will most likely cause a fatal.
      *
-     * @see \Brainworxx\Krexx\Service\Config\Security->isAllowedDebugCall()
-     * @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects->pollAllConfiguredDebugMethods()
+     * @see \Brainworxx\Krexx\Service\Config\Security::isAllowedDebugCall()
+     * @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::pollAllConfiguredDebugMethods()
      *
      * @var array
      */
@@ -261,6 +261,45 @@ class Fallback
         '\\ReflectionType',
         '\\ReflectionGenerator',
         '\\Reflector',
+    );
+
+    /**
+     * Here we store, how we are evaluation each setting.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Security::evaluateSetting
+     *
+     * @todo Callback in Value des Array nutzen
+     *       Rückmeldung macht dann die Callback Funktion
+     *       Message-ID-Strings vereinheitlichen für die Bool und Int funktionen
+     *       Eval funktion erhällt 2 Parameter:
+     *       1.) $value
+     *       2.) $name
+     *
+     * @var array
+     */
+    protected $evalSettings = array(
+        'analyseProtectedMethods' => 'evalBool',
+        'analysePrivateMethods' => 'evalBool',
+        'analyseProtected' => 'evalBool',
+        'analysePrivate' => 'evalBool',
+        'analyseConstants' => 'evalBool',
+        'analyseTraversable' => 'evalBool',
+        'debugMethods' => 'doNotEval',
+        'level' => 'evalInt',
+        'maxCall' => 'evalInt',
+        'disabled' => 'evalBool',
+        'detectAjax' => 'evalBool',
+        'destination' => 'evalDestination',
+        'maxfiles' => 'evalInt',
+        'skin' => 'evalSkin',                   // @todo write me!
+        'devHandle' => 'evalDevHandle',         // @todo write me!
+        'registerAutomatically' => 'evalFatal',
+        'iprange' => 'evalIpRange',
+        'analyseGetter' => 'evalBool',
+        'memoryLeft' => 'evalInt',
+        'maxRuntime' => 'evalMaxRuntime',
+        'useScopeAnalysis' => 'evalBool',
+        'maxStepNumber' => 'evalInt',
     );
 
     /**

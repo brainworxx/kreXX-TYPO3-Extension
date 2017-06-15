@@ -60,7 +60,7 @@ class ConfigSection extends AbstractCallback
     public function callMe()
     {
         $sectionOutput = '';
-        foreach ($this->parameters['data'] as $name => $setting) {
+        foreach ($this->parameters['data'] as $id => $setting) {
             // Render the single value.
             // We need to find out where the value comes from.
             /** @var \Brainworxx\Krexx\Service\Config\Model $setting */
@@ -76,21 +76,20 @@ class ConfigSection extends AbstractCallback
                 }
 
                 /** @var Model $model */
-                $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model');
+                $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')->setHelpid($id . 'Help');
+                $name = $this->pool->messages->getHelp($id . 'Readable');
                 if ($setting->getEditable()) {
                     $model->setData($name)
+                        ->setDomid($id)
                         ->setName($value)
                         ->setNormal($setting->getSource())
-                        ->setType($setting->getType())
-                        ->setHelpid($name);
-
+                        ->setType($setting->getType());
                     $sectionOutput .= $this->pool->render->renderSingleEditableChild($model);
                 } else {
                     $model->setData($value)
                         ->setName($name)
                         ->setNormal($value)
-                        ->setType($setting->getSource())
-                        ->setHelpid($name);
+                        ->setType($setting->getSource());
                     $sectionOutput .= $this->pool->render->renderSingleChild($model);
                 }
             }

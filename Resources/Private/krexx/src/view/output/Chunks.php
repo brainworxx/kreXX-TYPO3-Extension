@@ -48,7 +48,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * chunks. We also use this class stitch back together this
  * string for output.
  *
- * @see \Brainworxx\Krexx\Service\Factory\Pool->encodeString()
+ * @see \Brainworxx\Krexx\Service\Factory\Pool->encodingService
  *   We use '@@@' to mark a chunk key. This function escapes the @
  *   so we have no collusion with data from strings.
  *
@@ -112,6 +112,20 @@ class Chunks
     protected $fileStamp;
 
     /**
+     * Here we save the encoding we are currently using.
+     *
+     * @var string
+     */
+    protected $officialEncoding = 'utf8';
+
+    /**
+     * List of encodings, where we do not change the $officialEncoding var.
+     *
+     * @var array
+     */
+    protected $doNothingEncodiung = array('ASCII', 'UTF-8', false);
+
+    /**
      * Injects the pool.
      *
      * @param Pool $pool
@@ -142,6 +156,8 @@ class Chunks
         if ($this->useChunks && strlen($string) > 10000) {
             // Get the key.
             $key = $this->genKey();
+            // Detect the encoding in the chunk.
+            $this->detectEncoding($string);
             // Write the key to the chunks folder.
             $this->pool->fileService->putFileContents($this->chunkDir . $key . '.Krexx.tmp', $string);
             // Return the first part plus the key.
@@ -384,5 +400,40 @@ class Chunks
         foreach ($chunkList as $file) {
             $this->pool->fileService->deleteFile($file);
         }
+    }
+
+    /**
+     * Simple wrapper around mb_detect_encoding.
+     *
+     * We also try to track the encoding we need to add to the output, so
+     * people can use unicode function names.
+     * We are not using it above, because there we are only handling broken
+     * string encoding by completely encoding it, every char in there.
+     *
+     * @see \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString
+     *
+     * @param string $string
+     *   The string we are processing.
+     */
+    public function detectEncoding($string)
+    {
+        $encoding = mb_detect_encoding($string);
+
+        // We need to decide, if we need to change the official encoding of
+        // the HTML output with a meta tag. we ignore everything in the
+        // $this->doNothingEncoding array.
+        if (in_array($encoding, $this->doNothingEncodiung, true) === false) {
+            $this->officialEncoding = $encoding;
+        }
+    }
+
+    /**
+     * Getter for the official encoding.
+     *
+     * @return string
+     */
+    public function getOfficialEncoding()
+    {
+        return $this->officialEncoding;
     }
 }

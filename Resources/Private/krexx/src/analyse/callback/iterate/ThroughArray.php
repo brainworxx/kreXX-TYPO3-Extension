@@ -84,7 +84,7 @@ class ThroughArray extends AbstractCallback
 
             if (is_string($key)) {
                 $model->setData($value)
-                    ->setName($this->pool->encodeString($key))
+                    ->setName($this->pool->encodingService->encodeString($key))
                     ->setConnectorType(Connectors::ASSOCIATIVE_ARRAY);
             } else {
                 $model->setData($value)

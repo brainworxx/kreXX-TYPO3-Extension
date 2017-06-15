@@ -4,8 +4,8 @@
   "keywords": [
     "debug",
     "debugging",
-    "object",
-    "analysis"
+    "print_r",
+    "var_dump"
   ],
   "type": "library",
   "homepage": "https://github.com/brainworxx/kreXX",

@@ -51,7 +51,6 @@ class Routing extends AbstractRouting
     {
         parent::__construct($pool);
         $this->processArray = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessArray');
-        $this->processBacktrace = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessBacktrace');
         $this->processBoolean = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessBoolean');
         $this->processClosure = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessClosure');
         $this->processFloat = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessFloat');

@@ -3,10 +3,12 @@
   steps.
 - Added property comments to the analysis
 - Added property declaration place to the analysis.
+- Added better unicode support for the HTML output.
 - Change: Several performance tweaks for runtime optimization.
 - Change: Fallback setting runtime => level set to 5.
 - Change: Fallback setting runtime => maxCall set to 10.
 - Change: Refactored the half-assed messaging implementation.
+- Change: The cookie editor is now much better readable.
 - Bugfix: Several tweaks to get a smaller HTML footprint.
 - Bugfix: Prevent the debug methods from creating new analysis
   calls, resulting in an infinite loop.
@@ -38,6 +40,16 @@
 - Bugfix: The registry now can really tell if a value was set,
   or not.
 - Bugfix: The short text of an expandable child is now searchable.
+- Bugfix: Use the filepath filter for the location of the ini file.
+- Bugfix: Removed a warning in the filterFilePath, in case kreXX
+  was called via CLI.
+- Bugfix: Proper message output in case of a shell call.
+- Bugfix: Proper handling of dynamic declared class properties with
+  PHP forbidden chars.
+- Bugfix: The sorting of the configuration now stay the same as the
+  fallback settings.
+- Bugfix: The traversable analysis may forget to lower the nesting
+  level again.
 
 2.2.0
 - Added more search pattern and source code parsing to the

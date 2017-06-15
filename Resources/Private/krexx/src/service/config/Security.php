@@ -63,245 +63,152 @@ class Security extends Fallback
             return !in_array($name, $this->feConfigNoEdit);
         }
 
+        // We simply call the configured evaluation method.
+        $callback = $this->evalSettings[$name];
+        return $this->$callback($value, $name, $group);
+    }
 
-        // We must evaluate it.
-        $result = false;
-        switch ($name) {
-            case 'analyseProtectedMethods':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorMethodsProtected');
-                }
-                break;
+    /**
+     * We check the dev handle for a-z and A-Z.
+     *
+     * @param string $value
+     *   The value we want to evaluate
+     * @param string $name
+     *   The name of the value we are checking, needed for the feedback text.
+     *
+     * @return boolean
+     *   Whether it does evaluate or not.
+     */
+    protected function evalDevHandle($value, $name)
+    {
+        $result = preg_match('/[^a-zA-Z]/', $value) === 0;
+        if (!$result) {
+            $this->pool->messages->addMessage('configError' . ucfirst($name));
+        }
+        return $result;
+    }
 
-            case 'analysePrivateMethods':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorMethodsPrivate');
-                }
-                break;
+    /**
+     * We check one of the files for readability.
+     *
+     * @param string $value
+     *   The value we want to evaluate
+     * @param string $name
+     *   The name of the value we are checking, needed for the feedback text.
+     *
+     * @return boolean
+     *   Whether it does evaluate or not.
+     */
+    protected function evalSkin($value, $name)
+    {
+        $result = is_readable($this->pool->krexxDir . 'resources/skins/' . $value . '/header.html');
+        if (!$result) {
+            $this->pool->messages->addMessage('configError' . ucfirst($name));
+        }
+        return $result;
+    }
 
-            case 'analyseProtected':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorPropertiesProtected');
-                }
-                break;
+    /**
+     * We are expecting 'browser' or 'file'.
+     *
+     * @param string $value
+     *   The value we want to evaluate
+     * @param string $name
+     *   The name of the value we are checking, needed for the feedback text.
+     *
+     * @return boolean
+     *   Whether it does evaluate or not.
+     */
+    protected function evalDestination($value, $name)
+    {
+        $result = ($value === 'browser' || $value === 'file');
+        if (!$result) {
+            $this->pool->messages->addMessage('configError' . ucfirst($name));
+        }
+        return $result;
+    }
 
-            case 'analysePrivate':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorPropertiesPrivate');
-                }
-                break;
-
-            case 'analyseConstants':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorPropertiesConstants');
-                }
-                break;
-
-
-            case 'analyseTraversable':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorTraversable');
-                }
-                break;
-
-            case 'debugMethods':
-                // String that can get exploded, separated by a comma,
-                // might as well be a single function.
-                // We are not going to check this one.
-                $result = true;
-                break;
-
-            case 'level':
-                // We expect an integer.
-                $result = $this->evalInt($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorLevel');
-                }
-                break;
-
-            case 'maxCall':
-                // We expect an integer.
-                $result = $this->evalInt($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorMaxCall');
-                }
-                break;
-
-            case 'disabled':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorDisabled');
-                }
-                break;
-
-            case 'detectAjax':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorDetectAjax');
-                }
-                break;
-
-            case 'destination':
-                // We expect 'frontend', 'file' or 'direct.
-                if ($value === 'browser' || $value === 'file') {
-                    $result = true;
-                }
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorDestination');
-                }
-                break;
-
-            case 'maxfiles':
-                // We expect an integer.
-                $result = $this->evalInt($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorMaxfiles');
-                }
-                break;
-
-            case 'skin':
-                // We check the directory and one of the files for readability.
-                if (is_readable($this->pool->krexxDir . 'resources/skins/' . $value . '/header.html')) {
-                    $result = true;
-                }
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorSkin');
-                }
-                break;
-
-            case 'Local open function':
-                // The Developer handle, we check it for values that are not
-                // a-z and A-Z.
-                $devHandle = preg_match('/[^a-zA-Z]/', $value);
-                $result = empty($devHandle);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorHandle');
-                }
-                break;
-
-            case 'traceFatals':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorTraceFatals');
-                }
-                break;
-
-            case 'traceWarnings':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorTraceWarnings');
-                }
-                break;
-
-            case 'traceNotices':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorTraceNotices');
-                }
-                break;
-
-            case 'registerAutomatically':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorRegisterAuto');
-                }
-                // We also expect the php version to be lower than 7.
-                if ($result) {
-                    $result = $this->evalPhp();
-                    if (!$result) {
-                        $this->pool->messages->addMessage('configErrorPhp7');
-                    }
-                }
-                break;
-
-            case 'iprange':
-                // We expect an array of ip's after an explode.
-                // But we are not validating every singe one of them.
-                // We are just making sure that we get a list.
-                $result = trim($value);
-                $result = !empty($result);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorIpList');
-                }
-                break;
-
-            case 'analyseGetter':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorAnalyseGetter');
-                }
-                break;
-
-            case 'memoryLeft':
-                // We expect an integer.
-                $result = $this->evalInt($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorMemory');
-                }
-                break;
-
-            case 'maxRuntime':
-                // We expect an integer not greater than the max runtime of the
-                // server.
-                $result = $this->evalInt($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorMaxRuntime');
-                } else {
-                    // OK, we got an int, now to see if it is smaller than the
-                    // configured max runtime.
-                    $maxTime = (int)ini_get('max_execution_time');
-                    $value = (int)$value;
-                    if ($maxTime > 0 && $maxTime < $value) {
-                        // Too big!
-                        $this->pool->messages->addMessage('configErrorMaxRuntimeBig', array($maxTime));
-                        $result = false;
-                    }
-                }
-                break;
-
-            case 'useScopeAnalysis':
-                // We expect a bool.
-                $result = $this->evalBool($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorUseScopeAnalysis');
-                }
-                break;
-
-            case 'maxStepNumber':
-                // We expect an integer.
-                $result = $this->evalInt($value);
-                if (!$result) {
-                    $this->pool->messages->addMessage('configErrorMaxStepNumber');
-                }
-
-                break;
-
-            default:
-                // Unknown settings,
-                // return false, just in case.
-                break;
+    /**
+     * Evaluating the IP range, by testing that it is not empty.
+     *
+     * @param string $value
+     *   The value we want to evaluate
+     * @param string $name
+     *   The name of the value we are checking, needed for the feedback text.
+     *
+     * @return boolean
+     *   Whether it does evaluate or not.
+     */
+    protected function evalIpRange($value, $name)
+    {
+        $result = empty($value);
+        if ($result) {
+            $this->pool->messages->addMessage('configError' . ucfirst($name));
         }
 
-        return $result;
+        return !$result;
+    }
+
+    /**
+     * Evaluation the registering of the fatal error handler.
+     * Works only in PHP5 and we are expection a boolean.
+     *
+     * @param string $value
+     *   The value we want to evaluate
+     * @param string $name
+     *   The name of the value we are checking, needed for the feedback text.
+     * @param string $group
+     *   The name of the group that we are evaluating, needed for the feedback
+     *   text.
+     *
+     * @return boolean
+     *   Whether it does evaluate or not.
+     */
+    protected function evalFatal($value, $name, $group)
+    {
+        // The feedback happens in the methodsbelow.
+        return $this->evalBool($value, $name, $group) && $this->evalPhp();
+    }
+
+    /**
+     * Evaluation the maximum runtime, by looking at the server settings, as
+     * well as checking for an integer value.
+     *
+     * @param string $value
+     *   The value we want to evaluate
+     * @param string $name
+     *   The name of the value we are checking, needed for the feedback text.
+     * @param string $group
+     *   The name of the group that we are evaluating, needed for the feedback
+     *   text.
+     *
+     * @return boolean
+     *   Whether it does evaluate or not.
+     */
+    protected function evalMaxRuntime($value, $name, $group)
+    {
+        // Check for integer first.
+        if (!$this->evalInt($value, $name, $group)) {
+            return false;
+        }
+
+        $maxTime = (int)ini_get('max_execution_time');
+        // We need a maximum runtime in the first place
+        // and then check, if we have avalue smaller than it.
+        if ($maxTime <= 0) {
+            // We were unable to get the maximum runtime from the server.
+            // No need to check any further.
+            return true;
+        }
+        if ($maxTime < (int)$value) {
+            $this->pool->messages->addMessage(
+                'configError' . ucfirst($name) . 'Big',
+                array($maxTime)
+            );
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -309,13 +216,22 @@ class Security extends Fallback
      *
      * @param string $value
      *   The string we want to evaluate.
+     * @param string $name
+     *   The name of the value we are checking, needed for the feedback text.
+     * @param string $group
+     *   The name of the group that we are evaluating, needed for the feedback
+     *   text.
      *
      * @return bool
      *   Whether it does evaluate or not.
      */
-    protected function evalBool($value)
+    protected function evalBool($value, $name, $group)
     {
-        return ($value === 'true' || $value === 'false');
+        $result = ($value === 'true' || $value === 'false');
+        if (!$result) {
+            $this->pool->messages->addMessage('configErrorBool', array($group, $name));
+        }
+        return $result;
     }
 
     /**
@@ -326,11 +242,12 @@ class Security extends Fallback
      */
     protected function evalPhp()
     {
-        if (version_compare(phpversion(), '7.0.0', '>=')) {
-            return false;
+        $result = version_compare(phpversion(), '7.0.0', '>=');
+        if ($result) {
+            $this->pool->messages->addMessage('configErrorRegisterAutomatically2');
         }
 
-        return true;
+        return !$result;
     }
 
     /**
@@ -340,13 +257,34 @@ class Security extends Fallback
      *
      * @param string $value
      *   The string we want to evaluate.
+     * @param string $name
+     *   The name of the value we are checking, needed for the feedback text.
+     * @param string $group
+     *   The name of the group that we are evaluating, needed for the feedback
+     *   text.
      *
      * @return bool
      *   Whether it does evaluate or not.
      */
-    protected function evalInt($value)
+    protected function evalInt($value, $name, $group)
     {
-        return ((int) $value > 0);
+        $result = ((int) $value) > 0;
+        if (!$result) {
+            $this->pool->messages->addMessage('configErrorInt', array($group, $name));
+        }
+
+        return $result;
+    }
+
+    /**
+     * We do not evaluate this one.
+     *
+     * @return bool
+     *   Always true, we do not eval this one.
+     */
+    protected function doNotEval()
+    {
+        return true;
     }
 
     /**
@@ -379,44 +317,5 @@ class Security extends Fallback
         }
         // Nothing found?
         return true;
-    }
-
-    /**
-     * Checks if the current client ip is allowed.
-     *
-     * @param string $whitelist
-     *   The ip whitelist.
-     *
-     * @return bool
-     *   Whether the current client ip is allowed or not.
-     */
-    public function isAllowedIp($whitelist)
-    {
-        if (empty($_SERVER['REMOTE_ADDR'])) {
-            $remote = '';
-        } else {
-            $remote = $_SERVER['REMOTE_ADDR'];
-        }
-
-        // Fallback to the Chin Leung implementation.
-        // @author Chin Leung
-        // @see https://stackoverflow.com/questions/35559119/php-ip-address-whitelist-with-wildcards
-        $whitelist = explode(',', $whitelist);
-        if (in_array($remote, $whitelist)) {
-            // If the ip is matched, return true.
-            return true;
-        }
-
-        // Check the wildcards.
-        foreach ($whitelist as $ip) {
-            $ip = trim($ip);
-            $wildcardPos = strpos($ip, '*');
-            # Check if the ip has a wildcard
-            if ($wildcardPos !== false && substr($remote, 0, $wildcardPos) . '*' === $ip) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

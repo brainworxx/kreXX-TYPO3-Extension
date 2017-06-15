@@ -75,7 +75,7 @@ class Methods extends AbstractComment
             return $cache[$cachingKey];
         }
         // Cache not found. We need to generate this one.
-        $cache[$cachingKey] = $this->pool->encodeString(
+        $cache[$cachingKey] = $this->pool->encodingService->encodeString(
             $this->getMethodComment($reflectionMethod, $reflectionClass)
         );
         return $cache[$cachingKey];

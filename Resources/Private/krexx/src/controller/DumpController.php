@@ -50,8 +50,7 @@ class DumpController extends AbstractController
      * @param mixed $data
      *   The variable we want to analyse.
      * @param string $headline
-     *   The headline of the markup we want to produce. Most likely the name of
-     *   the variable.
+     *   The headline of the markup we want to produce. Only used by the timer.
      *
      * @return $this;
      *   Return $this for chaining.
@@ -66,38 +65,31 @@ class DumpController extends AbstractController
 
         // Find caller.
         $caller = $this->callerFinder->findCaller();
-        if ($headline === '') {
-            $caller['type'] = 'Analysis';
-        } else {
-            $caller['type'] = $headline;
-        }
 
         // Set the headline, if it's not set already.
         if (empty($headline)) {
             if (is_object($data)) {
                 $headline = get_class($data);
-            }
-            if (is_array($data)) {
+            } elseif (is_array($data)) {
                 $headline = 'array';
-            }
-            if (is_bool($data)) {
+            } elseif (is_bool($data)) {
                 $headline = 'boolean';
-            }
-            if (is_float($data)) {
+            } elseif (is_float($data)) {
                 $headline = 'float';
-            }
-            if (is_int($data)) {
+            } elseif (is_int($data)) {
                 $headline = 'integer';
-            }
-            if (is_null($data)) {
+            } elseif (is_null($data)) {
                 $headline = 'null';
-            }
-            if (is_resource($data)) {
+            } elseif (is_resource($data)) {
                 $headline = 'resource';
-            }
-            if (is_string($data)) {
+            } elseif (is_string($data)) {
                 $headline = 'string';
             }
+            // We are analysing stuff here.
+            $caller['type'] = 'Analysis';
+        } else {
+            // Caller type is most likely the timer.
+            $caller['type'] = $headline;
         }
 
         // We need to get the footer before the generating of the header,
@@ -118,6 +110,10 @@ class DumpController extends AbstractController
                 ->setData($data)
                 ->setName($caller['varname'])
         );
+
+        // Detect the encoding on the start-chunk-string of the analysis
+        // for a complete encoding picture.
+        $this->pool->chunks->detectEncoding($analysis);
 
         // Now that our analysis is done, we must check if there was an emergency
         // break.

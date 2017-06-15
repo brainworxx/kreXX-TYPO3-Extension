@@ -188,7 +188,7 @@ abstract class AbstractController
 
         $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
             ->setName($path)
-            ->setType($pathToIni)
+            ->setType($this->pool->fileService->filterFilePath($pathToIni))
             ->setHelpid('currentSettings')
             ->injectCallback(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConfig')

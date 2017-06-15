@@ -70,11 +70,19 @@ class BacktraceController extends AbstractController
         // because that is the internal function in kreXX.
         $backtrace = debug_backtrace();
         unset($backtrace[0]);
+        // REset the array keys, because the 0 is now missing.
+        $backtrace = array_values($backtrace);
+
 
         $footer = $this->outputFooter($caller);
         $analysis = $this->pool
             ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessBacktrace')
-            ->process($backtrace, -1);
+            ->process($backtrace);
+
+        // Detect the encoding on the start-chunk-string of the analysis
+        // for a complete encoding picture.
+        $this->pool->chunks->detectEncoding($analysis);
+
         // Now that our analysis is done, we must check if there was an emergency
         // break.
         if ($this->pool->emergencyHandler->checkEmergencyBreak()) {

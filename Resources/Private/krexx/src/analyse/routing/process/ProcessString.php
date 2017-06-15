@@ -58,31 +58,25 @@ class ProcessString extends AbstractProcess
 
         // Extra ?
         if (strlen($data) > 50) {
-            $cut = substr($this->pool->encodeString($data), 0, 50) . '. . .';
+            $cut = substr($this->pool->encodingService->encodeString($data), 0, 50) . '. . .';
             $model->hasExtras();
         } else {
-            $cut = $this->pool->encodeString($data);
+            $cut = $this->pool->encodingService->encodeString($data);
         }
 
-        // We need to take care for mixed encodings here.
-        set_error_handler(function () {
-            /* do nothing. */
-        });
-
         $encoding = mb_detect_encoding($data);
-        $length = $strlen = mb_strlen($data, $encoding);
-
-        // Reactivate whatever error handling we had previously.
-        restore_error_handler();
-
-        if ($strlen === false) {
+        if ($encoding !== false) {
+            // Normal encoding, nothing special here.
+            $length = $strlen = mb_strlen($data, $encoding);
+        } else {
             // Looks like we have a mixed encoded string.
+            // We need t otell the dev!
             $length = '~ ' . strlen($data);
             $strlen = ' broken encoding ' . $length;
             $encoding = 'broken';
         }
 
-        $newData = $this->pool->encodeString($data);
+        $newData = $this->pool->encodingService->encodeString($data);
 
         $model->setData($newData)
             ->setNormal($cut)

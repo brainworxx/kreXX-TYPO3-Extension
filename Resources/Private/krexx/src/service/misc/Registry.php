@@ -83,7 +83,7 @@ class Registry
         if (empty($this->data[$key])) {
             return null;
         }
-        
+
         return $this->data[$key];
     }
 
@@ -100,5 +100,4 @@ class Registry
     {
         return isset($this->data[$key]);
     }
-
 }

@@ -101,23 +101,17 @@ class File
                 // Add it to the result.
                 $realLineNo = $currentLineNo + 1;
 
-                // Escape it.
-                $content[$currentLineNo] = $this->pool->encodeString(
-                    $content[$currentLineNo],
-                    true
-                );
-
                 if ($currentLineNo === $highlight) {
                     $result .= $this->pool->render->renderBacktraceSourceLine(
                         'highlight',
                         $realLineNo,
-                        $content[$currentLineNo]
+                        $this->pool->encodingService->encodeString($content[$currentLineNo], true)
                     );
                 } else {
                     $result .= $this->pool->render->renderBacktraceSourceLine(
                         'source',
                         $realLineNo,
-                        $content[$currentLineNo]
+                        $this->pool->encodingService->encodeString($content[$currentLineNo], true)
                     );
                 }
             } else {
@@ -283,7 +277,7 @@ class File
         // We remove it, just in case, to make sure that we remove the doc root
         // completely from the $path variable.
         $docRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
-        if (isset($docRoot) && strpos($path, $docRoot) === 0) {
+        if (!empty($docRoot) && strpos($path, $docRoot) === 0) {
             // Found it on position 0.
             $path = '. . ./' . substr($path, strlen($docRoot) + 1);
         }

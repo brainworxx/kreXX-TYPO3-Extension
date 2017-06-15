@@ -59,13 +59,6 @@ class ErrorController extends AbstractController
         // analysed objects as possible.
         $this->pool->config->overwriteLocalSettings($this->configFatal);
 
-        // Get the header.
-        if (self::$headerSend) {
-            $header = $this->pool->render->renderFatalHeader('', '<!DOCTYPE html>');
-        } else {
-            $header = $this->pool->render->renderFatalHeader($this->outputCssAndJs(), '<!DOCTYPE html>');
-        }
-
         // Get the main part.
         $main = $this->pool->render->renderFatalMain(
             $errorData['type'],
@@ -77,13 +70,30 @@ class ErrorController extends AbstractController
         // Get the backtrace.
         $backtrace = $this->pool
             ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessBacktrace')
-            ->process($errorData['backtrace'], -1);
+            ->process($errorData['backtrace']);
+
         if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
             return $this;
         }
 
+        // Detect the encoding on the start-chunk-string of the analysis
+        // for a complete encoding picture.
+        $this->pool->chunks->detectEncoding($main);
+
+        // Detect the encoding on the start-chunk-string of the analysis
+        // for a complete encoding picture.
+        $this->pool->chunks->detectEncoding($backtrace);
+
+        // Get the header.
+        if (self::$headerSend) {
+            $header = $this->pool->render->renderFatalHeader('', '<!DOCTYPE html>');
+        } else {
+            $header = $this->pool->render->renderFatalHeader($this->outputCssAndJs(), '<!DOCTYPE html>');
+        }
+
         // Get the footer.
         $footer = $this->outputFooter(array());
+
         // Get the messages.
         $messages = $this->pool->messages->outputMessages();
 

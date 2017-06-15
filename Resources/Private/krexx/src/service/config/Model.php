@@ -65,7 +65,7 @@ class Model
     /**
      * Whether or not his setting is editable
      *
-     * @var string
+     * @var boolean
      */
     protected $editable;
 
@@ -79,7 +79,7 @@ class Model
     /**
      * Setter for the editable value.
      *
-     * @param string $editable
+     * @param boolean $editable
      *
      * @return $this
      *   Return $this for Chaining.
@@ -127,7 +127,7 @@ class Model
     /**
      * Getter for the editable value.
      *
-     * @return string
+     * @return boolean
      */
     public function getEditable()
     {

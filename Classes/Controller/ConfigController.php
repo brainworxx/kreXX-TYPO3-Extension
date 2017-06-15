@@ -186,7 +186,7 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
                             // whitelist it.
                             $value = htmlspecialchars(preg_replace('/\s+/', '', $value));
                             // Evaluate the setting!
-                            if ($this->pool->config->security->evaluateSetting($section, $settingName, $value)) {
+                            if ($this->pool->config->evaluateSetting($section, $settingName, $value)) {
                                 $oldValues[$section][$settingName] = $value;
                             } else {
                                 // Validation failed! kreXX will generate a message,
@@ -220,9 +220,6 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
 
         // Something went wrong, we need to tell the user.
         if (!$allOk) {
-            // Got to remove some messages. We we will not queue them now.
-            $this->pool->messages->removeKey('protected.folder.chunk');
-            $this->pool->messages->removeKey('protected.folder.log');
             foreach ($this->getTranslatedMessages() as $message) {
                 $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
             }

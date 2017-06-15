@@ -90,13 +90,6 @@ class File extends AbstractOutput
      */
     public function shutdownCallback()
     {
-        // Check for CLI and messages.
-        if (php_sapi_name() === 'cli') {
-            // Since we are in CLI mode, these messages are not in HTML.
-            // We can output them right away.
-            echo $this->pool->messages->outputMessages();
-        }
-
         // Output our chunks.
         // Every output is split into 4 chunk strings (header, messages,
         // data, footer).

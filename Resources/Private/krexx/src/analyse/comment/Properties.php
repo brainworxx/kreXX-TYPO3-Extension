@@ -35,7 +35,7 @@ class Properties extends AbstractComment
         }
 
         // Cache not found. We need to generate this one.
-        $cache[$cachingKey] = trim(nl2br($this->pool->encodeString(
+        $cache[$cachingKey] = trim(nl2br($this->pool->encodingService->encodeString(
             $this->prettifyComment($reflectionProperty->getDocComment())
         )));
 

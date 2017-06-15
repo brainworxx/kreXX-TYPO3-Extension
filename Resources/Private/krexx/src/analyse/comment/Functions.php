@@ -64,7 +64,9 @@ class Functions extends AbstractComment
         }
 
         // Cache not found. We need to generate this one.
-        $cache[$cachingKey] = $this->pool->encodeString($this->prettifyComment($reflectionFunction->getDocComment()));
+        $cache[$cachingKey] = $this->pool->encodingService->encodeString(
+            $this->prettifyComment($reflectionFunction->getDocComment())
+        );
         return $cache[$cachingKey];
     }
 }

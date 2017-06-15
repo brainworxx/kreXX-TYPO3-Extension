@@ -41,13 +41,57 @@ namespace Brainworxx\Krexx\Analyse\Code;
  */
 class Connectors
 {
-    const METHOD = 'method';
-    const STATIC_METHOD = 'staticMethod';
-    const NORMAL_ARRAY = 'array';
-    const ASSOCIATIVE_ARRAY = 'associativeArray';
-    const CONSTANT = 'constant';
-    const NORMAL_PROPERTY = 'property';
-    const STATIC_PROPERTY = 'staticProperty';
+    /**
+     * connector1 = '->'
+     * connector2 = '()'
+     * or
+     * connector2 = '(<small>' . $params . '</small>)'
+     */
+    const METHOD = 1;
+
+    /**
+     * connector1 = '::'
+     * connector2 = '()'
+     * or
+     * connector2 = '(<small>' . $params . '</small>)'
+     */
+    const STATIC_METHOD = 2;
+
+    /**
+     * connector1 = '['
+     * connector2 = ']'
+     */
+    const NORMAL_ARRAY = 3;
+
+    /**
+     * connector1 = '[\''
+     * connector2 = ''\']'
+     */
+    const ASSOCIATIVE_ARRAY = 4;
+
+    /**
+     * connector1 = '::'
+     * connector2 = ''
+     */
+    const CONSTANT = 5;
+
+    /**
+     * connector1 = '->'
+     * connector2 = ''
+     */
+    const NORMAL_PROPERTY = 6;
+
+    /**
+     * connector1 = '::'
+     * connector2 = ''
+     */
+    const STATIC_PROPERTY = 7;
+
+    /**
+     * connector1 = '->{\''
+     * connector2 = '\'}'
+     */
+    const SPECIAL_CHARS_PROP = 8;
 
     /**
      * The name of the language here. Will be used as the source generation
@@ -69,9 +113,9 @@ class Connectors
      *
      * @see constants above
      *
-     * @var string
+     * @var integer
      */
-    protected $type = '';
+    protected $type = 0;
 
     /**
      * Special snowflake connector1. will be uses in case it is set.
@@ -124,7 +168,7 @@ class Connectors
     {
         if (empty($this->customConnector1)) {
             switch ($this->type) {
-                case '':
+                case 0:
                     return '';
                     break;
 
@@ -154,6 +198,10 @@ class Connectors
 
                 case $this::CONSTANT:
                     return '::';
+                    break;
+
+                case $this::SPECIAL_CHARS_PROP:
+                    return '->{\'';
                     break;
 
                 default:
@@ -209,6 +257,10 @@ class Connectors
                     return '()';
                 }
                 return '(<small>' . $params . '</small>)';
+                break;
+
+            case $this::SPECIAL_CHARS_PROP:
+                return '\'}';
                 break;
 
             default:

@@ -111,27 +111,35 @@ class ThroughProperties extends AbstractCallback
                 $additional .= 'inherited ';
             }
 
+            $comment = '';
+            $declarationPlace = '';
+
             $connectorType = Connectors::NORMAL_PROPERTY;
             if ($refProperty->isStatic()) {
                 $additional .= 'static ';
                 $connectorType = Connectors::STATIC_PROPERTY;
                 // There is always a $ in front of a static property.
                 $propName = '$' . $propName;
-            }
-
-            // The property 'isUndeclared' is not a part of the reflectionProperty.
-            // @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
-            // With isset, we prevent a notice btw.
-            if (isset($refProperty->isUndeclared)) {
+            } elseif (isset($refProperty->isUndeclared)) {
+                // The property 'isUndeclared' is not a part of the reflectionProperty.
+                // @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
                 $additional .= 'dynamic property ';
-                $comment = '';
-                $declarationPlace = '';
+
+                // Check for very special chars in there.
+                // FAIK this is only possible for dynamically declared properties
+                // which can never be static.
+                if (!preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $propName)) {
+                    // @see https://stackoverflow.com/questions/29019484/validate-a-php-variable
+                    // @author AbraCadaver
+                    $connectorType = Connectors::SPECIAL_CHARS_PROP;
+                }
             } else {
                 // Since we are dealing with a declared Property here, we can
                 // get the comment and the declaration place.
                 $comment = $this->pool
                     ->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Properties')
                     ->getComment($refProperty);
+
                 $declarationPlace = $this->pool->fileService->filterFilePath(
                     $refProperty->getDeclaringClass()->getFileName()
                 );
@@ -141,7 +149,7 @@ class ThroughProperties extends AbstractCallback
             $output .= $this->pool->routing->analysisHub(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                     ->setData($value)
-                    ->setName($propName)
+                    ->setName($this->pool->encodingService->encodeString($propName))
                     ->addToJson('Comment', $comment)
                     ->addToJson('Declared in', $declarationPlace)
                     ->setAdditional($additional)

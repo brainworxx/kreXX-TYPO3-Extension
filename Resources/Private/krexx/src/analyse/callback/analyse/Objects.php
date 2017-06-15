@@ -317,7 +317,6 @@ class Objects extends AbstractCallback
     protected function pollAllConfiguredDebugMethods($data)
     {
         $output = '';
-        $security = $this->pool->config->security;
 
         foreach (explode(',', $this->pool->config->getSetting('debugMethods')) as $funcName) {
             // Check if:
@@ -326,7 +325,7 @@ class Objects extends AbstractCallback
             // 3.) It's not blacklisted.
             if (method_exists($data, $funcName) &&
                 is_callable(array($data, $funcName)) &&
-                $security->isAllowedDebugCall($data, $funcName)
+                $this->pool->config->isAllowedDebugCall($data, $funcName)
             ) {
                 $onlyOptionalParams = true;
                 // We need to check if the callable function requires any parameters.
@@ -434,6 +433,9 @@ class Objects extends AbstractCallback
             // Check nesting level
             $this->pool->emergencyHandler->upOneNestingLevel();
             if ($this->pool->emergencyHandler->checkNesting()) {
+                // We will not be doing this one, but we need to get down with our
+                // nesting level again.
+                $this->pool->emergencyHandler->downOneNestingLevel();
                 return '';
             }
 
@@ -589,7 +591,7 @@ class Objects extends AbstractCallback
         }
 
         // Got some getters right here.
-        // We need to set al least one connector here to activate
+        // We need to set at least one connector here to activate
         // code generation, even if it is a space.
         return $this->pool->render->renderExpandableChild(
             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')

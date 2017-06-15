@@ -262,7 +262,7 @@ class Codegen
     {
         if (is_string($default)) {
             // We need to escape this one.
-            return '\'' . $this->pool->encodeString($default) . '\'';
+            return '\'' . $this->pool->encodingService->encodeString($default) . '\'';
         }
 
         if (is_null($default)) {

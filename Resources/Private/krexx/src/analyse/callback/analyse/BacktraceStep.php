@@ -85,7 +85,7 @@ class BacktraceStep extends AbstractCallback
         // Sourcecode, is escaped by now.
 
         if (isset($stepData['line'])) {
-            $lineNo = $stepData['line'] + $this->parameters['offset'];
+            $lineNo = $stepData['line'] - 1;
             $source = trim($this->pool->fileService->readSourcecode(
                 $stepData['file'],
                 $lineNo,

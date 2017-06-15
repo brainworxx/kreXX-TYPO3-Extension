@@ -56,11 +56,6 @@ abstract class AbstractRouting
     protected $processArray;
 
     /**
-     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace
-     */
-    protected $processBacktrace;
-
-    /**
      * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean
      */
     protected $processBoolean;

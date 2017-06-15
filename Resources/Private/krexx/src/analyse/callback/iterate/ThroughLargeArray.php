@@ -93,7 +93,7 @@ class ThroughLargeArray extends AbstractCallback
 
             // Handling string keys of the array.
             if (is_string($key)) {
-                $model->setName($this->pool->encodeString($key))
+                $model->setName($this->pool->encodingService->encodeString($key))
                     ->setConnectorType(Connectors::ASSOCIATIVE_ARRAY);
             } else {
                 $model->setName($key)

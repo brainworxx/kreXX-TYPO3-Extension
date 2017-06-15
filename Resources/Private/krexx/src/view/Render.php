@@ -92,6 +92,7 @@ class Render extends AbstractRender
                 '{KrexxId}',
                 '{search}',
                 '{messages}',
+                '{encoding}'
             ),
             array(
                 $this->pool->config->version,
@@ -102,6 +103,7 @@ class Render extends AbstractRender
                 $this->pool->recursionHandler->getMarker(),
                 $this->renderSearch(),
                 $this->pool->messages->outputMessages(),
+                $this->pool->chunks->getOfficialEncoding(),
             ),
             $this->getTemplateFileContent('header')
         );
@@ -144,7 +146,7 @@ class Render extends AbstractRender
         );
     }
 
-        /**
+    /**
      * {@inheritdoc}
      */
     public function renderSingleChild(Model $model)
@@ -305,8 +307,14 @@ class Render extends AbstractRender
     public function renderSingleEditableChild(Model $model)
     {
         $element = str_replace(
-            array('{name}', '{value}'),
-            array($model->getData(), $model->getName()),
+            array(
+                '{id}',
+                '{value}'
+            ),
+            array(
+                $model->getDomid(),
+                $model->getName()       // Wrong!
+            ),
             $this->getTemplateFileContent('single' . $model->getType())
         );
         $options = '';
@@ -314,21 +322,11 @@ class Render extends AbstractRender
         // For dropdown elements, we need to render the options.
         if ($model->getType() === 'Select') {
             // Here we store what the list of possible values.
-            switch ($model->getData()) {
-                case 'destination':
-                    // At php shutdown, logfile or direct after analysis.
-                    $valueList = array('browser', 'file');
-                    break;
-
-                case 'skin':
-                    // Get a list of all skin folders.
-                    $valueList = $this->getSkinList();
-                    break;
-
-                default:
-                    // true/false
-                    $valueList = array('true', 'false');
-                    break;
+            if ($model->getDomid() === 'skin') {
+                // Get a list of all skin folders.
+                $valueList = $this->getSkinList();
+            } else {
+                $valueList = array('true', 'false');
             }
 
             // Paint it.
@@ -403,7 +401,7 @@ class Render extends AbstractRender
                 '{file}',
                 '{source}',
                 '{KrexxCount}',
-                '{line}',
+                '{line}'
             ),
             array(
                 $type,
@@ -411,7 +409,7 @@ class Render extends AbstractRender
                 $errfile,
                 $source,
                 $this->pool->emergencyHandler->getKrexxCount(),
-                $errline,
+                $errline
             ),
             $this->getTemplateFileContent('fatalMain')
         );

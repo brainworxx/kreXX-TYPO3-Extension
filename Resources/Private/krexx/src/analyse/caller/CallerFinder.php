@@ -127,7 +127,7 @@ class CallerFinder extends AbstractCaller
                 // brackets of the kreXX call.
                 preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', reset($possibleCommands), $name);
                 if (isset($name[1])) {
-                    $varname = $this->pool->encodeString(trim($name[1], " \t\n\r\0\x0B'\""));
+                    $varname = $this->pool->encodingService->encodeString(trim($name[1], " \t\n\r\0\x0B'\""));
                     break;
                 }
             }
