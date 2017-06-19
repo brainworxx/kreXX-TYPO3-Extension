@@ -123,7 +123,7 @@ class Chunks
      *
      * @var array
      */
-    protected $doNothingEncodiung = array('ASCII', 'UTF-8', false);
+    protected $doNothingEncoding = array('ASCII', 'UTF-8', false);
 
     /**
      * Injects the pool.
@@ -422,7 +422,7 @@ class Chunks
         // We need to decide, if we need to change the official encoding of
         // the HTML output with a meta tag. we ignore everything in the
         // $this->doNothingEncoding array.
-        if (in_array($encoding, $this->doNothingEncodiung, true) === false) {
+        if (in_array($encoding, $this->doNothingEncoding, true) === false) {
             $this->officialEncoding = $encoding;
         }
     }

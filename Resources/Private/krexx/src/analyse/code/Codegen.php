@@ -245,7 +245,7 @@ class Codegen
     }
 
     /**
-     * Convert the default value into a human readabla form.
+     * Convert the default value into a human readable form.
      *
      * @param mixed $default
      * The default value we need to bring into a human readable form.

@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Errorhandler;
 
+use Brainworxx\Krexx\Controller\AbstractController;
+
 /**
  * PHP 5.x fatal error handler.
  *
@@ -113,6 +115,10 @@ class Fatal extends AbstractError
                     'file' => $error['file'],
                     'backtrace' => $this->tickedBacktrace,
                 );
+
+                // Tell static main class, that we start a new analysis, to
+                // prevent an infinite loop.
+                AbstractController::$analysisInProgress = true;
                 $this->pool
                     ->createClass('Brainworxx\\Krexx\\Controller\\errorController')
                     ->errorAction($errorData);

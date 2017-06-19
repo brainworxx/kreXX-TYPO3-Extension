@@ -123,7 +123,7 @@ class Pool extends Factory
     public $registry;
 
     /**
-     * The routing of opur analysis.
+     * The routing of our analysis.
      *
      * @var Routing
      */

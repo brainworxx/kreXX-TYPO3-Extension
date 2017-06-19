@@ -155,14 +155,14 @@ class Routing extends AbstractRouting
             // Render recursion.
             if (is_object($data)) {
                 $type = get_class($data);
+                $domId = $this->generateDomIdFromObject($data);
             } else {
                 // Must be the globals array.
                 $type = '$GLOBALS';
+                $domId = '';
             }
-
-
             return $this->pool->render->renderRecursion($model
-                ->setDomid($this->generateDomIdFromObject($data))
+                ->setDomid($domId)
                 ->setNormal($type));
         }
 

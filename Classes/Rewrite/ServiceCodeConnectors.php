@@ -45,7 +45,7 @@ class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
      *
      * {@inheritdoc}
      */
-    protected $connctorArray = array(
+    protected $connectorArray = array(
         self::NOTHING => array('', ''),
         self::METHOD => array('.', '(@param@)'),
         self::STATIC_METHOD => array('.', '(@param@)'),

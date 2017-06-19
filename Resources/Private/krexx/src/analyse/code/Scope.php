@@ -125,7 +125,7 @@ class Scope
         $nestingLevel = $this->pool->emergencyHandler->getNestingLevel();
 
         // If we are too deep at this moment, we will stop right here!
-        // Also, anything not comming fro $this is not reachable, since
+        // Also, anything not coming from $this is not reachable, since
         // we are testing protected stuff here.
         if ($nestingLevel > 2 || $this->scope !== '$this') {
             return false;

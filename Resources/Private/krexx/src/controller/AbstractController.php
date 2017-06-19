@@ -46,6 +46,15 @@ use Brainworxx\Krexx\View\Output\AbstractOutput;
 abstract class AbstractController
 {
     /**
+     * Here we remember, if we are currently running a analysis.
+     * The debug methods may trigger another run, and we may get into
+     * trouble, memory or runtime wise.
+     *
+     * @var bool
+     */
+    public static $analysisInProgress = false;
+
+    /**
      * Config for the 'deep' backtrace analysis.
      *
      * @var array

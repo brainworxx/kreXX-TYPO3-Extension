@@ -37,7 +37,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
- * Processing of backtraces. No abstract for you, because we are dealing with
+ * Processing of a backtrace. No abstract for you, because we are dealing with
  * an array here.
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process

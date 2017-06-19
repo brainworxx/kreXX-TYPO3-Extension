@@ -153,7 +153,7 @@ class ThroughMethods extends AbstractCallback
      * @param \ReflectionMethod $reflectionMethod
      *   The reflection of the method that we are analysing.
      * @param \ReflectionClass $declaringClass
-     *   The class in wigh this method was declared.
+     *   The class in witch this method was declared.
      * @param \ReflectionClass $reflectionClass
      *   The class that we are currently analysing.
      *

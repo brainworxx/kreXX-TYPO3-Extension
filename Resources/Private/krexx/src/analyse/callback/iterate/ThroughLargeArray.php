@@ -46,8 +46,8 @@ use Brainworxx\Krexx\Analyse\Model;
  * We only display the name and the type of the object. Everything else
  * will be omitted.
  * We also do not use recursion handling, because assigning 2000 recursions
- * to the frontend would slow donw the brower considerately. Also, the info
- * we are providing here should be as huge as the info aout a recursion,
+ * to the frontend would slow down the browser considerately. Also, the info
+ * we are providing here should be as huge as the info about a recursion,
  * measured in MB.
  *
  * @uses array data

@@ -72,7 +72,7 @@ class File
     {
         $this->pool = $pool;
         $server = $pool->getServer();
-        $this->docRoot = rtrim(realpath($server['DOCUMENT_ROOT']), '/');
+        $this->docRoot = rtrim(realpath($server['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR);
         if (empty($this->docRoot)) {
             $this->docRoot = false;
         }
@@ -255,7 +255,7 @@ class File
      */
     public function deleteFile($filename)
     {
-        // Check if it is an actual file and if it is writeable.
+        // Check if it is an actual file and if it is writable.
         if (is_file($filename)) {
             set_error_handler(function () {
                 /* do nothing */
@@ -293,7 +293,7 @@ class File
         // completely from the $path variable.
         if ($this->docRoot !== false && strpos($path, $this->docRoot) === 0) {
             // Found it on position 0.
-            $path = '. . ./' . substr($path, strlen($this->docRoot) + 1);
+            $path = '. . .' . DIRECTORY_SEPARATOR . substr($path, strlen($this->docRoot) + 1);
         }
 
         return $path;

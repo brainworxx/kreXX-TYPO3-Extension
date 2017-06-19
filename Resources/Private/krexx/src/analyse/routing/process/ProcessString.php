@@ -70,7 +70,7 @@ class ProcessString extends AbstractProcess
             $length = $strlen = mb_strlen($data, $encoding);
         } else {
             // Looks like we have a mixed encoded string.
-            // We need t otell the dev!
+            // We need to tell the dev!
             $length = '~ ' . strlen($data);
             $strlen = ' broken encoding ' . $length;
             $encoding = 'broken';
@@ -87,7 +87,7 @@ class ProcessString extends AbstractProcess
         // Check if this is a possible callback.
         // We are not going to analyse this further, because modern systems
         // do not use these anymore.
-        if (is_callable($data)) {
+        if (function_exists($data)) {
             $model->setIsCallback(true);
         }
 

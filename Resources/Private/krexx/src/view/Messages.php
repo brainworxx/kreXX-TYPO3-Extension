@@ -162,6 +162,10 @@ class Messages
      */
     public function getHelp($key, array $args = array())
     {
+        if (empty($key)) {
+            return '';
+        }
+
         if (isset($this->helpArray[$key])) {
             return vsprintf($this->helpArray[$key], $args);
         }

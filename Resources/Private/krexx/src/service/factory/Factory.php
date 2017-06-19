@@ -114,7 +114,7 @@ class Factory
     }
 
     /**
-     * Return the superglobals $_SERVER.
+     * Return the superglobal $_SERVER.
      *
      * @return array
      */
@@ -124,7 +124,7 @@ class Factory
     }
 
     /**
-     * Return the superglobals $_COOKIE.
+     * Return the superglobal $_COOKIE.
      *
      * @return array
      */

@@ -86,7 +86,7 @@ class File extends AbstractOutput
 
 
     /**
-     * Creating the logfile after everything is done fro mthe chunk files.
+     * Creating the logfile after everything is done from the chunk files.
      */
     public function shutdownCallback()
     {

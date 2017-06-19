@@ -384,7 +384,7 @@ class Model
     /**
      * We simply add more info to our info json.
      * Leftover linebreaks will be removed.
-     * If the value is emptyx, we will remove a possible previous entry to this key.
+     * If the value is empty, we will remove a possible previous entry to this key.
      *
      * @param string $key
      *   The array key.

@@ -270,7 +270,7 @@ class Config extends Fallback
     protected function isRequestAjaxOrCli()
     {
         if ($this->getSetting('destination') !== 'file') {
-            // Fileoutout does not respect ajax or cli, because there is no
+            // File output does not respect ajax or cli, because there is no
             // interference with the output.
             return false;
         }

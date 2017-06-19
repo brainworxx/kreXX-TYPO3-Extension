@@ -100,7 +100,7 @@ class Emergency
     protected $nestingLevel = 0;
 
     /**
-     * Caqching the setting of the maximum nesting level.
+     * Caching the setting of the maximum nesting level.
      *
      * @var int
      */

@@ -37,7 +37,7 @@ namespace Brainworxx\Krexx\View\Output;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
- * Defining what is needed for an outpur class.
+ * Defining what is needed for an output class.
  *
  * @package Brainworxx\Krexx\View\Output
  */

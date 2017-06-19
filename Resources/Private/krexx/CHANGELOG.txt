@@ -52,6 +52,12 @@
   level again.
 - Bufix: The file path filter now uses realpath() to resolve
   possible symlinks.
+- Bugfix: Fixed a warning in PHP 5.3 when trying to get a object
+  hash from an array.
+- Bugfix: Fixed a autoloading triggering event, when processing
+  a string.
+- Bugfix: Fixed an issue with thepath filter and the directory
+  separator string on windows systems.
 
 2.2.0
 - Added more search pattern and source code parsing to the

@@ -151,7 +151,7 @@ class Security extends Fallback
 
     /**
      * Evaluation the registering of the fatal error handler.
-     * Works only in PHP5 and we are expection a boolean.
+     * Works only in PHP5 and we are expecting a boolean.
      *
      * @param string $value
      *   The value we want to evaluate
@@ -166,7 +166,7 @@ class Security extends Fallback
      */
     protected function evalFatal($value, $name, $group)
     {
-        // The feedback happens in the methodsbelow.
+        // The feedback happens in the methods below.
         return $this->evalBool($value, $name, $group) && $this->evalPhp();
     }
 
@@ -194,7 +194,7 @@ class Security extends Fallback
 
         $maxTime = (int)ini_get('max_execution_time');
         // We need a maximum runtime in the first place
-        // and then check, if we have avalue smaller than it.
+        // and then check, if we have a value smaller than it.
         if ($maxTime <= 0) {
             // We were unable to get the maximum runtime from the server.
             // No need to check any further.

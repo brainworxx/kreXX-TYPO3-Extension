@@ -60,7 +60,7 @@ abstract class AbstractCaller
     protected $pattern;
 
     /**
-     * Here we store a more sofisticated list of calls.
+     * Here we store a more sophisticated list of calls.
      *
      * We use his list to identify the variable name of the call.
      *

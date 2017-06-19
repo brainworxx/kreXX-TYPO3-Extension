@@ -70,7 +70,7 @@ class BacktraceController extends AbstractController
         // because that is the internal function in kreXX.
         $backtrace = debug_backtrace();
         unset($backtrace[0]);
-        // REset the array keys, because the 0 is now missing.
+        // Reset the array keys, because the 0 is now missing.
         $backtrace = array_values($backtrace);
 
 
