@@ -96,18 +96,18 @@ $boot = function ($_EXTKEY) {
     // But then it is already to late for these overwrites.
     $GLOBALS['kreXXoverwrites'] = array(
         'classes' => array(
-            'Brainworxx\\Krexx\\Service\\Config\\Security' => 'Tx_Includekrexx_Rewrite_ServiceConfigSecurity'
+            'Brainworxx\\Krexx\\Service\\Config\\Config' => 'Tx_Includekrexx_Rewrite_ServiceConfigConfig'
         ),
         'directories' => array(),
     );
     if (!class_exists('Brainworxx\\Krexx\\Service\\Config\\Fallback')) {
         include_once($extPath . 'Resources/Private/krexx/src/service/config/Fallback.php');
     }
-    if (!class_exists('Brainworxx\\Krexx\\Service\\Config\\Security')) {
-        include_once($extPath . 'Resources/Private/krexx/src/service/config/Security.php');
+    if (!class_exists('Brainworxx\\Krexx\\Service\\Config\\Config')) {
+        include_once($extPath . 'Resources/Private/krexx/src/service/config/Config.php');
     }
-    if (!class_exists('Tx_Includekrexx_Rewrite_ServiceConfigSecurity')) {
-        include_once($extPath . 'Classes/Rewrite/ServiceConfigSecurity.php');
+    if (!class_exists('Tx_Includekrexx_Rewrite_ServiceConfigConfig')) {
+        include_once($extPath . 'Classes/Rewrite/ServiceConfigConfig.php');
     }
 
 
@@ -144,11 +144,10 @@ $boot = function ($_EXTKEY) {
                 t3lib_div::writeFileToTypo3tempDir($tempPath . '/' . '.htaccess', $htAccess);
                 t3lib_div::writeFileToTypo3tempDir($tempPath . '/' . 'index.html', $indexHtml);
             }
-            // Register it!
-            $GLOBALS['kreXXoverwrites']['directories'][$key] = $tempPath;
         }
     }
-
+    // Register it!
+    $GLOBALS['kreXXoverwrites']['directories']['config'] = PATH_site . 'typo3temp/tx_includekrexx/config/Krexx.ini';
 
 
     // We load the kreXX library.

@@ -32,88 +32,71 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Caller;
+namespace Brainworxx\Krexx\Service\Config\From;
 
+use Brainworxx\Krexx\Service\Config\Security;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
- * Abstract defining what a CallerFinder clkass must implement.
+ * Get the configuration from the cookies.
  *
- * @package Brainworxx\Krexx\Analyse\Caller
+ * @package Brainworxx\Krexx\Service\Config
  */
-abstract class AbstractCaller
+class Cookie
 {
     /**
-     * Our pool where we keep al relevant classes.
+     * Our security handler.
      *
-     * @var Pool
+     * @var Security
      */
-    protected $pool;
+    public $security;
 
     /**
-     * Pattern that we use to identify the caller.
-     *
-     * We use this one to identify the line from which kreXX was called.
-     *
-     * @var string
-     */
-    protected $pattern;
-
-    /**
-     * Here we store a more sofisticated list of calls.
-     *
-     * We use his list to identify the variable name of the call.
+     * Here we cache our cookie settings.
      *
      * @var array
      */
-    protected $callPattern;
+    public $settings = array();
 
     /**
-     * Injects the pool.
+     * Inject the pool, and get a first impression of the cookies.
      *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
      */
     public function __construct(Pool $pool)
     {
-        $this->pool = $pool;
+        $this->security = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\Security');
+        $cookies = $pool->getCookie();
+
+        if (isset($cookies['KrexxDebugSettings'])) {
+            // We have local settings.
+            $settings = json_decode($cookies['KrexxDebugSettings'], true);
+            if (is_array($settings)) {
+                $this->settings = $settings;
+            }
+        }
     }
 
     /**
-     * Setter for the identifier pattern.
+     * Returns settings from the local cookies.
      *
-     * @param string $pattern
-     *   The pattern, duh!
+     * @param string $group
+     *   The name of the group inside the cookie.
+     * @param string $name
+     *   The name of the value.
      *
-     * @return $this
-     *   Return this for chaining.
+     * @return string|null
+     *   The value.
      */
-    public function setPattern($pattern)
+    public function getConfigFromCookies($group, $name)
     {
-        $this->pattern = $pattern;
-        return $this;
-    }
+        // Do we have a value in the cookies?
+        if (isset($this->settings[$name]) && $this->security->evaluateSetting($group, $name, $this->settings[$name])) {
+            // We escape them, just in case.
+            return htmlspecialchars($this->settings);
+        }
 
-    /**
-     * Getter for the current recognition pattern.
-     *
-     * @return string
-     */
-    public function getPattern()
-    {
-        return $this->pattern;
+        // Still here?
+        return null;
     }
-
-    /**
-     * Finds the place in the code from where krexx was called.
-     *
-     * @return array
-     *   The code, from where krexx was called.
-     *   array(
-     *     'file' => 'someFile.php',
-     *     'line' => 123,
-     *     'varname' => '$myVar'
-     *   );
-     */
-    abstract public function findCaller();
 }

@@ -32,12 +32,12 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Service\Config\Security;
+use Brainworxx\Krexx\Service\Config\Config;
 
 /**
  * Using the cmpIP from the GeneralUtility in TYPO3.
  */
-class Tx_Includekrexx_Rewrite_ServiceConfigSecurity extends Security
+class Tx_Includekrexx_Rewrite_ServiceConfigConfig extends Config
 {
     /**
      * {@inheritdoc}

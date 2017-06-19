@@ -54,7 +54,7 @@ abstract class AbstractComment
      *
      * @var array
      */
-    protected $inheritedCommentPattern = array(
+    protected $inheritdocPattern = array(
         '{@inheritdoc}',
         '{inheritdoc}',
         '@inheritdoc',
@@ -130,7 +130,7 @@ abstract class AbstractComment
      */
     protected function replaceInheritComment($originalComment, $comment)
     {
-        return str_ireplace($this->inheritedCommentPattern, $comment, $originalComment);
+        return str_ireplace($this->inheritdocPattern, $comment, $originalComment);
     }
 
     /**

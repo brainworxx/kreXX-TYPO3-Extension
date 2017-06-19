@@ -127,12 +127,19 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
          */
         protected $pool;
 
+        /**
+         * Set the pool and do the paren constructor.
+         */
         public function __construct()
         {
             parent::__construct();
             $this->pool = \Krexx::$pool;
         }
 
+        /**
+         * We check if we are running with a productive preset. If we do, we
+         * will display a warning.
+         */
         protected function checkProductiveSetting()
         {
             $isProductive = false;

@@ -70,20 +70,8 @@ class DumpController extends AbstractController
         if (empty($headline)) {
             if (is_object($data)) {
                 $headline = get_class($data);
-            } elseif (is_array($data)) {
-                $headline = 'array';
-            } elseif (is_bool($data)) {
-                $headline = 'boolean';
-            } elseif (is_float($data)) {
-                $headline = 'float';
-            } elseif (is_int($data)) {
-                $headline = 'integer';
-            } elseif (is_null($data)) {
-                $headline = 'null';
-            } elseif (is_resource($data)) {
-                $headline = 'resource';
-            } elseif (is_string($data)) {
-                $headline = 'string';
+            } else {
+                $headline = gettype($data);
             }
             // We are analysing stuff here.
             $caller['type'] = 'Analysis';

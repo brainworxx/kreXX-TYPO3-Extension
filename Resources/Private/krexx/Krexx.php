@@ -71,6 +71,7 @@ class Krexx
     public static function bootstrapKrexx()
     {
         $krexxDir = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+        include_once $krexxDir . 'src/view/RenderInterface.php';
         include_once $krexxDir . 'src/view/AbstractRender.php';
         include_once $krexxDir . 'src/view/Render.php';
         include_once $krexxDir . 'src/view/Messages.php';
@@ -82,6 +83,8 @@ class Krexx
         include_once $krexxDir . 'src/service/config/Fallback.php';
         include_once $krexxDir . 'src/service/config/Security.php';
         include_once $krexxDir . 'src/service/config/Config.php';
+        include_once $krexxDir . 'src/service/config/from/Cookie.php';
+        include_once $krexxDir . 'src/service/config/from/Ini.php';
         include_once $krexxDir . 'src/service/misc/File.php';
         include_once $krexxDir . 'src/service/misc/Registry.php';
         include_once $krexxDir . 'src/service/misc/Encoding.php';

@@ -59,7 +59,6 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
         }
 
         $data = array();
-        $value = array();
         // Setting possible form values.
         foreach ($this->pool->render->getSkinList() as $skin) {
             $data['skins'][$skin] = $skin;
@@ -84,48 +83,30 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
             $data['title'][$settingsName] = $this->LLL($settingsName);
         }
 
+        $iniConfig = $this->pool->config->iniConfig;
+
         // See, if we have any values in the configuration file.
-        $value['output']['skin'] = $this->pool->config
-            ->getConfigFromFile('output', 'skin');
-        $value['runtime']['memoryLeft'] = $this->pool->config
-            ->getConfigFromFile('runtime', 'memoryLeft');
-        $value['runtime']['maxRuntime'] = $this->pool->config
-            ->getConfigFromFile('runtime', 'maxRuntime');
-        $value['output']['maxfiles'] = $this->pool->config
-            ->getConfigFromFile('output', 'maxfiles');
-        $value['output']['destination'] = $this->pool->config
-            ->getConfigFromFile('output', 'destination');
-        $value['runtime']['maxCall'] = $this->pool->config
-            ->getConfigFromFile('runtime', 'maxCall');
-        $value['output']['disabled'] = $this->pool->config
-            ->getConfigFromFile('output', 'disabled');
-        $value['output']['iprange'] = $this->pool->config
-            ->getConfigFromFile('output', 'iprange');
-        $value['runtime']['detectAjax'] = $this->pool->config
-            ->getConfigFromFile('runtime', 'detectAjax');
-        $value['properties']['analyseProtected'] = $this->pool->config
-            ->getConfigFromFile('properties', 'analyseProtected');
-        $value['properties']['analysePrivate'] = $this->pool->config
-            ->getConfigFromFile('properties', 'analysePrivate');
-        $value['properties']['analyseConstants'] = $this->pool->config
-            ->getConfigFromFile('properties', 'analyseConstants');
-        $value['properties']['analyseTraversable'] = $this->pool->config
-            ->getConfigFromFile('properties', 'analyseTraversable');
-        $value['methods']['debugMethods'] = $this->pool->config
-            ->getConfigFromFile('methods', 'debugMethods');
-        $value['runtime']['level'] = $this->pool->config->getConfigFromFile('runtime', 'level');
-        $value['methods']['analyseProtectedMethods'] = $this->pool->config
-            ->getConfigFromFile('methods', 'analyseProtectedMethods');
-        $value['methods']['analysePrivateMethods'] = $this->pool->config
-            ->getConfigFromFile('methods', 'analysePrivateMethods');
-        $value['methods']['analyseGetter'] = $this->pool->config
-            ->getConfigFromFile('methods', 'analyseGetter');
-        $value['backtraceAndError']['registerAutomatically'] = $this->pool->config
-            ->getConfigFromFile('backtraceAndError', 'registerAutomatically');
-        $value['backtraceAndError']['maxStepNumber'] = $this->pool->config
-            ->getConfigFromFile('backtraceAndError', 'maxStepNumber');
-        $value['runtime']['useScopeAnalysis'] = $this->pool->config
-            ->getConfigFromFile('runtime', 'useScopeAnalysis');
+        $value['output']['skin'] = $iniConfig->getConfigFromFile('output', 'skin');
+        $value['runtime']['memoryLeft'] = $iniConfig->getConfigFromFile('runtime', 'memoryLeft');
+        $value['runtime']['maxRuntime'] = $iniConfig->getConfigFromFile('runtime', 'maxRuntime');
+        $value['output']['maxfiles'] = $iniConfig->getConfigFromFile('output', 'maxfiles');
+        $value['output']['destination'] = $iniConfig->getConfigFromFile('output', 'destination');
+        $value['runtime']['maxCall'] = $iniConfig->getConfigFromFile('runtime', 'maxCall');
+        $value['output']['disabled'] = $iniConfig->getConfigFromFile('output', 'disabled');
+        $value['output']['iprange'] = $iniConfig->getConfigFromFile('output', 'iprange');
+        $value['runtime']['detectAjax'] = $iniConfig->getConfigFromFile('runtime', 'detectAjax');
+        $value['properties']['analyseProtected'] = $iniConfig->getConfigFromFile('properties', 'analyseProtected');
+        $value['properties']['analysePrivate'] = $iniConfig->getConfigFromFile('properties', 'analysePrivate');
+        $value['properties']['analyseConstants'] = $iniConfig->getConfigFromFile('properties', 'analyseConstants');
+        $value['properties']['analyseTraversable'] = $iniConfig->getConfigFromFile('properties', 'analyseTraversable');
+        $value['methods']['debugMethods'] = $iniConfig->getConfigFromFile('methods', 'debugMethods');
+        $value['runtime']['level'] = $iniConfig->getConfigFromFile('runtime', 'level');
+        $value['methods']['analyseProtectedMethods'] = $iniConfig->getConfigFromFile('methods', 'analyseProtectedMethods');
+        $value['methods']['analysePrivateMethods'] = $iniConfig->getConfigFromFile('methods', 'analysePrivateMethods');
+        $value['methods']['analyseGetter'] = $iniConfig->getConfigFromFile('methods', 'analyseGetter');
+        $value['backtraceAndError']['registerAutomatically'] = $iniConfig->getConfigFromFile('backtraceAndError', 'registerAutomatically');
+        $value['backtraceAndError']['maxStepNumber'] = $iniConfig->getConfigFromFile('backtraceAndError', 'maxStepNumber');
+        $value['runtime']['useScopeAnalysis'] = $iniConfig->getConfigFromFile('runtime', 'useScopeAnalysis');
 
         // Are these actually set?
         foreach ($value as $mainkey => $setting) {
@@ -186,7 +167,7 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
                             // whitelist it.
                             $value = htmlspecialchars(preg_replace('/\s+/', '', $value));
                             // Evaluate the setting!
-                            if ($this->pool->config->evaluateSetting($section, $settingName, $value)) {
+                            if ($this->pool->config->security->evaluateSetting($section, $settingName, $value)) {
                                 $oldValues[$section][$settingName] = $value;
                             } else {
                                 // Validation failed! kreXX will generate a message,

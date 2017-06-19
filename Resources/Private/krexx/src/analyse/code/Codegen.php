@@ -131,13 +131,12 @@ class Codegen
                 return $this->concatenation($model);
             }
 
-            // Multiline code generation starts here.
+            // Multi line code generation starts here.
             if ($model->getMultiLineCodeGen() === self::ITERATOR_TO_ARRAY) {
                 return 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
             }
 
             // Test for private or protected.
-
             if (strpos($type, 'protected') === false && strpos($type, 'private') === false) {
                 // Is not protected.
                 return $this->concatenation($model);

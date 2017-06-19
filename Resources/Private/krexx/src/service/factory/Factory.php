@@ -94,10 +94,42 @@ class Factory
      */
     public function flushRewrite()
     {
-        if (isset($GLOBALS['kreXXoverwrites']) && isset($GLOBALS['kreXXoverwrites']['classes'])) {
-            $this->rewrite = $GLOBALS['kreXXoverwrites']['classes'];
+        $globals = $this->getGlobals();
+
+        if (isset($globals['kreXXoverwrites']) && isset($globals['kreXXoverwrites']['classes'])) {
+            $this->rewrite = $globals['kreXXoverwrites']['classes'];
         } else {
             $this->rewrite = array();
         }
+    }
+
+    /**
+     * Return the superglobal $GLOBALS.
+     *
+     * @return array
+     */
+    public function &getGlobals()
+    {
+        return $GLOBALS;
+    }
+
+    /**
+     * Return the superglobals $_SERVER.
+     *
+     * @return array
+     */
+    public function &getServer()
+    {
+        return $_SERVER;
+    }
+
+    /**
+     * Return the superglobals $_COOKIE.
+     *
+     * @return array
+     */
+    public function &getCookie()
+    {
+        return $_COOKIE;
     }
 }

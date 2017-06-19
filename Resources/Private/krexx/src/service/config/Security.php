@@ -286,36 +286,4 @@ class Security extends Fallback
     {
         return true;
     }
-
-    /**
-     * Determines if a debug function is blacklisted in s specific class.
-     *
-     * @param object $data
-     *   The class we are analysing.
-     * @param string $call
-     *   The function name we want to call.
-     *
-     * @return bool
-     *   Whether the function is allowed to be called.
-     */
-    public function isAllowedDebugCall($data, $call)
-    {
-        // Check if the class itself is blacklisted.
-        foreach ($this->debugClassBlacklist as $classname) {
-            if (is_a($data, $classname)) {
-                // No debug methods for you.
-                return false;
-            }
-        }
-
-        // Check for a class / method combination.
-        foreach ($this->debugMethodsBlacklist as $classname => $methodLlist) {
-            if (is_a($data, $classname) && in_array($call, $methodLlist)) {
-                // We have a winner, this one is blacklisted!
-                return false;
-            }
-        }
-        // Nothing found?
-        return true;
-    }
 }

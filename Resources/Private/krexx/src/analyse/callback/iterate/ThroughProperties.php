@@ -61,6 +61,13 @@ class ThroughProperties extends AbstractCallback
     protected $fileService;
 
     /**
+     * A list with the default properties from this object.
+     *
+     * @var array
+     */
+    protected $defaultProperties = array();
+
+    /**
      * Renders the properties of a class.
      *
      * @return string
@@ -73,7 +80,7 @@ class ThroughProperties extends AbstractCallback
         /* @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
         $output = '';
-        $default = $ref->getDefaultProperties();
+        $this->defaultProperties = $ref->getDefaultProperties();
 
         foreach ($this->parameters['data'] as $refProperty) {
             // Check memory and runtime.
@@ -82,45 +89,26 @@ class ThroughProperties extends AbstractCallback
             }
 
             /* @var \ReflectionProperty $refProperty */
-            $refProperty->setAccessible(true);
-
-            // Getting our values from the reflection.
-            $value = $refProperty->getValue($this->parameters['orgObject']);
             $propName = $refProperty->name;
-            if (is_null($value) && $refProperty->isDefault() && isset($default[$propName])) {
-                // We might want to look at the default value.
-                $value = $default[$propName];
-            }
+            $value = $this->getValueFromProperty($refProperty, $propName);
 
             // Now that we have the key and the value, we can analyse it.
             // Stitch together our additional info about the data:
-            // public, protected, private, static.
-            $additional = '';
-            if ($refProperty->isProtected()) {
-                $additional .= 'protected ';
-            } elseif ($refProperty->isPublic()) {
-                $additional .= 'public ';
-            } elseif ($refProperty->isPrivate()) {
-                $additional .= 'private ';
-            }
+            // public, protected, private, inherited
+            $additional = $this->getAdditionalData($refProperty, $ref);
 
-            // Test if the property is inherited or not by testing the
-            // declaring class
-            if ($refProperty->getDeclaringClass()->getName() !== $ref->getName()) {
-                // This one got inherited fom a lower level.
-                $additional .= 'inherited ';
-            }
-
-            $comment = '';
-            $declarationPlace = '';
-
+            // Every other additional string requires a special connector,
+            // so we do this here.
             $connectorType = Connectors::NORMAL_PROPERTY;
             if ($refProperty->isStatic()) {
                 $additional .= 'static ';
                 $connectorType = Connectors::STATIC_PROPERTY;
                 // There is always a $ in front of a static property.
                 $propName = '$' . $propName;
-            } elseif (isset($refProperty->isUndeclared)) {
+            }
+
+
+            if (isset($refProperty->isUndeclared)) {
                 // The property 'isUndeclared' is not a part of the reflectionProperty.
                 // @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
                 $additional .= 'dynamic property ';
@@ -133,6 +121,10 @@ class ThroughProperties extends AbstractCallback
                     // @author AbraCadaver
                     $connectorType = Connectors::SPECIAL_CHARS_PROP;
                 }
+
+                // There is no comment ora declaration place for a dynamic property.
+                $comment = '';
+                $declarationPlace = '';
             } else {
                 // Since we are dealing with a declared Property here, we can
                 // get the comment and the declaration place.
@@ -158,5 +150,54 @@ class ThroughProperties extends AbstractCallback
         }
 
         return $output;
+    }
+
+    /**
+     * Get the value from the property.
+     *
+     * @param \ReflectionProperty $refProperty
+     *   A reflection of the property we are analysing.
+     * @param string $propName
+     *   The name of the property we are analysing.
+     *
+     * @return mixed
+     *   The value we want.
+     */
+    protected function getValueFromProperty(\ReflectionProperty $refProperty, $propName)
+    {
+        $refProperty->setAccessible(true);
+
+        // Getting our values from the reflection.
+        $value = $refProperty->getValue($this->parameters['orgObject']);
+        if (is_null($value) && $refProperty->isDefault() && isset($this->defaultProperties[$propName])) {
+            // We might want to look at the default value.
+            $value = $this->defaultProperties[$propName];
+        }
+
+        return $value;
+    }
+
+    protected function getAdditionalData(\ReflectionProperty $refProperty, \ReflectionClass $ref)
+    {
+        // Now that we have the key and the value, we can analyse it.
+        // Stitch together our additional info about the data:
+        // public, protected, private, static.
+        $additional = '';
+        if ($refProperty->isProtected()) {
+            $additional .= 'protected ';
+        } elseif ($refProperty->isPublic()) {
+            $additional .= 'public ';
+        } elseif ($refProperty->isPrivate()) {
+            $additional .= 'private ';
+        }
+
+        // Test if the property is inherited or not by testing the
+        // declaring class
+        if ($refProperty->getDeclaringClass()->getName() !== $ref->getName()) {
+            // This one got inherited fom a lower level.
+            $additional .= 'inherited ';
+        }
+
+        return $additional;
     }
 }

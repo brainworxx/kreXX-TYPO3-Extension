@@ -74,16 +74,23 @@ class Recursion
     protected $globalsWereRendered = false;
 
     /**
+     * THe $GLOBALS array.
+     *
+     * @var array
+     */
+    protected $globals;
+
+    /**
      * Generate the recursion marker during class construction.
      *
      * @param Pool $pool
-     *   The pool, where we store the classes we need.
      */
-    public function __construct(Pool $pool)
+    public function __construct($pool)
     {
         $this->recursionMarker = 'Krexx' . substr(str_shuffle(md5(microtime())), 0, 10);
         // Mark the $GLOBALS array.
-        $GLOBALS[$this->recursionMarker] = true;
+        $this->globals = $pool->getGlobals();
+        $this->globals[$this->recursionMarker] = true;
         $this->recursionHive = new \SplObjectStorage();
     }
 
@@ -93,7 +100,7 @@ class Recursion
     public function __destruct()
     {
         // Remove our mark from the $GLOBALS.
-        unset($GLOBALS[$this->recursionMarker]);
+        unset($this->globals[$this->recursionMarker]);
     }
 
     /**

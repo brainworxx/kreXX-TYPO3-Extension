@@ -153,7 +153,7 @@ class Fallback
             'editable' => 'false',
         ),
         'maxfiles' => array(
-            'type' => 'None',
+            'type' => 'Input',
             'editable' => 'false',
         ),
         'skin' => array(
@@ -222,7 +222,7 @@ class Fallback
      *
      * @var array
      */
-    protected $debugMethodsBlacklist = array(
+    protected $methodBlacklist = array(
 
         // TYPO3 viewhelpers dislike this function.
         // In the TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper the private
@@ -248,7 +248,7 @@ class Fallback
      *
      * @var array
      */
-    protected $debugClassBlacklist = array(
+    protected $classBlacklist = array(
         // Fun with reflection classes. Not really.
         '\\ReflectionClass',
         '\\ReflectionFunction',
@@ -268,13 +268,6 @@ class Fallback
      *
      * @see \Brainworxx\Krexx\Service\Config\Security::evaluateSetting
      *
-     * @todo Callback in Value des Array nutzen
-     *       Rückmeldung macht dann die Callback Funktion
-     *       Message-ID-Strings vereinheitlichen für die Bool und Int funktionen
-     *       Eval funktion erhällt 2 Parameter:
-     *       1.) $value
-     *       2.) $name
-     *
      * @var array
      */
     protected $evalSettings = array(
@@ -291,8 +284,8 @@ class Fallback
         'detectAjax' => 'evalBool',
         'destination' => 'evalDestination',
         'maxfiles' => 'evalInt',
-        'skin' => 'evalSkin',                   // @todo write me!
-        'devHandle' => 'evalDevHandle',         // @todo write me!
+        'skin' => 'evalSkin',
+        'devHandle' => 'evalDevHandle',
         'registerAutomatically' => 'evalFatal',
         'iprange' => 'evalIpRange',
         'analyseGetter' => 'evalBool',

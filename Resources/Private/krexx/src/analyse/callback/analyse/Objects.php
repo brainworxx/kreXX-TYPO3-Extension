@@ -137,7 +137,7 @@ class Objects extends AbstractCallback
             }
         } while (is_object($reflectionClass));
 
-        usort($refProps, array($this, 'sortingCallbackProp'));
+        usort($refProps, array($this, 'reflectionSorting'));
         if (empty($refProps)) {
             return '';
         }
@@ -162,7 +162,7 @@ class Objects extends AbstractCallback
     protected function getProtectedProperties(\ReflectionClass $ref)
     {
         $refProps = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
-        usort($refProps, array($this, 'sortingCallbackProp'));
+        usort($refProps, array($this, 'reflectionSorting'));
 
         if (empty($refProps)) {
             return '';
@@ -216,7 +216,7 @@ class Objects extends AbstractCallback
             return '';
         }
 
-        usort($refProps, array($this, 'sortingCallbackProp'));
+        usort($refProps, array($this, 'reflectionSorting'));
         // Adding a HR to reflect that the following stuff are not public
         // properties anymore.
         return $this->getReflectionPropertiesData($refProps, $ref, $data, 'Public properties') .
@@ -224,33 +224,19 @@ class Objects extends AbstractCallback
     }
 
     /**
-     * Sorting callback for usort utilizing reflection properties.
+     * Simple sorting callback for reflections.
      *
-     * @param \ReflectionProperty $a
-     *   A string we want to sort.
-     * @param \ReflectionProperty $b
-     *   Another string for comparison
-     *
+     * @param \Reflector $reflectionA
+     *   The first reflection.
+     * @param \Reflector $reflectionB
+     *   The second reflection.
      * @return int
      */
-    protected function sortingCallbackProp(\ReflectionProperty $a, \ReflectionProperty $b)
+    protected function reflectionSorting(\Reflector $reflectionA, \Reflector $reflectionB)
     {
-        return strcmp($a->name, $b->name);
-    }
-
-     /**
-     * Sorting callback for usort utilizing reflection methods.
-     *
-     * @param \ReflectionMethod $a
-     *   A string we want to sort.
-     * @param \ReflectionMethod $b
-     *   Another string for comparison
-     *
-     * @return int
-     */
-    protected function sortingCallbackMethod(\ReflectionMethod $a, \ReflectionMethod $b)
-    {
-        return strcmp($a->name, $b->name);
+        /** @var \ReflectionMethod | \ReflectionProperty $reflectionA */
+        /** @var \ReflectionMethod | \ReflectionProperty $reflectionB */
+        return strcmp($reflectionA->name, $reflectionB->name);
     }
 
     /**
@@ -287,7 +273,7 @@ class Objects extends AbstractCallback
         }
 
         // We need to sort these alphabetically.
-        usort($methods, array($this, 'sortingCallbackMethod'));
+        usort($methods, array($this, 'reflectionSorting'));
         return $this->pool->render->renderExpandableChild(
             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setName('Methods')

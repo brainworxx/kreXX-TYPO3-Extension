@@ -130,18 +130,18 @@ class Encoding
      * Complete means every single char gets escaped.
      * This one dies some extra stuff for code display.
      *
-     * @param integer $n
+     * @param integer $charCode
      *
      * @return string
      *   The extra escaped result for code.
      */
-    protected function arrayMapCallbackCode($n)
+    protected function arrayMapCallbackCode($charCode)
     {
-        if ($n === 9) {
+        if ($charCode === 9) {
             // Replace TAB with two spaces, it's better readable that way.
             $result = '&nbsp;&nbsp;';
         } else {
-            $result = '&#' . $n . ';';
+            $result = '&#' . $charCode . ';';
         }
         return $result;
     }
@@ -150,13 +150,13 @@ class Encoding
      * Callback for the complete escaping of strings.
      * Complete means every single char gets escaped.
      *
-     * @param integer $n
+     * @param integer $charCode
      *
      * @return string
      *   The extra escaped result.
      */
-    protected function arrayMapCallbackNormal($n)
+    protected function arrayMapCallbackNormal($charCode)
     {
-        return '&#' . $n . ';';
+        return '&#' . $charCode . ';';
     }
 }

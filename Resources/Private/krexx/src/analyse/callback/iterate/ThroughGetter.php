@@ -171,7 +171,73 @@ class ThroughGetter extends AbstractCallback
         // - my_property
         // - _my_property
 
-        // Get the name and remove the 'get'.
+        // Get a first impression.
+        $propertyName = $this->preparePropertyName($reflectionMethod);
+
+        // myProperty
+        // Most should be handled here.
+        if ($classReflection->hasProperty($propertyName)) {
+            return $classReflection->getProperty($propertyName);
+        }
+
+        // _myProperty
+        $testName = '_' . $propertyName;
+        if ($classReflection->hasProperty($testName)) {
+            return $classReflection->getProperty($testName);
+        }
+
+        // MyProperty
+        $testName = ucfirst($propertyName);
+        if ($classReflection->hasProperty($testName)) {
+            return $classReflection->getProperty($testName);
+        }
+
+        // _MyProperty
+        $testName = '_' . ucfirst($propertyName);
+        if ($classReflection->hasProperty($testName)) {
+            return $classReflection->getProperty($testName);
+        }
+
+        // myproperty
+        $testName = strtolower($propertyName);
+        if ($classReflection->hasProperty($testName)) {
+            return $classReflection->getProperty($testName);
+        }
+
+        // _myproperty
+        $testName = '_' . strtolower($propertyName);
+        if ($classReflection->hasProperty($testName)) {
+            return $classReflection->getProperty($testName);
+        }
+
+        // my_property
+        $testName = $this->convertToSnakeCase($propertyName);
+        if ($classReflection->hasProperty($testName)) {
+            return $classReflection->getProperty($testName);
+        }
+
+        // _my_property
+        $testName = '_' . $this->convertToSnakeCase($propertyName);
+        if ($classReflection->hasProperty($testName)) {
+            return $classReflection->getProperty($testName);
+        }
+
+        // Time to do some deep stuff. We parse the sourcecode via regex!
+        return $this->getReflectionPropertyDeep($classReflection, $reflectionMethod);
+    }
+
+    /**
+     * Get a first impression ot the possible property name for the getter.
+     *
+     * @param \ReflectionMethod $reflectionMethod
+     *   A reflection of the getter method we are analysing.
+     *
+     * @return string
+     *   The first impression of the property name.
+     */
+    protected function preparePropertyName(\ReflectionMethod $reflectionMethod)
+    {
+         // Get the name and remove the 'get' or the '_get'.
         $getterName = $reflectionMethod->getName();
         if (strpos($getterName, 'get') === 0) {
             $getterName = substr($getterName, 3);
@@ -180,57 +246,7 @@ class ThroughGetter extends AbstractCallback
             $getterName = substr($getterName, 4);
         }
 
-
-        // myProperty
-        $propertyName = lcfirst($getterName);
-        if ($classReflection->hasProperty($propertyName)) {
-            return $classReflection->getProperty($propertyName);
-        }
-
-        // _myProperty
-        $propertyName = '_' . $propertyName;
-        if ($classReflection->hasProperty($propertyName)) {
-            return $classReflection->getProperty($propertyName);
-        }
-
-        // MyProperty
-        $propertyName = ucfirst($getterName);
-        if ($classReflection->hasProperty($propertyName)) {
-            return $classReflection->getProperty($propertyName);
-        }
-
-        // _MyProperty
-        $propertyName = '_' . $propertyName;
-        if ($classReflection->hasProperty($propertyName)) {
-            return $classReflection->getProperty($propertyName);
-        }
-
-        // myproperty
-        $propertyName = strtolower($getterName);
-        if ($classReflection->hasProperty($propertyName)) {
-            return $classReflection->getProperty($propertyName);
-        }
-
-        // _myproperty
-        $propertyName = '_' . $propertyName;
-        if ($classReflection->hasProperty($propertyName)) {
-            return $classReflection->getProperty($propertyName);
-        }
-
-        // my_property
-        $propertyName = $this->convertToSnakeCase($getterName);
-        if ($classReflection->hasProperty($propertyName)) {
-            return $classReflection->getProperty($propertyName);
-        }
-
-        // _my_property
-        $propertyName = '_' . $propertyName;
-        if ($classReflection->hasProperty($propertyName)) {
-            return $classReflection->getProperty($propertyName);
-        }
-
-        // Time to do some deep stuff. We parse the sourcecode via regex!
-        return $this->getReflectionPropertyDeep($classReflection, $reflectionMethod);
+        return lcfirst($getterName);
     }
 
     /**

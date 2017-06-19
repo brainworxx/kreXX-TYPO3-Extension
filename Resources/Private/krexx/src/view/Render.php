@@ -137,11 +137,11 @@ class Render extends AbstractRender
     /**
      * {@inheritdoc}
      */
-    public function renderCssJs(&$css, &$js)
+    public function renderCssJs(&$css, &$javascript)
     {
         return str_replace(
             array('{css}', '{js}'),
-            array($css, $js),
+            array($css, $javascript),
             $this->getTemplateFileContent('cssJs')
         );
     }
@@ -390,9 +390,9 @@ class Render extends AbstractRender
      */
     public function renderFatalMain($type, $errstr, $errfile, $errline)
     {
-        $from = $errline -6;
-        $to = $errline +5;
-        $source = $this->pool->fileService->readSourcecode($errfile, $errline -1, $from, $to -1);
+        $readFrom = $errline -6;
+        $readTo = $errline +5;
+        $source = $this->pool->fileService->readSourcecode($errfile, $errline -1, $readFrom, $readTo -1);
 
         return str_replace(
             array(

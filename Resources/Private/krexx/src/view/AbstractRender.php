@@ -38,11 +38,11 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
- * Defining what we need for a skin render class.
+ * Protected helper methods for the real render class.
  *
  * @package Brainworxx\Krexx\View
  */
-abstract class AbstractRender
+abstract class AbstractRender implements RenderInterface
 {
     /**
      * Here we store all relevant data.
@@ -59,17 +59,13 @@ abstract class AbstractRender
     protected $skinPath;
 
     /**
-     * Injects the pool.
-     *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
+     * {@inheritdoc}
      */
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
         $this->skinPath = $this->pool->krexxDir . 'resources/skins/' . $this->pool->config->getSetting('skin') . '/';
     }
-
 
     /**
      * Renders the footer part, where we display from where krexx was called.
@@ -180,10 +176,7 @@ abstract class AbstractRender
     }
 
     /**
-     * Gets a list of all available skins for the frontend config.
-     *
-     * @return array
-     *   An array with the skinnames.
+     * {@inheritdoc}
      */
     public function getSkinList()
     {
@@ -340,176 +333,4 @@ abstract class AbstractRender
 
         return ' data-' . $name . '="' . str_replace('"', '&#34;', $data) . '" ';
     }
-
-    /**
-     * Renders a "single child", containing a single not expandable value.
-     *
-     * Depending on how many characters are in there, it may be toggleable.
-     *
-     * @param Model $model
-     *   The model, which hosts all the data we need.
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    abstract public function renderSingleChild(Model $model);
-
-    /**
-     * Render a block of a detected recursion.
-     *
-     * If the recursion is an object, a click should jump to the original
-     * analysis data.
-     *
-     * @param Model $model
-     *   The model, which hosts all the data we need.
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    abstract public function renderRecursion(Model $model);
-
-    /**
-     * Renders the kreXX header.
-     *
-     * @param string $doctype
-     *   The doctype from the configuration.
-     * @param string $headline
-     *   The headline, what is actually analysed.
-     * @param string $cssJs
-     *   The CSS and JS in a string.
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    abstract public function renderHeader($doctype, $headline, $cssJs);
-
-    /**
-     * Renders the kreXX footer.
-     *
-     * @param array $caller
-     *   The caller of kreXX.
-     * @param string $configOutput
-     *   The pregenerated configuration markup.
-     * @param boolean $configOnly
-     *   Info if we are only displaying the configuration
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    abstract public function renderFooter($caller, $configOutput, $configOnly = false);
-
-
-
-    /**
-     * Simply outputs the css and js stuff.
-     *
-     * @param string $css
-     *   The CSS, rendered into the template.
-     * @param string $js
-     *   The JS, rendered into the template.
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    abstract public function renderCssJs(&$css, &$js);
-
-    /**
-     * Renders a expandable child with a callback in the middle.
-     *
-     * @param Model $model
-     *   The model, which hosts all the data we need.
-     * @param bool $isExpanded
-     *   Is this one expanded from the beginning?
-     *   TRUE when we render the settings menu only.
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    abstract public function renderExpandableChild(Model $model, $isExpanded = false);
-
-    /**
-     * Renders a simple editable child node.
-     *
-     * @param Model $model
-     *   The model, which hosts all the data we need.
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    abstract public function renderSingleEditableChild(Model $model);
-
-    /**
-     * Renders a simple button.
-     *
-     * @param Model $model
-     *   The model, which hosts all the data we need.
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    abstract public function renderButton(Model $model);
-
-    /**
-     * Renders the second part of the fatal error handler.
-     *
-     * @param string $type
-     *   The type of the error (should always be fatal).
-     * @param string $errstr
-     *   The string from the error.
-     * @param string $errfile
-     *   The file where the error occurred.
-     * @param int $errline
-     *   The line number where the error occurred.
-     *
-     * @return string
-     *   The template file, with all markers replaced.
-     */
-    abstract public function renderFatalMain($type, $errstr, $errfile, $errline);
-
-    /**
-     * Renders the header part of the fatal error handler.
-     *
-     * @param string $cssJs
-     *   The css and js from the template.
-     * @param string $doctype
-     *   The configured doctype.
-     *
-     * @return string
-     *   The template file, with all markers replaced.
-     */
-    abstract public function renderFatalHeader($cssJs, $doctype);
-
-    /**
-     * Renders all internal messages.
-     *
-     * @param array $messages
-     *   The current messages.
-     *
-     * @return string
-     *   The generates html output
-     */
-    abstract public function renderMessages(array $messages);
-
-    /**
-     * Renders the line of the sourcecode, from where the backtrace is coming.
-     *
-     * @param string $className
-     *   The class name where the sourcecode is from.
-     * @param string $lineNo
-     *   The kine number from the file.
-     * @param string $sourceCode
-     *   Part of the sourcecode, where the backtrace is coming from.
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    abstract public function renderBacktraceSourceLine($className, $lineNo, $sourceCode);
-
-    /**
-     * Renders the hr.
-     *
-     * @return string
-     *   The generated markup from the template file.
-     */
-    abstract public function renderSingeChildHr();
 }

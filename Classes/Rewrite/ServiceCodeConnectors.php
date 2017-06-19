@@ -41,57 +41,27 @@ class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
 {
 
     /**
+     * Diffeerent connectors for fluid.
+     *
+     * {@inheritdoc}
+     */
+    protected $connctorArray = array(
+        self::NOTHING => array('', ''),
+        self::METHOD => array('.', '(@param@)'),
+        self::STATIC_METHOD => array('.', '(@param@)'),
+        self::NORMAL_ARRAY => array('.', ''),
+        self::ASSOCIATIVE_ARRAY => array('.', ''),
+        self::CONSTANT => array('.', ''),
+        self::NORMAL_PROPERTY => array('.', ''),
+        self::STATIC_PROPERTY => array('.', ''),
+        // We do not support 'special' chars in function names.
+        self::SPECIAL_CHARS_PROP => array('.', ''),
+    );
+
+    /**
      * {@inheritdoc}
      */
     protected $language = 'fluid';
-
-    /**
-     * Everything is an array. Return the fluid point.
-     *
-     * @return string
-     *  The fluid connector.
-     */
-    public function getConnector1()
-    {
-        switch ($this->type) {
-            case '':
-                return '';
-                break;
-
-            case $this::NORMAL_ARRAY:
-                return '.';
-                break;
-
-            case $this::ASSOCIATIVE_ARRAY:
-                return '.';
-                break;
-
-            case $this::NORMAL_PROPERTY:
-                return '.';
-                break;
-
-            case $this::METHOD:
-                return '.';
-                break;
-
-            case $this::STATIC_METHOD:
-                return '.';
-                break;
-
-            case $this::STATIC_PROPERTY:
-                return '.';
-                break;
-
-            case $this::CONSTANT:
-                return '.';
-                break;
-
-            default:
-                // Unknown type, return empty string.
-                return '';
-                break;
-        }
-    }
 
     /**
      * Do nothing. There is no secornd connector in fluid.
@@ -109,26 +79,6 @@ class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
             return '';
         }
 
-        $length = strlen($this->params);
-        if ($cap > 0 && $length > $cap) {
-            $params = substr($this->params, 0, $cap) . ' . . . ';
-        } else {
-            $params = $this->params;
-        }
-
-        switch ($this->type) {
-            case $this::METHOD:
-                return '(' . $params . ')';
-                break;
-
-            case $this::STATIC_METHOD:
-                return '(' . $params . ')';
-                break;
-
-            default:
-                // Unknown type, return empty string.
-                return '';
-                break;
-        }
+        return parent::getConnector2($cap);
     }
 }

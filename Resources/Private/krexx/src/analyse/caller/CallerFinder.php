@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Analyse\Caller;
 
+use Brainworxx\Krexx\Service\Factory\Pool;
+
 /**
  * Finder for the script part that has actually called kreXX.
  * Used for the PHP part.
@@ -44,11 +46,30 @@ class CallerFinder extends AbstractCaller
 {
 
     /**
+     * Injects the pool, sets the callPattern to search for.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(Pool $pool)
+    {
+         parent::__construct($pool);
+
+        // Setting the search pattern.
+        $this->callPattern = array(
+            'krexx',
+            'krexx::open',
+            'krexx::' . $this->pool->config->getDevHandler(),
+            'Krexx::open',
+            'Krexx::' . $this->pool->config->getDevHandler()
+        );
+        $this->pattern = 'krexx';
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function findCaller()
     {
-
         $backtrace = debug_backtrace();
         $pattern = strtolower($this->pattern);
 
@@ -110,19 +131,7 @@ class CallerFinder extends AbstractCaller
         if (count($possibleCommands) === 1) {
             // Now that we have our actual call, we must remove the krexx-part
             // from it.
-            $possibleFunctionnames = array(
-                'krexx',
-                'krexx::open',
-                'krexx::' . $this->pool->config->getDevHandler(),
-                'Krexx::open',
-                'Krexx::' . $this->pool->config->getDevHandler()
-            );
-
-            // Adding the search pattern to the possible debug function names.
-            $possibleFunctionnames[] = $this->pattern;
-            $possibleFunctionnames[] = strtolower($this->pattern);
-
-            foreach ($possibleFunctionnames as $funcname) {
+            foreach ($this->callPattern as $funcname) {
                 // This little baby tries to resolve everything inside the
                 // brackets of the kreXX call.
                 preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', reset($possibleCommands), $name);

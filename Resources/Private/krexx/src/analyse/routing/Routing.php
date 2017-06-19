@@ -96,22 +96,13 @@ class Routing extends AbstractRouting
             return $this->processNull->process($model);
         }
 
+        // Handle the complex types.
         if (is_array($data) || is_object($data)) {
-            // Check nesting level
+            // Up one nesting Level.
             $this->pool->emergencyHandler->upOneNestingLevel();
-
-            if ($this->pool->emergencyHandler->checkNesting()) {
-                $this->pool->emergencyHandler->downOneNestingLevel();
-                $text = $this->pool->messages->getHelp('maximumLevelReached2');
-                $model->setData($text)
-                    ->setNormal($this->pool->messages->getHelp('maximumLevelReached1'))
-                    ->setType(gettype($data))
-                    ->hasExtras();
-                // Render it directly.
-                return $this->pool->render->renderSingleChild($model);
-            }
             // Handle the non simple types like array and object.
             $result = $this->handleNoneSimpleTypes($data, $model);
+            // We are done here, down one nesting level.
             $this->pool->emergencyHandler->downOneNestingLevel();
             return $result;
         }
@@ -148,6 +139,18 @@ class Routing extends AbstractRouting
      */
     protected function handleNoneSimpleTypes($data, Model $model)
     {
+        // Check the nesting level.
+        if ($this->pool->emergencyHandler->checkNesting()) {
+            $this->pool->emergencyHandler->downOneNestingLevel();
+            $text = $this->pool->messages->getHelp('maximumLevelReached2');
+            $model->setData($text)
+                ->setNormal($this->pool->messages->getHelp('maximumLevelReached1'))
+                ->setType(gettype($data))
+                ->hasExtras();
+            // Render it directly.
+            return $this->pool->render->renderSingleChild($model);
+        }
+
         if ($this->pool->recursionHandler->isInHive($data)) {
             // Render recursion.
             if (is_object($data)) {
