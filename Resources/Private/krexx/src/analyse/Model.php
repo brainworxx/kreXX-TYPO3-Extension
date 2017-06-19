@@ -132,9 +132,9 @@ class Model
     /**
      * Are we dealing with multiline code generation?
      *
-     * @var string
+     * @var integer
      */
-    protected $multiLineCodeGen = '';
+    protected $multiLineCodeGen = 0;
 
     /**
      * Defines if the content of the variable qualifies as a callback.

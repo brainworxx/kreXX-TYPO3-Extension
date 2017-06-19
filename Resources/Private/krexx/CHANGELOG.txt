@@ -50,6 +50,8 @@
   fallback settings.
 - Bugfix: The traversable analysis may forget to lower the nesting
   level again.
+- Bufix: The file path filter now uses realpath() to resolve
+  possible symlinks.
 
 2.2.0
 - Added more search pattern and source code parsing to the

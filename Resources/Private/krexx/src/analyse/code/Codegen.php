@@ -45,13 +45,9 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 class Codegen
 {
     /**
-     * Some constants for internal use.
+     * Constant identifier for the array multiline code generation.
      */
-    const ITERATOR_TO_ARRAY = 'iterator_to_array';
-    const STOP = 'stop';
-    const PROPERTY = 'property';
-    const METHOD = 'method';
-    const CONCATENATION = 'concatenation';
+    const ITERATOR_TO_ARRAY = 1;
 
 
     /**

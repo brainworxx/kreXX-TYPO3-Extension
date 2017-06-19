@@ -72,7 +72,7 @@ class File
     {
         $this->pool = $pool;
         $server = $pool->getServer();
-        $this->docRoot = rtrim($server['DOCUMENT_ROOT'], '/');
+        $this->docRoot = rtrim(realpath($server['DOCUMENT_ROOT']), '/');
         if (empty($this->docRoot)) {
             $this->docRoot = false;
         }
@@ -286,6 +286,8 @@ class File
      */
     public function filterFilePath($path)
     {
+        $path = realpath($path);
+
         // There may or may not be a trailing '/'.
         // We remove it, just in case, to make sure that we remove the doc root
         // completely from the $path variable.

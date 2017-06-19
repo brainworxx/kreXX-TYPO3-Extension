@@ -40,7 +40,10 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
 {
-    const VHS_CALL_VIEWHELPER = 'vhs_call_viewhelper';
+    /**
+     * Constant identifier for the multiline code generation for fluid
+     */
+    const VHS_CALL_VIEWHELPER = 2;
 
 
     /**
