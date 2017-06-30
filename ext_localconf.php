@@ -146,9 +146,6 @@ $boot = function ($_EXTKEY) {
             }
         }
     }
-    // Register it!
-    $GLOBALS['kreXXoverwrites']['directories']['config'] = PATH_site . 'typo3temp/tx_includekrexx/config/Krexx.ini';
-
 
     // We load the kreXX library.
     // The class__exists triggers the composer autoloading, if available.

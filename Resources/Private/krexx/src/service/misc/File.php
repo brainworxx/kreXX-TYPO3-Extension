@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Misc;
 
+use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -61,7 +62,7 @@ class File
      *
      * @var string|false
      */
-    protected $docroot;
+    protected $docRoot;
 
     /**
      * Injects the pool.
@@ -72,7 +73,7 @@ class File
     {
         $this->pool = $pool;
         $server = $pool->getServer();
-        $this->docRoot = rtrim(realpath($server['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR);
+        $this->docRoot = trim(realpath($server['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR);
         if (empty($this->docRoot)) {
             $this->docRoot = false;
         }
@@ -286,17 +287,20 @@ class File
      */
     public function filterFilePath($path)
     {
-        $path = realpath($path);
-
-        // There may or may not be a trailing '/'.
-        // We remove it, just in case, to make sure that we remove the doc root
-        // completely from the $path variable.
-        if ($this->docRoot !== false && strpos($path, $this->docRoot) === 0) {
-            // Found it on position 0.
-            $path = '. . .' . DIRECTORY_SEPARATOR . substr($path, strlen($this->docRoot) + 1);
+        $realpath = realpath($path);
+        // File exist?
+        if ($realpath === false) {
+            $realpath = ltrim($path, DIRECTORY_SEPARATOR);
+        } else {
+            $realpath = ltrim($realpath, DIRECTORY_SEPARATOR);
         }
 
-        return $path;
+        if ($this->docRoot !== false && strpos($realpath, $this->docRoot) === 0) {
+            // Found it on position 0.
+            $realpath = '. . .' . DIRECTORY_SEPARATOR . substr($realpath, strlen($this->docRoot) + 1);
+        }
+
+        return $realpath;
     }
 
     /**

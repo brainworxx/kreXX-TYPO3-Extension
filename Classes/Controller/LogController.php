@@ -151,7 +151,7 @@ class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controlle
         } else {
             // Error message.
             $this->addMessage(
-                $this->LLL('log.notdeletable', array($file)),
+                $this->LLL('log.notdeletable', array($this->pool->fileService->filterFilePath($file))),
                 $this->LLL('log.fileerror'),
                 t3lib_FlashMessage::ERROR
             );

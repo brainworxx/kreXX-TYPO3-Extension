@@ -93,7 +93,7 @@ class Cookie
         // Do we have a value in the cookies?
         if (isset($this->settings[$name]) && $this->security->evaluateSetting($group, $name, $this->settings[$name])) {
             // We escape them, just in case.
-            return htmlspecialchars($this->settings);
+            return htmlspecialchars($this->settings[$name]);
         }
 
         // Still here?

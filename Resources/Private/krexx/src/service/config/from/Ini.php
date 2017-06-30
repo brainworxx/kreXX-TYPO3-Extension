@@ -117,8 +117,8 @@ class Ini extends Fallback
                 $editable = 'false';
             }
         } else {
-            $type = $filevalue[$parameterName]['type'];
-            $editable = $filevalue[$parameterName]['editable'];
+            $type = $filevalue['type'];
+            $editable = $filevalue['editable'];
         }
 
         if ($editable === 'true') {

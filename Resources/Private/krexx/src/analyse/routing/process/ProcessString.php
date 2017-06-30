@@ -56,14 +56,7 @@ class ProcessString extends AbstractProcess
     {
         $data = $model->getData();
 
-        // Extra ?
-        if (strlen($data) > 50) {
-            $cut = substr($this->pool->encodingService->encodeString($data), 0, 50) . '. . .';
-            $model->hasExtras();
-        } else {
-            $cut = $this->pool->encodingService->encodeString($data);
-        }
-
+        // Checking the encoding.
         $encoding = mb_detect_encoding($data);
         if ($encoding !== false) {
             // Normal encoding, nothing special here.
@@ -71,18 +64,19 @@ class ProcessString extends AbstractProcess
         } else {
             // Looks like we have a mixed encoded string.
             // We need to tell the dev!
-            $length = '~ ' . strlen($data);
+            $length = mb_strlen($data);
             $strlen = ' broken encoding ' . $length;
             $encoding = 'broken';
         }
 
-        $newData = $this->pool->encodingService->encodeString($data);
-
-        $model->setData($newData)
-            ->setNormal($cut)
-            ->setType('string ' . $strlen)
-            ->addToJson('encoding', $encoding)
-            ->addToJson('length', $length);
+        // Check, if we are handling large string, and if we need to use a
+        // preview (which we call "extra").
+        if ($length > 50) {
+            $cut = $this->pool->encodingService->encodeString(mb_substr($data, 0, 50)) . '. . .';
+            $model->hasExtras();
+        } else {
+            $cut = $this->pool->encodingService->encodeString($data);
+        }
 
         // Check if this is a possible callback.
         // We are not going to analyse this further, because modern systems
@@ -91,6 +85,14 @@ class ProcessString extends AbstractProcess
             $model->setIsCallback(true);
         }
 
-        return $this->pool->render->renderSingleChild($model);
+        $data = $this->pool->encodingService->encodeString($data);
+
+        return $this->pool->render->renderSingleChild(
+            $model->setData($data)
+                ->setNormal($cut)
+                ->setType('string ' . $strlen)
+                ->addToJson('encoding', $encoding)
+                ->addToJson('length', $length)
+        );
     }
 }
