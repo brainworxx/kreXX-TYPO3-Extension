@@ -137,10 +137,10 @@ class Objects extends AbstractCallback
             }
         } while (is_object($reflectionClass));
 
-        usort($refProps, array($this, 'reflectionSorting'));
         if (empty($refProps)) {
             return '';
         }
+        usort($refProps, array($this, 'reflectionSorting'));
 
         return $this->getReflectionPropertiesData(
             $refProps,
@@ -162,11 +162,10 @@ class Objects extends AbstractCallback
     protected function getProtectedProperties(\ReflectionClass $ref)
     {
         $refProps = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
-        usort($refProps, array($this, 'reflectionSorting'));
-
         if (empty($refProps)) {
             return '';
         }
+        usort($refProps, array($this, 'reflectionSorting'));
 
         return $this->getReflectionPropertiesData(
             $refProps,
@@ -516,9 +515,10 @@ class Objects extends AbstractCallback
 
         if (strpos(strtoupper($label), 'PUBLIC') === false) {
             // Protected or private properties.
-            $model->setName($label)
-                ->setType('class internals');
-            return $this->pool->render->renderExpandableChild($model);
+            return $this->pool->render->renderExpandableChild(
+                $model->setName($label)
+                    ->setType('class internals')
+            );
         }
 
         // Public properties.

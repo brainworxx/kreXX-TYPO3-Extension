@@ -118,8 +118,7 @@ class ThroughLargeArray extends AbstractCallback
                 $output .= $this->pool->routing->analysisHub($model->setData($value));
             }
         }
-        $output .= $this->pool->render->renderSingeChildHr();
 
-        return $output;
+        return $output . $this->pool->render->renderSingeChildHr();
     }
 }

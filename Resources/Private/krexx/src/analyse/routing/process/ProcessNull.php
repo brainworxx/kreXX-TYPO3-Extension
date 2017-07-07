@@ -56,10 +56,8 @@ class ProcessNull extends AbstractProcess
     public function process(Model $model)
     {
         $data = 'NULL';
-        $model->setData($data)
-            ->setNormal($data)
-            ->setType('null');
-
-        return $this->pool->render->renderSingleChild($model);
+        return $this->pool->render->renderSingleChild(
+            $model->setData($data)->setNormal($data)->setType('null')
+        );
     }
 }

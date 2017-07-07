@@ -58,12 +58,6 @@ class ProcessArray extends AbstractProcess
         $multiline = false;
         $count = count($model->getData());
 
-        // Dumping all Properties.
-        $model->setType('array')
-            ->setNormal($count . ' elements')
-            ->addParameter('data', $model->getData())
-            ->addParameter('multiline', $multiline);
-
         if ($count > $this->pool->config->arrayCountLimit) {
             // Budget array analysis.
             $model->injectCallback(
@@ -76,6 +70,12 @@ class ProcessArray extends AbstractProcess
             );
         }
 
-        return $this->pool->render->renderExpandableChild($model);
+        // Dumping all Properties.
+        return $this->pool->render->renderExpandableChild(
+            $model->setType('array')
+                ->setNormal($count . ' elements')
+                ->addParameter('data', $model->getData())
+                ->addParameter('multiline', $multiline)
+        );
     }
 }

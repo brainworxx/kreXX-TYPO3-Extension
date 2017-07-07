@@ -39,7 +39,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Config\Security;
 
 /**
- * Reads the configuration of the frontend editing.
+ * Reads the config from the ini file, as well as the fe editing config.
  *
  * @package Brainworxx\Krexx\Service\Config
  */

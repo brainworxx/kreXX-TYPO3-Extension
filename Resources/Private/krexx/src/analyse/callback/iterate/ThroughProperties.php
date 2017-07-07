@@ -171,7 +171,7 @@ class ThroughProperties extends AbstractCallback
         $value = $refProperty->getValue($this->parameters['orgObject']);
         if (is_null($value) && $refProperty->isDefault() && isset($this->defaultProperties[$propName])) {
             // We might want to look at the default value.
-            $value = $this->defaultProperties[$propName];
+            return $this->defaultProperties[$propName];
         }
 
         return $value;

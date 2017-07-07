@@ -86,7 +86,6 @@ class ProcessString extends AbstractProcess
         }
 
         $data = $this->pool->encodingService->encodeString($data);
-
         return $this->pool->render->renderSingleChild(
             $model->setData($data)
                 ->setNormal($cut)

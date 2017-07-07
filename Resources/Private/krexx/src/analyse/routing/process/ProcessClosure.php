@@ -91,19 +91,18 @@ class ProcessClosure extends AbstractProcess
                 ->codegenHandler
                 ->parameterToString($reflectionParameter);
         }
-
-        // Remove the ',' after the last char.
-        $paramList = trim($paramList, ', ');
-        $model->setType('closure')
-            ->setNormal('. . .')
-            ->setConnectorParameters($paramList)
-            ->setDomid($this->generateDomIdFromObject($model->getData()))
-            ->addParameter('data', $result)
-            ->injectCallback(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis')
-            );
-
-        return $this->pool->render->renderExpandableChild($model);
+        
+        return $this->pool->render->renderExpandableChild(
+            $model->setType('closure')
+                ->setNormal('. . .')
+                // Remove the ',' after the last char.
+                ->setConnectorParameters(trim($paramList, ', '))
+                ->setDomid($this->generateDomIdFromObject($model->getData()))
+                ->addParameter('data', $result)
+                ->injectCallback(
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis')
+                )
+        );
 
     }
 }

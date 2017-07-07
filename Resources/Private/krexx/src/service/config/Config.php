@@ -81,7 +81,11 @@ class Config extends Fallback
      */
     public $cookieConfig;
 
-
+    /**
+     * Here we store the paths to our files and directories.
+     *
+     * @var array
+     */
     protected $directories = array();
 
     /**
@@ -142,7 +146,8 @@ class Config extends Fallback
         if (empty($globals['kreXXoverwrites']['directories']['config'])) {
             $this->directories['config'] = $this->pool->krexxDir . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini';
         } else {
-            $this->directories['config'] = $globals['kreXXoverwrites']['directories']['config'] . DIRECTORY_SEPARATOR . 'Krexx.ini';
+            $this->directories['config'] = $globals['kreXXoverwrites']['directories']['config'] .
+                DIRECTORY_SEPARATOR . 'Krexx.ini';
         }
     }
 
@@ -258,8 +263,6 @@ class Config extends Fallback
         $this->settings[$name] = $model;
         return;
     }
-
-
 
     /**
      * Check if the current request is an AJAX request.
