@@ -107,7 +107,7 @@ class Fallback
      *
      * @var array
      */
-    protected $feConfigFallback = array(
+    public $feConfigFallback = array(
         'analyseProtectedMethods' => array(
             'type' => 'Select',
             'editable' => 'true',
