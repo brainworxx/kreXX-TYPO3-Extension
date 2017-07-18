@@ -13,13 +13,16 @@ Changelog
 =============================================================
 
 2.2.1
+    - [Feature] Added a Fluid specific caller finder for the fluid debugger
     - [Feature] Added a configuration for the backtrace, to limit the analysed steps.
     - [Feature] Added property comments to the analysis
     - [Feature] Added property declaration place to the analysis.
+    - [Feature] Added better unicode support for the HTML output.
     - [Change] Several performance tweaks for runtime optimization.
     - [Change] Fallback setting runtime => level set to 5.
     - [Change] Fallback setting runtime => maxCall set to 10.
     - [Change] Refactored the half-assed messaging implementation.
+    - [Change] The cookie editor is now much better readable.
     - [Bugfix] Several tweaks to get a smaller HTML footprint.
     - [Bugfix] Prevent the debug methods from creating new analysis calls, resulting in an infinite loop.
     - [Bugfix] Better cleanup of HTML fragments left open from the hosting CMS.
@@ -40,6 +43,17 @@ Changelog
     - [Bugfix] No more getter analysis for internal php classes.
     - [Bugfix] The registry now can really tell if a value was set, or not.
     - [Bugfix] The short text of an expandable child is now searchable.
+    - [Bugfix] Use the filepath filter for the location of the ini file.
+    - [Bugfix] Removed a warning in the filterFilePath, in case kreXX was called via CLI.
+    - [Bugfix] Proper message output in case of a shell call.
+    - [Bugfix] Proper handling of dynamic declared class properties with PHP forbidden chars.
+    - [Bugfix] The sorting of the configuration now stay the same as the fallback settings.
+    - [Bugfix] The traversable analysis may forget to lower the nesting level again.
+    - [Bugfix] The file path filter now uses realpath() to resolve possible symlinks.
+    - [Bugfix] Fixed a warning in PHP 5.3 when trying to get a object hash from an array.
+    - [Bugfix] Fixed a autoloading triggering event, when processing a string.
+    - [Bugfix] Fixed an issue with the path filter and the directory separator string on windows systems.
+    - [Bugfix] Fixed an issue, where the preview of the string was first escaped, and then truncated.
 
 2.2.0
     - [Feature] Added a fluid debugger viewhelper.
