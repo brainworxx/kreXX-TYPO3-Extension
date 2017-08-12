@@ -253,27 +253,35 @@
         /** @type {string|*} */
         var result;
 
-        if (typeof el !== 'undefined') {
-            result = el.getAttribute('data-' + what);
+        if (typeof el === 'undefined') {
+            // No el, no data!
+            return '';
+        }
 
-            if (result !== null) {
-                if (mustEscape === false) {
-                    return result;
-                } else {
-                    return result.replace(/&/g, "&amp;")
-                        .replace(/</g, "&lt;")
-                        .replace(/>/g, "&gt;")
-                        .replace(/"/g, "&quot;")
-                        .replace(/'/g, "&#039;")
-                        // <small> is allowed. Parameters are better readable
-                        // this way.
-                        .replace('&lt;small&gt;', '<small>')
-                        .replace('&lt;/small&gt;', '</small>');
-                }
+        if (typeof el.getAttribute !== 'function') {
+            // No attribute, no data!
+            return '';
+        }
+
+        result = el.getAttribute('data-' + what);
+
+        if (result !== null) {
+            if (mustEscape === false) {
+                return result;
+            } else {
+                return result.replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;")
+                    // <small> is allowed. Parameters are better readable
+                    // this way.
+                    .replace('&lt;small&gt;', '<small>')
+                    .replace('&lt;/small&gt;', '</small>');
             }
         }
 
-        // Stille here?!? No data fount, hence an empty string.
+        // Still here?!? No data fount, hence an empty string.
         return '';
     };
 
@@ -651,6 +659,39 @@
             object3[attribute] = object2[attribute];
         }
         return object3;
+    };
+
+    /**
+     * Move the draXX element into the viewport. Should be called onDocumentReady.
+     *
+     * @param {string} selector
+     */
+    kdt.moveToViewport = function (selector) {
+        // Meh, we need to use the timeout to make this work on MS-Edge.
+        // Edge remembers the last scrolling position *after* the onDocumentReady
+        // event. 500 ms should be enough time to do this.
+        setTimeout(function(){
+            // Get the current viewport top value.
+            /** @type {number} */
+            var viewportTop = document.documentElement.scrollTop;
+            // Fallback for Chrome.
+            if (viewportTop === 0 ) {
+                viewportTop = document.body.scrollTop;
+            }
+
+            // Get the elements we need to move
+            /** @type {NodeList} */
+            var elements = document.querySelectorAll(selector);
+            /** @tpyoe {number} */
+            var oldOffset = 0;
+
+            for (var i = 0; i < elements.length; i++) {
+                // Get it's old offset.
+                oldOffset = parseInt(elements[i].style.top.slice(0, -2), 10);
+                // Set the new offset.
+                elements[i].style.top = (oldOffset + viewportTop) + 'px';
+            }
+        }, 500);
     };
 
     window.kreXXdomTools = kdt;

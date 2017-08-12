@@ -774,6 +774,18 @@ div.kwrapper {
     border-radius: 8px;
 }
 
+.kwrapper .kchild .kel .kodsp ::selection,
+.kfatalwrapper-outer .kchild .kel .kodsp ::selection {
+    /* WebKit/Blink Browsers */
+    background: #FED300 !important;
+}
+
+.kwrapper .kchild .kel .kodsp ::-moz-selection,
+.kfatalwrapper-outer .kchild .kel .kodsp ::-moz-selection {
+    /* Gecko Browsers */
+    background: #FED300 !important;
+}
+
 .kwrapper .kversion .kel {
     display: inline;
 }
@@ -798,6 +810,7 @@ div.kwrapper {
     background-color: #ffcd00 !important;
     color: #303030 !important;
 }
+
 .kwrapper .ksearch-found-highlight .kpre,
 .kwrapper .highlight-jumpto .kpre {
     color: #000000 !important;
@@ -818,9 +831,11 @@ div.kwrapper {
     width: 50%;
     display: inline-block;
 }
+
 .kwrapper .ksearch .koptionleft input {
     width: 15px;
 }
+
 .kwrapper .ksearch .ksearchhr {
     background-color: #303030;
     height: 1px;
@@ -835,7 +850,7 @@ div.kwrapper {
 }
 
 .kwrapper .ksearch .koptions:before {
-    content: '\26ED';
+    content: '\263C';
     font-weight: bolder;
 }
 
@@ -844,6 +859,7 @@ div.kwrapper {
     padding: 2px 5px;
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
+
 .kwrapper .khelp .khelprow .khelptitle {
     min-width: 50px;
 }

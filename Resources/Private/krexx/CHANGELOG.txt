@@ -4,6 +4,7 @@
 - Added property comments to the analysis
 - Added property declaration place to the analysis.
 - Added better unicode support for the HTML output.
+- Added better support for debugging onepagers.
 - Change: Several performance tweaks for runtime optimization.
 - Change: Fallback setting runtime => level set to 5.
 - Change: Fallback setting runtime => maxCall set to 10.
@@ -60,6 +61,13 @@
   separator string on windows systems.
 - Bugfix: Fixed an issue, where the preview of the string was
   first escaped, and then truncated.
+- Bugfix: The string analysis is now respection line breaks in
+  short string.
+- Bugfix: Make sure that the marking of text will be displayed in
+  the browser.
+- Bugfix: Prevent a search with no search text at all.
+- Bugfix: The cache handling of searches is now working correctly.
+- Bugfix: Fixed the display of the search-options-symbol on Macs.
 
 2.2.0
 - Added more search pattern and source code parsing to the

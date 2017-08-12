@@ -71,7 +71,9 @@ class ProcessString extends AbstractProcess
 
         // Check, if we are handling large string, and if we need to use a
         // preview (which we call "extra").
-        if ($length > 50) {
+        // We also need to check for linebreaks, because the preview can not
+        // display those.
+        if ($length > 50 || strstr($data, PHP_EOL) !== false) {
             $cut = $this->pool->encodingService->encodeString(mb_substr($data, 0, 50)) . '. . .';
             $model->hasExtras();
         } else {

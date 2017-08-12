@@ -154,7 +154,7 @@ class Routing extends AbstractRouting
         if ($this->pool->recursionHandler->isInHive($data)) {
             // Render recursion.
             if (is_object($data)) {
-                $type = get_class($data);
+                $type = '\\' . get_class($data);
                 $domId = $this->generateDomIdFromObject($data);
             } else {
                 // Must be the globals array.

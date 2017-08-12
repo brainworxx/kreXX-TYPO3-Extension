@@ -480,6 +480,14 @@ $fontLight: lighter 10px tahoma, verdana;
         padding: 5px;
         margin: 5px;
         float: right;
+        ::selection {
+          /* WebKit/Blink Browsers */
+          background: $yellowBwx !important;
+        }
+        ::-moz-selection {
+          /* Gecko Browsers */
+          background: $yellowBwx !important;
+        }
       }
 
     }
@@ -802,7 +810,7 @@ $fontLight: lighter 10px tahoma, verdana;
         margin: 0 5px;
         cursor: pointer;
         &:before {
-          content: '\26ED';
+          content: '\263C';
           font-weight: bolder;
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
         }
