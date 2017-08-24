@@ -65,7 +65,7 @@ if (TYPO3_MODE === 'BE') {
         }
 
         // The old way.
-        if (class_exists('Tx_Extbase_Utility_Extension') && !$registered) {
+        if (!$registered && class_exists('Tx_Extbase_Utility_Extension')) {
             Tx_Extbase_Utility_Extension::registerModule(// Main area.
                 $_EXTKEY,
                 'tools',
