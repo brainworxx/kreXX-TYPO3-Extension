@@ -6,9 +6,9 @@
   "license": ["LGPL-2.1"],
   "keywords": [
     "debug",
-    "debugging",
-    "object",
-    "analysis"
+    "vardump",
+    "developer",
+    "log"
   ],
   "authors": [
     {
@@ -24,5 +24,5 @@
   "support": {
     "issues": "https://github.com/brainworxx/kreXX-TYPO3-Extension/issues"
   },
-  "version": "2.2.1"
+  "version": "2.3.0"
 }
