@@ -144,6 +144,8 @@ $boot = function ($_EXTKEY) {
                 t3lib_div::writeFileToTypo3tempDir($tempPath . '/' . '.htaccess', $htAccess);
                 t3lib_div::writeFileToTypo3tempDir($tempPath . '/' . 'index.html', $indexHtml);
             }
+            // Register it!
+            $GLOBALS['kreXXoverwrites']['directories'][$key] = $tempPath;
         }
     }
 
