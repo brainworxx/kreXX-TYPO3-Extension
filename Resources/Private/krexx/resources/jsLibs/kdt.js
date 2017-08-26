@@ -682,7 +682,7 @@
             // Get the elements we need to move
             /** @type {NodeList} */
             var elements = document.querySelectorAll(selector);
-            /** @tpyoe {number} */
+            /** @type {number} */
             var oldOffset = 0;
 
             for (var i = 0; i < elements.length; i++) {

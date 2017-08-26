@@ -68,6 +68,10 @@
 - Bugfix: Prevent a search with no search text at all.
 - Bugfix: The cache handling of searches is now working correctly.
 - Bugfix: Fixed the display of the search-options-symbol on Macs.
+- Bugfix: Fixed a possible JS error in the search, in case we are
+  searching through no payload.
+- Bugfix: Fixed the rendering color of the connector 2 in the Hans
+  skin.
 
 2.2.0
 - Added more search pattern and source code parsing to the

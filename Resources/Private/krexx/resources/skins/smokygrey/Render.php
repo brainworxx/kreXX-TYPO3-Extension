@@ -50,15 +50,15 @@ class Render extends \Brainworxx\Krexx\View\Render
     public function renderSingleChild(Model $model)
     {
         // Replace the source button and set the json.
-        $json = $model->getJson();
-        $help = $this->pool->messages->getHelp($model->getHelpid());
-        if (!empty($help)) {
-            $json['Help'] = $help;
-        }
-
         return str_replace(
-            array('{language}', '{addjson}'),
-            array($model->getConnectorLanguage(), $this->generateDataAttribute('addjson', $this->encodeJson($json))),
+            array(
+                '{language}',
+                '{addjson}'
+            ),
+            array(
+                $model->getConnectorLanguage(),
+                $this->generateDataAttribute('addjson', $this->encodeJson($model->getJson()))
+            ),
             parent::renderSingleChild($model)
         );
     }
@@ -98,12 +98,6 @@ class Render extends \Brainworxx\Krexx\View\Render
             );
         }
 
-        $json = $model->getJson();
-        $help = $this->pool->messages->getHelp($model->getHelpid());
-        if (!empty($help)) {
-            $json['Help'] = $help;
-        }
-
         return str_replace(
             array(
                 '{name}',
@@ -127,7 +121,7 @@ class Render extends \Brainworxx\Krexx\View\Render
                 $this->renderConnector($model->getConnector2(128)),
                 $this->generateDataAttribute('source', $gencode),
                 '',
-                $this->generateDataAttribute('addjson', $this->encodeJson($json)),
+                $this->generateDataAttribute('addjson', $this->encodeJson($model->getJson())),
                 $this->pool->chunks->chunkMe($this->renderNest($model, false)),
                 $sourcebutton,
                 $this->generateDataAttribute('codewrapper1', $this->pool->codegenHandler->generateWrapper1()),
@@ -144,12 +138,11 @@ class Render extends \Brainworxx\Krexx\View\Render
     {
         $template = parent::renderRecursion($model);
         // We add our json to the output.
-        $json = $model->getJson();
-        $help = $this->pool->messages->getHelp($model->getHelpid());
-        if (!empty($help)) {
-            $json['Help'] = $help;
-        }
-        return str_replace('{addjson}', $this->generateDataAttribute('addjson', $this->encodeJson($json)), $template);
+        return str_replace(
+            '{addjson}',
+            $this->generateDataAttribute('addjson', $this->encodeJson($model->getJson())),
+            $template
+        );
     }
 
     /**
@@ -157,14 +150,10 @@ class Render extends \Brainworxx\Krexx\View\Render
      */
     public function renderSingleEditableChild(Model $model)
     {
-
         // Prepare the json. Not much do display for form elements.
-        $json = $this->encodeJson(array(
-            'Help' => $this->pool->messages->getHelp($model->getHelpid()),
-        ));
         return str_replace(
             '{addjson}',
-            $this->generateDataAttribute('addjson', $json),
+            $this->generateDataAttribute('addjson', $this->encodeJson($model->getJson())),
             parent::renderSingleEditableChild($model)
         );
     }
@@ -175,13 +164,9 @@ class Render extends \Brainworxx\Krexx\View\Render
     public function renderButton(Model $model)
     {
         // Prepare the json. Not much do display for form elements.
-        $json = $this->encodeJson(array(
-            'Help' => $this->pool->messages->getHelp($model->getHelpid()),
-        ));
-
         return str_replace(
             array('{addjson}', '{class}'),
-            array($this->generateDataAttribute('addjson', $json), $model->getName()),
+            array($this->generateDataAttribute('addjson', $this->encodeJson($model->getJson())), $model->getName()),
             parent::renderButton($model)
         );
     }

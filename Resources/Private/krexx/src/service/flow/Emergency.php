@@ -174,7 +174,7 @@ class Emergency
             return false;
         }
 
-        if (self::$allIsOk === false) {
+        if (static::$allIsOk === false) {
             // This has failed before!
             // No need to check again!
             return true;
@@ -186,7 +186,7 @@ class Emergency
             $this->pool->messages->addMessage('emergencyTimer');
             \Krexx::editSettings();
             \Krexx::disable();
-            self::$allIsOk = false;
+            static::$allIsOk = false;
             return true;
         }
 
@@ -201,7 +201,7 @@ class Emergency
                 // Show settings to give the dev to repair the situation.
                 \Krexx::editSettings();
                 \Krexx::disable();
-                self::$allIsOk = false;
+                static::$allIsOk = false;
                 return true;
             }
         }

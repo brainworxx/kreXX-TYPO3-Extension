@@ -137,7 +137,6 @@ class Recursion
                 return true;
             }
             $this->globalsWereRendered = true;
-            return false;
         }
 
         // Should be a normal array. We do not track these, because we can not

@@ -245,7 +245,7 @@ class File
         }
         // New file. We tell the caching, that we have read access here.
         file_put_contents($path, $string, FILE_APPEND);
-        self::$isReadableCache[$path] = true;
+        static::$isReadableCache[$path] = true;
 
     }
 
@@ -315,11 +315,11 @@ class File
     protected function fileIsReadable($filePath)
     {
         // Return the cache, if we have any.
-        if (isset(self::$isReadableCache[$filePath])) {
-            return self::$isReadableCache[$filePath];
+        if (isset(static::$isReadableCache[$filePath])) {
+            return static::$isReadableCache[$filePath];
         }
 
         // Set the cache and return it.
-        return self::$isReadableCache[$filePath] = is_readable($filePath) && is_file($filePath);
+        return static::$isReadableCache[$filePath] = is_readable($filePath) && is_file($filePath);
     }
 }

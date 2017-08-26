@@ -223,7 +223,7 @@ class Render extends AbstractRender
                 $model->getNormal(),
                 $this->renderHelp($model),
                 $this->renderConnector($model->getConnector1()),
-                $model->getConnector2(),
+                $this->renderConnector($model->getConnector2()),
                 $this->generateDataAttribute('codewrapper1', $this->pool->codegenHandler->generateWrapper1()),
                 $this->generateDataAttribute('codewrapper2', $this->pool->codegenHandler->generateWrapper2()),
             ),

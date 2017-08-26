@@ -206,7 +206,7 @@ class Connectors
     public function getConnector2($cap)
     {
         // Methods always have their parameters.
-        if ($this->type === self::METHOD || $this->type === self::STATIC_METHOD) {
+        if ($this->type === static::METHOD || $this->type === static::STATIC_METHOD) {
             if (!empty($this->params)) {
                 // Copy the parameters, we will need the original ones later.
                 // This one is only for the quick preview.

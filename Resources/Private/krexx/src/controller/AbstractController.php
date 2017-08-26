@@ -161,12 +161,12 @@ abstract class AbstractController
     protected function outputHeader($headline)
     {
         // Do we do an output as file?
-        if (self::$headerSend) {
+        if (static::$headerSend) {
             return $this->pool->render->renderHeader('', $headline, '');
         }
 
         // Send doctype and css/js only once.
-        self::$headerSend = true;
+        static::$headerSend = true;
         return $this->pool->render->renderHeader('<!DOCTYPE html>', $headline, $this->outputCssAndJs());
     }
 
@@ -395,6 +395,6 @@ abstract class AbstractController
     {
         echo '<pre>';
         var_dump($data);
-        echo('</pre>');
+        echo '</pre>';
     }
 }

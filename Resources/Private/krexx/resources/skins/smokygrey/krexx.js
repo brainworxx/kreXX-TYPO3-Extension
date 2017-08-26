@@ -508,7 +508,11 @@
             krexx.performSearch.results[instance][searchtext]['pointer'] = [];
 
             // Poll out payload for elements to search
-            var list = payload.querySelectorAll(selector.join(', '));
+            var list = [];
+            if (selector.length > 0) {
+                list = payload.querySelectorAll(selector.join(', '));
+            }
+            
             var textContent = '';
             for (var i = 0; i < list.length; ++i) {
                 // Does it contain our search string?

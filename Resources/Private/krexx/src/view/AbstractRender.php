@@ -106,32 +106,26 @@ abstract class AbstractRender implements RenderInterface
      */
     protected function renderHelp(Model $model)
     {
-        $helpId = $model->getHelpid();
         $data = $model->getJson();
-        $helpContent = '';
 
         // Test if we have anything to display at all.
-        if (empty($helpId) && empty($data)) {
+        if (empty($data)) {
             return '';
         }
 
-         // Add the normal help info
+        // We have at least something to display here.
         $helpRow = $this->getTemplateFileContent('helprow');
-        if (!empty($helpId)) {
-            $helpContent = str_replace(
-                array('{helptitle}', '{helptext}'),
-                array('Help', $this->pool->messages->getHelp($helpId)),
-                $helpRow
-            );
-        }
+        $helpContent = '';
 
-        // Add the stuff from the json here.
-        foreach ($data as $title => $text) {
-            $helpContent .= str_replace(
-                array('{helptitle}', '{helptext}'),
-                array($title, $text),
-                $helpRow
-            );
+        // Add the stuff from the json after the help text, if any.
+        if (!empty($data)) {
+            foreach ($data as $title => $text) {
+                $helpContent .= str_replace(
+                    array('{helptitle}', '{helptext}'),
+                    array($title, $text),
+                    $helpRow
+                );
+            }
         }
 
         // Add it into the wrapper.

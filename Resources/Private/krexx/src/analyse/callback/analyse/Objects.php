@@ -98,11 +98,8 @@ class Objects extends AbstractCallback
         }
 
         // Dumping all configured debug functions.
-        $output .= $this->pollAllConfiguredDebugMethods($data);
-
         // Adding a HR for a better readability.
-        $output .= $this->pool->render->renderSingeChildHr();
-        return $output;
+        return $output . $this->pollAllConfiguredDebugMethods($data) . $this->pool->render->renderSingeChildHr();
     }
 
     /**
@@ -193,11 +190,13 @@ class Objects extends AbstractCallback
 
         // Adding undeclared public properties to the dump.
         // Those are properties which are not visible with
-        // $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
+        // ReflectionProperty::IS_PUBLIC
         // but are in get_object_vars();
+        //
         // 1. Make a list of all properties
         // 2. Remove those that are listed in
-        // $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
+        // ReflectionProperty::IS_PUBLIC
+        //
         // What is left are those special properties that were dynamically
         // set during runtime, but were not declared in the class.
         foreach ($refProps as $refProp) {
@@ -377,24 +376,6 @@ class Objects extends AbstractCallback
      */
     protected function getTraversableData(\Traversable $data, $name)
     {
-        // Special Array Access here, resulting in multiline source generation.
-        // We need to generate something like:
-        // $kresult = iterator_to_array($data);
-        // $kresult = $kresult[5];
-        // So we tell the callback to to that.
-        $multiline = true;
-
-        // Normal ArrayAccess, direct access to the array. Nothing special
-        if (is_a($data, 'ArrayAccess')) {
-            $multiline = false;
-        }
-
-        // SplObject pool use the object as keys, so we need some
-        // multiline stuff!
-        if (is_a($data, 'SplObjectStorage')) {
-            $multiline = true;
-        }
-
         // Add a try to prevent the hosting CMS from doing something stupid.
         try {
             // We need to deactivate the current error handling to
@@ -422,6 +403,21 @@ class Objects extends AbstractCallback
                 // nesting level again.
                 $this->pool->emergencyHandler->downOneNestingLevel();
                 return '';
+            }
+
+            // Special Array Access here, resulting in modecomplicated source
+            // generation. So we tell the callback to to that.
+            $multiline = true;
+
+            // Normal ArrayAccess, direct access to the array. Nothing special
+            if (is_a($data, 'ArrayAccess')) {
+                $multiline = false;
+            }
+
+            // SplObject pool use the object as keys, so we need some
+            // multiline stuff!
+            if (is_a($data, 'SplObjectStorage')) {
+                $multiline = true;
             }
 
             /** @var Model $model */
@@ -524,7 +520,6 @@ class Objects extends AbstractCallback
         // Public properties.
         // We render them directly in the object "root", so we call
         // the render directly.
-        // $model->setAdditional($label);
         return $model->renderMe();
     }
 

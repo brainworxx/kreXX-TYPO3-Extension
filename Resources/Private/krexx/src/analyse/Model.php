@@ -46,6 +46,13 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
 class Model
 {
     /**
+     * Here we store all relevant data.
+     *
+     * @var Pool
+     */
+    protected $pool;
+
+    /**
      * The object/string/array/whatever we are analysing right now
      *
      * @var mixed
@@ -80,13 +87,6 @@ class Model
      * @var string
      */
     protected $type = '';
-
-    /**
-     * The ID of the help text.
-     *
-     * @var string
-     */
-    protected $helpid = '';
 
     /**
      * Additional data, we are sending to the FE vas a json, hence the name.
@@ -168,6 +168,7 @@ class Model
         $this->connectorService = $pool->createClass(
             'Brainworxx\\Krexx\\Analyse\\Code\\Connectors'
         );
+        $this->pool = $pool;
     }
 
     /**
@@ -331,29 +332,18 @@ class Model
     }
 
     /**
-     * Setter for the helpid.
+     * Setter for the $helpId.
      *
-     * @param string $helpid
+     * @param string $helpId
      *   The ID of the help text.
      *
      * @return $this
      *   $this, for chaining.
      */
-    public function setHelpid($helpid)
+    public function setHelpid($helpId)
     {
-        $this->helpid = $helpid;
+        $this->addToJson('Help', $this->pool->messages->getHelp($helpId));
         return $this;
-    }
-
-    /**
-     * Getter for the help id.
-     *
-     * @return string
-     *   The ID of the help text.
-     */
-    public function getHelpid()
-    {
-        return $this->helpid;
     }
 
     /**

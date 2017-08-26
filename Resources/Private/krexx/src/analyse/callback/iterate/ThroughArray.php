@@ -94,8 +94,7 @@ class ThroughArray extends AbstractCallback
 
             $output .= $this->pool->routing->analysisHub($model);
         }
-        $output .= $this->pool->render->renderSingeChildHr();
-
-        return $output;
+        
+        return $output . $this->pool->render->renderSingeChildHr();
     }
 }

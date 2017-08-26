@@ -128,7 +128,7 @@ class Codegen
             }
 
             // Multi line code generation starts here.
-            if ($model->getMultiLineCodeGen() === self::ITERATOR_TO_ARRAY) {
+            if ($model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY) {
                 return 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
             }
 

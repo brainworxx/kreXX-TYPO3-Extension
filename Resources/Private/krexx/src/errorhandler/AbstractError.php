@@ -82,13 +82,9 @@ abstract class AbstractError
      */
     protected function getIsActive()
     {
-        if ($this->isActive && !$this->pool->config->getSetting('disabled')) {
-            // We will only handle errors when kreXX and the handler
-            // itself is enabled.
-            return true;
-        }
-
-        return false;
+        // We will only handle errors when kreXX and the handler
+        // itself is enabled.
+        return $this->isActive && !$this->pool->config->getSetting('disabled');
     }
 
     /**
