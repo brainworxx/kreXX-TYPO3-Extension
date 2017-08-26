@@ -12,7 +12,7 @@
 Changelog
 =============================================================
 
-2.2.1
+2.3.0
     - [Feature] Added a Fluid specific caller finder for the fluid debugger
     - [Feature] Added a configuration for the backtrace, to limit the analysed steps.
     - [Feature] Added property comments to the analysis
@@ -54,6 +54,14 @@ Changelog
     - [Bugfix] Fixed a autoloading triggering event, when processing a string.
     - [Bugfix] Fixed an issue with the path filter and the directory separator string on windows systems.
     - [Bugfix] Fixed an issue, where the preview of the string was first escaped, and then truncated.
+    - [Bugfix] Fixed a warning, in case there is a special compartibility layer active in conjunction with T>PO3 8.7
+    - [Bugfix] The string analysis is now respection line breaks in short string.
+    - [Bugfix] Make sure that the marking of text will be displayed in the browser.
+    - [Bugfix] Prevent a search with no search text at all.
+    - [Bugfix] The cache handling of searches is now working correctly.
+    - [Bugfix] Fixed the display of the search-options-symbol on Macs.
+    - [Bugfix] Fixed a possible JS error in the search, in case we are searching through no payload.
+    - [Bugfix] Fixed the rendering color of the connector 2 in the Hans skin.
 
 2.2.0
     - [Feature] Added a fluid debugger viewhelper.
