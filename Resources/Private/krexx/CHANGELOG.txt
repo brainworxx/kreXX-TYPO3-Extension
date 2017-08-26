@@ -1,4 +1,4 @@
-2.2.1 dev
+2.3.0
 - Added a configuration for the backtrace, to limit the analysed
   steps.
 - Added property comments to the analysis
