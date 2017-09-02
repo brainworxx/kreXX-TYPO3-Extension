@@ -21,6 +21,7 @@ $EM_CONF[$_EXTKEY] = array(
   'author' => 'BRAINWORXX GmbH',
   'author_email' => 'tobias.guelzow@brainworxx.de',
   'author_company' => 'BRAINWORXX GmbH',
+  'createDirs' => '',
   'constraints' => array(
     'depends' => array(
       'typo3' => '4.5.0-8.7.99',
