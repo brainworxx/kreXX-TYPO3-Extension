@@ -13,6 +13,9 @@ Changelog
 =============================================================
 
 2.3.1
+    - [Bugfix] Fixed shell detection.
+    - [Bugfix] Fixed shell message feedback
+    - [Bugfix] Fixed ajax detection
 
 2.3.0
     - [Feature] Added a Fluid specific caller finder for the fluid debugger
