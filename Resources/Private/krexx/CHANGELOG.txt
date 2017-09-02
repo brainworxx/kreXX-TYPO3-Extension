@@ -1,3 +1,8 @@
+2.3.1 dev
+- Bugfix: Fixed shell detection.
+- Bugfix: Fixed shell message feedback
+- Bugfix: Fixed ajax detection
+
 2.3.0
 - Added a configuration for the backtrace, to limit the analysed
   steps.

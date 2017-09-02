@@ -112,7 +112,9 @@ class Config extends Fallback
 
         // We may need to change the disabling again, in case we are in cli
         // or ajax mode and have no fileoutput.
-        if ($this->isRequestAjaxOrCli()) {
+        if ($this->isRequestAjaxOrCli() &&
+            $this->getSetting('destination') !== 'file'
+        ) {
             // No kreXX for you!
             $this->setDisabled(true);
         }
@@ -272,25 +274,18 @@ class Config extends Fallback
      */
     protected function isRequestAjaxOrCli()
     {
-        if ($this->getSetting('destination') !== 'file') {
-            // File output does not respect ajax or cli, because there is no
-            // interference with the output.
-            return false;
-        }
-
         $server = $this->pool->getServer();
 
-        // Check for ajax.
         if (isset($server['HTTP_X_REQUESTED_WITH']) &&
-            strtolower($server['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest'
+            strtolower($server['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest' &&
+            $this->getSetting('detectAjax')
         ) {
             // Appending stuff after a ajax request will most likely
             // cause a js error. But there are moments when you actually
             // want to do this.
-            if ($this->getSetting('detectAjax')) {
-                // We were supposed to detect ajax, and we did it right now.
-                return true;
-            }
+            //
+            // We were supposed to detect ajax, and we did it right now.
+            return true;
         }
 
         // Check for CLI.

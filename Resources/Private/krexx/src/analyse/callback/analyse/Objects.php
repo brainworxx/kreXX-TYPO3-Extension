@@ -191,7 +191,7 @@ class Objects extends AbstractCallback
         // Adding undeclared public properties to the dump.
         // Those are properties which are not visible with
         // ReflectionProperty::IS_PUBLIC
-        // but are in get_object_vars();
+        // but are in get_object_vars
         //
         // 1. Make a list of all properties
         // 2. Remove those that are listed in
@@ -204,7 +204,7 @@ class Objects extends AbstractCallback
         }
         // For every not-declared property, we add a another reflection.
         // Those are simply added during runtime
-        foreach (array_diff_key(get_object_vars($data), $publicProps) as $key => $value) {
+        foreach (array_keys(array_diff_key(get_object_vars($data), $publicProps)) as $key) {
             $undeclaredProp = new \ReflectionProperty($data, $key);
             $undeclaredProp->isUndeclared = true;
             $refProps[] = $undeclaredProp;

@@ -369,6 +369,12 @@ class Chunks
         $this->useChunks = $bool;
     }
 
+    /**
+     * Setter for the the the $useLogging. Here we determine, if the logfolder
+     * is accessible.
+     *
+     * @param $bool
+     */
     public function setUseLogging($bool)
     {
         $this->useLogging = $bool;

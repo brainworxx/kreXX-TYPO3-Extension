@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Service\Misc;
 
-use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
