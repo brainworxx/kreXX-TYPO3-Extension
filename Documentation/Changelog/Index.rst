@@ -12,6 +12,8 @@
 Changelog
 =============================================================
 
+2.3.1
+
 2.3.0
     - [Feature] Added a Fluid specific caller finder for the fluid debugger
     - [Feature] Added a configuration for the backtrace, to limit the analysed steps.
