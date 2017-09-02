@@ -60,7 +60,7 @@ class Tx_Includekrexx_Controller_CookieController extends Tx_Includekrexx_Contro
 
         if ($this->pool->config->getSetting('disabled')) {
             // kreXX will not display anything, if it was disabled via:
-            // - krexx::disable();
+            // - krexx::disable
             // - Disable output --> true in the "Edit configuration file menu
             // We need to tell the user that krexx was disabled.
             $this->view->assign('is_disabled', true);

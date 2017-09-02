@@ -44,7 +44,8 @@ class Tx_Includekrexx_Rewrite_ServiceConfigConfig extends Config
      */
     public function isAllowedIp($whitelist)
     {
-        $remote = $_SERVER['REMOTE_ADDR'];
+        $server =  $this->pool->getServer();
+        $remote = $server['REMOTE_ADDR'];
         // Use TYPO3 v6+ cmpIP if possible.
         if (is_callable(array('\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'cmpIP'))) {
             return \TYPO3\CMS\Core\Utility\GeneralUtility::cmpIP($remote, $whitelist);

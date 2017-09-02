@@ -70,23 +70,57 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
         $iniConfig = $this->pool->config->iniConfig;
 
         // See, if we have any values in the configuration file.
-        $value['output']['skin'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('skin'));
-        $value['runtime']['memoryLeft'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('memoryLeft'));
-        $value['runtime']['maxRuntime'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('maxRuntime'));
-        $value['runtime']['maxCall'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('maxCall'));
-        $value['output']['disabled'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('disabled'));
-        $value['runtime']['detectAjax'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('detectAjax'));
-        $value['properties']['analyseProtected'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('analyseProtected'));
-        $value['properties']['analysePrivate'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('analysePrivate'));
-        $value['properties']['analyseTraversable'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('analyseTraversable'));
-        $value['properties']['analyseConstants'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('analyseConstants'));
-        $value['runtime']['level'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('level'));
-        $value['methods']['analyseProtectedMethods'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('analyseProtectedMethods'));
-        $value['methods']['analysePrivateMethods'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('analysePrivateMethods'));
-        $value['backtraceAndError']['registerAutomatically'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('registerAutomatically'));
-        $value['backtraceAndError']['maxStepNumber'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('maxStepNumber'));
-        $value['methods']['analyseGetter'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('analyseGetter'));
-        $value['runtime']['useScopeAnalysis'] = $this->convertKrexxFeSetting($iniConfig->getFeConfigFromFile('useScopeAnalysis'));
+        $value['output']['skin'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('skin')
+        );
+        $value['runtime']['memoryLeft'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('memoryLeft')
+        );
+        $value['runtime']['maxRuntime'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('maxRuntime')
+        );
+        $value['runtime']['maxCall'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('maxCall')
+        );
+        $value['output']['disabled'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('disabled')
+        );
+        $value['runtime']['detectAjax'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('detectAjax')
+        );
+        $value['properties']['analyseProtected'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('analyseProtected')
+        );
+        $value['properties']['analysePrivate'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('analysePrivate')
+        );
+        $value['properties']['analyseTraversable'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('analyseTraversable')
+        );
+        $value['properties']['analyseConstants'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('analyseConstants')
+        );
+        $value['runtime']['level'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('level')
+        );
+        $value['methods']['analyseProtectedMethods'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('analyseProtectedMethods')
+        );
+        $value['methods']['analysePrivateMethods'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('analysePrivateMethods')
+        );
+        $value['backtraceAndError']['registerAutomatically'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('registerAutomatically')
+        );
+        $value['backtraceAndError']['maxStepNumber'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('maxStepNumber')
+        );
+        $value['methods']['analyseGetter'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('analyseGetter')
+        );
+        $value['runtime']['useScopeAnalysis'] = $this->convertKrexxFeSetting(
+            $iniConfig->getFeConfigFromFile('useScopeAnalysis')
+        );
 
         // Are these actually set?
         foreach ($value as $mainkey => $setting) {
@@ -172,11 +206,11 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
             }
 
             // Now we should write the file!
-            if ($allOk) {
-                if (file_put_contents($filepath, $ini) === false) {
-                    $allOk = false;
-                    $this->pool->messages->addMessage('file.not.writable', array($filepath));
-                }
+            if ($allOk &&
+                file_put_contents($filepath, $ini) === false
+            ) {
+                $allOk = false;
+                $this->pool->messages->addMessage('file.not.writable', array($filepath));
             }
         }
 

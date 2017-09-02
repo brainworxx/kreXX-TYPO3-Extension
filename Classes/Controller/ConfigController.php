@@ -86,27 +86,90 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
         $iniConfig = $this->pool->config->iniConfig;
 
         // See, if we have any values in the configuration file.
-        $value['output']['skin'] = $iniConfig->getConfigFromFile('output', 'skin');
-        $value['runtime']['memoryLeft'] = $iniConfig->getConfigFromFile('runtime', 'memoryLeft');
-        $value['runtime']['maxRuntime'] = $iniConfig->getConfigFromFile('runtime', 'maxRuntime');
-        $value['output']['maxfiles'] = $iniConfig->getConfigFromFile('output', 'maxfiles');
-        $value['output']['destination'] = $iniConfig->getConfigFromFile('output', 'destination');
-        $value['runtime']['maxCall'] = $iniConfig->getConfigFromFile('runtime', 'maxCall');
-        $value['output']['disabled'] = $iniConfig->getConfigFromFile('output', 'disabled');
-        $value['output']['iprange'] = $iniConfig->getConfigFromFile('output', 'iprange');
-        $value['runtime']['detectAjax'] = $iniConfig->getConfigFromFile('runtime', 'detectAjax');
-        $value['properties']['analyseProtected'] = $iniConfig->getConfigFromFile('properties', 'analyseProtected');
-        $value['properties']['analysePrivate'] = $iniConfig->getConfigFromFile('properties', 'analysePrivate');
-        $value['properties']['analyseConstants'] = $iniConfig->getConfigFromFile('properties', 'analyseConstants');
-        $value['properties']['analyseTraversable'] = $iniConfig->getConfigFromFile('properties', 'analyseTraversable');
-        $value['methods']['debugMethods'] = $iniConfig->getConfigFromFile('methods', 'debugMethods');
-        $value['runtime']['level'] = $iniConfig->getConfigFromFile('runtime', 'level');
-        $value['methods']['analyseProtectedMethods'] = $iniConfig->getConfigFromFile('methods', 'analyseProtectedMethods');
-        $value['methods']['analysePrivateMethods'] = $iniConfig->getConfigFromFile('methods', 'analysePrivateMethods');
-        $value['methods']['analyseGetter'] = $iniConfig->getConfigFromFile('methods', 'analyseGetter');
-        $value['backtraceAndError']['registerAutomatically'] = $iniConfig->getConfigFromFile('backtraceAndError', 'registerAutomatically');
-        $value['backtraceAndError']['maxStepNumber'] = $iniConfig->getConfigFromFile('backtraceAndError', 'maxStepNumber');
-        $value['runtime']['useScopeAnalysis'] = $iniConfig->getConfigFromFile('runtime', 'useScopeAnalysis');
+        $value['output']['skin'] = $iniConfig->getConfigFromFile(
+            'output',
+            'skin'
+        );
+        $value['runtime']['memoryLeft'] = $iniConfig->getConfigFromFile(
+            'runtime',
+            'memoryLeft'
+        );
+        $value['runtime']['maxRuntime'] = $iniConfig->getConfigFromFile(
+            'runtime',
+            'maxRuntime'
+        );
+        $value['output']['maxfiles'] = $iniConfig->getConfigFromFile(
+            'output',
+            'maxfiles'
+        );
+        $value['output']['destination'] = $iniConfig->getConfigFromFile(
+            'output',
+            'destination'
+        );
+        $value['runtime']['maxCall'] = $iniConfig->getConfigFromFile(
+            'runtime',
+            'maxCall'
+        );
+        $value['output']['disabled'] = $iniConfig->getConfigFromFile(
+            'output',
+            'disabled'
+        );
+        $value['output']['iprange'] = $iniConfig->getConfigFromFile(
+            'output',
+            'iprange'
+        );
+        $value['runtime']['detectAjax'] = $iniConfig->getConfigFromFile(
+            'runtime',
+            'detectAjax'
+        );
+        $value['properties']['analyseProtected'] = $iniConfig->getConfigFromFile(
+            'properties',
+            'analyseProtected'
+        );
+        $value['properties']['analysePrivate'] = $iniConfig->getConfigFromFile(
+            'properties',
+            'analysePrivate'
+        );
+        $value['properties']['analyseConstants'] = $iniConfig->getConfigFromFile(
+            'properties',
+            'analyseConstants'
+        );
+        $value['properties']['analyseTraversable'] = $iniConfig->getConfigFromFile(
+            'properties',
+            'analyseTraversable'
+        );
+        $value['methods']['debugMethods'] = $iniConfig->getConfigFromFile(
+            'methods',
+            'debugMethods'
+        );
+        $value['runtime']['level'] = $iniConfig->getConfigFromFile(
+            'runtime',
+            'level'
+        );
+        $value['methods']['analyseProtectedMethods'] = $iniConfig->getConfigFromFile(
+            'methods',
+            'analyseProtectedMethods'
+        );
+        $value['methods']['analysePrivateMethods'] = $iniConfig->getConfigFromFile(
+            'methods',
+            'analysePrivateMethods'
+        );
+        $value['methods']['analyseGetter'] = $iniConfig->getConfigFromFile(
+            'methods',
+            'analyseGetter'
+        );
+        $value['backtraceAndError']['registerAutomatically'] = $iniConfig->getConfigFromFile(
+            'backtraceAndError',
+            'registerAutomatically'
+        );
+        $value['backtraceAndError']['maxStepNumber'] = $iniConfig->getConfigFromFile(
+            'backtraceAndError',
+            'maxStepNumber'
+        );
+        $value['runtime']['useScopeAnalysis'] = $iniConfig->getConfigFromFile(
+            'runtime',
+            'useScopeAnalysis'
+        );
 
         // Are these actually set?
         foreach ($value as $mainkey => $setting) {
@@ -191,11 +254,11 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
             }
 
             // Now we should write the file!
-            if ($allOk) {
-                if (file_put_contents($filepath, $ini) === false) {
-                    $allOk = false;
-                    $this->pool->messages->addMessage('file.not.writable', array($filepath));
-                }
+            if ($allOk &&
+                file_put_contents($filepath, $ini) === false
+            ) {
+                $allOk = false;
+                $this->pool->messages->addMessage('file.not.writable', array($filepath));
             }
         }
 

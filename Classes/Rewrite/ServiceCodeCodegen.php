@@ -66,7 +66,7 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
         }
 
         // check for VHS values.
-        if ($model->getMultiLineCodeGen() === self::VHS_CALL_VIEWHELPER) {
+        if ($model->getMultiLineCodeGen() === static::VHS_CALL_VIEWHELPER) {
             return $this->generateVhsCall($model);
         } else {
             // Do the parent generation. [ParentGeneration = Generation X ?]
