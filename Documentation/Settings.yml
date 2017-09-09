@@ -6,8 +6,8 @@
 conf.py:
   copyright: 2014 - 2017
   project: kreXX Debugger
-  version: 2.3.1 dev
-  release: 2.3.1 dev
+  version: 2.3.1
+  release: 2.3.1
   latex_documents:
   - - Index
     - includekrexx.tex

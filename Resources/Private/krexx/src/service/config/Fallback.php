@@ -300,7 +300,7 @@ class Fallback
      *
      * @var string
      */
-    public $version = '2.3.1 dev';
+    public $version = '2.3.1';
 
     /**
      * Limit for the count in an array. If an array is larger that this,
