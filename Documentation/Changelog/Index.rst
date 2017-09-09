@@ -24,7 +24,7 @@ Changelog
     - [Feature] Added property declaration place to the analysis.
     - [Feature] Added better unicode support for the HTML output.
     - [Feature] Added better support for debugging onepagers.
-    - [Change] Several performance tweaks for runtime optimization.
+    - [Internals] Several performance tweaks for runtime optimization.
     - [Change] Fallback setting runtime => level set to 5.
     - [Change] Fallback setting runtime => maxCall set to 10.
     - [Change] Refactored the half-assed messaging implementation.
