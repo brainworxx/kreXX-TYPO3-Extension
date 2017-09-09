@@ -32,64 +32,46 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback;
-
-use Brainworxx\Krexx\Service\Factory\Pool;
+namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 /**
- * Abstract class for the callback classes inside the model.
+ * Class Constants analysis.
  *
- * @package Brainworxx\Krexx\Analyse\Callback
+ * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  */
-abstract class AbstractCallback
+class Constants extends AbstractObjectAnalysis
 {
-
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected $pool;
-
-    /**
-     * The parameters for the callback.
-     *
-     * @var array
-     */
-    protected $parameters = array();
-
-    /**
-     * The actual callback function for the renderer.
+     * Dumps the constants of a class,
      *
      * @return string
      *   The generated markup.
      */
-    abstract public function callMe();
-
-    /**
-     * Injects the pool.
-     *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
-     */
-    public function __construct(Pool $pool)
+    public function callMe()
     {
-        $this->pool = $pool;
-    }
+        // This is actually an array, we ara analysing. But We do not want to render
+        // an array, so we need to process it like the return from an iterator.
+        /** @var \ReflectionClass $ref */
+        $ref = $this->parameters['ref'];
+        $refConst = $ref->getConstants();
 
-    /**
-     * Add callback parameters at class construction.
-     *
-     * @param array $params
-     *   The parameters for the callMe() method.
-     *
-     * @return $this
-     *   Retuirn $this, for chaining.
-     */
-    public function setParams(array &$params)
-    {
-        $this->parameters = $params;
+        if (empty($refConst)) {
+            // Nothing to see here, return an empty string.
+            return '';
+        }
 
-        return $this;
+        // We've got some values, we will dump them.
+        $classname = '\\' . $ref->getName();
+        return $this->pool->render->renderExpandableChild(
+            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                ->setName('Constants')
+                ->setType('class internals')
+                ->setIsMetaConstants(true)
+                ->addParameter('data', $refConst)
+                ->addParameter('classname', $classname)
+                ->injectCallback(
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConstants')
+                )
+        );
     }
 }

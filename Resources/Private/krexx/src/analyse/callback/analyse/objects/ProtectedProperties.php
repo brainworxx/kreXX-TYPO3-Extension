@@ -32,64 +32,36 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback;
-
-use Brainworxx\Krexx\Service\Factory\Pool;
+namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 /**
- * Abstract class for the callback classes inside the model.
+ * Analysis of protected properties.
  *
- * @package Brainworxx\Krexx\Analyse\Callback
+ * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  */
-abstract class AbstractCallback
+class ProtectedProperties extends AbstractObjectAnalysis
 {
-
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected $pool;
-
-    /**
-     * The parameters for the callback.
-     *
-     * @var array
-     */
-    protected $parameters = array();
-
-    /**
-     * The actual callback function for the renderer.
+     * Dump all protected properties.
      *
      * @return string
-     *   The generated markup.
+     *   The generated HTML markup
      */
-    abstract public function callMe();
-
-    /**
-     * Injects the pool.
-     *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
-     */
-    public function __construct(Pool $pool)
+    public function callMe()
     {
-        $this->pool = $pool;
-    }
+        /** @var \ReflectionClass $ref */
+        $ref = $this->parameters['ref'];
+        $refProps = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
+        if (empty($refProps)) {
+            return '';
+        }
+        usort($refProps, array($this, 'reflectionSorting'));
 
-    /**
-     * Add callback parameters at class construction.
-     *
-     * @param array $params
-     *   The parameters for the callMe() method.
-     *
-     * @return $this
-     *   Retuirn $this, for chaining.
-     */
-    public function setParams(array &$params)
-    {
-        $this->parameters = $params;
-
-        return $this;
+        return $this->getReflectionPropertiesData(
+            $refProps,
+            $ref,
+            $this->parameters['data'],
+            'Protected properties'
+        );
     }
 }

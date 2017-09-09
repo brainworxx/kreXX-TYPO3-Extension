@@ -99,6 +99,7 @@ class Krexx
         include_once $krexxDir . 'src/analyse/routing/process/ProcessObject.php';
         include_once $krexxDir . 'src/analyse/routing/process/ProcessResource.php';
         include_once $krexxDir . 'src/analyse/routing/process/ProcessString.php';
+        include_once $krexxDir . 'src/analyse/AbstractModel.php';
         include_once $krexxDir . 'src/analyse/Model.php';
         include_once $krexxDir . 'src/analyse/code/Scope.php';
         include_once $krexxDir . 'src/analyse/callback/AbstractCallback.php';
@@ -106,6 +107,15 @@ class Krexx
         include_once $krexxDir . 'src/analyse/callback/analyse/ConfigSection.php';
         include_once $krexxDir . 'src/analyse/callback/analyse/Debug.php';
         include_once $krexxDir . 'src/analyse/callback/analyse/Objects.php';
+        include_once $krexxDir . 'src/analyse/callback/analyse/objects/AbstractObjectAnalysis.php';
+        include_once $krexxDir . 'src/analyse/callback/analyse/objects/PublicProperties.php';
+        include_once $krexxDir . 'src/analyse/callback/analyse/objects/ProtectedProperties.php';
+        include_once $krexxDir . 'src/analyse/callback/analyse/objects/PrivateProperties.php';
+        include_once $krexxDir . 'src/analyse/callback/analyse/objects/Getter.php';
+        include_once $krexxDir . 'src/analyse/callback/analyse/objects/Constants.php';
+        include_once $krexxDir . 'src/analyse/callback/analyse/objects/Traversable.php';
+        include_once $krexxDir . 'src/analyse/callback/analyse/objects/Methods.php';
+        include_once $krexxDir . 'src/analyse/callback/analyse/objects/DebugMethods.php';
         include_once $krexxDir . 'src/analyse/callback/iterate/ThroughArray.php';
         include_once $krexxDir . 'src/analyse/callback/iterate/ThroughLargeArray.php';
         include_once $krexxDir . 'src/analyse/callback/iterate/ThroughConfig.php';

@@ -1,0 +1,91 @@
+<?php
+/**
+ * kreXX: Krumo eXXtended
+ *
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
+ *
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ *
+ * @author
+ *   brainworXX GmbH <info@brainworxx.de>
+ *
+ * @license
+ *   http://opensource.org/licenses/LGPL-2.1
+ *
+ *   GNU Lesser General Public License Version 2.1
+ *
+ *   kreXX Copyright (C) 2014-2017 Brainworxx GmbH
+ *
+ *   This library is free software; you can redistribute it and/or modify it
+ *   under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation; either version 2.1 of the License, or (at
+ *   your option) any later version.
+ *   This library is distributed in the hope that it will be useful, but WITHOUT
+ *   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ *   for more details.
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with this library; if not, write to the Free Software Foundation,
+ *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+
+namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
+
+/**
+ * Analysis of public properties.
+ *
+ * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
+ */
+class PublicProperties extends AbstractObjectAnalysis
+{
+    /**
+     * Dump all public properties.
+     *
+     * @return string
+     *   The generated HTML markup.
+     */
+    public function callMe()
+    {
+        $data = $this->parameters['data'];
+        /** @var \ReflectionClass $ref */
+        $ref = $this->parameters['ref'];
+
+        $refProps = $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $publicProps = array();
+
+        // Adding undeclared public properties to the dump.
+        // Those are properties which are not visible with
+        // ReflectionProperty::IS_PUBLIC
+        // but are in get_object_vars
+        //
+        // 1. Make a list of all properties
+        // 2. Remove those that are listed in
+        // ReflectionProperty::IS_PUBLIC
+        //
+        // What is left are those special properties that were dynamically
+        // set during runtime, but were not declared in the class.
+        foreach ($refProps as $refProp) {
+            $publicProps[$refProp->name] = true;
+        }
+        // For every not-declared property, we add a another reflection.
+        // Those are simply added during runtime
+        foreach (array_keys(array_diff_key(get_object_vars($data), $publicProps)) as $key) {
+            $undeclaredProp = new \ReflectionProperty($data, $key);
+            $undeclaredProp->isUndeclared = true;
+            $refProps[] = $undeclaredProp;
+        }
+
+        if (empty($refProps)) {
+            return '';
+        }
+
+        usort($refProps, array($this, 'reflectionSorting'));
+        // Adding a HR to reflect that the following stuff are not public
+        // properties anymore.
+        return $this->getReflectionPropertiesData($refProps, $ref, $data, 'Public properties') .
+            $this->pool->render->renderSingeChildHr();
+    }
+}
