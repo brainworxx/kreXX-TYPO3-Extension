@@ -47,6 +47,20 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
 {
 
     /**
+     * Here we sore, if we did have problems saving the form.
+     *
+     * @var bool
+     */
+    protected $allOk = true;
+
+    /**
+     * Whitelist of the vales we are accepting.
+     *
+     * @var array
+     */
+    protected $allowedValues = array('full', 'display', 'none');
+
+    /**
      * Shows the configuration for the FE editing.
      */
     public function editAction()
@@ -153,14 +167,11 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
     public function saveAction()
     {
         $arguments = $this->request->getArguments();
-        $allOk = true;
         $filepath = $this->pool->config->getPathToIniFile();
-        // Whitelist of the vales we are accepting.
-        $allowedValues = array('full', 'display', 'none');
 
         // Check for writing permission.
         if (!is_writable(dirname($filepath))) {
-            $allOk = false;
+            $this->allOk = false;
             $this->pool->messages->addMessage('file.not.writable', array($filepath));
         }
         // Check if the file does exist.
@@ -173,7 +184,7 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
             $oldValues = array();
         }
 
-        if (isset($arguments['action']) && $arguments['action'] == 'save' && $allOk) {
+        if (isset($arguments['action']) && $arguments['action'] == 'save' && $this->allOk) {
             // We need to correct the allowed settings, since we do not allow anything.
             unset($this->allowedSettingsNames['destination']);
             unset($this->allowedSettingsNames['maxfiles']);
@@ -183,16 +194,7 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
             // Iterating through the form.
             foreach ($arguments as $key => $data) {
                 if (is_array($data) && $key != '__referrer') {
-                    foreach ($data as $settingName => $value) {
-                        if (in_array($value, $allowedValues) && in_array($settingName, $this->allowedSettingsNames)) {
-                            // Whitelisted values are ok.
-                            $oldValues['feEditing'][$settingName] = $value;
-                        } else {
-                            // Validation failed!
-                            $allOk = false;
-                            $this->pool->messages->addMessage('value.not.allowed', array(htmlentities($value)));
-                        }
-                    }
+                    $oldValues = $this->processSection($data, $oldValues);
                 }
             }
 
@@ -206,16 +208,16 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
             }
 
             // Now we should write the file!
-            if ($allOk &&
+            if ($this->allOk &&
                 file_put_contents($filepath, $ini) === false
             ) {
-                $allOk = false;
+                $this->allOk = false;
                 $this->pool->messages->addMessage('file.not.writable', array($filepath));
             }
         }
 
         // Something went wrong, we need to tell the user.
-        if (!$allOk) {
+        if (!$this->allOk) {
             // Got to remove some messages. We we will not queue them now.
             $this->pool->messages->removeKey('protected.folder.chunk');
             $this->pool->messages->removeKey('protected.folder.log');
@@ -269,5 +271,34 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
             }
         }
         return $result;
+    }
+
+    /**
+     * Processing of the section values.
+     *
+     * @param $section
+     *   The name of the section that we are processing.
+     * @param array $data
+     *   The data from that section.
+     * @param array $oldValues
+     *   The old valued that we are supplementing.
+     *
+     * @return array
+     *   The supplemented old values.
+     */
+    protected function processSection(array $data, array $oldValues)
+    {
+        foreach ($data as $settingName => $value) {
+            if (in_array($value, $this->allowedValues) && in_array($settingName, $this->allowedSettingsNames)) {
+                // Whitelisted values are ok.
+                $oldValues['feEditing'][$settingName] = $value;
+            } else {
+                // Validation failed!
+                $this->allOk = false;
+                $this->pool->messages->addMessage('value.not.allowed', array(htmlentities($value)));
+            }
+        }
+
+        return $oldValues;
     }
 }

@@ -45,6 +45,12 @@ if (class_exists('Tx_Includekrexx_Controller_ConfigController')) {
  */
 class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Controller_CompatibilityController
 {
+    /**
+     * Here we sore, if we did have problems saving the form.
+     *
+     * @var bool
+     */
+    protected $allOk = true;
 
     /**
      * Shows the edit config screen.
@@ -198,13 +204,11 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
     public function saveAction()
     {
         $arguments = $this->request->getArguments();
-        $allOk = true;
         $filepath = $this->pool->config->getPathToIniFile();
-
-
+        
         // Check for writing permission.
         if (!is_writable(dirname($filepath))) {
-            $allOk = false;
+            $this->allOk = false;
             $this->pool->messages->addMessage('file.not.writable', array($filepath));
         }
 
@@ -219,27 +223,12 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
         // Everything else will be overwritten.
         $oldValues = array('feEditing' => $oldValues['feEditing']);
 
-        if (isset($arguments['action']) && $arguments['action'] == 'save' && $allOk) {
+        if (isset($arguments['action']) && $arguments['action'] == 'save' && $this->allOk) {
             // Iterating through the form.
             foreach ($arguments as $section => $data) {
                 if (is_array($data) && in_array($section, $this->allowedSections)) {
                     // We've got a section key.
-                    foreach ($data as $settingName => $value) {
-                        if (in_array($settingName, $this->allowedSettingsNames)) {
-                            // We escape the value, just in case, since we can not
-                            // whitelist it.
-                            $value = htmlspecialchars(preg_replace('/\s+/', '', $value));
-                            // Evaluate the setting!
-                            if ($this->pool->config->security->evaluateSetting($section, $settingName, $value)) {
-                                $oldValues[$section][$settingName] = $value;
-                            } else {
-                                // Validation failed! kreXX will generate a message,
-                                // which we will display
-                                // at the buttom.
-                                $allOk = false;
-                            }
-                        }
-                    }
+                    $oldValues = $this->processSection($section, $data, $oldValues);
                 }
             }
             // Now we must create the ini file.
@@ -254,16 +243,16 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
             }
 
             // Now we should write the file!
-            if ($allOk &&
+            if ($this->allOk &&
                 file_put_contents($filepath, $ini) === false
             ) {
-                $allOk = false;
+                $this->allOk = false;
                 $this->pool->messages->addMessage('file.not.writable', array($filepath));
             }
         }
 
         // Something went wrong, we need to tell the user.
-        if (!$allOk) {
+        if (!$this->allOk) {
             foreach ($this->getTranslatedMessages() as $message) {
                 $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
             }
@@ -276,5 +265,39 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
         }
 
         $this->redirect('edit');
+    }
+
+    /**
+     * Processing of the section values.
+     *
+     * @param $section
+     *   The name of the section that we are processing.
+     * @param array $data
+     *   The data from that section.
+     * @param array $oldValues
+     *   The old valued that we are supplementing.
+     *
+     * @return array
+     *   The supplemented old values.
+     */
+    protected function processSection($section, array $data, array $oldValues)
+    {
+        foreach ($data as $settingName => $value) {
+            if (in_array($settingName, $this->allowedSettingsNames)) {
+                // We escape the value, just in case, since we can not
+                // whitelist it.
+                $value = htmlspecialchars(preg_replace('/\s+/', '', $value));
+                // Evaluate the setting!
+                if ($this->pool->config->security->evaluateSetting($section, $settingName, $value)) {
+                    $oldValues[$section][$settingName] = $value;
+                } else {
+                    // Validation failed! kreXX will generate a message,
+                    // which we will display
+                    // at the buttom.
+                    $this->allOk = false;
+                }
+            }
+        }
+        return $oldValues;
     }
 }

@@ -41,27 +41,29 @@ class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
 {
 
     /**
-     * Diffeerent connectors for fluid.
-     *
      * {@inheritdoc}
      */
-    protected $connectorArray = array(
-        self::NOTHING => array('', ''),
-        self::METHOD => array('.', '(@param@)'),
-        self::STATIC_METHOD => array('.', '(@param@)'),
-        self::NORMAL_ARRAY => array('.', ''),
-        self::ASSOCIATIVE_ARRAY => array('.', ''),
-        self::CONSTANT => array('.', ''),
-        self::NORMAL_PROPERTY => array('.', ''),
-        self::STATIC_PROPERTY => array('.', ''),
-        // We do not support 'special' chars in function names.
-        self::SPECIAL_CHARS_PROP => array('.', ''),
-    );
+    protected $language = 'fluid';
 
     /**
      * {@inheritdoc}
      */
-    protected $language = 'fluid';
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Setting (nearly) everything to the point connector.
+        $this->connectorArray = array(
+            self::METHOD => array('.', '(@param@)'),
+            self::STATIC_METHOD => array('.', '(@param@)'),
+            self::NORMAL_ARRAY => array('.', ''),
+            self::ASSOCIATIVE_ARRAY => array('.', ''),
+            self::CONSTANT => array('.', ''),
+            self::NORMAL_PROPERTY => array('.', ''),
+            self::STATIC_PROPERTY => array('.', ''),
+            self::SPECIAL_CHARS_PROP => array('.', ''),
+        );
+    }
 
     /**
      * Do nothing. There is no secornd connector in fluid.

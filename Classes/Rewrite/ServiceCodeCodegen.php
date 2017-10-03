@@ -60,18 +60,18 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
         }
 
          // Disalowing code generation for configured debug methods.
-        $type = $model->getType();
-        if ($type === 'debug method') {
+        if ($model->getType() === 'debug method') {
             return '. . .';
         }
 
         // check for VHS values.
         if ($model->getMultiLineCodeGen() === static::VHS_CALL_VIEWHELPER) {
             return $this->generateVhsCall($model);
-        } else {
-            // Do the parent generation. [ParentGeneration = Generation X ?]
-            return parent::generateSource($model);
         }
+
+        // Do the parent generation. [ParentGeneration = Generation X ?]
+        return parent::generateSource($model);
+
     }
 
     /**
@@ -91,8 +91,6 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
         $data = $model->getParameters();
         $counter = 1;
         $args = '';
-
-
 
         foreach ($data['paramArray'] as $parameter) {
             $args .= 'arg' . $counter . ': \'' . $parameter . '\', ';

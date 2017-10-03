@@ -68,6 +68,7 @@ class Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter extends Throug
 
             /** @var Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                // We need to adjust the getter name for fluid.
                 ->setName(lcfirst(substr($reflectionMethod->getName(), 3)))
                 ->addToJson('method comment', $comments);
 
