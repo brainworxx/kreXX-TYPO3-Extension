@@ -332,7 +332,7 @@ abstract class AbstractController
      */
     protected function getCurrentUrl()
     {
-        $server = $this->pool->getGlobals('_SERVER');
+        $server = $this->pool->getServer();
 
         // Check if someone has been messing with the $_SERVER, to prevent
         // warnings and notices.

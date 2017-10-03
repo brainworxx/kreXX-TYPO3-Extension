@@ -274,7 +274,7 @@ class Config extends Fallback
      */
     protected function isRequestAjaxOrCli()
     {
-        $server = $this->pool->getGlobals('_SERVER');
+        $server = $this->pool->getServer();
 
         if (isset($server['HTTP_X_REQUESTED_WITH']) &&
             strtolower($server['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest' &&
@@ -334,7 +334,7 @@ class Config extends Fallback
      */
     protected function isAllowedIp($whitelist)
     {
-        $server = $this->pool->getGlobals('_SERVER');
+        $server = $this->pool->getServer();
 
         if (empty($server['REMOTE_ADDR'])) {
             $remote = '';

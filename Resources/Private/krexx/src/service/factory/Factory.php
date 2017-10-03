@@ -117,6 +117,18 @@ class Factory
         if (empty($what)) {
             return $GLOBALS;
         }
+
         return $GLOBALS[$what];
+    }
+
+    /**
+     * Returns the superglobal $_SERVER.
+     *
+     * @return array
+     *   The superglobal $_SERVER
+     */
+    public function &getServer()
+    {
+        return $_SERVER;
     }
 }
