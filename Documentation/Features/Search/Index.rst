@@ -6,7 +6,7 @@
 .. include:: ../../Includes.txt
 
 
-.. _search:
+.. _searchfeature:
 
 Search function
 ===============
