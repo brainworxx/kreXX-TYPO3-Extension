@@ -89,7 +89,7 @@ class Recursion
     {
         $this->recursionMarker = 'Krexx' . substr(str_shuffle(md5(microtime())), 0, 10);
         // Mark the $GLOBALS array.
-        $this->globals = $pool->getGlobals();
+        $this->globals = $pool->getGlobals('');
         $this->globals[$this->recursionMarker] = true;
         $this->recursionHive = new \SplObjectStorage();
     }

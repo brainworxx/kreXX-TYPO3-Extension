@@ -44,29 +44,36 @@ use Brainworxx\Krexx\Analyse\Model;
 class Traversable extends AbstractObjectAnalysis
 {
     /**
-     * Dumps all available traversable data.
+     * Checks runtime, memory and nesting level. Then trigger the actual analysis.
      *
      * @return string
      *   The generated markup.
      */
     public function callMe()
     {
-        $data = $this->parameters['data'];
-        $name = $this->parameters['name'];
-
-        // Check memory and runtime.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
-            return '';
-        }
-
-        // Check nesting level
+        // Check nesting level, memory and runtime.
         $this->pool->emergencyHandler->upOneNestingLevel();
-        if ($this->pool->emergencyHandler->checkNesting()) {
+        if ($this->pool->emergencyHandler->checkNesting() || $this->pool->emergencyHandler->checkEmergencyBreak()) {
             // We will not be doing this one, but we need to get down with our
             // nesting level again.
             $this->pool->emergencyHandler->downOneNestingLevel();
             return '';
         }
+
+        // Do the actual analysis
+        return $this->getTeversableData();
+    }
+
+    /**
+     * Analyses the traversable data.
+     *
+     * @return string
+     *   The generated markup.
+     */
+    protected function getTeversableData()
+    {
+        $data = $this->parameters['data'];
+        $name = $this->parameters['name'];
 
         // Add a try to prevent the hosting CMS from doing something stupid.
         try {

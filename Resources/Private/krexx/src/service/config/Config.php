@@ -131,24 +131,24 @@ class Config extends Fallback
 
     protected function initDirectories()
     {
-        $globals = $this->pool->getGlobals();
+        $overwrites = $this->pool->getGlobals('kreXXoverwrites');
 
-        if (empty($globals['kreXXoverwrites']['directories']['chunks'])) {
+        if (empty($overwrites['directories']['chunks'])) {
             $this->directories['chunks'] = $this->pool->krexxDir . 'chunks' . DIRECTORY_SEPARATOR;
         } else {
-            $this->directories['chunks'] = $globals['kreXXoverwrites']['directories']['chunks'] . DIRECTORY_SEPARATOR;
+            $this->directories['chunks'] = $overwrites['directories']['chunks'] . DIRECTORY_SEPARATOR;
         }
 
-        if (empty($globals['kreXXoverwrites']['directories']['log'])) {
+        if (empty($overwrites['directories']['log'])) {
             $this->directories['log'] = $this->pool->krexxDir . 'log' . DIRECTORY_SEPARATOR;
         } else {
-            $this->directories['log'] = $globals['kreXXoverwrites']['directories']['log'] . DIRECTORY_SEPARATOR;
+            $this->directories['log'] = $overwrites['directories']['log'] . DIRECTORY_SEPARATOR;
         }
 
-        if (empty($globals['kreXXoverwrites']['directories']['config'])) {
+        if (empty($overwrites['directories']['config'])) {
             $this->directories['config'] = $this->pool->krexxDir . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini';
         } else {
-            $this->directories['config'] = $globals['kreXXoverwrites']['directories']['config'] .
+            $this->directories['config'] = $overwrites['directories']['config'] .
                 DIRECTORY_SEPARATOR . 'Krexx.ini';
         }
     }
@@ -274,7 +274,7 @@ class Config extends Fallback
      */
     protected function isRequestAjaxOrCli()
     {
-        $server = $this->pool->getServer();
+        $server = $this->pool->getGlobals('_SERVER');
 
         if (isset($server['HTTP_X_REQUESTED_WITH']) &&
             strtolower($server['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest' &&
@@ -323,6 +323,9 @@ class Config extends Fallback
     /**
      * Checks if the current client ip is allowed.
      *
+     * @author Chin Leung
+     * @see https://stackoverflow.com/questions/35559119/php-ip-address-whitelist-with-wildcards
+     *
      * @param string $whitelist
      *   The ip whitelist.
      *
@@ -331,13 +334,7 @@ class Config extends Fallback
      */
     protected function isAllowedIp($whitelist)
     {
-        // Check for CLI.
-        if (php_sapi_name() === 'cli') {
-            // We do not care about IP's in CLI mode.
-            return true;
-        }
-
-        $server = $this->pool->getServer();
+        $server = $this->pool->getGlobals('_SERVER');
 
         if (empty($server['REMOTE_ADDR'])) {
             $remote = '';
@@ -345,12 +342,9 @@ class Config extends Fallback
             $remote = $server['REMOTE_ADDR'];
         }
 
-        // Fallback to the Chin Leung implementation.
-        // @author Chin Leung
-        // @see https://stackoverflow.com/questions/35559119/php-ip-address-whitelist-with-wildcards
         $whitelist = explode(',', $whitelist);
-        if (in_array($remote, $whitelist)) {
-            // If the ip is matched, return true.
+        if (php_sapi_name() === 'cli' || in_array($remote, $whitelist)) {
+            // Either the IP is matched, or we are in CLI
             return true;
         }
 
@@ -358,7 +352,7 @@ class Config extends Fallback
         foreach ($whitelist as $ip) {
             $ip = trim($ip);
             $wildcardPos = strpos($ip, '*');
-            # Check if the ip has a wildcard
+            // Check if the ip has a wildcard.
             if ($wildcardPos !== false && substr($remote, 0, $wildcardPos) . '*' === $ip) {
                 return true;
             }

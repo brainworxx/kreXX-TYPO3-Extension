@@ -55,10 +55,10 @@
         /** @type {Node} */
         var parent = el.parentNode;
 
-        while (parent !== null && typeof parent[matches()] === 'function') {
+        while (parent !== null) {
 
             // Check for classname
-            if (parent[matches()](selector)) {
+            if (kdt.matches(parent, selector)) {
                 result.push(parent);
             }
             // Get the next one.
@@ -66,26 +66,34 @@
         }
         return result;
 
-        // Workaround for several browsers, since matches() is still not really
-        // implemented in IE.
-        function matches() {
-            /** @type {Element} */
-            var el = document.querySelector('body');
-            /** @type {Array.<String>} */
-            var names = [
-                'matches',
-                'msMatchesSelector',
-                'mozMatchesSelector',
-                'oMatchesSelector',
-                'webkitMatchesSelector'
-            ];
-            // We need to iterate them.
-            for (var i = 0; i < names.length; i++) {
-                if (typeof el[names[i]] === 'function') {
-                    return names[i];
-                }
+    };
+
+    /**
+     * X-Browser implementation of the matchesSelector.
+     *
+     * @param {Node} element
+     * @param {string} selector
+     * @return {*}
+     */
+    kdt.matches = function(element, selector) {
+        return (
+            // Normal implementation.
+            element.matches ||
+            // Whatever.
+            element.matchesSelector ||
+            // IE.
+            element.msMatchesSelector ||
+            // Firefox.
+            element.mozMatchesSelector ||
+            // Chrome.
+            element.webkitMatchesSelector ||
+            // Opera.
+            element.oMatchesSelector ||
+            function () {
+                // Fallback to false, this is not the element you are lookking for.
+                return false;
             }
-        }
+        ).call(element, selector);
     };
 
     /**
@@ -202,7 +210,6 @@
      * @param {string} className
      */
     kdt.toggleClass = function (el, className) {
-
         if (el.classList) {
             // Just toggle it.
             el.classList.toggle(className);
@@ -231,12 +238,94 @@
      *
      */
     kdt.addEvent = function (selector, eventName, callBack) {
+        // We use the clickHandler instead.
+        if (eventName === 'click') {
+            kdt.clickHandler.add(selector, callBack);
+        } else {
+            /** @type {NodeList} */
+            var elements = document.querySelectorAll(selector);
+
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].addEventListener(eventName, callBack);
+            }
+        }
+    };
+
+    /**
+     * Click handler for kreXX, to get out of the event-hell.
+     */
+    kdt.clickHandler =  {};
+
+    /**
+     * The storage object, with an array of callbacks behind it.
+     *
+     * @type {{}}
+     */
+    kdt.clickHandler.storage = {};
+
+    /**
+     *
+     * @param {string} selector
+     * @param {function} callback
+     */
+    kdt.clickHandler.add = function(selector, callback) {
+        if (!(selector in kdt.clickHandler.storage)) {
+            kdt.clickHandler.storage[selector] = [];
+        }
+        kdt.clickHandler.storage[selector].push(callback);
+    };
+
+    /**
+     * Registers the eventhandler, prefereably on the kreXX instance window.
+     *
+     * @param selector
+     */
+    kdt.clickHandler.register = function(selector) {
         /** @type {NodeList} */
         var elements = document.querySelectorAll(selector);
 
         for (var i = 0; i < elements.length; i++) {
-            elements[i].addEventListener(eventName, callBack);
+            elements[i].addEventListener('click', kdt.clickHandler.handle);
         }
+    };
+
+    /**
+     * Whenever a click is bubbeled on a kreXX instance, we try to find
+     * the according callback, and sinply call it.
+     *
+     * @param {Event} event
+     */
+    kdt.clickHandler.handle = function(event) {
+        // We stop the event in it's tracks.
+        event.stopPropagation();
+        // event.preventDefault();
+
+        var element = event.target;
+        var finished = false;
+
+        do {
+            // We need to test the element on all selectors.
+            for (var selector in kdt.clickHandler.storage) {
+                if (kdt.matches(element, selector)) {
+                    // Got to call them all.
+                    for (var i = 0; i < kdt.clickHandler.storage[selector].length; i++) {
+                        kdt.clickHandler.storage[selector][i](event, element);
+                    }
+                    // We did what we came for.
+                    // Time to exit the while loop.
+                    finished = true;
+                }
+            }
+
+            if (finished) {
+                // Exit the while.
+                element = null;
+            } else {
+                // Time to test the parent.
+                element = element.parentNode;
+            }
+        } while (element !== null);
+
     };
 
     /**
@@ -562,12 +651,11 @@
      * Resets all values in the local cookie settings.
      *
      * @param {Event} event
+     *   The click event.
+     * @param {Node} element
+     *   The element that was clicked.
      */
-    kdt.resetSetting = function (event) {
-        // Prevents the default event behavior (ie: click).
-        event.preventDefault();
-        // Prevents the event from propagating (ie: "bubbling").
-        event.stopPropagation();
+    kdt.resetSetting = function (event, element) {
 
         // We do not delete the cookie, we simply remove all settings in it.
         /** @type {Object} */
@@ -607,8 +695,11 @@
      * Prevents the bubbeling of en event, nothing more.
      *
      * @param {Event} event
+     *   The click event.
+     * @param {Node} element
+     *   The element that was clicked.
      */
-    kdt.preventBubble = function (event) {
+    kdt.preventBubble = function (event, element) {
         event.stopPropagation();
     };
 

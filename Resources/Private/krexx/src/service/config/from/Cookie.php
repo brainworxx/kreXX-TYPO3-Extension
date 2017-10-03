@@ -66,7 +66,7 @@ class Cookie
     public function __construct(Pool $pool)
     {
         $this->security = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\Security');
-        $cookies = $pool->getCookie();
+        $cookies = $pool->getGlobals('_COOKIE');
 
         if (isset($cookies['KrexxDebugSettings'])) {
             // We have local settings.

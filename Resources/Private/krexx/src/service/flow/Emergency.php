@@ -180,6 +180,19 @@ class Emergency
             return true;
         }
 
+        return $this->checkMemory() || $this->checkRuntime();
+    }
+
+    /**
+     * Checks if there is enough time left for the analysis.
+     *
+     * @return bool
+     *   Boolean to show if we have enough left.
+     *   FALSE = all is OK.
+     *   TRUE = we have a problem.
+     */
+    protected function checkRuntime()
+    {
         // Check Runtime.
         if ($this->timer < time()) {
             // This is taking longer than expected.
@@ -189,8 +202,19 @@ class Emergency
             static::$allIsOk = false;
             return true;
         }
+        return false;
+    }
 
-        // Still here ? Commence with the memory check.
+    /**
+     * Check if we have enough memory left.
+     *
+     * @return bool
+     *   Boolean to show if we have enough left.
+     *   FALSE = all is OK.
+     *   TRUE = we have a problem.
+     */
+    protected function checkMemory()
+    {
         // We will only check, if we were able to determine a memory limit
         // in the first place.
         if ($this->serverMemoryLimit > 2) {
@@ -206,7 +230,6 @@ class Emergency
             }
         }
 
-        // Still here? Everything must be good  :-)
         return false;
     }
 

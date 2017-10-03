@@ -332,13 +332,7 @@ abstract class AbstractController
      */
     protected function getCurrentUrl()
     {
-        static $result;
-
-        if (isset($result)) {
-            return $result;
-        }
-
-        $server = $this->pool->getServer();
+        $server = $this->pool->getGlobals('_SERVER');
 
         // Check if someone has been messing with the $_SERVER, to prevent
         // warnings and notices.
@@ -346,9 +340,7 @@ abstract class AbstractController
             empty($server['SERVER_PROTOCOL']) ||
             empty($server['SERVER_PORT']) ||
             empty($server['SERVER_NAME'])) {
-            $result = 'n/a';
-
-            return $result;
+            return 'n/a';
         }
 
         // SSL or no SSL.
@@ -376,9 +368,7 @@ abstract class AbstractController
             $host = $server['SERVER_NAME'] . $port;
         }
 
-        $result = $this->pool->encodingService->encodeString($protocol . '://' . $host . $server['REQUEST_URI']);
-        return $result;
-
+        return $this->pool->encodingService->encodeString($protocol . '://' . $host . $server['REQUEST_URI']);
     }
 
     /**

@@ -94,42 +94,29 @@ class Factory
      */
     public function flushRewrite()
     {
-        $globals = $this->getGlobals();
+        $overwrites = $this->getGlobals('kreXXoverwrites');
 
-        if (isset($globals['kreXXoverwrites']) && isset($globals['kreXXoverwrites']['classes'])) {
-            $this->rewrite = $globals['kreXXoverwrites']['classes'];
+        if (isset($overwrites) && isset($overwrites['classes'])) {
+            $this->rewrite = $overwrites['classes'];
         } else {
             $this->rewrite = array();
         }
     }
 
     /**
-     * Return the superglobal $GLOBALS.
+     * Return a part the superglobal $GLOBALS.
+     *
+     * @param string $what
+     *   The part of the globals we want to access.
      *
      * @return array
+     *   The part we are requesting.
      */
-    public function &getGlobals()
+    public function &getGlobals($what)
     {
-        return $GLOBALS;
-    }
-
-    /**
-     * Return the superglobal $_SERVER.
-     *
-     * @return array
-     */
-    public function &getServer()
-    {
-        return $_SERVER;
-    }
-
-    /**
-     * Return the superglobal $_COOKIE.
-     *
-     * @return array
-     */
-    public function &getCookie()
-    {
-        return $_COOKIE;
+        if (empty($what)) {
+            return $GLOBALS;
+        }
+        return $GLOBALS[$what];
     }
 }

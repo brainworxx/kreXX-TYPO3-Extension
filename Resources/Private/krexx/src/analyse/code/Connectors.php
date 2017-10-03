@@ -101,17 +101,7 @@ class Connectors
      *
      * @var array
      */
-    protected $connectorArray = array(
-        self::NOTHING => array('', ''),
-        self::METHOD => array('->', '(@param@)'),
-        self::STATIC_METHOD => array('::', '(@param@)'),
-        self::NORMAL_ARRAY => array('[', ']'),
-        self::ASSOCIATIVE_ARRAY => array('[\'', '\']'),
-        self::CONSTANT => array('::', ''),
-        self::NORMAL_PROPERTY => array('->', ''),
-        self::STATIC_PROPERTY => array('::', ''),
-        self::SPECIAL_CHARS_PROP => array('->{\'', '\'}'),
-    );
+    protected $connectorArray;
 
     /**
      * The name of the language here. Will be used as the source generation
@@ -143,6 +133,24 @@ class Connectors
      * @var string
      */
     protected $customConnector1 = '';
+
+    /**
+     * Initializing the connector array.
+     */
+    public function __construct()
+    {
+        $this->connectorArray = array(
+            static::NOTHING => array('', ''),
+            static::METHOD => array('->', '(@param@)'),
+            static::STATIC_METHOD => array('::', '(@param@)'),
+            static::NORMAL_ARRAY => array('[', ']'),
+            static::ASSOCIATIVE_ARRAY => array('[\'', '\']'),
+            static::CONSTANT => array('::', ''),
+            static::NORMAL_PROPERTY => array('->', ''),
+            static::STATIC_PROPERTY => array('::', ''),
+            static::SPECIAL_CHARS_PROP => array('->{\'', '\'}'),
+        );
+    }
 
     /**
      * Setter for the $params. It is used in case we are connection a method or

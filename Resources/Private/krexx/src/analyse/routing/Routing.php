@@ -166,6 +166,23 @@ class Routing extends AbstractRouting
                 ->setNormal($type));
         }
 
+        // Looks like we are good.
+        return $this->preprocessNoneSimpleTypes($data, $model);
+    }
+
+    /**
+     * Do some preprocessing, before the routing.
+     *
+     * @param object|array $data
+     *   The object / array we are analysing.
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The already prepared model.
+     *
+     * @return string
+     *   The rendered HTML code.
+     */
+    protected function preprocessNoneSimpleTypes($data, Model $model)
+    {
         if (is_object($data)) {
             // Object?
             // Remember that we've been here before.
@@ -185,6 +202,5 @@ class Routing extends AbstractRouting
 
         // Must be an array.
         return $this->processArray->process($model);
-
     }
 }

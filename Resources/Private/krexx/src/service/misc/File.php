@@ -71,7 +71,7 @@ class File
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-        $server = $pool->getServer();
+        $server = $pool->getGlobals('_SERVER');
         $this->docRoot = trim(realpath($server['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR);
         if (empty($this->docRoot)) {
             $this->docRoot = false;

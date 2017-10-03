@@ -93,12 +93,11 @@ class ThroughConfig extends AbstractCallback
         );
 
         // Render the reset-button which will delete the debug-cookie.
-        $configOutput .= $this->pool->render->renderButton(
+        return $configOutput . $this->pool->render->renderButton(
             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setName('resetbutton')
                 ->setNormal('Reset local settings')
                 ->setHelpid('resetbutton')
         );
-        return $configOutput;
     }
 }
