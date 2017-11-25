@@ -29,9 +29,6 @@ If you want to debug Ajax or CLI requests, it is a good idea to use the followin
 	:width: 689px
 	:alt: Settings for ajax and cli debugging
 
-.. code-block:: typoscript
-
-    destination = "file"
 
 Logging
 ^^^^^^^

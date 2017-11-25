@@ -34,7 +34,7 @@ Like all local configurations, this is stored in a cookie inside your browser. T
 	// or as an alias
 	krexx($myObject, 'gue');
 
-Only people with the string “gue” added to their local configuration will now be able to trigger an analysis. kreXX will be disabled for everyone else.
+Only people with the string “gue” added to their local configuration will now be able to trigger this specific analysis.
 
 Debugging a live server
 ^^^^^^^^^^^^^^^^^^^^^^^
