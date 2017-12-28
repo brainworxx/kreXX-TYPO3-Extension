@@ -143,7 +143,7 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCa
     /**
      * {@inheritdoc}
      */
-    public function findCaller()
+    public function findCaller($headline, $data)
     {
         // Did we get our stuff together so far?
         if ($this->error) {
@@ -152,6 +152,7 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCa
                 'file' => 'n/a',
                 'line' => 'n/a',
                 'varname' => 'fluidvar',
+                'type' => $this->getType('Fluid analysis', 'fluidvar', $data),
             );
         }
 
@@ -176,6 +177,7 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCa
              'file' => $this->pool->fileService->filterFilePath($path),
              'line' => 'n/a',
              'varname' => 'fluidvar',
+             'type' => $this->getType('Fluid analysis', 'fluidvar', $data),
          );
     }
 
