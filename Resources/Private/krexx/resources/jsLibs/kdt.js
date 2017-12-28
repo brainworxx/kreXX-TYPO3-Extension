@@ -63,6 +63,11 @@
             }
             // Get the next one.
             parent = parent.parentNode;
+            // check if we have reached the top of the rabbit hole.
+            if (parent === kdt.body) {
+                // Exit the while.
+                parent = null;
+            }
         }
         return result;
 
@@ -76,24 +81,54 @@
      * @return {*}
      */
     kdt.matches = function(element, selector) {
-        return (
-            // Normal implementation.
-            element.matches ||
-            // Whatever.
-            element.matchesSelector ||
-            // IE.
-            element.msMatchesSelector ||
-            // Firefox.
-            element.mozMatchesSelector ||
-            // Chrome.
-            element.webkitMatchesSelector ||
-            // Opera.
-            element.oMatchesSelector ||
-            function () {
-                // Fallback to false, this is not the element you are lookking for.
-                return false;
+        return false;
+    };
+
+    /**
+     * We are adding a concrete implementation of the matches method,
+     * which may or may not be implemented in one way or the aother.
+     */
+    kdt.testMachtes = function() {
+        // Normal implementation.
+        if (typeof kdt.body.matches === 'function') {
+            kdt.matches = function(element, selector) {
+                return element.matches(selector);
+            };
+            return;
+        }
+        // Whatever.
+        if (typeof kdt.body.matchesSelector === 'function') {
+            kdt.matches = function(element, selector) {
+                return element.matchesSelector(selector);
+            };
+            return;
+        }
+        // IE.
+        if (typeof kdt.body.msMatchesSelector === 'function') {
+            kdt.matches = function(element, selector) {
+                return element.msMatchesSelector(selector);
+            };
+            return;
+        }
+        // Firefox.
+        if (typeof kdt.body.mozMatchesSelector === 'function') {
+            kdt.matches = function(element, selector) {
+                return element.mozMatchesSelector(selector);
+            };
+            return;
+        }
+        // Chrome.
+        if (typeof kdt.body.webkitMatchesSelector === 'function') {
+            kdt.matches = function(element, selector) {
+                return element.webkitMatchesSelector(selector);
             }
-        ).call(element, selector);
+        }
+         // Opera.
+        if (typeof kdt.body.oMatchesSelector === 'function') {
+            kdt.webkitMatchesSelector = function(element, selector) {
+                return element.oMatchesSelector(selector);
+            }
+        }
     };
 
     /**
@@ -303,6 +338,8 @@
         var element = event.target;
         var finished = false;
 
+
+
         do {
             // We need to test the element on all selectors.
             for (var selector in kdt.clickHandler.storage) {
@@ -323,6 +360,10 @@
             } else {
                 // Time to test the parent.
                 element = element.parentNode;
+                // Test if we have reached the top of the rabbit hole.
+                if (element === this) {
+                    element = null;
+                }
             }
         } while (element !== null);
 
@@ -452,7 +493,7 @@
             // - margin: top or
             // - margin: bottom
             /** @type {CSSStyleDeclaration} */
-            var bodyStyle = getComputedStyle(document.querySelector('body'));
+            var bodyStyle = getComputedStyle(kdt.body);
             if (bodyStyle.position === 'relative') {
 
                 /** @type {number} */
@@ -714,15 +755,13 @@
         // Get all elements.
         /** @type {NodeList} */
         var elements = document.querySelectorAll(selector);
-        /** @type {Element} */
-        var body = document.querySelector('body');
 
         for (var i = 0; i < elements.length; i++) {
             // Check if their parent is the body tag.
             if (elements[i].parentNode.nodeName.toUpperCase() !== 'BODY') {
                 // Meh, we are handling some broken DOM. We need to move it
                 // to the bottom.
-                body.appendChild(elements[i]);
+                kdt.body.appendChild(elements[i]);
             }
         }
     };
@@ -785,6 +824,25 @@
         }, 500);
     };
 
+    /**
+     * Must be called before usage, only once.
+     *
+     * @event onDocumentReady
+     */
+    kdt.initialize = function () {
+
+        /**
+         * Caching of the body element for late usage.
+         *
+         * @type {Element}
+         */
+        kdt.body = document.querySelector('body');
+
+        // Adding a concrete maches implementation to the lib.
+        kdt.testMachtes();
+    };
+
+    // Copy the lib to the DOM, for later usage.
     window.kreXXdomTools = kdt;
 
 })();

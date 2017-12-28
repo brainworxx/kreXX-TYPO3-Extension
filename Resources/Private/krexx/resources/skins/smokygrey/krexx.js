@@ -57,6 +57,8 @@
      * Executed on document ready
      */
     krexx.onDocumentReady = function () {
+        // Init our kdt lib before usage.
+        kdt.initialize();
 
         // In case we are handling a broken html structure, we must move everything
         // to the bottom.
