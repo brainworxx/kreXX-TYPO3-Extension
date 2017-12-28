@@ -54,14 +54,14 @@ class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
 
         // Setting (nearly) everything to the point connector.
         $this->connectorArray = array(
-            self::METHOD => array('.', '(@param@)'),
-            self::STATIC_METHOD => array('.', '(@param@)'),
-            self::NORMAL_ARRAY => array('.', ''),
-            self::ASSOCIATIVE_ARRAY => array('.', ''),
-            self::CONSTANT => array('.', ''),
-            self::NORMAL_PROPERTY => array('.', ''),
-            self::STATIC_PROPERTY => array('.', ''),
-            self::SPECIAL_CHARS_PROP => array('.', ''),
+            static::METHOD => array('.', '(@param@)'),
+            static::STATIC_METHOD => array('.', '(@param@)'),
+            static::NORMAL_ARRAY => array('.', ''),
+            static::ASSOCIATIVE_ARRAY => array('.', ''),
+            static::CONSTANT => array('.', ''),
+            static::NORMAL_PROPERTY => array('.', ''),
+            static::STATIC_PROPERTY => array('.', ''),
+            static::SPECIAL_CHARS_PROP => array('.', ''),
         );
     }
 
