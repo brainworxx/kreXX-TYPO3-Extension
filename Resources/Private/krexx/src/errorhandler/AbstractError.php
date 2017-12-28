@@ -45,6 +45,29 @@ abstract class AbstractError
 {
 
     /**
+     * Translates an error into someting more human readable.
+     *
+     * @var array
+     */
+    protected $errorTranslation = array(
+        E_ERROR => array('Fatal', 'traceFatals'),
+        E_WARNING => array('Warning', 'traceWarnings'),
+        E_PARSE => array('Parse error', 'traceFatals'),
+        E_NOTICE => array('Notice', 'traceNotices'),
+        E_CORE_ERROR => array('PHP startup error', 'traceFatals'),
+        E_CORE_WARNING => array('PHP startup warning', 'traceWarnings'),
+        E_COMPILE_ERROR => array('Zend scripting fatal error', 'traceFatals'),
+        E_COMPILE_WARNING => array('Zend scripting warning', 'traceWarnings'),
+        E_USER_ERROR => array('User defined error', 'traceFatals'),
+        E_USER_WARNING => array('User defined warning', 'traceWarnings'),
+        E_USER_NOTICE => array('User defined notice', 'traceNotices'),
+        E_STRICT => array('Strict notice', 'traceNotices'),
+        E_RECOVERABLE_ERROR => array('Catchable fatal error', 'traceFatals'),
+        E_DEPRECATED => array('Deprecated warning', 'traceWarnings'),
+        E_USER_DEPRECATED => array('User defined deprecated warning', 'traceWarnings'),
+    );
+
+    /**
      * Here we store all relevant data.
      *
      * @var Pool
@@ -102,87 +125,11 @@ abstract class AbstractError
      */
     protected function translateErrorType($errorint)
     {
-        switch ($errorint) {
-            case E_ERROR:
-                $errorName = 'Fatal';
-                $errorSetting = 'traceFatals';
-                break;
-
-            case E_WARNING:
-                $errorName = 'Warning';
-                $errorSetting = 'traceWarnings';
-                break;
-
-            case E_PARSE:
-                $errorName = 'Parse error';
-                $errorSetting = 'traceFatals';
-                break;
-
-            case E_NOTICE:
-                $errorName = 'Notice';
-                $errorSetting = 'traceNotices';
-                break;
-
-            case E_CORE_ERROR:
-                $errorName = 'PHP startup error';
-                $errorSetting = 'traceFatals';
-                break;
-
-            case E_CORE_WARNING:
-                $errorName = 'PHP startup warning';
-                $errorSetting = 'traceWarnings';
-                break;
-
-            case E_COMPILE_ERROR:
-                $errorName = 'Zend scripting fatal error';
-                $errorSetting = 'traceFatals';
-                break;
-
-            case E_COMPILE_WARNING:
-                $errorName = 'Zend scripting warning';
-                $errorSetting = 'traceWarnings';
-                break;
-
-            case E_USER_ERROR:
-                $errorName = 'User defined error';
-                $errorSetting = 'traceFatals';
-                break;
-
-            case E_USER_WARNING:
-                $errorName = 'User defined warning';
-                $errorSetting = 'traceWarnings';
-                break;
-
-            case E_USER_NOTICE:
-                $errorName = 'User defined notice';
-                $errorSetting = 'traceNotices';
-                break;
-
-            case E_STRICT:
-                $errorName = 'Strict notice';
-                $errorSetting = 'traceNotices';
-                break;
-
-            case E_RECOVERABLE_ERROR:
-                $errorName = 'Catchable fatal error';
-                $errorSetting = 'traceFatals';
-                break;
-
-            case E_DEPRECATED:
-                $errorName = 'Deprecated warning';
-                $errorSetting = 'traceWarnings';
-                break;
-
-            case E_USER_DEPRECATED:
-                $errorName = 'User defined deprecated warning';
-                $errorSetting = 'traceWarnings';
-                break;
-
-            default:
-                $errorName = 'Unknown error';
-                $errorSetting = 'unknown';
-                break;
+        if (isset($this->errorTranslation[$errorint]) === true) {
+            return $this->errorTranslation[$errorint];
         }
-        return array($errorName, $errorSetting);
+
+        // Fallback to 'unknown'.
+        return array('Unknown error', 'unknown');
     }
 }

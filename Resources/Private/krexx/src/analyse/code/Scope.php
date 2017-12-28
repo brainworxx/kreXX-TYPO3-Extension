@@ -142,7 +142,7 @@ class Scope
         // When analysing a class or array, we have + 1 on our nesting level, when
         // coming from the code generation. That is, because that class is currently
         // being analysed.
-        if (is_object($model->getData()) || is_array($model->getData())) {
+        if (is_object($model->getData()) === true || is_array($model->getData()) === true) {
             --$nestingLevel;
         }
 

@@ -483,10 +483,12 @@ $fontLight: lighter 10px tahoma, verdana;
         ::selection {
           /* WebKit/Blink Browsers */
           background: $yellowBwx !important;
+          color: $blackLight !important;
         }
         ::-moz-selection {
           /* Gecko Browsers */
           background: $yellowBwx !important;
+          color: $blackLight !important;
         }
       }
 
@@ -505,9 +507,11 @@ $fontLight: lighter 10px tahoma, verdana;
         background-color: $white;
       }
       .source {
-        padding: 1px 20px;
-        background-color: $whiteDark;
-        margin: 2px 0;
+        padding: 0 20px;
+        border-top: 1px solid $whiteDark;
+        border-bottom: 1px solid $whiteDark;
+        background-color: $white;
+        margin: 0;
       }
       .klineno {
         font-weight: normal;
@@ -516,7 +520,9 @@ $fontLight: lighter 10px tahoma, verdana;
         background-color: $greyLight !important;
         padding: 5px 20px;
         color: $blackLight;
-        margin: 10px 0;
+        margin: 0;
+        border-top: 5px solid $whiteDark;
+        border-bottom: 5px solid $whiteDark;
         position: relative;
         &:before {
           width: 3px;

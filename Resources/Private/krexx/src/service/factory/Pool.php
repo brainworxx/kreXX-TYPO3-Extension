@@ -130,13 +130,6 @@ class Pool extends Factory
     public $routing;
 
     /**
-     * The directory where kreXX is installed.
-     *
-     * @var string
-     */
-    public $krexxDir;
-
-    /**
      * @var File
      */
     public $fileService;
@@ -148,29 +141,21 @@ class Pool extends Factory
 
     /**
      * Initializes all needed classes.
-     *
-     * @param string $krexxDir
-     *   The directory, where kreXX is stored.
      */
-    public function __construct($krexxDir)
+    public function __construct()
     {
+        $this->init();
         $this->registry = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\Registry');
-        $this->init($krexxDir);
     }
 
     /**
      * (Re)initializes everything in the pool, in case in-runtime
      * factory overwrites.
-     *
-     * @param string $krexxDir
-     *   The dir where kreXX is stored.
      */
-    public function init($krexxDir)
+    public function init()
     {
         // Get the rewrites from the $GLOBALS.
         $this->flushRewrite();
-        // Set the directory.
-        $this->krexxDir = $krexxDir;
         // Initialize the encoding service.
         $this->encodingService = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\Encoding');
         // Initializes the file service.
@@ -206,7 +191,7 @@ class Pool extends Factory
         // Check chunk folder is writable.
         // If not, give feedback!
         $chunkFolder = $this->config->getChunkDir();
-        if (!is_writeable($chunkFolder)) {
+        if (is_writeable($chunkFolder) === false) {
             $chunkFolder = $this->fileService->filterFilePath($chunkFolder);
             $this->messages->addMessage('chunksNotWritable', array($chunkFolder));
             // We can work without chunks, but this will require much more memory!
@@ -216,13 +201,14 @@ class Pool extends Factory
         // Check if the log folder is writable.
         // If not, give feedback!
         $logFolder = $this->config->getLogDir();
-        if (!is_writeable($logFolder)) {
+        if (is_writeable($logFolder) === false) {
             $logFolder = $this->fileService->filterFilePath($logFolder);
             $this->messages->addMessage('logNotWritable', array($logFolder));
             // Tell the chunk output that we have no write access in the logging
             // folder.
             $this->chunks->setUseLogging(false);
         }
+
         // At this point, we won't inform the dev right away. The error message
         // will pop up, when kreXX is actually displayed, no need to bother the
         // dev just now.
@@ -244,21 +230,13 @@ class Pool extends Factory
     }
 
     /**
-     * Reload the configuration.
-     */
-    public function resetConfig()
-    {
-        $this->config = $this->createClass('Brainworxx\\Krexx\\Service\\Config\\Config');
-    }
-
-    /**
      * Loads the renderer from the skin.
      */
     protected function initRenderer()
     {
         $skin = $this->config->getSetting('skin');
         $classname = 'Brainworxx\\Krexx\\View\\' . ucfirst($skin) . '\\Render';
-        include_once $this->krexxDir . 'resources/skins/' . $skin . '/Render.php';
+        include_once KREXX_DIR . 'resources/skins/' . $skin . '/Render.php';
         $this->render =  $this->createClass($classname);
     }
 }

@@ -96,8 +96,7 @@ class Fallback
             'analyseGetter' => 'true',
             'debugMethods' => 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo,getProperties',
         ),
-        'backtraceAndError' => array(
-            'registerAutomatically' => 'false',
+        'backtrace' => array(
             'maxStepNumber' => 10,
         ),
     );
@@ -159,10 +158,6 @@ class Fallback
         'skin' => array(
             'type' => 'Select',
             'editable' => 'true',
-        ),
-        'registerAutomatically' => array(
-            'type' => 'Select',
-            'editable' => 'false',
         ),
         'detectAjax' => array(
             'type' => 'Select',
@@ -286,7 +281,6 @@ class Fallback
         'maxfiles' => 'evalInt',
         'skin' => 'evalSkin',
         'devHandle' => 'evalDevHandle',
-        'registerAutomatically' => 'evalFatal',
         'iprange' => 'evalIpRange',
         'analyseGetter' => 'evalBool',
         'memoryLeft' => 'evalInt',
@@ -311,5 +305,5 @@ class Fallback
      *
      * @var int
      */
-    public $arrayCountLimit = 100;
+    public $arrayCountLimit = 300;
 }

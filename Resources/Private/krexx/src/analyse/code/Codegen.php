@@ -98,10 +98,10 @@ class Codegen
      */
     public function generateSource(Model $model)
     {
-        if ($this->allowCodegen) {
+        if ($this->allowCodegen === true) {
             // We handle the first one special, because we need to add the original
             // variable name to the source generation.
-            if ($this->firstRun) {
+            if ($this->firstRun === true) {
                 $this->firstRun = false;
                 return $this->concatenation($model);
             }
@@ -109,13 +109,13 @@ class Codegen
             // Test for constants.
             // They have no connectors, but are marked as such.
             // although this is meta stuff, we need to add the stop info here.
-            if ($model->getIsMetaConstants()) {
+            if ($model->getIsMetaConstants() === true) {
                 // We must only take the stuff from the constant itself
                 return ';stop;';
             }
 
             $connectors = $model->getConnector1() . $model->getConnector2();
-            if (empty($connectors)) {
+            if (empty($connectors) === true) {
                 // No connectors, no nothing. We must be dealing with meta stuff.
                 // We will ignore this one.
                 return '';
@@ -132,14 +132,14 @@ class Codegen
                 return 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
             }
 
-            // Test for private or protected.
+            // Test for private or protected access.
             if (strpos($type, 'protected') === false && strpos($type, 'private') === false) {
                 // Is not protected.
                 return $this->concatenation($model);
             }
 
             // Test if we are inside the scope. Everything within our scope is reachable.
-            if ($this->pool->scope->testModelForCodegen($model)) {
+            if ($this->pool->scope->testModelForCodegen($model) === true) {
                 // We are inside the scope, this value, function or class is reachable.
                 return $this->concatenation($model);
             }
@@ -227,9 +227,9 @@ class Codegen
         $result = '';
 
         // Check for type value
-        if ($reflectionParameter->isArray()) {
+        if ($reflectionParameter->isArray() === true) {
             $parameterType = 'array';
-        } elseif (!is_null($reflectionParameter->getClass())) {
+        } elseif ($reflectionParameter->getClass() !== null) {
             // We got ourselves an object!
             $parameterType = $reflectionParameter->getClass()->name;
         }
@@ -237,7 +237,7 @@ class Codegen
         $result .= $parameterType . ' $' . $reflectionParameter->getName();
 
         // Check for default value.
-        if ($reflectionParameter->isDefaultValueAvailable()) {
+        if ($reflectionParameter->isDefaultValueAvailable() === true) {
             $result .= ' = ' . $this->prepareDefaultValue($reflectionParameter->getDefaultValue());
         }
 
@@ -255,20 +255,20 @@ class Codegen
      */
     protected function prepareDefaultValue($default)
     {
-        if (is_string($default)) {
+        if (is_string($default) === true) {
             // We need to escape this one.
             return '\'' . $this->pool->encodingService->encodeString($default) . '\'';
         }
 
-        if (is_null($default)) {
+        if ($default === null) {
             return 'NULL';
         }
 
-        if (is_array($default)) {
+        if (is_array($default) === true) {
             return 'array()';
         }
 
-        if (is_bool($default)) {
+        if (is_bool($default) === true) {
             // Transform it to readable values.
             if ($default === true) {
                 return 'TRUE';
@@ -277,7 +277,7 @@ class Codegen
             }
         }
 
-        // Still here ?!?
+        // Still here?
         return (string) $default;
     }
 }

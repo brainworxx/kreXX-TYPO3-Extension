@@ -123,10 +123,7 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
         $value['methods']['analysePrivateMethods'] = $this->convertKrexxFeSetting(
             $iniConfig->getFeConfigFromFile('analysePrivateMethods')
         );
-        $value['backtraceAndError']['registerAutomatically'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('registerAutomatically')
-        );
-        $value['backtraceAndError']['maxStepNumber'] = $this->convertKrexxFeSetting(
+        $value['backtrace']['maxStepNumber'] = $this->convertKrexxFeSetting(
             $iniConfig->getFeConfigFromFile('maxStepNumber')
         );
         $value['methods']['analyseGetter'] = $this->convertKrexxFeSetting(

@@ -38,6 +38,11 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
  * Analysis of all getter methods.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
+ *
+ * @uses mixed data
+ *   The class we are currently analsysing.
+ * @uses \ReflectionClass ref
+ *   A reflection of the class we are currently analysing.
  */
 class Getter extends AbstractObjectAnalysis
 {
@@ -55,7 +60,7 @@ class Getter extends AbstractObjectAnalysis
         // Get all public methods.
         $methodList = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
 
-        if ($this->pool->scope->isInScope()) {
+        if ($this->pool->scope->isInScope() === true) {
             // Looks like we also need the protected and private methods.
             $methodList = array_merge(
                 $methodList,
@@ -63,26 +68,22 @@ class Getter extends AbstractObjectAnalysis
             );
         }
 
-        if (empty($methodList)) {
+        if (empty($methodList) === true) {
             // There are no getter methods in here.
             return '';
         }
 
         // Filter them.
+        /** @var \ReflectionMethod $method */
         foreach ($methodList as $key => $method) {
-            if (strpos($method->getName(), 'get') === 0) {
-                // We only dump those that have no parameters.
-                /** @var \ReflectionMethod $method */
-                $parameters = $method->getParameters();
-                if (!empty($parameters)) {
-                    unset($methodList[$key]);
-                }
-            } else {
+            // We only dump those that start with 'get' and have no parameters.
+            if (strpos($method->getName(), 'get') !== 0 &&
+                count($method->getParameters()) !== 0) {
                 unset($methodList[$key]);
             }
         }
 
-        if (empty($methodList)) {
+        if (empty($methodList) === true) {
             // There are no getter methods in here.
             return '';
         }

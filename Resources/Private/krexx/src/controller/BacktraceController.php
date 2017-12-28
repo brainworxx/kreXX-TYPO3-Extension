@@ -50,19 +50,15 @@ class BacktraceController extends AbstractController
      */
     public function backtraceAction()
     {
-        if ($this->pool->emergencyHandler->checkMaxCall()) {
+        if ($this->pool->emergencyHandler->checkMaxCall() === true) {
             // Called too often, we might get into trouble here!
             return $this;
         }
 
         $this->pool->reset();
-        // We overwrite the local settings, so we can get as much info from
-        // analysed objects as possible.
-        $this->pool->config->overwriteLocalSettings($this->configFatal);
 
         // Find caller.
-        $caller = $this->callerFinder->findCaller();
-        $caller['type'] = 'Backtrace';
+        $caller = $this->callerFinder->findCaller('Backtrace', array());
 
         $this->pool->scope->setScope($caller['varname']);
 
@@ -85,7 +81,7 @@ class BacktraceController extends AbstractController
 
         // Now that our analysis is done, we must check if there was an emergency
         // break.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
             return $this;
         }
 
@@ -96,9 +92,6 @@ class BacktraceController extends AbstractController
         $this->outputService->addChunkString($this->outputHeader('Backtrace'));
         $this->outputService->addChunkString($analysis);
         $this->outputService->addChunkString($footer);
-
-        // Reset our configuration for the other analysis calls.
-        $this->pool->resetConfig();
 
         return $this;
     }

@@ -38,6 +38,11 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
  * Analysis of protected properties.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
+ *
+ * @uses mixed data
+ *   The class we are currently analsysing.
+ * @uses \ReflectionClass ref
+ *   A reflection of the class we are currently analysing.
  */
 class ProtectedProperties extends AbstractObjectAnalysis
 {
@@ -52,9 +57,10 @@ class ProtectedProperties extends AbstractObjectAnalysis
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
         $refProps = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
-        if (empty($refProps)) {
+        if (empty($refProps) === true) {
             return '';
         }
+        
         usort($refProps, array($this, 'reflectionSorting'));
 
         return $this->getReflectionPropertiesData(

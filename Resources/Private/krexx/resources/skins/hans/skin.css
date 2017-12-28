@@ -778,12 +778,14 @@ div.kwrapper {
 .kfatalwrapper-outer .kchild .kel .kodsp ::selection {
     /* WebKit/Blink Browsers */
     background: #FED300 !important;
+    color: #303030;
 }
 
 .kwrapper .kchild .kel .kodsp ::-moz-selection,
 .kfatalwrapper-outer .kchild .kel .kodsp ::-moz-selection {
     /* Gecko Browsers */
     background: #FED300 !important;
+    color: #303030;
 }
 
 .kwrapper .kversion .kel {

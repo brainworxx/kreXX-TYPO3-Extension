@@ -364,10 +364,12 @@
         float: right; }
         .kwrapper .kchild .kel .kodsp ::selection, .kfatalwrapper-outer .kchild .kel .kodsp ::selection {
           /* WebKit/Blink Browsers */
-          background: #FED300 !important; }
+          background: #FED300 !important;
+          color: #555555 !important; }
         .kwrapper .kchild .kel .kodsp ::-moz-selection, .kfatalwrapper-outer .kchild .kel .kodsp ::-moz-selection {
           /* Gecko Browsers */
-          background: #FED300 !important; }
+          background: #FED300 !important;
+          color: #555555 !important; }
     .kwrapper .kchild .kpreview, .kfatalwrapper-outer .kchild .kpreview {
       padding: 0;
       margin-bottom: 5px; }
@@ -379,16 +381,20 @@
         white-space: pre;
         background-color: #ffffff; }
       .kwrapper .kchild .kpreview .source, .kfatalwrapper-outer .kchild .kpreview .source {
-        padding: 1px 20px;
-        background-color: #F2F2F2;
-        margin: 2px 0; }
+        padding: 0 20px;
+        border-top: 1px solid #F2F2F2;
+        border-bottom: 1px solid #F2F2F2;
+        background-color: #ffffff;
+        margin: 0; }
       .kwrapper .kchild .kpreview .klineno, .kfatalwrapper-outer .kchild .kpreview .klineno {
         font-weight: normal; }
       .kwrapper .kchild .kpreview .highlight, .kfatalwrapper-outer .kchild .kpreview .highlight {
         background-color: #E0E0E0 !important;
         padding: 5px 20px;
         color: #555555;
-        margin: 10px 0;
+        margin: 0;
+        border-top: 5px solid #F2F2F2;
+        border-bottom: 5px solid #F2F2F2;
         position: relative; }
         .kwrapper .kchild .kpreview .highlight:before, .kfatalwrapper-outer .kchild .kpreview .highlight:before {
           width: 3px;

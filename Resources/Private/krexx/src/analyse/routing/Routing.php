@@ -76,28 +76,29 @@ class Routing extends AbstractRouting
     public function analysisHub(Model $model)
     {
         // Check memory and runtime.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
             return '';
         }
+
         $data = $model->getData();
 
         // String?
-        if (is_string($data)) {
+        if (is_string($data) === true) {
             return $this->processString->process($model);
         }
 
         // Integer?
-        if (is_int($data)) {
+        if (is_int($data) === true) {
             return $this->processInteger->process($model);
         }
 
-        // Null ?
-        if (is_null($data)) {
+        // Null?
+        if ($data === null) {
             return $this->processNull->process($model);
         }
 
         // Handle the complex types.
-        if (is_array($data) || is_object($data)) {
+        if (is_array($data) === true || is_object($data) === true) {
             // Up one nesting Level.
             $this->pool->emergencyHandler->upOneNestingLevel();
             // Handle the non simple types like array and object.
@@ -108,17 +109,17 @@ class Routing extends AbstractRouting
         }
 
         // Boolean?
-        if (is_bool($data)) {
+        if (is_bool($data) === true) {
             return $this->processBoolean->process($model);
         }
 
         // Float?
-        if (is_float($data)) {
+        if (is_float($data) === true) {
             return $this->processFloat->process($model);
         }
 
         // Resource?
-        if (is_resource($data)) {
+        if (is_resource($data) === true) {
             return $this->processResource->process($model);
         }
 
@@ -140,20 +141,24 @@ class Routing extends AbstractRouting
     protected function handleNoneSimpleTypes($data, Model $model)
     {
         // Check the nesting level.
-        if ($this->pool->emergencyHandler->checkNesting()) {
-            $this->pool->emergencyHandler->downOneNestingLevel();
+        if ($this->pool->emergencyHandler->checkNesting() === true) {
             $text = $this->pool->messages->getHelp('maximumLevelReached2');
+            if (is_array($data) === true) {
+                $type = 'array';
+            } else {
+                $type = 'object';
+            }
             $model->setData($text)
                 ->setNormal($this->pool->messages->getHelp('maximumLevelReached1'))
-                ->setType(gettype($data))
+                ->setType($type)
                 ->hasExtras();
             // Render it directly.
             return $this->pool->render->renderSingleChild($model);
         }
 
-        if ($this->pool->recursionHandler->isInHive($data)) {
+        if ($this->pool->recursionHandler->isInHive($data) === true) {
             // Render recursion.
-            if (is_object($data)) {
+            if (is_object($data) === true) {
                 $type = '\\' . get_class($data);
                 $domId = $this->generateDomIdFromObject($data);
             } else {
@@ -161,9 +166,10 @@ class Routing extends AbstractRouting
                 $type = '$GLOBALS';
                 $domId = '';
             }
-            return $this->pool->render->renderRecursion($model
-                ->setDomid($domId)
-                ->setNormal($type));
+
+            return $this->pool->render->renderRecursion(
+                $model->setDomid($domId)->setNormal($type)
+            );
         }
 
         // Looks like we are good.
@@ -171,7 +177,7 @@ class Routing extends AbstractRouting
     }
 
     /**
-     * Do some preprocessing, before the routing.
+     * Do some pre processing, before the routing.
      *
      * @param object|array $data
      *   The object / array we are analysing.
@@ -183,19 +189,19 @@ class Routing extends AbstractRouting
      */
     protected function preprocessNoneSimpleTypes($data, Model $model)
     {
-        if (is_object($data)) {
+        if (is_object($data) === true) {
             // Object?
             // Remember that we've been here before.
             $this->pool->recursionHandler->addToHive($data);
 
             // We need to check if this is an object first.
-            // When calling is_a('myClass', 'anotherClass') the
-            // autoloader is triggered, trying to load 'myClass', although
-            // it is just a string.
-            if (is_a($data, '\\Closure')) {
+            // When calling is_a('myClass', 'anotherClass') the autoloader is
+            // triggered, trying to load 'myClass', although it is just a string.
+            if ($data instanceof \Closure) {
                 // Closures are handled differently than normal objects
                 return $this->processClosure->process($model);
             }
+
             // Normal object.
             return $this->processObject->process($model);
         }

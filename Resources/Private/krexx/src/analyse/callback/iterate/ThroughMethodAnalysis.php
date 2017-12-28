@@ -73,6 +73,7 @@ class ThroughMethodAnalysis extends AbstractCallback
 
             $output .= $this->pool->render->renderSingleChild($model);
         }
+        
         return $output;
     }
 }

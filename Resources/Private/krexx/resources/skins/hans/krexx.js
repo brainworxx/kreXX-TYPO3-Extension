@@ -295,7 +295,7 @@
      *   The element that was clicked.
      */
     krexx.collapse = function (event, element) {
-
+        event.stop = true;
         var button = element;
         var wrapper = kdt.getParents(button, '.kwrapper')[0];
 
@@ -664,6 +664,9 @@
      */
     krexx.generateCode = function (event, element) {
 
+        // We don't want to bubble the click any further.
+        event.stop = true;
+
         var codedisplay = element.nextElementSibling;
         var resultArray = [];
         var resultString = '';
@@ -786,7 +789,7 @@
 
     /**
      * Checks if the search form is inside the viewport. If not, fixes it on top.
-     * Gets triggered on,y when scolling the fatel error handler.
+     * Gets triggered on,y when scolling the fatal error handler.
      *
      * @param {Event} event
      */
@@ -810,6 +813,7 @@
      * Listens for a <RETURN> in the search field.
      *
      * @param {Event} event
+     * @event keyUp
      */
     krexx.searchfieldReturn = function (event) {
         // Prevents the default event behavior (ie: click).

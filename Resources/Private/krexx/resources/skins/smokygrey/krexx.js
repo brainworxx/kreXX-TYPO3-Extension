@@ -102,6 +102,13 @@
         kdt.addEvent('.kwrapper .kgencode', 'click', krexx.generateCode);
 
         /**
+         * Prevents the click-event-bubbling on the generated code.
+         *
+         * @event click
+         */
+        kdt.addEvent('.kodsp', 'click', kdt.preventBubble);
+
+        /**
          * Register krexx close button function.
          *
          * @event click
@@ -174,13 +181,6 @@
          * display the fatal error handler
          */
         kdt.addEvent('.kfatalwrapper-outer', 'scroll', krexx.checkSeachInViewport);
-
-        /**
-         * Prevents the click-event-bubbling on the generated code.
-         *
-         * @event click
-         */
-        kdt.addEvent('.kodsp', 'click', kdt.preventBubble);
 
         /**
          * Clear our search results, because we now have new options.
@@ -316,6 +316,7 @@
      *   The element that was clicked.
      */
     krexx.collapse = function (event, element) {
+        event.stop = true;
 
         /** @type {EventTarget} */
         var button = element;
@@ -684,6 +685,10 @@
      *   The element that was clicked.
      */
     krexx.generateCode = function (event, element) {
+
+        // We don't want to bubble the click any further.
+        event.stop = true;
+
         var codedisplay = element.nextElementSibling;
         var resultArray = [];
         var resultString = '';
@@ -834,58 +839,65 @@
      */
     krexx.setAdditionalData = function (event, element) {
 
-        var wrapper = kdt.getParents(element, '.kwrapper')[0];
-        if (typeof wrapper === 'undefined') {
-            // This only happens, when we are facing a recursion. There is no
-            // additional json data, anyway.
-            return;
-        }
+        // When dealing with 400MB output, or more, this one takes more time than anything else.
+        // We will delay it, so that is does not slow down other stuff.
+        setTimeout(function() {
+            var wrapper = kdt.getParents(element, '.kwrapper')[0];
+            if (typeof wrapper === 'undefined') {
+                // This only happens, when we are facing a recursion. There is no
+                // additional json data, anyway.
+                return;
+            }
 
-        var body = wrapper.querySelector('.kdatabody');
-        var html = '';
-        var counter = 0;
-        var regex = /\\u([\d\w]{4})/gi;
+            var body = wrapper.querySelector('.kdatabody');
+            var html = '';
+            var counter = 0;
+            var regex = /\\u([\d\w]{4})/gi;
 
-        // Mark the clicked el, clear the others.
-        kdt.removeClass(wrapper.querySelectorAll('.kcurrent-additional'), 'kcurrent-additional');
-        kdt.addClass([element], 'kcurrent-additional');
+            // Mark the clicked el, clear the others.
+            kdt.removeClass(wrapper.querySelectorAll('.kcurrent-additional'), 'kcurrent-additional');
+            kdt.addClass([element], 'kcurrent-additional');
 
-        // Load the Json.
-        var json = kdt.getDataset(element, 'addjson', false);
-        json = kdt.parseJson(json);
+            // Load the Json.
+            var json = kdt.getDataset(element, 'addjson', false);
+            json = kdt.parseJson(json);
 
-        if (typeof json === 'object') {
-            // We've got data!
-            for (var prop in json) {
-                if (json[prop].length > 0) {
-                    json[prop] = json[prop].replace(regex, function (match, grp) {
-                        return String.fromCharCode(parseInt(grp, 16));
-                    });
-                    json[prop] = decodeURI(json[prop]);
-                    html += '<tr><td>' + prop + '</td><td>' + json[prop] + '</td></tr>';
-                    counter++;
+            if (typeof json === 'object') {
+                // We've got data!
+                for (var prop in json) {
+                    if (json[prop].length > 0) {
+                        json[prop] = json[prop].replace(regex, function (match, grp) {
+                            return String.fromCharCode(parseInt(grp, 16));
+                        });
+                        json[prop] = decodeURI(json[prop]);
+                        html += '<tr><td>' + prop + '</td><td>' + json[prop] + '</td></tr>';
+                        counter++;
+                    }
                 }
             }
-        }
-        if (counter === 0) {
-            // We have no data. Tell the user that there is nothing to see.
-            html = '<tr><td>No data available for this item.</td><td>Sorry.</td></tr>';
-        }
+            if (counter === 0) {
+                // We have no data. Tell the user that there is nothing to see.
+                html = '<tr><td>No data available for this item.</td><td>Sorry.</td></tr>';
+            }
 
-        // Add it to the DOM.
-        html = '<table><caption class="kheadline">Additional data</caption><tbody class="kdatabody">' + html + '</tbody></table>';
-        // Meh, IE9 does not allow me to edit the contents of a table. I have to
-        // redraw the whole thing.  :-(
-        body.parentNode.parentNode.innerHTML = html;
+            // Add it to the DOM.
+            html = '<table><caption class="kheadline">Additional data</caption><tbody class="kdatabody">' + html + '</tbody></table>';
+            // Meh, IE9 does not allow me to edit the contents of a table. I have to
+            // redraw the whole thing.  :-(
+            body.parentNode.parentNode.innerHTML = html;
 
-        // Since the additional data table might now be larger or smaller than,
-        // we need to recalculate the height of the payload.
-        krexx.setPayloadMaxHeight();
+            // Since the additional data table might now be larger or smaller than,
+            // we need to recalculate the height of the payload.
+            krexx.setPayloadMaxHeight();
+
+        }, 100);
+
+
     };
 
     /**
      * Checks if the search form is inside the viewport. If not, fixes it on top.
-     * Gets triggered on,y when scolling the fatel error handler.
+     * Gets triggered on,y when scolling the fatal error handler.
      */
     krexx.checkSeachInViewport = function () {
         // Get the search
@@ -907,6 +919,7 @@
      * Listens for a <RETURN> in the search field.
      *
      * @param {Event} event
+     * @event keyUp
      */
     krexx.searchfieldReturn = function (event) {
         // Prevents the default event behavior (ie: click).

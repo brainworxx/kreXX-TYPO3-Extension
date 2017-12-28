@@ -38,6 +38,11 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
  * Analysis of private properties.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
+ *
+ * @uses mixed data
+ *   The class we are currently analsysing.
+ * @uses \ReflectionClass ref
+ *   A reflection of the class we are currently analysing.
  */
 class PrivateProperties extends AbstractObjectAnalysis
 {
@@ -53,7 +58,6 @@ class PrivateProperties extends AbstractObjectAnalysis
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
         $reflectionClass = $ref;
-        $analysePrivate = $this->pool->config->getSetting('analysePrivate');
 
         // The main problem here is, that you only get the private properties of
         // the current class, but not the inherited private properties.
@@ -62,20 +66,13 @@ class PrivateProperties extends AbstractObjectAnalysis
         do {
             $refProps = array_merge($refProps, $reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE));
             // And now for the parent class.
-            // Inherited private properties are not accessible from inside
-            // the class. We will only dump them, if we are analysing private
-            // properties.
-            if ($analysePrivate) {
-                $reflectionClass = $reflectionClass->getParentClass();
-            } else {
-                // This should break the do while.
-                break;
-            }
+            $reflectionClass = $reflectionClass->getParentClass();
         } while (is_object($reflectionClass));
 
-        if (empty($refProps)) {
+        if (empty($refProps) === true) {
             return '';
         }
+        
         usort($refProps, array($this, 'reflectionSorting'));
 
         return $this->getReflectionPropertiesData(

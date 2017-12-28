@@ -33,7 +33,6 @@
             <label index="maxfiles">How many logfiles do you want to store inside your logging folder? When there are more files than this number, the older files will get deleted.</label>
             <label index="skin">Choose a skin here. We have provided kreXX with two skins: smoky-grey and hans.</label>
             <label index="currentSettings">kreXX&apos;s configuration can be edited here, changes will be stored in a cookie and overwrite the ini and factory settings. Please note, that these are only local settings. They only affect this browser.</label>
-            <label index="registerAutomatically">This option registers the fatal errorhandler as soon as kreXX is included. When a fatal error occures, kreXX will offer a backtrace and an analysis of the all objects in it. PHP always clears the stack in case of a fatal error,  so kreXX has to keep track of it. Be warned: This option will dramatically slow down your requests. Use this only when you have to. It is by far better to register the errorhandler yourself with \krexx::registerFatal(); and later unregister it with \krexx::unregisterFatal(); tp prevent a slowdown.</label>
             <label index="maxStepNumber">"A backtrace tends to produce a lot of output, and browsers tend to have problems with more than 100MB output in HTML text. Normally it is not unneccessary to go back more than 10 steps, but if you need to, you can increase this number here.</label>
             <label index="detectAjax">kreXX tries to detect whether a request is made via ajax. When it is detected, it will do no output at all. The AJAX detection can be disabled here.</label>
             <label index="backtraceAnalysis">Shall kreXX do a "deep" analysis of  the backtrace? Be warned, a deep analysis can produce a lot of output. A "normal" analysis will use the configured settings, while a "deep" analysis will get as much data from the objects as possible.</label>
@@ -66,7 +65,6 @@
             <label index="configErrorFolderWritable">Wrong configuration for: 'output => folder#! Directory is not writable. The configured setting was not applied!</label>
             <label index="configErrorFolderProtection">Wrong configuration for: 'output => folder'! Directory is not protected. The configured setting was not applied!</label>
             <label index="configErrorSkin">Wrong configuration for: 'output => skin'! Skin not found. The configured setting was not applied!</label>
-            <label index="configErrorRegisterAutomatically2">Wrong configuration for: 'backtraceAndError => registerAutomatically'! Fatal errors got removed in PHP 7. The handler will not work here!</label>
             <label index="configErrorDevHandle">You have entered a wrong developer handle. Please use only letters between a-z and A-Z.</label>
             <label index="configErrorLocal">Could not read the Local Cookie configuration. Sorry :-/</label>
             <label index="configErrorIprange">Wrong configuration for: 'output => iprange'! An empty IP list means that no one will be able to use kreXX. The configured setting was not applied!</label>
@@ -90,7 +88,7 @@
             <label index="subhead.output">Output</label>
             <label index="subhead.properties">Properties</label>
             <label index="subhead.methods">Methods</label>
-            <label index="subhead.backtraceAndError">Fatal error handling</label>
+            <label index="subhead.backtrace">Fatal error handling</label>
 
             <!-- Labels -->
             <label index="label.skin">Skin:</label>
@@ -109,7 +107,6 @@
             <label index="label.level">Maximum nesting level for objects and arrays:</label>
             <label index="label.analyseProtectedMethods">Analyse protected methods:</label>
             <label index="label.analysePrivateMethods">Analyse private methods:</label>
-            <label index="label.registerAutomatically">Register fatal error handler automatically:</label>
             <label index="label.backtraceAnalysis">Backtrace analysis settings:</label>
             <label index="label.analyseConstants">Analyse constants</label>
             <label index="label.iprange">IP Range</label>

@@ -164,12 +164,8 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
             'methods',
             'analyseGetter'
         );
-        $value['backtraceAndError']['registerAutomatically'] = $iniConfig->getConfigFromFile(
-            'backtraceAndError',
-            'registerAutomatically'
-        );
-        $value['backtraceAndError']['maxStepNumber'] = $iniConfig->getConfigFromFile(
-            'backtraceAndError',
+        $value['backtrace']['maxStepNumber'] = $iniConfig->getConfigFromFile(
+            'backtrace',
             'maxStepNumber'
         );
         $value['runtime']['useScopeAnalysis'] = $iniConfig->getConfigFromFile(

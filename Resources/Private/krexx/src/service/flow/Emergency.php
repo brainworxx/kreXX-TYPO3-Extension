@@ -169,7 +169,7 @@ class Emergency
      */
     public function checkEmergencyBreak()
     {
-        if ($this->disabled) {
+        if ($this->disabled === true) {
             // Tell them, everything is OK!
             return false;
         }
@@ -202,6 +202,7 @@ class Emergency
             static::$allIsOk = false;
             return true;
         }
+
         return false;
     }
 
@@ -278,7 +279,7 @@ class Emergency
      */
     public function resetTimer()
     {
-        if (empty($this->timer)) {
+        if (empty($this->timer) === true) {
             $this->timer = time() + $this->maxRuntime;
         }
     }
@@ -295,10 +296,12 @@ class Emergency
             // Called too often, we might get into trouble here!
             return true;
         }
+
         // Give feedback if this is our last call.
         if ($this->krexxCount === ($this->maxCall - 1)) {
             $this->pool->messages->addMessage('maxCallReached');
         }
+
         // Count goes up.
         ++$this->krexxCount;
         // Tell them that we are still good.

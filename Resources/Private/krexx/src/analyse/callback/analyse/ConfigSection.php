@@ -71,6 +71,7 @@ class ConfigSection extends AbstractCallback
                 if ($value === true) {
                     $value = 'true';
                 }
+
                 if ($value === false) {
                     $value = 'false';
                 }
@@ -78,7 +79,7 @@ class ConfigSection extends AbstractCallback
                 /** @var Model $model */
                 $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')->setHelpid($id . 'Help');
                 $name = $this->pool->messages->getHelp($id . 'Readable');
-                if ($setting->getEditable()) {
+                if ($setting->getEditable() === true) {
                     $model->setData($name)
                         ->setDomid($id)
                         ->setName($value)
@@ -94,6 +95,7 @@ class ConfigSection extends AbstractCallback
                 }
             }
         }
+        
         return $sectionOutput;
     }
 }

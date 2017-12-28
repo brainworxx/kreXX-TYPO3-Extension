@@ -38,6 +38,9 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
  * Method analysis for objects.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
+ *
+ * @uses \ReflectionClass ref
+ *   A reflection of the class we are currently analysing.
  */
 class Methods extends AbstractObjectAnalysis
 {
@@ -52,38 +55,111 @@ class Methods extends AbstractObjectAnalysis
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
 
+        // We need to check, if we have a meta recursion here.
+
+        $doProtected = $this->pool->config->getSetting('analyseProtectedMethods') ||
+            $this->pool->scope->isInScope();
+        $doPrivate = $this->pool->config->getSetting('analysePrivateMethods') ||
+            $this->pool->scope->isInScope();
+        $domId = $this->generateDomIdFromClassname($ref->getName(), $doProtected, $doPrivate);
+
+        if ($this->pool->recursionHandler->isInMetaHive($domId) === true) {
+            // We have been here before.
+            // We skip this one, and leave it to the js recursion handler!
+            return $this->pool->render->renderRecursion(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    ->setDomid($domId)
+                    ->setNormal('Methods')
+                    ->setName('Methods')
+                    ->setType('class internals')
+            );
+        }
+
+        return $this->analyseMethods($ref, $domId, $doProtected, $doPrivate);
+    }
+
+    /**
+     * Do the real analysis.
+     */
+    /**
+     * @param \ReflectionClass $ref
+     *   The reflection of t he class we are analysing
+     * @param $domId
+     *   The alredy generated dom id.
+     * @param $doProtected
+     *   Are we analysing the protected methods here?
+     * @param $doPrivate
+     *   Are we analysing private methods here?
+     * @return string
+     *   The generated markup.
+     */
+    protected function analyseMethods(\ReflectionClass $ref, $domId, $doProtected, $doPrivate)
+    {
+        // Add it to the meta hive.
+        $this->pool->recursionHandler->addToMetaHive($domId);
+
         // Dumping all methods but only if we have any.
         $protected = array();
         $private = array();
         $public = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
 
-        if ($this->pool->config->getSetting('analyseProtectedMethods') ||
-            $this->pool->scope->isInScope()) {
+        if ($doProtected === true) {
             $protected = $ref->getMethods(\ReflectionMethod::IS_PROTECTED);
         }
 
-        if ($this->pool->config->getSetting('analysePrivateMethods') ||
-            $this->pool->scope->isInScope()) {
+        if ($doPrivate === true) {
             $private = $ref->getMethods(\ReflectionMethod::IS_PRIVATE);
         }
 
         // Is there anything to analyse?
         $methods = array_merge($public, $protected, $private);
-        if (empty($methods)) {
+        if (empty($methods) === true) {
             return '';
         }
 
         // We need to sort these alphabetically.
         usort($methods, array($this, 'reflectionSorting'));
+
         return $this->pool->render->renderExpandableChild(
             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setName('Methods')
                 ->setType('class internals')
                 ->addParameter('data', $methods)
                 ->addParameter('ref', $ref)
+                ->setDomId($domId)
                 ->injectCallback(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods')
                 )
         );
+    }
+
+    /**
+     * Generates a id for the DOM.
+     *
+     * This is used to jump from a recursion to the object analysis data.
+     * The ID is simply the md5 hash of the classname with thenamspace.
+     *
+     * @param string $data
+     *   The object from which we want the ID.
+     * @param boolean $doProtected
+     *   Are we analysing the protected methods here?
+     * @param boolean $doPrivate
+     *   Are we analysing private methods here?
+     *
+     * @return string
+     *   The generated id.
+     */
+    protected function generateDomIdFromClassname($data, $doProtected, $doPrivate)
+    {
+        $string = 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_m_';
+        if ($doProtected === true) {
+            $string .= 'pro_';
+        }
+
+        if ($doPrivate === true) {
+            $string .= 'pri_';
+        }
+
+        return $string . md5($data);
     }
 }

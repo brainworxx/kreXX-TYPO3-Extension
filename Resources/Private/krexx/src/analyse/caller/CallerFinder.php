@@ -68,7 +68,7 @@ class CallerFinder extends AbstractCaller
     /**
      * {@inheritdoc}
      */
-    public function findCaller()
+    public function findCaller($headline, $data)
     {
         $backtrace = debug_backtrace();
         $pattern = strtolower($this->pattern);
@@ -81,16 +81,21 @@ class CallerFinder extends AbstractCaller
             if (isset($caller['function']) && strtolower($caller['function']) === $pattern) {
                 break;
             }
+
             if (isset($caller['class']) && strtolower($caller['class']) === $pattern) {
                 break;
             }
         }
+
+        $varname = $this->getVarName($caller['file'], $caller['line']);
+
         // We will not keep the whole backtrace im memory. We only return what we
         // actually need.
         return array(
             'file' => htmlspecialchars($this->pool->fileService->filterFilePath($caller['file'])),
             'line' => (int)$caller['line'],
-            'varname' => $this->getVarName($caller['file'], $caller['line']),
+            'varname' => $varname,
+            'type' => $this->getType($headline, $varname, $data),
         );
     }
 
@@ -107,25 +112,23 @@ class CallerFinder extends AbstractCaller
      */
     protected function getVarName($file, $line)
     {
-        // Fallback to '. . .'.
-        $varname = '. . .';
-
         // Retrieve the call from the sourcecode file.
-        if (!is_readable($file)) {
-            return $varname;
+        if ($this->pool->fileService->fileIsReadable($file) === false) {
+            return '. . .';
         }
 
-        $source = file($file);
+        $line--;
 
         // Now that we have the line where it was called, we must check if
         // we have several commands in there.
-        $possibleCommands = explode(';', $source[$line - 1]);
+        $possibleCommands = explode(';', $this->pool->fileService->readFile($file, $line, $line));
         // Now we must weed out the none krexx commands.
         foreach ($possibleCommands as $key => $command) {
             if (strpos(strtolower($command), strtolower($this->pattern)) === false) {
                 unset($possibleCommands[$key]);
             }
         }
+
         // I have no idea how to determine the actual call of krexx if we
         // are dealing with several calls per line.
         if (count($possibleCommands) === 1) {
@@ -135,7 +138,7 @@ class CallerFinder extends AbstractCaller
                 // This little baby tries to resolve everything inside the
                 // brackets of the kreXX call.
                 preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', reset($possibleCommands), $name);
-                if (isset($name[1])) {
+                if (isset($name[1]) === true) {
                     $varname = $this->pool->encodingService->encodeString(trim($name[1], " \t\n\r\0\x0B'\""));
                     break;
                 }
@@ -143,7 +146,7 @@ class CallerFinder extends AbstractCaller
         }
 
         // Check if we have a value.
-        if (empty($varname)) {
+        if (empty($varname) === true) {
             $varname = '. . .';
         }
 

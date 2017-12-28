@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -40,6 +41,11 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
  * Poll all configured debug methods of a class.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
+ *
+ * @uses mixed data
+ *   The class we are currently analsysing.
+ * @uses \ReflectionClass ref
+ *   A reflection of the class we are currently analysing.
  */
 class DebugMethods extends AbstractObjectAnalysis
 {
@@ -58,69 +64,90 @@ class DebugMethods extends AbstractObjectAnalysis
     public function callMe()
     {
         $data = $this->parameters['data'];
-
+        /** @var \ReflectionClass $reflectionClass */
+        $reflectionClass = $this->parameters['ref'];
         $output = '';
 
         foreach (explode(',', $this->pool->config->getSetting('debugMethods')) as $funcName) {
-            // Check if:
-            // 1.) Method exists
-            // 2.) Method can be called
-            // 3.) It's not blacklisted.
-            if (method_exists($data, $funcName) &&
-                is_callable(array($data, $funcName)) &&
-                $this->pool->config->isAllowedDebugCall($data, $funcName)
-            ) {
-                $onlyOptionalParams = true;
-                // We need to check if the callable function requires any parameters.
-                // We will not call those, because we simply can not provide them.
-                /** @var \ReflectionClass $reflectionClass */
-                $reflectionClass = $this->parameters['ref'];
-                $ref = $reflectionClass->getMethod($funcName);
-
-                /** @var \ReflectionParameter $param */
-                foreach ($ref->getParameters() as $param) {
-                    if (!$param->isOptional()) {
-                        // We've got a required parameter!
-                        // We will not call this one.
-                        $onlyOptionalParams = false;
-                        break;
-                    }
+            if ($this->checkIfAccessible($data, $funcName, $reflectionClass) === true) {
+                // Add a try to prevent the hosting CMS from doing something stupid.
+                try {
+                    // We need to deactivate the current error handling to
+                    // prevent the host system to do anything stupid.
+                    set_error_handler(
+                        function () {
+                            // Do nothing.
+                        }
+                    );
+                    $result = $data->$funcName();
+                } catch (\Exception $e) {
+                    // Restore the old error handler and move to the next method.
+                    restore_error_handler();
+                    continue;
                 }
 
-                if ($onlyOptionalParams) {
-                    // Add a try to prevent the hosting CMS from doing something stupid.
-                    try {
-                        // We need to deactivate the current error handling to
-                        // prevent the host system to do anything stupid.
-                        set_error_handler(function () {
-                            // Do nothing.
-                        });
-                        $result = $data->$funcName();
-                    } catch (\Exception $e) {
-                        // Do nothing.
-                    }
+                // Reactivate whatever error handling we had previously.
+                restore_error_handler();
 
-                    // Reactivate whatever error handling we had previously.
-                    restore_error_handler();
-
-                    if (isset($result)) {
-                        $output .= $this->pool->render->renderExpandableChild(
-                            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                                ->setName($funcName)
-                                ->setType('debug method')
-                                ->setNormal('. . .')
-                                ->setHelpid($funcName)
-                                ->setConnectorType(Connectors::METHOD)
-                                ->addParameter('data', $result)
-                                ->injectCallback(
-                                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Debug')
-                                )
-                        );
-                        unset($result);
-                    }
+                if (isset($result) === true) {
+                    $output .= $this->pool->render->renderExpandableChild(
+                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                            ->setName($funcName)
+                            ->setType('debug method')
+                            ->setNormal('. . .')
+                            ->setHelpid($funcName)
+                            ->setConnectorType(Connectors::METHOD)
+                            ->addParameter('data', $result)
+                            ->injectCallback(
+                                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Debug')
+                            )
+                    );
+                    unset($result);
                 }
             }
         }
+
         return $output;
+    }
+
+    /**
+     * Check if we are allowed to access this class method as a debug method for this class.
+     *
+     * @param mixed $data
+     *   The class that we are currently analysing.
+     * @param string $funcName
+     *   The name of the function that we want to call.
+     * @param \ReflectionClass $reflectionClass
+     *   The reflection of the class that we are currently analysing.
+     *
+     * @return boolean
+     *   Wether or not we are allowed toi access this method.
+     */
+    protected function checkIfAccessible($data, $funcName, \ReflectionClass $reflectionClass)
+    {
+        // We need to check if:
+        // 1.) Method exists. It may be protected though.
+        // 2.) Method can be called. There may be a magical method, though.
+        // 3.) It's not blacklisted.
+        if (method_exists($data, $funcName) === true &&
+            is_callable(array($data, $funcName)) == true &&
+            $this->pool->config->isAllowedDebugCall($data, $funcName) === true) {
+            // We need to check if the callable function requires any parameters.
+            // We will not call those, because we simply can not provide them.
+            $ref = $reflectionClass->getMethod($funcName);
+
+            /** @var \ReflectionParameter $param */
+            foreach ($ref->getParameters() as $param) {
+                if ($param->isOptional() === false) {
+                    // We've got a required parameter!
+                    // We will not call this one.
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

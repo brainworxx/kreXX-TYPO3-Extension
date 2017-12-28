@@ -107,13 +107,45 @@ abstract class AbstractCaller
     /**
      * Finds the place in the code from where krexx was called.
      *
+     * @var string $headline
+     *   The headline from the call.
+     *
      * @return array
      *   The code, from where krexx was called.
      *   array(
      *     'file' => 'someFile.php',
      *     'line' => 123,
-     *     'varname' => '$myVar'
+     *     'varname' => '$myVar',
+     *     'type' => 'Analysis of $myString, string'
      *   );
      */
-    abstract public function findCaller();
+    abstract public function findCaller($headline, $data);
+
+    /**
+     * Get the analysis type for the metadata and the page title.
+     *
+     * @param string $headline
+     *   The headline from the call. We will use this one, if not empty.
+     * @param string $varname
+     *   The name of the variable that we were able to determine.
+     * @param mixed $data
+     *   The variable tht we are analysing.
+     *
+     * @return string
+     *   The analysis type.
+     */
+    protected function getType($headline, $varname, $data)
+    {
+        if (empty($headline) === true) {
+            if (is_object($data) === true) {
+                $type = get_class($data);
+            } else {
+                $type = gettype($data);
+            }
+            return 'Analysis of ' . $varname . ', ' . $type;
+        }
+
+        // We already have a headline and will not touch it.
+        return $headline;
+    }
 }

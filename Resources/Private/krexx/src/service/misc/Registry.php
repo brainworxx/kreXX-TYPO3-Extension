@@ -80,7 +80,7 @@ class Registry
      */
     public function get($key)
     {
-        if (empty($this->data[$key])) {
+        if (empty($this->data[$key]) === true) {
             return null;
         }
 

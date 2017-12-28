@@ -108,19 +108,7 @@ analyseGetter = "true"
 debugMethods = "debug,toArray,__toString,toString"
 
 ; ------------------------------------------------------------------------------
-[backtraceAndError]
-
-; kreXX comes with an unregistrable fatal error handler, which can be configured
-; here. When set to "true", kreXX will register the handler as soon as it's
-; included. When a fatal error occurs, kreXX will offer a backtrace and a
-; analysis of the all objects in it. PHP always clears the stack in case of a
-; fatal error, so kreXX has to keep track of it. Be warned: This option will
-; dramatically slow down your requests. Use this only when you have to. It is by
-; far better to register the errorhandler yourself with \krexx::registerFatal();
-; and later unregister it with \krexx::unregisterFatal(); to prevent a slowdown.
-; registerAutomatically = "true"
-registerAutomatically = "false"
-
+[backtrace]
 ; A backtrace tends to produce a lot of output, and browsers tend to have problems
 ; with more than 100MB output in HTML text. Normally it is not unneccessary to go
 ; back more than 10 steps, but if you need to, you can increase this number here.
@@ -147,7 +135,6 @@ analyseGetter = "full"
 level = "full"
 analyseProtectedMethods = "full"
 analysePrivateMethods = "full"
-registerAutomatically = "full"
 useScopeAnalysis = "full"
 memoryLeft = "full"
 maxRuntime = "full"

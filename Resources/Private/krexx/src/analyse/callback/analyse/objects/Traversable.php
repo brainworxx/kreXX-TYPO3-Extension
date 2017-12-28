@@ -40,6 +40,12 @@ use Brainworxx\Krexx\Analyse\Model;
  * Object traversable analysis.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
+ *
+ * @uses mixed data
+ *   The class we are currently analsysing.
+ * @uses string name
+ *   The variavble name or key in the parrent object / array where the current
+ *   class is stored.
  */
 class Traversable extends AbstractObjectAnalysis
 {
@@ -53,7 +59,8 @@ class Traversable extends AbstractObjectAnalysis
     {
         // Check nesting level, memory and runtime.
         $this->pool->emergencyHandler->upOneNestingLevel();
-        if ($this->pool->emergencyHandler->checkNesting() || $this->pool->emergencyHandler->checkEmergencyBreak()) {
+        if ($this->pool->emergencyHandler->checkNesting() === true ||
+        $this->pool->emergencyHandler->checkEmergencyBreak() === true) {
             // We will not be doing this one, but we need to get down with our
             // nesting level again.
             $this->pool->emergencyHandler->downOneNestingLevel();
@@ -79,30 +86,34 @@ class Traversable extends AbstractObjectAnalysis
         try {
             // We need to deactivate the current error handling to
             // prevent the host system to do anything stupid.
-                set_error_handler(function () {
+                set_error_handler(
+                    function () {
                     // Do nothing.
-                });
+                    }
+                );
                 $parameter = iterator_to_array($data);
         } catch (\Exception $e) {
-            // Do nothing.
+            //Restore the previous error handler, and return an empty string.
+            restore_error_handler();
+            return '';
         }
 
         // Reactivate whatever error handling we had previously.
         restore_error_handler();
 
-        if (isset($parameter)) {
-            // Special Array Access here, resulting in modecomplicated source
+        if (is_array($parameter) === true) {
+            // Special Array Access here, resulting in more complicated source
             // generation. So we tell the callback to to that.
             $multiline = true;
 
             // Normal ArrayAccess, direct access to the array. Nothing special
-            if (is_a($data, 'ArrayAccess')) {
+            if ($data instanceof \ArrayAccess) {
                 $multiline = false;
             }
 
             // SplObject pool use the object as keys, so we need some
             // multiline stuff!
-            if (is_a($data, 'SplObjectStorage')) {
+            if ($data instanceof \SplObjectStorage) {
                 $multiline = true;
             }
 
@@ -112,7 +123,10 @@ class Traversable extends AbstractObjectAnalysis
                 ->setType('Foreach')
                 ->addParameter('data', $parameter)
                 ->addParameter('multiline', $multiline);
-            // This one is huge!
+
+            // Check, if we are handling a huge array. Huge arrays tend to result in a huge
+            // output, maybe even triggering a emergency break. t oavoid this, we give them
+            // a special callback.
             if (count($parameter) > $this->pool->config->arrayCountLimit) {
                 $model->injectCallback(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray')
@@ -128,6 +142,7 @@ class Traversable extends AbstractObjectAnalysis
             $this->pool->emergencyHandler->downOneNestingLevel();
             return $result;
         }
+
         // Still here?!? Return an empty string.
         return '';
     }

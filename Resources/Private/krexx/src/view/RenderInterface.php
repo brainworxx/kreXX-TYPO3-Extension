@@ -127,7 +127,7 @@ interface RenderInterface
      *
      * @param Model $model
      *   The model, which hosts all the data we need.
-     * @param bool $isExpanded
+     * @param boolean $isExpanded
      *   Is this one expanded from the beginning?
      *   TRUE when we render the settings menu only.
      *

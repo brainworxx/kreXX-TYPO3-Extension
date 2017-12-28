@@ -81,12 +81,11 @@ class Ini extends Fallback
      */
     public function loadIniFile($path)
     {
-        if (is_file($path)) {
-            $this->iniSettings = (array)parse_ini_string(
-                $this->pool->fileService->getFileContents($path),
-                true
-            );
-        }
+
+        $this->iniSettings = (array)parse_ini_string(
+            $this->pool->fileService->getFileContents($path, false),
+            true
+        );
 
         return $this;
     }
@@ -106,28 +105,23 @@ class Ini extends Fallback
         $filevalue = $this->getFeConfigFromFile($parameterName);
 
         // Do we have a value?
-        if (empty($filevalue)) {
+        if (empty($filevalue) === true) {
             // Fallback to factory settings.
-            if (isset($this->feConfigFallback[$parameterName])) {
-                $type = $this->feConfigFallback[$parameterName]['type'];
-                $editable = $this->feConfigFallback[$parameterName]['editable'];
-            } else {
-                // Unknown parameter.
-                $type = 'None';
-                $editable = 'false';
+            if (isset($this->feConfigFallback[$parameterName]) === true) {
+                return array(
+                    ($this->feConfigFallback[$parameterName]['editable'] === 'true'),
+                    $this->feConfigFallback[$parameterName]['type']
+                );
             }
-        } else {
-            $type = $filevalue['type'];
-            $editable = $filevalue['editable'];
+            // Unknown parameter and nothing in the fallback!
+            // This should never happan, btw.
+            return array(false, 'None');
         }
 
-        if ($editable === 'true') {
-            $editable = true;
-        } else {
-            $editable = false;
-        }
-
-        return array($editable, $type);
+        return array(
+            ($filevalue['editable'] === 'true'),
+            $filevalue['type']
+        );
     }
 
     /**
@@ -144,10 +138,11 @@ class Ini extends Fallback
         // Get the human readable stuff from the ini file.
         $value = $this->getConfigFromFile('feEditing', $parameterName);
 
-        if (empty($value)) {
+        if (empty($value) === true) {
             // Sorry, no value stored.
             return null;
         }
+
         // Get the rendering type.
         $type = $this->feConfigFallback[$parameterName]['type'];
 
@@ -178,7 +173,6 @@ class Ini extends Fallback
             'type' => $type,
             'editable' => $editable,
         );
-
     }
 
     /**
@@ -196,11 +190,12 @@ class Ini extends Fallback
     {
         // Do we have a value in the ini?
         // Does it validate?
-        if (isset($this->iniSettings[$group][$name]) &&
-            $this->security->evaluateSetting($group, $name, $this->iniSettings[$group][$name])
+        if (isset($this->iniSettings[$group][$name]) === true &&
+            $this->security->evaluateSetting($group, $name, $this->iniSettings[$group][$name]) === true
         ) {
             return $this->iniSettings[$group][$name];
         }
+
         return null;
     }
 }

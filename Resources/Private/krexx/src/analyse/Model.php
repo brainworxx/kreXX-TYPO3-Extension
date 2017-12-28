@@ -455,7 +455,7 @@ class Model extends AbstractModel
     /**
      * Setter for the isMetaConstants.
      *
-     * @param bool $bool
+     * @param boolean $bool
      *   The value we want to set.
      * @return $this
      *   Return $this for chaining.

@@ -329,44 +329,43 @@
      * the according callback, and sinply call it.
      *
      * @param {Event} event
+     * @event click
      */
     kdt.clickHandler.handle = function(event) {
         // We stop the event in it's tracks.
         event.stopPropagation();
-        // event.preventDefault();
+        event.stop = false;
 
         var element = event.target;
-        var finished = false;
-
-
+        var selector;
+        var i;
+        var callbackArray = [];
 
         do {
             // We need to test the element on all selectors.
-            for (var selector in kdt.clickHandler.storage) {
+            for (selector in kdt.clickHandler.storage) {
+
                 if (kdt.matches(element, selector)) {
+                    callbackArray = kdt.clickHandler.storage[selector];
                     // Got to call them all.
-                    for (var i = 0; i < kdt.clickHandler.storage[selector].length; i++) {
-                        kdt.clickHandler.storage[selector][i](event, element);
+                    for (i = 0; i < callbackArray.length; i++) {
+                        callbackArray[i](event, element);
+                        if (event.stop) {
+                            // Our "implementation" of stopPropagation().
+                            return;
+                        }
                     }
-                    // We did what we came for.
-                    // Time to exit the while loop.
-                    finished = true;
                 }
             }
 
-            if (finished) {
-                // Exit the while.
+            // Time to test the parent.
+            element = element.parentNode;
+            // Test if we have reached the top of the rabbit hole.
+            if (element === this) {
                 element = null;
-            } else {
-                // Time to test the parent.
-                element = element.parentNode;
-                // Test if we have reached the top of the rabbit hole.
-                if (element === this) {
-                    element = null;
-                }
             }
-        } while (element !== null);
 
+        } while (element !== null);
     };
 
     /**
@@ -487,6 +486,8 @@
             /** @type {number} */
             var offSetX = offset.left + outerWidth(elContent) - event.pageX - outerWidth(elContent);
 
+            var elContentStyle = elContent.style;
+
             // We might need to add a special offset, in case that:
             // - body is position: relative;
             // and there are elements above that have
@@ -526,31 +527,28 @@
                 offSetX -= relOffsetX;
             }
 
-            // Prevents the default event behavior (ie: click).
+            document.addEventListener("mousemove", drag);
+            document.addEventListener("mouseup",up);
+
             event.preventDefault();
-            // Prevents the event from propagating (ie: "bubbling").
             event.stopPropagation();
 
-            document.addEventListener("mousemove", drag);
-
             /**
-             * Stops the dragging process
+             * Stops the dragging process.
              *
-             * @event mouseup
+             * @param {Event} event
              */
-            document.addEventListener("mouseup", function () {
-                // Prevents the default event behavior (ie: click).
+            function up(event) {
                 event.preventDefault();
-                // Prevents the event from propagating (ie: "bubbling").
                 event.stopPropagation();
+
                 // Unregister to prevent slowdown.
                 document.removeEventListener("mousemove", drag);
+                document.removeEventListener("mouseup", up);
 
                 // Calling the callback for the mouseup.
-                if (typeof  callbackUp === 'function') {
-                    callbackUp();
-                }
-            });
+                callbackUp();
+            }
 
             /**
              * Drags the DOM element around.
@@ -559,23 +557,14 @@
              * @param {Event} event
              */
             function drag(event) {
-                // Prevents the default event behavior (ie: click).
                 event.preventDefault();
-                // Prevents the event from propagating (ie: "bubbling").
                 event.stopPropagation();
 
-                /** @type {number} */
-                var left = event.pageX + offSetX;
-                /** @type {number} */
-                var top = event.pageY + offSetY;
-
-                elContent.style.left = left + "px";
-                elContent.style.top = top + "px";
+                elContentStyle.left = (event.pageX + offSetX) + "px";
+                elContentStyle.top = (event.pageY + offSetY) + "px";
 
                 // Calling the callback for the dragging.
-                if (typeof  callbackDrag === 'function') {
-                    callbackDrag();
-                }
+                callbackDrag();
             }
         }
 
@@ -733,18 +722,6 @@
     };
 
     /**
-     * Prevents the bubbeling of en event, nothing more.
-     *
-     * @param {Event} event
-     *   The click event.
-     * @param {Node} element
-     *   The element that was clicked.
-     */
-    kdt.preventBubble = function (event, element) {
-        event.stopPropagation();
-    };
-
-    /**
      * Get all elements with the provided selector and
      * move them to the bottom of the dom, right before
      * the </body> end tag.
@@ -822,6 +799,10 @@
                 elements[i].style.top = (oldOffset + viewportTop) + 'px';
             }
         }, 500);
+    };
+
+    kdt.preventBubble = function (event, element) {
+        event.stop = true;
     };
 
     /**

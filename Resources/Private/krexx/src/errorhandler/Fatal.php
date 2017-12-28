@@ -74,7 +74,7 @@ class Fatal extends AbstractError
      * anything during shutdown, in case we decide after
      * registering, that we do not want to interfere.
      *
-     * @param bool $value
+     * @param boolean $value
      *   Whether the handler is active or not.
      */
     public function setIsActive($value)
@@ -95,9 +95,7 @@ class Fatal extends AbstractError
         $error = error_get_last();
 
         // Do we have an error at all?
-        if (!is_null($error) &&
-            $this->getIsActive()
-        ) {
+        if ($error  !== null && $this->getIsActive() === true) {
             // Do we need to check this one, according to our settings?
             $translatedError = $this->translateErrorType($error['type']);
             if ($translatedError[1] === 'traceFatals') {
@@ -120,10 +118,11 @@ class Fatal extends AbstractError
                 // prevent an infinite loop.
                 AbstractController::$analysisInProgress = true;
                 $this->pool
-                    ->createClass('Brainworxx\\Krexx\\Controller\\errorController')
+                    ->createClass('Brainworxx\\Krexx\\Controller\\ErrorController')
                     ->errorAction($errorData);
             }
         }
+
         // Clean exit.
     }
 }

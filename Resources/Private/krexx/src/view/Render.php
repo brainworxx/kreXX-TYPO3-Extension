@@ -114,7 +114,7 @@ class Render extends AbstractRender
      */
     public function renderFooter($caller, $configOutput, $configOnly = false)
     {
-        if (isset($caller['file'])) {
+        if (isset($caller['file']) === true) {
             $caller = $this->renderCaller($caller['file'], $caller['line']);
         } else {
              // When we have no caller, we will not render it.
@@ -157,7 +157,7 @@ class Render extends AbstractRender
         $partCallable = '';
         $partExtra = '';
 
-        if ($model->getHasExtras()) {
+        if ($model->getHasExtras() === true) {
             // We have a lot of text, so we render this one expandable (yellow box).
             $partExpand = 'kexpand';
             // Add the yellow box for large output text.
@@ -167,7 +167,8 @@ class Render extends AbstractRender
                 $this->getTemplateFileContent('singleChildExtra')
             );
         }
-        if ($model->getIsCallback()) {
+
+        if ($model->getIsCallback() === true) {
             // Add callable partial.
             $partCallable = str_replace(
                 '{normal}',
@@ -175,6 +176,7 @@ class Render extends AbstractRender
                 $this->getTemplateFileContent('singleChildCallable')
             );
         }
+
         // Stitching the classes together, depending on the types.
         $typeClasses = '';
         foreach (explode(' ', $model->getType()) as $typeClass) {
@@ -185,7 +187,7 @@ class Render extends AbstractRender
         // to generate.
         $gensource = $this->pool->codegenHandler->generateSource($model);
 
-        if (empty($gensource)) {
+        if (empty($gensource) === true) {
             // Remove the markers, because here is nothing to add.
             $sourcebutton = '';
         } else {
@@ -229,7 +231,6 @@ class Render extends AbstractRender
             ),
             $this->getTemplateFileContent('singleChild')
         );
-
     }
 
     /**
@@ -238,7 +239,7 @@ class Render extends AbstractRender
     public function renderExpandableChild(Model $model, $isExpanded = false)
     {
         // Check for emergency break.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
             return '';
         }
 
@@ -251,7 +252,7 @@ class Render extends AbstractRender
         // Generating our code and adding the Codegen button, if there is
         // something to generate.
         $gencode = $this->pool->codegenHandler->generateSource($model);
-        if ($gencode === ';stop;' || empty($gencode)) {
+        if ($gencode === ';stop;' || empty($gencode) === true) {
             // Remove the button marker, because here is nothing to add.
             $sourceButton = '';
         } else {
@@ -260,7 +261,7 @@ class Render extends AbstractRender
         }
 
         // Is it expanded?
-        if ($isExpanded) {
+        if ($isExpanded === true) {
             $expandedClass = 'kopened';
         } else {
             $expandedClass = '';
@@ -330,7 +331,7 @@ class Render extends AbstractRender
             }
 
             // Paint it.
-            $optionTemplateName = 'single' . $model->getType() . 'Options';
+            $optionTemplateName = 'singleSelectOptions';
             foreach ($valueList as $value) {
                 if ($value === $model->getName()) {
                     // This one is selected.
@@ -338,6 +339,7 @@ class Render extends AbstractRender
                 } else {
                     $selected = '';
                 }
+
                 $options .= str_replace(
                     array('{text}', '{value}', '{selected}'),
                     array($value, $value, $selected),
@@ -449,6 +451,7 @@ class Render extends AbstractRender
         foreach ($messages as $message) {
             $result .= str_replace('{message}', $message, $messageTemplate);
         }
+
         return $result;
     }
 

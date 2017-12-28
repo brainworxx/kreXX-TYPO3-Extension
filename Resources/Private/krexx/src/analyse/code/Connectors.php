@@ -194,12 +194,11 @@ class Connectors
      */
     public function getConnector1()
     {
-        if (empty($this->customConnector1)) {
+        if (empty($this->customConnector1) === true) {
             return $this->connectorArray[$this->type][0];
         }
 
         return $this->customConnector1;
-
     }
 
     /**
@@ -215,20 +214,25 @@ class Connectors
     {
         // Methods always have their parameters.
         if ($this->type === static::METHOD || $this->type === static::STATIC_METHOD) {
-            if (!empty($this->params)) {
-                // Copy the parameters, we will need the original ones later.
-                // This one is only for the quick preview.
-                $params = $this->params;
-                // Capping the parameters for a better readability.
-                if ($cap > 0 && strlen($params) > $cap) {
-                    $params = substr($params, 0, $cap) . ' . . . ';
-                }
-                // We wrap them in a <small>, but only if we have any.
-                $params = '<small>' . $params . '</small>';
-            } else {
-                $params = '';
+            if (empty($this->params) === true) {
+                // Remove the params marker when we have nothing to show.
+                return  str_replace('@param@', '', $this->connectorArray[$this->type][1]);
             }
-            return  str_replace('@param@', $params, $this->connectorArray[$this->type][1]);
+
+            // Copy the parameters, we will need the original ones later.
+            // This one is only for the quick preview.
+            $params = $this->params;
+            // Capping the parameters for a better readability.
+            if ($cap > 0 && strlen($params) > $cap) {
+                $params = substr($params, 0, $cap) . ' . . . ';
+            }
+
+            // We wrap them in a <small>, but only if we have any.
+            return  str_replace(
+                '@param@',
+                '<small>' . $params . '</small>',
+                $this->connectorArray[$this->type][1]
+            );
         }
 
         return $this->connectorArray[$this->type][1];

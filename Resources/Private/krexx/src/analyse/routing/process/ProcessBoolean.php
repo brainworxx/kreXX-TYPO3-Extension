@@ -44,7 +44,7 @@ use Brainworxx\Krexx\Analyse\Model;
 class ProcessBoolean extends AbstractProcess
 {
     /**
-     * Render a dump for a bool value.
+     * Render a dump for a boolean value.
      *
      * @param Model $model
      *   The data we are analysing.

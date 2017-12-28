@@ -73,7 +73,7 @@ class File
         $this->pool = $pool;
         $server = $pool->getServer();
         $this->docRoot = trim(realpath($server['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR);
-        if (empty($this->docRoot)) {
+        if (empty($this->docRoot) === true) {
             $this->docRoot = false;
         }
     }
@@ -104,31 +104,38 @@ class File
         if ($readFrom < 0) {
              $readFrom = 0;
         }
+
+        if (isset($content[$readFrom]) === false) {
+            // We can not even start reading this file!
+            // Return empty string.
+            return '';
+        }
+
         if ($readTo < 0) {
             $readTo = 0;
         }
 
-        for ($currentLineNo = $readFrom; $currentLineNo <= $readTo; ++$currentLineNo) {
-            if (isset($content[$currentLineNo])) {
-                // Add it to the result.
-                $realLineNo = $currentLineNo + 1;
+        if (isset($content[$readTo]) === false) {
+            // We can not read this far, set it to the last line.
+            $readTo = count($content) - 1;
+        }
 
-                if ($currentLineNo === $highlight) {
-                    $result .= $this->pool->render->renderBacktraceSourceLine(
-                        'highlight',
-                        $realLineNo,
-                        $this->pool->encodingService->encodeString($content[$currentLineNo], true)
-                    );
-                } else {
-                    $result .= $this->pool->render->renderBacktraceSourceLine(
-                        'source',
-                        $realLineNo,
-                        $this->pool->encodingService->encodeString($content[$currentLineNo], true)
-                    );
-                }
+        for ($currentLineNo = $readFrom; $currentLineNo <= $readTo; ++$currentLineNo) {
+            // Add it to the result.
+            $realLineNo = $currentLineNo + 1;
+
+            if ($currentLineNo === $highlight) {
+                $result .= $this->pool->render->renderBacktraceSourceLine(
+                    'highlight',
+                    $realLineNo,
+                    $this->pool->encodingService->encodeString($content[$currentLineNo], true)
+                );
             } else {
-                // End of the file.
-                break;
+                $result .= $this->pool->render->renderBacktraceSourceLine(
+                    'source',
+                    $realLineNo,
+                    $this->pool->encodingService->encodeString($content[$currentLineNo], true)
+                );
             }
         }
 
@@ -154,6 +161,7 @@ class File
         if ($readFrom < 0) {
              $readFrom = 0;
         }
+
         if ($readTo < 0) {
             $readTo = 0;
         }
@@ -181,18 +189,17 @@ class File
     {
         static $filecache = array();
 
-        if (isset($filecache[$filename])) {
+        if (isset($filecache[$filename]) === true) {
             return $filecache[$filename];
         }
 
         // Using \SplFixedArray to save some memory, as it can get
         // quire huge, depending on your system. 4mb is nothing here.
-        if ($this->fileIsReadable($filename)) {
+        if ($this->fileIsReadable($filename) === true) {
             return $filecache[$filename] = \SplFixedArray::fromArray(file($filename));
-        } else {
-            // Not readable!
-            return $filecache[$filename] = new \SplFixedArray(0);
         }
+        // Not readable!
+        return $filecache[$filename] = new \SplFixedArray(0);
     }
 
     /**
@@ -200,26 +207,32 @@ class File
      *
      * @param string $path
      *   The path to the file.
+     * @param boolean $showError
+     *   Do we need to display na error message?
      *
      * @return string
      *   The content of the file, if readable.
      */
-    public function getFileContents($path)
+    public function getFileContents($path, $showError = true)
     {
-        // Is it readable and does it have any content?
-        if ($this->fileIsReadable($path)) {
-            $size = filesize($path);
-            if ($size > 0) {
-                $file = fopen($path, 'r');
-                $result = fread($file, $size);
-                fclose($file);
-                return $result;
+        if ($this->fileIsReadable($path) === false) {
+            if ($showError === true) {
+                // This file was not readable! We need to tell the user!
+                $this->pool->messages->addMessage('fileserviceAccess', array($this->filterFilePath($path)));
             }
-        } else {
-            // This file was not readable! We need to tell the user!
-            $this->pool->messages->addMessage('fileserviceAccess', array($this->filterFilePath($path)));
+            // Return empty string.
+            return '';
         }
 
+        // Is it readable and does it have any content?
+        $size = filesize($path);
+        if ($size > 0) {
+            $file = fopen($path, 'r');
+            $result = fread($file, $size);
+            fclose($file);
+            return $result;
+        }
+        
         // Empty file returns an empty string.
         return '';
     }
@@ -237,15 +250,15 @@ class File
      */
     public function putFileContents($path, $string)
     {
-        if ($this->fileIsReadable($path)) {
+        if ($this->fileIsReadable($path) === true) {
             // Existing file. Most likely a html log file.
             file_put_contents($path, $string, FILE_APPEND);
             return;
         }
+
         // New file. We tell the caching, that we have read access here.
         file_put_contents($path, $string, FILE_APPEND);
         static::$isReadableCache[$path] = true;
-
     }
 
     /**
@@ -256,16 +269,19 @@ class File
     public function deleteFile($filename)
     {
         // Check if it is an actual file and if it is writable.
-        if (is_file($filename)) {
-            set_error_handler(function () {
+        if (is_file($filename) === true) {
+            set_error_handler(
+                function () {
                 /* do nothing */
-            });
+                }
+            );
             // Make sure it is unlinkable.
             chmod($filename, 0777);
-            if (unlink($filename)) {
+            if (unlink($filename) === true) {
                 restore_error_handler();
                 return;
             }
+
             // We have a permission problem here!
             $this->pool->messages->addMessage('fileserviceDelete', array($this->filterFilePath($filename)));
             restore_error_handler();
@@ -311,10 +327,10 @@ class File
      * @return bool
      *   If the file is readable, or not.
      */
-    protected function fileIsReadable($filePath)
+    public function fileIsReadable($filePath)
     {
         // Return the cache, if we have any.
-        if (isset(static::$isReadableCache[$filePath])) {
+        if (isset(static::$isReadableCache[$filePath]) === true) {
             return static::$isReadableCache[$filePath];
         }
 

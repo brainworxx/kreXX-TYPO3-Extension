@@ -120,10 +120,11 @@ abstract class AbstractModel
      */
     public function renderMe()
     {
-        if (isset($this->callback)) {
+        if (isset($this->callback) === true) {
             $this->callback->setParams($this->parameters);
             return $this->callback->callMe();
         }
+
         return '';
     }
 
@@ -159,7 +160,7 @@ abstract class AbstractModel
         return $this;
     }
 
-        /**
+    /**
      * We simply add more info to our info json.
      * Leftover linebreaks will be removed.
      * If the value is empty, we will remove a possible previous entry to this key.

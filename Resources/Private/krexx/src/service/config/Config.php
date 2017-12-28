@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Service\Config;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Config\From\Cookie;
 use Brainworxx\Krexx\Service\Config\From\Ini;
+use Brainworxx\Krexx\Service\Overwrites;
 
 /**
  * Access the debug settings here.
@@ -112,7 +113,7 @@ class Config extends Fallback
 
         // We may need to change the disabling again, in case we are in cli
         // or ajax mode and have no fileoutput.
-        if ($this->isRequestAjaxOrCli() &&
+        if ($this->isRequestAjaxOrCli() === true &&
             $this->getSetting('destination') !== 'file'
         ) {
             // No kreXX for you!
@@ -121,7 +122,7 @@ class Config extends Fallback
 
         // Now that our settings are in place, we need to check the
         // ip to decide if we need to deactivate kreXX.
-        if (!$this->isAllowedIp($this->getSetting('iprange'))) {
+        if ($this->isAllowedIp($this->getSetting('iprange')) === false) {
             // No kreXX for you!
             $this->setDisabled(true);
         }
@@ -129,34 +130,40 @@ class Config extends Fallback
         $this->debugFuncList = explode(',', $this->getSetting('debugMethods'));
     }
 
+    /**
+     * Set the directory path, according to the overwrites for:
+     * - Chunk files
+     * - Log files
+     * - Configuration files
+     */
     protected function initDirectories()
     {
-        $overwrites = $this->pool->getGlobals('kreXXoverwrites');
-
-        if (empty($overwrites['directories']['chunks'])) {
-            $this->directories['chunks'] = $this->pool->krexxDir . 'chunks' . DIRECTORY_SEPARATOR;
+        // Set the chunks folder.
+        if (empty(Overwrites::$directories['chunks']) === true) {
+            $this->directories['chunks'] = KREXX_DIR . 'chunks/' ;
         } else {
-            $this->directories['chunks'] = $overwrites['directories']['chunks'] . DIRECTORY_SEPARATOR;
+            $this->directories['chunks'] = Overwrites::$directories['chunks'] . '/';
         }
 
-        if (empty($overwrites['directories']['log'])) {
-            $this->directories['log'] = $this->pool->krexxDir . 'log' . DIRECTORY_SEPARATOR;
+        // Set the log folder.
+        if (empty(Overwrites::$directories['log']) === true) {
+            $this->directories['log'] = KREXX_DIR . 'log' . '/';
         } else {
-            $this->directories['log'] = $overwrites['directories']['log'] . DIRECTORY_SEPARATOR;
+            $this->directories['log'] = Overwrites::$directories['log'] . '/';
         }
 
-        if (empty($overwrites['directories']['config'])) {
-            $this->directories['config'] = $this->pool->krexxDir . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini';
+        // Set the configuration file path.
+        if (empty(Overwrites::$directories['config']) === true) {
+            $this->directories['config'] = KREXX_DIR . 'config/Krexx.ini';
         } else {
-            $this->directories['config'] = $overwrites['directories']['config'] .
-                DIRECTORY_SEPARATOR . 'Krexx.ini';
+            $this->directories['config'] = Overwrites::$directories['config'] . '/Krexx.ini';
         }
     }
 
     /**
      * Setter for the enabling from sourcecode.
      *
-     * @param bool $value
+     * @param boolean $value
      *   Whether it it enabled, or not.
      */
     public function setDisabled($value)
@@ -164,23 +171,6 @@ class Config extends Fallback
         $this->settings['disabled']
             ->setValue($value)
             ->setSource('Internal flow');
-    }
-
-    /**
-     * Here we overwrite the local settings.
-     *
-     * When we are handling errors and are analysing objects, we should
-     * output protected and private variables of a class, outputting as
-     * much info as possible.
-     *
-     * @param array $newSettings
-     *   Part of the array we want to overwrite.
-     */
-    public function overwriteLocalSettings(array $newSettings)
-    {
-        foreach ($newSettings as $name => $value) {
-            $this->settings[$name]->setValue($value);
-        }
     }
 
     /**
@@ -237,14 +227,11 @@ class Config extends Fallback
         if ($feConfig[0] === true) {
             $cookieSetting = $this->cookieConfig->getConfigFromCookies($section, $name);
             // Do we have a value in the cookies?
-            if (!is_null($cookieSetting)) {
+            if ($cookieSetting  !== null) {
                 // We must not overwrite a disabled=true with local cookie settings!
                 // Otherwise it could get enabled locally, which might be a security
                 // issue.
-                if (($name === 'disabled' && $cookieSetting === 'false')) {
-                    // Do nothing.
-                    // We ignore this setting.
-                } else {
+                if (($name === 'disabled' && $cookieSetting === 'false') === false) {
                     $model->setValue($cookieSetting)->setSource('Local cookie settings');
                     $this->settings[$name] = $model;
                     return;
@@ -254,7 +241,7 @@ class Config extends Fallback
 
         // Do we have a value in the ini?
         $iniSettings = $this->iniConfig->getConfigFromFile($section, $name);
-        if (isset($iniSettings)) {
+        if (isset($iniSettings) === true) {
             $model->setValue($iniSettings)->setSource('Krexx.ini settings');
             $this->settings[$name] = $model;
             return;
@@ -263,7 +250,6 @@ class Config extends Fallback
         // Nothing yet? Give back factory settings.
         $model->setValue($factorySetting)->setSource('Factory settings');
         $this->settings[$name] = $model;
-        return;
     }
 
     /**
@@ -276,9 +262,9 @@ class Config extends Fallback
     {
         $server = $this->pool->getServer();
 
-        if (isset($server['HTTP_X_REQUESTED_WITH']) &&
+        if (isset($server['HTTP_X_REQUESTED_WITH']) === true &&
             strtolower($server['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest' &&
-            $this->getSetting('detectAjax')
+            $this->getSetting('detectAjax') === true
         ) {
             // Appending stuff after a ajax request will most likely
             // cause a js error. But there are moments when you actually
@@ -306,7 +292,6 @@ class Config extends Fallback
     public function getChunkDir()
     {
         return $this->directories['chunks'];
-
     }
 
     /**
@@ -336,14 +321,14 @@ class Config extends Fallback
     {
         $server = $this->pool->getServer();
 
-        if (empty($server['REMOTE_ADDR'])) {
+        if (empty($server['REMOTE_ADDR']) === true) {
             $remote = '';
         } else {
             $remote = $server['REMOTE_ADDR'];
         }
 
         $whitelist = explode(',', $whitelist);
-        if (php_sapi_name() === 'cli' || in_array($remote, $whitelist)) {
+        if (php_sapi_name() === 'cli' || in_array($remote, $whitelist) === true) {
             // Either the IP is matched, or we are in CLI
             return true;
         }
@@ -376,19 +361,20 @@ class Config extends Fallback
     {
         // Check if the class itself is blacklisted.
         foreach ($this->classBlacklist as $classname) {
-            if (is_a($data, $classname)) {
+            if (is_a($data, $classname) === true) {
                 // No debug methods for you.
                 return false;
             }
         }
 
         // Check for a class / method combination.
-        foreach ($this->methodBlacklist as $classname => $methodLlist) {
-            if (is_a($data, $classname) && in_array($call, $methodLlist)) {
+        foreach ($this->methodBlacklist as $classname => $methodList) {
+            if (is_a($data, $classname) === true && in_array($call, $methodList) === true) {
                 // We have a winner, this one is blacklisted!
                 return false;
             }
         }
+
         // Nothing found?
         return true;
     }

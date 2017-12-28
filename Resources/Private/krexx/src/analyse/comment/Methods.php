@@ -71,9 +71,10 @@ class Methods extends AbstractComment
         $this->methodName = $reflectionMethod->getName();
         $cachingKey = $reflectionClass->getName() . '::' . $this->methodName;
 
-        if (isset($cache[$cachingKey])) {
+        if (isset($cache[$cachingKey]) === true) {
             return $cache[$cachingKey];
         }
+
         // Cache not found. We need to generate this one.
         $cache[$cachingKey] = $this->pool->encodingService->encodeString(
             $this->getMethodComment($reflectionMethod, $reflectionClass)
@@ -97,7 +98,7 @@ class Methods extends AbstractComment
         // Get a first impression.
         $comment = $this->prettifyComment($reflectionMethod->getDocComment());
 
-        if ($this->checkComment($comment)) {
+        if ($this->checkComment($comment) === true) {
             // Found it!
             return trim($comment);
         }
@@ -105,7 +106,7 @@ class Methods extends AbstractComment
         // Check for interfaces.
         $comment = $this->getInterfaceComment($comment, $reflectionClass);
 
-        if ($this->checkComment($comment)) {
+        if ($this->checkComment($comment) === true) {
             // Found it!
             return trim($comment);
         }
@@ -113,21 +114,23 @@ class Methods extends AbstractComment
         // Check for traits.
         $comment = $this->getTraitComment($comment, $reflectionClass);
 
-        if ($this->checkComment($comment)) {
+        if ($this->checkComment($comment) === true) {
             // Found it!
             return trim($comment);
         }
 
         // Nothing on this level, we need to take a look at the parent.
         $parentReflection = $reflectionClass->getParentClass();
-        if ($parentReflection &&
-            $parentReflection->hasMethod($this->methodName)
+        if ($parentReflection === true &&
+            $parentReflection->hasMethod($this->methodName) === true
         ) {
             // Going deeper into the rabid hole!
-            $comment = trim($this->getMethodComment(
-                $parentReflection->getMethod($this->methodName),
-                $parentReflection
-            ));
+            $comment = trim(
+                $this->getMethodComment(
+                    $parentReflection->getMethod($this->methodName),
+                    $parentReflection
+                )
+            );
         }
 
         // Still here? Tell the dev that we could not resolve the comment.
@@ -153,17 +156,18 @@ class Methods extends AbstractComment
     protected function getTraitComment($originalComment, \ReflectionClass $reflection)
     {
         // We need to check if we can get traits here.
-        if (method_exists($reflection, 'getTraits')) {
+        if (method_exists($reflection, 'getTraits') === true) {
             // Get the traits from this class.
             // Now we should have an array with reflections of all
             // traits in the class we are currently looking at.
             foreach ($reflection->getTraits() as $trait) {
-                if ($this->checkComment($originalComment)) {
+                if ($this->checkComment($originalComment) === true) {
                     // Looks like we've resolved them all.
                     return $originalComment;
                 }
+
                 // We need to look further!
-                if ($trait->hasMethod($this->methodName)) {
+                if ($trait->hasMethod($this->methodName) === true) {
                     $traitComment = $this->prettifyComment(
                         $trait->getMethod($this->methodName)->getDocComment()
                     );
@@ -171,6 +175,7 @@ class Methods extends AbstractComment
                     $originalComment = $this->replaceInheritComment($originalComment, $traitComment);
                 }
             }
+
             // Return what we could resolve so far.
             return $originalComment;
         }
@@ -196,17 +201,19 @@ class Methods extends AbstractComment
     protected function getInterfaceComment($originalComment, \ReflectionClass $reflectionClass)
     {
         foreach ($reflectionClass->getInterfaces() as $interface) {
-            if ($this->checkComment($originalComment)) {
+            if ($this->checkComment($originalComment) === true) {
                 // Looks like we've resolved them all.
                 return $originalComment;
             }
+
             // We need to look further.
-            if ($interface->hasMethod($this->methodName)) {
+            if ($interface->hasMethod($this->methodName) === true) {
                 $interfaceComment = $this->prettifyComment($interface->getMethod($this->methodName)->getDocComment());
                 // Replace it.
                 $originalComment = $this->replaceInheritComment($originalComment, $interfaceComment);
             }
         }
+
         // Return what we could resolve so far.
         return $originalComment;
     }

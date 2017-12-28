@@ -34,6 +34,7 @@
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 // The mainproblem with 7.0 is, that compatibility6 may or may not be installed.
 // If not, I have to put this thing here, hoping not to break anything!
@@ -97,7 +98,6 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             'level',
             'analyseProtectedMethods',
             'analysePrivateMethods',
-            'registerAutomatically',
             'analyseConstants',
             'iprange',
             'analyseGetter',
@@ -117,7 +117,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             'output',
             'properties',
             'methods',
-            'backtraceAndError',
+            'backtrace',
         );
 
         /**
@@ -133,6 +133,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
         public function __construct()
         {
             parent::__construct();
+            Pool::createPool();
             $this->pool = \Krexx::$pool;
         }
 

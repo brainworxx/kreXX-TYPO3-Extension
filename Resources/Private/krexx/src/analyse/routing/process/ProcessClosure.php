@@ -78,7 +78,7 @@ class ProcessClosure extends AbstractProcess
 
         // Adding the namespace, but only if we have one.
         $namespace = $ref->getNamespaceName();
-        if (!empty($namespace)) {
+        if (empty($namespace) === false) {
             $result['namespace'] = $namespace;
         }
 
@@ -91,7 +91,7 @@ class ProcessClosure extends AbstractProcess
                 ->codegenHandler
                 ->parameterToString($reflectionParameter);
         }
-        
+
         return $this->pool->render->renderExpandableChild(
             $model->setType('closure')
                 ->setNormal('. . .')
@@ -103,6 +103,5 @@ class ProcessClosure extends AbstractProcess
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis')
                 )
         );
-
     }
 }

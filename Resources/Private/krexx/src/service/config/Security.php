@@ -82,9 +82,10 @@ class Security extends Fallback
     protected function evalDevHandle($value, $name)
     {
         $result = preg_match('/[^a-zA-Z]/', $value) === 0;
-        if (!$result) {
+        if ($result === false) {
             $this->pool->messages->addMessage('configError' . ucfirst($name));
         }
+
         return $result;
     }
 
@@ -101,10 +102,13 @@ class Security extends Fallback
      */
     protected function evalSkin($value, $name)
     {
-        $result = is_readable($this->pool->krexxDir . 'resources/skins/' . $value . '/header.html');
-        if (!$result) {
+        $result = $this->pool->fileService->fileIsReadable(
+            KREXX_DIR . 'resources/skins/' . $value . '/header.html'
+        );
+        if ($result === false) {
             $this->pool->messages->addMessage('configError' . ucfirst($name));
         }
+
         return $result;
     }
 
@@ -122,9 +126,10 @@ class Security extends Fallback
     protected function evalDestination($value, $name)
     {
         $result = ($value === 'browser' || $value === 'file');
-        if (!$result) {
+        if ($result === false) {
             $this->pool->messages->addMessage('configError' . ucfirst($name));
         }
+
         return $result;
     }
 
@@ -142,32 +147,11 @@ class Security extends Fallback
     protected function evalIpRange($value, $name)
     {
         $result = empty($value);
-        if ($result) {
+        if ($result === true) {
             $this->pool->messages->addMessage('configError' . ucfirst($name));
         }
 
         return !$result;
-    }
-
-    /**
-     * Evaluation the registering of the fatal error handler.
-     * Works only in PHP5 and we are expecting a boolean.
-     *
-     * @param string $value
-     *   The value we want to evaluate
-     * @param string $name
-     *   The name of the value we are checking, needed for the feedback text.
-     * @param string $group
-     *   The name of the group that we are evaluating, needed for the feedback
-     *   text.
-     *
-     * @return boolean
-     *   Whether it does evaluate or not.
-     */
-    protected function evalFatal($value, $name, $group)
-    {
-        // The feedback happens in the methods below.
-        return $this->evalBool($value, $name, $group) && $this->evalPhp();
     }
 
     /**
@@ -188,7 +172,7 @@ class Security extends Fallback
     protected function evalMaxRuntime($value, $name, $group)
     {
         // Check for integer first.
-        if (!$this->evalInt($value, $name, $group)) {
+        if ($this->evalInt($value, $name, $group) === false) {
             return false;
         }
 
@@ -200,6 +184,7 @@ class Security extends Fallback
             // No need to check any further.
             return true;
         }
+
         if ($maxTime < (int)$value) {
             $this->pool->messages->addMessage(
                 'configError' . ucfirst($name) . 'Big',
@@ -228,26 +213,11 @@ class Security extends Fallback
     protected function evalBool($value, $name, $group)
     {
         $result = ($value === 'true' || $value === 'false');
-        if (!$result) {
+        if ($result === false) {
             $this->pool->messages->addMessage('configErrorBool', array($group, $name));
         }
+
         return $result;
-    }
-
-    /**
-     * Checks if the php version is lower then 7.0.0.
-     *
-     * @return bool
-     *   Whether it does evaluate or not.
-     */
-    protected function evalPhp()
-    {
-        $result = version_compare(phpversion(), '7.0.0', '>=');
-        if ($result) {
-            $this->pool->messages->addMessage('configErrorRegisterAutomatically2');
-        }
-
-        return !$result;
     }
 
     /**
@@ -269,7 +239,7 @@ class Security extends Fallback
     protected function evalInt($value, $name, $group)
     {
         $result = ((int) $value) > 0;
-        if (!$result) {
+        if ($result === false) {
             $this->pool->messages->addMessage('configErrorInt', array($group, $name));
         }
 

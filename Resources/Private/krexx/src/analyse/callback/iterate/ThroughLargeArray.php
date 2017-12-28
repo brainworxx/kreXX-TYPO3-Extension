@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Analyse\Model;
 /**
  * Going through an array with 2000 objects can create more than 1GB of
  * Output. Afaik, there is no browser that can actually display this kind
- * of garbage. Our soluition is simple:
+ * of garbage. Our solution is simple:
  * We only display the name and the type of the object. Everything else
  * will be omitted.
  * We also do not use recursion handling, because assigning 2000 recursions
@@ -52,7 +52,7 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @uses array data
  *   The array want to iterate.
- * @uses bool multiline
+ * @uses boolean multiline
  *   Do we need a multiline code generation?
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Iterate
@@ -70,6 +70,7 @@ class ThroughLargeArray extends AbstractCallback
         $output = '';
         $recursionMarker = $this->pool->recursionHandler->getMarker();
         $output .= $this->pool->render->renderSingeChildHr();
+        $multiline = $this->parameters['multiline'];
 
         // Iterate through.
         foreach ($this->parameters['data'] as $key => &$value) {
@@ -85,40 +86,72 @@ class ThroughLargeArray extends AbstractCallback
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model');
 
             // Are we dealing with multiline code generation?
-            if ($this->parameters['multiline']) {
+            if ($multiline === true) {
                 // Here we tell the Codegen service that we need some
                 // special handling.
                 $model->setMultiLineCodeGen(Codegen::ITERATOR_TO_ARRAY);
             }
 
             // Handling string keys of the array.
-            if (is_string($key)) {
-                $model->setName($this->pool->encodingService->encodeString($key))
-                    ->setConnectorType(Connectors::ASSOCIATIVE_ARRAY);
-            } else {
-                $model->setName($key)
-                    ->setConnectorType(Connectors::NORMAL_ARRAY);
-            }
-
-            if (is_object($value)) {
-                // We will not go too deep here, and say only what it is.
-                $model->setType('simplified class analysis')
-                    ->setNormal(get_class($value));
-
-                $output .= $this->pool->render->renderSingleChild($model);
-            } elseif (is_array($value)) {
-                // Adding another array to the output may be as bad as a
-                // complete object analysis.
-                $model->setType('simplified array analysis')
-                    ->setNormal('count: ' . count($value));
-
-                $output .= $this->pool->render->renderSingleChild($model);
-            } else {
-                // We handle the simple type normally with the analysis hub.
-                $output .= $this->pool->routing->analysisHub($model->setData($value));
-            }
+            $this->handleKey($key, $model);
+            // Handling of the value and add some output.
+            $output .= $this->handleValue($value, $model);
         }
 
         return $output . $this->pool->render->renderSingeChildHr();
+    }
+
+    /**
+     * Adding quotation marks and a connector, depending on the type
+     * of the key.
+     *
+     * @param integer|string $key
+     *   The key (or name) of what we are analysing.
+     * @param Model $model
+     *   The so far prepared model we are preparing further.
+     */
+    protected function handleKey($key, Model $model)
+    {
+        if (is_string($key) === true) {
+            $model->setName($this->pool->encodingService->encodeString($key))
+                ->setConnectorType(Connectors::ASSOCIATIVE_ARRAY);
+
+            return;
+        }
+
+        $model->setName($key)->setConnectorType(Connectors::NORMAL_ARRAY);
+    }
+
+    /**
+     * Starting the analysis ofthe value.
+     *
+     * @param mixed $value
+     *   The value from the current array position.
+     * @param Model $model
+     *   The so far prepared model.
+     * @return string
+     *   The generated markup
+     */
+    protected function handleValue($value, Model $model)
+    {
+        if (is_object($value) === true) {
+            // We will not go too deep here, and say only what it is.
+            $model->setType('simplified class analysis')
+                ->setNormal(get_class($value));
+
+            return $this->pool->render->renderSingleChild($model);
+        }
+
+        if (is_array($value) === true) {
+            // Adding another array to the output may be as bad as a
+            // complete object analysis.
+            $model->setType('simplified array analysis')
+                ->setNormal('count: ' . count($value));
+
+                return $this->pool->render->renderSingleChild($model);
+        }
+
+        // We handle the simple type normally with the analysis hub.
+        return $this->pool->routing->analysisHub($model->setData($value));
     }
 }

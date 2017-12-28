@@ -71,6 +71,5 @@ class ThroughConstants extends AbstractCallback
         }
 
         return $output;
-
     }
 }

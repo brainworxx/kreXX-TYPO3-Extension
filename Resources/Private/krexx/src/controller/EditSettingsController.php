@@ -49,7 +49,7 @@ class EditSettingsController extends AbstractController
      */
     public function editSettingsAction()
     {
-        if ($this->pool->emergencyHandler->checkMaxCall()) {
+        if ($this->pool->emergencyHandler->checkMaxCall() === true) {
             // Called too often, we might get into trouble here!
             return $this;
         }
@@ -60,10 +60,8 @@ class EditSettingsController extends AbstractController
         // themselves out.
         $this->pool->emergencyHandler->setDisable(true);
 
-
         // Find caller.
-        $caller = $this->callerFinder->findCaller();
-        $caller['type'] = 'Cookie Configuration';
+        $caller = $this->callerFinder->findCaller('Cookie Configuration', array());
         $this->pool->chunks->addMetadata($caller);
 
         // Render it.

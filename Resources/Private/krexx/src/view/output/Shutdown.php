@@ -58,18 +58,7 @@ class Shutdown extends AbstractOutput
      *   This means, that every output is split in 4 parts
      */
     protected $chunkStrings = array();
-
-    /**
-     * Inject the pool and register the shutdown function.
-     *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
-     */
-    public function __construct(Pool $pool)
-    {
-        parent::__construct($pool);
-        register_shutdown_function(array($this, 'shutdownCallback'));
-    }
-
+    
     /**
      * Adds output to our shutdown handler.
      *

@@ -64,7 +64,7 @@ abstract class AbstractRender implements RenderInterface
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-        $this->skinPath = $this->pool->krexxDir . 'resources/skins/' . $this->pool->config->getSetting('skin') . '/';
+        $this->skinPath = KREXX_DIR . 'resources/skins/' . $this->pool->config->getSetting('skin') . '/';
     }
 
     /**
@@ -109,7 +109,7 @@ abstract class AbstractRender implements RenderInterface
         $data = $model->getJson();
 
         // Test if we have anything to display at all.
-        if (empty($data)) {
+        if (empty($data) === true) {
             return '';
         }
 
@@ -118,14 +118,12 @@ abstract class AbstractRender implements RenderInterface
         $helpContent = '';
 
         // Add the stuff from the json after the help text, if any.
-        if (!empty($data)) {
-            foreach ($data as $title => $text) {
-                $helpContent .= str_replace(
-                    array('{helptitle}', '{helptext}'),
-                    array($title, $text),
-                    $helpRow
-                );
-            }
+        foreach ($data as $title => $text) {
+            $helpContent .= str_replace(
+                array('{helptitle}', '{helptext}'),
+                array($title, $text),
+                $helpRow
+            );
         }
 
         // Add it into the wrapper.
@@ -143,7 +141,7 @@ abstract class AbstractRender implements RenderInterface
      */
     protected function renderConnector($connector)
     {
-        if (empty($connector)) {
+        if (empty($connector) === true) {
             return '';
         }
 
@@ -177,12 +175,12 @@ abstract class AbstractRender implements RenderInterface
         // Static cache to make it a little bit faster.
         static $list = array();
 
-        if (empty($list)) {
+        if (empty($list) === true) {
             // Get the list.
-            $list = array_filter(glob($this->pool->krexxDir . 'resources/skins/*'), 'is_dir');
+            $list = array_filter(glob(KREXX_DIR . 'resources/skins/*'), 'is_dir');
             // Now we need to filter it, we only want the names, not the full path.
             foreach ($list as &$path) {
-                $path = str_replace($this->pool->krexxDir . 'resources/skins/', '', $path);
+                $path = str_replace(KREXX_DIR . 'resources/skins/', '', $path);
             }
         }
 
@@ -194,7 +192,7 @@ abstract class AbstractRender implements RenderInterface
      *
      * @param Model $model
      *   The model, which hosts all the data we need.
-     * @param bool $isExpanded
+     * @param boolean $isExpanded
      *   The only expanded nest is the settings menu, when we render only the
      *   settings menu.
      *
@@ -210,7 +208,7 @@ abstract class AbstractRender implements RenderInterface
         }
 
         // Are we expanding this one?
-        if ($isExpanded) {
+        if ($isExpanded === true) {
             $style = '';
         } else {
             $style = 'khidden';
@@ -244,7 +242,7 @@ abstract class AbstractRender implements RenderInterface
     {
         static $fileCache = array();
 
-        if (isset($fileCache[$what])) {
+        if (isset($fileCache[$what]) === true) {
             return $fileCache[$what];
         }
 
@@ -267,7 +265,7 @@ abstract class AbstractRender implements RenderInterface
     protected function encodeJson(array $array)
     {
         // No data, no json!
-        if (empty($array)) {
+        if (empty($array) === true) {
             return '';
         }
 

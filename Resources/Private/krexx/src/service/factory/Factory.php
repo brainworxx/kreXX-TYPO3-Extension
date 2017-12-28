@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Service\Factory;
 
+use Brainworxx\Krexx\Service\Overwrites;
+
 /**
  * Simple factory, nothing special. Offers a overwrite method.
  *
@@ -65,7 +67,7 @@ class Factory
     public function createClass($classname)
     {
         // Check for possible overwrite.
-        if (isset($this->rewrite[$classname])) {
+        if (isset($this->rewrite[$classname]) === true) {
             $classname = $this->rewrite[$classname];
         }
 
@@ -94,13 +96,7 @@ class Factory
      */
     public function flushRewrite()
     {
-        $overwrites = $this->getGlobals('kreXXoverwrites');
-
-        if (isset($overwrites) && isset($overwrites['classes'])) {
-            $this->rewrite = $overwrites['classes'];
-        } else {
-            $this->rewrite = array();
-        }
+        $this->rewrite = Overwrites::$classes;
     }
 
     /**
@@ -114,7 +110,7 @@ class Factory
      */
     public function &getGlobals($what)
     {
-        if (empty($what)) {
+        if (empty($what) === true) {
             return $GLOBALS;
         }
 
@@ -130,5 +126,27 @@ class Factory
     public function &getServer()
     {
         return $_SERVER;
+    }
+
+    /**
+     * Create the pool, but only if it is not alredy there.
+     *
+     * @internal
+     */
+    public static function createPool()
+    {
+        if (\Krexx::$pool !== null) {
+            // The ppol is there, do nothing.
+            return;
+        }
+
+        // Create a new pool where we store all our classes.
+        // We also need to check if we have an overwrite for the pool.
+        if (empty(Overwrites::$classes['Brainworxx\\Krexx\\Service\\Factory\\Pool']) === true) {
+            \Krexx::$pool = new Pool();
+            return;
+        }
+        $classname = Overwrites::$classes['Brainworxx\\Krexx\\Service\\Factory\\Pool'];
+        \Krexx::$pool = new $classname();
     }
 }

@@ -55,20 +55,6 @@ abstract class AbstractController
     public static $analysisInProgress = false;
 
     /**
-     * Config for the 'deep' backtrace analysis.
-     *
-     * @var array
-     */
-    protected $configFatal = array(
-        'analyseProtected' => 'true',
-        'analysePrivate' => 'true',
-        'analyseTraversable' => 'true',
-        'analyseConstants' => 'true',
-        'analyseProtectedMethods' => 'true',
-        'analysePrivateMethods' => 'true',
-    );
-
-    /**
      * Sends the output to the browser during shutdown phase.
      *
      * @var AbstractOutput
@@ -144,6 +130,7 @@ abstract class AbstractController
         if ($outputSetting === 'browser') {
             $this->outputService = $pool->createClass('Brainworxx\\Krexx\\View\\Output\\Shutdown');
         }
+
         if ($outputSetting === 'file') {
             $this->outputService = $pool->createClass('Brainworxx\\Krexx\\View\\Output\\File');
         }
@@ -161,7 +148,7 @@ abstract class AbstractController
     protected function outputHeader($headline)
     {
         // Do we do an output as file?
-        if (static::$headerSend) {
+        if (static::$headerSend === true) {
             return $this->pool->render->renderHeader('', $headline, '');
         }
 
@@ -175,7 +162,7 @@ abstract class AbstractController
      *
      * @param array $caller
      *   Where was kreXX initially invoked from.
-     * @param bool $isExpanded
+     * @param boolean $isExpanded
      *   Are we rendering an expanded footer?
      *   TRUE when we render the settings menu only.
      *
@@ -187,7 +174,7 @@ abstract class AbstractController
         // Now we need to stitch together the content of the ini file
         // as well as it's path.
         $pathToIni = $this->pool->config->getPathToIniFile();
-        if (is_readable($pathToIni)) {
+        if ($this->pool->fileService->fileIsReadable($pathToIni) === true) {
             $path = $this->pool->messages->getHelp('currentConfig');
         } else {
             // Project settings are not accessible
@@ -215,10 +202,9 @@ abstract class AbstractController
      */
     protected function outputCssAndJs()
     {
-        $krexxDir = $this->pool->krexxDir;
         // Get the css file.
         $css = $this->pool->fileService->getFileContents(
-            $krexxDir .
+            KREXX_DIR .
             'resources/skins/' .
             $this->pool->config->getSetting('skin') .
             '/skin.css'
@@ -227,20 +213,22 @@ abstract class AbstractController
         $css = preg_replace('/\s+/', ' ', $css);
 
         // Adding our DOM tools to the js.
-        if (is_readable($krexxDir . 'resources/jsLibs/kdt.min.js')) {
-            $jsFile = $krexxDir . 'resources/jsLibs/kdt.min.js';
+        if ($this->pool->fileService->fileIsReadable(KREXX_DIR . 'resources/jsLibs/kdt.min.js') === true) {
+            $jsFile = KREXX_DIR . 'resources/jsLibs/kdt.min.js';
         } else {
-            $jsFile = $krexxDir . 'resources/jsLibs/kdt.js';
+            $jsFile = KREXX_DIR . 'resources/jsLibs/kdt.js';
         }
+
         $jsCode = $this->pool->fileService->getFileContents($jsFile);
 
         // Krexx.js is comes directly form the template.
-        $path = $krexxDir . 'resources/skins/' . $this->pool->config->getSetting('skin');
-        if (is_readable($path . '/krexx.min.js')) {
+        $path = KREXX_DIR . 'resources/skins/' . $this->pool->config->getSetting('skin');
+        if ($this->pool->fileService->fileIsReadable($path . '/krexx.min.js') === true) {
             $jsFile = $path . '/krexx.min.js';
         } else {
             $jsFile = $path . '/krexx.js';
         }
+
         $jsCode .= $this->pool->fileService->getFileContents($jsFile);
 
         return $this->pool->render->renderCssJs($css, $jsCode);
@@ -259,7 +247,7 @@ abstract class AbstractController
      */
     public function noFatalForKrexx()
     {
-        if ($this->fatalShouldActive) {
+        if ($this->fatalShouldActive === true) {
             $this->krexxFatal->setIsActive(false);
             unregister_tick_function(array($this->krexxFatal, 'tickCallback'));
         }
@@ -279,7 +267,7 @@ abstract class AbstractController
      */
     public function reFatalAfterKrexx()
     {
-        if ($this->fatalShouldActive) {
+        if ($this->fatalShouldActive === true) {
             $this->krexxFatal->setIsActive(true);
             register_tick_function(array($this->krexxFatal, 'tickCallback'));
         }
@@ -318,6 +306,7 @@ abstract class AbstractController
                 $prevMomentName = $moment;
             }
         }
+
         return $result;
     }
 
@@ -336,10 +325,10 @@ abstract class AbstractController
 
         // Check if someone has been messing with the $_SERVER, to prevent
         // warnings and notices.
-        if (empty($server) ||
-            empty($server['SERVER_PROTOCOL']) ||
-            empty($server['SERVER_PORT']) ||
-            empty($server['SERVER_NAME'])) {
+        if (empty($server) === true ||
+            empty($server['SERVER_PROTOCOL']) === true ||
+            empty($server['SERVER_PORT']) === true ||
+            empty($server['SERVER_NAME'])=== true) {
             return 'n/a';
         }
 
@@ -348,13 +337,13 @@ abstract class AbstractController
 
         $protocol = strtolower($server['SERVER_PROTOCOL']);
         $protocol = substr($protocol, 0, strpos($protocol, '/'));
-        if ($ssl) {
+        if ($ssl === true) {
             $protocol .= 's';
         }
 
         $port = $server['SERVER_PORT'];
 
-        if ((!$ssl && $port === '80') || ($ssl && $port === '443')) {
+        if (($ssl === false && $port === '80') || ($ssl === true && $port === '443')) {
             // Normal combo with port and protocol.
             $port = '';
         } else {
@@ -362,29 +351,12 @@ abstract class AbstractController
             $port = ':' . $port;
         }
 
-        if (isset($server['HTTP_HOST'])) {
+        if (isset($server['HTTP_HOST']) === true) {
             $host = $server['HTTP_HOST'];
         } else {
             $host = $server['SERVER_NAME'] . $port;
         }
 
         return $this->pool->encodingService->encodeString($protocol . '://' . $host . $server['REQUEST_URI']);
-    }
-
-    /**
-     * Simply outputs a formatted var_dump.
-     *
-     * This is an internal debugging function, because it is
-     * rather difficult to debug a debugger, when your tool of
-     * choice is the debugger itself.
-     *
-     * @param mixed $data
-     *   The data for the var_dump.
-     */
-    public static function formattedVarDump($data)
-    {
-        echo '<pre>';
-        var_dump($data);
-        echo '</pre>';
     }
 }

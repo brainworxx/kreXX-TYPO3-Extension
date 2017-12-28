@@ -37,6 +37,7 @@ if (!defined('TYPO3_MODE')) {
 }
 
 $boot = function ($_EXTKEY) {
+
     if (class_exists('\\TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility')) {
         // 6.0 ++
         $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY);
@@ -45,6 +46,14 @@ $boot = function ($_EXTKEY) {
         $extPath = t3lib_extMgm::extPath($_EXTKEY);
     }
 
+    // We load the kreXX library.
+    // The class__exists triggers the composer autoloading, if available.
+    // It not, we use the bundled version wich comes with the externsion.
+    $krexxFile = $extPath . 'Resources/Private/krexx/Krexx.php';
+    if (file_exists($krexxFile) && !class_exists('Krexx')) {
+        
+        include_once $krexxFile;
+    }
 
     // Do some "autoloading" stuff which may or may not be done by TYPO3
     // automatically, depending on the version.
@@ -87,25 +96,13 @@ $boot = function ($_EXTKEY) {
                 );
             }
         }
-
     }
 
 
     // Add our specific overwrites.
     // When we include the kreXX mainfile, it gets bootstrapped.
     // But then it is already to late for these overwrites.
-    $GLOBALS['kreXXoverwrites'] = array(
-        'classes' => array(
-            'Brainworxx\\Krexx\\Service\\Config\\Config' => 'Tx_Includekrexx_Rewrite_ServiceConfigConfig'
-        ),
-        'directories' => array(),
-    );
-    if (!class_exists('Brainworxx\\Krexx\\Service\\Config\\Fallback')) {
-        include_once($extPath . 'Resources/Private/krexx/src/service/config/Fallback.php');
-    }
-    if (!class_exists('Brainworxx\\Krexx\\Service\\Config\\Config')) {
-        include_once($extPath . 'Resources/Private/krexx/src/service/config/Config.php');
-    }
+    \Brainworxx\Krexx\Service\Overwrites::$classes['Brainworxx\\Krexx\\Service\\Config\\Config'] = 'Tx_Includekrexx_Rewrite_ServiceConfigConfig';
     if (!class_exists('Tx_Includekrexx_Rewrite_ServiceConfigConfig')) {
         include_once($extPath . 'Classes/Rewrite/ServiceConfigConfig.php');
     }
@@ -133,7 +130,7 @@ $boot = function ($_EXTKEY) {
                 \TYPO3\CMS\Core\Utility\GeneralUtility::writeFileToTypo3tempDir($tempPath . '/' . 'index.html', $indexHtml);
             }
             // Register it!
-            $GLOBALS['kreXXoverwrites']['directories'][$key] = $tempPath;
+            \Brainworxx\Krexx\Service\Overwrites::$directories[$key] = $tempPath;
         }
     } else {
         foreach ($tempPaths as $key => $tempPath) {
@@ -145,18 +142,10 @@ $boot = function ($_EXTKEY) {
                 t3lib_div::writeFileToTypo3tempDir($tempPath . '/' . 'index.html', $indexHtml);
             }
             // Register it!
-            $GLOBALS['kreXXoverwrites']['directories'][$key] = $tempPath;
+
+            \Brainworxx\Krexx\Service\Overwrites::$directories[$key] = $tempPath;
         }
     }
-
-    // We load the kreXX library.
-    // The class__exists triggers the composer autoloading, if available.
-    // It not, we use the bundled version wich comes with the externsion.
-    $krexxFile = $extPath . 'Resources/Private/krexx/Krexx.php';
-    if (file_exists($krexxFile) && !class_exists('Krexx')) {
-        include_once $krexxFile;
-    }
-
 };
 
 $boot($_EXTKEY);
