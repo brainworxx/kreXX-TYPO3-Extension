@@ -133,7 +133,7 @@
 
             <!-- Usage help -->
             <label index="usage.headline">Usage PHP</label>
-            <label index="usage.calling">kreXX will be called in the PHP source code:</label>
+            <label index="usage.label.calling">kreXX will be called in the PHP source code:</label>
             <label index="usage.features">Most of the time you will use this method. kreXX will analyse the $object and give you detailed information about it:</label>
             <label index="usage.features.1">Public attributes of the object</label>
             <label index="usage.features.2">Protected attributes of the object (can be toggled)</label>
