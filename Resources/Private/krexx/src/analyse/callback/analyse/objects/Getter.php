@@ -76,9 +76,14 @@ class Getter extends AbstractObjectAnalysis
         // Filter them.
         /** @var \ReflectionMethod $method */
         foreach ($methodList as $key => $method) {
-            // We only dump those that start with 'get' and have no parameters.
-            if (strpos($method->getName(), 'get') !== 0 &&
-                count($method->getParameters()) !== 0) {
+            if (strpos($method->getName(), 'get') === 0) {
+                // We only dump those that have no parameters.
+                /** @var \ReflectionMethod $method */
+                $parameters = $method->getParameters();
+                if (!empty($parameters)) {
+                    unset($methodList[$key]);
+                }
+            } else {
                 unset($methodList[$key]);
             }
         }
