@@ -11,49 +11,40 @@
         <h1><f:translate key="editconfig.headline" /></h1>
         <table border="0" class="krexx-config">
 
-            <tr>
-                <th colspan="4"><b><f:translate key="subhead.output" /></b></th>
-            </tr>
-            <f:render section="dropdown" arguments="{name: 'disabled',               helptext: data.title.disabled,                 options: data.bool,        value: value.output.disabled,                 useFactorySettings: data.factory.disabled               }" />
-            <f:render section="input"    arguments="{name: 'iprange',                helptext: data.title.iprange,                                             value: value.output.iprange,                  useFactorySettings: data.factory.iprange                }" />
-            <f:render section="dropdown" arguments="{name: 'skin',                   helptext: data.title.skin,                     options: data.skins,       value: value.output.skin,                     useFactorySettings: data.factory.skin                   }" />
-            <f:render section="dropdown" arguments="{name: 'destination',            helptext: data.title.destination,              options: data.destination, value: value.output.destination,              useFactorySettings: data.factory.destination            }" />
-            <f:render section="input"    arguments="{name: 'maxfiles',               helptext: data.title.maxfiles,                                            value: value.output.maxfiles,                 useFactorySettings: data.factory.maxfiles               }" />
+            <tr><th colspan="4"><b><f:translate key="subhead.output" /></b></th></tr>
+            <f:render section="dropdown" arguments="{config: config.disabled, options: dropdown.bool}" />
+            <f:render section="input"    arguments="{config: config.iprange}" />
+            <f:render section="dropdown" arguments="{config: config.skin, options: dropdown.skins}" />
+            <f:render section="dropdown" arguments="{config: config.destination, options: dropdown.destination}" />
+            <f:render section="input"    arguments="{config: config.maxfiles}" />
             <tr><td colspan="4">&nbsp;</td></tr>
 
-            <tr>
-                <th colspan="4"><b><f:translate key="subhead.runtime" /></b></th>
-            </tr>
-            <f:render section="dropdown" arguments="{name: 'detectAjax',              helptext: data.title.detectAjax,             options: data.bool,         value: value.runtime.detectAjax,              useFactorySettings: data.factory.detectAjax             }" />
-            <f:render section="input"    arguments="{name: 'level',                   helptext: data.title.level,                                              value: value.runtime.level,                   useFactorySettings: data.factory.level                  }" />
-            <f:render section="input"    arguments="{name: 'maxCall',                 helptext: data.title.maxCall,                                            value: value.runtime.maxCall,                 useFactorySettings: data.factory.maxCall                }" />
-            <f:render section="input"    arguments="{name: 'memoryLeft',              helptext: data.title.memoryLeft,                                         value: value.runtime.memoryLeft,              useFactorySettings: data.factory.memoryLeft             }" />
-            <f:render section="input"    arguments="{name: 'maxRuntime',              helptext: data.title.maxRuntime,                                         value: value.runtime.maxRuntime,              useFactorySettings: data.factory.maxRuntime             }" />
-            <f:render section="dropdown" arguments="{name: 'useScopeAnalysis',        helptext: data.title.useScopeAnalysis,        options: data.bool,        value: value.runtime.useScopeAnalysis,        useFactorySettings: data.factory.useScopeAnalysis       }" />
+            <tr><th colspan="4"><b><f:translate key="subhead.runtime" /></b></th></tr>
+            <f:render section="dropdown" arguments="{config: config.detectAjax, options: dropdown.bool}" />
+            <f:render section="input"    arguments="{config: config.level}" />
+            <f:render section="input"    arguments="{config: config.maxCall}" />
+            <f:render section="input"    arguments="{config: config.memoryLeft}" />
+            <f:render section="input"    arguments="{config: config.maxRuntime}" />
+            <f:render section="dropdown" arguments="{config: config.useScopeAnalysis, options: dropdown.bool}" />
             <tr><td colspan="4">&nbsp;</td></tr>
 
-            <tr>
-                <th colspan="4"><b><f:translate key="subhead.properties" /></b></th>
-            </tr>
-            <f:render section="dropdown" arguments="{name: 'analyseProtected',        helptext: data.title.analyseProtected,        options: data.bool,        value: value.properties.analyseProtected,     useFactorySettings: data.factory.analyseProtected       }" />
-            <f:render section="dropdown" arguments="{name: 'analysePrivate',          helptext: data.title.analysePrivate,          options: data.bool,        value: value.properties.analysePrivate,       useFactorySettings: data.factory.analysePrivate         }" />
-            <f:render section="dropdown" arguments="{name: 'analyseConstants',        helptext: data.title.analyseConstants,        options: data.bool,        value: value.properties.analyseConstants,     useFactorySettings: data.factory.analyseConstants       }" />
-            <f:render section="dropdown" arguments="{name: 'analyseTraversable',      helptext: data.title.analyseTraversable,      options: data.bool,        value: value.properties.analyseTraversable,   useFactorySettings: data.factory.analyseTraversable     }" />
+            <tr><th colspan="4"><b><f:translate key="subhead.properties" /></b></th></tr>
+            <f:render section="dropdown" arguments="{config: config.analyseProtected, options: dropdown.bool}" />
+            <f:render section="dropdown" arguments="{config: config.analysePrivate, options: dropdown.bool}" />
+            <f:render section="dropdown" arguments="{config: config.analyseConstants, options: dropdown.bool}" />
+            <f:render section="dropdown" arguments="{config: config.analyseTraversable, options: dropdown.bool}" />
             <tr><td colspan="4">&nbsp;</td></tr>
 
-            <tr>
-                <th colspan="4"><b><f:translate key="subhead.methods" /></b></th>
-            </tr>
-            <f:render section="dropdown" arguments="{name: 'analyseProtectedMethods', helptext: data.title.analyseProtectedMethods, options: data.bool,        value: value.methods.analyseProtectedMethods, useFactorySettings: data.factory.analyseProtectedMethods}" />
-            <f:render section="dropdown" arguments="{name: 'analysePrivateMethods',   helptext: data.title.analysePrivateMethods,   options: data.bool,        value: value.methods.analysePrivateMethods,   useFactorySettings: data.factory.analysePrivateMethods  }" />
-            <f:render section="dropdown" arguments="{name: 'analyseGetter',           helptext: data.title.analyseGetter,           options: data.bool,        value: value.methods.analyseGetter,           useFactorySettings: data.factory.analyseGetter          }" />
-            <f:render section="input"    arguments="{name: 'debugMethods',            helptext: data.title.debugMethods,                                       value: value.methods.debugMethods,            useFactorySettings: data.factory.debugMethods           }" />
+            <tr><th colspan="4"><b><f:translate key="subhead.methods" /></b></th></tr>
+            <f:render section="dropdown" arguments="{config: config.analyseProtectedMethods, options: dropdown.bool}" />
+            <f:render section="dropdown" arguments="{config: config.analysePrivateMethods, options: dropdown.bool}" />
+            <f:render section="dropdown" arguments="{config: config.analyseGetter, options: dropdown.bool}" />
+            <f:render section="input"    arguments="{config: config.debugMethods}" />
             <tr><td colspan="4">&nbsp;</td></tr>
 
-            <tr>
-                <th colspan="4"><b><f:translate key="subhead.backtrace" /></b></th>
-            </tr>
-            <f:render section="input"    arguments="{name: 'maxStepNumber',           helptext: data.title.maxStepNumber,                                      value: value.backtrace.maxStepNumber,         useFactorySettings: data.factory.maxStepNumber          }" />
+            <tr><th colspan="4"><b><f:translate key="subhead.backtrace" /></b></th></tr>
+            <f:render section="input"    arguments="{config: config.maxStepNumber}" />
+            
         </table>
 
     </f:form>
@@ -62,43 +53,47 @@
 /**
  * Rendering of a dropdown field.
  *
- * @var string {name}
+ * @var string {config.name}
  *   The name of the dropdown field.
- * @var string {helptext}
+ * @var string {config.helptext}
  *   The Hepltext for the (i) icon.
  * @var array {options}
  *   The options for the dropdown.
- * @var string {value}
+ * @var string {config.value}
  *   The current value of the dropdown.
- * @var boolean {useFactorySettings}
+ * @var boolean {config.useFactorySettings}
  *   Are we using factory settings here?
+ * @var string {config.group}
+ *   The configuration group, where this setting belongs to.
  */
 <f:section name="dropdown">
     <tr>
-        <td><label for="{name}"><f:translate key="label.{name}" /></label></td>
-        <td><img src="{f:uri.resource(path:'Icons/info.png')}" title="{helptext}" alt="{helptext}" /></td>
-        <td><f:form.select id="{name}" name="output[{name}]" options="{options}" value="{value}" /></td>
-        <td><f:form.checkbox id="factory.{name}" name="factory" checked="{useFactorySettings}" value="1" /><label for="factory.{name}"><f:translate key="factory.settings" /></label></td>
+        <td><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
+        <td><img src="{f:uri.resource(path:'Icons/info.png')}" title="{config.helptext}" alt="{config.helptext}" /></td>
+        <td><f:form.select id="{config.name}" name="{config.group}[{config.name}]" options="{options}" value="{config.value}" /></td>
+        <td><f:form.checkbox id="factory.{config.name}" name="factory" checked="{config.useFactorySettings}" value="1" /><label for="factory.{config.name}"><f:translate key="factory.settings" /></label></td>
     </tr>
 </f:section>
 
 /**
  * Rendering of an input field.
  *
- * @var string {name}
+ * @var string {config.name}
  *   The name of the input field.
- * @var string {helptext}
+ * @var string {config.helptext}
  *   The Hepltext for the (i) icon.
- * @var string {value}
+ * @var string {config.value}
  *   The current value of the dropdown.
- * @var integer {useFactorySettings}
+ * @var integer {config.useFactorySettings}
  *   Are we using factory settings here?
+ * @var string {config.group}
+ *   The configuration group, where this setting belongs to.
  */
 <f:section name="input">
     <tr>
-        <td><label for="{name}"><f:translate key="label.{name}" /></label></td>
-        <td><img src="{f:uri.resource(path:'Icons/info.png')}" title="{helptext}" alt="{helptext}" /></td>
-        <td><f:form.textfield id="{name}" name="output[{name}]"  value="{value}" /></td>
-        <td><f:form.checkbox id="factory.{name}" name="factory" checked="{useFactorySettings}" value="1" /><label for="factory.{name}"><f:translate key="factory.settings" /></label></td>
+        <td><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
+        <td><img src="{f:uri.resource(path:'Icons/info.png')}" title="{config.helptext}" alt="{config.helptext}" /></td>
+        <td><f:form.textfield id="{config.name}" name="{config.group}[{config.name}]"  value="{config.value}" /></td>
+        <td><f:form.checkbox id="factory.{config.name}" name="factory" checked="{config.useFactorySettings}" value="1" /><label for="factory.{config.name}"><f:translate key="factory.settings" /></label></td>
     </tr>
 </f:section>

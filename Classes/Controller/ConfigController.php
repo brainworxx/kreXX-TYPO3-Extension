@@ -64,131 +64,43 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
             $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
         }
 
-        $data = array();
-        // Setting possible form values.
-        foreach ($this->pool->render->getSkinList() as $skin) {
-            $data['skins'][$skin] = $skin;
-        }
-        $data['destination'] = array(
-            'browser' => $this->LLL('browser'),
-            'file' => $this->LLL('file'),
-        );
-        $data['bool'] = array(
-            'true' => $this->LLL('true'),
-            'false' => $this->LLL('false'),
-        );
-        $data['backtrace'] = array(
-            'normal' => $this->LLL('normal'),
-            'deep' => $this->LLL('deep'),
-        );
-
-        // Assigning the help stuff to the template.
-        $data['title'] = array();
-        $value = array();
-        foreach ($this->allowedSettingsNames as $settingsName) {
-            $data['title'][$settingsName] = $this->LLL($settingsName);
-        }
-
-        $iniConfig = $this->pool->config->iniConfig;
-
-        // See, if we have any values in the configuration file.
-        $value['output']['skin'] = $iniConfig->getConfigFromFile(
-            'output',
-            'skin'
-        );
-        $value['runtime']['memoryLeft'] = $iniConfig->getConfigFromFile(
-            'runtime',
-            'memoryLeft'
-        );
-        $value['runtime']['maxRuntime'] = $iniConfig->getConfigFromFile(
-            'runtime',
-            'maxRuntime'
-        );
-        $value['output']['maxfiles'] = $iniConfig->getConfigFromFile(
-            'output',
-            'maxfiles'
-        );
-        $value['output']['destination'] = $iniConfig->getConfigFromFile(
-            'output',
-            'destination'
-        );
-        $value['runtime']['maxCall'] = $iniConfig->getConfigFromFile(
-            'runtime',
-            'maxCall'
-        );
-        $value['output']['disabled'] = $iniConfig->getConfigFromFile(
-            'output',
-            'disabled'
-        );
-        $value['output']['iprange'] = $iniConfig->getConfigFromFile(
-            'output',
-            'iprange'
-        );
-        $value['runtime']['detectAjax'] = $iniConfig->getConfigFromFile(
-            'runtime',
-            'detectAjax'
-        );
-        $value['properties']['analyseProtected'] = $iniConfig->getConfigFromFile(
-            'properties',
-            'analyseProtected'
-        );
-        $value['properties']['analysePrivate'] = $iniConfig->getConfigFromFile(
-            'properties',
-            'analysePrivate'
-        );
-        $value['properties']['analyseConstants'] = $iniConfig->getConfigFromFile(
-            'properties',
-            'analyseConstants'
-        );
-        $value['properties']['analyseTraversable'] = $iniConfig->getConfigFromFile(
-            'properties',
-            'analyseTraversable'
-        );
-        $value['methods']['debugMethods'] = $iniConfig->getConfigFromFile(
-            'methods',
-            'debugMethods'
-        );
-        $value['runtime']['level'] = $iniConfig->getConfigFromFile(
-            'runtime',
-            'level'
-        );
-        $value['methods']['analyseProtectedMethods'] = $iniConfig->getConfigFromFile(
-            'methods',
-            'analyseProtectedMethods'
-        );
-        $value['methods']['analysePrivateMethods'] = $iniConfig->getConfigFromFile(
-            'methods',
-            'analysePrivateMethods'
-        );
-        $value['methods']['analyseGetter'] = $iniConfig->getConfigFromFile(
-            'methods',
-            'analyseGetter'
-        );
-        $value['backtrace']['maxStepNumber'] = $iniConfig->getConfigFromFile(
-            'backtrace',
-            'maxStepNumber'
-        );
-        $value['runtime']['useScopeAnalysis'] = $iniConfig->getConfigFromFile(
-            'runtime',
-            'useScopeAnalysis'
-        );
-
-        // Are these actually set?
-        foreach ($value as $mainkey => $setting) {
-            foreach ($setting as $attribute => $config) {
-                if (is_null($config)) {
-                    $data['factory'][$attribute] = true;
-                    // We need to fill these values with the stuff from the
-                    // factory settings!
-                    $value[$mainkey][$attribute] = $this->pool->config->configFallback[$mainkey][$attribute];
-                } else {
-                    $data['factory'][$attribute] = false;
+        $config = array();
+        foreach ($this->pool->config->configFallback as $group => $fallback) {
+            foreach ($fallback as $settingsName => $value) {
+                // Stitch together the settings in the template.
+                $config[$settingsName] = array();
+                $config[$settingsName]['name'] = $settingsName;
+                $config[$settingsName]['helptext'] = $this->LLL($settingsName);
+                $config[$settingsName]['value'] = $this->pool->config->iniConfig->getConfigFromFile($group, $settingsName);
+                $config[$settingsName]['group'] = $group;
+                $config[$settingsName]['useFactorySettings'] = false;
+                // Check if we have a value. If not, we need to load the
+                // factory settings. We also need to set the info, if we
+                // are using the factory settings, at all.
+                if (is_null($config[$settingsName]['value'])) {
+                    $config[$settingsName]['value'] = $value;
+                    $config[$settingsName]['useFactorySettings'] = true;
                 }
             }
         }
 
-        $this->view->assign('data', $data);
-        $this->view->assign('value', $value);
+        // Adding the dropdown values.
+        $dropdown = array();
+        $dropdown['skins'] = array();
+        foreach ($this->pool->render->getSkinList() as $skin) {
+            $dropdown['skins'][$skin] = $skin;
+        }
+        $dropdown['destination'] = array(
+            'browser' => $this->LLL('browser'),
+            'file' => $this->LLL('file'),
+        );
+        $dropdown['bool'] = array(
+            'true' => $this->LLL('true'),
+            'false' => $this->LLL('false'),
+        );
+
+        $this->view->assign('config', $config);
+        $this->view->assign('dropdown', $dropdown);
         $this->addCssToView('Backend.css');
         $this->addJsToView('Backend.js');
         $this->assignFlashInfo();
