@@ -17,6 +17,8 @@
 - Bugfix: Removed the comma in the method parameter analysis.
 - Bugfix: Fixed in issue, where the correct nesting level was not
   set correctly, resulting in output overkill.
+- Bugfix: Fixed codewrapper2 for the code generation in the Hans
+  skin.
 
 2.3.1
 - Bugfix: Fixed shell detection.

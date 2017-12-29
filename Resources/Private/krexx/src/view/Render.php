@@ -296,7 +296,7 @@ class Render extends AbstractRender
                 $expandedClass,
                 $this->pool->chunks->chunkMe($this->renderNest($model, $isExpanded)),
                 $this->generateDataAttribute('codewrapper1', $this->pool->codegenHandler->generateWrapper1()),
-                $this->generateDataAttribute('codewrapper1', $this->pool->codegenHandler->generateWrapper2()),
+                $this->generateDataAttribute('codewrapper2', $this->pool->codegenHandler->generateWrapper2()),
             ),
             $this->getTemplateFileContent('expandableChildNormal')
         );
