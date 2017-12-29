@@ -108,21 +108,11 @@ Methods
 |                                | Comma separated list of methods. These methods are called without parameters. They also might do stuff which might be unwanted.        |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 
-Error Handling and Backtrace
+Backtrace
 ----------------------------
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Option                         | Description                                                                                                                            | Possible values / example |
 +================================+========================================================================================================================================+===========================+
-| Register fatal error handler   | When set to "true", kreXX will register the handler as soon as it's loaded. When a fatal error occurs, kreXX will offer a backtrace    | - true                    |
-| automatically                  | and an analysis of all objects in it. PHP always clears the stack in case of a fatal error, so kreXX has to keep track of it.          | - false                   |
-|                                | Be warned: This option will dramatically slow down your requests.                                                                      |                           |
-|                                |                                                                                                                                        |                           |
-|                                | | Use this only when you have to. It is much better to register the error handler yourself with                                        |                           |
-|                                | | :literal:`\krexx::registerFatal();`                                                                                                  |                           |
-|                                | | and later unregister it with                                                                                                         |                           |
-|                                | | :literal:`\krexx::unregisterFatal();`                                                                                                |                           |
-|                                | | to prevent a slowdown.                                                                                                               |                           |
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Maximum steps in the backtrace | A backtrace tends to produce a lot of output, and browsers tend to have problems with more than 100MB output in HTML text.             | 10                        |
 |                                | Normally it is not unneccessary to go back more than 10 steps, but if you need to, you can increase this number here.                  |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+

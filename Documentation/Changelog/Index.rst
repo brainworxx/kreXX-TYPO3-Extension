@@ -12,6 +12,23 @@
 Changelog
 =============================================================
 
+2.3.2 dev
+    - [Feature] Added the method analysis to the recursion detection, to prevent analysing the same methods over and over again.
+    - [Feature] Added Javascript optimisation for very large output.
+    - [Feature] Added mimetype analysis for strings.
+    - [Change] Moved the overwrites from the GLOBALS to a static class
+    - [Change] Prettified the display of sourcecode in the backtrace in the smoky grey skin.
+    - [Change] Removed the option for the atomatic registration of the fatal error handler.
+    - [Change] Lots of micro optimizations.
+    - [Change] Updated to TYPO3 9.0
+    - [Change] Updated to PHP 7.2
+    - [Bugfix] Minimise CSS interference from the hosting cms with marked text.
+    - [Bugfix] Disabling via sourcecode works again.
+    - [Bugfix] Removed the special backtrace configuration, which resulted in a output overkill, crashing the backtrace.
+    - [Bugfix] Removed the comma in the method parameter analysis.
+    - [Bugfix] Fixed in issue, where the correct nesting level was not set correctly, resulting in output overkill.
+    - [Bugfix] Fixed codewrapper2 for the code generation in the Hans skin.
+
 2.3.1
     - [Bugfix] Fixed shell detection.
     - [Bugfix] Fixed shell message feedback
