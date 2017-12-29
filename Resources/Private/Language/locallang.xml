@@ -88,7 +88,7 @@
             <label index="subhead.output">Output</label>
             <label index="subhead.properties">Properties</label>
             <label index="subhead.methods">Methods</label>
-            <label index="subhead.backtrace">Fatal error handling</label>
+            <label index="subhead.backtrace">Backtrace</label>
 
             <!-- Labels -->
             <label index="label.skin">Skin:</label>
