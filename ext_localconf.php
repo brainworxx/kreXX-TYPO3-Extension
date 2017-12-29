@@ -47,11 +47,10 @@ $boot = function ($_EXTKEY) {
     }
 
     // We load the kreXX library.
-    // The class__exists triggers the composer autoloading, if available.
+    // The class_exists triggers the composer autoloading, if available.
     // It not, we use the bundled version wich comes with the externsion.
     $krexxFile = $extPath . 'Resources/Private/krexx/Krexx.php';
     if (file_exists($krexxFile) && !class_exists('Krexx')) {
-        
         include_once $krexxFile;
     }
 

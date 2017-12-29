@@ -128,7 +128,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
         protected $pool;
 
         /**
-         * Set the pool and do the paren constructor.
+         * Set the pool and do the parent constructor.
          */
         public function __construct()
         {
