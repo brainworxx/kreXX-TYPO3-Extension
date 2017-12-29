@@ -161,7 +161,7 @@
             <label index="config.factory.headline">1.) Factory settings</label>
             <label index="config.factory.text">The factory settings are hardcoded fallback settings.</label>
             <label index="config.file.headline">2.) Configuration file Krexx.ini</label>
-            <label index="config.file.text">The configuration file settings are stored in the file Krexx.ini. kreXX shows in it's output footer where it is searching for this file. In typo3 this is normally:</label>
+            <label index="config.file.text">The configuration file settings are stored in the file Krexx.ini. kreXX shows in it's output footer where it is searching for this file. According to kreXX, this is:</label>
             <label index="config.file.link.1">You can edit these settings </label>
             <label index="config.file.link.2">here</label>
             <label index="config.file.hierarchy">Configuration file settings overwrite factory settings.</label>

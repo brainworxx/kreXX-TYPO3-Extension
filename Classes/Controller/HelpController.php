@@ -72,6 +72,11 @@ class Tx_Includekrexx_Controller_HelpController extends Tx_Includekrexx_Controll
         foreach ($this->getTranslatedMessages() as $message) {
             $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
         }
+
+        $this->view->assign(
+            'pathToIni',
+            $this->pool->fileService->filterFilePath($this->pool->config->getPathToIniFile())
+        );
         $this->addCssToView('Backend.css');
         $this->assignFlashInfo();
     }
