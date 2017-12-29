@@ -72,83 +72,37 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
             $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
         }
 
-        $data = array();
-        $value = array();
-        // Setting possible form values.
-        $data['settings'] = array(
+        $iniConfig = $this->pool->config->iniConfig;
+
+        $dropdown = array(
             'full' => $this->LLL('full'),
             'display' => $this->LLL('display'),
             'none' => $this->LLL('none')
         );
 
-        $iniConfig = $this->pool->config->iniConfig;
-
-        // See, if we have any values in the configuration file.
-        $value['output']['skin'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('skin')
-        );
-        $value['runtime']['memoryLeft'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('memoryLeft')
-        );
-        $value['runtime']['maxRuntime'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('maxRuntime')
-        );
-        $value['runtime']['maxCall'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('maxCall')
-        );
-        $value['output']['disabled'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('disabled')
-        );
-        $value['runtime']['detectAjax'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('detectAjax')
-        );
-        $value['properties']['analyseProtected'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('analyseProtected')
-        );
-        $value['properties']['analysePrivate'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('analysePrivate')
-        );
-        $value['properties']['analyseTraversable'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('analyseTraversable')
-        );
-        $value['properties']['analyseConstants'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('analyseConstants')
-        );
-        $value['runtime']['level'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('level')
-        );
-        $value['methods']['analyseProtectedMethods'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('analyseProtectedMethods')
-        );
-        $value['methods']['analysePrivateMethods'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('analysePrivateMethods')
-        );
-        $value['backtrace']['maxStepNumber'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('maxStepNumber')
-        );
-        $value['methods']['analyseGetter'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('analyseGetter')
-        );
-        $value['runtime']['useScopeAnalysis'] = $this->convertKrexxFeSetting(
-            $iniConfig->getFeConfigFromFile('useScopeAnalysis')
-        );
-
-        // Are these actually set?
-        foreach ($value as $mainkey => $setting) {
-            foreach ($setting as $attribute => $config) {
-                if (is_null($config)) {
-                    $data['factory'][$attribute] = true;
-                    // We need to fill these values with the stuff from the factory settings!
-                    $value[$mainkey][$attribute] = $this->convertKrexxFeSetting($iniConfig
-                        ->feConfigFallback[$attribute]);
-                } else {
-                    $data['factory'][$attribute] = false;
+        $config = array();
+        foreach ($this->pool->config->configFallback as $fallback) {
+            foreach ($fallback as $settingsName => $value) {
+                $config[$settingsName] = array();
+                $config[$settingsName]['name'] = $settingsName;
+                $config[$settingsName]['options'] = $dropdown;
+                $config[$settingsName]['useFactorySettings'] = false;
+                $config[$settingsName]['value'] =  $this->convertKrexxFeSetting(
+                    $iniConfig->getFeConfigFromFile($settingsName)
+                );
+                // Check if we have a value. If not, we need to load the
+                // factory settings. We also need to set the info, if we
+                // are using the factory settings, at all.
+                if (is_null($config[$settingsName]['value'])) {
+                    $config[$settingsName]['value'] = $this->convertKrexxFeSetting(
+                        $iniConfig->feConfigFallback[$settingsName]
+                    );
+                    $config[$settingsName]['useFactorySettings'] = true;
                 }
             }
         }
 
-        $this->view->assign('data', $data);
-        $this->view->assign('value', $value);
+        $this->view->assign('config', $config);
         $this->addCssToView('Backend.css');
         $this->addJsToView('Backend.js');
         $this->assignFlashInfo();
