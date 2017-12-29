@@ -1,4 +1,11 @@
 <f:layout name="BackendRefresh"/>
+
+/**
+ * Renders the backend logfile access.
+ *
+ * @var array {_all}
+ *   Complete access to all variables.
+ */
 <f:section name="main">
     <h1><f:translate key="log.headline" /></h1>
     <p>
@@ -9,7 +16,7 @@
     <br/>
     <f:if condition="{f:count(subject: files)}>0">
         <f:then>
-            <f:render section="table" arguments="{files: '{files}'}" />
+            <f:render section="table" arguments="{files: files}" />
         </f:then>
         <f:else>
             <f:translate key="log.noresult" />
@@ -17,6 +24,11 @@
     </f:if>
 </f:section>
 
+/**
+ * Renders the table with all files that can be accessed.
+ *
+ * @var array {files}
+ *   A list of all log files with their mata data.
 <f:section name="table">
     <table border="0" class="krexx-logs">
         <tr>
@@ -31,39 +43,36 @@
                 <td><f:link.action target="_blank" class="krexx-link" controller="Log" action="getContent" arguments="{id: '{file.id}'}">{file.name}</f:link.action></td>
                 <td>{file.time}</td>
                 <td>{file.size}</td>
-                <td>
-                    <table class="noborder">
-                        <tbody>
-                            <f:if condition="{f:count(subject: file.meta)}==0">
-                                <f:then>
-                                    <tr><td><f:translate key="log.nodata" /></td></tr>
-                                </f:then>
-                                <f:else>
-                                    <f:for each="{file.meta}" as="meta">
-                                        <tr>
-                                            <td class="metatype">
-                                                {meta.type}
-                                                <f:if condition="{meta.varname}!='...'">
-                                                    <f:then>
-                                                        <f:translate key="log.of" /> <b>{meta.varname}</b>
-                                                    </f:then>
-                                                </f:if>
-                                            </td>
-                                            <td>
-                                                <f:translate key="log.in" /> <b title="{meta.file}">{meta.filename}</b>
-                                            </td>
-                                            <td>
-                                                <f:translate key="log.inline" /> <b>{meta.line}</b>
-                                            </td>
-                                        </tr>
-                                    </f:for>
-                                </f:else>
-                            </f:if>
-                        </tbody>
-                    </table>
-                </td>
+                <td><f:render section="innerTable" arguments="{file: file}" /></td>
                 <td><f:link.action controller="Log" action="delete" arguments="{id: '{file.id}'}"><img width="16" class="delete" src="{f:uri.resource(path:'Icons/delete.png')}" alt="{f:translate(key:'log.delete')}"/></f:link.action></td>
             </tr>
         </f:for>
+    </table>
+</f:section>
+
+/**
+ * Renders the inner table with the metadata.
+ *
+ * @var array {file}
+ *   The known info of this debug file.
+ */
+<f:section name="innerTable">
+    <table class="noborder">
+        <tbody>
+            <f:if condition="{f:count(subject: file.meta)}==0">
+                <f:then>
+                    <tr><td><f:translate key="log.nodata" /></td></tr>
+                </f:then>
+                <f:else>
+                    <f:for each="{file.meta}" as="meta">
+                        <tr>
+                            <td class="metatype">{meta.type}</td>
+                            <td><f:translate key="log.in" /> <b title="{meta.file}">{meta.filename}</b></td>
+                            <td><f:translate key="log.inline" /> <b>{meta.line}</b></td>
+                        </tr>
+                    </f:for>
+                </f:else>
+            </f:if>
+        </tbody>
     </table>
 </f:section>
