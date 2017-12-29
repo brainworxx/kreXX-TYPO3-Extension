@@ -131,16 +131,16 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld extends Abstrac
             $pos = count($renderingStack) -1;
             if (isset($renderingStack[$pos])) {
                 return $renderingStack[$pos];
-            } else {
-                // No rendering stack, no template file  :-(
-                $this->error = true;
-                return false;
             }
-        } else {
             // No rendering stack, no template file  :-(
             $this->error = true;
             return false;
         }
+
+        // No rendering stack, no template file  :-(
+        $this->error = true;
+        return false;
+        
     }
 
 
@@ -258,6 +258,5 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld extends Abstrac
             }
         }
         return $result;
-
     }
 }

@@ -71,7 +71,6 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
 
         // Do the parent generation. [ParentGeneration = Generation X ?]
         return parent::generateSource($model);
-
     }
 
     /**
@@ -95,7 +94,6 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
         foreach ($data['paramArray'] as $parameter) {
             $args .= 'arg' . $counter . ': \'' . $parameter . '\', ';
             $counter++;
-
         }
 
         $firstPart = ' -> v:call(method: \'';
@@ -105,9 +103,9 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
 
         if ($counter >= 2) {
             return $firstPart . $model->getName() . $secondPart . rtrim($args, ', ') . $lastPart;
-        } else {
-            return $firstPart . $model->getName() . $alternativeLastPart;
         }
+
+        return $firstPart . $model->getName() . $alternativeLastPart;
     }
 
     /**
