@@ -99,8 +99,15 @@ $boot = function ($_EXTKEY) {
 
 
     // Add our specific overwrites.
-    // When we include the kreXX mainfile, it gets bootstrapped.
-    // But then it is already to late for these overwrites.
+    // There is a bug with the extension installing (at least in TYPO3 8.7.8),
+    // causing this class not being available, right after a manual upgrade.
+    // It's not a showstopper, because after a reload, everything is OK.
+    // We need to make sure that we have access to the overwrite class, to
+    // prevent this ugly TYPO3 error message.
+    $overwritesFile = $extPath . 'Resources/Private/krexx/src/Service/Overwrites.php';
+    if (file_exists($overwritesFile) && !class_exists('\\Brainworxx\\Krexx\\Service\\Overwrites')) {
+        include_once $overwritesFile;
+    }
     \Brainworxx\Krexx\Service\Overwrites::$classes['Brainworxx\\Krexx\\Service\\Config\\Config'] = 'Tx_Includekrexx_Rewrite_ServiceConfigConfig';
     if (!class_exists('Tx_Includekrexx_Rewrite_ServiceConfigConfig')) {
         include_once($extPath . 'Classes/Rewrite/ServiceConfigConfig.php');
