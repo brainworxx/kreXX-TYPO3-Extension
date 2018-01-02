@@ -113,6 +113,7 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
     {
         $arguments = $this->request->getArguments();
         $filepath = $this->pool->config->getPathToIniFile();
+        $oldValues = array();
         
         // Check for writing permission.
         if (!is_writable(dirname($filepath))) {
@@ -123,8 +124,6 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
         // Check if the file does exist.
         if (is_file($filepath)) {
             $oldValues = parse_ini_file($filepath, true);
-        } else {
-            $oldValues = array();
         }
 
         // We must preserve the section 'feEditing'.

@@ -105,6 +105,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             'memoryLeft',
             'useScopeAnalysis',
             'maxStepNumber',
+            'arrayCountLimit',
         );
 
         /**
@@ -117,7 +118,7 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
             'output',
             'properties',
             'methods',
-            'backtrace',
+            'pruneOutput',
         );
 
         /**

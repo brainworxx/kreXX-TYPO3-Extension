@@ -88,7 +88,7 @@
             <label index="subhead.output">Output</label>
             <label index="subhead.properties">Properties</label>
             <label index="subhead.methods">Methods</label>
-            <label index="subhead.backtrace">Backtrace</label>
+            <label index="subhead.pruneOutput">Prune output</label>
 
             <!-- Labels -->
             <label index="label.skin">Skin:</label>
@@ -113,6 +113,7 @@
             <label index="label.analyseGetter">Analyse getter methods</label>
             <label index="label.useScopeAnalysis">Use scope analysis</label>
             <label index="label.maxStepNumber">Maximum steps in the backtrace</label>
+            <label index="label.arrayCountLimit">Maximum array size before fallback to simplified analysis:</label>
 
             <!-- Content stuff  Edit Frontend Settings -->
             <label index="editfeconfig.help.headline">Here you can edit the frontend configuration form.</label>
