@@ -90,8 +90,7 @@ class ThroughMethods extends AbstractCallback
                 $paramList .= ', ';
             }
 
-            // Remove the ',' after the last char.
-            $paramList = trim($paramList, ', ');
+            
 
             // Get declaring keywords.
             $methodData['declaration keywords'] = $this->getDeclarationKeywords(
@@ -113,7 +112,8 @@ class ThroughMethods extends AbstractCallback
                     ->setName($reflectionMethod->name)
                     ->setType($methodData['declaration keywords'] . ' method')
                     ->setConnectorType($connectorType)
-                    ->setConnectorParameters($paramList)
+                    // Remove the ',' after the last char.
+                    ->setConnectorParameters(trim($paramList, ', '))
                     ->addParameter('data', $methodData)
                     ->injectCallback(
                         $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis')

@@ -108,11 +108,22 @@ analyseGetter = "true"
 debugMethods = "debug,toArray,__toString,toString"
 
 ; ------------------------------------------------------------------------------
-[backtrace]
+[pruneOutput]
+
 ; A backtrace tends to produce a lot of output, and browsers tend to have problems
 ; with more than 100MB output in HTML text. Normally it is not unneccessary to go
 ; back more than 10 steps, but if you need to, you can increase this number here.
 maxStepNumber = 10
+
+; When doing a database loading operation, most framewors return a class which holds
+; models inside. Getting more than 1000 of these can result in an overkill output.
+; The content of such a class will be transformed into an array by the traversasble
+; analysis. But there are also a lot of situations, where you get large arrays of
+; objects as well, without a traversable analysis.
+; When encountering an array larger than this number, kreXX will resort to a
+; simplified array analysis. This means that classes or other arrays in this large
+; array will only get a rudimentary analysis to prevent an overkill output.
+arrayCountLimit = 300
 
 ; ------------------------------------------------------------------------------
 [feEditing]

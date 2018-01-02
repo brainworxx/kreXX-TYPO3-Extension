@@ -70,34 +70,63 @@ class Fallback
      */
     public $configFallback = array(
         'output' => array(
+            // Disable kreXX.
             'disabled' => 'false',
+            // IP range for calling kreXX.
+            // kreXX is disabled for everyone who dies not fit into this range.
             'iprange' => '*',
+            // Skin for kreXX. We have provided 'hans' and 'smokygrey'.
             'skin' => 'smokygrey',
+            // Output desination. Either 'file' or 'browser'.
             'destination' => 'browser',
+            // Maximum files that are kept inside the logfolder.
             'maxfiles' => '10',
         ),
         'runtime' => array(
+            // Try to detect ajax requests.
+            // If set to 'true', kreXX is disablked for them.
             'detectAjax' => 'true',
+            // Maximum nesting level.
             'level' => '5',
+            // Maximum amount of kreXX calls.
             'maxCall' => '10',
+            // Maximum runtime in seconds, before triggering an emergancy break.
             'maxRuntime' => '60',
+            // Maximum MB memory left, before triggering an emergency break.
             'memoryLeft' => '64',
+            // Use the scope analyis (aka autoconfiguration).
             'useScopeAnalysis' => 'true',
         ),
         'properties' => array(
+            // Analyse protected class properties.
             'analyseProtected' => 'false',
+            // Analyse private class properties.
             'analysePrivate' => 'false',
+            // Analyse class constants.
             'analyseConstants' => 'true',
+            // Analyse traversable part of classes.
             'analyseTraversable' => 'true',
         ),
         'methods' => array(
+            // Analyse protected class methods.
             'analyseProtectedMethods' => 'false',
+            // Analyse private class methods.
             'analysePrivateMethods' => 'false',
+            // Analyse the getter methods of a class and try to
+            // get a possible return value without calling the method.
             'analyseGetter' => 'true',
+            // Debug methods that get called.
+            // A debug method must be public and have no parameters.
+            // Change these only if you know what you are doing.
             'debugMethods' => 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo,getProperties',
         ),
-        'backtrace' => array(
+        'pruneOutput' => array(
+            // Maximum step numbers that get analysed from a backtrace.
+            // all other steps be be omitted.
             'maxStepNumber' => 10,
+            // Limit for the count in an array. If an array is larger that this,
+            // we will use the ThroughLargeArray callback
+            'arrayCountLimit' => 300,
         ),
     );
 
@@ -188,6 +217,10 @@ class Fallback
             'editable' => 'true',
         ),
         'maxStepNumber' => array(
+            'type' => 'Input',
+            'editable' => 'true',
+        ),
+        'arrayCountLimit' => array(
             'type' => 'Input',
             'editable' => 'true',
         ),
@@ -287,6 +320,7 @@ class Fallback
         'maxRuntime' => 'evalMaxRuntime',
         'useScopeAnalysis' => 'evalBool',
         'maxStepNumber' => 'evalInt',
+        'arrayCountLimit' => 'evalInt',
     );
 
     /**
@@ -295,15 +329,4 @@ class Fallback
      * @var string
      */
     public $version = '2.3.2 dev';
-
-    /**
-     * Limit for the count in an array. If an array is larger that this,
-     * we will use the ThroughLargeArray callback
-     *
-     * @see \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray
-     * @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
-     *
-     * @var int
-     */
-    public $arrayCountLimit = 300;
 }

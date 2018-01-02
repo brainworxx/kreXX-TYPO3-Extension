@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Code\Connectors;
 
 /**
  * Processing of closures.
@@ -90,6 +91,9 @@ class ProcessClosure extends AbstractProcess
             $paramList .=  $result['Parameter #' . $key] = $this->pool
                 ->codegenHandler
                 ->parameterToString($reflectionParameter);
+            // We add a comme to the parameter list, to separate them for a
+            // better readability.
+            $paramList .= ', ';
         }
 
         return $this->pool->render->renderExpandableChild(
@@ -98,6 +102,7 @@ class ProcessClosure extends AbstractProcess
                 // Remove the ',' after the last char.
                 ->setConnectorParameters(trim($paramList, ', '))
                 ->setDomid($this->generateDomIdFromObject($model->getData()))
+                ->setConnectorType(Connectors::METHOD)
                 ->addParameter('data', $result)
                 ->injectCallback(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis')

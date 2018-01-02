@@ -11,6 +11,8 @@
 - Cannge: Lots of micro optimizations.
 - Bugfix: Minimise CSS interference from the hosting cms with
   marked text.
+- Change: Simplified array analysis is now configurable.
+- Change: Renamed the 'Backtrace' config group to 'pruneOutput'.
 - Bugfix: Disabling via sourcecode works again.
 - Bugfix: Removed the special backtrace configuration, which
   resulted in a output overkill, crashing the backtrace.
@@ -19,6 +21,7 @@
   set correctly, resulting in output overkill.
 - Bugfix: Fixed codewrapper2 for the code generation in the Hans
   skin.
+- Bugfix: Source generation for closures now work as expected.
 
 2.3.1
 - Bugfix: Fixed shell detection.
