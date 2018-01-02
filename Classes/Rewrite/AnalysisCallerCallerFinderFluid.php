@@ -252,4 +252,30 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCa
         }
         return $result;
     }
+
+    /**
+     * Get the analysis type for the metadata and the page title.
+     *
+     * @param string $headline
+     *   The headline from the call. We will use this one, if not empty.
+     * @param string $varname
+     *   The name of the variable that we were able to determine.
+     * @param mixed $data
+     *   The variable tht we are analysing.
+     *
+     * @return string
+     *   The analysis type.
+     */
+    protected function getType($headline, $varname, $data)
+    {
+
+        if (is_object($data) === true) {
+            $type = get_class($data);
+        } else {
+            $type = gettype($data);
+        }
+        return $headline . ' of ' . $varname . ', ' . $type;
+
+
+    }
 }
