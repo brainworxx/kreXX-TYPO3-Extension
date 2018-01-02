@@ -33,6 +33,7 @@
  */
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 // The main problem with 7.0 is, that compatibility6 may or may not be installed.
 // If not, I have to put his thing here, hoping not to break anything!
@@ -98,7 +99,8 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
      */
     public function render()
     {
-        Krexx::$pool::createPool();
+
+        Pool::createPool();
 
         Krexx::$pool
             // Registering the alternative getter analysis, without the 'get' in
