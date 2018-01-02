@@ -98,6 +98,8 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
      */
     public function render()
     {
+        Krexx::$pool::createPool();
+
         Krexx::$pool
             // Registering the alternative getter analysis, without the 'get' in
             // the functionname.
