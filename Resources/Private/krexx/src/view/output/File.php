@@ -34,8 +34,6 @@
 
 namespace Brainworxx\Krexx\View\Output;
 
-use Brainworxx\Krexx\Service\Factory\Pool;
-
 /**
  * File output, directly after the analysis.
  *

@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Processing of strings.
@@ -50,7 +51,7 @@ class ProcessString extends AbstractProcess
      */
     protected $bufferInfo;
 
-    public function __construct(\Brainworxx\Krexx\Service\Factory\Pool $pool)
+    public function __construct(Pool $pool)
     {
         parent::__construct($pool);
         $this->bufferInfo = new \finfo(FILEINFO_MIME);
@@ -104,7 +105,7 @@ class ProcessString extends AbstractProcess
         } else {
             $model->setNormal($this->pool->encodingService->encodeString($data));
         }
-        
+
         return $this->pool->render->renderSingleChild(
             $model->setType('string ' . $strlen)
                 ->addToJson('encoding', $encoding)

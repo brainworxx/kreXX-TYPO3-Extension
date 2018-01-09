@@ -34,8 +34,6 @@
 
 namespace Brainworxx\Krexx\View\Output;
 
-use Brainworxx\Krexx\Service\Factory\Pool;
-
 /**
  * Triggers the kreXX output during shutdown phase.
  *
@@ -58,7 +56,7 @@ class Shutdown extends AbstractOutput
      *   This means, that every output is split in 4 parts
      */
     protected $chunkStrings = array();
-    
+
     /**
      * Adds output to our shutdown handler.
      *

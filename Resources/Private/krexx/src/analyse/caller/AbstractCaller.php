@@ -109,6 +109,8 @@ abstract class AbstractCaller
      *
      * @var string $headline
      *   The headline from the call.
+     * @var mixed $data
+     *   The variable we are currently analysing.
      *
      * @return array
      *   The code, from where krexx was called.
