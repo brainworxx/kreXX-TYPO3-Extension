@@ -22,7 +22,10 @@ When using TYPO3 4.5 until 8.4, you need to declare the namespace first. If you 
 .. code-block:: html
 
     {namespace krexx=Tx_Includekrexx_ViewHelpers}
-
+    or
+    <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+          xmlns:krexx="http://typo3.org/ns/Tx_Includekrexx_ViewHelpers"
+          data-namespace-typo3-fluid="true">
 
 Analytic function
 ^^^^^^^^^^^^^^^^^

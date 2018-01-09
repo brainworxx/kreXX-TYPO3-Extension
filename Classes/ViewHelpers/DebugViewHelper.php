@@ -57,6 +57,10 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  * @namespace
  *   When using TYPO3 4.5 until 8.4, you need to declare the namespace first:
  *   {namespace krexx=Tx_Includekrexx_ViewHelpers}
+ *   or
+ *   <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+ *         xmlns:krexx="http://typo3.org/ns/Tx_Includekrexx_ViewHelpers"
+ *         data-namespace-typo3-fluid="true">
  *   TYPO3 8.5 and beyond don't need to do that anymore  ;-)
  *
  * @usage
