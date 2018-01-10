@@ -140,7 +140,6 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld extends Abstrac
         // No rendering stack, no template file  :-(
         $this->error = true;
         return false;
-        
     }
 
 
@@ -172,7 +171,7 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld extends Abstrac
             $path = $this->getPartialPath();
         }
 
-        // RENDERING_PARTIAL = 3
+        // RENDERING_LAYOUT = 3
         if ($this->renderingType === 3) {
             $path = $this->getLayoutPath();
         }
