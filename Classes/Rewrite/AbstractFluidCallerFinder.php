@@ -217,7 +217,7 @@ abstract class Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder  extends Abstra
              'file' => $this->pool->fileService->filterFilePath($path),
              'line' => $this->line,
              'varname' => $this->varname,
-             'type' => $this->getType('Fluid analysis', 'fluidvar', $data),
+             'type' => $this->getType('Fluid analysis', $this->varname, $data),
          );
     }
 
