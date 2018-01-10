@@ -45,6 +45,9 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
      */
     const VHS_CALL_VIEWHELPER = 2;
 
+    protected $wrapper1 = '{';
+
+    protected $wrapper2 = '}';
 
     /**
      * We are only handling the VHS Call VireHelper generation here.
@@ -109,22 +112,52 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
     }
 
     /**
-     * Warp everything into those fluid brackets, but onlky on the first level.
+     * Set a individual wrapper for source generation.
+     *
+     * @param string $wrapper
+     *   The wrapper we want to use.
+     *
+     * @return $this
+     *   Return this, for chaining.
+     */
+    public function setComplicatedWrapper1($wrapper)
+    {
+        $this->wrapper1 = $wrapper;
+        return $this;
+    }
+
+    /**
+     * Set a individual wrapper for source generation.
+     *
+     * @param string $wrapper
+     *   The wrapper we want to use.
+     *
+     * @return $this
+     *   Return this, for chaining.
+     */
+    public function setComplicatedWrapper2($wrapper)
+    {
+        $this->wrapper2 = $wrapper;
+        return $this;
+    }
+
+    /**
+     * Warp everything into those fluid brackets, but only on the first level.
      *
      * @return string
      */
     public function generateWrapper1()
     {
-        return '{';
+        return $this->wrapper1;
     }
 
     /**
-     * Warp everything into those fluid brackets, but onlky on the first level.
+     * Warp everything into those fluid brackets, but only on the first level.
      *
      * @return string
      */
     public function generateWrapper2()
     {
-        return '}';
+        return $this->wrapper2;
     }
 }

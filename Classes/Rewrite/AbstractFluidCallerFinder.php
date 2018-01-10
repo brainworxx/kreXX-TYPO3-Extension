@@ -89,6 +89,20 @@ abstract class Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder  extends Abstra
     protected $debugViewhelper;
 
     /**
+     * The line in the template file. that we were able to resolve.
+     *
+     * @var string
+     */
+    protected $line = 'n/a';
+
+    /**
+     * The variable name, that we were able to resolve.
+     *
+     * @var string
+     */
+    protected $varname = 'fluidvar';
+
+    /**
      * Trying to get our stuff together.
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
@@ -96,6 +110,25 @@ abstract class Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder  extends Abstra
     public function __construct(\Brainworxx\Krexx\Service\Factory\Pool $pool)
     {
         parent::__construct($pool);
+
+        // The regex should look something like this:
+        // \s*<krexx:debug value="{(.*)}"\/>\s*/u
+        $this->callPattern = array(
+             array(
+                '<krexx:debug>{',
+                // We need to escape the forward slash.
+                '}<\/krexx:debug>'
+            ),
+            array(
+                '<krexx:debug value="{',
+                // We need to escape the forward slash.
+                '}" \/>'
+            ),
+            array(
+                '<krexx:debug value="{',
+                // We need to escape the forward slash.
+                '}"\/>')
+        );
 
         $debugViewhelper = $this->pool->registry->get('DebugViewHelper');
 
@@ -177,10 +210,13 @@ abstract class Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder  extends Abstra
             $path = $this->getLayoutPath();
         }
 
+        // Trying to resolve the line as well as the variable name, if possible.
+        $this->resolveVarname($path);
+
          return array(
              'file' => $this->pool->fileService->filterFilePath($path),
-             'line' => 'n/a',
-             'varname' => 'fluidvar',
+             'line' => $this->line,
+             'varname' => $this->varname,
              'type' => $this->getType('Fluid analysis', 'fluidvar', $data),
          );
     }
@@ -200,13 +236,86 @@ abstract class Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder  extends Abstra
      */
     protected function getType($headline, $varname, $data)
     {
-
         if (is_object($data) === true) {
             $type = get_class($data);
         } else {
             $type = gettype($data);
         }
         return $headline . ' of ' . $varname . ', ' . $type;
+    }
+
+    /**
+     * Resolve the variable name and the line number of the
+     * debug call from fluid.
+     *
+     * @param string $filePath
+     *   The path to the template file we need to parse.
+     */
+    protected function resolveVarname($filePath)
+    {
+        // Retrieve the call from the sourcecode file.
+        if ($this->pool->fileService->fileIsReadable($filePath) === false) {
+            // File is not readable. We can not do this.
+            // Fallback to the standard values in the class header.
+            return ;
+        }
+
+        $fileContent = $this->pool->fileService->getFileContents($filePath, false);
+
+        $varname = 'fluidvar';
+        $alreadyFound = false;
+
+        foreach ($this->callPattern as $funcname) {
+            // This little baby tries to resolve everything inside the
+            // brackets of the kreXX call.
+            preg_match_all('/\s*' . $funcname[0] . '(.*)' . $funcname[1] . '\s*/u', $fileContent, $name);
+
+            if (isset($name[1]) === true && isset($name[1][0])) {
+                // Found something!
+                // Check if we already have one, or more than one.
+                if ($alreadyFound === true || count($name[1]) > 1) {
+                    // There is more than one call in this template file.
+                    // Unable to determine, which call was the right one.
+                    return;
+                }
+
+                $varname =  $this->checkForComplicatedStuff(
+                    $this->pool->encodingService->encodeString(trim($name[1][0], " \t\n\r\0\x0B"))
+                );
+                $alreadyFound = true;
+            }
+        }
+
+        // Still here? Set our varname.
+        if ($alreadyFound) {
+            $this->varname = $varname;
+        }
+    }
+
+    /**
+     * Check, if we have a varname, at all, or are looking at something more
+     * complicated like: {val1: 'something', val2: 'something else'}
+     *
+     * . . . or even worse stuff . . .
+     * If we find such a thing, we need to create a variable in the source
+     * gen, via <variable.set /> first, to access it.
+     *
+     * @param string $varname
+     *   The resolved varname, so far.
+     *
+     * @return string
+     *   The variable name, which may or may not have changed.
+     */
+    protected function checkForComplicatedStuff($varname)
+    {
+        // We check for : and -> to see if we are facing some inline stuff
+        if (strpos($varname, ':') !== false || strpos($varname, '->') !== false) {
+            $this->pool->codegenHandler->setComplicatedWrapper1(
+                '<v:variable.set value="{' . $varname . '}" name="fluidvar" /> {'
+            );
+            $varname = 'fluidvar';
+        }
+        return $varname;
     }
 
     /**
