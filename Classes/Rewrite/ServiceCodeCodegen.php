@@ -45,9 +45,28 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
      */
     const VHS_CALL_VIEWHELPER = 2;
 
+    /**
+     * The we wrap this one arround the fluid code generation, on the left.
+     *
+     * @var string
+     */
     protected $wrapper1 = '{';
 
+    /**
+     * The we wrap this one arround the fluid code generation, on the right.
+     *
+     * @var string
+     */
     protected $wrapper2 = '}';
+
+    /**
+     * The recalculated nesting level.
+     *
+     * @var int
+     */
+    protected $currentNesting = 0;
+
+    protected $isAll = false;
 
     /**
      * We are only handling the VHS Call VireHelper generation here.
@@ -62,17 +81,40 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
             return '';
         }
 
-         // Disalowing code generation for configured debug methods.
+         // Disallowing code generation for configured debug methods.
         if ($model->getType() === 'debug method') {
             return '. . .';
         }
 
-        // check for VHS values.
+        // Check for VHS values.
         if ($model->getMultiLineCodeGen() === static::VHS_CALL_VIEWHELPER) {
             return $this->generateVhsCall($model);
         }
 
-        // Do the parent generation. [ParentGeneration = Generation X ?]
+        // Check for the {_all} varname, which is not a real varname.
+        // We can not use this one for code generation.
+        if ($model->getName() === '_all') {
+            $this->isAll = true;
+            return '';
+        }
+
+        // Do the parent generation.
+        // We must also remove a leading dot, which may be there, if we are
+        // analysing the dreaded {_all} in fluid.
+        if ($this->isAll) {
+            $nestingLevel = $this->pool->emergencyHandler->getNestingLevel();
+            if ($model->getType() === 'array' || $model->getType() === 'object') {
+                --$nestingLevel;
+            }
+            // Simple types inherit their nesting level from the parent none-simple-type.
+            // We need to correct this value, to really get only the ones from
+            // the first level and remove the dot there. But do this only if
+            // we are analysing the {_all} at this time.
+            if ($nestingLevel === 1) {
+                return trim(parent::generateSource($model), '.');
+            }
+        }
+
         return parent::generateSource($model);
     }
 

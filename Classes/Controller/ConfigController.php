@@ -114,7 +114,7 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
         $arguments = $this->request->getArguments();
         $filepath = $this->pool->config->getPathToIniFile();
         $oldValues = array();
-        
+
         // Check for writing permission.
         if (!is_writable(dirname($filepath))) {
             $this->allOk = false;

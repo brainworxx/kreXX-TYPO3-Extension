@@ -315,6 +315,7 @@ abstract class Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder  extends Abstra
             );
             $varname = 'fluidvar';
         }
+
         return $varname;
     }
 
