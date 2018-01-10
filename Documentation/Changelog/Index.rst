@@ -16,6 +16,7 @@ Changelog
     - [Feature] Added the method analysis to the recursion detection, to prevent analysing the same methods over and over again.
     - [Feature] Added Javascript optimisation for very large output.
     - [Feature] Added mimetype analysis for strings.
+    - [Feature] Added variable resolving to the fluid debugger.
     - [Change] Moved the overwrites from the GLOBALS to a static class
     - [Change] Prettified the display of sourcecode in the backtrace in the smoky grey skin.
     - [Change] Removed the option for the atomatic registration of the fatal error handler.
