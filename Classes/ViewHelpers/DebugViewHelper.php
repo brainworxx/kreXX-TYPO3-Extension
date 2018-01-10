@@ -186,6 +186,9 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
         if (version_compare(TYPO3_version, '7.2', '>')) {
             $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx');
 
+            if (!class_exists('Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder')) {
+                include_once($extPath . 'Classes/Rewrite/AbstractFluidCallerFinder.php');
+            }
             if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid')) {
                 include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderFluid.php');
             }

@@ -32,158 +32,14 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
-
 /**
  * Trying to coax the current template/layout/partial file out of the fluid framework.
  */
-class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCaller
+class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder
 {
-    /**
-     * @var \TYPO3Fluid\Fluid\View\ViewInterface
-     */
-    protected $view;
-
-    /**
-     * A reflection of the view that we are currentlx rendering.
-     *
-     * @var \ReflectionClass
-     */
-    protected $viewReflection;
-
-    /**
-     * @var \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface
-     */
-    protected $renderingContext;
-
-
-    /**
-     * Actually, this is a compiled class.
-     *
-     * @var TYPO3Fluid\Fluid\Core\Compiler\AbstractCompiledTemplate
-     */
-    protected $parsedTemplate;
-
-    /**
-     * What we are currently rendering.
-     *
-     * 1 = template file
-     * 2 = partial file
-     * 3 = layout file
-     *
-     * @var integer
-     */
-    protected $renderingType;
-
-    /**
-     * Have we encountered an error during our initialization phase?
-     *
-     * @var bool
-     */
-    protected $error = false;
-
-    /**
-     * Trying to get our stuff together.
-     *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
-     */
-    public function __construct(\Brainworxx\Krexx\Service\Factory\Pool $pool)
-    {
-        parent::__construct($pool);
-
-        $debugViewhelper = $this->pool->registry->get('DebugViewHelper');
-
-        $this->view = $debugViewhelper->getView();
-        $this->viewReflection = new \ReflectionClass($this->view);
-        $this->renderingContext = $debugViewhelper->getRenderingContext();
-
-        // Get the parsed template and the rendering type from the rendering stack
-        $renderingStackEntry = $this->retrieveLastRenderingStackEntry();
-        if ($renderingStackEntry !== false) {
-            if (isset($renderingStackEntry['parsedTemplate'])) {
-                $this->parsedTemplate = $renderingStackEntry['parsedTemplate'];
-            } else {
-                $this->error = true;
-            }
-            if (isset($renderingStackEntry['type'])) {
-                $this->renderingType = $renderingStackEntry['type'];
-            } else {
-                $this->error = true;
-            }
-        }
-    }
-
-    /**
-     * Retrieves the rendering stack straight out of the view.
-     *
-     * @return bool|array
-     */
-    protected function retrieveLastRenderingStackEntry()
-    {
-        if ($this->viewReflection->hasProperty('renderingStack')) {
-            $renderingStackReflection = $this->viewReflection->getProperty('renderingStack');
-            $renderingStackReflection->setAccessible(true);
-            $renderingStack = $renderingStackReflection->getValue($this->view);
-            $pos = count($renderingStack) -1;
-            if (isset($renderingStack[$pos])) {
-                return $renderingStack[$pos];
-            }
-            // No rendering stack, no template file  :-(
-            $this->error = true;
-            return false;
-        }
-        // No rendering stack, no template file  :-(
-        $this->error = true;
-        return false;
-    }
-
 
     /**
      * {@inheritdoc}
-     */
-    public function findCaller($headline, $data)
-    {
-        // Did we get our stuff together so far?
-        if ($this->error) {
-            // Something went wrong!
-            return array(
-                'file' => 'n/a',
-                'line' => 'n/a',
-                'varname' => 'fluidvar',
-                'type' => $this->getType('Fluid analysis', 'fluidvar', $data),
-            );
-        }
-
-        $path = 'n/a';
-
-        // RENDERING_TEMPLATE = 1
-        if ($this->renderingType === 1) {
-            $path = $this->getTemplatePath();
-        }
-
-        // RENDERING_PARTIAL = 2
-        if ($this->renderingType === 2) {
-            $path = $this->getPartialPath();
-        }
-
-        // RENDERING_LAYOUT = 3
-        if ($this->renderingType === 3) {
-            $path = $this->getLayoutPath();
-        }
-
-         return array(
-             'file' => $this->pool->fileService->filterFilePath($path),
-             'line' => 'n/a',
-             'varname' => 'fluidvar',
-             'type' => $this->getType('Fluid analysis', 'fluidvar', $data),
-         );
-    }
-
-    /**
-     * Get the current used template file from the fluid framework.
-     *
-     * @return string
-     *   The template filename and it's path.
      */
     protected function getTemplatePath()
     {
@@ -195,10 +51,7 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCa
     }
 
     /**
-     * Get the current used layout file from the fluid framework.
-     *
-     * @return string
-     *   The layout filename and it's path.
+     * {@inheritdoc}
      */
     protected function getLayoutPath()
     {
@@ -209,11 +62,7 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCa
     }
 
     /**
-     * Try to figure out the currently rendered partial file from somewhere deep
-     * within the fluid framework. So dirty.
-     *
-     * @return string
-     *   The partial filename and it's path.
+     * {@inheritdoc}
      */
     protected function getPartialPath()
     {
@@ -251,31 +100,5 @@ class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid extends AbstractCa
             }
         }
         return $result;
-    }
-
-    /**
-     * Get the analysis type for the metadata and the page title.
-     *
-     * @param string $headline
-     *   The headline from the call. We will use this one, if not empty.
-     * @param string $varname
-     *   The name of the variable that we were able to determine.
-     * @param mixed $data
-     *   The variable tht we are analysing.
-     *
-     * @return string
-     *   The analysis type.
-     */
-    protected function getType($headline, $varname, $data)
-    {
-
-        if (is_object($data) === true) {
-            $type = get_class($data);
-        } else {
-            $type = gettype($data);
-        }
-        return $headline . ' of ' . $varname . ', ' . $type;
-
-
     }
 }
