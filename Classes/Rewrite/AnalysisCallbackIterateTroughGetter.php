@@ -83,6 +83,54 @@ class Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter extends Throug
             $output .= $this->retrievePropertyValue($reflectionMethod, $model);
         }
 
+        return $this->handleDataviewerEav() . $output;
+    }
+
+    /**
+     * If we are facing a \MageDeveloper\Dataviewer\Domain\Model\Record,
+     * we may want to take a look at the containing dynamic getter values.
+     *
+     * @return string
+     *   The generated HTML markup for the magic getters.
+     */
+    protected function handleDataviewerEav()
+    {
+        $record = $this->parameters['data'];
+        $output = '';
+        if (is_object($record) && is_a($record, '\\MageDeveloper\\Dataviewer\\Domain\\Model\\Record')) {
+            try {
+                /** @var \MageDeveloper\Dataviewer\Domain\Model\Record $record  */
+                $values = $record->getValues();
+
+                foreach ($record->getDatatype()->getFields() as $field) {
+                    /** @var \Brainworxx\Krexx\Analyse\Model $model */
+                    if (is_a($field, '\\MageDeveloper\\Dataviewer\\Domain\\Model\\Field') === false) {
+                        // Huh, not what I was expecting. We skip this one.
+                        continue;
+                    }
+
+                    // Get the value
+                    $record->initializeValue($field);
+                    $code = $field->getCode();
+                    $value = $values->getValueByCode($code)->getValue();
+
+                    // Send a new model to the analysis hub.
+                    $output .= $this->pool->routing->analysisHub($this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->setName($code . '.value')
+                        ->setConnectorType(Connectors::METHOD)
+                        ->setData($value)
+                        ->addToJson('hint', 'Magic dataviewer getter method.'));
+                }
+            } catch (\Exception $e) {
+                // Something whent wrong here.
+                // We skip the output here.
+                return '';
+            }
+
+            // Add a HR to the output, for better readability.
+            $output .= $this->pool->render->renderSingeChildHr();
+        }
+
         return $output;
     }
 }
