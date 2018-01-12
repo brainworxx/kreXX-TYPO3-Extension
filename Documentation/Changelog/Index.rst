@@ -17,6 +17,9 @@ Changelog
     - [Feature] Added Javascript optimisation for very large output.
     - [Feature] Added mimetype analysis for strings.
     - [Feature] Added variable resolving to the fluid debugger.
+    - [Feature] Added prosessing class for "other" variable types.
+    - [Feature] Added info button to the hans skin, to replace the somewhat intrusive hover info.
+    - [Feature] Added a special analysis for the dataviewer values in fluid.
     - [Change] Moved the overwrites from the GLOBALS to a static class
     - [Change] Prettified the display of sourcecode in the backtrace in the smoky grey skin.
     - [Change] Removed the option for the atomatic registration of the fatal error handler.
@@ -29,6 +32,8 @@ Changelog
     - [Bugfix] Removed the comma in the method parameter analysis.
     - [Bugfix] Fixed in issue, where the correct nesting level was not set correctly, resulting in output overkill.
     - [Bugfix] Fixed codewrapper2 for the code generation in the Hans skin.
+    - [Bugfix] Source generation for closures now work as expected.
+    - [Bugfix] Better cleanup for still open HTML tags.
 
 2.3.1
     - [Bugfix] Fixed shell detection.
