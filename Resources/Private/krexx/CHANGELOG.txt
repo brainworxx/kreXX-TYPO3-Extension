@@ -4,6 +4,8 @@
 - Added Javascript optimisation for very large output.
 - Added mimetype analysis for strings.
 - Added prosessing class for "other" variable types.
+- Added info button to the hans skin, to replace the somewhat
+  intrusive hover info.
 - Change: Moved the overwrites from the GLOBALS to a static class
 - Change: Prettified the display of sourcecode in the backtrace in
   the smoky grey skin.
@@ -23,6 +25,7 @@
 - Bugfix: Fixed codewrapper2 for the code generation in the Hans
   skin.
 - Bugfix: Source generation for closures now work as expected.
+- Bugfix: Better cleanup for still open HTML tags.
 
 2.3.1
 - Bugfix: Fixed shell detection.

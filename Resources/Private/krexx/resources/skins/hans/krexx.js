@@ -222,6 +222,13 @@
          */
         kdt.addEvent('.koptions', 'click', krexx.displaySearchOptions);
 
+        /**
+         * Display the content of the info box.
+         *
+         * @event click
+         */
+        kdt.addEvent('.kwrapper .kchild .kinfobutton', 'click', krexx.displayInfoBox);
+
         // Disable form-buttons in case a logfile is opened local.
         if (window.location.protocol === 'file:') {
             krexx.disableForms();
@@ -828,5 +835,26 @@
 
         kdt.trigger(this.parentNode.querySelectorAll('.ksearchnow')[1], 'click');
     };
+
+    /**
+     * Toggle the display of t he infobox.
+     *
+     * @param {Event} event
+     * @event keyUp
+     */
+    krexx.displayInfoBox = function (event, element) {
+        // We don't want to bubble the click any further.
+        event.stop = true;
+
+        // Find the corresponding info box.
+        var box = element.previousElementSibling;
+
+        if (box.style.display === 'none') {
+            box.style.display = '';
+        }
+        else {
+            box.style.display = 'none';
+        }
+    }
 
 })(kreXXdomTools);

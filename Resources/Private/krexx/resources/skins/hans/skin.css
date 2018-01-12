@@ -439,13 +439,8 @@ div.kwrapper {
     background-color: #f2f2f2;
     padding: 2px 5px;
     margin-top: 10px;
-    display: none;
     margin-left: 250px;
     color: #303030;
-}
-
-.kwrapper .kel:hover .khelp {
-    display: block;
 }
 
 .kwrapper .kclose.kfatal {
@@ -760,8 +755,21 @@ div.kwrapper {
     font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
 
-.kwrapper .kchild .kgencode:hover {
+.kwrapper .kchild .kgencode:hover,
+.kwrapper .kchild .kinfobutton:hover {
     color: #dbdbdb;
+}
+
+.kwrapper .kchild .kinfobutton {
+    margin: 0 5px;
+    display: table-cell;
+    float: right;
+}
+
+.kwrapper .kchild .kinfobutton .kinfoinner {
+    padding: 0 2px;
+    color: #e2db74;
+    font: bold 12px tahoma, verdana;
 }
 
 .kwrapper .kodsp {
