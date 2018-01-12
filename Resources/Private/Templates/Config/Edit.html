@@ -23,8 +23,8 @@
             <f:render section="dropdown" arguments="{config: config.detectAjax, options: dropdown.bool}" />
             <f:render section="input"    arguments="{config: config.level}" />
             <f:render section="input"    arguments="{config: config.maxCall}" />
-            <f:render section="input"    arguments="{config: config.memoryLeft}" />
             <f:render section="input"    arguments="{config: config.maxRuntime}" />
+            <f:render section="input"    arguments="{config: config.memoryLeft}" />
             <f:render section="dropdown" arguments="{config: config.useScopeAnalysis, options: dropdown.bool}" />
             <tr><td colspan="4">&nbsp;</td></tr>
 
@@ -45,7 +45,7 @@
             <tr><th colspan="4"><b><f:translate key="subhead.pruneOutput" /></b></th></tr>
             <f:render section="input"    arguments="{config: config.maxStepNumber}" />
             <f:render section="input"    arguments="{config: config.arrayCountLimit}" />
-            
+
         </table>
 
     </f:form>
