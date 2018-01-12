@@ -3,6 +3,7 @@
   analysing the same methods over and over again.
 - Added Javascript optimisation for very large output.
 - Added mimetype analysis for strings.
+- Added prosessing class for "other" variable types.
 - Change: Moved the overwrites from the GLOBALS to a static class
 - Change: Prettified the display of sourcecode in the backtrace in
   the smoky grey skin.

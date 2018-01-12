@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2017 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -59,6 +59,7 @@ class Routing extends AbstractRouting
         $this->processObject = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessObject');
         $this->processResource = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessResource');
         $this->processString = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessString');
+        $this->processOther = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessOther');
     }
 
     /**
@@ -123,8 +124,8 @@ class Routing extends AbstractRouting
             return $this->processResource->process($model);
         }
 
-        // Still here? This should not happen. Return empty string, just in case.
-        return '';
+        // Still here? Tell the dev that we can not analyse this one.
+        return $this->processOther->process($model);
     }
 
     /**
