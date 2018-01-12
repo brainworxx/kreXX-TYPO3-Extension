@@ -102,14 +102,15 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
         // We must also remove a leading dot, which may be there, if we are
         // analysing the dreaded {_all} in fluid.
         if ($this->isAll) {
-            $nestingLevel = $this->pool->emergencyHandler->getNestingLevel();
-            if ($model->getType() === 'array' || $model->getType() === 'object') {
-                --$nestingLevel;
-            }
             // Simple types inherit their nesting level from the parent none-simple-type.
             // We need to correct this value, to really get only the ones from
             // the first level and remove the dot there. But do this only if
             // we are analysing the {_all} at this time.
+            $nestingLevel = $this->pool->emergencyHandler->getNestingLevel();
+            $type = $model->getType();
+            if ($type === 'array' || $type === 'class') {
+                --$nestingLevel;
+            }
             if ($nestingLevel === 1) {
                 return trim(parent::generateSource($model), '.');
             }
