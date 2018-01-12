@@ -847,7 +847,7 @@
         event.stop = true;
 
         // Find the corresponding info box.
-        var box = element.previousElementSibling;
+        var box = element.nextElementSibling;
 
         if (box.style.display === 'none') {
             box.style.display = '';

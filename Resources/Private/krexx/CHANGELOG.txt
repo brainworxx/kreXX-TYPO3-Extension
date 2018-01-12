@@ -11,7 +11,7 @@
   the smoky grey skin.
 - Change: Removed the option for the atomatic registration of the
   fatal error handler.
-- Cannge: Lots of micro optimizations.
+- Change: Lots of micro optimizations.
 - Bugfix: Minimise CSS interference from the hosting cms with
   marked text.
 - Change: Simplified array analysis is now configurable.
