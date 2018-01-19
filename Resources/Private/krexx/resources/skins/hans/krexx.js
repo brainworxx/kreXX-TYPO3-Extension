@@ -291,8 +291,12 @@
             var realButton = element.querySelector('.kinfobutton');
 
             // We don't need the infobox on newEl, so we will remove it.
-            newInfobox.parentNode.removeChild(newInfobox);
-            newButton.parentNode.removeChild(newButton);
+            if (newInfobox !== null) {
+                newInfobox.parentNode.removeChild(newInfobox);
+            }
+            if (newButton !== null) {
+                newButton.parentNode.removeChild(newButton);
+            }
 
             // We copy the Infobox from the recursion to the newEl, if it exists.
             if (realInfobox !== null) {
