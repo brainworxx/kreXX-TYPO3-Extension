@@ -51,6 +51,8 @@ class Objects extends AbstractCallback
     /**
      * Starts the dump of an object.
      *
+     * @throws \ReflectionException
+     *
      * @return string
      *   The generated markup.
      */

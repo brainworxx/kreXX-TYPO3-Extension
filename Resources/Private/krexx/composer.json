@@ -9,7 +9,7 @@
   ],
   "type": "library",
   "homepage": "https://github.com/brainworxx/kreXX",
-  "license": ["LGPL-2.1"],
+  "license": ["LGPL-2.1-or-later"],
   "authors": [
     {
       "name": "Brainworxx",

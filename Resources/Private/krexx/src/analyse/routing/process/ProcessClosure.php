@@ -50,6 +50,8 @@ class ProcessClosure extends AbstractProcess
      * @param Model $model
      *   The closure we want to analyse.
      *
+     * @throws \ReflectionException
+     *
      * @return string
      *   The generated markup.
      */

@@ -120,8 +120,9 @@ class Methods extends AbstractComment
         }
 
         // Nothing on this level, we need to take a look at the parent.
+        /** @var \ReflectionClass $parentReflection */
         $parentReflection = $reflectionClass->getParentClass();
-        if ($parentReflection === true &&
+        if ($parentReflection !== null &&
             $parentReflection->hasMethod($this->methodName) === true
         ) {
             // Going deeper into the rabid hole!
