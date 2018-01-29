@@ -3,7 +3,7 @@
   "type": "typo3-cms-extension",
   "description": "kreXX is a feature rich php debugger with a neatly arranged debug window, featuring backend access to logfiles, code generation to reach the displayed values and much more.",
   "homepage": "https://github.com/brainworxx/kreXX-TYPO3-Extension",
-  "license": ["LGPL-2.1"],
+  "license": ["LGPL-2.1-or-later"],
   "keywords": [
     "debug",
     "vardump",
