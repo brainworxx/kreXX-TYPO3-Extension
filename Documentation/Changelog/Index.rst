@@ -24,6 +24,8 @@ Changelog
     - [Change] Prettified the display of sourcecode in the backtrace in the smoky grey skin.
     - [Change] Removed the option for the atomatic registration of the fatal error handler.
     - [Change] Lots of micro optimizations.
+    - [Change] Simplified array analysis is now configurable.
+    - [Change] Renamed the 'Backtrace' config group to 'pruneOutput'.
     - [Change] Updated to TYPO3 9.0
     - [Change] Updated to PHP 7.2
     - [Bugfix] Minimise CSS interference from the hosting cms with marked text.
