@@ -12,7 +12,7 @@
 Changelog
 =============================================================
 
-2.3.2 dev
+2.4.0
     - [Feature] Added the method analysis to the recursion detection, to prevent analysing the same methods over and over again.
     - [Feature] Added Javascript optimisation for very large output.
     - [Feature] Added mimetype analysis for strings.

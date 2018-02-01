@@ -1,4 +1,4 @@
-2.3.2 dev
+2.4.0
 - Added the method analysis to the recursion detection, to prevent
   analysing the same methods over and over again.
 - Added Javascript optimisation for very large output.
