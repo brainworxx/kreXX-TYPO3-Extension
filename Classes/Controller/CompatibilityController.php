@@ -35,6 +35,7 @@
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Config\Fallback;
 
 // The mainproblem with 7.0 is, that compatibility6 may or may not be installed.
 // If not, I have to put this thing here, hoping not to break anything!
@@ -85,27 +86,27 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
          * @var array
          */
         protected $allowedSettingsNames = array(
-            'skin',
-            'maxfiles',
-            'destination',
-            'maxCall',
-            'disabled',
-            'detectAjax',
-            'analyseProtected',
-            'analysePrivate',
-            'analyseTraversable',
-            'debugMethods',
-            'level',
-            'analyseProtectedMethods',
-            'analysePrivateMethods',
-            'analyseConstants',
-            'iprange',
-            'analyseGetter',
-            'maxRuntime',
-            'memoryLeft',
-            'useScopeAnalysis',
-            'maxStepNumber',
-            'arrayCountLimit',
+            Fallback::SETTINGSKIN,
+            Fallback::SETTINGMAXFILES,
+            Fallback::SETTINGDESTINATION,
+            Fallback::SETTINGMAXCALL,
+            Fallback::SETTINGDISABLED,
+            Fallback::SETTINGDETECTAJAX,
+            Fallback::SETTINGANALYSEPROTECTED,
+            Fallback::SETTINGANALYSEPRIVATE,
+            Fallback::SETTINGANALYSETRAVERSABLE,
+            Fallback::SETTINGDEBUGMETHODS,
+            Fallback::SETTINGLEVEL,
+            Fallback::SETTINGANALYSEPROTECTEDMETHODS,
+            Fallback::SETTINGANALYSEPRIVATEMETHODS,
+            Fallback::SETTINGANALYSECONSTATS,
+            Fallback::SETTINGIPRANGE,
+            Fallback::SETTINGANALYSEGETTER,
+            Fallback::SETTINGMAXRUNTIME,
+            Fallback::SETTINGMEMORYLEFT,
+            Fallback::SETTINGUSESCOPEANALYSIS,
+            Fallback::SETTINGMAXSTEPNUMBER,
+            Fallback::SETTINGARRAYCOUNTLIMIT,
         );
 
         /**
@@ -114,11 +115,11 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
          * @var array
          */
         protected $allowedSections = array(
-            'runtime',
-            'output',
-            'properties',
-            'methods',
-            'pruneOutput',
+            Fallback::SECTIONRUNTIME,
+            Fallback::SECTIONOUTPUT,
+            Fallback::SECTIONPROPERTIES,
+            Fallback::SECTIONMETHODS,
+            Fallback::SECTIONPRUNEOUTPUT,
         );
 
         /**

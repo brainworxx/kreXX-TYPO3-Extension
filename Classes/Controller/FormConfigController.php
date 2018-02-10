@@ -40,6 +40,8 @@ if (class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
     return;
 }
 
+use Brainworxx\Krexx\Service\Config\Fallback;
+
 /**
  * Backend controller for the kreXX typo3 extension
  */
@@ -135,10 +137,10 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
 
         if (isset($arguments['action']) && $arguments['action'] == 'save' && $this->allOk) {
             // We need to correct the allowed settings, since we do not allow anything.
-            unset($this->allowedSettingsNames['destination']);
-            unset($this->allowedSettingsNames['maxfiles']);
-            unset($this->allowedSettingsNames['debugMethods']);
-            unset($this->allowedSettingsNames['iprange']);
+            unset($this->allowedSettingsNames[Fallback::SETTINGDESTINATION]);
+            unset($this->allowedSettingsNames[Fallback::SETTINGMAXFILES]);
+            unset($this->allowedSettingsNames[Fallback::SETTINGDEBUGMETHODS]);
+            unset($this->allowedSettingsNames[Fallback::SETTINGIPRANGE]);
 
             // Iterating through the form.
             foreach ($arguments as $key => $data) {

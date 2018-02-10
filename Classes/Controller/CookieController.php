@@ -40,6 +40,8 @@ if (class_exists('Tx_Includekrexx_Controller_CookieController')) {
     return;
 }
 
+use Brainworxx\Krexx\Service\Config\Fallback;
+
 /**
  * Cookie controller for the kreXX typo3 extension
  */
@@ -58,7 +60,7 @@ class Tx_Includekrexx_Controller_CookieController extends Tx_Includekrexx_Contro
             $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
         }
 
-        if ($this->pool->config->getSetting('disabled')) {
+        if ($this->pool->config->getSetting(Fallback::SETTINGDISABLED)) {
             // kreXX will not display anything, if it was disabled via:
             // - krexx::disable
             // - Disable output --> true in the "Edit configuration file menu
@@ -68,7 +70,7 @@ class Tx_Includekrexx_Controller_CookieController extends Tx_Includekrexx_Contro
             $this->view->assign('is_disabled', false);
         }
 
-        if ($this->pool->config->getSetting('destination') == 'file') {
+        if ($this->pool->config->getSetting(Fallback::SETTINGDESTINATION) == 'file') {
             // A file output will also prevent the options from popping ou here.
             // We need to tell the user that there is nothing to see here.
             $this->view->assign('is_file', true);
