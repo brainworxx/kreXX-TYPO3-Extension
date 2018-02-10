@@ -138,7 +138,8 @@ class DumpController extends AbstractController
     {
         $this->timerAction('end');
         // And we are done. Feedback to the user.
-        $this->dumpAction($this->miniBenchTo(static::$timekeeping), 'kreXX timer');
+        $miniBench = $this->miniBenchTo(static::$timekeeping);
+        $this->dumpAction($miniBench, 'kreXX timer');
         // Reset the timer vars.
         static::$timekeeping = array();
         static::$counterCache = array();

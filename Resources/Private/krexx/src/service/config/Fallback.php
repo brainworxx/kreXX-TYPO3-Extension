@@ -47,7 +47,7 @@ class Fallback
 {
 
     const RENDER = 'render';
-    const EVAL = 'eval';
+    const EVALUATE = 'eval';
     const VALUE = 'value';
     const SECTION = 'section';
 
@@ -210,42 +210,42 @@ class Fallback
                 // Analyse protected class methods.
                 Fallback::VALUE => Fallback::VALUEFALSE,
                 Fallback::RENDER => $this->editableSelect,
-                Fallback::EVAL => Fallback::EVALBOOL,
+                Fallback::EVALUATE => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONMETHODS,
             ),
             Fallback::SETTINGANALYSEPRIVATEMETHODS => array(
                 // Analyse private class methods.
                 Fallback::VALUE => Fallback::VALUEFALSE,
                 Fallback::RENDER => $this->editableSelect,
-                Fallback::EVAL => Fallback::EVALBOOL,
+                Fallback::EVALUATE => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONMETHODS,
             ),
             Fallback::SETTINGANALYSEPROTECTED => array(
                 // Analyse protected class properties.
                 Fallback::VALUE => Fallback::VALUEFALSE,
                 Fallback::RENDER => $this->editableSelect,
-                Fallback::EVAL => Fallback::EVALBOOL,
+                Fallback::EVALUATE => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONPROPERTIES,
             ),
             Fallback::SETTINGANALYSEPRIVATE => array(
                 // Analyse private class properties.
                 Fallback::VALUE => Fallback::VALUEFALSE,
                 Fallback::RENDER => $this->editableSelect,
-                Fallback::EVAL => Fallback::EVALBOOL,
+                Fallback::EVALUATE => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONPROPERTIES,
             ),
             Fallback::SETTINGANALYSECONSTATS => array(
                 // Analyse class constants.
                 Fallback::VALUE => Fallback::VALUETRUE,
                 Fallback::RENDER => $this->editableSelect,
-                Fallback::EVAL => Fallback::EVALBOOL,
+                Fallback::EVALUATE => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONPROPERTIES,
             ),
             Fallback::SETTINGANALYSETRAVERSABLE => array(
                 // Analyse traversable part of classes.
                 Fallback::VALUE => Fallback::VALUETRUE,
                 Fallback::RENDER => $this->editableSelect,
-                Fallback::EVAL => Fallback::EVALBOOL,
+                Fallback::EVALUATE => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONPROPERTIES,
             ),
             Fallback::SETTINGDEBUGMETHODS => array(
@@ -254,49 +254,49 @@ class Fallback
                 // Change these only if you know what you are doing.
                 Fallback::VALUE => 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo,getProperties',
                 Fallback::RENDER => $this->displayOnlyInput,
-                Fallback::EVAL => Fallback::DONOTEVAL,
+                Fallback::EVALUATE => Fallback::DONOTEVAL,
                 Fallback::SECTION =>  Fallback::SECTIONMETHODS,
             ),
             Fallback::SETTINGLEVEL => array(
                 // Maximum nesting level.
                 Fallback::VALUE => 5,
                 Fallback::RENDER => $this->editableInput,
-                Fallback::EVAL => Fallback::EVALINT,
+                Fallback::EVALUATE => Fallback::EVALINT,
                 Fallback::SECTION => Fallback::SECTIONRUNTIME,
             ),
             Fallback::SETTINGMAXCALL => array(
                 // Maximum amount of kreXX calls.
                 Fallback::VALUE => 10,
                 Fallback::RENDER => $this->editableInput,
-                Fallback::EVAL => Fallback::EVALINT,
+                Fallback::EVALUATE => Fallback::EVALINT,
                 Fallback::SECTION => Fallback::SECTIONRUNTIME,
             ),
             Fallback::SETTINGDISABLED => array(
                 // Disable kreXX.
                 Fallback::VALUE => Fallback::VALUEFALSE,
                 Fallback::RENDER => $this->editableSelect,
-                Fallback::EVAL => Fallback::EVALBOOL,
+                Fallback::EVALUATE => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONOUTPUT,
             ),
             Fallback::SETTINGDESTINATION => array(
                 // Output desination. Either 'file' or 'browser'.
                 Fallback::VALUE => 'browser',
                 Fallback::RENDER => $this->displayOnlySelect,
-                Fallback::EVAL => Fallback::EVALDESTINATION,
+                Fallback::EVALUATE => Fallback::EVALDESTINATION,
                 Fallback::SECTION => Fallback::SECTIONOUTPUT,
             ),
             Fallback::SETTINGMAXFILES => array(
                 // Maximum files that are kept inside the logfolder.
                 Fallback::VALUE => 10,
                 Fallback::RENDER => $this->displayOnlyInput,
-                Fallback::EVAL => Fallback::EVALINT,
+                Fallback::EVALUATE => Fallback::EVALINT,
                 Fallback::SECTION => Fallback::SECTIONOUTPUT,
             ),
             Fallback::SETTINGSKIN => array(
                 // Skin for kreXX. We have provided 'hans' and 'smokygrey'.
                 Fallback::VALUE => 'smokygrey',
                 Fallback::RENDER => $this->editableSelect,
-                Fallback::EVAL => Fallback::EVALSKIN,
+                Fallback::EVALUATE => Fallback::EVALSKIN,
                 Fallback::SECTION => Fallback::SECTIONOUTPUT,
             ),
             Fallback::SETTINGDETECTAJAX => array(
@@ -304,7 +304,7 @@ class Fallback
                 // If set to 'true', kreXX is disablked for them.
                 Fallback::VALUE => Fallback::VALUETRUE,
                 Fallback::RENDER => $this->editableSelect,
-                Fallback::EVAL => Fallback::EVALBOOL,
+                Fallback::EVALUATE => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONRUNTIME,
             ),
             Fallback::SETTINGIPRANGE => array(
@@ -312,13 +312,13 @@ class Fallback
                 // kreXX is disabled for everyone who dies not fit into this range.
                 Fallback::VALUE => '*',
                 Fallback::RENDER => $this->displayNothing,
-                Fallback::EVAL => Fallback::EVALIPRANGE,
+                Fallback::EVALUATE => Fallback::EVALIPRANGE,
                 Fallback::SECTION => Fallback::SECTIONOUTPUT,
             ),
             'devHandle' => array(
                 Fallback::VALUE => '',
                 Fallback::RENDER => $this->editableInput,
-                Fallback::EVAL => Fallback::EVALDEVHANDLE,
+                Fallback::EVALUATE => Fallback::EVALDEVHANDLE,
                 Fallback::SECTION => ''
             ),
             Fallback::SETTINGANALYSEGETTER => array(
@@ -326,28 +326,28 @@ class Fallback
                 // get a possible return value without calling the method.
                 Fallback::VALUE => Fallback::VALUETRUE,
                 Fallback::RENDER => $this->editableSelect,
-                Fallback::EVAL => Fallback::EVALBOOL,
+                Fallback::EVALUATE => Fallback::EVALBOOL,
                 Fallback::SECTION =>  Fallback::SECTIONMETHODS,
             ),
             Fallback::SETTINGMEMORYLEFT => array(
                 // Maximum MB memory left, before triggering an emergency break.
                 Fallback::VALUE => 64,
                 Fallback::RENDER => $this->editableInput,
-                Fallback::EVAL => Fallback::EVALINT,
+                Fallback::EVALUATE => Fallback::EVALINT,
                 Fallback::SECTION => Fallback::SECTIONRUNTIME,
             ),
             Fallback::SETTINGMAXRUNTIME => array(
                 // Maximum runtime in seconds, before triggering an emergancy break.
                 Fallback::VALUE => 60,
                 Fallback::RENDER => $this->editableInput,
-                Fallback::EVAL => Fallback::EVALMAXRUNTIME,
+                Fallback::EVALUATE => Fallback::EVALMAXRUNTIME,
                 Fallback::SECTION => Fallback::SECTIONRUNTIME,
             ),
             Fallback::SETTINGUSESCOPEANALYSIS => array(
                 // Use the scope analyis (aka autoconfiguration).
                 Fallback::VALUE => Fallback::VALUETRUE,
                 Fallback::RENDER => $this->editableSelect,
-                Fallback::EVAL => Fallback::EVALBOOL,
+                Fallback::EVALUATE => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONRUNTIME,
             ),
             Fallback::SETTINGMAXSTEPNUMBER => array(
@@ -355,7 +355,7 @@ class Fallback
                 // All other steps be be omitted.
                 Fallback::VALUE => 10,
                 Fallback::RENDER => $this->editableInput,
-                Fallback::EVAL => Fallback::EVALINT,
+                Fallback::EVALUATE => Fallback::EVALINT,
                 Fallback::SECTION => Fallback::SECTIONPRUNEOUTPUT,
             ),
             Fallback::SETTINGARRAYCOUNTLIMIT => array(
@@ -363,7 +363,7 @@ class Fallback
                 // we will use the ThroughLargeArray callback
                 Fallback::VALUE => 300,
                 Fallback::RENDER => $this->editableInput,
-                Fallback::EVAL => Fallback::EVALINT,
+                Fallback::EVALUATE => Fallback::EVALINT,
                 Fallback::SECTION => Fallback::SECTIONPRUNEOUTPUT,
             ),
         );

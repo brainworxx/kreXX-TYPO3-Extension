@@ -64,7 +64,7 @@ class Security extends Fallback
         }
 
         // We simply call the configured evaluation method.
-        $callback = $this->feConfigFallback[$name][Fallback::EVAL];
+        $callback = $this->feConfigFallback[$name][Fallback::EVALUATE];
         return $this->$callback($value, $name, $group);
     }
 
