@@ -106,8 +106,8 @@ class Config extends Fallback
 
         // Loading the settings.
         foreach ($this->configFallback as $section => $settings) {
-            foreach ($settings as $name => $factorySetting) {
-                $this->loadConfigValue($section, $name, $factorySetting);
+            foreach ($settings as $name) {
+                $this->loadConfigValue($name);
             }
         }
 
@@ -207,16 +207,13 @@ class Config extends Fallback
     /**
      * Load values of the kreXX's configuration.
      *
-     * @param string $section
-     *   The group inside the ini of the value that we want to read.
      * @param string $name
      *   The name of the config value.
-     * @param string $factorySetting
-     *   The factory setting
      */
-    protected function loadConfigValue($section, $name, $factorySetting)
+    protected function loadConfigValue($name)
     {
         $feConfig = $this->iniConfig->getFeConfig($name);
+        $section = $this->feConfigFallback[$name][Fallback::SECTION];
         /** @var Model $model */
         $model = $this->pool->createClass('Brainworxx\\Krexx\\Service\\Config\\Model')
             ->setSection($section)
@@ -248,7 +245,7 @@ class Config extends Fallback
         }
 
         // Nothing yet? Give back factory settings.
-        $model->setValue($factorySetting)->setSource('Factory settings');
+        $model->setValue($this->feConfigFallback[$name][Fallback::VALUE])->setSource('Factory settings');
         $this->settings[$name] = $model;
     }
 

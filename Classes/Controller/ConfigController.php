@@ -40,6 +40,8 @@ if (class_exists('Tx_Includekrexx_Controller_ConfigController')) {
     return;
 }
 
+use Brainworxx\Krexx\Service\Config\Fallback;
+
 /**
  * Configuration controller for the kreXX typo3 extension
  */
@@ -65,22 +67,21 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
         }
 
         $config = array();
-        foreach ($this->pool->config->configFallback as $group => $fallback) {
-            foreach ($fallback as $settingsName => $value) {
-                // Stitch together the settings in the template.
-                $config[$settingsName] = array();
-                $config[$settingsName]['name'] = $settingsName;
-                $config[$settingsName]['helptext'] = $this->LLL($settingsName);
-                $config[$settingsName]['value'] = $this->pool->config->iniConfig->getConfigFromFile($group, $settingsName);
-                $config[$settingsName]['group'] = $group;
-                $config[$settingsName]['useFactorySettings'] = false;
-                // Check if we have a value. If not, we need to load the
-                // factory settings. We also need to set the info, if we
-                // are using the factory settings, at all.
-                if (is_null($config[$settingsName]['value'])) {
-                    $config[$settingsName]['value'] = $value;
-                    $config[$settingsName]['useFactorySettings'] = true;
-                }
+        foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
+            // Stitch together the settings in the template.
+            $group = $fallback[Fallback::SECTION];
+            $config[$settingsName] = array();
+            $config[$settingsName]['name'] = $settingsName;
+            $config[$settingsName]['helptext'] = $this->LLL($settingsName);
+            $config[$settingsName]['value'] = $this->pool->config->iniConfig->getConfigFromFile($group, $settingsName);
+            $config[$settingsName]['group'] = $group;
+            $config[$settingsName]['useFactorySettings'] = false;
+            // Check if we have a value. If not, we need to load the
+            // factory settings. We also need to set the info, if we
+            // are using the factory settings, at all.
+            if (is_null($config[$settingsName]['value'])) {
+                $config[$settingsName]['value'] = $fallback[Fallback::VALUE];
+                $config[$settingsName]['useFactorySettings'] = true;
             }
         }
 

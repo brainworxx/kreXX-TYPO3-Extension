@@ -109,8 +109,8 @@ class Ini extends Fallback
             // Fallback to factory settings.
             if (isset($this->feConfigFallback[$parameterName]) === true) {
                 return array(
-                    ($this->feConfigFallback[$parameterName]['editable'] === 'true'),
-                    $this->feConfigFallback[$parameterName]['type']
+                    ($this->feConfigFallback[$parameterName][$this::RENDER]['editable'] === 'true'),
+                    $this->feConfigFallback[$parameterName][$this::RENDER]['type']
                 );
             }
             // Unknown parameter and nothing in the fallback!
@@ -144,7 +144,7 @@ class Ini extends Fallback
         }
 
         // Get the rendering type.
-        $type = $this->feConfigFallback[$parameterName]['type'];
+        $type = $this->feConfigFallback[$parameterName][$this::RENDER]['type'];
 
         // Stitch together the setting.
         switch ($value) {

@@ -81,24 +81,22 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
         );
 
         $config = array();
-        foreach ($this->pool->config->configFallback as $fallback) {
-            foreach ($fallback as $settingsName => $value) {
-                $config[$settingsName] = array();
-                $config[$settingsName]['name'] = $settingsName;
-                $config[$settingsName]['options'] = $dropdown;
-                $config[$settingsName]['useFactorySettings'] = false;
-                $config[$settingsName]['value'] =  $this->convertKrexxFeSetting(
-                    $iniConfig->getFeConfigFromFile($settingsName)
+        foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
+            $config[$settingsName] = array();
+            $config[$settingsName]['name'] = $settingsName;
+            $config[$settingsName]['options'] = $dropdown;
+            $config[$settingsName]['useFactorySettings'] = false;
+            $config[$settingsName]['value'] =  $this->convertKrexxFeSetting(
+                $iniConfig->getFeConfigFromFile($settingsName)
+            );
+            // Check if we have a value. If not, we need to load the
+            // factory settings. We also need to set the info, if we
+            // are using the factory settings, at all.
+            if (is_null($config[$settingsName]['value'])) {
+                $config[$settingsName]['value'] = $this->convertKrexxFeSetting(
+                    $iniConfig->feConfigFallback[$settingsName][$iniConfig::RENDER]
                 );
-                // Check if we have a value. If not, we need to load the
-                // factory settings. We also need to set the info, if we
-                // are using the factory settings, at all.
-                if (is_null($config[$settingsName]['value'])) {
-                    $config[$settingsName]['value'] = $this->convertKrexxFeSetting(
-                        $iniConfig->feConfigFallback[$settingsName]
-                    );
-                    $config[$settingsName]['useFactorySettings'] = true;
-                }
+                $config[$settingsName]['useFactorySettings'] = true;
             }
         }
 
