@@ -128,11 +128,24 @@ abstract class AbstractComment
      * - {@inheritdoc}
      *
      * @param $originalComment
+     *   The original comment, featuring the inheritance documentor.
      * @param $comment
+     *   The string to replace the inheritance documentor.
      */
     protected function replaceInheritComment($originalComment, $comment)
     {
-        return str_ireplace($this->inheritdocPattern, $comment, $originalComment);
+        foreach ($this->inheritdocPattern as $pattern) {
+            // Replace the first we find. There may be others in there,
+            // and we must not replace them with themselves, causing
+            // the comment to repeat itself.
+            if (strpos($originalComment, $pattern) !== false) {
+                // Found one, and end the foreach.
+                $originalComment = str_ireplace($pattern, $comment, $originalComment);
+                break;
+            }
+        }
+
+        return $originalComment;
     }
 
     /**

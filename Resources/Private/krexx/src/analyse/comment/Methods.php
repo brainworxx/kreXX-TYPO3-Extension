@@ -105,7 +105,6 @@ class Methods extends AbstractComment
 
         // Check for interfaces.
         $comment = $this->getInterfaceComment($comment, $reflectionClass);
-
         if ($this->checkComment($comment) === true) {
             // Found it!
             return trim($comment);
@@ -113,7 +112,6 @@ class Methods extends AbstractComment
 
         // Check for traits.
         $comment = $this->getTraitComment($comment, $reflectionClass);
-
         if ($this->checkComment($comment) === true) {
             // Found it!
             return trim($comment);
@@ -202,17 +200,16 @@ class Methods extends AbstractComment
     protected function getInterfaceComment($originalComment, \ReflectionClass $reflectionClass)
     {
         foreach ($reflectionClass->getInterfaces() as $interface) {
-            if ($this->checkComment($originalComment) === true) {
-                // Looks like we've resolved them all.
-                return $originalComment;
-            }
-
-            // We need to look further.
             if ($interface->hasMethod($this->methodName) === true) {
                 $interfaceComment = $this->prettifyComment($interface->getMethod($this->methodName)->getDocComment());
                 // Replace it.
                 $originalComment = $this->replaceInheritComment($originalComment, $interfaceComment);
             }
+            if ($this->checkComment($originalComment) === true) {
+                // Looks like we've resolved them all.
+                return $originalComment;
+            }
+            // We need to look further.
         }
 
         // Return what we could resolve so far.

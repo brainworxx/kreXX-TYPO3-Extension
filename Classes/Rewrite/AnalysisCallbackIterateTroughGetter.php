@@ -41,22 +41,24 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
  */
 class Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter extends ThroughGetter
 {
+
     /**
-     * Try to get the possible result of all getter methods.
+     * Iterating through a list of reflection methods.
      *
      * Change: we remove the 'get' from the name, since fluid requires this.
      *
+     * @param array $methodList
+     *   The list of methods we are going through, consisting of \ReflectionMethod
+     *
      * @return string
-     *   The generated markup.
+     *   The generated DOM.
      */
-    public function callMe()
+    protected function goThroughMethodList(array $methodList)
     {
         $output = '';
-        /** @var \Brainworxx\Krexx\Analyse\comment\Methods $commentAnalysis */
-        $commentAnalysis = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Methods');
 
         /** @var \ReflectionMethod $reflectionMethod */
-        foreach ($this->parameters['methodList'] as $reflectionMethod) {
+        foreach ($methodList as $reflectionMethod) {
             // Back to level 0, we reset the deep counter.
             $this->deep = 0;
 
@@ -64,16 +66,17 @@ class Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter extends Throug
             // 1.) We have an actual value
             // 2.) We got NULL as a value
             // 3.) We were unable to get any info at all.
-            $comments = nl2br($commentAnalysis->getComment($reflectionMethod, $this->parameters['ref']));
+            $comments = nl2br($this->commentAnalysis->getComment($reflectionMethod, $this->parameters['ref']));
 
             /** @var Model $model */
+            $methodName = $reflectionMethod->getName();
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                // We need to adjust the getter name for fluid.
-                ->setName(lcfirst(substr($reflectionMethod->getName(), 3)))
-                ->addToJson('method comment', $comments);
+                ->setName(lcfirst(substr($methodName, strlen($this->currentPrefix))))
+                ->addToJson('method comment', $comments)
+                ->addToJson('method name', $methodName . '()');
 
             // We need to decide if we are handling static getters.
-            if ($reflectionMethod->isStatic()) {
+            if ($reflectionMethod->isStatic() === true) {
                 $model->setConnectorType(Connectors::STATIC_METHOD);
             } else {
                 $model->setConnectorType(Connectors::METHOD);
@@ -115,11 +118,12 @@ class Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter extends Throug
                     $value = $values->getValueByCode($code)->getValue();
 
                     // Send a new model to the analysis hub.
-                    $output .= $this->pool->routing->analysisHub($this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                        ->setName($code . '.value')
-                        ->setConnectorType(Connectors::METHOD)
-                        ->setData($value)
-                        ->addToJson('hint', 'Magic dataviewer getter method.'));
+                    $output .= $this->pool
+                        ->routing->analysisHub($this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                            ->setName($code . '.value')
+                            ->setConnectorType(Connectors::METHOD)
+                            ->setData($value)
+                            ->addToJson('hint', 'Magic dataviewer getter method.'));
                 }
             } catch (\Exception $e) {
                 // Something whent wrong here.

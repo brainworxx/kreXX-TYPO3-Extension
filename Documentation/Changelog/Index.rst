@@ -12,6 +12,13 @@
 Changelog
 =============================================================
 
+2.4.1 dev
+    - [Feature] Added 'is' and 'has' to the getter analysis.
+    - [Bugfix] The position of the search field of the hans skin is now calculated correct when the viewport is not on top.
+    - [Bugfix] The scroll container detection of the hans skin works now.
+    - [Bugfix] Added help text for the arrayCountLimit.
+    - [Bugfix] "Resolving" of unresolvable inherited comment parts work now as expected.
+
 2.4.0
     - [Feature] Added the method analysis to the recursion detection, to prevent analysing the same methods over and over again.
     - [Feature] Added Javascript optimisation for very large output.

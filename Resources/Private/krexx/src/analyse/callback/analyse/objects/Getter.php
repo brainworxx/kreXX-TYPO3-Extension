@@ -73,22 +73,40 @@ class Getter extends AbstractObjectAnalysis
             return '';
         }
 
+        $normalGetter = array();
+        $isGetter = array();
+        $hasGetter = array();
+
         // Filter them.
+        // We only dump those that have no parameters and start with
+        // has, is or get.
         /** @var \ReflectionMethod $method */
-        foreach ($methodList as $key => $method) {
+        foreach ($methodList as $method) {
             if (strpos($method->getName(), 'get') === 0) {
-                // We only dump those that have no parameters.
                 /** @var \ReflectionMethod $method */
                 $parameters = $method->getParameters();
-                if (!empty($parameters)) {
-                    unset($methodList[$key]);
+                if (empty($parameters)) {
+                    $normalGetter[] = $method;
                 }
-            } else {
-                unset($methodList[$key]);
+            } elseif (strpos($method->getName(), 'is') === 0) {
+                /** @var \ReflectionMethod $method */
+                $parameters = $method->getParameters();
+                if (empty($parameters)) {
+                    $isGetter[] = $method;
+                }
+            } elseif (strpos($method->getName(), 'has') === 0) {
+                /** @var \ReflectionMethod $method */
+                $parameters = $method->getParameters();
+                if (empty($parameters)) {
+                    $hasGetter[] = $method;
+                }
             }
         }
 
-        if (empty($methodList) === true) {
+        if (empty($normalGetter) === true &&
+            empty($isGetter) === true &&
+            empty($hasGetter) === true
+        ) {
             // There are no getter methods in here.
             return '';
         }
@@ -102,7 +120,9 @@ class Getter extends AbstractObjectAnalysis
                 ->setType('class internals')
                 ->setHelpid('getterHelpInfo')
                 ->addParameter('ref', $ref)
-                ->addParameter('methodList', $methodList)
+                ->addParameter('normalGetter', $normalGetter)
+                ->addParameter('isGetter', $isGetter)
+                ->addParameter('hasGetter', $hasGetter)
                 ->addParameter('data', $data)
                 ->injectCallback(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter')

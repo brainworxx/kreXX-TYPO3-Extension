@@ -70,14 +70,18 @@
             '.kheadnote',
             function () {
                 var searchWrapper = document.querySelectorAll('.search-wrapper');
+                var viewportOffset;
                 for (var i = 0; i < searchWrapper.length; i++) {
+                    viewportOffset = searchWrapper[i].getBoundingClientRect();
                     searchWrapper[i].style.position = 'fixed';
+                    searchWrapper[i].style.top = viewportOffset.top + 'px';
                 }
             },
             function () {
                 var searchWrapper = document.querySelectorAll('.search-wrapper');
                 for (var i = 0; i < searchWrapper.length; i++) {
                     searchWrapper[i].style.position = 'absolute';
+                    searchWrapper[i].style.top = '';
                 }
             }
         );
@@ -527,19 +531,26 @@
 
         var instance = kdt.getDataset(element, 'instance');
         var search = document.querySelector('#search-' + instance);
+        var viewportOffset;
 
         // Toggle display / hidden.
         if (kdt.hasClass(search, 'hidden')) {
             // Display it.
             kdt.toggleClass(search, 'hidden');
             search.querySelector('.ksearchfield').focus();
+            search.style.position = 'absolute';
+            search.style.top = '';
+            viewportOffset = search.getBoundingClientRect();
             search.style.position = 'fixed';
+            console.log(viewportOffset.top);
+            search.style.top = viewportOffset.top + 'px';
         }
         else {
             // Hide it.
             kdt.toggleClass(search, 'hidden');
             kdt.removeClass('.ksearch-found-highlight', 'ksearch-found-highlight');
-            search.style.position = 'fixed';
+            search.style.position = 'absolute';
+            search.style.top = '';
             // Clear the results.
            krexx.performSearch.results = [];
         }
@@ -603,6 +614,9 @@
         if (container.length === 0) {
             // Normal scrolling
             container = document.querySelectorAll('html');
+            if (container[0].scrollHeight === container[0].clientHeight) {
+                container = document.querySelectorAll('body');
+            }
             destination = el.getBoundingClientRect().top + container[0].scrollTop - 50;
         }
         else {
