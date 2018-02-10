@@ -36,6 +36,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Service\Config\Fallback;
 
 /**
  * Poll all configured debug methods of a class.
@@ -68,7 +69,7 @@ class DebugMethods extends AbstractObjectAnalysis
         $reflectionClass = $this->parameters['ref'];
         $output = '';
 
-        foreach (explode(',', $this->pool->config->getSetting('debugMethods')) as $funcName) {
+        foreach (explode(',', $this->pool->config->getSetting(Fallback::SETTINGDEBUGMETHODS)) as $funcName) {
             if ($this->checkIfAccessible($data, $funcName, $reflectionClass) === true) {
                 // Add a try to prevent the hosting CMS from doing something stupid.
                 try {

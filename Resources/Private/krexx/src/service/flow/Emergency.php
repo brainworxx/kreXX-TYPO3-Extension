@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Flow;
 
+use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -142,10 +143,10 @@ class Emergency
         }
 
         // Cache some settings.
-        $this->maxRuntime = (int) $pool->config->getSetting('maxRuntime');
-        $this->minMemoryLeft = ((int) $pool->config->getSetting('memoryLeft'))  * 1024 * 1024;
-        $this->maxCall = (int) $this->pool->config->getSetting('maxCall');
-        $this->maxNestingLevel = (int) $this->pool->config->getSetting('level');
+        $this->maxRuntime = (int) $pool->config->getSetting(Fallback::SETTINGMAXRUNTIME);
+        $this->minMemoryLeft = ((int) $pool->config->getSetting(Fallback::SETTINGMEMORYLEFT))  * 1024 * 1024;
+        $this->maxCall = (int) $this->pool->config->getSetting(Fallback::SETTINGMAXCALL);
+        $this->maxNestingLevel = (int) $this->pool->config->getSetting(Fallback::SETTINGLEVEL);
     }
 
     /**

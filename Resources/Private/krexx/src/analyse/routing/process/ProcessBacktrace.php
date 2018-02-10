@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -77,7 +78,7 @@ class ProcessBacktrace
     public function process(array &$backtrace)
     {
         $output = '';
-        $maxStep = (int) $this->pool->config->getSetting('maxStepNumber');
+        $maxStep = (int) $this->pool->config->getSetting(Fallback::SETTINGMAXSTEPNUMBER);
         $stepCount = count($backtrace);
 
         // Remove steps according to the configuration.

@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\View\Output;
 
+use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -343,7 +344,7 @@ class Chunks
         }
 
         array_multisort(array_map('filemtime', $logList), SORT_DESC, $logList);
-        $maxFileCount = (int)$this->pool->config->getSetting('maxfiles');
+        $maxFileCount = (int)$this->pool->config->getSetting(Fallback::SETTINGMAXFILES);
         $count = 1;
         // Cleanup logfiles.
         foreach ($logList as $file) {

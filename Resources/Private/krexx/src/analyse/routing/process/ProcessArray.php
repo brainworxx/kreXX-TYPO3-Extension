@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Config\Fallback;
 
 /**
  * Processing of arrays.
@@ -58,7 +59,7 @@ class ProcessArray extends AbstractProcess
         $multiline = false;
         $count = count($model->getData());
 
-        if ($count > (int) $this->pool->config->getSetting('arrayCountLimit')) {
+        if ($count > (int) $this->pool->config->getSetting(Fallback::SETTINGARRAYCOUNTLIMIT)) {
             // Budget array analysis.
             $model->injectCallback(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray')

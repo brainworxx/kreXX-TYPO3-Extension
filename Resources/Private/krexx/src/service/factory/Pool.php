@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Service\Factory;
 
 use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Service\Config\Config;
+use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Service\Misc\Registry;
@@ -234,7 +235,7 @@ class Pool extends Factory
      */
     protected function initRenderer()
     {
-        $skin = $this->config->getSetting('skin');
+        $skin = $this->config->getSetting(Fallback::SETTINGSKIN);
         $classname = 'Brainworxx\\Krexx\\View\\' . ucfirst($skin) . '\\Render';
         include_once KREXX_DIR . 'resources/skins/' . $skin . '/Render.php';
         $this->render =  $this->createClass($classname);

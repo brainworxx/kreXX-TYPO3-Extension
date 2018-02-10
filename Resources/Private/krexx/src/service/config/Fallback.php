@@ -69,6 +69,28 @@ class Fallback
     const VALUETRUE = 'true';
     const VALUEFALSE = 'false';
 
+    const SETTINGDISABLED = 'disabled';
+    const SETTINGIPRANGE = 'iprange';
+    const SETTINGSKIN = 'skin';
+    const SETTINGDESTINATION = 'destination';
+    const SETTINGMAXFILES = 'maxfiles';
+    const SETTINGDETECTAJAX = 'detectAjax';
+    const SETTINGLEVEL = 'level';
+    const SETTINGMAXCALL = 'maxCall';
+    const SETTINGMAXRUNTIME = 'maxRuntime';
+    const SETTINGMEMORYLEFT = 'memoryLeft';
+    const SETTINGUSESCOPEANALYSIS = 'useScopeAnalysis';
+    const SETTINGANALYSEPROTECTED = 'analyseProtected';
+    const SETTINGANALYSEPRIVATE = 'analysePrivate';
+    const SETTINGANALYSECONSTATS = 'analyseConstants';
+    const SETTINGANALYSETRAVERSABLE = 'analyseTraversable';
+    const SETTINGANALYSEPROTECTEDMETHODS = 'analyseProtectedMethods';
+    const SETTINGANALYSEPRIVATEMETHODS = 'analysePrivateMethods';
+    const SETTINGANALYSEGETTER = 'analyseGetter';
+    const SETTINGDEBUGMETHODS = 'debugMethods';
+    const SETTINGMAXSTEPNUMBER = 'maxStepNumber';
+    const SETTINGARRAYCOUNTLIMIT = 'arrayCountLimit';
+
     /**
      * Defining the layout of the frontend editing form.
      *
@@ -151,82 +173,82 @@ class Fallback
 
         $this->configFallback = array(
             Fallback::SECTIONOUTPUT => array(
-                'disabled',
-                'iprange',
-                'skin',
-                'destination',
-                'maxfiles',
+                Fallback::SETTINGDISABLED,
+                Fallback::SETTINGIPRANGE,
+                Fallback::SETTINGSKIN,
+                Fallback::SETTINGDESTINATION,
+                Fallback::SETTINGMAXFILES,
             ),
             Fallback::SECTIONRUNTIME => array(
-                'detectAjax',
-                'level',
-                'maxCall',
-                'maxRuntime',
-                'memoryLeft',
-                'useScopeAnalysis',
+                Fallback::SETTINGDETECTAJAX,
+                Fallback::SETTINGLEVEL,
+                Fallback::SETTINGMAXCALL,
+                Fallback::SETTINGMAXRUNTIME,
+                Fallback::SETTINGMEMORYLEFT,
+                Fallback::SETTINGUSESCOPEANALYSIS,
             ),
             Fallback::SECTIONPROPERTIES => array(
-                'analyseProtected',
-                'analysePrivate',
-                'analyseConstants',
-                'analyseTraversable',
+                Fallback::SETTINGANALYSEPROTECTED,
+                Fallback::SETTINGANALYSEPRIVATE,
+                Fallback::SETTINGANALYSECONSTATS,
+                Fallback::SETTINGANALYSETRAVERSABLE,
             ),
             Fallback::SECTIONMETHODS => array(
-                'analyseProtectedMethods',
-                'analysePrivateMethods',
-                'analyseGetter',
-                'debugMethods',
+                Fallback::SETTINGANALYSEPROTECTEDMETHODS,
+                Fallback::SETTINGANALYSEPRIVATEMETHODS,
+                Fallback::SETTINGANALYSEGETTER,
+                Fallback::SETTINGDEBUGMETHODS,
             ),
             Fallback::SECTIONPRUNEOUTPUT => array(
-                'maxStepNumber',
-                'arrayCountLimit',
+                Fallback::SETTINGMAXSTEPNUMBER,
+                Fallback::SETTINGARRAYCOUNTLIMIT,
             ),
         );
 
         $this->feConfigFallback = array(
-            'analyseProtectedMethods' => array(
+            Fallback::SETTINGANALYSEPROTECTEDMETHODS => array(
                 // Analyse protected class methods.
                 Fallback::VALUE => Fallback::VALUEFALSE,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVAL => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONMETHODS,
             ),
-            'analysePrivateMethods' => array(
+            Fallback::SETTINGANALYSEPRIVATEMETHODS => array(
                 // Analyse private class methods.
                 Fallback::VALUE => Fallback::VALUEFALSE,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVAL => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONMETHODS,
             ),
-            'analyseProtected' => array(
+            Fallback::SETTINGANALYSEPROTECTED => array(
                 // Analyse protected class properties.
                 Fallback::VALUE => Fallback::VALUEFALSE,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVAL => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONPROPERTIES,
             ),
-            'analysePrivate' => array(
+            Fallback::SETTINGANALYSEPRIVATE => array(
                 // Analyse private class properties.
                 Fallback::VALUE => Fallback::VALUEFALSE,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVAL => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONPROPERTIES,
             ),
-            'analyseConstants' => array(
+            Fallback::SETTINGANALYSECONSTATS => array(
                 // Analyse class constants.
                 Fallback::VALUE => Fallback::VALUETRUE,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVAL => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONPROPERTIES,
             ),
-            'analyseTraversable' => array(
+            Fallback::SETTINGANALYSETRAVERSABLE => array(
                 // Analyse traversable part of classes.
                 Fallback::VALUE => Fallback::VALUETRUE,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVAL => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONPROPERTIES,
             ),
-            'debugMethods' => array(
+            Fallback::SETTINGDEBUGMETHODS => array(
                 // Debug methods that get called.
                 // A debug method must be public and have no parameters.
                 // Change these only if you know what you are doing.
@@ -235,49 +257,49 @@ class Fallback
                 Fallback::EVAL => Fallback::DONOTEVAL,
                 Fallback::SECTION =>  Fallback::SECTIONMETHODS,
             ),
-            'level' => array(
+            Fallback::SETTINGLEVEL => array(
                 // Maximum nesting level.
                 Fallback::VALUE => 5,
                 Fallback::RENDER => $this->editableInput,
                 Fallback::EVAL => Fallback::EVALINT,
                 Fallback::SECTION => Fallback::SECTIONRUNTIME,
             ),
-            'maxCall' => array(
+            Fallback::SETTINGMAXCALL => array(
                 // Maximum amount of kreXX calls.
                 Fallback::VALUE => 10,
                 Fallback::RENDER => $this->editableInput,
                 Fallback::EVAL => Fallback::EVALINT,
                 Fallback::SECTION => Fallback::SECTIONRUNTIME,
             ),
-            'disabled' => array(
+            Fallback::SETTINGDISABLED => array(
                 // Disable kreXX.
                 Fallback::VALUE => Fallback::VALUEFALSE,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVAL => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONOUTPUT,
             ),
-            'destination' => array(
+            Fallback::SETTINGDESTINATION => array(
                 // Output desination. Either 'file' or 'browser'.
                 Fallback::VALUE => 'browser',
                 Fallback::RENDER => $this->displayOnlySelect,
                 Fallback::EVAL => Fallback::EVALDESTINATION,
                 Fallback::SECTION => Fallback::SECTIONOUTPUT,
             ),
-            'maxfiles' => array(
+            Fallback::SETTINGMAXFILES => array(
                 // Maximum files that are kept inside the logfolder.
                 Fallback::VALUE => 10,
                 Fallback::RENDER => $this->displayOnlyInput,
                 Fallback::EVAL => Fallback::EVALINT,
                 Fallback::SECTION => Fallback::SECTIONOUTPUT,
             ),
-            'skin' => array(
+            Fallback::SETTINGSKIN => array(
                 // Skin for kreXX. We have provided 'hans' and 'smokygrey'.
                 Fallback::VALUE => 'smokygrey',
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVAL => Fallback::EVALSKIN,
                 Fallback::SECTION => Fallback::SECTIONOUTPUT,
             ),
-            'detectAjax' => array(
+            Fallback::SETTINGDETECTAJAX => array(
                 // Try to detect ajax requests.
                 // If set to 'true', kreXX is disablked for them.
                 Fallback::VALUE => Fallback::VALUETRUE,
@@ -285,7 +307,7 @@ class Fallback
                 Fallback::EVAL => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONRUNTIME,
             ),
-            'iprange' => array(
+            Fallback::SETTINGIPRANGE => array(
                 // IP range for calling kreXX.
                 // kreXX is disabled for everyone who dies not fit into this range.
                 Fallback::VALUE => '*',
@@ -299,7 +321,7 @@ class Fallback
                 Fallback::EVAL => Fallback::EVALDEVHANDLE,
                 Fallback::SECTION => ''
             ),
-            'analyseGetter' => array(
+            Fallback::SETTINGANALYSEGETTER => array(
                 // Analyse the getter methods of a class and try to
                 // get a possible return value without calling the method.
                 Fallback::VALUE => Fallback::VALUETRUE,
@@ -307,28 +329,28 @@ class Fallback
                 Fallback::EVAL => Fallback::EVALBOOL,
                 Fallback::SECTION =>  Fallback::SECTIONMETHODS,
             ),
-            'memoryLeft' => array(
+            Fallback::SETTINGMEMORYLEFT => array(
                 // Maximum MB memory left, before triggering an emergency break.
                 Fallback::VALUE => 64,
                 Fallback::RENDER => $this->editableInput,
                 Fallback::EVAL => Fallback::EVALINT,
                 Fallback::SECTION => Fallback::SECTIONRUNTIME,
             ),
-            'maxRuntime' => array(
+            Fallback::SETTINGMAXRUNTIME => array(
                 // Maximum runtime in seconds, before triggering an emergancy break.
                 Fallback::VALUE => 60,
                 Fallback::RENDER => $this->editableInput,
                 Fallback::EVAL => Fallback::EVALMAXRUNTIME,
                 Fallback::SECTION => Fallback::SECTIONRUNTIME,
             ),
-            'useScopeAnalysis' => array(
+            Fallback::SETTINGUSESCOPEANALYSIS => array(
                 // Use the scope analyis (aka autoconfiguration).
                 Fallback::VALUE => Fallback::VALUETRUE,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVAL => Fallback::EVALBOOL,
                 Fallback::SECTION => Fallback::SECTIONRUNTIME,
             ),
-            'maxStepNumber' => array(
+            Fallback::SETTINGMAXSTEPNUMBER => array(
                 // Maximum step numbers that get analysed from a backtrace.
                 // All other steps be be omitted.
                 Fallback::VALUE => 10,
@@ -336,7 +358,7 @@ class Fallback
                 Fallback::EVAL => Fallback::EVALINT,
                 Fallback::SECTION => Fallback::SECTIONPRUNEOUTPUT,
             ),
-            'arrayCountLimit' => array(
+            Fallback::SETTINGARRAYCOUNTLIMIT => array(
                 // Limit for the count in an array. If an array is larger that this,
                 // we will use the ThroughLargeArray callback
                 Fallback::VALUE => 300,
@@ -357,10 +379,10 @@ class Fallback
      * @var array
      */
     protected $feConfigNoEdit = array(
-        'destination',
-        'maxfiles',
-        'debugMethods',
-        'iprange',
+        Fallback::SETTINGDESTINATION,
+        Fallback::SETTINGMAXFILES,
+        Fallback::SETTINGDEBUGMETHODS,
+        Fallback::SETTINGIPRANGE,
     );
 
     /**

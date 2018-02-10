@@ -109,7 +109,7 @@ class Ini extends Fallback
             // Fallback to factory settings.
             if (isset($this->feConfigFallback[$parameterName]) === true) {
                 return array(
-                    ($this->feConfigFallback[$parameterName][$this::RENDER]['editable'] === 'true'),
+                    ($this->feConfigFallback[$parameterName][$this::RENDER]['editable'] === Fallback::VALUETRUE),
                     $this->feConfigFallback[$parameterName][$this::RENDER]['type']
                 );
             }
@@ -119,7 +119,7 @@ class Ini extends Fallback
         }
 
         return array(
-            ($filevalue['editable'] === 'true'),
+            ($filevalue['editable'] === Fallback::VALUETRUE),
             $filevalue['type']
         );
     }
@@ -150,22 +150,22 @@ class Ini extends Fallback
         switch ($value) {
             case 'none':
                 $type = 'None';
-                $editable = 'false';
+                $editable = Fallback::VALUEFALSE;
                 break;
 
             case 'display':
-                $editable = 'false';
+                $editable = Fallback::VALUEFALSE;
                 break;
 
             case 'full':
-                $editable = 'true';
+                $editable = Fallback::VALUETRUE;
                 break;
 
             default:
                 // Unknown setting.
                 // Fallback to no display, just in case.
                 $type = 'None';
-                $editable = 'false';
+                $editable = Fallback::VALUEFALSE;
                 break;
         }
 

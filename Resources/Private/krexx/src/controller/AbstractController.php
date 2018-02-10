@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Controller;
 
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
+use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\View\Output\AbstractOutput;
 
@@ -126,7 +127,7 @@ abstract class AbstractController
 
         // Register our output service.
         // Depending on the setting, we use another class here.
-        $outputSetting = $pool->config->getSetting('destination');
+        $outputSetting = $pool->config->getSetting(Fallback::SETTINGDESTINATION);
         if ($outputSetting === 'browser') {
             $this->outputService = $pool->createClass('Brainworxx\\Krexx\\View\\Output\\Shutdown');
         }
@@ -206,7 +207,7 @@ abstract class AbstractController
         $css = $this->pool->fileService->getFileContents(
             KREXX_DIR .
             'resources/skins/' .
-            $this->pool->config->getSetting('skin') .
+            $this->pool->config->getSetting(Fallback::SETTINGSKIN) .
             '/skin.css'
         );
         // Remove whitespace.
@@ -222,7 +223,7 @@ abstract class AbstractController
         $jsCode = $this->pool->fileService->getFileContents($jsFile);
 
         // Krexx.js is comes directly form the template.
-        $path = KREXX_DIR . 'resources/skins/' . $this->pool->config->getSetting('skin');
+        $path = KREXX_DIR . 'resources/skins/' . $this->pool->config->getSetting(Fallback::SETTINGSKIN);
         if ($this->pool->fileService->fileIsReadable($path . '/krexx.min.js') === true) {
             $jsFile = $path . '/krexx.min.js';
         } else {

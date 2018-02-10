@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Controller;
 
+use Brainworxx\Krexx\Service\Config\Fallback;
+
 /**
  * "Controller" for the fatal error handler "action"
  *
@@ -103,7 +105,7 @@ class ErrorController extends AbstractController
             )
         );
 
-        if ($this->pool->config->getSetting('destination') === 'file') {
+        if ($this->pool->config->getSetting(Fallback::SETTINGDESTINATION) === 'file') {
             // Save it to a file.
             $this->pool->chunks->saveDechunkedToFile($header . $messages . $main . $backtrace . $footer);
         } else {

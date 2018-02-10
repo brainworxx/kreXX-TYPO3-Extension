@@ -114,7 +114,7 @@ class Config extends Fallback
         // We may need to change the disabling again, in case we are in cli
         // or ajax mode and have no fileoutput.
         if ($this->isRequestAjaxOrCli() === true &&
-            $this->getSetting('destination') !== 'file'
+            $this->getSetting(Fallback::SETTINGDESTINATION) !== 'file'
         ) {
             // No kreXX for you!
             $this->setDisabled(true);
@@ -122,12 +122,12 @@ class Config extends Fallback
 
         // Now that our settings are in place, we need to check the
         // ip to decide if we need to deactivate kreXX.
-        if ($this->isAllowedIp($this->getSetting('iprange')) === false) {
+        if ($this->isAllowedIp($this->getSetting(Fallback::SETTINGIPRANGE)) === false) {
             // No kreXX for you!
             $this->setDisabled(true);
         }
 
-        $this->debugFuncList = explode(',', $this->getSetting('debugMethods'));
+        $this->debugFuncList = explode(',', $this->getSetting(Fallback::SETTINGDEBUGMETHODS));
     }
 
     /**
@@ -168,7 +168,7 @@ class Config extends Fallback
      */
     public function setDisabled($value)
     {
-        $this->settings['disabled']
+        $this->settings[Fallback::SETTINGDISABLED]
             ->setValue($value)
             ->setSource('Internal flow');
     }
@@ -228,7 +228,7 @@ class Config extends Fallback
                 // We must not overwrite a disabled=true with local cookie settings!
                 // Otherwise it could get enabled locally, which might be a security
                 // issue.
-                if (($name === 'disabled' && $cookieSetting === 'false') === false) {
+                if (($name === Fallback::SETTINGDISABLED && $cookieSetting === Fallback::VALUEFALSE) === false) {
                     $model->setValue($cookieSetting)->setSource('Local cookie settings');
                     $this->settings[$name] = $model;
                     return;
@@ -261,7 +261,7 @@ class Config extends Fallback
 
         if (isset($server['HTTP_X_REQUESTED_WITH']) === true &&
             strtolower($server['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest' &&
-            $this->getSetting('detectAjax') === true
+            $this->getSetting(Fallback::SETTINGDETECTAJAX) === true
         ) {
             // Appending stuff after a ajax request will most likely
             // cause a js error. But there are moments when you actually

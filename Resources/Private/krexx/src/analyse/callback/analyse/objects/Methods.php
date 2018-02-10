@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Service\Config\Fallback;
+
 /**
  * Method analysis for objects.
  *
@@ -57,9 +59,9 @@ class Methods extends AbstractObjectAnalysis
 
         // We need to check, if we have a meta recursion here.
 
-        $doProtected = $this->pool->config->getSetting('analyseProtectedMethods') ||
+        $doProtected = $this->pool->config->getSetting(Fallback::SETTINGANALYSEPROTECTEDMETHODS) ||
             $this->pool->scope->isInScope();
-        $doPrivate = $this->pool->config->getSetting('analysePrivateMethods') ||
+        $doPrivate = $this->pool->config->getSetting(Fallback::SETTINGANALYSEPRIVATEMETHODS) ||
             $this->pool->scope->isInScope();
         $domId = $this->generateDomIdFromClassname($ref->getName(), $doProtected, $doPrivate);
 

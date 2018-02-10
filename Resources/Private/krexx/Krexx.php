@@ -34,6 +34,7 @@
 
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Controller\AbstractController;
+use Brainworxx\Krexx\Service\Config\Fallback;
 
 // Include some files and set some internal values.
 \Krexx::bootstrapKrexx();
@@ -231,7 +232,7 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting('disabled') || AbstractController::$analysisInProgress) {
+        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED) || AbstractController::$analysisInProgress) {
             return;
         }
 
@@ -255,7 +256,7 @@ class Krexx
         Pool::createPool();
 
         // Disabled ?
-        if (static::$pool->config->getSetting('disabled') || AbstractController::$analysisInProgress) {
+        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED) || AbstractController::$analysisInProgress) {
             return;
         }
 
@@ -282,7 +283,7 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting('disabled') || AbstractController::$analysisInProgress) {
+        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED) || AbstractController::$analysisInProgress) {
             return;
         }
 
@@ -310,7 +311,7 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting('disabled') || AbstractController::$analysisInProgress) {
+        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED) || AbstractController::$analysisInProgress) {
             return;
         }
 
@@ -353,7 +354,7 @@ class Krexx
 
         // Disabled?
         // We are ignoring local settings here.
-        if (static::$pool->config->getSetting('disabled')) {
+        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED)) {
             return;
         }
 
@@ -375,7 +376,7 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting('disabled')) {
+        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED)) {
             return;
         }
 
@@ -406,7 +407,7 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting('disabled')) {
+        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED)) {
             return;
         }
 

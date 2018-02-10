@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\View;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Config\Fallback;
 
 /**
  * Render methods.
@@ -323,7 +324,7 @@ class Render extends AbstractRender
         // For dropdown elements, we need to render the options.
         if ($model->getType() === 'Select') {
             // Here we store what the list of possible values.
-            if ($model->getDomid() === 'skin') {
+            if ($model->getDomid() === Fallback::SETTINGSKIN) {
                 // Get a list of all skin folders.
                 $valueList = $this->getSkinList();
             } else {

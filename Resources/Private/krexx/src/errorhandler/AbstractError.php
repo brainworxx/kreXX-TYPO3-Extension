@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Errorhandler;
 
+use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -107,7 +108,7 @@ abstract class AbstractError
     {
         // We will only handle errors when kreXX and the handler
         // itself is enabled.
-        return $this->isActive && !$this->pool->config->getSetting('disabled');
+        return $this->isActive && !$this->pool->config->getSetting(Fallback::SETTINGDISABLED);
     }
 
     /**

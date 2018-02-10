@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Code;
 
+use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Analyse\Model;
 
@@ -108,7 +109,7 @@ class Scope
     {
         return  $this->pool->emergencyHandler->getNestingLevel() <= 1 &&
             $this->scope === '$this' &&
-            $this->pool->config->getSetting('useScopeAnalysis');
+            $this->pool->config->getSetting(Fallback::SETTINGUSESCOPEANALYSIS);
     }
 
     /**
