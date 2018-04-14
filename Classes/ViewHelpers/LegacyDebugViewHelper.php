@@ -37,7 +37,8 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Legacy debug viewhelper.
  *
- * You can *still* use the old namespace declararion.
+ * You can *still* use the old namespace declaration.
+ * But really, you should not.
  */
 class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper
 {
