@@ -17,14 +17,14 @@ kreXX does not only work in PHP. We have added a debug viewhelper for fluid.
 Namespace
 ^^^^^^^^^
 
-When using TYPO3 4.5 until 8.4, you need to declare the namespace first. If you are using TYPO3 8.5 and later, this will not be necessary anymore.
+When using TYPO3 6.2 until 8.4, you need to declare the namespace first. If you are using TYPO3 8.5 and later, this will not be necessary anymore.
 
 .. code-block:: html
 
-    {namespace krexx=Tx_Includekrexx_ViewHelpers}
+    {namespace krexx=Brainworxx\Includekrexx\ViewHelpers}
     or
     <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-          xmlns:krexx="http://typo3.org/ns/Tx_Includekrexx_ViewHelpers"
+          xmlns:krexx="http://typo3.org/ns/Brainworxx/Includekrexx/ViewHelpers"
           data-namespace-typo3-fluid="true">
 
 Analytic function
