@@ -59,31 +59,8 @@ class ext_update
     {
         // We flush the caches, just in case. The extension manager does not flush
         // the ext_localconf cache.
-        $this->flushCache();
+        GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')
+            ->flushCachesInGroup('system');
     }
 
-    /**
-     * Does a system cache wipe if available, flushes everything if not.
-     */
-    protected function flushCache()
-    {
-        // 1. Get the TCE Main.
-        // 't3lib_TCEmain' => 'TYPO3\\CMS\\Core\\DataHandling\\DataHandler',
-        if ((int)TYPO3_version < 6) {
-            // Oldschool cache management in globals.
-            $cacheManager = $GLOBALS['typo3CacheManager'];
-        } else {
-            $cacheManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager');
-        }
-
-        // 2. Flush the cache.
-        if (method_exists($cacheManager, 'flushCachesInGroup')) {
-            // TYPO3 6+
-            $cacheManager->flushCachesInGroup('system');
-        } else {
-            // TYPO3 4.x
-            $cacheManager->flushCaches();
-        }
-
-    }
 }

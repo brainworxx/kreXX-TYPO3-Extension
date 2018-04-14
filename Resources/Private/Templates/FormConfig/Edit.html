@@ -1,3 +1,5 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
 <f:layout name="BackendSave"/>
 
 /**
@@ -60,7 +62,7 @@
 
             <tr><th colspan="3"><b><f:translate key="subhead.backtrace" /></b></th></tr>
             <f:render section="dropdown" arguments="{config.maxStepNumber}" />
-            
+
         </table>
     </f:form>
 </f:section>
@@ -94,3 +96,5 @@
 <f:section name="noedit">
     <tr><td><f:translate key="label.{name}" /></td><td colspan="2"><f:translate key="logging.noteditable"/></td></tr>
 </f:section>
+
+</html>

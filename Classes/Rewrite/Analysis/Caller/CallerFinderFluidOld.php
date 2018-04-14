@@ -32,10 +32,12 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+namespace Brainworxx\Includekrexx\Rewrite\Analysis\Caller;
+
 /**
  * Trying to coax the current template/layout/partial file out of the fluid framework.
  */
-class Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld extends Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder
+class CallerFinderFluidOld extends AbstractCallerFinderFluid
 {
 
     /**

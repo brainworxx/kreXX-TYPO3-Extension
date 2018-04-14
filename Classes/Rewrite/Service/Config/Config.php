@@ -32,12 +32,14 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Service\Config\Config;
+namespace Brainworxx\Includekrexx\Rewrite\Service\Config;
+
+use Brainworxx\Krexx\Service\Config\Config as OrgConfig;
 
 /**
  * Using the cmpIP from the GeneralUtility in TYPO3.
  */
-class Tx_Includekrexx_Rewrite_ServiceConfigConfig extends Config
+class Config extends OrgConfig
 {
     /**
      * {@inheritdoc}

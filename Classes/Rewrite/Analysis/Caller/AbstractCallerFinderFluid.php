@@ -32,15 +32,18 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+namespace Brainworxx\Includekrexx\Rewrite\Analysis\Caller;
+
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
+use \Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Contains all methods, that are used by the fluid caller finder classes.
  */
-abstract class Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder  extends AbstractCaller
+abstract class AbstractCallerFinderFluid  extends AbstractCaller
 {
     /**
-     * @var \TYPO3Fluid\Fluid\View\ViewInterface
+     * @var \TYPO3\CMS\Fluid\View\AbstractTemplateView|\TYPO3Fluid\Fluid\View\ViewInterface
      */
     protected $view;
 
@@ -84,7 +87,7 @@ abstract class Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder  extends Abstra
     /**
      * The kreXX debug viewhelper class
      *
-     * @var Tx_Includekrexx_ViewHelpers_DebugViewHelper
+     * @var \Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper
      */
     protected $debugViewhelper;
 
@@ -106,8 +109,9 @@ abstract class Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder  extends Abstra
      * Trying to get our stuff together.
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @throws \ReflectionException
      */
-    public function __construct(\Brainworxx\Krexx\Service\Factory\Pool $pool)
+    public function __construct(Pool $pool)
     {
         parent::__construct($pool);
 
@@ -310,7 +314,7 @@ abstract class Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder  extends Abstra
     {
         // We check for : and -> to see if we are facing some inline stuff
         if (strpos($varname, ':') !== false || strpos($varname, '->') !== false) {
-            $this->pool->codegenHandler->setComplicatedWrapper1(
+            $this->pool->codegenHandler->setComplicatedWrapperLeft(
                 '<v:variable.set value="{' . $varname . '}" name="fluidvar" /> {'
             );
             $varname = 'fluidvar';

@@ -32,34 +32,20 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+namespace Brainworxx\Includekrexx\ViewHelpers;
+
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
-// The main problem with 7.0 is, that compatibility6 may or may not be installed.
-// If not, I have to put his thing here, hoping not to break anything!
-if (!class_exists('Tx_Fluid_Core_ViewHelper_AbstractViewHelper')) {
-    /**
-     * Class Tx_Fluid_Core_ViewHelper_AbstractViewHelper
-     */
-    abstract class Tx_Fluid_Core_ViewHelper_AbstractViewHelper extends AbstractViewHelper
-    {
-    }
-}
-// For some reasons, TYPO3 7.6 manages to load this file multiple times, causing
-// a fatal.
-if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
-    return;
-}
-
 /**
- * Class Tx_Includekrexx_ViewHelpers_DebugViewHelper
+ * Our fluid wraqpper for kreXX.
  *
  * @namespace
- *   When using TYPO3 4.5 until 8.4, you need to declare the namespace first:
- *   {namespace krexx=Tx_Includekrexx_ViewHelpers}
+ *   When using TYPO3 6.2 until 8.4, you need to declare the namespace first:
+ *   {namespace krexx=Brainworxx\Includekrexx\ViewHelpers}
  *   or
  *   <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
- *         xmlns:krexx="http://typo3.org/ns/Tx_Includekrexx_ViewHelpers"
+ *         xmlns:krexx="http://typo3.org/ns/Brainworxx/Includekrexx/ViewHelpers"
  *         data-namespace-typo3-fluid="true">
  *   TYPO3 8.5 and beyond don't need to do that anymore  ;-)
  *
@@ -70,7 +56,7 @@ if (class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
  *   Use this part if you don't want fluid to escape your string or if you are
  *   stitching together an array.
  */
-class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelper_AbstractViewHelper
+class DebugViewHelper extends AbstractViewHelper
 {
 
     /**
@@ -89,6 +75,8 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \TYPO3\CMS\Fluid\Core\ViewHelper\Exception
      */
     public function initializeArguments()
     {
@@ -106,46 +94,43 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
 
         Pool::createPool();
 
-        Krexx::$pool
+        \Krexx::$pool
             // Registering the alternative getter analysis, without the 'get' in
             // the functionname.
             ->addRewrite(
                 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter',
-                'Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter'
+                'Brainworxx\\Includekrexx\\Rewrite\\Analysis\\Callback\\Iterate\\TroughGetter'
             )
             // Registering the fluid connector class.
             ->addRewrite(
                 'Brainworxx\\Krexx\\Analyse\\Code\\Connectors',
-                'Tx_Includekrexx_Rewrite_ServiceCodeConnectors'
+                'Brainworxx\\Includekrexx\\Rewrite\\Service\\Code\\Connectors'
             )
             // Registering the special source generation for methods.
             ->addRewrite(
                 'Brainworxx\\Krexx\\Analyse\Callback\\Iterate\\ThroughMethods',
-                'Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods'
+                'Brainworxx\\Includekrexx\\Rewrite\\Analyse\\Callback\\Iterate\\ThroughMethods'
             )
             ->addRewrite(
                 'Brainworxx\\Krexx\\Analyse\\Code\\Codegen',
-                'Tx_Includekrexx_Rewrite_ServiceCodeCodegen'
+                'Brainworxx\\Includekrexx\\Rewrite\\Service\\Code\\Codegen'
             );
 
 
         // We need other fluid caller finders, depending on the version.
-        Krexx::$pool->registry->set('DebugViewHelper', $this);
+        \Krexx::$pool->registry->set('DebugViewHelper', $this);
 
         if (version_compare(TYPO3_version, '8.4', '>')) {
-            Krexx::$pool->addRewrite(
+            \Krexx::$pool->addRewrite(
                 'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
-                'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid'
+                'Brainworxx\\Includekrexx\\Rewrite\\Analysis\\Caller\\CallerFinderFluid'
             );
         } else {
-            Krexx::$pool->addRewrite(
+            \Krexx::$pool->addRewrite(
                 'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
-                'Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld'
+                'Brainworxx\\Includekrexx\\Rewrite\\Analysis\\Caller\\CallerFinderFluidOld'
             );
         }
-
-        // Trigger the file loading, which may or may not be done by TYPO3.
-        $this->fileLoading();
 
         $found  = false;
         if (!is_null($this->arguments['value'])) {
@@ -165,49 +150,9 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Tx_Fluid_Core_ViewHelp
         }
 
         // Reset all rewrites to the global ones.
-        Krexx::$pool->flushRewrite();
+        \Krexx::$pool->flushRewrite();
 
         return '';
-    }
-
-    /**
-     * "Autoloading" for files that do not get autoloaded anymore, but are
-     * needed for the code above.
-     */
-    protected function fileLoading()
-    {
-        static $once = false;
-        // We do this only once.
-        if ($once) {
-            return;
-        }
-
-        $once = true;
-        if (version_compare(TYPO3_version, '7.2', '>')) {
-            $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx');
-
-            if (!class_exists('Tx_Includekrexx_Rewrite_AbstractFluidCallerFinder')) {
-                include_once($extPath . 'Classes/Rewrite/AbstractFluidCallerFinder.php');
-            }
-            if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluid')) {
-                include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderFluid.php');
-            }
-            if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallerCallerFinderFluidOld')) {
-                include_once($extPath . 'Classes/Rewrite/AnalysisCallerCallerFinderFluidOld.php');
-            }
-            if (!class_exists('Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter')) {
-                include_once($extPath . 'Classes/Rewrite/AnalysisCallbackIterateTroughGetter.php');
-            }
-            if (!class_exists('Tx_Includekrexx_Rewrite_ServiceCodeConnectors')) {
-                include_once($extPath . 'Classes/Rewrite/ServiceCodeConnectors.php');
-            }
-            if (!class_exists('Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods')) {
-                include_once($extPath . 'Classes/Rewrite/AnalyseCallbackIterateThroughMethods.php');
-            }
-            if (!class_exists('Tx_Includekrexx_Rewrite_ServiceCodeCodegen')) {
-                include_once($extPath . 'Classes/Rewrite/ServiceCodeCodegen.php');
-            }
-        }
     }
 
     /**

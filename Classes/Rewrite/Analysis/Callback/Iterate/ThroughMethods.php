@@ -32,10 +32,17 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
+namespace Brainworxx\Includekrexx\Rewrite\Analyse\Callback\Iterate;
+
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods as OrgThroughMethods;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 
-class Tx_Includekrexx_Rewrite_AnalyseCallbackIterateThroughMethods extends ThroughMethods
+/**
+ * Fluid methods need some special handling.
+ *
+ * @package Brainworxx\Includekrexx\Rewrite\Analyse\Callback\Iterate
+ */
+class ThroughMethods extends OrgThroughMethods
 {
 
     /**

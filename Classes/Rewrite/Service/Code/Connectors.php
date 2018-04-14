@@ -32,12 +32,14 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Analyse\Code\Connectors;
+namespace Brainworxx\Includekrexx\Rewrite\Service\Code;
+
+use Brainworxx\Krexx\Analyse\Code\Connectors as OrgConnectors;
 
 /**
  * Special connectors for fluid. Used by the code generation.
  */
-class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
+class Connectors extends OrgConnectors
 {
 
     /**

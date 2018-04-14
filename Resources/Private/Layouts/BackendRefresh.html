@@ -1,13 +1,6 @@
-<f:be.container>
-    <style type="text/css">
-        /* since addJsFile and addCssFile got removed in 7.0, I have to resort to adding stuff inline! */
-        {css}
-    </style>
-    <script type="text/javascript">
-        // Since there is no format raw viewhelper in 4.5, I havew to resort to putting this inline.
-        <f:format.html parseFuncTSPath="">{js}</f:format.html>
-    </script>
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 
+<f:be.container includeCssFiles="{Backend: '{f:uri.resource(path:\'Css/Backend.css\')}'}" includeJsFiles="{Backend: '{f:uri.resource(path:\'JavaScript/Backend.js\')}'}">
     <div class="typo3-fullDoc">
         <div id="typo3-docheader">
             <div class="typo3-docheader-functions">
@@ -39,3 +32,5 @@
         </div>
     </div>
 </f:be.container>
+
+</html>

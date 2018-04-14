@@ -32,15 +32,15 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+namespace Brainworxx\Includekrexx\Controller;
 
-if (class_exists('Tx_Includekrexx_Controller_LogController')) {
-    return;
-}
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Log controller for the kreXX typo3 extension
  */
-class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controller_CompatibilityController
+class LogController extends CompatibilityController
 {
 
     /**
@@ -94,18 +94,24 @@ class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controlle
 
         // 4. Has kreXX something to say? Maybe a writeprotected logfolder?
         foreach ($this->getTranslatedMessages() as $message) {
-            $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+            $this->addFlashMessage(
+                $message,
+                LocalizationUtility::translate('general.error.title', static::EXT_KEY),
+                FlashMessage::ERROR
+            );
         }
 
         // 5. Assign the file list.
         $this->view->assign('files', $fileList);
-        $this->addCssToView('Backend.css');
-        $this->addJsToView('Backend.js');
         $this->assignFlashInfo();
     }
 
     /**
      * Gets the content of a logfile
+     *
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
     public function getContentAction()
     {
@@ -119,15 +125,22 @@ class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controlle
             die();
         } else {
             // Error message and redirect to the list action.
-            $this->addMessage(
-                $this->LLL('log.notreadable', array($id . '.Krexx.html')),
-                $this->LLL('log.fileerror'),
-                t3lib_FlashMessage::ERROR
+            $this->addFlashMessage(
+                LocalizationUtility::translate('log.notreadable', static::EXT_KEY, array($id . '.Krexx.html')),
+                LocalizationUtility::translate('log.fileerror', static::EXT_KEY),
+                FlashMessage::ERROR
             );
             $this->redirect('list');
         }
     }
 
+    /**
+     * Deletes a logfile.
+     *
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     */
     public function deleteAction()
     {
         // No directory traversal for you!
@@ -143,6 +156,12 @@ class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controlle
         $this->redirect('list');
     }
 
+    /**
+     * Physically deletes a file, if possible.
+     *
+     * @param string $file
+     *   Path to the file we want to delete.
+     */
     protected function delete($file)
     {
         if (is_writeable(dirname(($file))) && file_exists($file)) {
@@ -150,10 +169,14 @@ class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controlle
             unlink($file);
         } else {
             // Error message.
-            $this->addMessage(
-                $this->LLL('log.notdeletable', array($this->pool->fileService->filterFilePath($file))),
-                $this->LLL('log.fileerror'),
-                t3lib_FlashMessage::ERROR
+            $this->addFlashMessage(
+                LocalizationUtility::translate(
+                    'log.notdeletable',
+                    static::EXT_KEY,
+                    array($this->pool->fileService->filterFilePath($file))
+                ),
+                LocalizationUtility::translate('log.fileerror', static::EXT_KEY),
+                FlashMessage::ERROR
             );
         }
     }
@@ -214,6 +237,8 @@ class Tx_Includekrexx_Controller_LogController extends Tx_Includekrexx_Controlle
      */
     protected function dispatchFile($path)
     {
+        header('Content-Type: text/html; charset=utf-8');
+        
         $size = 1024 * 1024;
         $res = fopen($path, "rb");
         while (!feof($res)) {

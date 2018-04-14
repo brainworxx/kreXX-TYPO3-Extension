@@ -32,13 +32,15 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Analyse\Code\Codegen;
+namespace Brainworxx\Includekrexx\Rewrite\Service\Code;
+
+use Brainworxx\Krexx\Analyse\Code\Codegen as OrgCodegen;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Special code generation for fluid.
  */
-class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
+class Codegen extends OrgCodegen
 {
     /**
      * Constant identifier for the multiline code generation for fluid
@@ -50,14 +52,14 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
      *
      * @var string
      */
-    protected $wrapper1 = '{';
+    protected $wrapperLeft = '{';
 
     /**
      * The we wrap this one arround the fluid code generation, on the right.
      *
      * @var string
      */
-    protected $wrapper2 = '}';
+    protected $wrapperRight = '}';
 
     /**
      * The recalculated nesting level.
@@ -66,6 +68,11 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
      */
     protected $currentNesting = 0;
 
+    /**
+     * Are we analysing the dreaded {_all}?
+     *
+     * @var bool
+     */
     protected $isAll = false;
 
     /**
@@ -163,9 +170,9 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
      * @return $this
      *   Return this, for chaining.
      */
-    public function setComplicatedWrapper1($wrapper)
+    public function setComplicatedWrapperLeft($wrapper)
     {
-        $this->wrapper1 = $wrapper;
+        $this->wrapperLeft = $wrapper;
         return $this;
     }
 
@@ -178,9 +185,9 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
      * @return $this
      *   Return this, for chaining.
      */
-    public function setComplicatedWrapper2($wrapper)
+    public function setComplicatedWrapperRight($wrapper)
     {
-        $this->wrapper2 = $wrapper;
+        $this->wrapperRight = $wrapper;
         return $this;
     }
 
@@ -189,9 +196,9 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
      *
      * @return string
      */
-    public function generateWrapper1()
+    public function generateWrapperLeft()
     {
-        return $this->wrapper1;
+        return $this->wrapperLeft;
     }
 
     /**
@@ -199,8 +206,8 @@ class Tx_Includekrexx_Rewrite_ServiceCodeCodegen extends Codegen
      *
      * @return string
      */
-    public function generateWrapper2()
+    public function generateWrapperRight()
     {
-        return $this->wrapper2;
+        return $this->wrapperRight;
     }
 }

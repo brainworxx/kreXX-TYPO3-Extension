@@ -32,20 +32,16 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-// The 7.3'er autoloader tries to include this file twice, probably
-// because of the class mappings above. I need to make sure not to
-// redeclare the Tx_Includekrexx_Controller_HelpController and throw
-// a fatal.
-if (class_exists('Tx_Includekrexx_Controller_CookieController')) {
-    return;
-}
+namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Krexx\Service\Config\Fallback;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Cookie controller for the kreXX typo3 extension
  */
-class Tx_Includekrexx_Controller_CookieController extends Tx_Includekrexx_Controller_CompatibilityController
+class CookieController extends CompatibilityController
 {
 
     /**
@@ -57,7 +53,11 @@ class Tx_Includekrexx_Controller_CookieController extends Tx_Includekrexx_Contro
 
         // Has kreXX something to say? Maybe a writeprotected logfolder?
         foreach ($this->getTranslatedMessages() as $message) {
-            $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+            $this->addFlashMessage(
+                $message,
+                LocalizationUtility::translate('general.error.title', static::EXT_KEY),
+                FlashMessage::ERROR
+            );
         }
 
         if ($this->pool->config->getSetting(Fallback::SETTING_DISABLED)) {
@@ -78,7 +78,6 @@ class Tx_Includekrexx_Controller_CookieController extends Tx_Includekrexx_Contro
             // Normal frontend output mode.
             $this->view->assign('is_file', false);
         }
-        $this->addCssToView('Backend.css');
         \Krexx::editSettings();
         $this->assignFlashInfo();
     }

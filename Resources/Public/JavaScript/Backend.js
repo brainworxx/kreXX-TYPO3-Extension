@@ -65,17 +65,17 @@
         }
 
         var saveButton = document.getElementById('editconfig_save');
-        if (typeof saveButton === 'object' && saveButton != 'undefined' && saveButton != null) {
+        if (typeof saveButton === 'object' && saveButton !== 'undefined' && saveButton != null) {
             saveButton.addEventListener('click', function () {
                 var form = document.getElementById('editconfig');
-                if (typeof form === 'object' && form != 'undefined' && form != null) {
+                if (typeof form === 'object' && form !== 'undefined' && form != null) {
                     form.submit();
                 }
             }, true);
         }
 
         var refreshButton = document.getElementById('editconfig_refresh');
-        if (typeof refreshButton === 'object' && refreshButton != 'undefined' && refreshButton != null) {
+        if (typeof refreshButton === 'object' && refreshButton !== 'undefined' && refreshButton != null) {
             refreshButton.addEventListener('click', function () {
                 location.reload();
             }, true);
@@ -90,11 +90,11 @@
      */
     formSupport.toggle = function (checkbox) {
         var id = checkbox.id.split('.');
-        if (id[1] != 'undefined') {
+        if (id[1] !== 'undefined') {
             var element = document.getElementById(id[1]);
         }
 
-        if (typeof element === 'object' && element != 'undefined' && element != null) {
+        if (typeof element === 'object' && element !== 'undefined' && element != null) {
             if (checkbox.checked) {
                 element.disabled = true;
             } else {

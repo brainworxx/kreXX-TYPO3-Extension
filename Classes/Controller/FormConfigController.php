@@ -32,20 +32,16 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-// The 7.3'er autoloader tries to include this file twice, probably
-// because of the class mappings above. I need to make sure not to
-// redeclare the Tx_Includekrexx_Controller_IndexController and throw
-// a fatal.
-if (class_exists('Tx_Includekrexx_Controller_FormConfigController')) {
-    return;
-}
+namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Krexx\Service\Config\Fallback;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Backend controller for the kreXX typo3 extension
  */
-class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Controller_CompatibilityController
+class FormConfigController extends CompatibilityController
 {
 
     /**
@@ -71,15 +67,19 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
 
         // Has kreXX something to say? Maybe a writeprotected logfolder?
         foreach ($this->getTranslatedMessages() as $message) {
-            $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+            $this->addFlashMessage(
+                $message,
+                LocalizationUtility::translate('general.error.title', static::EXT_KEY),
+                FlashMessage::ERROR
+            );
         }
 
         $iniConfig = $this->pool->config->iniConfig;
 
         $dropdown = array(
-            'full' => $this->LLL('full'),
-            'display' => $this->LLL('display'),
-            'none' => $this->LLL('none')
+            'full' => LocalizationUtility::translate('full', static::EXT_KEY),
+            'display' => LocalizationUtility::translate('display', static::EXT_KEY),
+            'none' => LocalizationUtility::translate('none', static::EXT_KEY)
         );
 
         $config = array();
@@ -103,8 +103,6 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
         }
 
         $this->view->assign('config', $config);
-        $this->addCssToView('Backend.css');
-        $this->addJsToView('Backend.js');
         $this->assignFlashInfo();
     }
 
@@ -114,6 +112,9 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
      * We are saving the values of the FE editing in the same file as
      * the rest of the kreXX settings. Since we are using different forms,
      * we need to check the values already set.
+     *
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
     public function saveAction()
     {
@@ -173,13 +174,17 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
             $this->pool->messages->removeKey('protected.folder.chunk');
             $this->pool->messages->removeKey('protected.folder.log');
             foreach ($this->getTranslatedMessages() as $message) {
-                $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
+                $this->addFlashMessage(
+                    $message,
+                    LocalizationUtility::translate('save.fail.title', static::EXT_KEY),
+                    FlashMessage::ERROR
+                );
             }
         } else {
-            $this->addMessage(
-                $this->LLL('save.success.text', array($filepath)),
-                $this->LLL('save.success.title'),
-                t3lib_FlashMessage::OK
+            $this->addFlashMessage(
+                LocalizationUtility::translate('save.success.text', static::EXT_KEY, array($filepath)),
+                LocalizationUtility::translate('save.success.title', static::EXT_KEY),
+                FlashMessage::OK
             );
         }
 
@@ -227,8 +232,6 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
     /**
      * Processing of the section values.
      *
-     * @param $section
-     *   The name of the section that we are processing.
      * @param array $data
      *   The data from that section.
      * @param array $oldValues

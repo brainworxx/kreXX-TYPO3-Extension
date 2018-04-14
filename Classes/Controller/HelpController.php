@@ -32,18 +32,15 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-// The 7.3'er autoloader tries to include this file twice, probably
-// because of the class mappings above. I need to make sure not to
-// redeclare the Tx_Includekrexx_Controller_HelpController and throw
-// a fatal.
-if (class_exists('Tx_Includekrexx_Controller_HelpController')) {
-    return;
-}
+namespace Brainworxx\Includekrexx\Controller;
+
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Backend help controller for the kreXX typo3 extension
  */
-class Tx_Includekrexx_Controller_HelpController extends Tx_Includekrexx_Controller_CompatibilityController
+class HelpController extends CompatibilityController
 {
 
     /**
@@ -55,9 +52,13 @@ class Tx_Includekrexx_Controller_HelpController extends Tx_Includekrexx_Controll
 
         // Has kreXX something to say? Maybe a writeprotected logfolder?
         foreach ($this->getTranslatedMessages() as $message) {
-            $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+            $this->addFlashMessage(
+                $message,
+                LocalizationUtility::translate('general.error.title', static::EXT_KEY),
+                FlashMessage::ERROR
+            );
         }
-        $this->addCssToView('Backend.css');
+
         $this->assignFlashInfo();
     }
 
@@ -70,14 +71,18 @@ class Tx_Includekrexx_Controller_HelpController extends Tx_Includekrexx_Controll
 
         // Has kreXX something to say? Maybe a writeprotected logfolder?
         foreach ($this->getTranslatedMessages() as $message) {
-            $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+            $this->addFlashMessage(
+                $message,
+                LocalizationUtility::translate('general.error.title', static::EXT_KEY),
+                FlashMessage::ERROR
+            );
         }
 
         $this->view->assign(
             'pathToIni',
             $this->pool->fileService->filterFilePath($this->pool->config->getPathToIniFile())
         );
-        $this->addCssToView('Backend.css');
+
         $this->assignFlashInfo();
     }
 }

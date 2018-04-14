@@ -32,20 +32,16 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-// The 7.3'er autoloader tries to include this file twice, probably
-// because of the class mappings above. I need to make sure not to
-// redeclare the Tx_Includekrexx_Controller_HelpController and throw
-// a fatal.
-if (class_exists('Tx_Includekrexx_Controller_ConfigController')) {
-    return;
-}
+namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Krexx\Service\Config\Fallback;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Configuration controller for the kreXX typo3 extension
  */
-class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Controller_CompatibilityController
+class ConfigController extends CompatibilityController
 {
     /**
      * Here we sore, if we did have problems saving the form.
@@ -63,7 +59,11 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
 
         // Has kreXX something to say? Maybe a writeprotected logfolder?
         foreach ($this->getTranslatedMessages() as $message) {
-            $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
+            $this->addFlashMessage(
+                $message,
+                LocalizationUtility::translate('general.error.title', static::EXT_KEY),
+                FlashMessage::ERROR
+            );
         }
 
         $config = array();
@@ -72,7 +72,7 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
             $group = $fallback[Fallback::SECTION];
             $config[$settingsName] = array();
             $config[$settingsName]['name'] = $settingsName;
-            $config[$settingsName]['helptext'] = $this->LLL($settingsName);
+            $config[$settingsName]['helptext'] = LocalizationUtility::translate($settingsName, static::EXT_KEY);
             $config[$settingsName]['value'] = $this->pool->config->iniConfig->getConfigFromFile($group, $settingsName);
             $config[$settingsName]['group'] = $group;
             $config[$settingsName]['useFactorySettings'] = false;
@@ -92,23 +92,24 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
             $dropdown['skins'][$skin] = $skin;
         }
         $dropdown[Fallback::SETTING_DESTINATION] = array(
-            'browser' => $this->LLL('browser'),
-            'file' => $this->LLL('file'),
+            'browser' => LocalizationUtility::translate('browser', static::EXT_KEY),
+            'file' => LocalizationUtility::translate('file', static::EXT_KEY),
         );
         $dropdown['bool'] = array(
-            'true' => $this->LLL('true'),
-            'false' => $this->LLL('false'),
+            'true' => LocalizationUtility::translate('true', static::EXT_KEY),
+            'false' => LocalizationUtility::translate('false', static::EXT_KEY),
         );
 
         $this->view->assign('config', $config);
         $this->view->assign('dropdown', $dropdown);
-        $this->addCssToView('Backend.css');
-        $this->addJsToView('Backend.js');
         $this->assignFlashInfo();
     }
 
     /**
      * Saves the kreXX configuration.
+     *
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
     public function saveAction()
     {
@@ -162,13 +163,17 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
         // Something went wrong, we need to tell the user.
         if (!$this->allOk) {
             foreach ($this->getTranslatedMessages() as $message) {
-                $this->addMessage($message, $this->LLL('save.fail.title'), t3lib_FlashMessage::ERROR);
+                $this->addFlashMessage(
+                    $message,
+                    LocalizationUtility::translate('save.fail.title', static::EXT_KEY),
+                    FlashMessage::ERROR
+                );
             }
         } else {
-            $this->addMessage(
-                $this->LLL('save.success.text', array($filepath)),
-                $this->LLL('save.success.title'),
-                t3lib_FlashMessage::OK
+            $this->addFlashMessage(
+                LocalizationUtility::translate('save.success.text', static::EXT_KEY, array($filepath)),
+                LocalizationUtility::translate('save.success.title', static::EXT_KEY),
+                FlashMessage::OK
             );
         }
 

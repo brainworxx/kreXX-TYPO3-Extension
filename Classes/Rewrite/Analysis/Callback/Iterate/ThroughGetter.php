@@ -32,14 +32,18 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
+namespace Brainworxx\Includekrexx\Rewrite\Analyse\Callback\Iterate;
+
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter as OrgThroughGetter;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 
 /**
  * Analysing the getter methods, without the actual 'get' word in the method name.
+ *
+ * @package Brainworxx\Includekrexx\Rewrite\Analyse\Callback\Iterate
  */
-class Tx_Includekrexx_Rewrite_AnalysisCallbackIterateTroughGetter extends ThroughGetter
+class ThroughGetter extends OrgThroughGetter
 {
 
     /**
