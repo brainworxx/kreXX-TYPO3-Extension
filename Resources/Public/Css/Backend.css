@@ -110,6 +110,10 @@ td.cbx {
     width: 330px;
 }
 
+table {
+    font-size: 12px;
+}
+
 table.krexx-logs {
     text-align: left;
 }
