@@ -64,7 +64,7 @@ class Security extends Fallback
         }
 
         // We simply call the configured evaluation method.
-        $callback = $this->feConfigFallback[$name][Fallback::EVALUATE];
+        $callback = $this->feConfigFallback[$name][static::EVALUATE];
         return $this->$callback($value, $name, $group);
     }
 
@@ -125,7 +125,7 @@ class Security extends Fallback
      */
     protected function evalDestination($value, $name)
     {
-        $result = ($value === 'browser' || $value === 'file');
+        $result = ($value === static::VALUE_BROWSER || $value === 'file');
         if ($result === false) {
             $this->pool->messages->addMessage('configError' . ucfirst($name));
         }
@@ -212,7 +212,7 @@ class Security extends Fallback
      */
     protected function evalBool($value, $name, $group)
     {
-        $result = ($value === Fallback::VALUETRUE || $value === Fallback::VALUEFALSE);
+        $result = ($value === static::VALUE_TRUE || $value === static::VALUE_FALSE);
         if ($result === false) {
             $this->pool->messages->addMessage('configErrorBool', array($group, $name));
         }

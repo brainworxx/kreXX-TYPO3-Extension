@@ -137,10 +137,10 @@ class Tx_Includekrexx_Controller_FormConfigController extends Tx_Includekrexx_Co
 
         if (isset($arguments['action']) && $arguments['action'] == 'save' && $this->allOk) {
             // We need to correct the allowed settings, since we do not allow anything.
-            unset($this->allowedSettingsNames[Fallback::SETTINGDESTINATION]);
-            unset($this->allowedSettingsNames[Fallback::SETTINGMAXFILES]);
-            unset($this->allowedSettingsNames[Fallback::SETTINGDEBUGMETHODS]);
-            unset($this->allowedSettingsNames[Fallback::SETTINGIPRANGE]);
+            unset($this->allowedSettingsNames[Fallback::SETTING_DESTINATION]);
+            unset($this->allowedSettingsNames[Fallback::SETTING_MAX_FILES]);
+            unset($this->allowedSettingsNames[Fallback::SETTING_DEBUG_METHODS]);
+            unset($this->allowedSettingsNames[Fallback::SETTING_IP_RANGE]);
 
             // Iterating through the form.
             foreach ($arguments as $key => $data) {

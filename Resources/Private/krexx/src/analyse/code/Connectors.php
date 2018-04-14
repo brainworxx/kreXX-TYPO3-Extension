@@ -45,54 +45,54 @@ class Connectors
     const NOTHING = 0;
 
     /**
-     * connector1 = '->'
-     * connector2 = '()'
+     * connectorLeft = '->'
+     * connectorRight = '()'
      * or
-     * connector2 = '(<small>' . $params . '</small>)'
+     * connectorRight = '(<small>' . $params . '</small>)'
      */
     const METHOD = 1;
 
     /**
-     * connector1 = '::'
-     * connector2 = '()'
+     * connectorLeft = '::'
+     * connectorRight = '()'
      * or
-     * connector2 = '(<small>' . $params . '</small>)'
+     * connectorRight = '(<small>' . $params . '</small>)'
      */
     const STATIC_METHOD = 2;
 
     /**
-     * connector1 = '['
-     * connector2 = ']'
+     * connectorLeft = '['
+     * connectorRight = ']'
      */
     const NORMAL_ARRAY = 3;
 
     /**
-     * connector1 = '[\''
-     * connector2 = '\']'
+     * connectorLeft = '[\''
+     * connectorRight = '\']'
      */
     const ASSOCIATIVE_ARRAY = 4;
 
     /**
-     * connector1 = '::'
-     * connector2 = ''
+     * connectorLeft = '::'
+     * connectorRight = ''
      */
     const CONSTANT = 5;
 
     /**
-     * connector1 = '->'
-     * connector2 = ''
+     * connectorLeft = '->'
+     * connectorRight = ''
      */
     const NORMAL_PROPERTY = 6;
 
     /**
-     * connector1 = '::'
-     * connector2 = ''
+     * connectorLeft = '::'
+     * connectorRight = ''
      */
     const STATIC_PROPERTY = 7;
 
     /**
-     * connector1 = '->{\''
-     * connector2 = '\'}'
+     * connectorLeft = '->{\''
+     * connectorRight = '\'}'
      */
     const SPECIAL_CHARS_PROP = 8;
 
@@ -128,11 +128,11 @@ class Connectors
     protected $type = 0;
 
     /**
-     * Special snowflake connector1. will be uses in case it is set.
+     * Special snowflake connectorLeft. will be uses in case it is set.
      *
      * @var string
      */
-    protected $customConnector1 = '';
+    protected $customConnectorLeft = '';
 
     /**
      * Initializing the connector array.
@@ -187,22 +187,22 @@ class Connectors
     }
 
     /**
-     * Getting the connector1, according to the type.
+     * Getting the connectorLeft, according to the type.
      *
      * @return string
      *   The PHP connector, what else?
      */
-    public function getConnector1()
+    public function getConnectorLeft()
     {
-        if (empty($this->customConnector1) === true) {
+        if (empty($this->customConnectorLeft) === true) {
             return $this->connectorArray[$this->type][0];
         }
 
-        return $this->customConnector1;
+        return $this->customConnectorLeft;
     }
 
     /**
-     * Getting the connector1, according to the type.
+     * Getting the connectorLeft, according to the type.
      *
      * @param integer $cap
      *   Maximum length of all parameters. 0 means no cap.
@@ -210,7 +210,7 @@ class Connectors
      * @return string
      *   The PHP connector, what else?
      */
-    public function getConnector2($cap)
+    public function getConnectorRight($cap)
     {
         // Methods always have their parameters.
         if ($this->type === static::METHOD || $this->type === static::STATIC_METHOD) {
@@ -239,14 +239,14 @@ class Connectors
     }
 
     /**
-     * Sets the special snowflake connector1.
+     * Sets the special snowflake connectorLeft.
      *
-     * @param string $customConnector1
+     * @param string $customConnectorLeft
      *   The string we want to set.
      */
-    public function setCustomConnector1($customConnector1)
+    public function setCustomConnectorLeft($customConnectorLeft)
     {
-        $this->customConnector1 = $customConnector1;
+        $this->customConnectorLeft = $customConnectorLeft;
     }
 
     /**

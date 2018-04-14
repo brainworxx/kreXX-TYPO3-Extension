@@ -344,7 +344,7 @@ class Chunks
         }
 
         array_multisort(array_map('filemtime', $logList), SORT_DESC, $logList);
-        $maxFileCount = (int)$this->pool->config->getSetting(Fallback::SETTINGMAXFILES);
+        $maxFileCount = (int)$this->pool->config->getSetting(Fallback::SETTING_MAX_FILES);
         $count = 1;
         // Cleanup logfiles.
         foreach ($logList as $file) {

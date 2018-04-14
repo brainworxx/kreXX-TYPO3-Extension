@@ -94,7 +94,6 @@ $fontLight: lighter 10px tahoma, verdana;
   border-top-left-radius: $radius;
 }
 
-
 .kwrapper, .kfatalwrapper-outer {
 
   // We need to secure some initial formating for our elements, to prevent the
@@ -108,6 +107,7 @@ $fontLight: lighter 10px tahoma, verdana;
     text-align: left;
     line-height: normal;
     float: none;
+    width: unset;
   }
   small {
     line-height: normal;
@@ -157,7 +157,7 @@ $fontLight: lighter 10px tahoma, verdana;
   }
 
   // The wrapper itself
-  position: absolute;
+  position: absolute !important;
   z-index: 10000;
   text-align: left;
   color: $blackLight;

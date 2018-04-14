@@ -59,9 +59,9 @@ class Methods extends AbstractObjectAnalysis
 
         // We need to check, if we have a meta recursion here.
 
-        $doProtected = $this->pool->config->getSetting(Fallback::SETTINGANALYSEPROTECTEDMETHODS) ||
+        $doProtected = $this->pool->config->getSetting(Fallback::SETTING_ANALYSE_PROTECTED_METHODS) ||
             $this->pool->scope->isInScope();
-        $doPrivate = $this->pool->config->getSetting(Fallback::SETTINGANALYSEPRIVATEMETHODS) ||
+        $doPrivate = $this->pool->config->getSetting(Fallback::SETTING_ANALYSE_PRIVATE_METHODS) ||
             $this->pool->scope->isInScope();
         $domId = $this->generateDomIdFromClassname($ref->getName(), $doProtected, $doPrivate);
 
@@ -97,9 +97,6 @@ class Methods extends AbstractObjectAnalysis
      */
     protected function analyseMethods(\ReflectionClass $ref, $domId, $doProtected, $doPrivate)
     {
-        // Add it to the meta hive.
-        $this->pool->recursionHandler->addToMetaHive($domId);
-
         // Dumping all methods but only if we have any.
         $protected = array();
         $private = array();
@@ -118,6 +115,9 @@ class Methods extends AbstractObjectAnalysis
         if (empty($methods) === true) {
             return '';
         }
+
+        // Now that we have something to analyse, register the DOM ID.
+        $this->pool->recursionHandler->addToMetaHive($domId);
 
         // We need to sort these alphabetically.
         usort($methods, array($this, 'reflectionSorting'));

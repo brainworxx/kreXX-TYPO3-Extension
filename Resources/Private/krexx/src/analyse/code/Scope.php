@@ -109,7 +109,7 @@ class Scope
     {
         return  $this->pool->emergencyHandler->getNestingLevel() <= 1 &&
             $this->scope === '$this' &&
-            $this->pool->config->getSetting(Fallback::SETTINGUSESCOPEANALYSIS);
+            $this->pool->config->getSetting(Fallback::SETTING_USE_SCOPE_ANALYSIS);
     }
 
     /**

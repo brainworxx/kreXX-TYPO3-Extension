@@ -74,7 +74,7 @@ abstract class AbstractController
      *
      * @var \Brainworxx\Krexx\Errorhandler\Fatal
      */
-    protected $krexxFatal;
+    protected static $krexxFatal;
 
     /**
      * Stores whether out fatal error handler should be active.
@@ -127,12 +127,10 @@ abstract class AbstractController
 
         // Register our output service.
         // Depending on the setting, we use another class here.
-        $outputSetting = $pool->config->getSetting(Fallback::SETTINGDESTINATION);
-        if ($outputSetting === 'browser') {
+        $outputSetting = $pool->config->getSetting(Fallback::SETTING_DESTINATION);
+        if ($outputSetting === Fallback::VALUE_BROWSER) {
             $this->outputService = $pool->createClass('Brainworxx\\Krexx\\View\\Output\\Shutdown');
-        }
-
-        if ($outputSetting === 'file') {
+        } elseif ($outputSetting === Fallback::VALUE_FILE) {
             $this->outputService = $pool->createClass('Brainworxx\\Krexx\\View\\Output\\File');
         }
     }
@@ -207,7 +205,7 @@ abstract class AbstractController
         $css = $this->pool->fileService->getFileContents(
             KREXX_DIR .
             'resources/skins/' .
-            $this->pool->config->getSetting(Fallback::SETTINGSKIN) .
+            $this->pool->config->getSetting(Fallback::SETTING_SKIN) .
             '/skin.css'
         );
         // Remove whitespace.
@@ -223,7 +221,7 @@ abstract class AbstractController
         $jsCode = $this->pool->fileService->getFileContents($jsFile);
 
         // Krexx.js is comes directly form the template.
-        $path = KREXX_DIR . 'resources/skins/' . $this->pool->config->getSetting(Fallback::SETTINGSKIN);
+        $path = KREXX_DIR . 'resources/skins/' . $this->pool->config->getSetting(Fallback::SETTING_SKIN);
         if ($this->pool->fileService->fileIsReadable($path . '/krexx.min.js') === true) {
             $jsFile = $path . '/krexx.min.js';
         } else {
@@ -249,8 +247,8 @@ abstract class AbstractController
     public function noFatalForKrexx()
     {
         if ($this->fatalShouldActive === true) {
-            $this->krexxFatal->setIsActive(false);
-            unregister_tick_function(array($this->krexxFatal, 'tickCallback'));
+            $this::$krexxFatal->setIsActive(false);
+            unregister_tick_function(array($this::$krexxFatal, 'tickCallback'));
         }
 
         return $this;
@@ -269,8 +267,8 @@ abstract class AbstractController
     public function reFatalAfterKrexx()
     {
         if ($this->fatalShouldActive === true) {
-            $this->krexxFatal->setIsActive(true);
-            register_tick_function(array($this->krexxFatal, 'tickCallback'));
+            $this::$krexxFatal->setIsActive(true);
+            register_tick_function(array($this::$krexxFatal, 'tickCallback'));
         }
 
         return $this;

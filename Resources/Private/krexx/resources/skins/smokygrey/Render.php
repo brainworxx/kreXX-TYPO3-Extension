@@ -44,6 +44,12 @@ use Brainworxx\Krexx\Analyse\Model;
 class Render extends \Brainworxx\Krexx\View\Render
 {
 
+    const MARKER_LANGUAGE = '{language}';
+    const MARKER_ADDITIONAL_JSON = '{addjson}';
+    const MARKER_K_DEBUG_CLASSES = '{kdebug-classes}';
+    const MARKER_K_CONFIG_CLASSES = '{kconfiguration-classes}';
+    const MARKER_K_LINK_CLASSES = '{klinks-classes}';
+
     /**
      * {@inheritDoc}
      */
@@ -52,8 +58,8 @@ class Render extends \Brainworxx\Krexx\View\Render
         // Replace the source button and set the json.
         return str_replace(
             array(
-                '{language}',
-                '{addjson}'
+                static::MARKER_LANGUAGE,
+                static::MARKER_ADDITIONAL_JSON,
             ),
             array(
                 $model->getConnectorLanguage(),
@@ -92,7 +98,7 @@ class Render extends \Brainworxx\Krexx\View\Render
         } else {
             // Add the button.
             $sourcebutton = str_replace(
-                '{language}',
+                static::MARKER_LANGUAGE,
                 $model->getConnectorLanguage(),
                 $this->getTemplateFileContent('sourcebutton')
             );
@@ -100,32 +106,32 @@ class Render extends \Brainworxx\Krexx\View\Render
 
         return str_replace(
             array(
-                '{name}',
-                '{type}',
-                '{ktype}',
-                '{normal}',
-                '{connector2}',
-                '{gensource}',
-                '{isExpanded}',
-                '{addjson}',
-                '{nest}',
-                '{sourcebutton}',
-                '{codewrapper1}',
-                '{codewrapper2}',
+                static::MARKER_NAME,
+                static::MARKER_TYPE,
+                static::MARKER_K_TYPE,
+                static::MARKER_NORMAL,
+                static::MARKER_CONNECTOR_RIGHT,
+                static::MARKER_GEN_SOURCE,
+                static::MARKER_IS_EXPANDED,
+                static::MARKER_ADDITIONAL_JSON,
+                static::MARKER_NEST,
+                static::MARKER_SOURCE_BUTTON,
+                static::MARKER_CODE_WRAPPER_LEFT,
+                static::MARKER_CODE_WRAPPER_RIGHT,
             ),
             array(
                 $model->getName(),
                 $model->getType(),
                 $cssType,
                 $model->getNormal(),
-                $this->renderConnector($model->getConnector2(128)),
+                $this->renderConnector($model->getConnectorRight(128)),
                 $this->generateDataAttribute('source', $gencode),
                 '',
                 $this->generateDataAttribute('addjson', $this->encodeJson($model->getJson())),
                 $this->pool->chunks->chunkMe($this->renderNest($model, false)),
                 $sourcebutton,
-                $this->generateDataAttribute('codewrapper1', $this->pool->codegenHandler->generateWrapper1()),
-                $this->generateDataAttribute('codewrapper2', $this->pool->codegenHandler->generateWrapper2()),
+                $this->generateDataAttribute('codewrapperLeft', $this->pool->codegenHandler->generateWrapperLeft()),
+                $this->generateDataAttribute('codewrapperRight', $this->pool->codegenHandler->generateWrapperRight()),
             ),
             $this->getTemplateFileContent('expandableChildNormal')
         );
@@ -139,7 +145,7 @@ class Render extends \Brainworxx\Krexx\View\Render
         $template = parent::renderRecursion($model);
         // We add our json to the output.
         return str_replace(
-            '{addjson}',
+            static::MARKER_ADDITIONAL_JSON,
             $this->generateDataAttribute('addjson', $this->encodeJson($model->getJson())),
             $template
         );
@@ -152,7 +158,7 @@ class Render extends \Brainworxx\Krexx\View\Render
     {
         // Prepare the json. Not much do display for form elements.
         return str_replace(
-            '{addjson}',
+            static::MARKER_ADDITIONAL_JSON,
             $this->generateDataAttribute('addjson', $this->encodeJson($model->getJson())),
             parent::renderSingleEditableChild($model)
         );
@@ -165,7 +171,7 @@ class Render extends \Brainworxx\Krexx\View\Render
     {
         // Prepare the json. Not much do display for form elements.
         return str_replace(
-            array('{addjson}', '{class}'),
+            array(static::MARKER_ADDITIONAL_JSON, static::MARKER_CLASS),
             array($this->generateDataAttribute('addjson', $this->encodeJson($model->getJson())), $model->getName()),
             parent::renderButton($model)
         );
@@ -191,9 +197,9 @@ class Render extends \Brainworxx\Krexx\View\Render
 
         return str_replace(
             array(
-                '{kdebug-classes}',
-                '{kconfiguration-classes}',
-                '{klinks-classes}',
+                static::MARKER_K_DEBUG_CLASSES,
+                static::MARKER_K_CONFIG_CLASSES,
+                static::MARKER_K_LINK_CLASSES,
             ),
             array(
                 $debugClass,
@@ -214,13 +220,13 @@ class Render extends \Brainworxx\Krexx\View\Render
         // to the config as the current payload.
         if ($configOnly === true) {
             $template = str_replace(
-                '{kconfiguration-classes}',
+                static::MARKER_K_CONFIG_CLASSES,
                 '',
                 parent::renderFooter($caller, $configOutput)
             );
         } else {
             $template = str_replace(
-                '{kconfiguration-classes}',
+                static::MARKER_K_CONFIG_CLASSES,
                 'khidden',
                 parent::renderFooter($caller, $configOutput)
             );
@@ -236,7 +242,7 @@ class Render extends \Brainworxx\Krexx\View\Render
     {
         // Add the search.
         return str_replace(
-            array('{search}', '{KrexxId}'),
+            array(static::MARKER_SEARCH, static::MARKER_KREXX_ID),
             array($this->renderSearch(), $this->pool->recursionHandler->getMarker()),
             parent::renderFatalMain($type, $errstr, $errfile, $errline)
         );

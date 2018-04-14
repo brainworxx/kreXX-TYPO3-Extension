@@ -66,14 +66,14 @@ class ThroughMethodAnalysis extends AbstractCallback
 
             if ($key === 'comments' || $key === 'declared in' || $key === 'source') {
                 $model->setNormal('. . .');
-                $model->hasExtras();
+                $model->setHasExtra(true);
             } else {
                 $model->setNormal($string);
             }
 
             $output .= $this->pool->render->renderSingleChild($model);
         }
-        
+
         return $output;
     }
 }

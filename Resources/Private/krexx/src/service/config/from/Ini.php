@@ -93,34 +93,34 @@ class Ini extends Fallback
     /**
      * Get the configuration of the frontend config form.
      *
-     * @param string $parameterName
-     *   The parameter you want to render.
+     * @param string $name
+     *   The parameter name you want to render.
      *
      * @return array
      *   The configuration (is it editable, a dropdown, a textfield, ...)
      */
-    public function getFeConfig($parameterName)
+    public function getFeConfig($name)
     {
         // Load it from the file.
-        $filevalue = $this->getFeConfigFromFile($parameterName);
+        $filevalue = $this->getFeConfigFromFile($name);
 
         // Do we have a value?
         if (empty($filevalue) === true) {
             // Fallback to factory settings.
-            if (isset($this->feConfigFallback[$parameterName]) === true) {
+            if (isset($this->feConfigFallback[$name]) === true) {
                 return array(
-                    ($this->feConfigFallback[$parameterName][$this::RENDER]['editable'] === Fallback::VALUETRUE),
-                    $this->feConfigFallback[$parameterName][$this::RENDER]['type']
+                    ($this->feConfigFallback[$name][static::RENDER][static::RENDER_EDITABLE] === static::VALUE_TRUE),
+                    $this->feConfigFallback[$name][static::RENDER][static::RENDER_TYPE]
                 );
             }
             // Unknown parameter and nothing in the fallback!
             // This should never happan, btw.
-            return array(false, 'None');
+            return array(false, static::RENDER_TYPE_NONE);
         }
 
         return array(
-            ($filevalue['editable'] === Fallback::VALUETRUE),
-            $filevalue['type']
+            ($filevalue[static::RENDER_EDITABLE] === static::VALUE_TRUE),
+            $filevalue[static::RENDER_TYPE]
         );
     }
 
@@ -144,34 +144,34 @@ class Ini extends Fallback
         }
 
         // Get the rendering type.
-        $type = $this->feConfigFallback[$parameterName][$this::RENDER]['type'];
+        $type = $this->feConfigFallback[$parameterName][static::RENDER][static::RENDER_TYPE];
 
         // Stitch together the setting.
         switch ($value) {
-            case 'none':
-                $type = 'None';
-                $editable = Fallback::VALUEFALSE;
+            case static::RENDER_TYPE_NONE:
+                $type = static::RENDER_TYPE_NONE;
+                $editable = static::VALUE_FALSE;
                 break;
 
             case 'display':
-                $editable = Fallback::VALUEFALSE;
+                $editable = static::VALUE_FALSE;
                 break;
 
             case 'full':
-                $editable = Fallback::VALUETRUE;
+                $editable = static::VALUE_TRUE;
                 break;
 
             default:
                 // Unknown setting.
                 // Fallback to no display, just in case.
-                $type = 'None';
-                $editable = Fallback::VALUEFALSE;
+                $type = static::RENDER_TYPE_NONE;
+                $editable = static::VALUE_FALSE;
                 break;
         }
 
         return array(
-            'type' => $type,
-            'editable' => $editable,
+            static::RENDER_TYPE => $type,
+            static::RENDER_EDITABLE => $editable,
         );
     }
 

@@ -59,7 +59,7 @@ class ProcessArray extends AbstractProcess
         $multiline = false;
         $count = count($model->getData());
 
-        if ($count > (int) $this->pool->config->getSetting(Fallback::SETTINGARRAYCOUNTLIMIT)) {
+        if ($count > (int) $this->pool->config->getSetting(Fallback::SETTING_ARRAY_COUNT_LIMIT)) {
             // Budget array analysis.
             $model->injectCallback(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray')

@@ -56,8 +56,6 @@ class Krexx
      */
     public static $pool;
 
-
-
     /**
      * Includes all needed files and sets some internal values.
      *
@@ -70,7 +68,7 @@ class Krexx
         // unwanted interaction with the rest of the system when registering
         // another autoloader. This leaves us with loading every single file
         // via include_once.
-        define('KREXX_DIR', __DIR__ . '/');
+        define('KREXX_DIR', __DIR__ . DIRECTORY_SEPARATOR);
         include_once 'src/Analyse/Callback/AbstractCallback.php';
 
         include_once 'src/Analyse/Callback/Analyse/Objects/AbstractObjectAnalysis.php';
@@ -206,7 +204,7 @@ class Krexx
     {
         Pool::createPool();
 
-        // Do we gave a handle?
+        // Do we have a handle?
         if ($name === static::$pool->config->getDevHandler()) {
             // We do a standard-open.
             if (isset($arguments[0])) {
@@ -232,7 +230,7 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED) || AbstractController::$analysisInProgress) {
+        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) || AbstractController::$analysisInProgress) {
             return;
         }
 
@@ -256,7 +254,7 @@ class Krexx
         Pool::createPool();
 
         // Disabled ?
-        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED) || AbstractController::$analysisInProgress) {
+        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) || AbstractController::$analysisInProgress) {
             return;
         }
 
@@ -283,7 +281,7 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED) || AbstractController::$analysisInProgress) {
+        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) || AbstractController::$analysisInProgress) {
             return;
         }
 
@@ -311,7 +309,7 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED) || AbstractController::$analysisInProgress) {
+        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) || AbstractController::$analysisInProgress) {
             return;
         }
 
@@ -337,8 +335,6 @@ class Krexx
         static::$pool->config->setDisabled(true);
         static::$pool->createClass('Brainworxx\\Krexx\\Controller\\DumpController')
             ->noFatalForKrexx();
-        // We will not re-enable it afterwards, because kreXX
-        // is disabled and the handler would not show up anyway.
     }
 
     /**
@@ -354,7 +350,7 @@ class Krexx
 
         // Disabled?
         // We are ignoring local settings here.
-        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED)) {
+        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED)) {
             return;
         }
 
@@ -376,7 +372,7 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED)) {
+        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED)) {
             return;
         }
 
@@ -407,7 +403,7 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTINGDISABLED)) {
+        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED)) {
             return;
         }
 

@@ -114,11 +114,11 @@ class Model
      */
     public function setValue($value)
     {
-        if ($value === Fallback::VALUETRUE) {
+        if ($value === Fallback::VALUE_TRUE) {
             $value = true;
         }
 
-        if ($value === Fallback::VALUEFALSE) {
+        if ($value === Fallback::VALUE_FALSE) {
             $value = false;
         }
 

@@ -91,7 +91,7 @@ class Tx_Includekrexx_Controller_ConfigController extends Tx_Includekrexx_Contro
         foreach ($this->pool->render->getSkinList() as $skin) {
             $dropdown['skins'][$skin] = $skin;
         }
-        $dropdown[Fallback::SETTINGDESTINATION] = array(
+        $dropdown[Fallback::SETTING_DESTINATION] = array(
             'browser' => $this->LLL('browser'),
             'file' => $this->LLL('file'),
         );

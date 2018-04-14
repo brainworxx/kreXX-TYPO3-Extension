@@ -47,6 +47,50 @@ use Brainworxx\Krexx\Service\Config\Fallback;
  */
 class Render extends AbstractRender
 {
+
+    const MARKER_NAME = '{name}';
+    const MARKER_NORMAL = '{normal}';
+    const MARKER_CONNECTOR_LEFT = '{connectorLeft}';
+    const MARKER_CONNECTOR_RIGHT = '{connectorRight}';
+    const MARKER_GEN_SOURCE = '{gensource}';
+    const MARKER_VERSION = '{version}';
+    const MARKER_DOCTYPE = '{doctype}';
+    const MARKER_KREXX_COUNT = '{KrexxCount}';
+    const MARKER_HEADLINE = '{headline}';
+    const MARKER_CSS_JS = '{cssJs}';
+    const MARKER_SEARCH = '{search}';
+    const MARKER_MESSAGES = '{messages}';
+    const MARKER_ENCODING = '{encoding}';
+    const MARKER_CONFIG_INFO = '{configInfo}';
+    const MARKER_CALLER = '{caller}';
+    const MARKER_CSS = '{css}';
+    const MARKER_JS = '{js}';
+    const MARKER_DATA = '{data}';
+    const MARKER_SOURCE_BUTTON = '{sourcebutton}';
+    const MARKER_EXPAND = '{expand}';
+    const MARKER_CALLABLE = '{callable}';
+    const MARKER_EXTRA = '{extra}';
+    const MARKER_TYPE = '{type}';
+    const MARKER_TYPE_CLASSES = '{type-classes}';
+    const MARKER_CODE_WRAPPER_LEFT = '{codewrapperLeft}';
+    const MARKER_CODE_WRAPPER_RIGHT = '{codewrapperRight}';
+    const MARKER_K_TYPE = '{ktype}';
+    const MARKER_IS_EXPANDED = '{isExpanded}';
+    const MARKER_NEST = '{nest}';
+    const MARKER_ID = '{id}';
+    const MARKER_VALUE = '{value}';
+    const MARKER_TEXT = '{text}';
+    const MARKER_SELECTED = '{selected}';
+    const MARKER_SOURCE = '{source}';
+    const MARKER_OPTIONS = '{options}';
+    const MARKER_CLASS = '{class}';
+    const MARKER_ERROR_STRING = '{errstr}';
+    const MARKER_FILE = '{file}';
+    const MARKER_LINE = '{line}';
+    const MARKER_CLASS_NAME = '{className}';
+    const MARKER_LINE_NO = '{lineNo}';
+    const MARKER_SOURCE_CODE = '{sourceCode}';
+
     /**
      * {@inheritdoc}
      */
@@ -54,21 +98,21 @@ class Render extends AbstractRender
     {
         return str_replace(
             array(
-                '{name}',
-                '{domId}',
-                '{normal}',
-                '{connector1}',
-                '{help}',
-                '{connector2}',
-                '{gensource}',
+                static::MARKER_NAME,
+                static::MARKER_DOM_ID,
+                static::MARKER_NORMAL,
+                static::MARKER_CONNECTOR_LEFT,
+                static::MARKER_HELP,
+                static::MARKER_CONNECTOR_RIGHT,
+                static::MARKER_GEN_SOURCE,
             ),
             array(
                 $model->getName(),
                 $model->getDomid(),
                 $model->getNormal(),
-                $this->renderConnector($model->getConnector1()),
+                $this->renderConnector($model->getConnectorLeft()),
                 $this->renderHelp($model),
-                $this->renderConnector($model->getConnector2()),
+                $this->renderConnector($model->getConnectorRight()),
                 $this->generateDataAttribute(
                     'source',
                     $this->pool->codegenHandler->generateSource($model)
@@ -85,15 +129,15 @@ class Render extends AbstractRender
     {
         return str_replace(
             array(
-                '{version}',
-                '{doctype}',
-                '{KrexxCount}',
-                '{headline}',
-                '{cssJs}',
-                '{KrexxId}',
-                '{search}',
-                '{messages}',
-                '{encoding}'
+                static::MARKER_VERSION,
+                static::MARKER_DOCTYPE,
+                static::MARKER_KREXX_COUNT,
+                static::MARKER_HEADLINE,
+                static::MARKER_CSS_JS,
+                static::MARKER_KREXX_ID,
+                static::MARKER_SEARCH,
+                static::MARKER_MESSAGES,
+                static::MARKER_ENCODING,
             ),
             array(
                 $this->pool->config->version,
@@ -124,8 +168,8 @@ class Render extends AbstractRender
 
         return str_replace(
             array(
-                '{configInfo}',
-                '{caller}',
+                static::MARKER_CONFIG_INFO,
+                static::MARKER_CALLER,
             ),
             array(
                 $configOutput,
@@ -141,7 +185,7 @@ class Render extends AbstractRender
     public function renderCssJs(&$css, &$javascript)
     {
         return str_replace(
-            array('{css}', '{js}'),
+            array(static::MARKER_CSS, static::MARKER_JS),
             array($css, $javascript),
             $this->getTemplateFileContent('cssJs')
         );
@@ -158,12 +202,12 @@ class Render extends AbstractRender
         $partCallable = '';
         $partExtra = '';
 
-        if ($model->getHasExtras() === true) {
+        if ($model->getHasExtra() === true) {
             // We have a lot of text, so we render this one expandable (yellow box).
             $partExpand = 'kexpand';
             // Add the yellow box for large output text.
             $partExtra = str_replace(
-                '{data}',
+                static::MARKER_DATA,
                 $model->getData(),
                 $this->getTemplateFileContent('singleChildExtra')
             );
@@ -172,7 +216,7 @@ class Render extends AbstractRender
         if ($model->getIsCallback() === true) {
             // Add callable partial.
             $partCallable = str_replace(
-                '{normal}',
+                static::MARKER_NORMAL,
                 $model->getNormal(),
                 $this->getTemplateFileContent('singleChildCallable')
             );
@@ -199,21 +243,21 @@ class Render extends AbstractRender
         // Stitching it together.
         return str_replace(
             array(
-                '{gensource}',
-                '{sourcebutton}',
-                '{expand}',
-                '{callable}',
-                '{extra}',
-                '{name}',
-                '{type}',
-                '{type-classes}',
-                '{normal}',
-                '{help}',
-                '{connector1}',
-                '{connector2}',
-                '{codewrapper1}',
-                '{codewrapper2}',
-                ),
+                static::MARKER_GEN_SOURCE,
+                static::MARKER_SOURCE_BUTTON,
+                static::MARKER_EXPAND,
+                static::MARKER_CALLABLE,
+                static::MARKER_EXTRA,
+                static::MARKER_NAME,
+                static::MARKER_TYPE,
+                static::MARKER_TYPE_CLASSES,
+                static::MARKER_NORMAL,
+                static::MARKER_HELP,
+                static::MARKER_CONNECTOR_LEFT,
+                static::MARKER_CONNECTOR_RIGHT,
+                static::MARKER_CODE_WRAPPER_LEFT,
+                static::MARKER_CODE_WRAPPER_RIGHT,
+            ),
             array(
                 $this->generateDataAttribute('source', $gensource),
                 $sourcebutton,
@@ -225,10 +269,10 @@ class Render extends AbstractRender
                 $typeClasses,
                 $model->getNormal(),
                 $this->renderHelp($model),
-                $this->renderConnector($model->getConnector1()),
-                $this->renderConnector($model->getConnector2()),
-                $this->generateDataAttribute('codewrapper1', $this->pool->codegenHandler->generateWrapper1()),
-                $this->generateDataAttribute('codewrapper2', $this->pool->codegenHandler->generateWrapper2()),
+                $this->renderConnector($model->getConnectorLeft()),
+                $this->renderConnector($model->getConnectorRight()),
+                $this->generateDataAttribute('codewrapperLeft', $this->pool->codegenHandler->generateWrapperLeft()),
+                $this->generateDataAttribute('codewrapperRight', $this->pool->codegenHandler->generateWrapperRight()),
             ),
             $this->getTemplateFileContent('singleChild')
         );
@@ -270,19 +314,19 @@ class Render extends AbstractRender
 
         return str_replace(
             array(
-                '{name}',
-                '{type}',
-                '{ktype}',
-                '{normal}',
-                '{help}',
-                '{connector1}',
-                '{connector2}',
-                '{gensource}',
-                '{sourcebutton}',
-                '{isExpanded}',
-                '{nest}',
-                '{codewrapper1}',
-                '{codewrapper2}',
+                static::MARKER_NAME,
+                static::MARKER_TYPE,
+                static::MARKER_K_TYPE,
+                static::MARKER_NORMAL,
+                static::MARKER_HELP,
+                static::MARKER_CONNECTOR_LEFT,
+                static::MARKER_CONNECTOR_RIGHT,
+                static::MARKER_GEN_SOURCE,
+                static::MARKER_SOURCE_BUTTON,
+                static::MARKER_IS_EXPANDED,
+                static::MARKER_NEST,
+                static::MARKER_CODE_WRAPPER_LEFT,
+                static::MARKER_CODE_WRAPPER_RIGHT,
             ),
             array(
                 $model->getName(),
@@ -290,14 +334,14 @@ class Render extends AbstractRender
                 $cssType,
                 $model->getNormal(),
                 $this->renderHelp($model),
-                $this->renderConnector($model->getConnector1()),
-                $this->renderConnector($model->getConnector2(128)),
+                $this->renderConnector($model->getConnectorLeft()),
+                $this->renderConnector($model->getConnectorRight(128)),
                 $this->generateDataAttribute('source', $gencode),
                 $sourceButton,
                 $expandedClass,
                 $this->pool->chunks->chunkMe($this->renderNest($model, $isExpanded)),
-                $this->generateDataAttribute('codewrapper1', $this->pool->codegenHandler->generateWrapper1()),
-                $this->generateDataAttribute('codewrapper2', $this->pool->codegenHandler->generateWrapper2()),
+                $this->generateDataAttribute('codewrapperLeft', $this->pool->codegenHandler->generateWrapperLeft()),
+                $this->generateDataAttribute('codewrapperRight', $this->pool->codegenHandler->generateWrapperRight()),
             ),
             $this->getTemplateFileContent('expandableChildNormal')
         );
@@ -310,8 +354,8 @@ class Render extends AbstractRender
     {
         $element = str_replace(
             array(
-                '{id}',
-                '{value}'
+                static::MARKER_ID,
+                static::MARKER_VALUE,
             ),
             array(
                 $model->getDomid(),
@@ -322,9 +366,9 @@ class Render extends AbstractRender
         $options = '';
 
         // For dropdown elements, we need to render the options.
-        if ($model->getType() === 'Select') {
+        if ($model->getType() === Fallback::RENDER_TYPE_SELECT) {
             // Here we store what the list of possible values.
-            if ($model->getDomid() === Fallback::SETTINGSKIN) {
+            if ($model->getDomid() === Fallback::SETTING_SKIN) {
                 // Get a list of all skin folders.
                 $valueList = $this->getSkinList();
             } else {
@@ -342,7 +386,7 @@ class Render extends AbstractRender
                 }
 
                 $options .= str_replace(
-                    array('{text}', '{value}', '{selected}'),
+                    array(static::MARKER_TEXT, static::MARKER_VALUE, static::MARKER_SELECTED),
                     array($value, $value, $selected),
                     $this->getTemplateFileContent($optionTemplateName)
                 );
@@ -351,17 +395,17 @@ class Render extends AbstractRender
 
         return str_replace(
             array(
-                '{name}',
-                '{source}',
-                '{normal}',
-                '{type}',
-                '{help}',
+                static::MARKER_NAME,
+                static::MARKER_SOURCE,
+                static::MARKER_NORMAL,
+                static::MARKER_TYPE,
+                static::MARKER_HELP,
             ),
             array(
                 $model->getData(),
                 $model->getNormal(),
-                str_replace('{options}', $options, $element),
-                'editable',
+                str_replace(static::MARKER_OPTIONS, $options, $element),
+                Fallback::RENDER_EDITABLE,
                 $this->renderHelp($model),
             ),
             $this->getTemplateFileContent('singleEditableChild')
@@ -375,9 +419,9 @@ class Render extends AbstractRender
     {
         return str_replace(
             array(
-                '{help}',
-                '{text}',
-                '{class}',
+                static::MARKER_HELP,
+                static::MARKER_TEXT,
+                static::MARKER_CLASS,
             ),
             array(
                 $this->renderHelp($model),
@@ -399,12 +443,12 @@ class Render extends AbstractRender
 
         return str_replace(
             array(
-                '{type}',
-                '{errstr}',
-                '{file}',
-                '{source}',
-                '{KrexxCount}',
-                '{line}'
+                static::MARKER_TYPE,
+                static::MARKER_ERROR_STRING,
+                static::MARKER_FILE,
+                static::MARKER_SOURCE,
+                static::MARKER_KREXX_COUNT,
+                static::MARKER_LINE,
             ),
             array(
                 $type,
@@ -425,11 +469,11 @@ class Render extends AbstractRender
     {
         return str_replace(
             array(
-                '{cssJs}',
-                '{version}',
-                '{doctype}',
-                '{search}',
-                '{KrexxId}',
+                static::MARKER_CSS_JS,
+                static::MARKER_VERSION,
+                static::MARKER_DOCTYPE,
+                static::MARKER_SEARCH,
+                static::MARKER_KREXX_ID,
             ),
             array(
                 $cssJs,
@@ -463,9 +507,9 @@ class Render extends AbstractRender
     {
         return str_replace(
             array(
-                '{className}',
-                '{lineNo}',
-                '{sourceCode}',
+                static::MARKER_CLASS_NAME,
+                static::MARKER_LINE_NO,
+                static::MARKER_SOURCE_CODE,
             ),
             array(
                 $className,

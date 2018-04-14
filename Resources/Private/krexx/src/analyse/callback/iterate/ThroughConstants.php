@@ -66,7 +66,7 @@ class ThroughConstants extends AbstractCallback
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                     ->setData($v)
                     ->setName($k)
-                    ->setCustomConnector1($this->parameters['classname'] . '::')
+                    ->setCustomConnectorLeft($this->parameters['classname'] . '::')
             );
         }
 

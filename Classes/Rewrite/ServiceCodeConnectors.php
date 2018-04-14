@@ -81,6 +81,6 @@ class Tx_Includekrexx_Rewrite_ServiceCodeConnectors extends Connectors
             return '';
         }
 
-        return parent::getConnector2($cap);
+        return parent::getConnectorRight($cap);
     }
 }

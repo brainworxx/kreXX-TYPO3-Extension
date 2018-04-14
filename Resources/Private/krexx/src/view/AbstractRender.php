@@ -45,6 +45,17 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 abstract class AbstractRender implements RenderInterface
 {
+    const MARKER_CALLER_FILE = '{callerFile}';
+    const MARKER_CALLER_LINE = '{callerLine}';
+    const MARKER_HELP = '{help}';
+    const MARKER_HELP_TITLE = '{helptitle}';
+    const MARKER_HELP_TEXT = '{helptext}';
+    const MARKER_CONNECTOR = '{connector}';
+    const MARKER_KREXX_ID = '{KrexxId}';
+    const MARKER_STYLE = '{style}';
+    const MARKER_MAIN_FUNCTION = '{mainfunction}';
+    const MARKER_DOM_ID = '{domId}';
+
     /**
      * Here we store all relevant data.
      *
@@ -65,7 +76,8 @@ abstract class AbstractRender implements RenderInterface
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-        $this->skinPath = KREXX_DIR . 'resources/skins/' . $this->pool->config->getSetting(Fallback::SETTINGSKIN) . '/';
+        $this->skinPath = KREXX_DIR . 'resources/skins/' .
+            $this->pool->config->getSetting(Fallback::SETTING_SKIN) . '/';
     }
 
     /**
@@ -83,8 +95,8 @@ abstract class AbstractRender implements RenderInterface
     {
         return str_replace(
             array(
-                '{callerFile}',
-                '{callerLine}',
+                static::MARKER_CALLER_FILE,
+                static::MARKER_CALLER_LINE,
             ),
             array(
                 $file,
@@ -121,14 +133,14 @@ abstract class AbstractRender implements RenderInterface
         // Add the stuff from the json after the help text, if any.
         foreach ($data as $title => $text) {
             $helpContent .= str_replace(
-                array('{helptitle}', '{helptext}'),
+                array(static::MARKER_HELP_TITLE, static::MARKER_HELP_TEXT),
                 array($title, $text),
                 $helpRow
             );
         }
 
         // Add it into the wrapper.
-        return str_replace('{help}', $helpContent, $this->getTemplateFileContent('help'));
+        return str_replace(static::MARKER_HELP, $helpContent, $this->getTemplateFileContent('help'));
     }
 
     /**
@@ -147,7 +159,7 @@ abstract class AbstractRender implements RenderInterface
         }
 
         return str_replace(
-            '{connector}',
+            static::MARKER_CONNECTOR,
             $connector,
             $this->getTemplateFileContent('connector')
         );
@@ -162,7 +174,7 @@ abstract class AbstractRender implements RenderInterface
     protected function renderSearch()
     {
         return str_replace(
-            '{KrexxId}',
+            static::MARKER_KREXX_ID,
             $this->pool->recursionHandler->getMarker(),
             $this->getTemplateFileContent('search')
         );
@@ -217,9 +229,9 @@ abstract class AbstractRender implements RenderInterface
 
         return str_replace(
             array(
-                '{style}',
-                '{mainfunction}',
-                '{domId}',
+                static::MARKER_STYLE,
+                static::MARKER_MAIN_FUNCTION,
+                static::MARKER_DOM_ID,
             ),
             array(
                 $style,

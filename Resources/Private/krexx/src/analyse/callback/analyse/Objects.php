@@ -69,28 +69,28 @@ class Objects extends AbstractCallback
 
         // Dumping getter methods.
         // We will not dump the getters for internal classes, though.
-        if ($this->pool->config->getSetting(Fallback::SETTINGANALYSEGETTER) === true &&
+        if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_GETTER) === true &&
             $ref->isUserDefined() === true
         ) {
             $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Getter');
         }
 
         // Dumping protected properties.
-        if ($this->pool->config->getSetting(Fallback::SETTINGANALYSEPROTECTED) === true ||
+        if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_PROTECTED) === true ||
             $this->pool->scope->isInScope() === true
         ) {
             $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\ProtectedProperties');
         }
 
         // Dumping private properties.
-        if ($this->pool->config->getSetting(Fallback::SETTINGANALYSEPRIVATE) === true ||
+        if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_PRIVATE) === true ||
             $this->pool->scope->isInScope() === true
         ) {
             $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PrivateProperties');
         }
 
         // Dumping class constants.
-        if ($this->pool->config->getSetting(Fallback::SETTINGANALYSECONSTATS) === true) {
+        if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_CONSTANTS) === true) {
             $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Constants');
         }
 
@@ -98,7 +98,7 @@ class Objects extends AbstractCallback
         $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods');
 
         // Dumping traversable data.
-        if ($this->pool->config->getSetting(Fallback::SETTINGANALYSETRAVERSABLE) === true &&
+        if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_TRAVERSABLE) === true &&
             $data instanceof \Traversable
         ) {
             $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable');

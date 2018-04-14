@@ -152,7 +152,7 @@ class Routing extends AbstractRouting
             $model->setData($text)
                 ->setNormal($this->pool->messages->getHelp('maximumLevelReached1'))
                 ->setType($type)
-                ->hasExtras();
+                ->setHasExtra(true);
             // Render it directly.
             return $this->pool->render->renderSingleChild($model);
         }

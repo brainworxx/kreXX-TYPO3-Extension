@@ -34,7 +34,7 @@
  *
  */
 .kwrapper, .kfatalwrapper-outer {
-  position: absolute;
+  position: absolute !important;
   z-index: 10000;
   text-align: left;
   color: #555555;
@@ -63,7 +63,8 @@
     border: none;
     text-align: left;
     line-height: normal;
-    float: none; }
+    float: none;
+    width: unset; }
   .kwrapper small, .kfatalwrapper-outer small {
     line-height: normal;
     font-size: 80%; }

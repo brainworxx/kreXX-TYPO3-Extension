@@ -246,18 +246,18 @@ class Model extends AbstractModel
     }
 
     /**
-     * Getter got connector1.
+     * Getter got connectorLeft.
      *
      * @return string
      *   The first connector.
      */
-    public function getConnector1()
+    public function getConnectorLeft()
     {
-        return $this->connectorService->getConnector1();
+        return $this->connectorService->getConnectorLeft();
     }
 
     /**
-     * Getter for connector2.
+     * Getter for connectorRight.
      *
      * @param integer $cap
      *   Maximum length of all parameters. 0 means no cap.
@@ -265,9 +265,9 @@ class Model extends AbstractModel
      * @return string
      *   The second connector.
      */
-    public function getConnector2($cap = 0)
+    public function getConnectorRight($cap = 0)
     {
-        return $this->connectorService->getConnector2($cap);
+        return $this->connectorService->getConnectorRight($cap);
     }
 
     /**
@@ -297,25 +297,28 @@ class Model extends AbstractModel
     }
 
     /**
-     * Getter for the hasExtras property.
+     * Getter for the hasExtra property.
      *
      * @return bool
      *   Info for the render class, if we need to render the extras part.
      */
-    public function getHasExtras()
+    public function getHasExtra()
     {
         return $this->hasExtra;
     }
 
     /**
-     * "Setter" for the hasExtras property.
+     * "Setter" for the hasExtra property.
+     *
+     * @param boolean $value
+     *   The value we want to set.
      *
      * @return $this
      *   $this, for chaining.
      */
-    public function hasExtras()
+    public function setHasExtra($value)
     {
-        $this->hasExtra = true;
+        $this->hasExtra = $value;
         return $this;
     }
 
@@ -358,10 +361,16 @@ class Model extends AbstractModel
      * Setter for the $isCallback.
      *
      * @param boolean $isCallback
+     *   The value we want to set.
+     *
+     * @return $this
+     *   $this for chaining.
      */
     public function setIsCallback($isCallback)
     {
         $this->isCallback = $isCallback;
+
+        return $this;
     }
 
      /**
@@ -406,7 +415,7 @@ class Model extends AbstractModel
     }
 
     /**
-     * Sets a special and custom connector1. Only used for constants code
+     * Sets a special and custom connectorLeft. Only used for constants code
      * generation.
      *
      * @param string $string
@@ -414,9 +423,9 @@ class Model extends AbstractModel
      * @return $this
      *   Return $this for chaining.
      */
-    public function setCustomConnector1($string)
+    public function setCustomConnectorLeft($string)
     {
-        $this->connectorService->setCustomConnector1($string);
+        $this->connectorService->setCustomConnectorLeft($string);
         return $this;
     }
 

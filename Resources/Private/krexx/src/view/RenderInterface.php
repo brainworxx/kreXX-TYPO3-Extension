@@ -44,6 +44,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 interface RenderInterface
 {
+
     /**
      * Injects the pool and initialize the skin path.
      *

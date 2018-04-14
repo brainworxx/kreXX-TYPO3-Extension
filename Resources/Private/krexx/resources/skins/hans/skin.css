@@ -73,6 +73,7 @@ div.kwrapper {
     border: none;
     text-align: left;
     line-height: normal;
+    width: unset;
 }
 
 .kwrapper small {

@@ -105,7 +105,7 @@ class Config extends Fallback
         $this->cookieConfig = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\From\\Cookie');
 
         // Loading the settings.
-        foreach ($this->configFallback as $section => $settings) {
+        foreach ($this->configFallback as $settings) {
             foreach ($settings as $name) {
                 $this->loadConfigValue($name);
             }
@@ -114,7 +114,7 @@ class Config extends Fallback
         // We may need to change the disabling again, in case we are in cli
         // or ajax mode and have no fileoutput.
         if ($this->isRequestAjaxOrCli() === true &&
-            $this->getSetting(Fallback::SETTINGDESTINATION) !== 'file'
+            $this->getSetting(static::SETTING_DESTINATION) !== 'file'
         ) {
             // No kreXX for you!
             $this->setDisabled(true);
@@ -122,12 +122,12 @@ class Config extends Fallback
 
         // Now that our settings are in place, we need to check the
         // ip to decide if we need to deactivate kreXX.
-        if ($this->isAllowedIp($this->getSetting(Fallback::SETTINGIPRANGE)) === false) {
+        if ($this->isAllowedIp($this->getSetting(static::SETTING_IP_RANGE)) === false) {
             // No kreXX for you!
             $this->setDisabled(true);
         }
 
-        $this->debugFuncList = explode(',', $this->getSetting(Fallback::SETTINGDEBUGMETHODS));
+        $this->debugFuncList = explode(',', $this->getSetting(static::SETTING_DEBUG_METHODS));
     }
 
     /**
@@ -168,7 +168,7 @@ class Config extends Fallback
      */
     public function setDisabled($value)
     {
-        $this->settings[Fallback::SETTINGDISABLED]
+        $this->settings[static::SETTING_DISABLED]
             ->setValue($value)
             ->setSource('Internal flow');
     }
@@ -184,7 +184,7 @@ class Config extends Fallback
         static $handle = false;
 
         if ($handle === false) {
-            $handle = $this->cookieConfig->getConfigFromCookies('deep', 'devHandle');
+            $handle = $this->cookieConfig->getConfigFromCookies('deep', static::SETTING_DEV_HANDLE);
         }
 
         return $handle;
@@ -213,7 +213,7 @@ class Config extends Fallback
     protected function loadConfigValue($name)
     {
         $feConfig = $this->iniConfig->getFeConfig($name);
-        $section = $this->feConfigFallback[$name][Fallback::SECTION];
+        $section = $this->feConfigFallback[$name][static::SECTION];
         /** @var Model $model */
         $model = $this->pool->createClass('Brainworxx\\Krexx\\Service\\Config\\Model')
             ->setSection($section)
@@ -228,7 +228,7 @@ class Config extends Fallback
                 // We must not overwrite a disabled=true with local cookie settings!
                 // Otherwise it could get enabled locally, which might be a security
                 // issue.
-                if (($name === Fallback::SETTINGDISABLED && $cookieSetting === Fallback::VALUEFALSE) === false) {
+                if (($name === static::SETTING_DISABLED && $cookieSetting === static::VALUE_FALSE) === false) {
                     $model->setValue($cookieSetting)->setSource('Local cookie settings');
                     $this->settings[$name] = $model;
                     return;
@@ -245,7 +245,7 @@ class Config extends Fallback
         }
 
         // Nothing yet? Give back factory settings.
-        $model->setValue($this->feConfigFallback[$name][Fallback::VALUE])->setSource('Factory settings');
+        $model->setValue($this->feConfigFallback[$name][static::VALUE])->setSource('Factory settings');
         $this->settings[$name] = $model;
     }
 
@@ -261,7 +261,7 @@ class Config extends Fallback
 
         if (isset($server['HTTP_X_REQUESTED_WITH']) === true &&
             strtolower($server['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest' &&
-            $this->getSetting(Fallback::SETTINGDETECTAJAX) === true
+            $this->getSetting(static::SETTING_DETECT_AJAX) === true
         ) {
             // Appending stuff after a ajax request will most likely
             // cause a js error. But there are moments when you actually

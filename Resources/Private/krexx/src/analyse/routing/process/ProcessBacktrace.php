@@ -78,7 +78,7 @@ class ProcessBacktrace
     public function process(array &$backtrace)
     {
         $output = '';
-        $maxStep = (int) $this->pool->config->getSetting(Fallback::SETTINGMAXSTEPNUMBER);
+        $maxStep = (int) $this->pool->config->getSetting(Fallback::SETTING_MAX_STEP_NUMBER);
         $stepCount = count($backtrace);
 
         // Remove steps according to the configuration.

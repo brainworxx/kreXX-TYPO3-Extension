@@ -86,27 +86,27 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
          * @var array
          */
         protected $allowedSettingsNames = array(
-            Fallback::SETTINGSKIN,
-            Fallback::SETTINGMAXFILES,
-            Fallback::SETTINGDESTINATION,
-            Fallback::SETTINGMAXCALL,
-            Fallback::SETTINGDISABLED,
-            Fallback::SETTINGDETECTAJAX,
-            Fallback::SETTINGANALYSEPROTECTED,
-            Fallback::SETTINGANALYSEPRIVATE,
-            Fallback::SETTINGANALYSETRAVERSABLE,
-            Fallback::SETTINGDEBUGMETHODS,
-            Fallback::SETTINGLEVEL,
-            Fallback::SETTINGANALYSEPROTECTEDMETHODS,
-            Fallback::SETTINGANALYSEPRIVATEMETHODS,
-            Fallback::SETTINGANALYSECONSTATS,
-            Fallback::SETTINGIPRANGE,
-            Fallback::SETTINGANALYSEGETTER,
-            Fallback::SETTINGMAXRUNTIME,
-            Fallback::SETTINGMEMORYLEFT,
-            Fallback::SETTINGUSESCOPEANALYSIS,
-            Fallback::SETTINGMAXSTEPNUMBER,
-            Fallback::SETTINGARRAYCOUNTLIMIT,
+            Fallback::SETTING_SKIN,
+            Fallback::SETTING_MAX_FILES,
+            Fallback::SETTING_DESTINATION,
+            Fallback::SETTING_MAX_CALL,
+            Fallback::SETTING_DISABLED,
+            Fallback::SETTING_DETECT_AJAX,
+            Fallback::SETTING_ANALYSE_PROTECTED,
+            Fallback::SETTING_ANALYSE_PRIVATE,
+            Fallback::SETTING_ANALYSE_TRAVERSABLE,
+            Fallback::SETTING_DEBUG_METHODS,
+            Fallback::SETTING_NESTING_LEVEL,
+            Fallback::SETTING_ANALYSE_PROTECTED_METHODS,
+            Fallback::SETTING_ANALYSE_PRIVATE_METHODS,
+            Fallback::SETTING_ANALYSE_CONSTANTS,
+            Fallback::SETTING_IP_RANGE,
+            Fallback::SETTING_ANALYSE_GETTER,
+            Fallback::SETTING_MAX_RUNTIME,
+            Fallback::SETTING_MEMORY_LEFT,
+            Fallback::SETTING_USE_SCOPE_ANALYSIS,
+            Fallback::SETTING_MAX_STEP_NUMBER,
+            Fallback::SETTING_ARRAY_COUNT_LIMIT,
         );
 
         /**
@@ -115,11 +115,11 @@ if (!class_exists('Tx_Includekrexx_Controller_CompatibilityController')) {
          * @var array
          */
         protected $allowedSections = array(
-            Fallback::SECTIONRUNTIME,
-            Fallback::SECTIONOUTPUT,
-            Fallback::SECTIONPROPERTIES,
-            Fallback::SECTIONMETHODS,
-            Fallback::SECTIONPRUNEOUTPUT,
+            Fallback::SECTION_RUNTIME,
+            Fallback::SECTION_OUTPUT,
+            Fallback::SECTION_PROPERTIES,
+            Fallback::SECTION_METHODS,
+            Fallback::SECTION_PRUNE_OUTPUT,
         );
 
         /**

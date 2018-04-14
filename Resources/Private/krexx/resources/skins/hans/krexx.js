@@ -714,8 +714,8 @@
         var resultString = '';
         var sourcedata;
         var domid;
-        var wrapper1 = '';
-        var wrapper2 = '';
+        var wrapperLeft = '';
+        var wrapperRight = '';
 
         // Get the first element
         var el = kdt.getParents(element, 'li.kchild')[0];
@@ -726,8 +726,8 @@
             domid = kdt.getDataset(el, 'domid');
             sourcedata = kdt.getDataset(el, 'source');
 
-            wrapper1 = kdt.getDataset(el, 'codewrapper1');
-            wrapper2 = kdt.getDataset(el, 'codewrapper2');
+            wrapperLeft = kdt.getDataset(el, 'codewrapperLeft');
+            wrapperRight = kdt.getDataset(el, 'codewrapperRight');
 
             if (sourcedata === '. . .') {
                 if (domid !== '') {
@@ -773,7 +773,7 @@
         }
 
         // Add the wrapper that we collected so far
-        resultString = wrapper1 + resultString + wrapper2;
+        resultString = wrapperLeft + resultString + wrapperRight;
 
         // 3. Add the text
         codedisplay.innerHTML = '<div class="kcode-inner">' + resultString + '</div>';

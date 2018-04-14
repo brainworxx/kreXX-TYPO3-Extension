@@ -69,7 +69,7 @@ class DebugMethods extends AbstractObjectAnalysis
         $reflectionClass = $this->parameters['ref'];
         $output = '';
 
-        foreach (explode(',', $this->pool->config->getSetting(Fallback::SETTINGDEBUGMETHODS)) as $funcName) {
+        foreach (explode(',', $this->pool->config->getSetting(Fallback::SETTING_DEBUG_METHODS)) as $funcName) {
             if ($this->checkIfAccessible($data, $funcName, $reflectionClass) === true) {
                 // Add a try to prevent the hosting CMS from doing something stupid.
                 try {
@@ -131,7 +131,7 @@ class DebugMethods extends AbstractObjectAnalysis
         // 2.) Method can be called. There may be a magical method, though.
         // 3.) It's not blacklisted.
         if (method_exists($data, $funcName) === true &&
-            is_callable(array($data, $funcName)) == true &&
+            is_callable(array($data, $funcName)) === true &&
             $this->pool->config->isAllowedDebugCall($data, $funcName) === true) {
             // We need to check if the callable function requires any parameters.
             // We will not call those, because we simply can not provide them.

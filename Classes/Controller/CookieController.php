@@ -60,7 +60,7 @@ class Tx_Includekrexx_Controller_CookieController extends Tx_Includekrexx_Contro
             $this->addMessage($message, $this->LLL('general.error.title'), t3lib_FlashMessage::ERROR);
         }
 
-        if ($this->pool->config->getSetting(Fallback::SETTINGDISABLED)) {
+        if ($this->pool->config->getSetting(Fallback::SETTING_DISABLED)) {
             // kreXX will not display anything, if it was disabled via:
             // - krexx::disable
             // - Disable output --> true in the "Edit configuration file menu
@@ -70,7 +70,7 @@ class Tx_Includekrexx_Controller_CookieController extends Tx_Includekrexx_Contro
             $this->view->assign('is_disabled', false);
         }
 
-        if ($this->pool->config->getSetting(Fallback::SETTINGDESTINATION) == 'file') {
+        if ($this->pool->config->getSetting(Fallback::SETTING_DESTINATION) == 'file') {
             // A file output will also prevent the options from popping ou here.
             // We need to tell the user that there is nothing to see here.
             $this->view->assign('is_file', true);

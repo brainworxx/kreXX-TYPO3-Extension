@@ -114,7 +114,7 @@ class Codegen
                 return ';stop;';
             }
 
-            $connectors = $model->getConnector1() . $model->getConnector2();
+            $connectors = $model->getConnectorLeft() . $model->getConnectorRight();
             if (empty($connectors) === true) {
                 // No connectors, no nothing. We must be dealing with meta stuff.
                 // We will ignore this one.
@@ -160,7 +160,7 @@ class Codegen
      * @return string
      *   Return an empty string.
      */
-    public function generateWrapper1()
+    public function generateWrapperLeft()
     {
         return '';
     }
@@ -172,7 +172,7 @@ class Codegen
      * @return string
      *   Return an empty string.
      */
-    public function generateWrapper2()
+    public function generateWrapperRight()
     {
         return '';
     }
@@ -195,7 +195,7 @@ class Codegen
             $model->getName()
         );
 
-        return $model->getConnector1() . $name . $model->getConnector2();
+        return $model->getConnectorLeft() . $name . $model->getConnectorRight();
     }
 
     /**

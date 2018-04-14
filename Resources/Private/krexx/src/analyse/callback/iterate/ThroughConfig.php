@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Service\Config\Fallback;
 
 /**
  * Configuration output methods.
@@ -81,14 +82,14 @@ class ThroughConfig extends AbstractCallback
         }
 
         // Render the dev-handle field.
-        $devHandleLabel = $this->pool->messages->getHelp('devHandle');
+        $devHandleLabel = $this->pool->messages->getHelp(Fallback::SETTING_DEV_HANDLE);
         $configOutput .= $this->pool->render->renderSingleEditableChild(
             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setData($devHandleLabel)
-                ->setDomId('devHandle')
+                ->setDomId(Fallback::SETTING_DEV_HANDLE)
                 ->setName($this->pool->config->getDevHandler())
                 ->setNormal('\krexx::')
-                ->setType('Input')
+                ->setType(Fallback::RENDER_TYPE_INPUT)
                 ->setHelpid('localFunction')
         );
 

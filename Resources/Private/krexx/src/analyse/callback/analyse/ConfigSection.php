@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Config\Fallback;
 
 /**
  * Configuration "analysis" methods. Meh, naming conventions suck sometimes.
@@ -64,7 +65,7 @@ class ConfigSection extends AbstractCallback
             // Render the single value.
             // We need to find out where the value comes from.
             /** @var \Brainworxx\Krexx\Service\Config\Model $setting */
-            if ($setting->getType() !== 'None') {
+            if ($setting->getType() !== Fallback::RENDER_TYPE_NONE) {
                 $value = $setting->getValue();
                 // We need to re-translate booleans to something the
                 // frontend can understand.
@@ -95,7 +96,7 @@ class ConfigSection extends AbstractCallback
                 }
             }
         }
-        
+
         return $sectionOutput;
     }
 }

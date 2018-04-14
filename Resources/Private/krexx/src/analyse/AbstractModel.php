@@ -120,12 +120,9 @@ abstract class AbstractModel
      */
     public function renderMe()
     {
-        if (isset($this->callback) === true) {
-            $this->callback->setParams($this->parameters);
-            return $this->callback->callMe();
-        }
-
-        return '';
+        return $this->callback
+            ->setParams($this->parameters)
+            ->callMe();
     }
 
     /**

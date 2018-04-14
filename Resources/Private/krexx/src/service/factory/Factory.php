@@ -136,7 +136,7 @@ class Factory
     public static function createPool()
     {
         if (\Krexx::$pool !== null) {
-            // The ppol is there, do nothing.
+            // The pool is there, do nothing.
             return;
         }
 

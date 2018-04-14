@@ -143,10 +143,10 @@ class Emergency
         }
 
         // Cache some settings.
-        $this->maxRuntime = (int) $pool->config->getSetting(Fallback::SETTINGMAXRUNTIME);
-        $this->minMemoryLeft = ((int) $pool->config->getSetting(Fallback::SETTINGMEMORYLEFT))  * 1024 * 1024;
-        $this->maxCall = (int) $this->pool->config->getSetting(Fallback::SETTINGMAXCALL);
-        $this->maxNestingLevel = (int) $this->pool->config->getSetting(Fallback::SETTINGLEVEL);
+        $this->maxRuntime = (int) $pool->config->getSetting(Fallback::SETTING_MAX_RUNTIME);
+        $this->minMemoryLeft = ((int) $pool->config->getSetting(Fallback::SETTING_MEMORY_LEFT))  * 1024 * 1024;
+        $this->maxCall = (int) $this->pool->config->getSetting(Fallback::SETTING_MAX_CALL);
+        $this->maxNestingLevel = (int) $this->pool->config->getSetting(Fallback::SETTING_NESTING_LEVEL);
     }
 
     /**
