@@ -91,7 +91,6 @@ class DebugViewHelper extends AbstractViewHelper
      */
     public function render()
     {
-
         Pool::createPool();
 
         \Krexx::$pool

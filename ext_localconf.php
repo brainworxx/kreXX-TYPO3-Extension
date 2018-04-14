@@ -39,7 +39,6 @@ if (!defined('TYPO3_MODE')) {
 $boot = function ($_EXTKEY) {
     $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY);
 
-
     // We load the kreXX library.
     // The class_exists triggers the composer autoloading, if available.
     // It not, we use the bundled version wich comes with the externsion.
@@ -57,6 +56,12 @@ $boot = function ($_EXTKEY) {
             );
         }
     }
+    // Add the legacy debug viewhelper, in case people are using the old krexx
+    // namespace.
+    if (!class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
+        include_once $extPath . 'Classes/ViewHelpers/LegacyDebugViewHelper.php';
+    }
+
 
     // Add our specific overwrites.
     // There is a bug with the extension installing (at least in TYPO3 8.7.8),
@@ -70,8 +75,6 @@ $boot = function ($_EXTKEY) {
     }
     \Brainworxx\Krexx\Service\Overwrites::$classes['Brainworxx\\Krexx\\Service\\Config\\Config'] =
         'Brainworxx\\Includekrexx\\Rewrite\\Service\\Config\\Config';
-
-
 
     // See if we must create a temp directory for kreXX.
     $tempPaths = array(
