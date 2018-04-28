@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\ViewHelpers;
 
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 
 /**
  * Our fluid wraqpper for kreXX.
@@ -92,44 +93,17 @@ class DebugViewHelper extends AbstractViewHelper
     public function render()
     {
         Pool::createPool();
-
-        \Krexx::$pool
-            // Registering the alternative getter analysis, without the 'get' in
-            // the functionname.
-            ->addRewrite(
-                'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter',
-                'Brainworxx\\Includekrexx\\Rewrite\\Analyse\\Callback\\Iterate\\ThroughGetter'
-            )
-            // Registering the fluid connector class.
-            ->addRewrite(
-                'Brainworxx\\Krexx\\Analyse\\Code\\Connectors',
-                'Brainworxx\\Includekrexx\\Rewrite\\Service\\Code\\Connectors'
-            )
-            // Registering the special source generation for methods.
-            ->addRewrite(
-                'Brainworxx\\Krexx\\Analyse\Callback\\Iterate\\ThroughMethods',
-                'Brainworxx\\Includekrexx\\Rewrite\\Analyse\\Callback\\Iterate\\ThroughMethods'
-            )
-            ->addRewrite(
-                'Brainworxx\\Krexx\\Analyse\\Code\\Codegen',
-                'Brainworxx\\Includekrexx\\Rewrite\\Service\\Code\\Codegen'
-            );
-
-
-        // We need other fluid caller finders, depending on the version.
         \Krexx::$pool->registry->set('DebugViewHelper', $this);
 
-        if (version_compare(TYPO3_version, '8.4', '>')) {
-            \Krexx::$pool->addRewrite(
-                'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
-                'Brainworxx\\Includekrexx\\Rewrite\\Analyse\\Caller\\CallerFinderFluid'
-            );
-        } else {
-            \Krexx::$pool->addRewrite(
-                'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
-                'Brainworxx\\Includekrexx\\Rewrite\\Analyse\\Caller\\CallerFinderFluidOld'
-            );
-        }
+        Registration::activatePlugin(
+            'Brainworxx\\Includekrexx\\Plugins\\FluidCodeGen\\Configuration'
+        );
+        Registration::activatePlugin(
+            'Brainworxx\\Includekrexx\\Plugins\\FluidCallerFinder\\Configuration'
+        );
+        Registration::activatePlugin(
+            'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
+        );
 
         $found  = false;
         if (!is_null($this->arguments['value'])) {
@@ -148,8 +122,15 @@ class DebugViewHelper extends AbstractViewHelper
             krexx(null);
         }
 
-        // Reset all rewrites to the global ones.
-        \Krexx::$pool->flushRewrite();
+        Registration::deactivatePlugin(
+            'Brainworxx\\Includekrexx\\Plugins\\FluidCodeGen\\Configuration'
+        );
+        Registration::deactivatePlugin(
+            'Brainworxx\\Includekrexx\\Plugins\\FluidCallerFinder\\Configuration'
+        );
+        Registration::deactivatePlugin(
+            'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
+        );
 
         return '';
     }

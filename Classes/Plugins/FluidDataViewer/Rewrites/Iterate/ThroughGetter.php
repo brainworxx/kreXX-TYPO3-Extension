@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Rewrite\Analyse\Callback\Iterate;
+namespace Brainworxx\Includekrexx\Plugins\FluidDataViewer\Rewrites\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter as OrgThroughGetter;
 use Brainworxx\Krexx\Analyse\Model;
@@ -47,9 +47,9 @@ class ThroughGetter extends OrgThroughGetter
 {
 
     /**
-     * Iterating through a list of reflection methods.
+     * {@inheritdoc}
      *
-     * Change: we remove the 'get' from the name, since fluid requires this.
+     * We simply add the data viewer eav to the output.
      *
      * @param array $methodList
      *   The list of methods we are going through, consisting of \ReflectionMethod
@@ -59,38 +59,7 @@ class ThroughGetter extends OrgThroughGetter
      */
     protected function goThroughMethodList(array $methodList)
     {
-        $output = '';
-
-        /** @var \ReflectionMethod $reflectionMethod */
-        foreach ($methodList as $reflectionMethod) {
-            // Back to level 0, we reset the deep counter.
-            $this->deep = 0;
-
-            // Now we have three possible outcomes:
-            // 1.) We have an actual value
-            // 2.) We got NULL as a value
-            // 3.) We were unable to get any info at all.
-            $comments = nl2br($this->commentAnalysis->getComment($reflectionMethod, $this->parameters['ref']));
-
-            /** @var Model $model */
-            $methodName = $reflectionMethod->getName();
-            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setName(lcfirst(substr($methodName, strlen($this->currentPrefix))))
-                ->addToJson('method comment', $comments)
-                ->addToJson('method name', $methodName . '()');
-
-            // We need to decide if we are handling static getters.
-            if ($reflectionMethod->isStatic() === true) {
-                $model->setConnectorType(Connectors::STATIC_METHOD);
-            } else {
-                $model->setConnectorType(Connectors::METHOD);
-            }
-
-            // Get ourselves a possible return value
-            $output .= $this->retrievePropertyValue($reflectionMethod, $model);
-        }
-
-        return $this->handleDataviewerEav() . $output;
+        return $this->handleDataviewerEav() . parent::goThroughMethodList($methodList);
     }
 
     /**

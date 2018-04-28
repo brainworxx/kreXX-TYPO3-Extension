@@ -32,57 +32,41 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Rewrite\Service\Code;
+namespace Brainworxx\Includekrexx\Plugins\FluidCodeGen\EventHandlers;
 
-use Brainworxx\Krexx\Analyse\Code\Connectors as OrgConnectors;
+use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\AbstractEventHandler;
+use Brainworxx\Includekrexx\Plugins\FluidCodeGen\Rewrites\Code\Codegen;
 
 /**
- * Special connectors for fluid. Used by the code generation.
+ * Class VhsMethods
+ *
+ * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe::end
+ * @package Brainworxx\Includekrexx\Plugins\FluidCodeGen\EventHandlers
  */
-class Connectors extends OrgConnectors
+class VhsMethods extends AbstractEventHandler
 {
-
     /**
-     * {@inheritdoc}
-     */
-    protected $language = 'fluid';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        // Setting (nearly) everything to the point connector.
-        $this->connectorArray = array(
-            static::METHOD => array('.', '(@param@)'),
-            static::STATIC_METHOD => array('.', '(@param@)'),
-            static::NORMAL_ARRAY => array('.', ''),
-            static::ASSOCIATIVE_ARRAY => array('.', ''),
-            static::CONSTANT => array('.', ''),
-            static::NORMAL_PROPERTY => array('.', ''),
-            static::STATIC_PROPERTY => array('.', ''),
-            static::SPECIAL_CHARS_PROP => array('.', ''),
-        );
-    }
-
-    /**
-     * Do nothing. There is no secornd connector in fluid.
+     * We set the multiline code generation to VHS, and We add the name of the
+     * parameter for the VHS code generation into the 'paramArray'
      *
-     * @param integer $cap
-     *   Maximum length of all parameters. 0 means no cap.
-     *
-     * @return string
-     *   Return an empty string.
+     * @param array $params
+     *   The parameters for the callback.
+     * @param \Brainworxx\Krexx\Analyse\Model|null $model
+     *   The model so far.
      */
-    public function getConnector2($cap)
+    public function handle(array $params, Model $model = null)
     {
-        // No params, no cookies!
-        if (empty($this->params)) {
-            return '';
+        /** @var \ReflectionMethod $reflectionMethod */
+        $reflectionMethod = $params['reflectionMethod'];
+
+        $paramArray = array();
+        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
+            $paramArray[] = $reflectionParameter->getName();
         }
 
-        return parent::getConnectorRight($cap);
+        // Switch to VHS Viewhelper
+        $model->setMultiLineCodeGen(Codegen::VHS_CALL_VIEWHELPER)
+            ->addParameter('paramArray', $paramArray);
     }
 }

@@ -32,32 +32,31 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Rewrite\Service\Config;
+namespace Brainworxx\Includekrexx\Plugins\FluidCodeGen\EventHandlers;
 
-use Brainworxx\Krexx\Service\Config\Config as OrgConfig;
+use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\AbstractEventHandler;
 
 /**
- * Using the cmpIP from the GeneralUtility in TYPO3.
+ * Class GetterWiothoutGet
+ *
+ * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList::end
+ * @package Brainworxx\Includekrexx\Plugins\FluidCallerFinder\EventHandlers
  */
-class Config extends OrgConfig
+class GetterWithoutGet extends AbstractEventHandler
 {
     /**
-     * {@inheritdoc}
+     * We simply remoge the 'get' from the methodname in the model.
+     *
+     * @param array $params
+     *   The parameters for the callback.
+     * @param \Brainworxx\Krexx\Analyse\Model|null $model
+     *   The model so far.
      */
-    public function isAllowedIp($whitelist)
+    public function handle(array $params, Model $model = null)
     {
-        $server =  $this->pool->getServer();
-        $remote = $server['REMOTE_ADDR'];
-        // Use TYPO3 v6+ cmpIP if possible.
-        if (is_callable(array('\\TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'cmpIP'))) {
-            return \TYPO3\CMS\Core\Utility\GeneralUtility::cmpIP($remote, $whitelist);
-        }
-        // Use TYPO3 v6- cmpIP if possible.
-        if (is_callable(array('t3lib_div', 'cmpIP'))) {
-            return \t3lib_div::cmpIP($remote, $whitelist);
-        }
-
-        // Still here?!? This should not have happened!
-        return parent::isAllowedIp($whitelist);
+        $methodName = lcfirst(substr($model->getName(), strlen($params['currentPrefix'])));
+        $model->addToJson('method name', $model->getName() . '()')
+            ->setName($methodName);
     }
 }
