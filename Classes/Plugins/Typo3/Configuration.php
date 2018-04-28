@@ -92,8 +92,12 @@ class Configuration extends AbstractPluginConfig
                 GeneralUtility::writeFileToTypo3tempDir($tempPath . '/' . '.htaccess', $htAccess);
                 GeneralUtility::writeFileToTypo3tempDir($tempPath . '/' . 'index.html', $indexHtml);
             }
-            // Register it!
-            Config::$directories[$key] = $tempPath;
         }
+        // Register it!
+        Config::$directories = array(
+            'chunks' => $tempPaths['chunks'] . '/',
+            'log' => $tempPaths['log'] . '/',
+            'config' => $tempPaths['config'] . '/Krexx.ini',
+        );
     }
 }
