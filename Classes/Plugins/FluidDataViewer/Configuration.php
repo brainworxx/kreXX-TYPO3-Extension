@@ -34,15 +34,15 @@
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDataViewer;
 
-use Brainworxx\Krexx\Service\Plugin\AbstractPluginConfig;
 use Brainworxx\Krexx\Service\Factory\Factory;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 
 /**
  * Data viewer support for fluid analysis.
  *
  * @package Brainworxx\Includekrexx\Plugins\FluidDataViewer
  */
-class Configuration extends AbstractPluginConfig
+class Configuration implements PluginConfigInterface
 {
     /**
      * {@inheritdoc}

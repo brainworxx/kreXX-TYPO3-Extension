@@ -34,15 +34,15 @@
 
 namespace Brainworxx\Includekrexx\Plugins\FluidCodeGen;
 
-use Brainworxx\Krexx\Service\Plugin\AbstractPluginConfig;
 use Brainworxx\Krexx\Service\Factory\Factory;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 
 /**
  * Special overwrites and event handlers for fluid.
  *
  * @package Brainworxx\Includekrexx\Plugins\Fluid
  */
-class Configuration extends AbstractPluginConfig
+class Configuration implements PluginConfigInterface
 {
     /**
      * {@inheritdoc}

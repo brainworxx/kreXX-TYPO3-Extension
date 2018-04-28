@@ -34,9 +34,9 @@
 
 namespace Brainworxx\Includekrexx\Plugins\Typo3;
 
-use Brainworxx\Krexx\Service\Plugin\AbstractPluginConfig;
 use Brainworxx\Krexx\Service\Factory\Factory;
 use Brainworxx\Krexx\Service\Config\Config;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -46,7 +46,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package Brainworxx\Includekrexx\Plugins\Typo3
  */
-class Configuration extends AbstractPluginConfig
+class Configuration implements PluginConfigInterface
 {
     /**
      * {@inheritdoc}

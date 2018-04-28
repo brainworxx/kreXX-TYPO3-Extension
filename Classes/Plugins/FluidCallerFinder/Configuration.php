@@ -34,15 +34,15 @@
 
 namespace Brainworxx\Includekrexx\Plugins\FluidCallerFinder;
 
-use Brainworxx\Krexx\Service\Plugin\AbstractPluginConfig;
 use Brainworxx\Krexx\Service\Factory\Factory;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 
 /**
  * Class Configuration
  *
  * @package Brainworxx\Includekrexx\Plugins\FluidCallerFinder
  */
-class Configuration extends AbstractPluginConfig
+class Configuration implements PluginConfigInterface
 {
     /**
      * {@inheritdoc}

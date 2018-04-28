@@ -157,7 +157,7 @@ class Krexx
         include_once 'src/Service/Misc/Registry.php';
 
         include_once 'src/Service/Plugin/Registration.php';
-        include_once 'src/Service/Plugin/AbstractPluginConfig.php';
+        include_once 'src/Service/Plugin/PluginConfigInterface.php';
 
         include_once 'src/View/Output/AbstractOutput.php';
         include_once 'src/View/Output/Chunks.php';

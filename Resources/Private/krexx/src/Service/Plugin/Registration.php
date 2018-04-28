@@ -77,7 +77,8 @@ class Registration
     public static function activatePlugin($name)
     {
         static::$plugins[$name][static::IS_ACTIVE] = true;
-        static::$plugins[$name][static::CONFIG_CLASS]::exec();
+        $staticPlugin = static::$plugins[$name][static::CONFIG_CLASS];
+        $staticPlugin::exec();
     }
 
     /**
@@ -97,7 +98,8 @@ class Registration
         static::$plugins[$name][static::IS_ACTIVE] = false;
         foreach (static::$plugins as $plugin) {
             if ($plugin[static::IS_ACTIVE]) {
-                static::$plugins[$name][static::CONFIG_CLASS]::exec();
+                $staticPlugin = static::$plugins[$name][static::CONFIG_CLASS];
+                $staticPlugin::exec();
             }
         }
     }

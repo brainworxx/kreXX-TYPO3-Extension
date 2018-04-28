@@ -35,17 +35,17 @@
 namespace Brainworxx\Krexx\Service\Plugin;
 
 
-abstract class AbstractPluginConfig
+interface PluginConfigInterface
 {
     /**
      * Get the name of the plugin. Must be unique.
      *
      * @return string
      */
-    abstract public static function getName();
+    public static function getName();
 
     /**
      * Registers all Overwrites
      */
-    abstract public static function exec();
+    public static function exec();
 }
