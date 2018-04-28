@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Rewrite\Analysis\Caller;
+namespace Brainworxx\Includekrexx\Rewrite\Analyse\Caller;
 
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use \Brainworxx\Krexx\Service\Factory\Pool;

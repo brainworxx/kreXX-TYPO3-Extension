@@ -115,7 +115,7 @@ class ThroughMethods extends OrgThroughMethods
                     ->setConnectorParameters($paramList)
                     ->addParameter('data', $methodData)
                     ->addParameter('paramArray', $paramArray)   // xx
-                    ->setMultiLineCodeGen(\Tx_Includekrexx_Rewrite_ServiceCodeCodegen::VHS_CALL_VIEWHELPER) // xx
+                    ->setMultiLineCodeGen(\Brainworxx\Includekrexx\Rewrite\Service\Code\Codegen::VHS_CALL_VIEWHELPER) // xx
                     ->injectCallback(
                         $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis')
                     )

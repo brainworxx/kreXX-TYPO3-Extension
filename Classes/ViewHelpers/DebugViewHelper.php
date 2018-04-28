@@ -98,7 +98,7 @@ class DebugViewHelper extends AbstractViewHelper
             // the functionname.
             ->addRewrite(
                 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter',
-                'Brainworxx\\Includekrexx\\Rewrite\\Analysis\\Callback\\Iterate\\TroughGetter'
+                'Brainworxx\\Includekrexx\\Rewrite\\Analyse\\Callback\\Iterate\\ThroughGetter'
             )
             // Registering the fluid connector class.
             ->addRewrite(
@@ -122,12 +122,12 @@ class DebugViewHelper extends AbstractViewHelper
         if (version_compare(TYPO3_version, '8.4', '>')) {
             \Krexx::$pool->addRewrite(
                 'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
-                'Brainworxx\\Includekrexx\\Rewrite\\Analysis\\Caller\\CallerFinderFluid'
+                'Brainworxx\\Includekrexx\\Rewrite\\Analyse\\Caller\\CallerFinderFluid'
             );
         } else {
             \Krexx::$pool->addRewrite(
                 'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
-                'Brainworxx\\Includekrexx\\Rewrite\\Analysis\\Caller\\CallerFinderFluidOld'
+                'Brainworxx\\Includekrexx\\Rewrite\\Analyse\\Caller\\CallerFinderFluidOld'
             );
         }
 
