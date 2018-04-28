@@ -47,6 +47,15 @@ $boot = function ($_EXTKEY) {
         include_once $krexxFile;
     }
 
+    // There is a bug with the extension installing (at least in TYPO3 8.7.8),
+    // causing this class not being available, right after a manual upgrade.
+    // It's not a showstopper, because after a reload, everything is OK.
+    // We need to make sure that we have access to the plugin registration, to
+    // prevent this ugly TYPO3 error message.
+    if (!class_exists('\\Brainworxx\\Krexx\\Service\\Plugin\\Registration')) {
+        return;
+    }
+
     // Register and activate the TYPO3 plugin.
     \Brainworxx\Krexx\Service\Plugin\Registration::register(
         'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Configuration'
