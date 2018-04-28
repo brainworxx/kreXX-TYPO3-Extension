@@ -98,7 +98,7 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
         // Public properties.
         // We render them directly in the object "root", so we call
         // the render directly.
-        return $model->renderMe();
+        return $this->dispatchEventWithModel('analysisEnd', $model)->renderMe();
     }
 
     /**

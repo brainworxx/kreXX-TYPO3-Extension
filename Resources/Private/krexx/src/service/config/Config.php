@@ -37,7 +37,6 @@ namespace Brainworxx\Krexx\Service\Config;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Config\From\Cookie;
 use Brainworxx\Krexx\Service\Config\From\Ini;
-use Brainworxx\Krexx\Service\Overwrites;
 
 /**
  * Access the debug settings here.
@@ -87,7 +86,7 @@ class Config extends Fallback
      *
      * @var array
      */
-    protected $directories = array();
+    public static $directories = array();
 
     /**
      * Injection the pool and loading the configuration.
@@ -98,7 +97,6 @@ class Config extends Fallback
     {
         parent::__construct($pool);
 
-        $this->initDirectories();
         $this->security = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\Security');
         $this->iniConfig = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\From\\Ini')
             ->loadIniFile($this->getPathToIniFile());
@@ -128,36 +126,6 @@ class Config extends Fallback
         }
 
         $this->debugFuncList = explode(',', $this->getSetting(static::SETTING_DEBUG_METHODS));
-    }
-
-    /**
-     * Set the directory path, according to the overwrites for:
-     * - Chunk files
-     * - Log files
-     * - Configuration files
-     */
-    protected function initDirectories()
-    {
-        // Set the chunks folder.
-        if (empty(Overwrites::$directories['chunks']) === true) {
-            $this->directories['chunks'] = KREXX_DIR . 'chunks/' ;
-        } else {
-            $this->directories['chunks'] = Overwrites::$directories['chunks'] . '/';
-        }
-
-        // Set the log folder.
-        if (empty(Overwrites::$directories['log']) === true) {
-            $this->directories['log'] = KREXX_DIR . 'log' . '/';
-        } else {
-            $this->directories['log'] = Overwrites::$directories['log'] . '/';
-        }
-
-        // Set the configuration file path.
-        if (empty(Overwrites::$directories['config']) === true) {
-            $this->directories['config'] = KREXX_DIR . 'config/Krexx.ini';
-        } else {
-            $this->directories['config'] = Overwrites::$directories['config'] . '/Krexx.ini';
-        }
     }
 
     /**
@@ -288,7 +256,7 @@ class Config extends Fallback
      */
     public function getChunkDir()
     {
-        return $this->directories['chunks'];
+        return static::$directories['chunks'];
     }
 
     /**
@@ -299,7 +267,18 @@ class Config extends Fallback
      */
     public function getLogDir()
     {
-        return $this->directories['log'];
+        return static::$directories['log'];
+    }
+
+    /**
+     * Get the path to the configuration file.
+     *
+     * @return string
+     *   The absolute path to the Krexx.ini.
+     */
+    public function getPathToIniFile()
+    {
+        return static::$directories['config'];
     }
 
     /**
@@ -374,16 +353,5 @@ class Config extends Fallback
 
         // Nothing found?
         return true;
-    }
-
-    /**
-     * Get the path to the configuration file.
-     *
-     * @return string
-     *   The absolute path to the Krexx.ini.
-     */
-    public function getPathToIniFile()
-    {
-        return $this->directories['config'];
     }
 }

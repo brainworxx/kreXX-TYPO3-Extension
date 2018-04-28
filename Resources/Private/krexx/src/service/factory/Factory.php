@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Factory;
 
-use Brainworxx\Krexx\Service\Overwrites;
+
 
 /**
  * Simple factory, nothing special. Offers a overwrite method.
@@ -54,7 +54,7 @@ class Factory
      *
      * @var array
      */
-    protected $rewrite = array();
+    public static $rewrite = array();
 
     /**
      * Create objects and returns them. Singletons are handled by the pool.
@@ -67,36 +67,11 @@ class Factory
     public function createClass($classname)
     {
         // Check for possible overwrite.
-        if (isset($this->rewrite[$classname]) === true) {
-            $classname = $this->rewrite[$classname];
+        if (isset(static::$rewrite[$classname]) === true) {
+            $classname = static::$rewrite[$classname];
         }
 
         return new $classname($this);
-    }
-
-    /**
-     * Adds another value to the overwrite.
-     *
-     * @param string $originalClassName
-     *   The original class name, we want to overwrite this one.
-     * @param string $newClassName
-     *   The new class name, the factory will then return this class via get();
-     *
-     * @return $this
-     *   Return $this, for chaining.
-     */
-    public function addRewrite($originalClassName, $newClassName)
-    {
-        $this->rewrite[$originalClassName] = $newClassName;
-        return $this;
-    }
-
-    /**
-     * Resets the rewrite info and reloads it from the globals.
-     */
-    public function flushRewrite()
-    {
-        $this->rewrite = Overwrites::$classes;
     }
 
     /**
@@ -142,11 +117,11 @@ class Factory
 
         // Create a new pool where we store all our classes.
         // We also need to check if we have an overwrite for the pool.
-        if (empty(Overwrites::$classes['Brainworxx\\Krexx\\Service\\Factory\\Pool']) === true) {
+        if (empty(static::$rewrite['Brainworxx\\Krexx\\Service\\Factory\\Pool']) === true) {
             \Krexx::$pool = new Pool();
             return;
         }
-        $classname = Overwrites::$classes['Brainworxx\\Krexx\\Service\\Factory\\Pool'];
+        $classname = static::$rewrite['Brainworxx\\Krexx\\Service\\Factory\\Pool'];
         \Krexx::$pool = new $classname();
     }
 }

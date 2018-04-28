@@ -32,29 +32,20 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Service;
+namespace Brainworxx\Krexx\Service\Plugin;
 
-/**
- * Storing overwrites for the factory or the configuration.
- *
- * @package Brainworxx\Krexx\Service
- */
-class Overwrites
+
+abstract class AbstractPluginConfig
 {
     /**
-     * Storing the global overwrites here. These will not get flushed.
+     * Get the name of the plugin. Must be unique.
      *
-     * @var array
+     * @return string
      */
-    public static $classes = array();
+    abstract public static function getName();
 
     /**
-     * Overwriting the path to the following folders:
-     * - chunks
-     * - config
-     * - log
-     *
-     * @var array
+     * Registers all Overwrites
      */
-    public static $directories = array();
+    abstract public static function exec();
 }

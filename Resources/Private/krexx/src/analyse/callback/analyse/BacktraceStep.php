@@ -41,7 +41,7 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
  *
  * The iterate-part takes place in the OutputActions::backtraceAction()
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analysis
+ * @package Brainworxx\Krexx\Analyse\Callback\Analyse
  *
  * @uses array data
  *   The singe step from a backtrace.
@@ -64,6 +64,8 @@ class BacktraceStep extends AbstractCallback
      */
     public function callMe()
     {
+        $this->dispatchStartEvent();
+
         // We are handling the following values here:
         // file, line, function, object, type, args, sourcecode.
         return $this->fileToOutput() .
@@ -85,11 +87,14 @@ class BacktraceStep extends AbstractCallback
         $stepData = $this->parameters['data'];
         if (isset($stepData[static::STEP_DATA_FILE]) === true) {
             return $this->pool->render->renderSingleChild(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                    ->setData($stepData[static::STEP_DATA_FILE])
-                    ->setName('File')
-                    ->setNormal($stepData[static::STEP_DATA_FILE])
-                    ->setType('string ' . strlen($stepData[static::STEP_DATA_FILE]))
+                $this->dispatchEventWithModel(
+                    __FUNCTION__ . '::end',
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->setData($stepData[static::STEP_DATA_FILE])
+                        ->setName('File')
+                        ->setNormal($stepData[static::STEP_DATA_FILE])
+                        ->setType('string ' . strlen($stepData[static::STEP_DATA_FILE]))
+                )
             );
         }
 
@@ -136,12 +141,15 @@ class BacktraceStep extends AbstractCallback
 
         // Add the prettified code to the analysis.
         return $output . $this->pool->render->renderSingleChild(
-            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setData($source)
-                ->setName('Sourcecode')
-                ->setNormal('. . .')
-                ->setHasExtra(true)
-                ->setType('PHP')
+            $this->dispatchEventWithModel(
+                __FUNCTION__ . '::end',
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    ->setData($source)
+                    ->setName('Sourcecode')
+                    ->setNormal('. . .')
+                    ->setHasExtra(true)
+                    ->setType('PHP')
+            )
         );
     }
 
@@ -157,11 +165,14 @@ class BacktraceStep extends AbstractCallback
 
         if (isset($stepData[static::STEP_DATA_FUNCTION]) === true) {
             return $this->pool->render->renderSingleChild(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                    ->setData($stepData[static::STEP_DATA_FUNCTION])
-                    ->setName('Last called function')
-                    ->setNormal($stepData[static::STEP_DATA_FUNCTION])
-                    ->setType('string ' . strlen($stepData[static::STEP_DATA_FUNCTION]))
+                $this->dispatchEventWithModel(
+                    __FUNCTION__ . '::end',
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->setData($stepData[static::STEP_DATA_FUNCTION])
+                        ->setName('Last called function')
+                        ->setNormal($stepData[static::STEP_DATA_FUNCTION])
+                        ->setType('string ' . strlen($stepData[static::STEP_DATA_FUNCTION]))
+                )
             );
         }
 
@@ -181,11 +192,12 @@ class BacktraceStep extends AbstractCallback
         if (isset($stepData[static::STEP_DATA_OBJECT]) === true) {
             return $this->pool
                 ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessObject')
-                ->process(
+                ->process($this->dispatchEventWithModel(
+                    __FUNCTION__ . '::end',
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                         ->setData($stepData[static::STEP_DATA_OBJECT])
                         ->setName('Calling object')
-                );
+                ));
         }
 
         return '';
@@ -203,11 +215,14 @@ class BacktraceStep extends AbstractCallback
 
         if (isset($stepData[static::STEP_DATA_TYPE]) === true) {
             return $this->pool->render->renderSingleChild(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                    ->setData($stepData[static::STEP_DATA_TYPE])
-                    ->setName('Call type')
-                    ->setNormal($stepData[static::STEP_DATA_TYPE])
-                    ->setType('string ' . strlen($stepData[static::STEP_DATA_TYPE]))
+                $this->dispatchEventWithModel(
+                    __FUNCTION__ . '::end',
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->setData($stepData[static::STEP_DATA_TYPE])
+                        ->setName('Call type')
+                        ->setNormal($stepData[static::STEP_DATA_TYPE])
+                        ->setType('string ' . strlen($stepData[static::STEP_DATA_TYPE]))
+                )
             );
         }
 
@@ -228,9 +243,12 @@ class BacktraceStep extends AbstractCallback
             return $this->pool
                 ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessArray')
                     ->process(
-                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                            ->setData($stepData[static::STEP_DATA_ARGS])
-                            ->setName('Arguments from the call')
+                        $this->dispatchEventWithModel(
+                            __FUNCTION__ . '::end',
+                            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                                ->setData($stepData[static::STEP_DATA_ARGS])
+                                ->setName('Arguments from the call')
+                        )
                     );
         }
 

@@ -46,6 +46,9 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
  *   Array of reflection methods.
  * @uses \reflectionClass ref
  *   Reflection of the class we are analysing.
+ * @uses \reflectionMethod reflectionMethod
+ *   The current reflection of the methos we are analysing.
+ *   Gets set from the inside.
  */
 class ThroughMethods extends AbstractCallback
 {
@@ -57,6 +60,8 @@ class ThroughMethods extends AbstractCallback
      */
     public function callMe()
     {
+        $this->dispatchStartEvent();
+
         $result = '';
         /** @var \ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters['ref'];
@@ -90,8 +95,6 @@ class ThroughMethods extends AbstractCallback
                 $paramList .= ', ';
             }
 
-            
-
             // Get declaring keywords.
             $methodData['declaration keywords'] = $this->getDeclarationKeywords(
                 $reflectionMethod,
@@ -106,18 +109,26 @@ class ThroughMethods extends AbstractCallback
                 $connectorType = Connectors::METHOD;
             }
 
+            // Update the reflection method.
+            $this->parameters['reflectionMethod'] = $reflectionMethod;
+
             // Render it!
             $result .= $this->pool->render->renderExpandableChild(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                    ->setName($reflectionMethod->name)
-                    ->setType($methodData['declaration keywords'] . ' method')
-                    ->setConnectorType($connectorType)
-                    // Remove the ',' after the last char.
-                    ->setConnectorParameters(trim($paramList, ', '))
-                    ->addParameter('data', $methodData)
-                    ->injectCallback(
-                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis')
-                    )
+                $this->dispatchEventWithModel(
+                    __FUNCTION__ . '::end',
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->setName($reflectionMethod->name)
+                        ->setType($methodData['declaration keywords'] . ' method')
+                        ->setConnectorType($connectorType)
+                        // Remove the ',' after the last char.
+                        ->setConnectorParameters(trim($paramList, ', '))
+                        ->addParameter('data', $methodData)
+                        ->injectCallback(
+                            $this->pool->createClass(
+                                'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis'
+                            )
+                        )
+                )
             );
         }
 

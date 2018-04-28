@@ -56,6 +56,8 @@ class ThroughConstants extends AbstractCallback
      */
     public function callMe()
     {
+        $this->dispatchStartEvent();
+        
         $output = '';
 
         // We do not need to check the recursionHandler, this is class

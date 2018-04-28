@@ -64,6 +64,8 @@ class DebugMethods extends AbstractObjectAnalysis
      */
     public function callMe()
     {
+        $this->dispatchStartEvent();
+
         $data = $this->parameters['data'];
         /** @var \ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters['ref'];
@@ -92,16 +94,19 @@ class DebugMethods extends AbstractObjectAnalysis
 
                 if (isset($result) === true) {
                     $output .= $this->pool->render->renderExpandableChild(
-                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                            ->setName($funcName)
-                            ->setType('debug method')
-                            ->setNormal('. . .')
-                            ->setHelpid($funcName)
-                            ->setConnectorType(Connectors::METHOD)
-                            ->addParameter('data', $result)
-                            ->injectCallback(
-                                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Debug')
-                            )
+                        $this->dispatchEventWithModel(
+                            'analysisEnd',
+                            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                                ->setName($funcName)
+                                ->setType('debug method')
+                                ->setNormal('. . .')
+                                ->setHelpid($funcName)
+                                ->setConnectorType(Connectors::METHOD)
+                                ->addParameter('data', $result)
+                                ->injectCallback(
+                                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Debug')
+                                )
+                        )
                     );
                     unset($result);
                 }

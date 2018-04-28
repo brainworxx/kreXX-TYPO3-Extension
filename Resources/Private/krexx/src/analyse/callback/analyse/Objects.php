@@ -40,7 +40,7 @@ use Brainworxx\Krexx\Service\Config\Fallback;
 /**
  * Object analysis methods.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analysis
+ * @package Brainworxx\Krexx\Analyse\Callback\Analyse
  *
  * @uses object data
  *   The class we are analysing.
@@ -59,6 +59,8 @@ class Objects extends AbstractCallback
      */
     public function callMe()
     {
+        $this->dispatchStartEvent();
+        
         $output = $this->pool->render->renderSingeChildHr();
 
         $data = $this->parameters['data'];

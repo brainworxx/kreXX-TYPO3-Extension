@@ -35,6 +35,7 @@
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\Config;
 
 // Include some files and set some internal values.
 \Krexx::bootstrapKrexx();
@@ -143,6 +144,8 @@ class Krexx
         include_once 'src/Service/Config/From/Cookie.php';
         include_once 'src/Service/Config/From/Ini.php';
 
+        include_once 'src/Service/Factory/AbstractEventHandler.php';
+        include_once 'src/Service/Factory/Event.php';
         include_once 'src/Service/Factory/Factory.php';
         include_once 'src/Service/Factory/Pool.php';
 
@@ -153,7 +156,8 @@ class Krexx
         include_once 'src/Service/Misc/File.php';
         include_once 'src/Service/Misc/Registry.php';
 
-        include_once 'src/Service/Overwrites.php';
+        include_once 'src/Service/Plugin/Registration.php';
+        include_once 'src/Service/Plugin/AbstractPluginConfig.php';
 
         include_once 'src/View/Output/AbstractOutput.php';
         include_once 'src/View/Output/Chunks.php';
@@ -164,6 +168,13 @@ class Krexx
         include_once 'src/View/AbstractRender.php';
         include_once 'src/View/Messages.php';
         include_once 'src/View/Render.php';
+
+        // Point the configuration to the right directories
+        Config::$directories = array(
+            'chunks' => KREXX_DIR . 'chunks/',
+            'log' => KREXX_DIR . 'log/',
+            'config' => KREXX_DIR . 'config/Krexx.ini',
+        );
 
         if (!function_exists('krexx')) {
             /**

@@ -75,6 +75,8 @@ class ThroughProperties extends AbstractCallback
      */
     public function callMe()
     {
+        $this->dispatchStartEvent();
+
         // I need to preprocess them, since I do not want to render a
         // reflection property.
         /** @var \ReflectionClass $ref */
@@ -140,13 +142,16 @@ class ThroughProperties extends AbstractCallback
 
             // Stitch together our model
             $output .= $this->pool->routing->analysisHub(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                    ->setData($value)
-                    ->setName($this->pool->encodingService->encodeString($propName))
-                    ->addToJson('Comment', $comment)
-                    ->addToJson('Declared in', $declarationPlace)
-                    ->setAdditional($additional)
-                    ->setConnectorType($connectorType)
+                $this->dispatchEventWithModel(
+                    __FUNCTION__ . '::end',
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->setData($value)
+                        ->setName($this->pool->encodingService->encodeString($propName))
+                        ->addToJson('Comment', $comment)
+                        ->addToJson('Declared in', $declarationPlace)
+                        ->setAdditional($additional)
+                        ->setConnectorType($connectorType)
+                )
             );
         }
 

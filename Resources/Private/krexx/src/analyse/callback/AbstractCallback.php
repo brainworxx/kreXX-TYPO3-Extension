@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Callback;
 
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -91,5 +92,38 @@ abstract class AbstractCallback
         $this->parameters = $params;
 
         return $this;
+    }
+
+    /**
+     * Dispatches the start event of the callMe callback.
+     */
+    public function dispatchStartEvent()
+    {
+        $this->pool->eventService->dispatch(
+            get_class($this) . '::callMe::start',
+            $this->parameters
+        );
+    }
+
+    /**
+     * Dispatches an event where the modes is available.
+     *
+     * @param string $name
+     *   The name of the event.
+     * @param Model $model
+     *   The model so far.
+     *
+     * @return Model
+     *   Return the model for chaining.
+     */
+    public function dispatchEventWithModel($name, Model $model)
+    {
+        $this->pool->eventService->dispatch(
+            get_class($this) . '::' . $name,
+            $this->parameters,
+            $model
+        );
+
+        return $model;
     }
 }

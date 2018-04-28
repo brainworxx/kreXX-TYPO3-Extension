@@ -41,7 +41,7 @@ use Brainworxx\Krexx\Service\Config\Fallback;
 /**
  * Configuration "analysis" methods. Meh, naming conventions suck sometimes.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analysis
+ * @package Brainworxx\Krexx\Analyse\Callback\Analyse
  *
  * @uses array data
  *   The configuration section we are rendering
@@ -60,6 +60,8 @@ class ConfigSection extends AbstractCallback
      */
     public function callMe()
     {
+        $this->dispatchStartEvent();
+        
         $sectionOutput = '';
         foreach ($this->parameters['data'] as $id => $setting) {
             // Render the single value.

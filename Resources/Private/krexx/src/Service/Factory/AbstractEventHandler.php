@@ -32,54 +32,25 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
+namespace Brainworxx\Krexx\Service\Factory;
 
-use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Class MethodInfo
+ * Class AbstractEventHandler
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
- *
- * @uses array data
- *   Associative array, the analysis result.
+ * @package Brainworxx\Krexx\Service\Factory
  */
-class ThroughMethodAnalysis extends AbstractCallback
+abstract class AbstractEventHandler
 {
     /**
-     * Renders the info of a single method.
+     * Blueprint for the event handler.
      *
-     * @return string
-     *   The generated markup.
+     * @param array $params
+     *   The parameters from the analyse class
+     * @param \Brainworxx\Krexx\Analyse\Model|null $model
+     *   The m,odel, if available, so far.
      */
-    public function callMe()
-    {
-        $this->dispatchStartEvent();
+    abstract public function handle(array $params, Model $model = null);
 
-        $output = '';
-        foreach ($this->parameters['data'] as $key => $string) {
-            /** @var Model $model */
-            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setData($string)
-                ->setName($key)
-                ->setType('reflection');
-
-            if ($key === 'comments' || $key === 'declared in' || $key === 'source') {
-                $model->setNormal('. . .');
-                $model->setHasExtra(true);
-            } else {
-                $model->setNormal($string);
-            }
-
-            $output .= $this->pool->render->renderSingleChild(
-                $this->dispatchEventWithModel(
-                    __FUNCTION__ . '::end',
-                    $model
-                )
-            );
-        }
-
-        return $output;
-    }
 }

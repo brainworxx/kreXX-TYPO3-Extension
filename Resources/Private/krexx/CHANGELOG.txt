@@ -1,5 +1,8 @@
-2.4.1 dev
+3.0.0 dev
 - Added 'is' and 'has' to the getter analysis.
+- Added half-asses plugin support, to replace the half-asses
+  overwrites
+- Added a event dispatcher.
 - Change: Some internal renaming.
 - Bugfix: The position of the search field of the hans skin is now
   calculated correct when the viewport is not on top.

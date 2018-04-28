@@ -54,6 +54,8 @@ class Getter extends AbstractObjectAnalysis
      */
     public function callMe()
     {
+        $this->dispatchStartEvent();
+
         $data = $this->parameters['data'];
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
@@ -115,18 +117,21 @@ class Getter extends AbstractObjectAnalysis
         // We need to set at least one connector here to activate
         // code generation, even if it is a space.
         return $this->pool->render->renderExpandableChild(
-            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setName('Getter')
-                ->setType('class internals')
-                ->setHelpid('getterHelpInfo')
-                ->addParameter('ref', $ref)
-                ->addParameter('normalGetter', $normalGetter)
-                ->addParameter('isGetter', $isGetter)
-                ->addParameter('hasGetter', $hasGetter)
-                ->addParameter('data', $data)
-                ->injectCallback(
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter')
-                )
+            $this->dispatchEventWithModel(
+                'analysisEnd',
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    ->setName('Getter')
+                    ->setType('class internals')
+                    ->setHelpid('getterHelpInfo')
+                    ->addParameter('ref', $ref)
+                    ->addParameter('normalGetter', $normalGetter)
+                    ->addParameter('isGetter', $isGetter)
+                    ->addParameter('hasGetter', $hasGetter)
+                    ->addParameter('data', $data)
+                    ->injectCallback(
+                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter')
+                    )
+            )
         );
     }
 }

@@ -54,6 +54,8 @@ class Methods extends AbstractObjectAnalysis
      */
     public function callMe()
     {
+        $this->dispatchStartEvent();
+
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
 
@@ -123,15 +125,18 @@ class Methods extends AbstractObjectAnalysis
         usort($methods, array($this, 'reflectionSorting'));
 
         return $this->pool->render->renderExpandableChild(
-            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setName('Methods')
-                ->setType('class internals')
-                ->addParameter('data', $methods)
-                ->addParameter('ref', $ref)
-                ->setDomId($domId)
-                ->injectCallback(
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods')
-                )
+            $this->dispatchEventWithModel(
+                'analysisEnd',
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    ->setName('Methods')
+                    ->setType('class internals')
+                    ->addParameter('data', $methods)
+                    ->addParameter('ref', $ref)
+                    ->setDomId($domId)
+                    ->injectCallback(
+                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods')
+                    )
+            )
         );
     }
 

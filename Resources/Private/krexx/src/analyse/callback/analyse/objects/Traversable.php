@@ -58,6 +58,8 @@ class Traversable extends AbstractObjectAnalysis
      */
     public function callMe()
     {
+        $this->dispatchStartEvent();
+
         // Check nesting level, memory and runtime.
         $this->pool->emergencyHandler->upOneNestingLevel();
         if ($this->pool->emergencyHandler->checkNesting() === true ||
@@ -139,7 +141,9 @@ class Traversable extends AbstractObjectAnalysis
                 )->setNormal('Traversable Info');
             }
 
-            $result = $this->pool->render->renderExpandableChild($model);
+            $result = $this->pool->render->renderExpandableChild(
+                $this->dispatchEventWithModel('analysisEnd', $model)
+            );
             $this->pool->emergencyHandler->downOneNestingLevel();
             return $result;
         }

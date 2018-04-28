@@ -39,7 +39,7 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 /**
  * Debug method result analysis methods.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analysis
+ * @package Brainworxx\Krexx\Analyse\Callback\Analyse
  *
  * @uses mixed data
  *   The result from one single configured debug method.
@@ -54,11 +54,16 @@ class Debug extends AbstractCallback
      */
     public function callMe()
     {
+        $this->dispatchStartEvent();
+
         // This could be anything, we need to route it.
         return $this->pool->routing->analysisHub(
-            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                ->setData($this->parameters['data'])
-                ->setName('result')
+            $this->dispatchEventWithModel(
+                'analysisEnd',
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    ->setData($this->parameters['data'])
+                    ->setName('result')
+            )
         );
     }
 }

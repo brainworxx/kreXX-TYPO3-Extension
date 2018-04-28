@@ -59,6 +59,8 @@ class ThroughArray extends AbstractCallback
      */
     public function callMe()
     {
+        $this->dispatchStartEvent();
+        
         $recursionMarker = $this->pool->recursionHandler->getMarker();
         $output = $this->pool->render->renderSingeChildHr();
 
@@ -94,7 +96,7 @@ class ThroughArray extends AbstractCallback
 
             $output .= $this->pool->routing->analysisHub($model);
         }
-        
+
         return $output . $this->pool->render->renderSingeChildHr();
     }
 }

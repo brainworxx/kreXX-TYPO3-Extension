@@ -57,6 +57,9 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *   A reflection class of the object we are analysing.
  * @uses object $data
  *   The object we are currently analysing
+ * @uses string $currentPrefix
+ *   The current prefix we are analysing (get, is, has).
+ *   Does not get set from the outside.
  */
 class ThroughGetter extends AbstractCallback
 {
@@ -74,15 +77,6 @@ class ThroughGetter extends AbstractCallback
      * @var \Brainworxx\Krexx\Analyse\comment\Methods
      */
     protected $commentAnalysis;
-
-    /**
-     * The current prefix we are analysing (get, is, has).
-     *
-     * @see $this->preparePropertyName()
-     *
-     * @var string
-     */
-    protected $currentPrefix;
 
     /**
      * Injects the pool and initializes the comment analysis.
@@ -103,13 +97,15 @@ class ThroughGetter extends AbstractCallback
      */
     public function callMe()
     {
-        $this->currentPrefix = 'get';
+        $this->dispatchStartEvent();
+
+        $this->parameters['currentPrefix'] = 'get';
         $output = $this->goThroughMethodList($this->parameters['normalGetter']);
 
-        $this->currentPrefix = 'is';
+        $this->parameters['currentPrefix'] = 'is';
         $output .= $this->goThroughMethodList($this->parameters['isGetter']);
 
-        $this->currentPrefix = 'has';
+        $this->parameters['currentPrefix'] = 'has';
         return $output . $this->goThroughMethodList($this->parameters['hasGetter']);
     }
 
@@ -150,7 +146,13 @@ class ThroughGetter extends AbstractCallback
             }
 
             // Get ourselves a possible return value
-            $output .= $this->retrievePropertyValue($reflectionMethod, $model);
+            $output .= $this->retrievePropertyValue(
+                $reflectionMethod,
+                $this->dispatchEventWithModel(
+                    __FUNCTION__ . '::end',
+                    $model
+                )
+            );
         }
 
         return $output;
@@ -191,7 +193,12 @@ class ThroughGetter extends AbstractCallback
             $model->addToJson('hint', $this->pool->messages->getHelp('getterNull'));
         }
 
-        return $this->pool->routing->analysisHub($model);
+        return $this->pool->routing->analysisHub(
+            $this->dispatchEventWithModel(
+                __FUNCTION__ . '::end',
+                $model
+            )
+        );
     }
 
     /**
@@ -293,15 +300,17 @@ class ThroughGetter extends AbstractCallback
      */
     protected function preparePropertyName(\ReflectionMethod $reflectionMethod)
     {
+        $currentPrefix = $this->parameters['currentPrefix'];
+
          // Get the name and remove the 'get' . . .
         $getterName = $reflectionMethod->getName();
-        if (strpos($getterName, $this->currentPrefix) === 0) {
-            return lcfirst(substr($getterName, strlen($this->currentPrefix)));
+        if (strpos($getterName, $currentPrefix) === 0) {
+            return lcfirst(substr($getterName, strlen($currentPrefix)));
         }
 
         // . . .  or the '_get'.
-        if (strpos($getterName, '_' . $this->currentPrefix) === 0) {
-            return lcfirst(substr($getterName, strlen($this->currentPrefix) + 1));
+        if (strpos($getterName, '_' . $currentPrefix) === 0) {
+            return lcfirst(substr($getterName, strlen($currentPrefix) + 1));
         }
 
         // Still here?!? At least make the first letter lowercase.
