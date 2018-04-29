@@ -54,6 +54,9 @@ class VhsMethods extends AbstractEventHandler
      *   The parameters for the callback.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far.
+     *
+     * @return string
+     *   Return an empty string.
      */
     public function handle(array $params, Model $model = null)
     {

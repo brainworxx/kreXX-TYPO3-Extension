@@ -32,46 +32,33 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\FluidDataViewer\Rewrites\Iterate;
+namespace Brainworxx\Includekrexx\Plugins\FluidDataViewer\EventHandlers;
 
-use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter as OrgThroughGetter;
-use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\AbstractEventHandler;
 
 /**
- * Analysing the getter methods, without the actual 'get' word in the method name.
+ * We simply add the data viewer eav to the output.
  *
- * @package Brainworxx\Includekrexx\Rewrite\Analyse\Callback\Iterate
+ * @event
+ *   Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe::start
+ * @package Brainworxx\Includekrexx\Plugins\FluidDataViewer
  */
-class ThroughGetter extends OrgThroughGetter
+class AddAnalysis extends AbstractEventHandler
 {
-
     /**
-     * {@inheritdoc}
-     *
-     * We simply add the data viewer eav to the output.
-     *
-     * @param array $methodList
-     *   The list of methods we are going through, consisting of \ReflectionMethod
+     * @param array $params
+     *   The parameters from the callback class.
+     * @param \Brainworxx\Krexx\Analyse\Model|null $model
+     *   The model, if available
      *
      * @return string
-     *   The generated DOM.
+     *   The generaqted markup.
      */
-    protected function goThroughMethodList(array $methodList)
+    public function handle(array $params, Model $model = null)
     {
-        return $this->handleDataviewerEav() . parent::goThroughMethodList($methodList);
-    }
-
-    /**
-     * If we are facing a \MageDeveloper\Dataviewer\Domain\Model\Record,
-     * we may want to take a look at the containing dynamic getter values.
-     *
-     * @return string
-     *   The generated HTML markup for the magic getters.
-     */
-    protected function handleDataviewerEav()
-    {
-        $record = $this->parameters['data'];
+        $record = $params['data'];
         $output = '';
         if (is_object($record) && is_a($record, '\\MageDeveloper\\Dataviewer\\Domain\\Model\\Record')) {
             try {
