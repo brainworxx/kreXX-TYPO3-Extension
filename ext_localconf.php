@@ -90,6 +90,14 @@ $boot = function ($_EXTKEY) {
     if (!class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
         include_once $extPath . 'Classes/ViewHelpers/LegacyDebugViewHelper.php';
     }
+
+    // Register the Aimoes Magic plugin.
+    \Brainworxx\Krexx\Service\Plugin\Registration::register(
+        'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
+    );
+    \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin(
+        'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
+    );
 };
 
 $boot($_EXTKEY);
