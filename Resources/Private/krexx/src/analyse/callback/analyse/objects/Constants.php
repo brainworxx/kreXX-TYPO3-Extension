@@ -52,7 +52,7 @@ class Constants extends AbstractObjectAnalysis
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
+        $output = $this->dispatchStartEvent();
 
         // This is actually an array, we ara analysing. But We do not want to render
         // an array, so we need to process it like the return from an iterator.
@@ -67,7 +67,7 @@ class Constants extends AbstractObjectAnalysis
 
         // We've got some values, we will dump them.
         $classname = '\\' . $ref->getName();
-        return $this->pool->render->renderExpandableChild(
+        return $output . $this->pool->render->renderExpandableChild(
             $this->dispatchEventWithModel(
                 'analysisEnd',
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')

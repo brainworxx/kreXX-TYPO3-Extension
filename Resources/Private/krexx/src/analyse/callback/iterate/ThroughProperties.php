@@ -75,13 +75,13 @@ class ThroughProperties extends AbstractCallback
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
+        $output = $this->dispatchStartEvent();
 
         // I need to preprocess them, since I do not want to render a
         // reflection property.
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
-        $output = '';
+
         $this->defaultProperties = $ref->getDefaultProperties();
 
         foreach ($this->parameters['data'] as $refProperty) {

@@ -60,9 +60,8 @@ class ConfigSection extends AbstractCallback
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
-        
-        $sectionOutput = '';
+        $sectionOutput = $this->dispatchStartEvent();
+
         foreach ($this->parameters['data'] as $id => $setting) {
             // Render the single value.
             // We need to find out where the value comes from.

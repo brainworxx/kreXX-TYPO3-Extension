@@ -54,7 +54,7 @@ class Getter extends AbstractObjectAnalysis
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
+        $output = $this->dispatchStartEvent();
 
         $data = $this->parameters['data'];
         /** @var \ReflectionClass $ref */
@@ -72,7 +72,7 @@ class Getter extends AbstractObjectAnalysis
 
         if (empty($methodList) === true) {
             // There are no getter methods in here.
-            return '';
+            return $output;
         }
 
         $normalGetter = array();
@@ -110,28 +110,29 @@ class Getter extends AbstractObjectAnalysis
             empty($hasGetter) === true
         ) {
             // There are no getter methods in here.
-            return '';
+            return $output;
         }
 
         // Got some getters right here.
         // We need to set at least one connector here to activate
         // code generation, even if it is a space.
-        return $this->pool->render->renderExpandableChild(
-            $this->dispatchEventWithModel(
-                'analysisEnd',
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                    ->setName('Getter')
-                    ->setType('class internals')
-                    ->setHelpid('getterHelpInfo')
-                    ->addParameter('ref', $ref)
-                    ->addParameter('normalGetter', $normalGetter)
-                    ->addParameter('isGetter', $isGetter)
-                    ->addParameter('hasGetter', $hasGetter)
-                    ->addParameter('data', $data)
-                    ->injectCallback(
-                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter')
-                    )
-            )
-        );
+        return $output .
+            $this->pool->render->renderExpandableChild(
+                $this->dispatchEventWithModel(
+                    'analysisEnd',
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->setName('Getter')
+                        ->setType('class internals')
+                        ->setHelpid('getterHelpInfo')
+                        ->addParameter('ref', $ref)
+                        ->addParameter('normalGetter', $normalGetter)
+                        ->addParameter('isGetter', $isGetter)
+                        ->addParameter('hasGetter', $hasGetter)
+                        ->addParameter('data', $data)
+                        ->injectCallback(
+                            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter')
+                        )
+                )
+            );
     }
 }

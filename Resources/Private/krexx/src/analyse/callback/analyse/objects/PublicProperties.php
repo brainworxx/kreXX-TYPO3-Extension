@@ -56,8 +56,8 @@ class PublicProperties extends AbstractObjectAnalysis
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
-        
+        $output = $this->dispatchStartEvent();
+
         $data = $this->parameters['data'];
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
@@ -89,13 +89,14 @@ class PublicProperties extends AbstractObjectAnalysis
         }
 
         if (empty($refProps) === true) {
-            return '';
+            return $output;
         }
 
         usort($refProps, array($this, 'reflectionSorting'));
         // Adding a HR to reflect that the following stuff are not public
         // properties anymore.
-        return $this->getReflectionPropertiesData($refProps, $ref, $data, 'Public properties') .
+        return $output .
+            $this->getReflectionPropertiesData($refProps, $ref, $data, 'Public properties') .
             $this->pool->render->renderSingeChildHr();
     }
 }

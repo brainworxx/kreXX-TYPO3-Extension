@@ -64,11 +64,10 @@ class BacktraceStep extends AbstractCallback
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
-
         // We are handling the following values here:
         // file, line, function, object, type, args, sourcecode.
-        return $this->fileToOutput() .
+        return $this->dispatchStartEvent() .
+            $this->fileToOutput() .
             $this->lineToOutput() .
             $this->functionToOutput() .
             $this->objectToOutput() .

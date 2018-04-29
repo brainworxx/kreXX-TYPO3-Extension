@@ -97,10 +97,10 @@ class ThroughGetter extends AbstractCallback
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
+        $output = $this->dispatchStartEvent();
 
         $this->parameters['currentPrefix'] = 'get';
-        $output = $this->goThroughMethodList($this->parameters['normalGetter']);
+        $output .= $this->goThroughMethodList($this->parameters['normalGetter']);
 
         $this->parameters['currentPrefix'] = 'is';
         $output .= $this->goThroughMethodList($this->parameters['isGetter']);

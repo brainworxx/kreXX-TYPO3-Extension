@@ -54,8 +54,8 @@ class PrivateProperties extends AbstractObjectAnalysis
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
-        
+        $output = $this->dispatchStartEvent();
+
         $refProps = array();
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
@@ -72,16 +72,17 @@ class PrivateProperties extends AbstractObjectAnalysis
         } while (is_object($reflectionClass));
 
         if (empty($refProps) === true) {
-            return '';
+            return $output;
         }
 
         usort($refProps, array($this, 'reflectionSorting'));
 
-        return $this->getReflectionPropertiesData(
-            $refProps,
-            $ref,
-            $this->parameters['data'],
-            'Private properties'
-        );
+        return $output .
+            $this->getReflectionPropertiesData(
+                $refProps,
+                $ref,
+                $this->parameters['data'],
+                'Private properties'
+            );
     }
 }

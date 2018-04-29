@@ -54,22 +54,23 @@ class ProtectedProperties extends AbstractObjectAnalysis
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
-        
+        $output = $this->dispatchStartEvent();
+
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
         $refProps = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
         if (empty($refProps) === true) {
-            return '';
+            return $output;
         }
 
         usort($refProps, array($this, 'reflectionSorting'));
 
-        return $this->getReflectionPropertiesData(
-            $refProps,
-            $ref,
-            $this->parameters['data'],
-            'Protected properties'
-        );
+        return $output .
+            $this->getReflectionPropertiesData(
+                $refProps,
+                $ref,
+                $this->parameters['data'],
+                'Protected properties'
+            );
     }
 }

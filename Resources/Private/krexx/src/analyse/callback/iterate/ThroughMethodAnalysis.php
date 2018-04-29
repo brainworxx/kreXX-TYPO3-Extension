@@ -55,9 +55,8 @@ class ThroughMethodAnalysis extends AbstractCallback
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
+        $output = $this->dispatchStartEvent();
 
-        $output = '';
         foreach ($this->parameters['data'] as $key => $string) {
             /** @var Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')

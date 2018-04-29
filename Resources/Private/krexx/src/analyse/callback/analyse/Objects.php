@@ -59,9 +59,7 @@ class Objects extends AbstractCallback
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
-        
-        $output = $this->pool->render->renderSingeChildHr();
+        $output = $this->pool->render->renderSingeChildHr() . $this->dispatchStartEvent();
 
         $data = $this->parameters['data'];
         $ref = $this->parameters['ref'] = new \ReflectionClass($data);

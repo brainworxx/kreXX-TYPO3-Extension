@@ -60,9 +60,7 @@ class ThroughMethods extends AbstractCallback
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
-
-        $result = '';
+        $result = $this->dispatchStartEvent();
         /** @var \ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters['ref'];
 

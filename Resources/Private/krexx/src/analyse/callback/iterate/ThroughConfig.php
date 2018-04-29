@@ -58,9 +58,7 @@ class ThroughConfig extends AbstractCallback
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
-        
-        $configOutput = '';
+        $configOutput = $this->dispatchStartEvent();
 
         // We need to "explode" our config array into the
         // sections again, for better readability.

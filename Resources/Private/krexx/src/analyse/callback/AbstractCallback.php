@@ -96,10 +96,13 @@ abstract class AbstractCallback
 
     /**
      * Dispatches the start event of the callMe callback.
+     *
+     * @return string
+     *   The generated markup from the event handler.
      */
     public function dispatchStartEvent()
     {
-        $this->pool->eventService->dispatch(
+        return $this->pool->eventService->dispatch(
             get_class($this) . '::callMe::start',
             $this->parameters
         );

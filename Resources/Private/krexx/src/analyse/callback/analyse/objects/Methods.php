@@ -54,7 +54,7 @@ class Methods extends AbstractObjectAnalysis
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
+        $output = $this->dispatchStartEvent();
 
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
@@ -70,16 +70,17 @@ class Methods extends AbstractObjectAnalysis
         if ($this->pool->recursionHandler->isInMetaHive($domId) === true) {
             // We have been here before.
             // We skip this one, and leave it to the js recursion handler!
-            return $this->pool->render->renderRecursion(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                    ->setDomid($domId)
-                    ->setNormal('Methods')
-                    ->setName('Methods')
-                    ->setType('class internals')
-            );
+            return $output .
+                $this->pool->render->renderRecursion(
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->setDomid($domId)
+                        ->setNormal('Methods')
+                        ->setName('Methods')
+                        ->setType('class internals')
+                );
         }
 
-        return $this->analyseMethods($ref, $domId, $doProtected, $doPrivate);
+        return $output . $this->analyseMethods($ref, $domId, $doProtected, $doPrivate);
     }
 
     /**

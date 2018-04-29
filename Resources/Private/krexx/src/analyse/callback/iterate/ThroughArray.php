@@ -59,11 +59,10 @@ class ThroughArray extends AbstractCallback
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
-        
-        $recursionMarker = $this->pool->recursionHandler->getMarker();
-        $output = $this->pool->render->renderSingeChildHr();
+        $output = $this->pool->render->renderSingeChildHr() .
+            $this->dispatchStartEvent();
 
+        $recursionMarker = $this->pool->recursionHandler->getMarker();
         // Iterate through.
         foreach ($this->parameters['data'] as $key => &$value) {
             // We will not output our recursion marker.

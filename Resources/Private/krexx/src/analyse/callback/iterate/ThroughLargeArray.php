@@ -67,9 +67,8 @@ class ThroughLargeArray extends AbstractCallback
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
-        
-        $output = '';
+        $output = $this->dispatchStartEvent();
+
         $recursionMarker = $this->pool->recursionHandler->getMarker();
         $output .= $this->pool->render->renderSingeChildHr();
         $multiline = $this->parameters['multiline'];

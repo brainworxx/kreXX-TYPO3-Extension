@@ -77,18 +77,25 @@ class Event
      *   The parameters for the callback.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far, if available.
+     *
+     * @return string
+     *   The generated markup from the event hanslers
+     *   This will only get dispatched, if you use the start event.
      */
     public function dispatch($name, array &$params, Model $model = null)
     {
+        $output = '';
         if (isset($this->register[$name]) === false) {
             // No registered handler. Early return.
-            return;
+            return $output;
         }
 
         // Got to handel them all.
         foreach ($this->register[$name] as $classname) {
-            $this->pool->createClass($classname)->handle($params, $model);
+            $output .= $this->pool->createClass($classname)->handle($params, $model);
         }
+
+        return $output;
     }
 
     /**

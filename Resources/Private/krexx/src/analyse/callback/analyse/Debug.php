@@ -54,16 +54,15 @@ class Debug extends AbstractCallback
      */
     public function callMe()
     {
-        $this->dispatchStartEvent();
-
         // This could be anything, we need to route it.
-        return $this->pool->routing->analysisHub(
-            $this->dispatchEventWithModel(
-                'analysisEnd',
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                    ->setData($this->parameters['data'])
-                    ->setName('result')
-            )
-        );
+        return $this->dispatchStartEvent() .
+            $this->pool->routing->analysisHub(
+                $this->dispatchEventWithModel(
+                    'analysisEnd',
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->setData($this->parameters['data'])
+                        ->setName('result')
+                )
+            );
     }
 }
