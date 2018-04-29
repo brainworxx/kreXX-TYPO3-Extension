@@ -126,4 +126,23 @@ abstract class AbstractCallback
 
         return $model;
     }
+
+    /**
+     * Check for special chars in properties.
+     *
+     * AFAIK this is only possible for dynamically declared properties
+     * or some magical stuff from __get()
+     *
+     * @see https://stackoverflow.com/questions/29019484/validate-a-php-variable
+     * @author AbraCadaver
+     *
+     * @param $propName
+     *   The property name we want to check.
+     * @return bool
+     *   Whether we have a special char in there, or not.
+     */
+    protected function isPropertyNameNormal($propName)
+    {
+        return (bool) preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $propName);
+    }
 }

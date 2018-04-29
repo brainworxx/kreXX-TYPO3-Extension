@@ -119,9 +119,7 @@ class ThroughProperties extends AbstractCallback
                 // Check for very special chars in there.
                 // AFAIK this is only possible for dynamically declared properties
                 // which can never be static.
-                if (!preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $propName)) {
-                    // @see https://stackoverflow.com/questions/29019484/validate-a-php-variable
-                    // @author AbraCadaver
+                if ($this->isPropertyNameNormal($propName) === false) {
                     $connectorType = Connectors::SPECIAL_CHARS_PROP;
                 }
 

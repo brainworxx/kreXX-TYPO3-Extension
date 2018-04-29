@@ -419,6 +419,8 @@ class Fallback
 
         // The lazy loading proxy may not have loaded the object at this time.
         '\\TYPO3\\CMS\\Extbase\\Persistence\\Generic\\LazyLoadingProxy' => array('__toString'),
+
+        '\\Aimeos\\MW\\DB\\Statement\\Base' => array('__toString'),
     );
 
     /**
