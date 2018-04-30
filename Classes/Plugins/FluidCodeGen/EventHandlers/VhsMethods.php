@@ -35,8 +35,9 @@
 namespace Brainworxx\Includekrexx\Plugins\FluidCodeGen\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\AbstractEventHandler;
 use Brainworxx\Includekrexx\Plugins\FluidCodeGen\Rewrites\Code\Codegen;
+use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Class VhsMethods
@@ -44,8 +45,23 @@ use Brainworxx\Includekrexx\Plugins\FluidCodeGen\Rewrites\Code\Codegen;
  * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe::end
  * @package Brainworxx\Includekrexx\Plugins\FluidCodeGen\EventHandlers
  */
-class VhsMethods extends AbstractEventHandler
+class VhsMethods implements EventHandlerInterface
 {
+    /**
+     * The resource pool
+     *
+     * @var Pool
+     */
+    protected $pool;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(Pool $pool)
+    {
+        $this->pool = $pool;
+    }
+    
     /**
      * We set the multiline code generation to VHS, and We add the name of the
      * parameter for the VHS code generation into the 'paramArray'
@@ -71,5 +87,7 @@ class VhsMethods extends AbstractEventHandler
         // Switch to VHS Viewhelper
         $model->setMultiLineCodeGen(Codegen::VHS_CALL_VIEWHELPER)
             ->addParameter('paramArray', $paramArray);
+
+        return '';
     }
 }

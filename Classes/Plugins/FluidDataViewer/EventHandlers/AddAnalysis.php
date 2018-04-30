@@ -36,7 +36,8 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDataViewer\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\AbstractEventHandler;
+use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * We simply add the data viewer eav to the output.
@@ -45,8 +46,23 @@ use Brainworxx\Krexx\Service\Factory\AbstractEventHandler;
  *   Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe::start
  * @package Brainworxx\Includekrexx\Plugins\FluidDataViewer
  */
-class AddAnalysis extends AbstractEventHandler
+class AddAnalysis implements EventHandlerInterface
 {
+    /**
+     * The resource pool
+     *
+     * @var Pool
+     */
+    protected $pool;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(Pool $pool)
+    {
+        $this->pool = $pool;
+    }
+
     /**
      * @param array $params
      *   The parameters from the callback class.

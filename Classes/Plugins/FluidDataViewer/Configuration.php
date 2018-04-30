@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDataViewer;
 
+use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Factory\Factory;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 
@@ -57,11 +58,7 @@ class Configuration implements PluginConfigInterface
      */
     public static function exec()
     {
-        // Registering the fluid connector class.
-//        Factory::$rewrite['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter'] =
-//            'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Rewrites\\Iterate\\ThroughGetter';
-
-        \Krexx::$pool->eventService->register(
+        Event::register(
             'Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe::start',
             'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\EventHandlers\\AddAnalysis'
         );

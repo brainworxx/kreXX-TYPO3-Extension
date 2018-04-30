@@ -35,7 +35,8 @@
 namespace Brainworxx\Includekrexx\Plugins\FluidCodeGen\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\AbstractEventHandler;
+use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Class GetterWiothoutGet
@@ -43,8 +44,23 @@ use Brainworxx\Krexx\Service\Factory\AbstractEventHandler;
  * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList::end
  * @package Brainworxx\Includekrexx\Plugins\FluidCallerFinder\EventHandlers
  */
-class GetterWithoutGet extends AbstractEventHandler
+class GetterWithoutGet implements EventHandlerInterface
 {
+    /**
+     * The resource pool
+     *
+     * @var Pool
+     */
+    protected $pool;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(Pool $pool)
+    {
+        $this->pool = $pool;
+    }
+
     /**
      * We simply remoge the 'get' from the methodname in the model.
      *

@@ -32,49 +32,55 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\AimeosMagic\Rewrites;
+namespace Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers;
 
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 
 /**
- * Analysis of Aimeos magical properties.
+ * Analysing the __get() implementation in aimeos items.
  *
- * Aimeos either stores it's magical properties in
- * $this->bdata
- * or
- * $this->values
+ * @event Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::callMe::start
  *
- * @package rainworxx\Includekrexx\Plugins\AimeosMagic\Rewrites
- *
- * @uses mixed data
- *   The class we are currently analsysing.
- * @uses \ReflectionClass ref
- *   A reflection of the class we are currently analysing.
+ * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers
  */
-class MagicalGetter extends PublicProperties
+class MagicalGetter extends AbstractCallback implements EventHandlerInterface
 {
+
+    public function callMe()
+    {
+       // Do nothing. This is a event observer, and not a callback.
+    }
+
     /**
      * We add our magical properties right before the normal
      * public properties.
      *
-     * {@inheritdoc}
+     * @param array $params
+     *   The parameters from the analyse class
+     * @param \Brainworxx\Krexx\Analyse\Model|null $model
+     *   The model, if available, so far.
+     *
+     * @return string
+     *   The generated markup.
      */
-    public function callMe()
+    public function handle(array $params, Model $model = null)
     {
-        $data = $this->parameters['data'];
+        $data = $params['data'];
         $result = '';
 
         if (is_a($data, 'Aimeos\\MShop\\Common\\Item\\Iface')) {
-            $result .= $this->extractValues('bdata');
+            $result .= $this->extractValues('bdata', $params);
         } elseif (is_a($data, 'Aimeos\\MW\\Tree\\Node\\Iface')) {
-            $result .= $this->extractValues('values');
+            $result .= $this->extractValues('values', $params);
         } elseif (is_a($data, 'Aimeos\\MW\\View\\Iface')) {
-            $result .= $this->extractValues('values');
+            $result .= $this->extractValues('values', $params);
         }
 
-        // Do the original stuff.
-        return $result . parent::callMe();
+        // Return the generated markup.
+        return $result;
     }
 
     /**
@@ -86,12 +92,12 @@ class MagicalGetter extends PublicProperties
      * @return string
      *   The generated markup.
      */
-    protected function extractValues($name)
+    protected function extractValues($name, array $params)
     {
         $result = array();
-        $data = $this->parameters['data'];
+        $data = $params['data'];
         /** @var \ReflectionClass $ref */
-        $ref = $this->parameters['ref'];
+        $ref = $params['ref'];
 
         try {
             // The property is a private property somewhere deep withing the

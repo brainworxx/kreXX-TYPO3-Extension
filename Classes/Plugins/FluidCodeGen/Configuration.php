@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Plugins\FluidCodeGen;
 
+use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Factory\Factory;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 
@@ -71,14 +72,14 @@ class Configuration implements PluginConfigInterface
 
         // Register our event handler, to remove the 'get' from the getter
         // method names. Fluid does not use these.
-        \Krexx::$pool->eventService->register(
-            'Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList::end',
+        Event::register(
+            'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::goThroughMethodList::end',
             'Brainworxx\\Includekrexx\\Plugins\\FluidCodeGen\\EventHandlers\\GetterWithoutGet'
         );
         // Another event switches to VHS code generation.
-        \Krexx::$pool->eventService->register(
-            'Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe::end',
+        Event::register(
+            'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods::callMe::end',
             'Brainworxx\\Includekrexx\\Plugins\\FluidCodeGen\\EventHandlers\\VhsMethods'
-            );
+        );
     }
 }

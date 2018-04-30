@@ -35,7 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\AimeosMagic;
 
 
-use Brainworxx\Krexx\Service\Factory\Factory;
+use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 
 class Configuration  implements PluginConfigInterface
@@ -58,7 +58,9 @@ class Configuration  implements PluginConfigInterface
     public static function exec()
     {
         // Resolving the __get()
-        Factory::$rewrite['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties'] =
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\Rewrites\\MagicalGetter';
+        Event::register(
+            'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::callMe::start',
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\MagicalGetter'
+        );
     }
 }
