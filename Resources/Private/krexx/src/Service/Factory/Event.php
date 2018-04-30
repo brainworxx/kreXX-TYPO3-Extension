@@ -48,7 +48,7 @@ class Event
      *
      * @var array
      */
-    protected $register = array();
+    protected static $register = array();
 
     /**
      * The pool.
@@ -85,13 +85,13 @@ class Event
     public function dispatch($name, array &$params, Model $model = null)
     {
         $output = '';
-        if (isset($this->register[$name]) === false) {
+        if (isset(self::$register[$name]) === false) {
             // No registered handler. Early return.
             return $output;
         }
 
         // Got to handel them all.
-        foreach ($this->register[$name] as $classname) {
+        foreach (self::$register[$name] as $classname) {
             $output .= $this->pool->createClass($classname)->handle($params, $model);
         }
 
@@ -106,12 +106,12 @@ class Event
      * @param string $className
      *   The class name.
      */
-    public function register($name, $className)
+    public static function register($name, $className)
     {
-        if (isset($this->register[$name]) === false) {
-            $this->register[$name] = array();
+        if (isset(self::$register[$name]) === false) {
+            self::$register[$name] = array();
         }
-        $this->register[$name][$className] = $className;
+        self::$register[$name][$className] = $className;
     }
 
     /**
@@ -122,19 +122,19 @@ class Event
      * @param string $className
      *   The class name.
      */
-    public function unregister($name, $className)
+    public static function unregister($name, $className)
     {
-        if (isset($this->register[$name]) === false) {
-            $this->register[$name] = array();
+        if (isset(self::$register[$name]) === false) {
+            self::$register[$name] = array();
         }
-        unset($this->register[$className]);
+        unset(self::$register[$className]);
     }
 
     /**
      * Purge all registered events.
      */
-    public function purge()
+    public static function purge()
     {
-        $this->register = array();
+        self::$register = array();
     }
 }

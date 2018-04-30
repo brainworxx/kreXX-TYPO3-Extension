@@ -41,25 +41,15 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @package Brainworxx\Krexx\Service\Factory
  */
-abstract class AbstractEventHandler
+interface EventHandlerInterface
 {
-
-    /**
-     * Our pool
-     *
-     * @var Pool
-     */
-    protected $pool;
 
     /**
      * Inject the pool.
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
      */
-    public function __construct(Pool $pool)
-    {
-        $this->pool = $pool;
-    }
+    public function __construct(Pool $pool);
 
     /**
      * Blueprint for the event handler.
@@ -73,6 +63,6 @@ abstract class AbstractEventHandler
      *   The generated markup.
      *   Only the markupo from start events gets dispatched.
      */
-    abstract public function handle(array $params, Model $model = null);
+    public function handle(array $params, Model $model = null);
 
 }
