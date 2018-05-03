@@ -46,7 +46,7 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers
  */
-class MagicalGetter extends AbstractCallback implements EventHandlerInterface
+class MagicalProperties extends AbstractCallback implements EventHandlerInterface
 {
 
     public function callMe()
@@ -109,6 +109,7 @@ class MagicalGetter extends AbstractCallback implements EventHandlerInterface
                     $propertyRef = $parentReflection->getProperty($name);
                     $propertyRef->setAccessible(true);
                     $result = $propertyRef->getValue($data);
+                    break;
                 }
                 // Going deeper!
                 $parentReflection = $parentReflection->getParentClass();

@@ -60,7 +60,31 @@ class Configuration  implements PluginConfigInterface
         // Resolving the __get()
         Event::register(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::callMe::start',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\MagicalGetter'
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\MagicalProperties'
+        );
+
+        // Resolving the __function()
+        Event::register(
+            'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start',
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\MagicalFunctions'
+        );
+
+        // Different display text for magical aimoes methods
+        Event::register(
+            'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::analysisEnd',
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\MagicalFunctionsDumping'
+        );
+
+        // Make sure to mark the recursions as aimeos magic stuff
+        Event::register(
+            'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::recursion',
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\MagicalFunctionsDumping'
+        );
+
+        // Make sure to mark the magical Aimes getter as such
+        Event::register(
+            'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Getter::analysisEnd',
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\MagicalFunctionsDumping'
         );
     }
 }
