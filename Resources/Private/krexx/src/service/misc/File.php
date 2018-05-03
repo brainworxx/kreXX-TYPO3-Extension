@@ -166,12 +166,21 @@ class File
             $readTo = 0;
         }
 
-        // Do we have enough lines in there?
-        if (count($content) > $readTo) {
-            for ($currentLineNo = $readFrom; $currentLineNo <= $readTo; ++$currentLineNo) {
-                $result .= $content[$currentLineNo];
-            }
+        $countContent = count($content);
+
+        if ($countContent === 0) {
+            return $result;
         }
+
+        // Do we have enough lines in there?
+        if ($countContent <= $readTo) {
+            $readTo = $countContent - 1;
+        }
+
+        for ($currentLineNo = $readFrom; $currentLineNo <= $readTo; ++$currentLineNo) {
+            $result .= $content[$currentLineNo];
+        }
+
 
         return $result;
     }
@@ -232,7 +241,7 @@ class File
             fclose($file);
             return $result;
         }
-        
+
         // Empty file returns an empty string.
         return '';
     }

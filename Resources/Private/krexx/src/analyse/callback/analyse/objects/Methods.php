@@ -72,11 +72,14 @@ class Methods extends AbstractObjectAnalysis
             // We skip this one, and leave it to the js recursion handler!
             return $output .
                 $this->pool->render->renderRecursion(
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                        ->setDomid($domId)
-                        ->setNormal('Methods')
-                        ->setName('Methods')
-                        ->setType('class internals')
+                    $this->dispatchEventWithModel(
+                        'recursion',
+                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                            ->setDomid($domId)
+                            ->setNormal('Methods')
+                            ->setName('Methods')
+                            ->setType('class internals')
+                    )
                 );
         }
 
