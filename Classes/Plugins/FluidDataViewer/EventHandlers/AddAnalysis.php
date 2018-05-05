@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDataViewer\EventHandlers;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
@@ -64,16 +65,17 @@ class AddAnalysis implements EventHandlerInterface
     }
 
     /**
-     * @param array $params
-     *   The parameters from the callback class.
+     * @param AbstractCallback $params
+     *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available
      *
      * @return string
      *   The generated markup.
      */
-    public function handle(array $params, Model $model = null)
+    public function handle(AbstractCallback $callback, Model $model = null)
     {
+        $params = $callback->getParameters();
         $record = $params['data'];
         $output = '';
         if (is_object($record) && is_a($record, '\\MageDeveloper\\Dataviewer\\Domain\\Model\\Record')) {
