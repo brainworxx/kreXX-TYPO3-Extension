@@ -46,7 +46,7 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers
  */
-class MagicalProperties extends AbstractCallback implements EventHandlerInterface
+class Properties extends AbstractCallback implements EventHandlerInterface
 {
 
     public function callMe()
@@ -58,16 +58,17 @@ class MagicalProperties extends AbstractCallback implements EventHandlerInterfac
      * We add our magical properties right before the normal
      * public properties.
      *
-     * @param array $params
-     *   The parameters from the analyse class
+     * @param AbstractCallback $params
+     *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
      *
      * @return string
      *   The generated markup.
      */
-    public function handle(array $params, Model $model = null)
+    public function handle(AbstractCallback $callback, Model $model = null)
     {
+        $params = $callback->getParameters();
         $data = $params['data'];
         $result = '';
 

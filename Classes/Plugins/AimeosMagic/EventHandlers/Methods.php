@@ -34,27 +34,13 @@
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
-/**
- * Handling the magical functions, used in Aimeos.
- *
- * Some Aimeos classes pass not existing class methods on to a private object
- * they hold, making debugging somewhat challenging. We try to remedy this by
- * analysing the available methods and getters of said object.
- *
- * @event Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start
- *
- * @uses mixed data
- *   The class we are currently analysing
- * @uses \ReflectionClass ref
- *   A reflection of the class we are currently analysing.
- *
- * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers
- */
-class MagicalFunctions implements EventHandlerInterface
+
+class Methods implements EventHandlerInterface
 {
     /**
      * List of classes that have potentially implemented this.
@@ -89,22 +75,22 @@ class MagicalFunctions implements EventHandlerInterface
     );
 
     /**
-     * Our pool, what else?
-     *
      * @var Pool
      */
     protected $pool;
 
     /**
-     * {@inheritdoc}
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
      */
-    public function __construct(Pool $pool)
+    public function __construct(\Brainworxx\Krexx\Service\Factory\Pool $pool)
     {
         $this->pool = $pool;
     }
 
     /**
-     * The "magic" starts here.
+     * Resolving the possible methods from the decorator pattern.
      *
      * @param array $params
      *   The parameters from the analyse class
@@ -116,61 +102,67 @@ class MagicalFunctions implements EventHandlerInterface
      * @return string
      *   The generated markup.
      */
-    public function handle(array $params, Model $model = null)
+    public function handle(AbstractCallback $callback, Model $model = null)
     {
         $result = '';
-        $data = $params['data'];
+        $params = $callback->getParameters();
 
+        // Get a first impression.
+        $data = $params['data'];
         if ($this->checkClassName($data) === false) {
             // Early return, we skip this one.
             return $result;
         }
 
+        // Retreive all piled up receiver objects. We may have decorators
+        // inside of decorators.
+        $allReceivers = array();
+
         $receiver = $this->retrieveReceiverObject($data, $params['ref']);
-        if (empty($receiver)) {
-            // Unable to get anything from the class.
-            // There is nothing more we can do here.
-            return $result;
+        $methods = array();
+        while ($receiver !== false) {
+            $allReceivers[] = $receiver;
+            $ref = new \ReflectionClass($receiver);
+            $receiver = $this->retrieveReceiverObject($receiver, $ref);
+            // Get all reflection methods together, from all the receivers.
+            // The receivers in front overwrite the methods from the receivers
+            // in the back.
+            $methods = array_merge($this->retreivePublicMethods($ref), $methods);
+        }
+
+        if (empty($methods) === false) {
+            // Got to dump them all!
+            $result .= $this->pool->render->renderExpandableChild(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    ->setName('Decorator Methods')
+                    ->setType('class internals decorator')
+                    ->addParameter('data', $methods)
+                    ->setHelpid('aimeosDecoratorsInfo')
+                    ->injectCallback(
+                        $this->pool->createClass(
+                            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\Callbacks\\ThroughMethods'
+                        )
+                    )
+            );
         }
 
 
-        // Now that we have an object, we must analyse its public methods
-        // and getter methods.
-        // We will simply abuse the already existing analysis classes for this.
-        $receiverParams = array(
-            'data' => $receiver,
-            'ref' => new \ReflectionClass($receiver),
-            // The aimeos class name will get set as additional data info.
-            'aimeos object' => get_class($receiver),
-            'aimeos name' => 'Aimeos Magical Methods'
-        );
-
-        // We may be facing receivers within receivers within receivers.
-        // Hence, we need to keep track of the already rendered methods.
-        $receiverParams['this run'] = get_class_methods($receiver);
-        if (isset($params['methods done']) === false) {
-            $receiverParams['methods done'] = array();
+        // Do a normal analysis of all receiver objects.
+        if (empty($allReceivers) === false) {
+            $this->pool->codegenHandler->setAllowCodegen(false);
+            $result .= $this->pool->render->renderExpandableChild(
+                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    ->setName('Decorator Objects')
+                    ->setType('class internals decorator')
+                    ->addParameter('data', $allReceivers)
+                    ->injectCallback(
+                        $this->pool->createClass(
+                            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\Callbacks\\ThroughReceivers'
+                        )
+                    )
+            );
+            $this->pool->codegenHandler->setAllowCodegen(true);
         }
-        // Create a whitelist of leftover methods.
-        $lookupArray = array_flip($receiverParams['methods done']);
-        foreach ($receiverParams['this run'] as $methodName) {
-            // @todo hier weitermachen
-        }
-
-
-        // Dump the methods of the receiver object.
-        $result .= $this->pool
-            ->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods')
-            ->setParams($receiverParams)
-            ->callMe();
-
-        // Dump the getter of the receiver object.
-        $receiverParams['aimeos name'] = 'Aimeos Magical Getter';
-        $result .= $this->pool
-            ->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Getter')
-            ->setParams($receiverParams)
-            ->callMe();
-
 
 
         return $result;
@@ -209,7 +201,7 @@ class MagicalFunctions implements EventHandlerInterface
      * @param \ReflectionClass $ref
      *   The reflection of the class we are analysing.
      *
-     * @return mixed
+     * @return false|object
      *   Either a false, or the object that receives all method calls.
      */
     protected function retrieveReceiverObject($data, \ReflectionClass $ref)
@@ -265,5 +257,25 @@ class MagicalFunctions implements EventHandlerInterface
 
         // Still here?
         return false;
+    }
+
+    /**
+     * Reteive a namebased array of the public methods of a reflection.
+     *
+     * @param \ReflectionClass $ref
+     *   The reflection from where we want to reteive the method list.
+     *
+     * @return array
+     *   Name based array with the methos names.
+     */
+    protected function retreivePublicMethods(\ReflectionClass $ref)
+    {
+        $methods = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
+        $result = array();
+        foreach ($methods as $refMethod) {
+            $result[$refMethod->name] = $refMethod;
+        }
+
+        return $result;
     }
 }

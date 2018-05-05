@@ -32,47 +32,44 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\AimeosMagic;
+namespace Brainworxx\Includekrexx\Plugins\AimeosMagic\Callbacks;
 
-use Brainworxx\Krexx\Service\Factory\Event;
-use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 
-class Configuration implements PluginConfigInterface
+/**
+ * Dump all Receiver classes inside the decorator.
+ *
+ * @uses array $data
+ *   An array with the receiver classes.
+ *
+ * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\Callbacks
+ */
+class ThroughReceivers extends AbstractCallback
 {
     /**
-     * {@inheritdoc}
+     * Dumps the receiver classes.
      *
      * @return string
+     *   The generated markup
      */
-    public static function getName()
+    public function callMe()
     {
-        return 'Aimeos magical method resolving v1.0';
-    }
+        $this->dispatchStartEvent();
 
-    /**
-     * The Aimeos shop hat a lot of magical methods.
-     *
-     * This plugin tries to resolve them.
-     */
-    public static function exec()
-    {
-        // Resolving the __get().
-        Event::register(
-            'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::callMe::start',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\Properties'
-        );
+        $data = $this->parameters['data'];
+        $result = '';
+        // We simply pass it on to the routing.
+        foreach ($data as $key => $object) {
+            $result .= $this->pool->routing->analysisHub(
+                $this->dispatchEventWithModel(
+                    'analysisEnd',
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->setData($object)
+                        ->setName($key)
+                )
+            );
+        }
 
-        // Resolving the getter that get their values from an private array.
-        Event::register(
-            'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::retrievePropertyValue::resolving',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\Getter'
-        );
-
-        // Resolving the magical class methods of the decorator pattern.
-        Event::register(
-            'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\Methods'
-        );
-
+        return $result;
     }
 }
