@@ -49,7 +49,7 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Brainworxx\Includekrex
         // Tell the dev to change his namespace.
         Krexx::$pool->messages->addMessage('t3LegacyNamespace');
 
-        // Let the patenr do it's magic.
+        // Let the parent do it's magic.
         return parent::render();
     }
 }

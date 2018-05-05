@@ -57,7 +57,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 class MagicalFunctions implements EventHandlerInterface
 {
     /**
-     * List of classes that have potentially impletemtet this.
+     * List of classes that have potentially implemented this.
      *
      * @var array
      */
@@ -137,7 +137,7 @@ class MagicalFunctions implements EventHandlerInterface
         // Now that we have an object, we must analyse its public methods
         // and getter methods.
         // We will simply abuse the already existing analysis classes for this.
-        $recieverParams = array(
+        $receiverParams = array(
             'data' => $receiver,
             'ref' => new \ReflectionClass($receiver),
             // The aimeos class name will get set as additional data info.
@@ -145,30 +145,30 @@ class MagicalFunctions implements EventHandlerInterface
             'aimeos name' => 'Aimeos Magical Methods'
         );
 
-        // We may be facing recievers within recievers within recievers.
+        // We may be facing receivers within receivers within receivers.
         // Hence, we need to keep track of the already rendered methods.
-        $recieverParams['this run'] = get_class_methods($receiver);
+        $receiverParams['this run'] = get_class_methods($receiver);
         if (isset($params['methods done']) === false) {
-            $recieverParams['methods done'] = array();
+            $receiverParams['methods done'] = array();
         }
         // Create a whitelist of leftover methods.
-        $lookupArray = array_flip($recieverParams['methods done']);
-        foreach ($recieverParams['this run'] as $methodName) {
-
+        $lookupArray = array_flip($receiverParams['methods done']);
+        foreach ($receiverParams['this run'] as $methodName) {
+            // @todo hier weitermachen
         }
 
 
-        // Dump the methods of the reciever object.
+        // Dump the methods of the receiver object.
         $result .= $this->pool
             ->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods')
-            ->setParams($recieverParams)
+            ->setParams($receiverParams)
             ->callMe();
 
-        // Dump the getter of the reciever object.
-        $recieverParams['aimeos name'] = 'Aimeos Magical Getter';
+        // Dump the getter of the receiver object.
+        $receiverParams['aimeos name'] = 'Aimeos Magical Getter';
         $result .= $this->pool
             ->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Getter')
-            ->setParams($recieverParams)
+            ->setParams($receiverParams)
             ->callMe();
 
 
@@ -206,13 +206,15 @@ class MagicalFunctions implements EventHandlerInterface
      *
      * @param mixed $data
      *   The aimeos object we need to get the receiver class from.
+     * @param \ReflectionClass $ref
+     *   The reflection of the class we are analysing.
      *
      * @return mixed
      *   Either a false, or the object that receives all method calls.
      */
     protected function retrieveReceiverObject($data, \ReflectionClass $ref)
     {
-        // First, we need to get the name of the object we need to retieve.
+        // First, we need to get the name of the object we need to retrieve.
         // Get the __call() source code.
         $methodRef = $ref->getMethod('__call');
 
@@ -238,7 +240,7 @@ class MagicalFunctions implements EventHandlerInterface
             }
         }
         if (empty($objectName)) {
-            // Unable to retreive the object name.
+            // Unable to retrieve the object name.
             return false;
         }
 

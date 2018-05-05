@@ -39,11 +39,11 @@ use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
- * Simply change some info text, in case we are dumping magical Aimeos mathods.
+ * Simply change some info text, in case we are dumping magical Aimeos methods.
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers
  */
-class MagicalFunctionsDumping  implements EventHandlerInterface
+class MagicalFunctionsDumping implements EventHandlerInterface
 {
     /**
      * Our pool, what else?
@@ -68,8 +68,6 @@ class MagicalFunctionsDumping  implements EventHandlerInterface
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
      *
-     * @throws \ReflectionException
-     *
      * @return string
      *   The generated markup.
      */
@@ -81,20 +79,20 @@ class MagicalFunctionsDumping  implements EventHandlerInterface
         }
 
         // We need to adjust the already dumped methods, because we have
-        // a hirarchy in there.
+        // a hierarchy in there.
         $modelParameters = $model->getParameters();
         $methodsToDo = $modelParameters['data'];
         $lookupArray = array_flip($params['methods done']);
         if (is_array($methodsToDo) || count($methodsToDo) > 0) {
-            foreach ($methodsToDo as $key => $rethodRef) {
-                if (isset($lookupArray[$rethodRef->name])) {
+            foreach ($methodsToDo as $key => $methodRef) {
+                if (isset($lookupArray[$methodRef->name])) {
                     unset($methodsToDo[$key]);
                 }
             }
 
             $model->setName($params['aimeos name'])
-                ->addToJson('hint', 'Aimeos magical methods will get passed to the reciever object.')
-                ->addToJson('reciever object', $params['aimeos object'])
+                ->addToJson('hint', 'Aimeos magical methods will get passed to the receiver object.')
+                ->addToJson('receiver object', $params['aimeos object'])
                 ->addParameter('data', $methodsToDo);
         }
 

@@ -70,7 +70,7 @@ class AddAnalysis implements EventHandlerInterface
      *   The model, if available
      *
      * @return string
-     *   The generaqted markup.
+     *   The generated markup.
      */
     public function handle(array $params, Model $model = null)
     {
@@ -80,7 +80,7 @@ class AddAnalysis implements EventHandlerInterface
             try {
                 /** @var \MageDeveloper\Dataviewer\Domain\Model\Record $record  */
                 $values = $record->getValues();
-
+                /** @var \MageDeveloper\Dataviewer\Domain\Model\Field $field */
                 foreach ($record->getDatatype()->getFields() as $field) {
                     /** @var \Brainworxx\Krexx\Analyse\Model $model */
                     if (is_a($field, '\\MageDeveloper\\Dataviewer\\Domain\\Model\\Field') === false) {
@@ -102,7 +102,7 @@ class AddAnalysis implements EventHandlerInterface
                             ->addToJson('hint', 'Magic dataviewer getter method.'));
                 }
             } catch (\Exception $e) {
-                // Something whent wrong here.
+                // Something went wrong here.
                 // We skip the output here.
                 return '';
             }

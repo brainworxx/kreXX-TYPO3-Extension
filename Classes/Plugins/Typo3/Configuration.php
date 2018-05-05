@@ -81,7 +81,7 @@ class Configuration implements PluginConfigInterface
 
         // htAccess to prevent a listing
         $htAccess = 'order deny,allow' . chr(10) . 'deny from all';
-        // Empty index.html in caqse the htacess is not enough.
+        // Empty index.html in case the htacess is not enough.
         $indexHtml = '';
         // Create and protect the temporal folders.
         foreach ($tempPaths as $key => $tempPath) {

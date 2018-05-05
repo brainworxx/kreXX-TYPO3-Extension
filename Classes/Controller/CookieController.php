@@ -51,7 +51,7 @@ class CookieController extends CompatibilityController
     {
         $this->checkProductiveSetting();
 
-        // Has kreXX something to say? Maybe a writeprotected logfolder?
+        // Has kreXX something to say? Maybe a write protected logfolder?
         foreach ($this->getTranslatedMessages() as $message) {
             $this->addFlashMessage(
                 $message,

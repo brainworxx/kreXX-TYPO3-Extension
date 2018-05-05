@@ -65,7 +65,7 @@ class FormConfigController extends CompatibilityController
     {
         $this->checkProductiveSetting();
 
-        // Has kreXX something to say? Maybe a writeprotected logfolder?
+        // Has kreXX something to say? Maybe a write protected logfolder?
         foreach ($this->getTranslatedMessages() as $message) {
             $this->addFlashMessage(
                 $message,
@@ -196,10 +196,10 @@ class FormConfigController extends CompatibilityController
      *
      * Letting people choose what kind of form element will
      * be used does not really make sense. We will convert the
-     * original kreXX settings to a more useable form for the editor.
+     * original kreXX settings to a more usable form for the editor.
      *
      * @param array $values
-     *   The valuees we want to convert.
+     *   The values we want to convert.
      *
      * @return string|null
      *   The converted values.

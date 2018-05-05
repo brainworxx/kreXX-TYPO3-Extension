@@ -88,6 +88,8 @@ class MagicalProperties extends AbstractCallback implements EventHandlerInterfac
      *
      * @param string $name
      *   The internal name of the array we need to extract
+     * @param array $params
+     *   The parameters from the original callback.
      *
      * @return string
      *   The generated markup.
@@ -118,7 +120,7 @@ class MagicalProperties extends AbstractCallback implements EventHandlerInterfac
             // Do nothing.
         }
 
-        // Huh, something whent wqrong here!
+        // Huh, something went wrong here!
         if (empty($result) || is_array($result) === false) {
             return '';
         }
@@ -126,7 +128,7 @@ class MagicalProperties extends AbstractCallback implements EventHandlerInterfac
     }
 
     /**
-     * Dumping the array as if they are normal prperties.
+     * Dumping the array as if they are normal properties.
      *
      * @param array $array
      *   The array we dump as properties.

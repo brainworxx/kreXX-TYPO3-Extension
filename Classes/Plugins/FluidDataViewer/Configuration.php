@@ -35,7 +35,6 @@
 namespace Brainworxx\Includekrexx\Plugins\FluidDataViewer;
 
 use Brainworxx\Krexx\Service\Factory\Event;
-use Brainworxx\Krexx\Service\Factory\Factory;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 
 /**

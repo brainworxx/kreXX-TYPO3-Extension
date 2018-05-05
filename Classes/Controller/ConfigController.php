@@ -57,7 +57,7 @@ class ConfigController extends CompatibilityController
     {
         $this->checkProductiveSetting();
 
-        // Has kreXX something to say? Maybe a writeprotected logfolder?
+        // Has kreXX something to say? Maybe a write protected logfolder?
         foreach ($this->getTranslatedMessages() as $message) {
             $this->addFlashMessage(
                 $message,
@@ -206,7 +206,7 @@ class ConfigController extends CompatibilityController
                 } else {
                     // Validation failed! kreXX will generate a message,
                     // which we will display
-                    // at the buttom.
+                    // at the bottom.
                     $this->allOk = false;
                 }
             }

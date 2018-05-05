@@ -92,7 +92,7 @@ class LogController extends CompatibilityController
             $fileList[] = $fileinfo;
         }
 
-        // 4. Has kreXX something to say? Maybe a writeprotected logfolder?
+        // 4. Has kreXX something to say? Maybe a write protected logfolder?
         foreach ($this->getTranslatedMessages() as $message) {
             $this->addFlashMessage(
                 $message,
@@ -238,7 +238,7 @@ class LogController extends CompatibilityController
     protected function dispatchFile($path)
     {
         header('Content-Type: text/html; charset=utf-8');
-        
+
         $size = 1024 * 1024;
         $res = fopen($path, "rb");
         while (!feof($res)) {

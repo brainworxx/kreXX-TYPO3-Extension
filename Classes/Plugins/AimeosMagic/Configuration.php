@@ -34,11 +34,10 @@
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosMagic;
 
-
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 
-class Configuration  implements PluginConfigInterface
+class Configuration implements PluginConfigInterface
 {
     /**
      * {@inheritdoc}
@@ -47,11 +46,11 @@ class Configuration  implements PluginConfigInterface
      */
     public static function getName()
     {
-        return 'Aimeos magigal method resolving v1.0';
+        return 'Aimeos magical method resolving v1.0';
     }
 
     /**
-     * The Aimeos shop hat a lot of magigal methods.
+     * The Aimeos shop hat a lot of magical methods.
      *
      * This plugin tries to resolve them.
      */
@@ -81,7 +80,7 @@ class Configuration  implements PluginConfigInterface
             'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\MagicalFunctionsDumping'
         );
 
-        // Make sure to mark the magical Aimes getter as such
+        // Make sure to mark the magical Aimeos getter as such
         Event::register(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Getter::analysisEnd',
             'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\MagicalFunctionsDumping'

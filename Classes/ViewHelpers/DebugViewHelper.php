@@ -39,7 +39,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 
 /**
- * Our fluid wraqpper for kreXX.
+ * Our fluid wrapper for kreXX.
  *
  * @namespace
  *   When using TYPO3 6.2 until 8.4, you need to declare the namespace first:
