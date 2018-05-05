@@ -3,6 +3,8 @@
 - Added half-asses plugin support, to replace the half-asses
   overwrites
 - Added a event dispatcher.
+- Added deeper search for the source code getter analysis for
+  better results.
 - Change: Some internal renaming.
 - Bugfix: The position of the search field of the hans skin is now
   calculated correct when the viewport is not on top.

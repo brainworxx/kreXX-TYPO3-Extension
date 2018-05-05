@@ -346,8 +346,14 @@ class ThroughGetter extends AbstractCallback
         // Later on, we may also try to parse deeper for stuff.
         foreach ($this->findIt(array('return $this->', ';'), $sourcecode) as $propertyName) {
             // Check if this is a property and return the first we find.
-            if ($classReflection->hasProperty($propertyName) === true) {
-                return $classReflection->getProperty($propertyName);
+            $parentClass = $classReflection;
+            while ($parentClass !== false) {
+                // Chack if it was declared somewhere deeper in the
+                // class stucture.
+                if ($parentClass->hasProperty($propertyName) === true) {
+                    return $parentClass->getProperty($propertyName);
+                }
+                $parentClass = $parentClass->getParentClass();
             }
 
             // Check if this is a method and go deeper!
