@@ -67,14 +67,13 @@ $boot = function ($_EXTKEY) {
     // Register the fluid plugins.
     // We activate them later in the viewhelper.
     \Brainworxx\Krexx\Service\Plugin\Registration::register(
-        'Brainworxx\\Includekrexx\\Plugins\\FluidCodeGen\\Configuration'
+        'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'
     );
-    \Brainworxx\Krexx\Service\Plugin\Registration::register(
-        'Brainworxx\\Includekrexx\\Plugins\\FluidCallerFinder\\Configuration'
-    );
-    \Brainworxx\Krexx\Service\Plugin\Registration::register(
-        'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
-    );
+    if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('dataviewer')) {
+        \Brainworxx\Krexx\Service\Plugin\Registration::register(
+            'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
+        );
+    }
 
     if (version_compare(TYPO3_version, '8.5', '>=')) {
         // Register our debug-viewhelper globally, so people don't have to

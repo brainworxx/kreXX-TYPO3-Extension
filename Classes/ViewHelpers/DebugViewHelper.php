@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\ViewHelpers;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Our fluid wrapper for kreXX.
@@ -96,10 +97,7 @@ class DebugViewHelper extends AbstractViewHelper
         \Krexx::$pool->registry->set('DebugViewHelper', $this);
 
         Registration::activatePlugin(
-            'Brainworxx\\Includekrexx\\Plugins\\FluidCodeGen\\Configuration'
-        );
-        Registration::activatePlugin(
-            'Brainworxx\\Includekrexx\\Plugins\\FluidCallerFinder\\Configuration'
+            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'
         );
         Registration::activatePlugin(
             'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
@@ -123,14 +121,11 @@ class DebugViewHelper extends AbstractViewHelper
         }
 
         Registration::deactivatePlugin(
-            'Brainworxx\\Includekrexx\\Plugins\\FluidCodeGen\\Configuration'
+            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'
         );
-        Registration::deactivatePlugin(
-            'Brainworxx\\Includekrexx\\Plugins\\FluidCallerFinder\\Configuration'
-        );
-        Registration::deactivatePlugin(
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
-        );
+        if (ExtensionManagementUtility::isLoaded('dataviewer')) {
+            Registration::deactivatePlugin('Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration');
+        }
 
         return '';
     }
