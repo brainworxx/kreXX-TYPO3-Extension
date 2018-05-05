@@ -32,13 +32,15 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\FluidCodeGen\Rewrites\Code;
+namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code;
 
 use Brainworxx\Krexx\Analyse\Code\Codegen as OrgCodegen;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Special code generation for fluid.
+ *
+ * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code
  */
 class Codegen extends OrgCodegen
 {
@@ -48,14 +50,14 @@ class Codegen extends OrgCodegen
     const VHS_CALL_VIEWHELPER = 2;
 
     /**
-     * The we wrap this one arround the fluid code generation, on the left.
+     * The we wrap this one around the fluid code generation, on the left.
      *
      * @var string
      */
     protected $wrapperLeft = '{';
 
     /**
-     * The we wrap this one arround the fluid code generation, on the right.
+     * The we wrap this one around the fluid code generation, on the right.
      *
      * @var string
      */
@@ -76,7 +78,7 @@ class Codegen extends OrgCodegen
     protected $isAll = false;
 
     /**
-     * We are only handling the VHS Call VireHelper generation here.
+     * We are only handling the VHS Call ViewHelper generation here.
      * Everything els will be done by the parent class.
      *
      * {@inheritdoc}
@@ -127,7 +129,7 @@ class Codegen extends OrgCodegen
     }
 
     /**
-     * We are generation fluid inline code, usinf the CHS Call ViewHelper
+     * We are generation fluid inline code, using the VHS Call ViewHelper
      *
      * @example
      *   object -> v:call(method: 'functionname', arguments: {arg1: 'parmeter1', arg2: 'parameter2'})

@@ -32,14 +32,14 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\FluidCallerFinder\Rewrites;
+namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 /**
  * Trying to coax the current template/layout/partial file out of the fluid framework.
  *
- * @package Brainworxx\Includekrexx\Rewrite\Analyse\Caller
+ * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder
  */
-class CallerFinderFluid extends AbstractCallerFinderFluid
+class Fluid extends AbstractFluid
 {
 
     /**
@@ -86,7 +86,7 @@ class CallerFinderFluid extends AbstractCallerFinderFluid
         $hash = $identifier[count($identifier) -1];
 
         $templatePath = $this->renderingContext->getTemplatePaths();
-        $templatePathReflection = new ReflectionClass($templatePath);
+        $templatePathReflection = new \ReflectionClass($templatePath);
 
         if ($templatePathReflection->hasProperty('resolvedIdentifiers')) {
             $resolvedIdentifiersReflection = $templatePathReflection->getProperty('resolvedIdentifiers');
@@ -94,8 +94,8 @@ class CallerFinderFluid extends AbstractCallerFinderFluid
             $resolvedIdentifiers = $resolvedIdentifiersReflection->getValue($templatePath);
 
             if (isset($resolvedIdentifiers['partials'])) {
-                foreach ($resolvedIdentifiers['partials'] as $fileName => $realIdentifyer) {
-                    if (strpos($realIdentifyer, $hash) !== false) {
+                foreach ($resolvedIdentifiers['partials'] as $fileName => $realIdentifier) {
+                    if (strpos($realIdentifier, $hash) !== false) {
                         // We've got our filename!
                         $result = $templatePath->getPartialPathAndFilename($fileName);
                         break;

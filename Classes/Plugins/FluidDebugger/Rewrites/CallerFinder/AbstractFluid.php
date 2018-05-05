@@ -32,15 +32,17 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\FluidCallerFinder\Rewrites;
+namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use \Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Contains all methods, that are used by the fluid caller finder classes.
+ *
+ * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder
  */
-abstract class AbstractCallerFinderFluid  extends AbstractCaller
+abstract class AbstractFluid extends AbstractCaller
 {
     /**
      * @var \TYPO3\CMS\Fluid\View\AbstractTemplateView|\TYPO3Fluid\Fluid\View\ViewInterface
@@ -48,7 +50,7 @@ abstract class AbstractCallerFinderFluid  extends AbstractCaller
     protected $view;
 
     /**
-     * A reflection of the view that we are currentlx rendering.
+     * A reflection of the view that we are currently rendering.
      *
      * @var \ReflectionClass
      */

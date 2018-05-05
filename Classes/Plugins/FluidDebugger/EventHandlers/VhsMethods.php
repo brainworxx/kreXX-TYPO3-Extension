@@ -32,10 +32,10 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\FluidCodeGen\EventHandlers;
+namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Includekrexx\Plugins\FluidCodeGen\Rewrites\Code\Codegen;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
@@ -61,7 +61,7 @@ class VhsMethods implements EventHandlerInterface
     {
         $this->pool = $pool;
     }
-    
+
     /**
      * We set the multiline code generation to VHS, and We add the name of the
      * parameter for the VHS code generation into the 'paramArray'

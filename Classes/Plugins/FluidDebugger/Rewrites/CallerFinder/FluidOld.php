@@ -32,12 +32,14 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\FluidCallerFinder\Rewrites;
+namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 /**
  * Trying to coax the current template/layout/partial file out of the fluid framework.
+ *
+ * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder
  */
-class CallerFinderFluidOld extends AbstractCallerFinderFluid
+class FluidOld extends AbstractFluid
 {
 
     /**
@@ -95,9 +97,9 @@ class CallerFinderFluidOld extends AbstractCallerFinderFluid
             $partialIdentifierCacheReflection->setAccessible(true);
             $partialIdentifierCache = $partialIdentifierCacheReflection->getValue($this->view);
 
-            foreach ($partialIdentifierCache as $fileName => $realIdentifyer) {
-                if (strpos($realIdentifyer, $hash) !== false) {
-                    // We've got our real identifyer, yay. :-|
+            foreach ($partialIdentifierCache as $fileName => $realIdentifier) {
+                if (strpos($realIdentifier, $hash) !== false) {
+                    // We've got our real identifier, yay. :-|
                     $getPartialPathAndFilenameReflection = $this->viewReflection
                         ->getMethod('getPartialPathAndFilename');
                     $getPartialPathAndFilenameReflection->setAccessible(true);

@@ -32,57 +32,52 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\FluidCodeGen\Rewrites\Code;
+namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 
-use Brainworxx\Krexx\Analyse\Code\Connectors as OrgConnectors;
+use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
- * Special connectors for fluid. Used by the code generation.
+ * Class GetterWithoutGet
+ *
+ * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList::end
+ * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers
  */
-class Connectors extends OrgConnectors
+class GetterWithoutGet implements EventHandlerInterface
 {
+    /**
+     * The resource pool
+     *
+     * @var Pool
+     */
+    protected $pool;
 
     /**
      * {@inheritdoc}
      */
-    protected $language = 'fluid';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct()
+    public function __construct(Pool $pool)
     {
-        parent::__construct();
-
-        // Setting (nearly) everything to the point connector.
-        $this->connectorArray = array(
-            static::METHOD => array('.', '(@param@)'),
-            static::STATIC_METHOD => array('.', '(@param@)'),
-            static::NORMAL_ARRAY => array('.', ''),
-            static::ASSOCIATIVE_ARRAY => array('.', ''),
-            static::CONSTANT => array('.', ''),
-            static::NORMAL_PROPERTY => array('.', ''),
-            static::STATIC_PROPERTY => array('.', ''),
-            static::SPECIAL_CHARS_PROP => array('.', ''),
-        );
+        $this->pool = $pool;
     }
 
     /**
-     * Do nothing. There is no secornd connector in fluid.
+     * We simply remove the 'get' from the method name in the model.
      *
-     * @param integer $cap
-     *   Maximum length of all parameters. 0 means no cap.
+     * @param array $params
+     *   The parameters for the callback.
+     * @param \Brainworxx\Krexx\Analyse\Model|null $model
+     *   The model so far.
      *
      * @return string
      *   Return an empty string.
      */
-    public function getConnectorRight($cap)
+    public function handle(array $params, Model $model = null)
     {
-        // No params, no cookies!
-        if (empty($this->params)) {
-            return '';
-        }
+        $methodName = lcfirst(substr($model->getName(), strlen($params['currentPrefix'])));
+        $model->addToJson('method name', $model->getName() . '()')
+            ->setName($methodName);
 
-        return parent::getConnectorRight($cap);
+        return '';
     }
 }
