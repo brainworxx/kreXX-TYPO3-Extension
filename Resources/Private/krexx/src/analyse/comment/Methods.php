@@ -69,7 +69,7 @@ class Methods extends AbstractComment
         static $cache = array();
         /** @var \ReflectionMethod $reflectionMethod */
         $this->methodName = $reflectionMethod->getName();
-        $cachingKey = $reflectionClass->getName() . '::' . $this->methodName;
+        $cachingKey =  $reflectionMethod->getDeclaringClass()->name . '::' . $this->methodName;
 
         if (isset($cache[$cachingKey]) === true) {
             return $cache[$cachingKey];

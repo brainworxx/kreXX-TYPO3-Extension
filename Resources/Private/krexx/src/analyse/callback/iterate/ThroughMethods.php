@@ -47,7 +47,7 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
  * @uses \reflectionClass ref
  *   Reflection of the class we are analysing.
  * @uses \reflectionMethod reflectionMethod
- *   The current reflection of the methos we are analysing.
+ *   The current reflection of the method we are analysing.
  *   Gets set from the inside.
  */
 class ThroughMethods extends AbstractCallback

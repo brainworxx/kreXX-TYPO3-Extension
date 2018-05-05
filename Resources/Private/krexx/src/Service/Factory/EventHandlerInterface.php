@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Factory;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -63,6 +64,6 @@ interface EventHandlerInterface
      *   The generated markup.
      *   Only the markupo from start events gets dispatched.
      */
-    public function handle(array $params, Model $model = null);
+    public function handle(AbstractCallback $callback, Model $model = null);
 
 }

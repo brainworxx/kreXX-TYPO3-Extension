@@ -95,16 +95,28 @@ abstract class AbstractCallback
     }
 
     /**
+     * Access the internal parameters from the outside.
+     * Used mostly (only?) in the event system.
+     *
+     * @return array
+     *   The internal parameters for the callback.
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
      * Dispatches the start event of the callMe callback.
      *
      * @return string
      *   The generated markup from the event handler.
      */
-    public function dispatchStartEvent()
+    protected function dispatchStartEvent()
     {
         return $this->pool->eventService->dispatch(
             get_class($this) . '::callMe::start',
-            $this->parameters
+            $this
         );
     }
 
@@ -119,11 +131,11 @@ abstract class AbstractCallback
      * @return Model
      *   Return the model for chaining.
      */
-    public function dispatchEventWithModel($name, Model $model)
+    protected function dispatchEventWithModel($name, Model $model)
     {
         $this->pool->eventService->dispatch(
             get_class($this) . '::' . $name,
-            $this->parameters,
+            $this,
             $model
         );
 

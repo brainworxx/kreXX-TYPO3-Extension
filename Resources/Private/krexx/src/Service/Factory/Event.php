@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Factory;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -82,7 +83,7 @@ class Event
      *   The generated markup from the event hanslers
      *   This will only get dispatched, if you use the start event.
      */
-    public function dispatch($name, array &$params, Model $model = null)
+    public function dispatch($name, AbstractCallback $callback, Model $model = null)
     {
         $output = '';
         if (isset(self::$register[$name]) === false) {
@@ -92,7 +93,7 @@ class Event
 
         // Got to handel them all.
         foreach (self::$register[$name] as $classname) {
-            $output .= $this->pool->createClass($classname)->handle($params, $model);
+            $output .= $this->pool->createClass($classname)->handle($callback, $model);
         }
 
         return $output;
