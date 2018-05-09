@@ -55,8 +55,8 @@ interface EventHandlerInterface
     /**
      * Blueprint for the event handler.
      *
-     * @param array $params
-     *   The parameters from the analyse class
+     * @param AbstractCallback $callback
+     *   The original callback.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
      *
@@ -65,5 +65,4 @@ interface EventHandlerInterface
      *   Only the markupo from start events gets dispatched.
      */
     public function handle(AbstractCallback $callback, Model $model = null);
-
 }

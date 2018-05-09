@@ -34,7 +34,11 @@
 
 namespace Brainworxx\Krexx\Service\Plugin;
 
-
+/**
+ * Plugin configuration interface.
+ *
+ * @package Brainworxx\Krexx\Service\Plugin
+ */
 interface PluginConfigInterface
 {
     /**

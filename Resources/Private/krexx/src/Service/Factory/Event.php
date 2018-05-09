@@ -74,7 +74,7 @@ class Event
      *
      * @param string $name
      *   The name of the event.
-     * @param array $params
+     * @param array $callback
      *   The parameters for the callback.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far, if available.

@@ -34,8 +34,6 @@
 
 namespace Brainworxx\Krexx\Service\Factory;
 
-
-
 /**
  * Simple factory, nothing special. Offers a overwrite method.
  *
