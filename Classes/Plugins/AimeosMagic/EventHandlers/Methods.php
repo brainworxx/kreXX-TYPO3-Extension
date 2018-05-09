@@ -39,7 +39,11 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
-
+/**
+ * Resolving Aimeos magical decorator class methods.
+ *
+ * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers
+ */
 class Methods implements EventHandlerInterface
 {
     /**
@@ -82,9 +86,9 @@ class Methods implements EventHandlerInterface
     /**
      * Inject the pool.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(\Brainworxx\Krexx\Service\Factory\Pool $pool)
+    public function __construct(Pool $pool)
     {
         $this->pool = $pool;
     }
@@ -92,8 +96,8 @@ class Methods implements EventHandlerInterface
     /**
      * Resolving the possible methods from the decorator pattern.
      *
-     * @param array $params
-     *   The parameters from the analyse class
+     * @param AbstractCallback $callback
+     *   The original callback.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
      *

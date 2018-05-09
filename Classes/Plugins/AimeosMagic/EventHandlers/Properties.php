@@ -58,7 +58,7 @@ class Properties extends AbstractCallback implements EventHandlerInterface
      * We add our magical properties right before the normal
      * public properties.
      *
-     * @param AbstractCallback $params
+     * @param AbstractCallback $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.

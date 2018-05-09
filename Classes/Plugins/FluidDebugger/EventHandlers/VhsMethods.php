@@ -67,7 +67,7 @@ class VhsMethods implements EventHandlerInterface
      * We set the multiline code generation to VHS, and We add the name of the
      * parameter for the VHS code generation into the 'paramArray'
      *
-     * @param AbstractCallback $params
+     * @param AbstractCallback $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far.

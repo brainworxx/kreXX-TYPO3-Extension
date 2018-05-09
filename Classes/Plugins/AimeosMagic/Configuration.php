@@ -73,6 +73,5 @@ class Configuration implements PluginConfigInterface
             'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start',
             'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\Methods'
         );
-
     }
 }

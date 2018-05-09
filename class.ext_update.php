@@ -32,7 +32,6 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -62,5 +61,4 @@ class ext_update
         GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')
             ->flushCachesInGroup('system');
     }
-
 }

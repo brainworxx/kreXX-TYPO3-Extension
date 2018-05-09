@@ -65,7 +65,7 @@ class AddAnalysis implements EventHandlerInterface
     }
 
     /**
-     * @param AbstractCallback $params
+     * @param AbstractCallback $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available

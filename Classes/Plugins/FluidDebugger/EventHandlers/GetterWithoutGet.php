@@ -65,7 +65,7 @@ class GetterWithoutGet implements EventHandlerInterface
     /**
      * We simply remove the 'get' from the method name in the model.
      *
-     * @param AbstractCallback $params
+     * @param AbstractCallback $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far.
