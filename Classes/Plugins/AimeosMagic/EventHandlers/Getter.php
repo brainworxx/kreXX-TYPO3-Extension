@@ -65,7 +65,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * @uses array $additional
  *   Additional data from the event call.
  */
-class Getter  implements EventHandlerInterface
+class Getter implements EventHandlerInterface
 {
 
     /**
@@ -83,7 +83,7 @@ class Getter  implements EventHandlerInterface
     /**
      * Some special resolving of Aimeos getter
      *
-     * @param AbstractCallback $params
+     * @param AbstractCallback $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
@@ -112,7 +112,7 @@ class Getter  implements EventHandlerInterface
         $reflectionMethod = $params['additional']['refMethod'];
         $possibleKey = strtolower(substr($reflectionMethod->name, 3));
 
-        $values = $this->retrieveValueArray($params);
+        $values = $this->retrieveValueArray($params, $reflectionMethod);
 
         if (empty($values) === true) {
             // There is nothing to retrieve here.
@@ -148,42 +148,52 @@ class Getter  implements EventHandlerInterface
     }
 
     /**
+     * Retrieve the data arraqy from the class.
+     *
      * @param array $params
      *   The parameters from the callback
+     * @param \ReflectionMethod $reflectionMethod
+     *   The reflection of the getter we are analysing.
+     *
      * @return array
      *   The values array from the class.
      */
-    protected function retrieveValueArray(array &$params)
+    protected function retrieveValueArray(array &$params, \ReflectionMethod $reflectionMethod)
     {
-        // Caching.
-        // We might alreday have retrieved this value.
-        if (isset($params['valueCache'])) {
-            return $params['valueCache'];
+        $result = array();
+        // Retrieve the value array from the class.
+        // Everything sits in a private array, so we do not need to walk
+        // through the whole class structure.
+        /** @var \ReflectionClass $reflectionClass */
+        $reflectionClass = $reflectionMethod->getDeclaringClass();
+        $data = $params['data'];
+        if ($reflectionClass->hasProperty('bdata')) {
+            $reflectionProperty = $reflectionClass->getProperty('bdata');
+            $reflectionProperty->setAccessible(true);
+            $bdata = $reflectionProperty->getValue($data);
+            if (is_array($bdata)) {
+                $result = $bdata;
+            }
         }
 
-        $params['valueCache'] = array();
-        // Retrieve the value array from the class.
-        /** @var \ReflectionClass $reflectionClass */
-        $reflectionClass = $params['ref'];
-        $data = $params['data'];
+        if ($reflectionClass->hasProperty('data')) {
+            $reflectionProperty = $reflectionClass->getProperty('data');
+            $reflectionProperty->setAccessible(true);
+            $data = $reflectionProperty->getValue($data);
+            if (is_array($data)) {
+                $result = array_merge($result, $data);
+            }
+        }
+
         if ($reflectionClass->hasProperty('values')) {
             $reflectionProperty = $reflectionClass->getProperty('values');
             $reflectionProperty->setAccessible(true);
-            $params['valueCache'] = $reflectionProperty->getValue($data);
-        } elseif ($reflectionClass->hasProperty('bdata')) {
-            $reflectionProperty = $reflectionClass->getProperty('bdata');
-            $reflectionProperty->setAccessible(true);
-            $params['valueCache'] = $reflectionProperty->getValue($data);
+            $values = $reflectionProperty->getValue($data);
+            if (is_array($values)) {
+                $result = array_merge($result, $values);
+            }
         }
 
-        // Check for array.
-        // If this is not an array, something went wrong. We need to make sure
-        // that a possible wrong result does not kill off the rest of the
-        // analysis.
-        if (is_array($params['valueCache']) === false) {
-            $params['valueCache'] = array();
-        }
-
-        return $params['valueCache'];
+        return $result;
     }
 }
