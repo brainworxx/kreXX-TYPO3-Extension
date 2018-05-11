@@ -118,7 +118,7 @@ class Methods implements EventHandlerInterface
             return $result;
         }
 
-        // Retreive all piled up receiver objects. We may have decorators
+        // Retrieve all piled up receiver objects. We may have decorators
         // inside of decorators.
         $allReceivers = array();
 
@@ -250,7 +250,10 @@ class Methods implements EventHandlerInterface
                 if ($parentReflection->hasProperty($objectName)) {
                     $propertyRef = $parentReflection->getProperty($objectName);
                     $propertyRef->setAccessible(true);
-                    return $propertyRef->getValue($data);
+                    $receiver = $propertyRef->getValue($data);
+                    if (is_object($receiver)) {
+                        return $receiver;
+                    }
                 }
                 // Going deeper!
                 $parentReflection = $parentReflection->getParentClass();
