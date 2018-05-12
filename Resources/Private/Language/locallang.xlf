@@ -150,8 +150,12 @@
             <trans-unit id="debugpreset.warning.message">
                 <source>kreXX will function normally, but please do not debug a productive system.</source>
 			</trans-unit>
-
-
+            <trans-unit id="chunksNotWritable">
+                <source>Chunksfolder %s is not writable! This will increase the memory usage of kreXX significantly!</source>
+            </trans-unit>
+            <trans-unit id="logNotWritable">
+                <source>Logfolder %s is not writable!</source>
+            </trans-unit>
 
             <!--
                 Error messages from the krexx lib
