@@ -156,6 +156,7 @@ class ViewFactory implements EventHandlerInterface
                         ->setName('Instantiated view helpers')
                         ->setType('class internals magical factory')
                         ->addParameter('data', $this->helpers)
+                        ->setHelpid('aimeosViewExisting')
                         ->injectCallback(
                             $this->pool->createClass(
                                 'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\Callbacks\\ThroughClassList'
