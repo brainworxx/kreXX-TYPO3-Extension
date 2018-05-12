@@ -111,6 +111,7 @@ div.kwrapper {
 
 .kwrapper caption {
     display: table-caption;
+    caption-side: top;
 }
 
 .kwrapper tbody {

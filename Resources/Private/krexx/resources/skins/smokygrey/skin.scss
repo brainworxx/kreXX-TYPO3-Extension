@@ -131,6 +131,7 @@ $fontLight: lighter 10px tahoma, verdana;
   }
   caption {
     display: table-caption;
+    caption-side: top;
   }
   tbody {
     display: table-row-group;

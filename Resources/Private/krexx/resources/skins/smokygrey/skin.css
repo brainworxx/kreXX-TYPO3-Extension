@@ -79,7 +79,8 @@
   .kwrapper table, .kfatalwrapper-outer table {
     display: table; }
   .kwrapper caption, .kfatalwrapper-outer caption {
-    display: table-caption; }
+    display: table-caption;
+    caption-side: top; }
   .kwrapper tbody, .kfatalwrapper-outer tbody {
     display: table-row-group; }
   .kwrapper tr, .kfatalwrapper-outer tr {
