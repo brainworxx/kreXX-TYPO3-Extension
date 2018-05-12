@@ -12,9 +12,16 @@
 Changelog
 =============================================================
 
-2.4.1 dev
+3.0.0 dev
     - [Feature] Added 'is' and 'has' to the getter analysis.
+    - [Feature] Added half-asses plugin support, to replace the half-asses overwrites
+    - [Feature] Added a event dispatcher.
+    - [Feature] Added deeper search for the source code getter analysis for better results.
+    - [Feature] Added Aimeos shop debugger.
     - [Change] Removed the old 4.5 compatibility.
+    - [Change] Some internal renaming.
+    - [Change] Moved the existing overwrites into plugins.
+    - [Change] Used the introduced event system in the plugins when possible
     - [Bugfix] The position of the search field of the hans skin is now calculated correct when the viewport is not on top.
     - [Bugfix] The scroll container detection of the hans skin works now.
     - [Bugfix] Added help text for the arrayCountLimit.
@@ -22,6 +29,10 @@ Changelog
     - [Bugfix] Prevent the registering of multiple fatal error handlers.
     - [Bugfix] Minimise interference with strange CSS styles.
     - [Bugfix] Do not render an unresolvable method analysis recursion when there are no methods to analyse in that specific class.
+    - [Bugfix] The file service can now read the bottom of file more reliably.
+    - [Bugfix] Prevent code generation for explicitly forbidden paths, when the recursion resolving is copying the original analysis into the forbidden path
+    - [Bugfix] Removing of message keys should work again.
+    - [Bugfix] Added two missing translation keys.
 
 2.4.0
     - [Feature] Added the method analysis to the recursion detection, to prevent analysing the same methods over and over again.

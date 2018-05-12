@@ -23,6 +23,7 @@
   when the recursion resolving is copying the original analysis
   into the forbidden path (try to say this fast and 4 times in a
   row).
+- Bugfix: Removing of message keys should work again.
 
 2.4.0
 - Added the method analysis to the recursion detection, to prevent
