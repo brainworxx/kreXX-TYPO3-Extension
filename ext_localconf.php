@@ -93,7 +93,7 @@ $boot = function ($_EXTKEY) {
     // Check if we have thze Aimeos shop available.
     // We can not rely on the extention manager to know about the shop, in case
     // it is required via composer.
-    if (class_exists('Aimeos\\MShop\\Factory')) {
+    if (class_exists('Aimeos\\MShop\\Factory') === false) {
         // Register the Aimoes Magic plugin.
         \Brainworxx\Krexx\Service\Plugin\Registration::register(
             'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
