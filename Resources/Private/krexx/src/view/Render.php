@@ -232,7 +232,7 @@ class Render extends AbstractRender
         // to generate.
         $gensource = $this->pool->codegenHandler->generateSource($model);
 
-        if (empty($gensource) === true) {
+        if (empty($gensource) === true || $this->pool->codegenHandler->getAllowCodegen() === false) {
             // Remove the markers, because here is nothing to add.
             $sourcebutton = '';
         } else {
@@ -297,7 +297,10 @@ class Render extends AbstractRender
         // Generating our code and adding the Codegen button, if there is
         // something to generate.
         $gencode = $this->pool->codegenHandler->generateSource($model);
-        if ($gencode === ';stop;' || empty($gencode) === true) {
+        if ($gencode === ';stop;' ||
+            empty($gencode) === true ||
+            $this->pool->codegenHandler->getAllowCodegen() === false
+        ) {
             // Remove the button marker, because here is nothing to add.
             $sourceButton = '';
         } else {

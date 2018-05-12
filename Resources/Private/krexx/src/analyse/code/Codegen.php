@@ -150,7 +150,10 @@ class Codegen
             return '. . .';
         }
 
-        return '';
+        // No code generation in this path.
+        // We must prevent code generation when copying stuff here by recursion
+        // resolving by adding these dots.
+        return '. . .';
     }
 
     /**
@@ -206,6 +209,16 @@ class Codegen
     public function setAllowCodegen($bool)
     {
         $this->allowCodegen = $bool;
+    }
+
+    /**
+     * Getter for the allowance of the code generation.
+     *
+     * @return bool
+     */
+    public function getAllowCodegen()
+    {
+        return $this->allowCodegen;
     }
 
         /**

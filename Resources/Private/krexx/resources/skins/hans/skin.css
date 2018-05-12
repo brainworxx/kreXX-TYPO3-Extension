@@ -45,7 +45,7 @@ div.kwrapper {
     text-align: left;
     color: #000000;
     padding-bottom: 35px;
-    min-width: 35%;
+    min-width: 620px;
 }
 
 /* We need to secure some initial formating for our elements, to prevent the */

@@ -92,7 +92,10 @@ class Render extends \Brainworxx\Krexx\View\Render
         // something to generate.
         $gencode = $this->pool->codegenHandler->generateSource($model);
 
-        if ($gencode === ';stop;' || empty($gencode) === true) {
+        if ($gencode === ';stop;' ||
+            empty($gencode) === true ||
+            $this->pool->codegenHandler->getAllowCodegen() === false
+        ) {
             // Remove the button marker, because here is nothing to add.
             $sourcebutton = '';
         } else {
