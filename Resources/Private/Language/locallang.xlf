@@ -267,7 +267,7 @@
                 <source>Maximum amount of calls:</source>
 			</trans-unit>
             <trans-unit id="label.disabled">
-                <source>Disable output:</source>
+                <source>Disable kreXX:</source>
 			</trans-unit>
             <trans-unit id="label.detectAjax">
                 <source>Try to detect AJAX requests:</source>
