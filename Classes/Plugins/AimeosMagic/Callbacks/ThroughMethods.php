@@ -53,15 +53,29 @@ class ThroughMethods extends AbstractCallback
     {
         $this->dispatchStartEvent();
 
+        $data = $this->parameters['data'];
+        if (isset($this->parameters['isFactoryMethod'])) {
+            $isFactoryMethod = true;
+        } else {
+            $isFactoryMethod = false;
+        }
+
+
         $result = '';
         /** @var \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods $thoughMethods */
         $thoughMethods = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods');
 
         /** @var \ReflectionMethod $reflectionMethod */
-        foreach ($this->parameters['data'] as $reflectionMethod) {
+        foreach ($data as $factoryName =>$reflectionMethod) {
             $params = array(
                 'data' => array($reflectionMethod),
-                'ref' => $reflectionMethod->getDeclaringClass());
+                'ref' => $reflectionMethod->getDeclaringClass(),
+            );
+            // We may not be able to use the method name here
+            // @see ViewFactory
+            if ($isFactoryMethod) {
+                $params['factoryName'] = $factoryName;
+            }
             // Now, that we have set the reflection class, we can call the original.
             $result .= $thoughMethods->setParams($params)->callMe();
         }

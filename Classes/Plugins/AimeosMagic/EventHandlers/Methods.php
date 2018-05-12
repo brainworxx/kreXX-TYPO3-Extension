@@ -161,7 +161,7 @@ class Methods implements EventHandlerInterface
                     ->addParameter('data', $allReceivers)
                     ->injectCallback(
                         $this->pool->createClass(
-                            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\Callbacks\\ThroughReceivers'
+                            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\Callbacks\\ThroughClassList'
                         )
                     )
             );

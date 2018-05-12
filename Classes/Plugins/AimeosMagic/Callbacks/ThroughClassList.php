@@ -44,7 +44,7 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\Callbacks
  */
-class ThroughReceivers extends AbstractCallback
+class ThroughClassList extends AbstractCallback
 {
     /**
      * Dumps the receiver classes.

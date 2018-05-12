@@ -90,13 +90,19 @@ $boot = function ($_EXTKEY) {
         include_once $extPath . 'Classes/ViewHelpers/LegacyDebugViewHelper.php';
     }
 
-    // Register the Aimoes Magic plugin.
-    \Brainworxx\Krexx\Service\Plugin\Registration::register(
-        'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
-    );
-    \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin(
-        'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
-    );
+    // Check if we have thze Aimeos shop available.
+    // We can not rely on the extention manager to know about the shop, in case
+    // it is required via composer.
+    if (class_exists('Aimeos\\MShop\\Factory')) {
+        // Register the Aimoes Magic plugin.
+        \Brainworxx\Krexx\Service\Plugin\Registration::register(
+            'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
+        );
+        \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin(
+            'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
+        );
+    }
+
 };
 
 $boot($_EXTKEY);

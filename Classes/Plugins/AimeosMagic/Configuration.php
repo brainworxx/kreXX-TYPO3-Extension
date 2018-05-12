@@ -73,5 +73,18 @@ class Configuration implements PluginConfigInterface
             'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start',
             'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\Methods'
         );
+
+        // Resolving the magical factory for the view helpers (not to be confused
+        // with fluid viewhelpers).
+        Event::register(
+            'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start',
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\ViewFactory'
+        );
+
+        // Replacing the magical factory name in the method analysis.
+        Event::register(
+            'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods::callMe::end',
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\ThroughMethods'
+        );
     }
 }
