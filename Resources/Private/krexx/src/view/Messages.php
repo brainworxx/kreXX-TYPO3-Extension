@@ -110,7 +110,12 @@ class Messages
      */
     public function removeKey($key)
     {
-        unset($this->keys[$key]);
+        foreach ($this->keys as $counter => $keyArray) {
+            if ($keyArray['key'] === $key) {
+                unset($this->keys[$counter]);
+                return;
+            }
+        }
     }
 
     /**
