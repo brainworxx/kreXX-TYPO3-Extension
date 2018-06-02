@@ -95,6 +95,10 @@ class Traversable extends AbstractObjectAnalysis
                     }
                 );
                 $parameter = iterator_to_array($data);
+        } catch (\Throwable $e) {
+            //Restore the previous error handler, and return an empty string.
+            restore_error_handler();
+            return '';
         } catch (\Exception $e) {
             //Restore the previous error handler, and return an empty string.
             restore_error_handler();

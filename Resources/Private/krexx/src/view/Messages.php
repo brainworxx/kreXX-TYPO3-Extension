@@ -97,9 +97,12 @@ class Messages
      */
     public function addMessage($key, array $args = array())
     {
-        // Add it to the keys, so the CMS can display it.
-        $this->keys[] = array('key' => $key, 'params' => $args);
-        $this->messages[] = $this->getHelp($key, $args);
+        // We will only display these messages once.
+        if (isset($this->keys[$key]) === false) {
+            // Add it to the keys, so the CMS can display it.
+            $this->keys[$key] = array('key' => $key, 'params' => $args);
+            $this->messages[] = $this->getHelp($key, $args);
+        }
     }
 
     /**
@@ -110,12 +113,7 @@ class Messages
      */
     public function removeKey($key)
     {
-        foreach ($this->keys as $counter => $keyArray) {
-            if ($keyArray['key'] === $key) {
-                unset($this->keys[$counter]);
-                return;
-            }
-        }
+        unset($this->keys[$key]);
     }
 
     /**

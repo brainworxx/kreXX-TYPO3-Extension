@@ -81,6 +81,10 @@ class DebugMethods extends AbstractObjectAnalysis
                         }
                     );
                     $result = $data->$funcName();
+                } catch (\Throwable $e) {
+                    //Restore the previous error handler, and return an empty string.
+                    restore_error_handler();
+                    continue;
                 } catch (\Exception $e) {
                     // Restore the old error handler and move to the next method.
                     restore_error_handler();

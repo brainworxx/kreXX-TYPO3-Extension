@@ -114,6 +114,6 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
     {
         /** @var \ReflectionMethod | \ReflectionProperty $reflectionA */
         /** @var \ReflectionMethod | \ReflectionProperty $reflectionB */
-        return strcmp($reflectionA->name, $reflectionB->name);
+        return strcmp($reflectionA->getName(), $reflectionB->getName());
     }
 }

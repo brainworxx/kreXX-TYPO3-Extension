@@ -155,6 +155,7 @@ class Krexx
         include_once 'src/Service/Misc/Encoding.php';
         include_once 'src/Service/Misc/File.php';
         include_once 'src/Service/Misc/Registry.php';
+        include_once 'src/Service/Misc/ReflectionUndeclaredProperty.php';
 
         include_once 'src/Service/Plugin/Registration.php';
         include_once 'src/Service/Plugin/PluginConfigInterface.php';
