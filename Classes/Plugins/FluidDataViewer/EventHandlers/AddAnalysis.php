@@ -103,6 +103,10 @@ class AddAnalysis implements EventHandlerInterface
                             ->setData($value)
                             ->addToJson('hint', 'Magic dataviewer getter method.'));
                 }
+            } catch (\Throwable $e) {
+                // Something went wrong here.
+                // We skip the output here.
+                return '';
             } catch (\Exception $e) {
                 // Something went wrong here.
                 // We skip the output here.

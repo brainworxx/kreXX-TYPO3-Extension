@@ -117,6 +117,8 @@ class Properties extends AbstractCallback implements EventHandlerInterface
                 // Going deeper!
                 $parentReflection = $parentReflection->getParentClass();
             }
+        } catch (\Throwable $e) {
+            // Do nothing.
         } catch (\Exception $e) {
             // Do nothing.
         }
