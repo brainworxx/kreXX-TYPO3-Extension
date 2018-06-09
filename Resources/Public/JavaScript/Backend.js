@@ -50,7 +50,8 @@
     /**
      * @namespace formSupport
      */
-    function formSupport() {}
+    function formSupport() {
+    }
 
     formSupport.formReady = function () {
         var checkboxes = document.getElementsByName('tx_includekrexx_tools_includekrexxkrexxconfiguration[factory]');
