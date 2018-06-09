@@ -59,7 +59,6 @@ abstract class AbstractOutput
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-        register_shutdown_function(array($this, 'shutdownCallback'));
     }
 
     /**
@@ -69,4 +68,9 @@ abstract class AbstractOutput
      *   The chunked output string.
      */
     abstract public function addChunkString($chunkString);
+
+    /**
+     * Tell the output service, that we are finished.
+     */
+    abstract public function finalize();
 }

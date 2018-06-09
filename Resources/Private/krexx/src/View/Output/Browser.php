@@ -39,7 +39,7 @@ namespace Brainworxx\Krexx\View\Output;
  *
  * @package Brainworxx\Krexx\View\Output
  */
-class Shutdown extends AbstractOutput
+class Browser extends AbstractOutput
 {
     /**
      * [0] -> The chunkedup string, that we intend to send to
@@ -84,5 +84,13 @@ class Shutdown extends AbstractOutput
             // Send it to the browser.
             $this->pool->chunks->sendDechunkedToBrowser($chunkString);
         }
+    }
+
+    /**
+     * Register this one in the php shutdown phase.
+     */
+    public function finalize()
+    {
+        register_shutdown_function(array($this, 'shutdownCallback'));
     }
 }

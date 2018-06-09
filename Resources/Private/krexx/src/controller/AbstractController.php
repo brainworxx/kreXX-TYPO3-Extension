@@ -87,20 +87,6 @@ abstract class AbstractController
     protected $fatalShouldActive = false;
 
     /**
-     * Here we save all timekeeping stuff.
-     *
-     * @var array
-     */
-    protected static $timekeeping = array();
-
-    /**
-     * More timekeeping stuff.
-     *
-     * @var array
-     */
-    protected static $counterCache = array();
-
-    /**
      * Our pool where we keep all relevant classes.
      *
      * @var Pool
@@ -127,9 +113,11 @@ abstract class AbstractController
 
         // Register our output service.
         // Depending on the setting, we use another class here.
+        // We get a new output service for every krexx call, because the hosting
+        // cms may do their stuff in the shutdown functions as well.
         $outputSetting = $pool->config->getSetting(Fallback::SETTING_DESTINATION);
         if ($outputSetting === Fallback::VALUE_BROWSER) {
-            $this->outputService = $pool->createClass('Brainworxx\\Krexx\\View\\Output\\Shutdown');
+            $this->outputService = $pool->createClass('Brainworxx\\Krexx\\View\\Output\\Browser');
         } elseif ($outputSetting === Fallback::VALUE_FILE) {
             $this->outputService = $pool->createClass('Brainworxx\\Krexx\\View\\Output\\File');
         }
@@ -274,41 +262,6 @@ abstract class AbstractController
         }
 
         return $this;
-    }
-
-    /**
-     * The benchmark main function.
-     *
-     * @param array $timeKeeping
-     *   The timekeeping array.
-     *
-     * @return array
-     *   The benchmark array.
-     *
-     * @see http://php.net/manual/de/function.microtime.php
-     * @author gomodo at free dot fr
-     */
-    protected function miniBenchTo(array $timeKeeping)
-    {
-        // Get the very first key.
-        $start = key($timeKeeping);
-        $totalTime = round((end($timeKeeping) - $timeKeeping[$start]) * 1000, 4);
-        $result['url'] = $this->getCurrentUrl();
-        $result['total_time'] = $totalTime;
-        $prevMomentName = $start;
-        $prevMomentStart = $timeKeeping[$start];
-
-        foreach ($timeKeeping as $moment => $time) {
-            if ($moment !== $start) {
-                // Calculate the time.
-                $percentageTime = round(((round(($time - $prevMomentStart) * 1000, 4) / $totalTime) * 100), 1);
-                $result[$prevMomentName . '->' . $moment] = $percentageTime . '%';
-                $prevMomentStart = $time;
-                $prevMomentName = $moment;
-            }
-        }
-
-        return $result;
     }
 
     /**

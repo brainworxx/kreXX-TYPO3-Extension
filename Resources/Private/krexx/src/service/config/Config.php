@@ -177,8 +177,11 @@ class Config extends Fallback
      *
      * @param string $name
      *   The name of the config value.
+     *
+     * @return $this
+     *   REturn this, for chaining.
      */
-    protected function loadConfigValue($name)
+    public function loadConfigValue($name)
     {
         $feConfig = $this->iniConfig->getFeConfig($name);
         $section = $this->feConfigFallback[$name][static::SECTION];
@@ -215,6 +218,8 @@ class Config extends Fallback
         // Nothing yet? Give back factory settings.
         $model->setValue($this->feConfigFallback[$name][static::VALUE])->setSource('Factory settings');
         $this->settings[$name] = $model;
+
+        return $this;
     }
 
     /**

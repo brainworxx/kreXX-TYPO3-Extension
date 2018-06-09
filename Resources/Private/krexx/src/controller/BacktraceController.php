@@ -92,6 +92,7 @@ class BacktraceController extends AbstractController
         $this->outputService->addChunkString($this->outputHeader('Backtrace'));
         $this->outputService->addChunkString($analysis);
         $this->outputService->addChunkString($footer);
+        $this->outputService->finalize();
 
         return $this;
     }

@@ -60,7 +60,9 @@ class CallerFinder extends AbstractCaller
             'krexx::open',
             'krexx::' . $this->pool->config->getDevHandler(),
             'Krexx::open',
-            'Krexx::' . $this->pool->config->getDevHandler()
+            'Krexx::' . $this->pool->config->getDevHandler(),
+            'Krexx::log',
+            'krexx::log',
         );
         $this->pattern = 'krexx';
     }
@@ -70,7 +72,12 @@ class CallerFinder extends AbstractCaller
      */
     public function findCaller($headline, $data)
     {
-        $backtrace = debug_backtrace(false, 4);
+        if (version_compare(phpversion(), '5.4.0', '>=')) {
+            $backtrace = debug_backtrace(false, 5);
+        } else {
+            $backtrace = debug_backtrace(false);
+        }
+
         $pattern = strtolower($this->pattern);
 
         // Going from the first call of the first line up

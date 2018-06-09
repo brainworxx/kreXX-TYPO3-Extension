@@ -69,12 +69,10 @@ class File extends AbstractOutput
         $this->chunkStrings[] = $chunkString;
     }
 
-
-
     /**
-     * Creating the logfile after everything is done from the chunk files.
+     * Creating the logfile after the analysis.
      */
-    public function shutdownCallback()
+    public function finalize()
     {
         // Output our chunks.
         // Every output is split into 4 chunk strings (header, messages,

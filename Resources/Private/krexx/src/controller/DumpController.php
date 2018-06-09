@@ -35,7 +35,7 @@
 namespace Brainworxx\Krexx\Controller;
 
 /**
- * "Controller" for the dump (aka analysis) "action" ad the timer "actions".
+ * "Controller" for the dump (aka analysis) "action".
  *
  * @package Brainworxx\Krexx\Controller
  */
@@ -98,51 +98,7 @@ class DumpController extends AbstractController
         $this->outputService->addChunkString($this->outputHeader($caller['type']));
         $this->outputService->addChunkString($analysis);
         $this->outputService->addChunkString($footer);
-
-        return $this;
-    }
-
-    /**
-     * Takes a "moment" for the benchmark test.
-     *
-     * @param string $string
-     *   Defines a "moment" during a benchmark test.
-     *   The string should be something meaningful, like "Model invoice db call".
-     *
-     * @return $this
-     *   Return $this for chaining
-     */
-    public function timerAction($string)
-    {
-        // Did we use this one before?
-        if (isset(static::$counterCache[$string]) === true) {
-            // Add another to the counter.
-            ++static::$counterCache[$string];
-            static::$timekeeping['[' . static::$counterCache[$string] . ']' . $string] = microtime(true);
-        } else {
-            // First time counter, set it to 1.
-            static::$counterCache[$string] = 1;
-            static::$timekeeping[$string] = microtime(true);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Outputs the timer
-     *
-     * @return $this
-     *   Return $this for chaining
-     */
-    public function timerEndAction()
-    {
-        $this->timerAction('end');
-        // And we are done. Feedback to the user.
-        $miniBench = $this->miniBenchTo(static::$timekeeping);
-        $this->dumpAction($miniBench, 'kreXX timer');
-        // Reset the timer vars.
-        static::$timekeeping = array();
-        static::$counterCache = array();
+        $this->outputService->finalize();
 
         return $this;
     }

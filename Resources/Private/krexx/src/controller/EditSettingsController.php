@@ -69,6 +69,7 @@ class EditSettingsController extends AbstractController
         $this->outputService->addChunkString($this->outputHeader('Edit local settings'));
         $this->outputService->addChunkString($footer);
         $this->pool->emergencyHandler->setDisable(false);
+        $this->outputService->finalize();
 
         return $this;
     }

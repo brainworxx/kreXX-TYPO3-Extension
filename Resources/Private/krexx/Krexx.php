@@ -130,6 +130,7 @@ class Krexx
         include_once 'src/Controller/AbstractController.php';
         include_once 'src/Controller/BacktraceController.php';
         include_once 'src/Controller/DumpController.php';
+        include_once 'src/Controller/TimerController.php';
         include_once 'src/Controller/EditSettingsController.php';
         include_once 'src/Controller/ErrorController.php';
 
@@ -163,7 +164,7 @@ class Krexx
         include_once 'src/View/Output/AbstractOutput.php';
         include_once 'src/View/Output/Chunks.php';
         include_once 'src/View/Output/File.php';
-        include_once 'src/View/Output/Shutdown.php';
+        include_once 'src/View/Output/Browser.php';
 
         include_once 'src/View/RenderInterface.php';
         include_once 'src/View/AbstractRender.php';
@@ -248,7 +249,7 @@ class Krexx
 
         AbstractController::$analysisInProgress = true;
 
-        static::$pool->createClass('Brainworxx\\Krexx\\Controller\\DumpController')
+        static::$pool->createClass('Brainworxx\\Krexx\\Controller\\TimerController')
             ->noFatalForKrexx()
             ->timerAction($string)
             ->reFatalAfterKrexx();
@@ -272,7 +273,7 @@ class Krexx
 
         AbstractController::$analysisInProgress = true;
 
-        static::$pool->createClass('Brainworxx\\Krexx\\Controller\\DumpController')
+        static::$pool->createClass('Brainworxx\\Krexx\\Controller\\TimerController')
             ->noFatalForKrexx()
             ->timerEndAction()
             ->reFatalAfterKrexx();
@@ -435,6 +436,13 @@ class Krexx
     {
         Pool::createPool();
 
+        // Disabled?
+        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) || AbstractController::$analysisInProgress) {
+            return;
+        }
+
+        AbstractController::$analysisInProgress = true;
+
         // Output destination: file
         \Krexx::$pool->config
             ->settings['destination']
@@ -448,11 +456,16 @@ class Krexx
             ->setValue('false');
 
         // Start the anaylsis.
-        static::open($data);
+        static::$pool->createClass('Brainworxx\\Krexx\\Controller\\DumpController')
+            ->noFatalForKrexx()
+            ->dumpAction($data)
+            ->reFatalAfterKrexx();
 
         // Reset everything afterwards.
-        unset(\Krexx::$pool->config);
-        \Krexx::$pool->config = \Krexx::$pool
-            ->createClass('Brainworxx\\Krexx\\Service\\Config\\Config');
+        \Krexx::$pool->config
+            ->loadConfigValue('destination')
+            ->loadConfigValue('detectAjax');
+
+        AbstractController::$analysisInProgress = false;
     }
 }
