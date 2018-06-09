@@ -18,8 +18,11 @@ Changelog
     - [Feature] Added a event dispatcher.
     - [Feature] Added deeper search for the source code getter analysis for better results.
     - [Feature] Added Aimeos shop debugger.
+    - [Feature] Added a forced logger, which van be reached by \Krexx:log();
+    - [Feature] Added a jumpTo element after uncollapsing the breadcrumbs for better usability.
     - [Change] Removed the old 4.5 compatibility.
     - [Change] Some internal renaming.
+    - [Change] Removed the constants analysis configuration.
     - [Change] Moved the existing overwrites into plugins.
     - [Change] Used the introduced event system in the plugins when possible
     - [Bugfix] The position of the search field of the hans skin is now calculated correct when the viewport is not on top.
@@ -32,6 +35,12 @@ Changelog
     - [Bugfix] The file service can now read the bottom of file more reliably.
     - [Bugfix] Prevent code generation for explicitly forbidden paths, when the recursion resolving is copying the original analysis into the forbidden path
     - [Bugfix] Removing of message keys should work again.
+    - [Bugfix] Duplicate messages will not be displayed anymore.
+    - [Bugfix] Fixed a possible fatal, when trying to analyse dynamically declared properties, which have a name collusion with private properties somewhere deeper in the class inheritance.
+    - [Bugfix] Detect unset properties in classes.
+    - [Bugfix] Added closing style tags to both skins
+    - [Bugfix] Catch throwable in PHP 7.
+    - [Bugfix] Removed the annoying spaces from the hans template, so people can copy stuff better from the output.
     - [Bugfix] Added two missing translation keys.
 
 2.4.0

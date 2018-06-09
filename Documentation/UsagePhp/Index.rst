@@ -18,11 +18,29 @@ Main analytic function
 
 	krexx($myObject);
 	// or as an alias:
-	\kreXX::open($myObject)
+	\Krexx::open($myObject);
 
 .. figure:: ../Images/main_function.png
 	:width: 678px
 	:alt: analysis of an extbase query result
+
+Logging
+^^^^^^^
+
+Force kreXX to write the analysis into a logfile:
+
+.. code-block:: php
+
+	\Krexx::logging($myObject);
+
+
+Description in more detail:
+
+ - Set destination -> file
+ - Set ajaxDetection -> false
+ - Analyse the object and create a logfile
+ - Reset the configuration again.
+
 
 Benchmarking
 ^^^^^^^^^^^^
@@ -45,7 +63,7 @@ Backtrace
 
 .. code-block:: php
 
-	\kreXX::backtrace();
+	\Krexx::backtrace();
 
 .. figure:: ../Images/Usage/backtrace.png
 	:width: 920px

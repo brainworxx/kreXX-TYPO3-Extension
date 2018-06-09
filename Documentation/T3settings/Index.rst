@@ -15,11 +15,13 @@ TYPO3 Development Settings
 .. important::
 	**Do not use these settings on a productive site!** Never debug a productive system.
 
+.. tip::
+	| These are TYPO3 standard settings, that have nothing to do with kreXX.
 
-When developing TYPO3 extensions or editing template files, people often find themselves unable to get any useful error messages from the system.
-And cleaning the cache for every page refresh can be taxing.
+When developing TYPO3 extensions or editing template files, people often find themselves unable to get any useful error messages from the system. And cleaning the cache for every page refresh can be taxing.
 
-Like everything in TYPO3, there is a configuration for this.
+Of course is a standard configuration for this.
+
 
 Typoscript
 ^^^^^^^^^^
