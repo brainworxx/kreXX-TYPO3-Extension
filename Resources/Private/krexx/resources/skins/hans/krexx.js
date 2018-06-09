@@ -58,7 +58,7 @@
      */
     krexx.onDocumentReady = function () {
         // Init our kdt lib before usage.
-        kdt.initialize();
+        kdt.initialize(krexx);
 
         // In case we are handling a broken html structure, we must move everything
         // to the bottom.
@@ -168,7 +168,7 @@
          *
          * @event click
          */
-        kdt.addEvent('.kwrapper .kolps', 'click', krexx.collapse);
+        kdt.addEvent('.kwrapper .kolps', 'click', kdt.collapse);
 
         /**
          * Register the code generator on the P symbol.
@@ -312,48 +312,6 @@
             element.parentNode.removeChild(element);
         }
 
-    };
-
-    /**
-     * Collapses elements for a breadcrumb
-     *
-     * Hides all other elements, except the one with
-     * the button. This way, we can get a breadcrumb
-     * to the element we want to look at.
-     *
-     * @param {Event} event
-     *   The click event.
-     * @param {Node} element
-     *   The element that was clicked.
-     */
-    krexx.collapse = function (event, element) {
-        event.stop = true;
-        var button = element;
-        var wrapper = kdt.getParents(button, '.kwrapper')[0];
-
-        // Remove all old classes within this debug "window"
-        kdt.removeClass(wrapper.querySelectorAll('.kfilterroot'), 'kfilterroot');
-        kdt.removeClass(wrapper.querySelectorAll('.krootline'), 'krootline');
-        kdt.removeClass(wrapper.querySelectorAll('.ktopline'), 'ktopline');
-
-        // Here we start the hiding, only when clicked on a
-        // none-collapsed button.
-        if (!kdt.hasClass(button, 'kcollapsed')) {
-            kdt.addClass(kdt.getParents(button, 'div.kbg-wrapper > ul'), 'kfilterroot');
-            // Add the "rootline" to all elements between the button and the filterroot
-            kdt.addClass(kdt.getParents(button, 'ul.knode, li.kchild'), 'krootline');
-            // Add the "topline" to the highest element in the rootline
-            kdt.addClass([kdt.getParents(button, '.krootline')[0]], 'ktopline');
-            // Reset the old collapse button.
-            kdt.removeClass(wrapper.querySelectorAll('.kcollapsed'), 'kcollapsed');
-
-            // Highlight the new collapse button.
-            kdt.addClass([button], 'kcollapsed');
-        }
-        else {
-            // Reset the button, since we are un-collapsing nodes here.
-            kdt.removeClass('.kcollapsed', 'kcollapsed');
-        }
     };
 
      /**

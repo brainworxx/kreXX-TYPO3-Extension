@@ -84,7 +84,6 @@ class Fallback
     const SETTING_USE_SCOPE_ANALYSIS = 'useScopeAnalysis';
     const SETTING_ANALYSE_PROTECTED = 'analyseProtected';
     const SETTING_ANALYSE_PRIVATE = 'analysePrivate';
-    const SETTING_ANALYSE_CONSTANTS = 'analyseConstants';
     const SETTING_ANALYSE_TRAVERSABLE = 'analyseTraversable';
     const SETTING_ANALYSE_PROTECTED_METHODS = 'analyseProtectedMethods';
     const SETTING_ANALYSE_PRIVATE_METHODS = 'analysePrivateMethods';
@@ -201,7 +200,6 @@ class Fallback
             Fallback::SECTION_PROPERTIES => array(
                 Fallback::SETTING_ANALYSE_PROTECTED,
                 Fallback::SETTING_ANALYSE_PRIVATE,
-                Fallback::SETTING_ANALYSE_CONSTANTS,
                 Fallback::SETTING_ANALYSE_TRAVERSABLE,
             ),
             Fallback::SECTION_METHODS => array(
@@ -241,13 +239,6 @@ class Fallback
             Fallback::SETTING_ANALYSE_PRIVATE => array(
                 // Analyse private class properties.
                 Fallback::VALUE => Fallback::VALUE_FALSE,
-                Fallback::RENDER => $this->editableSelect,
-                Fallback::EVALUATE => Fallback::EVAL_BOOL,
-                Fallback::SECTION => Fallback::SECTION_PROPERTIES,
-            ),
-            Fallback::SETTING_ANALYSE_CONSTANTS => array(
-                // Analyse class constants.
-                Fallback::VALUE => Fallback::VALUE_TRUE,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVALUATE => Fallback::EVAL_BOOL,
                 Fallback::SECTION => Fallback::SECTION_PROPERTIES,

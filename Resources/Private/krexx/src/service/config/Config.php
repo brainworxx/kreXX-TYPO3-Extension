@@ -89,7 +89,7 @@ class Config extends Fallback
     public static $directories = array();
 
     /**
-     * Injection the pool and loading the configuration.
+     * Inject the pool and load the configuration.
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
      */

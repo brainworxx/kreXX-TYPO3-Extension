@@ -70,7 +70,7 @@ class CallerFinder extends AbstractCaller
      */
     public function findCaller($headline, $data)
     {
-        $backtrace = debug_backtrace();
+        $backtrace = debug_backtrace(false, 4);
         $pattern = strtolower($this->pattern);
 
         // Going from the first call of the first line up

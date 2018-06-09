@@ -194,9 +194,14 @@ class Model
      * Setter for the source value.
      *
      * @param string $source
+     *
+     * @return $this
+     *   Return $this for Chaining.
      */
     public function setSource($source)
     {
         $this->source = $source;
+
+        return $this;
     }
 }

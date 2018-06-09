@@ -89,14 +89,8 @@ class ThroughProperties extends AbstractCallback
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
 
-        // Some devs unset declared properties, which removes not only the
-        // property from the object instance. The object will also act as if
-        // this property was never declared in the first place.
-        // Tha will lead to notices, and worse, will triger __get() or __isset()
-        // inside the object!
-        // The only way known to me to prevent this, is by casting the object
-        // into an array. If the value exist in there, it also exists inside the
-        // object.
+
+        // Retrieve the class variables.
         $this->objectArray = (array) $this->parameters['orgObject'];
 
         foreach ($this->parameters['data'] as $refProperty) {
@@ -113,54 +107,19 @@ class ThroughProperties extends AbstractCallback
             // Every other additional string requires a special connector,
             // so we do this here.
             $connectorType = Connectors::NORMAL_PROPERTY;
-
             /** @var \ReflectionProperty $refProperty */
             $propName = $refProperty->getName();
-            if (array_key_exists($propName, $this->objectArray)) {
-                // Public value.
-                $value = $this->objectArray[$propName];
-            } elseif (array_key_exists("\0*\0" . $propName, $this->objectArray)) {
-                // Get the private / protected value.
-                $value = $this->objectArray["\0*\0" . $propName];
-            } elseif ($refProperty->isStatic() === true) {
-                $additional .= 'static ';
+
+            // Static properties are very special.
+            if ($refProperty->isStatic() === true) {
                 $connectorType = Connectors::STATIC_PROPERTY;
                 // There is always a $ in front of a static property.
                 $propName = '$' . $propName;
-                // Retrieve the static value.
-                $refProperty->setAccessible(true);
-                $value = $refProperty->getValue($this->parameters['orgObject']);
-            } elseif ($refProperty->isPrivate()) {
-                // Private properties that are not present inside the array
-                // come from somewhere deep inside the class structure.
-                // There is still the cahnce, that it gor unset.
-                $refProperty->setAccessible(true);
-                try {
-                    // We need to deactivate the current error handling to
-                    // prevent the host system to do anything stupid.
-                    set_error_handler(
-                        function () {
-                            // Do nothing.
-                        }
-                    );
-                    $value = $refProperty->getValue($this->parameters['orgObject']);
-                    restore_error_handler();
-                } catch (\Throwable $e) {
-                    //Restore the previous error handler, and return an empty string.
-                    restore_error_handler();
-                    // This one got himself unset!
-                    $value = null;
-                    $additional .= 'unset ';
-                } catch (\Exception $e) {
-                    // Restore the old error handler and move to the next method.
-                    restore_error_handler();
-                    // This one got himself unset!
-                    $value = null;
-                    $additional .= 'unset ';
-                }
-            } else {
-                // This one got himself unset!
-                $value = null;
+            }
+
+            $value = $this->retrieveValue($propName, $refProperty);
+
+            if (isset($refProperty->isUnset) === true) {
                 $additional .= 'unset ';
             }
 
@@ -209,7 +168,6 @@ class ThroughProperties extends AbstractCallback
         return $output;
     }
 
-
     /**
      * Adding declaration keywords to our data in the additional field.
      *
@@ -241,6 +199,55 @@ class ThroughProperties extends AbstractCallback
             $additional .= 'inherited ';
         }
 
+        // Add the info, if this is static.
+        if ($refProperty->isStatic() === true) {
+            $additional .= 'static ';
+        }
+
         return $additional;
+    }
+
+    /**
+     * Retrieve the value from the object, if possible.
+     *
+     * @param string $propName
+     *   The name of the property.
+     * @param \ReflectionProperty $refProperty
+     *   The reflection of the property we are analysing.
+     *
+     * @return mixed;
+     *   The retrieved value.
+     */
+    protected function retrieveValue($propName, \ReflectionProperty $refProperty)
+    {
+        if (array_key_exists("\0*\0" . $propName, $this->objectArray)) {
+            // Protected or a private
+            return $this->objectArray["\0*\0" . $propName];
+        }
+
+        if (array_key_exists($propName, $this->objectArray)) {
+            // Must be a public var.
+            return $this->objectArray[$propName];
+        }
+
+        if ($refProperty->isStatic() === true) {
+            // Static values are not inside the value array.
+            $refProperty->setAccessible(true);
+            return $refProperty->getValue($this->parameters['orgObject']);
+        }
+
+        // If we are facing multiple declarations, the declaring class nsme
+        // is set in front of the key.
+        $propName = "\0" . $refProperty->getDeclaringClass()->getName() . "\0" . $propName;
+        if (array_key_exists($propName, $this->objectArray)) {
+            // Found it!
+            return $this->objectArray[$propName];
+        }
+
+        // We are still here, which means that we are not able to get the value
+        // out of it. The only remaining possibility is, that this value was
+        // unset during runtime.
+        $refProperty->isUnset = true;
+        return null;
     }
 }

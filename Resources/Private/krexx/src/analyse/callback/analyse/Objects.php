@@ -90,9 +90,7 @@ class Objects extends AbstractCallback
         }
 
         // Dumping class constants.
-        if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_CONSTANTS) === true) {
-            $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Constants');
-        }
+        $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Constants');
 
         // Dumping all methods.
         $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods');

@@ -63,11 +63,11 @@ abstract class AbstractController
     protected $outputService;
 
     /**
-     * Have we already send the CSS and JS?
+     * Have we already send the CSS and JS, depending on the destination?
      *
-     * @var bool
+     * @var array
      */
-    protected static $headerSend = false;
+    protected static $jsCssSend = array();
 
     /**
      * Here we store the fatal error handler.
@@ -146,13 +146,6 @@ abstract class AbstractController
      */
     protected function outputHeader($headline)
     {
-        // Do we do an output as file?
-        if (static::$headerSend === true) {
-            return $this->pool->render->renderHeader('', $headline, '');
-        }
-
-        // Send doctype and css/js only once.
-        static::$headerSend = true;
         return $this->pool->render->renderHeader('<!DOCTYPE html>', $headline, $this->outputCssAndJs());
     }
 
@@ -201,6 +194,15 @@ abstract class AbstractController
      */
     protected function outputCssAndJs()
     {
+        // We only do this once per output type.
+        $destination = $this->pool->config->getSetting('destination');
+        $result = isset(static::$jsCssSend[$destination]);
+        static::$jsCssSend[$destination] = true;
+        if ($result === true) {
+            // Been here, done that.
+            return '';
+        }
+
         // Get the css file.
         $css = $this->pool->fileService->getFileContents(
             KREXX_DIR .

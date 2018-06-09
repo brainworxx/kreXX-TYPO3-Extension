@@ -801,6 +801,56 @@
         }, 500);
     };
 
+    /**
+     * Collapses elements for a breadcrumb
+     *
+     * Hides all other elements, except the one with
+     * the button. This way, we can get a breadcrumb
+     * to the element we want to look at.
+     *
+     * @param {Event} event
+     *   The click event.
+     * @param {Node} element
+     *   The element that was clicked.
+     */
+    kdt.collapse = function (event, element) {
+        event.stop = true;
+
+        var wrapper = kdt.getParents(element, '.kwrapper')[0];
+
+        // Remove all old classes within this debug "window"
+        kdt.removeClass(wrapper.querySelectorAll('.kfilterroot'), 'kfilterroot');
+        kdt.removeClass(wrapper.querySelectorAll('.krootline'), 'krootline');
+        kdt.removeClass(wrapper.querySelectorAll('.ktopline'), 'ktopline');
+
+        // Here we start the hiding, only when clicked on a
+        // none-collapsed button.
+        if (!kdt.hasClass(element, 'kcollapsed')) {
+            kdt.addClass(kdt.getParents(element, 'div.kbg-wrapper > ul'), 'kfilterroot');
+            // Add the "rootline" to all elements between the button and the filterroot
+            kdt.addClass(kdt.getParents(element, 'ul.knode, li.kchild'), 'krootline');
+            // Add the "topline" to the highest element in the rootline
+            kdt.addClass([kdt.getParents(element, '.krootline')[0]], 'ktopline');
+            // Reset the old collapse button.
+            kdt.removeClass(wrapper.querySelectorAll('.kcollapsed'), 'kcollapsed');
+
+            // Highlight the new collapse button.
+            kdt.addClass([element], 'kcollapsed');
+        }
+        else {
+            // Reset the button, since we are un-collapsing nodes here.
+            kdt.removeClass('.kcollapsed', 'kcollapsed');
+            // Move the original element back into the viewport.
+            kdt.krexx.jumpTo(element);
+        }
+    };
+
+    /**
+     * Prevent the bubbling of an event in the kdt event handler.
+     *
+     * @param {Event} event
+     * @param element
+     */
     kdt.preventBubble = function (event, element) {
         event.stop = true;
     };
@@ -810,7 +860,7 @@
      *
      * @event onDocumentReady
      */
-    kdt.initialize = function () {
+    kdt.initialize = function (krexx) {
 
         /**
          * Caching of the body element for late usage.
@@ -818,6 +868,11 @@
          * @type {Element}
          */
         kdt.body = document.querySelector('body');
+
+        /**
+         * @type {Krexx}
+         */
+        kdt.krexx = krexx;
 
         // Adding a concrete maches implementation to the lib.
         kdt.testMachtes();

@@ -422,4 +422,37 @@ class Krexx
         static::$pool->createClass('Brainworxx\\Krexx\\Controller\\ErrorController')
             ->unregisterFatalAction();
     }
+
+    /**
+     * Ignore all settings, and force file logging. Ajax requests will not be ignored.
+     *
+     * @api
+     *
+     * @param mixed $data
+     *   The variable we want to analyse.
+     */
+    public static function log($data = null)
+    {
+        Pool::createPool();
+
+        // Output destination: file
+        \Krexx::$pool->config
+            ->settings['destination']
+            ->setSource('forced logging')
+            ->setValue('file');
+
+        // Do not care about ajax requests.
+        \Krexx::$pool->config
+            ->settings['detectAjax']
+            ->setSource('forced logging')
+            ->setValue('false');
+
+        // Start the anaylsis.
+        static::open($data);
+
+        // Reset everything afterwards.
+        unset(\Krexx::$pool->config);
+        \Krexx::$pool->config = \Krexx::$pool
+            ->createClass('Brainworxx\\Krexx\\Service\\Config\\Config');
+    }
 }

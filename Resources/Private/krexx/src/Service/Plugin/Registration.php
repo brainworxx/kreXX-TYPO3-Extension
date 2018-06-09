@@ -76,10 +76,14 @@ class Registration
      */
     public static function activatePlugin($name)
     {
-        static::$plugins[$name][static::IS_ACTIVE] = true;
-        /** @var \Brainworxx\Krexx\Service\Plugin\PluginConfigInterface $staticPlugin */
-        $staticPlugin = static::$plugins[$name][static::CONFIG_CLASS];
-        $staticPlugin::exec();
+        if (isset(static::$plugins[$name])) {
+            static::$plugins[$name][static::IS_ACTIVE] = true;
+            /** @var \Brainworxx\Krexx\Service\Plugin\PluginConfigInterface $staticPlugin */
+            $staticPlugin = static::$plugins[$name][static::CONFIG_CLASS];
+            $staticPlugin::exec();
+        }
+        // No registration, no config, no plugin.
+        // Do nothing.
     }
 
     /**

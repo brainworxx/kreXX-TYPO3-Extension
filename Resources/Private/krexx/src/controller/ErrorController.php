@@ -83,11 +83,8 @@ class ErrorController extends AbstractController
         $this->pool->chunks->detectEncoding($backtrace);
 
         // Get the header.
-        if (static::$headerSend === true) {
-            $header = $this->pool->render->renderFatalHeader('', '<!DOCTYPE html>');
-        } else {
-            $header = $this->pool->render->renderFatalHeader($this->outputCssAndJs(), '<!DOCTYPE html>');
-        }
+        $header = $this->pool->render->renderFatalHeader($this->outputCssAndJs(), '<!DOCTYPE html>');
+
 
         // Get the footer.
         $footer = $this->outputFooter(array());
