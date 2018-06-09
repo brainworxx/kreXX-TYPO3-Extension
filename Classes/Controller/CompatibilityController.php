@@ -71,7 +71,6 @@ class CompatibilityController extends ActionController
         Fallback::SETTING_NESTING_LEVEL,
         Fallback::SETTING_ANALYSE_PROTECTED_METHODS,
         Fallback::SETTING_ANALYSE_PRIVATE_METHODS,
-        Fallback::SETTING_ANALYSE_CONSTANTS,
         Fallback::SETTING_IP_RANGE,
         Fallback::SETTING_ANALYSE_GETTER,
         Fallback::SETTING_MAX_RUNTIME,
