@@ -105,7 +105,9 @@ class Registration
             if ($plugin[static::IS_ACTIVE]) {
                 /** @var \Brainworxx\Krexx\Service\Plugin\PluginConfigInterface $staticPlugin */
                 $staticPlugin = static::$plugins[$name][static::CONFIG_CLASS];
-                $staticPlugin::exec();
+                if (isset($staticPlugin)) {
+                    $staticPlugin::exec();
+                }
             }
         }
     }
