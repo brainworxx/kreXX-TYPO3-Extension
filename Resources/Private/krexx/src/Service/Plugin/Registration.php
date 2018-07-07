@@ -44,7 +44,7 @@ use Brainworxx\Krexx\Service\Factory\Factory;
 class Registration
 {
     /**
-     * The registered plugin configuration files as classnames.
+     * The registered plugin configuration files as class names.
      *
      * @var array
      */

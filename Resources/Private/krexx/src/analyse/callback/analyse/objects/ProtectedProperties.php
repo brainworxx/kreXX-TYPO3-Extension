@@ -40,7 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  *
  * @uses mixed data
- *   The class we are currently analsysing.
+ *   The class we are currently analysing.
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
@@ -69,7 +69,6 @@ class ProtectedProperties extends AbstractObjectAnalysis
             $this->getReflectionPropertiesData(
                 $refProps,
                 $ref,
-                $this->parameters['data'],
                 'Protected properties'
             );
     }

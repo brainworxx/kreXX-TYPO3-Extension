@@ -37,7 +37,7 @@ namespace Brainworxx\Krexx\Analyse\Caller;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
- * Abstract defining what a CallerFinder clkass must implement.
+ * Abstract defining what a CallerFinder class must implement.
  *
  * @package Brainworxx\Krexx\Analyse\Caller
  */

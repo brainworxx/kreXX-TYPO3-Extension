@@ -62,18 +62,10 @@ class BacktraceController extends AbstractController
 
         $this->pool->scope->setScope($caller['varname']);
 
-        // Remove the fist step from the backtrace,
-        // because that is the internal function in kreXX.
-        $backtrace = debug_backtrace();
-        unset($backtrace[0]);
-        // Reset the array keys, because the 0 is now missing.
-        $backtrace = array_values($backtrace);
-
-
         $footer = $this->outputFooter($caller);
         $analysis = $this->pool
             ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessBacktrace')
-            ->process($backtrace);
+            ->process();
 
         // Detect the encoding on the start-chunk-string of the analysis
         // for a complete encoding picture.

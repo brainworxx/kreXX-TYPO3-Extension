@@ -45,7 +45,7 @@ use Brainworxx\Krexx\Service\Misc\File;
  *
  * @uses array data
  *   Array of \reflectionProperties.
- * @uses \ReflectionClass ref
+ * @uses \Service\Reflection\ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  * @uses object orgObject
  *   The original object we are analysing
@@ -86,12 +86,8 @@ class ThroughProperties extends AbstractCallback
 
         // I need to preprocess them, since I do not want to render a
         // reflection property.
-        /** @var \ReflectionClass $ref */
+        /** @var \Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters['ref'];
-
-
-        // Retrieve the class variables.
-        $this->objectArray = (array) $this->parameters['orgObject'];
 
         foreach ($this->parameters['data'] as $refProperty) {
             // Check memory and runtime.
@@ -117,7 +113,7 @@ class ThroughProperties extends AbstractCallback
                 $propName = '$' . $propName;
             }
 
-            $value = $this->retrieveValue($propName, $refProperty);
+            $value = $ref->retrieveValue($refProperty);
 
             if (isset($refProperty->isUnset) === true) {
                 $additional .= 'unset ';
@@ -205,49 +201,5 @@ class ThroughProperties extends AbstractCallback
         }
 
         return $additional;
-    }
-
-    /**
-     * Retrieve the value from the object, if possible.
-     *
-     * @param string $propName
-     *   The name of the property.
-     * @param \ReflectionProperty $refProperty
-     *   The reflection of the property we are analysing.
-     *
-     * @return mixed;
-     *   The retrieved value.
-     */
-    protected function retrieveValue($propName, \ReflectionProperty $refProperty)
-    {
-        if (array_key_exists("\0*\0" . $propName, $this->objectArray)) {
-            // Protected or a private
-            return $this->objectArray["\0*\0" . $propName];
-        }
-
-        if (array_key_exists($propName, $this->objectArray)) {
-            // Must be a public var.
-            return $this->objectArray[$propName];
-        }
-
-        if ($refProperty->isStatic() === true) {
-            // Static values are not inside the value array.
-            $refProperty->setAccessible(true);
-            return $refProperty->getValue($this->parameters['orgObject']);
-        }
-
-        // If we are facing multiple declarations, the declaring class nsme
-        // is set in front of the key.
-        $propName = "\0" . $refProperty->getDeclaringClass()->getName() . "\0" . $propName;
-        if (array_key_exists($propName, $this->objectArray)) {
-            // Found it!
-            return $this->objectArray[$propName];
-        }
-
-        // We are still here, which means that we are not able to get the value
-        // out of it. The only remaining possibility is, that this value was
-        // unset during runtime.
-        $refProperty->isUnset = true;
-        return null;
     }
 }

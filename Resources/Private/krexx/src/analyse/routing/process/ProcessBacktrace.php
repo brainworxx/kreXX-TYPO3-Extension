@@ -64,19 +64,15 @@ class ProcessBacktrace
     }
 
     /**
-     * Analysis a backtrace.
-     *
-     * We need to format this one a little bit different than a
-     * normal array.
-     *
-     * @param array $backtrace
-     *   The backtrace.
+     * Do a backtrace analysis.
      *
      * @return string
      *   The rendered backtrace.
      */
-    public function process(array &$backtrace)
+    public function process()
     {
+        $backtrace = $this->getBacktrace();
+
         $output = '';
         $maxStep = (int) $this->pool->config->getSetting(Fallback::SETTING_MAX_STEP_NUMBER);
         $stepCount = count($backtrace);
@@ -104,5 +100,30 @@ class ProcessBacktrace
         }
 
         return $output;
+    }
+
+    /**
+     * Get the backtrace, and remove all steps that were caused by kreXX.
+     *
+     * @return array
+     *   The scrubbed backtrace.
+     */
+    protected function getBacktrace()
+    {
+        // Remove the fist step from the backtrace,
+        // because that is the internal function in kreXX.
+        $backtrace = debug_backtrace();
+
+        // We remove all steps that came from inside the kreXX lib.
+        foreach ($backtrace as $key => $step) {
+            if (strpos($step['file'], KREXX_DIR) !== false) {
+                unset($backtrace[$key]);
+            }
+        }
+
+        // Reset the array keys, because the 0 is now missing.
+        $backtrace = array_values($backtrace);
+
+        return $backtrace;
     }
 }

@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Analyse\Model;
+use Service\Reflection\ReflectionClass;
 
 /**
  * Abstract class for the object analysis.
@@ -64,17 +65,15 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
      *
      * @param array $refProps
      *   The list of the reflection properties.
-     * @param \ReflectionClass $ref
+     * @param ReflectionClass $ref
      *   The reflection of the object we are currently analysing.
-     * @param object $data
-     *   The object we are currently analysing.
      * @param string $label
      *   The additional part of the template file.
      *
      * @return string
      *   The generated markup.
      */
-    protected function getReflectionPropertiesData(array $refProps, \ReflectionClass $ref, $data, $label)
+    protected function getReflectionPropertiesData(array $refProps, ReflectionClass $ref, $label)
     {
         // We are dumping public properties direct into the main-level, without
         // any "abstraction level", because they can be accessed directly.
@@ -82,7 +81,6 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
         $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
             ->addParameter('data', $refProps)
             ->addParameter('ref', $ref)
-            ->addParameter('orgObject', $data)
             ->injectCallback(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties')
             );

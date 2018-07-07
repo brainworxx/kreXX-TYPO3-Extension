@@ -61,7 +61,7 @@ class ThroughMethods extends AbstractCallback
     public function callMe()
     {
         $result = $this->dispatchStartEvent();
-        /** @var \ReflectionClass $reflectionClass */
+        /** @var \Service\Reflection\ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters['ref'];
 
         $commentAnalysis = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Methods');
@@ -88,7 +88,7 @@ class ThroughMethods extends AbstractCallback
                 $paramList .= $methodData['Parameter #' . $key] = $this->pool
                     ->codegenHandler
                     ->parameterToString($reflectionParameter);
-                // We add a comme to the parameter list, to separate them for a
+                // We add a comma to the parameter list, to separate them for a
                 // better readability.
                 $paramList .= ', ';
             }

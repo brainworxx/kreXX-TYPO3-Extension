@@ -114,7 +114,7 @@ class Ini extends Fallback
                 );
             }
             // Unknown parameter and nothing in the fallback!
-            // This should never happan, btw.
+            // This should never happen, btw.
             return array(false, static::RENDER_TYPE_NONE);
         }
 

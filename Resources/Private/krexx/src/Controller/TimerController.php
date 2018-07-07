@@ -60,9 +60,9 @@ class TimerController extends AbstractController
     /**
      * We simply set the pool. We will not register any shutdown stuff.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @param Pool $pool
      */
-    public function __construct(\Brainworxx\Krexx\Service\Factory\Pool $pool)
+    public function __construct(Pool $pool)
     {
         $this->pool = $pool;
     }

@@ -95,7 +95,7 @@ class Fallback
 
     const RENDER_TYPE = 'Type';
     const RENDER_EDITABLE = 'Editable';
-    // The render type is also paert of the template filemane fot the
+    // The render type is also part of the template filename of the
     // cookie editor.
     const RENDER_TYPE_SELECT = 'Select';
     const RENDER_TYPE_INPUT = 'Input';
@@ -281,7 +281,7 @@ class Fallback
                 Fallback::SECTION => Fallback::SECTION_OUTPUT,
             ),
             Fallback::SETTING_DESTINATION => array(
-                // Output desination. Either 'file' or 'browser'.
+                // Output destination. Either 'file' or 'browser'.
                 Fallback::VALUE => Fallback::VALUE_BROWSER,
                 Fallback::RENDER => $this->displayOnlySelect,
                 Fallback::EVALUATE => Fallback::EVAL_DESTINATION,
@@ -303,7 +303,7 @@ class Fallback
             ),
             Fallback::SETTING_DETECT_AJAX => array(
                 // Try to detect ajax requests.
-                // If set to 'true', kreXX is disablked for them.
+                // If set to 'true', kreXX is disabled for them.
                 Fallback::VALUE => Fallback::VALUE_TRUE,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVALUATE => Fallback::EVAL_BOOL,
@@ -339,14 +339,14 @@ class Fallback
                 Fallback::SECTION => Fallback::SECTION_RUNTIME,
             ),
             Fallback::SETTING_MAX_RUNTIME => array(
-                // Maximum runtime in seconds, before triggering an emergancy break.
+                // Maximum runtime in seconds, before triggering an emergency break.
                 Fallback::VALUE => 60,
                 Fallback::RENDER => $this->editableInput,
                 Fallback::EVALUATE => Fallback::EVAL_MAX_RUNTIME,
                 Fallback::SECTION => Fallback::SECTION_RUNTIME,
             ),
             Fallback::SETTING_USE_SCOPE_ANALYSIS => array(
-                // Use the scope analyis (aka autoconfiguration).
+                // Use the scope analysis (aka auto configuration).
                 Fallback::VALUE => Fallback::VALUE_TRUE,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVALUATE => Fallback::EVAL_BOOL,

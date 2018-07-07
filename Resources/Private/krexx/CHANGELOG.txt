@@ -12,6 +12,7 @@
   complete.
 - Change: Some internal renaming.
 - Change: Removed the constants analysis configuration.
+- Change: Moved the bootstrapping to it's own file.
 - Bugfix: The position of the search field of the hans skin is now
   calculated correct when the viewport is not on top.
 - Bugfix: The scroll container detection of the hans skin works
@@ -39,6 +40,8 @@
 - Bugfix: Catch throwable in PHP 7.
 - Bugfix: Removed the anoying speces from the hans template, so
   people can copy stuff better from the output.
+- Bugfix: Added 'Krexx' with a capital 'K' to the caller finder
+  pattern.
 
 2.4.0
 - Added the method analysis to the recursion detection, to prevent

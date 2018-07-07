@@ -60,8 +60,8 @@ class ProcessOther extends AbstractProcess
         $type = $this->pool->encodingService->encodeString(gettype($model->getData()));
         return $this->pool->render->renderSingleChild(
             $model->setType($type)
-                ->setNormal('Unhandeled type: ' . $type)
-                ->setHelpid('unhandeldOtherHelp')
+                ->setNormal('Unhandled type: ' . $type)
+                ->setHelpid('unhandedOtherHelp')
         );
     }
 }

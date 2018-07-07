@@ -34,13 +34,13 @@
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
+
 /**
  * Analysis of public properties.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  *
- * @uses mixed data
- *   The class we are currently analsysing.
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
@@ -58,9 +58,9 @@ class PublicProperties extends AbstractObjectAnalysis
     {
         $output = $this->dispatchStartEvent();
 
-        $data = $this->parameters['data'];
-        /** @var \ReflectionClass $ref */
+        /** @var \Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters['ref'];
+        $data = $ref->getData();
 
         $refProps = $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
         $publicProps = array();
@@ -89,7 +89,7 @@ class PublicProperties extends AbstractObjectAnalysis
                 $refProps[] = $undeclaredProp;
             } catch (\ReflectionException $e) {
                 // See class comments for more info, what is happening here.
-                $undeclaredProp = new \Brainworxx\Krexx\Service\Misc\ReflectionUndeclaredProperty($data, $key);
+                $undeclaredProp = new UndeclaredProperty($data, $key);
                 $refProps[] = $undeclaredProp;
             }
         }
@@ -102,7 +102,7 @@ class PublicProperties extends AbstractObjectAnalysis
         // Adding a HR to reflect that the following stuff are not public
         // properties anymore.
         return $output .
-            $this->getReflectionPropertiesData($refProps, $ref, $data, 'Public properties') .
+            $this->getReflectionPropertiesData($refProps, $ref, 'Public properties') .
             $this->pool->render->renderSingeChildHr();
     }
 }

@@ -127,9 +127,9 @@ abstract class AbstractComment
      * - {inheritdoc}
      * - {@inheritdoc}
      *
-     * @param $originalComment
+     * @param string $originalComment
      *   The original comment, featuring the inheritance documentor.
-     * @param $comment
+     * @param string $comment
      *   The string to replace the inheritance documentor.
      */
     protected function replaceInheritComment($originalComment, $comment)

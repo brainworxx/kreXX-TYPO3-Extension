@@ -55,8 +55,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *   get methods starting with 'has'
  * @uses \ReflectionClass $ref
  *   A reflection class of the object we are analysing.
- * @uses object $data
- *   The object we are currently analysing
  * @uses string $currentPrefix
  *   The current prefix we are analysing (get, is, has).
  *   Does not get set from the outside.
@@ -178,8 +176,7 @@ class ThroughGetter extends AbstractCallback
         if (empty($refProp) === false) {
             // We've got ourselves a possible result!
             $nothingFound = false;
-            $refProp->setAccessible(true);
-            $value = $refProp->getValue($this->parameters['data']);
+            $value = $this->parameters['ref']->retrieveValue($refProp);
             $model->setData($value);
             if ($value === null) {
                 // A NULL value might mean that the values does not
@@ -364,8 +361,8 @@ class ThroughGetter extends AbstractCallback
             // Check if this is a property and return the first we find.
             $parentClass = $classReflection;
             while ($parentClass !== false) {
-                // Chack if it was declared somewhere deeper in the
-                // class stucture.
+                // Check if it was declared somewhere deeper in the
+                // class structure.
                 if ($parentClass->hasProperty($propertyName) === true) {
                     return $parentClass->getProperty($propertyName);
                 }

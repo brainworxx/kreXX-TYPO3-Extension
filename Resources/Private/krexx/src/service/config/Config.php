@@ -114,15 +114,15 @@ class Config extends Fallback
         if ($this->isRequestAjaxOrCli() === true &&
             $this->getSetting(static::SETTING_DESTINATION) !== 'file'
         ) {
-            // No kreXX for you!
+            // No kreXX for you. At least until you start forced logging.
             $this->setDisabled(true);
         }
 
         // Now that our settings are in place, we need to check the
         // ip to decide if we need to deactivate kreXX.
         if ($this->isAllowedIp($this->getSetting(static::SETTING_IP_RANGE)) === false) {
-            // No kreXX for you!
-            $this->setDisabled(true);
+            // No kreXX for you! At all.
+            \Krexx::disable();
         }
 
         $this->debugFuncList = explode(',', $this->getSetting(static::SETTING_DEBUG_METHODS));
@@ -179,7 +179,7 @@ class Config extends Fallback
      *   The name of the config value.
      *
      * @return $this
-     *   REturn this, for chaining.
+     *   Return this, for chaining.
      */
     public function loadConfigValue($name)
     {
@@ -202,7 +202,7 @@ class Config extends Fallback
                 if (($name === static::SETTING_DISABLED && $cookieSetting === static::VALUE_FALSE) === false) {
                     $model->setValue($cookieSetting)->setSource('Local cookie settings');
                     $this->settings[$name] = $model;
-                    return;
+                    return $this;
                 }
             }
         }
@@ -212,7 +212,7 @@ class Config extends Fallback
         if (isset($iniSettings) === true) {
             $model->setValue($iniSettings)->setSource('Krexx.ini settings');
             $this->settings[$name] = $model;
-            return;
+            return $this;
         }
 
         // Nothing yet? Give back factory settings.

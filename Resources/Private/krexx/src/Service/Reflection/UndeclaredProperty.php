@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Service\Misc;
+namespace Brainworxx\Krexx\Service\Reflection;
 
 /**
  * The original \ReflectionProperty may throw an error when used with
@@ -52,7 +52,7 @@ namespace Brainworxx\Krexx\Service\Misc;
  *
  * @package Brainworxx\Krexx\Service\Misc
  */
-class ReflectionUndeclaredProperty extends \ReflectionProperty
+class UndeclaredProperty extends \ReflectionProperty
 {
     /**
      * This one is always undeclared.
@@ -76,7 +76,7 @@ class ReflectionUndeclaredProperty extends \ReflectionProperty
     protected $propertyName;
 
     /**
-     * A reflection of the class, wheere the property was declared.
+     * A reflection of the class, where the property was declared.
      *
      * @var \ReflectionClass
      */
@@ -86,7 +86,7 @@ class ReflectionUndeclaredProperty extends \ReflectionProperty
      * ReflectionUndeclaredProperty constructor.
      *
      * @param $class
-     *   The instrance of the class with the property.
+     *   The instance of the class with the property.
      * @param $name
      *   The name of the property.
      *
@@ -100,7 +100,7 @@ class ReflectionUndeclaredProperty extends \ReflectionProperty
     }
 
     /**
-     * A dynamically declared property can naver be static.
+     * A dynamically declared property can never be static.
      *
      * @return bool
      *   Always false.
@@ -114,7 +114,7 @@ class ReflectionUndeclaredProperty extends \ReflectionProperty
      * Getter for the reflection of the class with the property.
      *
      * @return \ReflectionClass
-     *   The refelction.
+     *   The refection.
      */
     public function getDeclaringClass()
     {
@@ -169,7 +169,7 @@ class ReflectionUndeclaredProperty extends \ReflectionProperty
      * Try to retrieve the value, nested within some error handling.
      *
      * @param null $object
-     *   We ignore this one. It's only here to make the class compartible with
+     *   We ignore this one. It's only here to make the class compatible with
      *   the original \ReflectionProperty.
      * @return mixed
      *   The value, if we can get it.
@@ -206,8 +206,8 @@ class ReflectionUndeclaredProperty extends \ReflectionProperty
     }
 
     /**
-     * We need to implement thsi one without the possibility of throwing an
-     * error in order to be compartible with te original \ReflectionClass.
+     * We need to implement this one without the possibility of throwing an
+     * error in order to be compatible with te original \ReflectionClass.
      *
      * @return string
      *   Always an empty string.

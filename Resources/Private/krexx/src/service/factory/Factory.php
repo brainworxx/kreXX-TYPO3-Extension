@@ -102,7 +102,7 @@ class Factory
     }
 
     /**
-     * Create the pool, but only if it is not alredy there.
+     * Create the pool, but only if it is not already there.
      *
      * @internal
      */

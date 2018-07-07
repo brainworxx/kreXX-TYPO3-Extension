@@ -124,7 +124,7 @@ class ThroughLargeArray extends AbstractCallback
     }
 
     /**
-     * Starting the analysis ofthe value.
+     * Starting the analysis of the value.
      *
      * @param mixed $value
      *   The value from the current array position.

@@ -40,7 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  *
  * @uses mixed data
- *   The class we are currently analsysing.
+ *   The class we are currently analysing.
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
@@ -56,9 +56,9 @@ class Getter extends AbstractObjectAnalysis
     {
         $output = $this->dispatchStartEvent();
 
-        $data = $this->parameters['data'];
-        /** @var \ReflectionClass $ref */
+        /** @var \Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters['ref'];
+
         // Get all public methods.
         $methodList = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
 
@@ -128,7 +128,6 @@ class Getter extends AbstractObjectAnalysis
                         ->addParameter('normalGetter', $normalGetter)
                         ->addParameter('isGetter', $isGetter)
                         ->addParameter('hasGetter', $hasGetter)
-                        ->addParameter('data', $data)
                         ->injectCallback(
                             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter')
                         )

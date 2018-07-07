@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use Service\Reflection\ReflectionClass;
 
 /**
  * Object analysis methods.
@@ -60,9 +61,8 @@ class Objects extends AbstractCallback
     public function callMe()
     {
         $output = $this->pool->render->renderSingeChildHr() . $this->dispatchStartEvent();
-
-        $data = $this->parameters['data'];
-        $ref = $this->parameters['ref'] = new \ReflectionClass($data);
+        
+        $ref = $this->parameters['ref'] = new ReflectionClass($this->parameters['data']);
 
         // Dumping public properties.
         $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties');
@@ -97,7 +97,7 @@ class Objects extends AbstractCallback
 
         // Dumping traversable data.
         if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_TRAVERSABLE) === true &&
-            $data instanceof \Traversable
+            $this->parameters['data'] instanceof \Traversable
         ) {
             $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable');
         }

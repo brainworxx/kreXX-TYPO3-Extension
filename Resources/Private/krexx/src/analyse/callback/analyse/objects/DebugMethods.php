@@ -44,7 +44,7 @@ use Brainworxx\Krexx\Service\Config\Fallback;
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  *
  * @uses mixed data
- *   The class we are currently analsysing.
+ *   The class we are currently analysing.
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
@@ -64,9 +64,10 @@ class DebugMethods extends AbstractObjectAnalysis
      */
     public function callMe()
     {
-        $data = $this->parameters['data'];
-        /** @var \ReflectionClass $reflectionClass */
+
+        /** @var \Service\Reflection\ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters['ref'];
+        $data = $reflectionClass->getData();
         $output = $this->dispatchStartEvent();
 
         foreach (explode(',', $this->pool->config->getSetting(Fallback::SETTING_DEBUG_METHODS)) as $funcName) {
@@ -129,7 +130,7 @@ class DebugMethods extends AbstractObjectAnalysis
      *   The reflection of the class that we are currently analysing.
      *
      * @return boolean
-     *   Wether or not we are allowed toi access this method.
+     *   Whether or not we are allowed toi access this method.
      */
     protected function checkIfAccessible($data, $funcName, \ReflectionClass $reflectionClass)
     {

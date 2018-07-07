@@ -45,7 +45,7 @@ use Brainworxx\Krexx\Service\Config\Fallback;
  * @uses mixed data
  *   The class we are currently analsysing.
  * @uses string name
- *   The variavble name or key in the parrent object / array where the current
+ *   The variavble name or key in the parent object / array where the current
  *   class is stored.
  */
 class Traversable extends AbstractObjectAnalysis
@@ -71,7 +71,7 @@ class Traversable extends AbstractObjectAnalysis
         }
 
         // Do the actual analysis
-        return $output . $this->getTeversableData();
+        return $output . $this->getTaversableData();
     }
 
     /**
@@ -80,7 +80,7 @@ class Traversable extends AbstractObjectAnalysis
      * @return string
      *   The generated markup.
      */
-    protected function getTeversableData()
+    protected function getTaversableData()
     {
         $data = $this->parameters['data'];
         $name = $this->parameters['name'];
@@ -132,7 +132,7 @@ class Traversable extends AbstractObjectAnalysis
                 ->addParameter('multiline', $multiline);
 
             // Check, if we are handling a huge array. Huge arrays tend to result in a huge
-            // output, maybe even triggering a emergency break. t oavoid this, we give them
+            // output, maybe even triggering a emergency break. to avoid this, we give them
             // a special callback.
             if (count($parameter) > (int) $this->pool->config->getSetting(Fallback::SETTING_ARRAY_COUNT_LIMIT)) {
                 $model->injectCallback(

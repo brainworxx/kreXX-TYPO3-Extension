@@ -39,8 +39,8 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  *
- * @uses mixed data
- *   The class we are currently analsysing.
+ * @uses array data
+ *   The class we are currently analysing.
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
@@ -59,6 +59,7 @@ class PrivateProperties extends AbstractObjectAnalysis
         $refProps = array();
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
+        // We need to keep the original reference intact.
         $reflectionClass = $ref;
 
         // The main problem here is, that you only get the private properties of
@@ -81,7 +82,6 @@ class PrivateProperties extends AbstractObjectAnalysis
             $this->getReflectionPropertiesData(
                 $refProps,
                 $ref,
-                $this->parameters['data'],
                 'Private properties'
             );
     }

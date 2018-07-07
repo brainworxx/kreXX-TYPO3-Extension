@@ -93,7 +93,7 @@ class Methods extends AbstractObjectAnalysis
      * @param \ReflectionClass $ref
      *   The reflection of t he class we are analysing
      * @param $domId
-     *   The alredy generated dom id.
+     *   The already generated dom id.
      * @param $doProtected
      *   Are we analysing the protected methods here?
      * @param $doPrivate
@@ -148,7 +148,7 @@ class Methods extends AbstractObjectAnalysis
      * Generates a id for the DOM.
      *
      * This is used to jump from a recursion to the object analysis data.
-     * The ID is simply the md5 hash of the classname with thenamspace.
+     * The ID is simply the md5 hash of the classname with the namespace.
      *
      * @param string $data
      *   The object from which we want the ID.
