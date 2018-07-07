@@ -19,12 +19,15 @@ Changelog
     - [Feature] Added deeper search for the source code getter analysis for better results.
     - [Feature] Added Aimeos shop debugger.
     - [Feature] Added a forced logger, which van be reached by \Krexx:log();
+    - [Feature] Added a forced fluid logger, which van be reached by <krexx:log value={_all} />
     - [Feature] Added a jumpTo element after uncollapsing the breadcrumbs for better usability.
     - [Change] Removed the old 4.5 compatibility.
     - [Change] Some internal renaming.
     - [Change] Removed the constants analysis configuration.
     - [Change] Moved the existing overwrites into plugins.
-    - [Change] Used the introduced event system in the plugins when possible
+    - [Change] Used the introduced event system in the plugins when possible.
+    - [Change] The file logger writes the logfile right after the analysis is complete.
+    - [Change] Moved the bootstrapping to it's own file.
     - [Bugfix] The position of the search field of the hans skin is now calculated correct when the viewport is not on top.
     - [Bugfix] The scroll container detection of the hans skin works now.
     - [Bugfix] Added help text for the arrayCountLimit.
@@ -42,6 +45,7 @@ Changelog
     - [Bugfix] Catch throwable in PHP 7.
     - [Bugfix] Removed the annoying spaces from the hans template, so people can copy stuff better from the output.
     - [Bugfix] Added two missing translation keys.
+    - [Bugfix] Added 'Krexx' with a capital 'K' to the caller finder pattern.
 
 2.4.0
     - [Feature] Added the method analysis to the recursion detection, to prevent analysing the same methods over and over again.

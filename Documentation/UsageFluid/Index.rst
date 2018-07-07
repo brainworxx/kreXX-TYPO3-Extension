@@ -34,15 +34,13 @@ Using the viewhelper is pretty much straight forward:
 
 .. code-block:: html
 
+    <!-- Normal frontend output -->
     <krexx:debug>{_all}</krexx:debug>
-
-or
-
-.. code-block:: html
-
+    <!-- Use this part if you don't want fluid to escape your string or if you are stitching together an array. -->
     <krexx:debug value="{my: 'value', to: 'analyse'}" />
-
-Use this part if you don't want fluid to escape your string or if you are stitching together an array.
+    <!-- Force the logging into a file -->
+    <krexx:log>{_all}</krexx:log>
+    <krexx:log value="{my: 'value', to: 'analyse'}" />
 
 |
 |
