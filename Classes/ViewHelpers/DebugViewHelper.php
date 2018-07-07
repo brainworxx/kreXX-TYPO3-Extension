@@ -103,6 +103,23 @@ class DebugViewHelper extends AbstractViewHelper
             'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
         );
 
+        $this->analysis();
+
+        Registration::deactivatePlugin(
+            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'
+        );
+        Registration::deactivatePlugin(
+            'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
+        );
+        
+        return '';
+    }
+
+    /**
+     * Analyse the stuff from the template.
+     */
+    protected function analysis()
+    {
         $found  = false;
         if (!is_null($this->arguments['value'])) {
             krexx($this->arguments['value']);
@@ -119,15 +136,6 @@ class DebugViewHelper extends AbstractViewHelper
             // Both are NULL, we must tell the dev!
             krexx(null);
         }
-
-        Registration::deactivatePlugin(
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'
-        );
-        if (ExtensionManagementUtility::isLoaded('dataviewer')) {
-            Registration::deactivatePlugin('Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration');
-        }
-
-        return '';
     }
 
     /**
