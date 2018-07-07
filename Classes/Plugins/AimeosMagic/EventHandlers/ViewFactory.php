@@ -106,7 +106,8 @@ class ViewFactory implements EventHandlerInterface
     {
         $result = '';
         $params = $callback->getParameters();
-        $data = $params['data'];
+        $data = $params['ref']->getData();
+
         /** @var \ReflectionClass $ref */
         $ref = $params['ref'];
 

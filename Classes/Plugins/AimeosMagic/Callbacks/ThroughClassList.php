@@ -42,6 +42,9 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
  * @uses array $data
  *   An array with the receiver classes.
  *
+ * @event
+ *   Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe::start
+ *
  * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\Callbacks
  */
 class ThroughClassList extends AbstractCallback
@@ -58,6 +61,7 @@ class ThroughClassList extends AbstractCallback
 
         $data = $this->parameters['data'];
         $result = '';
+        
         // We simply pass it on to the routing.
         foreach ($data as $key => $object) {
             $result .= $this->pool->routing->analysisHub(

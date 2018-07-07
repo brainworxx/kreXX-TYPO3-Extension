@@ -66,7 +66,7 @@ class ThroughMethods extends AbstractCallback
         $thoughMethods = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods');
 
         /** @var \ReflectionMethod $reflectionMethod */
-        foreach ($data as $factoryName =>$reflectionMethod) {
+        foreach ($data as $factoryName => $reflectionMethod) {
             $params = array(
                 'data' => array($reflectionMethod),
                 'ref' => $reflectionMethod->getDeclaringClass(),

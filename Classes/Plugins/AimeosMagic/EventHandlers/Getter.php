@@ -96,7 +96,8 @@ class Getter implements EventHandlerInterface
         // We will only act, if we have no value so far.
         // Also, we only do this for Aimeos items.
         $params = $callback->getParameters();
-        $data = $params['data'];
+        $data = $params['ref']->getData();
+
         if ($params['additional']['nothingFound'] === false ||
             $params['currentPrefix'] !== 'get' ||
             is_a($data, 'Aimeos\\MShop\\Common\\Item\\Iface') === false
@@ -166,7 +167,8 @@ class Getter implements EventHandlerInterface
         // through the whole class structure.
         /** @var \ReflectionClass $reflectionClass */
         $reflectionClass = $reflectionMethod->getDeclaringClass();
-        $data = $params['data'];
+        $data = $params['ref']->getData();
+        
         if ($reflectionClass->hasProperty('bdata')) {
             $reflectionProperty = $reflectionClass->getProperty('bdata');
             $reflectionProperty->setAccessible(true);

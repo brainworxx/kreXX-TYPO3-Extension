@@ -76,7 +76,7 @@ class AddAnalysis implements EventHandlerInterface
     public function handle(AbstractCallback $callback, Model $model = null)
     {
         $params = $callback->getParameters();
-        $record = $params['data'];
+        $record = $params['ref']->getData();
         $output = '';
         if (is_object($record) && is_a($record, '\\MageDeveloper\\Dataviewer\\Domain\\Model\\Record')) {
             try {
