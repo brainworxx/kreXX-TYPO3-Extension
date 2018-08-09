@@ -57,20 +57,20 @@ $boot = function ($_EXTKEY) {
     }
 
     // Register and activate the TYPO3 plugin.
-    \Brainworxx\Krexx\Service\Plugin\Registration::register(
+    \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
         'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Configuration'
     );
-    \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin(
+    \Brainworxx\Krexx\Service\Plugin\SettingsGetter::activatePlugin(
         'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Configuration'
     );
 
     // Register the fluid plugins.
     // We activate them later in the viewhelper.
-    \Brainworxx\Krexx\Service\Plugin\Registration::register(
+    \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
         'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'
     );
     if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('dataviewer')) {
-        \Brainworxx\Krexx\Service\Plugin\Registration::register(
+        \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
             'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
         );
     }
@@ -95,10 +95,10 @@ $boot = function ($_EXTKEY) {
     // it is required via composer.
     if (class_exists('Aimeos\\MShop\\Factory') === false) {
         // Register the Aimoes Magic plugin.
-        \Brainworxx\Krexx\Service\Plugin\Registration::register(
+        \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
             'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
         );
-        \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin(
+        \Brainworxx\Krexx\Service\Plugin\SettingsGetter::activatePlugin(
             'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
         );
     }

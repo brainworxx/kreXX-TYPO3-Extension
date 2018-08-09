@@ -168,7 +168,7 @@ class Getter implements EventHandlerInterface
         /** @var \ReflectionClass $reflectionClass */
         $reflectionClass = $reflectionMethod->getDeclaringClass();
         $data = $params['ref']->getData();
-        
+
         if ($reflectionClass->hasProperty('bdata')) {
             $reflectionProperty = $reflectionClass->getProperty('bdata');
             $reflectionProperty->setAccessible(true);

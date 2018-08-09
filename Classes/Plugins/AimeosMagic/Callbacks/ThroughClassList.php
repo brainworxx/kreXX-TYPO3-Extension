@@ -61,7 +61,7 @@ class ThroughClassList extends AbstractCallback
 
         $data = $this->parameters['data'];
         $result = '';
-        
+
         // We simply pass it on to the routing.
         foreach ($data as $key => $object) {
             $result .= $this->pool->routing->analysisHub(

@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosMagic;
 
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 
 class Configuration implements PluginConfigInterface
 {
@@ -57,34 +58,44 @@ class Configuration implements PluginConfigInterface
     public static function exec()
     {
         // Resolving the __get().
-        Event::register(
+        Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::callMe::start',
             'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\Properties'
         );
 
         // Resolving the getter that get their values from an private array.
-        Event::register(
+        Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::retrievePropertyValue::resolving',
             'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\Getter'
         );
 
         // Resolving the magical class methods of the decorator pattern.
-        Event::register(
+        Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start',
             'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\Methods'
         );
 
         // Resolving the magical factory for the view helpers (not to be confused
         // with fluid viewhelpers).
-        Event::register(
+        Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start',
             'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\ViewFactory'
         );
 
         // Replacing the magical factory name in the method analysis.
-        Event::register(
+        Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods::callMe::end',
             'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\ThroughMethods'
         );
+
+        // No __toString for the db statement class.
+        Registration::addMethodToDebugBlacklist(
+            '\\Aimeos\\MW\\DB\\Statement\\Base',
+            '__toString'
+        );
+
+        // Addings additional texts.
+        $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx');
+        Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/aimeos.kreXX.ini');
     }
 }

@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Factory\Factory;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 
 /**
  * Special overwrites and event handlers for fluid.
@@ -59,12 +60,31 @@ class Configuration implements PluginConfigInterface
     public static function exec()
     {
         // Registering the fluid connector class.
-        Factory::$rewrite['Brainworxx\\Krexx\\Analyse\\Code\\Connectors'] =
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\\Code\\Connectors';
+        Registration::addRewrite(
+            'Brainworxx\\Krexx\\Analyse\\Code\\Connectors',
+            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\\Code\\Connectors'
+        );
 
         // Registering the special source generation for methods.
-        Factory::$rewrite['Brainworxx\\Krexx\\Analyse\\Code\\Codegen'] =
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\Code\\Codegen';
+        Registration::addRewrite(
+            'Brainworxx\\Krexx\\Analyse\\Code\\Codegen',
+            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\Code\\Codegen'
+        );
+
+        // Depending on the TYPO3 version, we need another fluid caller finder.
+        if (version_compare(TYPO3_version, '8.4', '>')) {
+            // Fluid 2.2 or higher
+            Registration::addRewrite(
+                'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
+                'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\\CallerFinder\\Fluid'
+            );
+        } else {
+            // Fluid 2.0 or lower.
+            Registration::addRewrite(
+                'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
+                'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\\CallerFinder\\FluidOld'
+            );
+        }
 
         // The code generation class is a singleton.
         // We need to reset the pool.
@@ -72,25 +92,18 @@ class Configuration implements PluginConfigInterface
 
         // Register our event handler, to remove the 'get' from the getter
         // method names. Fluid does not use these.
-        Event::register(
+        Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::goThroughMethodList::end',
             'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\EventHandlers\\GetterWithoutGet'
         );
         // Another event switches to VHS code generation.
-        Event::register(
+        Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods::callMe::end',
             'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\EventHandlers\\VhsMethods'
         );
 
-        // Depending on the TYPO3 version, we need another fluid caller finder.
-        if (version_compare(TYPO3_version, '8.4', '>')) {
-            // Fluid 2.2 or higher
-            Factory::$rewrite['Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder'] =
-                'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\\CallerFinder\\Fluid';
-        } else {
-            // Fluid 2.0 or lower.
-            Factory::$rewrite['Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder'] =
-                'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\\CallerFinder\\FluidOld';
-        }
+        // Addings additional texts.
+        $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx');
+        Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/fluid.kreXX.ini');
     }
 }

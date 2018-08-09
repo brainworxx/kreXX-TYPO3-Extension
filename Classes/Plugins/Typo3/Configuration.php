@@ -34,10 +34,10 @@
 
 namespace Brainworxx\Includekrexx\Plugins\Typo3;
 
-use Brainworxx\Krexx\Service\Factory\Factory;
-use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Configuration file for the TYPO3 kreXX plugin.
@@ -68,8 +68,10 @@ class Configuration implements PluginConfigInterface
     public static function exec()
     {
         // We are using the TYPO3 ip security, instead of the kreXX implementation.
-        Factory::$rewrite['Brainworxx\\Krexx\\Service\\Config\\Config'] =
-            'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Rewrites\\Config';
+        Registration::addRewrite(
+            'Brainworxx\\Krexx\\Service\\Config\\Config',
+            'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Rewrites\\Config'
+        );
 
         // See if we must create a temp directory for kreXX.
         $tempPaths = array(
@@ -81,7 +83,7 @@ class Configuration implements PluginConfigInterface
 
         // htAccess to prevent a listing
         $htAccess = 'order deny,allow' . chr(10) . 'deny from all';
-        // Empty index.html in case the htacess is not enough.
+        // Empty index.html in case the htaccess is not enough.
         $indexHtml = '';
         // Create and protect the temporal folders.
         foreach ($tempPaths as $key => $tempPath) {
@@ -93,11 +95,41 @@ class Configuration implements PluginConfigInterface
                 GeneralUtility::writeFileToTypo3tempDir($tempPath . '/' . 'index.html', $indexHtml);
             }
         }
+
         // Register it!
-        Config::$directories = array(
-            'chunks' => $tempPaths['chunks'] . '/',
-            'log' => $tempPaths['log'] . '/',
-            'config' => $tempPaths['config'] . '/Krexx.ini',
+        Registration::setConfigFile($tempPaths['config'] . '/Krexx.ini');
+        Registration::setChunksFolder($tempPaths['chunks'] . '/');
+        Registration::setLogFolder($tempPaths['log'] . '/');
+
+        // Adding our debugging balcklist.
+        // TYPO3 viewhelpers dislike this function.
+        // In the TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper the private
+        // $viewHelperNode might not be an object, and trying to render it might
+        // cause a fatal error!
+        Registration::addMethodToDebugBlacklist(
+            '\\TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractViewHelper',
+            '__toString'
         );
+
+        // Deleting all rows from the DB via typo3 repository is NOT a good
+        // debug method!
+        Registration::addMethodToDebugBlacklist(
+            '\\TYPO3\\CMS\\Extbase\\Persistence\\RepositoryInterface',
+            'removeAll'
+        );
+        Registration::addMethodToDebugBlacklist(
+            'Tx_Extbase_Persistence_RepositoryInterface',
+            'removeAll'
+        );
+
+        // The lazy loading proxy may not have loaded the object at this time.
+        Registration::addMethodToDebugBlacklist(
+            '\\TYPO3\\CMS\\Extbase\\Persistence\\Generic\\LazyLoadingProxy',
+            '__toString'
+        );
+
+        // Add additional texts to the help.
+        $extPath = ExtensionManagementUtility::extPath('includekrexx');
+        Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/t3.kreXX.ini');
     }
 }
