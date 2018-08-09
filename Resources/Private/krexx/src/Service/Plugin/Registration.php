@@ -34,15 +34,16 @@
 
 namespace Brainworxx\Krexx\Service\Plugin;
 
-use Brainworxx\Krexx\Service\Factory\Factory;
-
 /**
- * Register, activate and deactivate plugins.
+ * Allow plugins to alter the configuration
+ *
+ * @api
  *
  * @package Brainworxx\Krexx\Service
  */
 class Registration
 {
+
     /**
      * The registered plugin configuration files as class names.
      *
@@ -50,65 +51,180 @@ class Registration
      */
     protected static $plugins = array();
 
-    const IS_ACTIVE = 'isActive';
-    const CONFIG_CLASS = 'configClass';
+    /**
+     * The configured chunk folder from the plugin.
+     *
+     * @var string
+     */
+    protected static $chunkFolder;
 
     /**
-     * Register a plugin.
+     * The configures log folder from the plugin.
      *
-     * @param string $configClass
-     *   The class name of the configuration class for this plugin.
-     *   Must extend the \Brainworxx\Krexx\Service\AbstractPluginConfig
+     * @var string
      */
-    public static function register($configClass)
+    protected static $logFolder;
+
+    /**
+     * The configured configuration file from the plugin.
+     *
+     * @var string
+     */
+    protected static $configFile;
+
+    /**
+     * Blacklist of forbidden debug methods.
+     *
+     * @var array
+     */
+    protected static $blacklistDebugMethods = array();
+
+    /**
+     * Blacklist of classes, that will never get debug-method-called.
+     *
+     * @var array
+     */
+    protected static $blacklistDebugClass = array();
+
+    /**
+     * Additinal help files with text for the debugger.
+     *
+     * @var array
+     */
+    protected static $additionalHelpFiles = array();
+
+    /**
+     * List of all class rewritesfor the factory.
+     *
+     * @var array
+     */
+    protected static $rewriteList = array();
+
+    /**
+     * List of all registered events for the event handler.
+     *
+     * @var array
+     */
+    protected static $eventList = array();
+
+    /**
+     * Setter for the path to the configuration file.
+     *
+     * @api
+     *
+     * @param $path
+     *   The absolute path to the configuration file.
+     */
+    public static function setConfigFile($path)
     {
-        static::$plugins[$configClass] = array(
-            static::CONFIG_CLASS => $configClass,
-            static::IS_ACTIVE => false
-        );
+        static::$configFile = $path;
     }
 
     /**
-     * We activate the plugin with the name, and execute its configuration method.
+     * Setter for the path to the chaunks folder.
      *
-     * @param string $name
-     *   The name of the plugin.
+     * @api
+     *
+     * @param $path
+     *   The absolute path to the chunks folder.
      */
-    public static function activatePlugin($name)
+    public static function setChunksFolder($path)
     {
-        if (isset(static::$plugins[$name])) {
-            static::$plugins[$name][static::IS_ACTIVE] = true;
-            /** @var \Brainworxx\Krexx\Service\Plugin\PluginConfigInterface $staticPlugin */
-            $staticPlugin = static::$plugins[$name][static::CONFIG_CLASS];
-            $staticPlugin::exec();
-        }
-        // No registration, no config, no plugin.
-        // Do nothing.
+        static::$chunkFolder = $path;
     }
 
     /**
-     * We deactivate the plugin and reset the configuration
+     * Setter for the log folder.
+     *
+     * @api
+     *
+     * @param $path
+     *   The absolute path to the log folder.
+     */
+    public static function setLogFolder($path)
+    {
+        static::$logFolder = $path;
+    }
+
+    /**
+     * Add a class / method to the debug method blacklist
+     *
+     * @api
+     *
+     * @param string $class
+     *   The class, where  the method is hosted,
+     * @param string $methodName
+     *   The name of the method.
+     */
+    public static function addMethodToDebugBlacklist($class, $methodName)
+    {
+        if (isset(static::$blacklistDebugMethods[$class]) === false) {
+            static::$blacklistDebugMethods[$class] = array();
+        }
+        if (in_array($methodName, static::$blacklistDebugMethods[$class]) === false) {
+            static::$blacklistDebugMethods[$class][] = $methodName;
+        }
+    }
+
+    /**
+     * Add a class / method to the debug method blacklist
+     *
+     * @api
+     *
+     * @param string $class
+     *   The class name that gets blacklisted.
+     */
+    public static function addClassToDebugBlacklist($class)
+    {
+        if (in_array($class, static::$blacklistDebugMethods) === false) {
+            static::$blacklistDebugMethods[] = $class;
+        }
+    }
+
+    /**
+     * Adding a single overwrite class for the factory.
+     *
+     * Wrapper arround Factory::$rewrite[].
+     *
+     * @api
+     *
+     * @param string $originalClass
+     * @param string $rewriteClass
+     */
+    public static function addRewrite($originalClass, $rewriteClass)
+    {
+        static::$rewriteList[$originalClass] = $rewriteClass;
+    }
+
+    /**
+     * Register an event handler.
+     *
+     * @api
      *
      * @param string $name
-     *   The name of the plugin.
+     *   The event name
+     * @param string $className
+     *   The class name.
      */
-    public static function deactivatePlugin($name)
+    public static function registerEvent($name, $className)
     {
-        // Purge the rewrites.
-        Factory::$rewrite = array();
-        // Purge the event registration.
-        \Krexx::$pool->eventService->purge();
-
-        // Go through the remaining plugins.
-        static::$plugins[$name][static::IS_ACTIVE] = false;
-        foreach (static::$plugins as $plugin) {
-            if ($plugin[static::IS_ACTIVE]) {
-                /** @var \Brainworxx\Krexx\Service\Plugin\PluginConfigInterface $staticPlugin */
-                $staticPlugin = static::$plugins[$name][static::CONFIG_CLASS];
-                if (isset($staticPlugin)) {
-                    $staticPlugin::exec();
-                }
-            }
+        if (isset(static::$eventList[$name]) === false) {
+            static::$eventList[$name] = array();
         }
+        static::$eventList[$name][$className] = $className;
+    }
+
+    /**
+     * Register an additional help file.
+     *
+     * You can also overwrite existing texts here.
+     *
+     * @api
+     *
+     * @param string $path
+     */
+    public static function registerAdditionalHelpFile($path)
+    {
+        static::$additionalHelpFiles[] = $path;
     }
 }

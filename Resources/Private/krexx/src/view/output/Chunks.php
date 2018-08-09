@@ -317,7 +317,7 @@ class Chunks
             $now = time();
             foreach ($chunkList as $file) {
                 // We delete everything that is older than 15 minutes.
-                if ((filemtime($file) + 900) < $now) {
+                if (($this->pool->fileService->filetime($file) + 900) < $now) {
                     $this->pool->fileService->deleteFile($file);
                 }
             }
@@ -343,7 +343,12 @@ class Chunks
             return;
         }
 
-        array_multisort(array_map('filemtime', $logList), SORT_DESC, $logList);
+        array_multisort(
+            array_map(array($this->pool->fileService, 'filetime'), $logList),
+            SORT_DESC,
+            $logList
+        );
+        
         $maxFileCount = (int)$this->pool->config->getSetting(Fallback::SETTING_MAX_FILES);
         $count = 1;
         // Cleanup logfiles.

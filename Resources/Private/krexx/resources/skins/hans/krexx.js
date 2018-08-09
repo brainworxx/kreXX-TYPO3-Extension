@@ -185,48 +185,6 @@
         kdt.addEvent('.kodsp', 'click', kdt.preventBubble);
 
         /**
-         * Clear our search results, because we now have new options.
-         *
-         * @event change
-         */
-        kdt.addEvent('.ksearchcase', 'change', krexx.performSearch.clearSearch);
-
-        /**
-         * Clear our search results, because we now have new options.
-         *
-         * @event change
-         */
-        kdt.addEvent('.ksearchkeys', 'change', krexx.performSearch.clearSearch);
-
-        /**
-         * Clear our search results, because we now have new options.
-         *
-         * @event change
-         */
-        kdt.addEvent('.ksearchshort', 'change', krexx.performSearch.clearSearch);
-
-        /**
-         * Clear our search results, because we now have new options.
-         *
-         * @event change
-         */
-        kdt.addEvent('.ksearchlong', 'change', krexx.performSearch.clearSearch);
-
-        /**
-         * Clear our search results, because we now have new options.
-         *
-         * @event change
-         */
-        kdt.addEvent('.ksearchwhole', 'change', krexx.performSearch.clearSearch);
-
-        /**
-         * Display our search options.
-         *
-         * @event click
-         */
-        kdt.addEvent('.koptions', 'click', krexx.displaySearchOptions);
-
-        /**
          * Display the content of the info box.
          *
          * @event click
@@ -240,6 +198,9 @@
 
         // Move the output into the viewport. Debugging onepager is so annoying, otherwise.
         kdt.moveToViewport('.kouterwrapper');
+
+        // Draw the search form and register its events.
+        krexx.initSearch();
 
         // Register the click handler on all kreXX instances.
         kdt.clickHandler.register('.kwrapper.kouterwrapper, .kfatalwrapper-outer');
@@ -311,7 +272,36 @@
             // Remove the recursion EL.
             element.parentNode.removeChild(element);
         }
+    };
 
+    /**
+     * Initialize the search.
+     *
+     * - Draw the search form
+     * - Register the events
+     *
+     * @event onDocumentReady
+     */
+    krexx.initSearch = function () {
+        var html = '<hr class="ksearchhr"/><label class="koptionleft"><input data-instance="{KrexxId}" class="ksearchcase" type="checkbox" autocomplete="off" name="searchcase" value="searchcase">Case sensitive</label><label class="koptionright"><input data-instance="{KrexxId}" class="ksearchshort" type="checkbox" autocomplete="off" name="searchshort" value="searchshort" checked="checked">Search short results</label><br/><label class="koptionleft"><input data-instance="{KrexxId}" class="ksearchkeys" type="checkbox" autocomplete="off" name="searchkeys" value="searchkeys" checked="checked">Search keys </label><label class="koptionright"><input data-instance="{KrexxId}" class="ksearchlong" type="checkbox" autocomplete="off" name="searchlong" value="searchlong" checked="checked">Search long results</label><br/><label class="koptionleft"><input data-instance="{KrexxId}" class="ksearchwhole" type="checkbox" autocomplete="off" name="searchwhole" value="searchwhole">Search whole values</label>';
+        var elements = document.querySelectorAll('.koptionwrapper');
+
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].innerHTML = html;
+        }
+
+        // Clear our search results, because we now have new options.
+        kdt.addEvent('.ksearchcase', 'change', krexx.performSearch.clearSearch);
+        // Clear our search results, because we now have new options.
+        kdt.addEvent('.ksearchkeys', 'change', krexx.performSearch.clearSearch);
+        // Clear our search results, because we now have new options.
+        kdt.addEvent('.ksearchshort', 'change', krexx.performSearch.clearSearch);
+        // Clear our search results, because we now have new options.
+        kdt.addEvent('.ksearchlong', 'change', krexx.performSearch.clearSearch);
+        // Clear our search results, because we now have new options.
+        kdt.addEvent('.ksearchwhole', 'change', krexx.performSearch.clearSearch);
+        // Display our search options.
+        kdt.addEvent('.koptions', 'click', krexx.displaySearchOptions);
     };
 
      /**
@@ -833,6 +823,8 @@
      * Toggle the display of t he infobox.
      *
      * @param {Event} event
+     * @param element
+     *
      * @event keyUp
      */
     krexx.displayInfoBox = function (event, element) {

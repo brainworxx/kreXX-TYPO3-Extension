@@ -1,18 +1,19 @@
 3.0.0 dev
 - Added 'is' and 'has' to the getter analysis.
-- Added half-asses plugin support, to replace the half-asses
-  overwrites
+- Added plugin support, to replace the half-asses overwrites.
 - Added a event dispatcher.
 - Added deeper search for the source code getter analysis for
   better results.
 - Added a forced logger, which van be reached by \Krexx:log();
 - Added a jumpTo element after uncollapsing the breadcrumbs for
   better usability.
-- Change: The file logger writes the logfile right after the
-  analysis is complete.
+- The file logger writes the logfile right after the analysis is
+  complete.
 - Change: Some internal renaming.
 - Change: Removed the constants analysis configuration.
 - Change: Moved the bootstrapping to it's own file.
+- Change: Removed the annoying spaces from the generated DOM, for
+  better copy-paste.
 - Bugfix: The position of the search field of the hans skin is now
   calculated correct when the viewport is not on top.
 - Bugfix: The scroll container detection of the hans skin works
@@ -42,6 +43,15 @@
   people can copy stuff better from the output.
 - Bugfix: Added 'Krexx' with a capital 'K' to the caller finder
   pattern.
+- Bugfix: Prevent a possible fatal when analysing methods or
+  closures, and the typehinted class for this parameter does not
+  exist.
+- Bugfix: timer::moment() now disrespects the ajax or shell
+  detection, and works better with the forced logging.
+- Bugfix: Prevent other js libraries from messing with the search
+  form.
+- Bugfix: Prevent a fatal when trying to read the file time from a
+  not existing file.
 
 2.4.0
 - Added the method analysis to the recursion detection, to prevent

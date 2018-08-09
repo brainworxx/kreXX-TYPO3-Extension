@@ -236,15 +236,13 @@ class Codegen
         // Fun fact:
         // I tried to add a static cache here, but it was counter productive.
         // Things were not faster, memory usage went up!
-        $parameterType = '';
         $result = '';
 
         // Check for type value
         if ($reflectionParameter->isArray() === true) {
             $parameterType = 'array';
-        } elseif ($reflectionParameter->getClass() !== null) {
-            // We got ourselves an object!
-            $parameterType = $reflectionParameter->getClass()->name;
+        } else {
+            $parameterType = $this->retrieveClassName($reflectionParameter);
         }
 
         $result .= $parameterType . ' $' . $reflectionParameter->getName();
@@ -255,6 +253,29 @@ class Codegen
         }
 
         return $result;
+    }
+
+    /**
+     * Retireve the class name from a reflectiuon poarameter.
+     *
+     * When the class is not autoloaded, or there is a problem with the case
+     * sensitivity, we get a fatal. Hence, we do this in an alternative way.
+     *
+     * @param \ReflectionParameter $reflectionParameter
+     *   The reflection parameter.
+     *
+     * @return string
+     *   The class name, if available.
+     */
+    protected function retrieveClassName(\ReflectionParameter $reflectionParameter)
+    {
+        $explode = explode(' ', $reflectionParameter->__toString());
+        if (strpos($explode[4], '$') !== 0) {
+            return '\\' . $explode[4];
+        }
+
+        // Nothing found.
+        return '';
     }
 
     /**

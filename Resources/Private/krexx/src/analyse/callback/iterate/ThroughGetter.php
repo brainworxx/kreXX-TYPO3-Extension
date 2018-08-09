@@ -55,6 +55,8 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *   get methods starting with 'has'
  * @uses \ReflectionClass $ref
  *   A reflection class of the object we are analysing.
+ * @uses object $data
+ *   The object we are currently analysing
  * @uses string $currentPrefix
  *   The current prefix we are analysing (get, is, has).
  *   Does not get set from the outside.

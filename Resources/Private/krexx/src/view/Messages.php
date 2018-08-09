@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\View;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 
 /**
  * Messaging system.
@@ -81,10 +82,7 @@ class Messages
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-        $file = KREXX_DIR . 'resources/language/Help.ini';
-        $this->helpArray = (array)parse_ini_string(
-            $this->pool->fileService->getFileContents($file)
-        );
+        $this->readHelpTexts();
     }
 
     /**
@@ -174,5 +172,33 @@ class Messages
 
         // Return the value
         return vsprintf($this->helpArray[$key], $args);
+    }
+
+    /**
+     * Read a help text file, and add its contents to the already read content.
+     *
+     * @param string $file
+     *   Absolute path to the file we want to read.
+     */
+    public function readHelpFile($file)
+    {
+        $this->helpArray = array_merge(
+            $this->helpArray,
+            (array)parse_ini_string($this->pool->fileService->getFileContents($file))
+        );
+    }
+
+    /**
+     * Reset the read help texts to factory settings.
+     */
+    public function readHelpTexts()
+    {
+        $this->helpArray = array();
+
+        $this->readHelpFile(KREXX_DIR . 'resources/language/Help.ini');
+
+        foreach (SettingsGetter::getAdditionelHelpFiles() as $filename) {
+            $this->readHelpFile($filename);
+        }
     }
 }

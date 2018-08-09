@@ -103,10 +103,13 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
-            AbstractController::$analysisInProgress ||
-            static::$disabledByPhp
-        ) {
+        // We do not use the config settings here, because we do not havae any
+        // output whatsoever. The config settings are either on or off, during
+        // the entire run, meaning the can not be changed (by normal api means)
+        // from the outside.
+        // We also do not use the static ForcedLog methods here, because they
+        // are somewhat time costly.
+        if (AbstractController::$analysisInProgress || static::$disabledByPhp) {
             return;
         }
 

@@ -137,6 +137,7 @@ include 'src/Service/Reflection/UndeclaredProperty.php';
 include 'src/Service/Reflection/ReflectionClass.php';
 
 include 'src/Service/Plugin/Registration.php';
+include 'src/Service/Plugin/SettingsGetter.php';
 include 'src/Service/Plugin/PluginConfigInterface.php';
 
 include 'src/View/Output/AbstractOutput.php';
@@ -148,13 +149,6 @@ include 'src/View/RenderInterface.php';
 include 'src/View/AbstractRender.php';
 include 'src/View/Messages.php';
 include 'src/View/Render.php';
-
-// Point the configuration to the right directories
-\Brainworxx\Krexx\Service\Config\Config::$directories = array(
-    'chunks' => KREXX_DIR . 'chunks/',
-    'log' => KREXX_DIR . 'log/',
-    'config' => KREXX_DIR . 'config/Krexx.ini',
-);
 
 if (!function_exists('krexx')) {
     /**

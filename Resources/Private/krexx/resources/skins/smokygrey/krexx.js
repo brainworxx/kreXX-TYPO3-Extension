@@ -151,78 +151,8 @@
          */
         kdt.addEvent('.kwrapper .kcopyFrom', 'click', krexx.copyFrom);
 
-        /**
-         * Register the displaying of the search menu
-         *
-         * @event click
-         *   When the button is clicked, krexx will display the
-         *   search menu associated this the same output window.
-         */
-        kdt.addEvent('.kwrapper .ksearchbutton, .kwrapper .ksearch .kclose', 'click', krexx.displaySearch);
-
-        /**
-         * Register the search event on the next button.
-         *
-         * @event click
-         *   When the button is clicked, krexx will start searching.
-         */
-        kdt.addEvent('.kwrapper .ksearchnow', 'click', krexx.performSearch);
-
-        /**
-         * Listens for a <RETURN> in the search field.
-         *
-         * @event keyup
-         *   A <RETURN> will initiate the search.
-         */
-        kdt.addEvent('.kwrapper .ksearchfield', 'keyup', krexx.searchfieldReturn);
-
-        /**
-         * Always check if the searchfield is inside the viewport, in case we
-         * display the fatal error handler
-         */
-        kdt.addEvent('.kfatalwrapper-outer', 'scroll', krexx.checkSeachInViewport);
-
-        /**
-         * Clear our search results, because we now have new options.
-         *
-         * @event change
-         */
-        kdt.addEvent('.ksearchcase', 'change', krexx.performSearch.clearSearch);
-
-        /**
-         * Clear our search results, because we now have new options.
-         *
-         * @event change
-         */
-        kdt.addEvent('.ksearchkeys', 'change', krexx.performSearch.clearSearch);
-
-        /**
-         * Clear our search results, because we now have new options.
-         *
-         * @event change
-         */
-        kdt.addEvent('.ksearchshort', 'change', krexx.performSearch.clearSearch);
-
-        /**
-         * Clear our search results, because we now have new options.
-         *
-         * @event change
-         */
-        kdt.addEvent('.ksearchlong', 'change', krexx.performSearch.clearSearch);
-
-        /**
-         * Clear our search results, because we now have new options.
-         *
-         * @event change
-         */
-        kdt.addEvent('.ksearchwhole', 'change', krexx.performSearch.clearSearch);
-
-        /**
-         * Display our search options.
-         *
-         * @event click
-         */
-        kdt.addEvent('.koptions', 'click', krexx.displaySearchOptions);
+        // Draw the search form and register its events.
+        krexx.initSearch();
 
         // Expand the configuration info, we have enough space here!
         krexx.expandConfig();
@@ -300,7 +230,44 @@
             // Remove the recursion EL.
             element.parentNode.removeChild(element);
         }
+    };
 
+    /**
+     * Initialize the search.
+     *
+     * - Draw the search form
+     * - Register the events
+     *
+     * @event onDocumentReady
+     */
+    krexx.initSearch = function () {
+        var html = '<hr class="ksearchhr"/><label class="koptionleft"><input data-instance="{KrexxId}" class="ksearchcase" type="checkbox" autocomplete="off" name="searchcase" value="searchcase">Case sensitive </label><label class="koptionright"><input data-instance="{KrexxId}" class="ksearchshort" type="checkbox" autocomplete="off" name="searchshort" value="searchshort" checked="checked">Search short results </label><br/><label class="koptionleft"><input data-instance="{KrexxId}" class="ksearchkeys" type="checkbox" autocomplete="off" name="searchkeys" value="searchkeys" checked="checked">Search keys </label><label class="koptionright"><input data-instance="{KrexxId}" class="ksearchlong" type="checkbox" autocomplete="off" name="searchlong" value="searchlong" checked="checked">Search long results </label><br/><label class="koptionleft"><input data-instance="{KrexxId}" class="ksearchwhole" type="checkbox" autocomplete="off" name="searchwhole" value="searchwhole">Search whole values </label>';
+        var elements = document.querySelectorAll('.koptionwrapper');
+
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].innerHTML = html;
+        }
+
+        // Register the displaying of the search menu
+        kdt.addEvent('.kwrapper .ksearchbutton, .kwrapper .ksearch .kclose', 'click', krexx.displaySearch);
+        // Register the search event on the next button.
+        kdt.addEvent('.kwrapper .ksearchnow', 'click', krexx.performSearch);
+        // Listens for a <RETURN> in the search field.
+        kdt.addEvent('.kwrapper .ksearchfield', 'keyup', krexx.searchfieldReturn);
+        // Always check if the searchfield is inside the viewport, in case we
+        kdt.addEvent('.kfatalwrapper-outer', 'scroll', krexx.checkSeachInViewport);
+        // Clear our search results, because we now have new options.
+        kdt.addEvent('.ksearchcase', 'change', krexx.performSearch.clearSearch);
+        // Clear our search results, because we now have new options.
+        kdt.addEvent('.ksearchkeys', 'change', krexx.performSearch.clearSearch);
+        // Clear our search results, because we now have new options.
+        kdt.addEvent('.ksearchshort', 'change', krexx.performSearch.clearSearch);
+        // Clear our search results, because we now have new options.
+        kdt.addEvent('.ksearchlong', 'change', krexx.performSearch.clearSearch);
+        // Clear our search results, because we now have new options.
+        kdt.addEvent('.ksearchwhole', 'change', krexx.performSearch.clearSearch);
+        // Display our search options.
+        kdt.addEvent('.koptions', 'click', krexx.displaySearchOptions);
     };
 
     /**

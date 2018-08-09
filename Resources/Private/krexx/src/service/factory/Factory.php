@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Service\Factory;
 
+use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+
 /**
  * Simple factory, nothing special. Offers a overwrite method.
  *
@@ -52,7 +54,7 @@ class Factory
      *
      * @var array
      */
-    public static $rewrite = array();
+    public $rewrite = array();
 
     /**
      * Create objects and returns them. Singletons are handled by the pool.
@@ -65,8 +67,8 @@ class Factory
     public function createClass($classname)
     {
         // Check for possible overwrite.
-        if (isset(static::$rewrite[$classname]) === true) {
-            $classname = static::$rewrite[$classname];
+        if (isset($this->rewrite[$classname]) === true) {
+            $classname = $this->rewrite[$classname];
         }
 
         return new $classname($this);
@@ -113,13 +115,16 @@ class Factory
             return;
         }
 
+        $rewrite = SettingsGetter::getRewriteList();
+
         // Create a new pool where we store all our classes.
         // We also need to check if we have an overwrite for the pool.
-        if (empty(static::$rewrite['Brainworxx\\Krexx\\Service\\Factory\\Pool']) === true) {
+        if (empty($rewrite['Brainworxx\\Krexx\\Service\\Factory\\Pool']) === true) {
             \Krexx::$pool = new Pool();
-            return;
+        } else {
+            $classname = $rewrite['Brainworxx\\Krexx\\Service\\Factory\\Pool'];
+            \Krexx::$pool = new $classname();
         }
-        $classname = static::$rewrite['Brainworxx\\Krexx\\Service\\Factory\\Pool'];
-        \Krexx::$pool = new $classname();
+        \Krexx::$pool->rewrite = $rewrite;
     }
 }
