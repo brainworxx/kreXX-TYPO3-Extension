@@ -73,8 +73,8 @@
     <tr>
         <td><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
         <td><img src="{f:uri.resource(path:'Icons/info.png')}" title="{config.helptext}" alt="{config.helptext}" /></td>
-        <td><f:form.select additionalAttributes="{'autocomplete': 'off'}" id="{config.name}" name="{config.group}[{config.name}]" options="{options}" value="{config.value}" /></td>
-        <td><f:form.checkbox additionalAttributes="{'autocomplete': 'off'}" id="factory.{config.name}" name="factory" checked="{config.useFactorySettings}" value="1" /><label for="factory.{config.name}"><f:translate key="factory.settings" /></label></td>
+        <td><f:form.select additionalAttributes="{autocomplete: 'off'}" id="{config.name}" name="{config.group}[{config.name}]" options="{options}" value="{config.value}" /></td>
+        <td><f:form.checkbox additionalAttributes="{autocomplete: 'off'}" id="factory.{config.name}" name="factory" checked="{config.useFactorySettings}" value="1" /><label for="factory.{config.name}"><f:translate key="factory.settings" /></label></td>
     </tr>
 </f:section>
 
@@ -96,8 +96,8 @@
     <tr>
         <td><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
         <td><img src="{f:uri.resource(path:'Icons/info.png')}" title="{config.helptext}" alt="{config.helptext}" /></td>
-        <td><f:form.textfield additionalAttributes="{'autocomplete': 'off'}" id="{config.name}" name="{config.group}[{config.name}]"  value="{config.value}" /></td>
-        <td><f:form.checkbox additionalAttributes="{'autocomplete': 'off'}" id="factory.{config.name}" name="factory" checked="{config.useFactorySettings}" value="1" /><label for="factory.{config.name}"><f:translate key="factory.settings" /></label></td>
+        <td><f:form.textfield additionalAttributes="{autocomplete: 'off'}" id="{config.name}" name="{config.group}[{config.name}]"  value="{config.value}" /></td>
+        <td><f:form.checkbox additionalAttributes="{autocomplete: 'off'}" id="factory.{config.name}" name="factory" checked="{config.useFactorySettings}" value="1" /><label for="factory.{config.name}"><f:translate key="factory.settings" /></label></td>
     </tr>
 </f:section>
 

@@ -75,8 +75,8 @@
 <f:section name="dropdown">
     <tr>
         <td><label for="{name}"><f:translate key="label.{name}" /></label></td>
-        <td><f:form.select additionalAttributes="{'autocomplete': 'off'}" id="{name}" name="output[{name}]" options="{options}" value="{value}" /></td>
-        <td class="cbx"><f:form.checkbox additionalAttributes="{'autocomplete': 'off'}" id="factory.{name}" name="factory" checked="{useFactorySettings}" value="1" /><label for="factory.{name}"><f:translate key="factory.settings" /></label></td>
+        <td><f:form.select additionalAttributes="{autocomplete: 'off'}" id="{name}" name="output[{name}]" options="{options}" value="{value}" /></td>
+        <td class="cbx"><f:form.checkbox additionalAttributes="{autocomplete: 'off'}" id="factory.{name}" name="factory" checked="{useFactorySettings}" value="1" /><label for="factory.{name}"><f:translate key="factory.settings" /></label></td>
     </tr>
 </f:section>
 
