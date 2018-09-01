@@ -7,6 +7,7 @@
 - Added a forced logger, which van be reached by \Krexx:log();
 - Added a jumpTo element after uncollapsing the breadcrumbs for
   better usability.
+- Added support for "\0" chars.
 - The file logger writes the logfile right after the analysis is
   complete.
 - Change: Some internal renaming.

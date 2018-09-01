@@ -192,9 +192,10 @@ class Codegen
     {
         // We simply add the connectors for public access.
         // Escape the quotes. This is not done by the model.
+        // We also need to escape null-strings.
         $name = str_replace(
-            array('"', '\''),
-            array('&#034;', '&#039;'),
+            array('"', '\'', "\0"),
+            array('&#034;', '&#039;', '\' . "\0" . \''),
             $model->getName()
         );
 
@@ -282,10 +283,10 @@ class Codegen
      * Convert the default value into a human readable form.
      *
      * @param mixed $default
-     * The default value we need to bring into a human readable form.
+     *   The default value we need to bring into a human readable form.
      *
      * @return string
-     *  The human readable form.
+     *   The human readable form.
      */
     protected function prepareDefaultValue($default)
     {
