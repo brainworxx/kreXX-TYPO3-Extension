@@ -55,7 +55,17 @@ class Configuration implements PluginConfigInterface
      */
     public static function getName()
     {
-        return 'TYPO3 configuration v1.0';
+        return 'TYPO3 configuration';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public static function getVersion()
+    {
+        return 'v1.0';
     }
 
     /**

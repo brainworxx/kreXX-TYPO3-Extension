@@ -50,7 +50,17 @@ class Configuration implements PluginConfigInterface
      */
     public static function getName()
     {
-        return 'DataViewer fluid support v1.0';
+        return 'DataViewer fluid support';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public static function getVersion()
+    {
+        return 'v1.0';
     }
 
     /**

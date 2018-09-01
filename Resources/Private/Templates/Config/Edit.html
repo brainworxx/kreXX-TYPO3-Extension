@@ -12,22 +12,23 @@
     <f:form id="editconfig" action="save" >
         <h1><f:translate key="editconfig.headline" /></h1>
         <table border="0" class="krexx-config">
-
             <tr><th colspan="4"><b><f:translate key="subhead.output" /></b></th></tr>
             <f:render section="dropdown" arguments="{config: config.disabled, options: dropdown.bool}" />
             <f:render section="input"    arguments="{config: config.iprange}" />
+            <f:render section="dropdown" arguments="{config: config.detectAjax, options: dropdown.bool}" />
+            <tr><td colspan="4">&nbsp;</td></tr>
+
+            <tr><th colspan="4"><b><f:translate key="subhead.behavior" /></b></th></tr>
             <f:render section="dropdown" arguments="{config: config.skin, options: dropdown.skins}" />
             <f:render section="dropdown" arguments="{config: config.destination, options: dropdown.destination}" />
             <f:render section="input"    arguments="{config: config.maxfiles}" />
+            <f:render section="dropdown" arguments="{config: config.useScopeAnalysis, options: dropdown.bool}" />
             <tr><td colspan="4">&nbsp;</td></tr>
 
-            <tr><th colspan="4"><b><f:translate key="subhead.runtime" /></b></th></tr>
-            <f:render section="dropdown" arguments="{config: config.detectAjax, options: dropdown.bool}" />
+            <tr><th colspan="4"><b><f:translate key="subhead.pruneOutput" /></b></th></tr>
+            <f:render section="input"    arguments="{config: config.maxStepNumber}" />
+            <f:render section="input"    arguments="{config: config.arrayCountLimit}" />
             <f:render section="input"    arguments="{config: config.level}" />
-            <f:render section="input"    arguments="{config: config.maxCall}" />
-            <f:render section="input"    arguments="{config: config.maxRuntime}" />
-            <f:render section="input"    arguments="{config: config.memoryLeft}" />
-            <f:render section="dropdown" arguments="{config: config.useScopeAnalysis, options: dropdown.bool}" />
             <tr><td colspan="4">&nbsp;</td></tr>
 
             <tr><th colspan="4"><b><f:translate key="subhead.properties" /></b></th></tr>
@@ -43,10 +44,10 @@
             <f:render section="input"    arguments="{config: config.debugMethods}" />
             <tr><td colspan="4">&nbsp;</td></tr>
 
-            <tr><th colspan="4"><b><f:translate key="subhead.pruneOutput" /></b></th></tr>
-            <f:render section="input"    arguments="{config: config.maxStepNumber}" />
-            <f:render section="input"    arguments="{config: config.arrayCountLimit}" />
-
+            <tr><th colspan="4"><b><f:translate key="subhead.emergencystop" /></b></th></tr>
+            <f:render section="input"    arguments="{config: config.maxCall}" />
+            <f:render section="input"    arguments="{config: config.maxRuntime}" />
+            <f:render section="input"    arguments="{config: config.memoryLeft}" />
         </table>
 
     </f:form>
@@ -72,8 +73,8 @@
     <tr>
         <td><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
         <td><img src="{f:uri.resource(path:'Icons/info.png')}" title="{config.helptext}" alt="{config.helptext}" /></td>
-        <td><f:form.select id="{config.name}" name="{config.group}[{config.name}]" options="{options}" value="{config.value}" /></td>
-        <td><f:form.checkbox id="factory.{config.name}" name="factory" checked="{config.useFactorySettings}" value="1" /><label for="factory.{config.name}"><f:translate key="factory.settings" /></label></td>
+        <td><f:form.select additionalAttributes="{'autocomplete': 'off'}" id="{config.name}" name="{config.group}[{config.name}]" options="{options}" value="{config.value}" /></td>
+        <td><f:form.checkbox additionalAttributes="{'autocomplete': 'off'}" id="factory.{config.name}" name="factory" checked="{config.useFactorySettings}" value="1" /><label for="factory.{config.name}"><f:translate key="factory.settings" /></label></td>
     </tr>
 </f:section>
 
@@ -95,8 +96,8 @@
     <tr>
         <td><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
         <td><img src="{f:uri.resource(path:'Icons/info.png')}" title="{config.helptext}" alt="{config.helptext}" /></td>
-        <td><f:form.textfield id="{config.name}" name="{config.group}[{config.name}]"  value="{config.value}" /></td>
-        <td><f:form.checkbox id="factory.{config.name}" name="factory" checked="{config.useFactorySettings}" value="1" /><label for="factory.{config.name}"><f:translate key="factory.settings" /></label></td>
+        <td><f:form.textfield additionalAttributes="{'autocomplete': 'off'}" id="{config.name}" name="{config.group}[{config.name}]"  value="{config.value}" /></td>
+        <td><f:form.checkbox additionalAttributes="{'autocomplete': 'off'}" id="factory.{config.name}" name="factory" checked="{config.useFactorySettings}" value="1" /><label for="factory.{config.name}"><f:translate key="factory.settings" /></label></td>
     </tr>
 </f:section>
 

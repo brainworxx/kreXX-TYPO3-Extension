@@ -206,22 +206,25 @@ class FormConfigController extends CompatibilityController
      */
     protected function convertKrexxFeSetting($values)
     {
-
         if (is_array($values)) {
             // Explanation:
             // full -> is editable and values will be accepted
             // display -> we will only display the settings
             // The original values include the name of a template partial
             // with the form element.
-            if ($values['type'] == 'None') {
+            if ($values[Fallback::RENDER_TYPE] == Fallback::RENDER_TYPE_NONE) {
                 // It's not visible, thus we do not accept any values from it.
                 $result = 'none';
             }
-            if ($values['editable'] == 'true' && $values['type'] != 'None') {
+            if ($values[Fallback::RENDER_EDITABLE] == Fallback::VALUE_TRUE &&
+                $values[Fallback::RENDER_TYPE] != Fallback::RENDER_TYPE_NONE
+            ) {
                 // It's editable and visible.
                 $result = 'full';
             }
-            if ($values['editable'] == 'false' && $values['type'] != 'None') {
+            if ($values[Fallback::RENDER_EDITABLE] == Fallback::VALUE_FALSE &&
+                $values[Fallback::RENDER_TYPE] != Fallback::RENDER_TYPE_NONE
+            ) {
                 // It's only visible.
                 $result = 'display';
             }

@@ -47,7 +47,17 @@ class Configuration implements PluginConfigInterface
      */
     public static function getName()
     {
-        return 'Aimeos magical method resolving v1.0';
+        return 'Aimeos debugger';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public static function getVersion()
+    {
+        return 'v1.0';
     }
 
     /**

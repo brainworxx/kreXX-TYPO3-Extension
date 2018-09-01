@@ -86,11 +86,12 @@ class CompatibilityController extends ActionController
      * @var array
      */
     protected $allowedSections = array(
-        Fallback::SECTION_RUNTIME,
         Fallback::SECTION_OUTPUT,
         Fallback::SECTION_PROPERTIES,
         Fallback::SECTION_METHODS,
-        Fallback::SECTION_PRUNE_OUTPUT,
+        Fallback::SECTION_PRUNE,
+        Fallback::SECTION_BEHAVIOR,
+        Fallback::SECTION_EMERGENCY,
     );
 
     /**

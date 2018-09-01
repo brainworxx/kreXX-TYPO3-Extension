@@ -51,7 +51,17 @@ class Configuration implements PluginConfigInterface
      */
     public static function getName()
     {
-        return 'Fluid code generation v1.0';
+        return 'Fluid code generation';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public static function getVersion()
+    {
+        return 'v1.0';
     }
 
     /**

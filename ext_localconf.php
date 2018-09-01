@@ -69,11 +69,10 @@ $boot = function ($_EXTKEY) {
     \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
         'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'
     );
-    if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('dataviewer')) {
-        \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
-        );
-    }
+
+    \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
+        'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
+    );
 
     if (version_compare(TYPO3_version, '8.5', '>=')) {
         // Register our debug-viewhelper globally, so people don't have to
@@ -90,14 +89,15 @@ $boot = function ($_EXTKEY) {
         include_once $extPath . 'Classes/ViewHelpers/LegacyDebugViewHelper.php';
     }
 
+    // Register the Aimoes Magic plugin.
+    \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
+        'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
+    );
+
     // Check if we have thze Aimeos shop available.
     // We can not rely on the extention manager to know about the shop, in case
     // it is required via composer.
-    if (class_exists('Aimeos\\MShop\\Factory') === false) {
-        // Register the Aimoes Magic plugin.
-        \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
-            'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
-        );
+    if (class_exists('Aimeos\\MShop\\Factory') === true) {
         \Brainworxx\Krexx\Service\Plugin\SettingsGetter::activatePlugin(
             'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
         );

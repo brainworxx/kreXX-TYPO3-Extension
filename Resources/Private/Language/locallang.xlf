@@ -64,7 +64,7 @@
             <trans-unit id="level">
                 <source>Most frameworks have objects inside of objects inside of objects, and so on. Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.</source>
 			</trans-unit>
-            <trans-unit id="resetbutton">
+            <trans-unit id="kresetbutton">
                 <source>Here you can reset your local settings, which are stored in a cookie. kreXX will then use the global settings (either ini-file or factory settings).</source>
 			</trans-unit>
             <trans-unit id="destination">
@@ -230,11 +230,12 @@
             <trans-unit id="editfeconfig.headline">
                 <source>Edit FE configuration</source>
 			</trans-unit>
-            <trans-unit id="subhead.runtime">
-                <source>Runtime</source>
-			</trans-unit>
+
             <trans-unit id="subhead.output">
                 <source>Output</source>
+			</trans-unit>
+            <trans-unit id="subhead.behavior">
+                <source>Behavior</source>
 			</trans-unit>
             <trans-unit id="subhead.properties">
                 <source>Properties</source>
@@ -245,6 +246,9 @@
             <trans-unit id="subhead.pruneOutput">
                 <source>Prune output</source>
 			</trans-unit>
+            <trans-unit id="subhead.emergencystop">
+                <source>Emergency stop</source>
+            </trans-unit>
 
 
 

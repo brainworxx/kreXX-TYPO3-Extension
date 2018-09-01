@@ -12,38 +12,30 @@
     <f:form id="editconfig" action="save" >
         <h1><f:translate key="editfeconfig.headline" /></h1>
         <table border="0" class="krexx-config">
-            <tr>
-                <th colspan="3"><b><f:translate key="editfeconfig.help.headline" /></b></th>
-            </tr>
-            <tr>
-                <td><f:translate key="full" /></td>
-                <td colspan="2"><f:translate key="full.help" /></td>
-            </tr>
-            <tr>
-                <td><f:translate key="display" /></td>
-                <td colspan="2"><f:translate key="display.help" /></td>
-            </tr>
-            <tr>
-                <td><f:translate key="none" /></td>
-                <td colspan="2"><f:translate key="none.help" /></td>
-            </tr>
+            <tr><th colspan="3"><b><f:translate key="editfeconfig.help.headline" /></b></th></tr>
+            <tr><td><f:translate key="full" /></td><td colspan="2"><f:translate key="full.help" /></td></tr>
+            <tr><td><f:translate key="display" /></td><td colspan="2"><f:translate key="display.help" /></td></tr>
+            <tr><td><f:translate key="none" /></td><td colspan="2"><f:translate key="none.help" /></td></tr>
             <tr><td colspan="3">&nbsp;</td></tr>
+
 
             <tr><th colspan="3"><b><f:translate key="subhead.output" /></b></th></tr>
             <f:render section="dropdown" arguments="{config.disabled}" />
             <f:render section="noedit"   arguments="{config.iprange}" />
+             <f:render section="dropdown" arguments="{config.detectAjax}" />
+            <tr><td colspan="3">&nbsp;</td></tr>
+
+            <tr><th colspan="3"><b><f:translate key="subhead.behavior" /></b></th></tr>
             <f:render section="dropdown" arguments="{config.skin}" />
             <f:render section="noedit"   arguments="{config.destination}" />
             <f:render section="noedit"   arguments="{config.maxfiles}" />
+            <f:render section="dropdown" arguments="{config.useScopeAnalysis}" />
             <tr><td colspan="3">&nbsp;</td></tr>
 
-            <tr><th colspan="3"><b><f:translate key="subhead.runtime" /></b></th></tr>
-            <f:render section="dropdown" arguments="{config.detectAjax}" />
+            <tr><th colspan="3"><b><f:translate key="subhead.pruneOutput" /></b></th></tr>
+            <f:render section="dropdown" arguments="{config.maxStepNumber}" />
+            <f:render section="dropdown" arguments="{config.arrayCountLimit}" />
             <f:render section="dropdown" arguments="{config.level}" />
-            <f:render section="dropdown" arguments="{config.maxCall}" />
-            <f:render section="dropdown" arguments="{config.memoryLeft}" />
-            <f:render section="dropdown" arguments="{config.maxRuntime}" />
-            <f:render section="dropdown" arguments="{config.useScopeAnalysis}" />
             <tr><td colspan="3">&nbsp;</td></tr>
 
             <tr><th colspan="3"><b><f:translate key="subhead.properties" /></b></th></tr>
@@ -59,8 +51,10 @@
             <f:render section="noedit"   arguments="{config.debugMethods}" />
             <tr><td colspan="3">&nbsp;</td></tr>
 
-            <tr><th colspan="3"><b><f:translate key="subhead.backtrace" /></b></th></tr>
-            <f:render section="dropdown" arguments="{config.maxStepNumber}" />
+            <tr><th colspan="3"><b><f:translate key="subhead.emergencystop" /></b></th></tr>
+            <f:render section="dropdown" arguments="{config.maxCall}" />
+            <f:render section="dropdown" arguments="{config.memoryLeft}" />
+            <f:render section="dropdown" arguments="{config.maxRuntime}" />
 
         </table>
     </f:form>
@@ -81,8 +75,8 @@
 <f:section name="dropdown">
     <tr>
         <td><label for="{name}"><f:translate key="label.{name}" /></label></td>
-        <td><f:form.select id="{name}" name="output[{name}]" options="{options}" value="{value}" /></td>
-        <td class="cbx"><f:form.checkbox id="factory.{name}" name="factory" checked="{useFactorySettings}" value="1" /><label for="factory.{name}"><f:translate key="factory.settings" /></label></td>
+        <td><f:form.select additionalAttributes="{'autocomplete': 'off'}" id="{name}" name="output[{name}]" options="{options}" value="{value}" /></td>
+        <td class="cbx"><f:form.checkbox additionalAttributes="{'autocomplete': 'off'}" id="factory.{name}" name="factory" checked="{useFactorySettings}" value="1" /><label for="factory.{name}"><f:translate key="factory.settings" /></label></td>
     </tr>
 </f:section>
 
