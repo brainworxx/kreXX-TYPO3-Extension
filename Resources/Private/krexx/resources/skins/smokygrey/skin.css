@@ -237,7 +237,7 @@
     padding: 4px 5px 3px;
     margin: 0;
     font: bold 12px tahoma, verdana; }
-    .kwrapper .kmessage:before, .kfatalwrapper-outer .kmessage:before {
+    .kwrapper .kmessage::before, .kfatalwrapper-outer .kmessage::before {
       content: "\00a0\00a0!\00a0\00a0";
       font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
       background-color: #FED300;
@@ -327,19 +327,19 @@
       .kwrapper .kchild .kel.kexpand, .kfatalwrapper-outer .kchild .kel.kexpand {
         background-image: none;
         cursor: pointer; }
-        .kwrapper .kchild .kel.kexpand:before, .kfatalwrapper-outer .kchild .kel.kexpand:before {
+        .kwrapper .kchild .kel.kexpand::before, .kfatalwrapper-outer .kchild .kel.kexpand::before {
           content: "\00a0\25B6\00a0\00a0";
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif; }
         .kwrapper .kchild .kel.kexpand .kel-bg, .kfatalwrapper-outer .kchild .kel.kexpand .kel-bg {
           display: none; }
       .kwrapper .kchild .kel.kopened, .kfatalwrapper-outer .kchild .kel.kopened {
         background-image: none; }
-        .kwrapper .kchild .kel.kopened:before, .kfatalwrapper-outer .kchild .kel.kopened:before {
+        .kwrapper .kchild .kel.kopened::before, .kfatalwrapper-outer .kchild .kel.kopened::before {
           content: "\00a0\25BC\00a0\00a0";
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif; }
       .kwrapper .kchild .kel:not(.kexpand), .kfatalwrapper-outer .kchild .kel:not(.kexpand) {
         position: relative; }
-        .kwrapper .kchild .kel:not(.kexpand):before, .kfatalwrapper-outer .kchild .kel:not(.kexpand):before {
+        .kwrapper .kchild .kel:not(.kexpand)::before, .kfatalwrapper-outer .kchild .kel:not(.kexpand)::before {
           /* grey line */
           width: 3px;
           background: #919191 none repeat scroll 0 0;
@@ -398,7 +398,7 @@
         border-top: 5px solid #F2F2F2;
         border-bottom: 5px solid #F2F2F2;
         position: relative; }
-        .kwrapper .kchild .kpreview .highlight:before, .kfatalwrapper-outer .kchild .kpreview .highlight:before {
+        .kwrapper .kchild .kpreview .highlight::before, .kfatalwrapper-outer .kchild .kpreview .highlight::before {
           width: 3px;
           background: #990100 none repeat scroll 0 0;
           content: "";
@@ -414,7 +414,7 @@
       display: inline-block;
       float: right;
       color: #919191; }
-      .kwrapper .kchild .kolps:before, .kfatalwrapper-outer .kchild .kolps:before {
+      .kwrapper .kchild .kolps::before, .kfatalwrapper-outer .kchild .kolps::before {
         content: '\21D4';
         font-weight: bolder;
         font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif; }
@@ -422,7 +422,7 @@
         color: #555555; }
       .kwrapper .kchild .kolps.kcollapsed, .kfatalwrapper-outer .kchild .kolps.kcollapsed {
         color: #FED300; }
-        .kwrapper .kchild .kolps.kcollapsed:before, .kfatalwrapper-outer .kchild .kolps.kcollapsed:before {
+        .kwrapper .kchild .kolps.kcollapsed::before, .kfatalwrapper-outer .kchild .kolps.kcollapsed::before {
           content: '\21D5';
           font-weight: bolder;
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif; }
@@ -434,15 +434,15 @@
         color: #555555; }
     .kwrapper .kchild .krecursion, .kfatalwrapper-outer .kchild .krecursion {
       color: #b1b1b1; }
-      .kwrapper .kchild .krecursion:before, .kfatalwrapper-outer .kchild .krecursion:before {
+      .kwrapper .kchild .krecursion::before, .kfatalwrapper-outer .kchild .krecursion::before {
         /* grey line */
         background: #b1b1b1 none repeat scroll 0 0 !important; }
-    .kwrapper .kchild .kstring:before, .kfatalwrapper-outer .kchild .kstring:before {
+    .kwrapper .kchild .kstring::before, .kfatalwrapper-outer .kchild .kstring::before {
       /* yellow line */
       background: #AF8C4F none repeat scroll 0 0 !important; }
     .kwrapper .kchild .kstring.kexpand, .kfatalwrapper-outer .kchild .kstring.kexpand {
       background-image: none; }
-      .kwrapper .kchild .kstring.kexpand:before, .kfatalwrapper-outer .kchild .kstring.kexpand:before {
+      .kwrapper .kchild .kstring.kexpand::before, .kfatalwrapper-outer .kchild .kstring.kexpand::before {
         color: #AF8C4F;
         background-color: transparent !important; }
     .kwrapper .kchild .kstring em, .kwrapper .kchild .kstring .kname, .kfatalwrapper-outer .kchild .kstring em, .kfatalwrapper-outer .kchild .kstring .kname {
@@ -452,27 +452,27 @@
       background-color: #AF8C4F; }
     .kwrapper .kchild .kstring.kcurrent-additional.kexpand, .kfatalwrapper-outer .kchild .kstring.kcurrent-additional.kexpand {
       background-image: none; }
-      .kwrapper .kchild .kstring.kcurrent-additional.kexpand:before, .kfatalwrapper-outer .kchild .kstring.kcurrent-additional.kexpand:before {
+      .kwrapper .kchild .kstring.kcurrent-additional.kexpand::before, .kfatalwrapper-outer .kchild .kstring.kcurrent-additional.kexpand::before {
         color: #AF8C4F; }
     .kwrapper .kchild .kstring.kcurrent-additional em, .kwrapper .kchild .kstring.kcurrent-additional .kname, .kfatalwrapper-outer .kchild .kstring.kcurrent-additional em, .kfatalwrapper-outer .kchild .kstring.kcurrent-additional .kname {
       color: #AF8C4F; }
-    .kwrapper .kchild .kclass:before, .kfatalwrapper-outer .kchild .kclass:before {
+    .kwrapper .kchild .kclass::before, .kfatalwrapper-outer .kchild .kclass::before {
       color: #00AD00; }
     .kwrapper .kchild .kclass em, .kfatalwrapper-outer .kchild .kclass em {
       color: #00AD00; }
     .kwrapper .kchild .kclass span.kname, .kfatalwrapper-outer .kchild .kclass span.kname {
       color: #00AD00; }
-    .kwrapper .kchild .kmethod:before, .kfatalwrapper-outer .kchild .kmethod:before {
+    .kwrapper .kchild .kmethod::before, .kfatalwrapper-outer .kchild .kmethod::before {
       color: #00AD00; }
     .kwrapper .kchild .kmethod em, .kfatalwrapper-outer .kchild .kmethod em {
       color: #00AD00; }
-    .kwrapper .kchild .kclosure:before, .kfatalwrapper-outer .kchild .kclosure:before {
+    .kwrapper .kchild .kclosure::before, .kfatalwrapper-outer .kchild .kclosure::before {
       color: #00AD00; }
     .kwrapper .kchild .kclosure em, .kfatalwrapper-outer .kchild .kclosure em {
       color: #00AD00; }
     .kwrapper .kchild .karray, .kfatalwrapper-outer .kchild .karray {
       background-image: none; }
-      .kwrapper .kchild .karray:before, .kfatalwrapper-outer .kchild .karray:before {
+      .kwrapper .kchild .karray::before, .kfatalwrapper-outer .kchild .karray::before {
         color: #3498DB; }
       .kwrapper .kchild .karray.kopened, .kfatalwrapper-outer .kchild .karray.kopened {
         background-image: none; }
@@ -480,19 +480,19 @@
         color: #3498DB; }
       .kwrapper .kchild .karray span.kname, .kfatalwrapper-outer .kchild .karray span.kname {
         color: #3498DB; }
-    .kwrapper .kchild .kboolean:before, .kfatalwrapper-outer .kchild .kboolean:before {
+    .kwrapper .kchild .kboolean::before, .kfatalwrapper-outer .kchild .kboolean::before {
       /* pink line */
       background: #d87cd8 none repeat scroll 0 0 !important; }
     .kwrapper .kchild .kboolean em, .kfatalwrapper-outer .kchild .kboolean em {
       color: #d87cd8; }
     .kwrapper .kchild .kboolean span.kname, .kfatalwrapper-outer .kchild .kboolean span.kname {
       color: #d87cd8; }
-    .kwrapper .kchild .kinteger:before, .kfatalwrapper-outer .kchild .kinteger:before {
+    .kwrapper .kchild .kinteger::before, .kfatalwrapper-outer .kchild .kinteger::before {
       /* black line */
       background: #555555 none repeat scroll 0 0 !important; }
     .kwrapper .kchild .kinteger.kexpand, .kfatalwrapper-outer .kchild .kinteger.kexpand {
       background-image: none; }
-      .kwrapper .kchild .kinteger.kexpand:before, .kfatalwrapper-outer .kchild .kinteger.kexpand:before {
+      .kwrapper .kchild .kinteger.kexpand::before, .kfatalwrapper-outer .kchild .kinteger.kexpand::before {
         color: #555555; }
     .kwrapper .kchild .kinteger em, .kwrapper .kchild .kinteger .kname, .kfatalwrapper-outer .kchild .kinteger em, .kfatalwrapper-outer .kchild .kinteger .kname {
       color: #555555; }
@@ -561,7 +561,7 @@
       display: inline-table;
       font-size: 20px;
       color: #ffffff; }
-      .kwrapper .kclose.knormal:before, .kfatalwrapper-outer .kclose.knormal:before {
+      .kwrapper .kclose.knormal::before, .kfatalwrapper-outer .kclose.knormal::before {
         content: '\2715'; }
       .kwrapper .kclose.knormal:hover, .kfatalwrapper-outer .kclose.knormal:hover {
         color: #B2B2B2; }
@@ -610,7 +610,7 @@
         width: 24px;
         margin: 0 5px;
         cursor: pointer; }
-        .kwrapper .search-wrapper .ksearch .koptions:before, .kfatalwrapper-outer .search-wrapper .ksearch .koptions:before {
+        .kwrapper .search-wrapper .ksearch .koptions::before, .kfatalwrapper-outer .search-wrapper .ksearch .koptions::before {
           content: '\263C';
           font-weight: bolder;
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif; }
@@ -630,13 +630,16 @@
   .kwrapper .highlight-jumpto .kpre, .kfatalwrapper-outer .ksearch-found-highlight .kpre,
   .kfatalwrapper-outer .highlight-jumpto .kpre {
     color: #555555 !important; }
-  .kwrapper .klinks .kchild .kel, .kfatalwrapper-outer .klinks .kchild .kel {
-    color: #919191;
+  .kwrapper .kplugins .kchild .kel, .kfatalwrapper-outer .kplugins .kchild .kel {
+    color: #B2B2B2;
     text-decoration: none;
-    padding: 3px 6px 6px;
-    cursor: pointer; }
-    .kwrapper .klinks .kchild .kel:hover, .kfatalwrapper-outer .klinks .kchild .kel:hover {
-      text-decoration: underline; }
+    padding: 3px 6px 6px; }
+    .kwrapper .kplugins .kchild .kel.kisactive, .kfatalwrapper-outer .kplugins .kchild .kel.kisactive {
+      color: #919191; }
+      .kwrapper .kplugins .kchild .kel.kisactive::before, .kfatalwrapper-outer .kplugins .kchild .kel.kisactive::before {
+        background: #00AD00 none repeat scroll 0 0; }
+  .kwrapper .kplugins .kchild .kisactive, .kfatalwrapper-outer .kplugins .kchild .kisactive {
+    color: #00AD00; }
 
 .kfatalwrapper-outer {
   background: none repeat scroll 0 0 rgba(148, 148, 148, 0.8);

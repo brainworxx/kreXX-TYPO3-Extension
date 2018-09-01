@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\View;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 
 /**
  * Protected helper methods for the real render class.
@@ -55,6 +56,9 @@ abstract class AbstractRender implements RenderInterface
     const MARKER_STYLE = '{style}';
     const MARKER_MAIN_FUNCTION = '{mainfunction}';
     const MARKER_DOM_ID = '{domId}';
+    const MARKER_PLUGIN_TEXT = '{plugintext}';
+    const MARKER_PLUGIN_ACTIVE_TEXT = '{activetext}';
+    const MARKER_PLUGIN_ACTIVE_CLASS = '{activeclass}';
 
     /**
      * Here we store all relevant data.
@@ -178,6 +182,41 @@ abstract class AbstractRender implements RenderInterface
             $this->pool->recursionHandler->getMarker(),
             $this->getTemplateFileContent('search')
         );
+    }
+
+    /**
+     * Render a list of all registered plugins.
+     *
+     * @return string
+     *   The generated markup from the template files.
+     */
+    protected function renderPluginList()
+    {
+        $result = '';
+        $template = $this->getTemplateFileContent('singlePlugin');
+        foreach (SettingsGetter::getPlugins() as $plugin) {
+            if ($plugin[SettingsGetter::IS_ACTIVE] === true) {
+                $activeClass = 'kisactive';
+                $activeText = 'active';
+            } else {
+                $activeClass = 'kisinactive';
+                $activeText = 'inactive';
+            }
+            $result .= str_replace(
+                array(
+                    static::MARKER_PLUGIN_ACTIVE_CLASS,
+                    static::MARKER_PLUGIN_ACTIVE_TEXT,
+                    static::MARKER_PLUGIN_TEXT,
+                ),
+                array(
+                    $activeClass,
+                    $activeText,
+                    $plugin[SettingsGetter::PLUGIN_NAME] . ' ' . $plugin[SettingsGetter::PLUGIN_VERSION]
+                ),
+                $template
+            );
+        }
+        return $result;
     }
 
     /**

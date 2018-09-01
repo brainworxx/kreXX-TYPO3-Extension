@@ -330,7 +330,7 @@ $fontLight: lighter 10px tahoma, verdana;
     padding: 4px 5px 3px;
     margin: 0;
     font: bold 12px tahoma, verdana;
-    &:before {
+    &::before {
       content: "\00a0\00a0!\00a0\00a0";
       font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
       background-color: $yellowBwx;
@@ -431,7 +431,7 @@ $fontLight: lighter 10px tahoma, verdana;
         background-image: none;
         //color: $white;
         cursor: pointer;
-        &:before {
+        &::before {
           content: "\00a0\25B6\00a0\00a0";
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
         }
@@ -441,14 +441,14 @@ $fontLight: lighter 10px tahoma, verdana;
       }
       &.kopened {
         background-image: none;
-        &:before {
+        &::before {
           content: "\00a0\25BC\00a0\00a0";
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
         }
       }
       &:not(.kexpand) {
         position: relative;
-        &:before {
+        &::before {
           /* grey line */
           width: 3px;
           background: $greyDark none repeat scroll 0 0;
@@ -525,7 +525,7 @@ $fontLight: lighter 10px tahoma, verdana;
         border-top: 5px solid $whiteDark;
         border-bottom: 5px solid $whiteDark;
         position: relative;
-        &:before {
+        &::before {
           width: 3px;
           background: $red none repeat scroll 0 0;
           content: "";
@@ -546,7 +546,7 @@ $fontLight: lighter 10px tahoma, verdana;
       display: inline-block;
       float: right;
       color: $greyDark;
-      &:before {
+      &::before {
         content: '\21D4';
         font-weight: bolder;
         font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
@@ -557,7 +557,7 @@ $fontLight: lighter 10px tahoma, verdana;
       }
       &.kcollapsed {
         color: $yellowBwx;
-        &:before {
+        &::before {
           content: '\21D5';
           font-weight: bolder;
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
@@ -577,20 +577,20 @@ $fontLight: lighter 10px tahoma, verdana;
     // Data payload
     .krecursion {
       color: $recursion;
-      &:before {
+      &::before {
         /* grey line */
         background: $recursion none repeat scroll 0 0 !important;
       }
     }
 
     .kstring {
-      &:before {
+      &::before {
         /* yellow line */
         background: $string none repeat scroll 0 0 !important;
       }
       &.kexpand {
         background-image: none;
-        &:before {
+        &::before {
           color: $string;
           background-color: transparent !important;
         }
@@ -605,7 +605,7 @@ $fontLight: lighter 10px tahoma, verdana;
         }
         &.kexpand {
           background-image: none;
-          &:before {
+          &::before {
             color: $string-current;
           }
         }
@@ -616,7 +616,7 @@ $fontLight: lighter 10px tahoma, verdana;
     }
 
     .kclass {
-      &:before {
+      &::before {
         color: $object;
       }
       em {
@@ -627,7 +627,7 @@ $fontLight: lighter 10px tahoma, verdana;
       }
     }
     .kmethod {
-      &:before {
+      &::before {
         color: $object;
       }
       em {
@@ -635,7 +635,7 @@ $fontLight: lighter 10px tahoma, verdana;
       }
     }
     .kclosure {
-      &:before {
+      &::before {
         color: $object;
       }
       em {
@@ -644,7 +644,7 @@ $fontLight: lighter 10px tahoma, verdana;
     }
     .karray {
       background-image: none;
-      &:before {
+      &::before {
         color: $array;
       }
       &.kopened {
@@ -658,7 +658,7 @@ $fontLight: lighter 10px tahoma, verdana;
       }
     }
     .kboolean {
-      &:before {
+      &::before {
         /* pink line */
         background: $bool none repeat scroll 0 0 !important;
       }
@@ -670,13 +670,13 @@ $fontLight: lighter 10px tahoma, verdana;
       }
     }
     .kinteger {
-      &:before {
+      &::before {
         /* black line */
         background: $integer none repeat scroll 0 0 !important;
       }
       &.kexpand {
         background-image: none;
-        &:before {
+        &::before {
           color: $integer;
         }
       }
@@ -760,7 +760,7 @@ $fontLight: lighter 10px tahoma, verdana;
       display: inline-table;
       font-size: 20px;
       color: $white;
-      &:before {
+      &::before {
         content: '\2715';
       }
       &:hover {
@@ -816,7 +816,7 @@ $fontLight: lighter 10px tahoma, verdana;
         width: 24px;
         margin: 0 5px;
         cursor: pointer;
-        &:before {
+        &::before {
           content: '\263C';
           font-weight: bolder;
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
@@ -848,19 +848,22 @@ $fontLight: lighter 10px tahoma, verdana;
     color: $blackLight !important;
   }
 
-  .klinks {
+  .kplugins {
     .kchild {
       .kel {
-        color: $greyDark;
+        color: $grey;
         text-decoration: none;
         padding: 3px 6px 6px;
-        cursor: pointer;
-        &:hover {
-          text-decoration: underline;
-          //color: $white;
+        &.kisactive {
+          color: $greyDark;
+          &::before {
+            background: $object none repeat scroll 0 0;
+          }
         }
       }
-
+      .kisactive {
+        color: $object;
+      }
     }
   }
 }

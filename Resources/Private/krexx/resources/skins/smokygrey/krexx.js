@@ -140,7 +140,7 @@
          *   Resets the local settings in the settings cookie,
          *   when the reset button ic clicked.
          */
-        kdt.addEvent('.kwrapper .resetbutton', 'click', kdt.resetSetting);
+        kdt.addEvent('.kwrapper .kresetbutton', 'click', kdt.resetSetting);
 
         /**
          * Register the recursions resolving.

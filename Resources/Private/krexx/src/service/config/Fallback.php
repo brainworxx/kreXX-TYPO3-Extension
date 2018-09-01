@@ -61,10 +61,11 @@ class Fallback
     const EVAL_DEV_HANDLE = 'evalDevHandle';
 
     const SECTION_OUTPUT = 'output';
-    const SECTION_RUNTIME = 'runtime';
+    const SECTION_BEHAVIOR = 'behavior';
+    const SECTION_PRUNE = 'prune';
     const SECTION_PROPERTIES = 'properties';
     const SECTION_METHODS = 'methods';
-    const SECTION_PRUNE_OUTPUT = 'pruneOutput';
+    const SECTION_EMERGENCY = 'emergency';
 
     const VALUE_TRUE = 'true';
     const VALUE_FALSE = 'false';
@@ -185,17 +186,18 @@ class Fallback
             Fallback::SECTION_OUTPUT => array(
                 Fallback::SETTING_DISABLED,
                 Fallback::SETTING_IP_RANGE,
+                Fallback::SETTING_DETECT_AJAX,
+            ),
+            Fallback::SECTION_BEHAVIOR => array(
                 Fallback::SETTING_SKIN,
                 Fallback::SETTING_DESTINATION,
                 Fallback::SETTING_MAX_FILES,
-            ),
-            Fallback::SECTION_RUNTIME => array(
-                Fallback::SETTING_DETECT_AJAX,
-                Fallback::SETTING_NESTING_LEVEL,
-                Fallback::SETTING_MAX_CALL,
-                Fallback::SETTING_MAX_RUNTIME,
-                Fallback::SETTING_MEMORY_LEFT,
                 Fallback::SETTING_USE_SCOPE_ANALYSIS,
+            ),
+            Fallback::SECTION_PRUNE => array(
+                Fallback::SETTING_MAX_STEP_NUMBER,
+                Fallback::SETTING_ARRAY_COUNT_LIMIT,
+                Fallback::SETTING_NESTING_LEVEL,
             ),
             Fallback::SECTION_PROPERTIES => array(
                 Fallback::SETTING_ANALYSE_PROTECTED,
@@ -208,9 +210,10 @@ class Fallback
                 Fallback::SETTING_ANALYSE_GETTER,
                 Fallback::SETTING_DEBUG_METHODS,
             ),
-            Fallback::SECTION_PRUNE_OUTPUT => array(
-                Fallback::SETTING_MAX_STEP_NUMBER,
-                Fallback::SETTING_ARRAY_COUNT_LIMIT,
+            Fallback::SECTION_EMERGENCY => array(
+                Fallback::SETTING_MAX_CALL,
+                Fallback::SETTING_MAX_RUNTIME,
+                Fallback::SETTING_MEMORY_LEFT,
             ),
         );
 
@@ -264,14 +267,14 @@ class Fallback
                 Fallback::VALUE => 5,
                 Fallback::RENDER => $this->editableInput,
                 Fallback::EVALUATE => Fallback::EVAL_INT,
-                Fallback::SECTION => Fallback::SECTION_RUNTIME,
+                Fallback::SECTION => Fallback::SECTION_PRUNE,
             ),
             Fallback::SETTING_MAX_CALL => array(
                 // Maximum amount of kreXX calls.
                 Fallback::VALUE => 10,
                 Fallback::RENDER => $this->editableInput,
                 Fallback::EVALUATE => Fallback::EVAL_INT,
-                Fallback::SECTION => Fallback::SECTION_RUNTIME,
+                Fallback::SECTION => Fallback::SECTION_EMERGENCY,
             ),
             Fallback::SETTING_DISABLED => array(
                 // Disable kreXX.
@@ -285,21 +288,21 @@ class Fallback
                 Fallback::VALUE => Fallback::VALUE_BROWSER,
                 Fallback::RENDER => $this->displayOnlySelect,
                 Fallback::EVALUATE => Fallback::EVAL_DESTINATION,
-                Fallback::SECTION => Fallback::SECTION_OUTPUT,
+                Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
             ),
             Fallback::SETTING_MAX_FILES => array(
                 // Maximum files that are kept inside the logfolder.
                 Fallback::VALUE => 10,
                 Fallback::RENDER => $this->displayOnlyInput,
                 Fallback::EVALUATE => Fallback::EVAL_INT,
-                Fallback::SECTION => Fallback::SECTION_OUTPUT,
+                Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
             ),
             Fallback::SETTING_SKIN => array(
                 // Skin for kreXX. We have provided 'hans' and 'smokygrey'.
                 Fallback::VALUE => 'smokygrey',
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVALUATE => Fallback::EVAL_SKIN,
-                Fallback::SECTION => Fallback::SECTION_OUTPUT,
+                Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
             ),
             Fallback::SETTING_DETECT_AJAX => array(
                 // Try to detect ajax requests.
@@ -307,7 +310,7 @@ class Fallback
                 Fallback::VALUE => Fallback::VALUE_TRUE,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVALUATE => Fallback::EVAL_BOOL,
-                Fallback::SECTION => Fallback::SECTION_RUNTIME,
+                Fallback::SECTION => Fallback::SECTION_OUTPUT,
             ),
             Fallback::SETTING_IP_RANGE => array(
                 // IP range for calling kreXX.
@@ -336,21 +339,21 @@ class Fallback
                 Fallback::VALUE => 64,
                 Fallback::RENDER => $this->editableInput,
                 Fallback::EVALUATE => Fallback::EVAL_INT,
-                Fallback::SECTION => Fallback::SECTION_RUNTIME,
+                Fallback::SECTION => Fallback::SECTION_EMERGENCY,
             ),
             Fallback::SETTING_MAX_RUNTIME => array(
                 // Maximum runtime in seconds, before triggering an emergency break.
                 Fallback::VALUE => 60,
                 Fallback::RENDER => $this->editableInput,
                 Fallback::EVALUATE => Fallback::EVAL_MAX_RUNTIME,
-                Fallback::SECTION => Fallback::SECTION_RUNTIME,
+                Fallback::SECTION => Fallback::SECTION_EMERGENCY,
             ),
             Fallback::SETTING_USE_SCOPE_ANALYSIS => array(
                 // Use the scope analysis (aka auto configuration).
                 Fallback::VALUE => Fallback::VALUE_TRUE,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVALUATE => Fallback::EVAL_BOOL,
-                Fallback::SECTION => Fallback::SECTION_RUNTIME,
+                Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
             ),
             Fallback::SETTING_MAX_STEP_NUMBER => array(
                 // Maximum step numbers that get analysed from a backtrace.
@@ -358,7 +361,7 @@ class Fallback
                 Fallback::VALUE => 10,
                 Fallback::RENDER => $this->editableInput,
                 Fallback::EVALUATE => Fallback::EVAL_INT,
-                Fallback::SECTION => Fallback::SECTION_PRUNE_OUTPUT,
+                Fallback::SECTION => Fallback::SECTION_PRUNE,
             ),
             Fallback::SETTING_ARRAY_COUNT_LIMIT => array(
                 // Limit for the count in an array. If an array is larger that this,
@@ -366,7 +369,7 @@ class Fallback
                 Fallback::VALUE => 300,
                 Fallback::RENDER => $this->editableInput,
                 Fallback::EVALUATE => Fallback::EVAL_INT,
-                Fallback::SECTION => Fallback::SECTION_PRUNE_OUTPUT,
+                Fallback::SECTION => Fallback::SECTION_PRUNE
             ),
         );
     }

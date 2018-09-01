@@ -90,6 +90,7 @@ class Render extends AbstractRender
     const MARKER_CLASS_NAME = '{className}';
     const MARKER_LINE_NO = '{lineNo}';
     const MARKER_SOURCE_CODE = '{sourceCode}';
+    const MARKER_PLUGINS = '{plugins}';
 
     /**
      * {@inheritdoc}
@@ -170,10 +171,12 @@ class Render extends AbstractRender
             array(
                 static::MARKER_CONFIG_INFO,
                 static::MARKER_CALLER,
+                static::MARKER_PLUGINS,
             ),
             array(
                 $configOutput,
                 $caller,
+                $this->renderPluginList()
             ),
             $this->getTemplateFileContent('footer')
         );

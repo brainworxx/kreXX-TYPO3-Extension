@@ -46,6 +46,8 @@ class SettingsGetter extends Registration
 
     const IS_ACTIVE = 'isActive';
     const CONFIG_CLASS = 'configClass';
+    const PLUGIN_NAME = 'name';
+    const PLUGIN_VERSION = 'ver';
 
     /**
      * Register a plugin.
@@ -58,22 +60,24 @@ class SettingsGetter extends Registration
     {
         static::$plugins[$configClass] = array(
             static::CONFIG_CLASS => $configClass,
-            static::IS_ACTIVE => false
+            static::IS_ACTIVE => false,
+            static::PLUGIN_NAME => call_user_func(array($configClass, 'getName')),
+            static::PLUGIN_VERSION => call_user_func(array($configClass, 'getVersion'))
         );
     }
 
     /**
      * We activate the plugin with the name, and execute its configuration method.
      *
-     * @param string $name
-     *   The name of the plugin.
+     * @param string $configClass
+     *   The class name of the configuration class for this plugin.
      */
-    public static function activatePlugin($name)
+    public static function activatePlugin($configClass)
     {
-        if (isset(static::$plugins[$name])) {
-            static::$plugins[$name][static::IS_ACTIVE] = true;
+        if (isset(static::$plugins[$configClass])) {
+            static::$plugins[$configClass][static::IS_ACTIVE] = true;
             /** @var \Brainworxx\Krexx\Service\Plugin\PluginConfigInterface $staticPlugin */
-            $staticPlugin = static::$plugins[$name][static::CONFIG_CLASS];
+            $staticPlugin = static::$plugins[$configClass][static::CONFIG_CLASS];
             $staticPlugin::exec();
 
             if (isset(\Krexx::$pool)) {
@@ -92,12 +96,12 @@ class SettingsGetter extends Registration
      *
      * @internal
      *
-     * @param string $name
+     * @param string $configClass
      *   The name of the plugin.
      */
-    public static function deactivatePlugin($name)
+    public static function deactivatePlugin($configClass)
     {
-        if (static::$plugins[$name][static::IS_ACTIVE] !== true) {
+        if (static::$plugins[$configClass][static::IS_ACTIVE] !== true) {
             // We will not purge everything for a already deactivated plugin.
             return;
         }
@@ -113,10 +117,10 @@ class SettingsGetter extends Registration
         static::$rewriteList = array();
 
         // Go through the remaining plugins.
-        static::$plugins[$name][static::IS_ACTIVE] = false;
+        static::$plugins[$configClass][static::IS_ACTIVE] = false;
         foreach (static::$plugins as $pluginName => $plugin) {
             if ($plugin[static::IS_ACTIVE]) {
-                static::$plugins[$pluginName][static::CONFIG_CLASS]::exec();
+                call_user_func(array(static::$plugins[$pluginName][static::CONFIG_CLASS], 'exec'));
             }
         }
 
@@ -247,5 +251,18 @@ class SettingsGetter extends Registration
     public static function getAdditionelHelpFiles()
     {
         return static::$additionalHelpFiles;
+    }
+
+    /**
+     * Get the status of all registered plugins.
+     *
+     * @internal
+     *
+     * @return array
+     *   The configuration data for the view
+     */
+    public static function getPlugins()
+    {
+        return static::$plugins;
     }
 }

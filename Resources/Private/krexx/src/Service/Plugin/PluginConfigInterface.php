@@ -42,11 +42,18 @@ namespace Brainworxx\Krexx\Service\Plugin;
 interface PluginConfigInterface
 {
     /**
-     * Get the name of the plugin. Must be unique.
+     * Get the name of the plugin.
      *
      * @return string
      */
     public static function getName();
+
+    /**
+     * Get the version of the plugin.
+     *
+     * @return string
+     */
+    public static function getVersion();
 
     /**
      * Registers all Overwrites

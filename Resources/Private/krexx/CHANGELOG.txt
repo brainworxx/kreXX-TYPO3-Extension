@@ -14,6 +14,8 @@
 - Change: Moved the bootstrapping to it's own file.
 - Change: Removed the annoying spaces from the generated DOM, for
   better copy-paste.
+- Change: Resorted the settings.
+- Change: Prettified the output of the Hans skin.
 - Bugfix: The position of the search field of the hans skin is now
   calculated correct when the viewport is not on top.
 - Bugfix: The scroll container detection of the hans skin works

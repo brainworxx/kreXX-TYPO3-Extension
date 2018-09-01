@@ -197,7 +197,7 @@ class File
     protected function getFileContentsArray($filePath)
     {
         $filePath = realpath($filePath);
-        
+
         static $filecache = array();
 
         if (isset($filecache[$filePath]) === true) {
@@ -327,7 +327,7 @@ class File
 
         if ($this->docRoot !== false && strpos($realpath, $this->docRoot) === 0) {
             // Found it on position 0.
-            $realpath = '. . .' . DIRECTORY_SEPARATOR . substr($realpath, strlen($this->docRoot) + 1);
+            $realpath = '&hellip;' . DIRECTORY_SEPARATOR . substr($realpath, strlen($this->docRoot) + 1);
         }
 
         return $realpath;

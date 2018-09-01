@@ -176,7 +176,6 @@ div.kwrapper {
 
 .kwrapper .kel em.karrow {
     font: bold 12px tahoma, verdana;
-    background-color: #303030;
     padding: 0 2px;
 }
 
@@ -210,10 +209,16 @@ div.kwrapper {
 .kwrapper .kel-bg {
     /* white line */
     background: white no-repeat;
-    margin-left: 5px;
-    margin-right: 15px;
-    float: left;
     width: 3px;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    left: 5px;
+}
+
+.kwrapper .kel-bg.keditable {
+    /* green line */
+    background: #a6e22a no-repeat;
 }
 
 .kwrapper .kexpand .kel-bg {
@@ -382,8 +387,8 @@ div.kwrapper {
     color: #b1b1b1;
     font: bold 12px tahoma, verdana;
     padding-left: 5px;
-    /*position: absolute;*/
-    top: 7px;
+    position: absolute;
+    top: 9px;
 }
 
 .kwrapper .call {
@@ -441,18 +446,17 @@ div.kwrapper {
 .keditable select {
     font: 10px tahoma, verdana;
 }
-/*
-.kwrapper .khelp {
-    position: absolute;
-    border: solid 1px black;
-    background-color: #f2f2f2;
-    padding: 2px 5px;
-    top: 10px;
-    left: 250px;
-    color: #303030;
-    z-index: 1;
+
+.kwrapper .kchild .kname,
+.kwrapper .kchild .kresetbutton {
+    margin-left: 15px;
 }
-*/
+
+.kwrapper .kchild .kexpand .kname {
+    margin-left: 0;
+}
+
+
 .kwrapper .kclose.kfatal {
     cursor: pointer;
     display: inline-table;
@@ -671,6 +675,7 @@ div.kwrapper {
     height: inherit;
     line-height: inherit;
     margin: 2px;
+    margin-bottom: 0!important;
     padding: 2px 5px;
     width: inherit;
     background: none repeat scroll 0 0 #dbdbdb !important;
@@ -793,6 +798,7 @@ div.kwrapper {
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     border-radius: 8px;
+    margin-left: 15px;
 }
 
 .kwrapper .kchild .kel .kodsp ::selection,
@@ -844,7 +850,7 @@ div.kwrapper {
     height: 0;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    margin-right: 20px;
+    margin-right: 5px;
     margin-top: 0;
     margin-bottom: 5px;
     background-color: transparent;
@@ -885,4 +891,11 @@ div.kwrapper {
 
 .kwrapper .khelp .khelprow .khelptitle {
     min-width: 50px;
+}
+
+.kwrapper .kconfiguration .kel-bg.kisactive {
+    background-color: #a6e22a;;
+}
+.kwrapper .kconfiguration .kel .kisactive {
+    color: #a6e22a;;
 }

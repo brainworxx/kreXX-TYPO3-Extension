@@ -203,11 +203,13 @@ class Render extends \Brainworxx\Krexx\View\Render
                 static::MARKER_K_DEBUG_CLASSES,
                 static::MARKER_K_CONFIG_CLASSES,
                 static::MARKER_K_LINK_CLASSES,
+                static::MARKER_PLUGINS,
             ),
             array(
                 $debugClass,
                 $configClass,
                 $linkClass,
+                $this->renderPluginList(),
             ),
             parent::renderHeader($doctype, $headline, $cssJs)
         );
