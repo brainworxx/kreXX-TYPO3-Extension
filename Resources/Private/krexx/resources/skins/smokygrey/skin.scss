@@ -285,7 +285,7 @@ $fontLight: lighter 10px tahoma, verdana;
       padding: 10px;
       @include border-radius-bottom(2px);
       table {
-        min-width: 50%;
+        width: 100%;
         color: $greyDark;
         font: $fontBold;
 
@@ -305,11 +305,16 @@ $fontLight: lighter 10px tahoma, verdana;
         }
         td {
           padding: 2px 4px;
-          min-width: 50%;
           vertical-align: top;
           border: 1px solid $greyLight;
           @include border-radius-top(1px);
           @include border-radius-bottom(1px);
+          &.kinfo {
+            width: 150px;
+          }
+          &.kdesc {
+            max-width: 50px;
+          }
         }
       }
     }

@@ -124,17 +124,20 @@ class Traversable extends AbstractObjectAnalysis
                 $multiline = true;
             }
 
+            $count = count($parameter);
+
             /** @var Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setName($name)
                 ->setType('Foreach')
                 ->addParameter('data', $parameter)
-                ->addParameter('multiline', $multiline);
+                ->addParameter('multiline', $multiline)
+                ->addToJson('Length', count($parameter));
 
             // Check, if we are handling a huge array. Huge arrays tend to result in a huge
             // output, maybe even triggering a emergency break. to avoid this, we give them
             // a special callback.
-            if (count($parameter) > (int) $this->pool->config->getSetting(Fallback::SETTING_ARRAY_COUNT_LIMIT)) {
+            if ($count > (int) $this->pool->config->getSetting(Fallback::SETTING_ARRAY_COUNT_LIMIT)) {
                 $model->injectCallback(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray')
                 )->setNormal('Simplified Traversable Info')

@@ -195,7 +195,7 @@
       border-bottom-right-radius: 2px;
       border-bottom-left-radius: 2px; }
       .kwrapper .knode.kadditional table, .kfatalwrapper-outer .knode.kadditional table {
-        min-width: 50%;
+        width: 100%;
         color: #919191;
         font: bold 12px tahoma, verdana; }
         .kwrapper .knode.kadditional table tbody, .kfatalwrapper-outer .knode.kadditional table tbody {
@@ -211,7 +211,6 @@
           padding: 0; }
         .kwrapper .knode.kadditional table td, .kfatalwrapper-outer .knode.kadditional table td {
           padding: 2px 4px;
-          min-width: 50%;
           vertical-align: top;
           border: 1px solid #E0E0E0;
           -webkit-border-top-left-radius: 1px;
@@ -226,6 +225,10 @@
           -moz-border-radius-bottomleft: 1px;
           border-bottom-right-radius: 1px;
           border-bottom-left-radius: 1px; }
+          .kwrapper .knode.kadditional table td.kinfo, .kfatalwrapper-outer .knode.kadditional table td.kinfo {
+            width: 150px; }
+          .kwrapper .knode.kadditional table td.kdesc, .kfatalwrapper-outer .knode.kadditional table td.kdesc {
+            max-width: 50px; }
     .kwrapper .knode.kpayload, .kfatalwrapper-outer .knode.kpayload {
       background-color: #F2F2F2;
       overflow-y: scroll;

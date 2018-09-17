@@ -116,7 +116,7 @@ class ProcessBacktrace
 
         // We remove all steps that came from inside the kreXX lib.
         foreach ($backtrace as $key => $step) {
-            if (strpos($step['file'], KREXX_DIR) !== false) {
+            if (isset($step['file']) && strpos($step['file'], KREXX_DIR) !== false) {
                 unset($backtrace[$key]);
             }
         }

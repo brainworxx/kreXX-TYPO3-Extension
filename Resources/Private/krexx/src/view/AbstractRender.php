@@ -158,10 +158,6 @@ abstract class AbstractRender implements RenderInterface
      */
     protected function renderConnector($connector)
     {
-        if (empty($connector) === true) {
-            return '';
-        }
-
         return str_replace(
             static::MARKER_CONNECTOR,
             $connector,

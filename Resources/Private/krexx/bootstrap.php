@@ -71,6 +71,7 @@ include 'src/Analyse/Callback/Iterate/ThroughLargeArray.php';
 include 'src/Analyse/Callback/Iterate/ThroughMethodAnalysis.php';
 include 'src/Analyse/Callback/Iterate/ThroughMethods.php';
 include 'src/Analyse/Callback/Iterate/ThroughProperties.php';
+include 'src/Analyse/Callback/Iterate/ThroughResourceStream.php';
 
 include 'src/Analyse/Caller/AbstractCaller.php';
 include 'src/Analyse/Caller/CallerFinder.php';

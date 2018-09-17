@@ -8,6 +8,8 @@
 - Added a jumpTo element after uncollapsing the breadcrumbs for
   better usability.
 - Added support for "\0" chars.
+- Added the count info to the traversable analysis.
+- Added meta data analysis to the stream resource.
 - The file logger writes the logfile right after the analysis is
   complete.
 - Change: Some internal renaming.
@@ -55,6 +57,8 @@
   form.
 - Bugfix: Prevent a fatal when trying to read the file time from a
   not existing file.
+- Bugfix: Prevent unnecessary width "jumping" in the Smokey Grey skin.
+- Bugfix: Resource recognition works more accurate.
 
 2.4.0
 - Added the method analysis to the recursion detection, to prevent

@@ -222,7 +222,7 @@ class Codegen
         return $this->allowCodegen;
     }
 
-        /**
+    /**
      * Setter for the reflection parameter, it also calculates the
      * toString() return value.
      *

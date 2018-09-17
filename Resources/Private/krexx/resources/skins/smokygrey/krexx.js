@@ -502,8 +502,10 @@
      *
      * @param {Element} el
      *   The element you want to focus on.
+     * @param {boolean} noHighlight
+     *   Do we need to highlight the elenemt we arejuming to?
      */
-    krexx.jumpTo = function (el) {
+    krexx.jumpTo = function (el, noHighlight) {
 
         var nests = kdt.getParents(el, '.knest');
         var container;
@@ -515,10 +517,12 @@
             kdt.addClass([nests[i].previousElementSibling], 'kopened');
         }
 
-        // Remove old highlighting.
-        kdt.removeClass('.highlight-jumpto', 'highlight-jumpto');
-        // Highlight new one.
-        kdt.addClass([el], 'highlight-jumpto');
+        if (noHighlight !== true) {
+            // Remove old highlighting.
+            kdt.removeClass('.highlight-jumpto', 'highlight-jumpto');
+            // Highlight new one.
+            kdt.addClass([el], 'highlight-jumpto');
+        }
 
         // Getting our scroll container
         container = kdt.getParents(el, '.kpayload');
@@ -791,14 +795,14 @@
                             return String.fromCharCode(parseInt(grp, 16));
                         });
                         json[prop] = decodeURI(json[prop]);
-                        html += '<tr><td>' + prop + '</td><td>' + json[prop] + '</td></tr>';
+                        html += '<tr><td class="kinfo">' + prop + '</td><td class="kdesc">' + json[prop] + '</td></tr>';
                         counter++;
                     }
                 }
             }
             if (counter === 0) {
                 // We have no data. Tell the user that there is nothing to see.
-                html = '<tr><td>No data available for this item.</td><td>Sorry.</td></tr>';
+                html = '<tr><td class="kinfo">No data available for this item.</td><td class="kdesc">Sorry.</td></tr>';
             }
 
             // Add it to the DOM.

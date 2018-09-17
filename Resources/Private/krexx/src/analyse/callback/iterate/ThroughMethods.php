@@ -61,7 +61,7 @@ class ThroughMethods extends AbstractCallback
     public function callMe()
     {
         $result = $this->dispatchStartEvent();
-        /** @var \Service\Reflection\ReflectionClass $reflectionClass */
+        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters['ref'];
 
         $commentAnalysis = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Methods');

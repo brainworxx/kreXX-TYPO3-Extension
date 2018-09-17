@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Service\Reflection;
+namespace Brainworxx\Krexx\Service\Reflection;
 
 /**
  * Added a better possibility to retrieve the object values.

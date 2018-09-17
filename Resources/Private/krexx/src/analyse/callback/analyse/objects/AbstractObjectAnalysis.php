@@ -37,7 +37,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Analyse\Model;
-use Service\Reflection\ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 
 /**
  * Abstract class for the object analysis.

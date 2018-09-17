@@ -120,9 +120,17 @@ class Routing extends AbstractRouting
         }
 
         // Resource?
-        if (is_resource($data) === true) {
+        // The is_resource can not identify closed stream resource types.
+        // And the get_resource_type() throws a warning, in case this is not a
+        // resource.
+        set_error_handler(function () {
+            // Do nothing. We need to catch a possible warning.
+        });
+        if (get_resource_type($data) !== null) {
+            restore_error_handler();
             return $this->processResource->process($model);
         }
+        restore_error_handler();
 
         // Still here? Tell the dev that we can not analyse this one.
         return $this->processOther->process($model);

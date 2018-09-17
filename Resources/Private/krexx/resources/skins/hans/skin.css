@@ -200,10 +200,14 @@ div.kwrapper {
     cursor: default;
     display: block;
     clear: both;
-    padding: 2px 0 3px 0;
+    padding: 2px 0 3px 15px;
     margin: 0 0 5px;
     background: #444444 5px center;
     position: relative;
+}
+
+.kwrapper .kel.kexpand {
+    padding-left: 0;
 }
 
 .kwrapper .kel-bg {
@@ -247,7 +251,7 @@ div.kwrapper {
 }
 
 .kwrapper .kexpand:before {
-    content: "\00a0\25B6\00a0\00a0";
+    content: "\00a0\25B6";
     font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
 
@@ -264,7 +268,7 @@ div.kwrapper {
 }
 
 .kwrapper .kopened:before {
-    content: "\00a0\25BC\00a0\00a0";
+    content: "\00a0\25BC";
     font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
 
@@ -276,7 +280,6 @@ div.kwrapper {
 .kwrapper em.ktype {
     font-style: normal;
     margin: 0 2px;
-    padding-right: 35px;
 }
 
 .kwrapper .kbg-wrapper.knormal {
@@ -447,8 +450,8 @@ div.kwrapper {
     font: 10px tahoma, verdana;
 }
 
-.kwrapper .kchild .kname,
-.kwrapper .kchild .kresetbutton {
+.kwrapper .kconfiguration .kchild .kname,
+.kwrapper .kconfiguration .kchild .kresetbutton {
     margin-left: 15px;
 }
 

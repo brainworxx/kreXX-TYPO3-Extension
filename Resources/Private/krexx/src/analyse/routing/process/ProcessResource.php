@@ -55,10 +55,29 @@ class ProcessResource extends AbstractProcess
      */
     public function process(Model $model)
     {
-        $data = get_resource_type($model->getData());
+        $resource = $model->getData();
+        $type = get_resource_type($resource);
+        $typestring = 'resource (' . $type . ')';
+        if ($type === 'stream') {
+            // Output data from the class.
+            return $this->pool->render->renderExpandableChild(
+                $model->setType('resource')
+                    ->addParameter('data', $resource)
+                    ->setNormal($typestring)
+                    ->injectCallback(
+                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughResourceStream')
+                    )
+            );
+        }
+
+        // If we are facing a closed resource, 'Unknown' is a litttle bit sparse.
+        // PHP 7.2 can provide more info by calling gettype().
+        if (version_compare(phpversion(), '7.2.0', '>=')) {
+            $typestring = gettype($resource);
+        }
         return $this->pool->render->renderSingleChild(
-            $model->setData($data)
-                ->setNormal($data)
+            $model->setData($typestring)
+                ->setNormal($typestring)
                 ->setType('resource')
         );
     }
