@@ -24,22 +24,25 @@ Main analytic function
 	:width: 678px
 	:alt: analysis of an extbase query result
 
-Logging
-^^^^^^^
+Forced logging
+^^^^^^^^^^^^^^
 
 Force kreXX to write the analysis into a logfile:
 
 .. code-block:: php
 
-	\Krexx::logging($myObject);
+	// Force kreXX to write an analysis into a log file.
+	\Krexx::log($myObject);
+	// Force kreXX to write a backtrace into a log file
+	\Krexx::logBacktrace();
+	// Force the timer output into a log file
+	\Krexx::logTimerEnd();
 
 
-Description in more detail:
+Wen using the forced logging, the following things will happen:
 
- - Set destination -> file
- - Set ajaxDetection -> false
- - Analyse the object and create a logfile
- - Reset the configuration again.
+ - Output destination is set to file by force.
+ - Ajax requests will get logged by force.
 
 
 Benchmarking

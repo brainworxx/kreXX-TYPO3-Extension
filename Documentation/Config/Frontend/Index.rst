@@ -37,6 +37,6 @@ You can change which values can be edited on the frontend. To do this, we've als
 However, the following options will never be editable on the frontend:
 
 - Output --> IP Range
-- Output --> Destination
-- Output --> Maximum files in the logfolder
+- Behavior --> Destination
+- Behavior --> Maximum files in the logfolder
 - Methods --> List of debug methods to poll for data

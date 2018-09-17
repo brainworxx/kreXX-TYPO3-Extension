@@ -14,20 +14,27 @@ Changelog
 
 3.0.0 dev
     - [Feature] Added 'is' and 'has' to the getter analysis.
-    - [Feature] Added half-asses plugin support, to replace the half-asses overwrites
+    - [Feature] Added plugin support, to replace the half-asses overwrites.
     - [Feature] Added a event dispatcher.
     - [Feature] Added deeper search for the source code getter analysis for better results.
     - [Feature] Added Aimeos shop debugger.
     - [Feature] Added a forced logger, which van be reached by \Krexx:log();
     - [Feature] Added a forced fluid logger, which van be reached by <krexx:log value={_all} />
     - [Feature] Added a jumpTo element after uncollapsing the breadcrumbs for better usability.
+    - [Feature] Added support for "\0" chars.
+    - [Feature] Added the count info to the traversable analysis.
+    - [Feature] Added meta data analysis to the stream resource.
     - [Change] Removed the old 4.5 compatibility.
+    - [Change] The file logger writes the logfile right after the analysis is complete.
     - [Change] Some internal renaming.
     - [Change] Removed the constants analysis configuration.
+    - [Change] Moved the bootstrapping to it's own file.
+    - [Change] Removed the annoying spaces from the generated DOM, for better copy-paste.
+    - [Change] Resorted the settings.
+    - [Change] Prettified the output of the Hans skin.
     - [Change] Moved the existing overwrites into plugins.
     - [Change] Used the introduced event system in the plugins when possible.
     - [Change] The file logger writes the logfile right after the analysis is complete.
-    - [Change] Moved the bootstrapping to it's own file.
     - [Bugfix] The position of the search field of the hans skin is now calculated correct when the viewport is not on top.
     - [Bugfix] The scroll container detection of the hans skin works now.
     - [Bugfix] Added help text for the arrayCountLimit.
@@ -43,9 +50,14 @@ Changelog
     - [Bugfix] Detect unset properties in classes.
     - [Bugfix] Added closing style tags to both skins
     - [Bugfix] Catch throwable in PHP 7.
-    - [Bugfix] Removed the annoying spaces from the hans template, so people can copy stuff better from the output.
     - [Bugfix] Added two missing translation keys.
     - [Bugfix] Added 'Krexx' with a capital 'K' to the caller finder pattern.
+    - [Bugfix] Bugfix: Prevent a possible fatal when analysing methods or closures, and the typehinted class for this parameter does not exist.
+    - [Bugfix] Bugfix: timer::moment() now disrespects the ajax or shell detection, and works better with the forced logging.
+    - [Bugfix] Bugfix: Prevent other js libraries from messing with the search form.
+    - [Bugfix] Bugfix: Prevent a fatal when trying to read the file time from a not existing file.
+    - [Bugfix] Bugfix: Prevent unnecessary width "jumping" in the Smokey Grey skin.
+    - [Bugfix] Bugfix: Resource recognition works more accurate.
 
 2.4.0
     - [Feature] Added the method analysis to the recursion detection, to prevent analysing the same methods over and over again.

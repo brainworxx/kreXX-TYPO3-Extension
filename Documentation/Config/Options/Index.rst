@@ -21,10 +21,11 @@ We have provided an editor for the configuration file settings:
 
 Output
 ------
+
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Option                         | Description                                                                                                                            | Possible values / example |
 +================================+========================================================================================================================================+===========================+
-| Disable output                 | Is kreXX actually active?                                                                                                              | - true                    |
+| Disable kreXX                  | Is kreXX actually active?                                                                                                              | - true                    |
 |                                |                                                                                                                                        | - false                   |
 |                                | Here you can disable kreXX on a global level without uninstalling it.                                                                  |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
@@ -32,6 +33,18 @@ Output
 |                                |                                                                                                                                        |                           |
 |                                | List of IPs who can trigger kreXX. You can do something like '192.168.1.*', but not something like '192.168.*.110'.                    |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Try to detect AJAX requests    | Shall kreXX try to detect an AJAX request?                                                                                             | - true                    |
+|                                |                                                                                                                                        | - false                   |
+|                                | If set to true, there will be no output when AJAX is detected, to prevent a js error.                                                  |                           |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+
+
+Behavior
+--------
+
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Option                         | Description                                                                                                                            | Possible values / example |
++================================+========================================================================================================================================+===========================+
 | Skin                           | You can change the CSS/HTML skin. We included the Hans and Smoky-Grey skin                                                             | - hans                    |
 |                                |                                                                                                                                        | - smoky-grey              |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
@@ -40,36 +53,33 @@ Output
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Maximum files in the logfolder | How many files should it keep? Files will only get deleted, when a new one is created.                                                 | 10                        |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Use scope analysis             | kreXX will analyse all values and methods that can be reached from the point where the analysis was called. This will automatically    | - true                    |
+|                                | overwrite existing configurations, it can be considered the "auto config mode".                                                        | - false                   |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 
-Runtime
--------
+
+Prune output
+------------
+
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Option                         | Description                                                                                                                            | Possible values / example |
 +================================+========================================================================================================================================+===========================+
-| Try to detect AJAX requests    | Shall kreXX try to detect an AJAX request?                                                                                             | - true                    |
-|                                |                                                                                                                                        | - false                   |
-|                                | If set to true, there will be no output when AJAX is detected, to prevent a js error.                                                  |                           |
+| Maximum steps in the backtrace | A backtrace tends to produce a lot of output, and browsers tend to have problems with more than 100MB output in HTML text.             | 10                        |
+|                                | Normally it is not unneccessary to go back more than 10 steps, but if you need to, you can increase this number here.                  |                           |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Maximum array size before      | Huge arrays with lots of objects or other array have the tendancy to produce a lot of output. To prevent output that a browser can not | 300                       |
+| fallback to simplified         | handel, kreXX uses a simplified array analysis. Simple values will be analysed normally, objects will only display their name, key and |                           |
+| analysis                       | type.                                                                                                                                  |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Maximum nesting level          | How deep shall we analyse objects?                                                                                                     | 5                         |
 |                                |                                                                                                                                        |                           |
 |                                | When kreXX reaches a certain level, it simply stops there and won’t go any further.                                                    |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Maximum amount of calls        | How often can you call kreXX in one run?                                                                                               | 10                        |
-|                                |                                                                                                                                        |                           |
-|                                | kreXX can generate a lot of data, and depending on your settings increasing this number might not be a good idea.                      |                           |
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Minimum amount of memory [MB]  | kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break. Unit of       | 64                        |
-|                                | measurement is MB.                                                                                                                     |                           |
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Maximum Runtime [Seconds]      | kreXX checks during the analysis how much time has elapsed since start. Here you can adjust how many seconds can pass until an         | 60                        |
-|                                | emergency break will be triggered. Unit of measurement is seconds.                                                                     |                           |
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Use scope analysis             | kreXX will analyse all values and methods that can be reached from the point where the analysis was called. This will automatically    | - true                    |
-|                                | overwrite existing configurations, it can be considered the "auto config mode".                                                        | - false                   |
-+--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+
 
 Properties
 ----------
+
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Option                         | Description                                                                                                                            | Possible values / example |
 +================================+========================================================================================================================================+===========================+
@@ -84,8 +94,10 @@ Properties
 |                                |                                                                                                                                        | - false                   |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 
+
 Methods
 -------
+
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Option                         | Description                                                                                                                            | Possible values / example |
 +================================+========================================================================================================================================+===========================+
@@ -105,15 +117,19 @@ Methods
 |                                | Comma separated list of methods. These methods are called without parameters. They also might do stuff which might be unwanted.        |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 
-Prune output
-------------
+Emergency stop
+--------------
+
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Option                         | Description                                                                                                                            | Possible values / example |
 +================================+========================================================================================================================================+===========================+
-| Maximum steps in the backtrace | A backtrace tends to produce a lot of output, and browsers tend to have problems with more than 100MB output in HTML text.             | 10                        |
-|                                | Normally it is not unneccessary to go back more than 10 steps, but if you need to, you can increase this number here.                  |                           |
+| Maximum amount of calls        | How often can you call kreXX in one run?                                                                                               | 10                        |
+|                                |                                                                                                                                        |                           |
+|                                | kreXX can generate a lot of data, and depending on your settings increasing this number might not be a good idea.                      |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Maximum array size before      | Huge arrays with lots of objects or other array have the tendancy to produce a lot of output. To prevent output that a browser can not | 300                       |
-| fallback to simplified         | handel, kreXX uses a simplified array analysis. Simple values will be analysed normally, objects will only display their name, key and |                           |
-| analysis                       | type.                                                                                                                                  |                           |
+| Minimum amount of memory [MB]  | kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break. Unit of       | 64                        |
+|                                | measurement is MB.                                                                                                                     |                           |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Maximum Runtime [Seconds]      | kreXX checks during the analysis how much time has elapsed since start. Here you can adjust how many seconds can pass until an         | 60                        |
+|                                | emergency break will be triggered. Unit of measurement is seconds.                                                                     |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+

@@ -14,13 +14,13 @@ Little helpers
 kreXX can produce a lot of output. And when you are on the 5'th level of the 7'th object, things will get confusing and hard to read.
 To minimize confusion, the kreXX output offers two little helpers:
 
-Hide-Everything-Else
---------------------
+Code breadcrumbs
+----------------
 
 Modern frameworks tend to have complicated objects.
 Analysing them with kreXX will then produce a lot of output. And the values you are looking for might be buried in there somewhere.
 
-The Hide-Everything-Else function does exactly this: It hides all the other values, to make the output more comprehensible.
+The code breadcrumbs function does exactly this: It hides all the other values, to make the output more comprehensible.
 A click on the arrow symbol will hide all other values, except the value itself and it's child-values.
 Another click on will reset everything.
 

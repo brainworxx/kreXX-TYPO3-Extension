@@ -32,6 +32,6 @@ If you want to debug Ajax or CLI requests, it is a good idea to use the followin
 
 Logging
 ^^^^^^^
-The logging is documented herre: :ref:`logging`. kreXX will generate one output file for every request.
+The logging is documented here: :ref:`logging`. kreXX will generate one output file for every request.
 
 |
