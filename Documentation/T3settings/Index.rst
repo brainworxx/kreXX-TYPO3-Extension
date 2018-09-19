@@ -28,9 +28,9 @@ Typoscript
 
 .. code-block:: typoscript
 
-	# Activeate the error handler to show on the frontend want is going on.
+	# Activate the error handler to show on the frontend want is going on.
 	config.contentObjectExceptionHandler = 0
-	# Deacivaate the frontend cache.
+	# Deactivate the frontend cache.
 	config.no_cache = 1
 
 Disabling the frontend cache lets you see your changes right away, but it does have it's drawbacks:

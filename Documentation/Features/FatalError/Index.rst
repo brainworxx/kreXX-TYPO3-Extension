@@ -43,40 +43,9 @@ When a fatal error occurs, the only way to actually do something is the shutdown
 Since php won't do this, kreXX will have to keep track of the backtrace. But by doing this, it will slow down your system to the extreme. This is why you will have to activate the handler.
 
 
-There are to ways of doing this:
-
-Activation in the php code
---------------------------
-
-This is the most efficient way to activate the handler, because is it only active where it is needed. The slowdown will be minimal.
-
 .. code-block:: php
 
 	// register the fatal error handler
 	\kreXX::registerFatal();
 	// unregister the fatal error handler
 	\kreXX::unregisterFatal();
-
-
-Activation in the settings
---------------------------
-
-When it is activated in the settings (cookie or file settings), the handler will be registered by kreXX as soon as krexx is included into TYPO3 (which is very early).
-This will slow down your system very efficiently, so use this only when you absolutely have to.
-
-|
-
-.. figure:: ../../Images/FatalError/activate_local.png
-	:width: 887px
-	:alt: kreXX fatal error handler
-
-	Activate the fatal error handler via your local cookie settings.
-
-|
-|
-
-.. figure:: ../../Images/FatalError/activate_global.png
-	:width: 613px
-	:alt: kreXX fatal error handler
-
-	Activate it globally in your typo3 installation in the configuration editor.
