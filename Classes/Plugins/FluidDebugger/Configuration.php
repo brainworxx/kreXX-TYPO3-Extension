@@ -51,7 +51,7 @@ class Configuration implements PluginConfigInterface
      */
     public static function getName()
     {
-        return 'Fluid code generation';
+        return 'Fluid debugger';
     }
 
     /**
