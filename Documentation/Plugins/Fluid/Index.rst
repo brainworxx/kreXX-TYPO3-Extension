@@ -9,8 +9,8 @@
 .. _fluid:
 
 
-Fluid code generation
-=====================
+Fluid debugger
+==============
 
 
 kreXX does not only work in PHP. We have added a debug viewhelper for fluid.
