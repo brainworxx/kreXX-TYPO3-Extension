@@ -66,9 +66,7 @@ kreXX Debugger
 	Introduction/Index
 	UsagePhp/Index
 	Plugins/Index
-	UsageFluid/Index
-	Changelog/Index
 	Features/Index
 	Config/Index
 	T3settings/Index
-
+	Changelog/Index
