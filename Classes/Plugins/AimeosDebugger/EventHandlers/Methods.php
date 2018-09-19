@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers;
+namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Resolving Aimeos magical decorator class methods.
  *
- * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers
+ * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
 class Methods implements EventHandlerInterface
 {
@@ -144,7 +144,7 @@ class Methods implements EventHandlerInterface
                     ->setHelpid('aimeosDecoratorsInfo')
                     ->injectCallback(
                         $this->pool->createClass(
-                            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\Callbacks\\ThroughMethods'
+                            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Callbacks\\ThroughMethods'
                         )
                     )
             );
@@ -161,7 +161,7 @@ class Methods implements EventHandlerInterface
                     ->addParameter('data', $allReceivers)
                     ->injectCallback(
                         $this->pool->createClass(
-                            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\Callbacks\\ThroughClassList'
+                            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Callbacks\\ThroughClassList'
                         )
                     )
             );

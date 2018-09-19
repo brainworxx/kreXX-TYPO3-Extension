@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers;
+namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
@@ -43,7 +43,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * Resolving the Aimeos getter:
  * $this->values[$this->prefix . 'somekey']
  *
- * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers
+ * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  * @event
  *
  * @uses array normalGetter

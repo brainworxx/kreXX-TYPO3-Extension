@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers;
+namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
@@ -44,7 +44,7 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
  *
  * @event Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::callMe::start
  *
- * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers
+ * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
 class Properties extends AbstractCallback implements EventHandlerInterface
 {

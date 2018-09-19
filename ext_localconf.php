@@ -91,7 +91,7 @@ $boot = function ($_EXTKEY) {
 
     // Register the Aimoes Magic plugin.
     \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
-        'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
+        'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Configuration'
     );
 
     // Check if we have thze Aimeos shop available.
@@ -99,7 +99,7 @@ $boot = function ($_EXTKEY) {
     // it is required via composer.
     if (class_exists('Aimeos\\MShop\\Factory') === true) {
         \Brainworxx\Krexx\Service\Plugin\SettingsGetter::activatePlugin(
-            'Brainworxx\Includekrexx\Plugins\AimeosMagic\\Configuration'
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Configuration'
         );
     }
 

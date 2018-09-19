@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\AimeosMagic\Callbacks;
+namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 
@@ -45,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
  * @event
  *   Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe::start
  *
- * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\Callbacks
+ * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks
  */
 class ThroughClassList extends AbstractCallback
 {

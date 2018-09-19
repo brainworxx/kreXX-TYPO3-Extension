@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\AimeosMagic;
+namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger;
 
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -70,32 +70,32 @@ class Configuration implements PluginConfigInterface
         // Resolving the __get().
         Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::callMe::start',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\Properties'
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\EventHandlers\\Properties'
         );
 
         // Resolving the getter that get their values from an private array.
         Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::retrievePropertyValue::resolving',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\Getter'
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\EventHandlers\\Getter'
         );
 
         // Resolving the magical class methods of the decorator pattern.
         Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\Methods'
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\EventHandlers\\Methods'
         );
 
         // Resolving the magical factory for the view helpers (not to be confused
         // with fluid viewhelpers).
         Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\ViewFactory'
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\EventHandlers\\ViewFactory'
         );
 
         // Replacing the magical factory name in the method analysis.
         Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods::callMe::end',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\EventHandlers\\ThroughMethods'
+            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\EventHandlers\\ThroughMethods'
         );
 
         // No __toString for the db statement class.

@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers;
+namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
@@ -57,7 +57,7 @@ use Aimeos\MW\View\Iface;
  * @uses object $data
  *   The object we ara currently analysing.
  *
- * @package Brainworxx\Includekrexx\Plugins\AimeosMagic\EventHandlers
+ * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
 class ViewFactory implements EventHandlerInterface
 {
@@ -160,7 +160,7 @@ class ViewFactory implements EventHandlerInterface
                         ->setHelpid('aimeosViewExisting')
                         ->injectCallback(
                             $this->pool->createClass(
-                                'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\Callbacks\\ThroughClassList'
+                                'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Callbacks\\ThroughClassList'
                             )
                         )
                 );
@@ -240,7 +240,7 @@ class ViewFactory implements EventHandlerInterface
                 ->setHelpid('aimeosViewInfo')
                 ->injectCallback(
                     $this->pool->createClass(
-                        'Brainworxx\\Includekrexx\\Plugins\\AimeosMagic\\Callbacks\\ThroughMethods'
+                        'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Callbacks\\ThroughMethods'
                     )
                 )
         );
