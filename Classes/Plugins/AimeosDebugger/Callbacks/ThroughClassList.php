@@ -50,6 +50,11 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 class ThroughClassList extends AbstractCallback
 {
     /**
+     * {@inheritdoc}
+     */
+    protected static $eventPrefix = 'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Callbacks\\ThroughClassList';
+
+    /**
      * Dumps the receiver classes.
      *
      * @return string
