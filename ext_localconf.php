@@ -36,8 +36,8 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-$boot = function ($_EXTKEY) {
-    $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY);
+$boot = function () {
+    $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx');
 
     // We load the kreXX library.
     // The class_exists triggers the composer autoloading, if available.

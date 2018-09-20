@@ -38,7 +38,7 @@ if (!defined('TYPO3_MODE')) {
 
 // Register BE module.
 if (TYPO3_MODE === 'BE') {
-    $boot = function ($_EXTKEY) {
+    $boot = function () {
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
             'Brainworxx.Includekrexx',
             'tools',
@@ -54,11 +54,11 @@ if (TYPO3_MODE === 'BE') {
             array(
                 'access' => 'user,group',
                 'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
-                'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang.xml',
+                'labels' => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf',
             )
         );
     };
 
-    $boot($_EXTKEY);
+    $boot();
     unset($boot);
 }
