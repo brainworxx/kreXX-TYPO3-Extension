@@ -94,10 +94,12 @@ $boot = function () {
         'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Configuration'
     );
 
-    // Check if we have thze Aimeos shop available.
+    // Check if we have the Aimeos shop available.
     // We can not rely on the extention manager to know about the shop, in case
     // it is required via composer.
-    if (class_exists('Aimeos\\MShop\\Factory') === true) {
+    if (class_exists('Aimeos\\MShop\\Factory') === true ||
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('aimeos')
+    ) {
         \Brainworxx\Krexx\Service\Plugin\SettingsGetter::activatePlugin(
             'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Configuration'
         );
