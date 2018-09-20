@@ -46,6 +46,12 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
  */
 abstract class AbstractObjectAnalysis extends AbstractCallback
 {
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\AbstractObjectAnalysis';
+    
     /**
      * Here we store all relevant data.
      *

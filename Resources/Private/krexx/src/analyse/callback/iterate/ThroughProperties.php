@@ -45,13 +45,17 @@ use Brainworxx\Krexx\Service\Misc\File;
  *
  * @uses array data
  *   Array of \reflectionProperties.
- * @uses \Service\Reflection\ReflectionClass ref
+ * @uses ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  * @uses object orgObject
  *   The original object we are analysing
  */
 class ThroughProperties extends AbstractCallback
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties';
 
     /**
      * The file service, used to read and write files.
@@ -86,7 +90,7 @@ class ThroughProperties extends AbstractCallback
 
         // I need to preprocess them, since I do not want to render a
         // reflection property.
-        /** @var \Service\Reflection\ReflectionClass $ref */
+        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters['ref'];
 
         foreach ($this->parameters['data'] as $refProperty) {

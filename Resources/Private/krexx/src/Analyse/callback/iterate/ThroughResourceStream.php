@@ -47,6 +47,11 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 class ThroughResourceStream extends AbstractCallback
 {
     /**
+     * {@inheritdoc}
+     */
+    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughResourceStream';
+
+    /**
      * Renders the info of a resource.
      *
      * @return string

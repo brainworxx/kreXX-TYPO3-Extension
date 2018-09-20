@@ -45,12 +45,14 @@ use Brainworxx\Krexx\Service\Config\Fallback;
  *
  * @uses array data
  *   The configuration section we are rendering
- * @uses array source
- *   The info of the source if the configuration
- *   fallback, file, cookie.
  */
 class ConfigSection extends AbstractCallback
 {
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\ConfigSection';
 
     /**
      * Renders each section of the footer.

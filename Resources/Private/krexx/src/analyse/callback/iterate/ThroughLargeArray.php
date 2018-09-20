@@ -60,6 +60,11 @@ use Brainworxx\Krexx\Analyse\Model;
 class ThroughLargeArray extends AbstractCallback
 {
     /**
+     * {@inheritdoc}
+     */
+    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray';
+
+    /**
      * Renders the expendable around the array analysis.
      *
      * @return string

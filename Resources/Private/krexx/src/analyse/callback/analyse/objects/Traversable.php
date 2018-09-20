@@ -51,6 +51,11 @@ use Brainworxx\Krexx\Service\Config\Fallback;
 class Traversable extends AbstractObjectAnalysis
 {
     /**
+     * {@inheritdoc}
+     */
+    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable';
+
+    /**
      * Checks runtime, memory and nesting level. Then trigger the actual analysis.
      *
      * @return string

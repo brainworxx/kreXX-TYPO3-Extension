@@ -51,6 +51,11 @@ use Brainworxx\Krexx\Service\Config\Fallback;
 class ThroughConfig extends AbstractCallback
 {
     /**
+     * {@inheritdoc}
+     */
+    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConfig';
+
+    /**
      * Renders whole configuration.
      *
      * @return string

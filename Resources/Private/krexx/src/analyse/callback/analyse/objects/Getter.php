@@ -47,6 +47,11 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 class Getter extends AbstractObjectAnalysis
 {
     /**
+     * {@inheritdoc}
+     */
+    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Getter';
+
+    /**
      * Dump the possible result of all getter methods
      *
      * @return string

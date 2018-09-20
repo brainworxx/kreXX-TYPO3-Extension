@@ -49,6 +49,11 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 class BacktraceStep extends AbstractCallback
 {
 
+    /**
+     * {@inheritdoc}
+     */
+    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep';
+
     const STEP_DATA_FILE = 'file';
     const STEP_DATA_LINE = 'line';
     const STEP_DATA_FUNCTION = 'function';

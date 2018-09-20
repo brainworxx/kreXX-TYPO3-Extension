@@ -44,6 +44,12 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 abstract class AbstractCallback
 {
+    /**
+     * We use this as the string prefix for the event name.
+     *
+     * @var string
+     */
+    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\AbstractCallback';
 
     /**
      * Here we store all relevant data.
@@ -115,7 +121,7 @@ abstract class AbstractCallback
     protected function dispatchStartEvent()
     {
         return $this->pool->eventService->dispatch(
-            get_class($this) . '::callMe::start',
+            static::$eventPrefix . '::callMe::start',
             $this
         );
     }
@@ -134,7 +140,7 @@ abstract class AbstractCallback
     protected function dispatchEventWithModel($name, Model $model)
     {
         $this->pool->eventService->dispatch(
-            get_class($this) . '::' . $name,
+            static::$eventPrefix . '::' . $name,
             $this,
             $model
         );
@@ -158,6 +164,13 @@ abstract class AbstractCallback
      */
     protected function isPropertyNameNormal($propName)
     {
-        return (bool) preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $propName);
+        static $cache = array();
+
+        if (isset($cache[$propName])) {
+            return $cache[$propName];
+        }
+        $cache[$propName] = (bool) preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $propName);
+
+        return $cache[$propName];
     }
 }

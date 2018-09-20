@@ -63,6 +63,10 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class ThroughGetter extends AbstractCallback
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter';
 
     /**
      * Here we memorize how deep we are inside the current deep analysis.

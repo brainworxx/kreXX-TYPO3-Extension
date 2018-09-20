@@ -51,6 +51,11 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 class Objects extends AbstractCallback
 {
     /**
+     * {@inheritdoc}
+     */
+    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects';
+
+    /**
      * Starts the dump of an object.
      *
      * @throws \ReflectionException
