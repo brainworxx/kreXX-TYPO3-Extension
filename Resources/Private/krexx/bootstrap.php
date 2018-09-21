@@ -133,6 +133,7 @@ include 'src/Service/Flow/Recursion.php';
 include 'src/Service/Misc/Encoding.php';
 include 'src/Service/Misc/File.php';
 include 'src/Service/Misc/Registry.php';
+include 'src/Service/Misc/FileinfoDummy.php';
 
 include 'src/Service/Reflection/UndeclaredProperty.php';
 include 'src/Service/Reflection/ReflectionClass.php';

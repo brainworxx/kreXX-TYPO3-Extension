@@ -47,14 +47,78 @@ class ProcessString extends AbstractProcess
     /**
      * The buffer info class. We use it to get the mimetype from a string.
      *
-     * @var \finfo
+     * @var \finfo|\Brainworxx\Krexx\Service\Misc\FileinfoDummy
      */
     protected $bufferInfo;
 
     public function __construct(Pool $pool)
     {
         parent::__construct($pool);
-        $this->bufferInfo = new \finfo(FILEINFO_MIME);
+
+        // Init the fileinfo class.
+        if (class_exists('\\finfo', false) === true) {
+            $this->bufferInfo = new \finfo(FILEINFO_MIME);
+        } else {
+            // Use a "polyfill" dummy, tell the dev that we have a problem.
+            $this->bufferInfo = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\FileinfoDummy');
+            $pool->messages->addMessage('fileinfoNotInstalled');
+        }
+
+        // Register some namspaced cheap polifills, in case the mb-string
+        // extension is not available
+        if (function_exists('mb_detect_encoding') === false) {
+
+            /**
+             * Cheap dummy "polyfill" for mb_detect_encoding
+             *
+             * @param $string
+             *   Will not get used.
+             *
+             * @return string
+             *   Always 'polyfill'.
+             */
+            function mb_detect_encoding($string)
+            {
+                return 'polyfill';
+            }
+
+            /**
+             * Cheap "polyfill" for mb_strlen.
+             *
+             * @param $string
+             *   The sting we want to measure.
+             * @param $encoding
+             *   Will not get used.
+             *
+             * @return int
+             *   The length, according to strlen();
+             */
+            function mb_strlen($string, $encoding)
+            {
+                return strlen($string);
+            }
+
+            /**
+             * Cheap "polyfill" for mb_substr.
+             *
+             * @param $string
+             *   The original string.
+             * @param $start
+             *   The start.
+             * @param $length
+             *   The length we want
+             *
+             * @return string
+             *   The substring, according to substr().
+             */
+            function mb_substr($string, $start, $length)
+            {
+                return substr($string, $start, $length);
+            }
+
+            // Tell the dev, that we have a problem.
+            $pool->messages->addMessage('mbstringNotInstalled');
+        }
     }
 
     /**
@@ -91,8 +155,11 @@ class ProcessString extends AbstractProcess
             $model->setIsCallback(true);
         }
 
-        // Getting mimetype from the string.
-        $mimetype = $this->bufferInfo->buffer($data);
+        $mimetype = '';
+        if ($length > 20) {
+            // Getting mime type from the string.
+            $mimetype = $this->bufferInfo->buffer($data);
+        }
 
         // Check, if we are handling large string, and if we need to use a
         // preview (which we call "extra").

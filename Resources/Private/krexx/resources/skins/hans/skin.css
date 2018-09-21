@@ -72,7 +72,7 @@ div.kwrapper {
     color: inherit;
     border: none;
     text-align: left;
-    line-height: normal;
+    line-height: 15px;
     width: unset;
 }
 
@@ -280,6 +280,11 @@ div.kwrapper {
 .kwrapper em.ktype {
     font-style: normal;
     margin: 0 2px;
+    padding-right: 35px;
+    padding-left: 10px;
+}
+.kwrapper em.ktype.callback {
+    padding-right: 10px;
 }
 
 .kwrapper .kbg-wrapper.knormal {
@@ -305,8 +310,9 @@ div.kwrapper {
 .kwrapper .kmessage {
     background-color: #fffda5;
     list-style: outside none none;
-    padding: 4px 5px 3px;
+    padding: 4px 5px 5px;
     margin: 0;
+    font-size: 14px;
 }
 
 .kwrapper .kmessage:before {
@@ -315,6 +321,7 @@ div.kwrapper {
     background-color: #ffcd00;
     border: 1px solid black;
     font-size: small;
+    margin-right: 5px;
 }
 
 .kwrapper .kpreview {
@@ -390,8 +397,8 @@ div.kwrapper {
     color: #b1b1b1;
     font: bold 12px tahoma, verdana;
     padding-left: 5px;
-    position: absolute;
-    top: 9px;
+    line-height: 22px;
+    padding-right: 15px;
 }
 
 .kwrapper .call {
@@ -886,10 +893,15 @@ div.kwrapper {
     font-weight: bolder;
 }
 
+.kwrapper .khelp table {
+    width: 100%;
+}
 .kwrapper .khelp .khelprow td {
     vertical-align: top;
     padding: 2px 5px;
     border: 1px solid rgba(0, 0, 0, 0.1);
+    line-height: normal;
+    font-size: 13px;
 }
 
 .kwrapper .khelp .khelprow .khelptitle {

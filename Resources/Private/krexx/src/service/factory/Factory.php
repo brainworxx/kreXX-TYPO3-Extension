@@ -68,6 +68,7 @@ class Factory
     {
         // Check for possible overwrite.
         if (isset($this->rewrite[$classname]) === true) {
+
             $classname = $this->rewrite[$classname];
         }
 

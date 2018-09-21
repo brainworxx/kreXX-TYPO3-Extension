@@ -19,6 +19,7 @@
   better copy-paste.
 - Change: Resorted the settings.
 - Change: Prettified the output of the Hans skin.
+- Change: Mime type analysis threshold is now 20 chars for strings.
 - Bugfix: The position of the search field of the hans skin is now
   calculated correct when the viewport is not on top.
 - Bugfix: The scroll container detection of the hans skin works
@@ -59,6 +60,8 @@
   not existing file.
 - Bugfix: Prevent unnecessary width "jumping" in the Smokey Grey skin.
 - Bugfix: Resource recognition works more accurate.
+- Bugfix: Fixed a fatal, when the fileinfo extension is not installed.
+- Bugfix: Fixed a fatal, when the mb-string extension is not installed.
 
 2.4.0
 - Added the method analysis to the recursion detection, to prevent
