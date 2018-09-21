@@ -34,6 +34,7 @@ Changelog
     - [Change] Prettified the output of the Hans skin.
     - [Change] Moved the existing overwrites into plugins.
     - [Change] Used the introduced event system in the plugins when possible.
+    - [Change] Mime type analysis threshold is now 20 chars for strings.
     - [Change] The file logger writes the logfile right after the analysis is complete.
     - [Bugfix] The position of the search field of the hans skin is now calculated correct when the viewport is not on top.
     - [Bugfix] The scroll container detection of the hans skin works now.
@@ -52,12 +53,14 @@ Changelog
     - [Bugfix] Catch throwable in PHP 7.
     - [Bugfix] Added two missing translation keys.
     - [Bugfix] Added 'Krexx' with a capital 'K' to the caller finder pattern.
-    - [Bugfix] Bugfix: Prevent a possible fatal when analysing methods or closures, and the typehinted class for this parameter does not exist.
-    - [Bugfix] Bugfix: timer::moment() now disrespects the ajax or shell detection, and works better with the forced logging.
-    - [Bugfix] Bugfix: Prevent other js libraries from messing with the search form.
-    - [Bugfix] Bugfix: Prevent a fatal when trying to read the file time from a not existing file.
-    - [Bugfix] Bugfix: Prevent unnecessary width "jumping" in the Smokey Grey skin.
-    - [Bugfix] Bugfix: Resource recognition works more accurate.
+    - [Bugfix] Prevent a possible fatal when analysing methods or closures, and the typehinted class for this parameter does not exist.
+    - [Bugfix] timer::moment() now disrespects the ajax or shell detection, and works better with the forced logging.
+    - [Bugfix] Prevent other js libraries from messing with the search form.
+    - [Bugfix] Prevent a fatal when trying to read the file time from a not existing file.
+    - [Bugfix] Prevent unnecessary width "jumping" in the Smokey Grey skin.
+    - [Bugfix] Resource recognition works more accurate.
+    - [Bugfix] Fixed a fatal, when the fileinfo extension is not installed.
+    - [Bugfix] Fixed a fatal, when the mb-string extension is not installed.
 
 2.4.0
     - [Feature] Added the method analysis to the recursion detection, to prevent analysing the same methods over and over again.
