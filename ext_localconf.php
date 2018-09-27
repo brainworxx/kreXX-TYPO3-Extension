@@ -57,20 +57,19 @@ $boot = function () {
     }
 
     // Register and activate the TYPO3 plugin.
-    \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
+    \Brainworxx\Krexx\Service\Plugin\Registration::register(
         'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Configuration'
     );
-    \Brainworxx\Krexx\Service\Plugin\SettingsGetter::activatePlugin(
+    \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin(
         'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Configuration'
     );
 
     // Register the fluid plugins.
     // We activate them later in the viewhelper.
-    \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
+    \Brainworxx\Krexx\Service\Plugin\Registration::register(
         'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'
     );
-
-    \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
+    \Brainworxx\Krexx\Service\Plugin\Registration::register(
         'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
     );
 
@@ -90,22 +89,20 @@ $boot = function () {
     }
 
     // Register the Aimoes Magic plugin.
-    \Brainworxx\Krexx\Service\Plugin\SettingsGetter::register(
+    \Brainworxx\Krexx\Service\Plugin\Registration::register(
         'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Configuration'
     );
 
     // Check if we have the Aimeos shop available.
-    // We can not rely on the extention manager to know about the shop, in case
-    // it is required via composer.
     if (class_exists('Aimeos\\MShop\\Factory') === true ||
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('aimeos')
     ) {
-        \Brainworxx\Krexx\Service\Plugin\SettingsGetter::activatePlugin(
+        \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin(
             'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Configuration'
         );
     }
 
 };
 
-$boot($_EXTKEY);
+$boot();
 unset($boot);
