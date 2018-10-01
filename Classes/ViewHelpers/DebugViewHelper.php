@@ -102,6 +102,10 @@ class DebugViewHelper extends AbstractViewHelper
             'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
         );
 
+        if (get_class($this) === 'Tx_Includekrexx_ViewHelpers_DebugViewHelper') {
+            // Tell the dev to change his namespace.
+            \Krexx::$pool->messages->addMessage('t3LegacyNamespace');
+        }
         $this->analysis();
 
         Registration::deactivatePlugin(

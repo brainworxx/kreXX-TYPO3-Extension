@@ -32,8 +32,6 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Krexx\Service\Factory\Pool;
-
 /**
  * Legacy debug viewhelper.
  *
@@ -44,11 +42,6 @@ class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Brainworxx\Includekrex
 {
     public function render()
     {
-        Pool::createPool();
-
-        // Tell the dev to change his namespace.
-        Krexx::$pool->messages->addMessage('t3LegacyNamespace');
-
         // Let the parent do it's magic.
         return parent::render();
     }
