@@ -490,7 +490,6 @@
             search.style.top = '';
             viewportOffset = search.getBoundingClientRect();
             search.style.position = 'fixed';
-            console.log(viewportOffset.top);
             search.style.top = viewportOffset.top + 'px';
         }
         else {
@@ -561,50 +560,51 @@
         }
 
         // Getting our scroll container
-        container = document.querySelectorAll('.kfatalwrapper-outer');
+        container = document.querySelector('.kfatalwrapper-outer');
 
-        if (container.length === 0) {
+        if (container === null) {
             // Normal scrolling
-            container = document.querySelectorAll('html');
-            if (container[0].scrollHeight === container[0].clientHeight) {
-                container = document.querySelectorAll('body');
+            container = document.querySelector('html');
+            // The html container may not accept any scrollTop value.
+            ++container.scrollTop;
+            if (container.scrollTop === 0 || container.scrollHeight <= container.clientHeight) {
+                container = document.querySelector('body');
             }
-            destination = el.getBoundingClientRect().top + container[0].scrollTop - 50;
+            --container.scrollTop;
+            destination = el.getBoundingClientRect().top + container.scrollTop - 50;
         }
         else {
             // Fatal Error scrolling.
-            destination = el.getBoundingClientRect().top - container[0].getBoundingClientRect().top + container[0].scrollTop - 50;
+            destination = el.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop - 50;
         }
 
-        var diff = Math.abs(container[0].scrollTop - destination);
+        var diff = Math.abs(container.scrollTop - destination);
+        var step;
 
-        if (container.length > 0) {
-            var step;
-
-            if (container[0].scrollTop < destination) {
-                // Forward.
-                step = Math.round(diff / 12);
-            }
-            else {
-                // Backward.
-                step = Math.round(diff / 12) * -1;
-            }
-
-            // We stop scrolling, since we have a new target;
-            clearInterval(interval);
-            // We also need to check if the setting of the new value was successful.
-            var lastValue = container[0].scrollTop;
-            var interval = setInterval(function () {
-                container[0].scrollTop += step;
-                if (Math.abs(container[0].scrollTop - destination) <= Math.abs(step) || container[0].scrollTop === lastValue) {
-                    // We are here now, the next step would take us too far.
-                    // So we jump there right now and then clear the interval.
-                    container[0].scrollTop = destination;
-                    clearInterval(interval);
-                }
-                lastValue = container[0].scrollTop;
-            }, 1);
+        // Getting the direction
+        if (container.scrollTop < destination) {
+            // Forward.
+            step = Math.round(diff / 12);
         }
+        else {
+            // Backward.
+            step = Math.round(diff / 12) * -1;
+        }
+
+        // We also need to check if the setting of the new value was successful.
+        var lastValue = container.scrollTop;
+        var interval = setInterval(function () {
+
+            container.scrollTop += step;
+            if (Math.abs(container.scrollTop - destination) <= Math.abs(step) || container.scrollTop === lastValue) {
+                // We are here now, the next step would take us too far.
+                // So we jump there right now and then clear the interval.
+                container.scrollTop = destination;
+                clearInterval(interval);
+            }
+            lastValue = container.scrollTop;
+        }, 1);
+
     };
 
     /**

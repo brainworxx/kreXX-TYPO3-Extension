@@ -61,6 +61,7 @@ Changelog
     - [Bugfix] Resource recognition works more accurate.
     - [Bugfix] Fixed a fatal, when the fileinfo extension is not installed.
     - [Bugfix] Fixed a fatal, when the mb-string extension is not installed.
+    - [Bugfix] The search of the Hans skin scrolls now more reliably.
 
 2.4.0
     - [Feature] Added the method analysis to the recursion detection, to prevent analysing the same methods over and over again.

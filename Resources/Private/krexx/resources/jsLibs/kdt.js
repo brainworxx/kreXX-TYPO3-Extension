@@ -840,9 +840,14 @@
         else {
             // Reset the button, since we are un-collapsing nodes here.
             kdt.removeClass(wrapper.querySelectorAll('.kcollapsed'), 'kcollapsed');
-            // Move the original element back into the viewport.
-            kdt.krexx.jumpTo(element, true);
         }
+
+        setTimeout(
+            function(){
+                // Move the element into the viewport.
+                kdt.krexx.jumpTo(element, true);
+            }, 100
+        );
     };
 
     /**
