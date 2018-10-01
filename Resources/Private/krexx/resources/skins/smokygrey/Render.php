@@ -69,13 +69,11 @@ class Render extends \Brainworxx\Krexx\View\Render
         );
     }
 
-
     /**
      * {@inheritDoc}
      */
     public function renderExpandableChild(Model $model, $isExpanded = false)
     {
-
         // Check for emergency break.
         if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
             return '';

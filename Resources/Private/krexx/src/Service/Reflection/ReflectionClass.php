@@ -51,7 +51,7 @@ class ReflectionClass extends \ReflectionClass
     /**
      * The object we are currently analysing.
      *
-     * @var mixed
+     * @var object
      */
     protected $data;
 
@@ -119,7 +119,7 @@ class ReflectionClass extends \ReflectionClass
     /**
      * Get the instance, from which this reflection was created.
      *
-     * @return mixed
+     * @return object
      */
     public function getData()
     {

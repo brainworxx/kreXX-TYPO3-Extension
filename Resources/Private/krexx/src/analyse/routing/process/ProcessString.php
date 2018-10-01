@@ -93,7 +93,7 @@ class ProcessString extends AbstractProcess
              * @return int
              *   The length, according to strlen();
              */
-            function mb_strlen($string, $encoding)
+            function mb_strlen($string, $encoding = null)
             {
                 return strlen($string);
             }

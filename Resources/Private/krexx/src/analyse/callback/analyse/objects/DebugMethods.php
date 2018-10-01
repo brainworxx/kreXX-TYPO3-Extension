@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 
 /**
  * Poll all configured debug methods of a class.
@@ -45,7 +46,9 @@ use Brainworxx\Krexx\Service\Config\Fallback;
  *
  * @uses mixed data
  *   The class we are currently analysing.
- * @uses \ReflectionClass ref
+ * @uses string name
+ *   The name of the object we are analysing.
+ * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
 class DebugMethods extends AbstractObjectAnalysis
@@ -98,10 +101,11 @@ class DebugMethods extends AbstractObjectAnalysis
                 // Reactivate whatever error handling we had previously.
                 restore_error_handler();
 
+                // We ignore NULL values, as well as the exceptions from above.
                 if (isset($result) === true) {
                     $output .= $this->pool->render->renderExpandableChild(
                         $this->dispatchEventWithModel(
-                            'analysisEnd',
+                            $funcName,
                             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                                 ->setName($funcName)
                                 ->setType('debug method')
@@ -129,13 +133,13 @@ class DebugMethods extends AbstractObjectAnalysis
      *   The class that we are currently analysing.
      * @param string $funcName
      *   The name of the function that we want to call.
-     * @param \ReflectionClass $reflectionClass
+     * @param ReflectionClass $reflectionClass
      *   The reflection of the class that we are currently analysing.
      *
      * @return boolean
      *   Whether or not we are allowed toi access this method.
      */
-    protected function checkIfAccessible($data, $funcName, \ReflectionClass $reflectionClass)
+    protected function checkIfAccessible($data, $funcName, ReflectionClass $reflectionClass)
     {
         // We need to check if:
         // 1.) Method exists. It may be protected though.
