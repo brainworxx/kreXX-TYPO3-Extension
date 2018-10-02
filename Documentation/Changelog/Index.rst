@@ -12,7 +12,7 @@
 Changelog
 =============================================================
 
-3.0.0 dev
+3.0.0
     - [Feature] Added 'is' and 'has' to the getter analysis.
     - [Feature] Added plugin support, to replace the half-asses overwrites.
     - [Feature] Added a event dispatcher.
