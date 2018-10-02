@@ -58,6 +58,80 @@ class Encoding
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
+
+        // Register some namspaced cheap polifills, in case the mb-string
+        // extension is not available
+        if (function_exists('mb_detect_encoding') === false) {
+
+            /**
+             * Cheap dummy "polyfill" for mb_detect_encoding
+             *
+             * @param $string
+             *   Will not get used.
+             * @param $strict
+             *   Will not get used.
+             *
+             * @return string
+             *   Always 'polyfill'.
+             */
+            function mb_detect_encoding($string = '', $strict = '')
+            {
+                return 'polyfill';
+            }
+
+            /**
+             * Cheap "polyfill" for mb_strlen.
+             *
+             * @param $string
+             *   The sting we want to measure.
+             * @param $encoding
+             *   Will not get used.
+             *
+             * @return int
+             *   The length, according to strlen();
+             */
+            function mb_strlen($string, $encoding = null)
+            {
+                return strlen($string);
+            }
+
+            /**
+             * Cheap "polyfill" for mb_substr.
+             *
+             * @param $string
+             *   The original string.
+             * @param $start
+             *   The start.
+             * @param $length
+             *   The length we want.
+             *
+             * @return string
+             *   The substring, according to substr().
+             */
+            function mb_substr($string, $start, $length)
+            {
+                return substr($string, $start, $length);
+            }
+
+            /**
+             * The last cheap "polyfill". We only use this for displaying broken
+             * strings,
+             *
+             * @param string $string
+             * @param string $toEncoding
+             * @param string $fromEncoding
+             *
+             * @return string
+             *   always an empty string.
+             */
+            function mb_convert_encoding($string, $toEncoding, $fromEncoding)
+            {
+                return '';
+            }
+
+            // Tell the dev, that we have a problem.
+            $pool->messages->addMessage('mbstringNotInstalled');
+        }
     }
 
     /**
@@ -79,7 +153,7 @@ class Encoding
         if ($data === '') {
             return '';
         }
-        
+
         // Initialize the encoding configuration.
         if ($code === true) {
             // We encoding @, because we need them for our chunks.
@@ -128,6 +202,65 @@ class Encoding
         restore_error_handler();
 
         return $result;
+    }
+
+    /**
+     * Wrapper around mb_detect_encoding, to circumvent a not installed
+     * mb_string php extension.
+     *
+     * @param string $string
+     *   The string we want to analyse
+     * @param string $encodinglist
+     *   The orderd list of character encoding to check.
+     * @param bool $strict
+     *   Whether we want to use strict mode.
+     *
+     * @return string
+     *   The result.
+     */
+    public function mbDetectEncoding($string, $encodinglist = 'auto', $strict = null)
+    {
+        return mb_detect_encoding($string, $encodinglist, $strict);
+    }
+
+    /**
+     * Wrapper around mb_strlen, to circumvent a not installed
+     * mb_string php extension.
+     *
+     * @param string $string
+     *   The string we want to analyse
+     * @param string $encoding
+     *   The known encoding of thsi string, if known.
+     *
+     * @return integer
+     *   The result.
+     */
+    public function mbStrLen($string, $encoding = null)
+    {
+        // Meh, the original mb_strlen interprets a null here as an empty string.
+        if ($encoding === null) {
+            return mb_strlen($string);
+        }
+        return mb_strlen($string, $encoding);
+    }
+
+    /**
+     * Wrapper around mb_substr, to circumvent a not installed
+     * mb_string php extension.
+     *
+     * @param string $string
+     *   The string we want to analyse
+     * @param int $start
+     *   The strating point.
+     * @param int $length
+     *   The length we want.
+     *
+     * @return string
+     *   The result.
+     */
+    public function mbSubStr($string, $start, $length)
+    {
+        return mb_substr($string, $start, $length);
     }
 
     /**

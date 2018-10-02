@@ -41,6 +41,10 @@ use Brainworxx\Krexx\Service\Config\Fallback;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  *
+ * @uses object data
+ *   The object we are currently analysing.
+ * @uses string name
+ *   The name of the object we are analysing.
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
@@ -64,14 +68,13 @@ class Methods extends AbstractObjectAnalysis
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters['ref'];
 
-        // We need to check, if we have a meta recursion here.
-
         $doProtected = $this->pool->config->getSetting(Fallback::SETTING_ANALYSE_PROTECTED_METHODS) ||
             $this->pool->scope->isInScope();
         $doPrivate = $this->pool->config->getSetting(Fallback::SETTING_ANALYSE_PRIVATE_METHODS) ||
             $this->pool->scope->isInScope();
         $domId = $this->generateDomIdFromClassname($ref->getName(), $doProtected, $doPrivate);
 
+        // We need to check, if we have a meta recursion here.
         if ($this->pool->recursionHandler->isInMetaHive($domId) === true) {
             // We have been here before.
             // We skip this one, and leave it to the js recursion handler!
@@ -156,7 +159,7 @@ class Methods extends AbstractObjectAnalysis
      * The ID is simply the md5 hash of the classname with the namespace.
      *
      * @param string $data
-     *   The object from which we want the ID.
+     *   The object name from which we want the ID.
      * @param boolean $doProtected
      *   Are we analysing the protected methods here?
      * @param boolean $doPrivate

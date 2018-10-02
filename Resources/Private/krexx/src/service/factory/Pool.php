@@ -166,12 +166,12 @@ class Pool extends Factory
      */
     public function init()
     {
-        // Initialize the encoding service.
-        $this->encodingService = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\Encoding');
         // Initializes the file service.
         $this->fileService = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
         // Initializes the messages.
         $this->messages = $this->createClass('Brainworxx\\Krexx\\View\\Messages');
+        // Initialize the encoding service.
+        $this->encodingService = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\Encoding');
         // Initializes the configuration
         $this->config = $this->createClass('Brainworxx\\Krexx\\Service\\Config\\Config');
         // Initialize the emergency handler.

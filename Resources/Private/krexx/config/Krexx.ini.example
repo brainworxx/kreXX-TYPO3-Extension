@@ -14,6 +14,15 @@ disabled = "false"
 ; iprange = "192.168.0.110,192.168.1.*"
 iprange = "*"
 
+; Shall kreXX try to detect an AJAX request?
+; If set to true, there will be no output when AJAX is detected, to prevent a
+; js error.
+detectAjax = "true"
+; detectAjax = "false"
+
+; ------------------------------------------------------------------------------
+[behavior]
+
 ; Change the above value to set the CSS skin used to render kreXX layout.
 ; skin = "hans"
 skin = "smokygrey"
@@ -27,42 +36,34 @@ destination = "browser"
 ; Files will only get deleted, when he creates a new one.
 maxfiles = "10"
 
-; ------------------------------------------------------------------------------
-[runtime]
-
-; Shall kreXX try to detect an AJAX request?
-; If set to true, there will be no output when AJAX is detected, to prevent a
-; js error.
-detectAjax = "true"
-; detectAjax = "false"
-
-; How deep shall we analyse objects?
-; When we reach a certain level, we simply stop there and won't go any further.
-level = "10"
-
-; How often can you call kreXX in one run?
-; kreXX can generate a lot of data, and depending on your settings
-; increasing this number might not be a good idea.
-maxCall = "15"
-
-; Setting up the config for the emergency break.
-; When analysing large objects, there is always the chance that you run out of
-; time or memory. kreXX checks these values regularly.
-; kreXX checks regularly how much memory is left. Here you can adjust the amount
-; where it will trigger an emergency break. Unit of measurement is MB.
-memoryLeft = "64"
-
-; kreXX checks during the analysis how much time has elapsed since start. Here
-; you can adjust the amount where it will trigger an emergency break. Unit of
-; measurement is seconds.
-maxRuntime = "60"
-
 ; When you are using the scope analysis, kreXX will analyse everything that can
 ; be reached from the point where kreXX was callen in the code. When coming from
 ; the $this environment, all protected and most private values / methods are
 ; reachable, and kreXX will take this into account.
 useScopeAnalysis = "true"
 ; useScopeAnalysis = "false"
+
+; ------------------------------------------------------------------------------
+[prune]
+
+; A backtrace tends to produce a lot of output, and browsers tend to have problems
+; with more than 100MB output in HTML text. Normally it is not unneccessary to go
+; back more than 10 steps, but if you need to, you can increase this number here.
+maxStepNumber = 10
+
+; When doing a database loading operation, most framewors return a class which holds
+; models inside. Getting more than 1000 of these can result in an overkill output.
+; The content of such a class will be transformed into an array by the traversasble
+; analysis. But there are also a lot of situations, where you get large arrays of
+; objects as well, without a traversable analysis.
+; When encountering an array larger than this number, kreXX will resort to a
+; simplified array analysis. This means that classes or other arrays in this large
+; array will only get a rudimentary analysis to prevent an overkill output.
+arrayCountLimit = 300
+
+; How deep shall we analyse objects?
+; When we reach a certain level, we simply stop there and won't go any further.
+level = "10"
 
 ; ------------------------------------------------------------------------------
 [properties]
@@ -75,10 +76,6 @@ useScopeAnalysis = "true"
 analyseProtected = "false"
 ; analysePrivate = "true"
 analysePrivate = "false"
-
-; Shall kreXX analyse the constants of a class?
-analyseConstants = "true"
-; analyseConstants = "true"
 
 ; Shall kreXX try to traverse through the object?
 analyseTraversable = "true"
@@ -108,22 +105,24 @@ analyseGetter = "true"
 debugMethods = "debug,toArray,__toString,toString"
 
 ; ------------------------------------------------------------------------------
-[pruneOutput]
+[emergency]
 
-; A backtrace tends to produce a lot of output, and browsers tend to have problems
-; with more than 100MB output in HTML text. Normally it is not unneccessary to go
-; back more than 10 steps, but if you need to, you can increase this number here.
-maxStepNumber = 10
+; How often can you call kreXX in one run?
+; kreXX can generate a lot of data, and depending on your settings
+; increasing this number might not be a good idea.
+maxCall = "15"
 
-; When doing a database loading operation, most framewors return a class which holds
-; models inside. Getting more than 1000 of these can result in an overkill output.
-; The content of such a class will be transformed into an array by the traversasble
-; analysis. But there are also a lot of situations, where you get large arrays of
-; objects as well, without a traversable analysis.
-; When encountering an array larger than this number, kreXX will resort to a
-; simplified array analysis. This means that classes or other arrays in this large
-; array will only get a rudimentary analysis to prevent an overkill output.
-arrayCountLimit = 300
+; kreXX checks during the analysis how much time has elapsed since start. Here
+; you can adjust the amount where it will trigger an emergency break. Unit of
+; measurement is seconds.
+maxRuntime = "60"
+
+; Setting up the config for the emergency break.
+; When analysing large objects, there is always the chance that you run out of
+; time or memory. kreXX checks these values regularly.
+; kreXX checks regularly how much memory is left. Here you can adjust the amount
+; where it will trigger an emergency break. Unit of measurement is MB.
+memoryLeft = "64"
 
 ; ------------------------------------------------------------------------------
 [feEditing]
@@ -135,17 +134,19 @@ arrayCountLimit = 300
 ; ignored, in case a setting can not be edited.
 ; Please note, that the logging and debug methods options can never be edited
 ; on the frontend.
-skin = "full"
-maxCall = "full"
 disabled = "full"
 detectAjax = "full"
+skin = "full"
+useScopeAnalysis = "full"
+maxStepNumber = "full"
+arrayCountLimit = "full"
+level = "full"
 analyseProtected = "full"
 analysePrivate = "full"
 analyseTraversable = "full"
-analyseGetter = "full"
-level = "full"
 analyseProtectedMethods = "full"
 analysePrivateMethods = "full"
-useScopeAnalysis = "full"
+analyseGetter = "full"
+maxCall = "full"
 memoryLeft = "full"
 maxRuntime = "full"

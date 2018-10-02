@@ -41,7 +41,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
  *
  * @uses array data
  *   The class we are currently analysing.
- * @uses \ReflectionClass ref
+ * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
 class PrivateProperties extends AbstractObjectAnalysis
@@ -62,7 +62,7 @@ class PrivateProperties extends AbstractObjectAnalysis
         $output = $this->dispatchStartEvent();
 
         $refProps = array();
-        /** @var \ReflectionClass $ref */
+        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters['ref'];
         // We need to keep the original reference intact.
         $reflectionClass = $ref;

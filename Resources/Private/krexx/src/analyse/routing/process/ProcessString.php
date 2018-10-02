@@ -63,62 +63,6 @@ class ProcessString extends AbstractProcess
             $this->bufferInfo = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\FileinfoDummy');
             $pool->messages->addMessage('fileinfoNotInstalled');
         }
-
-        // Register some namspaced cheap polifills, in case the mb-string
-        // extension is not available
-        if (function_exists('mb_detect_encoding') === false) {
-
-            /**
-             * Cheap dummy "polyfill" for mb_detect_encoding
-             *
-             * @param $string
-             *   Will not get used.
-             *
-             * @return string
-             *   Always 'polyfill'.
-             */
-            function mb_detect_encoding($string)
-            {
-                return 'polyfill';
-            }
-
-            /**
-             * Cheap "polyfill" for mb_strlen.
-             *
-             * @param $string
-             *   The sting we want to measure.
-             * @param $encoding
-             *   Will not get used.
-             *
-             * @return int
-             *   The length, according to strlen();
-             */
-            function mb_strlen($string, $encoding = null)
-            {
-                return strlen($string);
-            }
-
-            /**
-             * Cheap "polyfill" for mb_substr.
-             *
-             * @param $string
-             *   The original string.
-             * @param $start
-             *   The start.
-             * @param $length
-             *   The length we want
-             *
-             * @return string
-             *   The substring, according to substr().
-             */
-            function mb_substr($string, $start, $length)
-            {
-                return substr($string, $start, $length);
-            }
-
-            // Tell the dev, that we have a problem.
-            $pool->messages->addMessage('mbstringNotInstalled');
-        }
     }
 
     /**
@@ -135,16 +79,16 @@ class ProcessString extends AbstractProcess
         $data = $model->getData();
 
         // Checking the encoding.
-        $encoding = mb_detect_encoding($data);
+        $encoding = $this->pool->encodingService->mbDetectEncoding($data);
         if ($encoding === false) {
             // Looks like we have a mixed encoded string.
             // We need to tell the dev!
-            $length = mb_strlen($data);
+            $length = $this->pool->encodingService->mbStrLen($data);
             $strlen = ' broken encoding ' . $length;
             $encoding = 'broken';
         } else {
             // Normal encoding, nothing special here.
-            $length = $strlen = mb_strlen($data, $encoding);
+            $length = $strlen = $this->pool->encodingService->mbStrLen($data, $encoding);
             $encoding = '';
         }
 
@@ -166,7 +110,9 @@ class ProcessString extends AbstractProcess
         // We also need to check for linebreaks, because the preview can not
         // display those.
         if ($length > 50 || strstr($data, PHP_EOL) !== false) {
-            $cut = $this->pool->encodingService->encodeString(mb_substr($data, 0, 50)) . '. . .';
+            $cut = $this->pool->encodingService->encodeString(
+                $this->pool->encodingService->mbSubStr($data, 0, 50)
+            ) . '. . .';
             $data = $this->pool->encodingService->encodeString($data);
             $model->setHasExtra(true)->setNormal($cut)->setData($data);
         } else {

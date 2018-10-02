@@ -43,7 +43,7 @@ use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
  *
  * @uses mixed data
  *   The class we are currently analysing.
- * @uses \ReflectionClass ref
+ * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
 class PublicProperties extends AbstractObjectAnalysis
@@ -65,7 +65,7 @@ class PublicProperties extends AbstractObjectAnalysis
     {
         $output = $this->dispatchStartEvent();
 
-        /** @var \Service\Reflection\ReflectionClass $ref */
+        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters['ref'];
         $data = $ref->getData();
 

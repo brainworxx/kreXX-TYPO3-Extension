@@ -348,7 +348,7 @@ class Chunks
             SORT_DESC,
             $logList
         );
-        
+
         $maxFileCount = (int)$this->pool->config->getSetting(Fallback::SETTING_MAX_FILES);
         $count = 1;
         // Cleanup logfiles.
@@ -430,7 +430,7 @@ class Chunks
      */
     public function detectEncoding($string)
     {
-        $encoding = mb_detect_encoding($string);
+        $encoding = $this->pool->encodingService->mbDetectEncoding($string);
 
         // We need to decide, if we need to change the official encoding of
         // the HTML output with a meta tag. We ignore everything in the
