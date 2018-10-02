@@ -133,6 +133,20 @@ abstract class AbstractFluid extends AbstractCaller
             array(
                 '<krexx:debug value="{',
                 // We need to escape the forward slash.
+                '}"\/>'),
+            array(
+                '<krexx:log>{',
+                // We need to escape the forward slash.
+                '}<\/krexx:log>'
+            ),
+            array(
+                '<krexx:log value="{',
+                // We need to escape the forward slash.
+                '}" \/>'
+            ),
+            array(
+                '<krexx:log value="{',
+                // We need to escape the forward slash.
                 '}"\/>')
         );
 
