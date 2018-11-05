@@ -65,7 +65,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
     /**
      * The namespace of the view helpers.
      */
-    const NAMESPACE = 'Aimeos\\MW\\View\\Helper\\';
+    const AI_NAMESPACE = 'Aimeos\\MW\\View\\Helper\\';
     const METHOD = 'transform';
 
     /**
@@ -264,7 +264,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
         }
         $doneSoFar[$directory] = true;
 
-        $iface = static::NAMESPACE . 'Iface';
+        $iface = static::AI_NAMESPACE . 'Iface';
         $standard = '\\Standard';
         $subDirs = scandir($directory);
 
@@ -280,9 +280,9 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
             }
 
             if (is_dir($directory . '/' . $dir)) {
-                if (class_exists(static::NAMESPACE . $dir . $standard)) {
+                if (class_exists(static::AI_NAMESPACE . $dir . $standard)) {
                     try {
-                        $ref = new \ReflectionClass(static::NAMESPACE . $dir . $standard);
+                        $ref = new \ReflectionClass(static::AI_NAMESPACE . $dir . $standard);
                     } catch (\ReflectionException $e) {
                         // Move to the next target.
                         continue;
