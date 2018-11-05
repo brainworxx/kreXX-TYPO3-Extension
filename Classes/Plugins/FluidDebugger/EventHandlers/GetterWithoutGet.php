@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -45,7 +46,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList::end
  * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers
  */
-class GetterWithoutGet implements EventHandlerInterface
+class GetterWithoutGet implements EventHandlerInterface, ConstInterface
 {
     /**
      * The resource pool
@@ -76,7 +77,7 @@ class GetterWithoutGet implements EventHandlerInterface
     public function handle(AbstractCallback $callback, Model $model = null)
     {
         $params = $callback->getParameters();
-        $methodName = lcfirst(substr($model->getName(), strlen($params['currentPrefix'])));
+        $methodName = lcfirst(substr($model->getName(), strlen($params[static::PARAM_CURRENT_PREFIX])));
         $model->addToJson('method name', $model->getName() . '()')
             ->setName($methodName);
 

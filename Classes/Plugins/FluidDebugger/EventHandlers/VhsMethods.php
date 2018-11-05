@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
@@ -46,7 +47,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe::end
  * @package Brainworxx\Includekrexx\Plugins\FluidCodeGen\EventHandlers
  */
-class VhsMethods implements EventHandlerInterface
+class VhsMethods implements EventHandlerInterface, ConstInterface
 {
     /**
      * The resource pool
@@ -64,7 +65,7 @@ class VhsMethods implements EventHandlerInterface
     }
 
     /**
-     * We set the multiline code generation to VHS, and We add the name of the
+     * We set the multiline code generation to VHS, and we add the name of the
      * parameter for the VHS code generation into the 'paramArray'
      *
      * @param AbstractCallback $callback
@@ -79,7 +80,7 @@ class VhsMethods implements EventHandlerInterface
     {
         $params = $callback->getParameters();
         /** @var \ReflectionMethod $reflectionMethod */
-        $reflectionMethod = $params['reflectionMethod'];
+        $reflectionMethod = $params[static::PARAM_REF_METHOD];
 
         $paramArray = array();
         foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
