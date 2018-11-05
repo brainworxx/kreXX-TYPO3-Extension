@@ -317,7 +317,6 @@ class Krexx
      */
     public static function log($data = null)
     {
-        Pool::createPool();
         static::startForcedLog();
         static::open($data);
         static::endForcedLog();
@@ -333,7 +332,6 @@ class Krexx
      */
     public static function logBacktrace()
     {
-        Pool::createPool();
         static::startForcedLog();
         static::backtrace();
         static::endForcedLog();
@@ -346,7 +344,6 @@ class Krexx
      */
     public static function logTimerEnd()
     {
-        Pool::createPool();
         static::startForcedLog();
         static::timerEnd();
         static::endForcedLog();
@@ -357,11 +354,13 @@ class Krexx
      */
     protected static function startForcedLog()
     {
+        Pool::createPool();
+
         // Output destination: file
         static::$pool->config
             ->settings[Fallback::SETTING_DESTINATION]
             ->setSource('forced logging')
-            ->setValue('file');
+            ->setValue(Fallback::VALUE_FILE);
 
         // Do not care about ajax requests.
         static::$pool->config
@@ -369,6 +368,7 @@ class Krexx
             ->setSource('forced logging')
             ->setValue(false);
 
+        // Reload the disabled settings with the new ajax setting.
          static::$pool->config
             ->loadConfigValue(Fallback::SETTING_DISABLED);
     }

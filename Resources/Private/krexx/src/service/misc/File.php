@@ -76,6 +76,7 @@ class File
         if (empty($this->docRoot) === true) {
             $this->docRoot = false;
         }
+        $pool->fileService = $this;
     }
 
     /**

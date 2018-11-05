@@ -46,6 +46,8 @@ if (defined('KREXX_DIR')) {
 }
 
 define('KREXX_DIR', __DIR__ . DIRECTORY_SEPARATOR);
+
+include 'src/Analyse/ConstInterface.php';
 include 'src/Analyse/Callback/AbstractCallback.php';
 
 include 'src/Analyse/Callback/Analyse/Objects/AbstractObjectAnalysis.php';

@@ -62,13 +62,6 @@ class UndeclaredProperty extends \ReflectionProperty
     public $isUndeclared = true;
 
     /**
-     * The class instance with the property.
-     *
-     * @var object
-     */
-    protected $object;
-
-    /**
      * THe name of the property.
      *
      * @var string
@@ -85,17 +78,16 @@ class UndeclaredProperty extends \ReflectionProperty
     /**
      * ReflectionUndeclaredProperty constructor.
      *
-     * @param $class
+     * @param \ReflectionClass $ref
      *   The instance of the class with the property.
      * @param $name
      *   The name of the property.
      *
      * @throws \ReflectionException
      */
-    public function __construct($class, $name)
+    public function __construct(\ReflectionClass $ref, $name)
     {
-        $this->object = $class;
-        $this->declaringClass = new \ReflectionClass($class);
+        $this->declaringClass = $ref;
         $this->propertyName = $name;
     }
 
@@ -163,35 +155,6 @@ class UndeclaredProperty extends \ReflectionProperty
     public function isPublic()
     {
         return true;
-    }
-
-    /**
-     * Try to retrieve the value, nested within some error handling.
-     *
-     * @param null $object
-     *   We ignore this one. It's only here to make the class compatible with
-     *   the original \ReflectionProperty.
-     * @return mixed
-     *   The value, if we can get it.
-     */
-    public function getValue($object = null)
-    {
-        set_error_handler(
-            function () {
-                // Do nothing.
-            }
-        );
-        try {
-            $value = $this->object->$this->objectName;
-        } catch (\Throwable $e) {
-            $value = null;
-        } catch (\Exception $e) {
-            $value = null;
-        }
-
-        // Reactivate whatever error handling we had previously.
-        restore_error_handler();
-        return $value;
     }
 
     /**

@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
@@ -120,7 +121,7 @@ class ProcessString extends AbstractProcess
         }
 
         return $this->pool->render->renderSingleChild(
-            $model->setType('string ' . $strlen)
+            $model->setType(static::TYPE_STRING . $strlen)
                 ->addToJson('encoding', $encoding)
                 ->addToJson('mimetype', $mimetype)
                 ->addToJson('length', $length)

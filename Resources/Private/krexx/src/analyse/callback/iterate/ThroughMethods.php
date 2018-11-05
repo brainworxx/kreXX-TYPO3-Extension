@@ -67,13 +67,13 @@ class ThroughMethods extends AbstractCallback
     {
         $result = $this->dispatchStartEvent();
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
-        $reflectionClass = $this->parameters['ref'];
+        $reflectionClass = $this->parameters[static::PARAM_REF];
 
         $commentAnalysis = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Methods');
 
         // Deep analysis of the methods.
         /** @var \ReflectionMethod $reflectionMethod */
-        foreach ($this->parameters['data'] as $reflectionMethod) {
+        foreach ($this->parameters[static::PARAM_DATA] as $reflectionMethod) {
             $methodData = array();
 
             // Get the comment from the class, it's parents, interfaces or traits.
@@ -113,19 +113,19 @@ class ThroughMethods extends AbstractCallback
             }
 
             // Update the reflection method.
-            $this->parameters['reflectionMethod'] = $reflectionMethod;
+            $this->parameters[static::PARAM_REF_METHOD] = $reflectionMethod;
 
             // Render it!
             $result .= $this->pool->render->renderExpandableChild(
                 $this->dispatchEventWithModel(
-                    __FUNCTION__ . '::end',
+                    __FUNCTION__ . static::EVENT_MARKER_END,
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                         ->setName($reflectionMethod->name)
-                        ->setType($methodData['declaration keywords'] . ' method')
+                        ->setType($methodData['declaration keywords'] . static::TYPE_METHOD)
                         ->setConnectorType($connectorType)
                         // Remove the ',' after the last char.
                         ->setConnectorParameters(trim($paramList, ', '))
-                        ->addParameter('data', $methodData)
+                        ->addParameter(static::PARAM_DATA, $methodData)
                         ->injectCallback(
                             $this->pool->createClass(
                                 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis'

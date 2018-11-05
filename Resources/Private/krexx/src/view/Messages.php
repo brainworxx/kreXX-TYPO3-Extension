@@ -83,6 +83,7 @@ class Messages
     {
         $this->pool = $pool;
         $this->readHelpTexts();
+        $pool->messages = $this;
     }
 
     /**

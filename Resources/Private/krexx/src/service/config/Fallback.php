@@ -59,6 +59,7 @@ class Fallback
     const EVAL_SKIN = 'evalSkin';
     const EVAL_IP_RANGE = 'evalIpRange';
     const EVAL_DEV_HANDLE = 'evalDevHandle';
+    const EVAL_DEBUG_METHODS = 'evalDebugMethods';
 
     const SECTION_OUTPUT = 'output';
     const SECTION_BEHAVIOR = 'behavior';
@@ -259,7 +260,7 @@ class Fallback
                 // Change these only if you know what you are doing.
                 Fallback::VALUE => 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo,getProperties',
                 Fallback::RENDER => $this->displayOnlyInput,
-                Fallback::EVALUATE => Fallback::DO_NOT_EVAL,
+                Fallback::EVALUATE => Fallback::EVAL_DEBUG_METHODS,
                 Fallback::SECTION =>  Fallback::SECTION_METHODS,
             ),
             Fallback::SETTING_NESTING_LEVEL => array(
@@ -393,8 +394,7 @@ class Fallback
     /**
      * Known Problems with debug functions, which will most likely cause a fatal.
      *
-     * @see \Brainworxx\Krexx\Service\Config\Security::isAllowedDebugCall()
-     * @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::pollAllConfiguredDebugMethods()
+     * @see \Brainworxx\Krexx\Service\Config\Config::isAllowedDebugCall()
      * @see \Brainworxx\Krexx\Service\Plugin\Registration::addMethodToDebugBlacklist()
      *
      * @var array
@@ -422,5 +422,5 @@ class Fallback
      *
      * @var string
      */
-    public $version = '3.0.0';
+    public $version = '3.0.1 dev';
 }

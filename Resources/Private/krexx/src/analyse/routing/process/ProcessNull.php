@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -57,7 +58,7 @@ class ProcessNull extends AbstractProcess
     {
         $data = 'NULL';
         return $this->pool->render->renderSingleChild(
-            $model->setData($data)->setNormal($data)->setType('null')
+            $model->setData($data)->setNormal($data)->setType(static::TYPE_NULL)
         );
     }
 }

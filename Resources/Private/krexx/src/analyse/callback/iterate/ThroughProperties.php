@@ -91,9 +91,9 @@ class ThroughProperties extends AbstractCallback
         // I need to preprocess them, since I do not want to render a
         // reflection property.
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
-        $ref = $this->parameters['ref'];
+        $ref = $this->parameters[static::PARAM_REF];
 
-        foreach ($this->parameters['data'] as $refProperty) {
+        foreach ($this->parameters[static::PARAM_DATA] as $refProperty) {
             // Check memory and runtime.
             if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
                 return '';
@@ -153,7 +153,7 @@ class ThroughProperties extends AbstractCallback
             // Stitch together our model
             $output .= $this->pool->routing->analysisHub(
                 $this->dispatchEventWithModel(
-                    __FUNCTION__ . '::end',
+                    __FUNCTION__ . static::EVENT_MARKER_END,
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                         ->setData($value)
                         ->setName($this->pool->encodingService->encodeString($propName))

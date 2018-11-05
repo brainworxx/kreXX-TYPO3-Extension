@@ -51,7 +51,7 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
      * {@inheritdoc}
      */
     protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\AbstractObjectAnalysis';
-    
+
     /**
      * Here we store all relevant data.
      *
@@ -79,30 +79,36 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
      * @return string
      *   The generated markup.
      */
-    protected function getReflectionPropertiesData(array $refProps, ReflectionClass $ref, $label)
+    protected function getReflectionPropertiesData(array $refProps, ReflectionClass $ref, $label, $useWrap = false)
     {
         // We are dumping public properties direct into the main-level, without
         // any "abstraction level", because they can be accessed directly.
         /** @var Model $model */
         $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-            ->addParameter('data', $refProps)
-            ->addParameter('ref', $ref)
+            ->addParameter(static::PARAM_DATA, $refProps)
+            ->addParameter(static::PARAM_REF, $ref)
             ->injectCallback(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties')
             );
 
-        if (strpos(strtoupper($label), 'PUBLIC') === false) {
+        if ($useWrap === true) {
             // Protected or private properties.
             return $this->pool->render->renderExpandableChild(
-                $model->setName($label)
-                    ->setType('class internals')
+                $this->dispatchEventWithModel(
+                    static::EVENT_MARKER_ANALYSES_END,
+                    $model->setName($label)
+                        ->setType(static::TYPE_INTERNALS)
+                )
             );
         }
 
         // Public properties.
         // We render them directly in the object "root", so we call
         // the render directly.
-        return $this->dispatchEventWithModel('analysisEnd', $model)->renderMe();
+        return $this->dispatchEventWithModel(
+            static::EVENT_MARKER_ANALYSES_END,
+            $model
+        )->renderMe();
     }
 
     /**

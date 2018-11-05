@@ -132,6 +132,7 @@ class Encoding
             // Tell the dev, that we have a problem.
             $pool->messages->addMessage('mbstringNotInstalled');
         }
+        $pool->encodingService = $this;
     }
 
     /**

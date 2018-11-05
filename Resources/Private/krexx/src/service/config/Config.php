@@ -114,7 +114,11 @@ class Config extends Fallback
             SettingsGetter::getBlacklistDebugClass()
         );
 
-        $this->security = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\Security');
+        $this->security = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\Security')
+            ->setMethodBlacklist($this->methodBlacklist);
+
+        $pool->config = $this;
+
         $this->iniConfig = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\From\\Ini')
             ->loadIniFile($this->getPathToIniFile());
         $this->cookieConfig = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\From\\Cookie');
@@ -345,7 +349,7 @@ class Config extends Fallback
     }
 
     /**
-     * Determines if a debug function is blacklisted in s specific class.
+     * Determines if the specific class is blacklisted for debug methods.
      *
      * @param object $data
      *   The class we are analysing.
@@ -355,20 +359,12 @@ class Config extends Fallback
      * @return bool
      *   Whether the function is allowed to be called.
      */
-    public function isAllowedDebugCall($data, $call)
+    public function isAllowedDebugCall($data)
     {
         // Check if the class itself is blacklisted.
         foreach ($this->classBlacklist as $classname) {
             if (is_a($data, $classname) === true) {
                 // No debug methods for you.
-                return false;
-            }
-        }
-
-        // Check for a class / method combination.
-        foreach ($this->methodBlacklist as $classname => $methodList) {
-            if (is_a($data, $classname) === true && in_array($call, $methodList) === true) {
-                // We have a winner, this one is blacklisted!
                 return false;
             }
         }

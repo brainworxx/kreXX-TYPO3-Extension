@@ -334,6 +334,9 @@ div.kwrapper {
     color: #b1b1b1;
     font: bold 12px tahoma, verdana;
     white-space: pre;
+    margin: 0;
+    padding: 0;
+    border: none;
 }
 
 .kwrapper .klineno {

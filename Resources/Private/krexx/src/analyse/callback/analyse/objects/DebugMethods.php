@@ -72,7 +72,7 @@ class DebugMethods extends AbstractObjectAnalysis
     public function callMe()
     {
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
-        $reflectionClass = $this->parameters['ref'];
+        $reflectionClass = $this->parameters[static::PARAM_REF];
         $data = $reflectionClass->getData();
         $output = $this->dispatchStartEvent();
 
@@ -108,11 +108,11 @@ class DebugMethods extends AbstractObjectAnalysis
                             $funcName,
                             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                                 ->setName($funcName)
-                                ->setType('debug method')
+                                ->setType(static::TYPE_DEBUG_METHOD)
                                 ->setNormal('. . .')
                                 ->setHelpid($funcName)
                                 ->setConnectorType(Connectors::METHOD)
-                                ->addParameter('data', $result)
+                                ->addParameter(static::PARAM_DATA, $result)
                                 ->injectCallback(
                                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Debug')
                                 )
@@ -147,7 +147,7 @@ class DebugMethods extends AbstractObjectAnalysis
         // 3.) It's not blacklisted.
         if (method_exists($data, $funcName) === true &&
             is_callable(array($data, $funcName)) === true &&
-            $this->pool->config->isAllowedDebugCall($data, $funcName) === true) {
+            $this->pool->config->isAllowedDebugCall($data) === true) {
             // We need to check if the callable function requires any parameters.
             // We will not call those, because we simply can not provide them.
             $ref = $reflectionClass->getMethod($funcName);

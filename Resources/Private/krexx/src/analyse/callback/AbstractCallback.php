@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Callback;
 
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
@@ -42,8 +43,14 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Analyse\Callback
  */
-abstract class AbstractCallback
+abstract class AbstractCallback implements ConstInterface
 {
+    /**
+     * Marks the last part of an even, when that part is finished.
+     */
+    const EVENT_MARKER_END = '::end';
+    const EVENT_MARKER_ANALYSES_END = 'analysisEnd';
+
     /**
      * We use this as the string prefix for the event name.
      *

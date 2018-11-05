@@ -62,7 +62,7 @@ class ProtectedProperties extends AbstractObjectAnalysis
         $output = $this->dispatchStartEvent();
 
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
-        $ref = $this->parameters['ref'];
+        $ref = $this->parameters[static::PARAM_REF];
         $refProps = $ref->getProperties(\ReflectionProperty::IS_PROTECTED);
         if (empty($refProps) === true) {
             return $output;

@@ -60,6 +60,35 @@ abstract class AbstractRender implements RenderInterface
     const MARKER_PLUGIN_ACTIVE_TEXT = '{activetext}';
     const MARKER_PLUGIN_ACTIVE_CLASS = '{activeclass}';
 
+    const DATA_ATTRIBUTE_SOURCE = 'source';
+    const DATA_ATTRIBUTE_WRAPPER_R = 'codewrapperRight';
+    const DATA_ATTRIBUTE_WRAPPER_L = 'codewrapperLeft';
+
+    const FILE_EX_CHILD_NORMAL = 'expandableChildNormal';
+    const FILE_SI_CHILD = 'singleChild';
+    const FILE_SI_CHILD_EX = 'singleChildExtra';
+    const FILE_SI_CHILD_CALL = 'singleChildCallable';
+    const FILE_SOURCE_BUTTON = 'sourcebutton';
+    const FILE_NEST = 'nest';
+    const FILE_BACKTRACE_SOURCELINE = 'backtraceSourceLine';
+    const FILE_CALLER = 'caller';
+    const FILE_HELPROW = 'helprow';
+    const FILE_HELP = 'help';
+    const FILE_CONNECTOR = 'connector';
+    const FILE_SI_PLUGIN = 'singlePlugin';
+    const FILE_SEARCH = 'search';
+    const FILE_RECURSION = 'recursion';
+    const FILE_HEADER = 'header';
+    const FILE_FOOTER = 'footer';
+    const FILE_CSSJS = 'cssJs';
+    const FILE_SI_SELECT_OPTIONS = 'singleSelectOptions';
+    const FILE_SI_EDIT_CHILD = 'singleEditableChild';
+    const FILE_SI_BUTTON = 'singleButton';
+    const FILE_FATAL_MAIN = 'fatalMain';
+    const FILE_FATAL_HEADER = 'fatalHeader';
+    const FILE_MESSAGE = 'message';
+    const FILE_SI_HR = 'singleChildHr';
+
     /**
      * Here we store all relevant data.
      *
@@ -106,7 +135,7 @@ abstract class AbstractRender implements RenderInterface
                 $file,
                 $line,
             ),
-            $this->getTemplateFileContent('caller')
+            $this->getTemplateFileContent(static::FILE_CALLER)
         );
     }
 
@@ -131,7 +160,7 @@ abstract class AbstractRender implements RenderInterface
         }
 
         // We have at least something to display here.
-        $helpRow = $this->getTemplateFileContent('helprow');
+        $helpRow = $this->getTemplateFileContent(static::FILE_HELPROW);
         $helpContent = '';
 
         // Add the stuff from the json after the help text, if any.
@@ -144,7 +173,7 @@ abstract class AbstractRender implements RenderInterface
         }
 
         // Add it into the wrapper.
-        return str_replace(static::MARKER_HELP, $helpContent, $this->getTemplateFileContent('help'));
+        return str_replace(static::MARKER_HELP, $helpContent, $this->getTemplateFileContent(static::FILE_HELP));
     }
 
     /**
@@ -161,7 +190,7 @@ abstract class AbstractRender implements RenderInterface
         return str_replace(
             static::MARKER_CONNECTOR,
             $connector,
-            $this->getTemplateFileContent('connector')
+            $this->getTemplateFileContent(static::FILE_CONNECTOR)
         );
     }
 
@@ -176,7 +205,7 @@ abstract class AbstractRender implements RenderInterface
         return str_replace(
             static::MARKER_KREXX_ID,
             $this->pool->recursionHandler->getMarker(),
-            $this->getTemplateFileContent('search')
+            $this->getTemplateFileContent(static::FILE_SEARCH)
         );
     }
 
@@ -189,7 +218,7 @@ abstract class AbstractRender implements RenderInterface
     protected function renderPluginList()
     {
         $result = '';
-        $template = $this->getTemplateFileContent('singlePlugin');
+        $template = $this->getTemplateFileContent(static::FILE_SI_PLUGIN);
         foreach (SettingsGetter::getPlugins() as $plugin) {
             if ($plugin[SettingsGetter::IS_ACTIVE] === true) {
                 $activeClass = 'kisactive';
@@ -273,7 +302,7 @@ abstract class AbstractRender implements RenderInterface
                 $model->renderMe(),
                 $domid,
             ),
-            $this->getTemplateFileContent('nest')
+            $this->getTemplateFileContent(static::FILE_NEST)
         );
     }
 

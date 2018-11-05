@@ -47,6 +47,14 @@ use Brainworxx\Krexx\Analyse\Model;
 class Scope
 {
     /**
+     * We use this scope, when kreXX was called like kreXX($this);
+     *
+     * This determines, that all private and protected variables will be
+     * analysed when using the scope analysis.
+     */
+    const THIS_SCOPE = '$this';
+
+    /**
      * Here we store all relevant data.
      *
      * @var Pool
@@ -71,6 +79,8 @@ class Scope
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
+
+        $pool->scope = $this;
     }
 
     /**
@@ -108,7 +118,7 @@ class Scope
     public function isInScope()
     {
         return  $this->pool->emergencyHandler->getNestingLevel() <= 1 &&
-            $this->scope === '$this' &&
+            $this->scope === static::THIS_SCOPE &&
             $this->pool->config->getSetting(Fallback::SETTING_USE_SCOPE_ANALYSIS);
     }
 
@@ -128,7 +138,7 @@ class Scope
         // If we are too deep at this moment, we will stop right here!
         // Also, anything not coming from $this is not reachable, since
         // we are testing protected stuff here.
-        if ($nestingLevel > 2 || $this->scope !== '$this') {
+        if ($nestingLevel > 2 || $this->scope !== static::THIS_SCOPE) {
             return false;
         }
 
@@ -147,6 +157,6 @@ class Scope
             --$nestingLevel;
         }
 
-        return $nestingLevel === 1 && $this->scope === '$this';
+        return $nestingLevel === 1 && $this->scope === static::THIS_SCOPE;
     }
 }

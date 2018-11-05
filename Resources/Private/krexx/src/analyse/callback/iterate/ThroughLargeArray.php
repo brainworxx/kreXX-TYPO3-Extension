@@ -76,10 +76,10 @@ class ThroughLargeArray extends AbstractCallback
 
         $recursionMarker = $this->pool->recursionHandler->getMarker();
         $output .= $this->pool->render->renderSingeChildHr();
-        $multiline = $this->parameters['multiline'];
+        $multiline = $this->parameters[static::PARAM_MULTILINE];
 
         // Iterate through.
-        foreach ($this->parameters['data'] as $key => &$value) {
+        foreach ($this->parameters[static::PARAM_DATA] as $key => &$value) {
             // We will not output our recursion marker.
             // Meh, the only reason for the recursion marker
             // in arrays is because of the $GLOBAL array, which
@@ -142,7 +142,7 @@ class ThroughLargeArray extends AbstractCallback
     {
         if (is_object($value) === true) {
             // We will not go too deep here, and say only what it is.
-            $model->setType('simplified class analysis')
+            $model->setType(static::TYPE_SIMPLE_CLASS)
                 ->setNormal(get_class($value));
 
             return $this->pool->render->renderSingleChild($model);
@@ -151,7 +151,7 @@ class ThroughLargeArray extends AbstractCallback
         if (is_array($value) === true) {
             // Adding another array to the output may be as bad as a
             // complete object analysis.
-            $model->setType('simplified array analysis')
+            $model->setType(static::TYPE_SIMPLE_ARRAY)
                 ->setNormal('count: ' . count($value));
 
                 return $this->pool->render->renderSingleChild($model);

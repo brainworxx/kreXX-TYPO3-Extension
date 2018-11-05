@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -55,7 +56,7 @@ class ProcessInteger extends AbstractProcess
     public function process(Model $model)
     {
         return $this->pool->render->renderSingleChild(
-            $model->setNormal($model->getData())->setType('integer')
+            $model->setNormal($model->getData())->setType(static::TYPE_INTEGER)
         );
     }
 }

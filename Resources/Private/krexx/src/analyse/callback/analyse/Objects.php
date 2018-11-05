@@ -67,7 +67,7 @@ class Objects extends AbstractCallback
     {
         $output = $this->pool->render->renderSingeChildHr() . $this->dispatchStartEvent();
 
-        $ref = $this->parameters['ref'] = new ReflectionClass($this->parameters['data']);
+        $ref = $this->parameters[static::PARAM_REF] = new ReflectionClass($this->parameters[static::PARAM_DATA]);
 
         // Dumping public properties.
         $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties');
@@ -102,7 +102,7 @@ class Objects extends AbstractCallback
 
         // Dumping traversable data.
         if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_TRAVERSABLE) === true &&
-            $this->parameters['data'] instanceof \Traversable
+            $this->parameters[static::PARAM_DATA] instanceof \Traversable
         ) {
             $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable');
         }

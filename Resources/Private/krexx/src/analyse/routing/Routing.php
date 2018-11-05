@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
@@ -47,6 +48,11 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 class Routing extends AbstractRouting
 {
 
+    /**
+     * Inject the pool and create all the routing classes.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
     public function __construct(Pool $pool)
     {
         parent::__construct($pool);
@@ -60,6 +66,8 @@ class Routing extends AbstractRouting
         $this->processResource = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessResource');
         $this->processString = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessString');
         $this->processOther = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessOther');
+
+        $pool->routing = $this;
     }
 
     /**
@@ -153,9 +161,9 @@ class Routing extends AbstractRouting
         if ($this->pool->emergencyHandler->checkNesting() === true) {
             $text = $this->pool->messages->getHelp('maximumLevelReached2');
             if (is_array($data) === true) {
-                $type = 'array';
+                $type = static::TYPE_ARRAY;
             } else {
-                $type = 'object';
+                $type = static::TYPE_OBJECT;
             }
             $model->setData($text)
                 ->setNormal($this->pool->messages->getHelp('maximumLevelReached1'))
@@ -168,16 +176,16 @@ class Routing extends AbstractRouting
         if ($this->pool->recursionHandler->isInHive($data) === true) {
             // Render recursion.
             if (is_object($data) === true) {
-                $type = '\\' . get_class($data);
+                $normal = '\\' . get_class($data);
                 $domId = $this->generateDomIdFromObject($data);
             } else {
                 // Must be the globals array.
-                $type = '$GLOBALS';
+                $normal = '$GLOBALS';
                 $domId = '';
             }
 
             return $this->pool->render->renderRecursion(
-                $model->setDomid($domId)->setNormal($type)
+                $model->setDomid($domId)->setNormal($normal)
             );
         }
 

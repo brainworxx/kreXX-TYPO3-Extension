@@ -1,3 +1,16 @@
+3.0.1 dev
+- Change: All singelton classes now add themself to the pool as
+  soon as they are created.
+- Bugfix: Added the missing end event to the property analysis.
+- Bugfix / Change: Configured debug methods are now checked on
+  configuration loading.
+- Bugfix: Preserve the line breaks from the string-extra.
+- Bugfix: Repair the UndeclaredProperty class and use it.
+- Bugfix: Lower the nesting level again after a failed traversable
+  analysis.
+- Bugfix: Analysis of private getter do not respect the context.
+- Bugfix: Interesting display of parameters in the method analysis.
+
 3.0.0
 - Added 'is' and 'has' to the getter analysis.
 - Added plugin support, to replace the half-asses overwrites.

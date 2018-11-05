@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -58,7 +59,7 @@ class ProcessBoolean extends AbstractProcess
         return $this->pool->render->renderSingleChild(
             $model->setData($data)
                 ->setNormal($data)
-                ->setType('boolean')
+                ->setType(static::TYPE_BOOL)
         );
     }
 }

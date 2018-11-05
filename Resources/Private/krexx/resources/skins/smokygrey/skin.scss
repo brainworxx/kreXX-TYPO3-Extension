@@ -511,6 +511,9 @@ $fontLight: lighter 10px tahoma, verdana;
         font: $fontBold;
         white-space: pre;
         background-color: $white;
+        border: none;
+        margin: 0;
+        padding: 0;
       }
       .source {
         padding: 0 20px;

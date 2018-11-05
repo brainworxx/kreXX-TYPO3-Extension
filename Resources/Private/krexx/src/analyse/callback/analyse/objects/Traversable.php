@@ -68,7 +68,8 @@ class Traversable extends AbstractObjectAnalysis
         // Check nesting level, memory and runtime.
         $this->pool->emergencyHandler->upOneNestingLevel();
         if ($this->pool->emergencyHandler->checkNesting() === true ||
-        $this->pool->emergencyHandler->checkEmergencyBreak() === true) {
+            $this->pool->emergencyHandler->checkEmergencyBreak() === true
+        ) {
             // We will not be doing this one, but we need to get down with our
             // nesting level again.
             $this->pool->emergencyHandler->downOneNestingLevel();
@@ -87,26 +88,28 @@ class Traversable extends AbstractObjectAnalysis
      */
     protected function getTaversableData()
     {
-        $data = $this->parameters['data'];
-        $name = $this->parameters['name'];
+        $data = $this->parameters[static::PARAM_DATA];
+        $name = $this->parameters[static::PARAM_NAME];
 
         // Add a try to prevent the hosting CMS from doing something stupid.
         try {
             // We need to deactivate the current error handling to
             // prevent the host system to do anything stupid.
-                set_error_handler(
-                    function () {
+            set_error_handler(
+                function () {
                     // Do nothing.
-                    }
-                );
-                $parameter = iterator_to_array($data);
+                }
+            );
+            $parameter = iterator_to_array($data);
         } catch (\Throwable $e) {
             //Restore the previous error handler, and return an empty string.
             restore_error_handler();
+            $this->pool->emergencyHandler->downOneNestingLevel();
             return '';
         } catch (\Exception $e) {
             //Restore the previous error handler, and return an empty string.
             restore_error_handler();
+            $this->pool->emergencyHandler->downOneNestingLevel();
             return '';
         }
 
@@ -134,9 +137,9 @@ class Traversable extends AbstractObjectAnalysis
             /** @var Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setName($name)
-                ->setType('Foreach')
-                ->addParameter('data', $parameter)
-                ->addParameter('multiline', $multiline)
+                ->setType(static::TYPE_FOREACH)
+                ->addParameter(static::PARAM_DATA, $parameter)
+                ->addParameter(static::PARAM_MULTILINE, $multiline)
                 ->addToJson('Length', count($parameter));
 
             // Check, if we are handling a huge array. Huge arrays tend to result in a huge
@@ -154,13 +157,14 @@ class Traversable extends AbstractObjectAnalysis
             }
 
             $result = $this->pool->render->renderExpandableChild(
-                $this->dispatchEventWithModel('analysisEnd', $model)
+                $this->dispatchEventWithModel(static::EVENT_MARKER_ANALYSES_END, $model)
             );
             $this->pool->emergencyHandler->downOneNestingLevel();
             return $result;
         }
 
         // Still here?!? Return an empty string.
+        $this->pool->emergencyHandler->downOneNestingLevel();
         return '';
     }
 }

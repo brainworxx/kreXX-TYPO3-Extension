@@ -64,7 +64,7 @@ class ConfigSection extends AbstractCallback
     {
         $sectionOutput = $this->dispatchStartEvent();
 
-        foreach ($this->parameters['data'] as $id => $setting) {
+        foreach ($this->parameters[static::PARAM_DATA] as $id => $setting) {
             // Render the single value.
             // We need to find out where the value comes from.
             /** @var \Brainworxx\Krexx\Service\Config\Model $setting */

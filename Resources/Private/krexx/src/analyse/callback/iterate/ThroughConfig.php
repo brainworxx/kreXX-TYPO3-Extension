@@ -42,11 +42,8 @@ use Brainworxx\Krexx\Service\Config\Fallback;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  *
- * @uses array data
- *   The configuration section we are rendering
- * @uses array source
- *   The info of the source if the configuration
- *   fallback, file, cookie.
+ * @uses null
+ *   There are no parameters available here.
  */
 class ThroughConfig extends AbstractCallback
 {
@@ -77,9 +74,9 @@ class ThroughConfig extends AbstractCallback
             $configOutput .= $this->pool->render->renderExpandableChild(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                     ->setName($this->pool->messages->getHelp($sectionName . 'Readable'))
-                    ->setType('Config')
+                    ->setType(static::TYPE_CONFIG)
                     ->setNormal('. . .')
-                    ->addParameter('data', $sectionData)
+                    ->addParameter(static::PARAM_DATA, $sectionData)
                     ->injectCallback(
                         $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\ConfigSection')
                     )

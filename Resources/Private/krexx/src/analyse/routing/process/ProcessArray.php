@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
 
@@ -73,10 +74,10 @@ class ProcessArray extends AbstractProcess
 
         // Dumping all Properties.
         return $this->pool->render->renderExpandableChild(
-            $model->setType('array')
+            $model->setType(static::TYPE_ARRAY)
                 ->setNormal($count . ' elements')
-                ->addParameter('data', $model->getData())
-                ->addParameter('multiline', $multiline)
+                ->addParameter(static::PARAM_DATA, $model->getData())
+                ->addParameter(static::PARAM_MULTILINE, $multiline)
         );
     }
 }

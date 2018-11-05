@@ -53,16 +53,17 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * @uses array hasGetter
  *   The list of all reflection methods we are analysing, hosting the
  *   get methods starting with 'has'
- * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
+ * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
  *   A reflection class of the object we are analysing.
- * @uses object $data
+ * @uses object data
  *   The object we are currently analysing
- * @uses string $currentPrefix
+ * @uses string currentPrefix
  *   The current prefix we are analysing (get, is, has).
  *   Does not get set from the outside.
  */
 class ThroughGetter extends AbstractCallback
 {
+
     /**
      * {@inheritdoc}
      */
@@ -103,14 +104,14 @@ class ThroughGetter extends AbstractCallback
     {
         $output = $this->dispatchStartEvent();
 
-        $this->parameters['currentPrefix'] = 'get';
-        $output .= $this->goThroughMethodList($this->parameters['normalGetter']);
+        $this->parameters[static::PARAM_CURRENT_PREFIX] = 'get';
+        $output .= $this->goThroughMethodList($this->parameters[static::PARAM_NORMAL_GETTER]);
 
-        $this->parameters['currentPrefix'] = 'is';
-        $output .= $this->goThroughMethodList($this->parameters['isGetter']);
+        $this->parameters[static::PARAM_CURRENT_PREFIX] = 'is';
+        $output .= $this->goThroughMethodList($this->parameters[static::PARAM_IS_GETTER]);
 
-        $this->parameters['currentPrefix'] = 'has';
-        return $output . $this->goThroughMethodList($this->parameters['hasGetter']);
+        $this->parameters[static::PARAM_CURRENT_PREFIX] = 'has';
+        return $output . $this->goThroughMethodList($this->parameters[static::PARAM_HAS_GETTER]);
     }
 
     /**
@@ -135,7 +136,10 @@ class ThroughGetter extends AbstractCallback
             // 1.) We have an actual value
             // 2.) We got NULL as a value
             // 3.) We were unable to get any info at all.
-            $comments = nl2br($this->commentAnalysis->getComment($reflectionMethod, $this->parameters['ref']));
+            $comments = nl2br($this->commentAnalysis->getComment(
+                $reflectionMethod,
+                $this->parameters[static::PARAM_REF]
+            ));
 
             /** @var Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
@@ -153,7 +157,7 @@ class ThroughGetter extends AbstractCallback
             $output .= $this->retrievePropertyValue(
                 $reflectionMethod,
                 $this->dispatchEventWithModel(
-                    __FUNCTION__ . '::end',
+                    __FUNCTION__ . static::EVENT_MARKER_END,
                     $model
                 )
             );
@@ -175,14 +179,14 @@ class ThroughGetter extends AbstractCallback
      */
     protected function retrievePropertyValue(\ReflectionMethod $reflectionMethod, Model $model)
     {
-        $refProp = $this->getReflectionProperty($this->parameters['ref'], $reflectionMethod);
+        $refProp = $this->getReflectionProperty($this->parameters[static::PARAM_REF], $reflectionMethod);
         $nothingFound = true;
         $value = null;
 
         if (empty($refProp) === false) {
             // We've got ourselves a possible result!
             $nothingFound = false;
-            $value = $this->parameters['ref']->retrieveValue($refProp);
+            $value = $this->parameters[static::PARAM_REF]->retrieveValue($refProp);
             $model->setData($value);
             if ($value === null) {
                 // A NULL value might mean that the values does not
@@ -205,16 +209,15 @@ class ThroughGetter extends AbstractCallback
         if ($this->parameters['additional']['nothingFound'] === true) {
             // Found nothing  :-(
             // We literally have no info. We need to tell the user.
-            $noInfoMessage = 'unknown';
-            $model->setType($noInfoMessage)
-                ->setNormal($noInfoMessage);
+            $model->setType(static::TYPE_UNKNOWN)
+                ->setNormal(static::TYPE_UNKNOWN);
             // We render this right away, without any routing.
             return $this->pool->render->renderSingleChild($model);
         }
 
         return $this->pool->routing->analysisHub(
             $this->dispatchEventWithModel(
-                __FUNCTION__ . '::end',
+                __FUNCTION__ . static::EVENT_MARKER_END,
                 $model
             )
         );
@@ -319,7 +322,7 @@ class ThroughGetter extends AbstractCallback
      */
     protected function preparePropertyName(\ReflectionMethod $reflectionMethod)
     {
-        $currentPrefix = $this->parameters['currentPrefix'];
+        $currentPrefix = $this->parameters[static::PARAM_CURRENT_PREFIX];
 
          // Get the name and remove the 'get' . . .
         $getterName = $reflectionMethod->getName();

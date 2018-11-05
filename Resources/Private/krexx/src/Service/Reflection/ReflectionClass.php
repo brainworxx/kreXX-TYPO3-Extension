@@ -83,7 +83,7 @@ class ReflectionClass extends \ReflectionClass
      */
     public function retrieveValue(\ReflectionProperty $refProperty)
     {
-        $propName = $refProperty->name;
+        $propName = $refProperty->getName();
 
         if (array_key_exists("\0*\0" . $propName, $this->objectArray)) {
             // Protected or a private

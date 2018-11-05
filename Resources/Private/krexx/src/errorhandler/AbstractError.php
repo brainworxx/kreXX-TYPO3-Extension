@@ -44,29 +44,16 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 abstract class AbstractError
 {
+    const TRACE_FATALS = 'traceFatals';
+    const TRACE_WARNINGS = 'traceWarnings';
+    const TRACE_NOTICES = 'traceNotices';
 
     /**
      * Translates an error into someting more human readable.
      *
      * @var array
      */
-    protected $errorTranslation = array(
-        E_ERROR => array('Fatal', 'traceFatals'),
-        E_WARNING => array('Warning', 'traceWarnings'),
-        E_PARSE => array('Parse error', 'traceFatals'),
-        E_NOTICE => array('Notice', 'traceNotices'),
-        E_CORE_ERROR => array('PHP startup error', 'traceFatals'),
-        E_CORE_WARNING => array('PHP startup warning', 'traceWarnings'),
-        E_COMPILE_ERROR => array('Zend scripting fatal error', 'traceFatals'),
-        E_COMPILE_WARNING => array('Zend scripting warning', 'traceWarnings'),
-        E_USER_ERROR => array('User defined error', 'traceFatals'),
-        E_USER_WARNING => array('User defined warning', 'traceWarnings'),
-        E_USER_NOTICE => array('User defined notice', 'traceNotices'),
-        E_STRICT => array('Strict notice', 'traceNotices'),
-        E_RECOVERABLE_ERROR => array('Catchable fatal error', 'traceFatals'),
-        E_DEPRECATED => array('Deprecated warning', 'traceWarnings'),
-        E_USER_DEPRECATED => array('User defined deprecated warning', 'traceWarnings'),
-    );
+    protected $errorTranslation;
 
     /**
      * Here we store all relevant data.
@@ -95,6 +82,24 @@ abstract class AbstractError
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
+
+        $this->errorTranslation = array(
+            E_ERROR => array('Fatal', static::TRACE_FATALS),
+            E_WARNING => array('Warning', static::TRACE_WARNINGS),
+            E_PARSE => array('Parse error', static::TRACE_FATALS),
+            E_NOTICE => array('Notice', static::TRACE_NOTICES),
+            E_CORE_ERROR => array('PHP startup error', static::TRACE_FATALS),
+            E_CORE_WARNING => array('PHP startup warning', static::TRACE_WARNINGS),
+            E_COMPILE_ERROR => array('Zend scripting fatal error', static::TRACE_FATALS),
+            E_COMPILE_WARNING => array('Zend scripting warning', static::TRACE_WARNINGS),
+            E_USER_ERROR => array('User defined error', static::TRACE_FATALS),
+            E_USER_WARNING => array('User defined warning', static::TRACE_WARNINGS),
+            E_USER_NOTICE => array('User defined notice', static::TRACE_NOTICES),
+            E_STRICT => array('Strict notice', static::TRACE_NOTICES),
+            E_RECOVERABLE_ERROR => array('Catchable fatal error', static::TRACE_FATALS),
+            E_DEPRECATED => array('Deprecated warning', static::TRACE_WARNINGS),
+            E_USER_DEPRECATED => array('User defined deprecated warning', static::TRACE_WARNINGS),
+        );
     }
 
     /**

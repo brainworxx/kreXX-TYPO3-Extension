@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Service\Config;
 
+use Brainworxx\Krexx\Service\Factory\Pool;
+
 /**
  * Security measures for the configuration
  *
@@ -41,6 +43,26 @@ namespace Brainworxx\Krexx\Service\Config;
  */
 class Security extends Fallback
 {
+
+    const KEY_CONFIG_ERROR = 'configError';
+    const KEY_CONFIG_ERROR_BOOL = 'configErrorBool';
+    const KEY_CONFIG_ERROR_INT = 'configErrorInt';
+    const KEY_CONFIG_ERROR_DEBUG_BLACKLIST = 'configErrorDebugBlacklist';
+    const KEY_CONFIG_ERROR_DEBUG_INVALID = 'configErrorDebugInvalid';
+
+    /**
+     * Setter for the debug methos blacklist by the config class.
+     *
+     * @param array $methodBlacklist
+     *   The blacklist.
+     * @return $this
+     *   This, for chaining.
+     */
+    public function setMethodBlacklist(array $methodBlacklist)
+    {
+        $this->methodBlacklist = $methodBlacklist;
+        return $this;
+    }
 
     /**
      * Evaluate a single setting from the cookies or the ini file.
@@ -83,7 +105,7 @@ class Security extends Fallback
     {
         $result = preg_match('/[^a-zA-Z]/', $value) === 0;
         if ($result === false) {
-            $this->pool->messages->addMessage('configError' . ucfirst($name));
+            $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR . ucfirst($name));
         }
 
         return $result;
@@ -106,7 +128,7 @@ class Security extends Fallback
             KREXX_DIR . 'resources/skins/' . $value . '/header.html'
         );
         if ($result === false) {
-            $this->pool->messages->addMessage('configError' . ucfirst($name));
+            $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR . ucfirst($name));
         }
 
         return $result;
@@ -127,7 +149,7 @@ class Security extends Fallback
     {
         $result = ($value === static::VALUE_BROWSER || $value === 'file');
         if ($result === false) {
-            $this->pool->messages->addMessage('configError' . ucfirst($name));
+            $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR . ucfirst($name));
         }
 
         return $result;
@@ -148,7 +170,7 @@ class Security extends Fallback
     {
         $result = empty($value);
         if ($result === true) {
-            $this->pool->messages->addMessage('configError' . ucfirst($name));
+            $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR . ucfirst($name));
         }
 
         return !$result;
@@ -187,7 +209,7 @@ class Security extends Fallback
 
         if ($maxTime < (int)$value) {
             $this->pool->messages->addMessage(
-                'configError' . ucfirst($name) . 'Big',
+                static::KEY_CONFIG_ERROR . ucfirst($name) . 'Big',
                 array($maxTime)
             );
             return false;
@@ -214,7 +236,7 @@ class Security extends Fallback
     {
         $result = ($value === static::VALUE_TRUE || $value === static::VALUE_FALSE);
         if ($result === false) {
-            $this->pool->messages->addMessage('configErrorBool', array($group, $name));
+            $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR_BOOL, array($group, $name));
         }
 
         return $result;
@@ -240,7 +262,7 @@ class Security extends Fallback
     {
         $result = ((int) $value) > 0;
         if ($result === false) {
-            $this->pool->messages->addMessage('configErrorInt', array($group, $name));
+            $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR_INT, array($group, $name));
         }
 
         return $result;
@@ -254,6 +276,45 @@ class Security extends Fallback
      */
     protected function doNotEval()
     {
+        return true;
+    }
+
+    /**
+     * Sanaty check, if the supplied debug methods are not obviously flawed.
+     *
+     * @param string $value
+     *   Comma separated list of debug methods.
+     * @param string $name
+     *   The name of the value we are checking, needed for the feedback text.
+     * @param string $group
+     *   The name of the group that we are evaluating, needed for the feedback
+     *   text.
+     *
+     * @return bool
+     *   Whether it does evaluate or not.
+     */
+    protected function evalDebugMethods($value, $name, $group)
+    {
+        $list = explode(',', $value);
+
+        foreach ($list as $entry) {
+            // Test for whitespace and the blacklist.
+            if (in_array($entry, $this->methodBlacklist)) {
+                $this->pool->messages->addMessage(
+                    static::KEY_CONFIG_ERROR_DEBUG_BLACKLIST,
+                    array($group, $name, $entry)
+                );
+                return false;
+            }
+            if (strpos($entry, ' ') !== false) {
+                $this->pool->messages->addMessage(
+                    static::KEY_CONFIG_ERROR_DEBUG_INVALID,
+                    array($group, $name, $entry)
+                );
+                return false;
+            }
+        }
+
         return true;
     }
 }

@@ -61,7 +61,7 @@ class ThroughResourceStream extends AbstractCallback
     {
         $output = $this->dispatchStartEvent();
         /** @var resource $resource */
-        $resource = $this->parameters['data'];
+        $resource = $this->parameters[static::PARAM_DATA];
         $meta = stream_get_meta_data($resource);
 
 

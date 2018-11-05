@@ -384,7 +384,10 @@
         color: #919191;
         font: bold 12px tahoma, verdana;
         white-space: pre;
-        background-color: #ffffff; }
+        background-color: #ffffff;
+        border: none;
+        margin: 0;
+        padding: 0; }
       .kwrapper .kchild .kpreview .source, .kfatalwrapper-outer .kchild .kpreview .source {
         padding: 0 20px;
         border-top: 1px solid #F2F2F2;

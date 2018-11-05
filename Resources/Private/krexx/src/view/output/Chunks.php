@@ -57,6 +57,9 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class Chunks
 {
+
+    const STRING_DELIMITER = '@@@';
+
     /**
      * Here we store all relevant data.
      *
@@ -139,6 +142,8 @@ class Chunks
         $this->logDir = $pool->config->getLogDir();
         $this->fileStamp = explode(' ', microtime());
         $this->fileStamp = $this->fileStamp[1] . str_replace('0.', '', $this->fileStamp[0]);
+
+        $pool->chunks = $this;
     }
 
     /**
@@ -162,7 +167,7 @@ class Chunks
             // Write the key to the chunks folder.
             $this->pool->fileService->putFileContents($this->chunkDir . $key . '.Krexx.tmp', $string);
             // Return the first part plus the key.
-            return '@@@' . $key . '@@@';
+            return static::STRING_DELIMITER . $key . static::STRING_DELIMITER;
         }
 
         // Return the original, because it's too small.
@@ -221,7 +226,7 @@ class Chunks
         // should not be anything to cleanup.
         $this->cleanupOldChunks();
 
-        $chunkPos = strpos($string, '@@@');
+        $chunkPos = strpos($string, static::STRING_DELIMITER);
 
         while ($chunkPos !== false) {
             // We have a chunk, we send the html part.
@@ -231,9 +236,13 @@ class Chunks
             $chunkPart = substr($string, $chunkPos);
 
             // We translate the first chunk.
-            $result = explode('@@@', $chunkPart, 3);
-            $string = str_replace('@@@' . $result[1] . '@@@', $this->dechunkMe($result[1]), $chunkPart);
-            $chunkPos = strpos($string, '@@@');
+            $result = explode(static::STRING_DELIMITER, $chunkPart, 3);
+            $string = str_replace(
+                static::STRING_DELIMITER . $result[1] . static::STRING_DELIMITER,
+                $this->dechunkMe($result[1]),
+                $chunkPart
+            );
+            $chunkPos = strpos($string, static::STRING_DELIMITER);
         }
 
         // No more chunk keys, we send what is left.
@@ -264,7 +273,7 @@ class Chunks
 
         // Determine the filename.
         $filename = $this->logDir . $this->fileStamp . '.Krexx.html';
-        $chunkPos = strpos($string, '@@@');
+        $chunkPos = strpos($string, static::STRING_DELIMITER);
 
         while ($chunkPos !== false) {
             // We have a chunk, we save the html part.
@@ -275,9 +284,13 @@ class Chunks
             // We translate the first chunk.
             // Strangely, with a memory peak of 84MB, explode is
             // 2 mb cheaper than preg_match().
-            $result = explode('@@@', $chunkPart, 3);
-            $string = str_replace('@@@' . $result[1] . '@@@', $this->dechunkMe($result[1]), $chunkPart);
-            $chunkPos = strpos($string, '@@@');
+            $result = explode(static::STRING_DELIMITER, $chunkPart, 3);
+            $string = str_replace(
+                static::STRING_DELIMITER . $result[1] . static::STRING_DELIMITER,
+                $this->dechunkMe($result[1]),
+                $chunkPart
+            );
+            $chunkPos = strpos($string, static::STRING_DELIMITER);
         }
 
         // No more chunks, we save what is left.

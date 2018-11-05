@@ -147,6 +147,8 @@ class Emergency
         $this->minMemoryLeft = ((int) $pool->config->getSetting(Fallback::SETTING_MEMORY_LEFT))  * 1024 * 1024;
         $this->maxCall = (int) $this->pool->config->getSetting(Fallback::SETTING_MAX_CALL);
         $this->maxNestingLevel = (int) $this->pool->config->getSetting(Fallback::SETTING_NESTING_LEVEL);
+
+        $pool->emergencyHandler = $this;
     }
 
     /**

@@ -99,6 +99,8 @@ class Recursion
         $this->globals = $pool->getGlobals('');
         $this->globals[$this->recursionMarker] = true;
         $this->recursionHive = new \SplObjectStorage();
+
+        $pool->recursionHandler = $this;
     }
 
     /**

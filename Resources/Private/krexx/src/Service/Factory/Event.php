@@ -69,6 +69,8 @@ class Event
     {
         $this->pool = $pool;
         $this->register = SettingsGetter::getEventList();
+
+        $pool->eventService = $this;
     }
 
     /**

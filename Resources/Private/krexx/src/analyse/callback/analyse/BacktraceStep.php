@@ -88,16 +88,16 @@ class BacktraceStep extends AbstractCallback
      */
     protected function fileToOutput()
     {
-        $stepData = $this->parameters['data'];
+        $stepData = $this->parameters[static::PARAM_DATA];
         if (isset($stepData[static::STEP_DATA_FILE]) === true) {
             return $this->pool->render->renderSingleChild(
                 $this->dispatchEventWithModel(
-                    __FUNCTION__ . '::end',
+                    __FUNCTION__ . static::EVENT_MARKER_END,
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                         ->setData($stepData[static::STEP_DATA_FILE])
                         ->setName('File')
                         ->setNormal($stepData[static::STEP_DATA_FILE])
-                        ->setType('string ' . strlen($stepData[static::STEP_DATA_FILE]))
+                        ->setType(static::TYPE_STRING . strlen($stepData[static::STEP_DATA_FILE]))
                 )
             );
         }
@@ -113,7 +113,7 @@ class BacktraceStep extends AbstractCallback
      */
     protected function lineToOutput()
     {
-        $stepData = $this->parameters['data'];
+        $stepData = $this->parameters[static::PARAM_DATA];
         $output = '';
         $source = '';
         if (isset($stepData[static::STEP_DATA_LINE]) === true) {
@@ -123,7 +123,7 @@ class BacktraceStep extends AbstractCallback
                     ->setData($stepData[static::STEP_DATA_LINE])
                     ->setName('Line no.')
                     ->setNormal($stepData[static::STEP_DATA_LINE])
-                    ->setType('integer')
+                    ->setType(static::TYPE_INTEGER)
             );
 
             // Trying the read the sourcecode where it was called.
@@ -146,13 +146,13 @@ class BacktraceStep extends AbstractCallback
         // Add the prettified code to the analysis.
         return $output . $this->pool->render->renderSingleChild(
             $this->dispatchEventWithModel(
-                __FUNCTION__ . '::end',
+                __FUNCTION__ . static::EVENT_MARKER_END,
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                     ->setData($source)
                     ->setName('Sourcecode')
                     ->setNormal('. . .')
                     ->setHasExtra(true)
-                    ->setType('PHP')
+                    ->setType(static::TYPE_PHP)
             )
         );
     }
@@ -165,17 +165,17 @@ class BacktraceStep extends AbstractCallback
      */
     protected function functionToOutput()
     {
-        $stepData = $this->parameters['data'];
+        $stepData = $this->parameters[static::PARAM_DATA];
 
         if (isset($stepData[static::STEP_DATA_FUNCTION]) === true) {
             return $this->pool->render->renderSingleChild(
                 $this->dispatchEventWithModel(
-                    __FUNCTION__ . '::end',
+                    __FUNCTION__ . static::EVENT_MARKER_END,
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                         ->setData($stepData[static::STEP_DATA_FUNCTION])
                         ->setName('Last called function')
                         ->setNormal($stepData[static::STEP_DATA_FUNCTION])
-                        ->setType('string ' . strlen($stepData[static::STEP_DATA_FUNCTION]))
+                        ->setType(static::TYPE_STRING . strlen($stepData[static::STEP_DATA_FUNCTION]))
                 )
             );
         }
@@ -191,13 +191,13 @@ class BacktraceStep extends AbstractCallback
      */
     protected function objectToOutput()
     {
-        $stepData = $this->parameters['data'];
+        $stepData = $this->parameters[static::PARAM_DATA];
 
         if (isset($stepData[static::STEP_DATA_OBJECT]) === true) {
             return $this->pool
                 ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessObject')
                 ->process($this->dispatchEventWithModel(
-                    __FUNCTION__ . '::end',
+                    __FUNCTION__ . static::EVENT_MARKER_END,
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                         ->setData($stepData[static::STEP_DATA_OBJECT])
                         ->setName('Calling object')
@@ -215,17 +215,17 @@ class BacktraceStep extends AbstractCallback
      */
     protected function typeToOutput()
     {
-        $stepData = $this->parameters['data'];
+        $stepData = $this->parameters[static::PARAM_DATA];
 
         if (isset($stepData[static::STEP_DATA_TYPE]) === true) {
             return $this->pool->render->renderSingleChild(
                 $this->dispatchEventWithModel(
-                    __FUNCTION__ . '::end',
+                    __FUNCTION__ . static::EVENT_MARKER_END,
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                         ->setData($stepData[static::STEP_DATA_TYPE])
                         ->setName('Call type')
                         ->setNormal($stepData[static::STEP_DATA_TYPE])
-                        ->setType('string ' . strlen($stepData[static::STEP_DATA_TYPE]))
+                        ->setType(static::TYPE_STRING . strlen($stepData[static::STEP_DATA_TYPE]))
                 )
             );
         }
@@ -241,14 +241,14 @@ class BacktraceStep extends AbstractCallback
      */
     protected function argsToOutput()
     {
-        $stepData = $this->parameters['data'];
+        $stepData = $this->parameters[static::PARAM_DATA];
 
         if (isset($stepData[static::STEP_DATA_ARGS]) === true) {
             return $this->pool
                 ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessArray')
                     ->process(
                         $this->dispatchEventWithModel(
-                            __FUNCTION__ . '::end',
+                            __FUNCTION__ . static::EVENT_MARKER_END,
                             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                                 ->setData($stepData[static::STEP_DATA_ARGS])
                                 ->setName('Arguments from the call')
