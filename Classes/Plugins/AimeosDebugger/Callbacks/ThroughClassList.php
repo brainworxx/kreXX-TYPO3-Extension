@@ -64,14 +64,14 @@ class ThroughClassList extends AbstractCallback
     {
         $this->dispatchStartEvent();
 
-        $data = $this->parameters['data'];
+        $data = $this->parameters[static::PARAM_DATA];
         $result = '';
 
         // We simply pass it on to the routing.
         foreach ($data as $key => $object) {
             $result .= $this->pool->routing->analysisHub(
                 $this->dispatchEventWithModel(
-                    'analysisEnd',
+                    static::EVENT_MARKER_ANALYSES_END,
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                         ->setData($object)
                         ->setName($key)

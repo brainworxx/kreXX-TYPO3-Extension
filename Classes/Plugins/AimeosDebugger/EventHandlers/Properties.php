@@ -69,7 +69,7 @@ class Properties extends AbstractCallback implements EventHandlerInterface
     public function handle(AbstractCallback $callback, Model $model = null)
     {
         $params = $callback->getParameters();
-        $data = $params['data'];
+        $data = $params[static::PARAM_DATA];
         $result = '';
 
         if (is_a($data, 'Aimeos\\MShop\\Common\\Item\\Iface')) {
@@ -98,9 +98,9 @@ class Properties extends AbstractCallback implements EventHandlerInterface
     protected function extractValues($name, array $params)
     {
         $result = array();
-        $data = $params['data'];
+        $data = $params[static::PARAM_DATA];
         /** @var \Service\Reflection\ReflectionClass $ref */
-        $ref = $params['ref'];
+        $ref = $params[static::PARAM_REF];
 
         try {
             // The property is a private property somewhere deep withing the

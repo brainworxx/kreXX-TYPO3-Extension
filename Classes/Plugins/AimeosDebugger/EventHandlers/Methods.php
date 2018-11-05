@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -44,7 +45,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class Methods implements EventHandlerInterface
+class Methods implements EventHandlerInterface, ConstInterface
 {
     /**
      * List of classes that have potentially implemented this.
@@ -112,7 +113,7 @@ class Methods implements EventHandlerInterface
         $params = $callback->getParameters();
 
         // Get a first impression.
-        $data = $params['data'];
+        $data = $params[static::PARAM_DATA];
         if ($this->checkClassName($data) === false) {
             // Early return, we skip this one.
             return $result;
@@ -122,7 +123,7 @@ class Methods implements EventHandlerInterface
         // inside of decorators.
         $allReceivers = array();
 
-        $receiver = $this->retrieveReceiverObject($data, $params['ref']);
+        $receiver = $this->retrieveReceiverObject($data, $params[static::PARAM_REF]);
         $methods = array();
         while ($receiver !== false) {
             $allReceivers[] = $receiver;

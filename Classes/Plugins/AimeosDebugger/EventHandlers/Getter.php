@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -65,8 +66,9 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * @uses array $additional
  *   Additional data from the event call.
  */
-class Getter implements EventHandlerInterface
+class Getter implements EventHandlerInterface, ConstInterface
 {
+    const PARAM_ADDITIONAL = 'additional';
 
     /**
      * Our pool.
@@ -96,10 +98,10 @@ class Getter implements EventHandlerInterface
         // We will only act, if we have no value so far.
         // Also, we only do this for Aimeos items.
         $params = $callback->getParameters();
-        $data = $params['ref']->getData();
+        $data = $params[static::PARAM_REF]->getData();
 
-        if ($params['additional']['nothingFound'] === false ||
-            $params['currentPrefix'] !== 'get' ||
+        if ($params[static::PARAM_ADDITIONAL]['nothingFound'] === false ||
+            $params[static::PARAM_CURRENT_PREFIX] !== 'get' ||
             is_a($data, 'Aimeos\\MShop\\Common\\Item\\Iface') === false
         ) {
             // Early return.
@@ -110,7 +112,7 @@ class Getter implements EventHandlerInterface
         // without the get, plus some prefix, separated with a dot.
         // 'getCustomerId' should be 'some.key.customerid'
         /** @var \ReflectionMethod $reflectionMethod */
-        $reflectionMethod = $params['additional']['refMethod'];
+        $reflectionMethod = $params[static::PARAM_ADDITIONAL]['refMethod'];
         $possibleKey = strtolower(substr($reflectionMethod->name, 3));
 
         $values = $this->retrieveValueArray($params, $reflectionMethod);
@@ -126,7 +128,7 @@ class Getter implements EventHandlerInterface
             $keyParts = explode('.', $key);
             if ($keyParts[count($keyParts) - 1] === $possibleKey) {
                 // We've got ourselves a result.
-                $params['additional']['nothingFound'] = false;
+                $params[static::PARAM_ADDITIONAL]['nothingFound'] = false;
 
                 // Update the model.
                 $model->setData($possibleResult);
@@ -167,7 +169,7 @@ class Getter implements EventHandlerInterface
         // through the whole class structure.
         /** @var \ReflectionClass $reflectionClass */
         $reflectionClass = $reflectionMethod->getDeclaringClass();
-        $data = $params['ref']->getData();
+        $data = $params[static::PARAM_REF]->getData();
 
         if ($reflectionClass->hasProperty('bdata')) {
             $reflectionProperty = $reflectionClass->getProperty('bdata');

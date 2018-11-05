@@ -63,7 +63,7 @@ class ThroughMethods extends AbstractCallback
     {
         $this->dispatchStartEvent();
 
-        $data = $this->parameters['data'];
+        $data = $this->parameters[static::PARAM_DATA];
         if (isset($this->parameters['isFactoryMethod'])) {
             $isFactoryMethod = true;
         } else {
@@ -78,8 +78,8 @@ class ThroughMethods extends AbstractCallback
         /** @var \ReflectionMethod $reflectionMethod */
         foreach ($data as $factoryName => $reflectionMethod) {
             $params = array(
-                'data' => array($reflectionMethod),
-                'ref' => $reflectionMethod->getDeclaringClass(),
+                static::PARAM_DATA => array($reflectionMethod),
+                static::PARAM_REF => $reflectionMethod->getDeclaringClass(),
             );
             // We may not be able to use the method name here
             // @see ViewFactory

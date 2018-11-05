@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -59,7 +60,7 @@ use Aimeos\MW\View\Iface;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class ViewFactory implements EventHandlerInterface
+class ViewFactory implements EventHandlerInterface, ConstInterface
 {
     /**
      * The namespace of the view helpers.
@@ -106,10 +107,10 @@ class ViewFactory implements EventHandlerInterface
     {
         $result = '';
         $params = $callback->getParameters();
-        $data = $params['ref']->getData();
+        $data = $params[static::PARAM_REF]->getData();
 
         /** @var \ReflectionClass $ref */
-        $ref = $params['ref'];
+        $ref = $params[static::PARAM_REF];
 
         // Test if we are facing an Aimeos view.
         if (is_a($data, 'Aimeos\\MW\\View\\Iface') === false) {
@@ -156,7 +157,7 @@ class ViewFactory implements EventHandlerInterface
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                         ->setName('Instantiated view helpers')
                         ->setType('class internals magical factory')
-                        ->addParameter('data', $this->helpers)
+                        ->addParameter(static::PARAM_DATA, $this->helpers)
                         ->setHelpid('aimeosViewExisting')
                         ->injectCallback(
                             $this->pool->createClass(
