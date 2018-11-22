@@ -12,6 +12,18 @@
 Changelog
 =============================================================
 
+3.0.1
+    - [Bugfix] Added the missing end event to the property analysis.
+    - [Bugfix][Change] Configured debug methods are now checked on configuration loading.
+    - [Bugfix] Preserve the line breaks from the string-extra.
+    - [Bugfix] Repair the UndeclaredProperty class and use it.
+    - [Bugfix] Lower the nesting level again after a failed traversable analysis.
+    - [Bugfix] Analysis of private getter do not respect the context.
+    - [Bugfix] Interesting display of parameters in the method analysis.
+    - [Bugfix] Infinite loop when configuring the ip range.
+	- [Bugfix] PHP5.x pars error in class ViewFactory
+    - [Change] All singelton classes now add themself to the pool as soon as they are created.
+
 3.0.0
     - [Feature] Added 'is' and 'has' to the getter analysis.
     - [Feature] Added plugin support, to replace the half-asses overwrites.
