@@ -71,6 +71,4 @@ interface ConstInterface
     const PARAM_NORMAL_GETTER = 'normalGetter';
     const PARAM_IS_GETTER = 'isGetter';
     const PARAM_HAS_GETTER = 'hasGetter';
-    const PARAM_REF_METHOD = 'reflectionMethod';
-    const PARAM_CURRENT_PREFIX = 'currentPrefix';
 }

@@ -10,6 +10,7 @@
   analysis.
 - Bugfix: Analysis of private getter do not respect the context.
 - Bugfix: Interesting display of parameters in the method analysis.
+- Bugfix: Infinite loop when configuring the ip range.
 
 3.0.0
 - Added 'is' and 'has' to the getter analysis.

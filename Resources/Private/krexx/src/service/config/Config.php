@@ -90,6 +90,13 @@ class Config extends Fallback
     protected $directories = array();
 
     /**
+     * Has kreXX been disabled via php call \Krexx::disable()?
+     *
+     * @var bool
+     */
+    public static $disabledByPhp = false;
+
+    /**
      * Inject the pool and load the configuration.
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
@@ -143,7 +150,8 @@ class Config extends Fallback
         // ip to decide if we need to deactivate kreXX.
         if ($this->isAllowedIp($this->getSetting(static::SETTING_IP_RANGE)) === false) {
             // No kreXX for you! At all.
-            \Krexx::disable();
+            $this->setDisabled(true);
+            static::$disabledByPhp = true;
         }
 
         $this->debugFuncList = explode(',', $this->getSetting(static::SETTING_DEBUG_METHODS));

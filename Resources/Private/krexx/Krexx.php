@@ -38,6 +38,7 @@ include_once 'bootstrap.php';
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\Config;
 
 /**
  * Public functions, allowing access to the kreXX debug features.
@@ -55,13 +56,6 @@ class Krexx
      * @var Pool
      */
     public static $pool;
-
-    /**
-     * Has kreXX been disabled via php call \Krexx::disable()?
-     *
-     * @var bool
-     */
-    protected static $disabledByPhp = false;
 
     /**
      * Handles the developer handle.
@@ -109,7 +103,7 @@ class Krexx
         // from the outside.
         // We also do not use the static ForcedLog methods here, because they
         // are somewhat time costly.
-        if (AbstractController::$analysisInProgress || static::$disabledByPhp) {
+        if (AbstractController::$analysisInProgress || Config::$disabledByPhp) {
             return;
         }
 
@@ -135,7 +129,7 @@ class Krexx
         // Disabled ?
         if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
-            static::$disabledByPhp
+            Config::$disabledByPhp
         ) {
             return;
         }
@@ -165,7 +159,7 @@ class Krexx
         // Disabled?
         if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
-            static::$disabledByPhp
+            Config::$disabledByPhp
         ) {
             return;
         }
@@ -196,7 +190,7 @@ class Krexx
         // Disabled?
         if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
-            static::$disabledByPhp
+            Config::$disabledByPhp
         ) {
             return;
         }
@@ -224,7 +218,7 @@ class Krexx
         static::$pool->createClass('Brainworxx\\Krexx\\Controller\\DumpController')
             ->noFatalForKrexx();
 
-        static::$disabledByPhp = true;
+        Config::$disabledByPhp = true;
     }
 
     /**
@@ -241,7 +235,7 @@ class Krexx
         // Disabled?
         // We are ignoring local settings here.
         if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
-            static::$disabledByPhp
+            Config::$disabledByPhp
         ) {
             return;
         }
@@ -265,7 +259,7 @@ class Krexx
 
         // Disabled?
         if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
-            static::$disabledByPhp
+            Config::$disabledByPhp
         ) {
             return;
         }
@@ -298,7 +292,7 @@ class Krexx
 
         // Disabled?
         if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
-            static::$disabledByPhp
+            Config::$disabledByPhp
         ) {
             return;
         }

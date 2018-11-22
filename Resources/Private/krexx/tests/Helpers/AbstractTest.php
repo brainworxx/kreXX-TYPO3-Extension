@@ -81,7 +81,7 @@ abstract class AbstractTest extends TestCase
         \Krexx::$pool->config = new Config(\Krexx::$pool);
         \Krexx::$pool->config->setDisabled(false);
         \Krexx::$pool = null;
-        $this->setValueByReflection('disabledByPhp', false, \Krexx::class);
+        Config::$disabledByPhp = false;
         $this->setValueByReflection('rewriteList', [], Registration::class);
         CallbackCounter::$counter = 0;
         CallbackCounter::$staticParameters = [];

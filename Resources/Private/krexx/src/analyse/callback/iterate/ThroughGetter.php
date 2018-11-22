@@ -63,6 +63,10 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class ThroughGetter extends AbstractCallback
 {
+    /**
+     * The parameter name of the prefix we ara analysing.
+     */
+    const CURRENT_PREFIX = 'currentPrefix';
 
     /**
      * {@inheritdoc}
@@ -104,13 +108,13 @@ class ThroughGetter extends AbstractCallback
     {
         $output = $this->dispatchStartEvent();
 
-        $this->parameters[static::PARAM_CURRENT_PREFIX] = 'get';
+        $this->parameters[static::CURRENT_PREFIX] = 'get';
         $output .= $this->goThroughMethodList($this->parameters[static::PARAM_NORMAL_GETTER]);
 
-        $this->parameters[static::PARAM_CURRENT_PREFIX] = 'is';
+        $this->parameters[static::CURRENT_PREFIX] = 'is';
         $output .= $this->goThroughMethodList($this->parameters[static::PARAM_IS_GETTER]);
 
-        $this->parameters[static::PARAM_CURRENT_PREFIX] = 'has';
+        $this->parameters[static::CURRENT_PREFIX] = 'has';
         return $output . $this->goThroughMethodList($this->parameters[static::PARAM_HAS_GETTER]);
     }
 
@@ -322,7 +326,7 @@ class ThroughGetter extends AbstractCallback
      */
     protected function preparePropertyName(\ReflectionMethod $reflectionMethod)
     {
-        $currentPrefix = $this->parameters[static::PARAM_CURRENT_PREFIX];
+        $currentPrefix = $this->parameters[static::CURRENT_PREFIX];
 
          // Get the name and remove the 'get' . . .
         $getterName = $reflectionMethod->getName();
