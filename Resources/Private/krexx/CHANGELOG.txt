@@ -1,4 +1,4 @@
-3.0.1 dev
+3.0.1
 - Change: All singelton classes now add themself to the pool as
   soon as they are created.
 - Bugfix: Added the missing end event to the property analysis.
