@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
   'title' => 'kreXX Debugger',
-  'description' => 'kreXX is a feature rich php debugger with a neatly arranged debug window, featuring backend access to logfiles, code generation to reach the displayed values and much more.',
+  'description' => 'kreXX is a feature rich php debugger, featuring backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for fluid, aimeos and dataviewer.',
   'category' => 'misc',
   'version' => '3.0.1',
   'state' => 'stable',
