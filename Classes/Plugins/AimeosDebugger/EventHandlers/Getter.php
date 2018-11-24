@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Analyse\Model;
@@ -68,8 +69,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class Getter implements EventHandlerInterface, ConstInterface
 {
-    const PARAM_ADDITIONAL = 'additional';
-
     /**
      * Our pool.
      *
@@ -106,7 +105,7 @@ class Getter implements EventHandlerInterface, ConstInterface
         $data = $params[static::PARAM_REF]->getData();
 
         if ($params[static::PARAM_ADDITIONAL]['nothingFound'] === false ||
-            $params[static::PARAM_CURRENT_PREFIX] !== 'get' ||
+            $params[ThroughGetter::CURRENT_PREFIX] !== 'get' ||
             is_a($data, 'Aimeos\\MShop\\Common\\Item\\Iface') === false
         ) {
             // Early return.

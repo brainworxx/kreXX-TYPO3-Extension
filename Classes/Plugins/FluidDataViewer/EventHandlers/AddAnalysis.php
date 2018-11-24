@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDataViewer\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -47,7 +48,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *   Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe::start
  * @package Brainworxx\Includekrexx\Plugins\FluidDataViewer
  */
-class AddAnalysis implements EventHandlerInterface
+class AddAnalysis implements EventHandlerInterface, ConstInterface
 {
     /**
      * The resource pool
@@ -76,7 +77,7 @@ class AddAnalysis implements EventHandlerInterface
     public function handle(AbstractCallback $callback, Model $model = null)
     {
         $params = $callback->getParameters();
-        $record = $params['ref']->getData();
+        $record = $params[static::PARAM_REF]->getData();
         $output = '';
         if (is_object($record) && is_a($record, '\\MageDeveloper\\Dataviewer\\Domain\\Model\\Record')) {
             try {
