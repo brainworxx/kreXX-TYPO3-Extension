@@ -22,6 +22,7 @@ Changelog
     - [Bugfix] Interesting display of parameters in the method analysis.
     - [Bugfix] Infinite loop when configuring the ip range.
     - [Bugfix] PHP5.x pars error in class ViewFactory
+    - [Bugfix] Double escaped path value in the config-help page
     - [Change] All singelton classes now add themself to the pool as soon as they are created.
 
 3.0.0
