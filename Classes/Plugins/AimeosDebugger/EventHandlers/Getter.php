@@ -77,6 +77,11 @@ class Getter implements EventHandlerInterface, ConstInterface
      */
     protected $pool;
 
+    /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
@@ -151,7 +156,7 @@ class Getter implements EventHandlerInterface, ConstInterface
     }
 
     /**
-     * Retrieve the data arraqy from the class.
+     * Retrieve the data array from the class.
      *
      * @param array $params
      *   The parameters from the callback

@@ -250,6 +250,9 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
     /**
      * Retrieve all helper class reflections from a directory.
      *
+     * @param string $directory
+     *   The directory we re processing.
+     *
      * @return array
      *   The list with the reflections.
      */

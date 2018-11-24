@@ -9,7 +9,7 @@
 .. _plugins:
 
 
-Bundeled plugins
+Bundled plugins
 ================
 
 In kreXX v3.0.0 we've introduced a plugin system to the main library. The main goal of this was to keep the codebase better manageable.

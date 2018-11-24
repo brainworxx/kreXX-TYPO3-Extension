@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Includekrexx\ViewHelpers;
 
-
 class LogViewHelper extends DebugViewHelper
 {
     /**

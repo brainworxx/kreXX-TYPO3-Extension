@@ -273,10 +273,10 @@ class Methods implements EventHandlerInterface, ConstInterface
      * Reteive a namebased array of the public methods of a reflection.
      *
      * @param \ReflectionClass $ref
-     *   The reflection from where we want to reteive the method list.
+     *   The reflection from where we want to retrieve the method list.
      *
      * @return array
-     *   Name based array with the methos names.
+     *   Name based array with the methods names.
      */
     protected function retreivePublicMethods(\ReflectionClass $ref)
     {

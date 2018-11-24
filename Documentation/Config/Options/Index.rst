@@ -65,9 +65,9 @@ Prune output
 | Option                         | Description                                                                                                                            | Possible values / example |
 +================================+========================================================================================================================================+===========================+
 | Maximum steps in the backtrace | A backtrace tends to produce a lot of output, and browsers tend to have problems with more than 100MB output in HTML text.             | 10                        |
-|                                | Normally it is not unneccessary to go back more than 10 steps, but if you need to, you can increase this number here.                  |                           |
+|                                | Normally it is not unnecessary to go back more than 10 steps, but if you need to, you can increase this number here.                  |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Maximum array size before      | Huge arrays with lots of objects or other array have the tendancy to produce a lot of output. To prevent output that a browser can not | 300                       |
+| Maximum array size before      | Huge arrays with lots of objects or other array have the tendency to produce a lot of output. To prevent output that a browser can not | 300                       |
 | fallback to simplified         | handel, kreXX uses a simplified array analysis. Simple values will be analysed normally, objects will only display their name, key and |                           |
 | analysis                       | type.                                                                                                                                  |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+

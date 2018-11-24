@@ -34,8 +34,6 @@
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
 
-use Brainworxx\Krexx\Service\Factory\Event;
-use Brainworxx\Krexx\Service\Factory\Factory;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 
@@ -112,7 +110,7 @@ class Configuration implements PluginConfigInterface
             'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\EventHandlers\\VhsMethods'
         );
 
-        // Addings additional texts.
+        // Adding additional texts.
         $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx');
         Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/fluid.kreXX.ini');
     }

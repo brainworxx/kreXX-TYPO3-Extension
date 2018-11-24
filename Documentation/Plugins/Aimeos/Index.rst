@@ -12,7 +12,7 @@
 Aimeos debugger
 ===============
 
-There is a lot of php magic happening in the aimoes shop. When getting informations out of objects, items or views you have to use them.
+There is a lot of php magic happening in the aimoes shop. When getting information out of objects, items or views you have to use them.
 With the used decorator pattern in place, you can may have a hard time finding the information you need.
 
 Features

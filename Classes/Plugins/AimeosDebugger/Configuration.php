@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger;
 
-use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 

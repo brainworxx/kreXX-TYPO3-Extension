@@ -99,7 +99,7 @@ class Properties extends AbstractCallback implements EventHandlerInterface
     {
         $result = array();
         $data = $params[static::PARAM_DATA];
-        /** @var \Service\Reflection\ReflectionClass $ref */
+        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $params[static::PARAM_REF];
 
         try {

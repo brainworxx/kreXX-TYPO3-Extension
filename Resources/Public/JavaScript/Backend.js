@@ -50,8 +50,7 @@
     /**
      * @namespace formSupport
      */
-    function formSupport() {
-    }
+    function formSupport() {}
 
     formSupport.formReady = function () {
         var checkboxes = document.getElementsByName('tx_includekrexx_tools_includekrexxkrexxconfiguration[factory]');
@@ -83,7 +82,7 @@
     };
 
     /**
-     * When activating the checkbox behind the form element, we deactivat the
+     * When activating the checkbox behind the form element, we deactivate the
      * form element, belonging to the checkbox.
      *
      * @param {HTMLInputElement} checkbox
