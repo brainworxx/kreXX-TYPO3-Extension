@@ -116,7 +116,7 @@ class SettingsGetter extends Registration
      * @internal
      *
      * @return array
-     *   THe liost with classes.
+     *   The list with classes.
      */
     public static function getBlacklistDebugClass()
     {

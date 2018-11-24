@@ -92,7 +92,7 @@ class ThroughConfigTest extends AbstractTest
 
         $this->assertEquals(2, CallbackCounter::$counter);
 
-        $expection = [
+        $expectation = [
             ['data' => [
                 'settingOne' => $settingOne,
                 'settingTwo' => $settingTwo
@@ -102,6 +102,6 @@ class ThroughConfigTest extends AbstractTest
                 'settingFour' => $settingFour
             ]]
         ];
-        $this->assertEquals($expection, CallbackCounter::$staticParameters);
+        $this->assertEquals($expectation, CallbackCounter::$staticParameters);
     }
 }

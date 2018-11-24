@@ -335,7 +335,7 @@ class ModelTest extends AbstractTest
     }
 
     /**
-     * Testing the setter for the connector paramaters.
+     * Testing the setter for the connector parameters.
      *
      * @covers \Brainworxx\Krexx\Analyse\Model::setConnectorParameters
      */

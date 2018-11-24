@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
-use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -56,7 +55,7 @@ class ProcessFloat extends AbstractProcess
     public function process(Model $model)
     {
         return $this->pool->render->renderSingleChild(
-            $model->setNormal($model->getData())->setType(static::TYPE_FOLAT)
+            $model->setNormal($model->getData())->setType(static::TYPE_FLOAT)
         );
     }
 }

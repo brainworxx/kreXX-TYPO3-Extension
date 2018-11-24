@@ -43,7 +43,7 @@ use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 
-class TraversableTest  extends AbstractTest
+class TraversableTest extends AbstractTest
 {
     /**
      * @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties
@@ -76,7 +76,7 @@ class TraversableTest  extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
      */
-    public function testCallMewithEmergency()
+    public function testCallMeWithEmergency()
     {
         // Tell the emergency handler mock that we have a nesting level problem.
         \Krexx::$pool->emergencyHandler->expects($this->once())

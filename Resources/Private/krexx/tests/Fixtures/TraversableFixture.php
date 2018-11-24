@@ -39,7 +39,7 @@ namespace Brainworxx\Krexx\Tests\Fixtures;
  *
  * @package Brainworxx\Krexx\Tests\Fixtures
  */
-class TraversableFixture  implements \Iterator
+class TraversableFixture implements \Iterator
 {
     private $position = 0;
 

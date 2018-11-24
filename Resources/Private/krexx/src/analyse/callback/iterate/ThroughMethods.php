@@ -113,7 +113,7 @@ class ThroughMethods extends AbstractCallback
             }
 
             // Update the reflection method.
-            $this->parameters['reflectionMethod'] = $reflectionMethod;
+            $this->parameters[static::PARAM_REF_METHOD] = $reflectionMethod;
 
             // Render it!
             $result .= $this->pool->render->renderExpandableChild(

@@ -72,7 +72,7 @@ class PublicPropertyTest extends AbstractTest
     }
 
     /**
-     * Test the public property asnalysis, without any public ones in the
+     * Test the public property analysis, without any public ones in the
      * fixture
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::callMe

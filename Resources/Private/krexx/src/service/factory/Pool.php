@@ -145,7 +145,7 @@ class Pool extends Factory
     public $encodingService;
 
     /**
-     * The event handler handels events.
+     * The event handler handles events.
      *
      * @var Event
      */

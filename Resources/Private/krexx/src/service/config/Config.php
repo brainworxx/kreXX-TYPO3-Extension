@@ -361,8 +361,6 @@ class Config extends Fallback
      *
      * @param object $data
      *   The class we are analysing.
-     * @param string $call
-     *   The function name we want to call.
      *
      * @return bool
      *   Whether the function is allowed to be called.

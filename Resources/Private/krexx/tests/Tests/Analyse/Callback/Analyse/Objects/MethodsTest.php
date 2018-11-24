@@ -37,8 +37,6 @@ namespace Brainworxx\Krexx\Tests\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Service\Config\Fallback;
-use Brainworxx\Krexx\Service\Factory\Event;
-use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
@@ -123,7 +121,7 @@ class MethodsTest extends AbstractTest
         // Run the test.
         $this->methods->callMe();
 
-        // The recuzrsion has no callback, and no parameters.
+        // The recursion has no callback, and no parameters.
         // Hence, we test the callback counter for zero data.
         $this->assertEquals(0, CallbackCounter::$counter);
         $this->assertEquals([], CallbackCounter::$staticParameters);
@@ -167,7 +165,7 @@ class MethodsTest extends AbstractTest
                 0 =>[
                     'data' => [
                         new \ReflectionMethod($this->fixture['data'], 'publicMethod'),
-                        new \ReflectionMethod($this->fixture['data'], 'troblesomeMethod'),
+                        new \ReflectionMethod($this->fixture['data'], 'troublesomeMethod'),
                     ],
                     'ref' => $this->fixture['ref']
                 ]
@@ -215,7 +213,7 @@ class MethodsTest extends AbstractTest
                     'data' => [
                         new \ReflectionMethod($this->fixture['data'], 'protectedMethod'),
                         new \ReflectionMethod($this->fixture['data'], 'publicMethod'),
-                        new \ReflectionMethod($this->fixture['data'], 'troblesomeMethod'),
+                        new \ReflectionMethod($this->fixture['data'], 'troublesomeMethod'),
                     ],
                     'ref' => $this->fixture['ref']
                 ]
@@ -263,7 +261,7 @@ class MethodsTest extends AbstractTest
                     'data' => [
                         new \ReflectionMethod($this->fixture['data'], 'privateMethod'),
                         new \ReflectionMethod($this->fixture['data'], 'publicMethod'),
-                        new \ReflectionMethod($this->fixture['data'], 'troblesomeMethod'),
+                        new \ReflectionMethod($this->fixture['data'], 'troublesomeMethod'),
                     ],
                     'ref' => $this->fixture['ref']
                 ]
@@ -312,7 +310,7 @@ class MethodsTest extends AbstractTest
                         new \ReflectionMethod($this->fixture['data'], 'privateMethod'),
                         new \ReflectionMethod($this->fixture['data'], 'protectedMethod'),
                         new \ReflectionMethod($this->fixture['data'], 'publicMethod'),
-                        new \ReflectionMethod($this->fixture['data'], 'troblesomeMethod'),
+                        new \ReflectionMethod($this->fixture['data'], 'troublesomeMethod'),
                     ],
                     'ref' => $this->fixture['ref']
                 ]

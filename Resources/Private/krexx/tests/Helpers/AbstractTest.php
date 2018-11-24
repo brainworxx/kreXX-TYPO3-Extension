@@ -128,7 +128,8 @@ abstract class AbstractTest extends TestCase
     /**
      * Mock the emergency handler, to prevent unwanted code execution.
      */
-    protected function mockEmergencyHandler() {
+    protected function mockEmergencyHandler()
+    {
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->any())
             ->method('checkEmergencyBreak')
@@ -142,19 +143,18 @@ abstract class AbstractTest extends TestCase
     /**
      * @param array ...$eventList
      *   Array with the events to listen for.
-     * @param $returnValue
      */
     protected function mockEventService(...$eventList)
     {
         // Set up the events
         $eventServiceMock = $this->createMock(Event::class);
-        $invocatinMocker = $eventServiceMock->expects($this->exactly(count($eventList)))
+        $invocationMocker = $eventServiceMock->expects($this->exactly(count($eventList)))
             ->method('dispatch')
             ->will($this->returnValue(''));
 
         // The '...' is very useful, but having to use call_user_func_array to
         // pass it is just meh.
-        call_user_func_array([$invocatinMocker, 'withConsecutive'], $eventList);
+        call_user_func_array([$invocationMocker, 'withConsecutive'], $eventList);
 
         // Inject the mock.
         \Krexx::$pool->eventService = $eventServiceMock;

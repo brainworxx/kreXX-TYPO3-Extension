@@ -83,7 +83,7 @@ class GetterFixture
     }
 
     /**
-     * Hasser for the value fiels. Pun not intended. Really.
+     * Hasser for the value fields. Pun not intended. Really.
      *
      * @return bool
      */

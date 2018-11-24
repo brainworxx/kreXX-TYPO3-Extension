@@ -35,14 +35,14 @@
 namespace Brainworxx\Krexx\Tests\Fixtures;
 
 /**
- * A fixture for the getter asnalysis, with some "interesting" variante.
+ * A fixture for the getter analysis, with some "interesting" variation.
  *
  * @package Brainworxx\Krexx\Tests\Fixtures
  */
 class DeepGetterFixture
 {
     /**
-     * Lower camel case vaiable.
+     * Lower camel case variable.
      *
      * @var string
      */
@@ -105,7 +105,7 @@ class DeepGetterFixture
     protected $somethingDifferent = 'nine';
 
     /**
-     * A treap for the source code parsing.
+     * A trap for the source code parsing.
      *
      * @var bool
      */
@@ -211,7 +211,7 @@ class DeepGetterFixture
     }
 
     /**
-     * We should not be able to retireve this one.
+     * We should not be able to retrieve this one.
      */
     public function getLiterallyNoting(): void
     {

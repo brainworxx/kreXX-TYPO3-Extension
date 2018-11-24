@@ -97,7 +97,7 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        // We do not use the config settings here, because we do not havae any
+        // We do not use the config settings here, because we do not have any
         // output whatsoever. The config settings are either on or off, during
         // the entire run, meaning the can not be changed (by normal api means)
         // from the outside.
@@ -332,7 +332,7 @@ class Krexx
     }
 
     /**
-     * Takes a "moment" and loggs the timer results.
+     * Takes a "moment" and logs the timer results.
      *
      * @api
      */

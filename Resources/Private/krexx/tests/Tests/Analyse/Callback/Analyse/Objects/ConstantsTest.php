@@ -36,8 +36,6 @@ namespace Brainworxx\Krexx\Tests\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Constants;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants;
-use Brainworxx\Krexx\Service\Factory\Event;
-use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\View\AbstractRender;
@@ -129,7 +127,7 @@ class ConstantsTest extends AbstractTest
         // Was it called?
         $this->assertEquals(1, CallbackCounter::$counter);
         // Were the parameters set correctly?
-        // The clsname gets root-namespaced, hence the '\'
+        // The classname gets root-namespaced, hence the '\'
         $this->assertEquals(
             ['data' => 'some constants', 'classname' => '\\some classname'],
             CallbackCounter::$staticParameters[0]

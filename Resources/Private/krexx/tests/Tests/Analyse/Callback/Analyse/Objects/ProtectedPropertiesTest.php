@@ -36,8 +36,6 @@ namespace Tests\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
-use Brainworxx\Krexx\Service\Factory\Event;
-use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ProtectedFixture;
@@ -73,7 +71,7 @@ class ProtectedPropertiesTest extends AbstractTest
     }
 
     /**
-     * Test the private propery analysis, without any protected ones in the
+     * Test the private property analysis, without any protected ones in the
      * fixture.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties::callMe
@@ -98,12 +96,12 @@ class ProtectedPropertiesTest extends AbstractTest
             ->setParams($fixture)
             ->callMe();
 
-        // Check if the callback counter wascalled, at all.
+        // Check if the callback counter was called, at all.
         $this->assertEquals(0, CallbackCounter::$counter);
     }
 
     /**
-     * Test, if the private analsysis gets all privates, including the
+     * Test, if the private analysis gets all privates, including the
      * "inherited"  ones.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties::callMe

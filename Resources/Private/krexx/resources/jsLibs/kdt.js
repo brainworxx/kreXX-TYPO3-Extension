@@ -80,52 +80,52 @@
      * @param {string} selector
      * @return {*}
      */
-    kdt.matches = function(element, selector) {
+    kdt.matches = function (element, selector) {
         return false;
     };
 
     /**
      * We are adding a concrete implementation of the matches method,
-     * which may or may not be implemented in one way or the aother.
+     * which may or may not be implemented in one way or the another.
      */
-    kdt.testMachtes = function() {
+    kdt.testMachtes = function () {
         // Normal implementation.
         if (typeof kdt.body.matches === 'function') {
-            kdt.matches = function(element, selector) {
+            kdt.matches = function (element, selector) {
                 return element.matches(selector);
             };
             return;
         }
         // Whatever.
         if (typeof kdt.body.matchesSelector === 'function') {
-            kdt.matches = function(element, selector) {
+            kdt.matches = function (element, selector) {
                 return element.matchesSelector(selector);
             };
             return;
         }
         // IE.
         if (typeof kdt.body.msMatchesSelector === 'function') {
-            kdt.matches = function(element, selector) {
+            kdt.matches = function (element, selector) {
                 return element.msMatchesSelector(selector);
             };
             return;
         }
         // Firefox.
         if (typeof kdt.body.mozMatchesSelector === 'function') {
-            kdt.matches = function(element, selector) {
+            kdt.matches = function (element, selector) {
                 return element.mozMatchesSelector(selector);
             };
             return;
         }
         // Chrome.
         if (typeof kdt.body.webkitMatchesSelector === 'function') {
-            kdt.matches = function(element, selector) {
+            kdt.matches = function (element, selector) {
                 return element.webkitMatchesSelector(selector);
             }
         }
          // Opera.
         if (typeof kdt.body.oMatchesSelector === 'function') {
-            kdt.webkitMatchesSelector = function(element, selector) {
+            kdt.webkitMatchesSelector = function (element, selector) {
                 return element.oMatchesSelector(selector);
             }
         }
@@ -303,7 +303,7 @@
      * @param {string} selector
      * @param {function} callback
      */
-    kdt.clickHandler.add = function(selector, callback) {
+    kdt.clickHandler.add = function (selector, callback) {
         if (!(selector in kdt.clickHandler.storage)) {
             kdt.clickHandler.storage[selector] = [];
         }
@@ -311,11 +311,11 @@
     };
 
     /**
-     * Registers the eventhandler, prefereably on the kreXX instance window.
+     * Registers the eventhandler, preferably on the kreXX instance window.
      *
      * @param selector
      */
-    kdt.clickHandler.register = function(selector) {
+    kdt.clickHandler.register = function (selector) {
         /** @type {NodeList} */
         var elements = document.querySelectorAll(selector);
 
@@ -325,13 +325,13 @@
     };
 
     /**
-     * Whenever a click is bubbeled on a kreXX instance, we try to find
-     * the according callback, and sinply call it.
+     * Whenever a click is bubbled on a kreXX instance, we try to find
+     * the according callback, and simply call it.
      *
      * @param {Event} event
      * @event click
      */
-    kdt.clickHandler.handle = function(event) {
+    kdt.clickHandler.handle = function (event) {
         // We stop the event in it's tracks.
         event.stopPropagation();
         event.stop = false;
@@ -456,7 +456,7 @@
     };
 
     /**
-     * Our dragable function (formerly a jQuery plugin)
+     * Our draggable function (formerly a jQuery plugin)
      *
      * @param {string} selector
      * @param {string} handle
@@ -755,7 +755,7 @@
      * @returns {object}
      *   A new object.
      */
-    kdt.simpleMerge = function(object1, object2){
+    kdt.simpleMerge = function (object1, object2){
         var object3 = {};
         var attribute;
 
@@ -777,7 +777,7 @@
         // Meh, we need to use the timeout to make this work on MS-Edge.
         // Edge remembers the last scrolling position *after* the onDocumentReady
         // event. 500 ms should be enough time to do this.
-        setTimeout(function(){
+        setTimeout(function (){
             // Get the current viewport top value.
             /** @type {number} */
             var viewportTop = document.documentElement.scrollTop;
@@ -843,7 +843,7 @@
         }
 
         setTimeout(
-            function(){
+            function () {
                 // Move the element into the viewport.
                 kdt.krexx.jumpTo(element, true);
             }, 100
@@ -879,7 +879,7 @@
          */
         kdt.krexx = krexx;
 
-        // Adding a concrete maches implementation to the lib.
+        // Adding a concrete matches implementation to the lib.
         kdt.testMachtes();
     };
 

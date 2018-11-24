@@ -56,7 +56,7 @@ class PrivateFixture extends SimpleFixture
     private $nullProperty;
 
     /**
-     * A private that overwrites a propery from the SimpleFixture
+     * A private that overwrites a property from the SimpleFixture
      *
      * @var string
      */

@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
-use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -71,7 +70,7 @@ class ProcessResource extends AbstractProcess
             );
         }
 
-        // If we are facing a closed resource, 'Unknown' is a litttle bit sparse.
+        // If we are facing a closed resource, 'Unknown' is a little bit sparse.
         // PHP 7.2 can provide more info by calling gettype().
         if (version_compare(phpversion(), '7.2.0', '>=')) {
             $typestring = gettype($resource);

@@ -46,7 +46,6 @@ class MethodsFixture
      */
     public function publicMethod()
     {
-
     }
 
     /**
@@ -54,7 +53,6 @@ class MethodsFixture
      */
     protected function protectedMethod()
     {
-
     }
 
     /**
@@ -62,7 +60,6 @@ class MethodsFixture
      */
     private function privateMethod()
     {
-
     }
 
     /**
@@ -70,8 +67,7 @@ class MethodsFixture
      *
      * @param \someNotExistingClass $parameter
      */
-    public function troblesomeMethod(\someNotExistingClass $parameter)
+    public function troublesomeMethod(\someNotExistingClass $parameter)
     {
-
     }
 }

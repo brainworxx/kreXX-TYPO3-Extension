@@ -34,8 +34,6 @@
 
 namespace Brainworxx\Krexx\Service\Config;
 
-use Brainworxx\Krexx\Service\Factory\Pool;
-
 /**
  * Security measures for the configuration
  *
@@ -51,7 +49,7 @@ class Security extends Fallback
     const KEY_CONFIG_ERROR_DEBUG_INVALID = 'configErrorDebugInvalid';
 
     /**
-     * Setter for the debug methos blacklist by the config class.
+     * Setter for the debug method blacklist by the config class.
      *
      * @param array $methodBlacklist
      *   The blacklist.
@@ -280,7 +278,7 @@ class Security extends Fallback
     }
 
     /**
-     * Sanaty check, if the supplied debug methods are not obviously flawed.
+     * Sanity check, if the supplied debug methods are not obviously flawed.
      *
      * @param string $value
      *   Comma separated list of debug methods.

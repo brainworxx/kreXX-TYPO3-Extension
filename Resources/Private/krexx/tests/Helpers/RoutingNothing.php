@@ -60,7 +60,7 @@ class RoutingNothing extends Routing
     }
 
     /**
-     * Again, we keep it siomple and make the model accessible.
+     * Again, we keep it simple and make the model accessible.
      *
      * @param \Brainworxx\Krexx\Analyse\Model $model
      *

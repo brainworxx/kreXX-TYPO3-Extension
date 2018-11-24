@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing;
 
-use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 

@@ -44,7 +44,7 @@ class PublicFixture extends SimpleFixture
     public $value1 = 'overwritten Value';
 
     /**
-     * Juns another value.
+     * Just another value.
      *
      * @var string
      */

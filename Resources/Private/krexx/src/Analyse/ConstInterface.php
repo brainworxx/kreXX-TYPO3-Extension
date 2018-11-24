@@ -58,7 +58,7 @@ interface ConstInterface
     const TYPE_STACK_FRAME = 'stack frame';
     const TYPE_BOOL = 'boolean';
     const TYPE_CLOSURE = 'closure';
-    const TYPE_FOLAT = 'float';
+    const TYPE_FLOAT = 'float';
     const TYPE_NULL = 'null';
     const TYPE_CLASS = 'class';
     const TYPE_RESOURCE = 'resource';
@@ -71,4 +71,6 @@ interface ConstInterface
     const PARAM_NORMAL_GETTER = 'normalGetter';
     const PARAM_IS_GETTER = 'isGetter';
     const PARAM_HAS_GETTER = 'hasGetter';
+    const PARAM_REF_METHOD = 'reflectionMethod';
+    const PARAM_ADDITIONAL = 'additional';
 }

@@ -201,8 +201,8 @@ class ThroughGetter extends AbstractCallback
 
         // Give the plugins the opportunity to do something with the value, or
         // try to resolve it,  if nothing was found.
-        // We also add the suff, that we were able to do so far.
-        $this->parameters['additional'] = array(
+        // We also add the stuff, that we were able to do so far.
+        $this->parameters[static::PARAM_ADDITIONAL] = array(
             'nothingFound' => $nothingFound,
             'value' => $value,
             'refProperty' => $refProp,
@@ -210,7 +210,7 @@ class ThroughGetter extends AbstractCallback
         );
         $this->dispatchEventWithModel(__FUNCTION__ . '::resolving', $model);
 
-        if ($this->parameters['additional']['nothingFound'] === true) {
+        if ($this->parameters[static::PARAM_ADDITIONAL]['nothingFound'] === true) {
             // Found nothing  :-(
             // We literally have no info. We need to tell the user.
             $model->setType(static::TYPE_UNKNOWN)

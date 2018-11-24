@@ -59,7 +59,7 @@ class Encoding
     {
         $this->pool = $pool;
 
-        // Register some namspaced cheap polifills, in case the mb-string
+        // Register some namspaced cheap polyfills, in case the mb-string
         // extension is not available
         if (function_exists('mb_detect_encoding') === false) {
 
@@ -231,7 +231,7 @@ class Encoding
      * @param string $string
      *   The string we want to analyse
      * @param string $encoding
-     *   The known encoding of thsi string, if known.
+     *   The known encoding of the string, if known.
      *
      * @return integer
      *   The result.
@@ -252,7 +252,7 @@ class Encoding
      * @param string $string
      *   The string we want to analyse
      * @param int $start
-     *   The strating point.
+     *   The starting point.
      * @param int $length
      *   The length we want.
      *

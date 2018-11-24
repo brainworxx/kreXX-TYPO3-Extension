@@ -43,9 +43,9 @@ use Brainworxx\Krexx\Service\Config\Fallback;
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  *
  * @uses mixed data
- *   The class we are currently analsysing.
+ *   The class we are currently analysing.
  * @uses string name
- *   The variavble name or key in the parent object / array where the current
+ *   The variable name or key in the parent object / array where the current
  *   class is stored.
  */
 class Traversable extends AbstractObjectAnalysis

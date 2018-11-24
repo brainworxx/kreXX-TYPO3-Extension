@@ -363,8 +363,7 @@
             // Set the pointer to the next or previous element
             if (direction === 'forward') {
                 krexx.performSearch.results[instance][searchtext]['pointer']++;
-            }
-            else {
+            } else {
                 krexx.performSearch.results[instance][searchtext]['pointer']--;
             }
 
@@ -373,8 +372,7 @@
                 if (direction === 'forward') {
                     // There is no next element, we go back to the first one.
                     krexx.performSearch.results[instance][searchtext]['pointer'] = 0;
-                }
-                else {
+                } else {
                     krexx.performSearch.results[instance][searchtext]['pointer'] = krexx.performSearch.results[instance][searchtext]['data'].length - 1;
                 }
             }
@@ -386,8 +384,7 @@
                 // We got another one!
                 krexx.jumpTo(krexx.performSearch.results[instance][searchtext]['data'][krexx.performSearch.results[instance][searchtext]['pointer']]);
             }
-        }
-        else {
+        } else {
             // Not enough chars as a searchtext!
             element.parentNode.querySelector('.ksearch-state').textContent = '<- must be bigger than 3 characters';
         }
@@ -491,8 +488,7 @@
             viewportOffset = search.getBoundingClientRect();
             search.style.position = 'fixed';
             search.style.top = viewportOffset.top + 'px';
-        }
-        else {
+        } else {
             // Hide it.
             kdt.toggleClass(search, 'hidden');
             kdt.removeClass('.ksearch-found-highlight', 'ksearch-found-highlight');
@@ -572,8 +568,7 @@
             }
             --container.scrollTop;
             destination = el.getBoundingClientRect().top + container.scrollTop - 50;
-        }
-        else {
+        } else {
             // Fatal Error scrolling.
             destination = el.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop - 50;
         }
@@ -585,8 +580,7 @@
         if (container.scrollTop < destination) {
             // Forward.
             step = Math.round(diff / 12);
-        }
-        else {
+        } else {
             // Backward.
             step = Math.round(diff / 12) * -1;
         }
@@ -732,8 +726,7 @@
         if (codedisplay.style.display === 'none') {
             codedisplay.style.display = '';
             kdt.selectText(codedisplay);
-        }
-        else {
+        } else {
             codedisplay.style.display = 'none';
         }
     };
@@ -756,8 +749,7 @@
 
         if (element.classList) {
             element.classList.add('kactive');
-        }
-        else {
+        } else {
             element.className += ' kactive';
         }
 
@@ -840,8 +832,7 @@
 
         if (box.style.display === 'none') {
             box.style.display = '';
-        }
-        else {
+        } else {
             box.style.display = 'none';
         }
     }

@@ -75,6 +75,8 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
      *   The reflection of the object we are currently analysing.
      * @param string $label
      *   The additional part of the template file.
+     * @param boolean $useWrap
+     *   Wrap the output in a nest?
      *
      * @return string
      *   The generated markup.

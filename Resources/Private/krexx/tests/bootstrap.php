@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-Namespace Brainworxx\Krexx\Service\Config;
+namespace Brainworxx\Krexx\Service\Config;
 
 include __DIR__ . '/../Krexx.php';
 include __DIR__ . '/Helpers/AbstractTest.php';
@@ -55,12 +55,13 @@ include __DIR__ . '/Fixtures/DeepGetterFixture.php';
  * Mocking the sapi name, to do something else in a different namespace.
  *
  * @param null|string $what
- *   The return valuse. kreXX only checks for cli, btw.
+ *   The return value. kreXX only checks for cli, btw.
  *
  * @return string
  *   The mocked value, to coax kreXX into fileoutput.
  */
-function php_sapi_name($what = null) {
+function php_sapi_name($what = null)
+{
     static $result = 'whatever';
 
     if (!empty($what)) {
@@ -71,6 +72,6 @@ function php_sapi_name($what = null) {
 }
 
 // Register a shutdown method to die, so we get no output on the shell.
-register_shutdown_function(function(){
+register_shutdown_function (function(){
     die();
 });

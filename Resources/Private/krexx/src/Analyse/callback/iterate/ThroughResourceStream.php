@@ -66,7 +66,7 @@ class ThroughResourceStream extends AbstractCallback
 
 
 
-        // Temporatily disable code gen.
+        // Temporarily disable code gen.
         $isAllowedCodeGen = $this->pool->codegenHandler->getAllowCodegen();
         $this->pool->codegenHandler->setAllowCodegen(false);
 

@@ -52,7 +52,7 @@ class AbstractCallbackTest extends AbstractTest
     }
 
     /**
-     * Testing the settings ofthe parameters for the callback.
+     * Testing the settings of the parameters for the callback.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::setParams
      */

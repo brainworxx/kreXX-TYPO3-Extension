@@ -36,7 +36,6 @@ namespace Brainworxx\Krexx\Tests\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
-use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\DebugMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\GetterFixture;
@@ -171,12 +170,12 @@ class GetterTest extends AbstractTest
         $this->assertEquals($expectedResult, CallbackCounter::$staticParameters);
     }
 
-    public function testCallMeOutOfScopr()
+    public function testCallMeOutOfScope()
     {
         // Setup the events.
         $this->mockEventService(
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Getter::callMe::start', $this->getter],
-                ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Getter::analysisEnd', $this->getter]
+            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Getter::analysisEnd', $this->getter]
         );
 
         // Set up fixture, without any methods at all.

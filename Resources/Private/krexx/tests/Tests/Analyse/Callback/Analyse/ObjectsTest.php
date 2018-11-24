@@ -44,7 +44,6 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
 use Brainworxx\Krexx\Service\Config\Fallback;
-use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
@@ -189,7 +188,7 @@ class ObjectsTest extends AbstractTest
 
         $this->assertEquals(1, CallbackCounter::$counter);
 
-        // Test analye protected false
+        // Test analyse protected false
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PROTECTED, false);
         CallbackCounter::$counter = 0;
 
@@ -318,7 +317,7 @@ class ObjectsTest extends AbstractTest
     }
 
     /**
-     * Test, if the debug methos analysis is triggered.
+     * Test, if the debug methods analysis is triggered.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff

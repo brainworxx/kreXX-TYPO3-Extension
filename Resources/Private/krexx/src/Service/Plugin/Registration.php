@@ -91,14 +91,14 @@ class Registration
     protected static $blacklistDebugClass = array();
 
     /**
-     * Additinal help files with text for the debugger.
+     * Additional help files with text for the debugger.
      *
      * @var array
      */
     protected static $additionalHelpFiles = array();
 
     /**
-     * List of all class rewritesfor the factory.
+     * List of all class rewrites for the factory.
      *
      * @var array
      */
@@ -125,7 +125,7 @@ class Registration
     }
 
     /**
-     * Setter for the path to the chaunks folder.
+     * Setter for the path to the chunks folder.
      *
      * @api
      *
@@ -188,7 +188,7 @@ class Registration
     /**
      * Adding a single overwrite class for the factory.
      *
-     * Wrapper arround Factory::$rewrite[].
+     * Wrapper around Factory::$rewrite[].
      *
      * @api
      *
@@ -304,7 +304,7 @@ class Registration
             }
         }
 
-        // Renew the configration class, so the new one will load all settings
+        // Renew the configuration class, so the new one will load all settings
         // from the registration class.
         if (isset(\Krexx::$pool)) {
             \Krexx::$pool->rewrite = static::$rewriteList;

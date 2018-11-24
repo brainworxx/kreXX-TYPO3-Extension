@@ -67,7 +67,7 @@ class Ini extends Fallback
     public function __construct(Pool $pool)
     {
         parent::__construct($pool);
-        $this->security = $pool->config->security;;
+        $this->security = $pool->config->security;
     }
 
     /**

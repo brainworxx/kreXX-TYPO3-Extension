@@ -43,7 +43,7 @@ use Brainworxx\Krexx\View\Messages;
 class AbstractModelTest extends AbstractTest
 {
     /**
-     * Test if we get the pool as well as thej connector service.
+     * Test if we get the pool as well as the connector service.
      *
      * @covers \Brainworxx\Krexx\Analyse\AbstractModel::__construct
      */
@@ -82,7 +82,7 @@ class AbstractModelTest extends AbstractTest
 
     /**
      * The rendering will call the callback. We will mock the callback and test
-     * if we get the actzual aoutput from it.
+     * if we get the actual output from it.
      *
      * @covers \Brainworxx\Krexx\Analyse\AbstractModel::renderMe
      */
@@ -94,7 +94,7 @@ class AbstractModelTest extends AbstractTest
 
         $htmlResult = 'Rendered HTML';
 
-        // The callback sould return the HTML result, wicvh gets mocked here.
+        // The callback should return the HTML result, which gets mocked here.
         $mockCallback->expects($this->once())
             ->method('callMe')
             ->will($this->returnValue($htmlResult));
@@ -134,7 +134,7 @@ class AbstractModelTest extends AbstractTest
 
     /**
      * Test the setting of the help id. The help id sets additional text to the
-     * specific alaysis, to explain the output.
+     * specific analysis, to explain the output.
      *
      * @covers \Brainworxx\Krexx\Analyse\AbstractModel::setHelpid
      */
@@ -175,7 +175,7 @@ class AbstractModelTest extends AbstractTest
         $this->assertEquals($model, $model->addToJson($key, $text));
         $this->assertAttributeEquals($expected, 'json', $model);
 
-        //Remove the value. Shouldbe empty now.
+        //Remove the value. Should be empty now.
         $this->assertEquals($model, $model->addToJson($key, ''));
         $this->assertAttributeEquals([], 'json', $model);
     }

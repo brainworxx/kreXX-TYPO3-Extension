@@ -49,7 +49,7 @@ abstract class AbstractError
     const TRACE_NOTICES = 'traceNotices';
 
     /**
-     * Translates an error into someting more human readable.
+     * Translates an error into something more human readable.
      *
      * @var array
      */
