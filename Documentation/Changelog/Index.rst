@@ -21,7 +21,7 @@ Changelog
     - [Bugfix] Analysis of private getter do not respect the context.
     - [Bugfix] Interesting display of parameters in the method analysis.
     - [Bugfix] Infinite loop when configuring the ip range.
-	- [Bugfix] PHP5.x pars error in class ViewFactory
+    - [Bugfix] PHP5.x pars error in class ViewFactory
     - [Change] All singelton classes now add themself to the pool as soon as they are created.
 
 3.0.0

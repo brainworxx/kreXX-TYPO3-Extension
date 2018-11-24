@@ -26,7 +26,7 @@ Debugging Both
 If you want to debug Ajax or CLI requests, it is a good idea to use the following settings:
 
 .. figure:: ../../Images/AjaxCli/cli_ajax.png
-	:width: 689px
+	:width: 756px
 	:alt: Settings for ajax and cli debugging
 
 

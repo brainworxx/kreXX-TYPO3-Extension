@@ -47,7 +47,7 @@ Using the viewhelper is pretty much straight forward:
 |
 
 .. figure:: ../../Images/FluidDebugger/fluid_debugger.png
-	:width: 1081px
+	:width: 946px
 	:alt: Screenshot of the fluid debugger output
 
 	Fluid debugger output with source generation for fluid.

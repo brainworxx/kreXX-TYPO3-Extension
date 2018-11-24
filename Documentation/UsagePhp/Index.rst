@@ -51,13 +51,13 @@ Benchmarking
 .. code-block:: php
 
 	\Krexx::timerMoment('get all rows');
-	$notizs = $this->notizRepository->findByPageId($GLOBALS['TSFE']->id);
-	\Krexx::timerMoment('assign rows to view');
-	$this->view->assign('notizs', $notizs);
-	\Krexx::timerEnd();
+    $notixxes = $this->notixxRepository->findAll();
+    \Krexx::timerMoment('assign rows to view');
+    $this->view->assign('notixxes', $notixxes);
+    \Krexx::timerEnd();
 
 .. figure:: ../Images/Usage/timer.png
-	:width: 678px
+	:width: 624px
 	:alt: benchmarking result
 
 
@@ -69,7 +69,7 @@ Backtrace
 	\Krexx::backtrace();
 
 .. figure:: ../Images/Usage/backtrace.png
-	:width: 920px
+	:width: 934px
 	:alt: kreXX backtrace
 
 Fatal error handler

@@ -20,7 +20,7 @@ To achieve this, you can simply setup your own developer handle.
 |
 
 .. figure:: ../../Images/DevHandle/local_open_function.png
-	:width: 849px
+	:width: 765px
 	:alt: Setting up a Developer Handle to use as a local opening function
 
 	Setting up a Developer Handle to use as a local opening function

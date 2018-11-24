@@ -38,7 +38,7 @@ Key features:
 
 
 .. figure:: ../Images/main_function.png
-	:width: 678px
+	:width: 714px
 	:alt: Analysis of an extbase query result
 
 	Analysis of an extbase query result
