@@ -1,0 +1,93 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+/**
+ * Renders the configuration form, for the frontend editing of the settings.
+ *
+ * @var array {_all}
+ *   Complete access to all variables.
+ */
+<f:section name="main">
+    <table border="0">
+        <tr><th class="last" colspan="3"><b><f:translate key="editfeconfig.help.headline" /></b></th></tr>
+        <tr><td><f:translate key="full" /></td><td colspan="2"><f:translate key="full.help" /></td></tr>
+        <tr><td><f:translate key="display" /></td><td colspan="2"><f:translate key="display.help" /></td></tr>
+        <tr><td><f:translate key="none" /></td><td colspan="2"><f:translate key="none.help" /></td></tr>
+        <tr><td colspan="3">&nbsp;</td></tr>
+
+        <tr><th class="last" colspan="3"><b><f:translate key="subhead.output" /></b></th></tr>
+        <f:render section="dropdown" arguments="{formConfig.disabled}" />
+        <f:render section="noedit"   arguments="{formConfig.iprange}" />
+        <f:render section="dropdown" arguments="{formConfig.detectAjax}" />
+        <tr><td colspan="3">&nbsp;</td></tr>
+
+        <tr><th class="last" colspan="3"><b><f:translate key="subhead.behavior" /></b></th></tr>
+        <f:render section="dropdown" arguments="{formConfig.skin}" />
+        <f:render section="noedit"   arguments="{formConfig.destination}" />
+        <f:render section="noedit"   arguments="{formConfig.maxfiles}" />
+        <f:render section="dropdown" arguments="{formConfig.useScopeAnalysis}" />
+        <tr><td colspan="3">&nbsp;</td></tr>
+
+        <tr><th class="last" colspan="3"><b><f:translate key="subhead.pruneOutput" /></b></th></tr>
+        <f:render section="dropdown" arguments="{formConfig.maxStepNumber}" />
+        <f:render section="dropdown" arguments="{formConfig.arrayCountLimit}" />
+        <f:render section="dropdown" arguments="{formConfig.level}" />
+        <tr><td colspan="3">&nbsp;</td></tr>
+
+        <tr><th class="last"colspan="3"><b><f:translate key="subhead.properties" /></b></th></tr>
+        <f:render section="dropdown" arguments="{formConfig.analyseProtected}" />
+        <f:render section="dropdown" arguments="{formConfig.analysePrivate}" />
+        <f:render section="dropdown" arguments="{formConfig.analyseTraversable}" />
+        <tr><td colspan="3">&nbsp;</td></tr>
+
+        <tr><th class="last"colspan="3"><b><f:translate key="subhead.methods" /></b></th></tr>
+        <f:render section="dropdown" arguments="{formConfig.analyseProtectedMethods}" />
+        <f:render section="dropdown" arguments="{formConfig.analysePrivateMethods}" />
+        <f:render section="dropdown" arguments="{formConfig.analyseGetter}" />
+        <f:render section="noedit"   arguments="{formConfig.debugMethods}" />
+        <tr><td colspan="3">&nbsp;</td></tr>
+
+        <tr><th class="last"colspan="3"><b><f:translate key="subhead.emergencystop" /></b></th></tr>
+        <f:render section="dropdown" arguments="{formConfig.maxCall}" />
+        <f:render section="dropdown" arguments="{formConfig.memoryLeft}" />
+        <f:render section="dropdown" arguments="{formConfig.maxRuntime}" />
+
+    </table>
+</f:section>
+
+/**
+ * Renders a dropdown with the possible values.
+ *
+ * @var string {name}
+ *   The name of the dropdown.
+ * @var array {options}
+ *   The options for the dropdown.
+ * @var string {value}
+ *   The current value of the dropdown.
+ * @var boolean {useFactorySettings}
+ *   Are we using factory settings here?
+ */
+<f:section name="dropdown">
+    <tr>
+        <td><label for="form{name}"><f:translate key="label.{name}" /></label></td>
+        <td><div class="chevron"><f:form.select additionalAttributes="{autocomplete: 'off'}" id="form{name}" property="form{name}" options="{options}" value="{value}" /></div></td>
+        <td class="cbx">
+            <f:form.checkbox additionalAttributes="{autocomplete: 'off'}" id="factory.form{name}" property="factory" checked="{useFactorySettings}" value="1" />
+            <label for="factory.form{name}">
+                <span class="chkwrapper"></span>
+                <f:translate key="factory.settings" />
+            </label>
+        </td>
+    </tr>
+</f:section>
+
+/**
+ * Renders the "This setting is not editable on the frontend." part.
+ *
+ * @var string {name}
+ *   The name of the setting, used for the language key.
+ */
+<f:section name="noedit">
+    <tr><td><f:translate key="label.{name}" /></td><td colspan="2"><f:translate key="logging.noteditable"/></td></tr>
+</f:section>
+
+</html>

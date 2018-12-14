@@ -1,0 +1,20 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:be.container includeCssFiles="{Backend: '{f:uri.resource(path:\'Css/Index.css\')}'}" includeJsFiles="{Backend: '{f:uri.resource(path:\'JavaScript/Index.js\')}'}">
+    <div id="typo3-inner-docbody" class="krexx-backend">
+
+		<div class="module-loading-indicator"></div>
+        <div class="module-docheader" style="height: auto;">
+            <button id="main-save" class="btn btn-default btn-sm" value="1" title="Save">&#128190; Save</button>
+        </div>
+        <div class="module-body">
+            <f:if condition="{specialflash}">
+                <f:then><f:render partial="Specialflash"/></f:then>
+                <f:else><f:render partial="Normalflash"/></f:else>
+            </f:if>
+            <h1>kreXX Debugger</h1>
+            <f:render section="main" />
+        </div>
+    </div>
+</f:be.container>
+</html>

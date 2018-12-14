@@ -1,0 +1,27 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+/**
+ * Renders the surrounding table for the display of the logfiles.
+ *
+ * @var array {_all}
+ *   Complete access to all variables.
+ */
+<f:section name="main">
+    <div class="table-wrapper">
+        <table border="0" class="krexx-logs">
+            <thead>
+                <tr>
+                    <th class="icon"></th>
+                    <th class="filename"><b><f:translate key="log.filename" /></b></th>
+                    <th class="meta"><b><f:translate key="log.meta" /></b></th>
+                    <th class="delete"><b><f:translate key="log.delete" /></b></th>
+                    <th class="time"><b><f:translate key="log.time" /></b></th>
+                    <th class="size"><b><f:translate key="log.size" /></b></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</f:section>

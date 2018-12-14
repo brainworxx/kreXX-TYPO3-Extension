@@ -35,11 +35,11 @@
 namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
+use Brainworxx\Includekrexx\Collectors\Configuration;
+use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 
 /**
  * Class Tx_Includekrexx_Controller_IndexController
@@ -51,48 +51,7 @@ use TYPO3\CMS\Extbase\Mvc\Controller\Arguments;
 class CompatibilityController extends ActionController
 {
     const EXT_KEY = 'includekrexx';
-
-    /**
-     * List of all setting-names for which we are accepting values.
-     *
-     * @var array
-     */
-    protected $allowedSettingsNames = array(
-        Fallback::SETTING_SKIN,
-        Fallback::SETTING_MAX_FILES,
-        Fallback::SETTING_DESTINATION,
-        Fallback::SETTING_MAX_CALL,
-        Fallback::SETTING_DISABLED,
-        Fallback::SETTING_DETECT_AJAX,
-        Fallback::SETTING_ANALYSE_PROTECTED,
-        Fallback::SETTING_ANALYSE_PRIVATE,
-        Fallback::SETTING_ANALYSE_TRAVERSABLE,
-        Fallback::SETTING_DEBUG_METHODS,
-        Fallback::SETTING_NESTING_LEVEL,
-        Fallback::SETTING_ANALYSE_PROTECTED_METHODS,
-        Fallback::SETTING_ANALYSE_PRIVATE_METHODS,
-        Fallback::SETTING_IP_RANGE,
-        Fallback::SETTING_ANALYSE_GETTER,
-        Fallback::SETTING_MAX_RUNTIME,
-        Fallback::SETTING_MEMORY_LEFT,
-        Fallback::SETTING_USE_SCOPE_ANALYSIS,
-        Fallback::SETTING_MAX_STEP_NUMBER,
-        Fallback::SETTING_ARRAY_COUNT_LIMIT,
-    );
-
-    /**
-     * List of all sections for which we are accepting values
-     *
-     * @var array
-     */
-    protected $allowedSections = array(
-        Fallback::SECTION_OUTPUT,
-        Fallback::SECTION_PROPERTIES,
-        Fallback::SECTION_METHODS,
-        Fallback::SECTION_PRUNE,
-        Fallback::SECTION_BEHAVIOR,
-        Fallback::SECTION_EMERGENCY,
-    );
+    const MODULE_KEY = 'IncludekrexxKrexxConfiguration';
 
     /**
      * The kreXX framework.
@@ -100,6 +59,16 @@ class CompatibilityController extends ActionController
      * @var \Brainworxx\Krexx\Service\Factory\Pool
      */
     protected $pool;
+
+     /**
+     * @var \Brainworxx\Includekrexx\Collectors\Configuration
+     */
+    protected $configuration;
+
+    /**
+     * @var \Brainworxx\Includekrexx\Collectors\FormConfiguration
+     */
+    protected $formConfiguration;
 
     /**
      * Set the pool and do the parent constructor.
@@ -146,23 +115,32 @@ class CompatibilityController extends ActionController
     }
 
     /**
-     * Injects the arguments
+     * Inject the configuration collector.
      *
-     * @param Arguments $arguments
-     *   The arguments from the call to the controller.
+     * @param \Brainworxx\Includekrexx\Collectors\Configuration $configuration
      */
-    public function injectArguments(Arguments $arguments)
+    public function injectConfiguration(Configuration $configuration)
     {
-        $this->arguments = $arguments;
+        $this->configuration = $configuration;
     }
 
     /**
-     * Gets all messages from kreXX and translates them.
+     * Inject the form configuration collector.
+     *
+     * @param \Brainworxx\Includekrexx\Collectors\FormConfiguration $formConfiguration
+     */
+    public function injectFormConfiguration(FormConfiguration $formConfiguration)
+    {
+        $this->formConfiguration = $formConfiguration;
+    }
+
+    /**
+     * Move all messages from kreXX to the flash messages.
      *
      * @return array
      *   The translated messages.
      */
-    protected function getTranslatedMessages()
+    protected function retrieveKrexxMessages()
     {
         $result = array();
         // Get the keys and the args.
@@ -170,7 +148,11 @@ class CompatibilityController extends ActionController
 
         foreach ($keys as $message) {
             // And translate them.
-            $result[] = LocalizationUtility::translate($message['key'], static::EXT_KEY, $message['params']);
+            $this->addFlashMessage(
+                LocalizationUtility::translate($message['key'], static::EXT_KEY, $message['params']),
+                LocalizationUtility::translate('general.error.title', static::EXT_KEY),
+                FlashMessage::ERROR
+            );
         }
 
         return $result;
@@ -187,5 +169,26 @@ class CompatibilityController extends ActionController
         } else {
             $this->view->assign('specialflash', false);
         }
+    }
+
+    /**
+     * Dispatches a file, using output buffering.
+     *
+     * @param string $path
+     *   The path of the file we want to dispatch to the browser.
+     */
+    protected function dispatchFile($path)
+    {
+        header('Content-Type: text/html; charset=utf-8');
+        header('Content-length: ' . filesize($path));
+
+        $size = 1024 * 1024;
+        $res = fopen($path, "rb");
+        while (!feof($res)) {
+            echo fread($res, $size);
+            ob_flush();
+            flush();
+        }
+        fclose($res);
     }
 }

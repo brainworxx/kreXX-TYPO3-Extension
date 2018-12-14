@@ -32,37 +32,43 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
-}
+namespace Brainworxx\Includekrexx\Collectors;
 
-// Register BE module.
-if (TYPO3_MODE === 'BE') {
-    $boot = function () {
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-            'Brainworxx.Includekrexx',
-            'tools',
-            'kreXX configuration',
-            '',
-            array(
-                'Index' => 'index, save, dispatch'
-            ),
-            array(
-                'access' => 'user,group',
-                'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
-                'labels' => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf',
-            )
-        );
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
-            'includekrexx::RefreshLoglist',
-            '\\Brainworxx\\Includekrexx\\Controller\\AjaxController->refreshLoglistAction'
-        );
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
-            'includekrexx::DeleteLogFile',
-            '\\Brainworxx\\Includekrexx\\Controller\\AjaxController->deleteAction'
-        );
-    };
+use Brainworxx\Includekrexx\Controller\IndexController;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
-    $boot();
-    unset($boot);
+abstract class AbstractCollector
+{
+    /**
+     * The kreXX pool.
+     *
+     * @var \Brainworxx\Krexx\Service\Factory\Pool
+     */
+    protected $pool;
+
+    /**
+     * The current backend user
+     *
+     * @var array
+     */
+    protected $userUc = array();
+
+    /**
+     * Inject the pool.
+     */
+    public function __construct()
+    {
+        $this->pool = \Krexx::$pool;
+        $user = $GLOBALS['BE_USER'];
+        if (isset($user->uc['moduleData'][IndexController::MODULE_KEY])) {
+            $this->userUc = $user->uc['moduleData'][IndexController::MODULE_KEY];
+        }
+    }
+
+    /**
+     * Assigning stuff to the view.
+     *
+     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
+     */
+    abstract public function assignData(ViewInterface $view);
 }
