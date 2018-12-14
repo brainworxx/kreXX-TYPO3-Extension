@@ -121,6 +121,8 @@ class AjaxController
             $fileList[] = $fileinfo;
         }
 
+        \krexx::log($this);
+
         echo json_encode($fileList);
     }
 
@@ -136,7 +138,7 @@ class AjaxController
         $result = new \stdClass();
         $result->result = $this->delete($file . '.html') && $this->delete($file . '.html.json');
 
-        return json_encode($result);
+        echo json_encode($result);
     }
 
     /**
