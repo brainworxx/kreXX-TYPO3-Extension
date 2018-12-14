@@ -39,7 +39,7 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
-class IndexController extends CompatibilityController
+class IndexController extends AbstractController
 {
     /**
      * Simple index action, displayse everything.

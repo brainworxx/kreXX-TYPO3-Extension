@@ -48,7 +48,7 @@ use Brainworxx\Includekrexx\Collectors\FormConfiguration;
  * this extension compatible back to 4.5. This  makes the other controllers
  * (hopefully) more readable.
  */
-class CompatibilityController extends ActionController
+abstract class AbstractController extends ActionController
 {
     const EXT_KEY = 'includekrexx';
     const MODULE_KEY = 'IncludekrexxKrexxConfiguration';
