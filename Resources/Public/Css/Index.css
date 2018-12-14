@@ -101,6 +101,7 @@
     box-shadow: 0 2px 0 rgba(0, 0, 0, .1);
     border: 1px solid #ccc;
     border-radius: 2px;
+    max-width: 1000px;
 }
 
 .krexx-backend table {
@@ -362,7 +363,7 @@ button:hover {
     border-radius: 15px;
     height: 18px;
     width: 18px;
-    background-color: #89BCE6;
+    background-color: #89bce6;
     cursor: help;
 }
 
@@ -382,23 +383,18 @@ button:hover {
  */
 
 td .delete {
-    border: #CA433B 3px solid;
-    border-radius: 15px;
-    height: 18px;
-    width: 18px;
-    background-color: #D56763;
+    display: inline-block;
     cursor: pointer;
-}
-
-td .delete b {
-    font-size: 15px;
-    margin: 3px;
-    line-height: 18px;
-    color: #fff;
+    border: 1px solid #c4c4c4;
+    border-radius: 2px;
+    width: 30px;
+    height: 32px;
+    background: url("../Icons/delete.png") no-repeat center #dedede;
 }
 
 td .delete:hover {
-    opacity: 0.8;
+    background-color: #c4c4c4;
+    border-color: #a6a6a6;
 }
 
 /**
@@ -406,6 +402,8 @@ td .delete:hover {
  */
 .krexx-icon {
     background-image: url(../Icons/Extension.svg);
-    height: 20px;
-    width: 20px;
+    height: 12px;
+    width: 12px;
+    margin-top: 2px;
+    margin-left: 5px;
 }

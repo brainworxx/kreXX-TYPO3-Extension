@@ -158,7 +158,7 @@
     ajaxRefresh.timeout = function () {
         setTimeout(function () {
             ajaxRefresh.call();
-            // ajaxRefresh.timeout();
+            ajaxRefresh.timeout();
         }, 5000);
     };
 
@@ -197,7 +197,7 @@
                 }
                 html += '</td>';
 
-                html += '<td>' + '<div class="delete" data-id="' + file.id + '"><b>&times;</b></div>' + '</td>';
+                html += '<td>' + '<div class="delete" data-id="' + file.id + '"></div>' + '</td>';
                 html += '<td>' + file.time + '</td>';
                 html += '<td>' + file.size + '</td>';
                 html += '</tr>';
