@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class AjaxController
 {
@@ -85,6 +86,7 @@ class AjaxController
         // 3. Get the file info.
         $fileList = array();
         foreach ($files as $file) {
+            // @todo racing condition when deleting files.
             $fileinfo = array();
 
             // Getting the basic info.
@@ -135,8 +137,17 @@ class AjaxController
         $id = preg_replace('/[^0-9]/', '', GeneralUtility::_GET('id'));
         // Directly add the delete result return value.
         $file = $this->pool->config->getLogDir() . $id . '.Krexx';
+
         $result = new \stdClass();
-        $result->result = $this->delete($file . '.html') && $this->delete($file . '.html.json');
+        if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
+            $result->class  = 'success';
+            $result->text = LocalizationUtility::translate('fileDeleted', 'includekrexx', array($id));
+        } else {
+            $result->class  = 'error';
+            $result->text = LocalizationUtility::translate('fileDeletedFail', 'includekrexx', array($id));
+        }
+
+
 
         echo json_encode($result);
     }

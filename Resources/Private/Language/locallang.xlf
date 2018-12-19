@@ -156,6 +156,12 @@
             <trans-unit id="logNotWritable">
                 <source>Logfolder %s is not writable!</source>
             </trans-unit>
+            <trans-unit id="fileDeleted" xml:space="preserve">
+				<source>The file "%s" was successfully deleted.</source>
+			</trans-unit>
+            <trans-unit id="fileDeletedFail" xml:space="preserve">
+				<source>The file "%s" was NOT deleted.</source>
+			</trans-unit>
 
             <!--
                 Error messages from the krexx lib

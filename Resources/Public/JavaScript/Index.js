@@ -242,14 +242,38 @@
         );
 
         request.onload = function (event) {
-            var result = JSON.parse(request.responseText);
-            // @todo add popup to tell the user that the file ws deleted
-            // Refresh the table
+            ajaxRefresh.message(JSON.parse(request.responseText));
             ajaxRefresh.call();
         };
 
         request.send();
 
     };
+
+    /**
+     * Ajax relaqted messaging.
+     *
+     * @param {{}} json
+     */
+    ajaxRefresh.message = function (json) {
+        var messagebox = document.querySelector('.message-container-outer');
+        var message = document.createElement("div");
+
+        message.classList.add('ajax-msg');
+        message.classList.add(json.class);
+        message.innerHTML = '<div class="icon"></div><div class="text">' + json.text + '</div>';
+        messagebox.appendChild(message);
+
+        setTimeout(function () {
+            message.classList.add('fade');
+            setTimeout(function () {
+                message.classList.add('remove');
+                setTimeout(function () {
+                    messagebox.removeChild(message);
+                }, 600);
+            }, 600);
+        }, 4000);
+    }
+
 
 })(TYPO3);
