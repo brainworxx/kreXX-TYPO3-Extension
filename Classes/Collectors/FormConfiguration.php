@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Collectors;
 
-use Brainworxx\Includekrexx\Controller\CompatibilityController;
+use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -49,9 +49,9 @@ class FormConfiguration extends AbstractCollector
     public function assignData(ViewInterface $view)
     {
         $dropdown = array(
-            'full' => LocalizationUtility::translate('full', CompatibilityController::EXT_KEY),
-            'display' => LocalizationUtility::translate('display', CompatibilityController::EXT_KEY),
-            'none' => LocalizationUtility::translate('none', CompatibilityController::EXT_KEY)
+            'full' => LocalizationUtility::translate('full', AbstractController::EXT_KEY),
+            'display' => LocalizationUtility::translate('display', AbstractController::EXT_KEY),
+            'none' => LocalizationUtility::translate('none', AbstractController::EXT_KEY)
         );
 
         $iniConfig = $this->pool->config->iniConfig;

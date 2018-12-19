@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Collectors;
 
-use Brainworxx\Includekrexx\Controller\CompatibilityController;
+use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -56,7 +56,7 @@ class Configuration extends AbstractCollector
             $config[$settingsName]['name'] = $settingsName;
             $config[$settingsName]['helptext'] = LocalizationUtility::translate(
                 $settingsName,
-                CompatibilityController::EXT_KEY
+                AbstractController::EXT_KEY
             );
             $config[$settingsName]['value'] = $this->pool->config->iniConfig->getConfigFromFile($group, $settingsName);
             $config[$settingsName]['useFactorySettings'] = false;
@@ -84,12 +84,12 @@ class Configuration extends AbstractCollector
             $dropdown['skins'][$skin] = $skin;
         }
         $dropdown[Fallback::SETTING_DESTINATION] = array(
-            'browser' => LocalizationUtility::translate('browser', CompatibilityController::EXT_KEY),
-            'file' => LocalizationUtility::translate('file', CompatibilityController::EXT_KEY),
+            'browser' => LocalizationUtility::translate('browser', AbstractController::EXT_KEY),
+            'file' => LocalizationUtility::translate('file', AbstractController::EXT_KEY),
         );
         $dropdown['bool'] = array(
-            'true' => LocalizationUtility::translate('true', CompatibilityController::EXT_KEY),
-            'false' => LocalizationUtility::translate('false', CompatibilityController::EXT_KEY),
+            'true' => LocalizationUtility::translate('true', AbstractController::EXT_KEY),
+            'false' => LocalizationUtility::translate('false', AbstractController::EXT_KEY),
         );
 
         $view->assign('config', $config);
