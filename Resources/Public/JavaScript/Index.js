@@ -233,6 +233,11 @@
             return;
         }
 
+        var confirmed = confirm("Delete this file?");
+
+        if (confirmed === false) {
+            return;
+        }
 
         var request = new XMLHttpRequest();
         request.open(
