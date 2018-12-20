@@ -86,45 +86,51 @@ class AjaxController
         // 3. Get the file info.
         $fileList = array();
         foreach ($files as $file) {
-            // @todo racing condition when deleting files.
-            $fileinfo = array();
+            try {
+                $fileinfo = array();
 
-            // Getting the basic info.
-            $fileinfo['name'] = basename($file);
-            $fileinfo['size'] = $this->fileSizeConvert(filesize($file));
-            $fileinfo['time'] = date("d.m.y H:i:s", filemtime($file));
-            $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
-            $fileinfo['dispatcher'] = $this->uriBuilder
-                ->reset()
-                ->setArguments(array('M' => 'tools_IncludekrexxKrexxConfiguration'))
-                ->uriFor(
-                    'dispatch',
-                    array('id' => $fileinfo['id']),
-                    'Index',
-                    'includekrexx',
-                    'tools_IncludekrexxKrexxConfiguration'
-                );
+                // Getting the basic info.
+                $fileinfo['name'] = basename($file);
+                $fileinfo['size'] = $this->fileSizeConvert(filesize($file));
+                $fileinfo['time'] = date("d.m.y H:i:s", filemtime($file));
+                $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
+                $fileinfo['dispatcher'] = $this->uriBuilder
+                    ->reset()
+                    ->setArguments(array('M' => 'tools_IncludekrexxKrexxConfiguration'))
+                    ->uriFor(
+                        'dispatch',
+                        array('id' => $fileinfo['id']),
+                        'Index',
+                        'includekrexx',
+                        'tools_IncludekrexxKrexxConfiguration'
+                    );
 
-            // Parsing a potentially 80MB file for it's content is not a good idea.
-            // That is why the kreXX lib provides some meta data. We will open
-            // this file and add it's content to the template.
-            if (is_readable($file . '.json')) {
-                $fileinfo['meta'] = (array) json_decode(file_get_contents($file . '.json'), true);
+                // Parsing a potentially 80MB file for it's content is not a good idea.
+                // That is why the kreXX lib provides some meta data. We will open
+                // this file and add it's content to the template.
+                if (is_readable($file . '.json')) {
+                    $fileinfo['meta'] = (array) json_decode(file_get_contents($file . '.json'), true);
 
-                foreach ($fileinfo['meta'] as &$meta) {
-                    $meta['filename'] = basename($meta['file']);
+                    foreach ($fileinfo['meta'] as &$meta) {
+                        $meta['filename'] = basename($meta['file']);
 
-                    // Unescape the stuff from the json, to prevent double escaping.
-                    // Meh, there is no f:format.raw in 4.5 . . .
-                    $meta['varname'] = htmlspecialchars_decode($meta['varname']);
+                        // Unescape the stuff from the json, to prevent double escaping.
+                        // Meh, there is no f:format.raw in 4.5 . . .
+                        $meta['varname'] = htmlspecialchars_decode($meta['varname']);
+                    }
                 }
-            }
 
-            $fileList[] = $fileinfo;
+                $fileList[] = $fileinfo;
+
+            } catch (\Throwable $e) {
+                // We simply skip this one on error.
+                continue;
+            } catch (\Exception $e) {
+                continue;
+            }
         }
 
-        \krexx::log($this);
-
+        \Krexx::log($this);
         echo json_encode($fileList);
     }
 
