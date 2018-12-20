@@ -130,7 +130,6 @@ class AjaxController
             }
         }
 
-        \Krexx::log($this);
         echo json_encode($fileList);
     }
 

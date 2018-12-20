@@ -1,3 +1,8 @@
+body {
+    color: #333;
+}
+
+
 /**
  * Ajax messaging stuff
  */
@@ -91,6 +96,10 @@
 /**
  * Tabs
  */
+.tabpanel {
+    max-width: 1000px;
+}
+
 .nav-tabs {
     border-radius: 2px 2px 0 0;
     background-color: #ededed;
@@ -228,8 +237,16 @@ th.filename {
     width: 250px;
 }
 
+th.description {
+    width: 400px;
+}
+
+th.commands {
+    width: 68px;
+}
+
 .krexx-backend td {
-    padding: 6px;
+    padding: 6px 6px 3px 6px;
 }
 
 .krexx-backend thead tr {
@@ -280,8 +297,9 @@ th.filename {
     background-color: #fefefe;
     border: 1px solid #666;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    -webkit-transition: all ease-in-out .15s;
+    transition: all ease-in-out .15s;
+    margin-top: 3px;
 }
 
 .krexx-backend select:disabled,
@@ -322,56 +340,19 @@ th.filename {
     display: none;
 }
 
-.krexx-backend .chkwrapper {
-    vertical-align: top;
-    line-height: 16px;
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    height: 18px;
-    display: inline-block;
-    padding: 4px;
-    font-size: 11px;
-    border-radius: 2px;
-    color: #333;
-    background-color: #fefefe;
-    border: 1px solid #666;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    margin-left: 15px;
-    width: 18px;
-}
-
-.krexx-backend .chkwrapper.checked {
-    background-color: #79a548;
-}
-
-.krexx-backend .chkwrapper.checked::after {
-    content: "\2713";
-    color: white;
-    font-size: 15px;
-    font-weight: bolder;
-    margin-left: 3px;
-}
-
 .krexx-backend label {
     line-height: 30px;
 }
-
-/**
- * Log table specific stuff
- */
 
 .krexx-spacer {
     height: 5px;
 }
 
-table.krexx-logs tr {
+.table-wrapper table tr {
     border-bottom: 1px solid #c3c3c3;
 }
 
-table.krexx-logs tr:last-child {
+.table-wrapper table tr:last-child {
     border-bottom: none;
 }
 
@@ -422,69 +403,118 @@ button:hover {
 }
 
 /**
- * Styling the info "image"
+ * Styling the info tooltips
  */
 
 .krexx-backend .tooltip-text {
     display: none;
     position: absolute;
-    background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.25);
+    background-color: #333;
+    color: #eee;
     z-index: 1;
-    padding: 5px;
+    padding: 8px;
     min-width: 350px;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
+    bottom: 10px;
 }
 
-.krexx-backend .tooltip-hover {
-    vertical-align: middle;
-    position: relative;
+.krexx-backend .tooltip-text::after {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 3px 0 3px;
+    border-color: #000333 transparent transparent transparent;
+    content: "";
+    bottom: -6px;
+    position: absolute;
+    left: 12px;
 }
+
 
 .krexx-backend .tooltip-hover:hover .tooltip-text {
     display: block;
 }
 
-.info {
-    border: #6BABE0 3px solid;
-    border-radius: 15px;
-    height: 18px;
-    width: 18px;
-    background-color: #89bce6;
-    cursor: help;
-}
-
-.info b {
-    font-size: 15px;
-    margin: 7px;
-    line-height: 18px;
-    color: #fff;
-}
-
-.info:hover {
-    opacity: 0.8;
+.krexx-backend .toolwrapper {
+    position: relative;
 }
 
 /**
- * Styling the delete "image"
+ * Styling the buttons
  */
 
-td .delete {
+td .button {
     display: inline-block;
     cursor: pointer;
     border: 1px solid #c4c4c4;
     border-radius: 2px;
     width: 30px;
     height: 32px;
+    background-color: #dedede;
+    vertical-align: unset;
+}
+
+td .button:hover {
+    background-color: #c4c4c4;
+    border-color: #a6a6a6;
+}
+
+.button.delete {
     background: url("../Icons/delete.png") no-repeat center #dedede;
 }
 
-td .delete:hover {
-    background-color: #c4c4c4;
-    border-color: #a6a6a6;
+.button.tooltip-hover {
+    background: url("../Icons/info.png") no-repeat center #dedede;
+}
+
+/**
+ * on / off switch
+ */
+input.switch {
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+
+label span.switch {
+    cursor: pointer;
+    text-indent: -9999px;
+    width: 20px;
+    height: 11px;
+    background: black;
+    display: block;
+    border-radius: 15px;
+    position: relative;
+    min-height: auto;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
+label span.switch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    width: 7px;
+    height: 7px;
+    background: #dedede;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.button:hover label span.switch::after {
+    background: #c4c4c4;
+}
+
+input:checked  + span.switch {
+    background: grey;
+}
+
+input.switch:checked + span.switch::after {
+    left: calc(100% - 17px);
+    transform: translateX(+100%);
 }
 
 /**

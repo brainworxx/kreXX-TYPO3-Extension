@@ -236,7 +236,6 @@
             <trans-unit id="editfeconfig.headline">
                 <source>Edit FE configuration</source>
 			</trans-unit>
-
             <trans-unit id="subhead.output">
                 <source>Output</source>
 			</trans-unit>
@@ -254,6 +253,12 @@
 			</trans-unit>
             <trans-unit id="subhead.emergencystop">
                 <source>Emergency stop</source>
+            </trans-unit>
+            <trans-unit id="table.desc">
+                <source>Description</source>
+            </trans-unit>
+            <trans-unit id="table.value">
+                <source>Value</source>
             </trans-unit>
 
 

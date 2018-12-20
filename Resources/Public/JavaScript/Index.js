@@ -125,11 +125,9 @@
             if (checkbox.checked) {
                 element.disabled = true;
                 element.parentNode.classList.remove('active');
-                checkbox.parentNode.querySelector('.chkwrapper').classList.remove('checked');
             } else {
                 element.disabled = false;
                 element.parentNode.classList.add('active');
-                checkbox.parentNode.querySelector('.chkwrapper').classList.add('checked');
             }
         }
     };
@@ -197,7 +195,7 @@
                 }
                 html += '</td>';
 
-                html += '<td>' + '<div class="delete" data-id="' + file.id + '"></div>' + '</td>';
+                html += '<td>' + '<div class="button delete" data-id="' + file.id + '"></div>' + '</td>';
                 html += '<td>' + file.time + '</td>';
                 html += '<td>' + file.size + '</td>';
                 html += '</tr>';
