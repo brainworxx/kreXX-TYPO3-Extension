@@ -78,7 +78,7 @@ class Configuration extends AbstractCollector
             }
 
             // Assign the mode-class.
-            if (in_array($settingsName, $this->expertOnly)) {
+            if (in_array($settingsName, $this->expertOnly) && $config[$settingsName]['useFactorySettings']) {
                 $config[$settingsName]['mode'] = 'expert';
             }
         }
