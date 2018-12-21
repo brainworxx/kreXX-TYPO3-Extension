@@ -161,6 +161,13 @@
     };
 
     /**
+     * We store the last answer, to check if there was an update.
+     *
+     * @type {string}
+     */
+    ajaxRefresh.lastAnswer = '';
+
+    /**
      * Refresh the logfile list.
      */
     ajaxRefresh.call = function () {
@@ -171,10 +178,11 @@
             true
         );
 
+        var table = document.querySelector('table.krexx-logs tbody');
         request.onload = function (event) {
             var result = JSON.parse(request.responseText);
             var html = '';
-            var table = document.querySelector('table.krexx-logs tbody');
+
 
             for (var key in result) {
                 if (!result.hasOwnProperty(key)) {
@@ -195,14 +203,22 @@
                 }
                 html += '</td>';
 
-                html += '<td>' + '<div class="button delete" data-id="' + file.id + '"></div>' + '</td>';
                 html += '<td>' + file.time + '</td>';
                 html += '<td>' + file.size + '</td>';
+                html += '<td>' + '<div class="button delete" data-id="' + file.id + '"></div>' + '</td>';
                 html += '</tr>';
             }
-            if (table.innerHTML !== html) {
+
+            if (ajaxRefresh.lastAnswer !== html) {
                 table.innerHTML = html;
+                ajaxRefresh.message({
+                    text: 'Updated the logfiles!',
+                    class: 'Success'
+                });
             }
+
+            ajaxRefresh.lastAnswer = html;
+
         };
 
         request.send();
