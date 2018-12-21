@@ -32,6 +32,9 @@
             <trans-unit id="refresh">
                 <source>Refresh</source>
 			</trans-unit>
+            <trans-unit id="save">
+                <source>Save</source>
+			</trans-unit>
 
 
 

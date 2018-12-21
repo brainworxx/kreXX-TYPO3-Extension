@@ -398,7 +398,6 @@ td.commands {
     width: 100%;
     top: 0;
     left: 0;
-    min-height: 65px;
     z-index: 300;
     background-color: #eee;
     border-bottom: 1px solid #c3c3c3;
@@ -416,8 +415,8 @@ div#typo3-inner-docbody {
     padding-top: 80px;
 }
 
-button {
-    margin-top: 30px;
+.module-docheader button {
+    margin-top: 7px;
     color: #333;
     background-color: #eee;
     border-color: #bbb;
@@ -472,7 +471,7 @@ button:hover {
  * Styling the buttons
  */
 
-td .button {
+.button {
     display: inline-block;
     cursor: pointer;
     border: 1px solid #c4c4c4;
@@ -483,17 +482,24 @@ td .button {
     vertical-align: unset;
 }
 
-td .button:hover {
-    background-color: #c4c4c4;
-    border-color: #a6a6a6;
-}
-
 .button.delete {
     background: url("../Icons/delete.png") no-repeat center #dedede;
 }
 
 .button.tooltip-hover {
     background: url("../Icons/info.png") no-repeat center #dedede;
+}
+
+.button.save {
+    background: url("../Icons/save.png") no-repeat left;
+    padding-left: 24px;
+    width: auto;
+    height: auto;
+}
+
+.button:hover {
+    background-color: #c4c4c4;
+    border-color: #a6a6a6;
 }
 
 /**
