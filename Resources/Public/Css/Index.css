@@ -428,7 +428,7 @@ div#typo3-inner-docbody {
 }
 
 .module-body {
-    padding-top: 80px;
+    padding-top: 65px;
 }
 
 .module-docheader button {
@@ -460,6 +460,7 @@ button:hover {
     -moz-border-radius: 3px;
     border-radius: 3px;
     bottom: 10px;
+    text-align: left;
 }
 
 .krexx-backend .tooltip-text::after {
