@@ -119,15 +119,18 @@
         var id = checkbox.id.split('.');
         if (typeof id[1] !== 'undefined') {
             var element = document.getElementById(id[1]);
+            var fallback = document.getElementById(id[1] + '-fallback');
         }
 
         if (typeof element === 'object' && typeof element !== 'undefined' && element != null) {
             if (checkbox.checked) {
                 element.disabled = true;
                 element.parentNode.classList.remove('active');
+                fallback.classList.remove('disabled');
             } else {
                 element.disabled = false;
                 element.parentNode.classList.add('active');
+                fallback.classList.add('disabled');
             }
         }
     };

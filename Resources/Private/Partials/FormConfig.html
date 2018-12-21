@@ -106,7 +106,10 @@
 <f:section name="dropdown">
     <tr>
         <td><label for="form{name}"><f:translate key="label.{name}" /></label></td>
-        <td><div class="chevron"><f:form.select additionalAttributes="{autocomplete: 'off'}" id="form{name}" property="form{name}" options="{options}" value="{value}" /></div></td>
+        <td>
+            <div class="chevron"><f:form.select additionalAttributes="{autocomplete: 'off'}" id="form{name}" property="form{name}" options="{options}" value="{value}" /></div>
+            <div id="form{name}-fallback" class="fallback">{fallback}</div>
+        </td>
         <td class="commands">
             <label class="button" for="factory.form{name}">
                 <f:form.checkbox class="switch" additionalAttributes="{autocomplete: 'off'}" id="factory.form{name}" property="factory" checked="{useFactorySettings}" value="1" />

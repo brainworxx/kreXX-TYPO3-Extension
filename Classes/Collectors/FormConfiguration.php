@@ -64,10 +64,15 @@ class FormConfiguration extends AbstractCollector
             $config[$settingsName]['value'] =  $this->convertKrexxFeSetting(
                 $iniConfig->getFeConfigFromFile($settingsName)
             );
+            $config[$settingsName]['fallback'] = $dropdown[
+                $this->convertKrexxFeSetting(
+                    $iniConfig->feConfigFallback[$settingsName][$iniConfig::RENDER]
+                )
+            ];
+
             // Check if we have a value. If not, we need to load the
             // factory settings. We also need to set the info, if we
             // are using the factory settings, at all.
-
             if (is_null($config[$settingsName]['value'])) {
                 $config[$settingsName]['value'] = $this->convertKrexxFeSetting(
                     $iniConfig->feConfigFallback[$settingsName][$iniConfig::RENDER]
