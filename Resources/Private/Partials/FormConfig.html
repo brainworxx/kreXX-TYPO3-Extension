@@ -105,8 +105,8 @@
  */
 <f:section name="dropdown">
     <tr>
-        <td><label for="form{name}"><f:translate key="label.{name}" /></label></td>
-        <td>
+        <td class="description"><label for="form{name}"><f:translate key="label.{name}" /></label></td>
+        <td class="value">
             <div class="chevron"><f:form.select additionalAttributes="{autocomplete: 'off'}" id="form{name}" property="form{name}" options="{options}" value="{value}" /></div>
             <div id="form{name}-fallback" class="fallback">{fallback}</div>
         </td>

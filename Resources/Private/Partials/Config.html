@@ -106,12 +106,12 @@
  */
 <f:section name="dropdown">
     <tr class="{config.mode}">
-        <td><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
-        <td>
+        <td class="description"><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
+        <td class="value">
             <div class="chevron"><f:form.select additionalAttributes="{autocomplete: 'off'}" id="{config.name}" property="{config.name}" options="{options}" value="{config.value}" /></div>
             <div id="{config.name}-fallback" class="fallback">{config.fallback}</div>
         </td>
-        <td>
+        <td class="commands">
             <div class="button tooltip-hover">
                 <div class="toolwrapper">
                     <div class="tooltip-text">{config.helptext}</div>
@@ -139,8 +139,8 @@
  */
 <f:section name="input">
     <tr class="{config.mode}">
-        <td><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
-        <td>
+        <td class="description"><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
+        <td class="value">
             <f:form.textfield additionalAttributes="{autocomplete: 'off'}" id="{config.name}" property="{config.name}"  value="{config.value}" />
             <div id="{config.name}-fallback" class="fallback">{config.fallback}</div>
         </td>

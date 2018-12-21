@@ -244,15 +244,12 @@ th.filename {
     width: 250px;
 }
 
-th.description {
+td.description {
     width: 400px;
 }
 
-th.commands {
-    width: 68px;
-}
-
 td.commands {
+    width: 72px;
     text-align: right;
 }
 
