@@ -26,12 +26,6 @@
             <trans-unit id="false">
                 <source>False</source>
 			</trans-unit>
-            <trans-unit id="save_settings">
-                <source>Save settings</source>
-			</trans-unit>
-            <trans-unit id="refresh">
-                <source>Refresh</source>
-			</trans-unit>
             <trans-unit id="save">
                 <source>Save</source>
 			</trans-unit>
@@ -41,6 +35,7 @@
             <trans-unit id="expert">
                 <source>Expert mode</source>
             </trans-unit>
+
 
 
             <!-- General stuff for the FE configuration -->
@@ -72,12 +67,8 @@
             <trans-unit id="level">
                 <source>Most frameworks have objects inside of objects inside of objects, and so on. Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.</source>
 			</trans-unit>
-            <trans-unit id="kresetbutton">
-                <source>Here you can reset your local settings, which are stored in a cookie. kreXX will then use the global settings (either ini-file or factory settings).</source>
-			</trans-unit>
             <trans-unit id="destination">
-                <source><![CDATA['Browser' =  Sending everything to the browser after TYPO3 is finished with everything.
-'File' = Saving everything to the log folder.]]></source>
+                <source><![CDATA['Browser' =  Sending everything to the browser after TYPO3 is finished with everything. 'File' = Saving everything to the log folder.]]></source>
 			</trans-unit>
             <trans-unit id="maxCall">
                 <source>A lot of output does not only slow down your server, it also slows down your browser. When using kreXX in a loop, it will create output every time the loop is executed. To limit this, you can configure the maximum call settings.</source>
@@ -85,26 +76,17 @@
             <trans-unit id="disabled">
                 <source>Here you can disable kreXX without uninstalling the whole extension.</source>
 			</trans-unit>
-            <trans-unit id="folder">
-                <source>This is the folder where kreXX will store it&apos;s logfiles.</source>
-			</trans-unit>
             <trans-unit id="maxfiles">
                 <source>How many logfiles do you want to store inside your logging folder? When there are more files than this number, the older files will get deleted.</source>
 			</trans-unit>
             <trans-unit id="skin">
                 <source>Choose a skin here. We have provided kreXX with two skins: smoky-grey and hans.</source>
 			</trans-unit>
-            <trans-unit id="currentSettings">
-                <source>kreXX&apos;s configuration can be edited here, changes will be stored in a cookie and overwrite the ini and factory settings. Please note, that these are only local settings. They only affect this browser.</source>
-			</trans-unit>
             <trans-unit id="maxStepNumber">
                 <source>A backtrace tends to produce a lot of output, and browsers tend to have problems with more than 100MB output in HTML text. Normally it is not unneccessary to go back more than 10 steps, but if you need to, you can increase this number here.</source>
 			</trans-unit>
             <trans-unit id="detectAjax">
                 <source>kreXX tries to detect whether a request is made via ajax. When it is detected, it will do no output at all. The AJAX detection can be disabled here.</source>
-			</trans-unit>
-            <trans-unit id="backtraceAnalysis">
-                <source>Shall kreXX do a "deep" analysis of  the backtrace? Be warned, a deep analysis can produce a lot of output. A "normal" analysis will use the configured settings, while a "deep" analysis will get as much data from the objects as possible.</source>
 			</trans-unit>
             <trans-unit id="memoryLeft">
                 <source>kreXX checks regularly how much memory is left. Here you can adjust the amount where it will trigger an emergency break. Unit of measurement is MB.</source>
@@ -118,9 +100,6 @@
             <trans-unit id="analysePrivateMethods">
                 <source>Here you can toggle if kreXX shall analyse the private methods of a class.</source>
 			</trans-unit>
-            <trans-unit id="analyseConstants">
-                <source>Here you can toggle, if kreXX shall analyse all constants of a class.</source>
-			</trans-unit>
             <trans-unit id="iprange">
                 <source>List of IPs that can trigger kreXX. Wildcards can be used.</source>
 			</trans-unit>
@@ -130,6 +109,9 @@
             <trans-unit id="useScopeAnalysis">
                 <source>Shall kreXX analyse all reachable class properties and methods? If set to "TRUE", the default configuration for private and protected stuff is overwritten, in case that value is reachable.</source>
 			</trans-unit>
+            <trans-unit id="arrayCountLimit">
+                <source>When encountering an array larger than this number, kreXX will resort to a simplified array analysis. This means that classes or other arrays in this large array will only get a rudimentary analysis to prevent an overkill output.</source>
+            </trans-unit>
 
 
 
@@ -171,6 +153,8 @@
 				<source>The file "%s" was NOT deleted.</source>
 			</trans-unit>
 
+
+
             <!--
                 Error messages from the krexx lib
                 @see Brainworxx\Krexx\Service\Config\Security->evaluateSetting( . . . )
@@ -208,28 +192,16 @@
 
 
 
-            <!-- Fluid layout keys from the template files -->
-            <trans-unit id="factory.settings">
-                <source>Use factory settings</source>
-			</trans-unit>
 
-
-
-            <!-- Both layout files -->
+            <!-- Tabs -->
             <trans-unit id="layout.edit.config.file">
                 <source>Edit configuration file</source>
-			</trans-unit>
-            <trans-unit id="layout.edit.cookie.settings">
-                <source>Edit local cookie settings</source>
 			</trans-unit>
             <trans-unit id="layout.edit.config.fe">
                 <source>Edit FE configuration</source>
 			</trans-unit>
             <trans-unit id="layout.usage.help">
                 <source>Usage help</source>
-			</trans-unit>
-            <trans-unit id="layout.config.help">
-                <source>Config help</source>
 			</trans-unit>
             <trans-unit id="layout.log.index">
                 <source>Logfiles access</source>
@@ -238,12 +210,6 @@
 
 
             <!-- Headlines -->
-            <trans-unit id="editconfig.headline">
-                <source>Edit configuration file</source>
-			</trans-unit>
-            <trans-unit id="editfeconfig.headline">
-                <source>Edit FE configuration</source>
-			</trans-unit>
             <trans-unit id="subhead.output">
                 <source>Output</source>
 			</trans-unit>
@@ -281,9 +247,6 @@
             <trans-unit id="label.maxRuntime">
                 <source>Maximum Runtime [Seconds]:</source>
 			</trans-unit>
-            <trans-unit id="label.folder">
-                <source>Folder:</source>
-			</trans-unit>
             <trans-unit id="label.maxfiles">
                 <source>Maximum files in the logfolder:</source>
 			</trans-unit>
@@ -320,12 +283,6 @@
             <trans-unit id="label.analysePrivateMethods">
                 <source>Analyse private methods:</source>
 			</trans-unit>
-            <trans-unit id="label.backtraceAnalysis">
-                <source>Backtrace analysis settings:</source>
-			</trans-unit>
-            <trans-unit id="label.analyseConstants">
-                <source>Analyse constants</source>
-			</trans-unit>
             <trans-unit id="label.iprange">
                 <source>IP Range</source>
 			</trans-unit>
@@ -359,34 +316,6 @@
 			</trans-unit>
             <trans-unit id="logging.noteditable">
                 <source>This setting is not editable on the frontend.</source>
-			</trans-unit>
-
-
-
-            <!-- Content Edit Cookie Settings -->
-            <trans-unit id="editcookie.headline">
-                <source>Edit local cookie settings</source>
-			</trans-unit>
-            <trans-unit id="editcookie.disabled.1">
-                <source>Normally, we would display the menu for the local cookie settings here. This menu is a part of the kreXX output and located in the footer.</source>
-			</trans-unit>
-            <trans-unit id="editcookie.disabled.2">
-                <source>The output of kreXX was disabled, so it will not be displayed.</source>
-			</trans-unit>
-            <trans-unit id="editcookie.enabled.1">
-                <source>Here you can edit the local cookie settings. They are stored in a cookie, and only affect your current browser. Unlike the configuration file, not all settings can be edited here by default. This can be changed in the</source>
-			</trans-unit>
-            <trans-unit id="editcookie.enabled.2">
-                <source>menu. Local cookie settings overwrite configuration file settings.</source>
-			</trans-unit>
-            <trans-unit id="editcookie.enabled.3">
-                <source>Please note, that these settings only affect your current browser!</source>
-			</trans-unit>
-            <trans-unit id="editcookie.file.1">
-                <source>The output destination of kreXX is set to File, so it will not be displayed here.</source>
-			</trans-unit>
-            <trans-unit id="editcookie.file.2">
-                <source>You can access all logfiles here:</source>
 			</trans-unit>
 
 
@@ -460,69 +389,7 @@
 			</trans-unit>
 
 
-
-            <!-- Configuration Help -->
-            <trans-unit id="config.headline">
-                <source>Configuration</source>
-			</trans-unit>
-            <trans-unit id="config.headline.text">
-                <source>kreXX is already preconfigured, you don't have to configure it. But there are always moments when you want to change it. There are 3 levels of configuration:</source>
-			</trans-unit>
-            <trans-unit id="config.factory.headline">
-                <source>1.) Factory settings</source>
-			</trans-unit>
-            <trans-unit id="config.factory.text">
-                <source>The factory settings are hardcoded fallback settings.</source>
-			</trans-unit>
-            <trans-unit id="config.file.headline">
-                <source>2.) Configuration file Krexx.ini</source>
-			</trans-unit>
-            <trans-unit id="config.file.text">
-                <source>The configuration file settings are stored in the file Krexx.ini. kreXX shows in it's output footer where it is searching for this file. According to kreXX, this is:</source>
-			</trans-unit>
-            <trans-unit id="config.file.link.1">
-                <source>You can edit these settings </source>
-			</trans-unit>
-            <trans-unit id="config.file.link.2">
-                <source>here</source>
-			</trans-unit>
-            <trans-unit id="config.file.hierarchy">
-                <source>Configuration file settings overwrite factory settings.</source>
-			</trans-unit>
-            <trans-unit id="config.cookie.headline">
-                <source>3.) Local cookie settings</source>
-			</trans-unit>
-            <trans-unit id="config.cookie.text">
-                <source><![CDATA[You can edit the local cookie settings on the fly in the footer of the kreXX output. They are stored in a cookie, and only affect your current browser. Unlike the configuration file, not all settings can be edited there.<br/>Local cookie settings overwrite configuration file settings.]]></source>
-			</trans-unit>
-            <trans-unit id="config.cookie.warning">
-                <source>Please note, that these are only local settings, only affecting your current browser.</source>
-			</trans-unit>
-            <trans-unit id="config.links.headline">
-                <source>kreXX on the WeBB</source>
-			</trans-unit>
-            <trans-unit id="config.links.1">
-                <source>Documentation</source>
-			</trans-unit>
-            <trans-unit id="config.links.2">
-                <source>Bug reports for kreXX</source>
-			</trans-unit>
-            <trans-unit id="config.links.3">
-                <source>TYPO3 kreXX</source>
-			</trans-unit>
-            <trans-unit id="config.links.4">
-                <source>Magento kreXX</source>
-			</trans-unit>
-            <trans-unit id="config.links.5">
-                <source>Bug reports for the TYPO3 kreXX extension</source>
-			</trans-unit>
-
-
-
             <!-- Logging -->
-            <trans-unit id="log.headline">
-                <source>Overview file logging</source>
-			</trans-unit>
             <trans-unit id="log.filename">
                 <source>Filename</source>
 			</trans-unit>
@@ -538,35 +405,8 @@
             <trans-unit id="log.notreadable">
                 <source>File %1$s is not readable!</source>
 			</trans-unit>
-            <trans-unit id="log.notdeletable">
-                <source>File %1$s is not deletable!</source>
-			</trans-unit>
-            <trans-unit id="log.headline.text.1">
-                <source>This is an overview of all logfiles that kreXX has created. You can easily access them here, just by clicking the filename.</source>
-			</trans-unit>
-            <trans-unit id="log.headline.text.2">
-                <source>You can activate file logging on the configuration page found here:</source>
-			</trans-unit>
-            <trans-unit id="log.noresult">
-                <source>Sorry, there are currently no logfiles.</source>
-			</trans-unit>
-            <trans-unit id="log.inline">
-                <source>line</source>
-			</trans-unit>
-            <trans-unit id="log.of">
-                <source>of</source>
-			</trans-unit>
-            <trans-unit id="log.in">
-                <source>in</source>
-			</trans-unit>
-            <trans-unit id="log.nodata">
-                <source>No data available.</source>
-			</trans-unit>
             <trans-unit id="log.meta">
                 <source>Metadata</source>
-			</trans-unit>
-            <trans-unit id="log.delete">
-                <source>Delete</source>
 			</trans-unit>
 
         </body>
