@@ -7,52 +7,89 @@
  *   Complete access to all variables.
  */
 <f:section name="main">
-    <table border="0">
-        <tr><th class="last" colspan="3"><b><f:translate key="editfeconfig.help.headline" /></b></th></tr>
-        <tr><td><f:translate key="full" /></td><td colspan="2"><f:translate key="full.help" /></td></tr>
-        <tr><td><f:translate key="display" /></td><td colspan="2"><f:translate key="display.help" /></td></tr>
-        <tr><td><f:translate key="none" /></td><td colspan="2"><f:translate key="none.help" /></td></tr>
-        <tr><td colspan="3">&nbsp;</td></tr>
 
-        <tr><th class="last" colspan="3"><b><f:translate key="subhead.output" /></b></th></tr>
-        <f:render section="dropdown" arguments="{formConfig.disabled}" />
-        <f:render section="noedit"   arguments="{formConfig.iprange}" />
-        <f:render section="dropdown" arguments="{formConfig.detectAjax}" />
-        <tr><td colspan="3">&nbsp;</td></tr>
+    <h3><f:translate key="editfeconfig.help.headline" /></h3>
+    <f:translate key="full" /><f:translate key="full.help" /><br />
+    <f:translate key="display" /><f:translate key="display.help" /><br />
+    <f:translate key="none" /><f:translate key="none.help" /><br />
 
-        <tr><th class="last" colspan="3"><b><f:translate key="subhead.behavior" /></b></th></tr>
-        <f:render section="dropdown" arguments="{formConfig.skin}" />
-        <f:render section="noedit"   arguments="{formConfig.destination}" />
-        <f:render section="noedit"   arguments="{formConfig.maxfiles}" />
-        <f:render section="dropdown" arguments="{formConfig.useScopeAnalysis}" />
-        <tr><td colspan="3">&nbsp;</td></tr>
 
-        <tr><th class="last" colspan="3"><b><f:translate key="subhead.pruneOutput" /></b></th></tr>
-        <f:render section="dropdown" arguments="{formConfig.maxStepNumber}" />
-        <f:render section="dropdown" arguments="{formConfig.arrayCountLimit}" />
-        <f:render section="dropdown" arguments="{formConfig.level}" />
-        <tr><td colspan="3">&nbsp;</td></tr>
-
-        <tr><th class="last"colspan="3"><b><f:translate key="subhead.properties" /></b></th></tr>
-        <f:render section="dropdown" arguments="{formConfig.analyseProtected}" />
-        <f:render section="dropdown" arguments="{formConfig.analysePrivate}" />
-        <f:render section="dropdown" arguments="{formConfig.analyseTraversable}" />
-        <tr><td colspan="3">&nbsp;</td></tr>
-
-        <tr><th class="last"colspan="3"><b><f:translate key="subhead.methods" /></b></th></tr>
-        <f:render section="dropdown" arguments="{formConfig.analyseProtectedMethods}" />
-        <f:render section="dropdown" arguments="{formConfig.analysePrivateMethods}" />
-        <f:render section="dropdown" arguments="{formConfig.analyseGetter}" />
-        <f:render section="noedit"   arguments="{formConfig.debugMethods}" />
-        <tr><td colspan="3">&nbsp;</td></tr>
-
-        <tr><th class="last"colspan="3"><b><f:translate key="subhead.emergencystop" /></b></th></tr>
-        <f:render section="dropdown" arguments="{formConfig.maxCall}" />
-        <f:render section="dropdown" arguments="{formConfig.memoryLeft}" />
-        <f:render section="dropdown" arguments="{formConfig.maxRuntime}" />
-
-    </table>
+    <f:render section="table" arguments="{headline: 'subhead.output', payload: 'output', formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.behavior', payload: 'behavior', formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.pruneOutput', payload: 'pruneOutput', formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.properties', payload: 'properties', formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.methods', payload: 'methods', formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.emergencystop', payload: 'emergencystop', formConfig: formConfig}" />
 </f:section>
+
+/**
+ * Configuration payload for the table.
+ *
+ * @var array {formConfig}
+ *   The configuration for the payload.
+ */
+<f:section name="output">
+    <f:render section="dropdown" arguments="{formConfig.disabled}" />
+    <f:render section="noedit"   arguments="{formConfig.iprange}" />
+    <f:render section="dropdown" arguments="{formConfig.detectAjax}" />
+</f:section>
+<f:section name="behavior">
+    <f:render section="dropdown" arguments="{formConfig.skin}" />
+    <f:render section="noedit"   arguments="{formConfig.destination}" />
+    <f:render section="noedit"   arguments="{formConfig.maxfiles}" />
+    <f:render section="dropdown" arguments="{formConfig.useScopeAnalysis}" />
+</f:section>
+<f:section name="pruneOutput">
+    <f:render section="dropdown" arguments="{formConfig.maxStepNumber}" />
+    <f:render section="dropdown" arguments="{formConfig.arrayCountLimit}" />
+    <f:render section="dropdown" arguments="{formConfig.level}" />
+</f:section>
+<f:section name="properties">
+    <f:render section="dropdown" arguments="{formConfig.analyseProtected}" />
+    <f:render section="dropdown" arguments="{formConfig.analysePrivate}" />
+    <f:render section="dropdown" arguments="{formConfig.analyseTraversable}" />
+</f:section>
+<f:section name="methods">
+    <f:render section="dropdown" arguments="{formConfig.analyseProtectedMethods}" />
+    <f:render section="dropdown" arguments="{formConfig.analysePrivateMethods}" />
+    <f:render section="dropdown" arguments="{formConfig.analyseGetter}" />
+    <f:render section="noedit"   arguments="{formConfig.debugMethods}" />
+</f:section>
+<f:section name="emergencystop">
+    <f:render section="dropdown" arguments="{formConfig.maxCall}" />
+    <f:render section="dropdown" arguments="{formConfig.memoryLeft}" />
+    <f:render section="dropdown" arguments="{formConfig.maxRuntime}" />
+</f:section>
+
+/**
+ * Renders a configuration table.
+ *
+ * @var string {headline}
+ *   The headline aboce the table
+ * @var string {payload}
+ *   The section name with the payload for the table.
+ * @var array {config}
+ *   The configuration for the payload.
+ */
+<f:section name="table">
+    <h3><f:translate key="{headline}" /></h3>
+    <div class="table-wrapper">
+        <table border="0" class="krexx-config">
+            <thead>
+                <tr>
+                    <th class="description"><f:translate key="table.desc" /></th>
+                    <th class="value"><f:translate key="table.value" /></th>
+                    <th class="commands"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <f:render section="{payload}" arguments="{formConfig: formConfig}" />
+            </tbody>
+        </table>
+    </div>
+</f:section>
+
+
 
 /**
  * Renders a dropdown with the possible values.
@@ -70,11 +107,10 @@
     <tr>
         <td><label for="form{name}"><f:translate key="label.{name}" /></label></td>
         <td><div class="chevron"><f:form.select additionalAttributes="{autocomplete: 'off'}" id="form{name}" property="form{name}" options="{options}" value="{value}" /></div></td>
-        <td class="cbx">
-            <f:form.checkbox additionalAttributes="{autocomplete: 'off'}" id="factory.form{name}" property="factory" checked="{useFactorySettings}" value="1" />
-            <label for="factory.form{name}">
-                <span class="chkwrapper"></span>
-                <f:translate key="factory.settings" />
+        <td class="commands">
+            <label class="button" for="factory.form{name}">
+                <f:form.checkbox class="switch" additionalAttributes="{autocomplete: 'off'}" id="factory.form{name}" property="factory" checked="{useFactorySettings}" value="1" />
+                <span class="switch" ></span>
             </label>
         </td>
     </tr>

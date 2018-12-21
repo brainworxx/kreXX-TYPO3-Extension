@@ -193,7 +193,7 @@ body {
 }
 
 /**
- * Edit configuration file
+ * Tables
  */
 .krexx-backend .table-wrapper {
     background-color: #fafafa;
@@ -243,6 +243,10 @@ th.description {
 
 th.commands {
     width: 68px;
+}
+
+td.commands {
+    text-align: right;
 }
 
 .krexx-backend td {
