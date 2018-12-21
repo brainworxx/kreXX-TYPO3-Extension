@@ -279,7 +279,7 @@ td.commands {
 }
 
 .krexx-backend select::placeholder {
-    color: #d7d7d7;
+    color: #dddddd;
     opacity: 1;
 }
 
@@ -377,6 +377,10 @@ td.commands {
 
 .table-wrapper table tr {
     border-bottom: 1px solid #c3c3c3;
+}
+
+.table-wrapper table tr:hover {
+    background-color: #ededed;
 }
 
 .table-wrapper table tr:last-child {
