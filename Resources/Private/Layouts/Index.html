@@ -5,7 +5,13 @@
     <div id="typo3-inner-docbody" class="krexx-backend">
 		<div class="module-loading-indicator"></div>
         <div class="module-docheader" style="height: auto;">
-            <button class="button save" value="1" title="{f:translate(key: 'save')}"><f:translate key="save"/></button>
+            <button id="main-save" class="button save" value="1" title="{f:translate(key: 'save')}"><f:translate key="save"/></button>
+            <div class="chevron">
+                <select id="mode-switch" autocomplete="off" name="simplicity">
+                    <option value="simple" selected="selected"><f:translate key="simple"/></option>
+                    <option value="expert"><f:translate key="expert"/></option>
+                </select>
+            </div>
         </div>
         <div class="module-body">
             <f:if condition="{specialflash}">

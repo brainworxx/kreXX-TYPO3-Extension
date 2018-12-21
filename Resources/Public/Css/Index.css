@@ -2,6 +2,13 @@ body {
     color: #333;
 }
 
+.expert {
+    display: none;
+}
+
+.expert-mode .expert {
+    display: table-row;
+}
 
 /**
  * Ajax messaging stuff
@@ -333,6 +340,11 @@ td.commands {
     padding: 0 0 2px;
     position: absolute;
     pointer-events: none;
+}
+
+.module-docheader .chevron {
+    display: inline-block;
+    vertical-align: 21px;
 }
 
 .krexx-backend .fallback {

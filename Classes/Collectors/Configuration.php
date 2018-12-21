@@ -61,7 +61,7 @@ class Configuration extends AbstractCollector
             $config[$settingsName]['value'] = $this->pool->config->iniConfig->getConfigFromFile($group, $settingsName);
             $config[$settingsName]['useFactorySettings'] = false;
             $config[$settingsName]['fallback'] = $fallback[Fallback::VALUE];
-            
+
             // Check if we have a value. If not, we need to load the factory
             // settings. We also need to set the info, if we are using the
             // factory settings, at all.
@@ -75,6 +75,11 @@ class Configuration extends AbstractCollector
                     $config[$settingsName]['value'] = $fallback[Fallback::VALUE];
                 }
                 $config[$settingsName]['useFactorySettings'] = true;
+            }
+
+            // Assign the mode-class.
+            if (in_array($settingsName, $this->expertOnly)) {
+                $config[$settingsName]['mode'] = 'expert';
             }
         }
 

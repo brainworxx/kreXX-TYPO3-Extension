@@ -105,7 +105,7 @@
  *   Are we using factory settings here?
  */
 <f:section name="dropdown">
-    <tr>
+    <tr class="{config.mode}">
         <td><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
         <td>
             <div class="chevron"><f:form.select additionalAttributes="{autocomplete: 'off'}" id="{config.name}" property="{config.name}" options="{options}" value="{config.value}" /></div>
@@ -138,7 +138,7 @@
  *   Are we using factory settings here?
  */
 <f:section name="input">
-    <tr>
+    <tr class="{config.mode}">
         <td><label for="{config.name}"><f:translate key="label.{config.name}" /></label></td>
         <td>
             <f:form.textfield additionalAttributes="{autocomplete: 'off'}" id="{config.name}" property="{config.name}"  value="{config.value}" />

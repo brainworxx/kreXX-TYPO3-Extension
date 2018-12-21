@@ -106,6 +106,8 @@
                 }
             }, true);
         }
+
+        document.getElementById('mode-switch').addEventListener('change', formSupport.changeMode);
     };
 
     /**
@@ -132,6 +134,22 @@
                 element.parentNode.classList.add('active');
                 fallback.classList.add('disabled');
             }
+        }
+    };
+
+    /**
+     * We simply set a class on the higher dom elements to show the expert settings, if desired.
+     *
+     * @param {Event} event
+     */
+    formSupport.changeMode = function (event) {
+        var modeSwitch = document.getElementById('mode-switch');
+        var value = modeSwitch.options[modeSwitch.selectedIndex].value;
+
+        if (value === 'expert') {
+            document.getElementById('typo3-inner-docbody').classList.add('expert-mode');
+        } else {
+            document.getElementById('typo3-inner-docbody').classList.remove('expert-mode');
         }
     };
 

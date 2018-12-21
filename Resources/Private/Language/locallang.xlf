@@ -35,7 +35,12 @@
             <trans-unit id="save">
                 <source>Save</source>
 			</trans-unit>
-
+            <trans-unit id="simple">
+                <source>Simple mode</source>
+            </trans-unit>
+            <trans-unit id="expert">
+                <source>Expert mode</source>
+            </trans-unit>
 
 
             <!-- General stuff for the FE configuration -->

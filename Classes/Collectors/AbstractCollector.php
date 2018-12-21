@@ -54,6 +54,21 @@ abstract class AbstractCollector
     protected $userUc = array();
 
     /**
+     * List of options, that are 'expert' only.
+     *
+     * @var array
+     */
+    protected $expertOnly = array(
+        'detectAjax',
+        'useScopeAnalysis',
+        'maxStepNumber',
+        'arrayCountLimit',
+        'debugMethods',
+        'maxRuntime',
+        'memoryLeft'
+    );
+
+    /**
      * Inject the pool.
      */
     public function __construct()
