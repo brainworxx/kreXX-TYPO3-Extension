@@ -226,8 +226,11 @@
 
                 html += '<td>';
                 for (var i = 0; i < file.meta.length; i++) {
-                    html += 'Analysis of <b>' + file.meta[i].varname + '</b> in ' + file.meta[i].filename + '<br />';
-                    html += 'in line ' + file.meta[i].line + '<br />';
+                    html += '<b>' + file.meta[i].type + '</b><br />';
+                    html += 'in ' + file.meta[i].filename + ', line ' + file.meta[i].line;
+                    if (i < file.meta.length -1) {
+                        html += '<div class="spacer"></div>';
+                    }
                 }
                 if (file.meta.length > 0) {
                     html += '<div class="krexx-spacer"></div>'

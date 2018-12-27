@@ -113,9 +113,7 @@ class AjaxController
 
                     foreach ($fileinfo['meta'] as &$meta) {
                         $meta['filename'] = basename($meta['file']);
-
                         // Unescape the stuff from the json, to prevent double escaping.
-                        // Meh, there is no f:format.raw in 4.5 . . .
                         $meta['varname'] = htmlspecialchars_decode($meta['varname']);
                     }
                 }
