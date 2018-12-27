@@ -204,6 +204,16 @@
             var result = JSON.parse(request.responseText);
             var html = '';
 
+            // Are there any logiles, at all?
+            if (result.length === 0) {
+                document.querySelector('#tab-1 .table-wrapper').classList.add('display-none');
+                document.querySelector('#tab-1 .noresult').classList.remove('display-none');
+                // Nothing more to do here.
+                return;
+            }
+
+            document.querySelector('#tab-1 .table-wrapper').classList.remove('display-none');
+            document.querySelector('#tab-1 .noresult').classList.add('display-none');
 
             for (var key in result) {
                 if (!result.hasOwnProperty(key)) {
@@ -233,7 +243,7 @@
             if (ajaxRefresh.lastAnswer !== html) {
                 table.innerHTML = html;
                 ajaxRefresh.message({
-                    text: 'Updated the logfiles!',
+                    text: 'Updated the log-list!',
                     class: 'Success'
                 });
             }

@@ -6,6 +6,10 @@ body {
     display: none;
 }
 
+.display-none {
+    display: none;
+}
+
 .expert-mode .expert {
     display: table-row;
 }
@@ -341,7 +345,7 @@ td.commands {
 
 .module-docheader .chevron {
     display: inline-block;
-    vertical-align: 21px;
+    vertical-align: middle;
 }
 
 .krexx-backend .fallback {
@@ -414,7 +418,9 @@ td.commands {
     z-index: 300;
     background-color: #eee;
     border-bottom: 1px solid #c3c3c3;
-    padding: 0 24px;
+    padding-left: 24px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     -webkit-transition: margin-top .3s ease-in-out;
     transition: margin-top .3s ease-in-out;
 }
@@ -509,6 +515,8 @@ button:hover {
     padding-left: 24px;
     width: auto;
     height: auto;
+    margin: 0;
+    vertical-align: middle;
 }
 
 .button:hover {

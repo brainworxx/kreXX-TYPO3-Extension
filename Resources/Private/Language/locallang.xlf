@@ -408,6 +408,9 @@
             <trans-unit id="log.meta">
                 <source>Metadata</source>
 			</trans-unit>
+            <trans-unit id="log.noresult">
+                <source>Sorry, there are currently no logfiles.</source>
+			</trans-unit>
 
         </body>
     </file>
