@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
+use TYPO3\CMS\Core\Http\AjaxRequestHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -67,10 +68,22 @@ class AjaxController
 
     /**
      * List the logfiles with their corresponding meta data.
+     *
+     * @param array $arguments
+     *   Not used in 6.2.
+     * @param \TYPO3\CMS\Core\Http\AjaxRequestHandler|null $requesthandler
+     *   The request handler.
      */
-    public function refreshLoglistAction()
+    public function refreshLoglistAction(array $arguments = array(), AjaxRequestHandler $requesthandler = null)
     {
-       // 1. Get the log folder.
+        $fileList = array();
+
+        if ($requesthandler === null || $requesthandler->isError()) {
+            // Do nothing!
+            echo json_encode($fileList);
+            return;
+        }
+        // 1. Get the log folder.
         $dir = $this->pool->config->getLogDir();
 
         // 2. Get the file list and sort it.
@@ -84,7 +97,7 @@ class AjaxController
         });
 
         // 3. Get the file info.
-        $fileList = array();
+
         foreach ($files as $file) {
             try {
                 $fileinfo = array();
@@ -133,24 +146,33 @@ class AjaxController
 
     /**
      * Deletes a logfile.
+     *
+     * @param array $arguments
+     *   Not used in 6.2.
+     * @param \TYPO3\CMS\Core\Http\AjaxRequestHandler|null $requesthandler
+     *   The request handler.
      */
-    public function deleteAction()
+    public function deleteAction(array $arguments = array(), AjaxRequestHandler $requesthandler = null)
     {
+        $result = new \stdClass();
+        $result->class  = 'error';
+        $result->text = LocalizationUtility::translate('fileDeletedFail', 'includekrexx', array('n/a'));
+
+        if ($requesthandler === null || $requesthandler->isError()) {
+            // Do nothing!
+            echo json_encode($result);
+            return;
+        }
+
         // No directory traversal for you!
         $id = preg_replace('/[^0-9]/', '', GeneralUtility::_GET('id'));
         // Directly add the delete result return value.
         $file = $this->pool->config->getLogDir() . $id . '.Krexx';
 
-        $result = new \stdClass();
         if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
             $result->class  = 'success';
             $result->text = LocalizationUtility::translate('fileDeleted', 'includekrexx', array($id));
-        } else {
-            $result->class  = 'error';
-            $result->text = LocalizationUtility::translate('fileDeletedFail', 'includekrexx', array($id));
         }
-
-
 
         echo json_encode($result);
     }

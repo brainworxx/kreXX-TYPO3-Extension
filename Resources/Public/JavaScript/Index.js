@@ -119,7 +119,7 @@
             document.cookie = 'KrexxDebugSettings=' + JSON.stringify(settings) + '; ' + expires + '; path=/';
 
             ajaxRefresh.message({
-                class: 'Success',
+                class: 'success',
                 text: 'All cookie settings were removed!'
             })
         }, true);
@@ -262,7 +262,7 @@
                 table.innerHTML = html;
                 ajaxRefresh.message({
                     text: 'Updated the log-list!',
-                    class: 'Success'
+                    class: 'success'
                 });
             }
 
@@ -310,7 +310,18 @@
         );
 
         request.onload = function (event) {
-            ajaxRefresh.message(JSON.parse(request.responseText));
+            try {
+                ajaxRefresh.message(JSON.parse(request.responseText));
+            } catch (e) {
+                // We are not going to output the answer from the server, although
+                // it is visible in the browser inspector.
+                ajaxRefresh.message({
+                    class: 'error',
+                    text: 'Error while parsing the server answer.'
+                });
+            }
+
+
             ajaxRefresh.call();
         };
 
