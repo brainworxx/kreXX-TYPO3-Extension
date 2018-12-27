@@ -533,6 +533,15 @@ button:hover {
     vertical-align: middle;
 }
 
+.button.cookies {
+    background: url("../Icons/close.png") no-repeat left;
+    padding-left: 24px;
+    width: auto;
+    height: auto;
+    margin: 0;
+    vertical-align: middle;
+}
+
 .button:hover {
     background-color: #c4c4c4;
     border-color: #a6a6a6;

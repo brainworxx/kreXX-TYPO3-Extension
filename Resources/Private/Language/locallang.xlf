@@ -35,6 +35,9 @@
             <trans-unit id="expert">
                 <source>Expert mode</source>
             </trans-unit>
+            <trans-unit id="clear.cookies">
+                <source>Reset local cookie settings</source>
+            </trans-unit>
 
 
 

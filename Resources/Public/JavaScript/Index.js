@@ -97,17 +97,32 @@
             }, true);
         }
 
-        var saveButton = document.getElementById('main-save');
-        if (typeof saveButton === 'object' && saveButton !== 'undefined' && saveButton != null) {
-            saveButton.addEventListener('click', function () {
-                var form = document.getElementById('save-form');
-                if (typeof form === 'object' && form !== 'undefined' && form != null) {
-                    form.submit();
-                }
-            }, true);
-        }
+
+        document.getElementById('main-save').addEventListener('click', function () {
+            var form = document.getElementById('save-form');
+            if (typeof form === 'object' && form !== 'undefined' && form != null) {
+                form.submit();
+            }
+        }, true);
 
         document.getElementById('mode-switch').addEventListener('change', formSupport.changeMode);
+
+        document.getElementById('clear-cookies').addEventListener('click', function () {
+            // We do not delete the cookie, we simply remove all settings in it.
+            /** @type {Object} */
+            var settings = {};
+            /** @type {Date} */
+            var date = new Date();
+            date.setTime(date.getTime() + (99 * 24 * 60 * 60 * 1000));
+            /** @type {string} */
+            var expires = 'expires=' + date.toUTCString();
+            document.cookie = 'KrexxDebugSettings=' + JSON.stringify(settings) + '; ' + expires + '; path=/';
+
+            ajaxRefresh.message({
+                class: 'Success',
+                text: 'All cookie settings were removed!'
+            })
+        }, true);
     };
 
     /**
