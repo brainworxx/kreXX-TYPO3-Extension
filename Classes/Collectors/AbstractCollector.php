@@ -65,7 +65,8 @@ abstract class AbstractCollector
         'arrayCountLimit',
         'debugMethods',
         'maxRuntime',
-        'memoryLeft'
+        'memoryLeft',
+        'maxfiles'
     );
 
     /**
