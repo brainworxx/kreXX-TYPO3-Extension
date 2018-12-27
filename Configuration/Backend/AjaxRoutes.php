@@ -32,39 +32,13 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
-}
-
-// Register BE module.
-if (TYPO3_MODE === 'BE') {
-    $boot = function () {
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-            'Brainworxx.Includekrexx',
-            'tools',
-            'kreXX configuration',
-            '',
-            array(
-                'Index' => 'index, save, dispatch'
-            ),
-            array(
-                'access' => 'user,group',
-                'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
-                'labels' => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf',
-            )
-        );
-        if (version_compare(TYPO3_version, '7.6', '<')) {
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
-                'includekrexx_refresh',
-                'Brainworxx\\Includekrexx\\Controller\\AjaxController->refreshLoglistAction'
-            );
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
-                'includekrexx_delete',
-                'Brainworxx\\Includekrexx\\Controller\\AjaxController->deleteAction'
-            );
-        }
-    };
-
-    $boot();
-    unset($boot);
-}
+return array(
+    'includekrexx_refresh' => array(
+        'path' => '/refreshLoglist',
+        'target' => 'Brainworxx\\Includekrexx\\Controller\\AjaxController::refreshLoglistAction'
+    ),
+    'includekrexx_delete' => array(
+        'path' => '/delete',
+        'target' => 'Brainworxx\\Includekrexx\\Controller\\AjaxController::deleteAction'
+    ),
+);

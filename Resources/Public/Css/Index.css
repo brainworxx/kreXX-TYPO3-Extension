@@ -238,7 +238,7 @@ body {
     padding: 6px;
 }
 
-th.icon {
+th.th-icon {
     width: 10px;
 }
 
@@ -263,12 +263,13 @@ td.description {
 }
 
 td.commands {
-    width: 72px;
+    width: 76px;
     text-align: right;
 }
 
 .krexx-backend td {
     padding: 6px 6px 3px 6px;
+    vertical-align: top;
 }
 
 .krexx-backend thead tr {
@@ -321,7 +322,6 @@ td.commands {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
     -webkit-transition: all ease-in-out .15s;
     transition: all ease-in-out .15s;
-    margin-top: 3px;
 }
 
 .krexx-backend input[type=text] {
@@ -347,7 +347,7 @@ td.commands {
     -ms-transform: rotate(90deg);
     transform: rotate(90deg);
     right: 8px;
-    top: 4px;
+    top: 2px;
     padding: 0 0 2px;
     position: absolute;
     pointer-events: none;
@@ -365,12 +365,12 @@ td.commands {
     font-size: 11px;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
     border-radius: 2px;
-    margin-top: 3px;
     padding-left: 8px;
     padding-bottom: 5px;
     background-color: #ededed;
     max-width: 458px;
     overflow: hidden;
+    line-height: 13px;
 }
 
 .krexx-backend .fallback.disabled {
@@ -424,7 +424,7 @@ td.commands {
     z-index: 999999;
 }
 
-.module-docheader {
+#typo3-inner-docbody .module-docheader {
     position: fixed;
     width: 100%;
     top: 0;
@@ -437,14 +437,16 @@ td.commands {
     padding-bottom: 5px;
     -webkit-transition: margin-top .3s ease-in-out;
     transition: margin-top .3s ease-in-out;
+    min-height: auto;
 }
 
 div#typo3-inner-docbody {
     padding: 0 24px 24px 24px;
     margin-top: 0;
+    position: static;
 }
 
-.module-body {
+#typo3-inner-docbody .module-body {
     padding-top: 65px;
 }
 
@@ -514,6 +516,12 @@ button:hover {
     height: 32px;
     background-color: #dedede;
     vertical-align: unset;
+    margin: 0;
+    line-height: 25px;
+}
+
+.module-docheader .button {
+    padding: 0 8px 0 24px;
 }
 
 .button.delete {
@@ -535,7 +543,6 @@ button:hover {
 
 .button.cookies {
     background: url("../Icons/close.png") no-repeat left;
-    padding-left: 24px;
     width: auto;
     height: auto;
     margin: 0;
@@ -586,7 +593,7 @@ label span.switch::after {
     background: #c4c4c4;
 }
 
-input:checked  + span.switch {
+input:checked + span.switch {
     background: grey;
 }
 

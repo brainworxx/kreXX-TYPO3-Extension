@@ -210,7 +210,7 @@
         var request = new XMLHttpRequest();
         request.open(
             "GET",
-            TYPO3.settings.ajaxUrls['includekrexx::RefreshLoglist'],
+            TYPO3.settings.ajaxUrls['includekrexx_refresh'],
             true
         );
 
@@ -305,7 +305,7 @@
         var request = new XMLHttpRequest();
         request.open(
             "GET",
-            TYPO3.settings.ajaxUrls['includekrexx::DeleteLogFile'] + '&id=' + id,
+            TYPO3.settings.ajaxUrls['includekrexx_delete'] + '&id=' + id,
             true
         );
 
@@ -320,7 +320,6 @@
                     text: 'Error while parsing the server answer.'
                 });
             }
-
 
             ajaxRefresh.call();
         };

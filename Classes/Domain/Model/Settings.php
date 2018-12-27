@@ -271,9 +271,7 @@ class Settings
     {
         Pool::createPool();
         $this->security = \Krexx::$pool->config->security;
-        $this->registry = GeneralUtility::makeInstance(
-            '\\TYPO3\\CMS\\Core\\Registry'
-        );
+        $this->registry = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
     }
 
     /**

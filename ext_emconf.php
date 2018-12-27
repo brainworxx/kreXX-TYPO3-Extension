@@ -14,25 +14,25 @@ $EM_CONF[$_EXTKEY] = array (
 	'title' => 'kreXX Debugger',
 	'description' => 'kreXX is a feature rich php debugger, featuring backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for fluid, aimeos and dataviewer.',
 	'category' => 'misc',
-	'version' => '3.0.1',
+	'version' => '3.0.2 dev',
 	'state' => 'stable',
 	'uploadfolder' => false,
 	'createDirs' => '',
-	'clearcacheonload' => true,
+	'clearCacheOnLoad' => true,
 	'author' => 'BRAINWORXX GmbH',
 	'author_email' => 'info@brainworxx.de',
 	'author_company' => 'BRAINWORXX GmbH',
-	'constraints' => 
+	'constraints' =>
 	array (
-		'depends' => 
+		'depends' =>
 		array (
 			'typo3' => '6.2.0-9.5.99',
 			'php' => '5.3.0-7.2.99',
 		),
-		'conflicts' => 
+		'conflicts' =>
 		array (
 		),
-		'suggests' => 
+		'suggests' =>
 		array (
 		),
 	),

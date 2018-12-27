@@ -62,27 +62,23 @@ class AjaxController
     {
         Pool::createPool();
         $this->pool = \Krexx::$pool;
-        $objectManager = GeneralUtility::makeInstance('\\TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-        $this->uriBuilder = $objectManager->get('\\TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder');
+        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $this->uriBuilder = $objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder');
     }
 
     /**
      * List the logfiles with their corresponding meta data.
      *
-     * @param array $arguments
-     *   Not used in 6.2.
-     * @param \TYPO3\CMS\Core\Http\AjaxRequestHandler|null $requesthandler
-     *   The request handler.
+     * @param \TYPO3\CMS\Core\Http\ServerRequest|array $arg1
+     *   Depending on the TYPO3 version, either an empty array (6.2) or the
+     *   ServerRequest (7.6 and above)
+     * @param \TYPO3\CMS\Core\Http\Response|\TYPO3\CMS\Core\Http\AjaxRequestHandler $response
+     *   Depending on the TYPO3 version.
+     *
+     * @return \TYPO3\CMS\Core\Http\Response|\TYPO3\CMS\Core\Http\AjaxRequestHandler
      */
-    public function refreshLoglistAction(array $arguments = array(), AjaxRequestHandler $requesthandler = null)
+    public function refreshLoglistAction($arg1, $response)
     {
-        $fileList = array();
-
-        if ($requesthandler === null || $requesthandler->isError()) {
-            // Do nothing!
-            echo json_encode($fileList);
-            return;
-        }
         // 1. Get the log folder.
         $dir = $this->pool->config->getLogDir();
 
@@ -102,6 +98,12 @@ class AjaxController
             try {
                 $fileinfo = array();
 
+                if (version_compare(TYPO3_version, '9.0', '>=')) {
+                    $argumentKey = 'route';
+                } else {
+                    $argumentKey = 'M';
+                }
+                
                 // Getting the basic info.
                 $fileinfo['name'] = basename($file);
                 $fileinfo['size'] = $this->fileSizeConvert(filesize($file));
@@ -109,7 +111,7 @@ class AjaxController
                 $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
                 $fileinfo['dispatcher'] = $this->uriBuilder
                     ->reset()
-                    ->setArguments(array('M' => 'tools_IncludekrexxKrexxConfiguration'))
+                    ->setArguments(array($argumentKey => 'tools_IncludekrexxKrexxConfiguration'))
                     ->uriFor(
                         'dispatch',
                         array('id' => $fileinfo['id']),
@@ -141,40 +143,59 @@ class AjaxController
             }
         }
 
-        echo json_encode($fileList);
+        if (is_a($response, 'TYPO3\\CMS\\Core\\Http\\Response')) {
+            // 7.6 and above.
+            $response->getBody()->write(json_encode($fileList));
+        } else {
+            // Below 7.6.
+            $response->setContentFormat('jsonbody');
+            $response->setContent(($fileList));
+        }
+
+        return $response;
     }
 
     /**
      * Deletes a logfile.
      *
-     * @param array $arguments
-     *   Not used in 6.2.
-     * @param \TYPO3\CMS\Core\Http\AjaxRequestHandler|null $requesthandler
-     *   The request handler.
+     * @param \TYPO3\CMS\Core\Http\ServerRequest|array $arg1
+     *   Depending on the TYPO3 version, either an empty array (6.2) or the
+     *   ServerRequest (7.6 and above)
+     * @param \TYPO3\CMS\Core\Http\Response|\TYPO3\CMS\Core\Http\AjaxRequestHandler $response
+     *   Depending on the TYPO3 version.
+     *
+     * @return \TYPO3\CMS\Core\Http\Response|\TYPO3\CMS\Core\Http\AjaxRequestHandler
      */
-    public function deleteAction(array $arguments = array(), AjaxRequestHandler $requesthandler = null)
+    public function deleteAction($arg1, $response)
     {
-        $result = new \stdClass();
-        $result->class  = 'error';
-        $result->text = LocalizationUtility::translate('fileDeletedFail', 'includekrexx', array('n/a'));
-
-        if ($requesthandler === null || $requesthandler->isError()) {
-            // Do nothing!
-            echo json_encode($result);
-            return;
-        }
-
         // No directory traversal for you!
         $id = preg_replace('/[^0-9]/', '', GeneralUtility::_GET('id'));
         // Directly add the delete result return value.
         $file = $this->pool->config->getLogDir() . $id . '.Krexx';
 
+        $result = new \stdClass();
         if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
             $result->class  = 'success';
             $result->text = LocalizationUtility::translate('fileDeleted', 'includekrexx', array($id));
+        } else {
+
+            $result->class  = 'error';
+            $result->text = LocalizationUtility::translate('fileDeletedFail', 'includekrexx', array('n/a'));
         }
 
-        echo json_encode($result);
+        if (is_a($response, 'TYPO3\\CMS\\Core\\Http\\Response')) {
+            // 7.6 and above.
+            $response->getBody()->write(json_encode($result));
+        } else {
+            // Below 7.6.
+            // 6.2 always wants to send an array of json objects,for some reason,
+            // not a single one. Hence, we send it as plain. The js does not
+            // care.
+            $response->setContentFormat('plain');
+            $response->setContent(array(json_encode($result)));
+        }
+
+        return $response;
     }
 
     /**
