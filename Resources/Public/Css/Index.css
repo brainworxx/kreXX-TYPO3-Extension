@@ -424,7 +424,7 @@ td.commands {
     z-index: 999999;
 }
 
-#typo3-inner-docbody .module-docheader {
+.module-docheader {
     position: fixed;
     width: 100%;
     top: 0;
@@ -441,7 +441,7 @@ td.commands {
 }
 
 div#typo3-inner-docbody {
-    padding: 0 24px 24px 24px;
+    padding: 48px 24px 24px 24px;
     margin-top: 0;
     position: static;
 }

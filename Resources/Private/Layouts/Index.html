@@ -2,8 +2,8 @@
 
 <f:be.container includeCssFiles="{Backend: '{f:uri.resource(path:\'Css/Index.css\')}'}" includeJsFiles="{Backend: '{f:uri.resource(path:\'JavaScript/Index.js\')}'}">
     <div class="message-container-outer"></div>
-    <div id="typo3-inner-docbody" class="krexx-backend">
-		<div class="module-loading-indicator"></div>
+    <div class="module krexx-backend">
+        <div class="module-loading-indicator"></div>
         <div class="module-docheader" style="height: auto;">
             <button id="main-save" class="button save" value="1" title="{f:translate(key: 'save')}"><f:translate key="save"/></button>
             <div class="chevron">
@@ -14,7 +14,7 @@
             </div>
             <button id="clear-cookies" class="button cookies" value="1" title="{f:translate(key: 'clear.cookies')}"><f:translate key="clear.cookies"/></button>
         </div>
-        <div class="module-body">
+        <div id="typo3-inner-docbody" class="module-body">
             <f:if condition="{specialflash}">
                 <f:then><f:render partial="Specialflash"/></f:then>
                 <f:else><f:render partial="Normalflash"/></f:else>
