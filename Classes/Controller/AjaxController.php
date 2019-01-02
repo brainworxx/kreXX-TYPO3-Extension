@@ -103,7 +103,7 @@ class AjaxController
                 } else {
                     $argumentKey = 'M';
                 }
-                
+
                 // Getting the basic info.
                 $fileinfo['name'] = basename($file);
                 $fileinfo['size'] = $this->fileSizeConvert(filesize($file));

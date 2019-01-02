@@ -37,71 +37,11 @@ if (!defined('TYPO3_MODE')) {
 }
 
 $boot = function () {
-    $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx');
 
-    // We load the kreXX library.
-    // The class_exists triggers the composer autoloading, if available.
-    // It not, we use the bundled version which comes with the externsion.
-    $krexxFile = $extPath . 'Resources/Private/krexx/Krexx.php';
-    if (file_exists($krexxFile) && !class_exists('Krexx')) {
-        include_once $krexxFile;
-    }
-
-    // There is a bug with the extension installing (at least in TYPO3 8.7.8),
-    // causing this class not being available, right after a manual upgrade.
-    // It's not a showstopper, because after a reload, everything is OK.
-    // We need to make sure that we have access to the plugin registration, to
-    // prevent this ugly TYPO3 error message.
-    if (!class_exists('\\Brainworxx\\Krexx\\Service\\Plugin\\Registration')) {
-        return;
-    }
-
-    // Register and activate the TYPO3 plugin.
-    \Brainworxx\Krexx\Service\Plugin\Registration::register(
-        'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Configuration'
-    );
-    \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin(
-        'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Configuration'
-    );
-
-    // Register the fluid plugins.
-    // We activate them later in the viewhelper.
-    \Brainworxx\Krexx\Service\Plugin\Registration::register(
-        'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'
-    );
-    \Brainworxx\Krexx\Service\Plugin\Registration::register(
-        'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
-    );
-
-    if (version_compare(TYPO3_version, '8.5', '>=')) {
-        // Register our debug-viewhelper globally, so people don't have to
-        // do it inside the template. 'krexx' as a namespace should be unique enough.
-        if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['krexx'])) {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['krexx'] = array(
-                0 => 'Brainworxx\\Includekrexx\\ViewHelpers'
-            );
-        }
-    }
-    // Add the legacy debug viewhelper, in case people are using the old krexx
-    // namespace.
-    if (!class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
-        include_once $extPath . 'Classes/ViewHelpers/LegacyDebugViewHelper.php';
-    }
-
-    // Register the Aimoes Magic plugin.
-    \Brainworxx\Krexx\Service\Plugin\Registration::register(
-        'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Configuration'
-    );
-
-    // Check if we have the Aimeos shop available.
-    if (class_exists('Aimeos\\MShop\\Factory') === true ||
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('aimeos')
-    ) {
-        \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin(
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Configuration'
-        );
-    }
+    /** @var \Brainworxx\Includekrexx\Bootstrap\Bootstrap $bootstrap */
+    \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Brainworxx\\Includekrexx\\Bootstrap\\Bootstrap')
+        ->checkVersionNumber('3.0.2 dev')
+        ->run();
 };
-
 $boot();
 unset($boot);
