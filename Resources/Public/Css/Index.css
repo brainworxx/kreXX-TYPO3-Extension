@@ -53,7 +53,7 @@ body {
 .ajax-msg .text {
     display: inline-block;
     font-size: 15px;
-    max-width: 365px;
+    max-width: 343px;
 }
 
 .ajax-msg.success {
@@ -263,7 +263,7 @@ td.description {
 }
 
 td.commands {
-    width: 76px;
+    width: 77px;
     text-align: right;
 }
 
