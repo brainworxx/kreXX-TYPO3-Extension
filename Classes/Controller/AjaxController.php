@@ -169,7 +169,7 @@ class AjaxController
     public function deleteAction($arg1, $response)
     {
         // No directory traversal for you!
-        $id = preg_replace('/[^0-9]/', '', GeneralUtility::_GET('id'));
+        $id = preg_replace('/[^0-9]/', '', GeneralUtility::_GET('fileid'));
         // Directly add the delete result return value.
         $file = $this->pool->config->getLogDir() . $id . '.Krexx';
 

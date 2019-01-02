@@ -305,7 +305,7 @@
         var request = new XMLHttpRequest();
         request.open(
             "GET",
-            TYPO3.settings.ajaxUrls['includekrexx_delete'] + '&id=' + id,
+            TYPO3.settings.ajaxUrls['includekrexx_delete'] + '&fileid=' + id,
             true
         );
 
