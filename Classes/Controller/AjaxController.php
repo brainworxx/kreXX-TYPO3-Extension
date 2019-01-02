@@ -92,8 +92,9 @@ class AjaxController
             return filemtime($b) - filemtime($a);
         });
 
-        // 3. Get the file info.
+        $fileList = array();
 
+        // 3. Get the file info.
         foreach ($files as $file) {
             try {
                 $fileinfo = array();
