@@ -59,7 +59,7 @@ class Configuration implements PluginConfigInterface
      */
     public static function getVersion()
     {
-        return 'v1.0.1';
+        return 'v1.0.2';
     }
 
     /**
@@ -113,16 +113,6 @@ class Configuration implements PluginConfigInterface
         // Adding additional texts.
         $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx');
         Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/fluid.kreXX.ini');
-
-        // Register our debug-viewhelper globally, so people don't have to
-        // do it inside the template. 'krexx' as a namespace should be unique enough.
-        if (version_compare(TYPO3_version, '8.5', '>=')) {
-            if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['krexx'])) {
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['krexx'] = array(
-                    0 => 'Brainworxx\\Includekrexx\\ViewHelpers'
-                );
-            }
-        }
 
         // Add the legacy debug viewhelper, in case people are using the old krexx
         // namespace.

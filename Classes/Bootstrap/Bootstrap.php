@@ -85,6 +85,18 @@ class Bootstrap
         \Brainworxx\Krexx\Service\Plugin\Registration::register(
             'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'
         );
+        // Register our debug-viewhelper globally, so people don't have to
+        // do it inside the template. 'krexx' as a namespace should be unique enough.
+        // Theoratically, this should be part of the fluid debugger plugin, but
+        // activating it in the viewhelper is too late, for obvious reason.
+        if (version_compare(TYPO3_version, '8.5', '>=')) {
+            if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['krexx'])) {
+                $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['krexx'] = array(
+                    0 => 'Brainworxx\\Includekrexx\\ViewHelpers'
+                );
+            }
+        }
+
         \Brainworxx\Krexx\Service\Plugin\Registration::register(
             'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
         );
