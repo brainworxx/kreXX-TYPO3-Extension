@@ -44,21 +44,7 @@ kreXX will store all logfiles inside the directory
 
 	typo3temp/tx_includekrexx/log
 
-All debug data from one request will be stored inside two single files, one with the HTML output and a json with some meta data for the backend.
 
-To prevent these files from clogging up your system, kreXX will only keep 10 files and automatically delete older ones. This value can also be changed the logging option **Maximum files in the logfolder** to any number bigger than **0**.
-You can also delete these files in the backend .
-
-|
-
-.. figure:: ../../Images/Logging/logfiles.png
-	:width: 1033px
-	:alt: Logfiles backend menu
-
-	To make these logfiles easier accessible, we have provided a backend menu, where you can easily view them.
-
-|
+The logfiles can be accessed here: :ref:`accesslogfiles`
 
 
-| And please remember, when it comes to debugging a live server, there is only one rule:
-| **Never ever debug a live server. This will only lead to trouble.**

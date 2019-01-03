@@ -27,6 +27,8 @@ Local cookie settings
 
 Local cookie settings can be changed in the kreXX output window. The cookie settings overwrite the file settings.
 
+To wipe these settings, simply click the butin :literal:`Reset local cookie settings` in the backend module, or the button :literal:`Reset local settings` in the kreXX debug output.
+
 Exception to this hierarchy rule
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -6,16 +6,11 @@
 .. include:: ../../Includes.txt
 
 
-.. _little-helpers:
+.. _codebreadcrumbs:
 
-Little helpers
-==============
-
-kreXX can produce a lot of output. And when you are on the 5'th level of the 7'th object, things will get confusing and hard to read.
-To minimize confusion, the kreXX output offers two little helpers:
 
 Code breadcrumbs
-----------------
+================
 
 Modern frameworks tend to have complicated objects.
 Analysing them with kreXX will then produce a lot of output. And the values you are looking for might be buried in there somewhere.
@@ -42,20 +37,3 @@ Another click on will reset everything.
 	Better readable output, because unnecessary data is now hidden.
 
 |
-|
-
-Automatic code generation
--------------------------
-
-Displaying only the values you want to know about is one thing. Reaching them via php code is something else entirely.
-
-We have included an automatic code generation, which generates php-code to reach these values. There is a limitation, though. Most values you will come across are protected, and there is most likely a reason for this. kreXX will not generate code to make them public. A click on the <php> symbol will generate this code.
-
-|
-
-.. figure:: ../../Images/LittleHelpers/code_gen.png
-	:width: 1133
-	:alt: Code automatically generated via kreXX
-
-	Code automatically generated
-

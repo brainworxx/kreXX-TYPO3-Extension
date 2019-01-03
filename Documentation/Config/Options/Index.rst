@@ -12,12 +12,6 @@
 Configuration options
 =====================
 
-We have provided an editor for the configuration file settings:
-
-.. figure:: ../../Images/Config/typo3_backend_01.png
-	:width: 350px
-	:align: left
-	:alt: Backend settings editor
 
 Output
 ------

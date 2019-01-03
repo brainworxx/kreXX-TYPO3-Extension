@@ -63,6 +63,7 @@ A click on the recursion will then copy the original analysis via java script in
 
    Logging/Index
    Search/Index
-   LittleHelpers/Index
+   CodeBreadcrumbs/Index
+   CodeGeneration/Index
    Skins/Index
    FatalError/Index

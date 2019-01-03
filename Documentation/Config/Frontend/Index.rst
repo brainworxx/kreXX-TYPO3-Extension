@@ -12,6 +12,8 @@
 Edit FE Configuration
 =====================
 
+The FE Configuration is only available in the expert mode.
+
 Being able to edit all settings on the fly inside the debug output might not be such a good idea. Like with the configuration, we have provided kreXX with factory settings, disabling the more "dangerous" options.
 
 This can also be changed, of course. For (nearly) every control, you can set 3 different settings:
@@ -29,7 +31,7 @@ This can also be changed, of course. For (nearly) every control, you can set 3 d
 You can change which values can be edited on the frontend. To do this, we've also provided an editor:
 
 .. figure:: ../../Images/Config/typo3_backend_02.png
-	:width: 350px
+	:width: 1240px
 	:alt: Here you can change what options are available in the frontend.
 
 |

@@ -23,15 +23,6 @@ CLI detection is somewhat similar. When using a shell, a kreXX output will be mo
 
 Debugging Both
 ^^^^^^^^^^^^^^
-If you want to debug Ajax or CLI requests, it is a good idea to use the following settings:
+If you want to debug Ajax or CLI requests, simply switch to logging: :ref:`logging`
 
-.. figure:: ../../Images/AjaxCli/cli_ajax.png
-	:width: 756px
-	:alt: Settings for ajax and cli debugging
-
-
-Logging
-^^^^^^^
-The logging is documented here: :ref:`logging`. kreXX will generate one output file for every request.
-
-|
+The log files can be accessd here: :ref:`accesslogfiles`

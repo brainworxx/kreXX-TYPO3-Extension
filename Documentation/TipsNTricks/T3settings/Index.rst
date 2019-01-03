@@ -3,7 +3,7 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-.. include:: ../Includes.txt
+.. include:: ../../Includes.txt
 
 
 .. _t3-dev-settings:
@@ -47,4 +47,4 @@ The install tool does have 2 configuration presets for debugging:
 	- Live
 	- Debug
 
-What these presets do and where you can find them is documented `here <https://docs.typo3.org/typo3cms/InstallationGuide/In-depth/TheInstallTool/Index.html#configuration-presets />`_.
+What these presets do and where you can find them is documented `here <https://docs.typo3.org/typo3cms/InstallationGuide/master/In-depth/TheInstallTool/#settings />`_.

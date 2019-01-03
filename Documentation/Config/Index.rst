@@ -13,31 +13,26 @@ Configuration
 
 You do not have to configure kreXX. It works very well out of the box. There are two ways to configure kreXX:
 
-1. Edit configuration file settings (we have provided an editor for this)
+1. Edit configuration file settings in the backend
 2. Edit local cookie settings
 
-Factory settings
-----------------
+The editor for the configuration file can be found on the second tab of the backend module.
 
-The factory settings are hardcoded default settings, in case there is no configuration available.
-
-Configuration file settings
----------------------------
-
-The configuration file is located here:
-
-.. code-block:: typoscript
-
-	typo3temp/tx_includekrexx/config/Krexx.ini
-
-You do not have to edit this file manually. we have provided a backend editor for this: :ref:`config_options`
+.. figure:: ../Images/Config/typo3_backend_01.png
+	:width: 1241px
+	:align: left
+	:alt: Backend settings editor
 
 
-Local cookie settings
----------------------
+The toggle button on the right will enable the setting. The info button onm the right will display a short description about the specific setting. To save the desired configuration, simply click on the save button on the top.
 
-Local cookie settings can be changed in the kreXX output window. Not all settings can be edited in the frontend, but that can be changed here: :ref:`fe-configuration`.
-Please note that local cookie settings affect only your current browser.
+When a previous setting was stored, but later reverted, the backend will remember the last setting and offer it. This is especially useful for the IP-Range.
+
+Simple and expert mode
+----------------------
+
+kreXX has a lot of options, and some are used more often than others. When using the Simple mode, the backend will only display the most used settings. The expert mode will display them all.
+
 
 |
 |
@@ -49,8 +44,6 @@ Please note that local cookie settings affect only your current browser.
    :titlesonly:
    :glob:
 
-   Levels/Index
    Options/Index
+   Levels/Index
    Frontend/Index
-   AjaxCli/Index
-   DevHandle/Index

@@ -63,10 +63,12 @@ kreXX Debugger
 	:titlesonly:
 	:glob:
 
-	Introduction/Index
+	WhatDoesItDo/Index
 	UsagePhp/Index
-	Plugins/Index
-	Features/Index
+	UsageFluid/Index
+	AccessLogfiles/Index
 	Config/Index
-	T3settings/Index
+	Features/Index
+	TipsNTricks/Index
+	Plugins/Index
 	Changelog/Index
