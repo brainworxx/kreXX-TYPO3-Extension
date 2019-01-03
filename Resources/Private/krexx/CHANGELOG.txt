@@ -1,4 +1,6 @@
 3.0.2 dev
+- Bugfix: Replace the $hellip; in the file service, it may cause
+  double escaping issues in the backend of some systems.
 
 3.0.1
 - Change: All singelton classes now add themself to the pool as
