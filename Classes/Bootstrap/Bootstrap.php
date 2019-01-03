@@ -79,6 +79,23 @@ class Bootstrap
         \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin(
             'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Configuration'
         );
+        // Register our modules for the admin panel.
+        if (version_compare(TYPO3_version, '9.5', '>=')) {
+            if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['adminpanel']['modules']['debug'])) {
+                $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['adminpanel']['modules']['debug']['submodules'] = array_replace_recursive(
+                    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['adminpanel']['modules']['debug']['submodules'],
+                    array(
+                        'krexx' => array(
+                            'module' => 'Brainworxx\\Includekrexx\\Modules\\Logging',
+                            'after' => array(
+                                'log',
+                            ),
+                        )
+                    )
+                );
+            }
+        }
+
 
         // Register the fluid plugins.
         // We activate them later in the viewhelper.

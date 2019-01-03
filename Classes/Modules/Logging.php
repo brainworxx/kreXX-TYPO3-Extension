@@ -32,61 +32,60 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Collectors;
+namespace Brainworxx\Includekrexx\Modules;
 
-use Brainworxx\Includekrexx\Controller\IndexController;
-use Brainworxx\Krexx\Service\Factory\Pool;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Adminpanel\ModuleApi\AbstractSubModule;
+use TYPO3\CMS\Adminpanel\ModuleApi\ContentProviderInterface;
+use TYPO3\CMS\Adminpanel\ModuleApi\DataProviderInterface;
+use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 
-abstract class AbstractCollector
+/**
+ * Frontend Access to the logfiles inside the admin panel.
+ *
+ * @package Brainworxx\Includekrexx\Modules
+ */
+class Logging  extends AbstractSubModule implements DataProviderInterface, ContentProviderInterface
 {
     /**
-     * The kreXX pool.
-     *
-     * @var \Brainworxx\Krexx\Service\Factory\Pool
+     * @return string
      */
-    protected $pool;
-
-    /**
-     * The current backend user
-     *
-     * @var array
-     */
-    protected $userUc = array();
-
-    /**
-     * List of options, that are 'expert' only.
-     *
-     * @var array
-     */
-    protected $expertOnly = array(
-        'detectAjax',
-        'useScopeAnalysis',
-        'maxStepNumber',
-        'arrayCountLimit',
-        'debugMethods',
-        'maxRuntime',
-        'memoryLeft',
-        'maxfiles'
-    );
-
-    /**
-     * Inject the pool.
-     */
-    public function __construct()
+    public function getIdentifier(): string
     {
-        Pool::createPool();
-        $this->pool = \Krexx::$pool;
-        $user = $GLOBALS['BE_USER'];
-        if (isset($user->uc['moduleData'][IndexController::MODULE_KEY])) {
-            $this->userUc = $user->uc['moduleData'][IndexController::MODULE_KEY];
-        }
+        return 'krexx';
     }
 
     /**
-     * Assigning stuff to the view.
+     * Sub-Module label
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
+     * @return string
      */
-    abstract public function assignData(ViewInterface $view);
+    public function getLabel(): string
+    {
+        return $this->getLanguageService()->sL(
+            'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab'
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDataToStore(ServerRequestInterface $request): ModuleData
+    {
+
+        return new ModuleData(
+            array('files' => 'stuffToLog')
+        );
+    }
+
+    /**
+     * Sub-Module content as rendered HTML
+     *
+     * @param \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData $data
+     * @return string
+     */
+    public function getContent(ModuleData $data): string
+    {
+        return 'Look at my content in awe!';
+    }
 }
