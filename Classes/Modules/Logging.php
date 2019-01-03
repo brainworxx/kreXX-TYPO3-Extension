@@ -39,6 +39,7 @@ use TYPO3\CMS\Adminpanel\ModuleApi\AbstractSubModule;
 use TYPO3\CMS\Adminpanel\ModuleApi\ContentProviderInterface;
 use TYPO3\CMS\Adminpanel\ModuleApi\DataProviderInterface;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Frontend Access to the logfiles inside the admin panel.
@@ -68,13 +69,31 @@ class Logging  extends AbstractSubModule implements DataProviderInterface, Conte
     }
 
     /**
-     * @inheritdoc
+     * Retrieve the file list.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     *   The frontend request. Currently not used.
+     * @return \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData
+     *   The data we will assign to the admin panel.
      */
     public function getDataToStore(ServerRequestInterface $request): ModuleData
     {
+        // Check for module access (and backend user).
+        // We will abuse the backend logfile dispatch action, which is only
+        // accessible if you have access to includekrexx at all.
+        if (isset($GLOBALS['BE_USER']) &&
+            $GLOBALS['BE_USER']->check('modules', 'tools_IncludekrexxKrexxConfiguration')
+        ) {
+            return new ModuleData(
+                array('files' => GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
+                    ->get('Brainworxx\\Includekrexx\\Collectors\\LogfileList')
+                    ->retrieveFileList())
+            );
+        }
 
+        // Nothing to see here.
         return new ModuleData(
-            array('files' => 'stuffToLog')
+            array('files' => [])
         );
     }
 
@@ -86,6 +105,8 @@ class Logging  extends AbstractSubModule implements DataProviderInterface, Conte
      */
     public function getContent(ModuleData $data): string
     {
+        // @todo Get the view ready, create the template files
+        //       Short for: Write me!
         return 'Look at my content in awe!';
     }
 }
