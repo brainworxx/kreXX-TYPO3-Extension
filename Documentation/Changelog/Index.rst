@@ -12,6 +12,12 @@
 Changelog
 =============================================================
 
+3.0.2
+    - [Feature] Nearly complete rewrite of the backend module
+    - [Bugfix] Flush cache on update/install in 9.5 does not work anymore.
+    - [Bugfix] Malformed table in the extension documentation
+    - [Bugfix] Replace the $hellip; in the file service, it may cause double escaping issues in the backend of some systems.
+
 3.0.1
     - [Bugfix] Added the missing end event to the property analysis.
     - [Bugfix][Change] Configured debug methods are now checked on configuration loading.
