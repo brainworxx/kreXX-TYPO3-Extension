@@ -42,31 +42,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class AjaxController
 {
     /**
-     * The pool. And no, it's not closed.
-     *
-     * @var \Brainworxx\Krexx\Service\Factory\Pool
-     */
-    protected $pool;
-
-    /**
-     * The uri builder. We need to append the dispatcher links.
-     *
-     * @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder
-     */
-    protected $uriBuilder;
-
-    /**
-     * Inject the pool.
-     */
-    public function __construct()
-    {
-        Pool::createPool();
-        $this->pool = \Krexx::$pool;
-        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-        $this->uriBuilder = $objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder');
-    }
-
-    /**
      * List the logfiles with their corresponding meta data.
      *
      * @param \TYPO3\CMS\Core\Http\ServerRequest|array $arg1
@@ -79,70 +54,9 @@ class AjaxController
      */
     public function refreshLoglistAction($arg1, $response)
     {
-        // 1. Get the log folder.
-        $dir = $this->pool->config->getLogDir();
-
-        // 2. Get the file list and sort it.
-        $files = glob($dir . '*.Krexx.html');
-        if (!is_array($files)) {
-            $files = array();
-        }
-        // The function filemtime gets cached by php btw.
-        usort($files, function ($a, $b) {
-            return filemtime($b) - filemtime($a);
-        });
-
-        $fileList = array();
-
-        // 3. Get the file info.
-        foreach ($files as $file) {
-            try {
-                $fileinfo = array();
-
-                if (version_compare(TYPO3_version, '9.0', '>=')) {
-                    $argumentKey = 'route';
-                } else {
-                    $argumentKey = 'M';
-                }
-
-                // Getting the basic info.
-                $fileinfo['name'] = basename($file);
-                $fileinfo['size'] = $this->fileSizeConvert(filesize($file));
-                $fileinfo['time'] = date("d.m.y H:i:s", filemtime($file));
-                $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
-                $fileinfo['dispatcher'] = $this->uriBuilder
-                    ->reset()
-                    ->setArguments(array($argumentKey => 'tools_IncludekrexxKrexxConfiguration'))
-                    ->uriFor(
-                        'dispatch',
-                        array('id' => $fileinfo['id']),
-                        'Index',
-                        'includekrexx',
-                        'tools_IncludekrexxKrexxConfiguration'
-                    );
-
-                // Parsing a potentially 80MB file for it's content is not a good idea.
-                // That is why the kreXX lib provides some meta data. We will open
-                // this file and add it's content to the template.
-                if (is_readable($file . '.json')) {
-                    $fileinfo['meta'] = (array) json_decode(file_get_contents($file . '.json'), true);
-
-                    foreach ($fileinfo['meta'] as &$meta) {
-                        $meta['filename'] = basename($meta['file']);
-                        // Unescape the stuff from the json, to prevent double escaping.
-                        $meta['varname'] = htmlspecialchars_decode($meta['varname']);
-                    }
-                }
-
-                $fileList[] = $fileinfo;
-
-            } catch (\Throwable $e) {
-                // We simply skip this one on error.
-                continue;
-            } catch (\Exception $e) {
-                continue;
-            }
-        }
+        $fileList = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
+            ->get('Brainworxx\\Includekrexx\\Collectors\\LogfileList')
+            ->retrieveFileList();
 
         if (is_a($response, 'TYPO3\\CMS\\Core\\Http\\Response')) {
             // 7.6 and above.
@@ -169,17 +83,18 @@ class AjaxController
      */
     public function deleteAction($arg1, $response)
     {
+        Pool::createPool();
+
         // No directory traversal for you!
         $id = preg_replace('/[^0-9]/', '', GeneralUtility::_GET('fileid'));
         // Directly add the delete result return value.
-        $file = $this->pool->config->getLogDir() . $id . '.Krexx';
+        $file = \Krexx::$pool->config->getLogDir() . $id . '.Krexx';
 
         $result = new \stdClass();
         if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
             $result->class  = 'success';
             $result->text = LocalizationUtility::translate('fileDeleted', 'includekrexx', array($id));
         } else {
-
             $result->class  = 'error';
             $result->text = LocalizationUtility::translate('fileDeletedFail', 'includekrexx', array('n/a'));
         }
@@ -217,53 +132,5 @@ class AjaxController
         } else {
             return false;
         }
-    }
-
-    /**
-     * Converts bytes into human readable file size.
-     *
-     * @author Mogilev Arseny
-     *
-     * @param string $bytes
-     *   The bytes value we want to make readable.
-     *
-     * @return string
-     *   Human readable file size.
-     */
-    protected function fileSizeConvert($bytes)
-    {
-        $bytes = floatval($bytes);
-        $arBytes = array(
-            0 => array(
-                "UNIT" => "TB",
-                "VALUE" => pow(1024, 4),
-            ),
-            1 => array(
-                "UNIT" => "GB",
-                "VALUE" => pow(1024, 3),
-            ),
-            2 => array(
-                "UNIT" => "MB",
-                "VALUE" => pow(1024, 2),
-            ),
-            3 => array(
-                "UNIT" => "KB",
-                "VALUE" => 1024,
-            ),
-            4 => array(
-                "UNIT" => "B",
-                "VALUE" => 1,
-            ),
-        );
-
-        $result = '';
-        foreach ($arBytes as $aritem) {
-            if ($bytes >= $aritem["VALUE"]) {
-                $result = $bytes / $aritem["VALUE"];
-                $result = str_replace(".", ",", strval(round($result, 2))) . " " . $aritem["UNIT"];
-                break;
-            }
-        }
-        return $result;
     }
 }
