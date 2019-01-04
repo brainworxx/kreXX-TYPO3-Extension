@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
 abstract class AbstractCollector
@@ -93,6 +94,48 @@ abstract class AbstractCollector
     {
         return isset($GLOBALS['BE_USER']) &&
             $GLOBALS['BE_USER']->check('modules', 'tools_IncludekrexxKrexxConfiguration');
+    }
+
+    /**
+     * Depending on the TYPO3 version, we must use different classes to get a
+     * functioning link to the backend dispatcher.
+     *
+     * @param string $id
+     *   The id of the file we want to get the url from.
+     *
+     * @return string
+     *   The URL
+     */
+    protected function getRoute($id)
+    {
+        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+
+        if (version_compare(TYPO3_version, '9.0', '>=')) {
+            /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
+            $uriBuilder = $objectManager->get('TYPO3\\CMS\\Backend\\Routing\\UriBuilder');
+
+            return (string)$uriBuilder->buildUriFromRoute(
+                'tools_IncludekrexxKrexxConfiguration',
+                array(
+                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[id]' => $id,
+                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[action]' => 'dispatch',
+                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[controller]' => 'Index'
+                )
+            );
+        } else {
+            /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
+            $uriBuilder = $objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder');
+            return $uriBuilder
+                ->reset()
+                ->setArguments(array('M' => 'tools_IncludekrexxKrexxConfiguration'))
+                ->uriFor(
+                    'dispatch',
+                    array('id' => $id),
+                    'Index',
+                    'includekrexx',
+                    'tools_IncludekrexxKrexxConfiguration'
+                );
+        }
     }
 
     /**

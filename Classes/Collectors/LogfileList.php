@@ -44,26 +44,6 @@ use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
  */
 class LogfileList extends AbstractCollector
 {
-
-
-    /**
-     * The uri builder. We need to append the dispatcher links.
-     *
-     * @var \TYPO3\CMS\Backend\Routing\UriBuilder
-     */
-    protected $uriBuilder;
-
-    /**
-     * Inject the pool.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-        $this->uriBuilder = $objectManager->get('TYPO3\\CMS\\Backend\\Routing\\UriBuilder');
-    }
-
     /**
      * Assigning the list to the view. Used by out adminpanel logging module.
      *
@@ -82,8 +62,6 @@ class LogfileList extends AbstractCollector
      */
     public function retrieveFileList()
     {
-        \Krexx::log($this);
-        \Krexx::logBacktrace();
         $fileList = array();
 
         if ($this->hasAccess() === false) {
@@ -108,26 +86,12 @@ class LogfileList extends AbstractCollector
         foreach ($files as $file) {
             try {
                 $fileinfo = array();
-
-                if (version_compare(TYPO3_version, '9.0', '>=')) {
-                    $argumentKey = 'route';
-                } else {
-                    $argumentKey = 'M';
-                }
-
                 // Getting the basic info.
                 $fileinfo['name'] = basename($file);
                 $fileinfo['size'] = $this->fileSizeConvert(filesize($file));
                 $fileinfo['time'] = date("d.m.y H:i:s", filemtime($file));
                 $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
-                $fileinfo['dispatcher'] = (string)$this->uriBuilder->buildUriFromRoute(
-                    'tools_IncludekrexxKrexxConfiguration',
-                    array(
-                        'tx_includekrexx_tools_includekrexxkrexxconfiguration[id]' => $fileinfo['id'],
-                        'tx_includekrexx_tools_includekrexxkrexxconfiguration[action]' => 'dispatch',
-                        'tx_includekrexx_tools_includekrexxkrexxconfiguration[controller]' => 'Index'
-                    )
-                );
+                $fileinfo['dispatcher'] = $this->getRoute($fileinfo['id']);
 
                 // Parsing a potentially 80MB file for it's content is not a good idea.
                 // That is why the kreXX lib provides some meta data. We will open
