@@ -84,6 +84,18 @@ abstract class AbstractCollector
     }
 
     /**
+     * Additional check, if the current Backend user has access to the extension.
+     *
+     * @return bool
+     *   The result of the check.
+     */
+    protected function hasAccess()
+    {
+        return isset($GLOBALS['BE_USER']) &&
+            $GLOBALS['BE_USER']->check('modules', 'tools_IncludekrexxKrexxConfiguration');
+    }
+
+    /**
      * Assigning stuff to the view.
      *
      * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view

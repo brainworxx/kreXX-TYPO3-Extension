@@ -39,14 +39,19 @@ use TYPO3\CMS\Adminpanel\ModuleApi\AbstractSubModule;
 use TYPO3\CMS\Adminpanel\ModuleApi\ContentProviderInterface;
 use TYPO3\CMS\Adminpanel\ModuleApi\DataProviderInterface;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
+use TYPO3\CMS\Adminpanel\ModuleApi\ResourceProviderInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Frontend Access to the logfiles inside the admin panel.
  *
  * @package Brainworxx\Includekrexx\Modules
  */
-class Logging  extends AbstractSubModule implements DataProviderInterface, ContentProviderInterface
+class Log extends AbstractSubModule implements
+    DataProviderInterface,
+    ContentProviderInterface,
+    ResourceProviderInterface
 {
     /**
      * @return string
@@ -78,35 +83,50 @@ class Logging  extends AbstractSubModule implements DataProviderInterface, Conte
      */
     public function getDataToStore(ServerRequestInterface $request): ModuleData
     {
-        // Check for module access (and backend user).
-        // We will abuse the backend logfile dispatch action, which is only
-        // accessible if you have access to includekrexx at all.
-        if (isset($GLOBALS['BE_USER']) &&
-            $GLOBALS['BE_USER']->check('modules', 'tools_IncludekrexxKrexxConfiguration')
-        ) {
-            return new ModuleData(
-                array('files' => GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
-                    ->get('Brainworxx\\Includekrexx\\Collectors\\LogfileList')
-                    ->retrieveFileList())
-            );
-        }
-
-        // Nothing to see here.
         return new ModuleData(
-            array('files' => [])
+            array('files' => GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
+                ->get('Brainworxx\\Includekrexx\\Collectors\\LogfileList')
+                ->retrieveFileList())
         );
     }
 
     /**
-     * Sub-Module content as rendered HTML
+     * Render a standalone view with the links.
      *
      * @param \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData $data
      * @return string
      */
     public function getContent(ModuleData $data): string
     {
-        // @todo Get the view ready, create the template files
-        //       Short for: Write me!
-        return 'Look at my content in awe!';
+        $view = GeneralUtility::makeInstance(StandaloneView::class);
+        $templateNameAndPath = 'EXT:includekrexx/Resources/Private/Templates/Modules/Log.html';
+        $view->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($templateNameAndPath));
+        $view->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
+        $view->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
+        $view->assignMultiple($data->getArrayCopy());
+
+        return $view->render();
+    }
+
+    /**
+     * Returns a string array with css files that will be rendered after the module
+     * Example: return ['EXT:adminpanel/Resources/Public/JavaScript/Modules/Edit.css'];
+     *
+     * @return array
+     */
+    public function getCssFiles(): array
+    {
+        return [
+            'EXT:includekrexx/Resources/Public/Css/Adminpanel.css'
+        ];
+    }
+    /**
+     * No JS so far.
+     *
+     * @return array
+     */
+    public function getJavaScriptFiles(): array
+    {
+        return [];
     }
 }

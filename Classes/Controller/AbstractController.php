@@ -191,4 +191,16 @@ abstract class AbstractController extends ActionController
         }
         fclose($res);
     }
+
+    /**
+     * Additional check, if the current Backend user has access to the extension.
+     *
+     * @return bool
+     *   The result of the check.
+     */
+    protected function hasAccess()
+    {
+        return isset($GLOBALS['BE_USER']) &&
+            $GLOBALS['BE_USER']->check('modules', 'tools_IncludekrexxKrexxConfiguration');
+    }
 }

@@ -86,7 +86,7 @@ class Bootstrap
                     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['adminpanel']['modules']['debug']['submodules'],
                     array(
                         'krexx' => array(
-                            'module' => 'Brainworxx\\Includekrexx\\Modules\\Logging',
+                            'module' => 'Brainworxx\\Includekrexx\\Modules\\Log',
                             'after' => array(
                                 'log',
                             ),

@@ -83,20 +83,26 @@ class AjaxController
      */
     public function deleteAction($arg1, $response)
     {
-        Pool::createPool();
-
-        // No directory traversal for you!
-        $id = preg_replace('/[^0-9]/', '', GeneralUtility::_GET('fileid'));
-        // Directly add the delete result return value.
-        $file = \Krexx::$pool->config->getLogDir() . $id . '.Krexx';
-
         $result = new \stdClass();
-        if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
-            $result->class  = 'success';
-            $result->text = LocalizationUtility::translate('fileDeleted', 'includekrexx', array($id));
-        } else {
+
+        if ($this->hasAccess() === false) {
             $result->class  = 'error';
-            $result->text = LocalizationUtility::translate('fileDeletedFail', 'includekrexx', array('n/a'));
+            $result->text = LocalizationUtility::translate('accessDenied', 'includekrexx');
+        } else {
+            Pool::createPool();
+
+            // No directory traversal for you!
+            $id = preg_replace('/[^0-9]/', '', GeneralUtility::_GET('fileid'));
+            // Directly add the delete result return value.
+            $file = \Krexx::$pool->config->getLogDir() . $id . '.Krexx';
+
+            if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
+                $result->class  = 'success';
+                $result->text = LocalizationUtility::translate('fileDeleted', 'includekrexx', array($id));
+            } else {
+                $result->class  = 'error';
+                $result->text = LocalizationUtility::translate('fileDeletedFail', 'includekrexx', array('n/a'));
+            }
         }
 
         if (is_a($response, 'TYPO3\\CMS\\Core\\Http\\Response')) {
@@ -132,5 +138,17 @@ class AjaxController
         } else {
             return false;
         }
+    }
+
+    /**
+     * Additional check, if the current Backend user has access to the extension.
+     *
+     * @return bool
+     *   The result of the check.
+     */
+    protected function hasAccess()
+    {
+        return isset($GLOBALS['BE_USER']) &&
+            $GLOBALS['BE_USER']->check('modules', 'tools_IncludekrexxKrexxConfiguration');
     }
 }

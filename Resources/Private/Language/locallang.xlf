@@ -155,6 +155,9 @@
             <trans-unit id="fileDeletedFail" xml:space="preserve">
 				<source>The file "%s" was NOT deleted.</source>
 			</trans-unit>
+            <trans-unit id="accessDenied">
+                <source>Access denied!</source>
+            </trans-unit>
 
 
 
