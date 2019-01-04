@@ -207,7 +207,7 @@ body {
     background-color: white;
     color: #393939;
     margin: 0;
-    width: 525px;
+    max-width: 525px;
 }
 
 /**
@@ -264,6 +264,8 @@ td.description {
 
 td.commands {
     width: 77px;
+    max-width: 77px;
+    min-width: 77px;
     text-align: right;
 }
 
@@ -368,7 +370,7 @@ td.commands {
     padding-left: 8px;
     padding-bottom: 5px;
     background-color: #ededed;
-    max-width: 259px;
+    min-width: 120px;
     overflow: hidden;
     line-height: 13px;
 }
@@ -412,6 +414,25 @@ td.commands {
 
 .table-wrapper table tr:last-child {
     border-bottom: none;
+}
+
+@media (max-width: 991px) {
+    th.time,
+    th.size,
+    td.time,
+    td.size {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    th.meta,
+    td.meta {
+        display: none;
+    }
+    td.description {
+        max-width: 200px;
+    }
 }
 
 /**

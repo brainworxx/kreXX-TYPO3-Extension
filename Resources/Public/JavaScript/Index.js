@@ -239,7 +239,7 @@
                 html += '<td><a target="_blank" href="' + file.dispatcher + '"><div class="krexx-icon"></div></a></td>'
                 html += '<td><a target="_blank" href="' + file.dispatcher + '">  ' + file.name + '</a></td>';
 
-                html += '<td>';
+                html += '<td class="meta">';
                 for (var i = 0; i < file.meta.length; i++) {
                     html += '<b>' + file.meta[i].type + '</b><br />';
                     html += 'in ' + file.meta[i].filename + ', line ' + file.meta[i].line;
@@ -252,8 +252,8 @@
                 }
                 html += '</td>';
 
-                html += '<td>' + file.time + '</td>';
-                html += '<td>' + file.size + '</td>';
+                html += '<td class="time">' + file.time + '</td>';
+                html += '<td class="size">' + file.size + '</td>';
                 html += '<td>' + '<div class="button delete" data-id="' + file.id + '"></div>' + '</td>';
                 html += '</tr>';
             }
