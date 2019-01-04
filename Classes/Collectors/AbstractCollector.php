@@ -115,7 +115,7 @@ abstract class AbstractCollector
             $uriBuilder = $objectManager->get('TYPO3\\CMS\\Backend\\Routing\\UriBuilder');
 
             return (string)$uriBuilder->buildUriFromRoute(
-                'tools_IncludekrexxKrexxConfiguration',
+                'tools_IncludekrexxKrexxConfiguration_dispatch',
                 array(
                     'tx_includekrexx_tools_includekrexxkrexxconfiguration[id]' => $id,
                     'tx_includekrexx_tools_includekrexxkrexxconfiguration[action]' => 'dispatch',

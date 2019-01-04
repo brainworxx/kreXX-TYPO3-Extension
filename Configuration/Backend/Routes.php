@@ -33,8 +33,8 @@
  */
 
 return array(
-    'tools_IncludekrexxKrexxConfiguration' => array(
-        'path' => '/tools/IncludekrexxKrexxConfiguration/',
+    'tools_IncludekrexxKrexxConfiguration_dispatch' => array(
+        'path' => '/tools/IncludekrexxKrexxConfiguration/dispatch/',
         'target' => 'Brainworxx\\Includekrexx\\Controller\\IndexController::dispatchAction'
     )
 );

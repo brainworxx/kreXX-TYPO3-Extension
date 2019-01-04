@@ -35,8 +35,8 @@
 namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Domain\Model\Settings;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class IndexController extends AbstractController
@@ -96,14 +96,24 @@ class IndexController extends AbstractController
     /**
      * Dispatch a logfile.
      *
+     * @param ServerRequest|null $serverRequest
+     *
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
-    public function dispatchAction()
+    public function dispatchAction(ServerRequest $serverRequest = null)
     {
+        // And I was so happy to get rid of the 4.5 compatibility nightmare.
+        if ($this->request === null) {
+            $params = $serverRequest->getQueryParams();
+            $rawId = $params['tx_includekrexx_tools_includekrexxkrexxconfiguration']['id'];
+        } else {
+            $rawId = $this->request->getArgument('id');
+        }
+
         // No directory traversal for you!
-        $id = preg_replace('/[^0-9]/', '', $this->request->getArgument('id'));
+        $id = preg_replace('/[^0-9]/', '', $rawId);
         // Get the filepath.
         $file = $this->pool->config->getLogDir() . $id . '.Krexx.html';
         if (is_readable($file) && $this->hasAccess()) {
