@@ -575,6 +575,15 @@ button:hover {
     border-color: #a6a6a6;
 }
 
+@media (max-width: 450px) {
+    .button.cookies {
+        display: block;
+        margin-top: 5px;
+    }
+    #typo3-inner-docbody {
+        padding-top: 80px;
+    }
+}
 /**
  * on / off switch
  */
