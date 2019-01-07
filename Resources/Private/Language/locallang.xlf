@@ -364,10 +364,10 @@
                 <source>Outputs backtrace with sourcecode. When kreXX finds objects inside the backtrace, it will analyse them:</source>
 			</trans-unit>
             <trans-unit id="usage.label.registerFatal">
-                <source>Register the fatal error handler in the system:</source>
+                <source>Register the fatal error handler in the system (PHP 5 only):</source>
 			</trans-unit>
             <trans-unit id="usage.label.unregisterFatal">
-                <source>Unregister the fatal error handler in the system:</source>
+                <source>Unregister the fatal error handler in the system (PHP 5 only):</source>
 			</trans-unit>
             <trans-unit id="usage.links.headline">
                 <source>More datailed help</source>

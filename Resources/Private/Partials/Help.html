@@ -9,7 +9,9 @@
 <f:section name="main">
 
     <h2><f:translate key="usage.headline" /></h2>
-    <f:render section="codeblock" arguments="{name: 'calling', content: 'krexx($myObject);'}" />
+    <f:render section="codeblock" arguments="{name: 'calling', content: 'krexx($myObject);
+// forced logging
+\Krexx::log($myObject);'}" />
 
     <f:translate key="usage.features" />
     <ul>
@@ -22,15 +24,20 @@
     <f:translate key="usage.features.simple" />
 
     <div class="spacer"></div>
-    <f:render section="codeblock" arguments="{name: 'moment', content: '\kreXX::timerMoment($string);'}" />
+    <f:render section="codeblock" arguments="{name: 'moment', content: '\Krexx::timerMoment($string);'}" />
     <div class="spacer"></div>
-    <f:render section="codeblock" arguments="{name: 'timerEnd', content: '\kreXX::timerEnd();'}" />
+    <f:render section="codeblock" arguments="{name: 'timerEnd', content: '\Krexx::timerEnd();
+// forced logging
+\Krexx::logTimerEnd();'}" />
     <div class="spacer"></div>
-    <f:render section="codeblock" arguments="{name: 'backtrace', content: '\kreXX::backtrace();'}" />
+    <f:render section="codeblock" arguments="{name: 'backtrace', content: '\Krexx::backtrace();
+// forced logging
+\Krexx::logBacktrace();
+'}" />
     <div class="spacer"></div>
-    <f:render section="codeblock" arguments="{name: 'registerFatal', content: '\krexx::registerFatal();'}" />
+    <f:render section="codeblock" arguments="{name: 'registerFatal', content: '\Krexx::registerFatal();'}" />
     <div class="spacer"></div>
-    <f:render section="codeblock" arguments="{name: 'unregisterFatal', content: '\krexx::unregisterFatal();'}" />
+    <f:render section="codeblock" arguments="{name: 'unregisterFatal', content: '\Krexx::unregisterFatal();'}" />
     <br /><br />
 
     <h2><f:translate key="usage.headline.fluid" /></h2>
@@ -40,9 +47,11 @@
       xmlns:krexx=&quot;http://typo3.org/ns/Brainworxx/Includekrexx/ViewHelpers&quot;
       data-namespace-typo3-fluid=&quot;true&quot;&gt;'}" />
     <div class="spacer"></div>
-    <f:render section="codeblock" arguments="{name: 'fluidnormal', content: '&lt;krexx:debug&gt;&#123;_all&#125;&lt;/krexx:debug&gt;'}" />
+    <f:render section="codeblock" arguments="{name: 'fluidnormal', content: '&lt;krexx:debug&gt;&#123;_all&#125;&lt;/krexx:debug&gt;
+&lt;krexx:log&gt;&#123;_all&#125;&lt;/krexx:debug&gt;'}" />
     <div class="spacer"></div>
-    <f:render section="codeblock" arguments="{name: 'fluidvalue', content: '&lt;krexx:debug value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;'}" />
+    <f:render section="codeblock" arguments="{name: 'fluidvalue', content: '&lt;krexx:debug value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;
+&lt;krexx:log value=&quot;&#123;my: &#x27;value&#x27;, to: &#x27;analyse&#x27;&#125;&quot; /&gt;'}" />
     <br /><br />
 
     <h2><f:translate key="usage.links.headline" /></h2>
