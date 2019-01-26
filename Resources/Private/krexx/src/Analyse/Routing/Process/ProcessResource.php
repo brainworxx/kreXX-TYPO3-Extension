@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -58,27 +58,47 @@ class ProcessResource extends AbstractProcess
         $resource = $model->getData();
         $type = get_resource_type($resource);
         $typestring = 'resource (' . $type . ')';
-        if ($type === 'stream') {
-            // Output data from the class.
-            return $this->pool->render->renderExpandableChild(
-                $model->setType(static::TYPE_RESOURCE)
-                    ->addParameter(static::PARAM_DATA, $resource)
+
+
+        switch ($type) {
+            case 'stream':
+                $meta = stream_get_meta_data($resource);
+                break;
+
+            case 'curl':
+                // No need to check for a curl installation, because we are
+                // facing a curl instance right here.
+                $meta = curl_getinfo($resource);
+                break;
+
+            default:
+                $meta = array();
+        }
+
+
+
+        // Check, if we have something useful.
+        if (empty($meta)) {
+            // If we are facing a closed resource, 'Unknown' is a little bit sparse.
+            // PHP 7.2 can provide more info by calling gettype().
+            if (version_compare(phpversion(), '7.2.0', '>=')) {
+                $typestring = gettype($resource);
+            }
+            return $this->pool->render->renderSingleChild(
+                $model->setData($typestring)
                     ->setNormal($typestring)
-                    ->injectCallback(
-                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughResourceStream')
-                    )
+                    ->setType(static::TYPE_RESOURCE)
             );
         }
 
-        // If we are facing a closed resource, 'Unknown' is a little bit sparse.
-        // PHP 7.2 can provide more info by calling gettype().
-        if (version_compare(phpversion(), '7.2.0', '>=')) {
-            $typestring = gettype($resource);
-        }
-        return $this->pool->render->renderSingleChild(
-            $model->setData($typestring)
+        // Output meta data from the class.
+        return $this->pool->render->renderExpandableChild(
+            $model->setType(static::TYPE_RESOURCE)
+                ->addParameter(static::PARAM_DATA, $meta)
                 ->setNormal($typestring)
-                ->setType(static::TYPE_RESOURCE)
+                ->injectCallback(
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughResource')
+                )
         );
     }
 }

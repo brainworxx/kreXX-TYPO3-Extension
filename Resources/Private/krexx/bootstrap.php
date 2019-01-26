@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -73,7 +73,7 @@ include 'src/Analyse/Callback/Iterate/ThroughLargeArray.php';
 include 'src/Analyse/Callback/Iterate/ThroughMethodAnalysis.php';
 include 'src/Analyse/Callback/Iterate/ThroughMethods.php';
 include 'src/Analyse/Callback/Iterate/ThroughProperties.php';
-include 'src/Analyse/Callback/Iterate/ThroughResourceStream.php';
+include 'src/Analyse/Callback/Iterate/ThroughResource.php';
 
 include 'src/Analyse/Caller/AbstractCaller.php';
 include 'src/Analyse/Caller/CallerFinder.php';

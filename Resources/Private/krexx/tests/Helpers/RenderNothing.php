@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -57,7 +57,18 @@ class RenderNothing extends Render
      */
     public function renderSingleChild(Model $model)
     {
-        $this->model['renderSingleChild'][] = $model;
+        $this->model[__FUNCTION__][] = $model;
+        return '';
+    }
+
+    /**
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param bool $is
+     * @return string
+     */
+    public function renderExpandableChild(Model $model, $is = false)
+    {
+        $this->model[__FUNCTION__][] = $model;
         return '';
     }
 }

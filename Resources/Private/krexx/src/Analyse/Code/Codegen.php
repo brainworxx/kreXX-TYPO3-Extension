@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,7 +43,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Analyse\Code
  */
-class Codegen
+class Codegen implements ConstInterface
 {
     /**
      * Constant identifier for the array multiline code generation.
@@ -125,8 +125,7 @@ class Codegen
             }
 
             // Debug methods are always public.
-            $type = $model->getType();
-            if ($type === ConstInterface::TYPE_DEBUG_METHOD) {
+            if ($model->getType() === static::TYPE_DEBUG_METHOD) {
                 return $this->concatenation($model);
             }
 
@@ -136,8 +135,7 @@ class Codegen
             }
 
             // Test for private or protected access.
-            if (strpos($type, 'protected') === false && strpos($type, 'private') === false) {
-                // Is not protected.
+            if ($model->getIsPublic() === true) {
                 return $this->concatenation($model);
             }
 
@@ -150,13 +148,12 @@ class Codegen
             // We are still here? Must be a protected method or property.
             // The '. . .' will tell the code generation to stop in it's tracks
             // and do nothing.
-            return '. . .';
         }
 
         // No code generation in this path.
         // We must prevent code generation when copying stuff here by recursion
         // resolving by adding these dots.
-        return '. . .';
+        return static::UNKNOWN_VALUE;
     }
 
     /**
@@ -226,67 +223,45 @@ class Codegen
     }
 
     /**
-     * Setter for the reflection parameter, it also calculates the
-     * toString() return value.
+     * Abusing the __toString() magic to get informations about a parameter.
+     *
+     * If a parameter must have a specific class, that is not present in the
+     * system, we will get a reflection error. That is why we abuse the
+     * __string() method.
+     * The method getType() is available for PHP 7 only.
      *
      * @param \ReflectionParameter $reflectionParameter
      *   The reflection parameter we want to wrap.
      *
      * @return string
-     *   The parameter dada in a human readable form.
+     *   The parameter data in a human readable form.
      */
     public function parameterToString(\ReflectionParameter $reflectionParameter)
     {
-        // We parse the parameter stuff from the stringified reflection
-        // parameter.
-        $explode = explode(' ', $reflectionParameter->__toString());
-        $result = $explode[4];
-        if (strlen($explode[5]) > 1) {
-            $result .= ' ' . $explode[5];
-        }
+        // Slice off the first part.
+        $paremExplode = array_slice(explode(' ', trim($reflectionParameter->__toString(), ' ]')), 4);
+        // A long standard value gets cut off. We do not want that.
+        if ($reflectionParameter->isDefaultValueAvailable()) {
+            // Remove the standard value
+            $paremExplode = array_slice($paremExplode, 0, 2);
+            $default = $reflectionParameter->getDefaultValue();
 
-        // Check for default value.
-        if ($reflectionParameter->isDefaultValueAvailable() === true) {
-            $result .= ' = ' . $this->prepareDefaultValue($reflectionParameter->getDefaultValue());
-        }
-
-        return $result;
-    }
-
-    /**
-     * Convert the default value into a human readable form.
-     *
-     * @param mixed $default
-     *   The default value we need to bring into a human readable form.
-     *
-     * @return string
-     *   The human readable form.
-     */
-    protected function prepareDefaultValue($default)
-    {
-        if (is_string($default) === true) {
-            // We need to escape this one.
-            return '\'' . $this->pool->encodingService->encodeString($default) . '\'';
-        }
-
-        if ($default === null) {
-            return 'NULL';
-        }
-
-        if (is_array($default) === true) {
-            return 'array()';
-        }
-
-        if (is_bool($default) === true) {
-            // Transform it to readable values.
-            if ($default === true) {
-                return 'TRUE';
-            } else {
-                return 'FALSE';
+            // If we are dealing with a reflection parameter from a closure,
+            // there is a missing '=' in the return string.
+            if (end($paremExplode) !== '=') {
+                $paremExplode[] = '=';
             }
+
+            if (is_string($default)) {
+                $default = '\'' . $default . '\'';
+            } elseif (is_array($default)) {
+                $default = 'array()';
+            }
+
+            $paremExplode[] = $default;
         }
 
-        // Still here?
-        return (string) $default;
+        // Escape it, just in case.
+        return $this->pool->encodingService->encodeString(implode(' ', $paremExplode));
     }
 }

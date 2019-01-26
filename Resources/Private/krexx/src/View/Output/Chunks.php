@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -226,29 +226,70 @@ class Chunks
         // should not be anything to cleanup.
         $this->cleanupOldChunks();
 
-        $chunkPos = strpos($string, static::STRING_DELIMITER);
+        // Check for HTML output.
+        if ($this->isOutputHtml()) {
+            $chunkPos = strpos($string, static::STRING_DELIMITER);
 
-        while ($chunkPos !== false) {
-            // We have a chunk, we send the html part.
-            echo substr($string, 0, $chunkPos);
+            while ($chunkPos !== false) {
+                // We have a chunk, we send the html part.
+                echo substr($string, 0, $chunkPos);
+                ob_flush();
+                flush();
+                $chunkPart = substr($string, $chunkPos);
+
+                // We translate the first chunk.
+                $result = explode(static::STRING_DELIMITER, $chunkPart, 3);
+                $string = str_replace(
+                    static::STRING_DELIMITER . $result[1] . static::STRING_DELIMITER,
+                    $this->dechunkMe($result[1]),
+                    $chunkPart
+                );
+                $chunkPos = strpos($string, static::STRING_DELIMITER);
+            }
+
+            // No more chunk keys, we send what is left.
+            echo $string;
             ob_flush();
             flush();
-            $chunkPart = substr($string, $chunkPos);
+        }
+    }
 
-            // We translate the first chunk.
-            $result = explode(static::STRING_DELIMITER, $chunkPart, 3);
-            $string = str_replace(
-                static::STRING_DELIMITER . $result[1] . static::STRING_DELIMITER,
-                $this->dechunkMe($result[1]),
-                $chunkPart
-            );
-            $chunkPos = strpos($string, static::STRING_DELIMITER);
+    /**
+     * Is the output so far HTML?
+     *
+     * This one gets called during the shutdown phase of PHP. There is a high
+     * chance, that the header was already set.
+     *
+     * @return bool
+     *   Well? Is it?
+     */
+    protected function isOutputHtml()
+    {
+        static $result;
+
+        if ($result !== null) {
+            return $result;
         }
 
-        // No more chunk keys, we send what is left.
-        echo $string;
-        ob_flush();
-        flush();
+        if ($this->pool->config->getSetting(Fallback::SETTING_DETECT_AJAX) === Fallback::VALUE_FALSE) {
+            // We ignore the heades and send everything.
+            $result = true;
+        }
+
+        // When we have dispatched a PDF or Json, the browser will not be
+        // able to render the HTML output correctly.
+        foreach (headers_list() as $header) {
+            $header = strtolower($header);
+            if (strpos($header, 'content-type') !== false &&
+                strpos($header, 'html') === false
+            ) {
+                // We do have none html content type.
+                $result = false;
+            }
+        }
+
+        // Found nothing, must be HTML.
+        return $result = true;
     }
 
     /**

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -109,7 +109,7 @@ class DebugMethods extends AbstractObjectAnalysis
                             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                                 ->setName($funcName)
                                 ->setType(static::TYPE_DEBUG_METHOD)
-                                ->setNormal('. . .')
+                                ->setNormal(static::UNKNOWN_VALUE)
                                 ->setHelpid($funcName)
                                 ->setConnectorType(Connectors::METHOD)
                                 ->addParameter(static::PARAM_DATA, $result)

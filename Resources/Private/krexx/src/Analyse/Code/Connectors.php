@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,6 +42,12 @@ namespace Brainworxx\Krexx\Analyse\Code;
 class Connectors
 {
 
+    /**
+     * connectorLeft = ''
+     * connectorRight = ''
+     * or
+     * connectorRight = $params
+     */
     const NOTHING = 0;
 
     /**
@@ -116,7 +122,7 @@ class Connectors
      *
      * @var string
      */
-    protected $params = '';
+    protected $params;
 
     /**
      * The type of connectors we are rendering.
@@ -132,7 +138,7 @@ class Connectors
      *
      * @var string
      */
-    protected $customConnectorLeft = '';
+    protected $customConnectorLeft;
 
     /**
      * Initializing the connector array.
@@ -141,8 +147,8 @@ class Connectors
     {
         $this->connectorArray = array(
             static::NOTHING => array('', ''),
-            static::METHOD => array('->', '(@param@)'),
-            static::STATIC_METHOD => array('::', '(@param@)'),
+            static::METHOD => array('->', '()'),
+            static::STATIC_METHOD => array('::', '()'),
             static::NORMAL_ARRAY => array('[', ']'),
             static::ASSOCIATIVE_ARRAY => array('[\'', '\']'),
             static::CONSTANT => array('::', ''),
@@ -194,7 +200,7 @@ class Connectors
      */
     public function getConnectorLeft()
     {
-        if (empty($this->customConnectorLeft) === true) {
+        if ($this->customConnectorLeft === null) {
             return $this->connectorArray[$this->type][0];
         }
 
@@ -212,30 +218,22 @@ class Connectors
      */
     public function getConnectorRight($cap)
     {
-        // Methods always have their parameters.
-        if ($this->type === static::METHOD || $this->type === static::STATIC_METHOD) {
-            if (empty($this->params) === true) {
-                // Remove the params marker when we have nothing to show.
-                return  str_replace('@param@', '', $this->connectorArray[$this->type][1]);
-            }
-
-            // Copy the parameters, we will need the original ones later.
-            // This one is only for the quick preview.
-            $params = $this->params;
-            // Capping the parameters for a better readability.
-            if ($cap > 0 && strlen($params) > $cap) {
-                $params = substr($params, 0, $cap) . ' . . . ';
-            }
-
-            // We wrap them in a <small>, but only if we have any.
-            return  str_replace(
-                '@param@',
-                '<small>' . $params . '</small>',
-                $this->connectorArray[$this->type][1]
-            );
+        if (empty($this->params) === true ||
+            ($this->type !== static::METHOD && $this->type !== static::STATIC_METHOD)
+        ) {
+            return $this->connectorArray[$this->type][1];
         }
 
-        return $this->connectorArray[$this->type][1];
+        // Copy the parameters, we will need the original ones later.
+        // This one is only for the quick preview.
+        $params = $this->params;
+        // Capping the parameters for a better readability.
+        if ($cap > 0 && strlen($params) > $cap) {
+            $params = substr($params, 0, $cap) . ' . . . ';
+        }
+
+        // We wrap them in a <small>, but only if we have any.
+        return '(<small>' . $params . '</small>)';
     }
 
     /**

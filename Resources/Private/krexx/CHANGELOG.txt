@@ -1,6 +1,14 @@
 3.0.2 dev
+- Added classname to the declaration analysis of properties.
+- Added analysis of cUrl resources.
+- Added a check for the content type to the ajax detection.
+- Change: Protected properties are now wrapped again.
 - Bugfix: Replace the $hellip; in the file service, it may cause
   double escaping issues in the backend of some systems.
+- Bugfix: The method analysis doesn't take traits into account.
+- Bugfix: The property analysis doesn't take traits into account.
+- Bugfix: Remove the copy-pasta spaces from the skins.
+- Bugfix: Cut off parameter analysis
 
 3.0.1
 - Change: All singelton classes now add themself to the pool as

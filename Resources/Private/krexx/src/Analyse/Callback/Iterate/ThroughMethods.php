@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -46,9 +46,6 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
  *   Array of reflection methods.
  * @uses \reflectionClass ref
  *   Reflection of the class we are analysing.
- * @uses \reflectionMethod reflectionMethod
- *   The current reflection of the method we are analysing.
- *   Gets set from the inside.
  */
 class ThroughMethods extends AbstractCallback
 {
@@ -68,7 +65,6 @@ class ThroughMethods extends AbstractCallback
         $result = $this->dispatchStartEvent();
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters[static::PARAM_REF];
-
         $commentAnalysis = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Methods');
 
         // Deep analysis of the methods.
@@ -112,7 +108,8 @@ class ThroughMethods extends AbstractCallback
                 $connectorType = Connectors::METHOD;
             }
 
-            // Update the reflection method.
+            // Update the reflection method, so an event subscriber can do
+            // something with it.
             $this->parameters[static::PARAM_REF_METHOD] = $reflectionMethod;
 
             // Render it!
@@ -126,6 +123,7 @@ class ThroughMethods extends AbstractCallback
                         // Remove the ',' after the last char.
                         ->setConnectorParameters(trim($paramList, ', '))
                         ->addParameter(static::PARAM_DATA, $methodData)
+                        ->setIsPublic($reflectionMethod->isPublic())
                         ->injectCallback(
                             $this->pool->createClass(
                                 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis'
@@ -151,17 +149,63 @@ class ThroughMethods extends AbstractCallback
      */
     protected function getDeclarationPlace(\ReflectionMethod $reflectionMethod, \ReflectionClass $declaringClass)
     {
-        /** @var \Brainworxx\Krexx\Service\Misc\File $fileService */
-
-        $filename = $this->pool->fileService->filterFilePath($declaringClass->getFileName());
-
+        $filename = $this->pool->fileService->filterFilePath($reflectionMethod->getFileName());
         if (empty($filename) === true) {
             return ":: unable to determine declaration ::\n\nMaybe this is a predeclared class?";
         }
 
-        return $filename . "\n" .
-            'in class: ' . $declaringClass->getName() . "\n" .
-            'in line: ' . $reflectionMethod->getStartLine();
+        // If the filename of the $declaringClass and the $reflectionMethod differ,
+        // we are facing a trait here.
+        if ($reflectionMethod->getFileName() !== $declaringClass->getFileName() &&
+            method_exists($declaringClass, 'getTraits')
+        ) {
+            // There is no real clean way to get the name of the trait that we
+            // are looking at.
+            $traitName = ':: unable to get the trait name ::';
+            $trait = $this->retrieveDeclarinReflection($reflectionMethod, $declaringClass);
+            if ($trait !== false) {
+                $traitName = $trait->getName();
+            }
+
+            return $filename . "\n" .
+                'in trait: ' . $traitName . "\n" .
+                'in line: ' . $reflectionMethod->getStartLine();
+        } else {
+            return $filename . "\n" .
+                'in class: ' . $reflectionMethod->class . "\n" .
+                'in line: ' . $reflectionMethod->getStartLine();
+        }
+    }
+
+    /**
+     * Retrieve the declaration class reflection from traits.
+     *
+     * @param \ReflectionMethod $reflectionMethod
+     *   The reflection of the method we are analysing.
+     * @param \ReflectionClass $declaringClass
+     *   The original declaring class, the one with the traits.
+     *
+     * @return bool|\ReflectionClass
+     *   false = unable to retrieve someting.
+     *   Otherwise return a reflection class.
+     */
+    protected function retrieveDeclarinReflection(\ReflectionMethod $reflectionMethod, \ReflectionClass $declaringClass)
+    {
+        // Get a first impression.
+        if ($reflectionMethod->getFileName() === $declaringClass->getFileName()) {
+            return $declaringClass;
+        }
+
+        // Go through the first layer of traits.
+        // No need to recheck the availability for traits. This is done above.
+        foreach ($declaringClass->getTraits() as $trait) {
+            $result = $this->retrieveDeclarinReflection($reflectionMethod, $trait);
+            if ($result !== false) {
+                return $result;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -202,10 +246,6 @@ class ThroughMethods extends AbstractCallback
 
         if ($reflectionMethod->isFinal() === true) {
             $result .= ' final';
-        }
-
-        if ($reflectionMethod->isAbstract() === true) {
-            $result .= ' abstract';
         }
 
         return trim($result);

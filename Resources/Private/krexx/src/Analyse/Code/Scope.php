@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Code;
 
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Analyse\Model;
@@ -44,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @package Brainworxx\Krexx\Analyse\Code
  */
-class Scope
+class Scope implements ConstInterface
 {
     /**
      * We use this scope, when kreXX was called like kreXX($this);
@@ -91,7 +92,7 @@ class Scope
      */
     public function setScope($scope)
     {
-        if ($scope !== '. . .') {
+        if ($scope !== static::UNKNOWN_VALUE) {
             $this->scope = $scope;
             // Now that we have a scope, we can actually generate code to
             // reach the variables inside the analysis.
@@ -135,28 +136,27 @@ class Scope
     {
         $nestingLevel = $this->pool->emergencyHandler->getNestingLevel();
 
-        // If we are too deep at this moment, we will stop right here!
-        // Also, anything not coming from $this is not reachable, since
-        // we are testing protected stuff here.
         if ($nestingLevel > 2 || $this->scope !== static::THIS_SCOPE) {
+            // If we are too deep at this moment, we will stop right here!
+            // Also, anything not coming from $this is not reachable, since
+            // we are testing protected stuff here.
             return false;
         }
 
-        // Inherited private properties or methods are not accessible from the
-        // $this scope. We need to make sure that we do not generate any code
-        // for them.
         if (strpos($model->getType(), 'private inherited') !== false) {
-            // No source generation for you!
+            // Inherited private properties or methods are not accessible from the
+            // $this scope. We need to make sure that we do not generate any code
+            // for them.
             return false;
         }
 
-        // When analysing a class or array, we have + 1 on our nesting level, when
-        // coming from the code generation. That is, because that class is currently
-        // being analysed.
         if (is_object($model->getData()) === true || is_array($model->getData()) === true) {
+            // When analysing a class or array, we have + 1 on our nesting level, when
+            // coming from the code generation. That is, because that class is currently
+            // being analysed.
             --$nestingLevel;
         }
 
-        return $nestingLevel === 1 && $this->scope === static::THIS_SCOPE;
+        return $nestingLevel === 1;
     }
 }

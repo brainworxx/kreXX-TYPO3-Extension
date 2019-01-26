@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -44,11 +44,9 @@ use Brainworxx\Krexx\Service\Misc\File;
  * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  *
  * @uses array data
- *   Array of \reflectionProperties.
- * @uses ReflectionClass ref
+ *   Array of \ReflectionProperties.
+ * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionReflectionClass ref
  *   A reflection of the class we are currently analysing.
- * @uses object orgObject
- *   The original object we are analysing
  */
 class ThroughProperties extends AbstractCallback
 {
@@ -137,17 +135,14 @@ class ThroughProperties extends AbstractCallback
 
                 // There is no comment ora declaration place for a dynamic property.
                 $comment = '';
-                $declarationPlace = '';
+                $declarationPlace = 'undeclared';
             } else {
                 // Since we are dealing with a declared Property here, we can
                 // get the comment and the declaration place.
                 $comment = $this->pool
                     ->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Properties')
                     ->getComment($refProperty);
-
-                $declarationPlace = $this->pool->fileService->filterFilePath(
-                    $refProperty->getDeclaringClass()->getFileName()
-                );
+                $declarationPlace = $this->retrieveDeclarationPlace($refProperty);
             }
 
             // Stitch together our model
@@ -161,6 +156,7 @@ class ThroughProperties extends AbstractCallback
                         ->addToJson('Declared in', $declarationPlace)
                         ->setAdditional($additional)
                         ->setConnectorType($connectorType)
+                        ->setIsPublic($refProperty->isPublic())
                 )
             );
         }
@@ -205,5 +201,47 @@ class ThroughProperties extends AbstractCallback
         }
 
         return $additional;
+    }
+
+    /**
+     * Retrieve the declaration place of a property.
+     *
+     * @param \ReflectionProperty $refProperty
+     * @return string
+     */
+    protected function retrieveDeclarationPlace(\ReflectionProperty $refProperty)
+    {
+        static $declarationCache = array();
+
+        // Early return from the cache.
+        $declaringClass = $refProperty->getDeclaringClass();
+        $key = $refProperty->name . '::' . $declaringClass->name;
+        if (isset($declarationCache[$key])) {
+            return $declarationCache[$key];
+        }
+
+        // A class can not redeclare a property from a trait that it is using.
+        // Hence, if one of the traits has the same property that we are
+        // analysing, it is probably declared there.
+        // Traits on the other hand can redeclare their properties.
+        // I'm not sure how to get the actual declaration place, when dealing
+        // with several layers of traits. We will not parse the source code
+        // for an answer.
+        $type = '<br />in class: ';
+        foreach ($refProperty->getDeclaringClass()->getTraits() as $trait) {
+            if ($trait->hasProperty($refProperty->name)) {
+                if (count($trait->getTraitNames()) > 0) {
+                    // Multiple layers of traits!
+                    return $declarationCache[$key] = '';
+                }
+                // From a trait.
+                $declaringClass = $trait;
+                $type = '<br />in trait: ';
+                break;
+            }
+        }
+
+        return $declarationCache[$key] = $this->pool->fileService
+                ->filterFilePath($declaringClass->getFileName()) . $type . $declaringClass->name;
     }
 }

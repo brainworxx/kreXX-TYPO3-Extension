@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -114,6 +114,13 @@ class Model extends AbstractModel
      * @var bool
      */
     protected $isMetaConstants = false;
+
+    /**
+     * Is this a public property or method?
+     *
+     * @var bool
+     */
+    protected $isPublic = true;
 
     /**
      * Setter for the data.
@@ -473,5 +480,29 @@ class Model extends AbstractModel
     {
         $this->isMetaConstants = $bool;
         return $this;
+    }
+
+    /**
+     * Setter for the isProtectedPrivate.
+     *
+     * @param $bool
+     *   The value we want to set.
+     * @return $this
+     *   Return $this for chaining.
+     */
+    public function setIsPublic($bool)
+    {
+        $this->isPublic = $bool;
+        return $this;
+    }
+
+    /**
+     * Getter for the isPublic.
+     *
+     * @return bool
+     */
+    public function getIsPublic()
+    {
+        return $this->isPublic;
     }
 }

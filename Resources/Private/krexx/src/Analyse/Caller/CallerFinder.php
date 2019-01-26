@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Caller;
 
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -42,7 +43,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Analyse\Caller
  */
-class CallerFinder extends AbstractCaller
+class CallerFinder extends AbstractCaller implements ConstInterface
 {
 
     /**
@@ -112,7 +113,7 @@ class CallerFinder extends AbstractCaller
      *
      * @param string $file
      *   Path to the sourcecode file.
-     * @param string $line
+     * @param int $line
      *   The line from where kreXX was called.
      *
      * @return string
@@ -120,9 +121,12 @@ class CallerFinder extends AbstractCaller
      */
     protected function getVarName($file, $line)
     {
+        // Set a fallback value.
+        $varname = static::UNKNOWN_VALUE;
+
         // Retrieve the call from the sourcecode file.
         if ($this->pool->fileService->fileIsReadable($file) === false) {
-            return '. . .';
+            return $varname;
         }
 
         $line--;
@@ -151,11 +155,6 @@ class CallerFinder extends AbstractCaller
                     break;
                 }
             }
-        }
-
-        // Check if we have a value.
-        if (empty($varname) === true) {
-            $varname = '. . .';
         }
 
         return $varname;

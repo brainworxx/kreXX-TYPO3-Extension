@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -100,7 +100,7 @@ class ProcessClosure extends AbstractProcess
 
         return $this->pool->render->renderExpandableChild(
             $model->setType(static::TYPE_CLOSURE)
-                ->setNormal('. . .')
+                ->setNormal(static::UNKNOWN_VALUE)
                 // Remove the ',' after the last char.
                 ->setConnectorParameters(trim($paramList, ', '))
                 ->setDomid($this->generateDomIdFromObject($model->getData()))

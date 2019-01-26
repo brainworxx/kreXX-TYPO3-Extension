@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -74,14 +74,13 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
      * @param ReflectionClass $ref
      *   The reflection of the object we are currently analysing.
      * @param string $label
-     *   The additional part of the template file.
-     * @param boolean $useWrap
-     *   Wrap the output in a nest?
+     *   The additional part of the template file. If set, we will use a wrapper
+     *   around the analysis output.
      *
      * @return string
      *   The generated markup.
      */
-    protected function getReflectionPropertiesData(array $refProps, ReflectionClass $ref, $label, $useWrap = false)
+    protected function getReflectionPropertiesData(array $refProps, ReflectionClass $ref, $label = null)
     {
         // We are dumping public properties direct into the main-level, without
         // any "abstraction level", because they can be accessed directly.
@@ -93,7 +92,7 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties')
             );
 
-        if ($useWrap === true) {
+        if (isset($label)) {
             // Protected or private properties.
             return $this->pool->render->renderExpandableChild(
                 $this->dispatchEventWithModel(

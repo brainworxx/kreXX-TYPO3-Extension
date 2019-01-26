@@ -9,7 +9,9 @@
   ],
   "type": "library",
   "homepage": "https://github.com/brainworxx/kreXX",
-  "license": ["LGPL-2.1-or-later"],
+  "license": [
+    "LGPL-2.1-or-later"
+  ],
   "authors": [
     {
       "name": "Brainworxx",
@@ -19,7 +21,22 @@
   "require": {
     "php": ">=5.3.0"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^6.5"
+  },
   "autoload": {
-    "files": ["Krexx.php"]
+    "files": [
+      "Krexx.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Brainworxx\\Krexx\\Tests\\": "tests/"
+    },
+    "files": [
+      "tests/Scripts/MockBacktraceInCallerFinder.php",
+      "tests/Scripts/MockSapiInConfig.php",
+      "tests/Scripts/RegisterShutdownFunction.php"
+    ]
   }
 }

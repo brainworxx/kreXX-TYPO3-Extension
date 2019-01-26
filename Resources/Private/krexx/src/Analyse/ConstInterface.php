@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -73,4 +73,6 @@ interface ConstInterface
     const PARAM_HAS_GETTER = 'hasGetter';
     const PARAM_REF_METHOD = 'reflectionMethod';
     const PARAM_ADDITIONAL = 'additional';
+
+    const UNKNOWN_VALUE = '. . .';
 }

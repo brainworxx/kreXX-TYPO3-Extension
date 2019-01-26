@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2018 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -150,7 +150,7 @@ class BacktraceStep extends AbstractCallback
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                     ->setData($source)
                     ->setName('Sourcecode')
-                    ->setNormal('. . .')
+                    ->setNormal(static::UNKNOWN_VALUE)
                     ->setHasExtra(true)
                     ->setType(static::TYPE_PHP)
             )
