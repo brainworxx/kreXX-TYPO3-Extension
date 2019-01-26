@@ -234,9 +234,9 @@
                 if (!result.hasOwnProperty(key)) {
                     continue;
                 }
-                html += '<tr>';
                 var file = result[key];
-                html += '<td><a target="_blank" href="' + file.dispatcher + '"><div class="krexx-icon"></div></a></td>'
+                html += '<tr ' + ajaxRefresh.generateBackgroundStyle(file.name) + '>';
+                html += '<td><a target="_blank" href="' + file.dispatcher + '"><div class="krexx-icon"></div></a></td>';
                 html += '<td><a target="_blank" href="' + file.dispatcher + '">  ' + file.name + '</a></td>';
 
                 html += '<td class="meta">';
@@ -271,6 +271,28 @@
         };
 
         request.send();
+    };
+
+    /**
+     * Genertate the background style from the time string.
+     *
+     * @param string string
+     *
+     * @return string
+     *   style=" background-color: rgba(255, 0, 0, 0.1);"
+     */
+    ajaxRefresh.generateBackgroundStyle = function (string) {
+        var chr, hash, i, values;
+
+        for (i = 0; i < string.length; i++) {
+            chr   = string.charCodeAt(i);
+            hash  = ((hash << 5) - hash) + chr;
+            hash |= 0; // Convert to 32bit integer
+        }
+
+        values = Math.abs(hash).toString().match(/.{1,2}/g);
+
+        return 'style=" background-color: rgba(' + values[3] + ', ' + values[2] + ', ' + values[1] + ', 0.2' + values[0] + ');"';
     };
 
     /**

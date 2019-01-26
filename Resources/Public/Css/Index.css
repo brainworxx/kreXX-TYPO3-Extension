@@ -403,6 +403,9 @@ td.commands {
 .table-wrapper table tr {
     border-bottom: 1px solid #c3c3c3;
 }
+.table-wrapper table.krexx-logs tr {
+    border-bottom: 1px solid #aaa;
+}
 
 .table-wrapper table tr:nth-child(even) {
     background-color: #f7f7f7;
