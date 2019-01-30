@@ -39,7 +39,7 @@ use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * There is no way to cleart the cache after an extension update automatically
+ * There is no way to clear the cache after an extension update automatically
  * in TYPO3 9.0. To minimize the effect of this, we are doing several things in
  * here:
  *
@@ -149,7 +149,7 @@ class Bootstrap
             GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')
                 ->flushCachesInGroup('system');
         }
-        
+
         return $this;
     }
 
@@ -162,7 +162,6 @@ class Bootstrap
      */
     protected function loadKrexx()
     {
-
         // There may be a composer verion of kreXX installed.
         // We will not loead the bundeled one.
         if (class_exists('Krexx')) {
