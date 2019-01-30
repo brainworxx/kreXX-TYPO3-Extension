@@ -278,6 +278,14 @@ td.commands {
     background-color: #ededed;
 }
 
+.table-wrapper table tr:hover td {
+    background-color: rgba( 256, 256, 256, 0.2);
+}
+
+.table-wrapper table tr:hover a {
+    text-decoration: underline;
+}
+
 .krexx-backend th {
     margin-top: 15px;
     border-bottom: 1px solid #ccc;
