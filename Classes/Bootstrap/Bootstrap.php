@@ -145,18 +145,11 @@ class Bootstrap
      */
     public function checkVersionNumber($version)
     {
-        try {
-            if ($version !== ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY)) {
-                GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')
-                    ->flushCachesInGroup('system');
-            }
-        } catch (Exception $exception) {
-            // Huh, includekrexx is not installed.
-            // Clear it anyway.
+        if ($version !== ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY)) {
             GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')
                 ->flushCachesInGroup('system');
         }
-
+        
         return $this;
     }
 
