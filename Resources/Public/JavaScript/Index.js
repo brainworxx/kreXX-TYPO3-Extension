@@ -274,7 +274,7 @@
     };
 
     /**
-     * Genertate the background style from the time string.
+     * Generate the background style from the time string.
      *
      * @param string string
      *
@@ -287,7 +287,8 @@
         for (i = 0; i < string.length; i++) {
             chr   = string.charCodeAt(i);
             hash  = ((hash << 5) - hash) + chr;
-            hash |= 0; // Convert to 32bit integer
+            // Convert to 32bit integer
+            hash |= 0;
         }
 
         values = Math.abs(hash).toString().match(/.{1,2}/g);
