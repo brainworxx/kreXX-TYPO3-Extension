@@ -12,12 +12,12 @@
 Aimeos debugger
 ===============
 
-There is a lot of php magic happening in the aimoes shop. When getting information out of objects, items or views you have to use them.
+There is a lot of php magic happening in the Aimeos shop. When getting information out of objects, items or views you have to use them.
 With the used decorator pattern in place, you can may have a hard time finding the information you need.
 
 Features
-  - Advanced getter analysis previews the value you will get when using this getter.
-  - Resolving the magical properties which get provided by :literal:`__get()`
+  - Advanced getter analysis
+  - Resolving the magical properties
   - Analysis of all known view helpers inside the view
   - PHP code generation, to help you access these values
 
