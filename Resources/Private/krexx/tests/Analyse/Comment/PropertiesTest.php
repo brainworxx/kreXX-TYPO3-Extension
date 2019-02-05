@@ -32,39 +32,28 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Comment;
+namespace Brainworxx\Krexx\Tests\Analyse\Comment;
 
-/**
- * Retrieving the comment of a property.
- *
- * @package Brainworxx\Krexx\Analyse\Comment
- */
-class Properties extends AbstractComment
+use Brainworxx\Krexx\Analyse\Comment\Properties;
+use Brainworxx\Krexx\Tests\Fixtures\PrivateFixture;
+use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+
+class PropertiesTest extends AbstractTest
 {
     /**
-     * Get the comment from a property.
+     * Testing the comment retrieval for properties.
      *
-     * @param \Reflector $reflectionProperty
-     * @param \ReflectionClass|null $reflectionClass
-     * @return mixed
+     * @covers \Brainworxx\Krexx\Analyse\Comment\Properties::getComment
+     * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::prettifyComment
      */
-    public function getComment(\Reflector $reflectionProperty, \ReflectionClass $reflectionClass = null)
+    public function testGetComment()
     {
-        // Do some static caching. The comment will not change during a run.
-        static $cache = array();
-        /** @var \ReflectionProperty $reflectionProperty */
-        $cachingKey = $reflectionProperty->getDeclaringClass()->getName() . '::' . $reflectionProperty->getName();
-        if (isset($cache[$cachingKey]) === true) {
-            return $cache[$cachingKey];
-        }
+        $propertiesComment = new Properties(\Krexx::$pool);
+        $reflectionProperty = new \ReflectionProperty(PrivateFixture::class, 'value5');
 
-        // Cache not found. We need to generate this one.
-        $cache[$cachingKey] = nl2br(
-            $this->pool->encodingService->encodeString(
-                $this->prettifyComment($reflectionProperty->getDocComment())
-            )
+        $this->assertContains(
+            'A private that overwrites a property from the SimpleFixture',
+            $propertiesComment->getComment($reflectionProperty)
         );
-
-        return $cache[$cachingKey];
     }
 }

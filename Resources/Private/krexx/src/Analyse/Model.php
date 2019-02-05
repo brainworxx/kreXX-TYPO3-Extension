@@ -96,7 +96,7 @@ class Model extends AbstractModel
     /**
      * Are we dealing with multiline code generation?
      *
-     * @var integer
+     * @var int
      */
     protected $multiLineCodeGen = 0;
 

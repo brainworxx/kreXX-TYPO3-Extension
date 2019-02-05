@@ -151,7 +151,7 @@ class ThroughMethods extends AbstractCallback
     {
         $filename = $this->pool->fileService->filterFilePath($reflectionMethod->getFileName());
         if (empty($filename) === true) {
-            return ":: unable to determine declaration ::\n\nMaybe this is a predeclared class?";
+            return static::UNKNOWN_DECLARATION;
         }
 
         // If the filename of the $declaringClass and the $reflectionMethod differ,
@@ -162,7 +162,7 @@ class ThroughMethods extends AbstractCallback
             // There is no real clean way to get the name of the trait that we
             // are looking at.
             $traitName = ':: unable to get the trait name ::';
-            $trait = $this->retrieveDeclarinReflection($reflectionMethod, $declaringClass);
+            $trait = $this->retrieveDeclaringReflection($reflectionMethod, $declaringClass);
             if ($trait !== false) {
                 $traitName = $trait->getName();
             }
@@ -189,8 +189,10 @@ class ThroughMethods extends AbstractCallback
      *   false = unable to retrieve someting.
      *   Otherwise return a reflection class.
      */
-    protected function retrieveDeclarinReflection(\ReflectionMethod $reflectionMethod, \ReflectionClass $declaringClass)
-    {
+    protected function retrieveDeclaringReflection(
+        \ReflectionMethod $reflectionMethod,
+        \ReflectionClass $declaringClass
+    ) {
         // Get a first impression.
         if ($reflectionMethod->getFileName() === $declaringClass->getFileName()) {
             return $declaringClass;
@@ -199,7 +201,7 @@ class ThroughMethods extends AbstractCallback
         // Go through the first layer of traits.
         // No need to recheck the availability for traits. This is done above.
         foreach ($declaringClass->getTraits() as $trait) {
-            $result = $this->retrieveDeclarinReflection($reflectionMethod, $trait);
+            $result = $this->retrieveDeclaringReflection($reflectionMethod, $trait);
             if ($result !== false) {
                 return $result;
             }

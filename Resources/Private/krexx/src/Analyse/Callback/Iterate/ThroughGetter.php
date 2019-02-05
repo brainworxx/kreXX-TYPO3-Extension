@@ -183,14 +183,16 @@ class ThroughGetter extends AbstractCallback
      */
     protected function retrievePropertyValue(\ReflectionMethod $reflectionMethod, Model $model)
     {
-        $refProp = $this->getReflectionProperty($this->parameters[static::PARAM_REF], $reflectionMethod);
+        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
+        $reflectionClass = $this->parameters[static::PARAM_REF];
+        $refProp = $this->getReflectionProperty($reflectionClass, $reflectionMethod);
         $nothingFound = true;
         $value = null;
 
         if (empty($refProp) === false) {
             // We've got ourselves a possible result!
             $nothingFound = false;
-            $value = $this->parameters[static::PARAM_REF]->retrieveValue($refProp);
+            $value = $reflectionClass->retrieveValue($refProp);
             $model->setData($value);
             if ($value === null) {
                 // A NULL value might mean that the values does not

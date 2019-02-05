@@ -32,39 +32,30 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Comment;
+namespace Brainworxx\Krexx\Tests\Analyse\Comment;
 
-/**
- * Retrieving the comment of a property.
- *
- * @package Brainworxx\Krexx\Analyse\Comment
- */
-class Properties extends AbstractComment
+use Brainworxx\Krexx\Analyse\Comment\Functions;
+use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+
+class FunctionsTest extends AbstractTest
 {
+
     /**
-     * Get the comment from a property.
+     * Test the getting of a comment from a closure.
      *
-     * @param \Reflector $reflectionProperty
-     * @param \ReflectionClass|null $reflectionClass
-     * @return mixed
+     * @covers \Brainworxx\Krexx\Analyse\Comment\Functions::getComment
+     * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::prettifyComment
      */
-    public function getComment(\Reflector $reflectionProperty, \ReflectionClass $reflectionClass = null)
+    public function testGetComment()
     {
-        // Do some static caching. The comment will not change during a run.
-        static $cache = array();
-        /** @var \ReflectionProperty $reflectionProperty */
-        $cachingKey = $reflectionProperty->getDeclaringClass()->getName() . '::' . $reflectionProperty->getName();
-        if (isset($cache[$cachingKey]) === true) {
-            return $cache[$cachingKey];
-        }
+        /**
+         * Do something.
+         */
+        $fixture = function () {
+        };
+        $functionComment = new Functions(\Krexx::$pool);
+        $reflection = new \ReflectionFunction($fixture);
 
-        // Cache not found. We need to generate this one.
-        $cache[$cachingKey] = nl2br(
-            $this->pool->encodingService->encodeString(
-                $this->prettifyComment($reflectionProperty->getDocComment())
-            )
-        );
-
-        return $cache[$cachingKey];
+        $this->assertEquals('Do something.', $functionComment->getComment($reflection));
     }
 }

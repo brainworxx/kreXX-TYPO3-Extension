@@ -35,7 +35,7 @@
 namespace Brainworxx\Krexx\Tests\Fixtures;
 
 
-class ComplexMethodFixture extends MethodsFixture
+class ComplexMethodFixture extends MethodsFixture implements InterfaceFixture
 {
     use MultitraitFixture;
 
@@ -67,5 +67,13 @@ class ComplexMethodFixture extends MethodsFixture
     {
         // Stuff for the CallerFinder.
         krexx($parameter);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function interfaceMethod()
+    {
+
     }
 }

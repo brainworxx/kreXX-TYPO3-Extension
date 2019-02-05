@@ -65,7 +65,7 @@ class Model
     /**
      * Whether or not his setting is editable
      *
-     * @var boolean
+     * @var bool
      */
     protected $editable;
 

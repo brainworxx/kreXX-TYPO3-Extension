@@ -32,39 +32,23 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Comment;
+namespace Brainworxx\Krexx\Tests\Fixtures;
 
-/**
- * Retrieving the comment of a property.
- *
- * @package Brainworxx\Krexx\Analyse\Comment
- */
-class Properties extends AbstractComment
+class InheritDocFixture extends ComplexMethodFixture
 {
     /**
-     * Get the comment from a property.
-     *
-     * @param \Reflector $reflectionProperty
-     * @param \ReflectionClass|null $reflectionClass
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function getComment(\Reflector $reflectionProperty, \ReflectionClass $reflectionClass = null)
+    public function parameterizedMethod($parameter)
     {
-        // Do some static caching. The comment will not change during a run.
-        static $cache = array();
-        /** @var \ReflectionProperty $reflectionProperty */
-        $cachingKey = $reflectionProperty->getDeclaringClass()->getName() . '::' . $reflectionProperty->getName();
-        if (isset($cache[$cachingKey]) === true) {
-            return $cache[$cachingKey];
-        }
+        return parent::parameterizedMethod($parameter);
+    }
 
-        // Cache not found. We need to generate this one.
-        $cache[$cachingKey] = nl2br(
-            $this->pool->encodingService->encodeString(
-                $this->prettifyComment($reflectionProperty->getDocComment())
-            )
-        );
+    /**
+     * {@inheritdoc}
+     */
+    protected function unresolvable()
+    {
 
-        return $cache[$cachingKey];
     }
 }

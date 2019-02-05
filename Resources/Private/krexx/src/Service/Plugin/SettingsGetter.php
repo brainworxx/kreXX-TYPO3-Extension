@@ -57,7 +57,7 @@ class SettingsGetter extends Registration
     public static function getConfigFile()
     {
         if (empty(static::$configFile)) {
-            static::$configFile = KREXX_DIR . 'config/Krexx.ini';
+            static::$configFile = KREXX_DIR . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini';
         }
 
         return static::$configFile;
@@ -74,7 +74,7 @@ class SettingsGetter extends Registration
     public static function getChunkFolder()
     {
         if (empty(static::$chunkFolder)) {
-            static::$chunkFolder = KREXX_DIR . 'chunks/';
+            static::$chunkFolder = KREXX_DIR . 'chunks' . DIRECTORY_SEPARATOR;
         }
 
         return static::$chunkFolder;
@@ -91,7 +91,7 @@ class SettingsGetter extends Registration
     public static function getLogFolder()
     {
         if (empty(static::$logFolder)) {
-            static::$logFolder = KREXX_DIR . 'log/';
+            static::$logFolder = KREXX_DIR . 'log' . DIRECTORY_SEPARATOR;
         }
 
         return static::$logFolder;

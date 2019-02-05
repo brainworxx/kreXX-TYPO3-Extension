@@ -212,7 +212,7 @@ class Encoding
      * @param string $string
      *   The string we want to analyse
      * @param string $encodinglist
-     *   The orderd list of character encoding to check.
+     *   The ordered list of character encoding to check.
      * @param bool $strict
      *   Whether we want to use strict mode.
      *

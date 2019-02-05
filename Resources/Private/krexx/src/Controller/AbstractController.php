@@ -82,7 +82,7 @@ abstract class AbstractController
      * During a kreXX analysis, we deactivate it to improve performance.
      * Here we save, whether we should reactivate it.
      *
-     * @var boolean
+     * @var bool
      */
     protected $fatalShouldActive = false;
 

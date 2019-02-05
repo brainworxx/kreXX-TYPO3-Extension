@@ -100,21 +100,21 @@ class Methods extends AbstractComment
 
         if ($this->checkComment($comment) === true) {
             // Found it!
-            return trim($comment);
+            return $comment;
         }
 
         // Check for interfaces.
         $comment = $this->getInterfaceComment($comment, $reflectionClass);
         if ($this->checkComment($comment) === true) {
             // Found it!
-            return trim($comment);
+            return $comment;
         }
 
         // Check for traits.
         $comment = $this->getTraitComment($comment, $reflectionClass);
         if ($this->checkComment($comment) === true) {
             // Found it!
-            return trim($comment);
+            return $comment;
         }
 
         // Nothing on this level, we need to take a look at the parent.
@@ -124,16 +124,14 @@ class Methods extends AbstractComment
             $parentReflection->hasMethod($this->methodName) === true
         ) {
             // Going deeper into the rabid hole!
-            $comment = trim(
-                $this->getMethodComment(
-                    $parentReflection->getMethod($this->methodName),
-                    $parentReflection
-                )
+            $comment = $this->getMethodComment(
+                $parentReflection->getMethod($this->methodName),
+                $parentReflection
             );
         }
 
         // Still here? Tell the dev that we could not resolve the comment.
-        return trim($this->replaceInheritComment($comment, $this->pool->messages->getHelp('commentResolvingFail')));
+        return $this->replaceInheritComment($comment, $this->pool->messages->getHelp('commentResolvingFail'));
     }
 
     /**

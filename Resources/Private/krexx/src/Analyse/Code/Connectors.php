@@ -129,7 +129,7 @@ class Connectors
      *
      * @see constants above
      *
-     * @var integer
+     * @var int
      */
     protected $type = 0;
 

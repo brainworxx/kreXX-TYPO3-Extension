@@ -33,7 +33,7 @@
  */
 
 // Include some files and set some internal values.
-include_once 'bootstrap.php';
+include_once __DIR__  . '/bootstrap.php';
 
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Controller\AbstractController;
