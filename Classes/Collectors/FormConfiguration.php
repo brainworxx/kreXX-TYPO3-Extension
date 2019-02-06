@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Collectors;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
@@ -49,9 +50,9 @@ class FormConfiguration extends AbstractCollector
     public function assignData(ViewInterface $view)
     {
         $dropdown = array(
-            'full' => LocalizationUtility::translate('full', AbstractController::EXT_KEY),
-            'display' => LocalizationUtility::translate('display', AbstractController::EXT_KEY),
-            'none' => LocalizationUtility::translate('none', AbstractController::EXT_KEY)
+            'full' => LocalizationUtility::translate('full', Bootstrap::EXT_KEY),
+            'display' => LocalizationUtility::translate('display', Bootstrap::EXT_KEY),
+            'none' => LocalizationUtility::translate('none', Bootstrap::EXT_KEY)
         );
 
         $iniConfig = $this->pool->config->iniConfig;

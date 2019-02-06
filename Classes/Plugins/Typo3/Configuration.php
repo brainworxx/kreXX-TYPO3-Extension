@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Plugins\Typo3;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -139,7 +140,7 @@ class Configuration implements PluginConfigInterface
         );
 
         // Add additional texts to the help.
-        $extPath = ExtensionManagementUtility::extPath('includekrexx');
+        $extPath = ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
         Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/t3.kreXX.ini');
     }
 }

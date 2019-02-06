@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Collectors;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -132,7 +133,7 @@ abstract class AbstractCollector
                     'dispatch',
                     array('id' => $id),
                     'Index',
-                    'includekrexx',
+                    Bootstrap::EXT_KEY,
                     'tools_IncludekrexxKrexxConfiguration'
                 );
         }

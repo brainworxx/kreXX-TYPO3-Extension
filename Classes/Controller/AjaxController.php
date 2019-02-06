@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Controller;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Http\AjaxRequestHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -87,7 +88,7 @@ class AjaxController
 
         if ($this->hasAccess() === false) {
             $result->class  = 'error';
-            $result->text = LocalizationUtility::translate('accessDenied', 'includekrexx');
+            $result->text = LocalizationUtility::translate('accessDenied', Bootstrap::EXT_KEY);
         } else {
             Pool::createPool();
 
@@ -98,10 +99,10 @@ class AjaxController
 
             if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
                 $result->class  = 'success';
-                $result->text = LocalizationUtility::translate('fileDeleted', 'includekrexx', array($id));
+                $result->text = LocalizationUtility::translate('fileDeleted', Bootstrap::EXT_KEY, array($id));
             } else {
                 $result->class  = 'error';
-                $result->text = LocalizationUtility::translate('fileDeletedFail', 'includekrexx', array('n/a'));
+                $result->text = LocalizationUtility::translate('fileDeletedFail', Bootstrap::EXT_KEY, array('n/a'));
             }
         }
 

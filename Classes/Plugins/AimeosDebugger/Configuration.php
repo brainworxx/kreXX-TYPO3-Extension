@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 
@@ -103,8 +104,8 @@ class Configuration implements PluginConfigInterface
             '__toString'
         );
 
-        // Addings additional texts.
-        $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx');
+        // Adding additional texts.
+        $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
         Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/aimeos.kreXX.ini');
     }
 }

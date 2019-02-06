@@ -34,8 +34,10 @@
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Special overwrites and event handlers for fluid.
@@ -111,7 +113,7 @@ class Configuration implements PluginConfigInterface
         );
 
         // Adding additional texts.
-        $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx');
+        $extPath = ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
         Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/fluid.kreXX.ini');
     }
 }
