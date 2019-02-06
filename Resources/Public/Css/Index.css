@@ -160,11 +160,13 @@ body {
     border-color: #d7d7d7 #d7d7d7 #ccc;
     background: #e1e0e0;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .nav-tabs > li.active {
     position: relative;
     display: block;
+    cursor: default;
 }
 
 .nav-tabs > li.active > a {
