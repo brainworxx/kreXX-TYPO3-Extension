@@ -76,4 +76,11 @@ class ComplexMethodFixture extends MethodsFixture implements InterfaceFixture
     {
 
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function traitComment()
+    {
+    }
 }

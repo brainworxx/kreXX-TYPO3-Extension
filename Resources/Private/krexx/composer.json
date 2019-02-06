@@ -32,11 +32,6 @@
   "autoload-dev": {
     "psr-4": {
       "Brainworxx\\Krexx\\Tests\\": "tests/"
-    },
-    "files": [
-      "tests/Scripts/MockBacktraceInCallerFinder.php",
-      "tests/Scripts/MockSapiInConfig.php",
-      "tests/Scripts/RegisterShutdownFunction.php"
-    ]
+    }
   }
 }

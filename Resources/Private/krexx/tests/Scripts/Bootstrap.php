@@ -32,24 +32,61 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Service\Config;
+namespace Brainworxx\Krexx\Analyse\Caller {
 
-/**
- * Mocking the sapi name, to do something else in a different namespace.
- *
- * @param null|string $what
- *   The return value. kreXX only checks for cli, btw.
- *
- * @return string
- *   The mocked value, to coax kreXX into fileoutput.
- */
-function php_sapi_name($what = null)
-{
-    static $result = 'whatever';
+    /**
+     * Mocking the debug backtrace in the CallerFinder.
+     */
+    function debug_backtrace($options, $limit, $mockData = null)
+    {
+        static $returnValue = [
+            0 => [],
+            1 => [],
+            2 => [],
+            3 => [],
+            4 => [
+                'function' => 'krexx',
+                'class' => 'MockClass',
+                'file' => 'mockfile.php',
+                'line' => 999
+            ]
+        ];
+        // Update the return data.
+        if (is_array($mockData)) {
+            $returnValue = $mockData;
+        }
 
-    if (!empty($what)) {
-        $result = $what;
+        return $returnValue;
     }
+}
 
-    return $result;
+
+namespace Brainworxx\Krexx\Service\Config {
+
+    /**
+     * Mocking the sapi name, to do something else in a different namespace.
+     *
+     * @param null|string $what
+     *   The return value. kreXX only checks for cli, btw.
+     *
+     * @return string
+     *   The mocked value, to coax kreXX into fileoutput.
+     */
+    function php_sapi_name($what = null)
+    {
+        static $result = 'whatever';
+
+        if (!empty($what)) {
+            $result = $what;
+        }
+
+        return $result;
+    }
+}
+
+namespace {
+   // Register a shutdown method to die, so we get no output on the shell.
+    register_shutdown_function (function(){
+        die();
+    });
 }

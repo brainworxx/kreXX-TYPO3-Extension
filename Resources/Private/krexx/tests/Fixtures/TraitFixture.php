@@ -49,4 +49,11 @@ trait TraitFixture
     protected function traitFunction()
     {
     }
+
+    /**
+     * Do nothing.
+     */
+    public function traitComment()
+    {
+    }
 }

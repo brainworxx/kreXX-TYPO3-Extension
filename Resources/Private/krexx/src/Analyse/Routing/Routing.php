@@ -46,6 +46,55 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class Routing extends AbstractRouting
 {
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray
+     */
+    protected $processArray;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean
+     */
+    protected $processBoolean;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure
+     */
+    protected $processClosure;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat
+     */
+    protected $processFloat;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger
+     */
+    protected $processInteger;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessNull
+     */
+    protected $processNull;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject
+     */
+    protected $processObject;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource
+     */
+    protected $processResource;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString
+     */
+    protected $processString;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther
+     */
+    protected $processOther;
 
     /**
      * Inject the pool and create all the routing classes.

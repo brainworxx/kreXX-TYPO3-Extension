@@ -75,7 +75,9 @@ class MethodsTest extends AbstractTest
      * Comment in plain sight above method.
      *
      * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::getComment
+     * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::getMethodComment
      * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::prettifyComment
+     * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::checkComment
      * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::getInterfaceComment
      * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::getTraitComment
      * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::replaceInheritComment
@@ -102,8 +104,8 @@ class MethodsTest extends AbstractTest
 
         // Comment from a trait using a trait.
         $this->assertEquals(
-            'Do something.',
-            $this->returnTestResult(ComplexMethodFixture::class, 'traitFunction')
+            'Do nothing.',
+            $this->returnTestResult(ComplexMethodFixture::class, 'traitComment')
         );
 
         // Unresolvable comment.

@@ -128,7 +128,7 @@ class CallerFinderTest extends AbstractTest
         $result = $this->callerFinder->findCaller('', $this->subjectVar);
 
         // Check the result
-        $this->assertEquals('.../tests/Fixtures/ComplexMethodFixture.php', $result['file']);
+        $this->assertEquals('...' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'ComplexMethodFixture.php', $result['file']);
         $this->assertEquals(69, $result['line']);
         $this->assertEquals('$parameter', $result['varname']);
         $this->assertEquals('Analysis of $parameter, string', $result['type']);
@@ -153,7 +153,7 @@ class CallerFinderTest extends AbstractTest
         $result = $this->callerFinder->findCaller('A headline', $this->subjectVar);
 
         // Check the result
-        $this->assertEquals('.../tests/Fixtures/ComplexMethodFixture.php', $result['file']);
+        $this->assertEquals('...' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'ComplexMethodFixture.php', $result['file']);
         $this->assertEquals(69, $result['line']);
         $this->assertEquals('$parameter', $result['varname']);
         $this->assertEquals('A headline', $result['type']);
@@ -182,7 +182,7 @@ class CallerFinderTest extends AbstractTest
         $result = $this->callerFinder->findCaller('A headline', $this->subjectVar);
 
         // Check the result
-        $this->assertEquals('.../tests/Fixtures/ComplexMethodFixture.php file not there', $result['file']);
+        $this->assertEquals('...' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'ComplexMethodFixture.php file not there', $result['file']);
         $this->assertEquals(69, $result['line']);
         $this->assertEquals('. . .', $result['varname']);
         $this->assertEquals('A headline', $result['type']);
