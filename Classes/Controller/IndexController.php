@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Controller;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
@@ -75,15 +76,15 @@ class IndexController extends AbstractController
         ) {
             // File was saved successfully.
             $this->addFlashMessage(
-                LocalizationUtility::translate('save.success.text', static::EXT_KEY, array($filepath)),
-                LocalizationUtility::translate('save.success.title', static::EXT_KEY),
+                LocalizationUtility::translate('save.success.text', Bootstrap::EXT_KEY, array($filepath)),
+                LocalizationUtility::translate('save.success.title', Bootstrap::EXT_KEY),
                 FlashMessage::OK
             );
         } else {
             // Something went wrong here!
             $this->addFlashMessage(
-                LocalizationUtility::translate('file.not.writable', static::EXT_KEY, array($filepath)),
-                LocalizationUtility::translate('save.fail.title', static::EXT_KEY),
+                LocalizationUtility::translate('file.not.writable', Bootstrap::EXT_KEY, array($filepath)),
+                LocalizationUtility::translate('save.fail.title', Bootstrap::EXT_KEY),
                 FlashMessage::ERROR
             );
         }
@@ -123,8 +124,8 @@ class IndexController extends AbstractController
         } else {
             // Error message and redirect to the index action.
             $this->addFlashMessage(
-                LocalizationUtility::translate('log.notreadable', static::EXT_KEY, array($id . '.Krexx.html')),
-                LocalizationUtility::translate('log.fileerror', static::EXT_KEY),
+                LocalizationUtility::translate('log.notreadable', Bootstrap::EXT_KEY, array($id . '.Krexx.html')),
+                LocalizationUtility::translate('log.fileerror', Bootstrap::EXT_KEY),
                 FlashMessage::ERROR
             );
             $this->redirect('index');
