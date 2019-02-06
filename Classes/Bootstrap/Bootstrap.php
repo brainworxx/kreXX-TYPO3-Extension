@@ -96,7 +96,6 @@ class Bootstrap
             }
         }
 
-
         // Register the fluid plugins.
         // We activate them later in the viewhelper.
         \Brainworxx\Krexx\Service\Plugin\Registration::register(
@@ -168,8 +167,8 @@ class Bootstrap
      */
     protected function loadKrexx()
     {
-        // There may be a composer verion of kreXX installed.
-        // We will not loead the bundeled one.
+        // There may be a composer version of kreXX installed.
+        // We will not load the bundled one.
         if (class_exists('Krexx')) {
             return true;
         }

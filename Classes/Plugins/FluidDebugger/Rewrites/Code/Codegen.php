@@ -127,7 +127,7 @@ class Codegen extends OrgCodegen
 
         // There is no real iterator_to_array method in vanilla fluid or vhs.
         // The groupedFor viewhelper can be abused, but the new variable would
-        // only be visible insite the viewhelper scope. And adding a
+        // only be visible inside the viewhelper scope. And adding a
         // variable.set inside that scope would make the code generation
         // really complicated.
         // Meh, we simply stop the generation in it's track.

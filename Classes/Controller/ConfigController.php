@@ -48,7 +48,7 @@ class ConfigController extends ActionController
      * when updating an extension.
      *
      * The editAction is the old standard action of the old 3.0.1 backend
-     * module. When this one gets called, we clear the cache and redirecdt to
+     * module. When this one gets called, we clear the cache and redirect to
      * the new controller
      */
     public function editAction()

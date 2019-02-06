@@ -270,7 +270,7 @@ class Methods implements EventHandlerInterface, ConstInterface
     }
 
     /**
-     * Reteive a namebased array of the public methods of a reflection.
+     * Retrieve a name based array of the public methods of a reflection.
      *
      * @param \ReflectionClass $ref
      *   The reflection from where we want to retrieve the method list.

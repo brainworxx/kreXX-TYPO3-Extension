@@ -42,7 +42,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class IndexController extends AbstractController
 {
     /**
-     * Simple index action, displayse everything.
+     * Simple index action, display everything.
      */
     public function indexAction()
     {

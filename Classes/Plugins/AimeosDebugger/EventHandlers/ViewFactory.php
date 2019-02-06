@@ -76,7 +76,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
     protected $pool;
 
     /**
-     * List of all retreived helper classes from the view.
+     * List of all retrieved helper classes from the view.
      *
      * @var array
      */
@@ -127,7 +127,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
     }
 
     /**
-     * Retrieve the already instanciated helper classes from the view.
+     * Retrieve the already instantiated helper classes from the view.
      *
      * @param \Aimeos\MW\View\Iface $data
      *   The class we are analysing.
@@ -145,13 +145,13 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
             // Lets hope that other implementations use the same variable name.
             $propertyReflection = $ref->getProperty('helper');
             $propertyReflection->setAccessible(true);
-            // We store the helpers here, because we need them later fot the
-            // actual methos analysis. It is possible to inject helpers.
-            // Thismeans that the helper may be someone else as it should be,
+            // We store the helpers here, because we need them later for the
+            // actual method analysis. It is possible to inject helpers.
+            // This means that the helper may be someone else as it should be,
             // according to the key.
             $this->helpers = $propertyReflection->getValue($data);
             if (is_array($this->helpers) && empty($this->helpers) === false) {
-                // We got ourselfes some classes to analyse.
+                // We got ourselves some classes to analyse.
                 $this->pool->codegenHandler->setAllowCodegen(false);
                 $result .= $this->pool->render->renderExpandableChild(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
@@ -195,7 +195,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
         // 4.) Analyse them all!
 
         if (class_exists('Aimeos\\MW\\View\\Helper\\Base') === false) {
-            // This sould not have happened.
+            // This should not have happened.
             // No main class, no view helpers.
             // Early return
             return $result;
@@ -213,7 +213,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
         // Scan the main view helpers, to get a first impression.
         $reflectionList = $this->retrieveHelperList(dirname($ref->getFileName()));
 
-        // Replace the ones in there with the already instanciated ones from the
+        // Replace the ones in there with the already instantiated ones from the
         // helper array.
         foreach ($this->helpers as $key => $helperObject) {
             try {
