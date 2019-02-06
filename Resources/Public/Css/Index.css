@@ -564,6 +564,7 @@ button:hover {
 
 .button.tooltip-hover {
     background: url("../Icons/info.png") no-repeat center #dedede;
+    cursor: help;
 }
 
 .button.save {
