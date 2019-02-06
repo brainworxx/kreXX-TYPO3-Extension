@@ -113,6 +113,12 @@ class Bootstrap
                 );
             }
         }
+        // Add the legacy debug viewhelper, in case people are using the old krexx
+        // namespace.
+        if (!class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
+            $extPath = ExtensionManagementUtility::extPath(static::EXT_KEY);
+            include_once $extPath . 'Classes/ViewHelpers/LegacyDebugViewHelper.php';
+        }
 
         \Brainworxx\Krexx\Service\Plugin\Registration::register(
             'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'

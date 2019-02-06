@@ -113,11 +113,5 @@ class Configuration implements PluginConfigInterface
         // Adding additional texts.
         $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('includekrexx');
         Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/fluid.kreXX.ini');
-
-        // Add the legacy debug viewhelper, in case people are using the old krexx
-        // namespace.
-        if (!class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
-            include_once $extPath . 'Classes/ViewHelpers/LegacyDebugViewHelper.php';
-        }
     }
 }
