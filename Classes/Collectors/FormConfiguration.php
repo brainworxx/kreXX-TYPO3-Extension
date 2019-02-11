@@ -49,6 +49,11 @@ class FormConfiguration extends AbstractCollector
      */
     public function assignData(ViewInterface $view)
     {
+        if ($this->hasAccess() === false) {
+            // No access.
+            return;
+        }
+
         $dropdown = array(
             'full' => LocalizationUtility::translate('full', Bootstrap::EXT_KEY),
             'display' => LocalizationUtility::translate('display', Bootstrap::EXT_KEY),
