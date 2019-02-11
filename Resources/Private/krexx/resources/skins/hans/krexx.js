@@ -574,6 +574,11 @@
         }
 
         var diff = Math.abs(container.scrollTop - destination);
+        if (diff < 250) {
+            // No need to jump there
+            return;
+        }
+
         var step;
 
         // Getting the direction
@@ -597,7 +602,7 @@
                 clearInterval(interval);
             }
             lastValue = container.scrollTop;
-        }, 1);
+        }, 10);
 
     };
 

@@ -2,6 +2,7 @@
 - Added classname to the declaration analysis of properties.
 - Added analysis of cUrl resources.
 - Added a check for the content type to the ajax detection.
+- Improved the jump to element of the Hans skin.
 - Change: Protected properties are now wrapped again.
 - Bugfix: Replace the $hellip; in the file service, it may cause
   double escaping issues in the backend of some systems.
@@ -12,6 +13,8 @@
 - Bugfix: Property analysis does not handle predefined classes
   correctly.
 - Bugfix: "Autoloading" may fail with a weird directory path
+- Bugfix: The fatal error handler backtrace is broken
+- Bugfix: Fix the styles of the Hans skin
 
 3.0.1
 - Change: All singelton classes now add themself to the pool as

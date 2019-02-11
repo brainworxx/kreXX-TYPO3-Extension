@@ -67,12 +67,18 @@ class ProcessBacktrace implements ConstInterface
     /**
      * Do a backtrace analysis.
      *
+     * @param array $backtrace
+     *   The backtrace, which may (or may not) come from other sources.
+     *   If omitted, a new debug_backtrace() will be retrieved.
+     *
      * @return string
      *   The rendered backtrace.
      */
-    public function process()
+    public function process(&$backtrace = array())
     {
-        $backtrace = $this->getBacktrace();
+        if (empty($backtrace) === true) {
+            $backtrace = $this->getBacktrace();
+        }
 
         $output = '';
         $maxStep = (int) $this->pool->config->getSetting(Fallback::SETTING_MAX_STEP_NUMBER);

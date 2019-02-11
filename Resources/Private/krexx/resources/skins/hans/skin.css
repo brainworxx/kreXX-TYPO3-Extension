@@ -457,7 +457,7 @@ div.kwrapper {
 .kwrapper .search-wrapper .ksearch input,
 .keditable input,
 .keditable select {
-    font: 10px tahoma, verdana;
+    font: 14px tahoma, verdana;
 }
 
 .kwrapper .kconfiguration .kchild .kname,
@@ -469,12 +469,11 @@ div.kwrapper {
     margin-left: 0;
 }
 
-
 .kwrapper .kclose.kfatal {
     cursor: pointer;
     display: inline-table;
     width: 30px;
-    height: 40px;
+    line-height: 40px;
     margin-right: 7px;
     color: #303030;
 }
@@ -536,6 +535,10 @@ div.kwrapper {
     font-weight: bold;
 }
 
+.kwrapper .kfatal-headnote * {
+    vertical-align: middle;
+}
+
 .kwrapper .kstop {
     background: #303030; /* fallback */
     background: -moz-linear-gradient(45deg, transparent 8px, #303030 10px),
@@ -550,7 +553,6 @@ div.kwrapper {
     -webkit-linear-gradient(135deg, transparent 8px, #303030 10px),
     -webkit-linear-gradient(225deg, transparent 8px, #303030 10px),
     -webkit-linear-gradient(315deg, transparent 8px, #303030 10px);
-
     background-position: bottom left, bottom right, top right, top left;
     -moz-background-size: 50% 50%;
     -webkit-background-size: 50% 50%;
@@ -561,10 +563,13 @@ div.kwrapper {
     width: 44px;
     margin-left: 4px;
     margin-top: 4px;
+    height: 44px;
 }
 
 .kwrapper .kstop span {
     margin-left: 15px;
+    line-height: 40px;
+    color: white;
 }
 
 .kfatalwrapper-outer .kfatal-message {
@@ -729,7 +734,7 @@ div.kwrapper {
     -moz-border-radius: 8px;
     border-radius: 8px;
     padding: 4px;
-    font: 12px tahoma, verdana;
+    font: 14px tahoma, verdana;
     z-index: 10;
 }
 
@@ -843,12 +848,14 @@ div.kwrapper {
     font: bold 12px tahoma, verdana;
 }
 
-.kwrapper .ksearch-found-highlight {
-    background-color: #990100 !important;
+.kwrapper .ksearch-found-highlight,
+.kwrapper .ksearch-found-highlight * {
+    background-color: #fffda5 !important;
     color: #000000;
 }
 
-.kwrapper .highlight-jumpto {
+.kwrapper .highlight-jumpto,
+.kwrapper .highlight-jumpto * {
     background-color: #ffcd00 !important;
     color: #303030 !important;
 }
