@@ -58,7 +58,7 @@ class LogfileList extends AbstractCollector
      * Retrieve the file list, like the method name says. Used by the ajax controller.
      *
      * @return array
-     *   THe file list with the info.
+     *   The file list with the info.
      */
     public function retrieveFileList()
     {
