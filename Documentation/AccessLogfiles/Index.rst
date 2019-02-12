@@ -31,3 +31,9 @@ A file can be access by simply clicking on the filename.
 The trashcan on the right deletes the file.
 
 |
+.. figure:: ../Images/Logging/logging_debugbar.png
+	:width: 1178px
+	:alt: Logfiles in the debugbar
+
+	Alternatively, you can access the logfiles by using the TYPO3 DebugBar. This works only in TYPO3 9.5.
+

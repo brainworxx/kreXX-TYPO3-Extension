@@ -13,20 +13,23 @@ Changelog
 =============================================================
 
 3.0.2
-    - [Feature] Nearly complete rewrite of the backend module
+    - [Feature] Nearly complete rewrite of the backend module.
+    - [Feature] Logfile access in the debugbar.
     - [Feature] Added classname to the declaration analysis of properties.
     - [Feature] Added analysis of cUrl resources.
     - [Feature] Added a check for the content type to the ajax detection.
     - [Change] Protected properties are now wrapped again.
     - [Bugfix] Flush cache on update/install in 9.5 does not work anymore.
-    - [Bugfix] Malformed table in the extension documentation
+    - [Bugfix] Malformed table in the extension documentation.
     - [Bugfix] Replace the $hellip; in the file service, it may cause double escaping issues in the backend of some systems.
     - [Bugfix] The method analysis doesn't take traits into account.
     - [Bugfix] The property analysis doesn't take traits into account.
     - [Bugfix] Remove the copy-pasta spaces from the skins.
-    - [Bugfix] Cut off parameter analysis
+    - [Bugfix] Cut off parameter analysis.
     - [Bugfix] Property analysis does not handle predefined classes correctly.
-    - [Bugfix] "Autoloading" may fail with a weird directory path
+    - [Bugfix] "Autoloading" may fail with a weird directory path.
+    - [Bugfix] The fatal error handler backtrace is broken.
+    - [Bugfix] Fix the styles of the Hans skin.
 
 3.0.1
     - [Bugfix] Added the missing end event to the property analysis.
