@@ -1,0 +1,12 @@
+Manual installation
+===================
+1.) Upload the whole kreXX directory to your webserver. Put it somewhere,
+    where you are able to include it to your project.
+2.) Include as early as possible the file kreXX.php into your project.
+    Normally this is the index.php.
+
+Using composer
+==============
+composer require brainworxx/krexx
+Our composer page can be found here:
+https://packagist.org/packages/brainworxx/krexx

@@ -1,0 +1,13 @@
+<phpunit bootstrap="bootstrap.php">
+    <testsuites>
+        <testsuite name="krexxsuit">
+            <directory>Tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory>../src</directory>
+            <file>../Krexx.php</file>
+        </whitelist>
+    </filter>
+</phpunit>
