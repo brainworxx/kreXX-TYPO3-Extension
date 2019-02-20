@@ -48,6 +48,16 @@ class IndexController extends AbstractController
      */
     public function indexAction()
     {
+        if ($this->hasAccess() === false) {
+            // Sorry!
+            $this->addFlashMessage(
+                LocalizationUtility::translate('accessDenied', Bootstrap::EXT_KEY),
+                LocalizationUtility::translate('accessDenied', Bootstrap::EXT_KEY),
+                FlashMessage::ERROR
+            );
+            return '';
+        }
+
         $this->checkProductiveSetting();
 
         // Has kreXX something to say? Maybe a write protected logfolder?
@@ -68,6 +78,15 @@ class IndexController extends AbstractController
      */
     public function saveAction(Settings $settings)
     {
+        if ($this->hasAccess() === false) {
+            $this->addFlashMessage(
+                LocalizationUtility::translate('accessDenied', Bootstrap::EXT_KEY),
+                LocalizationUtility::translate('save.fail.title', Bootstrap::EXT_KEY),
+                FlashMessage::ERROR
+            );
+            $this->redirect('index');
+        }
+
         $filepath = $this->pool->config->getPathToIniFile();
 
         // Check for writing permission.
@@ -130,7 +149,7 @@ class IndexController extends AbstractController
             $response->shutdown();
             return $response;
         } else {
-            $response->setContent('Access denied!');
+            $response->setContent(LocalizationUtility::translate('accessDenied', Bootstrap::EXT_KEY));
         }
 
         return $response;
