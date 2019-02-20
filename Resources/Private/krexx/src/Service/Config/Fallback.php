@@ -422,5 +422,5 @@ class Fallback
      *
      * @var string
      */
-    public $version = '3.0.2 dev';
+    public $version = '3.0.2';
 }

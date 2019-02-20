@@ -1,4 +1,4 @@
-3.0.2 dev
+3.0.2
 - Added classname to the declaration analysis of properties.
 - Added analysis of cUrl resources.
 - Added a check for the content type to the ajax detection.
