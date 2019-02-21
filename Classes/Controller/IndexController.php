@@ -36,9 +36,12 @@ namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
+use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class IndexController extends AbstractController
@@ -117,20 +120,12 @@ class IndexController extends AbstractController
     /**
      * Dispatch a logfile.
      *
-     *
      * @param ServerRequest|null $serverRequest
-     *
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      *
      * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface
      */
     public function dispatchAction(ServerRequest $serverRequest = null)
     {
-        /** @var ResponseInterface $response */
-        $response = $this->objectManager->get(ResponseInterface::class);
-
         // And I was so happy to get rid of the 4.5 compatibility nightmare.
         if ($this->request === null) {
             $params = $serverRequest->getQueryParams();
@@ -146,10 +141,23 @@ class IndexController extends AbstractController
         if (is_readable($file) && $this->hasAccess()) {
             // We open and then send the file.
             $this->dispatchFile($file);
-            $response->shutdown();
-            return $response;
+        }
+        return $this->createResponse();
+    }
+
+    /**
+     * Create the response, depending on the calling context.
+     *
+     * @return ResponseInterface|NullResponse
+     */
+    protected function createResponse()
+    {
+        if (empty($this->objectManager)) {
+            $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            $response = $this->objectManager->get(NullResponse::class);
         } else {
-            $response->setContent(LocalizationUtility::translate('accessDenied', Bootstrap::EXT_KEY));
+            $response = $this->objectManager->get(ResponseInterface::class);
+            $response->shutdown();
         }
 
         return $response;
