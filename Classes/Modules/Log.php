@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Includekrexx\Modules;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Adminpanel\ModuleApi\AbstractSubModule;
 use TYPO3\CMS\Adminpanel\ModuleApi\ContentProviderInterface;
@@ -41,6 +43,7 @@ use TYPO3\CMS\Adminpanel\ModuleApi\DataProviderInterface;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Adminpanel\ModuleApi\ResourceProviderInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -53,7 +56,14 @@ class Log extends AbstractSubModule implements
     ContentProviderInterface,
     ResourceProviderInterface
 {
+
+    const MESSAGE_SEVERITY_ERROR = 'error';
+    const MESSAGE_SEVERITY_INFO = 'info';
+    const TRANSLATION_PREFIX = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:';
+
     /**
+     * The identifyer for the Admin Panel Module.
+     *
      * @return string
      */
     public function getIdentifier(): string
@@ -68,9 +78,7 @@ class Log extends AbstractSubModule implements
      */
     public function getLabel(): string
     {
-        return $this->getLanguageService()->sL(
-            'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab'
-        );
+        return LocalizationUtility::translate(static::TRANSLATION_PREFIX . 'mlang_tabs_tab');
     }
 
     /**
@@ -78,6 +86,7 @@ class Log extends AbstractSubModule implements
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *   The frontend request. Currently not used.
+     *
      * @return \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData
      *   The data we will assign to the admin panel.
      */
@@ -94,18 +103,38 @@ class Log extends AbstractSubModule implements
      * Render a standalone view with the links.
      *
      * @param \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData $data
+     *   The data we need to display.
+     *
      * @return string
+     *   The rendered content.
      */
     public function getContent(ModuleData $data): string
     {
+        if ($this->hasAccess() === false) {
+            return $this->renderMessage(
+                LocalizationUtility::translate(static::TRANSLATION_PREFIX . 'accessDenied'),
+                static::MESSAGE_SEVERITY_ERROR
+            );
+        }
+
+        $filelist = $data->getArrayCopy();
+        if (empty($filelist['files'])) {
+            return $this->retrieveKrexxMessages() . $this->renderMessage(
+                LocalizationUtility::translate(static::TRANSLATION_PREFIX . 'log.noresult'),
+                static::MESSAGE_SEVERITY_INFO
+            );
+        }
+
         $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $templateNameAndPath = 'EXT:includekrexx/Resources/Private/Templates/Modules/Log.html';
-        $view->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($templateNameAndPath));
+        $view->setTemplatePathAndFilename(
+            GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Templates/Modules/Log.html')
+        );
         $view->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
         $view->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
-        $view->assignMultiple($data->getArrayCopy());
+        $view->assignMultiple($filelist);
 
-        return $view->render();
+
+        return $this->retrieveKrexxMessages() . $view->render();
     }
 
     /**
@@ -128,5 +157,73 @@ class Log extends AbstractSubModule implements
     public function getJavaScriptFiles(): array
     {
         return [];
+    }
+
+    /**
+     * Additional check, if the current Backend user has access to the extension.
+     *
+     * @return bool
+     *   The result of the check.
+     */
+    protected function hasAccess()
+    {
+        return isset($GLOBALS['BE_USER']) &&
+            $GLOBALS['BE_USER']->check('modules', 'tools_IncludekrexxKrexxConfiguration');
+    }
+
+    /**
+     * Similar to the Flashmessages, just for the Admin Panel.
+     *
+     * @param string $text
+     *   The text to display.
+     * @param string $severity
+     *   One of the severity constants from this class, which is also the
+     *   message css class
+     *
+     * @return string
+     *   The rendered HTML message.
+     */
+    protected function renderMessage(string $text, string $severity): string
+    {
+        $view = GeneralUtility::makeInstance(StandaloneView::class);
+        $view->setTemplatePathAndFilename(
+            GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Templates/Modules/Message.html')
+        );
+        $view->setPartialRootPaths(['EXT:includekrexx/Resources/Private/Partials']);
+        $view->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
+        $view->assignMultiple(
+            [
+                'text' => $text,
+                'severity' => $severity,
+            ]
+        );
+
+        return $view->render();
+    }
+
+    /**
+     * Retrieve messages from the kreXX lib.
+     *
+     * @return string
+     *   The renders messages.
+     */
+    protected function retrieveKrexxMessages(): string
+    {
+        // Relay the renderedMessages from kreXX.
+        Pool::createPool();
+        $renderedMessages = '';
+
+        foreach (\Krexx::$pool->messages->getKeys() as $message) {
+            $renderedMessages .= $this->renderMessage(
+                LocalizationUtility::translate(
+                    static::TRANSLATION_PREFIX . $message['key'],
+                    Bootstrap::EXT_KEY,
+                    $message['params']
+                ),
+                static::MESSAGE_SEVERITY_ERROR
+            );
+        }
+
+        return $renderedMessages;
     }
 }
