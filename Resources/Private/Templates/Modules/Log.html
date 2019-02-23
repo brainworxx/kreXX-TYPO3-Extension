@@ -59,13 +59,15 @@
 /**
  * Rendering of the meta data of a file, about what was analysed.
  *
+ * The output is already escaped at this point, hence the format raw.
+ *
  * @param array {meta}
  *   Content of the metadata json.
  * @param array {iterator}
  *   The iterator from the f:for
  */
 <f:section name="meta">
-    <b>{meta.type}</b><br />
+    <b><f:format.raw>{meta.type}</f:format.raw></b><br />
     in {meta.filename}, line {meta.line}
     <f:if condition="{iterator.isLast}===false">
         <div class="typo3-adminPanel-table-cell-xx-spacer"></div>
