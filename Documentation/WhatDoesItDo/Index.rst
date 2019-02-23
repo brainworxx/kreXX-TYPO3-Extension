@@ -30,7 +30,8 @@ Key features:
     - Configurable local opening function, to prevent other developers from calling your debug commands.
     - IP mask to allow only some IPs (or IP ranges) to trigger kreXX.
     - Output can be saved to an output folder. Very useful in m2m communication or ajax.
-    - Backend access to the logfiles via a file dispatcher.
+    - Backend access to the logfiles with a file dispatcher.
+    - Frontend access to the logfiles with the 9.5'er Admin Panel.
     - Several safety measures to prevent prevent hangups with too large memory usage or a timeout.
     - Benchmarking
     - Fatal error handler with a full backtrace

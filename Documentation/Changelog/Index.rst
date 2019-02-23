@@ -12,12 +12,13 @@
 Changelog
 =============================================================
 
-3.0.2
+3.1.0
     - [Feature] Nearly complete rewrite of the backend module.
     - [Feature] Logfile access in the debugbar.
     - [Feature] Added classname to the declaration analysis of properties.
     - [Feature] Added analysis of cUrl resources.
     - [Feature] Added a check for the content type to the ajax detection.
+    - [Change] :literal:`includekrexx` and :literal:`krexx` version numbers are out of sync, because of the complete rewrite of the backend module.
     - [Change] Protected properties are now wrapped again.
     - [Bugfix] Flush cache on update/install in 9.5 does not work anymore.
     - [Bugfix] Malformed table in the extension documentation.
