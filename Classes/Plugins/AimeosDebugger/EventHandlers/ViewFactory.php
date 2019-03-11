@@ -234,7 +234,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setName('Aimeos view factory')
                 ->setType('class internals view magic')
-                ->addParameter('data', $reflectionList)
+                ->addParameter(static::PARAM_DATA, $reflectionList)
                 // Tell the callback to pass on the factory name.
                 // Thanks to the magic factory, we must use this one.
                 ->addParameter('isFactoryMethod', $result)

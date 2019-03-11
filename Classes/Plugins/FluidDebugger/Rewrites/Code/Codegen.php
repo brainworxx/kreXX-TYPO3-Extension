@@ -91,7 +91,7 @@ class Codegen extends OrgCodegen
         }
 
          // Disallowing code generation for configured debug methods.
-        if ($model->getType() === 'debug method') {
+        if ($model->getType() === static::TYPE_DEBUG_METHOD) {
             return '. . .';
         }
 
@@ -117,7 +117,7 @@ class Codegen extends OrgCodegen
             // we are analysing the {_all} at this time.
             $nestingLevel = $this->pool->emergencyHandler->getNestingLevel();
             $type = $model->getType();
-            if ($type === 'array' || $type === 'class') {
+            if ($type === static::TYPE_ARRAY || $type === static::TYPE_CLASS) {
                 --$nestingLevel;
             }
             if ($nestingLevel === 1) {

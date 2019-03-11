@@ -206,10 +206,10 @@ abstract class AbstractFluid extends AbstractCaller
         if ($this->error) {
             // Something went wrong!
             return array(
-                'file' => 'n/a',
-                'line' => 'n/a',
-                'varname' => 'fluidvar',
-                'type' => $this->getType('Fluid analysis', 'fluidvar', $data),
+                static::TRACE_FILE => 'n/a',
+                static::TRACE_LINE => 'n/a',
+                static::TRACE_VARNAME => 'fluidvar',
+                static::TRACE_TYPE => $this->getType('Fluid analysis', 'fluidvar', $data),
             );
         }
 
@@ -234,10 +234,10 @@ abstract class AbstractFluid extends AbstractCaller
         $this->resolveVarname($path);
 
          return array(
-             'file' => $this->pool->fileService->filterFilePath($path),
-             'line' => $this->line,
-             'varname' => $this->varname,
-             'type' => $this->getType('Fluid analysis', $this->varname, $data),
+             static::TRACE_FILE => $this->pool->fileService->filterFilePath($path),
+             static::TRACE_LINE => $this->line,
+             static::TRACE_VARNAME => $this->varname,
+             static::TRACE_TYPE => $this->getType('Fluid analysis', $this->varname, $data),
          );
     }
 

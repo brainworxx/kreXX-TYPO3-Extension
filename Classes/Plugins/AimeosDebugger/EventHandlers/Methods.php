@@ -141,7 +141,7 @@ class Methods implements EventHandlerInterface, ConstInterface
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                     ->setName('Decorator Methods')
                     ->setType('class internals decorator')
-                    ->addParameter('data', $methods)
+                    ->addParameter(static::PARAM_DATA, $methods)
                     ->setHelpid('aimeosDecoratorsInfo')
                     ->injectCallback(
                         $this->pool->createClass(
@@ -159,7 +159,7 @@ class Methods implements EventHandlerInterface, ConstInterface
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                     ->setName('Decorator Objects')
                     ->setType('class internals decorator')
-                    ->addParameter('data', $allReceivers)
+                    ->addParameter(static::PARAM_DATA, $allReceivers)
                     ->injectCallback(
                         $this->pool->createClass(
                             'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Callbacks\\ThroughClassList'
@@ -225,9 +225,7 @@ class Methods implements EventHandlerInterface, ConstInterface
         if (strpos($source, 'call_user_func') === false) {
             return false;
         }
-
-
-
+        
         // Still here? Now for the serious stuff.
         $objectName = false;
         foreach ($this->internalObjectNames as $name => $needle) {

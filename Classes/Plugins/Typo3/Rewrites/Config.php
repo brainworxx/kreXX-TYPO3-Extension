@@ -47,6 +47,6 @@ class Config extends OrgConfig
      */
     public function isAllowedIp($whitelist)
     {
-        return GeneralUtility::cmpIP(GeneralUtility::getIndpEnv('REMOTE_ADDR'), $whitelist);
+        return GeneralUtility::cmpIP(GeneralUtility::getIndpEnv(static::REMOTE_ADDRESS), $whitelist);
     }
 }
