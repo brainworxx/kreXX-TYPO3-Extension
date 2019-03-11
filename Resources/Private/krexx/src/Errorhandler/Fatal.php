@@ -97,20 +97,20 @@ class Fatal extends AbstractError
         // Do we have an error at all?
         if ($error  !== null && $this->getIsActive() === true) {
             // Do we need to check this one, according to our settings?
-            $translatedError = $this->translateErrorType($error['type']);
+            $translatedError = $this->translateErrorType($error[static::TRACE_TYPE]);
             if ($translatedError[1] === 'traceFatals') {
                 // We also need to prepare some Data we want to display.
-                $errorType = $this->translateErrorType($error['type']);
+                $errorType = $this->translateErrorType($error[static::TRACE_TYPE]);
 
                 // We prepare the error as far as we can here.
                 // The adding of the sourcecode happens in the controller.
                 $errorData = array(
-                    'type' => $errorType[0],
-                    'errstr' => $error['message'],
-                    'errfile' => $error['file'],
-                    'errline' => $error['line'],
+                    static::TRACE_TYPE => $errorType[0],
+                    static::TRACE_ERROR_STRING => $error['message'],
+                    static::TRACE_ERROR_FILE => $error[static::TRACE_FILE],
+                    static::TRACE_ERROR_LINE => $error[static::TRACE_LINE],
                     'handler' => __FUNCTION__,
-                    'file' => $error['file'],
+                    static::TRACE_FILE => $error[static::TRACE_FILE],
                     'backtrace' => $this->tickedBacktrace,
                 );
 

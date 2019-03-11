@@ -56,23 +56,27 @@ class ConfigSectionTest extends AbstractTest
         $renderEditable = new Model();
         $renderNotEditable = new Model();
 
-        $noRender->setSection('some Section')
+        $sectionString = 'some Section';
+        $sourceString = 'some source';
+        $valueString = 'some value';
+
+        $noRender->setSection($sectionString)
             ->setEditable(true)
-            ->setSource('some source')
+            ->setSource($sourceString)
             ->setType(Fallback::RENDER_TYPE_NONE)
-            ->setValue('some value');
+            ->setValue($valueString);
 
-        $renderEditable->setSection('some Section')
+        $renderEditable->setSection($sectionString)
             ->setEditable(true)
-            ->setSource('some source')
+            ->setSource($sourceString)
             ->setType(Fallback::RENDER_TYPE_INPUT)
-            ->setValue('some value');
+            ->setValue($valueString);
 
-        $renderNotEditable->setSection('some Section')
+        $renderNotEditable->setSection($sectionString)
             ->setEditable(false)
-            ->setSource('some source')
+            ->setSource($sourceString)
             ->setType(Fallback::RENDER_TYPE_INPUT)
-            ->setValue('some value');
+            ->setValue($valueString);
 
         $data = ['data' =>
             [

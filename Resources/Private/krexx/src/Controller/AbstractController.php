@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Controller;
 
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\View\Output\AbstractOutput;
@@ -44,7 +45,7 @@ use Brainworxx\Krexx\View\Output\AbstractOutput;
  *
  * @package Brainworxx\Krexx\Controller
  */
-abstract class AbstractController
+abstract class AbstractController implements ConstInterface
 {
     /**
      * Here we remember, if we are currently running a analysis.

@@ -42,6 +42,11 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 
 class CodegenTest extends AbstractTest
 {
+    const FIRST_RUN = 'firstRun';
+    const GET_CONNECTOR_LEFT = 'getConnectorLeft';
+    const GET_CONNECTOR_RIGHT = 'getConnectorRight';
+    const CONCATENATED_CONNECTORS = 'getConnectorLeftnamegetConnectorRight';
+
     /**
      * Our test subject
      *
@@ -67,7 +72,7 @@ class CodegenTest extends AbstractTest
 
         $this->codegenHandler = new Codegen(\Krexx::$pool);
         $this->codegenHandler->setAllowCodegen(true);
-        $this->setValueByReflection('firstRun', false, $this->codegenHandler);
+        $this->setValueByReflection(static::FIRST_RUN, false, $this->codegenHandler);
 
         $this->fixture = new Model(\Krexx::$pool);
         $this->fixture->setName('name')
@@ -87,11 +92,11 @@ class CodegenTest extends AbstractTest
     protected function expectConnectorCalls($left, $right)
     {
         $this->connectorMock->expects($this->exactly($left))
-            ->method('getConnectorLeft')
-            ->will($this->returnValue('getConnectorLeft'));
+            ->method(static::GET_CONNECTOR_LEFT)
+            ->will($this->returnValue(static::GET_CONNECTOR_LEFT));
         $this->connectorMock->expects($this->exactly($right))
-            ->method('getConnectorRight')
-            ->will($this->returnValue('getConnectorRight'));
+            ->method(static::GET_CONNECTOR_RIGHT)
+            ->will($this->returnValue(static::GET_CONNECTOR_RIGHT));
     }
 
     /**
@@ -126,16 +131,16 @@ class CodegenTest extends AbstractTest
      */
     public function testGenerateSourceFirstRun()
     {
-        $this->setValueByReflection('firstRun', true, $this->codegenHandler);
+        $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
         $this->expectConnectorCalls(1, 1);
 
         $this->assertEquals(
-            'getConnectorLeftnamegetConnectorRight',
+            static::CONCATENATED_CONNECTORS,
             $this->codegenHandler->generateSource($this->fixture)
         );
 
         // It's not the first run anymore.
-        $this->assertAttributeEquals(false, 'firstRun', $this->codegenHandler);
+        $this->assertAttributeEquals(false, static::FIRST_RUN, $this->codegenHandler);
     }
 
     /**
@@ -161,10 +166,10 @@ class CodegenTest extends AbstractTest
     public function testGenerateSourceEmpty()
     {
         $this->connectorMock->expects($this->exactly(1))
-            ->method('getConnectorLeft')
+            ->method(static::GET_CONNECTOR_LEFT)
             ->will($this->returnValue(''));
         $this->connectorMock->expects($this->exactly(1))
-            ->method('getConnectorRight')
+            ->method(static::GET_CONNECTOR_RIGHT)
             ->will($this->returnValue(''));
 
         $this->assertEquals(
@@ -184,7 +189,7 @@ class CodegenTest extends AbstractTest
         $this->expectConnectorCalls(2, 2);
         $this->fixture->setType($this->codegenHandler::TYPE_DEBUG_METHOD);
         $this->assertEquals(
-            'getConnectorLeftnamegetConnectorRight',
+            static::CONCATENATED_CONNECTORS,
             $this->codegenHandler->generateSource($this->fixture)
         );
     }
@@ -216,7 +221,7 @@ class CodegenTest extends AbstractTest
         $this->expectConnectorCalls(2, 2);
         $this->fixture->setIsPublic(true);
         $this->assertEquals(
-            'getConnectorLeftnamegetConnectorRight',
+            static::CONCATENATED_CONNECTORS,
             $this->codegenHandler->generateSource($this->fixture)
         );
     }
@@ -240,7 +245,7 @@ class CodegenTest extends AbstractTest
         \Krexx::$pool->scope = $scopeMock;
 
         $this->assertEquals(
-            'getConnectorLeftnamegetConnectorRight',
+            static::CONCATENATED_CONNECTORS,
             $this->codegenHandler->generateSource($this->fixture)
         );
     }

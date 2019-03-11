@@ -35,7 +35,7 @@
 namespace Brainworxx\Krexx\Analyse;
 
 /**
- * Interface with all the constants used in Routing ans Callback
+ * Interface with all the constants used all over the place.
  *
  * @package Brainworxx\Krexx\Analyse
  */
@@ -76,4 +76,20 @@ interface ConstInterface
 
     const UNKNOWN_VALUE = '. . .';
     const UNKNOWN_DECLARATION = ':: unable to determine declaration :: <br /><br />Maybe this is a predeclared class?';
+
+    const TRACE_FILE = 'file';
+    const TRACE_LINE = 'line';
+    const TRACE_VARNAME = 'varname';
+    const TRACE_TYPE = 'type';
+    const TRACE_FUNCTION = 'function';
+    const TRACE_CLASS = 'class';
+    const TRACE_OBJECT = 'object';
+    const TRACE_ARGS = 'args';
+    const TRACE_ERROR_STRING = 'errstr';
+    const TRACE_ERROR_FILE = 'errfile';
+    const TRACE_ERROR_LINE = 'errline';
+
+    const META_DECLARED_IN = 'Declared in';
+    const META_COMMENT = 'Comment';
+    const META_SOURCE = 'Source';
 }

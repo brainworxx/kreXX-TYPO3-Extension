@@ -35,11 +35,23 @@
 namespace Tests\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethodAnalysis;
+use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 
 class ThroughMethodAnalysisTest extends AbstractTest
 {
+    /**
+     * @var string
+     */
+    protected $startEvent = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis::callMe::start';
+
+    /**
+     * @var string
+     */
+    protected $endEvent = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis::callMe::end';
+
     /**
      * Our test subject.
      *
@@ -62,7 +74,7 @@ class ThroughMethodAnalysisTest extends AbstractTest
     {
         // Test start event
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis::callMe::start', $this->throughMethodAnalysis]
+            [$this->startEvent, $this->throughMethodAnalysis]
         );
 
         // Inject the fixture.
@@ -86,20 +98,21 @@ class ThroughMethodAnalysisTest extends AbstractTest
 
         // Test the events.
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis::callMe::start', $this->throughMethodAnalysis],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis::callMe::end', $this->throughMethodAnalysis],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis::callMe::end', $this->throughMethodAnalysis],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis::callMe::end', $this->throughMethodAnalysis],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis::callMe::end', $this->throughMethodAnalysis]
+            [$this->startEvent, $this->throughMethodAnalysis],
+            [$this->endEvent, $this->throughMethodAnalysis],
+            [$this->endEvent, $this->throughMethodAnalysis],
+            [$this->endEvent, $this->throughMethodAnalysis],
+            [$this->endEvent, $this->throughMethodAnalysis]
         );
 
         // Create a fixture.
+        $someKey = 'some key';
         $fixture = [
             $this->throughMethodAnalysis::PARAM_DATA => [
-                'some key' => 'some normal key',
-                'comments' => 'some comment',
-                'declared in' => 'some line',
-                'source' => 'source'
+                $someKey => 'some normal key',
+                ConstInterface::META_COMMENT => 'some comment',
+                ConstInterface::META_DECLARED_IN => 'some line',
+                ConstInterface::META_SOURCE => 'source code'
             ]
         ];
 
@@ -111,28 +124,63 @@ class ThroughMethodAnalysisTest extends AbstractTest
         $models = $renderNothing->model['renderSingleChild'];
 
         // Test the result.
-        $this->assertEquals($fixture[$this->throughMethodAnalysis::PARAM_DATA]['some key'], $models[0]->getData());
-        $this->assertEquals('some key', $models[0]->getName());
-        $this->assertEquals($this->throughMethodAnalysis::TYPE_REFLECTION,$models[0]->getType());
-        $this->assertEquals($fixture[$this->throughMethodAnalysis::PARAM_DATA]['some key'], $models[0]->getNormal());
-        $this->assertFalse($models[0]->getHasExtra());
+        $this->assertModelValues(
+            $models[0],
+            $fixture[$this->throughMethodAnalysis::PARAM_DATA][$someKey],
+            $someKey,
+            $this->throughMethodAnalysis::TYPE_REFLECTION,
+            $fixture[ConstInterface::PARAM_DATA][$someKey],
+            false
+        );
 
-        $this->assertEquals($fixture[$this->throughMethodAnalysis::PARAM_DATA]['comments'], $models[1]->getData());
-        $this->assertEquals('comments', $models[1]->getName());
-        $this->assertEquals($this->throughMethodAnalysis::TYPE_REFLECTION,$models[1]->getType());
-        $this->assertEquals('. . .', $models[1]->getNormal());
-        $this->assertTrue($models[1]->getHasExtra());
+        $this->assertModelValues(
+            $models[1],
+            $fixture[$this->throughMethodAnalysis::PARAM_DATA][ConstInterface::META_COMMENT],
+            ConstInterface::META_COMMENT,
+            ConstInterface::TYPE_REFLECTION,
+            ConstInterface::UNKNOWN_VALUE,
+            true
+        );
 
-        $this->assertEquals($fixture[$this->throughMethodAnalysis::PARAM_DATA]['declared in'], $models[2]->getData());
-        $this->assertEquals('declared in', $models[2]->getName());
-        $this->assertEquals($this->throughMethodAnalysis::TYPE_REFLECTION, $models[2]->getType());
-        $this->assertEquals('. . .', $models[2]->getNormal());
-        $this->assertTrue($models[2]->getHasExtra());
+        $this->assertModelValues(
+            $models[2],
+            $fixture[$this->throughMethodAnalysis::PARAM_DATA][ConstInterface::META_DECLARED_IN],
+            ConstInterface::META_DECLARED_IN,
+            ConstInterface::TYPE_REFLECTION,
+            ConstInterface::UNKNOWN_VALUE,
+            true
+        );
 
-        $this->assertEquals($fixture[$this->throughMethodAnalysis::PARAM_DATA]['source'], $models[3]->getData());
-        $this->assertEquals('source', $models[3]->getName());
-        $this->assertEquals($this->throughMethodAnalysis::TYPE_REFLECTION, $models[3]->getType());
-        $this->assertEquals('. . .', $models[3]->getNormal());
-        $this->assertTrue($models[3]->getHasExtra());
+        $this->assertModelValues(
+            $models[3],
+            $fixture[$this->throughMethodAnalysis::PARAM_DATA][ConstInterface::META_SOURCE],
+            ConstInterface::META_SOURCE,
+            ConstInterface::TYPE_REFLECTION,
+            ConstInterface::UNKNOWN_VALUE,
+            true
+        );
+    }
+
+    /**
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param mixed $data
+     * @param string $name
+     * @param string $type
+     * @param string $normal
+     * @param bool $hasExtras
+     */
+    protected function assertModelValues(
+        Model $model,
+        $data,
+        string $name,
+        string $type,
+        string $normal,
+        bool $hasExtras
+    ) {
+        $this->assertEquals($data, $model->getData());
+        $this->assertEquals($name, $model->getName());
+        $this->assertEquals($type, $model->getType());
+        $this->assertEquals($normal, $model->getNormal());
+        $this->assertEquals($hasExtras, $model->getHasExtra());
     }
 }

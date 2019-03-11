@@ -39,6 +39,8 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 
 class AbstractCallerTest extends AbstractTest
 {
+    const TEST_PATTERN = 'some pattern';
+
     /**
      * Testing the setting of the pool
      *
@@ -58,8 +60,8 @@ class AbstractCallerTest extends AbstractTest
     public function testSetPattern()
     {
         $callerFinder = new CallerFinder(\Krexx::$pool);
-        $callerFinder->setPattern('some pattern');
-        $this->assertAttributeEquals('some pattern', 'pattern', $callerFinder);
+        $callerFinder->setPattern(static::TEST_PATTERN);
+        $this->assertAttributeEquals(static::TEST_PATTERN, 'pattern', $callerFinder);
     }
 
     /**
@@ -71,7 +73,7 @@ class AbstractCallerTest extends AbstractTest
     {
         $callerFinder = new CallerFinder(\Krexx::$pool);
 
-        $this->setValueByReflection('pattern', 'some pattern', $callerFinder);
-        $this->assertEquals('some pattern', $callerFinder->getPattern());
+        $this->setValueByReflection('pattern', static::TEST_PATTERN, $callerFinder);
+        $this->assertEquals(static::TEST_PATTERN, $callerFinder->getPattern());
     }
 }

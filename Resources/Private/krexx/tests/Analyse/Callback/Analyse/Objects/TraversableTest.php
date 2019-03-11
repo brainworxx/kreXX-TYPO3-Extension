@@ -45,6 +45,18 @@ use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 
 class TraversableTest extends AbstractTest
 {
+    const CHECK_NESTING = 'checkNesting';
+
+    /**
+     * @var string
+     */
+    protected $startEvent = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable::callMe::start';
+
+    /**
+     * @var string
+     */
+    protected $endEvent = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable::analysisEnd';
+
     /**
      * @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties
      */
@@ -80,12 +92,12 @@ class TraversableTest extends AbstractTest
     {
         // Tell the emergency handler mock that we have a nesting level problem.
         \Krexx::$pool->emergencyHandler->expects($this->once())
-            ->method('checkNesting')
+            ->method(static::CHECK_NESTING)
             ->will($this->returnValue(true));
 
         // Listen for the start event.
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable::callMe::start', $this->traversable]
+            [$this->startEvent, $this->traversable]
         );
 
         // Create any fixture, we will not process it anyway, at least we should not.
@@ -115,7 +127,7 @@ class TraversableTest extends AbstractTest
 
         // Listen for the start event. Again.
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable::callMe::start', $this->traversable]
+            [$this->startEvent, $this->traversable]
         );
 
         // Run the test.
@@ -137,19 +149,19 @@ class TraversableTest extends AbstractTest
     {
         // Tell the emergency handler, that the nesting level is ok.
         \Krexx::$pool->emergencyHandler->expects($this->once())
-            ->method('checkNesting')
+            ->method(static::CHECK_NESTING)
             ->will($this->returnValue(false));
 
         // Listen for the start event.
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable::callMe::start', $this->traversable]
+            [$this->startEvent, $this->traversable]
         );
 
         // Create any fixture that is not traversable should cause an error.
         $data = new MethodsFixture();
         $fixture = [
             'data' => $data,
-            'name' => 'some name',
+            'name' => 'blargh',
             'ref' => new ReflectionClass($data)
         ];
 
@@ -174,13 +186,13 @@ class TraversableTest extends AbstractTest
     {
         // Tell the emergency handler, that the nesting level is ok.
         \Krexx::$pool->emergencyHandler->expects($this->any())
-            ->method('checkNesting')
+            ->method(static::CHECK_NESTING)
             ->will($this->returnValue(false));
 
         // Listen for the start and end event.
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable::callMe::start', $this->traversable],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable::analysisEnd', $this->traversable]
+            [$this->startEvent, $this->traversable],
+            [$this->endEvent, $this->traversable]
         );
 
         // Create a small iterateable fixture.
@@ -193,7 +205,7 @@ class TraversableTest extends AbstractTest
         $data = new \ArrayObject($array);
         $fixture = [
             'data' => $data,
-            'name' => 'some name',
+            'name' => 'whoopie',
             'ref' => new ReflectionClass($data)
         ];
 
@@ -228,13 +240,13 @@ class TraversableTest extends AbstractTest
     {
         // Tell the emergency handler, that the nesting level is ok.
         \Krexx::$pool->emergencyHandler->expects($this->any())
-            ->method('checkNesting')
+            ->method(static::CHECK_NESTING)
             ->will($this->returnValue(false));
 
         // Listen for the start and end event.
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable::callMe::start', $this->traversable],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable::analysisEnd', $this->traversable]
+            [$this->startEvent, $this->traversable],
+            [$this->endEvent, $this->traversable]
         );
 
         // Create a small iterateable fixture.
@@ -242,13 +254,13 @@ class TraversableTest extends AbstractTest
         $data = new \ArrayObject($array);
         $fixture = [
             'data' => $data,
-            'name' => 'some name',
+            'name' => 'tipsy',
             'ref' => new ReflectionClass($data)
         ];
 
         // Inject the callback counter
         \Krexx::$pool->rewrite = [
-            ThroughArray::class => 'some\\not\\existing\\class\to\trigger\\an\\error',
+            ThroughArray::class => 'some\\not\\existing\\class\\to\\trigger\\an\\error',
             ThroughLargeArray::class => CallbackCounter::class,
         ];
 

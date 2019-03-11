@@ -75,12 +75,12 @@ class ThroughMethods extends AbstractCallback
             // Get the comment from the class, it's parents, interfaces or traits.
             $methodComment = $commentAnalysis->getComment($reflectionMethod, $reflectionClass);
             if (empty($methodComment) === false) {
-                $methodData['comments'] = $methodComment;
+                $methodData[static::META_COMMENT] = $methodComment;
             }
 
             // Get declaration place.
             $declaringClass = $reflectionMethod->getDeclaringClass();
-            $methodData['declared in'] = $this->getDeclarationPlace($reflectionMethod, $declaringClass);
+            $methodData[static::META_DECLARED_IN] = $this->getDeclarationPlace($reflectionMethod, $declaringClass);
 
             // Get parameters.
             $paramList = '';

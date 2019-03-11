@@ -40,6 +40,12 @@ use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 
 class ThroughResourceTest extends AbstractTest
 {
+    const SOME_KEY = 'some_key';
+    const SOME_VALUE = 'some_value';
+    const ANOTHER_KEY = 'another key';
+    const ANOTHER_VALUE = 'another value';
+    const SOME_ARRAY = 'array';
+
 
     /**
      * Testing the analysis of a resource stream.
@@ -66,9 +72,9 @@ class ThroughResourceTest extends AbstractTest
         // generation and the prettification of the array keys.
         $fixture = [
             ThroughResource::PARAM_DATA => [
-                'some_key' => 'some_value',
-                'another key' => 'another value',
-                'array' => [
+                static::SOME_KEY => static::SOME_VALUE,
+                static::ANOTHER_KEY => static::ANOTHER_VALUE,
+                static::SOME_ARRAY => [
                     'deep' => 'stuff'
                 ]
             ]
@@ -81,16 +87,16 @@ class ThroughResourceTest extends AbstractTest
 
         $models = $routeNothing->model;
 
-        $this->assertEquals('some_value', $models[0]->getData());
-        $this->assertEquals('some_value', $models[0]->getNormal());
+        $this->assertEquals(static::SOME_VALUE, $models[0]->getData());
+        $this->assertEquals(static::SOME_VALUE, $models[0]->getNormal());
         $this->assertEquals('some key', $models[0]->getName());
 
-        $this->assertEquals('another value', $models[1]->getData());
-        $this->assertEquals('another value', $models[1]->getNormal());
-        $this->assertEquals('another key', $models[1]->getName());
+        $this->assertEquals(static::ANOTHER_VALUE, $models[1]->getData());
+        $this->assertEquals(static::ANOTHER_VALUE, $models[1]->getNormal());
+        $this->assertEquals(static::ANOTHER_KEY, $models[1]->getName());
 
-        $this->assertEquals($fixture[ThroughResource::PARAM_DATA]['array'], $models[2]->getData());
-        $this->assertEquals($fixture[ThroughResource::PARAM_DATA]['array'], $models[2]->getNormal());
-        $this->assertEquals('array', $models[2]->getName());
+        $this->assertEquals($fixture[ThroughResource::PARAM_DATA][static::SOME_ARRAY], $models[2]->getData());
+        $this->assertEquals($fixture[ThroughResource::PARAM_DATA][static::SOME_ARRAY], $models[2]->getNormal());
+        $this->assertEquals(static::SOME_ARRAY, $models[2]->getName());
     }
 }

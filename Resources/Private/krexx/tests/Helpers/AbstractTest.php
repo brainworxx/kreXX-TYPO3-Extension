@@ -38,6 +38,7 @@ use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use Brainworxx\Krexx\Tests\KrexxTest;
 use PHPUnit\Framework\TestCase;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Controller\AbstractController;
@@ -57,7 +58,7 @@ abstract class AbstractTest extends TestCase
     {
         // Reset the kreXX count.
         $emergencyRef = new \ReflectionClass(\Krexx::$pool->emergencyHandler);
-        $krexxCountRef = $emergencyRef->getProperty('krexxCount');
+        $krexxCountRef = $emergencyRef->getProperty(KrexxTest::KREXX_COUNT);
         $krexxCountRef->setAccessible(true);
         $krexxCountRef->setValue(\Krexx::$pool->emergencyHandler, 0);
 

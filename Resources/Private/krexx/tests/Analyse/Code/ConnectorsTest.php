@@ -39,6 +39,8 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 
 class ConnectorsTest extends AbstractTest
 {
+    const TEST_STRING = 'test me';
+
     public function setUp()
     {
         parent::setUp();
@@ -80,8 +82,8 @@ class ConnectorsTest extends AbstractTest
      */
     public function testSetParameters()
     {
-        $this->connectors->setParameters('test me');
-        $this->assertAttributeEquals('test me', 'params', $this->connectors);
+        $this->connectors->setParameters(static::TEST_STRING);
+        $this->assertAttributeEquals(static::TEST_STRING, 'params', $this->connectors);
     }
 
     /**
@@ -91,8 +93,8 @@ class ConnectorsTest extends AbstractTest
      */
     public function testGetParameters()
     {
-        $this->connectors->setParameters('test me');
-        $this->assertEquals('test me', $this->connectors->getParameters());
+        $this->connectors->setParameters(static::TEST_STRING);
+        $this->assertEquals(static::TEST_STRING, $this->connectors->getParameters());
     }
 
     /**
@@ -102,8 +104,8 @@ class ConnectorsTest extends AbstractTest
      */
     public function testSetType()
     {
-        $this->connectors->setType('test me');
-        $this->assertAttributeEquals('test me', 'type', $this->connectors);
+        $this->connectors->setType(static::TEST_STRING);
+        $this->assertAttributeEquals(static::TEST_STRING, 'type', $this->connectors);
     }
 
     /**
@@ -118,8 +120,8 @@ class ConnectorsTest extends AbstractTest
         $this->assertEquals('[\'', $this->connectors->getConnectorLeft());
 
         // With custom connectors.
-        $this->connectors->setCustomConnectorLeft('test me');
-        $this->assertEquals('test me', $this->connectors->getConnectorLeft());
+        $this->connectors->setCustomConnectorLeft(static::TEST_STRING);
+        $this->assertEquals(static::TEST_STRING, $this->connectors->getConnectorLeft());
     }
 
     /**
@@ -155,8 +157,8 @@ class ConnectorsTest extends AbstractTest
      */
     public function testSetCustomconnectorLeft()
     {
-        $this->connectors->setCustomConnectorLeft('test me');
-        $this->assertAttributeEquals('test me', 'customConnectorLeft', $this->connectors);
+        $this->connectors->setCustomConnectorLeft(static::TEST_STRING);
+        $this->assertAttributeEquals(static::TEST_STRING, 'customConnectorLeft', $this->connectors);
     }
 
     /**

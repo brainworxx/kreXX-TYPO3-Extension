@@ -46,6 +46,21 @@ use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 class MethodsTest extends AbstractTest
 {
     /**
+     * @var string
+     */
+    protected $startEvent = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start';
+
+    /**
+     * @var string
+     */
+    protected $endEvent = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::analysisEnd';
+
+    /**
+     * @var string
+     */
+    protected $recursionEvent = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::recursion';
+
+    /**
      * @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods
      */
     protected $methods;
@@ -101,30 +116,20 @@ class MethodsTest extends AbstractTest
     {
         // Set up the recursion events
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start', $this->methods],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::recursion', $this->methods]
+            [$this->startEvent, $this->methods],
+            [$this->recursionEvent, $this->methods]
         );
 
         // Set up the configuration.
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PRIVATE_METHODS, false);
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PROTECTED_METHODS, false);
 
-        // Mock the recursion handler.
-        $recursionMock = $this->createMock(Recursion::class);
-        $recursionMock->expects($this->once())
-            ->method('isInMetaHive')
-            ->with('k1_m_' . $this->md5Hash)
-            ->will($this->returnValue(true));
-        // Inject it.
-        \Krexx::$pool->recursionHandler = $recursionMock;
-
-        // Run the test.
-        $this->methods->callMe();
-
-        // The recursion has no callback, and no parameters.
-        // Hence, we test the callback counter for zero data.
-        $this->assertEquals(0, CallbackCounter::$counter);
-        $this->assertEquals([], CallbackCounter::$staticParameters);
+        $this->runAndAssertResults(
+            'k1_m_',
+            true,
+            0,
+            []
+        );
     }
 
     /**
@@ -138,39 +143,27 @@ class MethodsTest extends AbstractTest
     {
         // Set up the events
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start', $this->methods],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::analysisEnd', $this->methods]
+            [$this->startEvent, $this->methods],
+            [$this->endEvent, $this->methods]
         );
 
         // Set up the configuration
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PRIVATE_METHODS, false);
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PROTECTED_METHODS, false);
 
-        // Mock the recursion handler.
-        $recursionMock = $this->createMock(Recursion::class);
-        $recursionMock->expects($this->once())
-            ->method('isInMetaHive')
-            ->with('k1_m_' . $this->md5Hash)
-            ->will($this->returnValue(false));
-        // Inject it.
-        \Krexx::$pool->recursionHandler = $recursionMock;
-
-        // Run the test.
-        $this->methods->callMe();
-
-        // Test the callback counter for it's parameters.
-        $this->assertEquals(1, CallbackCounter::$counter);
-        $this->assertEquals(
+        $this->runAndAssertResults(
+            'k1_m_',
+            false,
+            1,
             [
-                0 =>[
+                0 => [
                     'data' => [
                         new \ReflectionMethod($this->fixture['data'], 'publicMethod'),
                         new \ReflectionMethod($this->fixture['data'], 'troublesomeMethod'),
                     ],
                     'ref' => $this->fixture['ref']
                 ]
-            ],
-            CallbackCounter::$staticParameters
+            ]
         );
     }
 
@@ -185,29 +178,18 @@ class MethodsTest extends AbstractTest
     {
         // Set up the events
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start', $this->methods],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::analysisEnd', $this->methods]
+            [$this->startEvent, $this->methods],
+            [$this->endEvent, $this->methods]
         );
 
         // Set up the configuration
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PRIVATE_METHODS, false);
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PROTECTED_METHODS, true);
 
-        // Mock the recursion handler.
-        $recursionMock = $this->createMock(Recursion::class);
-        $recursionMock->expects($this->once())
-            ->method('isInMetaHive')
-            ->with('k1_m_pro_' . $this->md5Hash)
-            ->will($this->returnValue(false));
-        // Inject it.
-        \Krexx::$pool->recursionHandler = $recursionMock;
-
-        // Run the test.
-        $this->methods->callMe();
-
-        // Test the callback counter for it's parameters.
-        $this->assertEquals(1, CallbackCounter::$counter);
-        $this->assertEquals(
+        $this->runAndAssertResults(
+            'k1_m_pro_',
+            false,
+            1,
             [
                 0 =>[
                     'data' => [
@@ -217,8 +199,7 @@ class MethodsTest extends AbstractTest
                     ],
                     'ref' => $this->fixture['ref']
                 ]
-            ],
-            CallbackCounter::$staticParameters
+            ]
         );
     }
 
@@ -233,29 +214,18 @@ class MethodsTest extends AbstractTest
     {
         // Set up the events
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start', $this->methods],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::analysisEnd', $this->methods]
+            [$this->startEvent, $this->methods],
+            [$this->endEvent, $this->methods]
         );
 
         // Set up the configuration
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PRIVATE_METHODS, true);
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PROTECTED_METHODS, false);
 
-        // Mock the recursion handler.
-        $recursionMock = $this->createMock(Recursion::class);
-        $recursionMock->expects($this->once())
-            ->method('isInMetaHive')
-            ->with('k1_m_pri_' . $this->md5Hash)
-            ->will($this->returnValue(false));
-        // Inject it.
-        \Krexx::$pool->recursionHandler = $recursionMock;
-
-        // Run the test.
-        $this->methods->callMe();
-
-        // Test the callback counter for it's parameters.
-        $this->assertEquals(1, CallbackCounter::$counter);
-        $this->assertEquals(
+        $this->runAndAssertResults(
+            'k1_m_pri_',
+            false,
+            1,
             [
                 0 =>[
                     'data' => [
@@ -265,8 +235,7 @@ class MethodsTest extends AbstractTest
                     ],
                     'ref' => $this->fixture['ref']
                 ]
-            ],
-            CallbackCounter::$staticParameters
+            ]
         );
     }
 
@@ -281,29 +250,18 @@ class MethodsTest extends AbstractTest
     {
         // Set up the events
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start', $this->methods],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::analysisEnd', $this->methods]
+            [$this->startEvent, $this->methods],
+            [$this->endEvent, $this->methods]
         );
 
         // Set up the configuration
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PRIVATE_METHODS, true);
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PROTECTED_METHODS, true);
 
-        // Mock the recursion handler.
-        $recursionMock = $this->createMock(Recursion::class);
-        $recursionMock->expects($this->once())
-            ->method('isInMetaHive')
-            ->with('k1_m_pro_pri_' . $this->md5Hash)
-            ->will($this->returnValue(false));
-        // Inject it.
-        \Krexx::$pool->recursionHandler = $recursionMock;
-
-        // Run the test.
-        $this->methods->callMe();
-
-        // Test the callback counter for it's parameters.
-        $this->assertEquals(1, CallbackCounter::$counter);
-        $this->assertEquals(
+        $this->runAndAssertResults(
+            'k1_m_pro_pri_',
+            false,
+            1,
             [
                 0 =>[
                     'data' => [
@@ -314,8 +272,35 @@ class MethodsTest extends AbstractTest
                     ],
                     'ref' => $this->fixture['ref']
                 ]
-            ],
-            CallbackCounter::$staticParameters
+            ]
         );
+    }
+
+    /**
+     * @param string $metaHiveKey
+     * @param bool $isInHive
+     * @param array $expectation
+     */
+    protected function runAndAssertResults(
+        string $metaHiveKey,
+        bool $isInHive,
+        int $counter,
+        array $expectation
+    ) {
+        // Mock the recursion handler.
+        $recursionMock = $this->createMock(Recursion::class);
+        $recursionMock->expects($this->once())
+            ->method('isInMetaHive')
+            ->with($metaHiveKey . $this->md5Hash)
+            ->will($this->returnValue($isInHive));
+        // Inject it.
+        \Krexx::$pool->recursionHandler = $recursionMock;
+
+        // Run the test.
+        $this->methods->callMe();
+
+        // Test the callback counter for it's parameters.
+        $this->assertEquals($counter, CallbackCounter::$counter);
+        $this->assertEquals($expectation, CallbackCounter::$staticParameters);
     }
 }

@@ -59,10 +59,10 @@ class ErrorController extends AbstractController
 
         // Get the main part.
         $main = $this->pool->render->renderFatalMain(
-            $errorData['type'],
-            $errorData['errstr'],
-            $errorData['errfile'],
-            $errorData['errline']
+            $errorData[static::TRACE_TYPE],
+            $errorData[static::TRACE_ERROR_STRING],
+            $errorData[static::TRACE_ERROR_FILE],
+            $errorData[static::TRACE_ERROR_LINE]
         );
 
         // Get the backtrace.
@@ -96,9 +96,9 @@ class ErrorController extends AbstractController
         // additional info, in case we are logging to a file.
         $this->pool->chunks->addMetadata(
             array(
-                'file' => $errorData['errfile'],
-                'line' => $errorData['errline'] + 1,
-                'varname' => ' Fatal Error',
+                static::TRACE_FILE => $errorData[static::TRACE_ERROR_FILE],
+                static::TRACE_LINE => $errorData[static::TRACE_ERROR_LINE] + 1,
+                static::TRACE_VARNAME => ' Fatal Error',
             )
         );
 

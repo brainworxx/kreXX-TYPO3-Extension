@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+
 /**
  * Analysis of all getter methods.
  *
@@ -52,6 +54,27 @@ class Getter extends AbstractObjectAnalysis
      * {@inheritdoc}
      */
     protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Getter';
+
+    /**
+     * List of the getter methods, that start with 'get'.
+     *
+     * @var array
+     */
+    protected $normalGetter = array();
+
+    /**
+     * List of hte boolean getter method, that start with 'is'.
+     *
+     * @var array
+     */
+    protected $isGetter = array();
+
+    /**
+     * List of hte boolean getter method, that start with 'has'.
+     *
+     * @var array
+     */
+    protected $hasGetter = array();
 
     /**
      * Dump the possible result of all getter methods
@@ -79,17 +102,49 @@ class Getter extends AbstractObjectAnalysis
         }
 
         if (empty($methodList) === true) {
+            // There are no methods in here, at all.
+            return $output;
+        }
+
+        $this->populateGetterLists($methodList, $isInScope, $ref);
+
+        if (empty($this->normalGetter) === true &&
+            empty($this->isGetter) === true &&
+            empty($this->hasGetter) === true
+        ) {
             // There are no getter methods in here.
             return $output;
         }
 
-        $normalGetter = array();
-        $isGetter = array();
-        $hasGetter = array();
+        return $output .
+            $this->pool->render->renderExpandableChild(
+                $this->dispatchEventWithModel(
+                    static::EVENT_MARKER_ANALYSES_END,
+                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->setName('Getter')
+                        ->setType(static::TYPE_INTERNALS)
+                        ->setHelpid('getterHelpInfo')
+                        ->addParameter(static::PARAM_REF, $ref)
+                        ->addParameter(static::PARAM_NORMAL_GETTER, $this->normalGetter)
+                        ->addParameter(static::PARAM_IS_GETTER, $this->isGetter)
+                        ->addParameter(static::PARAM_HAS_GETTER, $this->hasGetter)
+                        ->injectCallback(
+                            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter')
+                        )
+                )
+            );
+    }
 
-        // Filter them.
-        // We only dump those that have no parameters and start with
-        // has, is or get.
+    /**
+     * Filter and then populate the method list. We only dump those that have no
+     * parameters and start with has, is or get.
+     *
+     * @param array $methodList
+     * @param $isInScope
+     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
+     */
+    protected function populateGetterLists(array $methodList, $isInScope, ReflectionClass $ref)
+    {
         /** @var \ReflectionMethod $method */
         foreach ($methodList as $method) {
             // Check, if the method is really available, inside the analysis
@@ -109,50 +164,21 @@ class Getter extends AbstractObjectAnalysis
                 /** @var \ReflectionMethod $method */
                 $parameters = $method->getParameters();
                 if (empty($parameters)) {
-                    $normalGetter[] = $method;
+                    $this->normalGetter[] = $method;
                 }
             } elseif (strpos($method->getName(), 'is') === 0) {
                 /** @var \ReflectionMethod $method */
                 $parameters = $method->getParameters();
                 if (empty($parameters)) {
-                    $isGetter[] = $method;
+                    $this->isGetter[] = $method;
                 }
             } elseif (strpos($method->getName(), 'has') === 0) {
                 /** @var \ReflectionMethod $method */
                 $parameters = $method->getParameters();
                 if (empty($parameters)) {
-                    $hasGetter[] = $method;
+                    $this->hasGetter[] = $method;
                 }
             }
         }
-
-        if (empty($normalGetter) === true &&
-            empty($isGetter) === true &&
-            empty($hasGetter) === true
-        ) {
-            // There are no getter methods in here.
-            return $output;
-        }
-
-        // Got some getters right here.
-        // We need to set at least one connector here to activate
-        // code generation, even if it is a space.
-        return $output .
-            $this->pool->render->renderExpandableChild(
-                $this->dispatchEventWithModel(
-                    static::EVENT_MARKER_ANALYSES_END,
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                        ->setName('Getter')
-                        ->setType(static::TYPE_INTERNALS)
-                        ->setHelpid('getterHelpInfo')
-                        ->addParameter(static::PARAM_REF, $ref)
-                        ->addParameter(static::PARAM_NORMAL_GETTER, $normalGetter)
-                        ->addParameter(static::PARAM_IS_GETTER, $isGetter)
-                        ->addParameter(static::PARAM_HAS_GETTER, $hasGetter)
-                        ->injectCallback(
-                            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter')
-                        )
-                )
-            );
     }
 }

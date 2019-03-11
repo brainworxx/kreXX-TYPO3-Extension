@@ -46,6 +46,10 @@ use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 class KrexxTest extends AbstractTest
 {
 
+    const KREXX_COUNT = 'krexxCount';
+    const TIME_KEEPING = 'timekeeping';
+    const COUNTER_CACHE = 'counterCache';
+
     protected function getDirContents($dir, &$results = array())
     {
         $files = scandir($dir);
@@ -102,12 +106,12 @@ class KrexxTest extends AbstractTest
         \Krexx::timerMoment('test');
         $this->assertAttributeEquals(
             [],
-            'counterCache',
+            static::COUNTER_CACHE,
             TimerController::class
         );
         $this->assertAttributeEquals(
             [],
-            'timekeeping',
+            static::TIME_KEEPING,
             TimerController::class
         );
     }
@@ -127,12 +131,12 @@ class KrexxTest extends AbstractTest
         \Krexx::timerMoment('test');
         $this->assertAttributeEquals(
             [],
-            'counterCache',
+            static::COUNTER_CACHE,
             TimerController::class
         );
         $this->assertAttributeEquals(
             [],
-            'timekeeping',
+            static::TIME_KEEPING,
             TimerController::class
         );
     }
@@ -149,11 +153,11 @@ class KrexxTest extends AbstractTest
 
         $this->assertAttributeEquals(
             ['test' => 1],
-            'counterCache',
+            static::COUNTER_CACHE,
             TimerController::class
         );
         $this->assertAttributeNotEmpty(
-            'timekeeping',
+            static::TIME_KEEPING,
             TimerController::class
         );
     }
@@ -173,7 +177,7 @@ class KrexxTest extends AbstractTest
         \Krexx::timerEnd();
         $this->assertAttributeEquals(
             0,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
     }
@@ -193,7 +197,7 @@ class KrexxTest extends AbstractTest
         \Krexx::timerEnd();
         $this->assertAttributeEquals(
             0,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
     }
@@ -209,7 +213,7 @@ class KrexxTest extends AbstractTest
         // The counter should go up to 1
         $this->assertAttributeEquals(
             1,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
     }
@@ -228,7 +232,7 @@ class KrexxTest extends AbstractTest
         // The counter should be at 0.
         $this->assertAttributeEquals(
             0,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
     }
@@ -247,7 +251,7 @@ class KrexxTest extends AbstractTest
         // The counter should be at 0.
         $this->assertAttributeEquals(
             0,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
     }
@@ -263,7 +267,7 @@ class KrexxTest extends AbstractTest
         // The counter should be at 1.
         $this->assertAttributeEquals(
             1,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
     }
@@ -282,7 +286,7 @@ class KrexxTest extends AbstractTest
         // The counter should be at 0.
         $this->assertAttributeEquals(
             0,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
     }
@@ -301,7 +305,7 @@ class KrexxTest extends AbstractTest
         // The counter should be at 0.
         $this->assertAttributeEquals(
             0,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
     }
@@ -320,7 +324,7 @@ class KrexxTest extends AbstractTest
         // The counter should be at 0.
         $this->assertAttributeEquals(
             1,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
     }
@@ -351,7 +355,7 @@ class KrexxTest extends AbstractTest
         // The counter should be at 0.
         $this->assertAttributeEquals(
             0,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
     }
@@ -467,7 +471,7 @@ class KrexxTest extends AbstractTest
         // The counter should be at 1.
         $this->assertAttributeEquals(
             1,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
 
@@ -494,7 +498,7 @@ class KrexxTest extends AbstractTest
         // The counter should be at 0.
         $this->assertAttributeEquals(
             1,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
 
@@ -518,7 +522,7 @@ class KrexxTest extends AbstractTest
          // The counter should go up to 1
          $this->assertAttributeEquals(
              1,
-             'krexxCount',
+             static::KREXX_COUNT,
              \Krexx::$pool->emergencyHandler
          );
 
@@ -556,7 +560,7 @@ class KrexxTest extends AbstractTest
         // The counter should be at 0.
         $this->assertAttributeEquals(
             0,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
 
@@ -564,7 +568,7 @@ class KrexxTest extends AbstractTest
         // The counter should be at 1.
         $this->assertAttributeEquals(
             1,
-            'krexxCount',
+            static::KREXX_COUNT,
             \Krexx::$pool->emergencyHandler
         );
     }
@@ -581,34 +585,34 @@ class KrexxTest extends AbstractTest
         \Krexx::$pool->rewrite[Ini::class] = ConfigSupplier::class;
         ConfigSupplier::$overwriteValues[Fallback::SETTING_IP_RANGE] = '987.654.321.123';
         // Inject the IP.
-        $_SERVER['REMOTE_ADDR'] = '123.456.789.123';
+        $_SERVER[Config::REMOTE_ADDRESS] = '123.456.789.123';
 
         // Reset the config.
         Config::$disabledByPhp = false;
-        new Config(\Krexx::$pool);
+        $config = new Config(\Krexx::$pool);
         // Run the test
-        $this->assertTrue(Config::$disabledByPhp);
+        $this->assertTrue($config::$disabledByPhp);
 
         // Inject another ip.
-        $_SERVER['REMOTE_ADDR'] = '987.654.321.123';
+        $_SERVER[Config::REMOTE_ADDRESS] = '987.654.321.123';
         // Reset the config.
         Config::$disabledByPhp = false;
-        new Config(\Krexx::$pool);
-        $this->assertFalse(Config::$disabledByPhp);
+        $config = new Config(\Krexx::$pool);
+        $this->assertFalse($config::$disabledByPhp);
 
         // Testing the wildcards.
         ConfigSupplier::$overwriteValues[Fallback::SETTING_IP_RANGE] = '987.654.321.*';
          // Reset the config.
         Config::$disabledByPhp = false;
-        new Config(\Krexx::$pool);
-        $this->assertFalse(Config::$disabledByPhp);
+        $config = new Config(\Krexx::$pool);
+        $this->assertFalse($config::$disabledByPhp);
 
         // Inject another ip.
-        $_SERVER['REMOTE_ADDR'] = '123.654.321.123';
+        $_SERVER[Config::REMOTE_ADDRESS] = '123.654.321.123';
         // Reset the config.
         Config::$disabledByPhp = false;
-        new Config(\Krexx::$pool);
+        $config = new Config(\Krexx::$pool);
         // Run the test
-        $this->assertTrue(Config::$disabledByPhp);
+        $this->assertTrue($config::$disabledByPhp);
     }
 }

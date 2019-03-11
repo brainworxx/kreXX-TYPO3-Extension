@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Tests\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture;
@@ -44,6 +45,19 @@ use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 
 class ThroughPropertiesTest extends AbstractTest
 {
+    const PUBLIC_STRING_PROPERTY = 'publicStringProperty';
+    const PUBLIC_INT_PROPERTY = 'publicIntProperty';
+    const UNSET_PROPERTY = 'unsetProperty';
+    const PROTECTED_PROPERTY = 'protectedProperty';
+    const MY_PROPERTY = 'myProperty';
+    const LONG_STRING = 'longString';
+    const PUBLIC_STATIC = 'publicStatic';
+    const INHERITED_PUBLIC = 'inheritedPublic';
+    const INHERITED_NULL = 'inheritedNull';
+    const TRAIT_PROPERTY = 'traitProperty';
+    const JSON_COMMENT_KEY = 'Comment';
+    const JSON_DECLARED_KEY = 'Declared in';
+
     /**
      * @var \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties
      */
@@ -59,6 +73,16 @@ class ThroughPropertiesTest extends AbstractTest
     }
 
     /**
+     * @var string
+     */
+    protected $startEvent = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::start';
+
+    /**
+     * @var string
+     */
+    protected $endEvent = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::end';
+
+    /**
      * Testing an analysis without any methods to look at.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
@@ -67,7 +91,7 @@ class ThroughPropertiesTest extends AbstractTest
     {
         // Test for the start event
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::start', $this->throughProperties]
+            [$this->startEvent, $this->throughProperties]
         );
 
         // Create an empty fixture
@@ -92,18 +116,18 @@ class ThroughPropertiesTest extends AbstractTest
     {
         // Test the events.
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::start', $this->throughProperties],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::end', $this->throughProperties],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::end', $this->throughProperties],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::end', $this->throughProperties],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::end', $this->throughProperties],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::end', $this->throughProperties],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::end', $this->throughProperties],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::end', $this->throughProperties],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::end', $this->throughProperties],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::end', $this->throughProperties],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::end', $this->throughProperties],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties::callMe::end', $this->throughProperties]
+            [$this->startEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties]
         );
 
         // Create a fixture.
@@ -111,17 +135,17 @@ class ThroughPropertiesTest extends AbstractTest
         $fixture = [
             $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
             $this->throughProperties::PARAM_DATA => [
-                new \ReflectionProperty(ComplexPropertiesFixture::class, 'publicStringProperty'),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, 'publicIntProperty'),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, 'unsetProperty'),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, 'protectedProperty'),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, 'myProperty'),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, 'longString'),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, 'publicStatic'),
-                new \ReflectionProperty(ComplexPropertiesInheritanceFixture::class, 'myProperty'),
-                new \ReflectionProperty(ComplexPropertiesInheritanceFixture::class, 'inheritedPublic'),
-                new \ReflectionProperty(ComplexPropertiesInheritanceFixture::class, 'inheritedNull'),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, 'traitProperty')
+                new \ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_STRING_PROPERTY),
+                new \ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_INT_PROPERTY),
+                new \ReflectionProperty(ComplexPropertiesFixture::class, static::UNSET_PROPERTY),
+                new \ReflectionProperty(ComplexPropertiesFixture::class, static::PROTECTED_PROPERTY),
+                new \ReflectionProperty(ComplexPropertiesFixture::class, static::MY_PROPERTY),
+                new \ReflectionProperty(ComplexPropertiesFixture::class, static::LONG_STRING),
+                new \ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_STATIC),
+                new \ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::MY_PROPERTY),
+                new \ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::INHERITED_PUBLIC),
+                new \ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::INHERITED_NULL),
+                new \ReflectionProperty(ComplexPropertiesFixture::class, static::TRAIT_PROPERTY)
             ]
         ];
 
@@ -138,149 +162,187 @@ class ThroughPropertiesTest extends AbstractTest
         // Retrieve the result models and assert them.
         $models = $routeNothing->model;
 
-        $complexDeclarationString = '...' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'ComplexPropertiesFixture.php<br />in class: Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture';
-        $complexDeclarationStringInheritance = '...' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'ComplexPropertiesInheritanceFixture.php<br />in class: Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture';
+        $complexDeclarationString = '...' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR .
+            'Fixtures' . DIRECTORY_SEPARATOR .
+            'ComplexPropertiesFixture.php<br />in class: Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture';
+        $complexDeclarationStringInheritance = '...' . DIRECTORY_SEPARATOR . 'tests' .
+            DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR .
+            'ComplexPropertiesInheritanceFixture.php<br />in class: Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture';
 
         // publicStringProperty
-        $this->assertEquals('public property value', $models[0]->getData());
-        $this->assertEquals('publicStringProperty', $models[0]->getName());
-        $this->assertEquals(
+        $this->assertModelValues(
+            $models[0],
+            'public property value',
+            static::PUBLIC_STRING_PROPERTY,
             [
-                'Comment' => 'Public string property.<br /><br />&#64;var string',
-                'Declared in' => $complexDeclarationString
+                static::JSON_COMMENT_KEY => 'Public string property.<br /><br />&#64;var string',
+                static::JSON_DECLARED_KEY => $complexDeclarationString
             ],
-            $models[0]->getJson()
+            '->',
+            '',
+            'public '
         );
-        $this->assertEquals('public ', $models[0]->getAdditional());
-        $this->assertEquals('->', $models[0]->getConnectorLeft());
-        $this->assertEquals('', $models[0]->getConnectorRight());
 
         // publicIntProperty
-        $this->assertEquals(123, $models[1]->getData());
-        $this->assertEquals('publicIntProperty', $models[1]->getName());
-        $this->assertEquals(
+        $this->assertModelValues(
+            $models[1],
+            123,
+            'publicIntProperty',
             [
-                'Comment' => 'Public integer property.<br /><br />&#64;var int',
-                'Declared in' => $complexDeclarationString
+                static::JSON_COMMENT_KEY => 'Public integer property.<br /><br />&#64;var int',
+                static::JSON_DECLARED_KEY => $complexDeclarationString
             ],
-            $models[1]->getJson()
+            '->',
+            '',
+            'public '
         );
-        $this->assertEquals('public ', $models[1]->getAdditional());
-        $this->assertEquals('->', $models[1]->getConnectorLeft());
-        $this->assertEquals('', $models[1]->getConnectorRight());
 
         // unsetProperty
-        $this->assertEquals(null, $models[2]->getData());
-        $this->assertEquals('unsetProperty', $models[2]->getName());
-        $this->assertEquals(
+        $this->assertModelValues(
+            $models[2],
+            null,
+            static::UNSET_PROPERTY,
             [
-                'Comment' => 'Unset property is unsettling.<br /><br />&#64;var string',
-                'Declared in' => $complexDeclarationString
+                static::JSON_COMMENT_KEY => 'Unset property is unsettling.<br /><br />&#64;var string',
+                static::JSON_DECLARED_KEY => $complexDeclarationString
             ],
-            $models[2]->getJson()
+            '->',
+            '',
+            'public unset '
         );
-        $this->assertEquals('public unset ', $models[2]->getAdditional());
-        $this->assertEquals('->', $models[2]->getConnectorLeft());
-        $this->assertEquals('', $models[2]->getConnectorRight());
 
         // protectedProperty
-        $this->assertEquals('pro tected', $models[3]->getData());
-        $this->assertEquals('protectedProperty', $models[3]->getName());
-        $this->assertEquals(
+        $this->assertModelValues(
+            $models[3],
+            'pro tected',
+            static::PROTECTED_PROPERTY,
             [
-                'Comment' => 'Protected property<br /><br />&#64;var string',
-                'Declared in' => $complexDeclarationString
+                static::JSON_COMMENT_KEY => 'Protected property<br /><br />&#64;var string',
+                static::JSON_DECLARED_KEY => $complexDeclarationString
             ],
-            $models[3]->getJson()
+            '->',
+            '',
+            'protected '
         );
-        $this->assertEquals('protected ', $models[3]->getAdditional());
-        $this->assertEquals('->', $models[3]->getConnectorLeft());
-        $this->assertEquals('', $models[3]->getConnectorRight());
 
         // myProperty
-        $this->assertEquals('asdf', $models[4]->getData());
-        $this->assertEquals('myProperty', $models[4]->getName());
-        $this->assertEquals(
+        $this->assertModelValues(
+            $models[4],
+            'asdf',
+            static::MY_PROPERTY,
             [
-                'Comment' => 'Re-Declaration of a \'inherited\' private property<br /><br />&#64;var string',
-                'Declared in' => $complexDeclarationString
+                static::JSON_COMMENT_KEY => 'Re-Declaration of a \'inherited\' private property<br /><br />&#64;var string',
+                static::JSON_DECLARED_KEY => $complexDeclarationString
             ],
-            $models[4]->getJson()
+            '->',
+            '',
+            'private '
         );
-        $this->assertEquals('private ', $models[4]->getAdditional());
-        $this->assertEquals('->', $models[4]->getConnectorLeft());
-        $this->assertEquals('', $models[4]->getConnectorRight());
 
         // longString
-        $this->assertEquals('gdgdfgonidoidsfogidfo idfsoigdofgoiudsfgoü dsfo goühisdfg ohisdfghioü sdoiühfg hoisdghoi sdfghiosdg sdfg dsg sdgsdf gdsg dsg', $models[5]->getData());
-        $this->assertEquals('longString', $models[5]->getName());
-        $this->assertEquals(
+        $this->assertModelValues(
+            $models[5],
+            'gdgdfgonidoidsfogidfo idfsoigdofgoiudsfgoü dsfo goühisdfg ohisdfghioü sdoiühfg hoisdghoi sdfghiosdg sdfg dsg sdgsdf gdsg dsg',
+            static::LONG_STRING,
             [
-                'Comment' => 'A rather long string.<br /><br />&#64;var string',
-                'Declared in' => $complexDeclarationString
+                static::JSON_COMMENT_KEY => 'A rather long string.<br /><br />&#64;var string',
+                static::JSON_DECLARED_KEY => $complexDeclarationString
             ],
-            $models[5]->getJson()
+            '->',
+            '',
+            'public '
         );
-        $this->assertEquals('public ', $models[5]->getAdditional());
-        $this->assertEquals('->', $models[5]->getConnectorLeft());
-        $this->assertEquals('', $models[5]->getConnectorRight());
 
         // publicStatic
-        $this->assertEquals(1, $models[6]->getData());
-        $this->assertEquals('$publicStatic', $models[6]->getName());
-        $this->assertEquals(['Declared in' => $complexDeclarationString], $models[6]->getJson());
-        $this->assertEquals('public static ', $models[6]->getAdditional());
-        $this->assertEquals('::', $models[6]->getConnectorLeft());
-        $this->assertEquals('', $models[6]->getConnectorRight());
+        $this->assertModelValues(
+            $models[6],
+            1,
+            '$publicStatic',
+            [static::JSON_DECLARED_KEY => $complexDeclarationString],
+            '::',
+            '',
+            'public static '
+        );
 
         // myProperty
-        $this->assertEquals('my property', $models[7]->getData());
-        $this->assertEquals('myProperty', $models[7]->getName());
-        $this->assertEquals(
+        $this->assertModelValues(
+            $models[7],
+            'my property',
+            static::MY_PROPERTY,
             [
-                'Comment' => 'My private Property<br /><br />&#64;var string',
-                'Declared in' => $complexDeclarationStringInheritance
+                static::JSON_COMMENT_KEY =>'My private Property<br /><br />&#64;var string',
+                static::JSON_DECLARED_KEY => $complexDeclarationStringInheritance
             ],
-            $models[7]->getJson()
+            '->',
+            '',
+            'private inherited '
         );
-        $this->assertEquals('private inherited ', $models[7]->getAdditional());
-        $this->assertEquals('->', $models[7]->getConnectorLeft());
-        $this->assertEquals('', $models[7]->getConnectorRight());
 
         // inheritedPublic
-        $this->assertEquals('inherited public', $models[8]->getData());
-        $this->assertEquals('inheritedPublic', $models[8]->getName());
-        $this->assertEquals(
+        $this->assertModelValues(
+            $models[8],
+            'inherited public',
+            static::INHERITED_PUBLIC,
             [
-                'Declared in' => $complexDeclarationStringInheritance
+                static::JSON_DECLARED_KEY => $complexDeclarationStringInheritance
             ],
-            $models[8]->getJson()
+            '->',
+            '',
+            'public inherited '
         );
-        $this->assertEquals('public inherited ', $models[8]->getAdditional());
-        $this->assertEquals('->', $models[8]->getConnectorLeft());
-        $this->assertEquals('', $models[8]->getConnectorRight());
 
         // inheritedNull
-        $this->assertEquals(null, $models[9]->getData());
-        $this->assertEquals('inheritedNull', $models[9]->getName());
-        $this->assertEquals(
+        $this->assertModelValues(
+            $models[9],
+            null,
+            static::INHERITED_NULL,
             [
-                'Comment' => '&#64;var null',
-                'Declared in' => $complexDeclarationStringInheritance
+                static::JSON_COMMENT_KEY => '&#64;var null',
+                static::JSON_DECLARED_KEY => $complexDeclarationStringInheritance
             ],
-            $models[9]->getJson()
+            '->',
+            '',
+            'protected inherited '
         );
-        $this->assertEquals('->', $models[9]->getConnectorLeft());
-        $this->assertEquals('', $models[9]->getConnectorRight());
 
         // traitProperty
-        $this->assertEquals('trait property', $models[10]->getData());
-        $this->assertEquals('traitProperty', $models[10]->getName());
-        $this->assertEquals(
-            ['Comment' => 'A Property of a trait.<br /><br />&#64;var string'],
-            $models[10]->getJson()
+        $this->assertModelValues(
+            $models[10],
+            'trait property',
+            static::TRAIT_PROPERTY,
+            [
+                static::JSON_COMMENT_KEY => 'A Property of a trait.<br /><br />&#64;var string'
+            ],
+            '->',
+            '',
+            'protected '
         );
-        $this->assertEquals('->', $models[10]->getConnectorLeft());
-        $this->assertEquals('', $models[10]->getConnectorRight());
+    }
+
+    /**
+     * Simply assert the stuff inside the model.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @param mixed $data
+     * @param string $name
+     * @param array $json
+     * @param string $conectorLeft
+     * @param string $connectorRight
+     */
+    protected function assertModelValues(
+        Model $model,
+        $data,
+        string $name,
+        array $json,
+        string $conectorLeft,
+        string $connectorRight,
+        string $additional
+    ) {
+        $this->assertEquals($data, $model->getData());
+        $this->assertEquals($name, $model->getName());
+        $this->assertEquals($json, $model->getJson());
+        $this->assertEquals($conectorLeft, $model->getConnectorLeft());
+        $this->assertEquals($connectorRight, $model->getConnectorRight());
+        $this->assertEquals($additional, $model->getAdditional());
     }
 }

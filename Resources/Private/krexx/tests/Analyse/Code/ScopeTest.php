@@ -42,6 +42,9 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 
 class ScopeTest extends AbstractTest
 {
+    const SCOPE_ATTRIBUTE_NAME = 'scope';
+    const TEST_STRING = 'some scope';
+
     /**
      * @var Scope
      */
@@ -78,7 +81,7 @@ class ScopeTest extends AbstractTest
         \Krexx::$pool->codegenHandler = $codegenMock;
 
         $this->scope->setScope($this->scope::UNKNOWN_VALUE);
-        $this->assertAttributeEquals('', 'scope', $this->scope);
+        $this->assertAttributeEquals('', static::SCOPE_ATTRIBUTE_NAME, $this->scope);
 
         $codegenMock = $this->createMock(Codegen::class);
         $codegenMock->expects($this->once())
@@ -86,8 +89,8 @@ class ScopeTest extends AbstractTest
             ->with(true);
         \Krexx::$pool->codegenHandler = $codegenMock;
 
-        $this->scope->setScope('some scope');
-        $this->assertAttributeEquals('some scope', 'scope', $this->scope);
+        $this->scope->setScope(static::TEST_STRING);
+        $this->assertAttributeEquals(static::TEST_STRING, static::SCOPE_ATTRIBUTE_NAME, $this->scope);
     }
 
     /**
@@ -97,8 +100,8 @@ class ScopeTest extends AbstractTest
      */
     public function testGetScope()
     {
-        $this->setValueByReflection('scope', 'some scope', $this->scope);
-        $this->assertEquals('some scope', $this->scope->getScope());
+        $this->setValueByReflection(static::SCOPE_ATTRIBUTE_NAME, static::TEST_STRING, $this->scope);
+        $this->assertEquals(static::TEST_STRING, $this->scope->getScope());
     }
 
     /**

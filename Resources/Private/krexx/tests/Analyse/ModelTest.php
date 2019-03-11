@@ -40,6 +40,8 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 
 class ModelTest extends AbstractTest
 {
+    const SOME_STRING_TO_PASS_THROUGH = 'some string to pass through';
+    const CONNECTOR_SERVICE = 'connectorService';
 
     /**
      * A fresh instance of the model, redy to use.
@@ -103,7 +105,7 @@ class ModelTest extends AbstractTest
      */
     public function testSetName()
     {
-        $data = 'some name';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->assertEquals($this->model, $this->model->setName($data));
         $this->assertAttributeEquals($data, 'name', $this->model);
     }
@@ -115,7 +117,7 @@ class ModelTest extends AbstractTest
      */
     public function testGetName()
     {
-        $data = 'some name';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->setValueByReflection('name', $data, $this->model);
         $this->assertEquals($data, $this->model->getName());
     }
@@ -127,7 +129,7 @@ class ModelTest extends AbstractTest
      */
     public function testSetNormal()
     {
-        $data = 'some normal';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->assertEquals($this->model, $this->model->setNormal($data));
         $this->assertAttributeEquals($data, 'normal', $this->model);
     }
@@ -139,7 +141,7 @@ class ModelTest extends AbstractTest
      */
     public function testGetNormal()
     {
-        $data = 'some normal';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->setValueByReflection('normal', $data, $this->model);
         $this->assertEquals($data, $this->model->getNormal());
     }
@@ -151,7 +153,7 @@ class ModelTest extends AbstractTest
      */
     public function testSetAdditional()
     {
-        $data = 'some additional';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->assertEquals($this->model, $this->model->setAdditional($data));
         $this->assertAttributeEquals($data, 'additional', $this->model);
     }
@@ -163,7 +165,7 @@ class ModelTest extends AbstractTest
      */
     public function testGetAdditional()
     {
-        $data = 'some additional';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->setValueByReflection('additional', $data, $this->model);
         $this->assertEquals($data, $this->model->getAdditional());
     }
@@ -187,7 +189,7 @@ class ModelTest extends AbstractTest
      */
     public function testGetType()
     {
-        $data = 'some type';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
         $this->setValueByReflection('type', $data, $this->model);
         $this->assertEquals($data, $this->model->getType());
     }
@@ -199,14 +201,14 @@ class ModelTest extends AbstractTest
      */
     public function testGetConnectorLeft()
     {
-        $data = 'some value';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
 
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
             ->method('getConnectorLeft')
             ->will($this->returnValue($data));
 
-        $this->setValueByReflection('connectorService', $mockConnector, $this->model);
+        $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
         $this->assertEquals($data, $this->model->getConnectorLeft());
     }
 
@@ -217,7 +219,7 @@ class ModelTest extends AbstractTest
      */
     public function testGetConnectorRight()
     {
-        $data = 'some value';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
         $cap = 5;
 
         $mockConnector = $this->createMock(Connectors::class);
@@ -226,7 +228,7 @@ class ModelTest extends AbstractTest
             ->will($this->returnValue($data))
             ->with($this->equalTo($cap));
 
-        $this->setValueByReflection('connectorService', $mockConnector, $this->model);
+        $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
         $this->assertEquals($data, $this->model->getConnectorRight($cap));
     }
 
@@ -237,7 +239,7 @@ class ModelTest extends AbstractTest
      */
     public function testSetDomid()
     {
-        $data = 'some value';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
 
         $this->assertEquals($this->model, $this->model->setDomid($data));
         $this->assertAttributeEquals($data, 'domid', $this->model);
@@ -250,7 +252,7 @@ class ModelTest extends AbstractTest
      */
     public function testGetDomid()
     {
-        $data = 'some value';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
 
         $this->setValueByReflection('domid', $data, $this->model);
         $this->assertEquals($data, $this->model->getDomid());
@@ -289,7 +291,7 @@ class ModelTest extends AbstractTest
      */
     public function testGetMultiLineCodeGen()
     {
-        $data = 'some value';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
 
         $this->setValueByReflection('multiLineCodeGen', $data, $this->model);
         $this->assertEquals($data, $this->model->getMultiLineCodeGen());
@@ -302,7 +304,7 @@ class ModelTest extends AbstractTest
      */
     public function testSetMultiLineCodeGen()
     {
-        $data = 'some value';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
 
         $this->assertEquals($this->model, $this->model->setMultiLineCodeGen($data));
         $this->assertAttributeEquals($data, 'multiLineCodeGen', $this->model);
@@ -341,7 +343,7 @@ class ModelTest extends AbstractTest
      */
     public function testSetConnectorParameters()
     {
-        $data = 'some value';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
 
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
@@ -349,7 +351,7 @@ class ModelTest extends AbstractTest
             ->will($this->returnValue($data))
             ->with($this->equalTo($data));
 
-        $this->setValueByReflection('connectorService', $mockConnector, $this->model);
+        $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
         $this->assertEquals($this->model, $this->model->setConnectorParameters($data));
     }
 
@@ -360,14 +362,14 @@ class ModelTest extends AbstractTest
      */
     public function testGetConnectorParameters()
     {
-        $data = 'some value';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
 
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
             ->method('getParameters')
             ->will($this->returnValue($data));
 
-        $this->setValueByReflection('connectorService', $mockConnector, $this->model);
+        $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
         $this->assertEquals($data, $this->model->getConnectorParameters());
     }
 
@@ -378,14 +380,14 @@ class ModelTest extends AbstractTest
      */
     public function testSetConnectorType()
     {
-        $data = 'some value';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
 
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
             ->method('setType')
             ->will($this->returnValue($data));
 
-        $this->setValueByReflection('connectorService', $mockConnector, $this->model);
+        $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
         $this->assertEquals($this->model, $this->model->setConnectorType($data));
     }
 
@@ -396,14 +398,14 @@ class ModelTest extends AbstractTest
      */
     public function testSetCustomConnectorLeft()
     {
-        $data = 'some value';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
 
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
             ->method('setCustomConnectorLeft')
             ->will($this->returnValue($data));
 
-        $this->setValueByReflection('connectorService', $mockConnector, $this->model);
+        $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
         $this->assertEquals($this->model, $this->model->setCustomConnectorLeft($data));
     }
 
@@ -414,14 +416,14 @@ class ModelTest extends AbstractTest
      */
     public function testGetConnectorLanguage()
     {
-        $data = 'some value';
+        $data = static::SOME_STRING_TO_PASS_THROUGH;
 
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
             ->method('getLanguage')
             ->will($this->returnValue($data));
 
-        $this->setValueByReflection('connectorService', $mockConnector, $this->model);
+        $this->setValueByReflection(static::CONNECTOR_SERVICE, $mockConnector, $this->model);
         $this->assertEquals($data, $this->model->getConnectorLanguage());
     }
 

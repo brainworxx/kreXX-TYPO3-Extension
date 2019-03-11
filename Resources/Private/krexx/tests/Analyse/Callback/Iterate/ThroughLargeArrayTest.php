@@ -44,6 +44,7 @@ use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 
 class ThroughLargeArrayTest extends AbstractTest
 {
+    const RENDER_SINGLE_CHILD = 'renderSingleChild';
     /**
      * @var ThroughLargeArray
      */
@@ -86,18 +87,18 @@ class ThroughLargeArrayTest extends AbstractTest
     protected function alwaysRun($fixture)
     {
         // Test if all models got set
-        $this->assertTrue(count($this->renderMock->model['renderSingleChild']) === 2);
+        $this->assertTrue(count($this->renderMock->model[static::RENDER_SINGLE_CHILD]) === 2);
         $this->assertTrue(count($this->routingMock->model) === 1);
 
         // Test the types of the model
         $this->assertEquals('', $this->routingMock->model[0]->getType());
         $this->assertEquals(
             ConstInterface::TYPE_SIMPLE_ARRAY,
-            $this->renderMock->model['renderSingleChild'][0]->getType()
+            $this->renderMock->model[static::RENDER_SINGLE_CHILD][0]->getType()
         );
         $this->assertEquals(
             ConstInterface::TYPE_SIMPLE_CLASS,
-            $this->renderMock->model['renderSingleChild'][1]->getType()
+            $this->renderMock->model[static::RENDER_SINGLE_CHILD][1]->getType()
         );
 
         // Test of the simple type got the right value
@@ -130,8 +131,8 @@ class ThroughLargeArrayTest extends AbstractTest
 
         // Test multiline generation
         $this->assertEquals(0, $this->routingMock->model[0]->getMultiLineCodeGen());
-        $this->assertEquals(0, $this->renderMock->model['renderSingleChild'][0]->getMultiLineCodeGen());
-        $this->assertEquals(0, $this->renderMock->model['renderSingleChild'][1]->getMultiLineCodeGen());
+        $this->assertEquals(0, $this->renderMock->model[static::RENDER_SINGLE_CHILD][0]->getMultiLineCodeGen());
+        $this->assertEquals(0, $this->renderMock->model[static::RENDER_SINGLE_CHILD][1]->getMultiLineCodeGen());
 
         $this->alwaysRun($fixture);
     }
@@ -161,8 +162,8 @@ class ThroughLargeArrayTest extends AbstractTest
 
         // Test multiline generation
         $this->assertEquals(Codegen::ITERATOR_TO_ARRAY, $this->routingMock->model[0]->getMultiLineCodeGen());
-        $this->assertEquals(Codegen::ITERATOR_TO_ARRAY, $this->renderMock->model['renderSingleChild'][0]->getMultiLineCodeGen());
-        $this->assertEquals(Codegen::ITERATOR_TO_ARRAY, $this->renderMock->model['renderSingleChild'][1]->getMultiLineCodeGen());
+        $this->assertEquals(Codegen::ITERATOR_TO_ARRAY, $this->renderMock->model[static::RENDER_SINGLE_CHILD][0]->getMultiLineCodeGen());
+        $this->assertEquals(Codegen::ITERATOR_TO_ARRAY, $this->renderMock->model[static::RENDER_SINGLE_CHILD][1]->getMultiLineCodeGen());
 
         $this->alwaysRun($fixture);
     }

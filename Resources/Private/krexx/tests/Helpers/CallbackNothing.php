@@ -48,9 +48,4 @@ class CallbackNothing extends AbstractCallback
     {
         return 'some string';
     }
-
-    public function __construct(Pool $pool)
-    {
-        parent::__construct($pool);
-    }
 }

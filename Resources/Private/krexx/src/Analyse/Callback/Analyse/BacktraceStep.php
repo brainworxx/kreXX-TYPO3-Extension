@@ -54,13 +54,6 @@ class BacktraceStep extends AbstractCallback
      */
     protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep';
 
-    const STEP_DATA_FILE = 'file';
-    const STEP_DATA_LINE = 'line';
-    const STEP_DATA_FUNCTION = 'function';
-    const STEP_DATA_OBJECT = 'object';
-    const STEP_DATA_TYPE = 'type';
-    const STEP_DATA_ARGS = 'args';
-
     /**
      * Renders a backtrace step.
      *
@@ -89,15 +82,15 @@ class BacktraceStep extends AbstractCallback
     protected function fileToOutput()
     {
         $stepData = $this->parameters[static::PARAM_DATA];
-        if (isset($stepData[static::STEP_DATA_FILE]) === true) {
+        if (isset($stepData[static::TRACE_FILE]) === true) {
             return $this->pool->render->renderSingleChild(
                 $this->dispatchEventWithModel(
                     __FUNCTION__ . static::EVENT_MARKER_END,
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                        ->setData($stepData[static::STEP_DATA_FILE])
+                        ->setData($stepData[static::TRACE_FILE])
                         ->setName('File')
-                        ->setNormal($stepData[static::STEP_DATA_FILE])
-                        ->setType(static::TYPE_STRING . strlen($stepData[static::STEP_DATA_FILE]))
+                        ->setNormal($stepData[static::TRACE_FILE])
+                        ->setType(static::TYPE_STRING . strlen($stepData[static::TRACE_FILE]))
                 )
             );
         }
@@ -116,21 +109,21 @@ class BacktraceStep extends AbstractCallback
         $stepData = $this->parameters[static::PARAM_DATA];
         $output = '';
         $source = '';
-        if (isset($stepData[static::STEP_DATA_LINE]) === true) {
+        if (isset($stepData[static::TRACE_LINE]) === true) {
             // Adding the line info to the output
             $output .= $this->pool->render->renderSingleChild(
                 $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                    ->setData($stepData[static::STEP_DATA_LINE])
+                    ->setData($stepData[static::TRACE_LINE])
                     ->setName('Line no.')
-                    ->setNormal($stepData[static::STEP_DATA_LINE])
+                    ->setNormal($stepData[static::TRACE_LINE])
                     ->setType(static::TYPE_INTEGER)
             );
 
             // Trying the read the sourcecode where it was called.
-            $lineNo = $stepData[static::STEP_DATA_LINE] - 1;
+            $lineNo = $stepData[static::TRACE_LINE] - 1;
             $source = trim(
                 $this->pool->fileService->readSourcecode(
-                    $stepData[static::STEP_DATA_FILE],
+                    $stepData[static::TRACE_FILE],
                     $lineNo,
                     $lineNo -5,
                     $lineNo +5
@@ -167,15 +160,15 @@ class BacktraceStep extends AbstractCallback
     {
         $stepData = $this->parameters[static::PARAM_DATA];
 
-        if (isset($stepData[static::STEP_DATA_FUNCTION]) === true) {
+        if (isset($stepData[static::TRACE_FUNCTION]) === true) {
             return $this->pool->render->renderSingleChild(
                 $this->dispatchEventWithModel(
                     __FUNCTION__ . static::EVENT_MARKER_END,
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                        ->setData($stepData[static::STEP_DATA_FUNCTION])
+                        ->setData($stepData[static::TRACE_FUNCTION])
                         ->setName('Last called function')
-                        ->setNormal($stepData[static::STEP_DATA_FUNCTION])
-                        ->setType(static::TYPE_STRING . strlen($stepData[static::STEP_DATA_FUNCTION]))
+                        ->setNormal($stepData[static::TRACE_FUNCTION])
+                        ->setType(static::TYPE_STRING . strlen($stepData[static::TRACE_FUNCTION]))
                 )
             );
         }
@@ -193,13 +186,13 @@ class BacktraceStep extends AbstractCallback
     {
         $stepData = $this->parameters[static::PARAM_DATA];
 
-        if (isset($stepData[static::STEP_DATA_OBJECT]) === true) {
+        if (isset($stepData[static::TRACE_OBJECT]) === true) {
             return $this->pool
                 ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessObject')
                 ->process($this->dispatchEventWithModel(
                     __FUNCTION__ . static::EVENT_MARKER_END,
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                        ->setData($stepData[static::STEP_DATA_OBJECT])
+                        ->setData($stepData[static::TRACE_OBJECT])
                         ->setName('Calling object')
                 ));
         }
@@ -217,15 +210,15 @@ class BacktraceStep extends AbstractCallback
     {
         $stepData = $this->parameters[static::PARAM_DATA];
 
-        if (isset($stepData[static::STEP_DATA_TYPE]) === true) {
+        if (isset($stepData[static::TRACE_TYPE]) === true) {
             return $this->pool->render->renderSingleChild(
                 $this->dispatchEventWithModel(
                     __FUNCTION__ . static::EVENT_MARKER_END,
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                        ->setData($stepData[static::STEP_DATA_TYPE])
+                        ->setData($stepData[static::TRACE_TYPE])
                         ->setName('Call type')
-                        ->setNormal($stepData[static::STEP_DATA_TYPE])
-                        ->setType(static::TYPE_STRING . strlen($stepData[static::STEP_DATA_TYPE]))
+                        ->setNormal($stepData[static::TRACE_TYPE])
+                        ->setType(static::TYPE_STRING . strlen($stepData[static::TRACE_TYPE]))
                 )
             );
         }
@@ -243,14 +236,14 @@ class BacktraceStep extends AbstractCallback
     {
         $stepData = $this->parameters[static::PARAM_DATA];
 
-        if (isset($stepData[static::STEP_DATA_ARGS]) === true) {
+        if (isset($stepData[static::TRACE_ARGS]) === true) {
             return $this->pool
                 ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessArray')
                     ->process(
                         $this->dispatchEventWithModel(
                             __FUNCTION__ . static::EVENT_MARKER_END,
                             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
-                                ->setData($stepData[static::STEP_DATA_ARGS])
+                                ->setData($stepData[static::TRACE_ARGS])
                                 ->setName('Arguments from the call')
                         )
                     );

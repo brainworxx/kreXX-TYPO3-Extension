@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\View;
 
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -44,7 +45,7 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
  *
  * @package Brainworxx\Krexx\View
  */
-abstract class AbstractRender implements RenderInterface
+abstract class AbstractRender implements RenderInterface, ConstInterface
 {
     const MARKER_CALLER_FILE = '{callerFile}';
     const MARKER_CALLER_LINE = '{callerLine}';

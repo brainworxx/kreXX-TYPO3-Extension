@@ -339,11 +339,12 @@ class Chunks
         // Save our metadata, so a potential backend module can display it.
         // We may or may not have already some output for this file.
         if (empty($this->metadata) === false) {
+            $filename .= '.json';
             // Remove the old metadata file. We still have all it's content
             // available in $this->metadata.
-            $this->pool->fileService->deleteFile($filename . '.json');
+            $this->pool->fileService->deleteFile($filename);
             // Create a new metadata file with new info.
-            $this->pool->fileService->putFileContents($filename . '.json', json_encode($this->metadata));
+            $this->pool->fileService->putFileContents($filename, json_encode($this->metadata));
         }
     }
 

@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Errorhandler;
 
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
@@ -42,7 +43,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Errorhandler
  */
-abstract class AbstractError
+abstract class AbstractError implements ConstInterface
 {
     const TRACE_FATALS = 'traceFatals';
     const TRACE_WARNINGS = 'traceWarnings';

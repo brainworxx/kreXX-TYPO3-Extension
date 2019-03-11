@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Analyse\Caller;
 
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -43,7 +42,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Analyse\Caller
  */
-class CallerFinder extends AbstractCaller implements ConstInterface
+class CallerFinder extends AbstractCaller
 {
 
     /**
@@ -87,24 +86,24 @@ class CallerFinder extends AbstractCaller implements ConstInterface
         // Using a foreach is definitely faster, but then we
         // would have trouble using our pattern.
         while ($caller = array_pop($backtrace)) {
-            if (isset($caller['function']) && strtolower($caller['function']) === $pattern) {
+            if (isset($caller[static::TRACE_FUNCTION]) && strtolower($caller[static::TRACE_FUNCTION]) === $pattern) {
                 break;
             }
 
-            if (isset($caller['class']) && strtolower($caller['class']) === $pattern) {
+            if (isset($caller[static::TRACE_CLASS]) && strtolower($caller[static::TRACE_CLASS]) === $pattern) {
                 break;
             }
         }
 
-        $varname = $this->getVarName($caller['file'], $caller['line']);
+        $varname = $this->getVarName($caller[static::TRACE_FILE], $caller[static::TRACE_LINE]);
 
         // We will not keep the whole backtrace im memory. We only return what we
         // actually need.
         return array(
-            'file' => $this->pool->fileService->filterFilePath($caller['file']),
-            'line' => (int)$caller['line'],
-            'varname' => $varname,
-            'type' => $this->getType($headline, $varname, $data),
+            static::TRACE_FILE => $this->pool->fileService->filterFilePath($caller[static::TRACE_FILE]),
+            static::TRACE_LINE => (int)$caller[static::TRACE_LINE],
+            static::TRACE_VARNAME => $varname,
+            static::TRACE_TYPE => $this->getType($headline, $varname, $data),
         );
     }
 

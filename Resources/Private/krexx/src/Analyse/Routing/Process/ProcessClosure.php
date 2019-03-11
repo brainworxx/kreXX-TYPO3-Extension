@@ -62,13 +62,13 @@ class ProcessClosure extends AbstractProcess
         $result = array();
 
         // Adding comments from the file.
-        $result['comments'] =  $this->pool
+        $result[static::META_COMMENT] =  $this->pool
             ->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Functions')
             ->getComment($ref);
 
         // Adding the sourcecode
         $highlight = $ref->getStartLine() -1;
-        $result['source'] = $this->pool->fileService->readSourcecode(
+        $result[static::META_SOURCE] = $this->pool->fileService->readSourcecode(
             $ref->getFileName(),
             $highlight,
             $highlight - 3,
@@ -76,8 +76,8 @@ class ProcessClosure extends AbstractProcess
         );
 
         // Adding the place where it was declared.
-        $result['declared in'] = $this->pool->fileService->filterFilePath($ref->getFileName()) . "\n";
-        $result['declared in'] .= 'in line ' . $ref->getStartLine();
+        $result[static::META_DECLARED_IN] = $this->pool->fileService->filterFilePath($ref->getFileName()) . "\n";
+        $result[static::META_DECLARED_IN] .= 'in line ' . $ref->getStartLine();
 
         // Adding the namespace, but only if we have one.
         $namespace = $ref->getNamespaceName();

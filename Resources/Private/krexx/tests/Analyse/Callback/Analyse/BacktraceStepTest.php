@@ -44,14 +44,12 @@ use Brainworxx\Krexx\Tests\Helpers\ProcessNothing;
 
 class BacktraceStepTest extends AbstractTest
 {
-    protected $backtraceStep;
-
     /**
      * Getting some test data and preventing deeper processing.
      */
     public function setUp()
     {
-        $this->backtraceStep = ['data' => debug_backtrace()[5]];
+
         // We overwrite all processing classes with the processNothing class.
         // This way we can prevent going too deep inside the rabbit hole.
         Registration::addRewrite(ProcessArray::class, ProcessNothing::class);
@@ -83,8 +81,9 @@ class BacktraceStepTest extends AbstractTest
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::typeToOutput::end', $backtraceStep],
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::argsToOutput::end', $backtraceStep]
         );
-
-        $backtraceStep->setParams($this->backtraceStep);
+        
+        $singleStep = ['data' => debug_backtrace()[5]];
+        $backtraceStep->setParams($singleStep);
         $backtraceStep->callMe();
     }
 }

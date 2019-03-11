@@ -161,8 +161,8 @@ class Render extends AbstractRender
      */
     public function renderFooter($caller, $configOutput, $configOnly = false)
     {
-        if (isset($caller['file']) === true) {
-            $caller = $this->renderCaller($caller['file'], $caller['line']);
+        if (isset($caller[static::TRACE_FILE]) === true) {
+            $caller = $this->renderCaller($caller[static::TRACE_FILE], $caller[static::TRACE_LINE]);
         } else {
              // When we have no caller, we will not render it.
             $caller = '';

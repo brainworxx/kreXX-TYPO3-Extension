@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Analyse\Caller {
 
+    use Brainworxx\Krexx\Analyse\ConstInterface;
+
     /**
      * Mocking the debug backtrace in the CallerFinder.
      */
@@ -45,10 +47,10 @@ namespace Brainworxx\Krexx\Analyse\Caller {
             2 => [],
             3 => [],
             4 => [
-                'function' => 'krexx',
-                'class' => 'MockClass',
-                'file' => 'mockfile.php',
-                'line' => 999
+                ConstInterface::TRACE_FUNCTION => 'krexx',
+                ConstInterface::TRACE_CLASS => 'MockClass',
+                ConstInterface::TRACE_FILE => 'mockfile.php',
+                ConstInterface::TRACE_LINE => 999
             ]
         ];
         // Update the return data.

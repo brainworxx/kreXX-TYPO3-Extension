@@ -72,13 +72,13 @@ class DumpController extends AbstractController
         $footer = $this->outputFooter($caller);
 
         // We will only allow code generation, if we were able to determine the varname.
-        $this->pool->scope->setScope($caller['varname']);
+        $this->pool->scope->setScope($caller[static::TRACE_VARNAME]);
 
         // Start the magic.
         $analysis = $this->pool->routing->analysisHub(
             $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setData($data)
-                ->setName($caller['varname'])
+                ->setName($caller[static::TRACE_VARNAME])
         );
 
         // Detect the encoding on the start-chunk-string of the analysis
@@ -95,7 +95,7 @@ class DumpController extends AbstractController
         // additional info, in case we are logging to a file.
         $this->pool->chunks->addMetadata($caller);
 
-        $this->outputService->addChunkString($this->outputHeader($caller['type']));
+        $this->outputService->addChunkString($this->outputHeader($caller[static::TRACE_TYPE]));
         $this->outputService->addChunkString($analysis);
         $this->outputService->addChunkString($footer);
         $this->outputService->finalize();

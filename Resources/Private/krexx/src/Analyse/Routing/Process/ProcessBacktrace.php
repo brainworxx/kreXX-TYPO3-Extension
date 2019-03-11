@@ -123,7 +123,7 @@ class ProcessBacktrace implements ConstInterface
 
         // We remove all steps that came from inside the kreXX lib.
         foreach ($backtrace as $key => $step) {
-            if (isset($step['file']) && strpos($step['file'], KREXX_DIR) !== false) {
+            if (isset($step[static::TRACE_FILE]) && strpos($step[static::TRACE_FILE], KREXX_DIR) !== false) {
                 unset($backtrace[$key]);
             }
         }

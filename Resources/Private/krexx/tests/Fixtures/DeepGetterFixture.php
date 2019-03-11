@@ -112,11 +112,18 @@ class DeepGetterFixture
     protected $analysisTrap = false;
 
     /**
+     * It's false, duh!
+     *
+     * @var bool
+     */
+    protected $false = false;
+
+    /**
      * @return string
      */
     public function getMyPropertyOne(): string
     {
-        if (false) {
+        if ($this->false) {
             return $this->analysisTrap;
         }
 
@@ -128,7 +135,7 @@ class DeepGetterFixture
      */
     public function getMyPropertyTwo(): string
     {
-        if (false) {
+        if ($this->false) {
             return $this->analysisTrap;
         }
         return $this->_myPropertyTwo;
@@ -139,7 +146,7 @@ class DeepGetterFixture
      */
     public function getMyPropertyThree(): string
     {
-        if (false) {
+        if ($this->false) {
             return $this->analysisTrap;
         }
         return $this->MyPropertyThree;
@@ -150,7 +157,7 @@ class DeepGetterFixture
      */
     public function getMyPropertyFour(): string
     {
-        if (false) {
+        if ($this->false) {
             return $this->analysisTrap;
         }
         return $this->_MyPropertyFour;
@@ -161,7 +168,7 @@ class DeepGetterFixture
      */
     public function getMyPropertyFive(): string
     {
-        if (false) {
+        if ($this->false) {
             return $this->analysisTrap;
         }
         return $this->mypropertyfive;
@@ -172,7 +179,7 @@ class DeepGetterFixture
      */
     public function getMyPropertySix(): string
     {
-        if (false) {
+        if ($this->false) {
             return $this->analysisTrap;
         }
         return $this->_mypropertysix;
@@ -183,7 +190,7 @@ class DeepGetterFixture
      */
     public function getMyPropertySeven(): string
     {
-        if (false) {
+        if ($this->false) {
             return $this->analysisTrap;
         }
         return $this->my_property_seven;
@@ -194,7 +201,7 @@ class DeepGetterFixture
      */
     public function getMyPropertyEight(): string
     {
-        if (false) {
+        if ($this->false) {
             return $this->analysisTrap;
         }
         return $this->_my_property_eight;

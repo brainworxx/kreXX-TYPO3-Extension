@@ -50,21 +50,22 @@ class ThroughConfigTest extends AbstractTest
         $this->mockEmergencyHandler();
 
         // Create settings mock fixture.
+        $methodName = 'getSection';
         $settingOne = $this->createMock(Model::class);
         $settingOne->expects($this->once())
-            ->method('getSection')
+            ->method($methodName)
             ->will($this->returnValue('section one'));
         $settingTwo = $this->createMock(Model::class);
         $settingTwo->expects($this->once())
-            ->method('getSection')
+            ->method($methodName)
             ->will($this->returnValue('section one'));
         $settingThree = $this->createMock(Model::class);
         $settingThree->expects($this->once())
-            ->method('getSection')
+            ->method($methodName)
             ->will($this->returnValue('section two'));
         $settingFour = $this->createMock(Model::class);
         $settingFour->expects($this->once())
-            ->method('getSection')
+            ->method($methodName)
             ->will($this->returnValue('section two'));
         $fixture = [
             'settingOne' => $settingOne,
