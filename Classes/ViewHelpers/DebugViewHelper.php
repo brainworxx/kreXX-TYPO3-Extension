@@ -59,6 +59,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class DebugViewHelper extends AbstractViewHelper
 {
+    const ARGUMENT_VALUE = 'value';
 
     /**
      * No escaping for the rendered children, we want then as they are.
@@ -81,7 +82,7 @@ class DebugViewHelper extends AbstractViewHelper
      */
     public function initializeArguments()
     {
-        $this->registerArgument('value', 'mixed', 'The variable we want to analyse.', false);
+        $this->registerArgument(static::ARGUMENT_VALUE, 'mixed', 'The variable we want to analyse.', false);
     }
 
     /**
@@ -124,8 +125,8 @@ class DebugViewHelper extends AbstractViewHelper
     protected function analysis()
     {
         $found  = false;
-        if (!is_null($this->arguments['value'])) {
-            krexx($this->arguments['value']);
+        if (!is_null($this->arguments[static::ARGUMENT_VALUE])) {
+            krexx($this->arguments[static::ARGUMENT_VALUE]);
             $found = true;
         }
 
