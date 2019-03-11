@@ -40,9 +40,5 @@
  */
 class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper
 {
-    public function render()
-    {
-        // Let the parent do it's magic.
-        return parent::render();
-    }
+    // Do exactly, what the parent does.
 }
