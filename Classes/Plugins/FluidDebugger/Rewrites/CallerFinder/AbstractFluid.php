@@ -44,6 +44,8 @@ use \Brainworxx\Krexx\Service\Factory\Pool;
  */
 abstract class AbstractFluid extends AbstractCaller
 {
+    const FLUID_VARIABLE = 'fluidvar';
+
     /**
      * @var \TYPO3\CMS\Fluid\View\AbstractTemplateView|\TYPO3Fluid\Fluid\View\ViewInterface
      */
@@ -105,7 +107,7 @@ abstract class AbstractFluid extends AbstractCaller
      *
      * @var string
      */
-    protected $varname = 'fluidvar';
+    protected $varname;
 
     /**
      * Trying to get our stuff together.
@@ -149,6 +151,8 @@ abstract class AbstractFluid extends AbstractCaller
                 // We need to escape the forward slash.
                 '}"\/>')
         );
+
+        $this->varname = static::FLUID_VARIABLE;
 
         $debugViewhelper = $this->pool->registry->get('DebugViewHelper');
 
@@ -208,8 +212,8 @@ abstract class AbstractFluid extends AbstractCaller
             return array(
                 static::TRACE_FILE => 'n/a',
                 static::TRACE_LINE => 'n/a',
-                static::TRACE_VARNAME => 'fluidvar',
-                static::TRACE_TYPE => $this->getType('Fluid analysis', 'fluidvar', $data),
+                static::TRACE_VARNAME => static::FLUID_VARIABLE,
+                static::TRACE_TYPE => $this->getType('Fluid analysis', static::FLUID_VARIABLE, $data),
             );
         }
 
@@ -282,7 +286,7 @@ abstract class AbstractFluid extends AbstractCaller
 
         $fileContent = $this->pool->fileService->getFileContents($filePath, false);
 
-        $varname = 'fluidvar';
+        $varname = static::FLUID_VARIABLE;
         $alreadyFound = false;
 
         foreach ($this->callPattern as $funcname) {
@@ -333,7 +337,7 @@ abstract class AbstractFluid extends AbstractCaller
             $this->pool->codegenHandler->setComplicatedWrapperLeft(
                 '<v:variable.set value="{' . $varname . '}" name="fluidvar" /> {'
             );
-            $varname = 'fluidvar';
+            $varname = static::FLUID_VARIABLE;
         }
 
         return $varname;
