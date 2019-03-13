@@ -97,7 +97,7 @@ class Configuration implements PluginConfigInterface
         // Empty index.html in case the htaccess is not enough.
         $indexHtml = '';
         // Create and protect the temporal folders.
-        foreach ($tempPaths as $key => $tempPath) {
+        foreach ($tempPaths as $tempPath) {
             if (!is_dir($tempPath)) {
                 // Create it!
                 GeneralUtility::mkdir($tempPath);
