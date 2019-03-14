@@ -67,6 +67,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
      */
     const AI_NAMESPACE = 'Aimeos\\MW\\View\\Helper\\';
     const METHOD = 'transform';
+    const STANDARD = '\\Standard';
 
     /**
      * Our pool.
@@ -266,35 +267,31 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
             return $reflectionList;
         }
         $doneSoFar[$directory] = true;
-
-        $iface = static::AI_NAMESPACE . 'Iface';
-        $standard = '\\Standard';
         $subDirs = scandir($directory);
+        $iface = static::AI_NAMESPACE . 'Iface';
 
         foreach ($subDirs as $dir) {
-            if ($dir === '.' or $dir === '..') {
-                // Not a class.
+            if ($dir === '.' ||
+                $dir === '..' ||
+                isset($this->helpers[$dir])
+            ) {
+                // Either not a class, tzhe dot ones.
+                // or we will add it later on, if already inside the helpers.
                 continue;
             }
 
-            if (isset($this->helpers[$dir])) {
-                // We will add these later.
-                continue;
-            }
-
-            if (is_dir($directory . '/' . $dir)) {
-                if (class_exists(static::AI_NAMESPACE . $dir . $standard)) {
-                    try {
-                        $ref = new \ReflectionClass(static::AI_NAMESPACE . $dir . $standard);
-                    } catch (\ReflectionException $e) {
-                        // Move to the next target.
-                        continue;
-                    }
-
+            if (is_dir($directory . '/' . $dir) &&
+                class_exists(static::AI_NAMESPACE . $dir . static::STANDARD)
+            ) {
+                try {
+                    $ref = new \ReflectionClass(static::AI_NAMESPACE . $dir . static::STANDARD);
                     // Test for the view helper interface.
                     if ($ref->implementsInterface($iface)) {
                         $reflectionList[lcfirst($dir)] = $ref->getMethod(static::METHOD);
                     }
+                } catch (\ReflectionException $e) {
+                    // Move to the next target.
+                    continue;
                 }
             }
         }
