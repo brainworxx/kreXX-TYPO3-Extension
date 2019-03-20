@@ -133,34 +133,37 @@ class LogfileList extends AbstractCollector
     protected function fileSizeConvert($bytes)
     {
         $bytes = floatval($bytes);
+        $unit = 'UNIT';
+        $value = 'VALUE';
+
         $arBytes = array(
             0 => array(
-                "UNIT" => "TB",
-                "VALUE" => pow(1024, 4),
+                $unit => 'TB',
+                $value => pow(1024, 4),
             ),
             1 => array(
-                "UNIT" => "GB",
-                "VALUE" => pow(1024, 3),
+                $unit => 'GB',
+                $value => pow(1024, 3),
             ),
             2 => array(
-                "UNIT" => "MB",
-                "VALUE" => pow(1024, 2),
+                $unit => 'MB',
+                $value => pow(1024, 2),
             ),
             3 => array(
-                "UNIT" => "KB",
-                "VALUE" => 1024,
+                $unit => 'KB',
+                $value => 1024,
             ),
             4 => array(
-                "UNIT" => "B",
-                "VALUE" => 1,
+                $unit => 'B',
+                $value => 1,
             ),
         );
 
         $result = '';
         foreach ($arBytes as $aritem) {
-            if ($bytes >= $aritem["VALUE"]) {
-                $result = $bytes / $aritem["VALUE"];
-                $result = str_replace(".", ",", strval(round($result, 2))) . " " . $aritem["UNIT"];
+            if ($bytes >= $aritem[$value]) {
+                $result = $bytes / $aritem[$value];
+                $result = str_replace('.', ',', strval(round($result, 2))) . ' ' . $aritem[$unit];
                 break;
             }
         }
