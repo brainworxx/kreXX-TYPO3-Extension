@@ -225,7 +225,7 @@ class Methods implements EventHandlerInterface, ConstInterface
         if (strpos($source, 'call_user_func') === false) {
             return false;
         }
-        
+
         // Still here? Now for the serious stuff.
         $objectName = false;
         foreach ($this->internalObjectNames as $name => $needle) {

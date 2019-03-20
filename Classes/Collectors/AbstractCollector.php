@@ -42,6 +42,8 @@ use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
 abstract class AbstractCollector
 {
+    const MODULE_DATA = 'moduleData';
+
     /**
      * The kreXX pool.
      *
@@ -80,8 +82,8 @@ abstract class AbstractCollector
         Pool::createPool();
         $this->pool = \Krexx::$pool;
         $user = $GLOBALS['BE_USER'];
-        if (isset($user->uc['moduleData'][IndexController::MODULE_KEY])) {
-            $this->userUc = $user->uc['moduleData'][IndexController::MODULE_KEY];
+        if (isset($user->uc[static::MODULE_DATA][IndexController::MODULE_KEY])) {
+            $this->userUc = $user->uc[static::MODULE_DATA][IndexController::MODULE_KEY];
         }
     }
 

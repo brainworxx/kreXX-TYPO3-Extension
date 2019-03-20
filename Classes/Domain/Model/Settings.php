@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Domain\Model;
 
+use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -639,11 +640,11 @@ class Settings
         /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $user */
         $user = $GLOBALS['BE_USER'];
         // Save the last settings to the backend user, so we can retrieve it later.
-        if (!isset($user->uc['moduleData'][IndexController::MODULE_KEY])) {
-            $user->uc['moduleData'][IndexController::MODULE_KEY] = array();
+        if (!isset($user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY])) {
+            $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY] = array();
         }
-        $user->uc['moduleData'][IndexController::MODULE_KEY] = array_merge(
-            $user->uc['moduleData'][IndexController::MODULE_KEY],
+        $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY] = array_merge(
+            $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY],
             $moduleSettings
         );
         $user->writeUC();
