@@ -43,6 +43,7 @@ use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 abstract class AbstractCollector
 {
     const MODULE_DATA = 'moduleData';
+    const PLUGIN_NAME = 'tools_IncludekrexxKrexxConfiguration';
 
     /**
      * The kreXX pool.
@@ -75,28 +76,29 @@ abstract class AbstractCollector
     );
 
     /**
+     * Do we have access here?
+     *
+     * @var bool
+     */
+    protected $hasAccess = false;
+
+    /**
      * Inject the pool.
      */
     public function __construct()
     {
         Pool::createPool();
         $this->pool = \Krexx::$pool;
-        $user = $GLOBALS['BE_USER'];
-        if (isset($user->uc[static::MODULE_DATA][IndexController::MODULE_KEY])) {
+        if (isset($GLOBALS['BE_USER'])) {
+            $user = $GLOBALS['BE_USER'];
+            $this->hasAccess = $user
+                ->check('modules', static::PLUGIN_NAME);
+        }
+        if ($this->hasAccess &&
+            isset($user->uc[static::MODULE_DATA][IndexController::MODULE_KEY])
+        ) {
             $this->userUc = $user->uc[static::MODULE_DATA][IndexController::MODULE_KEY];
         }
-    }
-
-    /**
-     * Additional check, if the current Backend user has access to the extension.
-     *
-     * @return bool
-     *   The result of the check.
-     */
-    protected function hasAccess()
-    {
-        return isset($GLOBALS['BE_USER']) &&
-            $GLOBALS['BE_USER']->check('modules', 'tools_IncludekrexxKrexxConfiguration');
     }
 
     /**
@@ -130,13 +132,13 @@ abstract class AbstractCollector
             $uriBuilder = $objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder');
             return $uriBuilder
                 ->reset()
-                ->setArguments(array('M' => 'tools_IncludekrexxKrexxConfiguration'))
+                ->setArguments(array('M' => static::PLUGIN_NAME))
                 ->uriFor(
                     'dispatch',
                     array('id' => $id),
                     'Index',
                     Bootstrap::EXT_KEY,
-                    'tools_IncludekrexxKrexxConfiguration'
+                    static::PLUGIN_NAME
                 );
         }
     }

@@ -64,7 +64,7 @@ class LogfileList extends AbstractCollector
     {
         $fileList = array();
 
-        if ($this->hasAccess() === false) {
+        if ($this->hasAccess === false) {
             // No access.
             return $fileList;
         }

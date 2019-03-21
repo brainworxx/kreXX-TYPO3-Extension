@@ -49,7 +49,7 @@ class FormConfiguration extends AbstractCollector
      */
     public function assignData(ViewInterface $view)
     {
-        if ($this->hasAccess() === false) {
+        if ($this->hasAccess === false) {
             // No access.
             return;
         }
@@ -112,18 +112,18 @@ class FormConfiguration extends AbstractCollector
             // display -> we will only display the settings
             // The original values include the name of a template partial
             // with the form element.
-            if ($values[Fallback::RENDER_TYPE] == Fallback::RENDER_TYPE_NONE) {
+            if ($values[Fallback::RENDER_TYPE] === Fallback::RENDER_TYPE_NONE) {
                 // It's not visible, thus we do not accept any values from it.
                 $result = 'none';
             }
-            if ($values[Fallback::RENDER_EDITABLE] == Fallback::VALUE_TRUE &&
-                $values[Fallback::RENDER_TYPE] != Fallback::RENDER_TYPE_NONE
+            if ($values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_TRUE &&
+                $values[Fallback::RENDER_TYPE] !== Fallback::RENDER_TYPE_NONE
             ) {
                 // It's editable and visible.
                 $result = 'full';
             }
-            if ($values[Fallback::RENDER_EDITABLE] == Fallback::VALUE_FALSE &&
-                $values[Fallback::RENDER_TYPE] != Fallback::RENDER_TYPE_NONE
+            if ($values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_FALSE &&
+                $values[Fallback::RENDER_TYPE] !== Fallback::RENDER_TYPE_NONE
             ) {
                 // It's only visible.
                 $result = 'display';

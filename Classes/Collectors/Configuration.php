@@ -49,7 +49,7 @@ class Configuration extends AbstractCollector
      */
     public function assignData(ViewInterface $view)
     {
-        if ($this->hasAccess() === false) {
+        if ($this->hasAccess === false) {
             // No access.
             return;
         }
