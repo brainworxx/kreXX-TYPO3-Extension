@@ -64,13 +64,13 @@ class FormConfiguration extends AbstractCollector
         $config = array();
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
             $config[$settingsName] = array();
-            $config[$settingsName]['name'] = $settingsName;
-            $config[$settingsName]['options'] = $dropdown;
-            $config[$settingsName]['useFactorySettings'] = false;
-            $config[$settingsName]['value'] =  $this->convertKrexxFeSetting(
+            $config[$settingsName][static::SETTINGS_NAME] = $settingsName;
+            $config[$settingsName][static::SETTINGS_OPTIONS] = $dropdown;
+            $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = false;
+            $config[$settingsName][static::SETTINGS_VALUE] =  $this->convertKrexxFeSetting(
                 $iniConfig->getFeConfigFromFile($settingsName)
             );
-            $config[$settingsName]['fallback'] = $dropdown[
+            $config[$settingsName][static::SETTINGS_FALLBACK] = $dropdown[
                 $this->convertKrexxFeSetting(
                     $iniConfig->feConfigFallback[$settingsName][$iniConfig::RENDER]
                 )
@@ -79,11 +79,11 @@ class FormConfiguration extends AbstractCollector
             // Check if we have a value. If not, we need to load the
             // factory settings. We also need to set the info, if we
             // are using the factory settings, at all.
-            if (is_null($config[$settingsName]['value'])) {
-                $config[$settingsName]['value'] = $this->convertKrexxFeSetting(
+            if (is_null($config[$settingsName][static::SETTINGS_VALUE])) {
+                $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
                     $iniConfig->feConfigFallback[$settingsName][$iniConfig::RENDER]
                 );
-                $config[$settingsName]['useFactorySettings'] = true;
+                $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
             }
         }
 

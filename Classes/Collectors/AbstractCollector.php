@@ -45,6 +45,14 @@ abstract class AbstractCollector
     const MODULE_DATA = 'moduleData';
     const PLUGIN_NAME = 'tools_IncludekrexxKrexxConfiguration';
 
+    const SETTINGS_NAME = 'name';
+    const SETTINGS_HELPTEXT = 'helptext';
+    const SETTINGS_VALUE = 'value';
+    const SETTINGS_USE_FACTORY_SETTINGS = 'useFactorySettings';
+    const SETTINGS_FALLBACK = 'fallback';
+    const SETTINGS_MODE = 'mode';
+    const SETTINGS_OPTIONS = 'options';
+
     /**
      * The kreXX pool.
      *

@@ -59,33 +59,33 @@ class Configuration extends AbstractCollector
             // Stitch together the settings in the template.
             $group = $fallback[Fallback::SECTION];
             $config[$settingsName] = array();
-            $config[$settingsName]['name'] = $settingsName;
-            $config[$settingsName]['helptext'] = LocalizationUtility::translate(
+            $config[$settingsName][static::SETTINGS_NAME] = $settingsName;
+            $config[$settingsName][static::SETTINGS_HELPTEXT] = LocalizationUtility::translate(
                 $settingsName,
                 Bootstrap::EXT_KEY
             );
-            $config[$settingsName]['value'] = $this->pool->config->iniConfig->getConfigFromFile($group, $settingsName);
-            $config[$settingsName]['useFactorySettings'] = false;
-            $config[$settingsName]['fallback'] = $fallback[Fallback::VALUE];
+            $config[$settingsName][static::SETTINGS_VALUE] = $this->pool->config->iniConfig->getConfigFromFile($group, $settingsName);
+            $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = false;
+            $config[$settingsName][static::SETTINGS_FALLBACK] = $fallback[static::SETTINGS_VALUE];
 
             // Check if we have a value. If not, we need to load the factory
             // settings. We also need to set the info, if we are using the
             // factory settings, at all.
-            if (is_null($config[$settingsName]['value'])) {
+            if (is_null($config[$settingsName][static::SETTINGS_VALUE])) {
                 // Check if we have a value from the last time a user has saved
                 // the settings.
                 if ($this->userUc[$settingsName]) {
-                    $config[$settingsName]['value'] = $this->userUc[$settingsName];
+                    $config[$settingsName][static::SETTINGS_VALUE] = $this->userUc[$settingsName];
                 } else {
                     // Fallback to the fallback for a possible value.
-                    $config[$settingsName]['value'] = $fallback[Fallback::VALUE];
+                    $config[$settingsName][static::SETTINGS_VALUE] = $fallback[static::SETTINGS_VALUE];
                 }
-                $config[$settingsName]['useFactorySettings'] = true;
+                $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
             }
 
             // Assign the mode-class.
-            if (in_array($settingsName, $this->expertOnly) && $config[$settingsName]['useFactorySettings']) {
-                $config[$settingsName]['mode'] = 'expert';
+            if (in_array($settingsName, $this->expertOnly) && $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS]) {
+                $config[$settingsName][static::SETTINGS_MODE] = 'expert';
             }
         }
 
@@ -96,12 +96,12 @@ class Configuration extends AbstractCollector
             $dropdown['skins'][$skin] = $skin;
         }
         $dropdown[Fallback::SETTING_DESTINATION] = array(
-            'browser' => LocalizationUtility::translate('browser', Bootstrap::EXT_KEY),
-            'file' => LocalizationUtility::translate('file', Bootstrap::EXT_KEY),
+            Fallback::VALUE_BROWSER => LocalizationUtility::translate(Fallback::VALUE_BROWSER, Bootstrap::EXT_KEY),
+            Fallback::VALUE_FILE => LocalizationUtility::translate(Fallback::VALUE_FILE, Bootstrap::EXT_KEY),
         );
         $dropdown['bool'] = array(
-            'true' => LocalizationUtility::translate('true', Bootstrap::EXT_KEY),
-            'false' => LocalizationUtility::translate('false', Bootstrap::EXT_KEY),
+            Fallback::VALUE_TRUE => LocalizationUtility::translate(Fallback::VALUE_TRUE, Bootstrap::EXT_KEY),
+            Fallback::VALUE_FALSE => LocalizationUtility::translate(Fallback::VALUE_FALSE, Bootstrap::EXT_KEY),
         );
 
         $view->assign('config', $config);
