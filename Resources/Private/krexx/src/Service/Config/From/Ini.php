@@ -153,11 +153,11 @@ class Ini extends Fallback
                 $editable = static::VALUE_FALSE;
                 break;
 
-            case 'display':
+            case static::RENDER_TYPE_INI_DISPLAY:
                 $editable = static::VALUE_FALSE;
                 break;
 
-            case 'full':
+            case static::RENDER_TYPE_INI_FULL:
                 $editable = static::VALUE_TRUE;
                 break;
 

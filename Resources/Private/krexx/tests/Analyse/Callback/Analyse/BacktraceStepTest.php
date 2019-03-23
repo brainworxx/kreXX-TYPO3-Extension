@@ -81,7 +81,7 @@ class BacktraceStepTest extends AbstractTest
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::typeToOutput::end', $backtraceStep],
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::argsToOutput::end', $backtraceStep]
         );
-        
+
         $singleStep = ['data' => debug_backtrace()[5]];
         $backtraceStep->setParams($singleStep);
         $backtraceStep->callMe();

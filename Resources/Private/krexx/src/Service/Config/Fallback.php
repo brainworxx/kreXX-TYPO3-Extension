@@ -103,6 +103,10 @@ class Fallback
     const RENDER_TYPE_INPUT = 'Input';
     const RENDER_TYPE_NONE = 'None';
 
+    const RENDER_TYPE_INI_FULL = 'full';
+    const RENDER_TYPE_INI_DISPLAY = 'display';
+    const RENDER_TYPE_INI_NONE = 'none';
+
     /**
      * Defining the layout of the frontend editing form.
      *
