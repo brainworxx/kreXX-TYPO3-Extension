@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Includekrexx\Bootstrap;
 
-use TYPO3\CMS\Core\Exception;
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -57,18 +56,29 @@ class Bootstrap
     const EXT_KEY = 'includekrexx';
 
     /**
+     * TYPO3 configuration keys.
+     */
+    const TYPO3_CONF_VARS = 'TYPO3_CONF_VARS';
+    const EXTCONF = 'EXTCONF';
+    const ADMIN_PANEL = 'adminpanel';
+    const MODULES = 'modules';
+    const DEBUG = 'debug';
+    const SUBMODULES = 'submodules';
+    const SYS = 'SYS';
+    const FLUID = 'fluid';
+    const NAMESPACE = 'namespaces';
+    const KREXX = 'krexx';
+
+    /**
      * Batch for the bootstrapping.
      */
     public function run()
     {
-        if ($this->loadKrexx() === false) {
-            // Autoloading failed.
+        if ($this->loadKrexx() === false ||
+            class_exists('\\Brainworxx\\Krexx\\Service\\Plugin\\Registration') === false
+        ) {
+            // "Autoloading" failed.
             // There is no point in continuing here.
-            return;
-        }
-
-        // Register our plugins.
-        if (!class_exists('\\Brainworxx\\Krexx\\Service\\Plugin\\Registration')) {
             return;
         }
 
@@ -80,20 +90,20 @@ class Bootstrap
             'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Configuration'
         );
         // Register our modules for the admin panel.
-        if (version_compare(TYPO3_version, '9.5', '>=')) {
-            if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['adminpanel']['modules']['debug'])) {
-                $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['adminpanel']['modules']['debug']['submodules'] = array_replace_recursive(
-                    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['adminpanel']['modules']['debug']['submodules'],
-                    array(
-                        'krexx' => array(
-                            'module' => 'Brainworxx\\Includekrexx\\Modules\\Log',
-                            'after' => array(
-                                'log',
-                            ),
-                        )
+        if (version_compare(TYPO3_version, '9.5', '>=') &&
+            isset($GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL][static::MODULES][static::DEBUG])
+        ) {
+            $GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL][static::MODULES][static::DEBUG][static::SUBMODULES] = array_replace_recursive(
+                $GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL][static::MODULES][static::DEBUG][static::SUBMODULES],
+                array(
+                    static::KREXX => array(
+                        'module' => 'Brainworxx\\Includekrexx\\Modules\\Log',
+                        'after' => array(
+                            'log',
+                        ),
                     )
-                );
-            }
+                )
+            );
         }
 
         // Register the fluid plugins.
@@ -105,13 +115,14 @@ class Bootstrap
         // do it inside the template. 'krexx' as a namespace should be unique enough.
         // Theoratically, this should be part of the fluid debugger plugin, but
         // activating it in the viewhelper is too late, for obvious reason.
-        if (version_compare(TYPO3_version, '8.5', '>=')) {
-            if (empty($GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['krexx'])) {
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['krexx'] = array(
-                    0 => 'Brainworxx\\Includekrexx\\ViewHelpers'
-                );
-            }
+        if (version_compare(TYPO3_version, '8.5', '>=') &&
+            empty($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID][static::NAMESPACE][static::KREXX])
+        ) {
+            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID][static::NAMESPACE][static::KREXX] = array(
+                0 => 'Brainworxx\\Includekrexx\\ViewHelpers'
+            );
         }
+
         // Add the legacy debug viewhelper, in case people are using the old krexx
         // namespace.
         if (!class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
