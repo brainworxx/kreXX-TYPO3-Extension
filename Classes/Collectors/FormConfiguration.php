@@ -35,7 +35,6 @@
 namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
-use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -55,9 +54,18 @@ class FormConfiguration extends AbstractCollector
         }
 
         $dropdown = array(
-            'full' => LocalizationUtility::translate('full', Bootstrap::EXT_KEY),
-            'display' => LocalizationUtility::translate('display', Bootstrap::EXT_KEY),
-            'none' => LocalizationUtility::translate('none', Bootstrap::EXT_KEY)
+            Fallback::RENDER_TYPE_INI_FULL => LocalizationUtility::translate(
+                Fallback::RENDER_TYPE_INI_FULL,
+                Bootstrap::EXT_KEY
+            ),
+            Fallback::RENDER_TYPE_INI_DISPLAY => LocalizationUtility::translate(
+                Fallback::RENDER_TYPE_INI_DISPLAY,
+                Bootstrap::EXT_KEY
+            ),
+            Fallback::RENDER_TYPE_INI_NONE => LocalizationUtility::translate(
+                Fallback::RENDER_TYPE_INI_NONE,
+                Bootstrap::EXT_KEY
+            )
         );
 
         $iniConfig = $this->pool->config->iniConfig;
@@ -114,19 +122,19 @@ class FormConfiguration extends AbstractCollector
             // with the form element.
             if ($values[Fallback::RENDER_TYPE] === Fallback::RENDER_TYPE_NONE) {
                 // It's not visible, thus we do not accept any values from it.
-                $result = 'none';
+                $result = Fallback::RENDER_TYPE_INI_NONE;
             }
             if ($values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_TRUE &&
                 $values[Fallback::RENDER_TYPE] !== Fallback::RENDER_TYPE_NONE
             ) {
                 // It's editable and visible.
-                $result = 'full';
+                $result = Fallback::RENDER_TYPE_INI_FULL;
             }
             if ($values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_FALSE &&
                 $values[Fallback::RENDER_TYPE] !== Fallback::RENDER_TYPE_NONE
             ) {
                 // It's only visible.
-                $result = 'display';
+                $result = Fallback::RENDER_TYPE_INI_DISPLAY;
             }
         }
         return $result;
