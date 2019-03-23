@@ -102,7 +102,7 @@ class DebugViewHelper extends AbstractViewHelper
         Registration::activatePlugin(
             'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
         );
-        
+
         $this->analysis();
 
         Registration::deactivatePlugin(
