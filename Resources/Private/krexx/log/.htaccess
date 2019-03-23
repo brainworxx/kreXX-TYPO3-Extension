@@ -1,3 +1,7 @@
 order deny,allow
 deny from all
-# allow from 12.34.56.78
+
+RewriteEngine On
+<RequireAll>
+   Require all denied
+</RequireAll>

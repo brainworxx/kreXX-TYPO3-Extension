@@ -93,7 +93,14 @@ class Configuration implements PluginConfigInterface
         );
 
         // htAccess to prevent a listing
-        $htAccess = 'order deny,allow' . chr(10) . 'deny from all';
+        $htAccess = 'order deny,allow' . chr(10);
+        $htAccess .= 'deny from all' . chr(10);
+        $htAccess .= 'RewriteEngine On' . chr(10);
+        $htAccess .= '<RequireAll>' . chr(10);
+        $htAccess .= '   Require all denied' . chr(10);
+        $htAccess .= '</RequireAll>' . chr(10);
+
+
         // Empty index.html in case the htaccess is not enough.
         $indexHtml = '';
         // Create and protect the temporal folders.
