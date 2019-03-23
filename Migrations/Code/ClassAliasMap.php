@@ -31,14 +31,7 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-
-/**
- * Legacy debug viewhelper.
- *
- * You can *still* use the old namespace declaration.
- * But really, you should not.
- */
-class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper
-{
-    // Do exactly, what the parent does.
-}
+return array (
+    // Our old legacy namespace viewhelper
+    'Tx_Includekrexx_ViewHelpers_DebugViewHelper' => 'Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper',
+);

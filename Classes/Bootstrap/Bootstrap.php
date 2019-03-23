@@ -66,7 +66,7 @@ class Bootstrap
     const SUBMODULES = 'submodules';
     const SYS = 'SYS';
     const FLUID = 'fluid';
-    const NAMESPACE = 'namespaces';
+    const FLUID_NAMESPACE = 'namespaces';
     const KREXX = 'krexx';
 
     /**
@@ -116,18 +116,11 @@ class Bootstrap
         // Theoratically, this should be part of the fluid debugger plugin, but
         // activating it in the viewhelper is too late, for obvious reason.
         if (version_compare(TYPO3_version, '8.5', '>=') &&
-            empty($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID][static::NAMESPACE][static::KREXX])
+            empty($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID][static::FLUID_NAMESPACE][static::KREXX])
         ) {
-            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID][static::NAMESPACE][static::KREXX] = array(
+            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID][static::FLUID_NAMESPACE][static::KREXX] = array(
                 0 => 'Brainworxx\\Includekrexx\\ViewHelpers'
             );
-        }
-
-        // Add the legacy debug viewhelper, in case people are using the old krexx
-        // namespace.
-        if (!class_exists('Tx_Includekrexx_ViewHelpers_DebugViewHelper')) {
-            $extPath = ExtensionManagementUtility::extPath(static::EXT_KEY);
-            include_once $extPath . 'Classes/ViewHelpers/LegacyDebugViewHelper.php';
         }
 
         \Brainworxx\Krexx\Service\Plugin\Registration::register(
