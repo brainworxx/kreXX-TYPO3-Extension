@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Controller\IndexController;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
@@ -96,7 +97,7 @@ abstract class AbstractCollector
     public function __construct()
     {
         Pool::createPool();
-        $this->pool = \Krexx::$pool;
+        $this->pool = Krexx::$pool;
         if (isset($GLOBALS['BE_USER'])) {
             $user = $GLOBALS['BE_USER'];
             $this->hasAccess = $user

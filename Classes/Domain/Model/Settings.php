@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Domain\Model;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Controller\IndexController;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -271,7 +272,7 @@ class Settings
     public function __construct()
     {
         Pool::createPool();
-        $this->security = \Krexx::$pool->config->security;
+        $this->security = Krexx::$pool->config->security;
         $this->registry = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
     }
 
@@ -613,7 +614,7 @@ class Settings
         $moduleSettings = array();
 
         // Process the normal settings.
-        foreach (\Krexx::$pool->config->configFallback as $group => $settings) {
+        foreach (Krexx::$pool->config->configFallback as $group => $settings) {
             $result .= '[' . $group . ']' . "\n";
             foreach ($settings as $settingName) {
                 if (!is_null($this->$settingName) &&
@@ -627,7 +628,7 @@ class Settings
         // Process the configuration for the settings editing.
         $result .= '[feEditing]' . "\n";
         $allowedValues = array('full', 'display', 'none');
-        foreach (\Krexx::$pool->config->feConfigFallback as $settingName => $settings) {
+        foreach (Krexx::$pool->config->feConfigFallback as $settingName => $settings) {
             $settingNameInModel = 'form' . $settingName;
             if ($settings['render']['Editable'] === 'true' &&
                 in_array($this->$settingNameInModel, $allowedValues)
@@ -651,5 +652,4 @@ class Settings
 
         return $result;
     }
-
 }

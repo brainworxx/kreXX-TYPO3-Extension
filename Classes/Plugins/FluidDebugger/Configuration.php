@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -98,7 +99,7 @@ class Configuration implements PluginConfigInterface
 
         // The code generation class is a singleton.
         // We need to reset the pool.
-        \Krexx::$pool->reset();
+        Krexx::$pool->reset();
 
         // Register our event handler, to remove the 'get' from the getter
         // method names. Fluid does not use these.

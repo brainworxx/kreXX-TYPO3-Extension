@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -77,7 +78,7 @@ abstract class AbstractController extends ActionController
     {
         parent::__construct();
         Pool::createPool();
-        $this->pool = \Krexx::$pool;
+        $this->pool = Krexx::$pool;
     }
 
     /**

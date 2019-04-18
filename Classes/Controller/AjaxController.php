@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Http\AjaxRequestHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -95,7 +96,7 @@ class AjaxController
             // No directory traversal for you!
             $id = preg_replace('/[^0-9]/', '', GeneralUtility::_GET('fileid'));
             // Directly add the delete result return value.
-            $file = \Krexx::$pool->config->getLogDir() . $id . '.Krexx';
+            $file = Krexx::$pool->config->getLogDir() . $id . '.Krexx';
 
             if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
                 $result->class  = 'success';

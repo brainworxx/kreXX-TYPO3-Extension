@@ -107,7 +107,6 @@ class LogfileList extends AbstractCollector
                 }
 
                 $fileList[] = $fileinfo;
-
             } catch (\Throwable $e) {
                 // We simply skip this one on error.
                 continue;

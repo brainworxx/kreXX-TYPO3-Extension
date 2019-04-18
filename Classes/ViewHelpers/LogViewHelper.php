@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Includekrexx\ViewHelpers;
 
+use Brainworxx\Krexx\Krexx;
+
 class LogViewHelper extends DebugViewHelper
 {
     /**
@@ -43,19 +45,19 @@ class LogViewHelper extends DebugViewHelper
     {
         $found  = false;
         if (!is_null($this->arguments['value'])) {
-            \Krexx::log($this->arguments['value']);
+            Krexx::log($this->arguments['value']);
             $found = true;
         }
 
         $children = $this->renderChildren();
         if (!is_null($children)) {
-            \Krexx::log($children);
+            Krexx::log($children);
             $found = true;
         }
 
         if (!$found) {
             // Both are NULL, we must tell the dev!
-            \Krexx::log(null);
+            Krexx::log(null);
         }
     }
 }

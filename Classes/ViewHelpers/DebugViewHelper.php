@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\ViewHelpers;
 
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -94,7 +95,7 @@ class DebugViewHelper extends AbstractViewHelper
     public function render()
     {
         Pool::createPool();
-        \Krexx::$pool->registry->set('DebugViewHelper', $this);
+        Krexx::$pool->registry->set('DebugViewHelper', $this);
 
         Registration::activatePlugin(
             'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'

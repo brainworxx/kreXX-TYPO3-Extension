@@ -87,5 +87,4 @@ class ThroughMethods implements EventHandlerInterface
 
         return '';
     }
-
 }

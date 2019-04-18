@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Modules;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Adminpanel\ModuleApi\AbstractSubModule;
@@ -213,7 +214,7 @@ class Log extends AbstractSubModule implements
         Pool::createPool();
         $renderedMessages = '';
 
-        foreach (\Krexx::$pool->messages->getKeys() as $message) {
+        foreach (Krexx::$pool->messages->getKeys() as $message) {
             $renderedMessages .= $this->renderMessage(
                 LocalizationUtility::translate(
                     static::TRANSLATION_PREFIX . $message['key'],
