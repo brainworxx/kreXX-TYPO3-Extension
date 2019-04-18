@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\View\Messages;
+use Brainworxx\Krexx\Krexx;
 
 class AbstractModelTest extends AbstractTest
 {
@@ -49,8 +50,8 @@ class AbstractModelTest extends AbstractTest
      */
     public function test__construct()
     {
-        $model = new Model(\Krexx::$pool);
-        $this->assertAttributeEquals(\Krexx::$pool, 'pool', $model);
+        $model = new Model(Krexx::$pool);
+        $this->assertAttributeEquals(Krexx::$pool, 'pool', $model);
 
         $this->assertAttributeInstanceOf(Connectors::class, 'connectorService', $model);
     }
@@ -74,7 +75,7 @@ class AbstractModelTest extends AbstractTest
             ->method('setParams')
             ->will($this->returnValue(null));
 
-        $model = new Model(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
         $this->assertEquals($model, $model->injectCallback($mockCallback));
 
         $this->assertAttributeEquals($mockCallback, 'callback', $model);
@@ -103,7 +104,7 @@ class AbstractModelTest extends AbstractTest
             ->method('setParams')
             ->will($this->returnValue($mockCallback));
 
-        $model = new Model(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
 
         // Test id the HTML result gates returned and both methods gets called once.
         $this->assertEquals($htmlResult, $model->injectCallback($mockCallback)->renderMe());
@@ -119,7 +120,7 @@ class AbstractModelTest extends AbstractTest
         $parameterOne = new \stdClass();
         $parameterTwo = "some value";
 
-        $model = new Model(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
 
         $model->addParameter('parameterOne', $parameterOne);
         $model->addParameter('parameterTwo', $parameterTwo);
@@ -140,7 +141,7 @@ class AbstractModelTest extends AbstractTest
      */
     public function testSetHelpId()
     {
-        $model = new Model(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
 
         // Mock the message class, which will provide the help text.
         $helpText = 'some help text';
@@ -148,7 +149,7 @@ class AbstractModelTest extends AbstractTest
         $messageMock->expects($this->once())
             ->method('getHelp')
             ->will($this->returnValue($helpText));
-        \Krexx::$pool->messages = $messageMock;
+        Krexx::$pool->messages = $messageMock;
 
         // Test the return value for chaining
         $this->assertEquals($model, $model->setHelpid('some id'));
@@ -164,7 +165,7 @@ class AbstractModelTest extends AbstractTest
      */
     public function testAddToJson()
     {
-        $model = new Model(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
         $text = "Look\n at\r me\n\r, I'm\n\r a string";
         $key = 'some key';
         $expected = [
@@ -187,7 +188,7 @@ class AbstractModelTest extends AbstractTest
      */
     public function testGetJson()
     {
-        $model = new Model(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
         $jsonData = [
             'some' => 'value',
             'to' => 'check',

@@ -148,7 +148,7 @@ class ThroughGetter extends AbstractCallback
             /** @var Model $model */
             $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
                 ->setName($reflectionMethod->getName())
-                ->addToJson('method comment', $comments);
+                ->addToJson(static::META_METHOD_COMMENT, $comments);
 
             // We need to decide if we are handling static getters.
             if ($reflectionMethod->isStatic() === true) {
@@ -197,7 +197,7 @@ class ThroughGetter extends AbstractCallback
             if ($value === null) {
                 // A NULL value might mean that the values does not
                 // exist, until the getter computes it.
-                $model->addToJson('hint', $this->pool->messages->getHelp('getterNull'));
+                $model->addToJson(static::META_HINT, $this->pool->messages->getHelp('getterNull'));
             }
         }
 

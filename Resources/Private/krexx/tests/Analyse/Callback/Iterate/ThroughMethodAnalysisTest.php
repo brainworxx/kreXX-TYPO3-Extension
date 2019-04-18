@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use Brainworxx\Krexx\Krexx;
 
 class ThroughMethodAnalysisTest extends AbstractTest
 {
@@ -62,7 +63,7 @@ class ThroughMethodAnalysisTest extends AbstractTest
     public function setUp()
     {
         parent::setUp();
-        $this->throughMethodAnalysis = new ThroughMethodAnalysis(\Krexx::$pool);
+        $this->throughMethodAnalysis = new ThroughMethodAnalysis(Krexx::$pool);
     }
 
     /**
@@ -93,8 +94,8 @@ class ThroughMethodAnalysisTest extends AbstractTest
     public function testCallMeNormal()
     {
         // Inject render nothing.
-        $renderNothing = new RenderNothing(\Krexx::$pool);
-        \Krexx::$pool->render = $renderNothing;
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
 
         // Test the events.
         $this->mockEventService(

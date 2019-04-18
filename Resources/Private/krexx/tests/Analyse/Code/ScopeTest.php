@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Krexx;
 
 class ScopeTest extends AbstractTest
 {
@@ -54,7 +55,7 @@ class ScopeTest extends AbstractTest
     {
         parent::setUp();
 
-        $this->scope = new Scope(\Krexx::$pool);
+        $this->scope = new Scope(Krexx::$pool);
     }
 
     /**
@@ -64,8 +65,8 @@ class ScopeTest extends AbstractTest
      */
     public function test__construct()
     {
-        $this->assertAttributeEquals(\Krexx::$pool, 'pool', $this->scope);
-        $this->assertEquals($this->scope, \Krexx::$pool->scope);
+        $this->assertAttributeEquals(Krexx::$pool, 'pool', $this->scope);
+        $this->assertEquals($this->scope, Krexx::$pool->scope);
     }
 
     /**
@@ -78,7 +79,7 @@ class ScopeTest extends AbstractTest
         $codegenMock = $this->createMock(Codegen::class);
         $codegenMock->expects($this->never())
             ->method('setAllowCodegen');
-        \Krexx::$pool->codegenHandler = $codegenMock;
+        Krexx::$pool->codegenHandler = $codegenMock;
 
         $this->scope->setScope($this->scope::UNKNOWN_VALUE);
         $this->assertAttributeEquals('', static::SCOPE_ATTRIBUTE_NAME, $this->scope);
@@ -87,7 +88,7 @@ class ScopeTest extends AbstractTest
         $codegenMock->expects($this->once())
             ->method('setAllowCodegen')
             ->with(true);
-        \Krexx::$pool->codegenHandler = $codegenMock;
+        Krexx::$pool->codegenHandler = $codegenMock;
 
         $this->scope->setScope(static::TEST_STRING);
         $this->assertAttributeEquals(static::TEST_STRING, static::SCOPE_ATTRIBUTE_NAME, $this->scope);
@@ -124,7 +125,7 @@ class ScopeTest extends AbstractTest
         // No genereation for 'some' scope.
         $this->setNestingLevel(1);
         $this->scope->setScope('some');
-        $model = new Model(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
         $this->assertFalse($this->scope->testModelForCodegen($model));
 
         // No generation for a deep nesting level.
@@ -170,6 +171,6 @@ class ScopeTest extends AbstractTest
         $emergencyMock->expects($this->once())
             ->method('getNestingLevel')
             ->will($this->returnValue($level));
-        \Krexx::$pool->emergencyHandler = $emergencyMock;
+        Krexx::$pool->emergencyHandler = $emergencyMock;
     }
 }

@@ -87,10 +87,8 @@ class ProcessBacktrace implements ConstInterface
         // Remove steps according to the configuration.
         if ($maxStep < $stepCount) {
             $this->pool->messages->addMessage('omittedBacktrace', array(($maxStep + 1), $stepCount));
-        }
-
-        // We will not analyse more steps than we actually have.
-        if ($maxStep > $stepCount) {
+        } else {
+            // We will not analyse more steps than we actually have.
             $maxStep = $stepCount;
         }
 
@@ -122,9 +120,14 @@ class ProcessBacktrace implements ConstInterface
         $backtrace = debug_backtrace();
 
         // We remove all steps that came from inside the kreXX lib.
+        $krexxScr = KREXX_DIR . 'src';
         foreach ($backtrace as $key => $step) {
-            if (isset($step[static::TRACE_FILE]) && strpos($step[static::TRACE_FILE], KREXX_DIR) !== false) {
+            if (isset($step[static::TRACE_FILE]) && strpos($step[static::TRACE_FILE], $krexxScr) !== false) {
                 unset($backtrace[$key]);
+            } else {
+                // No need to ga wurther, because we should have passed the
+                // kreXX part.
+                break;
             }
         }
 

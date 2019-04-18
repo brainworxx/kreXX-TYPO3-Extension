@@ -622,6 +622,10 @@ $fontLight: lighter 10px tahoma, verdana;
           color: $string-current;
         }
       }
+      .kshort::before,
+      .kshort::after {
+        content: '\27';
+      }
     }
 
     .kclass {

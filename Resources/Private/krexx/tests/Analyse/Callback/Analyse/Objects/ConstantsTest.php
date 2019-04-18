@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\Krexx;
 
 class ConstantsTest extends AbstractTest
 {
@@ -46,7 +47,7 @@ class ConstantsTest extends AbstractTest
     {
         parent::setUp();
 
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             ThroughConstants::class => CallbackCounter::class,
         ];
 
@@ -73,7 +74,7 @@ class ConstantsTest extends AbstractTest
             'ref' => $reflectionMock
         ];
 
-        $constants = new Constants(\Krexx::$pool);
+        $constants = new Constants(Krexx::$pool);
         $this->mockEventService(
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Constants::callMe::start', $constants]
         );
@@ -82,7 +83,7 @@ class ConstantsTest extends AbstractTest
         $renderMock = $this->createMock(AbstractRender::class);
         $renderMock->expects($this->never())
             ->method('renderExpandableChild');
-        \Krexx::$pool->render = $renderMock;
+        Krexx::$pool->render = $renderMock;
 
         // Run the test.
         $constants->setParams($fixture)
@@ -114,7 +115,7 @@ class ConstantsTest extends AbstractTest
         ];
 
         // Create the class to test
-        $constants = new Constants(\Krexx::$pool);
+        $constants = new Constants(Krexx::$pool);
         $this->mockEventService(
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Constants::callMe::start', $constants],
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Constants::analysisEnd', $constants]

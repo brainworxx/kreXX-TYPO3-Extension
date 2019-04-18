@@ -37,10 +37,10 @@ namespace Brainworxx\Krexx\Tests\Analyse\Callback\Analyse;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
-use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Messages;
+use Brainworxx\Krexx\Krexx;
 
 class ConfigSectionTest extends AbstractTest
 {
@@ -86,7 +86,7 @@ class ConfigSectionTest extends AbstractTest
             ]
         ];
 
-        $configSection = new ConfigSection(\Krexx::$pool);
+        $configSection = new ConfigSection(Krexx::$pool);
 
         $configSection->setParams($data);
         // Test if start event has fired
@@ -105,7 +105,7 @@ class ConfigSectionTest extends AbstractTest
                 ['renderNotEditableReadable']
             )
             ->will($this->returnValue('some help text'));
-        \Krexx::$pool->messages = $messageMock;
+        Krexx::$pool->messages = $messageMock;
 
         // Test if editable or not
         $renderMock = $this->createMock(AbstractRender::class);
@@ -117,7 +117,7 @@ class ConfigSectionTest extends AbstractTest
             ->method('renderSingleChild')
             ->with($this->anything())
             ->will($this->returnValue('some string'));
-        \Krexx::$pool->render = $renderMock;
+        Krexx::$pool->render = $renderMock;
 
         // Run it!
         $configSection->callMe();

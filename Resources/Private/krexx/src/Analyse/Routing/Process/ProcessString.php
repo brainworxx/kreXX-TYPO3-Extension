@@ -35,19 +35,21 @@
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use finfo;
 
 /**
  * Processing of strings.
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessString extends AbstractProcess
+class ProcessString extends AbstractRouting implements ProcessInterface
 {
     /**
      * The buffer info class. We use it to get the mimetype from a string.
      *
-     * @var \finfo|\Brainworxx\Krexx\Service\Misc\FileinfoDummy
+     * @var finfo|\Brainworxx\Krexx\Service\Misc\FileinfoDummy
      */
     protected $bufferInfo;
 
@@ -57,7 +59,7 @@ class ProcessString extends AbstractProcess
 
         // Init the fileinfo class.
         if (class_exists('\\finfo', false) === true) {
-            $this->bufferInfo = new \finfo(FILEINFO_MIME);
+            $this->bufferInfo = new finfo(FILEINFO_MIME);
         } else {
             // Use a "polyfill" dummy, tell the dev that we have a problem.
             $this->bufferInfo = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\FileinfoDummy');
@@ -78,20 +80,6 @@ class ProcessString extends AbstractProcess
     {
         $data = $model->getData();
 
-        // Checking the encoding.
-        $encoding = $this->pool->encodingService->mbDetectEncoding($data);
-        if ($encoding === false) {
-            // Looks like we have a mixed encoded string.
-            // We need to tell the dev!
-            $length = $this->pool->encodingService->mbStrLen($data);
-            $strlen = ' broken encoding ' . $length;
-            $encoding = 'broken';
-        } else {
-            // Normal encoding, nothing special here.
-            $length = $strlen = $this->pool->encodingService->mbStrLen($data, $encoding);
-            $encoding = '';
-        }
-
         // Check if this is a possible callback.
         // We are not going to analyse this further, because modern systems
         // do not use these anymore.
@@ -99,10 +87,24 @@ class ProcessString extends AbstractProcess
             $model->setIsCallback(true);
         }
 
-        $mimetype = '';
+        // Checking the encoding.
+        $encoding = $this->pool->encodingService->mbDetectEncoding($data);
+        if ($encoding === false) {
+            // Looks like we have a mixed encoded string.
+            // We need to tell the dev!
+            $length = $this->pool->encodingService->mbStrLen($data);
+            $strlen = 'broken encoding ' . $length;
+            $model->addToJson(static::META_ENCODING, 'broken');
+        } else {
+            // Normal encoding, nothing special here.
+            $length = $strlen = $this->pool->encodingService->mbStrLen($data, $encoding);
+        }
+
         if ($length > 20) {
             // Getting mime type from the string.
-            $mimetype = $this->bufferInfo->buffer($data);
+            // With larger strings, there is a good chance that there is
+            // something interesting in there.
+            $model->addToJson(static::META_MIME_TYPE, $this->bufferInfo->buffer($data));
         }
 
         // Check, if we are handling large string, and if we need to use a
@@ -113,17 +115,19 @@ class ProcessString extends AbstractProcess
             $cut = $this->pool->encodingService->encodeString(
                 $this->pool->encodingService->mbSubStr($data, 0, 50)
             ) . static::UNKNOWN_VALUE;
+
             $data = $this->pool->encodingService->encodeString($data);
-            $model->setHasExtra(true)->setNormal($cut)->setData($data);
+
+            $model->setHasExtra(true)
+                ->setNormal($cut)
+                ->setData($data);
         } else {
             $model->setNormal($this->pool->encodingService->encodeString($data));
         }
 
         return $this->pool->render->renderSingleChild(
             $model->setType(static::TYPE_STRING . $strlen)
-                ->addToJson('encoding', $encoding)
-                ->addToJson('mimetype', $mimetype)
-                ->addToJson('length', $length)
+                ->addToJson(static::META_LENGTH, $length)
         );
     }
 }

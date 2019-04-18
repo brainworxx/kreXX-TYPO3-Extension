@@ -35,14 +35,15 @@
 namespace Brainworxx\Krexx\Tests\Helpers;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcess;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInterface;
 
 /**
  * Stops the processing of stuff, right in it's track.
  *
  * @package Brainworxx\Krexx\Tests\Helpers
  */
-class ProcessNothing extends AbstractProcess
+class ProcessNothing extends AbstractRouting implements ProcessInterface
 {
     public function process(Model $model)
     {

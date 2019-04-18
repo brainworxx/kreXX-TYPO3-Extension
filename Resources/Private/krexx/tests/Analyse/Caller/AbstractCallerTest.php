@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Tests\Analyse\Caller;
 
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Krexx;
 
 class AbstractCallerTest extends AbstractTest
 {
@@ -48,8 +49,8 @@ class AbstractCallerTest extends AbstractTest
      */
     public function test__construct()
     {
-        $callerFinder = new CallerFinder(\Krexx::$pool);
-        $this->assertAttributeEquals(\Krexx::$pool, 'pool', $callerFinder);
+        $callerFinder = new CallerFinder(Krexx::$pool);
+        $this->assertAttributeEquals(Krexx::$pool, 'pool', $callerFinder);
     }
 
     /**
@@ -59,7 +60,7 @@ class AbstractCallerTest extends AbstractTest
      */
     public function testSetPattern()
     {
-        $callerFinder = new CallerFinder(\Krexx::$pool);
+        $callerFinder = new CallerFinder(Krexx::$pool);
         $callerFinder->setPattern(static::TEST_PATTERN);
         $this->assertAttributeEquals(static::TEST_PATTERN, 'pattern', $callerFinder);
     }
@@ -71,7 +72,7 @@ class AbstractCallerTest extends AbstractTest
      */
     public function testGetPattern()
     {
-        $callerFinder = new CallerFinder(\Krexx::$pool);
+        $callerFinder = new CallerFinder(Krexx::$pool);
 
         $this->setValueByReflection('pattern', static::TEST_PATTERN, $callerFinder);
         $this->assertEquals(static::TEST_PATTERN, $callerFinder->getPattern());

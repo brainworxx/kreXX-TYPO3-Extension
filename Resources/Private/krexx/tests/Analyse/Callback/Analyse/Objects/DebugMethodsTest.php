@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\DebugMethodFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use Brainworxx\Krexx\Krexx;
 
 class DebugMethodsTest extends AbstractTest
 {
@@ -55,7 +56,7 @@ class DebugMethodsTest extends AbstractTest
     {
         parent::setUp();
 
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             Debug::class => CallbackCounter::class,
         ];
 
@@ -70,7 +71,7 @@ class DebugMethodsTest extends AbstractTest
         ];
 
         // Setup the class to test.
-        $this->debugMethods = new DebugMethods(\Krexx::$pool);
+        $this->debugMethods = new DebugMethods(Krexx::$pool);
         $this->debugMethods->setParams($fixture);
     }
 

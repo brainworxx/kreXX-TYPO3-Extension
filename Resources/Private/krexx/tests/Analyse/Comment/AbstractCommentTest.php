@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Tests\Analyse\Comment;
 
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Krexx;
 
 class AbstractCommentTest extends AbstractTest
 {
@@ -47,7 +48,7 @@ class AbstractCommentTest extends AbstractTest
      */
     public function test__construct()
     {
-        $methodTest = new Methods(\Krexx::$pool);
-        $this->assertAttributeEquals(\Krexx::$pool, 'pool', $methodTest);
+        $methodTest = new Methods(Krexx::$pool);
+        $this->assertAttributeEquals(Krexx::$pool, 'pool', $methodTest);
     }
 }

@@ -87,7 +87,7 @@ class Model extends AbstractModel
     /**
      * Info, if we have "extra" data to render.
      *
-     * @see render->renderSingleChild()
+     * @see \Brainworxx\Krexx\View\Render::renderSingleChild
      *
      * @var bool
      */

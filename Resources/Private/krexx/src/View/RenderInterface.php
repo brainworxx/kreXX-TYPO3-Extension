@@ -226,6 +226,8 @@ interface RenderInterface
     /**
      * Gets a list of all available skins for the frontend config.
      *
+     * @deprecated
+     *
      * @return array
      *   An array with the skinnames.
      */

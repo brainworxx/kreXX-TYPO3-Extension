@@ -250,7 +250,7 @@ div.kwrapper {
     cursor: pointer;
 }
 
-.kwrapper .kexpand:before {
+.kwrapper .kexpand::before {
     content: "\00a0\25B6";
     font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
@@ -267,7 +267,7 @@ div.kwrapper {
     background-image: none;
 }
 
-.kwrapper .kopened:before {
+.kwrapper .kopened::before {
     content: "\00a0\25BC";
     font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
@@ -315,7 +315,7 @@ div.kwrapper {
     font-size: 14px;
 }
 
-.kwrapper .kmessage:before {
+.kwrapper .kmessage::before {
     content: "\00a0\00a0!\00a0\00a0";
     font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
     background-color: #ffcd00;
@@ -613,7 +613,7 @@ div.kwrapper {
     background-image: none;
 }
 
-.kwrapper .kexpand.kstring:before {
+.kwrapper .kexpand.kstring::before {
     color: #e2db74;
 }
 
@@ -622,9 +622,14 @@ div.kwrapper {
     color: #e2db74;
 }
 
-.kwrapper .kclass:before,
-.kwrapper .kmethod:before,
-.kwrapper .kclosure:before {
+.kwrapper .kstring .kshort::before,
+.kwrapper .kstring .kshort::after {
+    content: '\27';
+}
+
+.kwrapper .kclass::before,
+.kwrapper .kmethod::before,
+.kwrapper .kclosure::before {
     color: #a6e22a;
 }
 
@@ -639,7 +644,7 @@ div.kwrapper {
     background-image: none;
 }
 
-.kwrapper .karray:before {
+.kwrapper .karray::before {
     color: #62d9ef;
 }
 
@@ -783,7 +788,7 @@ div.kwrapper {
     float: right;
 }
 
-.kwrapper .kchild .kgencode:before {
+.kwrapper .kchild .kgencode::before {
     content: '\02665';
     font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
 }
@@ -898,7 +903,7 @@ div.kwrapper {
     cursor: pointer;
 }
 
-.kwrapper .ksearch .koptions:before {
+.kwrapper .ksearch .koptions::before {
     content: '\263C';
     font-weight: bolder;
 }

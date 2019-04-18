@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Tests\Analyse\Comment;
 
 use Brainworxx\Krexx\Analyse\Comment\Functions;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Krexx;
 
 class FunctionsTest extends AbstractTest
 {
@@ -53,7 +54,7 @@ class FunctionsTest extends AbstractTest
          */
         $fixture = function () {
         };
-        $functionComment = new Functions(\Krexx::$pool);
+        $functionComment = new Functions(Krexx::$pool);
         $reflection = new \ReflectionFunction($fixture);
 
         $this->assertEquals('Do something.', $functionComment->getComment($reflection));

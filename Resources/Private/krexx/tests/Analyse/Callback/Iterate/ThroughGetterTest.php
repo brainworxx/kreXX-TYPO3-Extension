@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Tests\Fixtures\DeepGetterFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\View\Render;
+use Brainworxx\Krexx\Krexx;
 
 class ThroughGetterTest extends AbstractTest
 {
@@ -64,7 +65,7 @@ class ThroughGetterTest extends AbstractTest
         // Test the events.
         // Some events are called multiple times, so we can not rely on the
         // mockEventService method.
-        $throughGetter = new ThroughGetter(\Krexx::$pool);
+        $throughGetter = new ThroughGetter(Krexx::$pool);
         $eventServiceMock = $this->createMock(Event::class);
         $eventServiceMock->expects($this->exactly(30))
             ->method('dispatch')
@@ -75,18 +76,18 @@ class ThroughGetterTest extends AbstractTest
                 ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::retrievePropertyValue::end', $throughGetter]
             )
             ->will($this->returnValue(''));
-        \Krexx::$pool->eventService = $eventServiceMock;
+        Krexx::$pool->eventService = $eventServiceMock;
 
 
         // Prevent the further routing.
-        \Krexx::$pool->routing = new RoutingNothing(\Krexx::$pool);
+        Krexx::$pool->routing = new RoutingNothing(Krexx::$pool);
 
         // Mock the render object.
         $renderMock = $this->createMock(Render::class);
         $renderMock->expects($this->once())
             ->method('renderSingleChild')
             ->will($this->returnValue(''));
-        \Krexx::$pool->render = $renderMock;
+        Krexx::$pool->render = $renderMock;
 
         // Create a fixture.
         $data = new DeepGetterFixture();
@@ -114,7 +115,7 @@ class ThroughGetterTest extends AbstractTest
         $throughGetter->setParams($fixture)->callMe();
 
         // Get the models from RoutingNothing and assert their values.
-        $models = \Krexx::$pool->routing->model;
+        $models = Krexx::$pool->routing->model;
         $expectations = [
             'one',
             'two',

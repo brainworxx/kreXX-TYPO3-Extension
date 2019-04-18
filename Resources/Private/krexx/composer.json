@@ -25,8 +25,11 @@
     "phpunit/phpunit": "^6.5"
   },
   "autoload": {
+    "psr-4": {
+      "Brainworxx\\Krexx\\": "src/"
+    },
     "files": [
-      "Krexx.php"
+      "bootstrap.php"
     ]
   },
   "autoload-dev": {

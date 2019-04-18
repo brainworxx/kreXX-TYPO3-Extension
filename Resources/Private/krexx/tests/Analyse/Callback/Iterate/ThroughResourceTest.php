@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
+use Brainworxx\Krexx\Krexx;
 
 class ThroughResourceTest extends AbstractTest
 {
@@ -54,15 +55,15 @@ class ThroughResourceTest extends AbstractTest
      */
     public function testCallMe()
     {
-        $throughResourceStream = new ThroughResource(\Krexx::$pool);
+        $throughResourceStream = new ThroughResource(Krexx::$pool);
         // Test start event.
         $this->mockEventService(
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughResource::callMe::start', $throughResourceStream]
         );
 
         // Inject the nothing route
-        $routeNothing = new RoutingNothing(\Krexx::$pool);
-        \Krexx::$pool->routing = $routeNothing;
+        $routeNothing = new RoutingNothing(Krexx::$pool);
+        Krexx::$pool->routing = $routeNothing;
         $this->mockEmergencyHandler();
 
         // Create a fixture.

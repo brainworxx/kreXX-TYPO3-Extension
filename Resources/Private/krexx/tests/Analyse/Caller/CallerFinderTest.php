@@ -38,6 +38,7 @@ use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Krexx;
 
 class CallerFinderTest extends AbstractTest
 {
@@ -68,7 +69,7 @@ class CallerFinderTest extends AbstractTest
         parent::setUp();
 
         // Create our test subject.
-        $this->callerFinder = new CallerFinder(\Krexx::$pool);
+        $this->callerFinder = new CallerFinder(Krexx::$pool);
         $this->pathToFixture = '...' . DIRECTORY_SEPARATOR . 'tests' .
             DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'ComplexMethodFixture.php';
     }
@@ -107,10 +108,10 @@ class CallerFinderTest extends AbstractTest
             [
                 'krexx',
                 'krexx::open',
-                'krexx::' . \Krexx::$pool->config->getDevHandler(),
+                'krexx::' . Krexx::$pool->config->getDevHandler(),
                 'Krexx',
                 'Krexx::open',
-                'Krexx::' . \Krexx::$pool->config->getDevHandler(),
+                'Krexx::' . Krexx::$pool->config->getDevHandler(),
                 'Krexx::log',
                 'krexx::log',
             ],

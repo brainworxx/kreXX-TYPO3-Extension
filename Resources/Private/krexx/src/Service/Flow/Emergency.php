@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Service\Flow;
 
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Krexx;
 
 /**
  * Emergency break handler for large output (runtime and memory usage).
@@ -200,8 +201,8 @@ class Emergency
         if ($this->timer < time()) {
             // This is taking longer than expected.
             $this->pool->messages->addMessage('emergencyTimer');
-            \Krexx::editSettings();
-            \Krexx::disable();
+            Krexx::editSettings();
+            Krexx::disable();
             static::$allIsOk = false;
             return true;
         }
@@ -227,8 +228,8 @@ class Emergency
             if ($left < $this->minMemoryLeft) {
                 $this->pool->messages->addMessage('emergencyMemory');
                 // Show settings to give the dev to repair the situation.
-                \Krexx::editSettings();
-                \Krexx::disable();
+                Krexx::editSettings();
+                Krexx::disable();
                 static::$allIsOk = false;
                 return true;
             }

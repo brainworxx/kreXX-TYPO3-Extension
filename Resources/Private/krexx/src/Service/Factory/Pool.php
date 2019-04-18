@@ -188,9 +188,8 @@ class Pool extends Factory
         $this->createClass('Brainworxx\\Krexx\\Analyse\Routing\\Routing');
         // Initialize the event handler.
         $this->createClass('Brainworxx\\Krexx\\Service\\Factory\\Event');
-
         // Initializes the render class.
-        $this->initRenderer();
+        $this->createClass($this->config->getSkinClass());
         // Check the environment and prepare the feedback, if necessary.
         $this->checkEnvironment();
     }
@@ -239,16 +238,5 @@ class Pool extends Factory
         $this->createClass('Brainworxx\\Krexx\\Analyse\\Code\\Scope');
         // We also reset our emergency handler timer.
         $this->emergencyHandler->resetTimer();
-    }
-
-    /**
-     * Loads the renderer from the skin.
-     */
-    protected function initRenderer()
-    {
-        $skin = $this->config->getSetting(Fallback::SETTING_SKIN);
-        $classname = 'Brainworxx\\Krexx\\View\\' . ucfirst($skin) . '\\Render';
-        include_once KREXX_DIR . 'resources/skins/' . $skin . '/Render.php';
-        $this->render =  $this->createClass($classname);
     }
 }

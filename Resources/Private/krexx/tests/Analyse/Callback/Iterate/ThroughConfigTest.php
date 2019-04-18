@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig;
 use Brainworxx\Krexx\Service\Config\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use Brainworxx\Krexx\Krexx;
 
 class ThroughConfigTest extends AbstractTest
 {
@@ -75,15 +76,15 @@ class ThroughConfigTest extends AbstractTest
         ];
 
         // Inject the fixture
-        \Krexx::$pool->config->settings = $fixture;
+        Krexx::$pool->config->settings = $fixture;
 
         // Inject CallbackCounter for ConfigSection
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             ConfigSection::class => CallbackCounter::class
         ];
 
         // Test start event
-        $throughConfig = new ThroughConfig(\Krexx::$pool);
+        $throughConfig = new ThroughConfig(Krexx::$pool);
         $this->mockEventService(
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConfig::callMe::start', $throughConfig]
         );

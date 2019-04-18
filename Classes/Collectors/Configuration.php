@@ -92,7 +92,7 @@ class Configuration extends AbstractCollector
         // Adding the dropdown values.
         $dropdown = array();
         $dropdown['skins'] = array();
-        foreach ($this->pool->render->getSkinList() as $skin) {
+        foreach ($this->pool->config->getSkinList() as $skin) {
             $dropdown['skins'][$skin] = $skin;
         }
         $dropdown[Fallback::SETTING_DESTINATION] = array(

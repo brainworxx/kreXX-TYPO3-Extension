@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Tests\Fixtures\GetterFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use Brainworxx\Krexx\Krexx;
 
 class GetterTest extends AbstractTest
 {
@@ -67,9 +68,9 @@ class GetterTest extends AbstractTest
     {
         parent::setUp();
 
-        $this->getter = new Getter(\Krexx::$pool);
+        $this->getter = new Getter(Krexx::$pool);
         // Prevent getting deeper into the rabbit hole.
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             ThroughGetter::class => CallbackCounter::class,
         ];
 
@@ -157,7 +158,7 @@ class GetterTest extends AbstractTest
         ];
 
         // Set the scope!
-        \Krexx::$pool->scope->setScope('$this');
+        Krexx::$pool->scope->setScope('$this');
 
         // Run the test
         $this->getter->setParams($fixture)

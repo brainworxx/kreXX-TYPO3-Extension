@@ -41,6 +41,7 @@ namespace Brainworxx\Krexx\Analyse;
  */
 interface ConstInterface
 {
+    // Variable types. Css, array keys and frontend dosplay.
     const TYPE_STRING = 'string ';
     const TYPE_INTEGER = 'integer';
     const TYPE_PHP = 'PHP';
@@ -63,6 +64,7 @@ interface ConstInterface
     const TYPE_CLASS = 'class';
     const TYPE_RESOURCE = 'resource';
 
+    // Callback parameters
     const PARAM_DATA = 'data';
     const PARAM_REF = 'ref';
     const PARAM_NAME = 'name';
@@ -77,6 +79,7 @@ interface ConstInterface
     const UNKNOWN_VALUE = '. . .';
     const UNKNOWN_DECLARATION = ':: unable to determine declaration :: <br /><br />Maybe this is a predeclared class?';
 
+    // Stuff from the backtrace.
     const TRACE_FILE = 'file';
     const TRACE_LINE = 'line';
     const TRACE_VARNAME = 'varname';
@@ -89,7 +92,20 @@ interface ConstInterface
     const TRACE_ERROR_FILE = 'errfile';
     const TRACE_ERROR_LINE = 'errline';
 
+    // Stuff directly displaysed in the FE, not just array keys.
     const META_DECLARED_IN = 'Declared in';
     const META_COMMENT = 'Comment';
     const META_SOURCE = 'Source';
+    const META_NAMESPACE = 'Namespace';
+    const META_PARAM_NO = 'Parameter #';
+    const META_HELP = 'Help';
+    const META_LENGTH = 'Length';
+    const META_METHOD_COMMENT = 'Method comment';
+    const META_HINT = 'Hint';
+    const META_ENCODING = 'Encoding';
+    const META_MIME_TYPE = 'Mimetype';
+
+    // Stuff for the skin registration.
+    const SKIN_CLASS = 'class';
+    const SKIN_DIRECTORY = 'dir';
 }

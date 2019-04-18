@@ -62,7 +62,6 @@ namespace Brainworxx\Krexx\Analyse\Caller {
     }
 }
 
-
 namespace Brainworxx\Krexx\Service\Config {
 
     /**
@@ -87,8 +86,149 @@ namespace Brainworxx\Krexx\Service\Config {
 }
 
 namespace {
-   // Register a shutdown method to die, so we get no output on the shell.
-    register_shutdown_function (function(){
+
+    // Register a shutdown method to die, so we get no output on the shell.
+    register_shutdown_function(function () {
         die();
     });
+}
+
+namespace Brainworxx\Krexx\Analyse\Routing\Process {
+
+    use Brainworxx\Krexx\Analyse\ConstInterface;
+
+    /**
+     * Mocking the debug backtrace for the backtrace processor.
+     */
+    function debug_backtrace()
+    {
+        $data = 'data';
+        $someFile = 'some file';
+        return [
+            [
+                ConstInterface::TRACE_FILE => KREXX_DIR . 'src' . DIRECTORY_SEPARATOR . 'blargh',
+                $data => 'Step 1',
+            ],
+            [
+                ConstInterface::TRACE_FILE => $someFile,
+                $data => 'Step 2',
+            ],
+            [
+                ConstInterface::TRACE_FILE => $someFile,
+                $data => 'Step 3',
+            ],
+            [
+                ConstInterface::TRACE_FILE => KREXX_DIR . 'src' . DIRECTORY_SEPARATOR . 'whatever',
+                $data => 'Step 4',
+            ],
+        ];
+    }
+}
+
+namespace Brainworxx\Krexx\Analyse\Routing\Process {
+
+    use function foo\func;
+
+    /**
+     * Mocking the class_exist method for the string processing, to have some
+     * control over the file info class
+     *
+     * @param string $classname
+     * @param bool $useAutoloader
+     * @return bool
+     */
+    function class_exists(string $classname, bool $useAutoloader = true, bool $startMock = null): bool
+    {
+        static $activeMocking = false;
+
+        if ($startMock === true) {
+            $activeMocking = true;
+            return true;
+        }
+
+        if ($startMock === false) {
+            $activeMocking = false;
+            return true;
+        }
+
+        if ($activeMocking) {
+            return false;
+        }
+
+        return \class_exists($classname, $useAutoloader);
+    }
+
+    /**
+     * Mocking the get_resource_type function.
+     *
+     * @param $resource
+     * @param null $mockResult
+     * @return string
+     */
+    function get_resource_type($resource, $mockResult = null)
+    {
+        static $result = '';
+
+        if (!is_null($mockResult)) {
+            $result = $mockResult;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Mocking the stream_get_meta_data function.
+     *
+     * @param $resource
+     * @param null $mockResult
+     * @return array
+     */
+    function stream_get_meta_data($resource, $mockResult = null)
+    {
+        static $result = [];
+
+        if (!is_null($mockResult)) {
+            $result = $mockResult;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Mocking the curl_getinfo function.
+     *
+     * @param $resource
+     * @param null $mockResult
+     * @return null
+     */
+    function curl_getinfo($resource, $mockResult = null)
+    {
+        static $result = null;
+
+        if (!is_null($mockResult)) {
+            $result = $mockResult;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Mocking a php version.
+     *
+     * @param $version1
+     * @param $version2
+     * @param $operator
+     * @param null $mockResult
+     * @return boolean
+     */
+    function version_compare($version1, $version2, $operator, $mockResult = null)
+    {
+        static $result = false;
+
+        if (!is_null($mockResult)) {
+            $result = $mockResult;
+        }
+
+        return $result;
+    }
 }

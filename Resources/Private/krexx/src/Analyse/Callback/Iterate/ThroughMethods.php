@@ -86,7 +86,7 @@ class ThroughMethods extends AbstractCallback
             $paramList = '';
             foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
                 ++$key;
-                $paramList .= $methodData['Parameter #' . $key] = $this->pool
+                $paramList .= $methodData[static::META_PARAM_NO . $key] = $this->pool
                     ->codegenHandler
                     ->parameterToString($reflectionParameter);
                 // We add a comma to the parameter list, to separate them for a

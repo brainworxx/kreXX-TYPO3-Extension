@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Service\Factory;
 
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use Brainworxx\Krexx\Krexx;
 
 /**
  * Simple factory, nothing special. Offers a overwrite method.
@@ -110,7 +111,7 @@ class Factory
      */
     public static function createPool()
     {
-        if (\Krexx::$pool !== null) {
+        if (Krexx::$pool !== null) {
             // The pool is there, do nothing.
             return;
         }
@@ -120,11 +121,11 @@ class Factory
         // Create a new pool where we store all our classes.
         // We also need to check if we have an overwrite for the pool.
         if (empty($rewrite['Brainworxx\\Krexx\\Service\\Factory\\Pool']) === true) {
-            \Krexx::$pool = new Pool();
+            Krexx::$pool = new Pool();
         } else {
             $classname = $rewrite['Brainworxx\\Krexx\\Service\\Factory\\Pool'];
-            \Krexx::$pool = new $classname();
+            Krexx::$pool = new $classname();
         }
-        \Krexx::$pool->rewrite = $rewrite;
+        Krexx::$pool->rewrite = $rewrite;
     }
 }

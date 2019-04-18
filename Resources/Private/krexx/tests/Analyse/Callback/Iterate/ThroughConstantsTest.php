@@ -37,6 +37,7 @@ namespace Tests\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
+use Brainworxx\Krexx\Krexx;
 
 class ThroughConstantsTest extends AbstractTest
 {
@@ -50,7 +51,7 @@ class ThroughConstantsTest extends AbstractTest
         $this->mockEmergencyHandler();
 
         // Inject route nothing
-        \Krexx::$pool->routing = new RoutingNothing(\Krexx::$pool);
+        Krexx::$pool->routing = new RoutingNothing(Krexx::$pool);
 
         // Create a fixture
         $fixture = [
@@ -64,7 +65,7 @@ class ThroughConstantsTest extends AbstractTest
         ];
 
         // Listen for the start event.
-        $throughConstants = new ThroughConstants(\Krexx::$pool);
+        $throughConstants = new ThroughConstants(Krexx::$pool);
         $this->mockEventService(
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConstants::callMe::start', $throughConstants]
         );
@@ -74,7 +75,7 @@ class ThroughConstantsTest extends AbstractTest
 
         // Check the models from the route nothing
         $count = 0;
-        $models = \Krexx::$pool->routing->model;
+        $models = Krexx::$pool->routing->model;
 
         foreach ($fixture['data'] as $name => $value) {
             $this->assertEquals($name, $models[$count]->getName());

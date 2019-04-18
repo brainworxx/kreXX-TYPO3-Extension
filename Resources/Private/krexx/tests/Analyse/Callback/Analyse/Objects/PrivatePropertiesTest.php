@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Tests\Fixtures\PrivateFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use Brainworxx\Krexx\Krexx;
 
 class PrivatePropertiesTest extends AbstractTest
 {
@@ -60,10 +61,10 @@ class PrivatePropertiesTest extends AbstractTest
         parent::setUp();
 
         // Create in instance of the class to test
-        $this->privateProperties = new PrivateProperties(\Krexx::$pool);
+        $this->privateProperties = new PrivateProperties(Krexx::$pool);
 
         // Inject the callback counter
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             ThroughProperties::class => CallbackCounter::class,
         ];
 

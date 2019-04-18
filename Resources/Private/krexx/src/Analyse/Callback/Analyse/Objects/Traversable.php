@@ -140,7 +140,7 @@ class Traversable extends AbstractObjectAnalysis
                 ->setType(static::TYPE_FOREACH)
                 ->addParameter(static::PARAM_DATA, $parameter)
                 ->addParameter(static::PARAM_MULTILINE, $multiline)
-                ->addToJson('Length', count($parameter));
+                ->addToJson(static::META_LENGTH, count($parameter));
 
             // Check, if we are handling a huge array. Huge arrays tend to result in a huge
             // output, maybe even triggering a emergency break. to avoid this, we give them
@@ -149,7 +149,7 @@ class Traversable extends AbstractObjectAnalysis
                 $model->injectCallback(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray')
                 )->setNormal('Simplified Traversable Info')
-                    ->addToJson('Help', $this->pool->messages->getHelp('simpleArray'));
+                    ->setHelpid('simpleArray');
             } else {
                 $model->injectCallback(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')

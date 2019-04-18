@@ -37,10 +37,10 @@ namespace Brainworxx\Krexx\Tests\Analyse\Callback\Analyse;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\BacktraceStep;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
-use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\ProcessNothing;
+use Brainworxx\Krexx\Krexx;
 
 class BacktraceStepTest extends AbstractTest
 {
@@ -71,7 +71,7 @@ class BacktraceStepTest extends AbstractTest
      */
     public function testCallMe()
     {
-        $backtraceStep = new BacktraceStep(\Krexx::$pool);
+        $backtraceStep = new BacktraceStep(Krexx::$pool);
         $this->mockEventService(
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::callMe::start', $backtraceStep],
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::fileToOutput::end', $backtraceStep],

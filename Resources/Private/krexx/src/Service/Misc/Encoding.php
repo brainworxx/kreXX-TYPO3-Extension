@@ -167,8 +167,8 @@ class Encoding
             // We encoding @, because we need them for our chunks.
             // The { are needed in the marker of the skin.
             $sortingCallback = array($this, 'arrayMapCallbackNormal');
-            $search = array('@', '{');
-            $replace = array('&#64;', '&#123;');
+            $search = array('@', '{', '  ');
+            $replace = array('&#64;', '&#123;', '&nbsp;&nbsp;');
         }
 
         // There are several places here, that may throw a warning.

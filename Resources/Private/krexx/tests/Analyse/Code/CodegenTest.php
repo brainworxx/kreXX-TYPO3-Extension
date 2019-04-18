@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Krexx;
 
 class CodegenTest extends AbstractTest
 {
@@ -70,11 +71,11 @@ class CodegenTest extends AbstractTest
     {
         parent::setUp();
 
-        $this->codegenHandler = new Codegen(\Krexx::$pool);
+        $this->codegenHandler = new Codegen(Krexx::$pool);
         $this->codegenHandler->setAllowCodegen(true);
         $this->setValueByReflection(static::FIRST_RUN, false, $this->codegenHandler);
 
-        $this->fixture = new Model(\Krexx::$pool);
+        $this->fixture = new Model(Krexx::$pool);
         $this->fixture->setName('name')
             ->setIsPublic(false);
 
@@ -106,8 +107,8 @@ class CodegenTest extends AbstractTest
      */
     public function test__construct()
     {
-        $this->assertAttributeEquals(\Krexx::$pool, 'pool', $this->codegenHandler);
-        $this->assertAttributeEquals($this->codegenHandler, 'codegenHandler', \Krexx::$pool);
+        $this->assertAttributeEquals(Krexx::$pool, 'pool', $this->codegenHandler);
+        $this->assertAttributeEquals($this->codegenHandler, 'codegenHandler', Krexx::$pool);
     }
 
     /**
@@ -242,7 +243,7 @@ class CodegenTest extends AbstractTest
             ->method('testModelForCodegen')
             ->with($this->fixture)
             ->will($this->returnValue(true));
-        \Krexx::$pool->scope = $scopeMock;
+        Krexx::$pool->scope = $scopeMock;
 
         $this->assertEquals(
             static::CONCATENATED_CONNECTORS,
@@ -265,7 +266,7 @@ class CodegenTest extends AbstractTest
             ->method('testModelForCodegen')
             ->with($this->fixture)
             ->will($this->returnValue(false));
-        \Krexx::$pool->scope = $scopeMock;
+        Krexx::$pool->scope = $scopeMock;
 
         $this->assertEquals('. . .', $this->codegenHandler->generateSource($this->fixture));
     }

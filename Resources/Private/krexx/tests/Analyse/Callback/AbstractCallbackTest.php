@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Tests\Analyse\Callback;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Krexx;
 
 class AbstractCallbackTest extends AbstractTest
 {
@@ -46,9 +47,9 @@ class AbstractCallbackTest extends AbstractTest
      */
     public function test__construct()
     {
-        $debugCallback = new Debug(\Krexx::$pool);
+        $debugCallback = new Debug(Krexx::$pool);
 
-        $this->assertAttributeSame(\Krexx::$pool, 'pool', $debugCallback);
+        $this->assertAttributeSame(Krexx::$pool, 'pool', $debugCallback);
     }
 
     /**
@@ -63,7 +64,7 @@ class AbstractCallbackTest extends AbstractTest
             'param2' => 'value2',
         );
 
-        $debugCallback = new Debug(\Krexx::$pool);
+        $debugCallback = new Debug(Krexx::$pool);
         $this->assertEquals($debugCallback, $debugCallback->setParams($params));
         $this->assertAttributeEquals($params, 'parameters', $debugCallback);
     }
@@ -80,7 +81,7 @@ class AbstractCallbackTest extends AbstractTest
             'param2' => 'value2',
         );
 
-        $debugCallback = new Debug(\Krexx::$pool);
+        $debugCallback = new Debug(Krexx::$pool);
 
         $this->setValueByReflection('parameters', $params, $debugCallback);
 

@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use Brainworxx\Krexx\Krexx;
 
 class MethodsTest extends AbstractTest
 {
@@ -86,9 +87,9 @@ class MethodsTest extends AbstractTest
     {
         parent::setUp();
 
-        $this->methods = new Methods(\Krexx::$pool);
+        $this->methods = new Methods(Krexx::$pool);
         // Prevent getting deeper into the rabbit hole.
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             ThroughMethods::class => CallbackCounter::class,
         ];
 
@@ -294,7 +295,7 @@ class MethodsTest extends AbstractTest
             ->with($metaHiveKey . $this->md5Hash)
             ->will($this->returnValue($isInHive));
         // Inject it.
-        \Krexx::$pool->recursionHandler = $recursionMock;
+        Krexx::$pool->recursionHandler = $recursionMock;
 
         // Run the test.
         $this->methods->callMe();

@@ -50,6 +50,7 @@ use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Tests\Fixtures\TraversableFixture;
+use Brainworxx\Krexx\Krexx;
 
 class ObjectsTest extends AbstractTest
 {
@@ -73,7 +74,7 @@ class ObjectsTest extends AbstractTest
         parent::setUp();
 
         // Prevent the class from going deeper!
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             PublicProperties::class => CallbackNothing::class,
             Getter::class => CallbackNothing::class,
             ProtectedProperties::class => CallbackNothing::class,
@@ -84,7 +85,7 @@ class ObjectsTest extends AbstractTest
             DebugMethods::class => CallbackNothing::class,
         ];
 
-        $this->objects = new Objects(\Krexx::$pool);
+        $this->objects = new Objects(Krexx::$pool);
     }
 
     /**
@@ -130,7 +131,7 @@ class ObjectsTest extends AbstractTest
     public function testCallMePublic()
     {
         // Test analyse public
-        \Krexx::$pool->rewrite[PublicProperties::class] = CallbackCounter::class;
+        Krexx::$pool->rewrite[PublicProperties::class] = CallbackCounter::class;
 
         $this->objects->setParams($this->fixture)
             ->callMe();
@@ -150,7 +151,7 @@ class ObjectsTest extends AbstractTest
     public function testCallMeGetter()
     {
         // Test analyse getter true
-        \Krexx::$pool->rewrite[Getter::class] = CallbackCounter::class;
+        Krexx::$pool->rewrite[Getter::class] = CallbackCounter::class;
 
         // This one is depending on a setting.
         $this->setConfigValue(Fallback::SETTING_ANALYSE_GETTER, true);
@@ -180,7 +181,7 @@ class ObjectsTest extends AbstractTest
     public function testCallMeProtected()
     {
         // Test analyse protected true
-        \Krexx::$pool->rewrite[ProtectedProperties::class] = CallbackCounter::class;
+        Krexx::$pool->rewrite[ProtectedProperties::class] = CallbackCounter::class;
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PROTECTED, true);
 
         $this->objects->setParams($this->fixture)
@@ -209,7 +210,7 @@ class ObjectsTest extends AbstractTest
     public function testCallMePrivate()
     {
         // Test analyse private true
-        \Krexx::$pool->rewrite[PrivateProperties::class] = CallbackCounter::class;
+        Krexx::$pool->rewrite[PrivateProperties::class] = CallbackCounter::class;
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PRIVATE, true);
 
         $this->objects->setParams($this->fixture)
@@ -239,7 +240,7 @@ class ObjectsTest extends AbstractTest
      */
     public function testCallMeConstants()
     {
-        \Krexx::$pool->rewrite[Constants::class] = CallbackCounter::class;
+        Krexx::$pool->rewrite[Constants::class] = CallbackCounter::class;
 
         $this->objects->setParams($this->fixture)
             ->callMe();
@@ -257,7 +258,7 @@ class ObjectsTest extends AbstractTest
      */
     public function testCallMeMethods()
     {
-        \Krexx::$pool->rewrite[Methods::class] = CallbackCounter::class;
+        Krexx::$pool->rewrite[Methods::class] = CallbackCounter::class;
 
         $this->objects->setParams($this->fixture)
             ->callMe();
@@ -277,7 +278,7 @@ class ObjectsTest extends AbstractTest
     {
         // Test with traversable deactivated and with a traversable class
         $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, false);
-        \Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
+        Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
         $this->fixture['data'] = new TraversableFixture();
         $this->objects->setParams($this->fixture)
             ->callMe();
@@ -288,7 +289,7 @@ class ObjectsTest extends AbstractTest
 
         // Test with traversable deactivated and with a normal class
         $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, false);
-        \Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
+        Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
         $this->objects->setParams($this->fixture)
             ->callMe();
         $this->assertEquals(0, CallbackCounter::$counter);
@@ -298,7 +299,7 @@ class ObjectsTest extends AbstractTest
 
         // Test with traversable activated and with a normal class
         $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, true);
-        \Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
+        Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
         $this->objects->setParams($this->fixture)
             ->callMe();
         $this->assertEquals(0, CallbackCounter::$counter);
@@ -308,7 +309,7 @@ class ObjectsTest extends AbstractTest
 
         // Test with traversable activated and with a traversable class
         $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, true);
-        \Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
+        Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
         $this->fixture['data'] = new TraversableFixture();
         $this->objects->setParams($this->fixture)
             ->callMe();
@@ -324,7 +325,7 @@ class ObjectsTest extends AbstractTest
      */
     public function testCallMeDebugMethods()
     {
-        \Krexx::$pool->rewrite[DebugMethods::class] = CallbackCounter::class;
+        Krexx::$pool->rewrite[DebugMethods::class] = CallbackCounter::class;
         $this->objects->setParams($this->fixture)
             ->callMe();
         $this->assertEquals(1, CallbackCounter::$counter);

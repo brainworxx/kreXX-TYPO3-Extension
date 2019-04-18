@@ -39,9 +39,11 @@ use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\KrexxTest;
+use Brainworxx\Krexx\View\Messages;
 use PHPUnit\Framework\TestCase;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Controller\AbstractController;
+use Brainworxx\Krexx\Krexx;
 
 abstract class AbstractTest extends TestCase
 {
@@ -57,19 +59,19 @@ abstract class AbstractTest extends TestCase
     protected function tearDown()
     {
         // Reset the kreXX count.
-        $emergencyRef = new \ReflectionClass(\Krexx::$pool->emergencyHandler);
+        $emergencyRef = new \ReflectionClass(Krexx::$pool->emergencyHandler);
         $krexxCountRef = $emergencyRef->getProperty(KrexxTest::KREXX_COUNT);
         $krexxCountRef->setAccessible(true);
-        $krexxCountRef->setValue(\Krexx::$pool->emergencyHandler, 0);
+        $krexxCountRef->setValue(Krexx::$pool->emergencyHandler, 0);
 
         // Reset the messages.
-        $messageRef = new \ReflectionClass(\Krexx::$pool->messages);
+        $messageRef = new \ReflectionClass(Krexx::$pool->messages);
         $keysRef = $messageRef->getProperty('keys');
         $keysRef->setAccessible(true);
-        $keysRef->setValue(\Krexx::$pool->messages, []);
+        $keysRef->setValue(Krexx::$pool->messages, []);
 
         // Remove possible logfiles.
-        $logList = glob(\Krexx::$pool->config->getLogDir() . '*.Krexx.html');
+        $logList = glob(Krexx::$pool->config->getLogDir() . '*.Krexx.html');
         if (!empty($logList)) {
             foreach ($logList as $file) {
                 unlink($file);
@@ -79,9 +81,9 @@ abstract class AbstractTest extends TestCase
 
         // Reset the pool and the settings.
         AbstractController::$analysisInProgress = false;
-        \Krexx::$pool->config = new Config(\Krexx::$pool);
-        \Krexx::$pool->config->setDisabled(false);
-        \Krexx::$pool = null;
+        Krexx::$pool->config = new Config(Krexx::$pool);
+        Krexx::$pool->config->setDisabled(false);
+        Krexx::$pool = null;
         Config::$disabledByPhp = false;
         $this->setValueByReflection('rewriteList', [], Registration::class);
         CallbackCounter::$counter = 0;
@@ -114,6 +116,29 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
+     * Getting a protected value in the class we are testing.
+     *
+     * @throws \ReflectionException
+     *
+     * @param string $name
+     *   The name of the value.
+     * @param object $object
+     *   The instance where we want to set the value. Or the class name, when
+     *   setting static values.
+     *
+     * @return mixed
+     *   The value.
+     */
+    protected function getValueByReflection($name, $object)
+    {
+        $reflectionClass = new \ReflectionClass($object);
+        $reflectionProperty = $reflectionClass->getProperty($name);
+        $reflectionProperty->setAccessible(true);
+
+        return $reflectionProperty->getValue($object);
+    }
+
+    /**
      * Shortcut to adjust the configuration values.
      *
      * @param string $key
@@ -123,7 +148,7 @@ abstract class AbstractTest extends TestCase
      */
     protected function setConfigValue($key, $value)
     {
-        \Krexx::$pool->config->settings[$key]->setValue($value);
+        Krexx::$pool->config->settings[$key]->setValue($value);
     }
 
     /**
@@ -138,7 +163,7 @@ abstract class AbstractTest extends TestCase
         $emergencyMock->expects($this->any())
             ->method('getKrexxCount')
             ->will($this->returnValue(1));
-        \Krexx::$pool->emergencyHandler = $emergencyMock;
+        Krexx::$pool->emergencyHandler = $emergencyMock;
     }
 
     /**
@@ -158,6 +183,6 @@ abstract class AbstractTest extends TestCase
         call_user_func_array([$invocationMocker, 'withConsecutive'], $eventList);
 
         // Inject the mock.
-        \Krexx::$pool->eventService = $eventServiceMock;
+        Krexx::$pool->eventService = $eventServiceMock;
     }
 }

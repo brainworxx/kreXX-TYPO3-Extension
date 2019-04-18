@@ -35,13 +35,14 @@
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 
 /**
  * Processing of resources.
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessResource extends AbstractProcess
+class ProcessResource extends AbstractRouting implements ProcessInterface
 {
 
     /**
@@ -57,8 +58,7 @@ class ProcessResource extends AbstractProcess
     {
         $resource = $model->getData();
         $type = get_resource_type($resource);
-        $typestring = 'resource (' . $type . ')';
-
+        $typeString = 'resource (' . $type . ')';
 
         switch ($type) {
             case 'stream':
@@ -75,18 +75,16 @@ class ProcessResource extends AbstractProcess
                 $meta = array();
         }
 
-
-
         // Check, if we have something useful.
         if (empty($meta)) {
             // If we are facing a closed resource, 'Unknown' is a little bit sparse.
             // PHP 7.2 can provide more info by calling gettype().
             if (version_compare(phpversion(), '7.2.0', '>=')) {
-                $typestring = gettype($resource);
+                $typeString = gettype($resource);
             }
             return $this->pool->render->renderSingleChild(
-                $model->setData($typestring)
-                    ->setNormal($typestring)
+                $model->setData($typeString)
+                    ->setNormal($typeString)
                     ->setType(static::TYPE_RESOURCE)
             );
         }
@@ -95,7 +93,7 @@ class ProcessResource extends AbstractProcess
         return $this->pool->render->renderExpandableChild(
             $model->setType(static::TYPE_RESOURCE)
                 ->addParameter(static::PARAM_DATA, $meta)
-                ->setNormal($typestring)
+                ->setNormal($typeString)
                 ->injectCallback(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughResource')
                 )

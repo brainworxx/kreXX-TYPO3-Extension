@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Bootstrap;
 
+use Brainworxx\Krexx\Krexx;
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -173,12 +174,12 @@ class Bootstrap
     {
         // There may be a composer version of kreXX installed.
         // We will not load the bundled one.
-        if (class_exists('Krexx')) {
+        if (defined('KREXX_DIR') === true) {
             return true;
         }
 
         // Simply load the main file.
-        $krexxFile =  ExtensionManagementUtility::extPath(static::EXT_KEY) . 'Resources/Private/krexx/Krexx.php';
+        $krexxFile =  ExtensionManagementUtility::extPath(static::EXT_KEY) . 'Resources/Private/krexx/bootstrap.php';
         if (file_exists($krexxFile)) {
             include_once $krexxFile;
             return true;

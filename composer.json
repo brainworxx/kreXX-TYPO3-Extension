@@ -24,7 +24,8 @@
   ],
   "autoload": {
     "psr-4": {
-      "Brainworxx\\Includekrexx\\": "Classes/"
+      "Brainworxx\\Includekrexx\\": "Classes/",
+      "Brainworxx\\Krexx\\": "Resources/Private/krexx/src/"
     }
   },
   "replace": {

@@ -110,7 +110,7 @@ class Security extends Fallback
     }
 
     /**
-     * We check one of the files for readability.
+     * We check the configuration for this skin.
      *
      * @param string $value
      *   The value we want to evaluate
@@ -122,9 +122,12 @@ class Security extends Fallback
      */
     protected function evalSkin($value, $name)
     {
-        $result = $this->pool->fileService->fileIsReadable(
-            KREXX_DIR . 'resources/skins/' . $value . '/header.html'
-        );
+        $result = isset($this->skinConfiguration[$value]) &&
+            class_exists($this->skinConfiguration[$value][static::SKIN_CLASS]) &&
+            $this->pool->fileService->fileIsReadable(
+                $this->skinConfiguration[$value][static::SKIN_DIRECTORY] . 'header.html'
+            );
+
         if ($result === false) {
             $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR . ucfirst($name));
         }

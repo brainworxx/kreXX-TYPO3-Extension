@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Analyse\Comment;
 use Brainworxx\Krexx\Analyse\Comment\Properties;
 use Brainworxx\Krexx\Tests\Fixtures\PrivateFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Krexx;
 
 class PropertiesTest extends AbstractTest
 {
@@ -48,7 +49,7 @@ class PropertiesTest extends AbstractTest
      */
     public function testGetComment()
     {
-        $propertiesComment = new Properties(\Krexx::$pool);
+        $propertiesComment = new Properties(Krexx::$pool);
         $reflectionProperty = new \ReflectionProperty(PrivateFixture::class, 'value5');
 
         $this->assertContains(

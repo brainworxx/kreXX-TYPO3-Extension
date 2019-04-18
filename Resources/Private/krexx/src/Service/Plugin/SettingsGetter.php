@@ -43,9 +43,6 @@ namespace Brainworxx\Krexx\Service\Plugin;
  */
 class SettingsGetter extends Registration
 {
-
-
-
     /**
      * Getter for the configured configuration file
      *
@@ -176,5 +173,18 @@ class SettingsGetter extends Registration
     public static function getPlugins()
     {
         return static::$plugins;
+    }
+
+    /**
+     * Getter for the skins, provided by plugins.
+     *
+     * @internal
+     *
+     * @return array
+     *   The configuration arrays of additional skins.
+     */
+    public static function getAdditionalSkinList()
+    {
+        return self::$additionalSkinList;
     }
 }

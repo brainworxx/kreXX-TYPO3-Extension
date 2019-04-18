@@ -45,10 +45,13 @@ class BacktraceController extends AbstractController
     /**
      * Outputs a backtrace.
      *
+     * @param array|null $backtrace
+     *   An already existing backtrace.
+     *
      * @return $this
      *   Return $this for chaining.
      */
-    public function backtraceAction()
+    public function backtraceAction(array $backtrace = null)
     {
         if ($this->pool->emergencyHandler->checkMaxCall() === true) {
             // Called too often, we might get into trouble here!
@@ -65,7 +68,7 @@ class BacktraceController extends AbstractController
         $footer = $this->outputFooter($caller);
         $analysis = $this->pool
             ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessBacktrace')
-            ->process();
+            ->process($backtrace);
 
         // Detect the encoding on the start-chunk-string of the analysis
         // for a complete encoding picture.

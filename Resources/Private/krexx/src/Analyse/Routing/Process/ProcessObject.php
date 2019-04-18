@@ -35,13 +35,14 @@
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 
 /**
  * Processing of objects.
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessObject extends AbstractProcess
+class ProcessObject extends AbstractRouting implements ProcessInterface
 {
     /**
      * Render a dump for an object.
@@ -54,13 +55,14 @@ class ProcessObject extends AbstractProcess
      */
     public function process(Model $model)
     {
+        $object = $model->getData();
         // Output data from the class.
         return $this->pool->render->renderExpandableChild(
             $model->setType(static::TYPE_CLASS)
-                ->addParameter(static::PARAM_DATA, $model->getData())
+                ->addParameter(static::PARAM_DATA, $object)
                 ->addParameter(static::PARAM_NAME, $model->getName())
-                ->setNormal('\\' . get_class($model->getData()))
-                ->setDomid($this->generateDomIdFromObject($model->getData()))
+                ->setNormal('\\' . get_class($object))
+                ->setDomid($this->generateDomIdFromObject($object))
                 ->injectCallback(
                     $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects')
                 )

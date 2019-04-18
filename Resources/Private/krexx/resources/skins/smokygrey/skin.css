@@ -463,6 +463,10 @@
         color: #AF8C4F; }
     .kwrapper .kchild .kstring.kcurrent-additional em, .kwrapper .kchild .kstring.kcurrent-additional .kname, .kfatalwrapper-outer .kchild .kstring.kcurrent-additional em, .kfatalwrapper-outer .kchild .kstring.kcurrent-additional .kname {
       color: #AF8C4F; }
+    .kwrapper .kchild .kstring .kshort::before,
+    .kwrapper .kchild .kstring .kshort::after, .kfatalwrapper-outer .kchild .kstring .kshort::before,
+    .kfatalwrapper-outer .kchild .kstring .kshort::after {
+      content: '\27'; }
     .kwrapper .kchild .kclass::before, .kfatalwrapper-outer .kchild .kclass::before {
       color: #00AD00; }
     .kwrapper .kchild .kclass em, .kfatalwrapper-outer .kchild .kclass em {

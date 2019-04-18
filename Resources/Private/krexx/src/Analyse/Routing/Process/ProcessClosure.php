@@ -36,13 +36,14 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 
 /**
  * Processing of closures.
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessClosure extends AbstractProcess
+class ProcessClosure extends AbstractRouting implements ProcessInterface
 {
     /**
      * Analyses a closure.
@@ -82,7 +83,7 @@ class ProcessClosure extends AbstractProcess
         // Adding the namespace, but only if we have one.
         $namespace = $ref->getNamespaceName();
         if (empty($namespace) === false) {
-            $result['namespace'] = $namespace;
+            $result[static::META_NAMESPACE] = $namespace;
         }
 
         // Adding the parameters.
@@ -90,7 +91,7 @@ class ProcessClosure extends AbstractProcess
 
         foreach ($ref->getParameters() as $key => $reflectionParameter) {
             ++$key;
-            $paramList .=  $result['Parameter #' . $key] = $this->pool
+            $paramList .=  $result[static::META_PARAM_NO . $key] = $this->pool
                 ->codegenHandler
                 ->parameterToString($reflectionParameter);
             // We add a comma to the parameter list, to separate them for a

@@ -38,6 +38,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
+use Brainworxx\Krexx\Krexx;
 
 class ThroughArrayTest extends AbstractTest
 {
@@ -47,7 +48,7 @@ class ThroughArrayTest extends AbstractTest
     public function setUp()
     {
         parent::setUp();
-        \Krexx::$pool->routing = new RoutingNothing(\Krexx::$pool);
+        Krexx::$pool->routing = new RoutingNothing(Krexx::$pool);
     }
 
     /**
@@ -56,7 +57,7 @@ class ThroughArrayTest extends AbstractTest
     public function testCallMe()
     {
         // Listen for the start event.
-        $throughArray = new ThroughArray(\Krexx::$pool);
+        $throughArray = new ThroughArray(Krexx::$pool);
         $this->mockEventService(
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray::callMe::start', $throughArray]
         );
@@ -66,7 +67,7 @@ class ThroughArrayTest extends AbstractTest
         $recursionHandler->expects($this->once())
             ->method('getMarker')
             ->will($this->returnValue('recursion marker'));
-        \Krexx::$pool->recursionHandler = $recursionHandler;
+        Krexx::$pool->recursionHandler = $recursionHandler;
 
 
         $fixture = [
@@ -83,7 +84,7 @@ class ThroughArrayTest extends AbstractTest
             ->callMe();
 
         // Check the result
-        $models = \Krexx::$pool->routing->model;
+        $models = Krexx::$pool->routing->model;
         $this->assertEquals(2, count($models));
 
         // Test for multiline

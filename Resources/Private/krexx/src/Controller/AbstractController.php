@@ -184,7 +184,7 @@ abstract class AbstractController implements ConstInterface
     protected function outputCssAndJs()
     {
         // We only do this once per output type.
-        $destination = $this->pool->config->getSetting('destination');
+        $destination = $this->pool->config->getSetting(Fallback::SETTING_DESTINATION);
         $result = isset(static::$jsCssSend[$destination]);
         static::$jsCssSend[$destination] = true;
         if ($result === true) {
@@ -192,34 +192,27 @@ abstract class AbstractController implements ConstInterface
             return '';
         }
 
-        // Get the css file.
-        $css = $this->pool->fileService->getFileContents(
-            KREXX_DIR .
-            'resources/skins/' .
-            $this->pool->config->getSetting(Fallback::SETTING_SKIN) .
-            '/skin.css'
-        );
-        // Remove whitespace.
-        $css = preg_replace('/\s+/', ' ', $css);
-
         // Adding our DOM tools to the js.
         if ($this->pool->fileService->fileIsReadable(KREXX_DIR . 'resources/jsLibs/kdt.min.js') === true) {
-            $jsFile = KREXX_DIR . 'resources/jsLibs/kdt.min.js';
+            $kdtPath = KREXX_DIR . 'resources/jsLibs/kdt.min.js';
         } else {
-            $jsFile = KREXX_DIR . 'resources/jsLibs/kdt.js';
+            $kdtPath = KREXX_DIR . 'resources/jsLibs/kdt.js';
         }
+        $jsCode = $this->pool->fileService->getFileContents($kdtPath);
 
-        $jsCode = $this->pool->fileService->getFileContents($jsFile);
-
+        // Adding the skin css and js.
+        $skinDirectory = $this->pool->config->getSkinDirectory();
+        // Get the css file.
+        $css = $this->pool->fileService->getFileContents($skinDirectory . 'skin.css');
+        // Remove whitespace.
+        $css = preg_replace('/\s+/', ' ', $css);
         // Krexx.js is comes directly form the template.
-        $path = KREXX_DIR . 'resources/skins/' . $this->pool->config->getSetting(Fallback::SETTING_SKIN);
-        if ($this->pool->fileService->fileIsReadable($path . '/krexx.min.js') === true) {
-            $jsFile = $path . '/krexx.min.js';
+        if ($this->pool->fileService->fileIsReadable($skinDirectory . 'krexx.min.js') === true) {
+            $skinJsPath = $skinDirectory . 'krexx.min.js';
         } else {
-            $jsFile = $path . '/krexx.js';
+            $skinJsPath = $skinDirectory . 'krexx.js';
         }
-
-        $jsCode .= $this->pool->fileService->getFileContents($jsFile);
+        $jsCode .= $this->pool->fileService->getFileContents($skinJsPath);
 
         return $this->pool->render->renderCssJs($css, $jsCode);
     }

@@ -34,7 +34,9 @@
 
 namespace Brainworxx\Krexx\Service\Config;
 
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 
 /**
  * Configuration fallback settings.
@@ -43,9 +45,8 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Service\Config
  */
-class Fallback
+class Fallback  implements ConstInterface
 {
-
     const RENDER = 'render';
     const EVALUATE = 'eval';
     const VALUE = 'value';
@@ -106,6 +107,9 @@ class Fallback
     const RENDER_TYPE_INI_FULL = 'full';
     const RENDER_TYPE_INI_DISPLAY = 'display';
     const RENDER_TYPE_INI_NONE = 'none';
+
+    const SKIN_SMOKY_GREY = 'smokygrey';
+    const SKIN_HANS = 'hans';
 
     /**
      * Defining the layout of the frontend editing form.
@@ -170,6 +174,8 @@ class Fallback
         Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_NONE,
         Fallback::RENDER_EDITABLE => Fallback::VALUE_FALSE,
     );
+
+    protected $skinConfiguration = array();
 
     /**
      * Here we store all relevant data.
@@ -303,8 +309,7 @@ class Fallback
                 Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
             ),
             Fallback::SETTING_SKIN => array(
-                // Skin for kreXX. We have provided 'hans' and 'smokygrey'.
-                Fallback::VALUE => 'smokygrey',
+                Fallback::VALUE => static::SKIN_SMOKY_GREY,
                 Fallback::RENDER => $this->editableSelect,
                 Fallback::EVALUATE => Fallback::EVAL_SKIN,
                 Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
@@ -377,6 +382,22 @@ class Fallback
                 Fallback::SECTION => Fallback::SECTION_PRUNE
             ),
         );
+
+        // Setting up out two bundled skins.
+        $this->skinConfiguration = array_merge(
+            array(
+                static::SKIN_SMOKY_GREY => array(
+                    static::SKIN_CLASS => 'Brainworxx\\Krexx\\View\\Skins\\RenderSmokyGrey',
+                    static::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/smokygrey/'
+                ),
+                static::SKIN_HANS => array(
+                    static::SKIN_CLASS => 'Brainworxx\\Krexx\\View\\Skins\\RenderHans',
+                    static::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/hans/'
+                )
+            ),
+            SettingsGetter::getAdditionalSkinList()
+        );
+
     }
 
     /**
@@ -426,5 +447,5 @@ class Fallback
      *
      * @var string
      */
-    public $version = '3.0.2 dev';
+    public $version = '3.1.0 dev';
 }

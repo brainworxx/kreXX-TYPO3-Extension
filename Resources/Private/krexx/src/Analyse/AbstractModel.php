@@ -43,7 +43,7 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
  *
  * @package Brainworxx\Krexx\Analyse
  */
-abstract class AbstractModel
+abstract class AbstractModel implements ConstInterface
 {
     /**
      * Here we store all relevant data.
@@ -153,7 +153,7 @@ abstract class AbstractModel
      */
     public function setHelpid($helpId)
     {
-        $this->addToJson('Help', $this->pool->messages->getHelp($helpId));
+        $this->addToJson(static::META_HELP, $this->pool->messages->getHelp($helpId));
         return $this;
     }
 

@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use Brainworxx\Krexx\Krexx;
 
 class ThroughMethodsTest extends AbstractTest
 {
@@ -70,7 +71,7 @@ class ThroughMethodsTest extends AbstractTest
     public function setUp()
     {
         parent::setUp();
-        $this->throughMethods = new ThroughMethods(\Krexx::$pool);
+        $this->throughMethods = new ThroughMethods(Krexx::$pool);
     }
 
     /**
@@ -135,10 +136,10 @@ class ThroughMethodsTest extends AbstractTest
         ];
 
         // Inject the render nothing.
-        $renderNothing = new RenderNothing(\Krexx::$pool);
-        \Krexx::$pool->render = $renderNothing;
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
         // Overwrite the callback.
-        \Krexx::$pool->rewrite[ThroughMethodAnalysis::class] = CallbackNothing::class;
+        Krexx::$pool->rewrite[ThroughMethodAnalysis::class] = CallbackNothing::class;
 
         // Run the test.
         $this->throughMethods

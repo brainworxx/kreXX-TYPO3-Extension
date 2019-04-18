@@ -34,6 +34,9 @@
 
 namespace Brainworxx\Krexx\Service\Plugin;
 
+use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Krexx;
+
 /**
  * Allow plugins to alter the configuration
  *
@@ -41,7 +44,7 @@ namespace Brainworxx\Krexx\Service\Plugin;
  *
  * @package Brainworxx\Krexx\Service
  */
-class Registration
+class Registration implements ConstInterface
 {
     const IS_ACTIVE = 'isActive';
     const CONFIG_CLASS = 'configClass';
@@ -110,6 +113,13 @@ class Registration
      * @var array
      */
     protected static $eventList = array();
+
+    /**
+     * List of all additionally registered skins with their configuration.
+     *
+     * @var array
+     */
+    protected static $additionalSkinList = array();
 
     /**
      * Setter for the path to the configuration file.
@@ -231,6 +241,26 @@ class Registration
     {
         static::$additionalHelpFiles[] = $path;
     }
+
+    /**
+     * Register an additional skin. You can also overwrite already existing
+     * skins, if you use their name.
+     *
+     * @param string $name
+     *   The name of the skin. 'hans' and 'smokygrey' are the bundeled ones.
+     * @param string $className
+     *   The full qualified class name of the renderer
+     * @param string $directory
+     *   The absolute path to the skin html files.
+     */
+    public static function registerAdditionalskin($name, $className, $directory)
+    {
+        static::$additionalSkinList[$name] = array(
+            static::SKIN_CLASS => $className,
+            static::SKIN_DIRECTORY => $directory
+        );
+    }
+
     /**
      * Register a plugin.
      *
@@ -262,11 +292,11 @@ class Registration
             $staticPlugin = static::$plugins[$configClass][static::CONFIG_CLASS];
             $staticPlugin::exec();
 
-            if (isset(\Krexx::$pool)) {
+            if (isset(Krexx::$pool)) {
                 // Update stuff in the pool.
-                \Krexx::$pool->rewrite = static::$rewriteList;
-                \Krexx::$pool->eventService->register = static::$eventList;
-                \Krexx::$pool->messages->readHelpTexts();
+                Krexx::$pool->rewrite = static::$rewriteList;
+                Krexx::$pool->eventService->register = static::$eventList;
+                Krexx::$pool->messages->readHelpTexts();
             }
         }
         // No registration, no config, no plugin.
@@ -295,6 +325,7 @@ class Registration
         static::$additionalHelpFiles = array();
         static::$eventList = array();
         static::$rewriteList = array();
+        static::$additionalSkinList = array();
 
         // Go through the remaining plugins.
         static::$plugins[$configClass][static::IS_ACTIVE] = false;
@@ -306,11 +337,11 @@ class Registration
 
         // Renew the configuration class, so the new one will load all settings
         // from the registration class.
-        if (isset(\Krexx::$pool)) {
-            \Krexx::$pool->rewrite = static::$rewriteList;
-            \Krexx::$pool->eventService->register = static::$eventList;
-            \Krexx::$pool->config = \Krexx::$pool->createClass('Brainworxx\\Krexx\\Service\\Config\\Config');
-            \Krexx::$pool->messages->readHelpTexts();
+        if (isset(Krexx::$pool)) {
+            Krexx::$pool->rewrite = static::$rewriteList;
+            Krexx::$pool->eventService->register = static::$eventList;
+            Krexx::$pool->config = Krexx::$pool->createClass('Brainworxx\\Krexx\\Service\\Config\\Config');
+            Krexx::$pool->messages->readHelpTexts();
         }
     }
 }

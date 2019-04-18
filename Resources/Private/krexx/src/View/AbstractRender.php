@@ -36,7 +36,6 @@ namespace Brainworxx\Krexx\View;
 
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 
@@ -110,8 +109,8 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-        $this->skinPath = KREXX_DIR . 'resources/skins/' .
-            $this->pool->config->getSetting(Fallback::SETTING_SKIN) . '/';
+        $this->pool->render = $this;
+        $this->skinPath = $this->pool->config->getSkinDirectory();
     }
 
     /**
@@ -247,22 +246,12 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated
      */
     public function getSkinList()
     {
-        // Static cache to make it a little bit faster.
-        static $list = array();
-
-        if (empty($list) === true) {
-            // Get the list.
-            $list = array_filter(glob(KREXX_DIR . 'resources/skins/*'), 'is_dir');
-            // Now we need to filter it, we only want the names, not the full path.
-            foreach ($list as &$path) {
-                $path = str_replace(KREXX_DIR . 'resources/skins/', '', $path);
-            }
-        }
-
-        return $list;
+        return $this->pool->config->getSkinList();
     }
 
     /**

@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use Brainworxx\Krexx\Krexx;
 
 class TraversableTest extends AbstractTest
 {
@@ -72,14 +73,14 @@ class TraversableTest extends AbstractTest
         parent::setUp();
 
         // Create in instance of the class to test
-        $this->traversable = new Traversable(\Krexx::$pool);
+        $this->traversable = new Traversable(Krexx::$pool);
 
         $this->mockEmergencyHandler();
 
         // Add the nesting level tests.
-        \Krexx::$pool->emergencyHandler->expects($this->once())
+        Krexx::$pool->emergencyHandler->expects($this->once())
             ->method('upOneNestingLevel');
-        \Krexx::$pool->emergencyHandler->expects($this->once())
+        Krexx::$pool->emergencyHandler->expects($this->once())
             ->method('downOneNestingLevel');
     }
 
@@ -91,7 +92,7 @@ class TraversableTest extends AbstractTest
     public function testCallMeWithEmergency()
     {
         // Tell the emergency handler mock that we have a nesting level problem.
-        \Krexx::$pool->emergencyHandler->expects($this->once())
+        Krexx::$pool->emergencyHandler->expects($this->once())
             ->method(static::CHECK_NESTING)
             ->will($this->returnValue(true));
 
@@ -123,7 +124,7 @@ class TraversableTest extends AbstractTest
             ->method('checkEmergencyBreak')
             ->will($this->returnValue(true));
 
-        \Krexx::$pool->emergencyHandler = $emergencyMock;
+        Krexx::$pool->emergencyHandler = $emergencyMock;
 
         // Listen for the start event. Again.
         $this->mockEventService(
@@ -148,7 +149,7 @@ class TraversableTest extends AbstractTest
     public function testCallMeWithErrors()
     {
         // Tell the emergency handler, that the nesting level is ok.
-        \Krexx::$pool->emergencyHandler->expects($this->once())
+        Krexx::$pool->emergencyHandler->expects($this->once())
             ->method(static::CHECK_NESTING)
             ->will($this->returnValue(false));
 
@@ -185,7 +186,7 @@ class TraversableTest extends AbstractTest
     public function testMeWithSmallArray()
     {
         // Tell the emergency handler, that the nesting level is ok.
-        \Krexx::$pool->emergencyHandler->expects($this->any())
+        Krexx::$pool->emergencyHandler->expects($this->any())
             ->method(static::CHECK_NESTING)
             ->will($this->returnValue(false));
 
@@ -210,7 +211,7 @@ class TraversableTest extends AbstractTest
         ];
 
         // Inject the callback counter
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             ThroughArray::class => CallbackCounter::class,
             ThroughLargeArray::class => 'some\\not\\existing\\class\to\trigger\\an\\error',
         ];
@@ -239,7 +240,7 @@ class TraversableTest extends AbstractTest
     public function testMeWithLargeArray()
     {
         // Tell the emergency handler, that the nesting level is ok.
-        \Krexx::$pool->emergencyHandler->expects($this->any())
+        Krexx::$pool->emergencyHandler->expects($this->any())
             ->method(static::CHECK_NESTING)
             ->will($this->returnValue(false));
 
@@ -259,7 +260,7 @@ class TraversableTest extends AbstractTest
         ];
 
         // Inject the callback counter
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             ThroughArray::class => 'some\\not\\existing\\class\\to\\trigger\\an\\error',
             ThroughLargeArray::class => CallbackCounter::class,
         ];

@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
+use Brainworxx\Krexx\Krexx;
 
 class ThroughLargeArrayTest extends AbstractTest
 {
@@ -65,7 +66,7 @@ class ThroughLargeArrayTest extends AbstractTest
         parent::setUp();
 
         // Test start event
-        $this->throughLargeArray = new ThroughLargeArray(\Krexx::$pool);
+        $this->throughLargeArray = new ThroughLargeArray(Krexx::$pool);
         $eventServiceMock = $this->createMock(Event::class);
         $eventServiceMock->expects($this->exactly(1))
             ->method('dispatch')
@@ -73,15 +74,15 @@ class ThroughLargeArrayTest extends AbstractTest
                 ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray::callMe::start', $this->throughLargeArray]
             )
             ->will($this->returnValue(''));
-        \Krexx::$pool->eventService = $eventServiceMock;
+        Krexx::$pool->eventService = $eventServiceMock;
 
         // Mock the routing class.
-        $this->routingMock = new RoutingNothing(\Krexx::$pool);
-        \Krexx::$pool->routing = $this->routingMock;
+        $this->routingMock = new RoutingNothing(Krexx::$pool);
+        Krexx::$pool->routing = $this->routingMock;
 
         // Mock the render class.
-        $this->renderMock = new RenderNothing(\Krexx::$pool);
-        \Krexx::$pool->render = $this->renderMock;
+        $this->renderMock = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $this->renderMock;
     }
 
     protected function alwaysRun($fixture)

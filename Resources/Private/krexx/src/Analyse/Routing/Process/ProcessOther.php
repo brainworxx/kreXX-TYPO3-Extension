@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 
 /**
  * Processing of other types of values.
@@ -42,7 +43,7 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessOther extends AbstractProcess
+class ProcessOther extends AbstractRouting implements ProcessInterface
 {
 
     /**

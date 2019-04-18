@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
+use Brainworxx\Krexx\Krexx;
 
 class ThroughPropertiesTest extends AbstractTest
 {
@@ -69,7 +70,7 @@ class ThroughPropertiesTest extends AbstractTest
     public function setUp()
     {
         parent::setUp();
-        $this->throughProperties = new ThroughProperties(\Krexx::$pool);
+        $this->throughProperties = new ThroughProperties(Krexx::$pool);
     }
 
     /**
@@ -110,6 +111,7 @@ class ThroughPropertiesTest extends AbstractTest
      * Normal testrun for the property analysis.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDeclarationPlace
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
      */
     public function testCallMeNormal()
@@ -150,8 +152,8 @@ class ThroughPropertiesTest extends AbstractTest
         ];
 
         // Inject the nothing-router.
-        $routeNothing = new RoutingNothing(\Krexx::$pool);
-        \Krexx::$pool->routing = $routeNothing;
+        $routeNothing = new RoutingNothing(Krexx::$pool);
+        Krexx::$pool->routing = $routeNothing;
         $this->mockEmergencyHandler();
 
         // Run the test

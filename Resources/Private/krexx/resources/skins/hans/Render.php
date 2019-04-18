@@ -34,12 +34,16 @@
 
 namespace Brainworxx\Krexx\View\Hans;
 
+use Brainworxx\Krexx\View\Skins\RenderHans;
+
 /**
  * Individual render class for the Hans skin.
  *
+ * @deprecated
+ *
  * @package Brainworxx\Krexx\View\Hans
  */
-class Render extends \Brainworxx\Krexx\View\Render
+class Render extends RenderHans
 {
-    // Do nothing.
+
 }

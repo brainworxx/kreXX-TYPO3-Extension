@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Analyse;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Krexx;
 
 class ModelTest extends AbstractTest
 {
@@ -60,7 +61,7 @@ class ModelTest extends AbstractTest
     public function setUp()
     {
         parent::setUp();
-        $this->model = new Model(\Krexx::$pool);
+        $this->model = new Model(Krexx::$pool);
     }
 
     /**

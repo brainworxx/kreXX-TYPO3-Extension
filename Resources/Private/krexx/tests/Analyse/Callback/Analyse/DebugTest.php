@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Analyse\Callback\Analyse;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
 use Brainworxx\Krexx\Analyse\Routing\Routing;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Krexx;
 
 class DebugTest extends AbstractTest
 {
@@ -47,7 +48,7 @@ class DebugTest extends AbstractTest
      */
     public function testCallMe()
     {
-        $debug = new Debug(\Krexx::$pool);
+        $debug = new Debug(Krexx::$pool);
         $data = ['data' => 'just some string'];
         $debug->setParams($data);
 
@@ -63,7 +64,7 @@ class DebugTest extends AbstractTest
             ->method('analysisHub')
             ->with($this->anything())
             ->will($this->returnValue('some markup'));
-        \Krexx::$pool->routing = $routingMock;
+        Krexx::$pool->routing = $routingMock;
 
         // Run the test.
         $debug->callMe();
