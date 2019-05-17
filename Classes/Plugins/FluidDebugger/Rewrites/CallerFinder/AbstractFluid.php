@@ -347,7 +347,7 @@ abstract class AbstractFluid extends AbstractCaller
         if (strpos($varname, ':') !== false || strpos($varname, '->') !== false) {
             if (version_compare(TYPO3_version, '8.6', '>=')) {
                 // Variable set is native to 8.6 and beyond.
-                $code = '<f:variable.set value="{' . $varname . '}" name="fluidvar" /> {';
+                $code = '<f:variable value="{' . $varname . '}" name="fluidvar" /> {';
             } else {
                 $code = '<v:variable.set value="{' . $varname . '}" name="fluidvar" /> {';
             }
