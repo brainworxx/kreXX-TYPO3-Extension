@@ -35,10 +35,19 @@
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
+use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
+use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors as FluidConnectors;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen as FluidCodegen;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\FluidOld as OldCallerFinderFluid;
 
 /**
  * Special overwrites and event handlers for fluid.
@@ -72,29 +81,20 @@ class Configuration implements PluginConfigInterface
     {
         // Registering the fluid connector class.
         Registration::addRewrite(
-            'Brainworxx\\Krexx\\Analyse\\Code\\Connectors',
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\\Code\\Connectors'
+            Connectors::class,
+            FluidConnectors::class
         );
 
         // Registering the special source generation for methods.
-        Registration::addRewrite(
-            'Brainworxx\\Krexx\\Analyse\\Code\\Codegen',
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\Code\\Codegen'
-        );
+        Registration::addRewrite(Codegen::class, FluidCodegen::class);
 
         // Depending on the TYPO3 version, we need another fluid caller finder.
         if (version_compare(TYPO3_version, '8.4', '>')) {
             // Fluid 2.2 or higher
-            Registration::addRewrite(
-                'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
-                'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\\CallerFinder\\Fluid'
-            );
+            Registration::addRewrite(CallerFinder::class, CallerFinderFluid::class);
         } else {
             // Fluid 2.0 or lower.
-            Registration::addRewrite(
-                'Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder',
-                'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Rewrites\\CallerFinder\\FluidOld'
-            );
+            Registration::addRewrite(CallerFinder::class, OldCallerFinderFluid::class);
         }
 
         // The code generation class is a singleton.
@@ -105,12 +105,12 @@ class Configuration implements PluginConfigInterface
         // method names. Fluid does not use these.
         Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::goThroughMethodList::end',
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\EventHandlers\\GetterWithoutGet'
+            GetterWithoutGet::class
         );
         // Another event switches to VHS code generation.
         Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods::callMe::end',
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\EventHandlers\\VhsMethods'
+            VhsMethods::class
         );
 
         // Adding additional texts.

@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\From\Ini;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -53,7 +54,7 @@ class FormConfiguration extends AbstractCollector
             return;
         }
 
-        $dropdown = array(
+        $dropdown = [
             Fallback::RENDER_TYPE_INI_FULL => LocalizationUtility::translate(
                 Fallback::RENDER_TYPE_INI_FULL,
                 Bootstrap::EXT_KEY
@@ -66,21 +67,23 @@ class FormConfiguration extends AbstractCollector
                 Fallback::RENDER_TYPE_INI_NONE,
                 Bootstrap::EXT_KEY
             )
-        );
+        ];
 
-        $iniConfig = $this->pool->config->iniConfig;
-        $config = array();
+        /** @var Ini $iniReader */
+        $iniReader = $this->pool->createClass(Ini::class)
+            ->loadIniFile($this->pool->config->getPathToIniFile());
+        $config = [];
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
-            $config[$settingsName] = array();
+            $config[$settingsName] = [];
             $config[$settingsName][static::SETTINGS_NAME] = $settingsName;
             $config[$settingsName][static::SETTINGS_OPTIONS] = $dropdown;
             $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = false;
             $config[$settingsName][static::SETTINGS_VALUE] =  $this->convertKrexxFeSetting(
-                $iniConfig->getFeConfigFromFile($settingsName)
+                $iniReader->getFeConfigFromFile($settingsName)
             );
             $config[$settingsName][static::SETTINGS_FALLBACK] = $dropdown[
                 $this->convertKrexxFeSetting(
-                    $iniConfig->feConfigFallback[$settingsName][$iniConfig::RENDER]
+                    $iniReader->feConfigFallback[$settingsName][$iniReader::RENDER]
                 )
             ];
 
@@ -89,7 +92,7 @@ class FormConfiguration extends AbstractCollector
             // are using the factory settings, at all.
             if (is_null($config[$settingsName][static::SETTINGS_VALUE])) {
                 $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
-                    $iniConfig->feConfigFallback[$settingsName][$iniConfig::RENDER]
+                    $iniReader->feConfigFallback[$settingsName][$iniReader::RENDER]
                 );
                 $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
             }

@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Collectors;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\From\Ini;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -54,17 +55,21 @@ class Configuration extends AbstractCollector
             return;
         }
 
-        $config = array();
+        /** @var Ini $iniReader */
+        $iniReader = $this->pool->createClass(Ini::class)
+            ->loadIniFile($this->pool->config->getPathToIniFile());
+
+        $config = [];
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
             // Stitch together the settings in the template.
             $group = $fallback[Fallback::SECTION];
-            $config[$settingsName] = array();
+            $config[$settingsName] = [];
             $config[$settingsName][static::SETTINGS_NAME] = $settingsName;
             $config[$settingsName][static::SETTINGS_HELPTEXT] = LocalizationUtility::translate(
                 $settingsName,
                 Bootstrap::EXT_KEY
             );
-            $config[$settingsName][static::SETTINGS_VALUE] = $this->pool->config->iniConfig->getConfigFromFile($group, $settingsName);
+            $config[$settingsName][static::SETTINGS_VALUE] = $iniReader->getConfigFromFile($group, $settingsName);
             $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = false;
             $config[$settingsName][static::SETTINGS_FALLBACK] = $fallback[static::SETTINGS_VALUE];
 
@@ -84,25 +89,27 @@ class Configuration extends AbstractCollector
             }
 
             // Assign the mode-class.
-            if (in_array($settingsName, $this->expertOnly) && $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS]) {
+            if (in_array($settingsName, $this->expertOnly) &&
+                $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS]
+            ) {
                 $config[$settingsName][static::SETTINGS_MODE] = 'expert';
             }
         }
 
         // Adding the dropdown values.
-        $dropdown = array();
-        $dropdown['skins'] = array();
+        $dropdown = [];
+        $dropdown['skins'] = [];
         foreach ($this->pool->config->getSkinList() as $skin) {
             $dropdown['skins'][$skin] = $skin;
         }
-        $dropdown[Fallback::SETTING_DESTINATION] = array(
+        $dropdown[Fallback::SETTING_DESTINATION] = [
             Fallback::VALUE_BROWSER => LocalizationUtility::translate(Fallback::VALUE_BROWSER, Bootstrap::EXT_KEY),
             Fallback::VALUE_FILE => LocalizationUtility::translate(Fallback::VALUE_FILE, Bootstrap::EXT_KEY),
-        );
-        $dropdown['bool'] = array(
+        ];
+        $dropdown['bool'] = [
             Fallback::VALUE_TRUE => LocalizationUtility::translate(Fallback::VALUE_TRUE, Bootstrap::EXT_KEY),
             Fallback::VALUE_FALSE => LocalizationUtility::translate(Fallback::VALUE_FALSE, Bootstrap::EXT_KEY),
-        );
+        ];
 
         $view->assign('config', $config);
         $view->assign('dropdown', $dropdown);

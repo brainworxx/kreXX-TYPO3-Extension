@@ -38,8 +38,10 @@ use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 abstract class AbstractCollector
 {
@@ -66,14 +68,14 @@ abstract class AbstractCollector
      *
      * @var array
      */
-    protected $userUc = array();
+    protected $userUc = [];
 
     /**
      * List of options, that are 'expert' only.
      *
      * @var array
      */
-    protected $expertOnly = array(
+    protected $expertOnly = [
         'detectAjax',
         'useScopeAnalysis',
         'maxStepNumber',
@@ -82,7 +84,7 @@ abstract class AbstractCollector
         'maxRuntime',
         'memoryLeft',
         'maxfiles'
-    );
+    ];
 
     /**
      * Do we have access here?
@@ -122,29 +124,29 @@ abstract class AbstractCollector
      */
     protected function getRoute($id)
     {
-        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
         if (version_compare(TYPO3_version, '9.0', '>=')) {
             /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
-            $uriBuilder = $objectManager->get('TYPO3\\CMS\\Backend\\Routing\\UriBuilder');
+            $uriBuilder = $objectManager->get(UriBuilder::class);
 
             return (string)$uriBuilder->buildUriFromRoute(
                 'tools_IncludekrexxKrexxConfiguration_dispatch',
-                array(
+                [
                     'tx_includekrexx_tools_includekrexxkrexxconfiguration[id]' => $id,
                     'tx_includekrexx_tools_includekrexxkrexxconfiguration[action]' => 'dispatch',
                     'tx_includekrexx_tools_includekrexxkrexxconfiguration[controller]' => 'Index'
-                )
+                ]
             );
         } else {
             /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
-            $uriBuilder = $objectManager->get('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder');
+            $uriBuilder = $objectManager->get(\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class);
             return $uriBuilder
                 ->reset()
-                ->setArguments(array('M' => static::PLUGIN_NAME))
+                ->setArguments(['M' => static::PLUGIN_NAME])
                 ->uriFor(
                     'dispatch',
-                    array('id' => $id),
+                    ['id' => $id],
                     'Index',
                     Bootstrap::EXT_KEY,
                     static::PLUGIN_NAME

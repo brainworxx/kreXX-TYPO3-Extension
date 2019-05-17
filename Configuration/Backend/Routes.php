@@ -32,9 +32,9 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-return array(
-    'tools_IncludekrexxKrexxConfiguration_dispatch' => array(
+return [
+    'tools_IncludekrexxKrexxConfiguration_dispatch' => [
         'path' => '/tools/IncludekrexxKrexxConfiguration/dispatch/',
         'target' => 'Brainworxx\\Includekrexx\\Controller\\IndexController::dispatchAction'
-    )
-);
+    ]
+];

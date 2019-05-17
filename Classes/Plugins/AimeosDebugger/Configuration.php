@@ -35,8 +35,14 @@
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Methods;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class Configuration implements PluginConfigInterface
 {
@@ -70,32 +76,32 @@ class Configuration implements PluginConfigInterface
         // Resolving the __get().
         Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::callMe::start',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\EventHandlers\\Properties'
+            Properties::class
         );
 
         // Resolving the getter that get their values from an private array.
         Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::retrievePropertyValue::resolving',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\EventHandlers\\Getter'
+            Getter::class
         );
 
         // Resolving the magical class methods of the decorator pattern.
         Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\EventHandlers\\Methods'
+            Methods::class
         );
 
         // Resolving the magical factory for the view helpers (not to be confused
         // with fluid viewhelpers).
         Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\EventHandlers\\ViewFactory'
+            ViewFactory::class
         );
 
         // Replacing the magical factory name in the method analysis.
         Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods::callMe::end',
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\EventHandlers\\ThroughMethods'
+            ThroughMethods::class
         );
 
         // No __toString for the db statement class.
@@ -105,7 +111,7 @@ class Configuration implements PluginConfigInterface
         );
 
         // Adding additional texts.
-        $extPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
+        $extPath = ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
         Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/aimeos.kreXX.ini');
     }
 }

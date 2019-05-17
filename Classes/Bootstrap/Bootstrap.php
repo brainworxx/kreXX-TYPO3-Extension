@@ -34,9 +34,16 @@
 
 namespace Brainworxx\Includekrexx\Bootstrap;
 
-use Brainworxx\Krexx\Krexx;
-use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use Brainworxx\Includekrexx\Modules\Log;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Brainworxx\Krexx\Service\Plugin\Registration;
+use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
+use Brainworxx\Includekrexx\Plugins\FluidDataViewer\Configuration as FluidDataConfiguration;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
+use Aimeos\MShop\Exception as AimeosException;
 
 /**
  * There is no way to clear the cache after an extension update automatically
@@ -76,7 +83,7 @@ class Bootstrap
     public function run()
     {
         if ($this->loadKrexx() === false ||
-            class_exists('\\Brainworxx\\Krexx\\Service\\Plugin\\Registration') === false
+            class_exists(Registration::class) === false
         ) {
             // "Autoloading" failed.
             // There is no point in continuing here.
@@ -84,33 +91,32 @@ class Bootstrap
         }
 
         // Register and activate the TYPO3 plugin.
-        \Brainworxx\Krexx\Service\Plugin\Registration::register(
-            'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Configuration'
-        );
-        \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin(
-            'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Configuration'
-        );
+        Registration::register(T3configuration::class);
+        Registration::activatePlugin(T3configuration::class);
         // Register our modules for the admin panel.
         if (version_compare(TYPO3_version, '9.5', '>=') &&
-            isset($GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL][static::MODULES][static::DEBUG])
+            isset($GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
+                [static::MODULES][static::DEBUG])
         ) {
-            $GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL][static::MODULES][static::DEBUG][static::SUBMODULES] = array_replace_recursive(
-                $GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL][static::MODULES][static::DEBUG][static::SUBMODULES],
-                array(
-                    static::KREXX => array(
-                        'module' => 'Brainworxx\\Includekrexx\\Modules\\Log',
-                        'after' => array(
+            $GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
+            [static::MODULES][static::DEBUG][static::SUBMODULES] = array_replace_recursive(
+                $GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
+                [static::MODULES][static::DEBUG][static::SUBMODULES],
+                [
+                    static::KREXX => [
+                        'module' => Log::class,
+                        'after' => [
                             'log',
-                        ),
-                    )
-                )
+                        ],
+                    ]
+                ]
             );
         }
 
         // Register the fluid plugins.
         // We activate them later in the viewhelper.
-        \Brainworxx\Krexx\Service\Plugin\Registration::register(
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'
+        Registration::register(
+            FluidConfiguration::class
         );
         // Register our debug-viewhelper globally, so people don't have to
         // do it inside the template. 'krexx' as a namespace should be unique enough.
@@ -119,27 +125,21 @@ class Bootstrap
         if (version_compare(TYPO3_version, '8.5', '>=') &&
             empty($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID][static::FLUID_NAMESPACE][static::KREXX])
         ) {
-            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID][static::FLUID_NAMESPACE][static::KREXX] = array(
+            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID][static::FLUID_NAMESPACE][static::KREXX] = [
                 0 => 'Brainworxx\\Includekrexx\\ViewHelpers'
-            );
+            ];
         }
 
-        \Brainworxx\Krexx\Service\Plugin\Registration::register(
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
-        );
+        Registration::register(FluidDataConfiguration::class);
 
         // Register the Aimoes Magic plugin.
-        \Brainworxx\Krexx\Service\Plugin\Registration::register(
-            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Configuration'
-        );
+        Registration::register(AimeosConfiguration::class);
 
         // Check if we have the Aimeos shop available.
-        if (class_exists('Aimeos\\MShop\\Factory') === true ||
+        if (class_exists(AimeosException::class) === true ||
             ExtensionManagementUtility::isLoaded('aimeos')
         ) {
-            \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin(
-                'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Configuration'
-            );
+            Registration::activatePlugin(AimeosConfiguration::class);
         }
     }
 
@@ -156,7 +156,7 @@ class Bootstrap
     public function checkVersionNumber($version)
     {
         if ($version !== ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY)) {
-            GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')
+            GeneralUtility::makeInstance(CacheManager::class)
                 ->flushCachesInGroup('system');
         }
 

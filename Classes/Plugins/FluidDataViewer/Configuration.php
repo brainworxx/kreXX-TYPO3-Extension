@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDataViewer;
 
+use Brainworxx\Includekrexx\Plugins\FluidDataViewer\EventHandlers\AddAnalysis;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 
@@ -69,7 +70,7 @@ class Configuration implements PluginConfigInterface
     {
         Registration::registerEvent(
             'Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe::start',
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\EventHandlers\\AddAnalysis'
+            AddAnalysis::class
         );
     }
 }

@@ -42,6 +42,8 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
+use TYPO3\CMS\Install\Configuration\Context\LivePreset;
+use TYPO3\CMS\Install\Configuration\Context\ProductionPreset;
 
 /**
  * Class Tx_Includekrexx_Controller_IndexController
@@ -90,18 +92,18 @@ abstract class AbstractController extends ActionController
         $isProductive = false;
 
         // Check the 'Live' preset (7.6 and above)
-        if (class_exists('TYPO3\\CMS\\Install\\Configuration\\Context\\LivePreset')) {
+        if (class_exists(LivePreset::class)) {
             /** @var \TYPO3\CMS\Install\Configuration\Context\LivePreset $debugPreset */
             $productionPreset = $this->objectManager
-                ->get('TYPO3\\CMS\\Install\\Configuration\\Context\\LivePreset');
+                ->get(LivePreset::class);
             $isProductive = $productionPreset->isActive();
         }
 
         // Check the 'Production' preset (6.2)
-        if (class_exists('TYPO3\\CMS\\Install\\Configuration\\Context\\ProductionPreset')) {
+        if (class_exists(ProductionPreset::class)) {
             /** @var \TYPO3\CMS\Install\Configuration\Context\ProductionPreset $debugPreset */
             $productionPreset = $this->objectManager
-                ->get('TYPO3\\CMS\\Install\\Configuration\\Context\\ProductionPreset');
+                ->get(ProductionPreset::class);
             $isProductive = $productionPreset->isActive();
         }
 
@@ -143,7 +145,7 @@ abstract class AbstractController extends ActionController
      */
     protected function retrieveKrexxMessages()
     {
-        $result = array();
+        $result = [];
         // Get the keys and the args.
         $keys = $this->pool->messages->getKeys();
 

@@ -44,14 +44,14 @@ if (TYPO3_MODE === 'BE') {
             'tools',
             'kreXX configuration',
             '',
-            array(
+            [
                 'Index' => 'index, save, dispatch'
-            ),
-            array(
+            ],
+            [
                 'access' => 'user,group',
                 'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
                 'labels' => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf',
-            )
+            ]
         );
         if (version_compare(TYPO3_version, '7.6', '<')) {
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(

@@ -40,6 +40,10 @@ use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Throwable;
+use Exception;
+use MageDeveloper\Dataviewer\Domain\Model\Record;
+use MageDeveloper\Dataviewer\Domain\Model\Field;
 
 /**
  * We simply add the data viewer eav to the output.
@@ -79,14 +83,14 @@ class AddAnalysis implements EventHandlerInterface, ConstInterface
         $params = $callback->getParameters();
         $record = $params[static::PARAM_REF]->getData();
         $output = '';
-        if (is_object($record) && is_a($record, '\\MageDeveloper\\Dataviewer\\Domain\\Model\\Record')) {
+        if (is_object($record) && is_a($record, Record::class)) {
             try {
                 /** @var \MageDeveloper\Dataviewer\Domain\Model\Record $record  */
                 $values = $record->getValues();
                 /** @var \MageDeveloper\Dataviewer\Domain\Model\Field $field */
                 foreach ($record->getDatatype()->getFields() as $field) {
                     /** @var \Brainworxx\Krexx\Analyse\Model $model */
-                    if (is_a($field, '\\MageDeveloper\\Dataviewer\\Domain\\Model\\Field') === false) {
+                    if (is_a($field, Field::class) === false) {
                         // Huh, not what I was expecting. We skip this one.
                         continue;
                     }
@@ -98,17 +102,17 @@ class AddAnalysis implements EventHandlerInterface, ConstInterface
 
                     // Send a new model to the analysis hub.
                     $output .= $this->pool
-                        ->routing->analysisHub($this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        ->routing->analysisHub($this->pool->createClass(Model::class)
                             ->setName($code . '.value')
                             ->setConnectorType(Connectors::METHOD)
                             ->setData($value)
                             ->addToJson('hint', 'Magic dataviewer getter method.'));
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // Something went wrong here.
                 // We skip the output here.
                 return '';
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // Something went wrong here.
                 // We skip the output here.
                 return '';

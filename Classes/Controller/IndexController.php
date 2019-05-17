@@ -48,6 +48,8 @@ class IndexController extends AbstractController
 {
     /**
      * Simple index action, display everything.
+     *
+     * @return string|null
      */
     public function indexAction()
     {
@@ -69,7 +71,9 @@ class IndexController extends AbstractController
         $this->assignFlashInfo();
         $this->configuration->assignData($this->view);
         $this->formConfiguration->assignData($this->view);
-        $this->view->assign('settings', $this->objectManager->get('Brainworxx\\Includekrexx\\Domain\\Model\\Settings'));
+        $this->view->assign('settings', $this->objectManager->get(Settings::class));
+
+        return null;
     }
 
     /**
@@ -99,14 +103,14 @@ class IndexController extends AbstractController
         ) {
             // File was saved successfully.
             $this->addFlashMessage(
-                LocalizationUtility::translate('save.success.text', Bootstrap::EXT_KEY, array($filepath)),
+                LocalizationUtility::translate('save.success.text', Bootstrap::EXT_KEY, [$filepath]),
                 LocalizationUtility::translate('save.success.title', Bootstrap::EXT_KEY),
                 FlashMessage::OK
             );
         } else {
             // Something went wrong here!
             $this->addFlashMessage(
-                LocalizationUtility::translate('file.not.writable', Bootstrap::EXT_KEY, array($filepath)),
+                LocalizationUtility::translate('file.not.writable', Bootstrap::EXT_KEY, [$filepath]),
                 LocalizationUtility::translate('save.fail.title', Bootstrap::EXT_KEY),
                 FlashMessage::ERROR
             );

@@ -35,7 +35,8 @@
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
-use \Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Factory\Pool;
+use ReflectionClass;
 
 /**
  * Contains all methods, that are used by the fluid caller finder classes.
@@ -121,43 +122,45 @@ abstract class AbstractFluid extends AbstractCaller
 
         // The regex should look something like this:
         // \s*<krexx:debug value="{(.*)}"\/>\s*/u
-        $this->callPattern = array(
-             array(
+        $this->callPattern = [
+             [
                 '<krexx:debug>{',
                 // We need to escape the forward slash.
                 '}<\/krexx:debug>'
-            ),
-            array(
+             ],
+             [
                 '<krexx:debug value="{',
                 // We need to escape the forward slash.
                 '}" \/>'
-            ),
-            array(
+             ],
+             [
                 '<krexx:debug value="{',
                 // We need to escape the forward slash.
-                '}"\/>'),
-            array(
+                '}"\/>'
+             ],
+             [
                 '<krexx:log>{',
                 // We need to escape the forward slash.
                 '}<\/krexx:log>'
-            ),
-            array(
+             ],
+             [
                 '<krexx:log value="{',
                 // We need to escape the forward slash.
                 '}" \/>'
-            ),
-            array(
+             ],
+             [
                 '<krexx:log value="{',
                 // We need to escape the forward slash.
-                '}"\/>')
-        );
+                '}"\/>'
+             ]
+        ];
 
         $this->varname = static::FLUID_VARIABLE;
 
         $debugViewhelper = $this->pool->registry->get('DebugViewHelper');
 
         $this->view = $debugViewhelper->getView();
-        $this->viewReflection = new \ReflectionClass($this->view);
+        $this->viewReflection = new ReflectionClass($this->view);
         $this->renderingContext = $debugViewhelper->getRenderingContext();
 
         // Get the parsed template and the rendering type from the rendering stack
@@ -209,12 +212,12 @@ abstract class AbstractFluid extends AbstractCaller
         // Did we get our stuff together so far?
         if ($this->error) {
             // Something went wrong!
-            return array(
+            return [
                 static::TRACE_FILE => 'n/a',
                 static::TRACE_LINE => 'n/a',
                 static::TRACE_VARNAME => static::FLUID_VARIABLE,
                 static::TRACE_TYPE => $this->getType('Fluid analysis', static::FLUID_VARIABLE, $data),
-            );
+            ];
         }
 
         $path = 'n/a';
@@ -237,12 +240,12 @@ abstract class AbstractFluid extends AbstractCaller
         // Trying to resolve the line as well as the variable name, if possible.
         $this->resolveVarname($path);
 
-         return array(
+         return [
              static::TRACE_FILE => $this->pool->fileService->filterFilePath($path),
              static::TRACE_LINE => $this->line,
              static::TRACE_VARNAME => $this->varname,
              static::TRACE_TYPE => $this->getType('Fluid analysis', $this->varname, $data),
-         );
+         ];
     }
 
     /**

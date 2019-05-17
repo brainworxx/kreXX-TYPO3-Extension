@@ -34,11 +34,16 @@
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use ReflectionClass;
+use Exception;
+use Throwable;
+use ReflectionMethod;
 
 /**
  * Resolving Aimeos magical decorator class methods.
@@ -52,32 +57,32 @@ class Methods implements EventHandlerInterface, ConstInterface
      *
      * @var array
      */
-    protected $classList = array(
-        'Aimeos\\Controller\\Frontend\\Base',
-        'Aimeos\\Client\\JsonApi\\Base',
-        'Aimeos\\Client\\Html\\Base',
-        'Aimeos\\Admin\\JsonAdm\\Base',
-        'Aimeos\\Admin\\JQAdm\\Base',
-        'Aimeos\\MW\\View\\Helper\\Base',
-        'Aimeos\\MW\\View\\Iface',
-        'Aimeos\\MShop\\Service\\Provider\\Base',
-        'Aimeos\\MW\\Common\\Manager\\Base',
-        'Aimeos\\Controller\\Jobs\\Common\\Decorator\\Base',
-    );
+    protected $classList = [
+        \Aimeos\Controller\Frontend\Base::class,
+        \Aimeos\Client\JsonApi\Base::class,
+        \Aimeos\Client\Html\Base::class,
+        \Aimeos\Admin\JsonAdm\Base::class,
+        \Aimeos\Admin\JQAdm\Base::class,
+        \Aimeos\MW\View\Helper\Base::class,
+        \Aimeos\MW\View\Iface::class,
+        \Aimeos\MShop\Service\Provider\Base::class,
+        \Aimeos\MW\Common\Manager\Base::class,
+        \Aimeos\Controller\Jobs\Common\Decorator\Base::class,
+    ];
 
     /**
      * List of possible internal names of the recipient class.
      *
      * @var array
      */
-    protected $internalObjectNames = array(
+    protected $internalObjectNames = [
         'controller' => '$this->controller,',
         'manager' => '$this->manager,',
         'object' => '$this->object,',
         'view' => '$this->view,',
         'delegate' => '$this->delegate,',
         'client' => '$this->client,',
-    );
+    ];
 
     /**
      * @var Pool
@@ -121,13 +126,13 @@ class Methods implements EventHandlerInterface, ConstInterface
 
         // Retrieve all piled up receiver objects. We may have decorators
         // inside of decorators.
-        $allReceivers = array();
+        $allReceivers = [];
 
         $receiver = $this->retrieveReceiverObject($data, $params[static::PARAM_REF]);
-        $methods = array();
+        $methods = [];
         while ($receiver !== false) {
             $allReceivers[] = $receiver;
-            $ref = new \ReflectionClass($receiver);
+            $ref = new ReflectionClass($receiver);
             $receiver = $this->retrieveReceiverObject($receiver, $ref);
             // Get all reflection methods together, from all the receivers.
             // The receivers in front overwrite the methods from the receivers
@@ -138,14 +143,14 @@ class Methods implements EventHandlerInterface, ConstInterface
         if (empty($methods) === false) {
             // Got to dump them all!
             $result .= $this->pool->render->renderExpandableChild(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                $this->pool->createClass(Model::class)
                     ->setName('Decorator Methods')
                     ->setType('class internals decorator')
                     ->addParameter(static::PARAM_DATA, $methods)
                     ->setHelpid('aimeosDecoratorsInfo')
                     ->injectCallback(
                         $this->pool->createClass(
-                            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Callbacks\\ThroughMethods'
+                            \Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods::class
                         )
                     )
             );
@@ -156,15 +161,11 @@ class Methods implements EventHandlerInterface, ConstInterface
         if (empty($allReceivers) === false) {
             $this->pool->codegenHandler->setAllowCodegen(false);
             $result .= $this->pool->render->renderExpandableChild(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                $this->pool->createClass(Model::class)
                     ->setName('Decorator Objects')
                     ->setType('class internals decorator')
                     ->addParameter(static::PARAM_DATA, $allReceivers)
-                    ->injectCallback(
-                        $this->pool->createClass(
-                            'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Callbacks\\ThroughClassList'
-                        )
-                    )
+                    ->injectCallback($this->pool->createClass(ThroughClassList::class))
             );
             $this->pool->codegenHandler->setAllowCodegen(true);
         }
@@ -209,7 +210,7 @@ class Methods implements EventHandlerInterface, ConstInterface
      * @return false|object
      *   Either a false, or the object that receives all method calls.
      */
-    protected function retrieveReceiverObject($data, \ReflectionClass $ref)
+    protected function retrieveReceiverObject($data, ReflectionClass $ref)
     {
         // First, we need to get the name of the object we need to retrieve.
         // Get the __call() source code.
@@ -257,9 +258,9 @@ class Methods implements EventHandlerInterface, ConstInterface
                 // Going deeper!
                 $parentReflection = $parentReflection->getParentClass();
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Do nothing.
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Do nothing.
         }
 
@@ -276,10 +277,10 @@ class Methods implements EventHandlerInterface, ConstInterface
      * @return array
      *   Name based array with the methods names.
      */
-    protected function retreivePublicMethods(\ReflectionClass $ref)
+    protected function retreivePublicMethods(ReflectionClass $ref)
     {
-        $methods = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
-        $result = array();
+        $methods = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
+        $result = [];
         foreach ($methods as $refMethod) {
             $result[$refMethod->name] = $refMethod;
         }

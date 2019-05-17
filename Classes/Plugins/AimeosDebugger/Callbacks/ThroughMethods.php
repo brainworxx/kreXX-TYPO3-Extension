@@ -73,14 +73,14 @@ class ThroughMethods extends AbstractCallback
 
         $result = '';
         /** @var \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods $thoughMethods */
-        $thoughMethods = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods');
+        $thoughMethods = $this->pool->createClass(\Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::class);
 
         /** @var \ReflectionMethod $reflectionMethod */
         foreach ($data as $factoryName => $reflectionMethod) {
-            $params = array(
-                static::PARAM_DATA => array($reflectionMethod),
+            $params = [
+                static::PARAM_DATA => [$reflectionMethod],
                 static::PARAM_REF => $reflectionMethod->getDeclaringClass(),
-            );
+            ];
             // We may not be able to use the method name here
             // @see ViewFactory
             if ($isFactoryMethod) {

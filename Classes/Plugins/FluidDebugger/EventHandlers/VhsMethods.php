@@ -82,7 +82,7 @@ class VhsMethods implements EventHandlerInterface, ConstInterface
         /** @var \ReflectionMethod $reflectionMethod */
         $reflectionMethod = $params[static::PARAM_REF_METHOD];
 
-        $paramArray = array();
+        $paramArray = [];
         foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
             $paramArray[] = $reflectionParameter->getName();
         }

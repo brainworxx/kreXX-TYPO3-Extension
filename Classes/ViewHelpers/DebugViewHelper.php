@@ -98,19 +98,19 @@ class DebugViewHelper extends AbstractViewHelper
         Krexx::$pool->registry->set('DebugViewHelper', $this);
 
         Registration::activatePlugin(
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'
+            \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration::class
         );
         Registration::activatePlugin(
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
+            \Brainworxx\Includekrexx\Plugins\FluidDataViewer\Configuration::class
         );
 
         $this->analysis();
 
         Registration::deactivatePlugin(
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\Configuration'
+            \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration::class
         );
         Registration::deactivatePlugin(
-            'Brainworxx\\Includekrexx\\Plugins\\FluidDataViewer\\Configuration'
+            \Brainworxx\Includekrexx\Plugins\FluidDataViewer\Configuration::class
         );
 
         return '';

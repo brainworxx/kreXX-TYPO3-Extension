@@ -40,6 +40,8 @@ use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use ReflectionMethod;
+use Aimeos\MShop\Common\Item\Iface;
 
 /**
  * Resolving the Aimeos getter:
@@ -106,7 +108,7 @@ class Getter implements EventHandlerInterface, ConstInterface
 
         if ($params[static::PARAM_ADDITIONAL]['nothingFound'] === false ||
             $params[ThroughGetter::CURRENT_PREFIX] !== 'get' ||
-            is_a($data, 'Aimeos\\MShop\\Common\\Item\\Iface') === false
+            is_a($data, Iface::class) === false
         ) {
             // Early return.
             return '';
@@ -165,9 +167,9 @@ class Getter implements EventHandlerInterface, ConstInterface
      * @return array
      *   The values array from the class.
      */
-    protected function retrieveValueArray(array &$params, \ReflectionMethod $reflectionMethod)
+    protected function retrieveValueArray(array &$params, ReflectionMethod $reflectionMethod)
     {
-        $result = array();
+        $result = [];
         // Retrieve the value array from the class.
         // Everything sits in a private array, so we do not need to walk
         // through the whole class structure.

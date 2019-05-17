@@ -35,11 +35,15 @@
 namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Http\AjaxRequestHandler;
+use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use stdClass;
 
 class AjaxController
 {
@@ -56,11 +60,11 @@ class AjaxController
      */
     public function refreshLoglistAction($arg1, $response)
     {
-        $fileList = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
-            ->get('Brainworxx\\Includekrexx\\Collectors\\LogfileList')
+        $fileList = GeneralUtility::makeInstance(ObjectManager::class)
+            ->get(LogfileList::class)
             ->retrieveFileList();
 
-        if (is_a($response, 'TYPO3\\CMS\\Core\\Http\\Response')) {
+        if (is_a($response, Response::class)) {
             // 7.6 and above.
             $response->getBody()->write(json_encode($fileList));
         } else {
@@ -85,7 +89,7 @@ class AjaxController
      */
     public function deleteAction($arg1, $response)
     {
-        $result = new \stdClass();
+        $result = new stdClass();
 
         if ($this->hasAccess() === false) {
             $result->class  = 'error';
@@ -100,14 +104,14 @@ class AjaxController
 
             if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
                 $result->class  = 'success';
-                $result->text = LocalizationUtility::translate('fileDeleted', Bootstrap::EXT_KEY, array($id));
+                $result->text = LocalizationUtility::translate('fileDeleted', Bootstrap::EXT_KEY, [$id]);
             } else {
                 $result->class  = 'error';
-                $result->text = LocalizationUtility::translate('fileDeletedFail', Bootstrap::EXT_KEY, array('n/a'));
+                $result->text = LocalizationUtility::translate('fileDeletedFail', Bootstrap::EXT_KEY, ['n/a']);
             }
         }
 
-        if (is_a($response, 'TYPO3\\CMS\\Core\\Http\\Response')) {
+        if (is_a($response, Response::class)) {
             // 7.6 and above.
             $response->getBody()->write(json_encode($result));
         } else {
@@ -116,7 +120,7 @@ class AjaxController
             // not a single one. Hence, we send it as plain. The js does not
             // care.
             $response->setContentFormat('plain');
-            $response->setContent(array(json_encode($result)));
+            $response->setContent([json_encode($result)]);
         }
 
         return $response;

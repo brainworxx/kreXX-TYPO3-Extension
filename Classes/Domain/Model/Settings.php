@@ -38,6 +38,7 @@ use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -255,12 +256,12 @@ class Settings
     /**
      * The security validator used ba the setter.
      *
-     * @var \Brainworxx\Krexx\Service\Config\Security
+     * @var \Brainworxx\Krexx\Service\Config\Validation
      */
-    protected $security;
+    protected $validation;
 
     /**
-     * The system gegistry.
+     * The system registry.
      *
      * @var \TYPO3\CMS\Core\Registry
      */
@@ -272,8 +273,8 @@ class Settings
     public function __construct()
     {
         Pool::createPool();
-        $this->security = Krexx::$pool->config->security;
-        $this->registry = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
+        $this->validation = Krexx::$pool->config->validation;
+        $this->registry = GeneralUtility::makeInstance(Registry::class);
     }
 
     /**
@@ -611,14 +612,14 @@ class Settings
     public function generateIniContent()
     {
         $result = '';
-        $moduleSettings = array();
+        $moduleSettings = [];
 
         // Process the normal settings.
         foreach (Krexx::$pool->config->configFallback as $group => $settings) {
             $result .= '[' . $group . ']' . "\n";
             foreach ($settings as $settingName) {
                 if (!is_null($this->$settingName) &&
-                    $this->security->evaluateSetting($group, $settingName, $this->$settingName)) {
+                    $this->validation->evaluateSetting($group, $settingName, $this->$settingName)) {
                     $result .= $settingName . ' = "' . $this->$settingName . '"'  . "\n";
                     $moduleSettings[$settingName] = $this->$settingName;
                 }
@@ -627,7 +628,7 @@ class Settings
 
         // Process the configuration for the settings editing.
         $result .= '[feEditing]' . "\n";
-        $allowedValues = array('full', 'display', 'none');
+        $allowedValues = ['full', 'display', 'none'];
         foreach (Krexx::$pool->config->feConfigFallback as $settingName => $settings) {
             $settingNameInModel = 'form' . $settingName;
             if ($settings['render']['Editable'] === 'true' &&
@@ -642,7 +643,7 @@ class Settings
         $user = $GLOBALS['BE_USER'];
         // Save the last settings to the backend user, so we can retrieve it later.
         if (!isset($user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY])) {
-            $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY] = array();
+            $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY] = [];
         }
         $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY] = array_merge(
             $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY],

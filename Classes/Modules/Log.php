@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Modules;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Psr\Http\Message\ServerRequestInterface;
@@ -44,6 +45,7 @@ use TYPO3\CMS\Adminpanel\ModuleApi\DataProviderInterface;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Adminpanel\ModuleApi\ResourceProviderInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -94,9 +96,9 @@ class Log extends AbstractSubModule implements
     public function getDataToStore(ServerRequestInterface $request): ModuleData
     {
         return new ModuleData(
-            array('files' => GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
-                ->get('Brainworxx\\Includekrexx\\Collectors\\LogfileList')
-                ->retrieveFileList())
+            ['files' => GeneralUtility::makeInstance(ObjectManager::class)
+                ->get(LogfileList::class)
+                ->retrieveFileList()]
         );
     }
 

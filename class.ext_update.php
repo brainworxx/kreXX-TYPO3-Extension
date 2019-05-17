@@ -33,6 +33,7 @@
  */
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Cache\CacheManager;
 
 /**
  * TYPO3 installation class for kreXX
@@ -58,7 +59,7 @@ class ext_update
     {
         // We flush the caches, just in case. The extension manager does not flush
         // the ext_localconf cache.
-        GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')
+        GeneralUtility::makeInstance(CacheManager::class)
             ->flushCachesInGroup('system');
     }
 }

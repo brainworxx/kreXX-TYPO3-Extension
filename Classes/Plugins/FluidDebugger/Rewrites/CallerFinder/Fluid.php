@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
+use ReflectionClass;
+
 /**
  * Trying to coax the current template/layout/partial file out of the fluid framework.
  *
@@ -86,7 +88,7 @@ class Fluid extends AbstractFluid
         $hash = $identifier[count($identifier) -1];
 
         $templatePath = $this->renderingContext->getTemplatePaths();
-        $templatePathReflection = new \ReflectionClass($templatePath);
+        $templatePathReflection = new ReflectionClass($templatePath);
 
         if ($templatePathReflection->hasProperty('resolvedIdentifiers')) {
             $resolvedIdentifiersReflection = $templatePathReflection->getProperty('resolvedIdentifiers');

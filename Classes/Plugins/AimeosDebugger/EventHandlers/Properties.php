@@ -38,6 +38,8 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Exception;
+use Throwable;
 
 /**
  * Analysing the __get() implementation in aimeos items.
@@ -72,11 +74,11 @@ class Properties extends AbstractCallback implements EventHandlerInterface
         $data = $params[static::PARAM_DATA];
         $result = '';
 
-        if (is_a($data, 'Aimeos\\MShop\\Common\\Item\\Iface')) {
+        if (is_a($data, \Aimeos\MShop\Common\Item\Iface::class)) {
             $result .= $this->extractValues('bdata', $params);
-        } elseif (is_a($data, 'Aimeos\\MW\\Tree\\Node\\Iface')) {
+        } elseif (is_a($data, \Aimeos\MW\Tree\Node\Iface::class)) {
             $result .= $this->extractValues('values', $params);
-        } elseif (is_a($data, 'Aimeos\\MW\\View\\Iface')) {
+        } elseif (is_a($data, \Aimeos\MW\View\Iface::class)) {
             $result .= $this->extractValues('values', $params);
         }
 
@@ -97,7 +99,7 @@ class Properties extends AbstractCallback implements EventHandlerInterface
      */
     protected function extractValues($name, array $params)
     {
-        $result = array();
+        $result = [];
         $data = $params[static::PARAM_DATA];
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $params[static::PARAM_REF];
@@ -117,9 +119,9 @@ class Properties extends AbstractCallback implements EventHandlerInterface
                 // Going deeper!
                 $parentReflection = $parentReflection->getParentClass();
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Do nothing.
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Do nothing.
         }
 
@@ -154,7 +156,7 @@ class Properties extends AbstractCallback implements EventHandlerInterface
             // Could be anything.
             // We need to route it though the analysis hub.
             $result .= $this->pool->routing->analysisHub(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                $this->pool->createClass(Model::class)
                     ->setData($value)
                     ->setName($key)
                     ->setConnectorType($connectorType)

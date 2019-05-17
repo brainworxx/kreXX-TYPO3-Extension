@@ -35,10 +35,12 @@
 namespace Brainworxx\Includekrexx\Plugins\Typo3;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\Config as T3Config;
 
 /**
  * Configuration file for the TYPO3 kreXX plugin.
@@ -79,18 +81,15 @@ class Configuration implements PluginConfigInterface
     public static function exec()
     {
         // We are using the TYPO3 ip security, instead of the kreXX implementation.
-        Registration::addRewrite(
-            'Brainworxx\\Krexx\\Service\\Config\\Config',
-            'Brainworxx\\Includekrexx\\Plugins\\Typo3\\Rewrites\\Config'
-        );
+        Registration::addRewrite(Config::class, T3Config::class);
 
         // See if we must create a temp directory for kreXX.
-        $tempPaths = array(
+        $tempPaths = [
             'main' => PATH_site . 'typo3temp/tx_includekrexx',
             'log' => PATH_site . 'typo3temp/tx_includekrexx/log',
             'chunks' => PATH_site . 'typo3temp/tx_includekrexx/chunks',
             'config' => PATH_site . 'typo3temp/tx_includekrexx/config',
-        );
+        ];
 
         // htAccess to prevent a listing
         $htAccess = 'order deny,allow' . chr(10);

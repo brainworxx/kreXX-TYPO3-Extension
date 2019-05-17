@@ -57,16 +57,16 @@ class Connectors extends OrgConnectors
         parent::__construct();
 
         // Setting (nearly) everything to the point connector.
-        $this->connectorArray = array(
-            static::METHOD => array('.', '(@param@)'),
-            static::STATIC_METHOD => array('.', '(@param@)'),
-            static::NORMAL_ARRAY => array('.', ''),
-            static::ASSOCIATIVE_ARRAY => array('.', ''),
-            static::CONSTANT => array('.', ''),
-            static::NORMAL_PROPERTY => array('.', ''),
-            static::STATIC_PROPERTY => array('.', ''),
-            static::SPECIAL_CHARS_PROP => array('.', ''),
-        );
+        $this->connectorArray = [
+            static::METHOD => ['.', '(@param@)'],
+            static::STATIC_METHOD => ['.', '(@param@)'],
+            static::NORMAL_ARRAY => ['.', ''],
+            static::ASSOCIATIVE_ARRAY => ['.', ''],
+            static::CONSTANT => ['.', ''],
+            static::NORMAL_PROPERTY => ['.', ''],
+            static::STATIC_PROPERTY => ['.', ''],
+            static::SPECIAL_CHARS_PROP => ['.', ''],
+        ];
     }
 
     /**

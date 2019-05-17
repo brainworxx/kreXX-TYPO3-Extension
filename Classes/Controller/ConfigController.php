@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Controller;
 
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
@@ -53,7 +54,7 @@ class ConfigController extends ActionController
      */
     public function editAction()
     {
-        $this->objectManager->get('TYPO3\\CMS\\Core\\Cache\\CacheManager')
+        $this->objectManager->get(CacheManager::class)
             ->flushCachesInGroup('system');
 
         $this->redirect('index', 'Index');

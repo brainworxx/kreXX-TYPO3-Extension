@@ -34,8 +34,9 @@
 
 namespace Brainworxx\Includekrexx\Collectors;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use Throwable;
+use Exception;
 
 /**
  * Collection the log file list for the frontend and the backend.
@@ -62,7 +63,7 @@ class LogfileList extends AbstractCollector
      */
     public function retrieveFileList()
     {
-        $fileList = array();
+        $fileList = [];
 
         if ($this->hasAccess === false) {
             // No access.
@@ -75,7 +76,7 @@ class LogfileList extends AbstractCollector
         // 2. Get the file list and sort it.
         $files = glob($dir . '*.Krexx.html');
         if (!is_array($files)) {
-            $files = array();
+            $files = [];
         }
         // The function filemtime gets cached by php btw.
         usort($files, function ($a, $b) {
@@ -85,7 +86,7 @@ class LogfileList extends AbstractCollector
         // 3. Get the file info.
         foreach ($files as $file) {
             try {
-                $fileinfo = array();
+                $fileinfo = [];
                 // Getting the basic info.
                 $fileinfo['name'] = basename($file);
                 $fileinfo['size'] = $this->fileSizeConvert(filesize($file));
@@ -107,10 +108,10 @@ class LogfileList extends AbstractCollector
                 }
 
                 $fileList[] = $fileinfo;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 // We simply skip this one on error.
                 continue;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 continue;
             }
         }
@@ -135,28 +136,28 @@ class LogfileList extends AbstractCollector
         $unit = 'UNIT';
         $value = 'VALUE';
 
-        $arBytes = array(
-            0 => array(
+        $arBytes = [
+            0 => [
                 $unit => 'TB',
                 $value => pow(1024, 4),
-            ),
-            1 => array(
+            ],
+            1 => [
                 $unit => 'GB',
                 $value => pow(1024, 3),
-            ),
-            2 => array(
+            ],
+            2 => [
                 $unit => 'MB',
                 $value => pow(1024, 2),
-            ),
-            3 => array(
+            ],
+            3 => [
                 $unit => 'KB',
                 $value => 1024,
-            ),
-            4 => array(
+            ],
+            4 => [
                 $unit => 'B',
                 $value => 1,
-            ),
-        );
+            ],
+        ];
 
         $result = '';
         foreach ($arBytes as $aritem) {

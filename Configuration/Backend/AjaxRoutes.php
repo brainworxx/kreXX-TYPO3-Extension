@@ -33,12 +33,12 @@
  */
 
 return array(
-    'includekrexx_refresh' => array(
+    'includekrexx_refresh' => [
         'path' => '/refreshLoglist',
         'target' => 'Brainworxx\\Includekrexx\\Controller\\AjaxController::refreshLoglistAction'
-    ),
-    'includekrexx_delete' => array(
+    ],
+    'includekrexx_delete' => [
         'path' => '/delete',
         'target' => 'Brainworxx\\Includekrexx\\Controller\\AjaxController::deleteAction'
-    ),
+    ],
 );

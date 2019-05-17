@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Dump all Receiver classes inside the decorator.
@@ -72,7 +73,7 @@ class ThroughClassList extends AbstractCallback
             $result .= $this->pool->routing->analysisHub(
                 $this->dispatchEventWithModel(
                     static::EVENT_MARKER_ANALYSES_END,
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    $this->pool->createClass(Model::class)
                         ->setData($object)
                         ->setName($key)
                 )
