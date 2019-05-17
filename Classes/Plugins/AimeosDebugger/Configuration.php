@@ -35,7 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
-use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ThroughMethods;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Methods;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties;
@@ -43,6 +43,7 @@ use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use Aimeos\MW\DB\Statement\Base as StatementBase;
 
 class Configuration implements PluginConfigInterface
 {
@@ -106,7 +107,7 @@ class Configuration implements PluginConfigInterface
 
         // No __toString for the db statement class.
         Registration::addMethodToDebugBlacklist(
-            '\\Aimeos\\MW\\DB\\Statement\\Base',
+            StatementBase::class,
             '__toString'
         );
 
