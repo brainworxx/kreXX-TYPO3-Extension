@@ -40,6 +40,7 @@ use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -135,7 +136,11 @@ class IndexController extends AbstractController
             $params = $serverRequest->getQueryParams();
             $rawId = $params['tx_includekrexx_tools_includekrexxkrexxconfiguration']['id'];
         } else {
-            $rawId = $this->request->getArgument('id');
+            try {
+                $rawId = $this->request->getArgument('id');
+            } catch (NoSuchArgumentException $e) {
+                $rawId = '';
+            }
         }
 
         // No directory traversal for you!

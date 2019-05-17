@@ -41,9 +41,10 @@ use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Aimeos\MW\View\Iface;
 use ReflectionClass;
 use ReflectionException;
+use Aimeos\MW\View\Helper\Base as HelperBase;
+use Aimeos\MW\View\Iface as ViewIface;
 
 /**
  * Resolving the Aimoes viewhelper factory. Not to be confused with fluid
@@ -112,13 +113,13 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
     {
         $result = '';
         $params = $callback->getParameters();
-        $data = $params[static::PARAM_REF]->getData();
-
-        /** @var \ReflectionClass $ref */
+        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $params[static::PARAM_REF];
+        /** @var ViewIface $data */
+        $data = $ref->getData();
 
         // Test if we are facing an Aimeos view.
-        if (is_a($data, \Aimeos\MW\View\Iface::class) === false) {
+        if (is_a($data, ViewIface::class) === false) {
             // This is not he view we are looking for.
             // Early return.
             return $result;
@@ -141,14 +142,19 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
      * @return string
      *   The generated html.
      */
-    protected function retrieveHelpers(Iface $data, ReflectionClass $ref)
+    protected function retrieveHelpers(ViewIface $data, ReflectionClass $ref)
     {
         $result = '';
 
         if ($ref->hasProperty('helper')) {
             // Got our helpers right here.
             // Lets hope that other implementations use the same variable name.
-            $propertyReflection = $ref->getProperty('helper');
+            try {
+                $propertyReflection = $ref->getProperty('helper');
+            } catch (ReflectionException $e) {
+                return $result;
+            }
+
             $propertyReflection->setAccessible(true);
             // We store the helpers here, because we need them later for the
             // actual method analysis. It is possible to inject helpers.
@@ -195,7 +201,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
         // 3.) Replace the list with the ones from the already existing helpers
         // 4.) Analyse them all!
 
-        if (class_exists(\Aimeos\MW\View\Helper\Base::class) === false) {
+        if (class_exists(HelperBase::class) === false) {
             // This should not have happened.
             // No main class, no view helpers.
             // Early return
@@ -205,7 +211,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
         // Get a list of the core view helpers
         // Get the core view helpers directory
         try {
-            $ref = new ReflectionClass(\Aimeos\MW\View\Helper\Base::class);
+            $ref = new ReflectionClass(HelperBase::class);
         } catch (ReflectionException $e) {
             // Do nothing.
             return $result;

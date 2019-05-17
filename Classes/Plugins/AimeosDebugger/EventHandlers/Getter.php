@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionMethod;
 use Aimeos\MShop\Common\Item\Iface;
+use ReflectionException;
 
 /**
  * Resolving the Aimeos getter:
@@ -178,29 +179,44 @@ class Getter implements EventHandlerInterface, ConstInterface
         $data = $params[static::PARAM_REF]->getData();
 
         if ($reflectionClass->hasProperty('bdata')) {
-            $reflectionProperty = $reflectionClass->getProperty('bdata');
-            $reflectionProperty->setAccessible(true);
-            $bdata = $reflectionProperty->getValue($data);
-            if (is_array($bdata)) {
-                $result = $bdata;
+            try {
+                $reflectionProperty = $reflectionClass->getProperty('bdata');
+                $reflectionProperty->setAccessible(true);
+                $bdata = $reflectionProperty->getValue($data);
+                if (is_array($bdata)) {
+                    $result = $bdata;
+                }
+            } catch (ReflectionException $e) {
+                // We ignore this one.
+                // Do nothing.
             }
         }
 
         if ($reflectionClass->hasProperty('data')) {
-            $reflectionProperty = $reflectionClass->getProperty('data');
-            $reflectionProperty->setAccessible(true);
-            $data = $reflectionProperty->getValue($data);
-            if (is_array($data)) {
-                $result = array_merge($result, $data);
+            try {
+                $reflectionProperty = $reflectionClass->getProperty('data');
+                $reflectionProperty->setAccessible(true);
+                $data = $reflectionProperty->getValue($data);
+                if (is_array($data)) {
+                    $result = array_merge($result, $data);
+                }
+            } catch (ReflectionException $e) {
+                // We ignore this one.
+                // Do nothing.
             }
         }
 
         if ($reflectionClass->hasProperty('values')) {
-            $reflectionProperty = $reflectionClass->getProperty('values');
-            $reflectionProperty->setAccessible(true);
-            $values = $reflectionProperty->getValue($data);
-            if (is_array($values)) {
-                $result = array_merge($result, $values);
+            try {
+                $reflectionProperty = $reflectionClass->getProperty('values');
+                $reflectionProperty->setAccessible(true);
+                $values = $reflectionProperty->getValue($data);
+                if (is_array($values)) {
+                    $result = array_merge($result, $values);
+                }
+            } catch (ReflectionException $e) {
+                // We ignore this one.
+                // Do nothing.
             }
         }
 

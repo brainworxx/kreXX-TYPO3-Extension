@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
+use ReflectionException;
+
 /**
  * Trying to coax the current template/layout/partial file out of the fluid framework.
  *
@@ -50,7 +52,11 @@ class FluidOld extends AbstractFluid
         $result = 'n/a';
 
         if ($this->viewReflection->hasMethod('getTemplatePathAndFilename')) {
-            $templatePathAndFilenameReflection = $this->viewReflection->getMethod('getTemplatePathAndFilename');
+            try {
+                $templatePathAndFilenameReflection = $this->viewReflection->getMethod('getTemplatePathAndFilename');
+            } catch (ReflectionException $e) {
+                return $result;
+            }
             $templatePathAndFilenameReflection->setAccessible(true);
             $result = $templatePathAndFilenameReflection->invoke($this->view);
         }
@@ -67,7 +73,12 @@ class FluidOld extends AbstractFluid
 
         if ($this->viewReflection->hasMethod('getLayoutPathAndFilename')) {
             $fileName = $this->parsedTemplate->getLayoutName($this->renderingContext);
-            $layoutPathAndFilenameReflection = $this->viewReflection->getMethod('getLayoutPathAndFilename');
+            try {
+                $layoutPathAndFilenameReflection = $this->viewReflection->getMethod('getLayoutPathAndFilename');
+            } catch (ReflectionException $e) {
+                return $result;
+            }
+
             $layoutPathAndFilenameReflection->setAccessible(true);
             $result = $layoutPathAndFilenameReflection->invoke($this->view, $fileName);
         }
@@ -92,22 +103,27 @@ class FluidOld extends AbstractFluid
         $identifier = explode('_', get_class($this->parsedTemplate));
         $hash = $identifier[count($identifier) -1];
 
-        if ($this->viewReflection->hasProperty('partialIdentifierCache')) {
-            $partialIdentifierCacheReflection = $this->viewReflection->getProperty('partialIdentifierCache');
-            $partialIdentifierCacheReflection->setAccessible(true);
-            $partialIdentifierCache = $partialIdentifierCacheReflection->getValue($this->view);
+        try {
+            if ($this->viewReflection->hasProperty('partialIdentifierCache')) {
+                $partialIdentifierCacheReflection = $this->viewReflection->getProperty('partialIdentifierCache');
+                $partialIdentifierCacheReflection->setAccessible(true);
+                $partialIdentifierCache = $partialIdentifierCacheReflection->getValue($this->view);
 
-            foreach ($partialIdentifierCache as $fileName => $realIdentifier) {
-                if (strpos($realIdentifier, $hash) !== false) {
-                    // We've got our real identifier, yay. :-|
-                    $getPartialPathAndFilenameReflection = $this->viewReflection
-                        ->getMethod('getPartialPathAndFilename');
-                    $getPartialPathAndFilenameReflection->setAccessible(true);
-                    $result = $getPartialPathAndFilenameReflection->invoke($this->view, $fileName);
-                    break;
+                foreach ($partialIdentifierCache as $fileName => $realIdentifier) {
+                    if (strpos($realIdentifier, $hash) !== false) {
+                        // We've got our real identifier, yay. :-|
+                        $getPartialPathAndFilenameReflection = $this->viewReflection
+                            ->getMethod('getPartialPathAndFilename');
+                        $getPartialPathAndFilenameReflection->setAccessible(true);
+                        $result = $getPartialPathAndFilenameReflection->invoke($this->view, $fileName);
+                        break;
+                    }
                 }
             }
+        } catch (ReflectionException $e) {
+            // Do nothing. We return an empty result later.
         }
+
         return $result;
     }
 }

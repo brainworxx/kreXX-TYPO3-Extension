@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionClass;
+use ReflectionException;
 
 /**
  * Contains all methods, that are used by the fluid caller finder classes.
@@ -187,7 +188,12 @@ abstract class AbstractFluid extends AbstractCaller
     protected function retrieveLastRenderingStackEntry()
     {
         if ($this->viewReflection->hasProperty('renderingStack')) {
-            $renderingStackReflection = $this->viewReflection->getProperty('renderingStack');
+            try {
+                $renderingStackReflection = $this->viewReflection->getProperty('renderingStack');
+            } catch (ReflectionException $e) {
+                $this->error = true;
+                return false;
+            }
             $renderingStackReflection->setAccessible(true);
             $renderingStack = $renderingStackReflection->getValue($this->view);
             $pos = count($renderingStack) -1;

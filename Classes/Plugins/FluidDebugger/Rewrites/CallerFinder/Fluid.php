@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 use ReflectionClass;
+use ReflectionException;
 
 /**
  * Trying to coax the current template/layout/partial file out of the fluid framework.
@@ -88,23 +89,27 @@ class Fluid extends AbstractFluid
         $hash = $identifier[count($identifier) -1];
 
         $templatePath = $this->renderingContext->getTemplatePaths();
-        $templatePathReflection = new ReflectionClass($templatePath);
+        try {
+            $templatePathReflection = new ReflectionClass($templatePath);
+            if ($templatePathReflection->hasProperty('resolvedIdentifiers')) {
+                $resolvedIdentifiersReflection = $templatePathReflection->getProperty('resolvedIdentifiers');
+                $resolvedIdentifiersReflection->setAccessible(true);
+                $resolvedIdentifiers = $resolvedIdentifiersReflection->getValue($templatePath);
 
-        if ($templatePathReflection->hasProperty('resolvedIdentifiers')) {
-            $resolvedIdentifiersReflection = $templatePathReflection->getProperty('resolvedIdentifiers');
-            $resolvedIdentifiersReflection->setAccessible(true);
-            $resolvedIdentifiers = $resolvedIdentifiersReflection->getValue($templatePath);
-
-            if (isset($resolvedIdentifiers['partials'])) {
-                foreach ($resolvedIdentifiers['partials'] as $fileName => $realIdentifier) {
-                    if (strpos($realIdentifier, $hash) !== false) {
-                        // We've got our filename!
-                        $result = $templatePath->getPartialPathAndFilename($fileName);
-                        break;
+                if (isset($resolvedIdentifiers['partials'])) {
+                    foreach ($resolvedIdentifiers['partials'] as $fileName => $realIdentifier) {
+                        if (strpos($realIdentifier, $hash) !== false) {
+                            // We've got our filename!
+                            $result = $templatePath->getPartialPathAndFilename($fileName);
+                            break;
+                        }
                     }
                 }
             }
+        } catch (ReflectionException $e) {
+            // Do nothing. We return the already existing empty result.
         }
+
         return $result;
     }
 }

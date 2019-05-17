@@ -40,6 +40,9 @@ use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Exception;
 use Throwable;
+use Aimeos\MShop\Common\Item\Iface as ItemIface;
+use Aimeos\MW\Tree\Node\Iface as NodeIface;
+use Aimeos\MW\View\Iface as ViewIface;
 
 /**
  * Analysing the __get() implementation in aimeos items.
@@ -74,11 +77,11 @@ class Properties extends AbstractCallback implements EventHandlerInterface
         $data = $params[static::PARAM_DATA];
         $result = '';
 
-        if (is_a($data, \Aimeos\MShop\Common\Item\Iface::class)) {
+        if (is_a($data, ItemIface::class)) {
             $result .= $this->extractValues('bdata', $params);
-        } elseif (is_a($data, \Aimeos\MW\Tree\Node\Iface::class)) {
+        } elseif (is_a($data, NodeIface::class)) {
             $result .= $this->extractValues('values', $params);
-        } elseif (is_a($data, \Aimeos\MW\View\Iface::class)) {
+        } elseif (is_a($data, ViewIface::class)) {
             $result .= $this->extractValues('values', $params);
         }
 

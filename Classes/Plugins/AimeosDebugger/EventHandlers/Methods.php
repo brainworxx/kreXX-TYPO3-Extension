@@ -44,6 +44,17 @@ use ReflectionClass;
 use Exception;
 use Throwable;
 use ReflectionMethod;
+use Aimeos\Controller\Frontend\Base as FrontendBase;
+use Aimeos\Client\JsonApi\Base as JsonApiBase;
+use Aimeos\Client\Html\Base as HtmlBase;
+use Aimeos\Admin\JsonAdm\Base as JsonAdmBase;
+use Aimeos\Admin\JQAdm\Base as JQAdmBase;
+use Aimeos\MW\View\Helper\Base as HelperBase;
+use Aimeos\MW\View\Iface as ViewIface;
+use Aimeos\MShop\Service\Provider\Base as ProviderBase;
+use Aimeos\MW\Common\Manager\Base as ManagerBase;
+use Aimeos\Controller\Jobs\Common\Decorator\Base as DecoratorBase;
+use ReflectionException;
 
 /**
  * Resolving Aimeos magical decorator class methods.
@@ -58,16 +69,16 @@ class Methods implements EventHandlerInterface, ConstInterface
      * @var array
      */
     protected $classList = [
-        \Aimeos\Controller\Frontend\Base::class,
-        \Aimeos\Client\JsonApi\Base::class,
-        \Aimeos\Client\Html\Base::class,
-        \Aimeos\Admin\JsonAdm\Base::class,
-        \Aimeos\Admin\JQAdm\Base::class,
-        \Aimeos\MW\View\Helper\Base::class,
-        \Aimeos\MW\View\Iface::class,
-        \Aimeos\MShop\Service\Provider\Base::class,
-        \Aimeos\MW\Common\Manager\Base::class,
-        \Aimeos\Controller\Jobs\Common\Decorator\Base::class,
+        FrontendBase::class,
+        JsonApiBase::class,
+        HtmlBase::class,
+        JsonAdmBase::class,
+        JQAdmBase::class,
+        HelperBase::class,
+        ViewIface::class,
+        ProviderBase::class,
+        ManagerBase::class,
+        DecoratorBase::class,
     ];
 
     /**
@@ -214,8 +225,12 @@ class Methods implements EventHandlerInterface, ConstInterface
     {
         // First, we need to get the name of the object we need to retrieve.
         // Get the __call() source code.
-        $methodRef = $ref->getMethod('__call');
-
+        try {
+            $methodRef = $ref->getMethod('__call');
+        } catch (ReflectionException $e) {
+            return false;
+        }
+        
         $source = $this->pool->fileService->readFile(
             $methodRef->getFileName(),
             $methodRef->getStartLine(),
