@@ -90,6 +90,17 @@ class Codegen extends OrgCodegen
             return '';
         }
 
+        $name = $model->getName();
+
+        // Test for a point in a variable name.
+        // Stuff like this is not reachable by normal means.
+        if (strpos($name, '.') !== false &&
+            $this->pool->scope->getScope() !== $name
+        ) {
+            $model->setHelpid('dotsInFluidVarName');
+            return '. . .';
+        }
+
          // Disallowing code generation for configured debug methods.
         if ($model->getType() === static::TYPE_DEBUG_METHOD) {
             return '. . .';
@@ -102,7 +113,7 @@ class Codegen extends OrgCodegen
 
         // Check for the {_all} varname, which is not a real varname.
         // We can not use this one for code generation.
-        if ($model->getName() === '_all') {
+        if ($name === '_all') {
             $this->isAll = true;
             return '';
         }

@@ -351,9 +351,7 @@ abstract class AbstractFluid extends AbstractCaller
             } else {
                 $code = '<v:variable.set value="{' . $varname . '}" name="fluidvar" /> {';
             }
-            $this->pool->codegenHandler->setComplicatedWrapperLeft(
-                $code
-            );
+            $this->pool->codegenHandler->setComplicatedWrapperLeft($code);
 
             $varname = static::FLUID_VARIABLE;
         }
