@@ -41,6 +41,9 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\Config as T3Config;
+use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
+use TYPO3\CMS\Extbase\Persistence\RepositoryInterface;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Configuration file for the TYPO3 kreXX plugin.
@@ -124,24 +127,24 @@ class Configuration implements PluginConfigInterface
         // $viewHelperNode might not be an object, and trying to render it might
         // cause a fatal error!
         Registration::addMethodToDebugBlacklist(
-            '\\TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractViewHelper',
+            AbstractViewHelper::class,
+            '__toString'
+        );
+        Registration::addMethodToDebugBlacklist(
+            \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper::class,
             '__toString'
         );
 
         // Deleting all rows from the DB via typo3 repository is NOT a good
         // debug method!
         Registration::addMethodToDebugBlacklist(
-            '\\TYPO3\\CMS\\Extbase\\Persistence\\RepositoryInterface',
-            'removeAll'
-        );
-        Registration::addMethodToDebugBlacklist(
-            'Tx_Extbase_Persistence_RepositoryInterface',
+            RepositoryInterface::class,
             'removeAll'
         );
 
         // The lazy loading proxy may not have loaded the object at this time.
         Registration::addMethodToDebugBlacklist(
-            '\\TYPO3\\CMS\\Extbase\\Persistence\\Generic\\LazyLoadingProxy',
+            LazyLoadingProxy::class,
             '__toString'
         );
 
