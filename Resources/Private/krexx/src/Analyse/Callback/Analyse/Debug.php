@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Debug method result analysis methods.
@@ -64,7 +65,7 @@ class Debug extends AbstractCallback
             $this->pool->routing->analysisHub(
                 $this->dispatchEventWithModel(
                     static::EVENT_MARKER_ANALYSES_END,
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    $this->pool->createClass(Model::class)
                         ->setData($this->parameters[static::PARAM_DATA])
                         ->setName('result')
                 )

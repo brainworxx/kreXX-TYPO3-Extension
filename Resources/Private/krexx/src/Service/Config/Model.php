@@ -79,7 +79,7 @@ class Model
     /**
      * Setter for the editable value.
      *
-     * @param boolean $editable
+     * @param bool $editable
      *
      * @return $this
      *   Return $this for Chaining.
@@ -116,9 +116,7 @@ class Model
     {
         if ($value === Fallback::VALUE_TRUE) {
             $value = true;
-        }
-
-        if ($value === Fallback::VALUE_FALSE) {
+        } elseif ($value === Fallback::VALUE_FALSE) {
             $value = false;
         }
 
@@ -129,7 +127,7 @@ class Model
     /**
      * Getter for the editable value.
      *
-     * @return boolean
+     * @return bool
      */
     public function getEditable()
     {

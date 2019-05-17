@@ -52,7 +52,7 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @uses array data
  *   The array want to iterate.
- * @uses boolean multiline
+ * @uses bool multiline
  *   Do we need a multiline code generation?
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Iterate
@@ -89,7 +89,7 @@ class ThroughLargeArray extends AbstractCallback
             }
 
             /** @var Model $model */
-            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model');
+            $model = $this->pool->createClass(Model::class);
 
             // Are we dealing with multiline code generation?
             if ($multiline === true) {
@@ -111,7 +111,7 @@ class ThroughLargeArray extends AbstractCallback
      * Adding quotation marks and a connector, depending on the type
      * of the key.
      *
-     * @param integer|string $key
+     * @param int|string $key
      *   The key (or name) of what we are analysing.
      * @param Model $model
      *   The so far prepared model we are preparing further.

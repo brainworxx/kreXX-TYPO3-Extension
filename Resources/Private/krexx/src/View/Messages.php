@@ -50,21 +50,21 @@ class Messages
      *
      * @var array
      */
-    protected $messages = array();
+    protected $messages = [];
 
     /**
      * The translatable keys for backend integration.
      *
      * @var array
      */
-    protected $keys = array();
+    protected $keys = [];
 
     /**
      * A simple array to hold the values.
      *
      * @var array
      */
-    protected $helpArray = array();
+    protected $helpArray = [];
 
     /**
      * Here we store all relevant data.
@@ -94,12 +94,12 @@ class Messages
      * @param array $args
      *   The parameters for vsprintf().
      */
-    public function addMessage($key, array $args = array())
+    public function addMessage($key, array $args = [])
     {
         // We will only display these messages once.
         if (isset($this->keys[$key]) === false) {
             // Add it to the keys, so the CMS can display it.
-            $this->keys[$key] = array('key' => $key, 'params' => $args);
+            $this->keys[$key] = ['key' => $key, 'params' => $args];
             $this->messages[] = $this->getHelp($key, $args);
         }
     }
@@ -164,7 +164,7 @@ class Messages
      * @return string
      *   The help text.
      */
-    public function getHelp($key, array $args = array())
+    public function getHelp($key, array $args = [])
     {
         // Check if we can get a value, at all.
         if (empty($this->helpArray[$key]) === true) {
@@ -194,7 +194,7 @@ class Messages
      */
     public function readHelpTexts()
     {
-        $this->helpArray = array();
+        $this->helpArray = [];
 
         $this->readHelpFile(KREXX_DIR . 'resources/language/Help.ini');
 

@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Controller;
 
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
+
 /**
  * "Controller" for the backtrace "action".
  *
@@ -61,13 +63,11 @@ class BacktraceController extends AbstractController
         $this->pool->reset();
 
         // Find caller.
-        $caller = $this->callerFinder->findCaller('Backtrace', array());
-
+        $caller = $this->callerFinder->findCaller(static::TRACE_BACKTRACE, []);
         $this->pool->scope->setScope($caller[static::TRACE_VARNAME]);
 
-        $footer = $this->outputFooter($caller);
         $analysis = $this->pool
-            ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessBacktrace')
+            ->createClass(ProcessBacktrace::class)
             ->process($backtrace);
 
         // Detect the encoding on the start-chunk-string of the analysis
@@ -84,10 +84,15 @@ class BacktraceController extends AbstractController
         // additional info, in case we are logging to a file.
         $this->pool->chunks->addMetadata($caller);
 
-        $this->outputService->addChunkString($this->outputHeader('Backtrace'));
-        $this->outputService->addChunkString($analysis);
-        $this->outputService->addChunkString($footer);
-        $this->outputService->finalize();
+        // We need to get the footer before the generating of the header,
+        // because we need to display messages in the header from the configuration.
+        $footer = $this->outputFooter($caller);
+
+        $this->outputService
+            ->addChunkString($this->pool->render->renderHeader(static::TRACE_BACKTRACE, $this->outputCssAndJs()))
+            ->addChunkString($analysis)
+            ->addChunkString($footer)
+            ->finalize();
 
         return $this;
     }

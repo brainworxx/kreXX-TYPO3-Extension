@@ -54,7 +54,6 @@ class Render extends AbstractRender
     const MARKER_CONNECTOR_RIGHT = '{connectorRight}';
     const MARKER_GEN_SOURCE = '{gensource}';
     const MARKER_VERSION = '{version}';
-    const MARKER_DOCTYPE = '{doctype}';
     const MARKER_KREXX_COUNT = '{KrexxCount}';
     const MARKER_HEADLINE = '{headline}';
     const MARKER_CSS_JS = '{cssJs}';
@@ -92,6 +91,7 @@ class Render extends AbstractRender
     const MARKER_LINE_NO = '{lineNo}';
     const MARKER_SOURCE_CODE = '{sourceCode}';
     const MARKER_PLUGINS = '{plugins}';
+    const MARKER_DATE = '{date}';
 
     /**
      * {@inheritdoc}
@@ -99,7 +99,7 @@ class Render extends AbstractRender
     public function renderRecursion(Model $model)
     {
         return str_replace(
-            array(
+            [
                 static::MARKER_NAME,
                 static::MARKER_DOM_ID,
                 static::MARKER_NORMAL,
@@ -107,8 +107,8 @@ class Render extends AbstractRender
                 static::MARKER_HELP,
                 static::MARKER_CONNECTOR_RIGHT,
                 static::MARKER_GEN_SOURCE,
-            ),
-            array(
+            ],
+            [
                 $model->getName(),
                 $model->getDomid(),
                 $model->getNormal(),
@@ -119,7 +119,7 @@ class Render extends AbstractRender
                     static::DATA_ATTRIBUTE_SOURCE,
                     $this->pool->codegenHandler->generateSource($model)
                 ),
-            ),
+            ],
             $this->getTemplateFileContent(static::FILE_RECURSION)
         );
     }
@@ -127,12 +127,11 @@ class Render extends AbstractRender
     /**
      * {@inheritdoc}
      */
-    public function renderHeader($doctype, $headline, $cssJs)
+    public function renderHeader($headline, $cssJs)
     {
         return str_replace(
-            array(
+            [
                 static::MARKER_VERSION,
-                static::MARKER_DOCTYPE,
                 static::MARKER_KREXX_COUNT,
                 static::MARKER_HEADLINE,
                 static::MARKER_CSS_JS,
@@ -140,10 +139,9 @@ class Render extends AbstractRender
                 static::MARKER_SEARCH,
                 static::MARKER_MESSAGES,
                 static::MARKER_ENCODING,
-            ),
-            array(
+            ],
+            [
                 $this->pool->config->version,
-                $doctype,
                 $this->pool->emergencyHandler->getKrexxCount(),
                 $headline,
                 $cssJs,
@@ -151,7 +149,7 @@ class Render extends AbstractRender
                 $this->renderSearch(),
                 $this->pool->messages->outputMessages(),
                 $this->pool->chunks->getOfficialEncoding(),
-            ),
+            ],
             $this->getTemplateFileContent(static::FILE_HEADER)
         );
     }
@@ -159,26 +157,28 @@ class Render extends AbstractRender
     /**
      * {@inheritdoc}
      */
-    public function renderFooter($caller, $configOutput, $configOnly = false)
+    public function renderFooter(array $caller, Model $model, $configOnly = false)
     {
         if (isset($caller[static::TRACE_FILE]) === true) {
-            $caller = $this->renderCaller($caller[static::TRACE_FILE], $caller[static::TRACE_LINE]);
+            $callerString = $this->renderCaller($caller[static::TRACE_FILE], $caller[static::TRACE_LINE]);
         } else {
              // When we have no caller, we will not render it.
-            $caller = '';
+            $callerString = '';
         }
 
         return str_replace(
-            array(
+            [
                 static::MARKER_CONFIG_INFO,
                 static::MARKER_CALLER,
                 static::MARKER_PLUGINS,
-            ),
-            array(
-                $configOutput,
-                $caller,
-                $this->renderPluginList()
-            ),
+                static::MARKER_DATE
+            ],
+            [
+                $this->renderExpandableChild($model, $configOnly),
+                $callerString,
+                $this->renderPluginList(),
+                $caller[static::TRACE_DATE]
+            ],
             $this->getTemplateFileContent(static::FILE_FOOTER)
         );
     }
@@ -189,8 +189,8 @@ class Render extends AbstractRender
     public function renderCssJs(&$css, &$javascript)
     {
         return str_replace(
-            array(static::MARKER_CSS, static::MARKER_JS),
-            array($css, $javascript),
+            [static::MARKER_CSS, static::MARKER_JS],
+            [$css, $javascript],
             $this->getTemplateFileContent(static::FILE_CSSJS)
         );
     }
@@ -246,7 +246,7 @@ class Render extends AbstractRender
 
         // Stitching it together.
         return str_replace(
-            array(
+            [
                 static::MARKER_GEN_SOURCE,
                 static::MARKER_SOURCE_BUTTON,
                 static::MARKER_EXPAND,
@@ -261,8 +261,8 @@ class Render extends AbstractRender
                 static::MARKER_CONNECTOR_RIGHT,
                 static::MARKER_CODE_WRAPPER_LEFT,
                 static::MARKER_CODE_WRAPPER_RIGHT,
-            ),
-            array(
+            ],
+            [
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $gensource),
                 $sourcebutton,
                 $partExpand,
@@ -283,7 +283,7 @@ class Render extends AbstractRender
                     static::DATA_ATTRIBUTE_WRAPPER_R,
                     $this->pool->codegenHandler->generateWrapperRight()
                 ),
-            ),
+            ],
             $this->getTemplateFileContent(static::FILE_SI_CHILD)
         );
     }
@@ -326,7 +326,7 @@ class Render extends AbstractRender
         }
 
         return str_replace(
-            array(
+            [
                 static::MARKER_NAME,
                 static::MARKER_TYPE,
                 static::MARKER_K_TYPE,
@@ -340,8 +340,8 @@ class Render extends AbstractRender
                 static::MARKER_NEST,
                 static::MARKER_CODE_WRAPPER_LEFT,
                 static::MARKER_CODE_WRAPPER_RIGHT,
-            ),
-            array(
+            ],
+            [
                 $model->getName(),
                 $model->getType(),
                 $cssType,
@@ -361,7 +361,7 @@ class Render extends AbstractRender
                     static::DATA_ATTRIBUTE_WRAPPER_R,
                     $this->pool->codegenHandler->generateWrapperRight()
                 ),
-            ),
+            ],
             $this->getTemplateFileContent(static::FILE_EX_CHILD_NORMAL)
         );
     }
@@ -372,14 +372,14 @@ class Render extends AbstractRender
     public function renderSingleEditableChild(Model $model)
     {
         $element = str_replace(
-            array(
+            [
                 static::MARKER_ID,
                 static::MARKER_VALUE,
-            ),
-            array(
+            ],
+            [
                 $model->getDomid(),
-                $model->getName()       // Wrong!
-            ),
+                $model->getName()
+            ],
             $this->getTemplateFileContent('single' . $model->getType())
         );
         $options = '';
@@ -389,9 +389,9 @@ class Render extends AbstractRender
             // Here we store what the list of possible values.
             if ($model->getDomid() === Fallback::SETTING_SKIN) {
                 // Get a list of all skin folders.
-                $valueList = $this->getSkinList();
+                $valueList = $this->pool->config->getSkinList();
             } else {
-                $valueList = array('true', 'false');
+                $valueList = ['true', 'false'];
             }
 
             // Paint it.
@@ -404,28 +404,28 @@ class Render extends AbstractRender
                 }
 
                 $options .= str_replace(
-                    array(static::MARKER_TEXT, static::MARKER_VALUE, static::MARKER_SELECTED),
-                    array($value, $value, $selected),
+                    [static::MARKER_TEXT, static::MARKER_VALUE, static::MARKER_SELECTED],
+                    [$value, $value, $selected],
                     $this->getTemplateFileContent(static::FILE_SI_SELECT_OPTIONS)
                 );
             }
         }
 
         return str_replace(
-            array(
+            [
                 static::MARKER_NAME,
                 static::MARKER_SOURCE,
                 static::MARKER_NORMAL,
                 static::MARKER_TYPE,
                 static::MARKER_HELP,
-            ),
-            array(
+            ],
+            [
                 $model->getData(),
                 $model->getNormal(),
                 str_replace(static::MARKER_OPTIONS, $options, $element),
                 Fallback::RENDER_EDITABLE,
                 $this->renderHelp($model),
-            ),
+            ],
             $this->getTemplateFileContent(static::FILE_SI_EDIT_CHILD)
         );
     }
@@ -436,16 +436,16 @@ class Render extends AbstractRender
     public function renderButton(Model $model)
     {
         return str_replace(
-            array(
+            [
                 static::MARKER_HELP,
                 static::MARKER_TEXT,
                 static::MARKER_CLASS,
-            ),
-            array(
+            ],
+            [
                 $this->renderHelp($model),
                 $model->getNormal(),
                 $model->getName()
-            ),
+            ],
             $this->getTemplateFileContent(static::FILE_SI_BUTTON)
         );
     }
@@ -453,29 +453,27 @@ class Render extends AbstractRender
     /**
      * {@inheritdoc}
      */
-    public function renderFatalMain($type, $errstr, $errfile, $errline)
+    public function renderFatalMain($errstr, $errfile, $errline)
     {
         $readFrom = $errline -6;
         $readTo = $errline +5;
         $source = $this->pool->fileService->readSourcecode($errfile, $errline -1, $readFrom, $readTo -1);
 
         return str_replace(
-            array(
-                static::MARKER_TYPE,
+            [
                 static::MARKER_ERROR_STRING,
                 static::MARKER_FILE,
                 static::MARKER_SOURCE,
                 static::MARKER_KREXX_COUNT,
                 static::MARKER_LINE,
-            ),
-            array(
-                $type,
+            ],
+            [
                 $errstr,
                 $errfile,
                 $source,
                 $this->pool->emergencyHandler->getKrexxCount(),
                 $errline
-            ),
+            ],
             $this->getTemplateFileContent(static::FILE_FATAL_MAIN)
         );
     }
@@ -483,23 +481,23 @@ class Render extends AbstractRender
     /**
      * {@inheritdoc}
      */
-    public function renderFatalHeader($cssJs, $doctype)
+    public function renderFatalHeader($cssJs, $errorType)
     {
         return str_replace(
-            array(
+            [
                 static::MARKER_CSS_JS,
                 static::MARKER_VERSION,
-                static::MARKER_DOCTYPE,
                 static::MARKER_SEARCH,
                 static::MARKER_KREXX_ID,
-            ),
-            array(
+                static::MARKER_TYPE
+            ],
+            [
                 $cssJs,
                 $this->pool->config->version,
-                $doctype,
                 $this->renderSearch(),
-                $this->pool->recursionHandler->getMarker()
-            ),
+                $this->pool->recursionHandler->getMarker(),
+                $errorType
+            ],
             $this->getTemplateFileContent(static::FILE_FATAL_HEADER)
         );
     }
@@ -524,16 +522,16 @@ class Render extends AbstractRender
     public function renderBacktraceSourceLine($className, $lineNo, $sourceCode)
     {
         return str_replace(
-            array(
+            [
                 static::MARKER_CLASS_NAME,
                 static::MARKER_LINE_NO,
                 static::MARKER_SOURCE_CODE,
-            ),
-            array(
+            ],
+            [
                 $className,
                 $lineNo,
                 $sourceCode,
-            ),
+            ],
             $this->getTemplateFileContent(static::FILE_BACKTRACE_SOURCELINE)
         );
     }

@@ -266,7 +266,7 @@ class Model extends AbstractModel
     /**
      * Getter for connectorRight.
      *
-     * @param integer $cap
+     * @param int $cap
      *   Maximum length of all parameters. 0 means no cap.
      *
      * @return string
@@ -317,7 +317,7 @@ class Model extends AbstractModel
     /**
      * "Setter" for the hasExtra property.
      *
-     * @param boolean $value
+     * @param bool $value
      *   The value we want to set.
      *
      * @return $this
@@ -342,7 +342,7 @@ class Model extends AbstractModel
     /**
      * Setter for the multiline code generation.
      *
-     * @param integer $multiLineCodeGen
+     * @param int $multiLineCodeGen
      *   The constant from the Codegen class.
      *
      * @return $this
@@ -357,7 +357,7 @@ class Model extends AbstractModel
     /**
      * Getter for the $isCallback.
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsCallback()
     {
@@ -367,7 +367,7 @@ class Model extends AbstractModel
     /**
      * Setter for the $isCallback.
      *
-     * @param boolean $isCallback
+     * @param bool $isCallback
      *   The value we want to set.
      *
      * @return $this
@@ -471,7 +471,7 @@ class Model extends AbstractModel
     /**
      * Setter for the isMetaConstants.
      *
-     * @param boolean $bool
+     * @param bool $bool
      *   The value we want to set.
      * @return $this
      *   Return $this for chaining.

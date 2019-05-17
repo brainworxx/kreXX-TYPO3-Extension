@@ -34,26 +34,25 @@
 
 namespace Brainworxx\Krexx\Service\Factory;
 
+use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Scope;
+use Brainworxx\Krexx\Analyse\Routing\Routing;
 use Brainworxx\Krexx\Service\Config\Config;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
-use Brainworxx\Krexx\Service\Misc\Registry;
-use Brainworxx\Krexx\View\Output\Chunks;
-use Brainworxx\Krexx\Analyse\Code\Codegen;
-use Brainworxx\Krexx\View\Messages;
-use Brainworxx\Krexx\View\Render;
-use Brainworxx\Krexx\Analyse\Routing\Routing;
-use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Misc\Encoding;
+use Brainworxx\Krexx\Service\Misc\File;
+use Brainworxx\Krexx\Service\Misc\Registry;
+use Brainworxx\Krexx\View\Messages;
+use Brainworxx\Krexx\View\Output\Chunks;
+use Brainworxx\Krexx\View\Render;
 
 /**
  * Here we store all classes that we need.
  *
  * @package Brainworxx\Krexx\Service\Factory
  */
-class Pool extends Factory
+class Pool extends AbstractFactory
 {
 
     /**
@@ -117,7 +116,7 @@ class Pool extends Factory
     public $scope;
 
     /**
-     * Our registry. It will not be reset by the init().
+     * Our registry.
      *
      * @var Registry
      */
@@ -153,45 +152,54 @@ class Pool extends Factory
 
     /**
      * Initializes all needed classes.
+     *
+     * @param array $rewrite
+     *   The rewrites we are using for the classes.
      */
-    public function __construct()
+    public function __construct(array $rewrite = [])
     {
-        $this->init();
-        $this->registry = $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\Registry');
+        $this->rewrite = $rewrite;
+
+        // Initializes the file service.
+        $this->createClass(File::class);
+        // Initializes the messages.
+        $this->createClass(Messages::class);
+        // Initialize the encoding service.
+        $this->createClass(Encoding::class);
+        // Initializes the configuration.
+        $this->createClass(Config::class);
+        // Initialize the emergency handler.
+        $this->createClass(Emergency::class);
+        // Initialize the recursionHandler.
+        $this->createClass(Recursion::class);
+        // Initialize the code generation.
+        $this->createClass(Codegen::class);
+        // Initializes the chunks handler.
+        $this->createClass(Chunks::class);
+        // Initializes the scope analysis.
+        $this->createClass(Scope::class);
+        // Initializes the routing.
+        $this->createClass(Routing::class);
+        // Initialize the event handler.
+        $this->createClass(Event::class);
+        // Initializes the render class.
+        $this->createClass($this->config->getSkinClass());
+        // Create the registry
+        $this->createClass(Registry::class);
+        // Check the environment and prepare the feedback, if necessary.
+        $this->checkEnvironment();
     }
 
     /**
      * (Re)initializes everything in the pool, in case in-runtime
      * factory overwrites.
+     *
+     * @deprecated
+     *   Since 3.1.0. Will be removed.
      */
     public function init()
     {
-        // Initializes the file service.
-        $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\File');
-        // Initializes the messages.
-        $this->createClass('Brainworxx\\Krexx\\View\\Messages');
-        // Initialize the encoding service.
-        $this->createClass('Brainworxx\\Krexx\\Service\\Misc\\Encoding');
-        // Initializes the configuration.
-        $this->createClass('Brainworxx\\Krexx\\Service\\Config\\Config');
-        // Initialize the emergency handler.
-        $this->createClass('Brainworxx\\Krexx\\Service\\Flow\\Emergency');
-        // Initialize the recursionHandler.
-        $this->createClass('Brainworxx\\Krexx\\Service\\Flow\\Recursion');
-        // Initialize the code generation.
-        $this->createClass('Brainworxx\\Krexx\\Analyse\\Code\\Codegen');
-        // Initializes the chunks handler.
-        $this->createClass('Brainworxx\\Krexx\\View\\Output\\Chunks');
-        // Initializes the scope analysis.
-        $this->createClass('Brainworxx\\Krexx\\Analyse\\Code\\Scope');
-        // Initializes the routing.
-        $this->createClass('Brainworxx\\Krexx\\Analyse\Routing\\Routing');
-        // Initialize the event handler.
-        $this->createClass('Brainworxx\\Krexx\\Service\\Factory\\Event');
-        // Initializes the render class.
-        $this->createClass($this->config->getSkinClass());
-        // Check the environment and prepare the feedback, if necessary.
-        $this->checkEnvironment();
+        $this->__construct();
     }
 
     /**
@@ -202,9 +210,11 @@ class Pool extends Factory
         // Check chunk folder is writable.
         // If not, give feedback!
         $chunkFolder = $this->config->getChunkDir();
-        if (is_writeable($chunkFolder) === false) {
-            $chunkFolder = $this->fileService->filterFilePath($chunkFolder);
-            $this->messages->addMessage('chunksNotWritable', array($chunkFolder));
+        if (is_writable($chunkFolder) === false) {
+            $this->messages->addMessage(
+                'chunksNotWritable',
+                [$this->fileService->filterFilePath($chunkFolder)]
+            );
             // We can work without chunks, but this will require much more memory!
             $this->chunks->setUseChunks(false);
         }
@@ -212,9 +222,11 @@ class Pool extends Factory
         // Check if the log folder is writable.
         // If not, give feedback!
         $logFolder = $this->config->getLogDir();
-        if (is_writeable($logFolder) === false) {
-            $logFolder = $this->fileService->filterFilePath($logFolder);
-            $this->messages->addMessage('logNotWritable', array($logFolder));
+        if (is_writable($logFolder) === false) {
+            $this->messages->addMessage(
+                'logNotWritable',
+                [$this->fileService->filterFilePath($logFolder)]
+            );
             // Tell the chunk output that we have no write access in the logging
             // folder.
             $this->chunks->setUseLogging(false);
@@ -226,16 +238,16 @@ class Pool extends Factory
     }
 
     /**
-     * Re-new() the classes that need to be re-new()-ed.
+     * Renew the "semi-singletons" after an analysis.
      */
     public function reset()
     {
         // We need to reset our recursion handler, because
         // the content of classes might change with another run.
-        $this->createClass('Brainworxx\\Krexx\\Service\\Flow\\Recursion');
+        $this->createClass(Recursion::class);
         // Initialize the code generation.
-        $this->createClass('Brainworxx\\Krexx\\Analyse\\Code\\Codegen');
-        $this->createClass('Brainworxx\\Krexx\\Analyse\\Code\\Scope');
+        $this->createClass(Codegen::class);
+        $this->createClass(Scope::class);
         // We also reset our emergency handler timer.
         $this->emergencyHandler->resetTimer();
     }

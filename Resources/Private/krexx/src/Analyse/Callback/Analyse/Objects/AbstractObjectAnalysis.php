@@ -35,9 +35,11 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Reflector;
 
 /**
  * Abstract class for the object analysis.
@@ -64,7 +66,7 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
      *
      * @var array
      */
-    protected $parameters = array();
+    protected $parameters = [];
 
     /**
      * Gets the properties from a reflection property of the object.
@@ -85,11 +87,11 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
         // We are dumping public properties direct into the main-level, without
         // any "abstraction level", because they can be accessed directly.
         /** @var Model $model */
-        $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+        $model = $this->pool->createClass(Model::class)
             ->addParameter(static::PARAM_DATA, $refProps)
             ->addParameter(static::PARAM_REF, $ref)
             ->injectCallback(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties')
+                $this->pool->createClass(ThroughProperties::class)
             );
 
         if (isset($label)) {
@@ -121,7 +123,7 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
      *   The second reflection.
      * @return int
      */
-    protected function reflectionSorting(\Reflector $reflectionA, \Reflector $reflectionB)
+    protected function reflectionSorting(Reflector $reflectionA, Reflector $reflectionB)
     {
         /** @var \ReflectionMethod | \ReflectionProperty $reflectionA */
         /** @var \ReflectionMethod | \ReflectionProperty $reflectionB */

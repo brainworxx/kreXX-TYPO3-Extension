@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
-use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**

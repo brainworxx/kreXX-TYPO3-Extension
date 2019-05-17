@@ -85,15 +85,23 @@ abstract class AbstractTest extends TestCase
         Krexx::$pool->config->setDisabled(false);
         Krexx::$pool = null;
         Config::$disabledByPhp = false;
-        $this->setValueByReflection('rewriteList', [], Registration::class);
         CallbackCounter::$counter = 0;
         CallbackCounter::$staticParameters = [];
+
+        // Reset stuff from the plugins.
+        $this->setValueByReflection('logFolder', '', Registration::class);
+        $this->setValueByReflection('chunkFolder', '', Registration::class);
+        $this->setValueByReflection('configFile', '', Registration::class);
+        $this->setValueByReflection('blacklistDebugMethods', [], Registration::class);
+        $this->setValueByReflection('blacklistDebugClass', [], Registration::class);
+        $this->setValueByReflection('additionalHelpFiles', [], Registration::class);
+        $this->setValueByReflection('eventList', [], Registration::class);
+        $this->setValueByReflection('rewriteList', [], Registration::class);
+        $this->setValueByReflection('additionalSkinList', [], Registration::class);
     }
 
     /**
      * Setting a protected value in the class we are testing.
-     *
-     * @throws \ReflectionException
      *
      * @param string $name
      *   The name of the value.
@@ -105,20 +113,22 @@ abstract class AbstractTest extends TestCase
      */
     protected function setValueByReflection($name, $value, $object)
     {
-        $reflectionClass = new \ReflectionClass($object);
-        $reflectionProperty = $reflectionClass->getProperty($name);
-        $reflectionProperty->setAccessible(true);
-        if (is_object($object)) {
-            $reflectionProperty->setValue($object, $value);
-        } else {
-            $reflectionProperty->setValue($value);
+        try {
+            $reflectionClass = new \ReflectionClass($object);
+            $reflectionProperty = $reflectionClass->getProperty($name);
+            $reflectionProperty->setAccessible(true);
+            if (is_object($object)) {
+                $reflectionProperty->setValue($object, $value);
+            } else {
+                $reflectionProperty->setValue($value);
+            }
+        } catch (\ReflectionException $e) {
+            $this->fail($e->getMessage());
         }
     }
 
     /**
      * Getting a protected value in the class we are testing.
-     *
-     * @throws \ReflectionException
      *
      * @param string $name
      *   The name of the value.
@@ -131,11 +141,16 @@ abstract class AbstractTest extends TestCase
      */
     protected function getValueByReflection($name, $object)
     {
-        $reflectionClass = new \ReflectionClass($object);
-        $reflectionProperty = $reflectionClass->getProperty($name);
-        $reflectionProperty->setAccessible(true);
+        try {
+            $reflectionClass = new \ReflectionClass($object);
+            $reflectionProperty = $reflectionClass->getProperty($name);
+            $reflectionProperty->setAccessible(true);
 
-        return $reflectionProperty->getValue($object);
+            return $reflectionProperty->getValue($object);
+        } catch (\ReflectionException $e) {
+            $this->fail($e->getMessage());
+        }
+        return '';
     }
 
     /**

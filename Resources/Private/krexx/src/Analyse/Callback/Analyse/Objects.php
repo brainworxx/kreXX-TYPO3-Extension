@@ -35,8 +35,19 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Constants;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PrivateProperties;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Exception;
+use Throwable;
 
 /**
  * Object analysis methods.
@@ -70,47 +81,54 @@ class Objects extends AbstractCallback
         $ref = $this->parameters[static::PARAM_REF] = new ReflectionClass($this->parameters[static::PARAM_DATA]);
 
         // Dumping public properties.
-        $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties');
+        $output .= $this->dumpStuff(PublicProperties::class);
 
         // Dumping getter methods.
         // We will not dump the getters for internal classes, though.
         if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_GETTER) === true &&
             $ref->isUserDefined() === true
         ) {
-            $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Getter');
+            $output .= $this->dumpStuff(Getter::class);
+        }
+
+        // Anaylsing error objects.
+        if (is_a($this->parameters[static::PARAM_DATA], Throwable::class) ||
+            is_a($this->parameters[static::PARAM_DATA], Exception::class)
+        ) {
+            $output .= $this->dumpStuff(ErrorObject::class);
         }
 
         // Dumping protected properties.
         if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_PROTECTED) === true ||
             $this->pool->scope->isInScope() === true
         ) {
-            $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\ProtectedProperties');
+            $output .= $this->dumpStuff(ProtectedProperties::class);
         }
 
         // Dumping private properties.
         if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_PRIVATE) === true ||
             $this->pool->scope->isInScope() === true
         ) {
-            $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PrivateProperties');
+            $output .= $this->dumpStuff(PrivateProperties::class);
         }
 
         // Dumping class constants.
-        $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Constants');
+        $output .= $this->dumpStuff(Constants::class);
 
         // Dumping all methods.
-        $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods');
+        $output .= $this->dumpStuff(Methods::class);
 
         // Dumping traversable data.
         if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_TRAVERSABLE) === true &&
             $this->parameters[static::PARAM_DATA] instanceof \Traversable
         ) {
-            $output .= $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Traversable');
+            $output .= $this->dumpStuff(Traversable::class);
         }
 
         // Dumping all configured debug functions.
         // Adding a HR for a better readability.
         return $output .
-            $this->dumpStuff('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\DebugMethods') .
+            $this->dumpStuff(DebugMethods::class) .
             $this->pool->render->renderSingeChildHr();
     }
 

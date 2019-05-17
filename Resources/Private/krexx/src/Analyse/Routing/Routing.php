@@ -35,7 +35,18 @@
 namespace Brainworxx\Krexx\Analyse\Routing;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessNull;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessString;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Closure;
 
 /**
  * "Routing" for kreXX
@@ -104,16 +115,16 @@ class Routing extends AbstractRouting
     public function __construct(Pool $pool)
     {
         parent::__construct($pool);
-        $this->processArray = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessArray');
-        $this->processBoolean = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessBoolean');
-        $this->processClosure = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessClosure');
-        $this->processFloat = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessFloat');
-        $this->processInteger = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessInteger');
-        $this->processNull = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessNull');
-        $this->processObject = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessObject');
-        $this->processResource = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessResource');
-        $this->processString = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessString');
-        $this->processOther = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessOther');
+        $this->processArray = $pool->createClass(ProcessArray::class);
+        $this->processBoolean = $pool->createClass(ProcessBoolean::class);
+        $this->processClosure = $pool->createClass(ProcessClosure::class);
+        $this->processFloat = $pool->createClass(ProcessFloat::class);
+        $this->processInteger = $pool->createClass(ProcessInteger::class);
+        $this->processNull = $pool->createClass(ProcessNull::class);
+        $this->processObject = $pool->createClass(ProcessObject::class);
+        $this->processResource = $pool->createClass(ProcessResource::class);
+        $this->processString = $pool->createClass(ProcessString::class);
+        $this->processOther = $pool->createClass(ProcessOther::class);
 
         $pool->routing = $this;
     }
@@ -262,7 +273,7 @@ class Routing extends AbstractRouting
             // We need to check if this is an object first.
             // When calling is_a('myClass', 'anotherClass') the autoloader is
             // triggered, trying to load 'myClass', although it is just a string.
-            if ($data instanceof \Closure) {
+            if ($data instanceof Closure) {
                 // Closures are handled differently than normal objects
                 return $this->processClosure->process($model);
             }

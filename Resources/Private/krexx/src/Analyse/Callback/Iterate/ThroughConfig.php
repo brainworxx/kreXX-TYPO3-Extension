@@ -35,6 +35,8 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
 
 /**
@@ -64,7 +66,7 @@ class ThroughConfig extends AbstractCallback
 
         // We need to "explode" our config array into the
         // sections again, for better readability.
-        $sections = array();
+        $sections = [];
         foreach ($this->pool->config->settings as $name => $setting) {
             $sections[$setting->getSection()][$name] = $setting;
         }
@@ -72,13 +74,13 @@ class ThroughConfig extends AbstractCallback
         foreach ($sections as $sectionName => $sectionData) {
             // Render a whole section.
             $configOutput .= $this->pool->render->renderExpandableChild(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                $this->pool->createClass(Model::class)
                     ->setName($this->pool->messages->getHelp($sectionName . 'Readable'))
                     ->setType(static::TYPE_CONFIG)
                     ->setNormal(static::UNKNOWN_VALUE)
                     ->addParameter(static::PARAM_DATA, $sectionData)
                     ->injectCallback(
-                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\ConfigSection')
+                        $this->pool->createClass(ConfigSection::class)
                     )
             );
         }
@@ -86,7 +88,7 @@ class ThroughConfig extends AbstractCallback
         // Render the dev-handle field.
         $devHandleLabel = $this->pool->messages->getHelp(Fallback::SETTING_DEV_HANDLE);
         $configOutput .= $this->pool->render->renderSingleEditableChild(
-            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+            $this->pool->createClass(Model::class)
                 ->setData($devHandleLabel)
                 ->setDomId(Fallback::SETTING_DEV_HANDLE)
                 ->setName($this->pool->config->getDevHandler())
@@ -97,7 +99,7 @@ class ThroughConfig extends AbstractCallback
 
         // Render the reset-button which will delete the debug-cookie.
         return $configOutput . $this->pool->render->renderButton(
-            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+            $this->pool->createClass(Model::class)
                 ->setName('kresetbutton')
                 ->setNormal('Reset local settings')
                 ->setHelpid('kresetbutton')

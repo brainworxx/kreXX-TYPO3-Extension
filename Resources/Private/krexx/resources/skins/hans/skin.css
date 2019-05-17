@@ -759,6 +759,7 @@ div.kwrapper {
     margin-right: 5px;
     display: table-cell;
     float: right;
+    cursor: pointer;
 }
 
 .kwrapper .kchild .kolps:hover {
@@ -786,6 +787,7 @@ div.kwrapper {
     margin-right: 5px;
     display: table-cell;
     float: right;
+    cursor: pointer;
 }
 
 .kwrapper .kchild .kgencode::before {
@@ -804,6 +806,7 @@ div.kwrapper {
     position: absolute;
     right: 45px;
     top: 2px;
+    cursor: help;
 }
 
 .kwrapper .kchild .kinfobutton .kinfoinner {

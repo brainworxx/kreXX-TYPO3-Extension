@@ -144,6 +144,7 @@ class CallerFinderTest extends AbstractTest
         $this->assertEquals(69, $result[ConstInterface::TRACE_LINE]);
         $this->assertEquals('$parameter', $result[ConstInterface::TRACE_VARNAME]);
         $this->assertEquals('Analysis of $parameter, string', $result[ConstInterface::TRACE_TYPE]);
+        $this->assertArrayHasKey(ConstInterface::TRACE_DATE, $result);
     }
 
     /**
@@ -169,6 +170,7 @@ class CallerFinderTest extends AbstractTest
         $this->assertEquals(69, $result[ConstInterface::TRACE_LINE]);
         $this->assertEquals('$parameter', $result[ConstInterface::TRACE_VARNAME]);
         $this->assertEquals(static::HEADLINE_STRING, $result[ConstInterface::TRACE_TYPE]);
+        $this->assertArrayHasKey(ConstInterface::TRACE_DATE, $result);
     }
 
     /**
@@ -198,5 +200,6 @@ class CallerFinderTest extends AbstractTest
         $this->assertEquals(69, $result[ConstInterface::TRACE_LINE]);
         $this->assertEquals('. . .', $result[ConstInterface::TRACE_VARNAME]);
         $this->assertEquals(static::HEADLINE_STRING, $result[ConstInterface::TRACE_TYPE]);
+        $this->assertArrayHasKey(ConstInterface::TRACE_DATE, $result);
     }
 }

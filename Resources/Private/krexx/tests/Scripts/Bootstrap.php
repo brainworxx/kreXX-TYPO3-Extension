@@ -232,3 +232,120 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process {
         return $result;
     }
 }
+
+namespace Brainworxx\Krexx\Controller {
+
+    /**
+     * Short circuting the krexx command in the fatal error handler.
+     */
+    function krexx()
+    {
+        // Do nothing.
+    }
+
+    /**
+     * Mocking the microtime in the time controller.
+     *
+     * @return int
+     */
+    function microtime($get_as_float = null, $mockResult = null)
+    {
+        static $startMock = false;
+
+        if ($mockResult !== null) {
+            $startMock = $mockResult;
+        }
+
+        if ($startMock === true) {
+            return 3000;
+        }
+
+        return \microtime($get_as_float);
+    }
+
+    /**
+     * Mocking the setting of an exception handler.
+     *
+     * @param array $callback
+     *
+     * @return array
+     */
+    function set_exception_handler(array $callback): array
+    {
+        static $lastCallback = [];
+
+        if (!empty($callback)) {
+            $lastCallback = $callback;
+        }
+
+        return $lastCallback;
+    }
+
+    /**
+     * Mocking the restoring of an exception handler.
+     *
+     * @return int
+     *   Count of it's call.
+     */
+    function restore_exception_handler(): int
+    {
+        static $counter = 0;
+
+        ++$counter;
+
+        return $counter;
+    }
+}
+
+namespace Brainworxx\Krexx\Service\Config {
+
+    /**
+     * Mocking the max executon time settings for the validation class.
+     *
+     * @param string $what
+     * @return string
+     */
+    function ini_get(string $what): string
+    {
+        if ($what === 'max_execution_time') {
+            return '123';
+        }
+
+        return \ini_get($what);
+    }
+}
+
+namespace Brainworxx\Krexx\Service\Factory {
+
+
+    /**
+     * Mocking the is_writable method, to simulate inaccessible folders.
+     *
+     * @param string $what
+     * @param bool|null $overwriteResult
+     * @return bool
+     */
+    function is_writable(string $what = '', bool $overwriteResult = null): bool
+    {
+        static $result = [];
+
+        // Reset the result.
+        if (empty($what)) {
+            $result = [];
+            return true;
+        }
+
+        // Overwrite the return value.
+        if (is_bool($overwriteResult)) {
+            $result[$what] = $overwriteResult;
+            return $result[$what];
+        }
+
+        // Use the overwrite value once
+        if (isset($result[$what])) {
+            return $result[$what];
+        }
+
+        return \is_writable($what);
+    }
+}

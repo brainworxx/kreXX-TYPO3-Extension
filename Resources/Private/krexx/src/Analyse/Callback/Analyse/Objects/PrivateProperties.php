@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use ReflectionProperty;
+
 /**
  * Analysis of private properties.
  *
@@ -63,7 +65,7 @@ class PrivateProperties extends AbstractObjectAnalysis
     {
         $output = $this->dispatchStartEvent();
 
-        $refProps = array();
+        $refProps = [];
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
         // We need to keep the original reference intact.
@@ -74,7 +76,7 @@ class PrivateProperties extends AbstractObjectAnalysis
         // We need to get all parent classes and then poll them for private
         // properties to get the whole picture.
         do {
-            $refProps = array_merge($refProps, $reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE));
+            $refProps = array_merge($refProps, $reflectionClass->getProperties(ReflectionProperty::IS_PRIVATE));
             // And now for the parent class.
             $reflectionClass = $reflectionClass->getParentClass();
         } while (is_object($reflectionClass));
@@ -83,7 +85,7 @@ class PrivateProperties extends AbstractObjectAnalysis
             return $output;
         }
 
-        usort($refProps, array($this, 'reflectionSorting'));
+        usort($refProps, [$this, 'reflectionSorting']);
 
         return $output .
             $this->getReflectionPropertiesData(

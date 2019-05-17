@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Class ThroughResource
@@ -68,7 +69,7 @@ class ThroughResource extends AbstractCallback
 
         foreach ($this->parameters[static::PARAM_DATA] as $name => $data) {
             $output .= $this->pool->routing->analysisHub(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                $this->pool->createClass(Model::class)
                     ->setData($data)
                     ->setName(str_replace('_', ' ', $name))
                     ->setNormal($data)

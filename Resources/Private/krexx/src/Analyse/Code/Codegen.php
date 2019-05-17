@@ -37,6 +37,8 @@ namespace Brainworxx\Krexx\Analyse\Code;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use ReflectionException;
+use ReflectionParameter;
 
 /**
  * Code generation methods.
@@ -191,21 +193,15 @@ class Codegen implements ConstInterface
     protected function concatenation(Model $model)
     {
         // We simply add the connectors for public access.
-        // Escape the quotes. This is not done by the model.
-        // We also need to escape null-strings.
-        $name = str_replace(
-            array('"', '\'', "\0"),
-            array('&#034;', '&#039;', '\' . "\0" . \''),
-            $model->getName()
-        );
-
-        return $model->getConnectorLeft() . $name . $model->getConnectorRight();
+        return $model->getConnectorLeft() .
+            $this->pool->encodingService->encodeStringForCodeGeneration($model->getName()) .
+            $model->getConnectorRight();
     }
 
     /**
      * Gets set, as soon as we have a scope to come from.
      *
-     * @param boolean $bool
+     * @param bool $bool
      */
     public function setAllowCodegen($bool)
     {
@@ -236,7 +232,7 @@ class Codegen implements ConstInterface
      * @return string
      *   The parameter data in a human readable form.
      */
-    public function parameterToString(\ReflectionParameter $reflectionParameter)
+    public function parameterToString(ReflectionParameter $reflectionParameter)
     {
         // Slice off the first part.
         $paremExplode = array_slice(explode(' ', trim($reflectionParameter->__toString(), ' ]')), 4);
@@ -244,7 +240,11 @@ class Codegen implements ConstInterface
         if ($reflectionParameter->isDefaultValueAvailable()) {
             // Remove the standard value
             $paremExplode = array_slice($paremExplode, 0, 2);
-            $default = $reflectionParameter->getDefaultValue();
+            try {
+                $default = $reflectionParameter->getDefaultValue();
+            } catch (ReflectionException $e) {
+                $default = null;
+            }
 
             // If we are dealing with a reflection parameter from a closure,
             // there is a missing '=' in the return string.

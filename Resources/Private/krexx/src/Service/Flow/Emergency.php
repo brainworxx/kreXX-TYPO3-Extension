@@ -34,9 +34,9 @@
 
 namespace Brainworxx\Krexx\Service\Flow;
 
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Krexx;
 
 /**
  * Emergency break handler for large output (runtime and memory usage).

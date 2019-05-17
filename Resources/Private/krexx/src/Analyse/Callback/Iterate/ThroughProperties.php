@@ -36,7 +36,11 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Comment\Properties;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Misc\File;
+use ReflectionClass;
+use ReflectionProperty;
 
 /**
  * Class properties analysis methods.
@@ -67,14 +71,14 @@ class ThroughProperties extends AbstractCallback
      *
      * @var array
      */
-    protected $defaultProperties = array();
+    protected $defaultProperties = [];
 
     /**
      * The object, cast into an array.
      *
      * @var array
      */
-    protected $objectArray = array();
+    protected $objectArray = [];
 
     /**
      * Renders the properties of a class.
@@ -130,6 +134,7 @@ class ThroughProperties extends AbstractCallback
                 // AFAIK this is only possible for dynamically declared properties
                 // which can never be static.
                 if ($this->isPropertyNameNormal($propName) === false) {
+                    $propName = $this->pool->encodingService->encodeStringForCodeGeneration($propName);
                     $connectorType = Connectors::SPECIAL_CHARS_PROP;
                 }
 
@@ -140,7 +145,7 @@ class ThroughProperties extends AbstractCallback
                 // Since we are dealing with a declared Property here, we can
                 // get the comment and the declaration place.
                 $comment = $this->pool
-                    ->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Properties')
+                    ->createClass(Properties::class)
                     ->getComment($refProperty);
                 $declarationPlace = $this->retrieveDeclarationPlace($refProperty);
             }
@@ -149,7 +154,7 @@ class ThroughProperties extends AbstractCallback
             $output .= $this->pool->routing->analysisHub(
                 $this->dispatchEventWithModel(
                     __FUNCTION__ . static::EVENT_MARKER_END,
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    $this->pool->createClass(Model::class)
                         ->setData($value)
                         ->setName($this->pool->encodingService->encodeString($propName))
                         ->addToJson(static::META_COMMENT, $comment)
@@ -174,7 +179,7 @@ class ThroughProperties extends AbstractCallback
      *
      * @return string
      */
-    protected function getAdditionalData(\ReflectionProperty $refProperty, \ReflectionClass $ref)
+    protected function getAdditionalData(ReflectionProperty $refProperty, ReflectionClass $ref)
     {
         // Now that we have the key and the value, we can analyse it.
         // Stitch together our additional info about the data:
@@ -209,9 +214,9 @@ class ThroughProperties extends AbstractCallback
      * @param \ReflectionProperty $refProperty
      * @return string
      */
-    protected function retrieveDeclarationPlace(\ReflectionProperty $refProperty)
+    protected function retrieveDeclarationPlace(ReflectionProperty $refProperty)
     {
-        static $declarationCache = array();
+        static $declarationCache = [];
 
         // Early return from the cache.
         $declaringClass = $refProperty->getDeclaringClass();

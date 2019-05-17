@@ -145,17 +145,17 @@ class Connectors
      */
     public function __construct()
     {
-        $this->connectorArray = array(
-            static::NOTHING => array('', ''),
-            static::METHOD => array('->', '()'),
-            static::STATIC_METHOD => array('::', '()'),
-            static::NORMAL_ARRAY => array('[', ']'),
-            static::ASSOCIATIVE_ARRAY => array('[\'', '\']'),
-            static::CONSTANT => array('::', ''),
-            static::NORMAL_PROPERTY => array('->', ''),
-            static::STATIC_PROPERTY => array('::', ''),
-            static::SPECIAL_CHARS_PROP => array('->{\'', '\'}'),
-        );
+        $this->connectorArray = [
+            static::NOTHING => ['', ''],
+            static::METHOD => ['->', '()'],
+            static::STATIC_METHOD => ['::', '()'],
+            static::NORMAL_ARRAY => ['[', ']'],
+            static::ASSOCIATIVE_ARRAY => ['[\'', '\']'],
+            static::CONSTANT => ['::', ''],
+            static::NORMAL_PROPERTY => ['->', ''],
+            static::STATIC_PROPERTY => ['::', ''],
+            static::SPECIAL_CHARS_PROP => ['->{\'', '\'}'],
+        ];
     }
 
     /**
@@ -210,7 +210,7 @@ class Connectors
     /**
      * Getting the connectorLeft, according to the type.
      *
-     * @param integer $cap
+     * @param int $cap
      *   Maximum length of all parameters. 0 means no cap.
      *
      * @return string

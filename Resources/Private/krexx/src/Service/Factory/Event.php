@@ -50,7 +50,7 @@ class Event
      *
      * @var array
      */
-    public $register = array();
+    public $register = [];
 
     /**
      * The pool.
@@ -79,13 +79,12 @@ class Event
      * @param string $name
      *   The name of the event.
      * @param AbstractCallback $callback
-     *   The parameters for the callback.
+     *   The callback, that emitted the event.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far, if available.
      *
      * @return string
      *   The generated markup from the event handlers
-     *   This will only get dispatched, if you use the start event.
      */
     public function dispatch($name, AbstractCallback $callback, Model $model = null)
     {

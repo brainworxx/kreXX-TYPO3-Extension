@@ -36,6 +36,10 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Comment\Methods;
+use Brainworxx\Krexx\Analyse\Model;
+use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Methods analysis methods. :rolleyes:
@@ -65,12 +69,12 @@ class ThroughMethods extends AbstractCallback
         $result = $this->dispatchStartEvent();
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters[static::PARAM_REF];
-        $commentAnalysis = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Methods');
+        $commentAnalysis = $this->pool->createClass(Methods::class);
 
         // Deep analysis of the methods.
         /** @var \ReflectionMethod $reflectionMethod */
         foreach ($this->parameters[static::PARAM_DATA] as $reflectionMethod) {
-            $methodData = array();
+            $methodData = [];
 
             // Get the comment from the class, it's parents, interfaces or traits.
             $methodComment = $commentAnalysis->getComment($reflectionMethod, $reflectionClass);
@@ -116,7 +120,7 @@ class ThroughMethods extends AbstractCallback
             $result .= $this->pool->render->renderExpandableChild(
                 $this->dispatchEventWithModel(
                     __FUNCTION__ . static::EVENT_MARKER_END,
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    $this->pool->createClass(Model::class)
                         ->setName($reflectionMethod->name)
                         ->setType($methodData['declaration keywords'] . static::TYPE_METHOD)
                         ->setConnectorType($connectorType)
@@ -126,7 +130,7 @@ class ThroughMethods extends AbstractCallback
                         ->setIsPublic($reflectionMethod->isPublic())
                         ->injectCallback(
                             $this->pool->createClass(
-                                'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis'
+                                ThroughMethodAnalysis::class
                             )
                         )
                 )
@@ -147,7 +151,7 @@ class ThroughMethods extends AbstractCallback
      * @return string
      *   The analysis result.
      */
-    protected function getDeclarationPlace(\ReflectionMethod $reflectionMethod, \ReflectionClass $declaringClass)
+    protected function getDeclarationPlace(ReflectionMethod $reflectionMethod, ReflectionClass $declaringClass)
     {
         $filename = $this->pool->fileService->filterFilePath($reflectionMethod->getFileName());
         if (empty($filename) === true) {
@@ -190,8 +194,8 @@ class ThroughMethods extends AbstractCallback
      *   Otherwise return a reflection class.
      */
     protected function retrieveDeclaringReflection(
-        \ReflectionMethod $reflectionMethod,
-        \ReflectionClass $declaringClass
+        ReflectionMethod $reflectionMethod,
+        ReflectionClass $declaringClass
     ) {
         // Get a first impression.
         if ($reflectionMethod->getFileName() === $declaringClass->getFileName()) {
@@ -224,9 +228,9 @@ class ThroughMethods extends AbstractCallback
      *   All declaring keywords + the info if this method was inherited.
      */
     protected function getDeclarationKeywords(
-        \ReflectionMethod $reflectionMethod,
-        \ReflectionClass $declaringClass,
-        \ReflectionClass $reflectionClass
+        ReflectionMethod $reflectionMethod,
+        ReflectionClass $declaringClass,
+        ReflectionClass $reflectionClass
     ) {
         $result = '';
 

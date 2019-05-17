@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Service\Misc;
 
+use Brainworxx\Krexx\Service\Factory\Pool;
+
 /**
  * Registry class, to store stuff from the outside and inside.
  *
@@ -46,7 +48,17 @@ class Registry
      *
      * @var array
      */
-    protected $data = array();
+    protected $data = [];
+
+    /**
+     * Add itself to the pool.
+     *
+     * @param Pool $pool
+     */
+    public function __construct(Pool $pool)
+    {
+        $pool->registry = $this;
+    }
 
     /**
      * Storing stuff in the registry.

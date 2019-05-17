@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
+use ReflectionProperty;
 
 /**
  * Analysis of public properties.
@@ -56,8 +57,6 @@ class PublicProperties extends AbstractObjectAnalysis
     /**
      * Dump all public properties.
      *
-     * @throws \ReflectionException
-     *
      * @return string
      *   The generated HTML markup.
      */
@@ -69,8 +68,8 @@ class PublicProperties extends AbstractObjectAnalysis
         $ref = $this->parameters[static::PARAM_REF];
         $data = $ref->getData();
 
-        $refProps = $ref->getProperties(\ReflectionProperty::IS_PUBLIC);
-        $publicProps = array();
+        $refProps = $ref->getProperties(ReflectionProperty::IS_PUBLIC);
+        $publicProps = [];
 
         // Adding undeclared public properties to the dump.
         // Those are properties which are not visible with
@@ -97,7 +96,7 @@ class PublicProperties extends AbstractObjectAnalysis
             return $output;
         }
 
-        usort($refProps, array($this, 'reflectionSorting'));
+        usort($refProps, [$this, 'reflectionSorting']);
         // Adding a HR to reflect that the following stuff are not public
         // properties anymore.
         return $output .

@@ -34,9 +34,13 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
-use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethodAnalysis;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Comment\Functions;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use ReflectionException;
+use ReflectionFunction;
 
 /**
  * Processing of closures.
@@ -51,20 +55,24 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
      * @param Model $model
      *   The closure we want to analyse.
      *
-     * @throws \ReflectionException
-     *
      * @return string
      *   The generated markup.
      */
     public function process(Model $model)
     {
-        $ref = new \ReflectionFunction($model->getData());
+        try {
+            $ref = new ReflectionFunction($model->getData());
+        } catch (ReflectionException $e) {
+            // Not sure how this can happen.
+            return '';
+        }
 
-        $result = array();
+
+        $result = [];
 
         // Adding comments from the file.
         $result[static::META_COMMENT] =  $this->pool
-            ->createClass('Brainworxx\\Krexx\\Analyse\\Comment\\Functions')
+            ->createClass(Functions::class)
             ->getComment($ref);
 
         // Adding the sourcecode
@@ -108,7 +116,7 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
                 ->setConnectorType(Connectors::METHOD)
                 ->addParameter(static::PARAM_DATA, $result)
                 ->injectCallback(
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis')
+                    $this->pool->createClass(ThroughMethodAnalysis::class)
                 )
         );
     }

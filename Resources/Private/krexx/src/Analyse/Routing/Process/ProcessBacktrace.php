@@ -34,9 +34,10 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
-use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\BacktraceStep;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
-use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Processing of a backtrace. No abstract for you, because we are dealing with
@@ -44,24 +45,17 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessBacktrace implements ConstInterface
+class ProcessBacktrace extends AbstractCallback
 {
     /**
-     * Here we store all relevant data.
+     * Wrapper arround the process method, so we can use this one as a callback.
      *
-     * @var Pool
+     * @return string
+     *   The generated DOM.
      */
-    protected $pool;
-
-    /**
-     * Injects the pool.
-     *
-     * @param Pool $pool
-     *   The pool, where we store the classes we need.
-     */
-    public function __construct(Pool $pool)
+    public function callMe()
     {
-         $this->pool = $pool;
+        return $this->process($this->parameters[static::PARAM_DATA]);
     }
 
     /**
@@ -74,7 +68,7 @@ class ProcessBacktrace implements ConstInterface
      * @return string
      *   The rendered backtrace.
      */
-    public function process(&$backtrace = array())
+    public function process(&$backtrace = [])
     {
         if (empty($backtrace) === true) {
             $backtrace = $this->getBacktrace();
@@ -86,7 +80,7 @@ class ProcessBacktrace implements ConstInterface
 
         // Remove steps according to the configuration.
         if ($maxStep < $stepCount) {
-            $this->pool->messages->addMessage('omittedBacktrace', array(($maxStep + 1), $stepCount));
+            $this->pool->messages->addMessage('omittedBacktrace', [($maxStep + 1), $stepCount]);
         } else {
             // We will not analyse more steps than we actually have.
             $maxStep = $stepCount;
@@ -94,12 +88,12 @@ class ProcessBacktrace implements ConstInterface
 
         for ($step = 1; $step <= $maxStep; ++$step) {
             $output .= $this->pool->render->renderExpandableChild(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                $this->pool->createClass(Model::class)
                     ->setName($step)
                     ->setType(static::TYPE_STACK_FRAME)
                     ->addParameter(static::PARAM_DATA, $backtrace[$step - 1])
                     ->injectCallback(
-                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep')
+                        $this->pool->createClass(BacktraceStep::class)
                     )
             );
         }

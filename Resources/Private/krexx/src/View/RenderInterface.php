@@ -83,8 +83,6 @@ interface RenderInterface
     /**
      * Renders the kreXX header.
      *
-     * @param string $doctype
-     *   The doctype from the configuration.
      * @param string $headline
      *   The headline, what is actually analysed.
      * @param string $cssJs
@@ -93,22 +91,22 @@ interface RenderInterface
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderHeader($doctype, $headline, $cssJs);
+    public function renderHeader($headline, $cssJs);
 
     /**
      * Renders the kreXX footer.
      *
      * @param array $caller
      *   The caller of kreXX.
-     * @param string $configOutput
+     * @param Model $model
      *   The pregenerated configuration markup.
-     * @param boolean $configOnly
+     * @param bool $configOnly
      *   Info if we are only displaying the configuration
      *
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderFooter($caller, $configOutput, $configOnly = false);
+    public function renderFooter(array $caller, Model $model, $configOnly = false);
 
     /**
      * Simply outputs the css and js stuff.
@@ -128,7 +126,7 @@ interface RenderInterface
      *
      * @param Model $model
      *   The model, which hosts all the data we need.
-     * @param boolean $isExpanded
+     * @param bool $isExpanded
      *   Is this one expanded from the beginning?
      *   TRUE when we render the settings menu only.
      *
@@ -162,8 +160,6 @@ interface RenderInterface
     /**
      * Renders the second part of the fatal error handler.
      *
-     * @param string $type
-     *   The type of the error (should always be fatal).
      * @param string $errstr
      *   The string from the error.
      * @param string $errfile
@@ -174,20 +170,20 @@ interface RenderInterface
      * @return string
      *   The template file, with all markers replaced.
      */
-    public function renderFatalMain($type, $errstr, $errfile, $errline);
+    public function renderFatalMain($errstr, $errfile, $errline);
 
     /**
      * Renders the header part of the fatal error handler.
      *
      * @param string $cssJs
      *   The css and js from the template.
-     * @param string $doctype
-     *   The configured doctype.
+     * @param string $errorType
+     *   The error type, for the big, fat headline.
      *
      * @return string
      *   The template file, with all markers replaced.
      */
-    public function renderFatalHeader($cssJs, $doctype);
+    public function renderFatalHeader($cssJs, $errorType);
 
     /**
      * Renders all internal messages.
@@ -227,9 +223,10 @@ interface RenderInterface
      * Gets a list of all available skins for the frontend config.
      *
      * @deprecated
+     *   Since 3.1.0. Will be removed.
      *
      * @return array
-     *   An array with the skinnames.
+     *   An array with the skin names.
      */
     public function getSkinList();
 }

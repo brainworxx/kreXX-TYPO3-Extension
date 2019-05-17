@@ -47,7 +47,7 @@ interface ConstInterface
     const TYPE_PHP = 'PHP';
     const TYPE_INTERNALS = 'class internals';
     const TYPE_DEBUG_METHOD = 'debug method';
-    const TYPE_FOREACH = '´foreach';
+    const TYPE_FOREACH = 'foreach';
     const TYPE_CONFIG = 'config';
     const TYPE_UNKNOWN = 'unknown';
     const TYPE_SIMPLE_CLASS = 'simplified class analysis';
@@ -91,6 +91,8 @@ interface ConstInterface
     const TRACE_ERROR_STRING = 'errstr';
     const TRACE_ERROR_FILE = 'errfile';
     const TRACE_ERROR_LINE = 'errline';
+    const TRACE_BACKTRACE = 'backtrace';
+    const TRACE_DATE = 'date';
 
     // Stuff directly displaysed in the FE, not just array keys.
     const META_DECLARED_IN = 'Declared in';

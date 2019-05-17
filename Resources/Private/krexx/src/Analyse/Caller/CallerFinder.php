@@ -44,6 +44,9 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class CallerFinder extends AbstractCaller
 {
+    const CLASS_PATTERN = 'brainworxx\\krexx\\krexx';
+    const FUNCTION_PATTERN = 'krexx';
+
 
     /**
      * Injects the pool, sets the callPattern to search for.
@@ -55,7 +58,7 @@ class CallerFinder extends AbstractCaller
          parent::__construct($pool);
 
         // Setting the search pattern.
-        $this->callPattern = array(
+        $this->callPattern = [
             'krexx',
             'krexx::open',
             'krexx::' . $this->pool->config->getDevHandler(),
@@ -64,7 +67,7 @@ class CallerFinder extends AbstractCaller
             'Krexx::' . $this->pool->config->getDevHandler(),
             'Krexx::log',
             'krexx::log',
-        );
+        ];
         $this->pattern = 'krexx';
     }
 
@@ -73,24 +76,22 @@ class CallerFinder extends AbstractCaller
      */
     public function findCaller($headline, $data)
     {
-        if (version_compare(phpversion(), '5.4.0', '>=')) {
-            $backtrace = debug_backtrace(false, 5);
-        } else {
-            $backtrace = debug_backtrace(false);
-        }
-
-        $pattern = strtolower($this->pattern);
+        $backtrace = debug_backtrace(false, 5);
 
         // Going from the first call of the first line up
         // through the first debug call.
         // Using a foreach is definitely faster, but then we
         // would have trouble using our pattern.
         while ($caller = array_pop($backtrace)) {
-            if (isset($caller[static::TRACE_FUNCTION]) && strtolower($caller[static::TRACE_FUNCTION]) === $pattern) {
+            if (isset($caller[static::TRACE_FUNCTION]) &&
+                strtolower($caller[static::TRACE_FUNCTION]) === static::FUNCTION_PATTERN
+            ) {
                 break;
             }
 
-            if (isset($caller[static::TRACE_CLASS]) && strtolower($caller[static::TRACE_CLASS]) === $pattern) {
+            if (isset($caller[static::TRACE_CLASS]) &&
+                strtolower($caller[static::TRACE_CLASS]) === static::CLASS_PATTERN
+            ) {
                 break;
             }
         }
@@ -99,12 +100,13 @@ class CallerFinder extends AbstractCaller
 
         // We will not keep the whole backtrace im memory. We only return what we
         // actually need.
-        return array(
+        return [
             static::TRACE_FILE => $this->pool->fileService->filterFilePath($caller[static::TRACE_FILE]),
             static::TRACE_LINE => (int)$caller[static::TRACE_LINE],
             static::TRACE_VARNAME => $varname,
             static::TRACE_TYPE => $this->getType($headline, $varname, $data),
-        );
+            static::TRACE_DATE => date('d-m-Y H:i:s', time()),
+        ];
     }
 
     /**
@@ -135,7 +137,7 @@ class CallerFinder extends AbstractCaller
         $possibleCommands = explode(';', $this->pool->fileService->readFile($file, $line, $line));
         // Now we must weed out the none krexx commands.
         foreach ($possibleCommands as $key => $command) {
-            if (strpos(strtolower($command), strtolower($this->pattern)) === false) {
+            if (strpos(strtolower($command), $this->pattern) === false) {
                 unset($possibleCommands[$key]);
             }
         }

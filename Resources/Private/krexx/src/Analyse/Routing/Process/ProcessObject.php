@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 
@@ -64,7 +65,7 @@ class ProcessObject extends AbstractRouting implements ProcessInterface
                 ->setNormal('\\' . get_class($object))
                 ->setDomid($this->generateDomIdFromObject($object))
                 ->injectCallback(
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects')
+                    $this->pool->createClass(Objects::class)
                 )
         );
     }

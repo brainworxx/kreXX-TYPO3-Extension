@@ -37,33 +37,34 @@ Main analytic function
 
 	krexx($myObject);
 	// or as an alias:
-	\kreXX::open($myObject)
+	\Krexx::open($myObject)
 
 Benchmarking
 ^^^^^^^^^^^^
 .. code-block:: php
 
 	// start the benchmark test and define a "moment" during the test
-	\kreXX::timerMoment('meaningful string, like started db query 123');
+	\Krexx::timerMoment('meaningful string, like started db query 123');
 	// display the result
-	\kreXX::timerEnd();
+	\Krexx::timerEnd();
 
 
 Backtrace
 ^^^^^^^^^
 .. code-block:: php
 
-	\kreXX::backtrace();
+	\Krexx::backtrace();
 
 
 Fatal error handler
 ^^^^^^^^^^^^^^^^^^^
 .. code-block:: php
 
-	// register the fatal error handler
-	\kreXX::registerFatal();
-	// unregister the fatal error handler
-	\kreXX::unregisterFatal();
+	// PHP 5 only.
+	// Register the fatal error handler
+	\Krexx::registerFatal();
+	// Unregister the fatal error handler
+	\Krexx::unregisterFatal();
 
 
 Edit your settings
@@ -71,7 +72,7 @@ Edit your settings
 .. code-block:: php
 
 	// display the edit settings dialog
-	\kreXX::editSettings();
+	\Krexx::editSettings();
 
 
 Scope analysis
@@ -81,7 +82,16 @@ Often enough a kreXX call will look like this:
 
 .. code-block:: php
 
-	kreXX($this);
+	krexx($this);
 
 Analysing "$this" means, that all protected and private values and methods are reachable from this point inside the code. When kreXX notices this, it will analyse all reachable variables and methods of this class.
 
+
+Force logging
+^^^^^^^^^^^^^
+.. code-block:: php
+
+	// The following commands create a log file instead of a browser output.
+	\Krexx::log($myObject);
+	\Krexx::logBacktrace();
+	\Krexx::::logTimerEnd();

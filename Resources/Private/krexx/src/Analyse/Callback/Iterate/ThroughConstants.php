@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Constant analysis methods.
@@ -68,7 +69,7 @@ class ThroughConstants extends AbstractCallback
         // Iterate through.
         foreach ($this->parameters[static::PARAM_DATA] as $k => &$v) {
             $output .= $this->pool->routing->analysisHub(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                $this->pool->createClass(Model::class)
                     ->setData($v)
                     ->setName($k)
                     ->setCustomConnectorLeft($this->parameters[static::PARAM_CLASSNAME] . '::')

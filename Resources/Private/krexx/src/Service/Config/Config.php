@@ -34,9 +34,9 @@
 
 namespace Brainworxx\Krexx\Service\Config;
 
-use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Config\From\Cookie;
 use Brainworxx\Krexx\Service\Config\From\Ini;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 
 /**
@@ -48,29 +48,46 @@ class Config extends Fallback
 {
 
     const REMOTE_ADDRESS = 'REMOTE_ADDR';
+    const CHUNKS_FOLDER = 'chunks';
+    const LOG_FOLDER = 'log';
+    const CONFIG_FOLDER = 'config';
+
     /**
      * Our current settings.
      *
      * @var Model[]
      */
-    public $settings = array();
+    public $settings = [];
 
     /**
      * List of all configured debug methods.
      *
      * @var array
      */
-    public $debugFuncList = array();
+    public $debugFuncList = [];
 
     /**
      * Our security handler.
+     *
+     * @deprecated
+     *   Since 3.1.0. Will be removed.
      *
      * @var Security
      */
     public $security;
 
     /**
+     * Validating configuration settings.
+     *
+     * @var Validation
+     */
+    public $validation;
+
+    /**
      * Our ini file configuration handler.
+     *
+     * @deprecated
+     *   Since 3.1.0. Will be set to protected.
      *
      * @var Ini
      */
@@ -78,6 +95,9 @@ class Config extends Fallback
 
     /**
      * Our cookie configuration handler.
+     *
+     * @deprecated
+     *   Since 3.1.0. Will be set to protected.
      *
      * @var Cookie
      */
@@ -88,7 +108,7 @@ class Config extends Fallback
      *
      * @var array
      */
-    protected $directories = array();
+    protected $directories = [];
 
     /**
      * Has kreXX been disabled via php call \Krexx::disable()?
@@ -107,29 +127,19 @@ class Config extends Fallback
         parent::__construct($pool);
 
         // Point the configuration to the right directories
-        $this->directories = array(
-            'chunks' => SettingsGetter::getChunkFolder(),
-            'log' => SettingsGetter::getLogFolder(),
-            'config' => SettingsGetter::getConfigFile(),
-        );
+        $this->directories = [
+            static::CHUNKS_FOLDER => SettingsGetter::getChunkFolder(),
+            static::LOG_FOLDER => SettingsGetter::getLogFolder(),
+            static::CONFIG_FOLDER => SettingsGetter::getConfigFile(),
+        ];
 
-        $this->methodBlacklist = array_merge_recursive(
-            $this->methodBlacklist,
-            SettingsGetter::getBlacklistDebugMethods()
-        );
-        $this->classBlacklist = array_merge(
-            $this->classBlacklist,
-            SettingsGetter::getBlacklistDebugClass()
-        );
-
-        $this->security = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\Security')
-            ->setMethodBlacklist($this->methodBlacklist);
-
+        $this->security = $pool->createClass(Security::class);
+        $this->validation = $pool->createClass(Validation::class);
         $pool->config = $this;
 
-        $this->iniConfig = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\From\\Ini')
+        $this->iniConfig = $pool->createClass(Ini::class)
             ->loadIniFile($this->getPathToIniFile());
-        $this->cookieConfig = $pool->createClass('Brainworxx\\Krexx\\Service\\Config\\From\\Cookie');
+        $this->cookieConfig = $pool->createClass(Cookie::class);
 
         // Loading the settings.
         foreach ($this->configFallback as $settings) {
@@ -141,7 +151,7 @@ class Config extends Fallback
         // We may need to change the disabling again, in case we are in cli
         // or ajax mode and have no fileoutput.
         if ($this->isRequestAjaxOrCli() === true &&
-            $this->getSetting(static::SETTING_DESTINATION) !== 'file'
+            $this->getSetting(static::SETTING_DESTINATION) !==  static::VALUE_FILE
         ) {
             // No kreXX for you. At least until you start forced logging.
             $this->setDisabled(true);
@@ -161,7 +171,7 @@ class Config extends Fallback
     /**
      * Setter for the enabling from sourcecode.
      *
-     * @param boolean $value
+     * @param bool $value
      *   Whether it it enabled, or not.
      */
     public function setDisabled($value)
@@ -179,9 +189,9 @@ class Config extends Fallback
      */
     public function getDevHandler()
     {
-        static $handle = false;
+        static $handle;
 
-        if ($handle === false) {
+        if ($handle === null) {
             $handle = $this->cookieConfig->getConfigFromCookies('deep', static::SETTING_DEV_HANDLE);
         }
 
@@ -213,16 +223,17 @@ class Config extends Fallback
      */
     public function loadConfigValue($name)
     {
-        $feConfig = $this->iniConfig->getFeConfig($name);
+        $isEditable = $this->iniConfig->getFeIsEditable($name);
         $section = $this->feConfigFallback[$name][static::SECTION];
+
         /** @var Model $model */
-        $model = $this->pool->createClass('Brainworxx\\Krexx\\Service\\Config\\Model')
+        $model = $this->pool->createClass(Model::class)
             ->setSection($section)
-            ->setEditable($feConfig[0])
-            ->setType($feConfig[1]);
+            ->setEditable($isEditable)
+            ->setType($this->feConfigFallback[$name][static::RENDER][static::RENDER_TYPE]);
 
         // Do we accept cookie settings here?
-        if ($feConfig[0] === true) {
+        if ($isEditable === true) {
             $cookieSetting = $this->cookieConfig->getConfigFromCookies($section, $name);
             // Do we have a value in the cookies?
             if ($cookieSetting  !== null &&
@@ -239,14 +250,14 @@ class Config extends Fallback
 
         // Do we have a value in the ini?
         $iniSettings = $this->iniConfig->getConfigFromFile($section, $name);
-        if (isset($iniSettings) === true) {
-            $model->setValue($iniSettings)->setSource('Krexx.ini settings');
+        if ($iniSettings === null) {
+            // Take the factory settings.
+            $model->setValue($this->feConfigFallback[$name][static::VALUE])->setSource('Factory settings');
             $this->settings[$name] = $model;
             return $this;
         }
 
-        // Nothing yet? Give back factory settings.
-        $model->setValue($this->feConfigFallback[$name][static::VALUE])->setSource('Factory settings');
+        $model->setValue($iniSettings)->setSource('Krexx.ini settings');
         $this->settings[$name] = $model;
 
         return $this;
@@ -291,7 +302,7 @@ class Config extends Fallback
      */
     public function getChunkDir()
     {
-        return $this->directories['chunks'];
+        return $this->directories[static::CHUNKS_FOLDER];
     }
 
     /**
@@ -302,7 +313,7 @@ class Config extends Fallback
      */
     public function getLogDir()
     {
-        return $this->directories['log'];
+        return $this->directories[static::LOG_FOLDER];
     }
 
     /**
@@ -313,7 +324,7 @@ class Config extends Fallback
      */
     public function getPathToIniFile()
     {
-        return $this->directories['config'];
+        return $this->directories[static::CONFIG_FOLDER];
     }
 
     /**
@@ -363,21 +374,15 @@ class Config extends Fallback
      * @param object $data
      *   The class we are analysing.
      *
+     * @deprecated
+     *   Sinde 3.1.0. Will be removed
+     *
      * @return bool
      *   Whether the function is allowed to be called.
      */
     public function isAllowedDebugCall($data)
     {
-        // Check if the class itself is blacklisted.
-        foreach ($this->classBlacklist as $classname) {
-            if (is_a($data, $classname) === true) {
-                // No debug methods for you.
-                return false;
-            }
-        }
-
-        // Nothing found?
-        return true;
+        return $this->validation->isAllowedDebugCall($data);
     }
 
     /**
@@ -387,7 +392,7 @@ class Config extends Fallback
      */
     public function getSkinClass()
     {
-        return $this->skinConfiguration[$this->getSetting(Fallback::SETTING_SKIN)][static::SKIN_CLASS];
+        return $this->skinConfiguration[$this->getSetting(static::SETTING_SKIN)][static::SKIN_CLASS];
     }
 
      /**
@@ -397,7 +402,7 @@ class Config extends Fallback
      */
     public function getSkinDirectory()
     {
-        return $this->skinConfiguration[$this->getSetting(Fallback::SETTING_SKIN)][static::SKIN_DIRECTORY];
+        return $this->skinConfiguration[$this->getSetting(static::SETTING_SKIN)][static::SKIN_DIRECTORY];
     }
 
     /**

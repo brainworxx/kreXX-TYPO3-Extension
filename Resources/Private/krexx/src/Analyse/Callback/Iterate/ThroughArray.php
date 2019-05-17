@@ -46,7 +46,7 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @uses array data
  *   The array want to iterate.
- * @uses boolean multiline
+ * @uses bool multiline
  *   Do we need a multiline code generation?
  */
 class ThroughArray extends AbstractCallback
@@ -81,7 +81,7 @@ class ThroughArray extends AbstractCallback
             }
 
             /** @var Model $model */
-            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model');
+            $model = $this->pool->createClass(Model::class);
 
             // Are we dealing with multiline code generation?
             if ($isMultiline === true) {
@@ -92,7 +92,8 @@ class ThroughArray extends AbstractCallback
 
             if (is_string($key) === true) {
                 $model->setData($value)
-                    ->setName($this->pool->encodingService->encodeString($key))
+                    ->setName($this->pool->encodingService
+                        ->encodeStringForCodeGeneration($this->pool->encodingService->encodeString($key)))
                     ->setConnectorType(Connectors::ASSOCIATIVE_ARRAY);
             } else {
                 $model->setData($value)

@@ -34,13 +34,14 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
-use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 
 /**
  * Abstract class for (nearly) all processing classes.
  *
- * @deprecated deprecated since version 3.1.0.
+ * @deprecated
+ *   Since 3.1.0. Will be removed.
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */

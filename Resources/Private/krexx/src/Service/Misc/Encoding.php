@@ -142,7 +142,7 @@ class Encoding
      *
      * @param string $data
      *   The data which needs to be sanitized.
-     * @param boolean $code
+     * @param bool $code
      *   Do we need to format the string as code?
      *
      * @return string
@@ -160,15 +160,15 @@ class Encoding
             // We encoding @, because we need them for our chunks.
             // The { are needed in the marker of the skin.
             // We also replace tabs with two nbsp's.
-            $sortingCallback = array($this, 'arrayMapCallbackCode');
-            $search = array('@', '{', chr(9));
-            $replace = array('&#64;', '&#123;', '&nbsp;&nbsp;');
+            $sortingCallback = [$this, 'arrayMapCallbackCode'];
+            $search = ['@', '{', chr(9)];
+            $replace = ['&#64;', '&#123;', '&nbsp;&nbsp;'];
         } else {
             // We encoding @, because we need them for our chunks.
             // The { are needed in the marker of the skin.
-            $sortingCallback = array($this, 'arrayMapCallbackNormal');
-            $search = array('@', '{', '  ');
-            $replace = array('&#64;', '&#123;', '&nbsp;&nbsp;');
+            $sortingCallback = [$this, 'arrayMapCallbackNormal'];
+            $search = ['@', '{', '  '];
+            $replace = ['&#64;', '&#123;', '&nbsp;&nbsp;'];
         }
 
         // There are several places here, that may throw a warning.
@@ -233,7 +233,7 @@ class Encoding
      * @param string $encoding
      *   The known encoding of the string, if known.
      *
-     * @return integer
+     * @return int
      *   The result.
      */
     public function mbStrLen($string, $encoding = null)
@@ -265,11 +265,58 @@ class Encoding
     }
 
     /**
+     * Encode a string for the code generation.
+     *
+     * Take care of quotes, null-strings and BOM stuff.
+     * There are a lot of more invisible chars out there, but there is (afaik)
+     * no fast way to detect and replace them all.
+     * If anybody is actually reading this, and knows of a fast solution,
+     * please open a ticket in our bug tracker.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    public function encodeStringForCodeGeneration($name)
+    {
+        static $cache = [];
+
+        if (isset($cache[$name])) {
+            return $cache[$name];
+        }
+
+        $result = str_replace(
+            [
+                '"',
+                '\'',
+                "\0",
+                // BOM stuff
+                "\xEF",
+                "\xBB",
+                "\xBF"
+            ],
+            [
+                '&#034;',
+                '&#039;',
+                '\' . "\0" . \'',
+                // BOM stuff
+                '\' . "\xEF" . \'',
+                '\' . "\xBB" . \'',
+                '\' . "\xBF" . \'',
+            ],
+            $name
+        );
+
+        // Clean it up a bit
+        return $cache[$name] = str_replace('" . \'\' . "', '', $result);
+    }
+
+    /**
      * Callback for the complete escaping of strings.
      * Complete means every single char gets escaped.
      * This one dies some extra stuff for code display.
      *
-     * @param integer $charCode
+     * @param int $charCode
      *
      * @return string
      *   The extra escaped result for code.
@@ -287,7 +334,7 @@ class Encoding
      * Callback for the complete escaping of strings.
      * Complete means every single char gets escaped.
      *
-     * @param integer $charCode
+     * @param int $charCode
      *
      * @return string
      *   The extra escaped result.

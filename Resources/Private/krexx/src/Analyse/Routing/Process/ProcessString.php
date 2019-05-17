@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Misc\FileinfoDummy;
 use finfo;
 
 /**
@@ -58,11 +59,11 @@ class ProcessString extends AbstractRouting implements ProcessInterface
         parent::__construct($pool);
 
         // Init the fileinfo class.
-        if (class_exists('\\finfo', false) === true) {
+        if (class_exists(finfo::class, false) === true) {
             $this->bufferInfo = new finfo(FILEINFO_MIME);
         } else {
             // Use a "polyfill" dummy, tell the dev that we have a problem.
-            $this->bufferInfo = $pool->createClass('Brainworxx\\Krexx\\Service\\Misc\\FileinfoDummy');
+            $this->bufferInfo = $pool->createClass(FileinfoDummy::class);
             $pool->messages->addMessage('fileinfoNotInstalled');
         }
     }

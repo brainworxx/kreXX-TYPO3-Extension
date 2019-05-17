@@ -34,9 +34,9 @@
 
 namespace Brainworxx\Krexx\Analyse;
 
-use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Housing everything that does not directly hold data.
@@ -66,7 +66,7 @@ abstract class AbstractModel implements ConstInterface
      *
      * @var array
      */
-    protected $parameters = array();
+    protected $parameters = [];
 
     /**
      * Additional data, we are sending to the FE vas a json, hence the name.
@@ -75,7 +75,7 @@ abstract class AbstractModel implements ConstInterface
      *
      * @var array
      */
-    protected $json = array();
+    protected $json = [];
 
     /**
      * The connector service, used for source generation.
@@ -93,7 +93,7 @@ abstract class AbstractModel implements ConstInterface
     public function __construct(Pool $pool)
     {
         $this->connectorService = $pool->createClass(
-            'Brainworxx\\Krexx\\Analyse\\Code\\Connectors'
+            Connectors::class
         );
         $this->pool = $pool;
     }

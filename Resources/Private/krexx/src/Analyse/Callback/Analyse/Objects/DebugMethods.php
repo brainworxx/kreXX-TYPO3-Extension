@@ -1,5 +1,4 @@
 <?php
-
 /**
  * kreXX: Krumo eXXtended
  *
@@ -35,9 +34,14 @@
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Exception;
+use ReflectionException;
+use Throwable;
 
 /**
  * Poll all configured debug methods of a class.
@@ -88,11 +92,11 @@ class DebugMethods extends AbstractObjectAnalysis
                         }
                     );
                     $result = $data->$funcName();
-                } catch (\Throwable $e) {
+                } catch (Throwable $e) {
                     //Restore the previous error handler, and return an empty string.
                     restore_error_handler();
                     continue;
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     // Restore the old error handler and move to the next method.
                     restore_error_handler();
                     continue;
@@ -106,7 +110,7 @@ class DebugMethods extends AbstractObjectAnalysis
                     $output .= $this->pool->render->renderExpandableChild(
                         $this->dispatchEventWithModel(
                             $funcName,
-                            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                            $this->pool->createClass(Model::class)
                                 ->setName($funcName)
                                 ->setType(static::TYPE_DEBUG_METHOD)
                                 ->setNormal(static::UNKNOWN_VALUE)
@@ -114,7 +118,7 @@ class DebugMethods extends AbstractObjectAnalysis
                                 ->setConnectorType(Connectors::METHOD)
                                 ->addParameter(static::PARAM_DATA, $result)
                                 ->injectCallback(
-                                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Debug')
+                                    $this->pool->createClass(Debug::class)
                                 )
                         )
                     );
@@ -136,7 +140,7 @@ class DebugMethods extends AbstractObjectAnalysis
      * @param ReflectionClass $reflectionClass
      *   The reflection of the class that we are currently analysing.
      *
-     * @return boolean
+     * @return bool
      *   Whether or not we are allowed toi access this method.
      */
     protected function checkIfAccessible($data, $funcName, ReflectionClass $reflectionClass)
@@ -146,11 +150,16 @@ class DebugMethods extends AbstractObjectAnalysis
         // 2.) Method can be called. There may be a magical method, though.
         // 3.) It's not blacklisted.
         if (method_exists($data, $funcName) === true &&
-            is_callable(array($data, $funcName)) === true &&
-            $this->pool->config->isAllowedDebugCall($data) === true) {
+            is_callable([$data, $funcName]) === true &&
+            $this->pool->config->validation->isAllowedDebugCall($data, $funcName) === true) {
             // We need to check if the callable function requires any parameters.
             // We will not call those, because we simply can not provide them.
-            $ref = $reflectionClass->getMethod($funcName);
+            try {
+                $ref = $reflectionClass->getMethod($funcName);
+            } catch (ReflectionException $e) {
+                return false;
+            }
+
 
             /** @var \ReflectionParameter $param */
             foreach ($ref->getParameters() as $param) {

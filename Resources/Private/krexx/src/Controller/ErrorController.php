@@ -34,10 +34,14 @@
 
 namespace Brainworxx\Krexx\Controller;
 
-use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
+use Brainworxx\Krexx\Errorhandler\Fatal;
 
 /**
  * "Controller" for the fatal error handler "action"
+ *
+ * @deprecated
+ *   Since 3.1.0. Will be removed when dropping PHP support.
  *
  * @package Brainworxx\Krexx\Controller
  */
@@ -59,7 +63,6 @@ class ErrorController extends AbstractController
 
         // Get the main part.
         $main = $this->pool->render->renderFatalMain(
-            $errorData[static::TRACE_TYPE],
             $errorData[static::TRACE_ERROR_STRING],
             $errorData[static::TRACE_ERROR_FILE],
             $errorData[static::TRACE_ERROR_LINE]
@@ -67,8 +70,8 @@ class ErrorController extends AbstractController
 
         // Get the backtrace.
         $backtrace = $this->pool
-            ->createClass('Brainworxx\\Krexx\\Analyse\\Routing\\Process\\ProcessBacktrace')
-            ->process($errorData['backtrace']);
+            ->createClass(ProcessBacktrace::class)
+            ->process($errorData[static::TRACE_BACKTRACE]);
 
         if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
             return $this;
@@ -76,39 +79,29 @@ class ErrorController extends AbstractController
 
         // Detect the encoding on the start-chunk-string of the analysis
         // for a complete encoding picture.
-        $this->pool->chunks->detectEncoding($main);
+        $this->pool->chunks->detectEncoding($main . $backtrace);
 
-        // Detect the encoding on the start-chunk-string of the analysis
-        // for a complete encoding picture.
-        $this->pool->chunks->detectEncoding($backtrace);
-
-        // Get the header.
-        $header = $this->pool->render->renderFatalHeader($this->outputCssAndJs(), '<!DOCTYPE html>');
-
-
-        // Get the footer.
-        $footer = $this->outputFooter(array());
-
-        // Get the messages.
+        // Get the header, footer and messages
+        $footer = $this->outputFooter([]);
+        $header = $this->pool->render->renderFatalHeader($this->outputCssAndJs(), $errorData[static::TRACE_TYPE]);
         $messages = $this->pool->messages->outputMessages();
 
         // Add the caller as metadata to the chunks class. It will be saved as
         // additional info, in case we are logging to a file.
         $this->pool->chunks->addMetadata(
-            array(
+            [
                 static::TRACE_FILE => $errorData[static::TRACE_ERROR_FILE],
                 static::TRACE_LINE => $errorData[static::TRACE_ERROR_LINE] + 1,
-                static::TRACE_VARNAME => ' Fatal Error',
-            )
+                static::TRACE_VARNAME => ' ' . $errorData[static::TRACE_TYPE],
+            ]
         );
 
-        if ($this->pool->config->getSetting(Fallback::SETTING_DESTINATION) === Fallback::VALUE_FILE) {
-            // Save it to a file.
-            $this->pool->chunks->saveDechunkedToFile($header . $messages . $main . $backtrace . $footer);
-        } else {
-            // Send it to the browser.
-            $this->pool->chunks->sendDechunkedToBrowser($header . $messages . $main . $backtrace . $footer);
-        }
+        $this->outputService->addChunkString($header)
+            ->addChunkString($messages)
+            ->addChunkString($main)
+            ->addChunkString($backtrace)
+            ->addChunkString($footer)
+            ->finalize();
 
         return $this;
     }
@@ -134,22 +127,21 @@ class ErrorController extends AbstractController
             return $this;
         }
 
-        $this->pool->reset();
         // Do we need another shutdown handler?
-        if (is_object($this::$krexxFatal) === false) {
-            $this::$krexxFatal = $this->pool->createClass('Brainworxx\\Krexx\\Errorhandler\\Fatal');
+        if (static::$krexxFatal === null) {
+            static::$krexxFatal = $this->pool->createClass(Fatal::class);
             declare(ticks = 1);
             register_shutdown_function(
-                array(
-                    $this::$krexxFatal,
+                [
+                    static::$krexxFatal,
                     'shutdownCallback',
-                )
+                ]
             );
         }
 
-        $this::$krexxFatal->setIsActive(true);
+        static::$krexxFatal->setIsActive(true);
         $this->fatalShouldActive = true;
-        register_tick_function(array($this::$krexxFatal, 'tickCallback'));
+        register_tick_function([$this::$krexxFatal, 'tickCallback']);
 
         return $this;
     }
@@ -166,15 +158,17 @@ class ErrorController extends AbstractController
      */
     public function unregisterFatalAction()
     {
-        if ($this::$krexxFatal !== null) {
-            // Now we need to tell the shutdown function, that is must
-            // not do anything on shutdown.
-            $this::$krexxFatal->setIsActive(false);
-            unregister_tick_function(array($this::$krexxFatal, 'tickCallback'));
-        }
-
         $this->fatalShouldActive = false;
 
+        if ($this::$krexxFatal === null) {
+            // There is no fatal error handler to begin with.
+            return $this;
+        }
+
+        // Now we need to tell the shutdown function, that is must
+        // not do anything on shutdown.
+        $this::$krexxFatal->setIsActive(false);
+        unregister_tick_function([$this::$krexxFatal, 'tickCallback']);
         return $this;
     }
 }

@@ -34,6 +34,9 @@
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants;
+use Brainworxx\Krexx\Analyse\Model;
+
 /**
  * Class Constants analysis.
  *
@@ -75,14 +78,14 @@ class Constants extends AbstractObjectAnalysis
         return $output . $this->pool->render->renderExpandableChild(
             $this->dispatchEventWithModel(
                 static::EVENT_MARKER_ANALYSES_END,
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                $this->pool->createClass(Model::class)
                     ->setName('Constants')
                     ->setType(static::TYPE_INTERNALS)
                     ->setIsMetaConstants(true)
                     ->addParameter(static::PARAM_DATA, $refConst)
                     ->addParameter(static::PARAM_CLASSNAME, $classname)
                     ->injectCallback(
-                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConstants')
+                        $this->pool->createClass(ThroughConstants::class)
                     )
             )
         );

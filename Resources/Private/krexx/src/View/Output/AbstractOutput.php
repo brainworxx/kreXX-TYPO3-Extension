@@ -66,6 +66,9 @@ abstract class AbstractOutput
      *
      * @param string $chunkString
      *   The chunked output string.
+     *
+     * @return $this
+     *   For chaining.
      */
     abstract public function addChunkString($chunkString);
 

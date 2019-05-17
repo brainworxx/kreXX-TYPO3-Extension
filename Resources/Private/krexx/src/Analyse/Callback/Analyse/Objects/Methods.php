@@ -34,7 +34,11 @@
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Method analysis for objects.
@@ -82,7 +86,7 @@ class Methods extends AbstractObjectAnalysis
                 $this->pool->render->renderRecursion(
                     $this->dispatchEventWithModel(
                         'recursion',
-                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                        $this->pool->createClass(Model::class)
                             ->setDomid($domId)
                             ->setNormal('Methods')
                             ->setName('Methods')
@@ -109,19 +113,19 @@ class Methods extends AbstractObjectAnalysis
      * @return string
      *   The generated markup.
      */
-    protected function analyseMethods(\ReflectionClass $ref, $domId, $doProtected, $doPrivate)
+    protected function analyseMethods(ReflectionClass $ref, $domId, $doProtected, $doPrivate)
     {
         // Dumping all methods but only if we have any.
-        $protected = array();
-        $private = array();
-        $public = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
+        $protected = [];
+        $private = [];
+        $public = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
 
         if ($doProtected === true) {
-            $protected = $ref->getMethods(\ReflectionMethod::IS_PROTECTED);
+            $protected = $ref->getMethods(ReflectionMethod::IS_PROTECTED);
         }
 
         if ($doPrivate === true) {
-            $private = $ref->getMethods(\ReflectionMethod::IS_PRIVATE);
+            $private = $ref->getMethods(ReflectionMethod::IS_PRIVATE);
         }
 
         // Is there anything to analyse?
@@ -134,19 +138,19 @@ class Methods extends AbstractObjectAnalysis
         $this->pool->recursionHandler->addToMetaHive($domId);
 
         // We need to sort these alphabetically.
-        usort($methods, array($this, 'reflectionSorting'));
+        usort($methods, [$this, 'reflectionSorting']);
 
         return $this->pool->render->renderExpandableChild(
             $this->dispatchEventWithModel(
                 static::EVENT_MARKER_ANALYSES_END,
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                $this->pool->createClass(Model::class)
                     ->setName('Methods')
                     ->setType(static::TYPE_INTERNALS)
                     ->addParameter(static::PARAM_DATA, $methods)
                     ->addParameter(static::PARAM_REF, $ref)
                     ->setDomId($domId)
                     ->injectCallback(
-                        $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods')
+                        $this->pool->createClass(ThroughMethods::class)
                     )
             )
         );
@@ -160,9 +164,9 @@ class Methods extends AbstractObjectAnalysis
      *
      * @param string $data
      *   The object name from which we want the ID.
-     * @param boolean $doProtected
+     * @param bool $doProtected
      *   Are we analysing the protected methods here?
-     * @param boolean $doPrivate
+     * @param bool $doPrivate
      *   Are we analysing private methods here?
      *
      * @return string

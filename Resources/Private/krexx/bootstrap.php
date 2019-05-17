@@ -65,6 +65,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/ProtectedProperties.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/PublicProperties.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/Traversable.php';
+        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/ErrorObject.php';
 
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/BacktraceStep.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/ConfigSection.php';
@@ -121,6 +122,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Controller/TimerController.php';
         include_once KREXX_DIR . 'src/Controller/EditSettingsController.php';
         include_once KREXX_DIR . 'src/Controller/ErrorController.php';
+        include_once KREXX_DIR . 'src/Controller/ExceptionController.php';
 
         include_once KREXX_DIR . 'src/Errorhandler/AbstractError.php';
         include_once KREXX_DIR . 'src/Errorhandler/Fatal.php';
@@ -128,14 +130,17 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Service/Config/Fallback.php';
         include_once KREXX_DIR . 'src/Service/Config/Config.php';
         include_once KREXX_DIR . 'src/Service/Config/Model.php';
+        include_once KREXX_DIR . 'src/Service/Config/Validation.php';
+        // deprecated
         include_once KREXX_DIR . 'src/Service/Config/Security.php';
+        // deprecated
 
         include_once KREXX_DIR . 'src/Service/Config/From/Cookie.php';
         include_once KREXX_DIR . 'src/Service/Config/From/Ini.php';
 
         include_once KREXX_DIR . 'src/Service/Factory/EventHandlerInterface.php';
         include_once KREXX_DIR . 'src/Service/Factory/Event.php';
-        include_once KREXX_DIR . 'src/Service/Factory/Factory.php';
+        include_once KREXX_DIR . 'src/Service/Factory/AbstractFactory.php';
         include_once KREXX_DIR . 'src/Service/Factory/Pool.php';
 
         include_once KREXX_DIR . 'src/Service/Flow/Emergency.php';
@@ -173,7 +178,7 @@ call_user_func(function () {
     // When it does something stupid, krexxLoader will handle the rest.
     set_error_handler($krexxLoader);
     try {
-        if (interface_exists('Brainworxx\\Krexx\\Analyse\\ConstInterface') === false) {
+        if (interface_exists(\Brainworxx\Krexx\Analyse\ConstInterface::class) === false) {
             $krexxLoader();
         }
     } catch (\Throwable $e) {

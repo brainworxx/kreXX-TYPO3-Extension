@@ -34,7 +34,10 @@
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Analysis of all getter methods.
@@ -60,21 +63,21 @@ class Getter extends AbstractObjectAnalysis
      *
      * @var array
      */
-    protected $normalGetter = array();
+    protected $normalGetter = [];
 
     /**
      * List of hte boolean getter method, that start with 'is'.
      *
      * @var array
      */
-    protected $isGetter = array();
+    protected $isGetter = [];
 
     /**
      * List of hte boolean getter method, that start with 'has'.
      *
      * @var array
      */
-    protected $hasGetter = array();
+    protected $hasGetter = [];
 
     /**
      * Dump the possible result of all getter methods
@@ -90,14 +93,14 @@ class Getter extends AbstractObjectAnalysis
         $ref = $this->parameters[static::PARAM_REF];
 
         // Get all public methods.
-        $methodList = $ref->getMethods(\ReflectionMethod::IS_PUBLIC);
+        $methodList = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
 
         $isInScope = $this->pool->scope->isInScope();
         if ($isInScope === true) {
             // Looks like we also need the protected and private methods.
             $methodList = array_merge(
                 $methodList,
-                $ref->getMethods(\ReflectionMethod::IS_PRIVATE | \ReflectionMethod::IS_PROTECTED)
+                $ref->getMethods(ReflectionMethod::IS_PRIVATE | ReflectionMethod::IS_PROTECTED)
             );
         }
 
@@ -120,7 +123,7 @@ class Getter extends AbstractObjectAnalysis
             $this->pool->render->renderExpandableChild(
                 $this->dispatchEventWithModel(
                     static::EVENT_MARKER_ANALYSES_END,
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+                    $this->pool->createClass(Model::class)
                         ->setName('Getter')
                         ->setType(static::TYPE_INTERNALS)
                         ->setHelpid('getterHelpInfo')
@@ -129,7 +132,7 @@ class Getter extends AbstractObjectAnalysis
                         ->addParameter(static::PARAM_IS_GETTER, $this->isGetter)
                         ->addParameter(static::PARAM_HAS_GETTER, $this->hasGetter)
                         ->injectCallback(
-                            $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter')
+                            $this->pool->createClass(ThroughGetter::class)
                         )
                 )
             );

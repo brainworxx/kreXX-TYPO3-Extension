@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PrivateProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
@@ -83,6 +84,7 @@ class ObjectsTest extends AbstractTest
             Methods::class => CallbackNothing::class,
             Traversable::class => CallbackNothing::class,
             DebugMethods::class => CallbackNothing::class,
+            ErrorObject::class => CallbackNothing::class
         ];
 
         $this->objects = new Objects(Krexx::$pool);

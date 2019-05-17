@@ -41,6 +41,9 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * This class hosts all functions which all error handlers will share
  *
+ * @deprecated
+ *   Since 3.1.0. Will be removed when dropping PHP support.
+ *
  * @package Brainworxx\Krexx\Errorhandler
  */
 abstract class AbstractError implements ConstInterface
@@ -84,23 +87,23 @@ abstract class AbstractError implements ConstInterface
     {
         $this->pool = $pool;
 
-        $this->errorTranslation = array(
-            E_ERROR => array('Fatal', static::TRACE_FATALS),
-            E_WARNING => array('Warning', static::TRACE_WARNINGS),
-            E_PARSE => array('Parse error', static::TRACE_FATALS),
-            E_NOTICE => array('Notice', static::TRACE_NOTICES),
-            E_CORE_ERROR => array('PHP startup error', static::TRACE_FATALS),
-            E_CORE_WARNING => array('PHP startup warning', static::TRACE_WARNINGS),
-            E_COMPILE_ERROR => array('Zend scripting fatal error', static::TRACE_FATALS),
-            E_COMPILE_WARNING => array('Zend scripting warning', static::TRACE_WARNINGS),
-            E_USER_ERROR => array('User defined error', static::TRACE_FATALS),
-            E_USER_WARNING => array('User defined warning', static::TRACE_WARNINGS),
-            E_USER_NOTICE => array('User defined notice', static::TRACE_NOTICES),
-            E_STRICT => array('Strict notice', static::TRACE_NOTICES),
-            E_RECOVERABLE_ERROR => array('Catchable fatal error', static::TRACE_FATALS),
-            E_DEPRECATED => array('Deprecated warning', static::TRACE_WARNINGS),
-            E_USER_DEPRECATED => array('User defined deprecated warning', static::TRACE_WARNINGS),
-        );
+        $this->errorTranslation = [
+            E_ERROR => ['Fatal', static::TRACE_FATALS],
+            E_WARNING => ['Warning', static::TRACE_WARNINGS],
+            E_PARSE => ['Parse error', static::TRACE_FATALS],
+            E_NOTICE => ['Notice', static::TRACE_NOTICES],
+            E_CORE_ERROR => ['PHP startup error', static::TRACE_FATALS],
+            E_CORE_WARNING => ['PHP startup warning', static::TRACE_WARNINGS],
+            E_COMPILE_ERROR => ['Zend scripting fatal error', static::TRACE_FATALS],
+            E_COMPILE_WARNING => ['Zend scripting warning', static::TRACE_WARNINGS],
+            E_USER_ERROR => ['User defined error', static::TRACE_FATALS],
+            E_USER_WARNING => ['User defined warning', static::TRACE_WARNINGS],
+            E_USER_NOTICE => ['User defined notice', static::TRACE_NOTICES],
+            E_STRICT => ['Strict notice', static::TRACE_NOTICES],
+            E_RECOVERABLE_ERROR => ['Catchable fatal error', static::TRACE_FATALS],
+            E_DEPRECATED => ['Deprecated warning', static::TRACE_WARNINGS],
+            E_USER_DEPRECATED => ['User defined deprecated warning', static::TRACE_WARNINGS],
+        ];
     }
 
     /**
@@ -137,6 +140,6 @@ abstract class AbstractError implements ConstInterface
         }
 
         // Fallback to 'unknown'.
-        return array('Unknown error', 'unknown');
+        return ['Unknown error', 'unknown'];
     }
 }

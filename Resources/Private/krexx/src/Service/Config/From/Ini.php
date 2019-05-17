@@ -36,7 +36,6 @@ namespace Brainworxx\Krexx\Service\Config\From;
 
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Service\Config\Security;
 
 /**
  * Reads the config from the ini file, as well as the fe editing config.
@@ -48,16 +47,16 @@ class Ini extends Fallback
     /**
      * Our security handler.
      *
-     * @var Security
+     * @var \Brainworxx\Krexx\Service\Config\Validation
      */
-    public $security;
+    protected $validation;
 
     /**
      * The content of the ini file we have loaded.
      *
      * @var array
      */
-    protected $iniSettings = array();
+    protected $iniSettings = [];
 
     /**
      * Inject the pool, create the security handler, load the ini file.
@@ -67,7 +66,7 @@ class Ini extends Fallback
     public function __construct(Pool $pool)
     {
         parent::__construct($pool);
-        $this->security = $pool->config->security;
+        $this->validation = $pool->config->validation;
     }
 
     /**
@@ -81,7 +80,6 @@ class Ini extends Fallback
      */
     public function loadIniFile($path)
     {
-
         $this->iniSettings = (array)parse_ini_string(
             $this->pool->fileService->getFileContents($path, false),
             true
@@ -96,6 +94,9 @@ class Ini extends Fallback
      * @param string $name
      *   The parameter name you want to render.
      *
+     * @deprecated
+     *   Since 3.1.0. Will be removed.
+     *
      * @return array
      *   The configuration (is it editable, a dropdown, a textfield, ...)
      */
@@ -108,20 +109,42 @@ class Ini extends Fallback
         if (empty($filevalue) === true) {
             // Fallback to factory settings.
             if (isset($this->feConfigFallback[$name]) === true) {
-                return array(
+                return [
                     ($this->feConfigFallback[$name][static::RENDER][static::RENDER_EDITABLE] === static::VALUE_TRUE),
                     $this->feConfigFallback[$name][static::RENDER][static::RENDER_TYPE]
-                );
+                ];
             }
             // Unknown parameter and nothing in the fallback!
             // This should never happen, btw.
-            return array(false, static::RENDER_TYPE_NONE);
+            return [false, static::RENDER_TYPE_NONE];
         }
 
-        return array(
+        return [
             ($filevalue[static::RENDER_EDITABLE] === static::VALUE_TRUE),
             $filevalue[static::RENDER_TYPE]
-        );
+        ];
+    }
+
+    /**
+     * Get the configuration of the frontend config form.
+     *
+     * @param string $name
+     *
+     * @return bool
+     *   Well? is it editable?
+     */
+    public function getFeIsEditable($name)
+    {
+        // Load it from the file.
+        $filevalue = $this->getFeConfigFromFile($name);
+
+        // Do we have a value?
+        if (empty($filevalue) === true) {
+            // Use the fallback.
+            return $this->feConfigFallback[$name][static::RENDER][static::RENDER_EDITABLE] === static::VALUE_TRUE;
+        }
+
+        return $filevalue[static::RENDER_EDITABLE] === static::VALUE_TRUE;
     }
 
     /**
@@ -136,7 +159,7 @@ class Ini extends Fallback
     public function getFeConfigFromFile($parameterName)
     {
         // Get the human readable stuff from the ini file.
-        $value = $this->getConfigFromFile('feEditing', $parameterName);
+        $value = $this->getConfigFromFile(static::SECTION_FE_EDITING, $parameterName);
 
         if (empty($value) === true) {
             // Sorry, no value stored.
@@ -148,11 +171,6 @@ class Ini extends Fallback
 
         // Stitch together the setting.
         switch ($value) {
-            case static::RENDER_TYPE_NONE:
-                $type = static::RENDER_TYPE_NONE;
-                $editable = static::VALUE_FALSE;
-                break;
-
             case static::RENDER_TYPE_INI_DISPLAY:
                 $editable = static::VALUE_FALSE;
                 break;
@@ -162,36 +180,36 @@ class Ini extends Fallback
                 break;
 
             default:
-                // Unknown setting.
+                // Unknown setting, or render type none.
                 // Fallback to no display, just in case.
                 $type = static::RENDER_TYPE_NONE;
                 $editable = static::VALUE_FALSE;
                 break;
         }
 
-        return array(
+        return [
             static::RENDER_TYPE => $type,
             static::RENDER_EDITABLE => $editable,
-        );
+        ];
     }
 
     /**
-     * Returns settings from the ini file.
+     * Returns settings from the ini file, if it is validated.
      *
      * @param string $group
      *   The group name inside of the ini.
      * @param string $name
      *   The name of the setting.
      *
-     * @return string
-     *   The value from the file.
+     * @return string|null
+     *   The value from the file. Null, when not available or not validated.
      */
     public function getConfigFromFile($group, $name)
     {
         // Do we have a value in the ini?
         // Does it validate?
         if (isset($this->iniSettings[$group][$name]) === true &&
-            $this->security->evaluateSetting($group, $name, $this->iniSettings[$group][$name]) === true
+            $this->validation->evaluateSetting($group, $name, $this->iniSettings[$group][$name]) === true
         ) {
             return $this->iniSettings[$group][$name];
         }

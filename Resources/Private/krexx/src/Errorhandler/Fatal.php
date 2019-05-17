@@ -35,9 +35,13 @@
 namespace Brainworxx\Krexx\Errorhandler;
 
 use Brainworxx\Krexx\Controller\AbstractController;
+use Brainworxx\Krexx\Controller\ErrorController;
 
 /**
  * PHP 5.x fatal error handler.
+ *
+ * @deprecated
+ *   Since 3.1.0. Will be removed when dropping PHP support.
  *
  * @package Brainworxx\Krexx\Errorhandler
  */
@@ -55,7 +59,7 @@ class Fatal extends AbstractError
      *
      * @see $this->tickCallback().
      */
-    protected $tickedBacktrace = array();
+    protected $tickedBacktrace = [];
 
     /**
      * Registered tick callback.
@@ -74,7 +78,7 @@ class Fatal extends AbstractError
      * anything during shutdown, in case we decide after
      * registering, that we do not want to interfere.
      *
-     * @param boolean $value
+     * @param bool $value
      *   Whether the handler is active or not.
      */
     public function setIsActive($value)
@@ -104,25 +108,23 @@ class Fatal extends AbstractError
 
                 // We prepare the error as far as we can here.
                 // The adding of the sourcecode happens in the controller.
-                $errorData = array(
-                    static::TRACE_TYPE => $errorType[0],
+                $errorData = [
+                    static::TRACE_TYPE => $errorType[0] . ' Error',
                     static::TRACE_ERROR_STRING => $error['message'],
                     static::TRACE_ERROR_FILE => $error[static::TRACE_FILE],
                     static::TRACE_ERROR_LINE => $error[static::TRACE_LINE],
                     'handler' => __FUNCTION__,
                     static::TRACE_FILE => $error[static::TRACE_FILE],
-                    'backtrace' => $this->tickedBacktrace,
-                );
+                    static::TRACE_BACKTRACE => $this->tickedBacktrace,
+                ];
 
                 // Tell static main class, that we start a new analysis, to
                 // prevent an infinite loop.
                 AbstractController::$analysisInProgress = true;
                 $this->pool
-                    ->createClass('Brainworxx\\Krexx\\Controller\\ErrorController')
+                    ->createClass(ErrorController::class)
                     ->errorAction($errorData);
             }
         }
-
-        // Clean exit.
     }
 }

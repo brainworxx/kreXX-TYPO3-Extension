@@ -60,14 +60,14 @@ class RenderSmokyGrey extends Render
     {
         // Replace the source button and set the json.
         return str_replace(
-            array(
+            [
                 static::MARKER_LANGUAGE,
                 static::MARKER_ADDITIONAL_JSON,
-            ),
-            array(
+            ],
+            [
                 $model->getConnectorLanguage(),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_JSON, $this->encodeJson($model->getJson()))
-            ),
+            ],
             parent::renderSingleChild($model)
         );
     }
@@ -109,7 +109,7 @@ class RenderSmokyGrey extends Render
         }
 
         return str_replace(
-            array(
+            [
                 static::MARKER_NAME,
                 static::MARKER_TYPE,
                 static::MARKER_K_TYPE,
@@ -122,8 +122,8 @@ class RenderSmokyGrey extends Render
                 static::MARKER_SOURCE_BUTTON,
                 static::MARKER_CODE_WRAPPER_LEFT,
                 static::MARKER_CODE_WRAPPER_RIGHT,
-            ),
-            array(
+            ],
+            [
                 $model->getName(),
                 $model->getType(),
                 $cssType,
@@ -142,7 +142,7 @@ class RenderSmokyGrey extends Render
                     static::DATA_ATTRIBUTE_WRAPPER_R,
                     $this->pool->codegenHandler->generateWrapperRight()
                 ),
-            ),
+            ],
             $this->getTemplateFileContent(static::FILE_EX_CHILD_NORMAL)
         );
     }
@@ -181,13 +181,13 @@ class RenderSmokyGrey extends Render
     {
         // Prepare the json. Not much do display for form elements.
         return str_replace(
-            array(static::MARKER_ADDITIONAL_JSON, static::MARKER_CLASS),
-            array($this->generateDataAttribute(
+            [static::MARKER_ADDITIONAL_JSON, static::MARKER_CLASS],
+            [$this->generateDataAttribute(
                 static::DATA_ATTRIBUTE_JSON,
                 $this->encodeJson($model->getJson())
             ),
                 $model->getName()
-            ),
+            ],
             parent::renderButton($model)
         );
     }
@@ -195,7 +195,7 @@ class RenderSmokyGrey extends Render
     /**
      * {@inheritDoc}
      */
-    public function renderHeader($doctype, $headline, $cssJs)
+    public function renderHeader($headline, $cssJs)
     {
         // Doing special stuff for smokygrey:
         // We hide the debug-tab when we are displaying the config-only and switch
@@ -211,26 +211,26 @@ class RenderSmokyGrey extends Render
         }
 
         return str_replace(
-            array(
+            [
                 static::MARKER_K_DEBUG_CLASSES,
                 static::MARKER_K_CONFIG_CLASSES,
                 static::MARKER_K_LINK_CLASSES,
                 static::MARKER_PLUGINS,
-            ),
-            array(
+            ],
+            [
                 $debugClass,
                 $configClass,
                 $linkClass,
                 $this->renderPluginList(),
-            ),
-            parent::renderHeader($doctype, $headline, $cssJs)
+            ],
+            parent::renderHeader($headline, $cssJs)
         );
     }
 
     /**
      * {@inheritDoc}
      */
-    public function renderFooter($caller, $configOutput, $configOnly = false)
+    public function renderFooter(array $caller, Model $model, $configOnly = false)
     {
         // Doing special stuff for smokygrey:
         // We hide the debug-tab when we are displaying the config-only and switch
@@ -239,13 +239,13 @@ class RenderSmokyGrey extends Render
             $template = str_replace(
                 static::MARKER_K_CONFIG_CLASSES,
                 '',
-                parent::renderFooter($caller, $configOutput)
+                parent::renderFooter($caller, $model, $configOnly)
             );
         } else {
             $template = str_replace(
                 static::MARKER_K_CONFIG_CLASSES,
                 'khidden',
-                parent::renderFooter($caller, $configOutput)
+                parent::renderFooter($caller, $model, $configOnly)
             );
         }
 
@@ -255,13 +255,13 @@ class RenderSmokyGrey extends Render
     /**
      * {@inheritDoc}
      */
-    public function renderFatalMain($type, $errstr, $errfile, $errline)
+    public function renderFatalMain($errstr, $errfile, $errline)
     {
         // Add the search.
         return str_replace(
-            array(static::MARKER_SEARCH, static::MARKER_KREXX_ID),
-            array($this->renderSearch(), $this->pool->recursionHandler->getMarker()),
-            parent::renderFatalMain($type, $errstr, $errfile, $errline)
+            [static::MARKER_SEARCH, static::MARKER_KREXX_ID],
+            [$this->renderSearch(), $this->pool->recursionHandler->getMarker()],
+            parent::renderFatalMain($errstr, $errfile, $errline)
         );
     }
 

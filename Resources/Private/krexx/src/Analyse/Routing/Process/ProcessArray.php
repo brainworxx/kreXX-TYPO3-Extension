@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Service\Config\Fallback;
@@ -63,12 +65,12 @@ class ProcessArray extends AbstractRouting implements ProcessInterface
         if ($count > (int) $this->pool->config->getSetting(Fallback::SETTING_ARRAY_COUNT_LIMIT)) {
             // Budget array analysis.
             $model->injectCallback(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray')
+                $this->pool->createClass(ThroughLargeArray::class)
             )->setHelpid('simpleArray');
         } else {
             // Complete array analysis.
             $model->injectCallback(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')
+                $this->pool->createClass(ThroughArray::class)
             );
         }
 

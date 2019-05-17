@@ -34,6 +34,9 @@
 
 namespace Brainworxx\Krexx\Analyse\Comment;
 
+use ReflectionClass;
+use Reflector;
+
 /**
  * Getting the comment from functions.
  *
@@ -52,10 +55,10 @@ class Functions extends AbstractComment
      * @return string
      *   The prettified comment.
      */
-    public function getComment(\Reflector $reflectionFunction, \ReflectionClass $reflectionClass = null)
+    public function getComment(Reflector $reflectionFunction, ReflectionClass $reflectionClass = null)
     {
         // Do some static caching. The comment will not change during a run.
-        static $cache = array();
+        static $cache = [];
         /** @var \ReflectionFunction $reflectionFunction */
         $cachingKey = $reflectionFunction->getName();
 

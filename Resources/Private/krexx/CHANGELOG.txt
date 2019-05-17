@@ -4,15 +4,28 @@
 - Plugins can now register additional skins.
 - kreXX debug calls will return the original analysis value.
 - Leading and trailing spaces are now better visible in the output.
-- The bracktrace action accepts now an already existing one. Great
+- The backtrace action accepts now an already existing one. Great
   for debugging error objects.
+- Minor usability changes to both skins.
+- Added an automatic backtrace analysis for error objects.
+- Added the sourcecode dump to the error object analysis.
+- Added proper handling for BOM chars in array keys and properties.
+- Added an exception handler, to replace the PHP5 Fatal Error Handler.
+- Added the date time to the output.
 - Change: Deprecated the AbstractProcess class.
 - Change: Deprecated the Krexx main class. The "new" one resides
   now inside the src folder.
 - Change: Moved the skin render classes to the source folder.
+- Change: Dropped PHP 5.3 and PHP 5.4 support.
 - Bugfix: Fixes some "bugs" SonarCube found in the unit test fixtures,
   to prevent bad ratings.
 - Bugfix: Check if the developer handle is actually a string.
+- Bugfix: Added a missing check in the url determination in the
+  timer controller
+- Bugfix: The registering of blacklisted methods and classes for
+  the debug methods work now, as they should.
+- Bugfix: The rewriting of singleton classes in the pool does not
+  work.
 
 3.0.2
 - Added classname to the declaration analysis of properties.

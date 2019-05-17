@@ -55,17 +55,21 @@ class Browser extends AbstractOutput
      *   - footer
      *   This means, that every output is split in 4 parts
      */
-    protected $chunkStrings = array();
+    protected $chunkStrings = [];
 
     /**
      * Adds output to our shutdown handler.
      *
      * @param string $chunkString
      *   The chunked output string.
+     *
+     * @return $this
+     *   Return $this, for chaining.
      */
     public function addChunkString($chunkString)
     {
         $this->chunkStrings[] = $chunkString;
+        return $this;
     }
 
     /**
@@ -91,6 +95,6 @@ class Browser extends AbstractOutput
      */
     public function finalize()
     {
-        register_shutdown_function(array($this, 'shutdownCallback'));
+        register_shutdown_function([$this, 'shutdownCallback']);
     }
 }

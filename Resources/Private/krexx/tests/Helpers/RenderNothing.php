@@ -52,6 +52,30 @@ class RenderNothing extends Render
     public $model = [];
 
     /**
+     * Storing the css.
+     *
+     * @var string
+     */
+    public $css;
+
+    /**
+     * Storing the js.
+     *
+     * @var string
+     */
+    public $js;
+
+    /**
+     * @var string
+     */
+    protected $fatalMain = '';
+
+    /**
+     * @var string
+     */
+    protected $footer = '';
+
+    /**
      * @param \Brainworxx\Krexx\Analyse\Model $model
      * @return string
      */
@@ -70,5 +94,56 @@ class RenderNothing extends Render
     {
         $this->model[__FUNCTION__][] = $model;
         return '';
+    }
+
+    /**
+     * @param $caller
+     * @param Model $model
+     * @return string
+     */
+    public function renderFooter(array $caller, Model $model, $configOnly = false)
+    {
+        $this->model[__FUNCTION__][] = $model;
+        return $this->footer;
+    }
+
+    /**
+     * @param $css
+     * @param $javascript
+     * @return mixed|string
+     */
+    public function renderCssJs(&$css, &$javascript)
+    {
+        $this->css = $css;
+        $this->js = $javascript;
+        return '';
+    }
+
+    /**
+     * @param string $footer
+     */
+    public function setFooter(string $footer)
+    {
+        $this->footer = $footer;
+    }
+
+    /**
+     * @param $type
+     * @param $errstr
+     * @param $errfile
+     * @param $errline
+     * @return string
+     */
+    public function renderFatalMain($errstr, $errfile, $errline): string
+    {
+        return $this->fatalMain;
+    }
+
+    /**
+     * @param string $fatalMain
+     */
+    public function setFatalMain(string $fatalMain)
+    {
+        $this->fatalMain = $fatalMain;
     }
 }

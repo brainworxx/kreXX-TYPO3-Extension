@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Service\Misc;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
+use SplFixedArray;
 
 /**
  * File access service.
@@ -49,7 +50,7 @@ class File
      *
      * @var array
      */
-    protected static $isReadableCache = array();
+    protected static $isReadableCache = [];
 
     /**
      * @var Pool
@@ -199,7 +200,7 @@ class File
     {
         $filePath = realpath($filePath);
 
-        static $filecache = array();
+        static $filecache = [];
 
         if (isset($filecache[$filePath]) === true) {
             return $filecache[$filePath];
@@ -208,10 +209,10 @@ class File
         // Using \SplFixedArray to save some memory, as it can get
         // quire huge, depending on your system. 4mb is nothing here.
         if ($this->fileIsReadable($filePath) === true) {
-            return $filecache[$filePath] = \SplFixedArray::fromArray(file($filePath));
+            return $filecache[$filePath] = SplFixedArray::fromArray(file($filePath));
         }
         // Not readable!
-        return $filecache[$filePath] = new \SplFixedArray(0);
+        return $filecache[$filePath] = new SplFixedArray(0);
     }
 
     /**
@@ -219,7 +220,7 @@ class File
      *
      * @param string $filePath
      *   The path to the file.
-     * @param boolean $showError
+     * @param bool $showError
      *   Do we need to display na error message?
      *
      * @return string
@@ -232,7 +233,7 @@ class File
         if ($this->fileIsReadable($filePath) === false) {
             if ($showError === true) {
                 // This file was not readable! We need to tell the user!
-                $this->pool->messages->addMessage('fileserviceAccess', array($this->filterFilePath($filePath)));
+                $this->pool->messages->addMessage('fileserviceAccess', [$this->filterFilePath($filePath)]);
             }
             // Return empty string.
             return '';
@@ -299,7 +300,7 @@ class File
             }
 
             // We have a permission problem here!
-            $this->pool->messages->addMessage('fileserviceDelete', array($this->filterFilePath($filePath)));
+            $this->pool->messages->addMessage('fileserviceDelete', [$this->filterFilePath($filePath)]);
             restore_error_handler();
         }
     }

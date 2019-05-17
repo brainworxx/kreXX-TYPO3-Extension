@@ -81,7 +81,7 @@ class ConfigSection extends AbstractCallback
                 }
 
                 /** @var Model $model */
-                $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')->setHelpid($id . static::META_HELP);
+                $model = $this->pool->createClass(Model::class)->setHelpid($id . static::META_HELP);
                 $name = $this->pool->messages->getHelp($id . 'Readable');
                 if ($setting->getEditable() === true) {
                     $model->setData($name)

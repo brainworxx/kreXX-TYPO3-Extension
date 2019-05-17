@@ -34,6 +34,8 @@
 
 namespace Brainworxx\Krexx\Service\Reflection;
 
+use ReflectionProperty;
+
 /**
  * Added a better possibility to retrieve the object values.
  *
@@ -46,7 +48,7 @@ class ReflectionClass extends \ReflectionClass
      *
      * @var array
      */
-    protected $objectArray = array();
+    protected $objectArray = [];
 
     /**
      * The object we are currently analysing.
@@ -60,6 +62,7 @@ class ReflectionClass extends \ReflectionClass
      *
      * @param $data
      *   The class we are currently analysing.
+     *
      * @throws \ReflectionException
      */
     public function __construct($data)
@@ -81,7 +84,7 @@ class ReflectionClass extends \ReflectionClass
      * @return mixed;
      *   The retrieved value.
      */
-    public function retrieveValue(\ReflectionProperty $refProperty)
+    public function retrieveValue(ReflectionProperty $refProperty)
     {
         $propName = $refProperty->getName();
 

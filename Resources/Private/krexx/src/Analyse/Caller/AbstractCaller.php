@@ -91,7 +91,7 @@ abstract class AbstractCaller implements ConstInterface
      */
     public function setPattern($pattern)
     {
-        $this->pattern = $pattern;
+        $this->pattern = strtolower($pattern);
         return $this;
     }
 

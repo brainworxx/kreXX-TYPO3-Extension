@@ -34,8 +34,14 @@
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use ArrayAccess;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use Exception;
+use SplObjectStorage;
+use Throwable;
 
 /**
  * Object traversable analysis.
@@ -101,12 +107,12 @@ class Traversable extends AbstractObjectAnalysis
                 }
             );
             $parameter = iterator_to_array($data);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             //Restore the previous error handler, and return an empty string.
             restore_error_handler();
             $this->pool->emergencyHandler->downOneNestingLevel();
             return '';
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             //Restore the previous error handler, and return an empty string.
             restore_error_handler();
             $this->pool->emergencyHandler->downOneNestingLevel();
@@ -122,20 +128,20 @@ class Traversable extends AbstractObjectAnalysis
             $multiline = true;
 
             // Normal ArrayAccess, direct access to the array. Nothing special
-            if ($data instanceof \ArrayAccess) {
+            if ($data instanceof ArrayAccess) {
                 $multiline = false;
             }
 
             // SplObject pool use the object as keys, so we need some
             // multiline stuff!
-            if ($data instanceof \SplObjectStorage) {
+            if ($data instanceof SplObjectStorage) {
                 $multiline = true;
             }
 
             $count = count($parameter);
 
             /** @var Model $model */
-            $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+            $model = $this->pool->createClass(Model::class)
                 ->setName($name)
                 ->setType(static::TYPE_FOREACH)
                 ->addParameter(static::PARAM_DATA, $parameter)
@@ -147,12 +153,12 @@ class Traversable extends AbstractObjectAnalysis
             // a special callback.
             if ($count > (int) $this->pool->config->getSetting(Fallback::SETTING_ARRAY_COUNT_LIMIT)) {
                 $model->injectCallback(
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray')
+                    $this->pool->createClass(ThroughLargeArray::class)
                 )->setNormal('Simplified Traversable Info')
                     ->setHelpid('simpleArray');
             } else {
                 $model->injectCallback(
-                    $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray')
+                    $this->pool->createClass(ThroughArray::class)
                 )->setNormal('Traversable Info');
             }
 

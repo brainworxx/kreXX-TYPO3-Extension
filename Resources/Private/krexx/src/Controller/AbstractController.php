@@ -34,11 +34,16 @@
 
 namespace Brainworxx\Krexx\Controller;
 
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig;
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
+use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\View\Output\AbstractOutput;
+use Brainworxx\Krexx\View\Output\Browser;
+use Brainworxx\Krexx\View\Output\File;
 
 /**
  * Methods for the "controller" that are not directly "actions".
@@ -68,10 +73,13 @@ abstract class AbstractController implements ConstInterface
      *
      * @var array
      */
-    protected static $jsCssSend = array();
+    protected static $jsCssSend = [];
 
     /**
      * Here we store the fatal error handler.
+     *
+     * @deprecated
+     *   Since 3.1.0. Will be removed when dropping PHP support.
      *
      * @var \Brainworxx\Krexx\Errorhandler\Fatal
      */
@@ -82,6 +90,9 @@ abstract class AbstractController implements ConstInterface
      *
      * During a kreXX analysis, we deactivate it to improve performance.
      * Here we save, whether we should reactivate it.
+     *
+     * @deprecated
+     *   Since 3.1.0. Will be removed when dropping PHP support.
      *
      * @var bool
      */
@@ -102,6 +113,13 @@ abstract class AbstractController implements ConstInterface
     protected $callerFinder;
 
     /**
+     * The configured output destination.
+     *
+     * @var string
+     */
+    protected $destination;
+
+    /**
      * Injects the pool.
      *
      * @param Pool $pool
@@ -110,22 +128,25 @@ abstract class AbstractController implements ConstInterface
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-        $this->callerFinder = $pool->createClass('Brainworxx\\Krexx\\Analyse\\Caller\\CallerFinder');
+        $this->callerFinder = $pool->createClass(CallerFinder::class);
 
         // Register our output service.
         // Depending on the setting, we use another class here.
         // We get a new output service for every krexx call, because the hosting
         // cms may do their stuff in the shutdown functions as well.
-        $outputSetting = $pool->config->getSetting(Fallback::SETTING_DESTINATION);
-        if ($outputSetting === Fallback::VALUE_BROWSER) {
-            $this->outputService = $pool->createClass('Brainworxx\\Krexx\\View\\Output\\Browser');
-        } elseif ($outputSetting === Fallback::VALUE_FILE) {
-            $this->outputService = $pool->createClass('Brainworxx\\Krexx\\View\\Output\\File');
+        $this->destination = $pool->config->getSetting(Fallback::SETTING_DESTINATION);
+        if ($this->destination === Fallback::VALUE_BROWSER) {
+            $this->outputService = $pool->createClass(Browser::class);
+        } elseif ($this->destination === Fallback::VALUE_FILE) {
+            $this->outputService = $pool->createClass(File::class);
         }
     }
 
     /**
      * Simply outputs the Header of kreXX.
+     *
+     * @deprecated
+     *   Since 3.1.0. Will be removed.
      *
      * @param string $headline
      *   The headline, displayed in the header.
@@ -135,7 +156,7 @@ abstract class AbstractController implements ConstInterface
      */
     protected function outputHeader($headline)
     {
-        return $this->pool->render->renderHeader('<!DOCTYPE html>', $headline, $this->outputCssAndJs());
+        return $this->pool->render->renderHeader($headline, $this->outputCssAndJs());
     }
 
     /**
@@ -143,7 +164,7 @@ abstract class AbstractController implements ConstInterface
      *
      * @param array $caller
      *   Where was kreXX initially invoked from.
-     * @param boolean $isExpanded
+     * @param bool $isExpanded
      *   Are we rendering an expanded footer?
      *   TRUE when we render the settings menu only.
      *
@@ -163,16 +184,19 @@ abstract class AbstractController implements ConstInterface
             $path = $this->pool->messages->getHelp('iniNotFound');
         }
 
-        $model = $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Model')
+        $model = $this->pool->createClass(Model::class)
             ->setName($path)
             ->setType($this->pool->fileService->filterFilePath($pathToIni))
             ->setHelpid('currentSettings')
             ->injectCallback(
-                $this->pool->createClass('Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConfig')
+                $this->pool->createClass(ThroughConfig::class)
             );
 
-        $configOutput = $this->pool->render->renderExpandableChild($model, $isExpanded);
-        return $this->pool->render->renderFooter($caller, $configOutput, $isExpanded);
+        return $this->pool->render->renderFooter(
+            $caller,
+            $model,
+            $isExpanded
+        );
     }
 
     /**
@@ -184,9 +208,8 @@ abstract class AbstractController implements ConstInterface
     protected function outputCssAndJs()
     {
         // We only do this once per output type.
-        $destination = $this->pool->config->getSetting(Fallback::SETTING_DESTINATION);
-        $result = isset(static::$jsCssSend[$destination]);
-        static::$jsCssSend[$destination] = true;
+        $result = isset(static::$jsCssSend[$this->destination]);
+        static::$jsCssSend[$this->destination] = true;
         if ($result === true) {
             // Been here, done that.
             return '';
@@ -225,6 +248,9 @@ abstract class AbstractController implements ConstInterface
      * other kreXX calls, which may be caused by the debug callbacks
      * to prevent kreXX from starting other kreXX calls.
      *
+     * @deprecated
+     *   Since 3.1.0. Will be removed
+     *
      * @return $this
      *   Return $this for chaining.
      */
@@ -232,7 +258,7 @@ abstract class AbstractController implements ConstInterface
     {
         if ($this->fatalShouldActive === true) {
             $this::$krexxFatal->setIsActive(false);
-            unregister_tick_function(array($this::$krexxFatal, 'tickCallback'));
+            unregister_tick_function([$this::$krexxFatal, 'tickCallback']);
         }
 
         return $this;
@@ -245,6 +271,9 @@ abstract class AbstractController implements ConstInterface
      * a analysis, to generate faster output. We re-enable kreXX
      * afterwards, so the dev can use it again.
      *
+     * @deprecated
+     *   Since 3.1.0. Will be removed
+     *
      * @return $this
      *   Return $this for chaining.
      */
@@ -252,59 +281,9 @@ abstract class AbstractController implements ConstInterface
     {
         if ($this->fatalShouldActive === true) {
             $this::$krexxFatal->setIsActive(true);
-            register_tick_function(array($this::$krexxFatal, 'tickCallback'));
+            register_tick_function([$this::$krexxFatal, 'tickCallback']);
         }
 
         return $this;
-    }
-
-    /**
-     * Return the current URL.
-     *
-     * @see http://stackoverflow.com/questions/6768793/get-the-full-url-in-php
-     * @author Timo Huovinen
-     *
-     * @return string
-     *   The current URL.
-     */
-    protected function getCurrentUrl()
-    {
-        $server = $this->pool->getServer();
-
-        // Check if someone has been messing with the $_SERVER, to prevent
-        // warnings and notices.
-        if (empty($server) === true ||
-            empty($server['SERVER_PROTOCOL']) === true ||
-            empty($server['SERVER_PORT']) === true ||
-            empty($server['SERVER_NAME'])=== true) {
-            return 'n/a';
-        }
-
-        // SSL or no SSL.
-        $ssl = (!empty($server['HTTPS']) && $server['HTTPS'] === 'on');
-
-        $protocol = strtolower($server['SERVER_PROTOCOL']);
-        $protocol = substr($protocol, 0, strpos($protocol, '/'));
-        if ($ssl === true) {
-            $protocol .= 's';
-        }
-
-        $port = $server['SERVER_PORT'];
-
-        if (($ssl === false && $port === '80') || ($ssl === true && $port === '443')) {
-            // Normal combo with port and protocol.
-            $port = '';
-        } else {
-            // We have a special port here.
-            $port = ':' . $port;
-        }
-
-        if (isset($server['HTTP_HOST']) === true) {
-            $host = $server['HTTP_HOST'];
-        } else {
-            $host = $server['SERVER_NAME'] . $port;
-        }
-
-        return $this->pool->encodingService->encodeString($protocol . '://' . $host . $server['REQUEST_URI']);
     }
 }

@@ -34,6 +34,9 @@
 
 namespace Brainworxx\Krexx\Analyse\Comment;
 
+use ReflectionClass;
+use Reflector;
+
 /**
  * Retrieving the comment of a property.
  *
@@ -48,10 +51,10 @@ class Properties extends AbstractComment
      * @param \ReflectionClass|null $reflectionClass
      * @return mixed
      */
-    public function getComment(\Reflector $reflectionProperty, \ReflectionClass $reflectionClass = null)
+    public function getComment(Reflector $reflectionProperty, ReflectionClass $reflectionClass = null)
     {
         // Do some static caching. The comment will not change during a run.
-        static $cache = array();
+        static $cache = [];
         /** @var \ReflectionProperty $reflectionProperty */
         $cachingKey = $reflectionProperty->getDeclaringClass()->getName() . '::' . $reflectionProperty->getName();
         if (isset($cache[$cachingKey]) === true) {

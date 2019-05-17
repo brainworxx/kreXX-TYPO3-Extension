@@ -35,9 +35,9 @@
 namespace Brainworxx\Krexx\Analyse\Code;
 
 use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Scope analysis decides if a property of method is accessible in the current
