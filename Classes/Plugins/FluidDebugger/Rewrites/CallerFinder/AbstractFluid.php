@@ -345,9 +345,16 @@ abstract class AbstractFluid extends AbstractCaller
     {
         // We check for : and -> to see if we are facing some inline stuff
         if (strpos($varname, ':') !== false || strpos($varname, '->') !== false) {
+            if (version_compare(TYPO3_version, '8.6', '>=')) {
+                // Variable set is native to 8.6 and beyond.
+                $code = '<f:variable.set value="{' . $varname . '}" name="fluidvar" /> {';
+            } else {
+                $code = '<v:variable.set value="{' . $varname . '}" name="fluidvar" /> {';
+            }
             $this->pool->codegenHandler->setComplicatedWrapperLeft(
-                '<v:variable.set value="{' . $varname . '}" name="fluidvar" /> {'
+                $code
             );
+
             $varname = static::FLUID_VARIABLE;
         }
 
