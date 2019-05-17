@@ -71,7 +71,7 @@ class Configuration implements PluginConfigInterface
      */
     public static function getVersion()
     {
-        return 'v1.0.2';
+        return 'v1.1.0';
     }
 
     /**
