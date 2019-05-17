@@ -608,6 +608,9 @@ class Settings
     /**
      * We iterate through the fallback array to generate the content of the
      * ini file.
+     *
+     * @return string
+     *   The generated contend of the ini file.
      */
     public function generateIniContent()
     {
