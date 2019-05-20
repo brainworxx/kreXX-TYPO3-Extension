@@ -38,6 +38,7 @@ use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\Config as T3Config;
@@ -86,12 +87,20 @@ class Configuration implements PluginConfigInterface
         // We are using the TYPO3 ip security, instead of the kreXX implementation.
         Registration::addRewrite(Config::class, T3Config::class);
 
+        // Get the absolute site path. The constant PATH_site is deprecated
+        // since 9.2.
+        if (class_exists(Environment::class)) {
+            $pathSite = Environment::getPublicPath() . '/';
+        } else {
+            $pathSite = PATH_site;
+        }
+
         // See if we must create a temp directory for kreXX.
         $tempPaths = [
-            'main' => PATH_site . 'typo3temp/tx_includekrexx',
-            'log' => PATH_site . 'typo3temp/tx_includekrexx/log',
-            'chunks' => PATH_site . 'typo3temp/tx_includekrexx/chunks',
-            'config' => PATH_site . 'typo3temp/tx_includekrexx/config',
+            'main' => $pathSite . 'typo3temp/tx_includekrexx',
+            'log' => $pathSite . 'typo3temp/tx_includekrexx/log',
+            'chunks' => $pathSite . 'typo3temp/tx_includekrexx/chunks',
+            'config' => $pathSite . 'typo3temp/tx_includekrexx/config',
         ];
 
         // htAccess to prevent a listing
