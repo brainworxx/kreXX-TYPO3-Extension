@@ -104,21 +104,21 @@ class Render extends AbstractRender
                 static::MARKER_DOM_ID,
                 static::MARKER_NORMAL,
                 static::MARKER_CONNECTOR_LEFT,
-                static::MARKER_HELP,
                 static::MARKER_CONNECTOR_RIGHT,
                 static::MARKER_GEN_SOURCE,
+                static::MARKER_HELP,
             ],
             [
                 $model->getName(),
                 $model->getDomid(),
                 $model->getNormal(),
                 $this->renderConnector($model->getConnectorLeft()),
-                $this->renderHelp($model),
                 $this->renderConnector($model->getConnectorRight()),
                 $this->generateDataAttribute(
                     static::DATA_ATTRIBUTE_SOURCE,
                     $this->pool->codegenHandler->generateSource($model)
                 ),
+                $this->renderHelp($model),
             ],
             $this->getTemplateFileContent(static::FILE_RECURSION)
         );
@@ -256,11 +256,11 @@ class Render extends AbstractRender
                 static::MARKER_TYPE,
                 static::MARKER_TYPE_CLASSES,
                 static::MARKER_NORMAL,
-                static::MARKER_HELP,
                 static::MARKER_CONNECTOR_LEFT,
                 static::MARKER_CONNECTOR_RIGHT,
                 static::MARKER_CODE_WRAPPER_LEFT,
                 static::MARKER_CODE_WRAPPER_RIGHT,
+                static::MARKER_HELP,
             ],
             [
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $gensource),
@@ -272,7 +272,6 @@ class Render extends AbstractRender
                 $model->getType(),
                 $typeClasses,
                 $model->getNormal(),
-                $this->renderHelp($model),
                 $this->renderConnector($model->getConnectorLeft()),
                 $this->renderConnector($model->getConnectorRight()),
                 $this->generateDataAttribute(
@@ -283,6 +282,7 @@ class Render extends AbstractRender
                     static::DATA_ATTRIBUTE_WRAPPER_R,
                     $this->pool->codegenHandler->generateWrapperRight()
                 ),
+                $this->renderHelp($model),
             ],
             $this->getTemplateFileContent(static::FILE_SI_CHILD)
         );
@@ -331,7 +331,6 @@ class Render extends AbstractRender
                 static::MARKER_TYPE,
                 static::MARKER_K_TYPE,
                 static::MARKER_NORMAL,
-                static::MARKER_HELP,
                 static::MARKER_CONNECTOR_LEFT,
                 static::MARKER_CONNECTOR_RIGHT,
                 static::MARKER_GEN_SOURCE,
@@ -340,13 +339,13 @@ class Render extends AbstractRender
                 static::MARKER_NEST,
                 static::MARKER_CODE_WRAPPER_LEFT,
                 static::MARKER_CODE_WRAPPER_RIGHT,
+                static::MARKER_HELP,
             ],
             [
                 $model->getName(),
                 $model->getType(),
                 $cssType,
                 $model->getNormal(),
-                $this->renderHelp($model),
                 $this->renderConnector($model->getConnectorLeft()),
                 $this->renderConnector($model->getConnectorRight(128)),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $gencode),
@@ -361,6 +360,7 @@ class Render extends AbstractRender
                     static::DATA_ATTRIBUTE_WRAPPER_R,
                     $this->pool->codegenHandler->generateWrapperRight()
                 ),
+                $this->renderHelp($model),
             ],
             $this->getTemplateFileContent(static::FILE_EX_CHILD_NORMAL)
         );
@@ -437,14 +437,14 @@ class Render extends AbstractRender
     {
         return str_replace(
             [
-                static::MARKER_HELP,
                 static::MARKER_TEXT,
                 static::MARKER_CLASS,
+                static::MARKER_HELP,
             ],
             [
-                $this->renderHelp($model),
                 $model->getNormal(),
-                $model->getName()
+                $model->getName(),
+                $this->renderHelp($model),
             ],
             $this->getTemplateFileContent(static::FILE_SI_BUTTON)
         );

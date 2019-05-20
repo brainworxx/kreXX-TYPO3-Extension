@@ -58,6 +58,15 @@ class RenderSmokyGrey extends Render
      */
     public function renderSingleChild(Model $model)
     {
+        // We need to fetch the parent stuff first, because the str_replace
+        // works through its parameters from left to right. This means in this
+        // context, that we need to do the code generation first by fetching
+        // the parent, and then adding the help stuff here.
+        // And no, we do not do the code generation twice to avoid fetching
+        // the parentStuff in a local variable. (Not to mention code duplication
+        // by simply copying the parent method.)
+        $parentStuff = parent::renderSingleChild($model);
+
         // Replace the source button and set the json.
         return str_replace(
             [
@@ -68,7 +77,7 @@ class RenderSmokyGrey extends Render
                 $model->getConnectorLanguage(),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_JSON, $this->encodeJson($model->getJson()))
             ],
-            parent::renderSingleChild($model)
+            $parentStuff
         );
     }
 
@@ -117,11 +126,11 @@ class RenderSmokyGrey extends Render
                 static::MARKER_CONNECTOR_RIGHT,
                 static::MARKER_GEN_SOURCE,
                 static::MARKER_IS_EXPANDED,
-                static::MARKER_ADDITIONAL_JSON,
                 static::MARKER_NEST,
                 static::MARKER_SOURCE_BUTTON,
                 static::MARKER_CODE_WRAPPER_LEFT,
                 static::MARKER_CODE_WRAPPER_RIGHT,
+                static::MARKER_ADDITIONAL_JSON,
             ],
             [
                 $model->getName(),
@@ -131,7 +140,7 @@ class RenderSmokyGrey extends Render
                 $this->renderConnector($model->getConnectorRight(128)),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $gencode),
                 '',
-                $this->generateDataAttribute(static::DATA_ATTRIBUTE_JSON, $this->encodeJson($model->getJson())),
+
                 $this->pool->chunks->chunkMe($this->renderNest($model, false)),
                 $sourcebutton,
                 $this->generateDataAttribute(
@@ -142,6 +151,7 @@ class RenderSmokyGrey extends Render
                     static::DATA_ATTRIBUTE_WRAPPER_R,
                     $this->pool->codegenHandler->generateWrapperRight()
                 ),
+                $this->generateDataAttribute(static::DATA_ATTRIBUTE_JSON, $this->encodeJson($model->getJson())),
             ],
             $this->getTemplateFileContent(static::FILE_EX_CHILD_NORMAL)
         );
