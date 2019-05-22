@@ -2,19 +2,19 @@ body {
     color: #333;
 }
 
-.expert {
+.krexx-backend .expert {
     display: none;
 }
 
-.display-none {
+.krexx-backend .display-none {
     display: none;
 }
 
-.expert-mode .expert {
+.krexx-backend .expert-mode .expert {
     display: table-row;
 }
 
-.spacer {
+.krexx-backend .spacer {
     background: none;
     border: none;
     height: 10px;
@@ -24,7 +24,7 @@ body {
 /**
  * Ajax messaging stuff
  */
-.message-container-outer {
+.krexx-backend .message-container-outer {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -35,11 +35,11 @@ body {
 
 }
 
-.message-container-inner {
+.krexx-backend .message-container-inner {
     position: relative;
 }
 
-.ajax-msg {
+.krexx-backend .ajax-msg {
     float: right;
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
     border: 0;
@@ -50,23 +50,23 @@ body {
     width: 100%;
 }
 
-.ajax-msg .text {
+.krexx-backend .ajax-msg .text {
     display: inline-block;
     font-size: 15px;
     max-width: 343px;
 }
 
-.ajax-msg.success {
+.krexx-backend .ajax-msg.success {
     background-color: #79a548;
     color: #fff;
 }
 
-.ajax-msg.error {
+.krexx-backend .ajax-msg.error {
     background-color: #c83c3c;
     color: #fff;
 }
 
-.ajax-msg .icon {
+.krexx-backend .ajax-msg .icon {
     border-radius: 20px;
     display: inline-block;
     height: 25px;
@@ -75,15 +75,15 @@ body {
     vertical-align: top;
 }
 
-.ajax-msg.error .icon {
+.krexx-backend .ajax-msg.error .icon {
     background-color: #d36363;
 }
 
-.ajax-msg.success .icon {
+.krexx-backend .ajax-msg.success .icon {
     background-color: #94B76D
 }
 
-.ajax-msg .icon::after {
+.krexx-backend .ajax-msg .icon::after {
     color: white;
     font-size: 15px;
     font-weight: bolder;
@@ -92,20 +92,20 @@ body {
     margin-top: 3px;
 }
 
-.ajax-msg.success .icon:after {
+.krexx-backend .ajax-msg.success .icon:after {
     content: "\2713";
 }
 
-.ajax-msg.error .icon:after {
+.krexx-backend .ajax-msg.error .icon:after {
     content: "\2716";
 }
 
-.ajax-msg.fade {
+.module.krexx-backend .ajax-msg.fade {
     transition: all 0.5s;
     opacity: 0;
 }
 
-.ajax-msg.remove {
+.krexx-backend .ajax-msg.remove {
     height: 0;
     padding: 0;
     margin: 0;
@@ -114,11 +114,11 @@ body {
 /**
  * Tabs
  */
-.tabpanel {
+.krexx-backend .tabpanel {
     max-width: 1200px;
 }
 
-.nav-tabs {
+.krexx-backend .nav-tabs {
     border-radius: 2px 2px 0 0;
     background-color: #ededed;
     border-bottom: 1px solid #ccc;
@@ -129,21 +129,21 @@ body {
     height: 31px;
 }
 
-.nav-tabs > li + li {
+.krexx-backend .nav-tabs > li + li {
     margin-left: 2px;
 }
 
-.nav-tabs > li {
+.krexx-backend .nav-tabs > li {
     float: left;
     margin-bottom: -1px;
 }
 
-.nav > li {
+.krexx-backend .nav > li {
     position: relative;
     display: block;
 }
 
-.nav-tabs > li > a {
+.krexx-backend .nav-tabs > li > a {
     margin-right: 0;
     transition: all .1s ease-in-out;
     line-height: 1.5;
@@ -156,20 +156,20 @@ body {
     text-decoration: none;
 }
 
-.nav-tabs > li > a:hover {
+.krexx-backend .nav-tabs > li > a:hover {
     border-color: #d7d7d7 #d7d7d7 #ccc;
     background: #e1e0e0;
     text-decoration: none;
     cursor: pointer;
 }
 
-.nav-tabs > li.active {
+.krexx-backend .nav-tabs > li.active {
     position: relative;
     display: block;
     cursor: default;
 }
 
-.nav-tabs > li.active > a {
+.krexx-backend .nav-tabs > li.active > a {
     border: 1px solid #ccc;
     border-bottom-color: #fafafa;
     background-color: #fafafa;
@@ -179,7 +179,7 @@ body {
 
 }
 
-.tab-content > .tab-pane {
+.krexx-backend .tab-content > .tab-pane {
     display: block;
     height: 0;
     width: 0;
@@ -188,7 +188,7 @@ body {
 
 }
 
-.tab-content > .tab-pane.active {
+.krexx-backend .tab-content > .tab-pane.active {
     height: auto;
     width: auto;
     overflow: visible;
@@ -200,7 +200,7 @@ body {
 /**
  * Help info.
  */
-.codeblock pre {
+.krexx-backend .codeblock pre {
     border: 1px solid #cacaca;
     padding: 10px;
     -webkit-border-radius: 3px;
@@ -240,31 +240,31 @@ body {
     padding: 6px;
 }
 
-th.th-icon {
+.krexx-backend th.th-icon {
     width: 10px;
 }
 
-th.time {
+.krexx-backend th.time {
     width: 110px;
 }
 
-th.size {
+.krexx-backend th.size {
     width: 80px;
 }
 
-th.delete {
+.krexx-backend th.delete {
     width: 32px;
 }
 
-th.filename {
+.krexx-backend th.filename {
     width: 250px;
 }
 
-td.description {
+.krexx-backend td.description {
     width: 400px;
 }
 
-td.commands {
+.krexx-backend td.commands {
     width: 77px;
     max-width: 77px;
     min-width: 77px;
@@ -280,11 +280,11 @@ td.commands {
     background-color: #ededed;
 }
 
-.table-wrapper table tr:hover td {
+.krexx-backend .table-wrapper table tr:hover td {
     background-color: rgba( 256, 256, 256, 0.2);
 }
 
-.table-wrapper table tr:hover a {
+.krexx-backend .table-wrapper table tr:hover a {
     text-decoration: underline;
 }
 
@@ -365,7 +365,7 @@ td.commands {
     pointer-events: none;
 }
 
-.module-docheader .chevron {
+.krexx-backend .module-docheader .chevron {
     display: inline-block;
     vertical-align: middle;
 }
@@ -410,40 +410,40 @@ td.commands {
     height: 5px;
 }
 
-.table-wrapper table tr {
+.krexx-backend .table-wrapper table tr {
     border-bottom: 1px solid #c3c3c3;
 }
-.table-wrapper table.krexx-logs tr {
+.krexx-backend .table-wrapper table.krexx-logs tr {
     border-bottom: 1px solid #aaa;
 }
 
-.table-wrapper table tr:nth-child(even) {
+.krexx-backend .table-wrapper table tr:nth-child(even) {
     background-color: #f7f7f7;
 }
 
-.table-wrapper table tr:hover {
+.krexx-backend .table-wrapper table tr:hover {
     background-color: #ededed;
 }
 
-.table-wrapper table tr:last-child {
+.krexx-backend .table-wrapper table tr:last-child {
     border-bottom: none;
 }
 
 @media (max-width: 991px) {
-    th.time,
-    th.size,
-    td.time,
-    td.size {
+    .krexx-backend th.time,
+    .krexx-backend th.size,
+    .krexx-backend td.time,
+    .krexx-backend td.size {
         display: none;
     }
 }
 
 @media (max-width: 768px) {
-    th.meta,
-    td.meta {
+    .krexx-backend th.meta,
+    .krexx-backend td.meta {
         display: none;
     }
-    td.description {
+    .krexx-backend td.description {
         max-width: 200px;
     }
 }
@@ -458,7 +458,7 @@ td.commands {
     z-index: 999999;
 }
 
-.module-docheader {
+.krexx-backend .module-docheader {
     position: fixed;
     width: 100%;
     top: 0;
@@ -474,24 +474,24 @@ td.commands {
     min-height: auto;
 }
 
-div#typo3-inner-docbody {
+.krexx-backend div#typo3-inner-docbody {
     padding: 48px 24px 24px 24px;
     margin-top: 0;
     position: static;
 }
 
-#typo3-inner-docbody .module-body {
+.krexx-backend #typo3-inner-docbody .module-body {
     padding-top: 65px;
 }
 
-.module-docheader button {
+.krexx-backend .module-docheader button {
     margin-top: 7px;
     color: #333;
     background-color: #eee;
     border-color: #bbb;
 }
 
-button:hover {
+.krexx-backend button:hover {
     color: #333;
     background-color: #d5d4d4;
     border-color: #9c9c9c;
@@ -541,7 +541,7 @@ button:hover {
  * Styling the buttons
  */
 
-.button {
+.krexx-backend .button {
     display: inline-block;
     cursor: pointer;
     border: 1px solid #c4c4c4;
@@ -554,20 +554,20 @@ button:hover {
     line-height: 25px;
 }
 
-.module-docheader .button {
+.krexx-backend .module-docheader .button {
     padding: 0 8px 0 24px;
 }
 
-.button.delete {
+.krexx-backend .button.delete {
     background: url("../Icons/delete.png") no-repeat center #dedede;
 }
 
-.button.tooltip-hover {
+.krexx-backend .button.tooltip-hover {
     background: url("../Icons/info.png") no-repeat center #dedede;
     cursor: help;
 }
 
-.button.save {
+.krexx-backend .button.save {
     background: url("../Icons/save.png") no-repeat left;
     padding-left: 24px;
     width: auto;
@@ -576,7 +576,7 @@ button:hover {
     vertical-align: middle;
 }
 
-.button.cookies {
+.krexx-backend .button.cookies {
     background: url("../Icons/close.png") no-repeat left;
     width: auto;
     height: auto;
@@ -584,13 +584,13 @@ button:hover {
     vertical-align: middle;
 }
 
-.button:hover {
+.krexx-backend .button:hover {
     background-color: #c4c4c4;
     border-color: #a6a6a6;
 }
 
 @media (max-width: 450px) {
-    .button.cookies {
+    .krexx-backend .button.cookies {
         display: block;
         margin-top: 5px;
     }
@@ -601,13 +601,13 @@ button:hover {
 /**
  * on / off switch
  */
-input.switch {
+.krexx-backend input.switch {
     height: 0;
     width: 0;
     visibility: hidden;
 }
 
-label span.switch {
+.krexx-backend label span.switch {
     cursor: pointer;
     text-indent: -9999px;
     width: 20px;
@@ -621,7 +621,7 @@ label span.switch {
     margin-left: 5px;
 }
 
-label span.switch::after {
+.krexx-backend label span.switch::after {
     content: '';
     position: absolute;
     top: 2px;
@@ -633,15 +633,15 @@ label span.switch::after {
     transition: 0.3s;
 }
 
-.button:hover label span.switch::after {
+.krexx-backend .button:hover label span.switch::after {
     background: #c4c4c4;
 }
 
-input:checked + span.switch {
+.krexx-backend input:checked + span.switch {
     background: grey;
 }
 
-input.switch:checked + span.switch::after {
+.krexx-backend input.switch:checked + span.switch::after {
     left: calc(100% - 17px);
     transform: translateX(+100%);
 }
@@ -649,7 +649,7 @@ input.switch:checked + span.switch::after {
 /**
  * Styling for the kreXX logo
  */
-.krexx-icon {
+.krexx-backend .krexx-icon {
     background-image: url(../Icons/Extension.svg);
     height: 12px;
     width: 12px;
