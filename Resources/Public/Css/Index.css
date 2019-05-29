@@ -24,7 +24,7 @@ body {
 /**
  * Ajax messaging stuff
  */
-.krexx-backend .message-container-outer {
+.message-container-outer {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -35,11 +35,11 @@ body {
 
 }
 
-.krexx-backend .message-container-inner {
+.message-container-inner {
     position: relative;
 }
 
-.krexx-backend .ajax-msg {
+.ajax-msg {
     float: right;
     box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
     border: 0;
@@ -50,23 +50,23 @@ body {
     width: 100%;
 }
 
-.krexx-backend .ajax-msg .text {
+.ajax-msg .text {
     display: inline-block;
     font-size: 15px;
     max-width: 343px;
 }
 
-.krexx-backend .ajax-msg.success {
+.ajax-msg.success {
     background-color: #79a548;
     color: #fff;
 }
 
-.krexx-backend .ajax-msg.error {
+.ajax-msg.error {
     background-color: #c83c3c;
     color: #fff;
 }
 
-.krexx-backend .ajax-msg .icon {
+.ajax-msg .icon {
     border-radius: 20px;
     display: inline-block;
     height: 25px;
@@ -75,15 +75,15 @@ body {
     vertical-align: top;
 }
 
-.krexx-backend .ajax-msg.error .icon {
+.ajax-msg.error .icon {
     background-color: #d36363;
 }
 
-.krexx-backend .ajax-msg.success .icon {
+.ajax-msg.success .icon {
     background-color: #94B76D
 }
 
-.krexx-backend .ajax-msg .icon::after {
+.ajax-msg .icon::after {
     color: white;
     font-size: 15px;
     font-weight: bolder;
@@ -92,20 +92,20 @@ body {
     margin-top: 3px;
 }
 
-.krexx-backend .ajax-msg.success .icon:after {
+.ajax-msg.success .icon:after {
     content: "\2713";
 }
 
-.krexx-backend .ajax-msg.error .icon:after {
+.ajax-msg.error .icon:after {
     content: "\2716";
 }
 
-.module.krexx-backend .ajax-msg.fade {
+.ajax-msg.fade {
     transition: all 0.5s;
     opacity: 0;
 }
 
-.krexx-backend .ajax-msg.remove {
+.ajax-msg.remove {
     height: 0;
     padding: 0;
     margin: 0;
