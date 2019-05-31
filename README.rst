@@ -13,3 +13,4 @@ This is a TYPO3 extension, providing backend configuration masks for kreXX.
 |
 
 .. figure:: https://user-images.githubusercontent.com/11192910/58368478-dfe22700-7eed-11e9-8bff-55b91dc1c279.png
+
