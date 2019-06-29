@@ -349,3 +349,98 @@ namespace Brainworxx\Krexx\Service\Factory {
         return \is_writable($what);
     }
 }
+
+namespace Brainworxx\Krexx\Service\Flow {
+
+    /**
+     * Mocking the server php memory in the emergency helper
+     *
+     * @param string $what
+     *   The value we want to retrieve.
+     * @param bool|null $start
+     *   Start or end the mocking process.
+     * @param string $value
+     *   The desired return value.
+     *
+     * @return string
+     *   The retrieved value.
+     */
+    function ini_get(string $what, bool $start = null, string $value = ''): string
+    {
+        static $result = null;
+
+        if ($start === true) {
+            $result = $value;
+        }
+
+        if ($start === false) {
+            $result = null;
+        }
+
+        if (empty($result)) {
+            return \ini_get($what);
+        } else {
+            return $result;
+        }
+    }
+
+    /**
+     * Mocking the current memory limit.
+     *
+     * @param bool|null $start
+     *   Start or end the mocking process.
+     * @param int $value
+     *   The desired return value.
+     *
+     * @return int
+     *   The retrieved value.
+     */
+    function memory_get_usage(bool $start = null, int $value = 0): int
+    {
+        static $result = null;
+
+        if ($start === true) {
+            $result = $value;
+        }
+
+        if ($start === false) {
+            $result = null;
+        }
+
+        if (empty($result)) {
+            return \memory_get_usage();
+        } else {
+            return $result;
+        }
+    }
+
+    /**
+     * Mocking the time function for the emergency break.
+     *
+     * @param bool|null $start
+     *   Start or end the mocking process.
+     * @param int $value
+     *   The desired return value.
+     *
+     * @return int
+     *   The retrieved value.
+     */
+    function time(bool $start = null, int $value = 0): int
+    {
+        static $result = null;
+
+        if ($start === true) {
+            $result = $value;
+        }
+
+        if ($start === false) {
+            $result = null;
+        }
+
+        if (empty($result)) {
+            return \time();
+        } else {
+            return $result;
+        }
+    }
+}

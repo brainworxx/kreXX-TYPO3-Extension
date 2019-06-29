@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethodAnalysis;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Comment\Functions;
@@ -116,7 +117,7 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
                 ->setConnectorType(Connectors::METHOD)
                 ->addParameter(static::PARAM_DATA, $result)
                 ->injectCallback(
-                    $this->pool->createClass(ThroughMethodAnalysis::class)
+                    $this->pool->createClass(ThroughMeta::class)
                 )
         );
     }

@@ -68,7 +68,7 @@ class IniTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Service\Config\From\Ini::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $ini = new Ini(Krexx::$pool);
         $this->assertAttributeSame(Krexx::$pool->config->validation, 'validation', $ini);

@@ -405,7 +405,6 @@ div.kwrapper {
 }
 
 .kwrapper .call {
-    display: table-cell;
     font: bold 12px tahoma, verdana;
     color: #b1b1b1;
     padding-right: 10px;

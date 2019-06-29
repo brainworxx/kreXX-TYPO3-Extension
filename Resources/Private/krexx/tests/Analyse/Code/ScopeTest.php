@@ -63,7 +63,7 @@ class ScopeTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Scope::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $this->assertAttributeEquals(Krexx::$pool, 'pool', $this->scope);
         $this->assertEquals($this->scope, Krexx::$pool->scope);

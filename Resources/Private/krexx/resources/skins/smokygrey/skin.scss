@@ -352,8 +352,6 @@ $fontLight: lighter 10px tahoma, verdana;
     .call {
       display: inline-block;
       font: $fontBold;
-      padding-right: 10px;
-      padding-left: 10px;
       padding-bottom: 5px;
       .kcaller {
         color: $blackLight;
@@ -401,6 +399,7 @@ $fontLight: lighter 10px tahoma, verdana;
       margin: 0 0 5px;
       background-color: $white;
       line-height: 13px;
+      padding-left: 15px;
       @include border-radius-top(1px);
       @include border-radius-bottom(1px);
       &:hover, &.kcurrent-additional {
@@ -436,6 +435,7 @@ $fontLight: lighter 10px tahoma, verdana;
         background-image: none;
         //color: $white;
         cursor: pointer;
+        padding-left: 2px;
         &::before {
           content: "\00a0\25B6\00a0\00a0";
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
@@ -462,6 +462,10 @@ $fontLight: lighter 10px tahoma, verdana;
           display: inline-block;
           margin-right: 13px;
           line-height: 16px;
+          position: absolute;
+          top: 2px;
+          bottom: 2px;
+          left: 0;
         }
       }
 
@@ -868,7 +872,7 @@ $fontLight: lighter 10px tahoma, verdana;
       .kel {
         color: $grey;
         text-decoration: none;
-        padding: 3px 6px 6px;
+        padding: 3px 6px 6px 20px;
         &.kisactive {
           color: $greyDark;
           &::before {

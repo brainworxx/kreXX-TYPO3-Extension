@@ -66,6 +66,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/PublicProperties.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/Traversable.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/ErrorObject.php';
+        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/Meta.php';
 
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/BacktraceStep.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/ConfigSection.php';
@@ -77,10 +78,14 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughConstants.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughGetter.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughLargeArray.php';
+        // deprecated
         include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughMethodAnalysis.php';
+        // deprecated
         include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughMethods.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughProperties.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughResource.php';
+        include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughMeta.php';
+        include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughMetaReflections.php';
 
         include_once KREXX_DIR . 'src/Analyse/Caller/AbstractCaller.php';
         include_once KREXX_DIR . 'src/Analyse/Caller/CallerFinder.php';
@@ -93,6 +98,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Comment/Functions.php';
         include_once KREXX_DIR . 'src/Analyse/Comment/Methods.php';
         include_once KREXX_DIR . 'src/Analyse/Comment/Properties.php';
+        include_once KREXX_DIR . 'src/Analyse/Comment/Classes.php';
 
         include_once KREXX_DIR . 'src/Analyse/Routing/AbstractRouting.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Routing.php';

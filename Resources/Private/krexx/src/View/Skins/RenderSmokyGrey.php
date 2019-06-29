@@ -137,7 +137,7 @@ class RenderSmokyGrey extends Render
                 $model->getType(),
                 $cssType,
                 $model->getNormal(),
-                $this->renderConnector($model->getConnectorRight(128)),
+                $this->renderConnectorRight($model->getConnectorRight(128)),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $gencode),
                 '',
 
@@ -269,14 +269,25 @@ class RenderSmokyGrey extends Render
     {
         // Add the search.
         return str_replace(
-            [static::MARKER_SEARCH, static::MARKER_KREXX_ID],
-            [$this->renderSearch(), $this->pool->recursionHandler->getMarker()],
+            [
+                static::MARKER_SEARCH,
+                static::MARKER_KREXX_ID,
+                static::MARKER_PLUGINS
+            ],
+            [
+                $this->renderSearch(),
+                $this->pool->recursionHandler->getMarker(),
+                $this->renderPluginList()
+            ],
             parent::renderFatalMain($errstr, $errfile, $errline)
         );
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated
+     *   Since 3.1.0. Will be removed.
      */
     protected function renderConnector($connector)
     {
@@ -284,6 +295,20 @@ class RenderSmokyGrey extends Render
             // Something big, we should display it.
             // Most likely the parameters of a method.
             return parent::renderConnector($connector);
+        }
+
+        return '';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function renderConnectorRight($connector)
+    {
+        if (strlen($connector) > 17) {
+            // Something big, we should display it.
+            // Most likely the parameters of a method.
+            return parent::renderConnectorRight($connector);
         }
 
         return '';

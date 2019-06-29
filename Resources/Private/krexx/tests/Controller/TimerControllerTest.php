@@ -71,7 +71,7 @@ class TimerControllerTest extends AbstractController
      *
      * @covers \Brainworxx\Krexx\Controller\TimerController::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $this->assertAttributeEquals(Krexx::$pool, 'pool', $this->controller);
         // The __construct from the abstract controller must not be called.

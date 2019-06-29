@@ -248,7 +248,7 @@ class Pool extends AbstractFactory
         // Initialize the code generation.
         $this->createClass(Codegen::class);
         $this->createClass(Scope::class);
-        // We also reset our emergency handler timer.
-        $this->emergencyHandler->resetTimer();
+        // We also initialize emergency handler timer.
+        $this->emergencyHandler->initTimer();
     }
 }

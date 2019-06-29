@@ -1,3 +1,16 @@
-<span class="call">
-  Called from <span class="kcaller"> {callerFile}, </span> line <span class="kcaller">{callerLine}</span>
-</span>
+<li class="kchild">
+  <div class="kel kexpand">
+    <span class="kname">Called from</span>
+  </div>
+  <div class="knest khidden">
+    <ul class="knode">
+      <li class="kchild">
+        <div class="kel">
+          <div class="call"><span class="kcaller"> {callerFile}, </span> line <span class="kcaller">{callerLine}</span></div><br/>
+          <div class="call">At: <span class="kcaller">{date}</span></div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</li>
+

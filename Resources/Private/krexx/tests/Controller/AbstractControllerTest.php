@@ -50,7 +50,7 @@ class AbstractControllerTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Controller\AbstractController::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         // Mock the settings.
         $fileMock = $this->createMock(Config::class);

@@ -58,7 +58,7 @@ class ConnectorsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $expected = array(
             $this->connectors::NOTHING => array('', ''),
@@ -140,10 +140,10 @@ class ConnectorsTest extends AbstractTest
         // Test with methods and parameters.
         $this->connectors->setParameters('some parameter');
         $this->connectors->setType($this->connectors::STATIC_METHOD);
-        $this->assertEquals('(<small>some parameter</small>)', $this->connectors->getConnectorRight(0));
+        $this->assertEquals('(some parameter)', $this->connectors->getConnectorRight(0));
         $this->connectors->setType($this->connectors::METHOD);
-        $this->assertEquals('(<small>some parameter</small>)', $this->connectors->getConnectorRight(0));
-        $this->assertEquals('(<small>some  . . . </small>)', $this->connectors->getConnectorRight(5));
+        $this->assertEquals('(some parameter)', $this->connectors->getConnectorRight(0));
+        $this->assertEquals('(some  . . . )', $this->connectors->getConnectorRight(5));
 
         // Test with some other type
         $this->connectors->setType($this->connectors::CONSTANT);

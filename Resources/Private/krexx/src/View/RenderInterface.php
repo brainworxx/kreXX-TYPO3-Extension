@@ -229,4 +229,11 @@ interface RenderInterface
      *   An array with the skin names.
      */
     public function getSkinList();
+
+    /**
+     * Render a simple line break.
+     *
+     * @return string
+     */
+    public function renderLinebreak();
 }

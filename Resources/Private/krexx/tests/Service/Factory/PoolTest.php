@@ -76,7 +76,7 @@ class PoolTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Service\Factory\Pool::__construct
      * @covers \Brainworxx\Krexx\Service\Factory\Pool::checkEnvironment
      */
-    public function test__construct()
+    public function testConstruct()
     {
         Krexx::$pool = null;
         Pool::createPool();

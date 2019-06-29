@@ -48,7 +48,7 @@ class ProcessBacktraceTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $processBacktrace = new ProcessBacktrace(Krexx::$pool);
         $this->assertAttributeEquals(Krexx::$pool, 'pool', $processBacktrace);

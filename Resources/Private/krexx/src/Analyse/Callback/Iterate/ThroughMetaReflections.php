@@ -35,29 +35,25 @@
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
 
 /**
- * Class MethodInfo
+ * Simple iterating through meta reflections.
+ *
+ * @use array data
+ *   A list of reflections that we are iterating through.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Iterate
- *
- * @uses array data
- *   Associative array, the analysis result.
- *
- * @deprecated
- *   Since 3.1.0. Will be removed.
- *   Use ThroughMeta instead.
  */
-class ThroughMethodAnalysis extends AbstractCallback
+class ThroughMetaReflections extends AbstractCallback
 {
     /**
      * {@inheritdoc}
      */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis';
+    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMetaReflections';
 
     /**
-     * Renders the info of a single method.
+     * Simply iterate through reflections coming from the ThoughMeta callback.
      *
      * @return string
      *   The generated markup.
@@ -66,26 +62,16 @@ class ThroughMethodAnalysis extends AbstractCallback
     {
         $output = $this->dispatchStartEvent();
 
-        foreach ($this->parameters[static::PARAM_DATA] as $key => $string) {
-            /** @var Model $model */
-            $model = $this->pool->createClass(Model::class)
-                ->setData($string)
-                ->setName($key)
-                ->setType(static::TYPE_REFLECTION);
-
-            if ($key === static::META_COMMENT || $key === static::META_DECLARED_IN || $key === static::META_SOURCE) {
-                $model->setNormal(static::UNKNOWN_VALUE);
-                $model->setHasExtra(true);
-            } else {
-                $model->setNormal($string);
-            }
-
-            $output .= $this->pool->render->renderSingleChild(
-                $this->dispatchEventWithModel(
-                    __FUNCTION__ . static::EVENT_MARKER_END,
-                    $model
-                )
-            );
+        /** @var  \ReflectionClass $ref */
+        foreach ($this->parameters[static::PARAM_DATA] as $key => $ref) {
+            $parameters = [
+                static::PARAM_REF => $ref,
+                static::PARAM_META_NAME => $key
+            ];
+            $output .= $this->pool
+                ->createClass(Meta::class)
+                ->setParams($parameters)
+                ->callMe();
         }
 
         return $output;

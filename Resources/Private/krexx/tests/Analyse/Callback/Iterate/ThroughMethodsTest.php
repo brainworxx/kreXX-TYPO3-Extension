@@ -44,6 +44,8 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
+use ReflectionMethod;
+use ReflectionClass;
 
 class ThroughMethodsTest extends AbstractTest
 {
@@ -88,7 +90,7 @@ class ThroughMethodsTest extends AbstractTest
 
         // Create an empty fixture
         $fixture = [
-            $this->throughMethods::PARAM_REF => new \ReflectionClass(ComplexMethodFixture::class),
+            $this->throughMethods::PARAM_REF => new ReflectionClass(ComplexMethodFixture::class),
             $this->throughMethods::PARAM_DATA => []
         ];
 
@@ -104,6 +106,7 @@ class ThroughMethodsTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::getDeclarationPlace
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::getDeclarationKeywords
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveDeclaringReflection
      */
     public function testCallMeNormal()
     {
@@ -122,16 +125,16 @@ class ThroughMethodsTest extends AbstractTest
 
         // Create the empty fixture
         $fixture = [
-            $this->throughMethods::PARAM_REF => new \ReflectionClass(ComplexMethodFixture::class),
+            $this->throughMethods::PARAM_REF => new ReflectionClass(ComplexMethodFixture::class),
             $this->throughMethods::PARAM_DATA => [
-                new \ReflectionMethod(ComplexMethodFixture::class, 'publicMethod'),
-                new \ReflectionMethod(ComplexMethodFixture::class, 'protectedMethod'),
-                new \ReflectionMethod(ComplexMethodFixture::class, 'privateMethod'),
-                new \ReflectionMethod(MethodsFixture::class, 'privateMethod'),
-                new \ReflectionMethod(ComplexMethodFixture::class, 'troublesomeMethod'),
-                new \ReflectionMethod(ComplexMethodFixture::class, 'finalMethod'),
-                new \ReflectionMethod(ComplexMethodFixture::class, 'parameterizedMethod'),
-                new \ReflectionMethod(ComplexMethodFixture::class, 'traitFunction')
+                new ReflectionMethod(ComplexMethodFixture::class, 'publicMethod'),
+                new ReflectionMethod(ComplexMethodFixture::class, 'protectedMethod'),
+                new ReflectionMethod(ComplexMethodFixture::class, 'privateMethod'),
+                new ReflectionMethod(MethodsFixture::class, 'privateMethod'),
+                new ReflectionMethod(ComplexMethodFixture::class, 'troublesomeMethod'),
+                new ReflectionMethod(ComplexMethodFixture::class, 'finalMethod'),
+                new ReflectionMethod(ComplexMethodFixture::class, 'parameterizedMethod'),
+                new ReflectionMethod(ComplexMethodFixture::class, 'traitFunction')
             ]
         ];
 
@@ -214,7 +217,7 @@ class ThroughMethodsTest extends AbstractTest
             $fixture[$this->throughMethods::PARAM_DATA][4]->name,
             'public inherited method',
             '->',
-            '(<small>someNotExistingClass $parameter</small>)',
+            '(someNotExistingClass $parameter)',
             'someNotExistingClass $parameter',
             'Asking politely for trouble here',
             $methodFixtureFile,
@@ -240,7 +243,7 @@ class ThroughMethodsTest extends AbstractTest
             $fixture[$this->throughMethods::PARAM_DATA][6]->name,
             'public method',
             '->',
-            '(<small>$parameter</small>)',
+            '($parameter)',
             '$parameter',
             '&#64;param $parameter',
             $complexMethodFixtureFile,

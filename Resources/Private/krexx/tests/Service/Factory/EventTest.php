@@ -50,7 +50,7 @@ class EventTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Service\Factory\Event::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         Registration::registerEvent('some event', CallbackCounter::class);
         Registration::registerEvent('some event', 'SomeClassName');

@@ -48,7 +48,7 @@ class AbstractModelTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\AbstractModel::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $model = new Model(Krexx::$pool);
         $this->assertAttributeEquals(Krexx::$pool, 'pool', $model);

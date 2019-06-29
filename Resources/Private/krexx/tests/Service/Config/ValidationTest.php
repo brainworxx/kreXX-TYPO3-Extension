@@ -51,7 +51,7 @@ class ValidationTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Service\Config\Validation::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         Registration::addMethodToDebugBlacklist('someClass', 'someMethod');
         Registration::addMethodToDebugBlacklist('anotherClass', 'anotherMethod');

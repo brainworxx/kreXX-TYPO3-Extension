@@ -49,7 +49,7 @@ class ProcessStringTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         // Mock the class_exists method, to return always false.
         \Brainworxx\Krexx\Analyse\Routing\Process\class_exists('', true, true);

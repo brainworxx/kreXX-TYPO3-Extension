@@ -32,22 +32,38 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Tests\Analyse\Routing;
+namespace Brainworxx\Krexx\Analyse\Comment;
 
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Krexx\Tests\Helpers\ProcessNothing;
-use Brainworxx\Krexx\Krexx;
+use ReflectionClass;
+use Reflector;
 
-class AbstractRoutingTest extends AbstractTest
+/**
+ * Get the class comment.
+ *
+ * @package Brainworxx\Krexx\Analyse\Comment
+ */
+class Classes extends AbstractComment
 {
     /**
-     * Test if we get the pool was set.
+     * Get the prettified class comment.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::__construct
+     * @param \ReflectionClass $reflection
+     *   The actual reflection class.
+     * @param \ReflectionClass|null $reflectionClass
+     *   Not used.
+     *
+     * @return string
+     *   The comment.
      */
-    public function testConstruct()
+    public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null)
     {
-        $processor = new ProcessNothing(Krexx::$pool);
-        $this->assertAttributeEquals(Krexx::$pool, 'pool', $processor);
+        static $cache = [];
+        $name = $reflection->getName();
+
+        if (isset($cache[$name]) === false) {
+            $cache[$name] = $this->prettifyComment($reflection->getDocComment());
+        }
+
+        return $cache[$name];
     }
 }

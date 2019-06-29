@@ -232,26 +232,25 @@ class ThroughProperties extends AbstractCallback
         // I'm not sure how to get the actual declaration place, when dealing
         // with several layers of traits. We will not parse the source code
         // for an answer.
-        $type = '<br />in class: ';
-        if (method_exists($declaringClass, 'getTraits')) {
-            foreach ($refProperty->getDeclaringClass()->getTraits() as $trait) {
-                if ($trait->hasProperty($refProperty->name)) {
-                    if (count($trait->getTraitNames()) > 0) {
-                        // Multiple layers of traits!
-                        return $declarationCache[$key] = '';
-                    }
-                    // From a trait.
-                    $declaringClass = $trait;
-                    $type = '<br />in trait: ';
-                    break;
+        $type = $this->pool->render->renderLinebreak() . 'in class: ';
+        foreach ($refProperty->getDeclaringClass()->getTraits() as $trait) {
+            if ($trait->hasProperty($refProperty->name)) {
+                if (count($trait->getTraitNames()) > 0) {
+                    // Multiple layers of traits!
+                    return $declarationCache[$key] = '';
                 }
+                // From a trait.
+                $declaringClass = $trait;
+                $type = $this->pool->render->renderLinebreak() . 'in trait: ';
+                break;
             }
         }
+
 
         $filename = $declaringClass->getFileName();
 
         if (empty($filename) === true) {
-            return $declarationCache[$key] = static::UNKNOWN_DECLARATION;
+            return $declarationCache[$key] = $this->pool->messages->getHelp(static::UNKNOWN_DECLARATION);
         }
 
         return $declarationCache[$key] = $this->pool->fileService

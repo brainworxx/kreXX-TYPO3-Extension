@@ -66,15 +66,17 @@ class Encoding
             /**
              * Cheap dummy "polyfill" for mb_detect_encoding
              *
-             * @param $string
+             * @param string $string
              *   Will not get used.
-             * @param $strict
+             * @param string $encodingList
+             *   Will not get used.
+             * @param bool $strict
              *   Will not get used.
              *
              * @return string
              *   Always 'polyfill'.
              */
-            function mb_detect_encoding($string = '', $strict = '')
+            function mb_detect_encoding($string = '', $encodingList = '', $strict = false)
             {
                 return 'polyfill';
             }
@@ -118,8 +120,11 @@ class Encoding
              * strings,
              *
              * @param string $string
+             *   Will not get used.
              * @param string $toEncoding
+             *   Will not get used.
              * @param string $fromEncoding
+             *   Will not get used.
              *
              * @return string
              *   always an empty string.

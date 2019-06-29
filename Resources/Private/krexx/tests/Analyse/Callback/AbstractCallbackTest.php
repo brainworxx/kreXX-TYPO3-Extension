@@ -45,7 +45,7 @@ class AbstractCallbackTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $debugCallback = new Debug(Krexx::$pool);
 

@@ -87,6 +87,16 @@ class RenderNothing extends Render
 
     /**
      * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @return mixed|string
+     */
+    public function renderRecursion(Model $model)
+    {
+        $this->model[__FUNCTION__][] = $model;
+        return '';
+    }
+
+    /**
+     * @param \Brainworxx\Krexx\Analyse\Model $model
      * @param bool $is
      * @return string
      */

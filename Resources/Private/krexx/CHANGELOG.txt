@@ -1,5 +1,5 @@
 3.1.0 dev
-- Use some real autoloading, with a fallback to maunally including
+- Use some real autoloading, with a fallback to manually including
   all files.
 - Plugins can now register additional skins.
 - kreXX debug calls will return the original analysis value.
@@ -12,11 +12,11 @@
 - Added proper handling for BOM chars in array keys and properties.
 - Added an exception handler, to replace the PHP5 Fatal Error Handler.
 - Added the date time to the output.
-- Change: Deprecated the AbstractProcess class.
-- Change: Deprecated the Krexx main class. The "new" one resides
-  now inside the src folder.
+- Added analysis of the meta data of an object.
+- Change: Lots of deprecations.
 - Change: Moved the skin render classes to the source folder.
 - Change: Dropped PHP 5.3 and PHP 5.4 support.
+- Change: Moved the last hardcoded html tags to the skin renderers.
 - Bugfix: Fixes some "bugs" SonarCube found in the unit test fixtures,
   to prevent bad ratings.
 - Bugfix: Check if the developer handle is actually a string.
@@ -28,6 +28,10 @@
   work.
 - Bugfix: Adding additional data in the code generation is not
   rendered.
+- Bugfix: Added the plugin list to the (fatal) error handler
+  display of the smokygrey skin.
+- Bugfix: Wrong display of null and boolean default values in the
+  code generation and method analysis.
 
 3.0.2
 - Added classname to the declaration analysis of properties.

@@ -85,11 +85,11 @@ class Methods extends AbstractObjectAnalysis
             return $output .
                 $this->pool->render->renderRecursion(
                     $this->dispatchEventWithModel(
-                        'recursion',
+                        static::EVENT_MARKER_RECURSION,
                         $this->pool->createClass(Model::class)
                             ->setDomid($domId)
-                            ->setNormal('Methods')
-                            ->setName('Methods')
+                            ->setNormal(static::META_METHODS)
+                            ->setName(static::META_METHODS)
                             ->setType(static::TYPE_INTERNALS)
                     )
                 );
@@ -144,7 +144,7 @@ class Methods extends AbstractObjectAnalysis
             $this->dispatchEventWithModel(
                 static::EVENT_MARKER_ANALYSES_END,
                 $this->pool->createClass(Model::class)
-                    ->setName('Methods')
+                    ->setName(static::META_METHODS)
                     ->setType(static::TYPE_INTERNALS)
                     ->addParameter(static::PARAM_DATA, $methods)
                     ->addParameter(static::PARAM_REF, $ref)

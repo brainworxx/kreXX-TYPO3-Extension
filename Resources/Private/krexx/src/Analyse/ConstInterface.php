@@ -68,6 +68,7 @@ interface ConstInterface
     const PARAM_DATA = 'data';
     const PARAM_REF = 'ref';
     const PARAM_NAME = 'name';
+    const PARAM_META_NAME = 'metaname';
     const PARAM_MULTILINE = 'multiline';
     const PARAM_CLASSNAME = 'classname';
     const PARAM_NORMAL_GETTER = 'normalGetter';
@@ -77,7 +78,7 @@ interface ConstInterface
     const PARAM_ADDITIONAL = 'additional';
 
     const UNKNOWN_VALUE = '. . .';
-    const UNKNOWN_DECLARATION = ':: unable to determine declaration :: <br /><br />Maybe this is a predeclared class?';
+    const UNKNOWN_DECLARATION = 'unknownDeclaration';
 
     // Stuff from the backtrace.
     const TRACE_FILE = 'file';
@@ -106,6 +107,13 @@ interface ConstInterface
     const META_HINT = 'Hint';
     const META_ENCODING = 'Encoding';
     const META_MIME_TYPE = 'Mimetype';
+    const META_METHODS = 'Methods';
+    const META_CLASS_DATA = 'Meta class data';
+    const META_CLASS_NAME = 'Classname';
+    const META_INTERFACES = 'Interfaces';
+    const META_TRAITS = 'Traits';
+    const META_INHERITED_CLASS = 'Inherited class';
+
 
     // Stuff for the skin registration.
     const SKIN_CLASS = 'class';

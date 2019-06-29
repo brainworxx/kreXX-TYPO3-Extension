@@ -54,7 +54,7 @@ class Connectors
      * connectorLeft = '->'
      * connectorRight = '()'
      * or
-     * connectorRight = '(<small>' . $params . '</small>)'
+     * connectorRight = '(' . $params . ')'
      */
     const METHOD = 1;
 
@@ -62,7 +62,7 @@ class Connectors
      * connectorLeft = '::'
      * connectorRight = '()'
      * or
-     * connectorRight = '(<small>' . $params . '</small>)'
+     * connectorRight = '(' . $params . ')'
      */
     const STATIC_METHOD = 2;
 
@@ -232,8 +232,7 @@ class Connectors
             $params = substr($params, 0, $cap) . ' . . . ';
         }
 
-        // We wrap them in a <small>, but only if we have any.
-        return '(<small>' . $params . '</small>)';
+        return '(' . $params . ')';
     }
 
     /**

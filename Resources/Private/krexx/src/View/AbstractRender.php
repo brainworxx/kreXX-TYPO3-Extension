@@ -48,6 +48,7 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
 {
     const MARKER_CALLER_FILE = '{callerFile}';
     const MARKER_CALLER_LINE = '{callerLine}';
+    const MARKER_CALLER_DATE = '{date}';
     const MARKER_HELP = '{help}';
     const MARKER_HELP_TITLE = '{helptitle}';
     const MARKER_HELP_TEXT = '{helptext}';
@@ -74,7 +75,11 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
     const FILE_CALLER = 'caller';
     const FILE_HELPROW = 'helprow';
     const FILE_HELP = 'help';
+    // @deprecated
     const FILE_CONNECTOR = 'connector';
+    // @deprecated
+    const FILE_CONNECTOR_LEFT = 'connectorLeft';
+    const FILE_CONNECTOR_RIGHT = 'connectorRight';
     const FILE_SI_PLUGIN = 'singlePlugin';
     const FILE_SEARCH = 'search';
     const FILE_RECURSION = 'recursion';
@@ -88,6 +93,7 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
     const FILE_FATAL_HEADER = 'fatalHeader';
     const FILE_MESSAGE = 'message';
     const FILE_SI_HR = 'singleChildHr';
+    const FILE_BR = 'br';
 
     /**
      * Here we store all relevant data.
@@ -116,24 +122,23 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
     /**
      * Renders the footer part, where we display from where krexx was called.
      *
-     * @param string $file
-     *   The file from where krexx was called.
-     * @param string $line
-     *   The line number from where krexx was called.
+     * @param array $caller
      *
      * @return string
      *   The generated markup from the template files.
      */
-    protected function renderCaller($file, $line)
+    protected function renderCaller(array $caller)
     {
         return str_replace(
             [
                 static::MARKER_CALLER_FILE,
                 static::MARKER_CALLER_LINE,
+                static::MARKER_CALLER_DATE
             ],
             [
-                $file,
-                $line,
+                $caller[static::TRACE_FILE],
+                $caller[static::TRACE_LINE],
+                $caller[static::TRACE_DATE],
             ],
             $this->getTemplateFileContent(static::FILE_CALLER)
         );
@@ -182,6 +187,9 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
      * @param string $connector
      *   The data to be displayed.
      *
+     * @deprecated
+     *   Since 3.1.0. Will beremoved.
+     *
      * @return string
      *   The rendered connector.
      */
@@ -191,6 +199,47 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
             static::MARKER_CONNECTOR,
             $connector,
             $this->getTemplateFileContent(static::FILE_CONNECTOR)
+        );
+    }
+
+    /**
+     * Renders the left connector.
+     *
+     * @param string $connector
+     *   The data to be displayed.
+     *
+     * @return string
+     *   The rendered connector.
+     */
+    protected function renderConnectorLeft($connector)
+    {
+        return str_replace(
+            static::MARKER_CONNECTOR,
+            $connector,
+            $this->getTemplateFileContent(static::FILE_CONNECTOR_LEFT)
+        );
+    }
+
+    /**
+     * Renders the right connector.
+     *
+     * @param string $connector
+     *   The data to be displayed.
+     *
+     * @return string
+     *   The rendered connector.
+     */
+    protected function renderConnectorRight($connector)
+    {
+        if ($connector === '') {
+            // No connector, no display.
+            return '';
+        }
+
+        return str_replace(
+            static::MARKER_CONNECTOR,
+            $connector,
+            $this->getTemplateFileContent(static::FILE_CONNECTOR_RIGHT)
         );
     }
 

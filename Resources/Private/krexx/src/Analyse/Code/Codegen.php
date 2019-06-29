@@ -256,6 +256,12 @@ class Codegen implements ConstInterface
                 $default = '\'' . $default . '\'';
             } elseif (is_array($default)) {
                 $default = 'array()';
+            } elseif ($default ===  true) {
+                $default = 'TRUE';
+            } elseif ($default === false) {
+                $default = 'FALSE';
+            } elseif ($default === null) {
+                $default = 'NULL';
             }
 
             $paremExplode[] = $default;

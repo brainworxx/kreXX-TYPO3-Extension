@@ -46,7 +46,7 @@ class AbstractCommentTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $methodTest = new Methods(Krexx::$pool);
         $this->assertAttributeEquals(Krexx::$pool, 'pool', $methodTest);

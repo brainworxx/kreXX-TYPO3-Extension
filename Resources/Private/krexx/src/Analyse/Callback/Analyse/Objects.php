@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Constants;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PrivateProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties;
@@ -90,6 +91,8 @@ class Objects extends AbstractCallback
         ) {
             $output .= $this->dumpStuff(Getter::class);
         }
+
+        $output .= $this->dumpStuff(Meta::class);
 
         // Anaylsing error objects.
         if (is_a($this->parameters[static::PARAM_DATA], Throwable::class) ||

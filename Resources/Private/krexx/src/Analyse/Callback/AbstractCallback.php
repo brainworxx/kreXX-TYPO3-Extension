@@ -50,6 +50,7 @@ abstract class AbstractCallback implements ConstInterface
      */
     const EVENT_MARKER_END = '::end';
     const EVENT_MARKER_ANALYSES_END = 'analysisEnd';
+    const EVENT_MARKER_RECURSION = 'recursion';
 
     /**
      * We use this as the string prefix for the event name.

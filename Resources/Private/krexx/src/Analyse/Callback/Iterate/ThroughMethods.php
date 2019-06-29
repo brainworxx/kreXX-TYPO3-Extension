@@ -130,7 +130,7 @@ class ThroughMethods extends AbstractCallback
                         ->setIsPublic($reflectionMethod->isPublic())
                         ->injectCallback(
                             $this->pool->createClass(
-                                ThroughMethodAnalysis::class
+                                ThroughMeta::class
                             )
                         )
                 )
@@ -155,14 +155,12 @@ class ThroughMethods extends AbstractCallback
     {
         $filename = $this->pool->fileService->filterFilePath($reflectionMethod->getFileName());
         if (empty($filename) === true) {
-            return static::UNKNOWN_DECLARATION;
+            return $this->pool->messages->getHelp(static::UNKNOWN_DECLARATION);
         }
 
         // If the filename of the $declaringClass and the $reflectionMethod differ,
         // we are facing a trait here.
-        if ($reflectionMethod->getFileName() !== $declaringClass->getFileName() &&
-            method_exists($declaringClass, 'getTraits')
-        ) {
+        if ($reflectionMethod->getFileName() !== $declaringClass->getFileName()) {
             // There is no real clean way to get the name of the trait that we
             // are looking at.
             $traitName = ':: unable to get the trait name ::';

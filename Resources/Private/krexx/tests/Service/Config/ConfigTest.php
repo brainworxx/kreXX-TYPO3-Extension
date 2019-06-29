@@ -55,7 +55,7 @@ class ConfigTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Service\Config\Config::isRequestAjaxOrCli
      * @covers \Brainworxx\Krexx\Service\Config\Config::isAllowedIp
      */
-    public function test__construct()
+    public function testConstruct()
     {
         // Setup some fixtures.
         $chunkPath = 'chunks path';

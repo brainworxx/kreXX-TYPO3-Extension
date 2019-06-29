@@ -47,7 +47,7 @@ class AbstractCallerTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $callerFinder = new CallerFinder(Krexx::$pool);
         $this->assertAttributeEquals(Krexx::$pool, 'pool', $callerFinder);

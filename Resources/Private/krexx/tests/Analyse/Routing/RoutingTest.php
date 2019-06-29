@@ -137,7 +137,7 @@ class RoutingTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $this->assertEquals(123, Krexx::$pool->routing->testValue);
 

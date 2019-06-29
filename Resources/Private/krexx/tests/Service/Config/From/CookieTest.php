@@ -58,7 +58,7 @@ class CookieTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Service\Config\From\Cookie::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         // Run with a working fixture.
         $poolMock = $this->createMock(Pool::class);

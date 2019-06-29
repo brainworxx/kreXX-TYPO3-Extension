@@ -32,45 +32,41 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Tests\Service\Config;
+namespace Brainworxx\Krexx\Tests\Analyse\Callback\Iterate;
 
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMetaReflections;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Service\Config\Config;
-use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Krexx\View\Skins\RenderHans;
-use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
+use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 
-class FallbackTest extends AbstractTest
+class ThroughMetaReflectionsTest extends AbstractTest
 {
     /**
-     * Test the construct of an abstract class. Sounds about right.
+     * Test the iteratin through meta reflections.
      *
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::__construct
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMetaReflections::callMe
      */
-    public function testConstruct()
+    public function testCallMe()
     {
-        Registration::registerAdditionalskin('Unit Test Skin', 'UnitRenderer', '/dev/null');
-        $config = new Config(Krexx::$pool);
+        $throughMetaRef = new ThroughMetaReflections(Krexx::$pool);
 
-        // Test the setting of the pool
-        $this->assertAttributeSame(Krexx::$pool, 'pool', $config);
+        $this->mockEventService(
+            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMetaReflections::callMe::start', $throughMetaRef]
+        );
 
-        // Test the reading of the skin values.
-        $expectedSkinConfig = [
-            $config::SKIN_SMOKY_GREY => [
-                $config::SKIN_CLASS => RenderSmokyGrey::class,
-                $config::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/smokygrey/'
-            ],
-            $config::SKIN_HANS => [
-                $config::SKIN_CLASS => RenderHans::class,
-                $config::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/hans/'
-            ],
-            'Unit Test Skin' => [
-                $config::SKIN_CLASS => 'UnitRenderer',
-                $config::SKIN_DIRECTORY => '/dev/null'
+        // Normally, we are handling reflections here, but meh
+        $fixture = [
+            $throughMetaRef::PARAM_DATA => [
+                'key' => 'value'
             ]
         ];
-        $this->assertAttributeSame($expectedSkinConfig, 'skinConfiguration', $config);
+        Krexx::$pool->rewrite[Meta::class] = CallbackCounter::class;
+
+        $throughMetaRef->setParams($fixture)->callMe();
+        $parameter = CallbackCounter::$staticParameters[0];
+        $this->assertEquals(1, CallbackCounter::$counter);
+        $this->assertEquals($parameter[$throughMetaRef::PARAM_REF], 'value');
+        $this->assertEquals($parameter[$throughMetaRef::PARAM_META_NAME], 'key');
     }
 }

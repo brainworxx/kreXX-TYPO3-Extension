@@ -105,7 +105,7 @@ class CodegenTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::__construct
      */
-    public function test__construct()
+    public function testConstruct()
     {
         $this->assertAttributeEquals(Krexx::$pool, 'pool', $this->codegenHandler);
         $this->assertAttributeEquals($this->codegenHandler, 'codegenHandler', Krexx::$pool);
