@@ -34,9 +34,11 @@
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDataViewer;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\FluidDataViewer\EventHandlers\AddAnalysis;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Data viewer support for fluid analysis.
@@ -60,7 +62,7 @@ class Configuration implements PluginConfigInterface
      */
     public static function getVersion()
     {
-        return 'v1.1.0';
+        return ExtensionManagementUtility::getExtensionVersion(Bootstrap::EXT_KEY);
     }
 
     /**
