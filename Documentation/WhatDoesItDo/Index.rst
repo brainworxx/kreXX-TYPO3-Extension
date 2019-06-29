@@ -22,6 +22,7 @@ Key features:
     - Dumping of private properties
     - Dumping of traversable data
     - Dumping of getter method data
+    - Dumping of class metadata like interfaces, traits, class comments, inheritance.
     - Configurable debug callbacks, which will be called on objects (if present). The output will then be dumped.
     - Analysis of the methods of objects (comments, where declared, parameters). Comment dumping supports :literal:`{@inheritdoc}`.
     - Output is draggable and has a closing button.
@@ -34,9 +35,10 @@ Key features:
     - Frontend access to the logfiles with the 9.5'er Admin Panel.
     - Several safety measures to prevent prevent hangups with too large memory usage or a timeout.
     - Benchmarking
-    - Fatal error handler with a full backtrace
+    - Fatal error handler with a full backtrace (PHP5 only).
+    - Exception handler with a full backtrace.
     - Code generation to reach the displayed values, if possible.
-    - Debugger for the magical methods and properties of the Aimeos shop system
+    - Debugger for the magical methods and properties of the Aimeos shop system.
     - Debugger for Fluid
 
 

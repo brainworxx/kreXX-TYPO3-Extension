@@ -12,6 +12,34 @@
 Changelog
 =============================================================
 
+3.1.1 dev
+    - [Feature] Use some real autoloading, with a fallback to manually including all files.
+    - [Feature] Plugins can now register additional skins.
+    - [Feature] kreXX debug calls will return the original analysis value.
+    - [Feature] Leading and trailing spaces are now better visible in the output.
+    - [Feature] The backtrace action accepts now an already existing one. Great for debugging error objects.
+    - [Feature] Minor usability changes to both skins.
+    - [Feature] Added an automatic backtrace analysis for error objects.
+    - [Feature] Added the sourcecode dump to the error object analysis.
+    - [Feature] Added proper handling for BOM chars in array keys and properties.
+    - [Feature] Added an exception handler, to replace the PHP5 Fatal Error Handler.
+    - [Feature] Added the date time to the output.
+    - [Feature] Added analysis of the meta data of an object.
+    - [Change] Lots of deprecations.
+    - [Change] Moved the skin render classes to the source folder.
+    - [Change] Dropped PHP 5.3 and PHP 5.4 support.
+    - [Change] Moved the last hardcoded html tags to the skin renderers.
+    - [Bugfix] Fluid code generation for variable names with dots in them.
+    - [Bugfix] CSS selectors are too weak in the backend module.
+    - [Bugfix] Fixes some "bugs" SonarCube found in the unit test fixtures, to prevent bad ratings.
+    - [Bugfix] Check if the developer handle is actually a string.
+    - [Bugfix] Added a missing check in the url determination in the timer controller
+    - [Bugfix] The registering of blacklisted methods and classes for the debug methods work now, as they should.
+    - [Bugfix] The rewriting of singleton classes in the pool does not work.
+    - [Bugfix] Adding additional data in the code generation is not rendered.
+    - [Bugfix] Added the plugin list to the (fatal) error handler display of the smokygrey skin.
+    - [Bugfix] Wrong display of null and boolean default values in the code generation and method analysis.
+
 3.1.0
     - [Feature] Nearly complete rewrite of the backend module.
     - [Feature] Logfile access in the debugbar.

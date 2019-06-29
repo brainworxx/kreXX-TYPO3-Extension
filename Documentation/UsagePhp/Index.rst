@@ -84,9 +84,25 @@ Fatal error handler (PHP5 only)
     // unregister the fatal error handler
     \Krexx::unregisterFatal();
 
-.. figure:: ../Images/Usage/fatal.png
+
+
+Exception handler
+^^^^^^^^^^^^^^^^^
+
+.. code-block:: php
+
+    // register the exception handler
+    \Krexx::registerExceptionHandler();
+    // call undefined function to cause an error
+    undefinedFunctionCall();
+    // unregister the exception handler
+    \Krexx::unregisterExceptionHandler();
+
+
+.. figure:: ../Images/Usage/error_handler.png
     :width: 1049px
-    :alt: kreXX fatal error handler
+    :alt: kreXX error handler
+
 
 Scope analysis
 ^^^^^^^^^^^^^^

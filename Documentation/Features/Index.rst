@@ -66,4 +66,4 @@ A click on the recursion will then copy the original analysis via java script in
    CodeBreadcrumbs/Index
    CodeGeneration/Index
    Skins/Index
-   FatalError/Index
+   ErrorHandling/Index
