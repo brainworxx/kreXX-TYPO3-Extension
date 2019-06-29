@@ -82,7 +82,7 @@ class ThroughMethodAnalysisTest extends AbstractTest
         $fixture = [$this->throughMethodAnalysis::PARAM_DATA =>[]];
         // Run test.
         $this->throughMethodAnalysis
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
     }
 
@@ -119,7 +119,7 @@ class ThroughMethodAnalysisTest extends AbstractTest
 
         // Run test.
         $this->throughMethodAnalysis
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
 
         $models = $renderNothing->model['renderSingleChild'];

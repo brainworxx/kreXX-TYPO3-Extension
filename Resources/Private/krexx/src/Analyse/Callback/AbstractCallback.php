@@ -95,6 +95,8 @@ abstract class AbstractCallback implements ConstInterface
     /**
      * Add callback parameters at class construction.
      *
+     * @deprecated
+     *
      * @param array $params
      *   The parameters for the callMe() method.
      *
@@ -103,8 +105,21 @@ abstract class AbstractCallback implements ConstInterface
      */
     public function setParams(array &$params)
     {
-        $this->parameters = $params;
+        return $this->setParameters($params);
+    }
 
+    /**
+     * Add callback parameters at class construction.
+     *
+     * @param array $parameters
+     *   The parameters for the callMe() method.
+     *
+     * @return $this
+     *   Return $this, for chaining.
+     */
+    public function setParameters(array &$parameters)
+    {
+        $this->parameters = $parameters;
         return $this;
     }
 

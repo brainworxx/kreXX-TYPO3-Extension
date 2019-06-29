@@ -94,7 +94,7 @@ class ProtectedPropertiesTest extends AbstractTest
 
         // Run the test.
         $this->protectedProperties
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
 
         // Check if the callback counter was called, at all.
@@ -126,7 +126,7 @@ class ProtectedPropertiesTest extends AbstractTest
 
          // Run the test.
         $this->protectedProperties
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
 
         // Check if called

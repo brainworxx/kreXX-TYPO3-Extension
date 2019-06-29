@@ -103,7 +103,7 @@ class ThroughPropertiesTest extends AbstractTest
 
         // Run the test
         $this->throughProperties
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
     }
 
@@ -158,7 +158,7 @@ class ThroughPropertiesTest extends AbstractTest
 
         // Run the test
         $this->throughProperties
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
 
         // Retrieve the result models and assert them.

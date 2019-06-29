@@ -96,7 +96,7 @@ class ThroughMethodsTest extends AbstractTest
 
         // Run the test
         $this->throughMethods
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
     }
 
@@ -146,7 +146,7 @@ class ThroughMethodsTest extends AbstractTest
 
         // Run the test.
         $this->throughMethods
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
 
         // Check the result

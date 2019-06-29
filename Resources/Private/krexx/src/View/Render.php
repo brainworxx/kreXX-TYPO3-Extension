@@ -466,7 +466,7 @@ class Render extends AbstractRender
             ],
             [
                 $errstr,
-                $this->pool->fileService->filterFilePath($errfile),
+                $errfile,
                 $source,
                 $this->pool->emergencyHandler->getKrexxCount(),
                 $errline

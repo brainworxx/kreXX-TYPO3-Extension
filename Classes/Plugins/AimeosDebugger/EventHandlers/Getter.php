@@ -150,7 +150,7 @@ class Getter implements EventHandlerInterface, ConstInterface
         }
 
         // Update the parameters in the callback . . .
-        $callback->setParams($params);
+        $callback->setParameters($params);
 
         // This will not get used by the event itself here.
         // Return an empty string.

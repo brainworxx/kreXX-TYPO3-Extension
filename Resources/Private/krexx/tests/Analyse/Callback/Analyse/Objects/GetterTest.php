@@ -100,7 +100,7 @@ class GetterTest extends AbstractTest
         // Test for empty result.
         $this->assertEquals(
             '',
-            $this->getter->setParams($fixture)->callMe()
+            $this->getter->setParameters($fixture)->callMe()
         );
 
         // Test for no callbacks and no parameters.
@@ -132,7 +132,7 @@ class GetterTest extends AbstractTest
         // Test for empty result.
         $this->assertEquals(
             '',
-            $this->getter->setParams($fixture)->callMe()
+            $this->getter->setParameters($fixture)->callMe()
         );
 
         // Test for no callbacks and no parameters.
@@ -161,7 +161,7 @@ class GetterTest extends AbstractTest
         Krexx::$pool->scope->setScope('$this');
 
         // Run the test
-        $this->getter->setParams($fixture)
+        $this->getter->setParameters($fixture)
             ->callMe();
 
 
@@ -201,7 +201,7 @@ class GetterTest extends AbstractTest
         ];
 
         // Run the test
-        $this->getter->setParams($fixture)
+        $this->getter->setParameters($fixture)
             ->callMe();
 
 

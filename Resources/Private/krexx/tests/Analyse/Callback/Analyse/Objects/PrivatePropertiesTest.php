@@ -95,7 +95,7 @@ class PrivatePropertiesTest extends AbstractTest
 
         // Run the test.
         $this->privateProperties
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
 
         // Check if the callback counter was called, at all.
@@ -127,7 +127,7 @@ class PrivatePropertiesTest extends AbstractTest
 
          // Run the test.
         $this->privateProperties
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
 
         // Check if called

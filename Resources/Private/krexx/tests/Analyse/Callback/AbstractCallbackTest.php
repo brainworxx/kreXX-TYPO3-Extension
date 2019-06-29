@@ -55,9 +55,9 @@ class AbstractCallbackTest extends AbstractTest
     /**
      * Testing the settings of the parameters for the callback.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::setParams
+     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::setParameters
      */
-    public function testSetParams()
+    public function testSetParameters()
     {
         $params = array(
             'param1' => 'value1',
@@ -65,7 +65,7 @@ class AbstractCallbackTest extends AbstractTest
         );
 
         $debugCallback = new Debug(Krexx::$pool);
-        $this->assertEquals($debugCallback, $debugCallback->setParams($params));
+        $this->assertEquals($debugCallback, $debugCallback->setParameters($params));
         $this->assertAttributeEquals($params, 'parameters', $debugCallback);
     }
 

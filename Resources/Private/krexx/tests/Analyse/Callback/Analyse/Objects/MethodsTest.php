@@ -103,7 +103,7 @@ class MethodsTest extends AbstractTest
             'ref' => new ReflectionClass($testClass)
         ];
 
-        $this->methods->setParams($this->fixture);
+        $this->methods->setParameters($this->fixture);
     }
 
     /**

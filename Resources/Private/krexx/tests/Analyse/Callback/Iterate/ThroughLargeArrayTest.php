@@ -127,7 +127,7 @@ class ThroughLargeArrayTest extends AbstractTest
         ];
 
         // Run the test
-        $this->throughLargeArray->setParams($fixture)
+        $this->throughLargeArray->setParameters($fixture)
             ->callMe();
 
         // Test multiline generation
@@ -158,7 +158,7 @@ class ThroughLargeArrayTest extends AbstractTest
         ];
 
         // Run the test
-        $this->throughLargeArray->setParams($fixture)
+        $this->throughLargeArray->setParameters($fixture)
             ->callMe();
 
         // Test multiline generation

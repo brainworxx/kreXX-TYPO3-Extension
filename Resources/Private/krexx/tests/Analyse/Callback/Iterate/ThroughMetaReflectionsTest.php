@@ -63,7 +63,7 @@ class ThroughMetaReflectionsTest extends AbstractTest
         ];
         Krexx::$pool->rewrite[Meta::class] = CallbackCounter::class;
 
-        $throughMetaRef->setParams($fixture)->callMe();
+        $throughMetaRef->setParameters($fixture)->callMe();
         $parameter = CallbackCounter::$staticParameters[0];
         $this->assertEquals(1, CallbackCounter::$counter);
         $this->assertEquals($parameter[$throughMetaRef::PARAM_REF], 'value');

@@ -152,7 +152,7 @@ class ThroughMetaTest extends AbstractTest
             ]
         ];
 
-        $this->throughMeta->setParams($fixture)->callMe();
+        $this->throughMeta->setParameters($fixture)->callMe();
 
         $this->assertCount(1, $this->renderNothing->model['renderSingleChild']);
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
@@ -212,7 +212,7 @@ class ThroughMetaTest extends AbstractTest
             ]
         ];
 
-        $this->throughMeta->setParams($fixture)->callMe();
+        $this->throughMeta->setParameters($fixture)->callMe();
 
         $this->assertCount(1, $this->renderNothing->model['renderExpandableChild']);
         /** @var \Brainworxx\Krexx\Analyse\Model $model */

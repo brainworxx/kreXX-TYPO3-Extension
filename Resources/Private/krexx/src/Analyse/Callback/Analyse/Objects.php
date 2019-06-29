@@ -148,7 +148,7 @@ class Objects extends AbstractCallback
     {
         return $this->pool
             ->createClass($classname)
-            ->setParams($this->parameters)
+            ->setParameters($this->parameters)
             ->callMe();
     }
 }

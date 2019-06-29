@@ -111,7 +111,7 @@ class TraversableTest extends AbstractTest
 
         // Run the test.
         $this->traversable
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
 
         // Check if the callback counter was called, at all.
@@ -133,7 +133,7 @@ class TraversableTest extends AbstractTest
 
         // Run the test.
         $this->traversable
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
 
         // Check if the callback counter was called, at all.
@@ -170,7 +170,7 @@ class TraversableTest extends AbstractTest
         // The testing framework will also notice any thrown errors, warnings
         // or notices.
         $this->traversable
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
 
         // Check if the callback counter was called, at all.
@@ -220,7 +220,7 @@ class TraversableTest extends AbstractTest
         // The testing framework will also notice any thrown errors, warnings
         // or notices.
         $this->traversable
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
 
         // Check if the callback counter was called, at all.
@@ -269,7 +269,7 @@ class TraversableTest extends AbstractTest
         // The testing framework will also notice any thrown errors, warnings
         // or notices.
         $this->traversable
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
 
         // Check if the callback counter was called, at all.

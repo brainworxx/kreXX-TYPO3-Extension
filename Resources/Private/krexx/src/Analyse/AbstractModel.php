@@ -121,7 +121,7 @@ abstract class AbstractModel implements ConstInterface
     public function renderMe()
     {
         return $this->callback
-            ->setParams($this->parameters)
+            ->setParameters($this->parameters)
             ->callMe();
     }
 

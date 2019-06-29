@@ -102,7 +102,7 @@ class ErrorObjectTest extends AbstractTest
         $fixture = [
             $this->errorObject::PARAM_DATA => $errorObject
         ];
-        $this->errorObject->setParams($fixture)->callMe();
+        $this->errorObject->setParameters($fixture)->callMe();
         $this->assertEquals($backtrace, CallbackCounter::$staticParameters[0][$this->errorObject::PARAM_DATA]);
     }
 }

@@ -80,7 +80,7 @@ class ThroughArrayTest extends AbstractTest
         ];
 
         // Run the test.
-        $throughArray->setParams($fixture)
+        $throughArray->setParameters($fixture)
             ->callMe();
 
         // Check the result

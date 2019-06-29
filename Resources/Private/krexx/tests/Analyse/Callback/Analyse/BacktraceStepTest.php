@@ -83,7 +83,7 @@ class BacktraceStepTest extends AbstractTest
         );
 
         $singleStep = ['data' => debug_backtrace()[5]];
-        $backtraceStep->setParams($singleStep);
+        $backtraceStep->setParameters($singleStep);
         $backtraceStep->callMe();
     }
 }

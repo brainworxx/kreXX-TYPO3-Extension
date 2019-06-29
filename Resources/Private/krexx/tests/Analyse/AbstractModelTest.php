@@ -72,7 +72,7 @@ class AbstractModelTest extends AbstractTest
             ->will($this->returnValue(null));
 
         $mockCallback->expects($this->never())
-            ->method('setParams')
+            ->method('setParameters')
             ->will($this->returnValue(null));
 
         $model = new Model(Krexx::$pool);
@@ -101,7 +101,7 @@ class AbstractModelTest extends AbstractTest
             ->will($this->returnValue($htmlResult));
 
         $mockCallback->expects($this->once())
-            ->method('setParams')
+            ->method('setParameters')
             ->will($this->returnValue($mockCallback));
 
         $model = new Model(Krexx::$pool);

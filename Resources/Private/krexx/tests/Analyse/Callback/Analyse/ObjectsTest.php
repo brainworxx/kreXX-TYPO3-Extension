@@ -122,7 +122,7 @@ class ObjectsTest extends AbstractTest
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects::callMe::start', $this->objects]
         );
 
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
     }
 
@@ -137,7 +137,7 @@ class ObjectsTest extends AbstractTest
         // Test analyse public
         Krexx::$pool->rewrite[PublicProperties::class] = CallbackCounter::class;
 
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
 
         // Was it called?
@@ -160,7 +160,7 @@ class ObjectsTest extends AbstractTest
         // This one is depending on a setting.
         $this->setConfigValue(Fallback::SETTING_ANALYSE_GETTER, true);
 
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
 
         $this->assertEquals(1, CallbackCounter::$counter);
@@ -168,7 +168,7 @@ class ObjectsTest extends AbstractTest
         // Test analyse getter false
         CallbackCounter::$counter = 0;
         $this->setConfigValue(Fallback::SETTING_ANALYSE_GETTER, false);
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
 
         $this->assertEquals(0, CallbackCounter::$counter);
@@ -182,7 +182,7 @@ class ObjectsTest extends AbstractTest
     public function testCallMeMeta()
     {
         Krexx::$pool->rewrite[Meta::class] = CallbackCounter::class;
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
 
         $this->assertEquals(1, CallbackCounter::$counter);
@@ -200,7 +200,7 @@ class ObjectsTest extends AbstractTest
         Krexx::$pool->rewrite[ProtectedProperties::class] = CallbackCounter::class;
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PROTECTED, true);
 
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
 
         $this->assertEquals(1, CallbackCounter::$counter);
@@ -209,7 +209,7 @@ class ObjectsTest extends AbstractTest
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PROTECTED, false);
         CallbackCounter::$counter = 0;
 
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
 
         $this->assertEquals(0, CallbackCounter::$counter);
@@ -229,7 +229,7 @@ class ObjectsTest extends AbstractTest
         Krexx::$pool->rewrite[PrivateProperties::class] = CallbackCounter::class;
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PRIVATE, true);
 
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
 
         $this->assertEquals(1, CallbackCounter::$counter);
@@ -238,7 +238,7 @@ class ObjectsTest extends AbstractTest
         $this->setConfigValue(Fallback::SETTING_ANALYSE_PRIVATE, false);
         CallbackCounter::$counter = 0;
 
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
 
         $this->assertEquals(0, CallbackCounter::$counter);
@@ -258,7 +258,7 @@ class ObjectsTest extends AbstractTest
     {
         Krexx::$pool->rewrite[Constants::class] = CallbackCounter::class;
 
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
 
         $this->assertEquals(1, CallbackCounter::$counter);
@@ -276,7 +276,7 @@ class ObjectsTest extends AbstractTest
     {
         Krexx::$pool->rewrite[Methods::class] = CallbackCounter::class;
 
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
 
         $this->assertEquals(1, CallbackCounter::$counter);
@@ -296,7 +296,7 @@ class ObjectsTest extends AbstractTest
         $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, false);
         Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
         $this->fixture['data'] = new TraversableFixture();
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
         $this->assertEquals(0, CallbackCounter::$counter);
 
@@ -306,7 +306,7 @@ class ObjectsTest extends AbstractTest
         // Test with traversable deactivated and with a normal class
         $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, false);
         Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
         $this->assertEquals(0, CallbackCounter::$counter);
 
@@ -316,7 +316,7 @@ class ObjectsTest extends AbstractTest
         // Test with traversable activated and with a normal class
         $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, true);
         Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
         $this->assertEquals(0, CallbackCounter::$counter);
 
@@ -327,7 +327,7 @@ class ObjectsTest extends AbstractTest
         $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, true);
         Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
         $this->fixture['data'] = new TraversableFixture();
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
         $this->assertEquals(1, CallbackCounter::$counter);
         $this->parametersTest(CallbackCounter::$staticParameters[0]);
@@ -342,7 +342,7 @@ class ObjectsTest extends AbstractTest
     public function testCallMeDebugMethods()
     {
         Krexx::$pool->rewrite[DebugMethods::class] = CallbackCounter::class;
-        $this->objects->setParams($this->fixture)
+        $this->objects->setParameters($this->fixture)
             ->callMe();
         $this->assertEquals(1, CallbackCounter::$counter);
         $this->parametersTest(CallbackCounter::$staticParameters[0]);

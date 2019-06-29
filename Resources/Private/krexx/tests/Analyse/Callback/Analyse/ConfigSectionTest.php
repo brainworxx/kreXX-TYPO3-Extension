@@ -88,7 +88,7 @@ class ConfigSectionTest extends AbstractTest
 
         $configSection = new ConfigSection(Krexx::$pool);
 
-        $configSection->setParams($data);
+        $configSection->setParameters($data);
         // Test if start event has fired
         $this->mockEventService(
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\ConfigSection::callMe::start', $configSection]

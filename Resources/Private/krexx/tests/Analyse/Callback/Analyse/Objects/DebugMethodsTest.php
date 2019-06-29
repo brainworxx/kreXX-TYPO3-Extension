@@ -72,7 +72,7 @@ class DebugMethodsTest extends AbstractTest
 
         // Setup the class to test.
         $this->debugMethods = new DebugMethods(Krexx::$pool);
-        $this->debugMethods->setParams($fixture);
+        $this->debugMethods->setParameters($fixture);
     }
 
     /**

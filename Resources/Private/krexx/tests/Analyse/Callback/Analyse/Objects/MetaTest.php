@@ -109,7 +109,7 @@ class MetaTest extends AbstractTest
             $meta::PARAM_REF => $ref,
             $meta::PARAM_META_NAME => $metaName
         ];
-        $meta->setParams($parameters)->callMe();
+        $meta->setParameters($parameters)->callMe();
 
         // Retrieve the model and test the results.
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
@@ -164,7 +164,7 @@ class MetaTest extends AbstractTest
         $parameters = [
             $meta::PARAM_REF => $ref,
         ];
-        $meta->setParams($parameters)->callMe();
+        $meta->setParameters($parameters)->callMe();
 
         // Retrieve the model and test the results.
         /** @var \Brainworxx\Krexx\Analyse\Model $model */

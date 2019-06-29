@@ -70,7 +70,7 @@ class ThroughMetaReflections extends AbstractCallback
             ];
             $output .= $this->pool
                 ->createClass(Meta::class)
-                ->setParams($parameters)
+                ->setParameters($parameters)
                 ->callMe();
         }
 

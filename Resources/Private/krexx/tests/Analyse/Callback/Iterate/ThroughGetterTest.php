@@ -112,7 +112,7 @@ class ThroughGetterTest extends AbstractTest
         ];
 
         // Run the test.
-        $throughGetter->setParams($fixture)->callMe();
+        $throughGetter->setParameters($fixture)->callMe();
 
         // Get the models from RoutingNothing and assert their values.
         $models = Krexx::$pool->routing->model;

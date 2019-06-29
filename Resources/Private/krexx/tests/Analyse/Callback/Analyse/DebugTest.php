@@ -50,7 +50,7 @@ class DebugTest extends AbstractTest
     {
         $debug = new Debug(Krexx::$pool);
         $data = ['data' => 'just some string'];
-        $debug->setParams($data);
+        $debug->setParameters($data);
 
         // Test if start event has fired
         $this->mockEventService(

@@ -71,7 +71,7 @@ class ThroughConstantsTest extends AbstractTest
         );
 
         // Run the tests
-        $throughConstants->setParams($fixture)->callMe();
+        $throughConstants->setParameters($fixture)->callMe();
 
         // Check the models from the route nothing
         $count = 0;

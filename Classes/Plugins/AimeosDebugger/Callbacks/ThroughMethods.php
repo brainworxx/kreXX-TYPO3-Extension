@@ -87,7 +87,7 @@ class ThroughMethods extends AbstractCallback
                 $params['factoryName'] = $factoryName;
             }
             // Now, that we have set the reflection class, we can call the original.
-            $result .= $thoughMethods->setParams($params)->callMe();
+            $result .= $thoughMethods->setParameters($params)->callMe();
         }
 
         return $result;

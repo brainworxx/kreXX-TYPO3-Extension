@@ -86,7 +86,7 @@ class ConstantsTest extends AbstractTest
         Krexx::$pool->render = $renderMock;
 
         // Run the test.
-        $constants->setParams($fixture)
+        $constants->setParameters($fixture)
             ->callMe();
 
         // Was it called?
@@ -122,7 +122,7 @@ class ConstantsTest extends AbstractTest
         );
 
         // Run the test.
-        $constants->setParams($fixture)
+        $constants->setParameters($fixture)
             ->callMe();
 
         // Was it called?

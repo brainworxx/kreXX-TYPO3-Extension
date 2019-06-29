@@ -83,7 +83,7 @@ class ThroughResourceTest extends AbstractTest
 
         // Run the test.
         $throughResourceStream
-            ->setParams($fixture)
+            ->setParameters($fixture)
             ->callMe();
 
         $models = $routeNothing->model;
