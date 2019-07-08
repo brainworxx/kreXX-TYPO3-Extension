@@ -306,6 +306,12 @@ class CodegenTest extends AbstractTest
         $refParamMock->expects($this->once())
             ->method('getDefaultValue')
             ->will($this->returnValue('<h1>Default Stuff</h1>'));
+        $refParamMock->expects($this->once())
+            ->method('isPassedByReference')
+            ->will($this->returnValue(false));
+        $refParamMock->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('wahtever'));
 
         $this->assertEquals(
             'Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection $wahtever = \'&lt;h1&gt;Default Stuff&lt;/h1&gt;\'',
@@ -325,15 +331,21 @@ class CodegenTest extends AbstractTest
         $refParamMock = $this->createMock(\ReflectionParameter::class);
         $refParamMock->expects($this->once())
             ->method('__toString')
-            ->will($this->returnValue('Parameter #2 [ <optional> DateTimeZone or NULL $object ]'));
+            ->will($this->returnValue('Parameter #2 [ <required> DateTimeZone $object ]'));
         $refParamMock->expects($this->once())
             ->method('isDefaultValueAvailable')
             ->will($this->returnValue(false));
         $refParamMock->expects($this->never())
             ->method('getDefaultValue');
+        $refParamMock->expects($this->once())
+            ->method('isPassedByReference')
+            ->will($this->returnValue(false));
+        $refParamMock->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('object'));
 
         $this->assertEquals(
-            'DateTimeZone or NULL $object',
+            'DateTimeZone $object',
             $this->codegenHandler->parameterToString($refParamMock)
         );
     }

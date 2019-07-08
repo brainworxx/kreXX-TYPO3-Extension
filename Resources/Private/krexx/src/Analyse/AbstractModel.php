@@ -172,11 +172,12 @@ abstract class AbstractModel implements ConstInterface
      */
     public function addToJson($key, $value)
     {
-        // Remove leftover linebreaks.
-        $value = trim(preg_replace("/\r|\n/", "", $value));
-        if ($value === '') {
+
+        if (empty($value) === true) {
             unset($this->json[$key]);
         } else {
+            // Remove leftover linebreaks.
+            $value = trim(str_replace(["\r", "\n"], ['', ''], $value));
             $this->json[$key] = $value;
         }
 

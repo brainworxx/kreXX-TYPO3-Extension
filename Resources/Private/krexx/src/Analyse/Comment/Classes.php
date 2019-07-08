@@ -61,7 +61,9 @@ class Classes extends AbstractComment
         $name = $reflection->getName();
 
         if (isset($cache[$name]) === false) {
-            $cache[$name] = $this->prettifyComment($reflection->getDocComment());
+            $cache[$name] = $this->pool->encodingService->encodeString(
+                $this->prettifyComment($reflection->getDocComment())
+            );
         }
 
         return $cache[$name];

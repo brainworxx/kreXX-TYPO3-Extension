@@ -305,7 +305,7 @@ class RenderSmokyGrey extends Render
      */
     protected function renderConnectorRight($connector)
     {
-        if (strlen($connector) > 17) {
+        if (strlen($connector) > 2) {
             // Something big, we should display it.
             // Most likely the parameters of a method.
             return parent::renderConnectorRight($connector);

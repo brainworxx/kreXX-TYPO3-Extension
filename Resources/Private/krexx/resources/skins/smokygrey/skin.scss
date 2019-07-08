@@ -418,6 +418,9 @@ $fontLight: lighter 10px tahoma, verdana;
           padding: 0 2px;
           color: $greyDark !important;
           margin: 0 10px;
+          &.ktype {
+            font-size: 10px;
+          }
         }
       }
 

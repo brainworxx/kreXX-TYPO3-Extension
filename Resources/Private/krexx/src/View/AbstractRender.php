@@ -231,7 +231,7 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
      */
     protected function renderConnectorRight($connector)
     {
-        if ($connector === '') {
+        if (empty($connector) === true) {
             // No connector, no display.
             return '';
         }
@@ -436,7 +436,7 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
      */
     protected function generateDataAttribute($name, $data)
     {
-        if ($data  === '') {
+        if (empty($data) === true) {
             return '';
         }
 

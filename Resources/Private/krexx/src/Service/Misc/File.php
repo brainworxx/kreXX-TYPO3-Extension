@@ -119,7 +119,7 @@ class File
 
         if (isset($content[$readTo]) === false) {
             // We can not read this far, set it to the last line.
-            $readTo = count($content) - 1;
+            $readTo = $content->count() - 1;
         }
 
         for ($currentLineNo = $readFrom; $currentLineNo <= $readTo; ++$currentLineNo) {
@@ -147,6 +147,8 @@ class File
     /**
      * Simply read a file into a string.
      *
+     * Used for source analysis.
+     *
      * @param string $filePath
      * @param int $readFrom
      * @param int $readTo
@@ -168,7 +170,7 @@ class File
             $readTo = 0;
         }
 
-        $countContent = count($content);
+        $countContent = $content->count();
 
         if ($countContent === 0) {
             return $result;
@@ -182,7 +184,6 @@ class File
         for ($currentLineNo = $readFrom; $currentLineNo <= $readTo; ++$currentLineNo) {
             $result .= $content[$currentLineNo];
         }
-
 
         return $result;
     }
@@ -218,6 +219,8 @@ class File
     /**
      * Reads the content of a file.
      *
+     * Used to read kreXX resources and configuration into a string
+     *
      * @param string $filePath
      *   The path to the file.
      * @param bool $showError
@@ -228,21 +231,24 @@ class File
      */
     public function getFileContents($filePath, $showError = true)
     {
-        $filePath = realpath($filePath);
+        $realpath = realpath($filePath);
 
-        if ($this->fileIsReadable($filePath) === false) {
+        if ($this->fileIsReadable($realpath) === false) {
             if ($showError === true) {
+                if ($realpath === false) {
+                    $realpath = $filePath;
+                }
                 // This file was not readable! We need to tell the user!
-                $this->pool->messages->addMessage('fileserviceAccess', [$this->filterFilePath($filePath)]);
+                $this->pool->messages->addMessage('fileserviceAccess', [$this->filterFilePath($realpath)]);
             }
             // Return empty string.
             return '';
         }
 
         // Is it readable and does it have any content?
-        $size = filesize($filePath);
+        $size = filesize($realpath);
         if ($size > 0) {
-            $file = fopen($filePath, 'r');
+            $file = fopen($realpath, 'r');
             $result = fread($file, $size);
             fclose($file);
             return $result;
@@ -256,7 +262,8 @@ class File
      * Write the content of a string to a file.
      *
      * When the file already exists, we will append the content.
-     * Caches weather we are allowed to write, to reduce the overhead.
+     * Caches whether we are allowed to write, to reduce the overhead.
+     * Only used by the chunkes class, which tests beforehand, if we can write.
      *
      * @param string $filePath
      *   Path and filename.
@@ -265,15 +272,9 @@ class File
      */
     public function putFileContents($filePath, $string)
     {
-        if ($this->fileIsReadable($filePath) === true) {
-            // Existing file. Most likely a html log file.
-            file_put_contents($filePath, $string, FILE_APPEND);
-            return;
-        }
-
-        // New file. We tell the caching, that we have read access here.
-        file_put_contents($filePath, $string, FILE_APPEND);
+        // Register the file as a readable one.
         static::$isReadableCache[$filePath] = true;
+        file_put_contents($filePath, $string, FILE_APPEND);
     }
 
     /**
@@ -284,6 +285,12 @@ class File
     public function deleteFile($filePath)
     {
         $filePath = realpath($filePath);
+
+        // Fast forward for the chunk files.
+        if (static::$isReadableCache[$filePath] === true) {
+            unlink($filePath);
+            return;
+        }
 
         // Check if it is an actual file and if it is writable.
         if (is_file($filePath) === true) {
@@ -320,6 +327,7 @@ class File
     public function filterFilePath($filePath)
     {
         $realpath = realpath($filePath);
+
         // File exist?
         if ($realpath === false) {
             $realpath = ltrim($filePath, DIRECTORY_SEPARATOR);
@@ -346,15 +354,19 @@ class File
      */
     public function fileIsReadable($filePath)
     {
-        $filePath = realpath($filePath);
+        $realPath = realpath($filePath);
+
+        if ($realPath === false) {
+            $realPath = $filePath;
+        }
 
         // Return the cache, if we have any.
-        if (isset(static::$isReadableCache[$filePath]) === true) {
-            return static::$isReadableCache[$filePath];
+        if (isset(static::$isReadableCache[$realPath]) === true) {
+            return static::$isReadableCache[$realPath];
         }
 
         // Set the cache and return it.
-        return static::$isReadableCache[$filePath] = is_readable($filePath) && is_file($filePath);
+        return static::$isReadableCache[$realPath] = is_readable($realPath) && is_file($realPath);
     }
 
     /**
@@ -369,7 +381,7 @@ class File
     {
         $filePath = realpath($filePath);
 
-        if ($this->fileIsReadable($filePath)) {
+        if ($this->fileIsReadable($filePath) === true) {
             return filemtime($filePath);
         }
 

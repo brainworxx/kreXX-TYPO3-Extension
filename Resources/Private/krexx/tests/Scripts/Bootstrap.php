@@ -444,3 +444,32 @@ namespace Brainworxx\Krexx\Service\Flow {
         }
     }
 }
+namespace Brainworxx\Krexx\Service\Misc {
+
+    /**
+     * Mocking the file_put_contents for the file service test.
+     *
+     * @param $filename
+     * @param $data
+     * @param int $flags
+     * @param null $context
+     * @param bool $startMock
+     *
+     * @return int|bool
+     */
+    function file_put_contents($filename, $data, $flags = 0, $context = null, $startMock = null)
+    {
+        static $mockingInProgress = false;
+
+        if ($startMock !== null) {
+            $mockingInProgress = $startMock;
+            return false;
+        }
+
+        if ($mockingInProgress === true) {
+            return 42;
+        }
+
+        return \file_put_contents($filename, $data, $flags, $context);
+    }
+}

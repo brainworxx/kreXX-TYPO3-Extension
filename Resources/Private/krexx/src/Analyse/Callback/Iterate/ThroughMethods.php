@@ -125,7 +125,7 @@ class ThroughMethods extends AbstractCallback
                         ->setType($methodData['declaration keywords'] . static::TYPE_METHOD)
                         ->setConnectorType($connectorType)
                         // Remove the ',' after the last char.
-                        ->setConnectorParameters(trim($paramList, ', '))
+                        ->setConnectorParameters(rtrim($paramList, ', '))
                         ->addParameter(static::PARAM_DATA, $methodData)
                         ->setIsPublic($reflectionMethod->isPublic())
                         ->injectCallback(
@@ -252,6 +252,6 @@ class ThroughMethods extends AbstractCallback
             $result .= ' final';
         }
 
-        return trim($result);
+        return ltrim($result);
     }
 }

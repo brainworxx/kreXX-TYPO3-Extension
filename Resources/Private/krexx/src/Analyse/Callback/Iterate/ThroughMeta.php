@@ -65,6 +65,10 @@ class ThroughMeta extends AbstractCallback
         $output = $this->dispatchStartEvent();
 
         foreach ($this->parameters[static::PARAM_DATA] as $key => $metaData) {
+            if (empty($metaData) === true) {
+                // Nothing to see here, move on.
+                continue;
+            }
             if ($key === static::META_INHERITED_CLASS ||
                 $key === static::META_INTERFACES ||
                 $key === static::META_TRAITS
@@ -94,7 +98,7 @@ class ThroughMeta extends AbstractCallback
      *
      * @param string $key
      *   The key in the output list.
-     * @param string|array $meta
+     * @param string $meta
      *   The text to display.
      *
      * @return string
@@ -117,6 +121,7 @@ class ThroughMeta extends AbstractCallback
         } else {
             $model->setNormal($meta);
         }
+
         // Render a single data point.
         return $this->pool->render->renderSingleChild(
             $this->dispatchEventWithModel(

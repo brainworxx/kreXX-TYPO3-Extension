@@ -73,6 +73,7 @@ class Meta extends AbstractObjectAnalysis
     public function callMe()
     {
         $output = $this->dispatchStartEvent();
+        $this->pool->codegenHandler->setAllowCodegen(false);
 
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
@@ -87,6 +88,7 @@ class Meta extends AbstractObjectAnalysis
         if ($this->pool->recursionHandler->isInMetaHive($domId) === true) {
             // We have been here before.
             // We skip this one, and leave it to the js recursion handler!
+            $this->pool->codegenHandler->setAllowCodegen(true);
             return $output .
                 $this->pool->render->renderRecursion(
                     $this->dispatchEventWithModel(
@@ -99,14 +101,14 @@ class Meta extends AbstractObjectAnalysis
                     )
                 );
         }
-
+        $this->pool->codegenHandler->setAllowCodegen(true);
         return $output . $this->analyseMeta($domId, $ref, $name);
     }
 
     /**
      * Do the actual analysis.
      *
-     * @param $domId
+     * @param string $domId
      *   The dom id for the recursion handler.
      * @param \ReflectionClass $ref
      *   The reflection class, the main source of information.
@@ -134,7 +136,7 @@ class Meta extends AbstractObjectAnalysis
             $data[static::META_DECLARED_IN] = $this->pool
                 ->fileService
                 ->filterFilePath($ref->getFileName()) .
-                ', line ' . $ref->getStartLine() . ' to ' . $ref->getEndLine();
+                ', line ' . $ref->getStartLine();
         }
 
         // Now to collect the inheritance stuff.
@@ -155,7 +157,6 @@ class Meta extends AbstractObjectAnalysis
                 $previousClass->getName() => $previousClass
             ];
         }
-
 
         return $this->pool->render->renderExpandableChild(
             $this->dispatchEventWithModel(

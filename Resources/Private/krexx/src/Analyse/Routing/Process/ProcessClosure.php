@@ -35,7 +35,6 @@
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
-use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethodAnalysis;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Comment\Functions;
 use Brainworxx\Krexx\Analyse\Model;
@@ -112,7 +111,7 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
             $model->setType(static::TYPE_CLOSURE)
                 ->setNormal(static::UNKNOWN_VALUE)
                 // Remove the ',' after the last char.
-                ->setConnectorParameters(trim($paramList, ', '))
+                ->setConnectorParameters(rtrim($paramList, ', '))
                 ->setDomid($this->generateDomIdFromObject($model->getData()))
                 ->setConnectorType(Connectors::METHOD)
                 ->addParameter(static::PARAM_DATA, $result)

@@ -32,6 +32,7 @@
   display of the smokygrey skin.
 - Bugfix: Wrong display of null and boolean default values in the
   code generation and method analysis.
+- Bugfix: Display of wrong filename when a kreXX resource is not readable.
 
 3.0.2
 - Added classname to the declaration analysis of properties.

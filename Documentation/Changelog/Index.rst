@@ -39,6 +39,7 @@ Changelog
     - [Bugfix] Adding additional data in the code generation is not rendered.
     - [Bugfix] Added the plugin list to the (fatal) error handler display of the smokygrey skin.
     - [Bugfix] Wrong display of null and boolean default values in the code generation and method analysis.
+    - [Bugfix] Display of wrong filename when a kreXX resource is not readable.
 
 3.1.0
     - [Feature] Nearly complete rewrite of the backend module.

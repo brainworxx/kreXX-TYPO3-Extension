@@ -234,24 +234,27 @@ class Codegen implements ConstInterface
      */
     public function parameterToString(ReflectionParameter $reflectionParameter)
     {
-        // Slice off the first part.
-        $paremExplode = array_slice(explode(' ', trim($reflectionParameter->__toString(), ' ]')), 4);
-        // A long standard value gets cut off. We do not want that.
-        if ($reflectionParameter->isDefaultValueAvailable()) {
-            // Remove the standard value
-            $paremExplode = array_slice($paremExplode, 0, 2);
+        $type = explode(' ', $reflectionParameter->__toString())[4];
+        $name = '';
+
+        // Retrieve the type and the name, without calling a possible autoloader.
+        if ($reflectionParameter->isPassedByReference() === true) {
+            $prefix = '&$';
+        } else {
+            $prefix = '$';
+        }
+        if (strpos($type, $prefix) !== 0) {
+            $name = $type . ' ';
+        }
+        $name .= $prefix . $reflectionParameter->getName();
+
+        // Retrieve the default value, if available.
+        if ($reflectionParameter->isDefaultValueAvailable() === true) {
             try {
                 $default = $reflectionParameter->getDefaultValue();
             } catch (ReflectionException $e) {
                 $default = null;
             }
-
-            // If we are dealing with a reflection parameter from a closure,
-            // there is a missing '=' in the return string.
-            if (end($paremExplode) !== '=') {
-                $paremExplode[] = '=';
-            }
-
             if (is_string($default)) {
                 $default = '\'' . $default . '\'';
             } elseif (is_array($default)) {
@@ -263,11 +266,10 @@ class Codegen implements ConstInterface
             } elseif ($default === null) {
                 $default = 'NULL';
             }
-
-            $paremExplode[] = $default;
+            $name .= ' = ' . $default;
         }
 
         // Escape it, just in case.
-        return $this->pool->encodingService->encodeString(implode(' ', $paremExplode));
+        return $this->pool->encodingService->encodeString($name);
     }
 }
