@@ -35,7 +35,6 @@
 namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
-use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\From\Ini;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
