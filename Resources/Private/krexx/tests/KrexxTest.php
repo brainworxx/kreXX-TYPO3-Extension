@@ -370,12 +370,8 @@ class KrexxTest extends AbstractTest
      */
     public function testRegisterFatal()
     {
-        ob_start();
         Krexx::registerFatal();
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        $this->assertNotFalse(strpos($output, 'PHP7'));
+        $this->assertEquals(['php7' => ['key' => 'php7', 'params' => []]], Krexx::$pool->messages->getKeys());
     }
 
     /**

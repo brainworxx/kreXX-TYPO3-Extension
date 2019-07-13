@@ -147,6 +147,8 @@ abstract class AbstractController implements ConstInterface
      *
      * @deprecated
      *   Since 3.1.0. Will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @param string $headline
      *   The headline, displayed in the header.
@@ -250,6 +252,8 @@ abstract class AbstractController implements ConstInterface
      *
      * @deprecated
      *   Since 3.1.0. Will be removed
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @return $this
      *   Return $this for chaining.
@@ -273,6 +277,8 @@ abstract class AbstractController implements ConstInterface
      *
      * @deprecated
      *   Since 3.1.0. Will be removed
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @return $this
      *   Return $this for chaining.

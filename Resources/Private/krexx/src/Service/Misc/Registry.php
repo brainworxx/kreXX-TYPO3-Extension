@@ -65,7 +65,7 @@ class Registry
      *
      * To 'unset' any value, just submit an empty() value.
      *
-     * @param string $key
+     * @param mixed $key
      *   The key under what we store the $value,
      * @param mixed $value
      *   The stuff we want to store.
@@ -92,11 +92,11 @@ class Registry
      */
     public function get($key)
     {
-        if (empty($this->data[$key]) === true) {
-            return null;
+        if (isset($this->data[$key])) {
+            return $this->data[$key];
         }
 
-        return $this->data[$key];
+        return null;
     }
 
     /**

@@ -96,6 +96,9 @@ abstract class AbstractCallback implements ConstInterface
      * Add callback parameters at class construction.
      *
      * @deprecated
+     *   Since 3.1.0. Will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @param array $params
      *   The parameters for the callMe() method.

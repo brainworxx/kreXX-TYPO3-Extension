@@ -96,6 +96,8 @@ class Ini extends Fallback
      *
      * @deprecated
      *   Since 3.1.0. Will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @return array
      *   The configuration (is it editable, a dropdown, a textfield, ...)

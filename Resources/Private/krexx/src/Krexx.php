@@ -269,6 +269,8 @@ class Krexx
      *
      * @deprecated
      *   Since 3.1.0. Will be removed when dropping PHP 5 support.
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @api
      */
@@ -305,6 +307,8 @@ class Krexx
      *
      * @deprecated
      *   Since 3.1.0. Will be removed when dropping PHP 5 support.
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @api
      */

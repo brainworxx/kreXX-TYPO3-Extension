@@ -48,6 +48,8 @@ use Brainworxx\Krexx\Analyse\Model;
  * @deprecated
  *   Since 3.1.0. Will be removed.
  *   Use ThroughMeta instead.
+ * @codeCoverageIgnore
+ *   We will not test deprecated classes.
  */
 class ThroughMethodAnalysis extends AbstractCallback
 {

@@ -64,6 +64,23 @@ class FileTest extends AbstractTest
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        // undo the mocking.
+        \Brainworxx\Krexx\Service\Misc\unlink('', false);
+        \Brainworxx\Krexx\Service\Misc\chmod('', 0777, false);
+        \Brainworxx\Krexx\Service\Misc\realpath('', false);
+        \Brainworxx\Krexx\Service\Misc\is_file('', false);
+        \Brainworxx\Krexx\Service\Misc\is_file('', false);
+        \Brainworxx\Krexx\Service\Misc\filemtime('', false);
+        \Brainworxx\Krexx\Service\Misc\time(false);
+    }
+
+    /**
      * Setting of the pool and assigning itself to the pool.
      *
      * @covers \Brainworxx\Krexx\Service\Misc\File::__construct
@@ -232,5 +249,194 @@ class FileTest extends AbstractTest
             null,
             false
         );
+    }
+
+    /**
+     * Test the deleting of a registered file.
+     *
+     * @covers \Brainworxx\Krexx\Service\Misc\File::deleteFile
+     */
+    public function testDeleteFileRegistered()
+    {
+        // Start the mocking.
+        \Brainworxx\Krexx\Service\Misc\unlink('', true);
+        \Brainworxx\Krexx\Service\Misc\chmod('', 0777, true);
+        \Brainworxx\Krexx\Service\Misc\realpath('', true);
+
+        // Execute the test.
+        $payload = 'some_file.txt';
+        $fileService = new File(Krexx::$pool);
+        $this->setValueByReflection('isReadableCache', [$payload => true], $fileService);
+        $fileService->deleteFile($payload);
+
+        // Check the results.
+        $this->assertEquals([$payload], \Brainworxx\Krexx\Service\Misc\unlink('', false));
+        $this->assertEquals([], \Brainworxx\Krexx\Service\Misc\chmod('', 0777, false));
+        $this->assertEquals([], Krexx::$pool->messages->getKeys());
+    }
+
+    /**
+     * Test the deleting of a not existing file.
+     *
+     * @covers \Brainworxx\Krexx\Service\Misc\File::deleteFile
+     */
+    public function testDeleteFileNotExisting()
+    {
+        // Start the mocking.
+        \Brainworxx\Krexx\Service\Misc\unlink('', true);
+        \Brainworxx\Krexx\Service\Misc\chmod('', 0777, true);
+
+        // Execute the test.
+        $payload = 'not_existing_file.txt';
+        $fileService = new File(Krexx::$pool);
+        $fileService->deleteFile($payload);
+
+        // Check the results.
+        $this->assertEquals([], \Brainworxx\Krexx\Service\Misc\unlink('', false));
+        $this->assertEquals([], \Brainworxx\Krexx\Service\Misc\chmod('', 0777, false));
+        $this->assertEquals(
+            ['fileserviceDelete' => ['key' => 'fileserviceDelete', 'params' => [$payload]]],
+            Krexx::$pool->messages->getKeys()
+        );
+    }
+
+    /**
+     * Test the deleting of a unregistered file.
+     *
+     * @covers \Brainworxx\Krexx\Service\Misc\File::deleteFile
+     */
+    public function testDeleteFileUnRegistered()
+    {
+        // Start the mocking.
+        \Brainworxx\Krexx\Service\Misc\unlink('', true);
+        \Brainworxx\Krexx\Service\Misc\chmod('', 0777, true);
+        \Brainworxx\Krexx\Service\Misc\realpath('', true);
+        \Brainworxx\Krexx\Service\Misc\is_file('', true);
+
+        // Execute the test.
+        $payload = 'unregistered_file.txt';
+        $fileService = new File(Krexx::$pool);
+        $fileService->deleteFile($payload);
+
+        // Check the results.
+        $this->assertEquals([$payload], \Brainworxx\Krexx\Service\Misc\unlink('', false));
+        $this->assertEquals([$payload], \Brainworxx\Krexx\Service\Misc\chmod('', 0777, false));
+        $this->assertEquals([], Krexx::$pool->messages->getKeys());
+    }
+
+    /**
+     * Test the deletation of a problematic file.
+     *
+     * @covers \Brainworxx\Krexx\Service\Misc\File::deleteFile
+     */
+    public function testDeleteFileWithProblems()
+    {
+        \Brainworxx\Krexx\Service\Misc\unlink('', true);
+        \Brainworxx\Krexx\Service\Misc\chmod('', 0777, true);
+        \Brainworxx\Krexx\Service\Misc\realpath('', true);
+
+        // Execute the test.
+        $payload = 'unregistered_file.txt';
+        $fileService = new File(Krexx::$pool);
+        $fileService->deleteFile($payload);
+
+        // Check the results.
+        $this->assertEquals([], \Brainworxx\Krexx\Service\Misc\unlink('', false));
+        $this->assertEquals([], \Brainworxx\Krexx\Service\Misc\chmod('', 0777, false));
+        $this->assertEquals(
+            ['fileserviceDelete' => ['key' => 'fileserviceDelete', 'params' => [$payload]]],
+            Krexx::$pool->messages->getKeys()
+        );
+    }
+
+    /**
+     * Test the filepath filter
+     *
+     * @covers \Brainworxx\Krexx\Service\Misc\File::filterFilePath
+     */
+    public function testFilterFilePath()
+    {
+        // Set the stage.
+        \Brainworxx\Krexx\Service\Misc\realpath('', true);
+        $docRoot = 'somewhere on the server';
+        $filename = 'some file';
+        $payload = $docRoot . DIRECTORY_SEPARATOR . $filename;
+        $fileService = new File(Krexx::$pool);
+        $this->setValueByReflection('docRoot', $docRoot, $fileService);
+
+        // Run the test
+        $this->assertEquals('...' . DIRECTORY_SEPARATOR . $filename, $fileService->filterFilePath($payload));
+
+        // And now without a identifiable docroot.
+        $this->setValueByReflection('docRoot', false, $fileService);
+        $this->assertEquals($payload, $fileService->filterFilePath($payload));
+    }
+
+    /**
+     * Test, if an already registered file is readable.
+     *
+     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
+     */
+    public function testFileIsReadableRegistered()
+    {
+        // Set the stage.
+        \Brainworxx\Krexx\Service\Misc\realpath('', true);
+        $filename = 'some file';
+        $fileService = new File(Krexx::$pool);
+        $this->setValueByReflection('isReadableCache', [$filename => true], $fileService);
+
+        // Run the test.
+        $this->assertTrue($fileService->fileIsReadable($filename));
+    }
+
+    /**
+     * Test, if an already registered file is readable.
+     *
+     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
+     */
+    public function testFileIsReadableUnregistered()
+    {
+        \Brainworxx\Krexx\Service\Misc\is_file('', true);
+        \Brainworxx\Krexx\Service\Misc\is_readable('', true);
+        $filename = 'some file';
+        $fileService = new File(Krexx::$pool);
+
+        $this->assertTrue($fileService->fileIsReadable($filename));
+        $this->assertEquals([$filename], \Brainworxx\Krexx\Service\Misc\is_readable('', false));
+    }
+
+    /**
+     * Test if a not existing file is readable.
+     *
+     * @covers \Brainworxx\Krexx\Service\Misc\File::fileIsReadable
+     */
+    public function testFileIsReadableNotExisting()
+    {
+        $fileService = new File(Krexx::$pool);
+        $this->assertFalse($fileService->fileIsReadable('barf'));
+    }
+
+    /**
+     * Test the getting of a file stemp from an "existing" file.
+     *
+     * @covers \Brainworxx\Krexx\Service\Misc\File::filetime
+     */
+    public function testFileTimeExisting()
+    {
+        // Set the stage for an "existing" file.
+        \Brainworxx\Krexx\Service\Misc\realpath('', true);
+        $filename = 'some file';
+        $fileService = new File(Krexx::$pool);
+        $this->setValueByReflection('isReadableCache', [$filename => true], $fileService);
+
+        \Brainworxx\Krexx\Service\Misc\filemtime('', true);
+        $this->assertEquals(42, $fileService->filetime($filename));
+    }
+
+    public function testFileTimeNotExisting()
+    {
+        $fileService = new File(Krexx::$pool);
+        \Brainworxx\Krexx\Service\Misc\time(true);
+        $this->assertEquals(41, $fileService->filetime('I am not here'));
     }
 }

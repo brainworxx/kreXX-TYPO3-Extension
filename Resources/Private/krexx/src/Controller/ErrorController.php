@@ -43,6 +43,9 @@ use Brainworxx\Krexx\Errorhandler\Fatal;
  * @deprecated
  *   Since 3.1.0. Will be removed when dropping PHP support.
  *
+ * @codeCoverageIgnore
+ *   We will not test deprecated stuff.
+ *
  * @package Brainworxx\Krexx\Controller
  */
 class ErrorController extends AbstractController

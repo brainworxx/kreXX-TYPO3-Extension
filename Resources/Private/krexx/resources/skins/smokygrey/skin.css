@@ -317,6 +317,8 @@
           padding: 0 2px;
           color: #919191 !important;
           margin: 0 10px; }
+          .kwrapper .kchild .kel em.karrow.ktype, .kfatalwrapper-outer .kchild .kel em.karrow.ktype {
+            font-size: 10px; }
       .kwrapper .kchild .kel .kel-bg, .kfatalwrapper-outer .kchild .kel .kel-bg {
         /* white line */
         background-color: #919191;

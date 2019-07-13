@@ -37,5 +37,8 @@
     "psr-4": {
       "Brainworxx\\Krexx\\Tests\\": "tests/"
     }
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit --color -d memory_limit=-1 -c phpunit.xml"
   }
 }

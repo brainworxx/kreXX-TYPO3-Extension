@@ -39,6 +39,8 @@ namespace Brainworxx\Krexx\Service\Config;
  *
  * @deprecated
  *   Since 3.1.0. Will be removed.
+ * @codeCoverageIgnore
+ *   We will not test deprecated classes.
  *
  * @package Brainworxx\Krexx\Service\Config
  */

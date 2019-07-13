@@ -44,6 +44,9 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * @deprecated
  *   Since 3.1.0. Will be removed when dropping PHP support.
  *
+ * @codeCoverageIgnore
+ *   We will not test deprecated stuff.
+ *
  * @package Brainworxx\Krexx\Errorhandler
  */
 abstract class AbstractError implements ConstInterface

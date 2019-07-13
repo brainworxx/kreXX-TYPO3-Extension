@@ -639,6 +639,10 @@ div.kwrapper {
     color: #a6e22a;
 }
 
+.kwrapper .kmethod .karrow.ktype {
+    font-size: 10px;
+}
+
 .kwrapper .karray {
     background-image: none;
 }

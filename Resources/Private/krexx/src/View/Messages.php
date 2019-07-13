@@ -134,10 +134,10 @@ class Messages
      */
     public function outputMessages()
     {
-
         // Simple Wrapper for OutputActions::$render->renderMessages
         if (php_sapi_name() === 'cli' &&
-            !empty($this->messages)
+            empty($this->messages) === false &&
+            defined('KREXX_TEST_IN_PROGRESS') === false
         ) {
             // Output the messages on the shell.
             $result = "\n\nkreXX messages\n";

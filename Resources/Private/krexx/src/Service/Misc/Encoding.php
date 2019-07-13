@@ -223,6 +223,9 @@ class Encoding
      * @param bool $strict
      *   Whether we want to use strict mode.
      *
+     * @codeCoverageIgnore
+     *   We will not tests simple wrappers
+     *
      * @return string
      *   The result.
      */
@@ -262,6 +265,9 @@ class Encoding
      *   The starting point.
      * @param int $length
      *   The length we want.
+     *
+     * @codeCoverageIgnore
+     *   We will not tests simple wrappers
      *
      * @return string
      *   The result.

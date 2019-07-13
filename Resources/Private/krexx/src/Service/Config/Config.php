@@ -376,6 +376,8 @@ class Config extends Fallback
      *
      * @deprecated
      *   Sinde 3.1.0. Will be removed
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @return bool
      *   Whether the function is allowed to be called.

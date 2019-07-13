@@ -189,6 +189,8 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
      *
      * @deprecated
      *   Since 3.1.0. Will beremoved.
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @return string
      *   The rendered connector.
@@ -298,6 +300,8 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
      *
      * @deprecated
      *   Since 3.1.0. Will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      */
     public function getSkinList()
     {
