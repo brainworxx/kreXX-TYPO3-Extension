@@ -50,7 +50,7 @@ class Configuration implements PluginConfigInterface
     /**
      * {@inheritdoc}
      */
-    public static function getName()
+    public function getName()
     {
         return 'DataViewer fluid support';
     }
@@ -60,7 +60,7 @@ class Configuration implements PluginConfigInterface
      *
      * @return string
      */
-    public static function getVersion()
+    public function getVersion()
     {
         return ExtensionManagementUtility::getExtensionVersion(Bootstrap::EXT_KEY);
     }
@@ -68,7 +68,7 @@ class Configuration implements PluginConfigInterface
     /**
      * Data viewer support inside the fluid analysis.
      */
-    public static function exec()
+    public function exec()
     {
         Registration::registerEvent(
             'Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe::start',

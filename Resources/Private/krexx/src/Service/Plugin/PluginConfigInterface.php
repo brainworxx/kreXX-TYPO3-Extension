@@ -46,17 +46,17 @@ interface PluginConfigInterface
      *
      * @return string
      */
-    public static function getName();
+    public function getName();
 
     /**
      * Get the version of the plugin.
      *
      * @return string
      */
-    public static function getVersion();
+    public function getVersion();
 
     /**
      * Registers all Overwrites
      */
-    public static function exec();
+    public function exec();
 }

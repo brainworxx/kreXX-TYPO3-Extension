@@ -29,6 +29,7 @@ Changelog
     - [Change] Moved the skin render classes to the source folder.
     - [Change] Dropped PHP 5.3 and PHP 5.4 support.
     - [Change] Moved the last hardcoded html tags to the skin renderers.
+    - [Change] When registering a plugin, you must use a class instance, instead of a name of a static class.
     - [Bugfix] Fluid code generation for variable names with dots in them.
     - [Bugfix] CSS selectors are too weak in the backend module.
     - [Bugfix] Fixes some "bugs" SonarCube found in the unit test fixtures, to prevent bad ratings.

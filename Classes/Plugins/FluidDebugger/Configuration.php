@@ -59,7 +59,7 @@ class Configuration implements PluginConfigInterface
     /**
      * {@inheritdoc}
      */
-    public static function getName()
+    public function getName()
     {
         return 'Fluid debugger';
     }
@@ -69,7 +69,7 @@ class Configuration implements PluginConfigInterface
      *
      * @return string
      */
-    public static function getVersion()
+    public function getVersion()
     {
         return ExtensionManagementUtility::getExtensionVersion(Bootstrap::EXT_KEY);
     }
@@ -77,7 +77,7 @@ class Configuration implements PluginConfigInterface
     /**
      * Code generation for fluid.
      */
-    public static function exec()
+    public function exec()
     {
         // Registering the fluid connector class.
         Registration::addRewrite(

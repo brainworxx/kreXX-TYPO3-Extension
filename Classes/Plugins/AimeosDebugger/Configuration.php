@@ -52,7 +52,7 @@ class Configuration implements PluginConfigInterface
      *
      * @return string
      */
-    public static function getName()
+    public function getName()
     {
         return 'Aimeos debugger';
     }
@@ -62,7 +62,7 @@ class Configuration implements PluginConfigInterface
      *
      * @return string
      */
-    public static function getVersion()
+    public function getVersion()
     {
         return ExtensionManagementUtility::getExtensionVersion(Bootstrap::EXT_KEY);
     }
@@ -72,7 +72,7 @@ class Configuration implements PluginConfigInterface
      *
      * This plugin tries to resolve them.
      */
-    public static function exec()
+    public function exec()
     {
         // Resolving the __get().
         Registration::registerEvent(

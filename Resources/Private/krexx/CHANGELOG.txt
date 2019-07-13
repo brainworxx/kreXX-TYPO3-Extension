@@ -17,6 +17,8 @@
 - Change: Moved the skin render classes to the source folder.
 - Change: Dropped PHP 5.3 and PHP 5.4 support.
 - Change: Moved the last hardcoded html tags to the skin renderers.
+- Change: When registering a plugin, you must use a class instance,
+  instead of a name of a static class.
 - Bugfix: Fixes some "bugs" SonarCube found in the unit test fixtures,
   to prevent bad ratings.
 - Bugfix: Check if the developer handle is actually a string.

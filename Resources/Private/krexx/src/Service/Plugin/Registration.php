@@ -55,7 +55,7 @@ class Registration implements ConstInterface
     /**
      * The registered plugin configuration files as class names.
      *
-     * @var array
+     * @var \Brainworxx\Krexx\Service\Plugin\PluginConfigInterface[][]
      */
     protected static $plugins = [];
 
@@ -269,17 +269,17 @@ class Registration implements ConstInterface
     /**
      * Register a plugin.
      *
-     * @param string $configClass
+     * @param PluginConfigInterface $configClass
      *   The class name of the configuration class for this plugin.
      *   Must extend the \Brainworxx\Krexx\Service\AbstractPluginConfig
      */
-    public static function register($configClass)
+    public static function register(PluginConfigInterface $configClass)
     {
-        static::$plugins[$configClass] = [
+        static::$plugins[get_class($configClass)] = [
             static::CONFIG_CLASS => $configClass,
             static::IS_ACTIVE => false,
-            static::PLUGIN_NAME => call_user_func([$configClass, 'getName']),
-            static::PLUGIN_VERSION => call_user_func([$configClass, 'getVersion'])
+            static::PLUGIN_NAME => $configClass->getName(),
+            static::PLUGIN_VERSION => $configClass->getVersion()
         ];
     }
 
@@ -294,8 +294,7 @@ class Registration implements ConstInterface
         if (isset(static::$plugins[$configClass])) {
             static::$plugins[$configClass][static::IS_ACTIVE] = true;
             /** @var \Brainworxx\Krexx\Service\Plugin\PluginConfigInterface $staticPlugin */
-            $staticPlugin = static::$plugins[$configClass][static::CONFIG_CLASS];
-            $staticPlugin::exec();
+            static::$plugins[$configClass][static::CONFIG_CLASS]->exec();
 
             if (isset(Krexx::$pool)) {
                 // Update stuff in the pool.
@@ -316,7 +315,7 @@ class Registration implements ConstInterface
      */
     public static function deactivatePlugin($configClass)
     {
-        if (static::$plugins[$configClass][static::IS_ACTIVE] !== true) {
+        if (empty(static::$plugins[$configClass][static::IS_ACTIVE]) === true) {
             // We will not purge everything for a already deactivated plugin.
             return;
         }

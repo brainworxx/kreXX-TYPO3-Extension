@@ -91,7 +91,7 @@ class Bootstrap
         }
 
         // Register and activate the TYPO3 plugin.
-        Registration::register(T3configuration::class);
+        Registration::register(new T3configuration());
         Registration::activatePlugin(T3configuration::class);
         // Register our modules for the admin panel.
         if (version_compare(TYPO3_version, '9.5', '>=') &&
@@ -115,12 +115,10 @@ class Bootstrap
 
         // Register the fluid plugins.
         // We activate them later in the viewhelper.
-        Registration::register(
-            FluidConfiguration::class
-        );
+        Registration::register(new FluidConfiguration());
         // Register our debug-viewhelper globally, so people don't have to
         // do it inside the template. 'krexx' as a namespace should be unique enough.
-        // Theoratically, this should be part of the fluid debugger plugin, but
+        // Theoretically, this should be part of the fluid debugger plugin, but
         // activating it in the viewhelper is too late, for obvious reason.
         if (version_compare(TYPO3_version, '8.5', '>=') &&
             empty($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID][static::FLUID_NAMESPACE][static::KREXX])
@@ -130,10 +128,10 @@ class Bootstrap
             ];
         }
 
-        Registration::register(FluidDataConfiguration::class);
+        Registration::register(new FluidDataConfiguration());
 
         // Register the Aimoes Magic plugin.
-        Registration::register(AimeosConfiguration::class);
+        Registration::register(new AimeosConfiguration());
 
         // Check if we have the Aimeos shop available.
         if (class_exists(AimeosException::class) === true ||
@@ -149,6 +147,9 @@ class Bootstrap
      *
      * @param string $version
      *   The version number from the ext_localconf.
+     *
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheGroupException
+     * @throws \TYPO3\CMS\Core\Package\Exception
      *
      * @return $this
      *   Return $this, for chaining.

@@ -60,7 +60,7 @@ class Configuration implements PluginConfigInterface
      *
      * @return string
      */
-    public static function getName()
+    public function getName()
     {
         return 'TYPO3 configuration';
     }
@@ -70,7 +70,7 @@ class Configuration implements PluginConfigInterface
      *
      * @return string
      */
-    public static function getVersion()
+    public function getVersion()
     {
         return ExtensionManagementUtility::getExtensionVersion(Bootstrap::EXT_KEY);;
     }
@@ -82,7 +82,7 @@ class Configuration implements PluginConfigInterface
      * - Point the directories to the temp folder.
      * - Protect the temp folder, if necessary.
      */
-    public static function exec()
+    public function exec()
     {
         // We are using the TYPO3 ip security, instead of the kreXX implementation.
         Registration::addRewrite(Config::class, T3Config::class);
