@@ -196,8 +196,9 @@ call_user_func(function () {
     }
     restore_error_handler();
 
-    // Class alias shorthand for object analysis.
-    class_alias('Brainworxx\\Krexx\\Krexx', 'Krexx');
+    // Class shorthand for object analysis.
+    // The alias method does not work in all IDEs.
+    class Krexx extends Brainworxx\Krexx\Krexx {}
 
     /**
      * Alias shorthand function for object analysis.

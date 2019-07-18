@@ -73,7 +73,7 @@ class File
     {
         $this->pool = $pool;
         $server = $pool->getServer();
-        $this->docRoot = trim(realpath($server['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR);
+        $this->docRoot = trim($this->realpath($server['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR);
         if (empty($this->docRoot) === true) {
             $this->docRoot = false;
         }
@@ -199,7 +199,7 @@ class File
      */
     protected function getFileContentsArray($filePath)
     {
-        $filePath = realpath($filePath);
+        $filePath = $this->realpath($filePath);
 
         static $filecache = [];
 
@@ -241,7 +241,7 @@ class File
         }
 
         // Get the file contents.
-        $filePath = realpath($filePath);
+        $filePath = $this->realpath($filePath);
         $size = filesize($filePath);
         $file = fopen($filePath, 'r');
         $result = fread($file, $size);
@@ -275,10 +275,7 @@ class File
      */
     public function deleteFile($filePath)
     {
-        $realpath = realpath($filePath);
-        if ($realpath === false) {
-            $this->pool->messages->addMessage('fileserviceDelete', [$this->filterFilePath($filePath)]);
-        }
+        $realpath = $this->realpath($filePath);
 
         // Fast forward for the current chunk files.
         if (isset(static::$isReadableCache[$realpath]) === true) {
@@ -299,11 +296,12 @@ class File
             if (unlink($realpath) === true) {
                 restore_error_handler();
                 return;
+            } else {
+                // We have a permission problem here!
+                $this->pool->messages->addMessage('fileserviceDelete', [$this->filterFilePath($realpath)]);
             }
         }
 
-        // We have a permission problem here!
-        $this->pool->messages->addMessage('fileserviceDelete', [$this->filterFilePath($realpath)]);
         restore_error_handler();
     }
 
@@ -321,14 +319,8 @@ class File
      */
     public function filterFilePath($filePath)
     {
-        $realpath = realpath($filePath);
+        $realpath = ltrim($this->realpath($filePath), DIRECTORY_SEPARATOR);
 
-        // File exist?
-        if ($realpath === false) {
-            $realpath = ltrim($filePath, DIRECTORY_SEPARATOR);
-        } else {
-            $realpath = ltrim($realpath, DIRECTORY_SEPARATOR);
-        }
 
         if ($this->docRoot !== false && strpos($realpath, $this->docRoot) === 0) {
             // Found it on position 0.
@@ -349,11 +341,7 @@ class File
      */
     public function fileIsReadable($filePath)
     {
-        $realPath = realpath($filePath);
-
-        if ($realPath === false) {
-            $realPath = $filePath;
-        }
+        $realPath = $this->realpath($filePath);
 
         // Return the cache, if we have any.
         if (isset(static::$isReadableCache[$realPath]) === true) {
@@ -374,7 +362,7 @@ class File
      */
     public function filetime($filePath)
     {
-        $filePath = realpath($filePath);
+        $filePath = $this->realpath($filePath);
 
         if ($this->fileIsReadable($filePath) === true) {
             return filemtime($filePath);
@@ -384,5 +372,28 @@ class File
         // We are not interested in old file.
         // The current timestamp indicates, that this not-existing file is new.
         return time();
+    }
+
+    /**
+     * Wrapper around the native realpath method.
+     *
+     * When facing some special systems with strange configurations, realpath
+     * might fail, although the file is right there.
+     *
+     * @param string $filePath
+     *   Path to the file.
+     *
+     * @return string
+     *   The real path, if possible. The original path as fallback
+     */
+    protected function realpath($filePath)
+    {
+        $realpath = realpath($filePath);
+
+        if ($realpath === false) {
+            return $filePath;
+        }
+
+        return $filePath;
     }
 }
