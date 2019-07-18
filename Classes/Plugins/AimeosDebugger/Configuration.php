@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ThroughMethods;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Methods;
@@ -103,6 +104,12 @@ class Configuration implements PluginConfigInterface
         Registration::registerEvent(
             'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods::callMe::end',
             ThroughMethods::class
+        );
+
+        // Adding additional debug methods.
+        Registration::registerEvent(
+            'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\DebugMethods::callMe::start',
+            DebugMethods::class
         );
 
         // No __toString for the db statement class.

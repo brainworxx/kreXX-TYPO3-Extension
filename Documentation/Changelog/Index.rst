@@ -25,6 +25,7 @@ Changelog
     - [Feature] Added an exception handler, to replace the PHP5 Fatal Error Handler.
     - [Feature] Added the date time to the output.
     - [Feature] Added analysis of the meta data of an object.
+    - [Feature] Added getRefItems, getPropertyItems, getListItems handling to the debug methods.
     - [Change] Lots of deprecations.
     - [Change] Moved the skin render classes to the source folder.
     - [Change] Dropped PHP 5.3 and PHP 5.4 support.
