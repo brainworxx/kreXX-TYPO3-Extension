@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Tests\Service\Plugin;
 
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 
@@ -183,6 +184,73 @@ class RegistrationTest extends AbstractTest
     }
 
     /**
+     * Test the registering of help files.
+     *
+     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::registerAdditionalHelpFile
+     */
+    public function testRegisterAdditionalHelpFile()
+    {
+        $fileOne = 'help.ini';
+        $fileTwo = 'lang.ini';
+        Registration::registerAdditionalHelpFile($fileOne);
+        Registration::registerAdditionalHelpFile($fileTwo);
+
+        $this->assertAttributeEquals([$fileOne, $fileTwo], 'additionalHelpFiles', $this->registration);
+    }
+
+    /**
+     * Test the registering of an additional skin.
+     *
+     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::registerAdditionalskin
+     */
+    public function testRegisterAdditionalskin()
+    {
+        $skinName = 'Dev skin';
+        $renderClass = 'My\\Render\\Class';
+        $pathToHtmlFiles = 'some path';
+        Registration::registerAdditionalskin($skinName, $renderClass, $pathToHtmlFiles);
+
+        $this->assertAttributeEquals([$skinName => [
+            Registration::SKIN_CLASS => $renderClass,
+            Registration::SKIN_DIRECTORY => $pathToHtmlFiles
+        ]], 'additionalSkinList', $this->registration);
+    }
+
+    /**
+     * Test the registering of a plugin.
+     *
+     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::register
+     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin
+     */
+    public function testRegisterAndActivatePlugin()
+    {
+        $pluginMock = $this->createMock(PluginConfigInterface::class);
+        $pluginMock->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('Mocked Plugin'));
+        $pluginMock->expects($this->once())
+            ->method('getVersion')
+            ->will($this->returnValue('v0.0.0'));
+        $pluginMock->expects($this->once())
+            ->method('exec');
+        Registration::register($pluginMock);
+
+        $expectation = [
+            get_class($pluginMock) => [
+                Registration::CONFIG_CLASS => $pluginMock,
+                Registration::IS_ACTIVE => false,
+                Registration::PLUGIN_NAME => 'Mocked Plugin',
+                Registration::PLUGIN_VERSION => 'v0.0.0'
+            ]
+        ];
+        $this->assertAttributeEquals($expectation, 'plugins', $this->registration);
+
+        Registration::activatePlugin(get_class($pluginMock));
+        $expectation[get_class($pluginMock)][Registration::IS_ACTIVE] = true;
+        $this->assertAttributeEquals($expectation, 'plugins', $this->registration);
+    }
+
+    /**
      * Test the early return when deactivating an alredy deactivated plugin.
      *
      * @covers \Brainworxx\Krexx\Service\Plugin\Registration::deactivatePlugin
@@ -192,5 +260,15 @@ class RegistrationTest extends AbstractTest
         $this->setValueByReflection('logFolder', 'whatever', $this->registration);
         Registration::deactivatePlugin('Test Plugin');
         $this->assertAttributeEquals('whatever', 'logFolder', $this->registration);
+    }
+
+    /**
+     * Test the normal deactivation of a plugin.
+     *
+     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::deactivatePlugin
+     */
+    public function testDeactivatePuginNormal()
+    {
+        $this->markTestIncomplete('Write me!');
     }
 }

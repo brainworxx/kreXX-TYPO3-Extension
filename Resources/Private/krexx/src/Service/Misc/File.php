@@ -301,7 +301,7 @@ class File
                 $this->pool->messages->addMessage('fileserviceDelete', [$this->filterFilePath($realpath)]);
             }
         }
-
+        
         restore_error_handler();
     }
 
