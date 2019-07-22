@@ -143,12 +143,6 @@
             <trans-unit id="debugpreset.warning.message">
                 <source>kreXX will function normally, but please do not debug a productive system.</source>
 			</trans-unit>
-            <trans-unit id="chunksNotWritable">
-                <source>Chunksfolder %s is not writable! This will increase the memory usage of kreXX significantly!</source>
-            </trans-unit>
-            <trans-unit id="logNotWritable">
-                <source>Logfolder %s is not writable!</source>
-            </trans-unit>
             <trans-unit id="fileDeleted" xml:space="preserve">
 				<source>The file "%s" was successfully deleted.</source>
 			</trans-unit>
@@ -195,8 +189,42 @@
             <trans-unit id="configErrorMaxRuntimeBig">
                 <source>Wrong configuration for: 'runtime => maxRuntime'! Maximum for this server is: %s The configured setting was not applied!</source>
 			</trans-unit>
-
-
+            <trans-unit id="maxCallReached">
+                <source>Maximum call-level reached. This is the last analysis for this request. To increase this value, please edit: runtime => maxCall.</source>
+            </trans-unit>
+            <trans-unit id="configErrorDebugBlacklist">
+                <source>Wrong configuration for: '%s => %s'! The debugmethod '%s' is blacklisted. The configured setting was not applied!</source>
+            </trans-unit>
+            <trans-unit id="configErrorDebugInvalid">
+                <source>Wrong configuration for: '%s => %s'! '%s' is not a valid method. The configured setting was not applied!</source>
+            </trans-unit>
+            <trans-unit id="emergencyTimer">
+                <source>Emergency break due to extensive run time!</source>
+            </trans-unit>
+            <trans-unit id="emergencyMemory">
+                <source>Emergency break due to extensive memory usage!</source>
+            </trans-unit>
+            <trans-unit id="fileserviceDelete">
+                <source>Unable to delete file: %s</source>
+            </trans-unit>
+            <trans-unit id="fileserviceAccess">
+                <source>Could not access file: %s</source>
+            </trans-unit>
+            <trans-unit id="omittedBacktrace">
+                <source>Omitted backtrace steps %s until %s</source>
+            </trans-unit>
+            <trans-unit id="chunksNotWritable">
+                <source>Chunksfolder %s is not writable! This will increase the memory usage of kreXX significantly!</source>
+            </trans-unit>
+            <trans-unit id="logNotWritable">
+                <source>Logfolder %s is not writable !</source>
+            </trans-unit>
+            <trans-unit id="fileinfoNotInstalled">
+                <source>The php extension 'fileinfo' is not installed. The mime type analysis is not available.</source>
+            </trans-unit>
+            <trans-unit id="mbstringNotInstalled">
+                <source>The php extension 'mb-string' is not installed. The string analysis may be unreliable.</source>
+            </trans-unit>
 
 
             <!-- Tabs -->

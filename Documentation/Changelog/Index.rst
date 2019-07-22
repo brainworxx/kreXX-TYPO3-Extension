@@ -43,6 +43,7 @@ Changelog
     - [Bugfix] Wrong display of null and boolean default values in the code generation and method analysis.
     - [Bugfix] Display of wrong filename when a kreXX resource is not readable.
     - [Bugfix] The registry will not return values that are considered empty().
+    - [Bugfix] Missing translation keys.
 
 3.1.0
     - [Feature] Nearly complete rewrite of the backend module.

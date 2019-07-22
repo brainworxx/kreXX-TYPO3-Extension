@@ -186,7 +186,7 @@ class Log extends AbstractSubModule implements
      * @return string
      *   The rendered HTML message.
      */
-    protected function renderMessage(string $text, string $severity): string
+    protected function renderMessage($text, string $severity): string
     {
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setTemplatePathAndFilename(
@@ -196,7 +196,7 @@ class Log extends AbstractSubModule implements
         $view->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
         $view->assignMultiple(
             [
-                'text' => $text,
+                'text' => (string) $text,
                 'severity' => $severity,
             ]
         );
