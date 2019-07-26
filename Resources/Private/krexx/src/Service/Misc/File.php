@@ -60,7 +60,7 @@ class File
     /**
      * The current docroot.
      *
-     * @var string|false
+     * @var string|bool
      */
     protected $docRoot;
 
@@ -301,7 +301,7 @@ class File
                 $this->pool->messages->addMessage('fileserviceDelete', [$this->filterFilePath($realpath)]);
             }
         }
-        
+
         restore_error_handler();
     }
 
@@ -320,8 +320,6 @@ class File
     public function filterFilePath($filePath)
     {
         $realpath = ltrim($this->realpath($filePath), DIRECTORY_SEPARATOR);
-
-
         if ($this->docRoot !== false && strpos($realpath, $this->docRoot) === 0) {
             // Found it on position 0.
             $realpath = '...' . DIRECTORY_SEPARATOR . substr($realpath, strlen($this->docRoot) + 1);
@@ -394,6 +392,6 @@ class File
             return $filePath;
         }
 
-        return $filePath;
+        return $realpath;
     }
 }

@@ -50,7 +50,7 @@ class ProcessString extends AbstractRouting implements ProcessInterface
     /**
      * The buffer info class. We use it to get the mimetype from a string.
      *
-     * @var finfo|\Brainworxx\Krexx\Service\Misc\FileinfoDummy
+     * @var \finfo|\Brainworxx\Krexx\Service\Misc\FileinfoDummy
      */
     protected $bufferInfo;
 

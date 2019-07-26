@@ -294,9 +294,11 @@ class FileTest extends AbstractTest
         // Check the results.
         $this->assertEquals([], \Brainworxx\Krexx\Service\Misc\unlink('', false));
         $this->assertEquals([], \Brainworxx\Krexx\Service\Misc\chmod('', 0777, false));
+
         $this->assertEquals(
-            ['fileserviceDelete' => ['key' => 'fileserviceDelete', 'params' => [$payload]]],
-            Krexx::$pool->messages->getKeys()
+            [],
+            Krexx::$pool->messages->getKeys(),
+            'We do not give feedback when trying to delete a none existing file.'
         );
     }
 
@@ -325,15 +327,15 @@ class FileTest extends AbstractTest
     }
 
     /**
-     * Test the deletation of a problematic file.
+     * Test the deleting of a problematic file.
      *
      * @covers \Brainworxx\Krexx\Service\Misc\File::deleteFile
      */
     public function testDeleteFileWithProblems()
     {
-        \Brainworxx\Krexx\Service\Misc\unlink('', true);
         \Brainworxx\Krexx\Service\Misc\chmod('', 0777, true);
         \Brainworxx\Krexx\Service\Misc\realpath('', true);
+        \Brainworxx\Krexx\Service\Misc\is_file('', true);
 
         // Execute the test.
         $payload = 'unregistered_file.txt';
@@ -341,11 +343,15 @@ class FileTest extends AbstractTest
         $fileService->deleteFile($payload);
 
         // Check the results.
-        $this->assertEquals([], \Brainworxx\Krexx\Service\Misc\unlink('', false));
-        $this->assertEquals([], \Brainworxx\Krexx\Service\Misc\chmod('', 0777, false));
+        $this->assertEquals(
+            [$payload],
+            \Brainworxx\Krexx\Service\Misc\chmod('', 0777, false),
+            'Change the access rights of the file we want to delete.'
+        );
         $this->assertEquals(
             ['fileserviceDelete' => ['key' => 'fileserviceDelete', 'params' => [$payload]]],
-            Krexx::$pool->messages->getKeys()
+            Krexx::$pool->messages->getKeys(),
+            'Feedback, that we were unable to delete the file.'
         );
     }
 

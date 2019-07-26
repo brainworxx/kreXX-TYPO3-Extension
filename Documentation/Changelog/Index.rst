@@ -44,6 +44,7 @@ Changelog
     - [Bugfix] Display of wrong filename when a kreXX resource is not readable.
     - [Bugfix] The registry will not return values that are considered empty().
     - [Bugfix] Missing translation keys.
+    - [Bugfix] Invalid php doc comments may trigger errors
 
 3.1.0
     - [Feature] Nearly complete rewrite of the backend module.

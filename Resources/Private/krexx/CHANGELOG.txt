@@ -1,4 +1,4 @@
-3.1.0 dev
+3.1.0
 - Use some real autoloading, with a fallback to manually including
   all files.
 - Plugins can now register additional skins.
@@ -36,6 +36,7 @@
   code generation and method analysis.
 - Bugfix: Display of wrong filename when a kreXX resource is not readable.
 - Bugfix: The registry will not return values that are considered empty().
+- Bugfix: Invalid php doc comments may trigger errors
 
 3.0.2
 - Added classname to the declaration analysis of properties.
