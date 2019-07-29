@@ -181,17 +181,17 @@ class Bootstrap
 
         // Simply load the main file.
         $krexxFile =  ExtensionManagementUtility::extPath(static::EXT_KEY) . 'Resources/Private/krexx/bootstrap.php';
-        if (file_exists($krexxFile)) {
+        if (file_exists($krexxFile) === true &&
+            class_exists(\Krexx::class, false) === false
+        ) {
             include_once $krexxFile;
             return true;
         }
 
-        // There is a bug with the extension installing (at least in TYPO3 8.7.8),
-        // causing this class not being available, right after a manual upgrade.
-        // It's not a showstopper, because after a reload, everything is OK.
-        // We need to make sure that we have access to the plugin registration, to
-        // prevent this ugly TYPO3 error message.
-        // Or, something went horribly wrong here.
+        // Something went horribly wrong here.
+        // Or . . .
+        // More likely, the "autoloading" managed to bite us in the rear end.
+        // No need to continue at this point.
         return false;
     }
 }
