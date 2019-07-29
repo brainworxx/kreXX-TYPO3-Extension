@@ -24,8 +24,9 @@ kreXX will offer you the following information:
 	- Each object in the backtrace is fully analysed with all its data
 	- . . .
 
-Catching Exceptions
-^^^^^^^^^^^^^^^^^^^
+
+Set up an exception handler
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: php
 
@@ -36,6 +37,21 @@ Catching Exceptions
     // unregister the exception handler
     \Krexx::unregisterExceptionHandler();
 
+
+Use kreXX in a try/catch
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: php
+
+    try {
+        // Execute the stuff where the error may occur.
+        $this->doSometing();
+    } catch (\Throwable $e) {
+        krexx($e);
+    }
+
+The :literal:`\Throwable $e` will catch everything bigger than warnings. During development it is a good idea to do this, because you will get a good grip at what is going wrong in there.
+But when everything works as it should, you should narrow this down, so you can handle each exception type specifically.
 
 
 Catching PHP5 fatal errors

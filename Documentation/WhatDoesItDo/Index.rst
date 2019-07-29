@@ -40,6 +40,7 @@ Key features:
     - Code generation to reach the displayed values, if possible.
     - Debugger for the magical methods and properties of the Aimeos shop system.
     - Debugger for Fluid
+    - Advanced analysing of error objects
 
 
 .. figure:: ../Images/main_function.png
