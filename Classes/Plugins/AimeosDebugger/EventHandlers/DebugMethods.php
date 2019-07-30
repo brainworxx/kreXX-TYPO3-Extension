@@ -38,7 +38,6 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\ConstInterface;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods as DebugMethodCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -89,15 +88,38 @@ class DebugMethods implements EventHandlerInterface, ConstInterface
         $reflection = $params[static::PARAM_REF];
         $data = $reflection->getData();
 
+        // The 2019 version simplified much of the code, hence the configuration
+        // handling here.
         $methods = [
-            'getRefItems' => \Aimeos\MShop\Common\Item\ListRef\Base::class,
-            'getPropertyItems' => \Aimeos\MShop\Product\Item\Iface::class,
-            'getListItems' => \Aimeos\MShop\Common\Item\ListRef\Base::class
+            'getRefItems' => [
+                // Aimeos 2018
+                \Aimeos\MShop\Common\Item\ListRef\Base::class,
+                // Aimeos 2019
+                \Aimeos\MShop\Common\Item\ListRef\Iface::class
+            ],
+            'getPropertyItems' => [
+                // Aimeos 2018
+                \Aimeos\MShop\Product\Item\Iface::class,
+                \Aimeos\MShop\Attribute\Item\Iface::class,
+                \Aimeos\MShop\Media\Item\Iface::class,
+                \Aimeos\MShop\Product\Item\Iface::class,
+                // Aimeos 2019
+                \Aimeos\MShop\Common\Item\PropertyRef\Iface::class,
+            ],
+            'getListItems' => [
+                // Aimeos 2018 & 2019
+                \Aimeos\MShop\Common\Item\ListRef\Iface::class,
+
+            ]
         ];
 
-        foreach ($methods as $method => $class) {
-            if (is_a($data, $class) && $reflection->hasMethod($method)) {
-                $output .= $this->callDebugMethod($data, $method);
+        foreach ($methods as $method => $classNames) {
+            foreach ($classNames as $className) {
+                if ($data instanceof $className && $reflection->hasMethod($method)) {
+                    $output .= $this->callDebugMethod($data, $method);
+                    // We are done with this one. On to the next method.
+                    break;
+                }
             }
         }
         return $output;
