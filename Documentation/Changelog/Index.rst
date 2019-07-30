@@ -12,7 +12,7 @@
 Changelog
 =============================================================
 
-3.1.1 dev
+3.2.0
     - [Feature] Use some real autoloading, with a fallback to manually including all files.
     - [Feature] Plugins can now register additional skins.
     - [Feature] kreXX debug calls will return the original analysis value.
