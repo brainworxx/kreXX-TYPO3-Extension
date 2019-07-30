@@ -72,7 +72,7 @@ class Configuration implements PluginConfigInterface
      */
     public function getVersion()
     {
-        return ExtensionManagementUtility::getExtensionVersion(Bootstrap::EXT_KEY);;
+        return ExtensionManagementUtility::getExtensionVersion(Bootstrap::EXT_KEY);
     }
 
     /**
