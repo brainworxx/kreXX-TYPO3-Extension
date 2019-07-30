@@ -129,7 +129,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
         $result .= $this->retrieveHelpers($data, $ref);
 
         // Analyse the transform method of all possible view helpers.
-        return $this->retreivePossibleOtherHelpers() . $result;
+        return $this->retrievePossibleOtherHelpers() . $result;
     }
 
     /**
@@ -186,7 +186,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
      * @return string
      *   The generated html.
      */
-    protected function retreivePossibleOtherHelpers()
+    protected function retrievePossibleOtherHelpers()
     {
         $result = '';
 
