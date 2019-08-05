@@ -43,7 +43,6 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
-use TYPO3\CMS\Install\Configuration\Context\ProductionPreset;
 
 /**
  * Class Tx_Includekrexx_Controller_IndexController
@@ -89,25 +88,7 @@ abstract class AbstractController extends ActionController
      */
     protected function checkProductiveSetting()
     {
-        $isProductive = false;
-
-        // Check the 'Live' preset (7.6 and above)
-        if (class_exists(LivePreset::class)) {
-            /** @var \TYPO3\CMS\Install\Configuration\Context\LivePreset $debugPreset */
-            $productionPreset = $this->objectManager
-                ->get(LivePreset::class);
-            $isProductive = $productionPreset->isActive();
-        }
-
-        // Check the 'Production' preset (6.2)
-        if (class_exists(ProductionPreset::class)) {
-            /** @var \TYPO3\CMS\Install\Configuration\Context\ProductionPreset $debugPreset */
-            $productionPreset = $this->objectManager
-                ->get(ProductionPreset::class);
-            $isProductive = $productionPreset->isActive();
-        }
-
-        if ($isProductive) {
+        if ($this->objectManager->get(LivePreset::class)->isActive()) {
             //Display a warning, if we are in Productive / Live settings.
             $this->addFlashMessage(
                 LocalizationUtility::translate('debugpreset.warning.message', Bootstrap::EXT_KEY),
@@ -159,19 +140,6 @@ abstract class AbstractController extends ActionController
         }
 
         return $result;
-    }
-
-    /**
-     * Due to a change in the attributes of the flashmessage viewhelper,
-     * we are using special partials for it, depending on the TYPO3 version.
-     */
-    protected function assignFlashInfo()
-    {
-        if (version_compare(TYPO3_version, '7.3', '>=')) {
-            $this->view->assign('specialflash', true);
-        } else {
-            $this->view->assign('specialflash', false);
-        }
     }
 
     /**

@@ -68,8 +68,7 @@ class IndexController extends AbstractController
 
         // Has kreXX something to say? Maybe a write protected logfolder?
         $this->retrieveKrexxMessages();
-
-        $this->assignFlashInfo();
+        
         $this->configuration->assignData($this->view);
         $this->formConfiguration->assignData($this->view);
         $this->view->assign('settings', $this->objectManager->get(Settings::class));

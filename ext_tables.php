@@ -53,16 +53,6 @@ if (TYPO3_MODE === 'BE') {
                 'labels' => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf',
             ]
         );
-        if (version_compare(TYPO3_version, '7.6', '<')) {
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
-                'includekrexx_refresh',
-                'Brainworxx\\Includekrexx\\Controller\\AjaxController->refreshLoglistAction'
-            );
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
-                'includekrexx_delete',
-                'Brainworxx\\Includekrexx\\Controller\\AjaxController->deleteAction'
-            );
-        }
     };
 
     $boot();

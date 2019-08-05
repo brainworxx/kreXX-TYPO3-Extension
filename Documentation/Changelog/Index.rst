@@ -12,6 +12,11 @@
 Changelog
 =============================================================
 
+3.2.1 dev
+    - [Feature] Introduce php-mock/php-mock-phpunit.
+    - [Change] Remove the event prefix and use static::class instead.
+    - [Change] Removed TYPO3 6.2 compatibility.
+
 3.2.0
     - [Feature] Use some real autoloading, with a fallback to manually including all files.
     - [Feature] Plugins can now register additional skins.

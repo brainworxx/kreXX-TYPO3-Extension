@@ -38,8 +38,8 @@ use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use TYPO3\CMS\Core\Http\AjaxRequestHandler;
 use TYPO3\CMS\Core\Http\Response;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -50,28 +50,21 @@ class AjaxController
     /**
      * List the logfiles with their corresponding meta data.
      *
-     * @param \TYPO3\CMS\Core\Http\ServerRequest|array $arg1
-     *   Depending on the TYPO3 version, either an empty array (6.2) or the
-     *   ServerRequest (7.6 and above)
-     * @param \TYPO3\CMS\Core\Http\Response|\TYPO3\CMS\Core\Http\AjaxRequestHandler $response
-     *   Depending on the TYPO3 version.
+     * @param \TYPO3\CMS\Core\Http\ServerRequest $arg1
+     *   The current server request.
+     * @param \TYPO3\CMS\Core\Http\Response
+     *   The prepared response object.
      *
-     * @return \TYPO3\CMS\Core\Http\Response|\TYPO3\CMS\Core\Http\AjaxRequestHandler
+     * @return \TYPO3\CMS\Core\Http\Response
+     *   The response with the json string.
      */
-    public function refreshLoglistAction($arg1, $response)
+    public function refreshLoglistAction(ServerRequest $arg1, Response $response)
     {
         $fileList = GeneralUtility::makeInstance(ObjectManager::class)
             ->get(LogfileList::class)
             ->retrieveFileList();
 
-        if (is_a($response, Response::class)) {
-            // 7.6 and above.
-            $response->getBody()->write(json_encode($fileList));
-        } else {
-            // Below 7.6.
-            $response->setContentFormat('jsonbody');
-            $response->setContent(($fileList));
-        }
+        $response->getBody()->write(json_encode($fileList));
 
         return $response;
     }
@@ -79,15 +72,15 @@ class AjaxController
     /**
      * Deletes a logfile.
      *
-     * @param \TYPO3\CMS\Core\Http\ServerRequest|array $arg1
-     *   Depending on the TYPO3 version, either an empty array (6.2) or the
-     *   ServerRequest (7.6 and above)
-     * @param \TYPO3\CMS\Core\Http\Response|\TYPO3\CMS\Core\Http\AjaxRequestHandler $response
-     *   Depending on the TYPO3 version.
+     * @param \TYPO3\CMS\Core\Http\ServerRequest $arg1
+     *   The current server request.
+     * @param \TYPO3\CMS\Core\Http\Response $response
+     *   The prepared response object.
      *
-     * @return \TYPO3\CMS\Core\Http\Response|\TYPO3\CMS\Core\Http\AjaxRequestHandler
+     * @return \TYPO3\CMS\Core\Http\Response
+     *   The response with the json string.
      */
-    public function deleteAction($arg1, $response)
+    public function deleteAction(ServerRequest $arg1, Response $response)
     {
         $result = new stdClass();
 
@@ -111,17 +104,8 @@ class AjaxController
             }
         }
 
-        if (is_a($response, Response::class)) {
-            // 7.6 and above.
-            $response->getBody()->write(json_encode($result));
-        } else {
-            // Below 7.6.
-            // 6.2 always wants to send an array of json objects,for some reason,
-            // not a single one. Hence, we send it as plain. The js does not
-            // care.
-            $response->setContentFormat('plain');
-            $response->setContent([json_encode($result)]);
-        }
+        $response->getBody()->write(json_encode($result));
+
 
         return $response;
     }
