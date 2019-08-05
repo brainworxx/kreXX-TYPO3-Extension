@@ -34,4 +34,5 @@
 return array (
     // Our old legacy namespace viewhelper
     'Tx_Includekrexx_ViewHelpers_DebugViewHelper' => 'Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper',
+    'TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper' => 'TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper'
 );

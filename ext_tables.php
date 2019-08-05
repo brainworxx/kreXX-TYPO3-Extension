@@ -37,8 +37,10 @@ if (!defined('TYPO3_MODE')) {
 }
 
 // Register BE module.
-if (TYPO3_MODE === 'BE') {
-    $boot = function () {
+$boot = function () {
+    if (version_compare(TYPO3_version, '10.0.0', '<')) {
+        // The old way of the registration, with the guessing of the controller
+        // name.
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
             'Brainworxx.Includekrexx',
             'tools',
@@ -53,8 +55,25 @@ if (TYPO3_MODE === 'BE') {
                 'labels' => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf',
             ]
         );
-    };
+    } else {
+        // The new way, with the extension name only, and real controller names.
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+            'Includekrexx',
+            'tools',
+            'kreXX configuration',
+            '',
+            [
+                \Brainworxx\Includekrexx\Controller\IndexController::class => 'index, save, dispatch'
+            ],
+            [
+                'access' => 'user,group',
+                'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
+                'labels' => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf',
+            ]
+        );
+    }
 
-    $boot();
-    unset($boot);
-}
+};
+$boot();
+unset($boot);
+

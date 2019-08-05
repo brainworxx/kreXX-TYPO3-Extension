@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Controller;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
@@ -77,7 +78,10 @@ abstract class AbstractController extends ActionController
      */
     public function __construct()
     {
-        parent::__construct();
+        if (version_compare(TYPO3_version, '10.0.0', '<')) {
+            // The constructor was removed with 10.0.0.
+            parent::__construct();
+        }
         Pool::createPool();
         $this->pool = Krexx::$pool;
     }

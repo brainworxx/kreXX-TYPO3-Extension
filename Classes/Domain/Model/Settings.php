@@ -38,8 +38,6 @@ use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use TYPO3\CMS\Core\Registry;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This is one BBW model ;-)
@@ -252,30 +250,6 @@ class Settings
      * @var string
      */
     protected $factory;
-
-    /**
-     * The security validator used ba the setter.
-     *
-     * @var \Brainworxx\Krexx\Service\Config\Validation
-     */
-    protected $validation;
-
-    /**
-     * The system registry.
-     *
-     * @var \TYPO3\CMS\Core\Registry
-     */
-    protected $registry;
-
-    /**
-     * Initialize the pool, retrieve the security class.
-     */
-    public function __construct()
-    {
-        Pool::createPool();
-        $this->validation = Krexx::$pool->config->validation;
-        $this->registry = GeneralUtility::makeInstance(Registry::class);
-    }
 
     /**
      * @param string $analysePrivate
@@ -614,6 +588,9 @@ class Settings
      */
     public function generateIniContent()
     {
+        Pool::createPool();
+        $validation = Krexx::$pool->config->validation;
+
         $result = '';
         $moduleSettings = [];
 
@@ -622,7 +599,7 @@ class Settings
             $result .= '[' . $group . ']' . "\n";
             foreach ($settings as $settingName) {
                 if (!is_null($this->$settingName) &&
-                    $this->validation->evaluateSetting($group, $settingName, $this->$settingName)) {
+                    $validation->evaluateSetting($group, $settingName, $this->$settingName)) {
                     $result .= $settingName . ' = "' . $this->$settingName . '"'  . "\n";
                     $moduleSettings[$settingName] = $this->$settingName;
                 }
