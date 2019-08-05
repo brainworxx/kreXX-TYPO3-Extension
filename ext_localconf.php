@@ -40,7 +40,7 @@ $boot = function () {
 
     /** @var \Brainworxx\Includekrexx\Bootstrap\Bootstrap $bootstrap */
     \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)
-        ->checkVersionNumber('3.2.0')
+        ->checkVersionNumber('3.2.1 dev')
         ->run();
 };
 $boot();
