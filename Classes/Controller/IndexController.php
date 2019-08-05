@@ -68,7 +68,7 @@ class IndexController extends AbstractController
 
         // Has kreXX something to say? Maybe a write protected logfolder?
         $this->retrieveKrexxMessages();
-        
+
         $this->configuration->assignData($this->view);
         $this->formConfiguration->assignData($this->view);
         $this->view->assign('settings', $this->objectManager->get(Settings::class));
@@ -161,9 +161,12 @@ class IndexController extends AbstractController
     protected function createResponse()
     {
         if (empty($this->objectManager)) {
+            // This is either 10.0 or 9.5 with frontend dispatching.
             $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             $response = $this->objectManager->get(NullResponse::class);
         } else {
+            // 8.7 or 7.6 backend dispatching.
+            // And yes, we do need the shutdown here.
             $response = $this->objectManager->get(ResponseInterface::class);
             $response->shutdown();
         }

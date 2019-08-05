@@ -50,16 +50,21 @@ class AjaxController
     /**
      * List the logfiles with their corresponding meta data.
      *
-     * @param \TYPO3\CMS\Core\Http\ServerRequest $arg1
+     * @param \TYPO3\CMS\Core\Http\ServerRequest $serverRequest
      *   The current server request.
-     * @param \TYPO3\CMS\Core\Http\Response
-     *   The prepared response object.
+     * @param \TYPO3\CMS\Core\Http\Response|null
+     *   The prepared response object. Since 10.0, we need to create thjis one
+     *   by ourself.
      *
      * @return \TYPO3\CMS\Core\Http\Response
      *   The response with the json string.
      */
-    public function refreshLoglistAction(ServerRequest $arg1, Response $response)
+    public function refreshLoglistAction(ServerRequest $serverRequest, Response $response = null)
     {
+        if ($response === null) {
+            $response = GeneralUtility::makeInstance(Response::class);
+        }
+
         $fileList = GeneralUtility::makeInstance(ObjectManager::class)
             ->get(LogfileList::class)
             ->retrieveFileList();
