@@ -53,10 +53,6 @@ use ReflectionMethod;
  */
 class ThroughMethods extends AbstractCallback
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods';
 
     /**
      * Simply start to iterate through the methods.

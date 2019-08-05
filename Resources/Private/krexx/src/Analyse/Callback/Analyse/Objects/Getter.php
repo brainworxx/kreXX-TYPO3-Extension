@@ -53,10 +53,6 @@ use ReflectionMethod;
  */
 class Getter extends AbstractObjectAnalysis
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Getter';
 
     /**
      * List of the getter methods, that start with 'get'.

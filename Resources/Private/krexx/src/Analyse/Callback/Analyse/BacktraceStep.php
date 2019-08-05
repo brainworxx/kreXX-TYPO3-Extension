@@ -53,11 +53,6 @@ class BacktraceStep extends AbstractCallback
 {
 
     /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep';
-
-    /**
      * Renders a backtrace step.
      *
      * @return string

@@ -49,10 +49,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class ThroughConstants extends AbstractCallback
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughConstants';
 
     /**
      * Simply iterate though object constants.

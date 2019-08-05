@@ -43,9 +43,16 @@ use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
+use ReflectionMethod;
 
 class MethodsTest extends AbstractTest
 {
+
+    const PRIVATE_METHOD = 'privateMethod';
+    const PROTECTED_METHOD = 'protectedMethod';
+    const PUBLIC_METHOD = 'publicMethod';
+    const TROUBLESOME_METHOD = 'troublesomeMethod';
+
     /**
      * @var string
      */
@@ -159,8 +166,8 @@ class MethodsTest extends AbstractTest
             [
                 0 => [
                     'data' => [
-                        new \ReflectionMethod($this->fixture['data'], 'publicMethod'),
-                        new \ReflectionMethod($this->fixture['data'], 'troublesomeMethod'),
+                        new ReflectionMethod($this->fixture['data'], static::PUBLIC_METHOD),
+                        new ReflectionMethod($this->fixture['data'], static::TROUBLESOME_METHOD),
                     ],
                     'ref' => $this->fixture['ref']
                 ]
@@ -194,9 +201,9 @@ class MethodsTest extends AbstractTest
             [
                 0 =>[
                     'data' => [
-                        new \ReflectionMethod($this->fixture['data'], 'protectedMethod'),
-                        new \ReflectionMethod($this->fixture['data'], 'publicMethod'),
-                        new \ReflectionMethod($this->fixture['data'], 'troublesomeMethod'),
+                        new ReflectionMethod($this->fixture['data'], static::PROTECTED_METHOD),
+                        new ReflectionMethod($this->fixture['data'], static::PUBLIC_METHOD),
+                        new ReflectionMethod($this->fixture['data'], static::TROUBLESOME_METHOD),
                     ],
                     'ref' => $this->fixture['ref']
                 ]
@@ -230,9 +237,9 @@ class MethodsTest extends AbstractTest
             [
                 0 =>[
                     'data' => [
-                        new \ReflectionMethod($this->fixture['data'], 'privateMethod'),
-                        new \ReflectionMethod($this->fixture['data'], 'publicMethod'),
-                        new \ReflectionMethod($this->fixture['data'], 'troublesomeMethod'),
+                        new ReflectionMethod($this->fixture['data'], static::PRIVATE_METHOD),
+                        new ReflectionMethod($this->fixture['data'], static::PUBLIC_METHOD),
+                        new ReflectionMethod($this->fixture['data'], static::TROUBLESOME_METHOD),
                     ],
                     'ref' => $this->fixture['ref']
                 ]
@@ -266,10 +273,10 @@ class MethodsTest extends AbstractTest
             [
                 0 =>[
                     'data' => [
-                        new \ReflectionMethod($this->fixture['data'], 'privateMethod'),
-                        new \ReflectionMethod($this->fixture['data'], 'protectedMethod'),
-                        new \ReflectionMethod($this->fixture['data'], 'publicMethod'),
-                        new \ReflectionMethod($this->fixture['data'], 'troublesomeMethod'),
+                        new ReflectionMethod($this->fixture['data'], static::PRIVATE_METHOD),
+                        new ReflectionMethod($this->fixture['data'], static::PROTECTED_METHOD),
+                        new ReflectionMethod($this->fixture['data'], static::PUBLIC_METHOD),
+                        new ReflectionMethod($this->fixture['data'], static::TROUBLESOME_METHOD),
                     ],
                     'ref' => $this->fixture['ref']
                 ]
@@ -280,6 +287,7 @@ class MethodsTest extends AbstractTest
     /**
      * @param string $metaHiveKey
      * @param bool $isInHive
+     * @param int $counter
      * @param array $expectation
      */
     protected function runAndAssertResults(

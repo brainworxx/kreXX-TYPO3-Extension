@@ -47,10 +47,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class Debug extends AbstractCallback
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Debug';
 
     /**
      * Iterate though the result of the polled debug methods.

@@ -44,23 +44,42 @@ use finfo;
 
 class ProcessStringTest extends AbstractTest
 {
+
+    const BUFFER_INFO = 'bufferInfo';
+    const ENCODING = 'some encoding';
+    const ENCODING_PREFIX = 'encoded ';
+
+     /**
+     * Testing the setting of the pool and of the file info class.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::__construct
+     */
+    public function testConstructWithoutFinfo()
+    {
+        // Mock the class_exists method, to return always false.
+        $classExistMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'class_exists');
+        $classExistMock->expects($this->once())
+            ->will($this->returnValue(false));
+
+        $processor = new ProcessString(Krexx::$pool);
+        $this->assertAttributeEquals(Krexx::$pool, 'pool', $processor);
+        $this->assertAttributeInstanceOf(FileinfoDummy::class, static::BUFFER_INFO, $processor);
+    }
+
     /**
      * Testing the setting of the pool and of the file info class.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::__construct
      */
-    public function testConstruct()
+    public function testConstructWithFinfo()
     {
-        // Mock the class_exists method, to return always false.
-        \Brainworxx\Krexx\Analyse\Routing\Process\class_exists('', true, true);
-        $processor = new ProcessString(Krexx::$pool);
-        $this->assertAttributeEquals(Krexx::$pool, 'pool', $processor);
-        $this->assertAttributeInstanceOf(FileinfoDummy::class, 'bufferInfo', $processor);
+        // Mock the class_exists method, to return always true.
+        $classExistMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'class_exists');
+        $classExistMock->expects($this->once())
+            ->will($this->returnValue(true));
 
-        // Un-Mock the class_exist function.
-        \Brainworxx\Krexx\Analyse\Routing\Process\class_exists('', true, false);
         $processor = new ProcessString(Krexx::$pool);
-        $this->assertAttributeInstanceOf(finfo::class, 'bufferInfo', $processor);
+        $this->assertAttributeInstanceOf(finfo::class, static::BUFFER_INFO, $processor);
     }
 
     /**
@@ -71,7 +90,7 @@ class ProcessStringTest extends AbstractTest
     public function testProcessNormal()
     {
         $fixture = 'short string';
-        $encoding = 'some encoding';
+        $encoding = static::ENCODING;
         $length = 12;
         $model = $this->prepareMocksAndRunTest(
             $fixture,
@@ -81,7 +100,7 @@ class ProcessStringTest extends AbstractTest
 
         $this->assertEquals($model::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
-        $this->assertEquals('encoded ' . $fixture, $model->getNormal());
+        $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
         $this->assertEquals(false, $model->getHasExtra());
         $this->assertEquals(false, $model->getIsCallback());
         $this->assertArrayNotHasKey($model::META_ENCODING, $model->getJson());
@@ -106,7 +125,7 @@ class ProcessStringTest extends AbstractTest
 
         $this->assertEquals($model::TYPE_STRING . 'broken encoding ' .  $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
-        $this->assertEquals('encoded ' . $fixture, $model->getNormal());
+        $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
         $this->assertEquals('broken', $model->getJson()[$model::META_ENCODING]);
         $this->assertEquals(false, $model->getHasExtra());
         $this->assertEquals(false, $model->getIsCallback());
@@ -121,7 +140,7 @@ class ProcessStringTest extends AbstractTest
     public function testProcessLargerString()
     {
         $fixture = 'a string larger than 20 chars';
-        $encoding = 'some encoding';
+        $encoding = static::ENCODING;
         $length = strlen($fixture);
         $fileInfo = 'some mimetype';
         $model = $this->prepareMocksAndRunTest(
@@ -133,7 +152,7 @@ class ProcessStringTest extends AbstractTest
 
         $this->assertEquals($model::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
-        $this->assertEquals('encoded ' . $fixture, $model->getNormal());
+        $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
         $this->assertEquals($fileInfo, $model->getJson()[$model::META_MIME_TYPE]);
         $this->assertEquals(false, $model->getHasExtra());
         $this->assertEquals(false, $model->getIsCallback());
@@ -148,7 +167,7 @@ class ProcessStringTest extends AbstractTest
     public function testProcessHugeString()
     {
         $fixture = 'This is a very large string, bigger than 50 chars. Lorem ipsum and so on, just to fill it up.';
-        $encoding = 'some encoding';
+        $encoding = static::ENCODING;
         $length = strlen($fixture);
         $fileInfo = 'some mimetype';
         $model = $this->prepareMocksAndRunTest(
@@ -160,8 +179,8 @@ class ProcessStringTest extends AbstractTest
 
         $this->assertEquals($model::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
-        $this->assertEquals('encoded ' . substr($fixture, 0, 50) .  $model::UNKNOWN_VALUE, $model->getNormal());
-        $this->assertEquals('encoded ' . $fixture, $model->getData());
+        $this->assertEquals(static::ENCODING_PREFIX . substr($fixture, 0, 50) .  $model::UNKNOWN_VALUE, $model->getNormal());
+        $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getData());
         $this->assertEquals($fileInfo, $model->getJson()[$model::META_MIME_TYPE]);
         $this->assertEquals(true, $model->getHasExtra());
         $this->assertEquals(false, $model->getIsCallback());
@@ -176,7 +195,7 @@ class ProcessStringTest extends AbstractTest
     public function testProcessWithCallback()
     {
         $fixture = 'substr';
-        $encoding = 'some encoding';
+        $encoding = static::ENCODING;
         $length = 12;
         $model = $this->prepareMocksAndRunTest(
             $fixture,
@@ -186,7 +205,7 @@ class ProcessStringTest extends AbstractTest
 
         $this->assertEquals($model::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
-        $this->assertEquals('encoded ' . $fixture, $model->getNormal());
+        $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
         $this->assertEquals(false, $model->getHasExtra());
         $this->assertEquals(true, $model->getIsCallback());
         $this->assertArrayNotHasKey($model::META_ENCODING, $model->getJson());
@@ -203,7 +222,7 @@ class ProcessStringTest extends AbstractTest
     public function testProcessWithLinebreaks()
     {
         $fixture = 'some' . PHP_EOL . 'string';
-        $encoding = 'some encoding';
+        $encoding = static::ENCODING;
         $length = 12;
         $model = $this->prepareMocksAndRunTest(
             $fixture,
@@ -213,7 +232,7 @@ class ProcessStringTest extends AbstractTest
 
         $this->assertEquals($model::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
-        $this->assertEquals('encoded ' . $fixture . $model::UNKNOWN_VALUE, $model->getNormal());
+        $this->assertEquals(static::ENCODING_PREFIX . $fixture . $model::UNKNOWN_VALUE, $model->getNormal());
         $this->assertEquals(true, $model->getHasExtra());
         $this->assertEquals(false, $model->getIsCallback());
         $this->assertArrayNotHasKey($model::META_ENCODING, $model->getJson());
@@ -252,8 +271,8 @@ class ProcessStringTest extends AbstractTest
                     [$fixture]
                 )
                 ->will($this->returnValueMap([
-                    [$cut, false, 'encoded ' . $cut],
-                    [$fixture, false, 'encoded ' . $fixture]
+                    [$cut, false, static::ENCODING_PREFIX . $cut],
+                    [$fixture, false, static::ENCODING_PREFIX . $fixture]
                 ]));
 
             $encodingMock->expects($this->once())
@@ -267,7 +286,7 @@ class ProcessStringTest extends AbstractTest
             $encodingMock->expects($this->once())
                 ->method('encodeString')
                 ->with($fixture)
-                ->will($this->returnValue('encoded ' . $fixture));
+                ->will($this->returnValue(static::ENCODING_PREFIX . $fixture));
         }
         Krexx::$pool->encodingService = $encodingMock;
 
@@ -286,7 +305,7 @@ class ProcessStringTest extends AbstractTest
         $model->setData($fixture);
 
         $processString = new ProcessString(Krexx::$pool);
-        $this->setValueByReflection('bufferInfo', $fileinfoMock, $processString);
+        $this->setValueByReflection(static::BUFFER_INFO, $fileinfoMock, $processString);
         $processString->process($model);
 
         return $model;

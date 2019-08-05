@@ -53,13 +53,6 @@ abstract class AbstractCallback implements ConstInterface
     const EVENT_MARKER_RECURSION = 'recursion';
 
     /**
-     * We use this as the string prefix for the event name.
-     *
-     * @var string
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\AbstractCallback';
-
-    /**
      * Here we store all relevant data.
      *
      * @var Pool
@@ -147,7 +140,7 @@ abstract class AbstractCallback implements ConstInterface
     protected function dispatchStartEvent()
     {
         return $this->pool->eventService->dispatch(
-            static::$eventPrefix . '::callMe::start',
+            static::class . '::callMe::start',
             $this
         );
     }
@@ -166,7 +159,7 @@ abstract class AbstractCallback implements ConstInterface
     protected function dispatchEventWithModel($name, Model $model)
     {
         $this->pool->eventService->dispatch(
-            static::$eventPrefix . '::' . $name,
+            static::class . '::' . $name,
             $this,
             $model
         );

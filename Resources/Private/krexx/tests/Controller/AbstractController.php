@@ -121,6 +121,9 @@ class AbstractController extends AbstractTest
     {
         $pathToIni = 'some path';
         $pathToSkin = 'skin directory';
+        $pathToKdt = 'resources/jsLibs/kdt.min.js';
+        $skinJs = 'krexx.min.js';
+        $skinCss = 'skin.css';
 
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->once())
@@ -136,13 +139,13 @@ class AbstractController extends AbstractTest
             ->method('fileIsReadable')
             ->withConsecutive(
                 [$pathToIni],
-                [KREXX_DIR . 'resources/jsLibs/kdt.min.js'],
-                [$pathToSkin . 'krexx.min.js']
+                [KREXX_DIR . $pathToKdt],
+                [$pathToSkin . $skinJs]
             )->will($this->returnValueMap(
                 [
                     [$pathToIni, true],
-                    [KREXX_DIR . 'resources/jsLibs/kdt.min.js', true],
-                    [$pathToSkin . 'krexx.min.js', true]
+                    [KREXX_DIR . $pathToKdt, true],
+                    [$pathToSkin . $skinJs, true]
                 ]
             ));
         $fileServiceMock->expects($this->once())
@@ -152,14 +155,14 @@ class AbstractController extends AbstractTest
         $fileServiceMock->expects($this->exactly(3))
             ->method('getFileContents')
             ->withConsecutive(
-                [KREXX_DIR . 'resources/jsLibs/kdt.min.js'],
-                [$pathToSkin . 'skin.css'],
-                [$pathToSkin . 'krexx.min.js']
+                [KREXX_DIR . $pathToKdt],
+                [$pathToSkin . $skinCss],
+                [$pathToSkin . $skinJs]
             )->will($this->returnValueMap(
                 [
-                    [KREXX_DIR . 'resources/jsLibs/kdt.min.js', true, 'some js'],
-                    [$pathToSkin . 'skin.css', true, 'some styles'],
-                    [$pathToSkin . 'krexx.min.js', true, 'more js']
+                    [KREXX_DIR . $pathToKdt, true, 'some js'],
+                    [$pathToSkin . $skinCss, true, 'some styles'],
+                    [$pathToSkin . $skinJs, true, 'more js']
                 ]
             ));
         $poolMock->fileService = $fileServiceMock;

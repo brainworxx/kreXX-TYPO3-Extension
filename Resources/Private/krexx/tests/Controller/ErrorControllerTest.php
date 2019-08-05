@@ -140,6 +140,10 @@ class ErrorControllerTest extends AbstractController
      */
     public function testRegisterFatalActionWrongPhpVersion()
     {
+        // Short circuting the krexx command in the fatal error handler.
+        $krexxShorthand = $this->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'krexx');
+        $krexxShorthand->expects($this->once());
+        
         $messageMock = $this->createMock(Messages::class);
         $messageMock->expects($this->exactly(2))
             ->method('getHelp')

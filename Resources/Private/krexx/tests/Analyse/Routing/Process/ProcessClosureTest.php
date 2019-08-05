@@ -59,10 +59,11 @@ class ProcessClosureTest extends AbstractTest
          * Just another fixture.
          *
          * @param string $someVar
+         * @return string
          */
         $fixture = function (string $someVar) {
-            // 'Do' something, to prevent another code smell.
-            strlen($someVar);
+            // 'Do' something, to prevent another code smell or a bug.
+            return strlen($someVar);
         };
         $containingCode = 'just some source code';
         $filePath = 'some file in a directory';

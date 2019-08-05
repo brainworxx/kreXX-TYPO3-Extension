@@ -285,44 +285,56 @@ class ObjectsTest extends AbstractTest
     }
 
     /**
+     * Test with traversable deactivated and with a traversable class
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     */
+    public function testCallMeTraversableDeactivatedTraversable()
+    {
+        $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, false);
+        Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
+        $this->fixture['data'] = new TraversableFixture();
+        $this->objects->setParameters($this->fixture)->callMe();
+        $this->assertEquals(0, CallbackCounter::$counter);
+    }
+
+    /**
+     * Test with traversable deactivated and with a normal class
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     */
+    public function testCallMeTraversableDeactivatedNormal()
+    {
+        $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, false);
+        Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
+        $this->objects->setParameters($this->fixture)->callMe();
+        $this->assertEquals(0, CallbackCounter::$counter);
+    }
+
+    /**
+     * Test with traversable activated and with a normal class
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     */
+    public function testCallMeTraversableActivatedTraversable()
+    {
+        $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, true);
+        Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
+        $this->objects->setParameters($this->fixture)->callMe();
+        $this->assertEquals(0, CallbackCounter::$counter);
+    }
+
+    /**
      * Test, if the traversable part is called.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
      */
-    public function testCallMeTraversable()
+    public function testCallMeTraversableActivated()
     {
-        // Test with traversable deactivated and with a traversable class
-        $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, false);
-        Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
-        $this->fixture['data'] = new TraversableFixture();
-        $this->objects->setParameters($this->fixture)
-            ->callMe();
-        $this->assertEquals(0, CallbackCounter::$counter);
-
-        $this->tearDown();
-        $this->setUp();
-
-        // Test with traversable deactivated and with a normal class
-        $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, false);
-        Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
-        $this->objects->setParameters($this->fixture)
-            ->callMe();
-        $this->assertEquals(0, CallbackCounter::$counter);
-
-        $this->tearDown();
-        $this->setUp();
-
-        // Test with traversable activated and with a normal class
-        $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, true);
-        Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
-        $this->objects->setParameters($this->fixture)
-            ->callMe();
-        $this->assertEquals(0, CallbackCounter::$counter);
-
-        $this->tearDown();
-        $this->setUp();
-
         // Test with traversable activated and with a traversable class
         $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, true);
         Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;

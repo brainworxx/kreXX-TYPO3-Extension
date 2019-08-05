@@ -42,6 +42,8 @@ use StdClass;
 
 class RecursionTest extends AbstractTest
 {
+
+    const RECURSION_HIVE = 'recursionHive';
     /**
      * @var \Brainworxx\Krexx\Service\Flow\Recursion
      */
@@ -67,7 +69,7 @@ class RecursionTest extends AbstractTest
         $this->assertAttributeContains('Krexx', 'recursionMarker', $this->recursion);
         $this->assertAttributeSame($GLOBALS, 'globals', $this->recursion);
         $this->assertTrue($GLOBALS[$this->recursion->getMarker()]);
-        $this->assertAttributeEquals(new SplObjectStorage(), 'recursionHive', $this->recursion);
+        $this->assertAttributeEquals(new SplObjectStorage(), static::RECURSION_HIVE, $this->recursion);
         $this->assertSame($this->recursion, Krexx::$pool->recursionHandler);
     }
 
@@ -96,7 +98,7 @@ class RecursionTest extends AbstractTest
         $hiveMock->expects($this->once())
             ->method('attach')
             ->with($fixture);
-        $this->setValueByReflection('recursionHive', $hiveMock, $this->recursion);
+        $this->setValueByReflection(static::RECURSION_HIVE, $hiveMock, $this->recursion);
 
         $this->recursion->addToHive($fixture);
     }
@@ -115,7 +117,7 @@ class RecursionTest extends AbstractTest
             ->method('contains')
             ->with($fixture)
             ->will($this->returnValue(true));
-        $this->setValueByReflection('recursionHive', $hiveMock, $this->recursion);
+        $this->setValueByReflection(static::RECURSION_HIVE, $hiveMock, $this->recursion);
 
         $this->assertTrue($this->recursion->isInHive($fixture));
         $this->assertFalse($this->recursion->isInHive(['some', 'array']));
@@ -142,9 +144,9 @@ class RecursionTest extends AbstractTest
      */
     public function testIsInMetaHive()
     {
-        $hive = ['some string' => true];
+        $hive = ['marker' => true];
         $this->setValueByReflection('metaRecursionHive', $hive, $this->recursion);
-        $this->assertTrue($this->recursion->isInMetaHive('some string'));
+        $this->assertTrue($this->recursion->isInMetaHive('marker'));
         $this->assertFalse($this->recursion->isInMetaHive('what'));
     }
 

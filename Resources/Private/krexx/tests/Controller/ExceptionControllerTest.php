@@ -102,14 +102,13 @@ class ExceptionControllerTest extends AbstractController
     public function testRegisterAction()
     {
         $exceptionController = new ExceptionController(Krexx::$pool);
-        $exceptionController->registerAction();
+        $setExceptionHandler = $this->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'set_exception_handler');
+        $setExceptionHandler->expects($this->exactly(2))
+            ->with([$exceptionController, 'exceptionAction']);
 
-        $this->assertSame($exceptionController, \Brainworxx\Krexx\Controller\set_exception_handler([])[0]);
+        $exceptionController->registerAction();
         $newExceptionHandler = new ExceptionController(Krexx::$pool);
         $newExceptionHandler->registerAction();
-
-        // Wea are excepting the same old instance.
-        $this->assertSame($exceptionController, \Brainworxx\Krexx\Controller\set_exception_handler([])[0]);
     }
 
     /**
@@ -119,10 +118,11 @@ class ExceptionControllerTest extends AbstractController
      */
     public function testUnregisterAction()
     {
+        $restoreExceptionHandler = $this->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'restore_exception_handler');
+        $restoreExceptionHandler->expects($this->once());
+
         $exceptionController = new ExceptionController(Krexx::$pool);
         $exceptionController->unregisterAction();
-
-        $this->assertEquals(2, \Brainworxx\Krexx\Controller\restore_exception_handler());
     }
 
     /**

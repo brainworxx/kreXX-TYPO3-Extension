@@ -210,6 +210,7 @@ class KrexxTest extends AbstractTest
      */
     public function testTimerEndNormal()
     {
+        $this->mockDebugBacktraceStandard();
         Krexx::timerEnd();
         // The counter should go up to 1
         $this->assertAttributeEquals(
@@ -264,6 +265,8 @@ class KrexxTest extends AbstractTest
      */
     public function testOpen()
     {
+        $this->mockDebugBacktraceStandard();
+
         Krexx::open();
         // The counter should be at 1.
         $this->assertAttributeEquals(
@@ -320,6 +323,7 @@ class KrexxTest extends AbstractTest
     {
         // We make this a short one.
         Krexx::$pool->config->settings[Fallback::SETTING_MAX_STEP_NUMBER]->setValue(1);
+        $this->mockDebugBacktraceStandard();
 
         Krexx::backtrace();
         // The counter should be at 0.
@@ -370,6 +374,8 @@ class KrexxTest extends AbstractTest
      */
     public function testRegisterFatal()
     {
+        $this->mockDebugBacktraceStandard();
+
         Krexx::registerFatal();
         $this->assertEquals(['php7' => ['key' => 'php7', 'params' => []]], Krexx::$pool->messages->getKeys());
     }
@@ -458,6 +464,8 @@ class KrexxTest extends AbstractTest
      */
     public function testLog()
     {
+        $this->mockDebugBacktraceStandard();
+
         $this->beginForcedLogger();
         $settingsMockDest = Krexx::$pool->config->settings[Fallback::SETTING_DESTINATION];
         $settingsMockAjax = Krexx::$pool->config->settings[Fallback::SETTING_DETECT_AJAX];
@@ -484,6 +492,8 @@ class KrexxTest extends AbstractTest
      */
     public function testLogBacktrace()
     {
+        $this->mockDebugBacktraceStandard();
+
         $this->beginForcedLogger();
         $settingsMockDest = Krexx::$pool->config->settings[Fallback::SETTING_DESTINATION];
         $settingsMockAjax = Krexx::$pool->config->settings[Fallback::SETTING_DETECT_AJAX];
@@ -511,19 +521,21 @@ class KrexxTest extends AbstractTest
      */
     public function testLogTimerEnd()
     {
-         $this->beginForcedLogger();
-         $settingsMockDest = Krexx::$pool->config->settings[Fallback::SETTING_DESTINATION];
-         $settingsMockAjax = Krexx::$pool->config->settings[Fallback::SETTING_DETECT_AJAX];
+        $this->mockDebugBacktraceStandard();
 
-         Krexx::logTimerEnd();
-         // The counter should go up to 1
-         $this->assertAttributeEquals(
-             1,
-             static::KREXX_COUNT,
-             Krexx::$pool->emergencyHandler
-         );
+        $this->beginForcedLogger();
+        $settingsMockDest = Krexx::$pool->config->settings[Fallback::SETTING_DESTINATION];
+        $settingsMockAjax = Krexx::$pool->config->settings[Fallback::SETTING_DETECT_AJAX];
 
-         $this->endForcedLogger($settingsMockDest, $settingsMockAjax);
+        Krexx::logTimerEnd();
+        // The counter should go up to 1
+        $this->assertAttributeEquals(
+            1,
+            static::KREXX_COUNT,
+            Krexx::$pool->emergencyHandler
+        );
+
+        $this->endForcedLogger($settingsMockDest, $settingsMockAjax);
     }
 
     /**
@@ -533,6 +545,8 @@ class KrexxTest extends AbstractTest
      */
     public function testCallStatic()
     {
+        $this->mockDebugBacktraceStandard();
+
         $configMock = $this->createPartialMock(Config::class, ['getDevHandler']);
         $configMock->expects($this->any())
             ->method('getDevHandler')

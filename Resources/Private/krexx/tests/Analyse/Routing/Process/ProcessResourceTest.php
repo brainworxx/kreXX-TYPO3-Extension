@@ -56,20 +56,14 @@ class ProcessResourceTest extends AbstractTest
         $metaResults = [
             'best', 'stream', 'resource', 'ever'
         ];
-        \Brainworxx\Krexx\Analyse\Routing\Process\get_resource_type(null, 'stream');
-        \Brainworxx\Krexx\Analyse\Routing\Process\stream_get_meta_data(null, $metaResults);
+        $getResourceType = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'get_resource_type');
+        $getResourceType->expects($this->once())
+            ->will($this->returnValue('stream'));
+        $streamGetMetsData = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'stream_get_meta_data');
+        $streamGetMetsData->expects($this->once())
+            ->will($this->returnValue($metaResults));
 
-        Krexx::$pool->rewrite[ThroughResource::class] = CallbackCounter::class;
-        $model = new Model(Krexx::$pool);
-        $model->setData($resource);
-
-        $processor = new ProcessResource(Krexx::$pool);
-        $processor->process($model);
-
-        $this->assertEquals($model::TYPE_RESOURCE, $model->getType());
-        $this->assertEquals('resource (stream)', $model->getNormal());
-        $this->assertEquals($metaResults, $model->getParameters()[$model::PARAM_DATA]);
-        $this->assertEquals(1, CallbackCounter::$counter);
+        $this->runTheTest($resource, 1, 'resource (stream)', null, $metaResults);
     }
 
     /**
@@ -85,20 +79,14 @@ class ProcessResourceTest extends AbstractTest
         $metaResults = [
             'everybody', 'likes', 'curling'
         ];
-        \Brainworxx\Krexx\Analyse\Routing\Process\get_resource_type(null, 'curl');
-        \Brainworxx\Krexx\Analyse\Routing\Process\curl_getinfo(null, $metaResults);
+        $getResourceType = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'get_resource_type');
+        $getResourceType->expects($this->once())
+            ->will($this->returnValue('curl'));
+        $getResourceType = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'curl_getinfo');
+        $getResourceType->expects($this->once())
+            ->will($this->returnValue($metaResults));
 
-        Krexx::$pool->rewrite[ThroughResource::class] = CallbackCounter::class;
-        $model = new Model(Krexx::$pool);
-        $model->setData($resource);
-
-        $processor = new ProcessResource(Krexx::$pool);
-        $processor->process($model);
-
-        $this->assertEquals($model::TYPE_RESOURCE, $model->getType());
-        $this->assertEquals('resource (curl)', $model->getNormal());
-        $this->assertEquals($metaResults, $model->getParameters()[$model::PARAM_DATA]);
-        $this->assertEquals(1, CallbackCounter::$counter);
+        $this->runTheTest($resource, 1, 'resource (curl)', null, $metaResults);
     }
 
      /**
@@ -111,21 +99,14 @@ class ProcessResourceTest extends AbstractTest
         $this->mockEmergencyHandler();
 
         $resource = 'Letting a string look like a resource is easy.';
-        \Brainworxx\Krexx\Analyse\Routing\Process\get_resource_type(null, 'whatever');
-        \Brainworxx\Krexx\Analyse\Routing\Process\version_compare(null, null, null, false);
+        $getResourceType = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'get_resource_type');
+        $getResourceType->expects($this->once())
+            ->will($this->returnValue('whatever'));
+        $versionCompare = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'version_compare');
+        $versionCompare->expects($this->once())
+            ->will($this->returnValue(false));
 
-        Krexx::$pool->rewrite[ThroughResource::class] = CallbackCounter::class;
-        $model = new Model(Krexx::$pool);
-        $model->setData($resource);
-
-        $processor = new ProcessResource(Krexx::$pool);
-        $processor->process($model);
-
-        $this->assertEquals($model::TYPE_RESOURCE, $model->getType());
-        $this->assertEquals('resource (whatever)', $model->getNormal());
-        $this->assertEquals('resource (whatever)', $model->getData());
-        $this->assertEmpty($model->getParameters());
-        $this->assertEquals(0, CallbackCounter::$counter);
+        $this->runTheTest($resource, 0, 'resource (whatever)', 'resource (whatever)');
     }
 
     /**
@@ -138,9 +119,32 @@ class ProcessResourceTest extends AbstractTest
         $this->mockEmergencyHandler();
 
         $resource = 'Meh, here I might not really look like a resource at all.';
-        \Brainworxx\Krexx\Analyse\Routing\Process\get_resource_type(null, 'not a string');
-        \Brainworxx\Krexx\Analyse\Routing\Process\version_compare(null, null, null, true);
+        $getResourceType = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'get_resource_type');
+        $getResourceType->expects($this->once())
+            ->will($this->returnValue('not a string'));
+        $versionCompare = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'version_compare');
+        $versionCompare->expects($this->once())
+            ->will($this->returnValue(true));
 
+        $this->runTheTest($resource, 0, 'string', 'string');
+    }
+
+    /**
+     * Running the test is pretty much the same everyway here.
+     *
+     * @param $resource
+     * @param $counter
+     * @param $normalExpectation
+     * @param $dataExpectation
+     * @param $metaResults
+     */
+    protected function runTheTest(
+        $resource,
+        $counter,
+        $normalExpectation,
+        $dataExpectation = null,
+        $metaResults = null
+    ) {
         Krexx::$pool->rewrite[ThroughResource::class] = CallbackCounter::class;
         $model = new Model(Krexx::$pool);
         $model->setData($resource);
@@ -149,9 +153,15 @@ class ProcessResourceTest extends AbstractTest
         $processor->process($model);
 
         $this->assertEquals($model::TYPE_RESOURCE, $model->getType());
-        $this->assertEquals('string', $model->getNormal());
-        $this->assertEquals('string', $model->getData());
-        $this->assertEmpty($model->getParameters());
-        $this->assertEquals(0, CallbackCounter::$counter);
+        $this->assertEquals($normalExpectation, $model->getNormal());
+        if (isset($dataExpectation)) {
+            $this->assertEquals($dataExpectation, $model->getData());
+        }
+        if (isset($metaResults)) {
+            $this->assertEquals($metaResults, $model->getParameters()[$model::PARAM_DATA]);
+        } else {
+            $this->assertEmpty($model->getParameters());
+        }
+        $this->assertEquals($counter, CallbackCounter::$counter);
     }
 }

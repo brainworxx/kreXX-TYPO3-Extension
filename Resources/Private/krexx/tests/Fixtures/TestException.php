@@ -34,55 +34,8 @@
 
 namespace Brainworxx\Krexx\Tests\Fixtures;
 
-/**
- * A fixture class that we are analysing.
- *
- * @package Brainworxx\Krexx\Tests\Helpers
- */
-class SimpleFixture
+use \Exception;
+
+class TestException extends Exception
 {
-    /**
-     * Value 1
-     *
-     * @var int
-     */
-    public $value1 = 1;
-
-    /**
-     * Value 2
-     *
-     * @var int
-     */
-    public $value2 = 2;
-
-    /**
-     * Value 3
-     *
-     * @var string
-     */
-    protected $value3 = '3';
-
-    /**
-     * Value 4
-     *
-     * @var int
-     */
-    protected $value4 = 4;
-
-    /**
-     * Value 5
-     *
-     * @var string
-     */
-    private $value5 = 'dont\'t look at me!';
-
-    /**
-     * Do something with value5 to prevent a code smell.
-     *
-     * @return string
-     */
-    protected function doSomething()
-    {
-        return $this->value5;
-    }
 }

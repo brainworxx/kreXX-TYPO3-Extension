@@ -41,6 +41,7 @@ class InheritDocFixture extends ComplexMethodFixture
      */
     public function parameterizedMethod($parameter)
     {
+        $this->unresolvable();
         return parent::parameterizedMethod($parameter);
     }
 
@@ -49,6 +50,6 @@ class InheritDocFixture extends ComplexMethodFixture
      */
     protected function unresolvable()
     {
-
+        return 2;
     }
 }

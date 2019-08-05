@@ -1,3 +1,7 @@
+3.1.1 dev
+- Introduce php-mock/php-mock-phpunit
+- Change: Remove the event prefix and use static::class instead.
+
 3.1.0
 - Use some real autoloading, with a fallback to manually including
   all files.

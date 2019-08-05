@@ -45,6 +45,9 @@ use Brainworxx\Krexx\Krexx;
 class RoutingTest extends AbstractTest
 {
     const ROUTING_MOCK_RETURN_VALUE = 'routing mock success';
+    const IS_IN_HIVE = 'isInHive';
+    const ADD_TO_HIVE = 'addToHive';
+    const NO_ROUTE = 'no routing';
 
     /**
      * @var \Brainworxx\Krexx\Analyse\Routing\Routing
@@ -268,6 +271,18 @@ class RoutingTest extends AbstractTest
     }
 
     /**
+     * What the method name says.
+     *
+     * @return array
+     */
+    protected function createArrayParameter()
+    {
+        return [
+            'some', 'values'
+        ];
+    }
+
+    /**
      * Normal array routing.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
@@ -278,19 +293,17 @@ class RoutingTest extends AbstractTest
     {
         // Create the model.
         $model = new Model(Krexx::$pool);
-        $parameter = [
-            'some', 'values'
-        ];
+        $parameter = $this->createArrayParameter();
         $model->setData($parameter);
 
         $this->assertEmergencyHandler(false, false);
 
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->once())
-            ->method('isInHive')
+            ->method(static::IS_IN_HIVE)
             ->will($this->returnValue(false));
         $recursionMock->expects($this->never())
-            ->method('addToHive');
+            ->method(static::ADD_TO_HIVE);
         Krexx::$pool->recursionHandler = $recursionMock;
 
         $this->assertEquals(static::ROUTING_MOCK_RETURN_VALUE, $this->mockRouting('processArray', $model));
@@ -306,22 +319,20 @@ class RoutingTest extends AbstractTest
     {
         // Create the model.
         $model = new Model(Krexx::$pool);
-        $parameter = [
-            'some', 'values'
-        ];
+        $parameter = $this->createArrayParameter();
         $model->setData($parameter);
 
         $this->assertEmergencyHandler(false, true);
 
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->never())
-            ->method('isInHive');
+            ->method(static::IS_IN_HIVE);
         $recursionMock->expects($this->never())
-            ->method('addToHive');
+            ->method(static::ADD_TO_HIVE);
         Krexx::$pool->recursionHandler = $recursionMock;
 
         $this->assertRender($model, 'renderSingleChild');
-        $this->assertEquals('renderSingleChild called', $this->mockRouting('no routing', $model));
+        $this->assertEquals('renderSingleChild called', $this->mockRouting(static::NO_ROUTE, $model));
     }
 
     /**
@@ -335,23 +346,21 @@ class RoutingTest extends AbstractTest
         // Create the model.
         $model = new Model(Krexx::$pool);
         // We are not really using the globals.
-        $parameter = [
-            'some', 'values'
-        ];
+        $parameter = $this->createArrayParameter();
         $model->setData($parameter);
 
         $this->assertEmergencyHandler(false, false);
 
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->once())
-            ->method('isInHive')
+            ->method(static::IS_IN_HIVE)
             ->will($this->returnValue(true));
         $recursionMock->expects($this->never())
-            ->method('addToHive');
+            ->method(static::ADD_TO_HIVE);
         Krexx::$pool->recursionHandler = $recursionMock;
 
         $this->assertRender($model, 'renderRecursion');
-        $this->assertEquals('renderRecursion called', $this->mockRouting('no routing', $model));
+        $this->assertEquals('renderRecursion called', $this->mockRouting(static::NO_ROUTE, $model));
         $this->assertEquals('$GLOBALS', $model->getNormal());
     }
 
@@ -374,10 +383,10 @@ class RoutingTest extends AbstractTest
 
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->once())
-            ->method('isInHive')
+            ->method(static::IS_IN_HIVE)
             ->will($this->returnValue(false));
         $recursionMock->expects($this->once())
-            ->method('addToHive')
+            ->method(static::ADD_TO_HIVE)
             ->with($parameter);
         Krexx::$pool->recursionHandler = $recursionMock;
 
@@ -403,14 +412,14 @@ class RoutingTest extends AbstractTest
 
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->once())
-            ->method('isInHive')
+            ->method(static::IS_IN_HIVE)
             ->will($this->returnValue(true));
         $recursionMock->expects($this->never())
-            ->method('addToHive');
+            ->method(static::ADD_TO_HIVE);
         Krexx::$pool->recursionHandler = $recursionMock;
 
         $this->assertRender($model, 'renderRecursion');
-        $this->assertEquals('renderRecursion called', $this->mockRouting('no routing', $model));
+        $this->assertEquals('renderRecursion called', $this->mockRouting(static::NO_ROUTE, $model));
         $this->assertNotEmpty($model->getDomid());
     }
 
@@ -430,7 +439,7 @@ class RoutingTest extends AbstractTest
 
         $this->assertEmergencyHandler(false, true);
         $this->assertRender($model, 'renderSingleChild');
-        $this->assertEquals('renderSingleChild called', $this->mockRouting('no routing', $model));
+        $this->assertEquals('renderSingleChild called', $this->mockRouting(static::NO_ROUTE, $model));
     }
 
     /**
@@ -452,10 +461,10 @@ class RoutingTest extends AbstractTest
 
         $recursionMock = $this->createMock(Recursion::class);
         $recursionMock->expects($this->once())
-            ->method('isInHive')
+            ->method(static::IS_IN_HIVE)
             ->will($this->returnValue(false));
         $recursionMock->expects($this->once())
-            ->method('addToHive')
+            ->method(static::ADD_TO_HIVE)
             ->with($parameter);
         Krexx::$pool->recursionHandler = $recursionMock;
 

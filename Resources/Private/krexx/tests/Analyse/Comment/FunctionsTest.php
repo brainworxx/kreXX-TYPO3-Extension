@@ -53,6 +53,8 @@ class FunctionsTest extends AbstractTest
          * Do something.
          */
         $fixture = function () {
+            // Do something in here, to prevent a code smell.
+            return 1;
         };
         $functionComment = new Functions(Krexx::$pool);
         $reflection = new \ReflectionFunction($fixture);

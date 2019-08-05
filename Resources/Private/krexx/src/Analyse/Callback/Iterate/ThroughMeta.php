@@ -48,10 +48,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class ThroughMeta extends AbstractCallback
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMeta';
 
     /**
      * Renders the meta data of a class, which is actually the same as the

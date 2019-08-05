@@ -57,17 +57,23 @@ class MethodsFixture
 
     /**
      * Private method. Duh.
+     *
+     * @return string
      */
     private function privateMethod()
     {
+        return '';
     }
 
     /**
      * Asking politely for trouble here.
      *
      * @param \someNotExistingClass $parameter
+     *
+     * @return string
      */
     public function troublesomeMethod(\someNotExistingClass $parameter)
     {
+        return $parameter->stuff . $this->privateMethod();
     }
 }

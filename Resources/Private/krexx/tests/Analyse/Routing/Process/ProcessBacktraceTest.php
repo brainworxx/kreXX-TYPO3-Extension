@@ -43,6 +43,37 @@ use Brainworxx\Krexx\Krexx;
 
 class ProcessBacktraceTest extends AbstractTest
 {
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $data = 'data';
+        $someFile = 'some file';
+        $debugBacktrace = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'debug_backtrace');
+        $debugBacktrace->expects($this->any())
+            ->will($this->returnValue(
+                [
+                    [
+                        ConstInterface::TRACE_FILE => KREXX_DIR . 'src' . DIRECTORY_SEPARATOR . 'blargh',
+                        $data => 'Step 1',
+                    ],
+                    [
+                        ConstInterface::TRACE_FILE => $someFile,
+                        $data => 'Step 2',
+                    ],
+                    [
+                        ConstInterface::TRACE_FILE => $someFile,
+                        $data => 'Step 3',
+                    ],
+                    [
+                        ConstInterface::TRACE_FILE => KREXX_DIR . 'src' . DIRECTORY_SEPARATOR . 'whatever',
+                        $data => 'Step 4',
+                    ],
+                ]
+            ));
+    }
+
     /**
      * Test the setting of the pool.
      *

@@ -45,6 +45,10 @@ use Brainworxx\Krexx\Tests\Helpers\EventHandler;
 
 class EventTest extends AbstractTest
 {
+    const EVENT_ONE = 'some event';
+    const EVENT_TWO = 'another event';
+
+
     /**
      * Test the setting of the pool and the retrieval of the listener.
      *
@@ -52,17 +56,19 @@ class EventTest extends AbstractTest
      */
     public function testConstruct()
     {
-        Registration::registerEvent('some event', CallbackCounter::class);
-        Registration::registerEvent('some event', 'SomeClassName');
-        Registration::registerEvent('another event', CallbackNothing::class);
+        $customEventHandler = 'SomeClassName';
+
+        Registration::registerEvent(static::EVENT_ONE, CallbackCounter::class);
+        Registration::registerEvent(static::EVENT_ONE, $customEventHandler);
+        Registration::registerEvent(static::EVENT_TWO, CallbackNothing::class);
 
         $event = new Event(Krexx::$pool);
 
         $this->assertAttributeSame(Krexx::$pool, 'pool', $event);
         $this->assertAttributeEquals(
             [
-                'some event' => [CallbackCounter::class => CallbackCounter::class, 'SomeClassName' => 'SomeClassName'],
-                'another event' => [CallbackNothing::class => CallbackNothing::class]
+                static::EVENT_ONE => [CallbackCounter::class => CallbackCounter::class, $customEventHandler => $customEventHandler],
+                static::EVENT_TWO => [CallbackNothing::class => CallbackNothing::class]
             ],
             'register',
             $event
@@ -78,10 +84,10 @@ class EventTest extends AbstractTest
     {
         $event = new Event(Krexx::$pool);
         $fixture = [
-            'some event' => [
+            static::EVENT_ONE => [
                 EventHandler::class => EventHandler::class
             ],
-            'another event' => [
+            static::EVENT_TWO => [
                 EventHandler::class => EventHandler::class
             ]
         ];
@@ -89,7 +95,7 @@ class EventTest extends AbstractTest
 
         $callback = new CallbackNothing(Krexx::$pool);
         $model = new Model(Krexx::$pool);
-        $event->dispatch('some event', $callback, $model);
+        $event->dispatch(static::EVENT_ONE, $callback, $model);
         $this->assertSame(Krexx::$pool, EventHandler::$pool);
         $this->assertSame($callback, EventHandler::$callback);
         $this->assertSame($model, EventHandler::$model);
@@ -98,7 +104,7 @@ class EventTest extends AbstractTest
         EventHandler::$model = null;
 
         $callback = new CallbackNothing(Krexx::$pool);
-        $event->dispatch('another event', $callback);
+        $event->dispatch(static::EVENT_TWO, $callback);
         $this->assertSame(Krexx::$pool, EventHandler::$pool);
         $this->assertSame($callback, EventHandler::$callback);
         $this->assertNull(EventHandler::$model);

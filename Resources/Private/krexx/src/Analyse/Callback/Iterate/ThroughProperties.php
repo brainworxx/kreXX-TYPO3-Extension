@@ -54,10 +54,6 @@ use ReflectionProperty;
  */
 class ThroughProperties extends AbstractCallback
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughProperties';
 
     /**
      * The file service, used to read and write files.

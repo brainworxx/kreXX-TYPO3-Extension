@@ -34,22 +34,28 @@
 
 namespace Brainworxx\Krexx\Tests\Helpers;
 
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\KrexxTest;
-use Brainworxx\Krexx\View\Messages;
 use PHPUnit\Framework\TestCase;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Krexx;
+use phpmock\phpunit\PHPMock;
 
 abstract class AbstractTest extends TestCase
 {
+    use PHPMock;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
+        $this->mockPhpSapiNameStandard();
         Pool::createPool();
     }
 
@@ -199,5 +205,40 @@ abstract class AbstractTest extends TestCase
 
         // Inject the mock.
         Krexx::$pool->eventService = $eventServiceMock;
+    }
+
+    /**
+     * Standard mocking of the debug_backtrace.
+     */
+    protected function mockDebugBacktraceStandard()
+    {
+        $fixture = [
+            0 => [],
+            1 => [],
+            2 => [],
+            3 => [],
+            4 => [
+                ConstInterface::TRACE_FUNCTION => 'krexx',
+                ConstInterface::TRACE_CLASS => 'MockClass',
+                ConstInterface::TRACE_FILE => 'mockfile.php',
+                ConstInterface::TRACE_LINE => 999
+            ]
+        ];
+
+        $debugBacktrace = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Caller\\', 'debug_backtrace');
+        $debugBacktrace->expects($this->once())
+            ->willReturn($fixture);
+    }
+
+    /**
+     * Standard mocking of the php_sapi_name to prevent cli detection.
+     */
+    protected function mockPhpSapiNameStandard()
+    {
+        $phpSapiNameMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Config\\', 'php_sapi_name');
+        $phpSapiNameMock->expects($this->any())
+            ->will(
+                $this->returnValue('whatever')
+            );
     }
 }

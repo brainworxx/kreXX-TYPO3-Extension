@@ -47,10 +47,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class Constants extends AbstractObjectAnalysis
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Constants';
 
     /**
      * Dumps the constants of a class,

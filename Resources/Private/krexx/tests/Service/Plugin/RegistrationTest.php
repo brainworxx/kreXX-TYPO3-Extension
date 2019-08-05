@@ -37,6 +37,8 @@ namespace Brainworxx\Krexx\Tests\Service\Plugin;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\View\Messages;
 
 /**
  * Testing a static class . So. Much. Fun.
@@ -45,6 +47,17 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
  */
 class RegistrationTest extends AbstractTest
 {
+    const PLUGINS = 'plugins';
+    const CHUNK_FOLDER = 'chunkFolder';
+    const LOG_FOLDER = 'logFolder';
+    const CONFIG_FILE = 'configFile';
+    const BLACK_LIST_METHODS = 'blacklistDebugMethods';
+    const BLACK_LIST_CLASS = 'blacklistDebugClass';
+    const ADD_HELP_FILES = 'additionalHelpFiles';
+    const REWRITE_LIST = 'rewriteList';
+    const EVENT_LIST = 'eventList';
+    const ADD_SKIN_LIST = 'additionalSkinList';
+
     /**
      * @var Registration
      */
@@ -61,16 +74,16 @@ class RegistrationTest extends AbstractTest
         parent::tearDown();
 
         // Reset everything.
-        $this->setValueByReflection('plugins', [], $this->registration);
-        $this->setValueByReflection('chunkFolder', '', $this->registration);
-        $this->setValueByReflection('logFolder', '', $this->registration);
-        $this->setValueByReflection('configFile', '', $this->registration);
-        $this->setValueByReflection('blacklistDebugMethods', [], $this->registration);
-        $this->setValueByReflection('blacklistDebugClass', [], $this->registration);
-        $this->setValueByReflection('additionalHelpFiles', [], $this->registration);
-        $this->setValueByReflection('rewriteList', [], $this->registration);
-        $this->setValueByReflection('eventList', [], $this->registration);
-        $this->setValueByReflection('additionalSkinList', [], $this->registration);
+        $this->setValueByReflection(static::PLUGINS, [], $this->registration);
+        $this->setValueByReflection(static::CHUNK_FOLDER, '', $this->registration);
+        $this->setValueByReflection(static::LOG_FOLDER, '', $this->registration);
+        $this->setValueByReflection(static::CONFIG_FILE, '', $this->registration);
+        $this->setValueByReflection(static::BLACK_LIST_METHODS, [], $this->registration);
+        $this->setValueByReflection(static::BLACK_LIST_CLASS, [], $this->registration);
+        $this->setValueByReflection(static::ADD_HELP_FILES, [], $this->registration);
+        $this->setValueByReflection(static::REWRITE_LIST, [], $this->registration);
+        $this->setValueByReflection(static::EVENT_LIST, [], $this->registration);
+        $this->setValueByReflection(static::ADD_SKIN_LIST, [], $this->registration);
     }
 
     /**
@@ -82,7 +95,7 @@ class RegistrationTest extends AbstractTest
     {
         $path = 'some file.ini';
         Registration::setConfigFile($path);
-        $this->assertAttributeEquals($path, 'configFile', $this->registration);
+        $this->assertAttributeEquals($path, static::CONFIG_FILE, $this->registration);
     }
 
     /**
@@ -94,7 +107,7 @@ class RegistrationTest extends AbstractTest
     {
         $path = 'extra chunky';
         Registration::setChunksFolder($path);
-        $this->assertAttributeEquals($path, 'chunkFolder', $this->registration);
+        $this->assertAttributeEquals($path, static::CHUNK_FOLDER, $this->registration);
     }
 
     /**
@@ -106,7 +119,7 @@ class RegistrationTest extends AbstractTest
     {
         $path = 'logging';
         Registration::setLogFolder($path);
-        $this->assertAttributeEquals($path, 'logFolder', $this->registration);
+        $this->assertAttributeEquals($path, static::LOG_FOLDER, $this->registration);
     }
 
     /**
@@ -126,7 +139,7 @@ class RegistrationTest extends AbstractTest
         $this->assertAttributeEquals([$class => [
             $methodOne,
             $methodTwo
-        ]], 'blacklistDebugMethods', $this->registration);
+        ]], static::BLACK_LIST_METHODS, $this->registration);
     }
 
     /**
@@ -136,13 +149,13 @@ class RegistrationTest extends AbstractTest
      */
     public function testAddClassToDebugBlacklist()
     {
-        $classOne = 'SomClass';
+        $classOne = 'SomeClass';
         $classTwo = 'AnotherClass';
         Registration::addClassToDebugBlacklist($classOne);
         Registration::addClassToDebugBlacklist($classTwo);
         Registration::addClassToDebugBlacklist($classOne);
 
-        $this->assertAttributeEquals([$classOne, $classTwo], 'blacklistDebugClass', $this->registration);
+        $this->assertAttributeEquals([$classOne, $classTwo], static::BLACK_LIST_CLASS, $this->registration);
     }
 
     /**
@@ -152,13 +165,13 @@ class RegistrationTest extends AbstractTest
      */
     public function testAddRewrite()
     {
-        $classOne = 'SomClass';
-        $classTwo = 'AnotherClass';
+        $classOne = 'OrgClass';
+        $classTwo = 'NewClass';
         $classThree = 'MoreClasses';
         Registration::addRewrite($classOne, $classTwo);
         Registration::addRewrite($classOne, $classThree);
 
-        $this->assertAttributeEquals([$classOne => $classThree], 'rewriteList', $this->registration);
+        $this->assertAttributeEquals([$classOne => $classThree], static::REWRITE_LIST, $this->registration);
     }
 
     /**
@@ -170,8 +183,8 @@ class RegistrationTest extends AbstractTest
     {
         $eventOne = 'some event';
         $eventTwo = 'another event';
-        $classOne = 'SomClass';
-        $classTwo = 'AnotherClass';
+        $classOne = 'EventClass1';
+        $classTwo = 'EventClass2';
         $classThree = 'MoreClasses';
         Registration::registerEvent($eventOne, $classOne);
         Registration::registerEvent($eventOne, $classTwo);
@@ -180,7 +193,7 @@ class RegistrationTest extends AbstractTest
         $this->assertAttributeEquals([
             $eventOne => [$classOne => $classOne, $classTwo => $classTwo],
             $eventTwo => [$classThree => $classThree]
-        ], 'eventList', $this->registration);
+        ], static::EVENT_LIST, $this->registration);
     }
 
     /**
@@ -195,7 +208,7 @@ class RegistrationTest extends AbstractTest
         Registration::registerAdditionalHelpFile($fileOne);
         Registration::registerAdditionalHelpFile($fileTwo);
 
-        $this->assertAttributeEquals([$fileOne, $fileTwo], 'additionalHelpFiles', $this->registration);
+        $this->assertAttributeEquals([$fileOne, $fileTwo], static::ADD_HELP_FILES, $this->registration);
     }
 
     /**
@@ -213,17 +226,17 @@ class RegistrationTest extends AbstractTest
         $this->assertAttributeEquals([$skinName => [
             Registration::SKIN_CLASS => $renderClass,
             Registration::SKIN_DIRECTORY => $pathToHtmlFiles
-        ]], 'additionalSkinList', $this->registration);
+        ]], static::ADD_SKIN_LIST, $this->registration);
     }
 
     /**
-     * Test the registering of a plugin.
+     * Create a plugin mock.
      *
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::register
-     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin
+     * @return PluginConfigInterface
      */
-    public function testRegisterAndActivatePlugin()
+    protected function createMockPlugin()
     {
+
         $pluginMock = $this->createMock(PluginConfigInterface::class);
         $pluginMock->expects($this->once())
             ->method('getName')
@@ -233,8 +246,20 @@ class RegistrationTest extends AbstractTest
             ->will($this->returnValue('v0.0.0'));
         $pluginMock->expects($this->once())
             ->method('exec');
-        Registration::register($pluginMock);
 
+        /** @var PluginConfigInterface $pluginMock */
+        return $pluginMock;
+    }
+    /**
+     * Test the registering of a plugin.
+     *
+     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::register
+     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::activatePlugin
+     */
+    public function testRegisterAndActivatePlugin()
+    {
+        $pluginMock = $this->createMockPlugin();
+        Registration::register($pluginMock);
         $expectation = [
             get_class($pluginMock) => [
                 Registration::CONFIG_CLASS => $pluginMock,
@@ -243,11 +268,11 @@ class RegistrationTest extends AbstractTest
                 Registration::PLUGIN_VERSION => 'v0.0.0'
             ]
         ];
-        $this->assertAttributeEquals($expectation, 'plugins', $this->registration);
+        $this->assertAttributeEquals($expectation, static::PLUGINS, $this->registration);
 
         Registration::activatePlugin(get_class($pluginMock));
         $expectation[get_class($pluginMock)][Registration::IS_ACTIVE] = true;
-        $this->assertAttributeEquals($expectation, 'plugins', $this->registration);
+        $this->assertAttributeEquals($expectation, static::PLUGINS, $this->registration);
     }
 
     /**
@@ -257,9 +282,9 @@ class RegistrationTest extends AbstractTest
      */
     public function testDeactivatePluginDeactivated()
     {
-        $this->setValueByReflection('logFolder', 'whatever', $this->registration);
+        $this->setValueByReflection(static::LOG_FOLDER, 'whatever', $this->registration);
         Registration::deactivatePlugin('Test Plugin');
-        $this->assertAttributeEquals('whatever', 'logFolder', $this->registration);
+        $this->assertAttributeEquals('whatever', static::LOG_FOLDER, $this->registration);
     }
 
     /**
@@ -267,8 +292,51 @@ class RegistrationTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Service\Plugin\Registration::deactivatePlugin
      */
-    public function testDeactivatePuginNormal()
+    public function testDeactivatePluginNormal()
     {
-        $this->markTestIncomplete('Write me!');
+        // Register a plugin with a configuration class
+        $pluginMock = $this->createMockPlugin();
+        Registration::register($pluginMock);
+        $pluginMockClassName = get_class($pluginMock);
+        Registration::activatePlugin($pluginMockClassName);
+
+        // Set some values and test if they got purged.
+        $this->setValueByReflection(static::CHUNK_FOLDER, 'xxx', $this->registration);
+        $this->setValueByReflection(static::LOG_FOLDER, 'yyy', $this->registration);
+        $this->setValueByReflection(static::CONFIG_FILE, 'zzz', $this->registration);
+        $this->setValueByReflection(static::BLACK_LIST_METHODS, [123], $this->registration);
+        $this->setValueByReflection(static::BLACK_LIST_CLASS, [345], $this->registration);
+        $this->setValueByReflection(static::ADD_HELP_FILES, [678], $this->registration);
+        $this->setValueByReflection(static::REWRITE_LIST, [900], $this->registration);
+        $this->setValueByReflection(static::EVENT_LIST, [987], $this->registration);
+        $this->setValueByReflection(static::ADD_SKIN_LIST, [654], $this->registration);
+
+        // Make sure we can test the changes to the pool.
+        $oldConfig = Krexx::$pool->config;
+        $messageMock = $this->createMock(Messages::class);
+        $messageMock->expects($this->once())
+            ->method('readHelpTexts');
+        Krexx::$pool->messages = $messageMock;
+
+        // Deactivate it, and test the purging of the values.
+        Registration::deactivatePlugin($pluginMockClassName);
+        $pluginList = $this->getValueByReflection('plugins', $this->registration);
+        $this->assertFalse($pluginList[$pluginMockClassName][Registration::IS_ACTIVE]);
+        // The configuration class writes fallback values into these variables,
+        // hence they have only changed.
+        $this->assertAttributeNotEquals('xxx', static::CHUNK_FOLDER, $this->registration);
+        $this->assertAttributeNotEquals('yyy', static::LOG_FOLDER, $this->registration);
+        $this->assertAttributeNotEquals('zzz', static::CONFIG_FILE, $this->registration);
+        $this->assertAttributeEmpty(static::BLACK_LIST_METHODS, $this->registration);
+        $this->assertAttributeEmpty(static::BLACK_LIST_CLASS, $this->registration);
+        $this->assertAttributeEmpty(static::ADD_HELP_FILES, $this->registration);
+        $this->assertAttributeEmpty(static::REWRITE_LIST, $this->registration);
+        $this->assertAttributeEmpty(static::EVENT_LIST, $this->registration);
+        $this->assertAttributeEmpty(static::ADD_SKIN_LIST, $this->registration);
+
+        // 3. Test the changes made to the pool
+        $this->assertEmpty(Krexx::$pool->rewrite);
+        $this->assertEmpty(Krexx::$pool->eventService->register);
+        $this->assertNotSame($oldConfig, Krexx::$pool->config);
     }
 }

@@ -79,14 +79,16 @@ class ModelTest extends AbstractTest
      */
     public function testSetValue()
     {
+        $value = 'value';
+
         $this->assertSame($this->model, $this->model->setValue(static::VALUE));
-        $this->assertAttributeEquals(static::VALUE, 'value', $this->model);
+        $this->assertAttributeEquals(static::VALUE, $value, $this->model);
 
         $this->assertSame($this->model, $this->model->setValue(Fallback::VALUE_FALSE));
-        $this->assertAttributeEquals(false, 'value', $this->model);
+        $this->assertAttributeEquals(false, $value, $this->model);
 
         $this->assertSame($this->model, $this->model->setValue(Fallback::VALUE_TRUE));
-        $this->assertAttributeEquals(true, 'value', $this->model);
+        $this->assertAttributeEquals(true, $value, $this->model);
     }
 
     /**

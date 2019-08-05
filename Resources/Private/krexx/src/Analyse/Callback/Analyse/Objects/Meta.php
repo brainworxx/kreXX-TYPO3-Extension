@@ -52,10 +52,6 @@ use ReflectionClass;
  */
 class Meta extends AbstractObjectAnalysis
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Meta';
 
     /**
      * Dump the Meta stuff from a class.

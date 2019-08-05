@@ -47,10 +47,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class ThroughResource extends AbstractCallback
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughResource';
 
     /**
      * Renders the info of a resource.

@@ -47,10 +47,6 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
  */
 class ThroughMetaReflections extends AbstractCallback
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMetaReflections';
 
     /**
      * Simply iterate through reflections coming from the ThoughMeta callback.

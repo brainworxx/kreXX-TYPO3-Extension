@@ -63,7 +63,7 @@ class DebugMethodFixture
      */
     public function badDebugMethod()
     {
-        throw new \Exception('some message', 123);
+        throw new TestException('some message', 123);
     }
 
     /**
@@ -83,6 +83,9 @@ class DebugMethodFixture
      */
     public function parameterizedDebugMethod($variable)
     {
+        // Do something with the $variable to prevent a code smell.
+        trigger_error($variable, E_WARNING);
+
         $this->callWithParameter = true;
     }
 
@@ -96,6 +99,9 @@ class DebugMethodFixture
      */
     public function __call($name, $arguments)
     {
+        // Do something with the $arguments to prevent a code smell.
+        trigger_error($arguments, E_WARNING);
+
         $this->callMagicMethod[] = '__call was called for ' . $name;
     }
 }

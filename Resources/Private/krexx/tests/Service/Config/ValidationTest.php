@@ -53,16 +53,21 @@ class ValidationTest extends AbstractTest
      */
     public function testConstruct()
     {
-        Registration::addMethodToDebugBlacklist('someClass', 'someMethod');
-        Registration::addMethodToDebugBlacklist('anotherClass', 'anotherMethod');
-        Registration::addClassToDebugBlacklist('someClass');
-        Registration::addClassToDebugBlacklist('anotherClass');
+        $className = 'someClass';
+        $anotherClassName = 'anotherClass';
+        $methodName = 'someMethod';
+        $anotherMethodName = 'anotherMethod';
+
+        Registration::addMethodToDebugBlacklist($className, $methodName);
+        Registration::addMethodToDebugBlacklist($anotherClassName, $anotherMethodName);
+        Registration::addClassToDebugBlacklist($className);
+        Registration::addClassToDebugBlacklist($anotherClassName);
 
         $validation = new Validation(Krexx::$pool);
 
         $this->assertAttributeSame(Krexx::$pool, 'pool', $validation);
         $this->assertAttributeEquals(
-            ['someClass' => ['someMethod'], 'anotherClass' => ['anotherMethod']],
+            [$className => [$methodName], $anotherClassName => [$anotherMethodName]],
             'methodBlacklist',
             $validation
         );
@@ -71,8 +76,8 @@ class ValidationTest extends AbstractTest
                 ReflectionType::class,
                 ReflectionGenerator::class,
                 Reflector::class,
-                'someClass',
-                'anotherClass'
+                $className,
+                $anotherClassName
             ],
             'classBlacklist',
             $validation
@@ -114,6 +119,11 @@ class ValidationTest extends AbstractTest
      */
     public function testEvaluateSetting()
     {
+        $iniGet = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Config\\', 'ini_get');
+        $iniGet->expects($this->exactly(2))
+            ->with('max_execution_time')
+            ->will($this->returnValue('123'));
+
         Registration::addMethodToDebugBlacklist('forbiddenclass', 'forbiddenOne');
         $validation = new Validation(Krexx::$pool);
 

@@ -375,10 +375,10 @@ class Validation extends Fallback
 
         // Check if the combination of class and method is blacklisted.
         foreach ($this->methodBlacklist as $classname => $debugMethod) {
-            if (is_a($data, $classname) === true) {
-                if (in_array($method, $debugMethod, true)) {
-                    return false;
-                }
+            if (is_a($data, $classname) === true &&
+                in_array($method, $debugMethod, true) === true
+            ) {
+                return false;
             }
         }
 

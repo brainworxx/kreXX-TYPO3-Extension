@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
@@ -113,6 +114,7 @@ class ThroughPropertiesTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDeclarationPlace
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::isPropertyNameNormal
      */
     public function testCallMeNormal()
     {
@@ -129,11 +131,14 @@ class ThroughPropertiesTest extends AbstractTest
             [$this->endEvent, $this->throughProperties],
             [$this->endEvent, $this->throughProperties],
             [$this->endEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
             [$this->endEvent, $this->throughProperties]
         );
 
         // Create a fixture.
         $subject = new ComplexPropertiesFixture();
+        $undeclaredProp = 'special butterfly';
+        $subject->$undeclaredProp = null;
         $fixture = [
             $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
             $this->throughProperties::PARAM_DATA => [
@@ -147,7 +152,8 @@ class ThroughPropertiesTest extends AbstractTest
                 new \ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::MY_PROPERTY),
                 new \ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::INHERITED_PUBLIC),
                 new \ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::INHERITED_NULL),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, static::TRAIT_PROPERTY)
+                new \ReflectionProperty(ComplexPropertiesFixture::class, static::TRAIT_PROPERTY),
+                new UndeclaredProperty(new ReflectionClass($subject), $undeclaredProp)
             ]
         ];
 
@@ -318,6 +324,20 @@ class ThroughPropertiesTest extends AbstractTest
             '->',
             '',
             'protected '
+        );
+
+        // The special undeclared one.
+        // Please note, that a dynamic unset property is not possible.
+        $this->assertModelValues(
+            $models[11],
+            null,
+            $undeclaredProp,
+            [
+                static::JSON_DECLARED_KEY => 'undeclared'
+            ],
+            '->{\'',
+            '\'}',
+            'public dynamic property '
         );
     }
 

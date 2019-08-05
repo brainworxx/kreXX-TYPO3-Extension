@@ -54,10 +54,6 @@ use ReflectionMethod;
  */
 class Methods extends AbstractObjectAnalysis
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods';
 
     /**
      * Decides which methods we want to analyse and then starts the dump.

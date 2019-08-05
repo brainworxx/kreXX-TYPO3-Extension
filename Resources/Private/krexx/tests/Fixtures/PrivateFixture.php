@@ -61,4 +61,15 @@ class PrivateFixture extends SimpleFixture
      * @var string
      */
     private $value5 = 'Inherited privates do not exist!';
+
+    /**
+     * "Do" something with the private variables to prevent a code smell.
+     *
+     * @return string
+     *   Whatever.
+     */
+    protected function doSomething()
+    {
+        return $this->myProperty . $this->nullProperty . $this->value5;
+    }
 }

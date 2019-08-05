@@ -87,11 +87,6 @@ class ThroughGetter extends AbstractCallback
     protected $regexEscapeReplace = ['\.', '\/', '\(', '\)', '\<', '\>', '\$'];
 
     /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter';
-
-    /**
      * Here we memorize how deep we are inside the current deep analysis.
      *
      * @var int

@@ -50,9 +50,12 @@ class ComplexMethodFixture extends MethodsFixture implements InterfaceFixture
 
     /**
      * Private function
+     *
+     * @return string
      */
     private function privateMethod()
     {
+        return '';
     }
 
     /**
@@ -76,7 +79,7 @@ class ComplexMethodFixture extends MethodsFixture implements InterfaceFixture
      */
     public function interfaceMethod()
     {
-
+        return $this->privateMethod();
     }
 
     /**

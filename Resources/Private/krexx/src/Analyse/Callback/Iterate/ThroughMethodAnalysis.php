@@ -53,10 +53,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class ThroughMethodAnalysis extends AbstractCallback
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethodAnalysis';
 
     /**
      * Renders the info of a single method.

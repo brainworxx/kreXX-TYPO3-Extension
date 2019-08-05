@@ -61,15 +61,6 @@ use stdClass;
 
 class PoolTest extends AbstractTest
 {
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        // Reset the overwrites for the is_writable mock.
-        \Brainworxx\Krexx\Service\Factory\is_writable();
-    }
-
     /**
      * Testing the creation of all neccessary classes.
      *
@@ -112,22 +103,43 @@ class PoolTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Service\Factory\Pool::checkEnvironment
      */
-    public function testCheckEnvironment()
+    public function testCheckEnvironmentIsWritable()
     {
         // Chunks folder is writable
         // Log folder is writable
-        \Brainworxx\Krexx\Service\Factory\is_writable(Krexx::$pool->config->getChunkDir(), true);
-        \Brainworxx\Krexx\Service\Factory\is_writable(Krexx::$pool->config->getLogDir(), true);
+        $isWritable = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Factory\\', 'is_writable');
+        $isWritable->expects($this->exactly(2))
+            ->will(
+                $this->returnValueMap([
+                    [Krexx::$pool->config->getChunkDir(), true],
+                    [Krexx::$pool->config->getLogDir(), true]
+                ])
+            );
+
         Krexx::$pool = null;
         Pool::createPool();
         $this->assertAttributeEquals(true, 'useChunks', Krexx::$pool->chunks);
         $this->assertAttributeEquals(true, 'useLogging', Krexx::$pool->chunks);
         $this->assertAttributeEmpty('keys', Krexx::$pool->messages);
+    }
 
+    /**
+     * Test the checking of the environment, where kreXX is running.
+     *
+     * @covers \Brainworxx\Krexx\Service\Factory\Pool::checkEnvironment
+     */
+    public function testCheckEnvironmentIsNotWritable()
+    {
         // Chunks folder is not writable
         // Log folder is not writable
-        \Brainworxx\Krexx\Service\Factory\is_writable(Krexx::$pool->config->getChunkDir(), false);
-        \Brainworxx\Krexx\Service\Factory\is_writable(Krexx::$pool->config->getLogDir(), false);
+        $isWritable = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Factory\\', 'is_writable');
+        $isWritable->expects($this->exactly(2))
+            ->will(
+                $this->returnValueMap([
+                    [Krexx::$pool->config->getChunkDir(), false],
+                    [Krexx::$pool->config->getLogDir(), false]
+                ])
+            );
         Krexx::$pool = null;
         Pool::createPool();
         $this->assertAttributeEquals(false, 'useChunks', Krexx::$pool->chunks);

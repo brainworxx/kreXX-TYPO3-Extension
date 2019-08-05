@@ -226,13 +226,13 @@ class Connectors
 
         // Copy the parameters, we will need the original ones later.
         // This one is only for the quick preview.
-        $params = $this->params;
+        $parameters = $this->params;
         // Capping the parameters for a better readability.
-        if ($cap > 0 && strlen($params) > $cap) {
-            $params = substr($params, 0, $cap) . ' . . . ';
+        if ($cap > 0 && strlen($parameters) > $cap) {
+            $parameters = substr($parameters, 0, $cap) . ' . . . ';
         }
 
-        return '(' . $params . ')';
+        return '(' . $parameters . ')';
     }
 
     /**

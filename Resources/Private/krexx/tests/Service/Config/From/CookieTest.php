@@ -42,15 +42,29 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 
 class CookieTest extends AbstractTest
 {
+
+    const SETTING_01 = 'setting01';
+    const SETTING_02 = 'setting02';
+    const VALUE_01 = 'value 1';
+    const VALUE_02 = 'value 2';
+    const SETTINGS = 'settings';
+
     /**
      * The test fixture.
      *
      * @var array
      */
-    protected $fixture = [
-        'setting01' => 'value 1',
-        'setting02' => 'value 2'
-    ];
+    protected $fixture;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->fixture = [
+            static::SETTING_01 => static::VALUE_01,
+            static::SETTING_02 => static::VALUE_02
+        ];
+    }
 
     /**
      * Testing the assigning of the validation class and the reading of mocked
@@ -72,7 +86,7 @@ class CookieTest extends AbstractTest
 
         $cookies = new Cookie($poolMock);
         $this->assertAttributeSame(Krexx::$pool->config->validation, 'validation', $cookies);
-        $this->assertAttributeEquals($this->fixture, 'settings', $cookies);
+        $this->assertAttributeEquals($this->fixture, static::SETTINGS, $cookies);
 
         // Run with a broken fixture.
         $poolMock = $this->createMock(Pool::class);
@@ -85,7 +99,7 @@ class CookieTest extends AbstractTest
         $poolMock->config = Krexx::$pool->config;
 
         $cookies = new Cookie($poolMock);
-        $this->assertAttributeEquals([], 'settings', $cookies);
+        $this->assertAttributeEquals([], static::SETTINGS, $cookies);
     }
 
     /**
@@ -95,27 +109,29 @@ class CookieTest extends AbstractTest
      */
     public function testGetConfigFromCookies()
     {
+        $someGroup = 'some group';
+
         $validationMock = $this->createMock(Validation::class);
         $validationMock->expects($this->exactly(2))
             ->method('evaluateSetting')
             ->withConsecutive(
-                ['some group', 'setting01', 'value 1'],
-                ['some group', 'setting02', 'value 2']
+                [$someGroup, static::SETTING_01, static::VALUE_01],
+                [$someGroup, static::SETTING_02, static::VALUE_02]
             )
             ->will(
                 $this->returnValueMap(
                     [
-                        ['some group', 'setting01', 'value 1', true],
-                        ['some group', 'setting02', 'value 2', false]
+                        [$someGroup, static::SETTING_01, static::VALUE_01, true],
+                        [$someGroup, static::SETTING_02, static::VALUE_02, false]
                     ]
                 )
             );
 
         $cookies = new Cookie(Krexx::$pool);
         $this->setValueByReflection('validation', $validationMock, $cookies);
-        $this->setValueByReflection('settings', $this->fixture, $cookies);
-        $this->assertEquals('value 1', $cookies->getConfigFromCookies('some group', 'setting01'), 'validation correct');
-        $this->assertNull($cookies->getConfigFromCookies('some group', 'setting02'), 'validation failed');
-        $this->assertNull($cookies->getConfigFromCookies('some group', 'setting03'), 'an unknown setting');
+        $this->setValueByReflection(static::SETTINGS, $this->fixture, $cookies);
+        $this->assertEquals(static::VALUE_01, $cookies->getConfigFromCookies($someGroup, static::SETTING_01), 'validation correct');
+        $this->assertNull($cookies->getConfigFromCookies($someGroup, static::SETTING_02), 'validation failed');
+        $this->assertNull($cookies->getConfigFromCookies($someGroup, 'setting03'), 'an unknown setting');
     }
 }

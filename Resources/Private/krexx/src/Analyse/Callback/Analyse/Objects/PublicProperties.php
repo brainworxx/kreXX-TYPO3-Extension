@@ -49,10 +49,6 @@ use ReflectionProperty;
  */
 class PublicProperties extends AbstractObjectAnalysis
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties';
 
     /**
      * Dump all public properties.

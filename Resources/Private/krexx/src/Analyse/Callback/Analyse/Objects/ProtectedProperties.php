@@ -48,10 +48,6 @@ use ReflectionProperty;
  */
 class ProtectedProperties extends AbstractObjectAnalysis
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\ProtectedProperties';
 
     /**
      * Dump all protected properties.

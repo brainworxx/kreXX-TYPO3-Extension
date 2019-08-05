@@ -57,4 +57,14 @@ class ComplexPropertiesInheritanceFixture
      * @var null
      */
     protected $inheritedNull;
+
+    /**
+     * Do something with the private property to prevent a code smell.
+     *
+     * @return string
+     */
+    protected function doSomething()
+    {
+        return $this->myProperty;
+    }
 }

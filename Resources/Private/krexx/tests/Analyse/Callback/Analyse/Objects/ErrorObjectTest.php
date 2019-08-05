@@ -78,10 +78,10 @@ class ErrorObjectTest extends AbstractTest
         $file = 'some file';
         $code = 'some code';
 
-        $errorObject = new \Exception();
-        $this->setValueByReflection('trace', $backtrace, $errorObject);
-        $this->setValueByReflection('line', $line, $errorObject);
-        $this->setValueByReflection('file', $file, $errorObject);
+        $exception = new \Exception();
+        $this->setValueByReflection('trace', $backtrace, $exception);
+        $this->setValueByReflection('line', $line, $exception);
+        $this->setValueByReflection('file', $file, $exception);
 
         $codegenMock = $this->createMock(Codegen::class);
         $codegenMock->expects($this->exactly(2))
@@ -100,7 +100,7 @@ class ErrorObjectTest extends AbstractTest
         Krexx::$pool->fileService = $fileServiceMock;
 
         $fixture = [
-            $this->errorObject::PARAM_DATA => $errorObject
+            $this->errorObject::PARAM_DATA => $exception
         ];
         $this->errorObject->setParameters($fixture)->callMe();
         $this->assertEquals($backtrace, CallbackCounter::$staticParameters[0][$this->errorObject::PARAM_DATA]);

@@ -42,6 +42,9 @@ use Brainworxx\Krexx\Service\Misc\Encoding;
 
 class TimerControllerTest extends AbstractController
 {
+
+    const COUNTER_CACHE = 'counterCache';
+    const TIME_KEEPING = 'timekeeping';
     /**
      * @var TimerController
      */
@@ -53,7 +56,9 @@ class TimerControllerTest extends AbstractController
 
         // Create a clean timer controller.
         $this->controller = new TimerController(Krexx::$pool);
-        \Brainworxx\Krexx\Controller\microtime(null, true);
+        $microtime = $this->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'microtime');
+        $microtime->expects($this->any())
+            ->will($this->returnValue(3000));
     }
 
     public function tearDown()
@@ -61,9 +66,8 @@ class TimerControllerTest extends AbstractController
         parent::tearDown();
 
         // Clean up the timekeeping stuff.
-        $this->setValueByReflection('counterCache', [], $this->controller);
-        $this->setValueByReflection('timekeeping', [], $this->controller);
-        \Brainworxx\Krexx\Controller\microtime(null, false);
+        $this->setValueByReflection(static::COUNTER_CACHE, [], $this->controller);
+        $this->setValueByReflection(static::TIME_KEEPING, [], $this->controller);
     }
 
     /**
@@ -90,20 +94,20 @@ class TimerControllerTest extends AbstractController
 
         // Adding a first entry.
         $this->controller->timerAction($first);
-        $this->assertAttributeEquals([$first => 1], 'counterCache', $this->controller);
-        $this->assertArrayHasKey($first, $this->getObjectAttribute($this->controller, 'timekeeping'));
+        $this->assertAttributeEquals([$first => 1], static::COUNTER_CACHE, $this->controller);
+        $this->assertArrayHasKey($first, $this->getObjectAttribute($this->controller, static::TIME_KEEPING));
 
         // Adding a second entry.
         $this->controller->timerAction($second);
-        $this->assertAttributeEquals([$first => 1, $second => 1], 'counterCache', $this->controller);
-        $this->assertArrayHasKey($first, $this->getObjectAttribute($this->controller, 'timekeeping'));
-        $this->assertArrayHasKey($second, $this->getObjectAttribute($this->controller, 'timekeeping'));
+        $this->assertAttributeEquals([$first => 1, $second => 1], static::COUNTER_CACHE, $this->controller);
+        $this->assertArrayHasKey($first, $this->getObjectAttribute($this->controller, static::TIME_KEEPING));
+        $this->assertArrayHasKey($second, $this->getObjectAttribute($this->controller, static::TIME_KEEPING));
 
         // Adding the first entry again.
         $this->controller->timerAction($first);
-        $this->assertAttributeEquals([$first => 2, $second => 1], 'counterCache', $this->controller);
-        $this->assertArrayHasKey('[2]' . $first, $this->getObjectAttribute($this->controller, 'timekeeping'));
-        $this->assertArrayHasKey($second, $this->getObjectAttribute($this->controller, 'timekeeping'));
+        $this->assertAttributeEquals([$first => 2, $second => 1], static::COUNTER_CACHE, $this->controller);
+        $this->assertArrayHasKey('[2]' . $first, $this->getObjectAttribute($this->controller, static::TIME_KEEPING));
+        $this->assertArrayHasKey($second, $this->getObjectAttribute($this->controller, static::TIME_KEEPING));
     }
 
     /**
@@ -156,7 +160,7 @@ class TimerControllerTest extends AbstractController
         $poolMock->encodingService = $encodingMock;
 
         $this->setValueByReflection('pool', $poolMock, $this->controller);
-        $this->setValueByReflection('timekeeping', ['first' => 1000, 'second' => 2000], $this->controller);
+        $this->setValueByReflection(static::TIME_KEEPING, ['first' => 1000, 'second' => 2000], $this->controller);
         $this->controller->timerEndAction();
     }
 }
