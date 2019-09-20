@@ -144,7 +144,8 @@ class TraversableTest extends AbstractTest
      * Test, if the traversable analysis can handle some errors and warnings.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::getTaversableData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::retrieveTraversableData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::analyseTraversableResult
      */
     public function testCallMeWithErrors()
     {
@@ -181,7 +182,8 @@ class TraversableTest extends AbstractTest
      * Test, if the normal array analysis is called.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::getTaversableData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::retrieveTraversableData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::analyseTraversableResult
      */
     public function testMeWithSmallArray()
     {
@@ -235,7 +237,8 @@ class TraversableTest extends AbstractTest
      * Test if the large array analysis is called.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::getTaversableData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::retrieveTraversableData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::analyseTraversableResult
      */
     public function testMeWithLargeArray()
     {

@@ -45,7 +45,6 @@ use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Misc\Registry;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Output\Chunks;
-use Brainworxx\Krexx\View\Render;
 
 /**
  * Here we store all classes that we need.
@@ -83,7 +82,7 @@ class Pool extends AbstractFactory
      *
      * Gets loaded in the output footer.
      *
-     * @var Render
+     * @var \Brainworxx\Krexx\View\RenderInterface
      */
     public $render;
 
@@ -218,7 +217,7 @@ class Pool extends AbstractFactory
                 [$this->fileService->filterFilePath($chunkFolder)]
             );
             // We can work without chunks, but this will require much more memory!
-            $this->chunks->setUseChunks(false);
+            $this->chunks->setChunksAreAllowed(false);
         }
 
         // Check if the log folder is writable.
@@ -231,7 +230,7 @@ class Pool extends AbstractFactory
             );
             // Tell the chunk output that we have no write access in the logging
             // folder.
-            $this->chunks->setUseLogging(false);
+            $this->chunks->setLoggingIsAllowed(false);
         }
 
         // At this point, we won't inform the dev right away. The error message

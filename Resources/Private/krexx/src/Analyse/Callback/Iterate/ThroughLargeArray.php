@@ -72,7 +72,13 @@ class ThroughLargeArray extends AbstractCallback
 
         $recursionMarker = $this->pool->recursionHandler->getMarker();
         $output .= $this->pool->render->renderSingeChildHr();
-        $multiline = $this->parameters[static::PARAM_MULTILINE];
+
+        // Are we dealing with multiline code generation?
+        if ($this->parameters[static::PARAM_MULTILINE] === true) {
+            $multilineCodeGen = Codegen::ITERATOR_TO_ARRAY;
+        } else {
+            $multilineCodeGen = 0;
+        }
 
         // Iterate through.
         foreach ($this->parameters[static::PARAM_DATA] as $key => &$value) {
@@ -85,14 +91,8 @@ class ThroughLargeArray extends AbstractCallback
             }
 
             /** @var Model $model */
-            $model = $this->pool->createClass(Model::class);
-
-            // Are we dealing with multiline code generation?
-            if ($multiline === true) {
-                // Here we tell the Codegen service that we need some
-                // special handling.
-                $model->setMultiLineCodeGen(Codegen::ITERATOR_TO_ARRAY);
-            }
+            $model = $this->pool->createClass(Model::class)
+                ->setMultiLineCodeGen($multilineCodeGen);
 
             // Handling string keys of the array.
             $this->handleKey($key, $model);

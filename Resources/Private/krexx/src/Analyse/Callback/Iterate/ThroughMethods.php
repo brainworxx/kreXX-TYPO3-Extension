@@ -149,8 +149,13 @@ class ThroughMethods extends AbstractCallback
      */
     protected function getDeclarationPlace(ReflectionMethod $reflectionMethod, ReflectionClass $declaringClass)
     {
+        if ($declaringClass->isInternal() === true) {
+            return static::META_PREDECLARED;
+        }
+
         $filename = $this->pool->fileService->filterFilePath($reflectionMethod->getFileName());
         if (empty($filename) === true) {
+            // Not sure, if this is possible.
             return $this->pool->messages->getHelp(static::UNKNOWN_DECLARATION);
         }
 

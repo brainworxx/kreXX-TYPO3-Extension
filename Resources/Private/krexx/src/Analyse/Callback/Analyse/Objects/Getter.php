@@ -89,10 +89,69 @@ class Getter extends AbstractObjectAnalysis
         $ref = $this->parameters[static::PARAM_REF];
 
         // Get all public methods.
+        $this->retrieveMethodList($ref);
+        if (empty($this->normalGetter + $this->isGetter + $this->hasGetter) === true) {
+            // There are no getter methods in here.
+            return $output;
+        }
+
+        return $output . $this->pool->render->renderExpandableChild(
+            $this->dispatchEventWithModel(
+                static::EVENT_MARKER_ANALYSES_END,
+                $this->pool->createClass(Model::class)
+                    ->setName('Getter')
+                    ->setType(static::TYPE_INTERNALS)
+                    ->setHelpid('getterHelpInfo')
+                    ->addParameter(static::PARAM_REF, $ref)
+                    ->addParameter(static::PARAM_NORMAL_GETTER, $this->normalGetter)
+                    ->addParameter(static::PARAM_IS_GETTER, $this->isGetter)
+                    ->addParameter(static::PARAM_HAS_GETTER, $this->hasGetter)
+                    ->injectCallback($this->pool->createClass(ThroughGetter::class))
+            )
+        );
+    }
+
+    /**
+     * Filter and then populate the method list. We only dump those that have no
+     * parameters and start with has, is or get.
+     *
+     * @param ReflectionMethod $method
+     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
+     */
+    protected function populateGetterLists(ReflectionMethod $method, ReflectionClass $ref)
+    {
+        // Check, if the method is really available, inside the analysis
+        // context. A inherited private method can not be called inside the
+        // $this context.
+        if (($method->isPrivate() === true && $method->getDeclaringClass()->getName() !== $ref->getName()) ||
+            empty($method->getParameters()) === false
+        ) {
+            // We skip this one. Either its an out-of-scope private getter,
+            // or it has parameters.
+            return;
+        }
+
+        if (strpos($method->getName(), 'get') === 0) {
+            $this->normalGetter[] = $method;
+        } elseif (strpos($method->getName(), 'is') === 0) {
+            $this->isGetter[] = $method;
+        } elseif (strpos($method->getName(), 'has') === 0) {
+            $this->hasGetter[] = $method;
+        }
+    }
+
+    /**
+     * Retrieve the possible getter methos list from the class reflection.
+     *
+     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
+     *   The reflection of the class we are analysing.
+     */
+    protected function retrieveMethodList(ReflectionClass $ref)
+    {
+        // Get all public methods.
         $methodList = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
 
-        $isInScope = $this->pool->scope->isInScope();
-        if ($isInScope === true) {
+        if ($this->pool->scope->isInScope() === true) {
             // Looks like we also need the protected and private methods.
             $methodList = array_merge(
                 $methodList,
@@ -100,84 +159,13 @@ class Getter extends AbstractObjectAnalysis
             );
         }
 
-        if (empty($methodList) === true) {
-            // There are no methods in here, at all.
-            return $output;
+        if (empty($methodList)) {
+            return;
         }
 
-        $this->populateGetterLists($methodList, $isInScope, $ref);
-
-        if (empty($this->normalGetter) === true &&
-            empty($this->isGetter) === true &&
-            empty($this->hasGetter) === true
-        ) {
-            // There are no getter methods in here.
-            return $output;
-        }
-
-        return $output .
-            $this->pool->render->renderExpandableChild(
-                $this->dispatchEventWithModel(
-                    static::EVENT_MARKER_ANALYSES_END,
-                    $this->pool->createClass(Model::class)
-                        ->setName('Getter')
-                        ->setType(static::TYPE_INTERNALS)
-                        ->setHelpid('getterHelpInfo')
-                        ->addParameter(static::PARAM_REF, $ref)
-                        ->addParameter(static::PARAM_NORMAL_GETTER, $this->normalGetter)
-                        ->addParameter(static::PARAM_IS_GETTER, $this->isGetter)
-                        ->addParameter(static::PARAM_HAS_GETTER, $this->hasGetter)
-                        ->injectCallback(
-                            $this->pool->createClass(ThroughGetter::class)
-                        )
-                )
-            );
-    }
-
-    /**
-     * Filter and then populate the method list. We only dump those that have no
-     * parameters and start with has, is or get.
-     *
-     * @param array $methodList
-     * @param $isInScope
-     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
-     */
-    protected function populateGetterLists(array $methodList, $isInScope, ReflectionClass $ref)
-    {
         /** @var \ReflectionMethod $method */
         foreach ($methodList as $method) {
-            // Check, if the method is really available, inside the analysis
-            // context. A inherited private method can not be called inside the
-            // $this context.
-            if ($isInScope === true &&
-                $method->isPrivate() === true &&
-                $method->getDeclaringClass()->getName() !== $ref->getName()
-            ) {
-                // We skip this one, it's out of scope.
-                // Meh, as of 03-11-2018, I have never seen a private getter in
-                // my whole life.
-                continue;
-            }
-
-            if (strpos($method->getName(), 'get') === 0) {
-                /** @var \ReflectionMethod $method */
-                $parameters = $method->getParameters();
-                if (empty($parameters)) {
-                    $this->normalGetter[] = $method;
-                }
-            } elseif (strpos($method->getName(), 'is') === 0) {
-                /** @var \ReflectionMethod $method */
-                $parameters = $method->getParameters();
-                if (empty($parameters)) {
-                    $this->isGetter[] = $method;
-                }
-            } elseif (strpos($method->getName(), 'has') === 0) {
-                /** @var \ReflectionMethod $method */
-                $parameters = $method->getParameters();
-                if (empty($parameters)) {
-                    $this->hasGetter[] = $method;
-                }
-            }
+            $this->populateGetterLists($method, $ref);
         }
     }
 }

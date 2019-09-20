@@ -314,6 +314,7 @@ class RoutingTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNoneSimpleTypes
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNestedTooDeep
      */
     public function testAnalysisHubArrayNesting()
     {
@@ -340,6 +341,7 @@ class RoutingTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNoneSimpleTypes
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleRecursion
      */
     public function testAnalysisHubGlobalsInHive()
     {
@@ -399,6 +401,7 @@ class RoutingTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNoneSimpleTypes
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::generateDomIdFromObject
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleRecursion
      */
     public function testAnalysisHubObjectInHive()
     {
@@ -428,6 +431,7 @@ class RoutingTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNoneSimpleTypes
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNestedTooDeep
      */
     public function testAnalysisHubObjectNesting()
     {

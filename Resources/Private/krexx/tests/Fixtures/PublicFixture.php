@@ -49,4 +49,11 @@ class PublicFixture extends SimpleFixture
      * @var string
      */
     public $someValue = 'whatever';
+
+    /**
+     * Some static stuff.
+     *
+     * @var string
+     */
+    public static $static = 'static stuff';
 }

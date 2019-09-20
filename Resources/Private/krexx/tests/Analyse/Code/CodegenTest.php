@@ -292,6 +292,7 @@ class CodegenTest extends AbstractTest
      * Test the parameter analysis, with a default parameter
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
      */
     public function testParameterToStringWithDefaultPhpFive()
     {
@@ -324,6 +325,7 @@ class CodegenTest extends AbstractTest
      * We use a speciaql DetTime parameter as a fixture.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
      */
     public function testParameterToStringWithRequiredPhpSeven()
     {

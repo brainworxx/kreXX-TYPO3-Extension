@@ -38,7 +38,7 @@ use ReflectionProperty;
 
 /**
  * The original \ReflectionProperty may throw an error when used with
- * dynamically declared properties
+ * dynamically declared properties.
  *
  * For some reasons, the \ReflectionProperty may claims that this property is
  * not there. We may have run into an interference of private properties in a
@@ -46,7 +46,7 @@ use ReflectionProperty;
  * public dynamically declared property with the same name as the private
  * property.
  * The __isset is called, because there is a private property somewhere with the
- * same name, so we can not rely on it..
+ * same name, so we can not rely on it.
  * The reflection property then claims that this property does not exist. The
  * only thing I can think of how to fix this, is with a mockup class for the
  * ReflectionProperty.
@@ -64,7 +64,7 @@ class UndeclaredProperty extends ReflectionProperty
     public $isUndeclared = true;
 
     /**
-     * THe name of the property.
+     * The name of the property.
      *
      * @var string
      */

@@ -50,6 +50,8 @@ class ProcessClosureTest extends AbstractTest
      * Test the processing of a closure.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveParameterList
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveSourceCode
      */
     public function testProcess()
     {

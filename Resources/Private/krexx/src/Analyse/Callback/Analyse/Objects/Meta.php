@@ -127,7 +127,7 @@ class Meta extends AbstractObjectAnalysis
             ->getComment($ref);
 
         if ($ref->isInternal()) {
-            $data[static::META_DECLARED_IN] = 'n/a, is predeclared';
+            $data[static::META_DECLARED_IN] = static::META_PREDECLARED;
         } else {
             $data[static::META_DECLARED_IN] = $this->pool
                 ->fileService

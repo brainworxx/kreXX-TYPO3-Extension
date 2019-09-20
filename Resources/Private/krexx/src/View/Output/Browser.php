@@ -41,36 +41,6 @@ namespace Brainworxx\Krexx\View\Output;
  */
 class Browser extends AbstractOutput
 {
-    /**
-     * [0] -> The chunkedup string, that we intend to send to
-     *        the browser.
-     * [1] -> Are we ignoring local settings?
-     *
-     * @var array
-     *   An array of all chunk strings.
-     *   A chunk string are be:
-     *   - header
-     *   - messages
-     *   - data part
-     *   - footer
-     *   This means, that every output is split in 4 parts
-     */
-    protected $chunkStrings = [];
-
-    /**
-     * Adds output to our shutdown handler.
-     *
-     * @param string $chunkString
-     *   The chunked output string.
-     *
-     * @return $this
-     *   Return $this, for chaining.
-     */
-    public function addChunkString($chunkString)
-    {
-        $this->chunkStrings[] = $chunkString;
-        return $this;
-    }
 
     /**
      * The shutdown callback.
@@ -88,6 +58,7 @@ class Browser extends AbstractOutput
             // Send it to the browser.
             $this->pool->chunks->sendDechunkedToBrowser($chunkString);
         }
+        $this->destruct();
     }
 
     /**

@@ -41,7 +41,7 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\Config as T3Config;
+use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\RepositoryInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -85,7 +85,7 @@ class Configuration implements PluginConfigInterface
     public function exec()
     {
         // We are using the TYPO3 ip security, instead of the kreXX implementation.
-        Registration::addRewrite(Config::class, T3Config::class);
+        Registration::addRewrite(Config::class, T3CheckOutput::class);
 
         // Get the absolute site path. The constant PATH_site is deprecated
         // since 9.2.

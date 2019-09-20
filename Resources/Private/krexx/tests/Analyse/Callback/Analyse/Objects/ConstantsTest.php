@@ -38,8 +38,8 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Constants;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
-use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\View\Skins\RenderHans;
 
 class ConstantsTest extends AbstractTest
 {
@@ -80,7 +80,7 @@ class ConstantsTest extends AbstractTest
         );
 
         // We will not render anything.
-        $renderMock = $this->createMock(AbstractRender::class);
+        $renderMock = $this->createMock(RenderHans::class);
         $renderMock->expects($this->never())
             ->method('renderExpandableChild');
         Krexx::$pool->render = $renderMock;

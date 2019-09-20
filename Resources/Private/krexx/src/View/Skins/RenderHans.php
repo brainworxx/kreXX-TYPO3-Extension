@@ -34,14 +34,53 @@
 
 namespace Brainworxx\Krexx\View\Skins;
 
-use Brainworxx\Krexx\View\Render;
+use Brainworxx\Krexx\View\AbstractRender;
+use Brainworxx\Krexx\View\RenderInterface;
+use Brainworxx\Krexx\View\Skins\Hans\BacktraceSourceLine;
+use Brainworxx\Krexx\View\Skins\Hans\Button;
+use Brainworxx\Krexx\View\Skins\Hans\ConnectorLeft;
+use Brainworxx\Krexx\View\Skins\Hans\ConnectorRight;
+use Brainworxx\Krexx\View\Skins\Hans\ConstInterface;
+use Brainworxx\Krexx\View\Skins\Hans\CssJs;
+use Brainworxx\Krexx\View\Skins\Hans\ExpandableChild;
+use Brainworxx\Krexx\View\Skins\Hans\FatalHeader;
+use Brainworxx\Krexx\View\Skins\Hans\FatalMain;
+use Brainworxx\Krexx\View\Skins\Hans\Footer;
+use Brainworxx\Krexx\View\Skins\Hans\Header;
+use Brainworxx\Krexx\View\Skins\Hans\Help;
+use Brainworxx\Krexx\View\Skins\Hans\Linebreak;
+use Brainworxx\Krexx\View\Skins\Hans\Messages;
+use Brainworxx\Krexx\View\Skins\Hans\PluginList;
+use Brainworxx\Krexx\View\Skins\Hans\Recursion;
+use Brainworxx\Krexx\View\Skins\Hans\Search;
+use Brainworxx\Krexx\View\Skins\Hans\SingeChildHr;
+use Brainworxx\Krexx\View\Skins\Hans\SingleChild;
+use Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild;
 
 /**
  * Individual render class for the Hans skin.
  *
  * @package Brainworxx\Krexx\View\Hans
  */
-class RenderHans extends Render
+class RenderHans extends AbstractRender implements RenderInterface, ConstInterface
 {
-    // Do nothing.
+    use Recursion;
+    use Header;
+    use Footer;
+    use CssJs;
+    use SingleChild;
+    use ExpandableChild;
+    use SingleEditableChild;
+    use Button;
+    use FatalMain;
+    use FatalHeader;
+    use Messages;
+    use BacktraceSourceLine;
+    use SingeChildHr;
+    use Linebreak;
+    use PluginList;
+    use Help;
+    use ConnectorLeft;
+    use ConnectorRight;
+    use Search;
 }

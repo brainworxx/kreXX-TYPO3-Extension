@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Krexx\View\Smokygrey;
 
-use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
+use Brainworxx\Krexx\View\Skins\Render;
 
 /**
  * Individual render class for the smokey-grey skin.
@@ -43,6 +43,6 @@ use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
  *
  * @package Brainworxx\Krexx\View\Smokygrey
  */
-class Render extends RenderSmokyGrey
+class Render extends Render
 {
 }

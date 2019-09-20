@@ -59,16 +59,10 @@ class ThroughMeta extends AbstractCallback
     public function callMe()
     {
         $output = $this->dispatchStartEvent();
+        $reflectionStuff = [static::META_INHERITED_CLASS, static::META_INTERFACES, static::META_TRAITS];
 
         foreach ($this->parameters[static::PARAM_DATA] as $key => $metaData) {
-            if (empty($metaData) === true) {
-                // Nothing to see here, move on.
-                continue;
-            }
-            if ($key === static::META_INHERITED_CLASS ||
-                $key === static::META_INTERFACES ||
-                $key === static::META_TRAITS
-            ) {
+            if (in_array($key, $reflectionStuff)) {
                 $output .= $this->pool->render->renderExpandableChild(
                     $this->dispatchEventWithModel(
                         $key,
@@ -81,7 +75,7 @@ class ThroughMeta extends AbstractCallback
                             )
                     )
                 );
-            } else {
+            } elseif (empty($metaData) === false) {
                 $output .= $this->handleNoneReflections($key, $metaData);
             }
         }

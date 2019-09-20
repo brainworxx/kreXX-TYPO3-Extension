@@ -149,58 +149,47 @@ class Routing extends AbstractRouting
         }
 
         $data = $model->getData();
+        $result = '';
 
-        // String?
         if (is_string($data) === true) {
-            return $this->processString->process($model);
-        }
-
-        // Integer?
-        if (is_int($data) === true) {
-            return $this->processInteger->process($model);
-        }
-
-        // Null?
-        if ($data === null) {
-            return $this->processNull->process($model);
-        }
-
-        // Handle the complex types.
-        if (is_array($data) === true || is_object($data) === true) {
-            // Up one nesting Level.
+            // String?
+            $result =  $this->processString->process($model);
+        } elseif (is_int($data) === true) {
+            // Integer?
+            $result =  $this->processInteger->process($model);
+        } elseif ($data === null) {
+            // Null?
+            $result =  $this->processNull->process($model);
+        } elseif (is_array($data) === true || is_object($data) === true) {
+            // Handle the complex types.
             $this->pool->emergencyHandler->upOneNestingLevel();
-            // Handle the non simple types like array and object.
             $result = $this->handleNoneSimpleTypes($data, $model);
-            // We are done here, down one nesting level.
             $this->pool->emergencyHandler->downOneNestingLevel();
-            return $result;
-        }
-
-        // Boolean?
-        if (is_bool($data) === true) {
-            return $this->processBoolean->process($model);
-        }
-
-        // Float?
-        if (is_float($data) === true) {
-            return $this->processFloat->process($model);
-        }
-
-        // Resource?
-        // The is_resource can not identify closed stream resource types.
-        // And the get_resource_type() throws a warning, in case this is not a
-        // resource.
-        set_error_handler(function () {
-            // Do nothing. We need to catch a possible warning.
-        });
-        if (get_resource_type($data) !== null) {
+        } elseif (is_bool($data) === true) {
+            // Boolean?
+            $result =  $this->processBoolean->process($model);
+        } elseif (is_float($data) === true) {
+            // Float?
+            $result =  $this->processFloat->process($model);
+        } elseif (empty($result) === true) {
+            // Resource?
+            // The is_resource can not identify closed stream resource types.
+            // And the get_resource_type() throws a warning, in case this is not a
+            // resource.
+            set_error_handler(function () {
+                // Do nothing. We need to catch a possible warning.
+            });
+            if (get_resource_type($data) !== null) {
+                restore_error_handler();
+                $result =  $this->processResource->process($model);
+            }
             restore_error_handler();
-            return $this->processResource->process($model);
+        } elseif (empty($result) === true) {
+            // Tell the dev that we can not analyse this one.
+            $result = $this->processOther->process($model);
         }
-        restore_error_handler();
 
-        // Still here? Tell the dev that we can not analyse this one.
-        return $this->processOther->process($model);
+        return $result;
     }
 
     /**
@@ -218,38 +207,73 @@ class Routing extends AbstractRouting
     {
         // Check the nesting level.
         if ($this->pool->emergencyHandler->checkNesting() === true) {
-            $text = $this->pool->messages->getHelp('maximumLevelReached2');
-            if (is_array($data) === true) {
-                $type = static::TYPE_ARRAY;
-            } else {
-                $type = static::TYPE_OBJECT;
-            }
-            $model->setData($text)
-                ->setNormal($this->pool->messages->getHelp('maximumLevelReached1'))
-                ->setType($type)
-                ->setHasExtra(true);
-            // Render it directly.
-            return $this->pool->render->renderSingleChild($model);
+            return $this->handleNestedTooDeep($data, $model);
         }
 
+        // Render recursion.
         if ($this->pool->recursionHandler->isInHive($data) === true) {
-            // Render recursion.
-            if (is_object($data) === true) {
-                $normal = '\\' . get_class($data);
-                $domId = $this->generateDomIdFromObject($data);
-            } else {
-                // Must be the globals array.
-                $normal = '$GLOBALS';
-                $domId = '';
-            }
-
-            return $this->pool->render->renderRecursion(
-                $model->setDomid($domId)->setNormal($normal)
-            );
+            return $this->handleRecursion($data, $model);
         }
 
         // Looks like we are good.
         return $this->preprocessNoneSimpleTypes($data, $model);
+    }
+
+    /**
+     * This none simple type was analysed before.
+     *
+     * @param $data
+     *   The object / array we are analysing.
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The already prepared model.
+     *
+     * @return string
+     *   The rendered HTML.
+     */
+    protected function handleRecursion($data, Model $model)
+    {
+        if (is_object($data) === true) {
+            $normal = '\\' . get_class($data);
+            $domId = $this->generateDomIdFromObject($data);
+        } else {
+            // Must be the globals array.
+            $normal = '$GLOBALS';
+            $domId = '';
+        }
+
+        return $this->pool->render->renderRecursion(
+            $model->setDomid($domId)->setNormal($normal)
+        );
+    }
+
+    /**
+     * This none simple type was nested too deep.
+     *
+     * @param $data
+     *   The object / array we are analysing.
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The already prepared model.
+     *
+     * @return string
+     *   The rendered HTML.
+     */
+    protected function handleNestedTooDeep($data, Model $model)
+    {
+        $text = $this->pool->messages->getHelp('maximumLevelReached2');
+
+        if (is_array($data) === true) {
+            $type = static::TYPE_ARRAY;
+        } else {
+            $type = static::TYPE_OBJECT;
+        }
+
+        $model->setData($text)
+            ->setNormal($this->pool->messages->getHelp('maximumLevelReached1'))
+            ->setType($type)
+            ->setHasExtra(true);
+
+        // Render it directly.
+        return $this->pool->render->renderSingleChild($model);
     }
 
     /**

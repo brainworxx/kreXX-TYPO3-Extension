@@ -133,6 +133,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Errorhandler/AbstractError.php';
         include_once KREXX_DIR . 'src/Errorhandler/Fatal.php';
 
+        include_once KREXX_DIR . 'src/Service/Config/ConfigConstInterface.php';
         include_once KREXX_DIR . 'src/Service/Config/Fallback.php';
         include_once KREXX_DIR . 'src/Service/Config/Config.php';
         include_once KREXX_DIR . 'src/Service/Config/Model.php';
@@ -156,6 +157,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Service/Misc/File.php';
         include_once KREXX_DIR . 'src/Service/Misc/Registry.php';
         include_once KREXX_DIR . 'src/Service/Misc/FileinfoDummy.php';
+        include_once KREXX_DIR . 'src/Service/Misc/Cleanup.php';
 
         include_once KREXX_DIR . 'src/Service/Reflection/UndeclaredProperty.php';
         include_once KREXX_DIR . 'src/Service/Reflection/ReflectionClass.php';
@@ -168,13 +170,46 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/View/Output/Chunks.php';
         include_once KREXX_DIR . 'src/View/Output/File.php';
         include_once KREXX_DIR . 'src/View/Output/Browser.php';
+        include_once KREXX_DIR . 'src/View/Output/CheckOutput.php';
 
         include_once KREXX_DIR . 'src/View/RenderInterface.php';
         include_once KREXX_DIR . 'src/View/AbstractRender.php';
         include_once KREXX_DIR . 'src/View/Messages.php';
-        include_once KREXX_DIR . 'src/View/Render.php';
 
+        include_once KREXX_DIR . 'src/View/Skins/Hans/SingleEditableChild.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/ExpandableChild.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/SingleChild.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/BacktraceSourceLine.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/Button.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/CssJs.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/FatalHeader.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/FatalMain.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/Footer.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/Header.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/Linebreak.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/Messages.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/Recursion.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/SingeChildHr.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/PluginList.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/Help.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/ConnectorLeft.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/ConnectorRight.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/Search.php';
+        include_once KREXX_DIR . 'src/View/Skins/Hans/ConstInterface.php';
         include_once KREXX_DIR . 'src/View/Skins/RenderHans.php';
+        // deprecated
+        include_once KREXX_DIR . 'src/View/Render.php';
+        // deprecated
+        include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Button.php';
+        include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/ExpandableChild.php';
+        include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/FatalMain.php';
+        include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Footer.php';
+        include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Header.php';
+        include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Recursion.php';
+        include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/SingleChild.php';
+        include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/SingleEditableChild.php';
+        include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/ConnectorRight.php';
+        include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Help.php';
         include_once KREXX_DIR . 'src/View/Skins/RenderSmokyGrey.php';
 
         include_once KREXX_DIR . 'src/Krexx.php';

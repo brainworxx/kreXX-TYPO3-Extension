@@ -73,6 +73,9 @@ class Encoding
              * @param bool $strict
              *   Will not get used.
              *
+             * @codeCoverageIgnore
+             *   We will not test a cheap polyfill
+             *
              * @return string
              *   Always 'polyfill'.
              */
@@ -88,6 +91,9 @@ class Encoding
              *   The sting we want to measure.
              * @param $encoding
              *   Will not get used.
+             *
+             * @codeCoverageIgnore
+             *   We will not test a cheap polyfill
              *
              * @return int
              *   The length, according to strlen();
@@ -107,6 +113,9 @@ class Encoding
              * @param $length
              *   The length we want.
              *
+             * @codeCoverageIgnore
+             *   We will not test a cheap polyfill
+             *
              * @return string
              *   The substring, according to substr().
              */
@@ -125,6 +134,9 @@ class Encoding
              *   Will not get used.
              * @param string $fromEncoding
              *   Will not get used.
+             *
+             * @codeCoverageIgnore
+             *   We will not test a cheap polyfill
              *
              * @return string
              *   always an empty string.

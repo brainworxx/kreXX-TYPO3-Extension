@@ -86,6 +86,7 @@ class ProcessStringTest extends AbstractTest
      * Testing with a normal short string.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
      */
     public function testProcessNormal()
     {
@@ -111,6 +112,7 @@ class ProcessStringTest extends AbstractTest
      * Testing with broken encoding.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
      */
     public function testProcessBrokenEncodung()
     {
@@ -136,6 +138,7 @@ class ProcessStringTest extends AbstractTest
      * Testing with a large string.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
      */
     public function testProcessLargerString()
     {
@@ -163,6 +166,7 @@ class ProcessStringTest extends AbstractTest
      * Testing with a string larger than 50 characters.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
      */
     public function testProcessHugeString()
     {
@@ -191,6 +195,7 @@ class ProcessStringTest extends AbstractTest
      * Testing with a short callback string.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
      */
     public function testProcessWithCallback()
     {
@@ -218,6 +223,7 @@ class ProcessStringTest extends AbstractTest
      * @throws \ReflectionException
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
      */
     public function testProcessWithLinebreaks()
     {

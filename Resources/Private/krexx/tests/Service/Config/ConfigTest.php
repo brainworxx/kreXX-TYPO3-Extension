@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
+use Brainworxx\Krexx\View\Output\CheckOutput;
 
 class ConfigTest extends AbstractTest
 {
@@ -67,7 +68,7 @@ class ConfigTest extends AbstractTest
     {
         parent::tearDown();
         unset($_SERVER['HTTP_X_REQUESTED_WITH']);
-        unset($_SERVER[Config::REMOTE_ADDRESS]);
+        unset($_SERVER[CheckOutput::REMOTE_ADDRESS]);
     }
 
     /**
@@ -77,8 +78,7 @@ class ConfigTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Service\Config\Config::getChunkDir
      * @covers \Brainworxx\Krexx\Service\Config\Config::getLogDir
      * @covers \Brainworxx\Krexx\Service\Config\Config::getPathToIniFile
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isRequestAjaxOrCli
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isAllowedIp
+     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructNormal()
     {
@@ -98,7 +98,7 @@ class ConfigTest extends AbstractTest
         Registration::addClassToDebugBlacklist($evilClassOne);
 
         // Simulate a normal call (not cli or ajax).
-        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Config\\', 'php_sapi_name');
+        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'php_sapi_name');
         $sapiMock->expects($this->exactly(2))
             ->will($this->returnValue(static::NOT_CLI));
 
@@ -131,11 +131,11 @@ class ConfigTest extends AbstractTest
      * Test the browser output on cli.
      *
      * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isRequestAjaxOrCli
+     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructCliBrowser()
     {
-        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Config\\', 'php_sapi_name');
+        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'php_sapi_name');
         $sapiMock->expects($this->exactly(2))
             ->will($this->returnValue('cli'));
         $config = new Config(Krexx::$pool);
@@ -150,11 +150,11 @@ class ConfigTest extends AbstractTest
      * Test the browser output on ajax.
      *
      * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isRequestAjaxOrCli
+     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructAjaxBrowser()
     {
-        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Config\\', 'php_sapi_name');
+        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'php_sapi_name');
         $sapiMock->expects($this->exactly(1))
             ->will($this->returnValue(static::NOT_CLI));
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'xmlhttprequest';
@@ -170,12 +170,12 @@ class ConfigTest extends AbstractTest
      * Test the file output on cli.
      *
      * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isRequestAjaxOrCli
+     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructCliFile()
     {
-        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Config\\', 'php_sapi_name');
-        $sapiMock->expects($this->exactly(2))
+        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'php_sapi_name');
+        $sapiMock->expects($this->exactly(1))
             ->will($this->returnValue('cli'));
         ConfigSupplier::$overwriteValues = [
             Config::SETTING_DESTINATION => 'file'
@@ -193,8 +193,7 @@ class ConfigTest extends AbstractTest
      * Test the access from different ips.
      *
      * @covers \Brainworxx\Krexx\Service\Config\Config::__construct
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isRequestAjaxOrCli
-     * @covers \Brainworxx\Krexx\Service\Config\Config::isAllowedIp
+     * @covers \Brainworxx\Krexx\Service\Config\Config::checkEnabledStatus
      */
     public function testConstructIpRange()
     {
@@ -202,12 +201,12 @@ class ConfigTest extends AbstractTest
             Config::SETTING_IP_RANGE => '1.2.3.4.5, 127.0.0.1'
         ];
         Krexx::$pool->rewrite[Ini::class] = ConfigSupplier::class;
-        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Config\\', 'php_sapi_name');
+        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'php_sapi_name');
         $sapiMock->expects($this->exactly(4))
             ->will($this->returnValue(static::NOT_CLI));
 
         // Testing coming from the wrong ip
-        $_SERVER[Config::REMOTE_ADDRESS] = '5.4.3.2.1';
+        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '5.4.3.2.1';
 
         $config = new Config(Krexx::$pool);
         $this->assertEquals(
@@ -217,7 +216,7 @@ class ConfigTest extends AbstractTest
         );
 
         // Testing coming from the right ip
-        $_SERVER[Config::REMOTE_ADDRESS] = '1.2.3.4.5';
+        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '1.2.3.4.5';
 
         $config = new Config(Krexx::$pool);
         $this->assertEquals(

@@ -89,10 +89,11 @@ class ProcessResourceTest extends AbstractTest
         $this->runTheTest($resource, 1, 'resource (curl)', null, $metaResults);
     }
 
-     /**
+    /**
      * Testing the processing of a not yet implemented resource type analysis.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::renderUnknownOrClosed
      */
     public function testProcessOtherNotPhp72()
     {
@@ -113,6 +114,7 @@ class ProcessResourceTest extends AbstractTest
      * Testing the processing of a not yet implemented resource type analysis.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::renderUnknownOrClosed
      */
     public function testProcessOtherPhp72()
     {
@@ -130,7 +132,7 @@ class ProcessResourceTest extends AbstractTest
     }
 
     /**
-     * Running the test is pretty much the same everyway here.
+     * Running the test is pretty much the same every way here.
      *
      * @param $resource
      * @param $counter

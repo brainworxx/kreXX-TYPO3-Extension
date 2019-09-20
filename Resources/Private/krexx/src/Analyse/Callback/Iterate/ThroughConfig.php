@@ -58,28 +58,7 @@ class ThroughConfig extends AbstractCallback
      */
     public function callMe()
     {
-        $configOutput = $this->dispatchStartEvent();
-
-        // We need to "explode" our config array into the
-        // sections again, for better readability.
-        $sections = [];
-        foreach ($this->pool->config->settings as $name => $setting) {
-            $sections[$setting->getSection()][$name] = $setting;
-        }
-
-        foreach ($sections as $sectionName => $sectionData) {
-            // Render a whole section.
-            $configOutput .= $this->pool->render->renderExpandableChild(
-                $this->pool->createClass(Model::class)
-                    ->setName($this->pool->messages->getHelp($sectionName . 'Readable'))
-                    ->setType(static::TYPE_CONFIG)
-                    ->setNormal(static::UNKNOWN_VALUE)
-                    ->addParameter(static::PARAM_DATA, $sectionData)
-                    ->injectCallback(
-                        $this->pool->createClass(ConfigSection::class)
-                    )
-            );
-        }
+        $configOutput = $this->dispatchStartEvent() . $this->renderAllSections();
 
         // Render the dev-handle field.
         $devHandleLabel = $this->pool->messages->getHelp(Fallback::SETTING_DEV_HANDLE);
@@ -100,5 +79,38 @@ class ThroughConfig extends AbstractCallback
                 ->setNormal('Reset local settings')
                 ->setHelpid('kresetbutton')
         );
+    }
+
+    /**
+     * Render the configuration sections.
+     *
+     * @return string
+     *   The output html.
+     */
+    protected function renderAllSections()
+    {
+        // We need to "explode" our config array into the
+        // sections again, for better readability.
+        $sections = [];
+        foreach ($this->pool->config->settings as $name => $setting) {
+            $sections[$setting->getSection()][$name] = $setting;
+        }
+
+        $configOutput = '';
+        foreach ($sections as $sectionName => $sectionData) {
+            // Render a whole section.
+            $configOutput .= $this->pool->render->renderExpandableChild(
+                $this->pool->createClass(Model::class)
+                    ->setName($this->pool->messages->getHelp($sectionName . 'Readable'))
+                    ->setType(static::TYPE_CONFIG)
+                    ->setNormal(static::UNKNOWN_VALUE)
+                    ->addParameter(static::PARAM_DATA, $sectionData)
+                    ->injectCallback(
+                        $this->pool->createClass(ConfigSection::class)
+                    )
+            );
+        }
+
+        return $configOutput;
     }
 }

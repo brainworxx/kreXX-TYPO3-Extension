@@ -78,30 +78,8 @@ class DebugMethods extends AbstractObjectAnalysis
 
         foreach (explode(',', $this->pool->config->getSetting(Fallback::SETTING_DEBUG_METHODS)) as $funcName) {
             if ($this->checkIfAccessible($data, $funcName, $reflectionClass) === true) {
-                // Add a try to prevent the hosting CMS from doing something stupid.
-                try {
-                    // We need to deactivate the current error handling to
-                    // prevent the host system to do anything stupid.
-                    set_error_handler(
-                        function () {
-                            // Do nothing.
-                        }
-                    );
-                    $result = $data->$funcName();
-                } catch (Throwable $e) {
-                    //Restore the previous error handler, and return an empty string.
-                    restore_error_handler();
-                    continue;
-                } catch (Exception $e) {
-                    // Restore the old error handler and move to the next method.
-                    restore_error_handler();
-                    continue;
-                }
-
-                // Reactivate whatever error handling we had previously.
-                restore_error_handler();
-
-                // We ignore NULL values, as well as the exceptions from above.
+                // We ignore NULL values.
+                $result = $this->retrieveValue($data, $funcName);
                 if (isset($result) === true) {
                     $output .= $this->pool->render->renderExpandableChild(
                         $this->dispatchEventWithModel(
@@ -124,6 +102,40 @@ class DebugMethods extends AbstractObjectAnalysis
         }
 
         return $output;
+    }
+
+    /**
+     * Retrieve the vale from the debug method.
+     *
+     * @param object $object
+     *   The object we are currently analysing.
+     * @param string $methodName
+     *   The debug method name we want to call.
+     *
+     * @return mixed
+     *   Whatever the method would return.
+     */
+    protected function retrieveValue($object, $methodName)
+    {
+        $result = null;
+        // Add a try to prevent the hosting CMS from doing something stupid.
+        set_error_handler(
+            function () {
+                // Do nothing.
+            }
+        );
+        try {
+            $result = $object->$methodName();
+        } catch (Throwable $e) {
+            // Do nothing.
+        } catch (Exception $e) {
+            // Do nothing.
+        }
+
+        // Reactivate whatever error handling we had previously.
+        restore_error_handler();
+
+        return $result;
     }
 
     /**

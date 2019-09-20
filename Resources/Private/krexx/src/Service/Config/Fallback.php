@@ -47,72 +47,8 @@ use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
  *
  * @package Brainworxx\Krexx\Service\Config
  */
-abstract class Fallback implements ConstInterface
+abstract class Fallback implements ConstInterface, ConfigConstInterface
 {
-    const RENDER = 'render';
-    const EVALUATE = 'eval';
-    const VALUE = 'value';
-    const SECTION = 'section';
-
-    const EVAL_BOOL = 'evalBool';
-    const EVAL_INT = 'evalInt';
-    const EVAL_MAX_RUNTIME = 'evalMaxRuntime';
-    const EVAL_DESTINATION = 'evalDestination';
-    const EVAL_SKIN = 'evalSkin';
-    const EVAL_IP_RANGE = 'evalIpRange';
-    const EVAL_DEV_HANDLE = 'evalDevHandle';
-    const EVAL_DEBUG_METHODS = 'evalDebugMethods';
-
-    const SECTION_OUTPUT = 'output';
-    const SECTION_BEHAVIOR = 'behavior';
-    const SECTION_PRUNE = 'prune';
-    const SECTION_PROPERTIES = 'properties';
-    const SECTION_METHODS = 'methods';
-    const SECTION_EMERGENCY = 'emergency';
-    const SECTION_FE_EDITING = 'feEditing';
-
-    const VALUE_TRUE = 'true';
-    const VALUE_FALSE = 'false';
-    const VALUE_BROWSER = 'browser';
-    const VALUE_FILE = 'file';
-    const VALUE_DEBUG_METHODS = 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo,getProperties';
-
-    const SETTING_DISABLED = 'disabled';
-    const SETTING_IP_RANGE = 'iprange';
-    const SETTING_SKIN = 'skin';
-    const SETTING_DESTINATION = 'destination';
-    const SETTING_MAX_FILES = 'maxfiles';
-    const SETTING_DETECT_AJAX = 'detectAjax';
-    const SETTING_NESTING_LEVEL = 'level';
-    const SETTING_MAX_CALL = 'maxCall';
-    const SETTING_MAX_RUNTIME = 'maxRuntime';
-    const SETTING_MEMORY_LEFT = 'memoryLeft';
-    const SETTING_USE_SCOPE_ANALYSIS = 'useScopeAnalysis';
-    const SETTING_ANALYSE_PROTECTED = 'analyseProtected';
-    const SETTING_ANALYSE_PRIVATE = 'analysePrivate';
-    const SETTING_ANALYSE_TRAVERSABLE = 'analyseTraversable';
-    const SETTING_ANALYSE_PROTECTED_METHODS = 'analyseProtectedMethods';
-    const SETTING_ANALYSE_PRIVATE_METHODS = 'analysePrivateMethods';
-    const SETTING_ANALYSE_GETTER = 'analyseGetter';
-    const SETTING_DEBUG_METHODS = 'debugMethods';
-    const SETTING_MAX_STEP_NUMBER = 'maxStepNumber';
-    const SETTING_ARRAY_COUNT_LIMIT = 'arrayCountLimit';
-    const SETTING_DEV_HANDLE = 'devHandle';
-
-    const RENDER_TYPE = 'Type';
-    const RENDER_EDITABLE = 'Editable';
-    // The render type is also part of the template filename of the
-    // cookie editor.
-    const RENDER_TYPE_SELECT = 'Select';
-    const RENDER_TYPE_INPUT = 'Input';
-    const RENDER_TYPE_NONE = 'None';
-
-    const RENDER_TYPE_INI_FULL = 'full';
-    const RENDER_TYPE_INI_DISPLAY = 'display';
-    const RENDER_TYPE_INI_NONE = 'none';
-
-    const SKIN_SMOKY_GREY = 'smokygrey';
-    const SKIN_HANS = 'hans';
 
     /**
      * Defining the layout of the frontend editing form.
@@ -159,7 +95,7 @@ abstract class Fallback implements ConstInterface
      *
      * @var array
      */
-    public $feConfigFallback;
+    public $feConfigFallback = [];
 
     /**
      * Render settings for a editable select field.
@@ -235,174 +171,223 @@ abstract class Fallback implements ConstInterface
         $this->pool = $pool;
 
         $this->feConfigFallback = [
-            static::SETTING_ANALYSE_PROTECTED_METHODS => [
-                // Analyse protected class methods.
-                static::VALUE => static::VALUE_FALSE,
-                static::RENDER => $this->editableSelect,
-                static::EVALUATE => static::EVAL_BOOL,
-                static::SECTION => static::SECTION_METHODS,
-            ],
-            static::SETTING_ANALYSE_PRIVATE_METHODS => [
-                // Analyse private class methods.
-                static::VALUE => static::VALUE_FALSE,
-                static::RENDER => $this->editableSelect,
-                static::EVALUATE => static::EVAL_BOOL,
-                static::SECTION => static::SECTION_METHODS,
-            ],
-            static::SETTING_ANALYSE_PROTECTED => [
-                // Analyse protected class properties.
-                static::VALUE => static::VALUE_FALSE,
-                static::RENDER => $this->editableSelect,
-                static::EVALUATE => static::EVAL_BOOL,
-                static::SECTION => static::SECTION_PROPERTIES,
-            ],
-            static::SETTING_ANALYSE_PRIVATE => [
-                // Analyse private class properties.
-                static::VALUE => static::VALUE_FALSE,
-                static::RENDER => $this->editableSelect,
-                static::EVALUATE => static::EVAL_BOOL,
-                static::SECTION => static::SECTION_PROPERTIES,
-            ],
-            static::SETTING_ANALYSE_TRAVERSABLE => [
-                // Analyse traversable part of classes.
-                static::VALUE => static::VALUE_TRUE,
-                static::RENDER => $this->editableSelect,
-                static::EVALUATE => static::EVAL_BOOL,
-                static::SECTION => static::SECTION_PROPERTIES,
-            ],
-            static::SETTING_DEBUG_METHODS => [
-                // Debug methods that get called.
-                // A debug method must be public and have no parameters.
-                // Change these only if you know what you are doing.
-                static::VALUE => static::VALUE_DEBUG_METHODS,
-                static::RENDER => $this->displayOnlyInput,
-                static::EVALUATE => static::EVAL_DEBUG_METHODS,
-                static::SECTION =>  static::SECTION_METHODS,
-            ],
-            static::SETTING_NESTING_LEVEL => [
-                // Maximum nesting level.
-                static::VALUE => 5,
-                static::RENDER => $this->editableInput,
-                static::EVALUATE => static::EVAL_INT,
-                static::SECTION => static::SECTION_PRUNE,
-            ],
-            static::SETTING_MAX_CALL => [
-                // Maximum amount of kreXX calls.
-                static::VALUE => 10,
-                static::RENDER => $this->editableInput,
-                static::EVALUATE => static::EVAL_INT,
-                static::SECTION => static::SECTION_EMERGENCY,
-            ],
-            static::SETTING_DISABLED => [
-                // Disable kreXX.
-                static::VALUE => static::VALUE_FALSE,
-                static::RENDER => $this->editableSelect,
-                static::EVALUATE => static::EVAL_BOOL,
-                static::SECTION => static::SECTION_OUTPUT,
-            ],
-            static::SETTING_DESTINATION => [
-                // Output destination. Either 'file' or 'browser'.
-                static::VALUE => static::VALUE_BROWSER,
-                static::RENDER => $this->displayOnlySelect,
-                static::EVALUATE => static::EVAL_DESTINATION,
-                static::SECTION => static::SECTION_BEHAVIOR,
-            ],
-            static::SETTING_MAX_FILES => [
-                // Maximum files that are kept inside the logfolder.
-                static::VALUE => 10,
-                static::RENDER => $this->displayOnlyInput,
-                static::EVALUATE => static::EVAL_INT,
-                static::SECTION => static::SECTION_BEHAVIOR,
-            ],
-            static::SETTING_SKIN => [
-                static::VALUE => static::SKIN_SMOKY_GREY,
-                static::RENDER => $this->editableSelect,
-                static::EVALUATE => static::EVAL_SKIN,
-                static::SECTION => static::SECTION_BEHAVIOR,
-            ],
-            static::SETTING_DETECT_AJAX => [
-                // Try to detect ajax requests.
-                // If set to 'true', kreXX is disabled for them.
-                static::VALUE => static::VALUE_TRUE,
-                static::RENDER => $this->editableSelect,
-                static::EVALUATE => static::EVAL_BOOL,
-                static::SECTION => static::SECTION_OUTPUT,
-            ],
-            static::SETTING_IP_RANGE => [
-                // IP range for calling kreXX.
-                // kreXX is disabled for everyone who dies not fit into this range.
-                static::VALUE => '*',
-                static::RENDER => $this->displayNothing,
-                static::EVALUATE => static::EVAL_IP_RANGE,
-                static::SECTION => static::SECTION_OUTPUT,
-            ],
-            static::SETTING_DEV_HANDLE => [
-                static::VALUE => '',
-                static::RENDER => $this->editableInput,
-                static::EVALUATE => static::EVAL_DEV_HANDLE,
-                static::SECTION => ''
-            ],
-            static::SETTING_ANALYSE_GETTER => [
-                // Analyse the getter methods of a class and try to
-                // get a possible return value without calling the method.
-                static::VALUE => static::VALUE_TRUE,
-                static::RENDER => $this->editableSelect,
-                static::EVALUATE => static::EVAL_BOOL,
-                static::SECTION =>  static::SECTION_METHODS,
-            ],
-            static::SETTING_MEMORY_LEFT => [
-                // Maximum MB memory left, before triggering an emergency break.
-                static::VALUE => 64,
-                static::RENDER => $this->editableInput,
-                static::EVALUATE => static::EVAL_INT,
-                static::SECTION => static::SECTION_EMERGENCY,
-            ],
-            static::SETTING_MAX_RUNTIME => [
-                // Maximum runtime in seconds, before triggering an emergency break.
-                static::VALUE => 60,
-                static::RENDER => $this->editableInput,
-                static::EVALUATE => static::EVAL_MAX_RUNTIME,
-                static::SECTION => static::SECTION_EMERGENCY,
-            ],
-            static::SETTING_USE_SCOPE_ANALYSIS => [
-                // Use the scope analysis (aka auto configuration).
-                static::VALUE => static::VALUE_TRUE,
-                static::RENDER => $this->editableSelect,
-                static::EVALUATE => static::EVAL_BOOL,
-                static::SECTION => static::SECTION_BEHAVIOR,
-            ],
-            static::SETTING_MAX_STEP_NUMBER => [
-                // Maximum step numbers that get analysed from a backtrace.
-                // All other steps be be omitted.
-                static::VALUE => 10,
-                static::RENDER => $this->editableInput,
-                static::EVALUATE => static::EVAL_INT,
-                static::SECTION => static::SECTION_PRUNE,
-            ],
-            static::SETTING_ARRAY_COUNT_LIMIT => [
-                // Limit for the count in an array. If an array is larger that this,
-                // we will use the ThroughLargeArray callback
-                static::VALUE => 300,
-                static::RENDER => $this->editableInput,
-                static::EVALUATE => static::EVAL_INT,
-                static::SECTION => static::SECTION_PRUNE
-            ],
+            Fallback::SETTING_ANALYSE_PROTECTED_METHODS => $this->returnBoolSelectFalse(Fallback::SECTION_METHODS),
+            Fallback::SETTING_ANALYSE_PRIVATE_METHODS => $this->returnBoolSelectFalse(Fallback::SECTION_METHODS),
+            Fallback::SETTING_ANALYSE_PROTECTED => $this->returnBoolSelectFalse(Fallback::SECTION_PROPERTIES),
+            Fallback::SETTING_ANALYSE_PRIVATE => $this->returnBoolSelectFalse(Fallback::SECTION_PROPERTIES),
+            Fallback::SETTING_ANALYSE_TRAVERSABLE => $this->returnBoolSelectTrue(Fallback::SECTION_PROPERTIES),
+            Fallback::SETTING_DEBUG_METHODS => $this->returnDebugMethods(),
+            Fallback::SETTING_NESTING_LEVEL => $this->returnInput(Fallback::SECTION_PRUNE, 5),
+            Fallback::SETTING_MAX_CALL => $this->returnInput(Fallback::SECTION_EMERGENCY, 10),
+            Fallback::SETTING_DISABLED => $this->returnBoolSelectFalse(Fallback::SECTION_OUTPUT),
+            Fallback::SETTING_DESTINATION => $this->returnDestination(),
+            Fallback::SETTING_MAX_FILES => $this->returnMaxFiles(),
+            Fallback::SETTING_SKIN => $this->returnSkin(),
+            Fallback::SETTING_DETECT_AJAX => $this->returnBoolSelectTrue(Fallback::SECTION_OUTPUT),
+            Fallback::SETTING_IP_RANGE => $this->returnIpRange(),
+            Fallback::SETTING_DEV_HANDLE => $this->returnDevHandle(),
+            Fallback::SETTING_ANALYSE_GETTER => $this->returnBoolSelectTrue(Fallback::SECTION_METHODS),
+            Fallback::SETTING_MEMORY_LEFT => $this->returnInput(Fallback::SECTION_EMERGENCY, 64),
+            Fallback::SETTING_MAX_RUNTIME => $this->returnMaxRuntime(),
+            Fallback::SETTING_USE_SCOPE_ANALYSIS => $this->returnBoolSelectTrue(Fallback::SECTION_BEHAVIOR),
+            Fallback::SETTING_MAX_STEP_NUMBER => $this->returnInput(Fallback::SECTION_PRUNE, 10),
+            Fallback::SETTING_ARRAY_COUNT_LIMIT => $this->returnInput(Fallback::SECTION_PRUNE, 300),
         ];
 
         // Setting up out two bundled skins.
+        $this->generateSkinConfiguration();
+    }
+
+    /**
+     * Generate the skin configuration.
+     */
+    protected function generateSkinConfiguration()
+    {
         $this->skinConfiguration = array_merge(
             [
-                static::SKIN_SMOKY_GREY => [
-                    static::SKIN_CLASS => RenderSmokyGrey::class,
-                    static::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/smokygrey/'
+                Fallback::SKIN_SMOKY_GREY => [
+                    Fallback::SKIN_CLASS => RenderSmokyGrey::class,
+                    Fallback::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/smokygrey/'
                 ],
-                static::SKIN_HANS => [
-                    static::SKIN_CLASS => RenderHans::class,
-                    static::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/hans/'
+                Fallback::SKIN_HANS => [
+                    Fallback::SKIN_CLASS => RenderHans::class,
+                    Fallback::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/hans/'
                 ]
             ],
             SettingsGetter::getAdditionalSkinList()
         );
+    }
+
+    /**
+     * Return the settings for a simple true/false select.
+     *
+     * @param string $section
+     *   The section, where it belongs to
+     *
+     * @return array
+     *   The settings.
+     */
+    protected function returnBoolSelectFalse($section)
+    {
+        return [
+            Fallback::VALUE => Fallback::VALUE_FALSE,
+            Fallback::RENDER => $this->editableSelect,
+            Fallback::EVALUATE => Fallback::EVAL_BOOL,
+            Fallback::SECTION => $section,
+        ];
+    }
+
+    /**
+     * Return the settings for a simple true/false select.
+     *
+     * @param string $section
+     *   The section, where it belongs to
+     *
+     * @return array
+     *   The settings.
+     */
+    protected function returnBoolSelectTrue($section)
+    {
+        return [
+            Fallback::VALUE => Fallback::VALUE_TRUE,
+            Fallback::RENDER => $this->editableSelect,
+            Fallback::EVALUATE => Fallback::EVAL_BOOL,
+            Fallback::SECTION => $section,
+        ];
+    }
+
+    /**
+     * The render settings for a simple input field.
+     *
+     * @param string $section
+     *   The section, where it belongs to
+     * @param int $value
+     *   The prefilled value.
+     *
+     * @return array
+     *   The settings.
+     */
+    protected function returnInput($section, $value)
+    {
+        return [
+            Fallback::VALUE => $value,
+            Fallback::RENDER => $this->editableInput,
+            Fallback::EVALUATE => Fallback::EVAL_INT,
+            Fallback::SECTION => $section,
+        ];
+    }
+
+    /**
+     * The render settings for the debug methods.
+     *
+     * @return array
+     */
+    protected function returnDebugMethods()
+    {
+        return [
+            // Debug methods that get called.
+            // A debug method must be public and have no parameters.
+            // Change these only if you know what you are doing.
+            Fallback::VALUE => Fallback::VALUE_DEBUG_METHODS,
+            Fallback::RENDER => $this->displayOnlyInput,
+            Fallback::EVALUATE => Fallback::EVAL_DEBUG_METHODS,
+            Fallback::SECTION =>  Fallback::SECTION_METHODS,
+        ];
+    }
+
+    /**
+     * The render settings for the destination.
+     *
+     * @return array
+     */
+    protected function returnDestination()
+    {
+        return [
+                // Either 'file' or 'browser'.
+                Fallback::VALUE => Fallback::VALUE_BROWSER,
+                Fallback::RENDER => $this->displayOnlySelect,
+                Fallback::EVALUATE => Fallback::EVAL_DESTINATION,
+                Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
+            ];
+    }
+
+    /**
+     * The render settings for the max files.
+     *
+     * @return array
+     */
+    protected function returnMaxFiles()
+    {
+        return [
+            // Maximum files that are kept inside the logfolder.
+            Fallback::VALUE => 10,
+            Fallback::RENDER => $this->displayOnlyInput,
+            Fallback::EVALUATE => Fallback::EVAL_INT,
+            Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
+        ];
+    }
+
+    /**
+     * The render settings for the skin.
+     *
+     * @return array
+     */
+    protected function returnSkin()
+    {
+        return [
+            Fallback::VALUE => Fallback::SKIN_SMOKY_GREY,
+            Fallback::RENDER => $this->editableSelect,
+            Fallback::EVALUATE => Fallback::EVAL_SKIN,
+            Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
+        ];
+    }
+
+    /**
+     * The render settings for the ip range.
+     *
+     * @return array
+     */
+    protected function returnIpRange()
+    {
+        return [
+            // IP range for calling kreXX.
+            // kreXX is disabled for everyone who dies not fit into this range.
+            Fallback::VALUE => '*',
+            Fallback::RENDER => $this->displayNothing,
+            Fallback::EVALUATE => Fallback::EVAL_IP_RANGE,
+            Fallback::SECTION => Fallback::SECTION_OUTPUT,
+        ];
+    }
+
+    /**
+     * The render settings for the dev handle.
+     *
+     * @return array
+     */
+    protected function returnDevHandle()
+    {
+        return [
+            Fallback::VALUE => '',
+            Fallback::RENDER => $this->editableInput,
+            Fallback::EVALUATE => Fallback::EVAL_DEV_HANDLE,
+            Fallback::SECTION => ''
+        ];
+    }
+
+    /**
+     * The render settings for the max runtime.
+     *
+     * @return array
+     */
+    protected function returnMaxRuntime()
+    {
+        return [
+            // Maximum runtime in seconds, before triggering an emergency break.
+            Fallback::VALUE => 60,
+            Fallback::RENDER => $this->editableInput,
+            Fallback::EVALUATE => Fallback::EVAL_MAX_RUNTIME,
+            Fallback::SECTION => Fallback::SECTION_EMERGENCY,
+        ];
     }
 
     /**

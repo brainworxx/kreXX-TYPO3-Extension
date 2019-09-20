@@ -39,9 +39,10 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+use ReflectionProperty;
 
 /**
  * Getter method analysis methods.
@@ -171,17 +172,13 @@ class ThroughGetter extends AbstractCallback
             }
 
             // Get ourselves a possible return value
-            try {
-                $output .= $this->retrievePropertyValue(
-                    $reflectionMethod,
-                    $this->dispatchEventWithModel(
-                        __FUNCTION__ . static::EVENT_MARKER_END,
-                        $model
-                    )
-                );
-            } catch (ReflectionException $e) {
-                // Do nothing. We ignore this one.
-            }
+            $output .= $this->retrievePropertyValue(
+                $reflectionMethod,
+                $this->dispatchEventWithModel(
+                    __FUNCTION__ . static::EVENT_MARKER_END,
+                    $model
+                )
+            );
         }
 
         return $output;
@@ -195,8 +192,6 @@ class ThroughGetter extends AbstractCallback
      * @param Model $model
      *   The model so far.
      *
-     * @throws \ReflectionException
-     *
      * @return string
      *   The rendered markup.
      */
@@ -204,7 +199,51 @@ class ThroughGetter extends AbstractCallback
     {
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters[static::PARAM_REF];
-        $refProp = $this->getReflectionProperty($reflectionClass, $reflectionMethod);
+        try {
+            $refProp = $this->getReflectionProperty($reflectionClass, $reflectionMethod);
+        } catch (ReflectionException $e) {
+            // We ignore this one.
+            return '';
+        }
+
+        $this->prepareResult($reflectionClass, $reflectionMethod, $refProp, $model);
+        $this->dispatchEventWithModel(__FUNCTION__ . '::resolving', $model);
+
+        if ($this->parameters[static::PARAM_ADDITIONAL]['nothingFound'] === true) {
+            // Found nothing  :-(
+            // We literally have no info. We need to tell the user.
+            // We render this right away, without any routing.
+            return $this->pool->render->renderSingleChild(
+                $model->setType(static::TYPE_UNKNOWN)->setNormal(static::TYPE_UNKNOWN)
+            );
+        }
+
+        return $this->pool->routing->analysisHub(
+            $this->dispatchEventWithModel(
+                __FUNCTION__ . static::EVENT_MARKER_END,
+                $model
+            )
+        );
+    }
+
+    /**
+     * Prepare the retrieved result for output.
+     *
+     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass
+     *   The reflection class of the object we are analysing.
+     * @param \ReflectionMethod $reflectionMethod
+     *   The reflection of the getter where we want to retive the return value
+     * @param \ReflectionProperty|null $refProp
+     *   The reflection of the property that it may return.
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model so far.
+     */
+    public function prepareResult(
+        ReflectionClass $reflectionClass,
+        ReflectionMethod $reflectionMethod,
+        $refProp,
+        Model $model
+    ) {
         $nothingFound = true;
         $value = null;
 
@@ -229,23 +268,6 @@ class ThroughGetter extends AbstractCallback
             'refProperty' => $refProp,
             'refMethod' => $reflectionMethod
         ];
-        $this->dispatchEventWithModel(__FUNCTION__ . '::resolving', $model);
-
-        if ($this->parameters[static::PARAM_ADDITIONAL]['nothingFound'] === true) {
-            // Found nothing  :-(
-            // We literally have no info. We need to tell the user.
-            $model->setType(static::TYPE_UNKNOWN)
-                ->setNormal(static::TYPE_UNKNOWN);
-            // We render this right away, without any routing.
-            return $this->pool->render->renderSingleChild($model);
-        }
-
-        return $this->pool->routing->analysisHub(
-            $this->dispatchEventWithModel(
-                __FUNCTION__ . static::EVENT_MARKER_END,
-                $model
-            )
-        );
     }
 
     /**
@@ -253,7 +275,7 @@ class ThroughGetter extends AbstractCallback
      *
      * We try to guess the corresponding property in the class.
      *
-     * @param \ReflectionClass $classReflection
+     * @param ReflectionClass $classReflection
      *   The reflection class oof the object we are analysing.
      * @param \ReflectionMethod $reflectionMethod
      *   The reflection ot the method of which we want to coax the result from
@@ -274,64 +296,29 @@ class ThroughGetter extends AbstractCallback
         // property.
 
         // We will check:
-        // - myProperty
-        // - _myProperty
-        // - MyProperty
-        // - _MyProperty
-        // - myproperty
-        // - _myproperty
-        // - my_property
-        // - _my_property
+        $names = [
+            // myProperty
+            $propertyName = $this->preparePropertyName($reflectionMethod),
+            // _myProperty
+            $testName = '_' . $propertyName,
+            // MyProperty
+            $testName = ucfirst($propertyName),
+            // _MyProperty
+            $testName = '_' . ucfirst($propertyName),
+            // myproperty
+            $testName = strtolower($propertyName),
+            // _myproperty
+            $testName = '_' . strtolower($propertyName),
+            // my_property
+            $testName = $this->convertToSnakeCase($propertyName),
+            // _my_property
+            $testName = '_' . $this->convertToSnakeCase($propertyName)
+        ];
 
-        // Get a first impression.
-        $propertyName = $this->preparePropertyName($reflectionMethod);
-
-        // myProperty
-        // Most should be handled here.
-        if ($classReflection->hasProperty($propertyName) === true) {
-            return $classReflection->getProperty($propertyName);
-        }
-
-        // _myProperty
-        $testName = '_' . $propertyName;
-        if ($classReflection->hasProperty($testName) === true) {
-            return $classReflection->getProperty($testName);
-        }
-
-        // MyProperty
-        $testName = ucfirst($propertyName);
-        if ($classReflection->hasProperty($testName) === true) {
-            return $classReflection->getProperty($testName);
-        }
-
-        // _MyProperty
-        $testName = '_' . ucfirst($propertyName);
-        if ($classReflection->hasProperty($testName) === true) {
-            return $classReflection->getProperty($testName);
-        }
-
-        // myproperty
-        $testName = strtolower($propertyName);
-        if ($classReflection->hasProperty($testName) === true) {
-            return $classReflection->getProperty($testName);
-        }
-
-        // _myproperty
-        $testName = '_' . strtolower($propertyName);
-        if ($classReflection->hasProperty($testName) === true) {
-            return $classReflection->getProperty($testName);
-        }
-
-        // my_property
-        $testName = $this->convertToSnakeCase($propertyName);
-        if ($classReflection->hasProperty($testName) === true) {
-            return $classReflection->getProperty($testName);
-        }
-
-        // _my_property
-        $testName = '_' . $this->convertToSnakeCase($propertyName);
-        if ($classReflection->hasProperty($testName) === true) {
-            return $classReflection->getProperty($testName);
+        foreach ($names as $name) {
+            if ($classReflection->hasProperty($name) === true) {
+                return $classReflection->getProperty($name);
+            }
         }
 
         // Time to do some deep stuff. We parse the sourcecode via regex!
@@ -371,7 +358,7 @@ class ThroughGetter extends AbstractCallback
      *
      * This time we are analysing the source code itself!
      *
-     * @param \ReflectionClass $classReflection
+     * @param ReflectionClass $classReflection
      *   The reflection class oof the object we are analysing.
      * @param \ReflectionMethod $reflectionMethod
      *   The reflection ot the method of which we want to coax the result from

@@ -81,6 +81,8 @@ class GetterTest extends AbstractTest
      * Test without any methods at all.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::populateGetterLists
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::retrieveMethodList
      */
     public function testCallMeEmpty()
     {
@@ -113,6 +115,8 @@ class GetterTest extends AbstractTest
      * Test without any getter methods.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::populateGetterLists
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::retrieveMethodList
      */
     public function testCallMeWithoutGetter()
     {
@@ -141,6 +145,11 @@ class GetterTest extends AbstractTest
         $this->assertEquals([], CallbackCounter::$staticParameters);
     }
 
+    /**
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::populateGetterLists
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::retrieveMethodList
+     */
     public function testCallMeInScope()
     {
         // Setup the events.
@@ -184,6 +193,11 @@ class GetterTest extends AbstractTest
         $this->assertEquals($expectedResult, CallbackCounter::$staticParameters);
     }
 
+    /**
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::populateGetterLists
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter::retrieveMethodList
+     */
     public function testCallMeOutOfScope()
     {
         // Setup the events.

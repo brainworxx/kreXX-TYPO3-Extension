@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Tests;
 
 use Brainworxx\Krexx\Controller\AbstractController;
+use Brainworxx\Krexx\Controller\ExceptionController;
 use Brainworxx\Krexx\Controller\TimerController;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
@@ -43,6 +44,8 @@ use Brainworxx\Krexx\Service\Config\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\View\Output\CheckOutput;
+use FilesystemIterator;
 
 class KrexxTest extends AbstractTest
 {
@@ -58,13 +61,32 @@ class KrexxTest extends AbstractTest
         foreach ($files as $value) {
             $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
             if (is_dir($path) === false) {
-                $results[] = $path;
+                if ($this->endsWith($path, '.php')) {
+                    $results[] = $path;
+                }
             } elseif ($value != "." && $value != "..") {
                 $this->getDirContents($path, $results);
             }
         }
 
         return $results;
+    }
+
+    /**
+     * Find out, if a string ends with a certain string.
+     *
+     * @param $string
+     * @param $test
+     * @return bool
+     */
+    protected function endsWith($string, $test)
+    {
+        $stringLength = strlen($string);
+        $testLength = strlen($test);
+        if ($testLength > $stringLength) {
+            return false;
+        }
+        return substr_compare($string, $test, $stringLength - $testLength, $testLength) === 0;
     }
 
     /**
@@ -87,15 +109,15 @@ class KrexxTest extends AbstractTest
                 array('', '', '\\'),
                 $file
             );
-            $result = interface_exists($className) || class_exists($className);
-            $this->assertTrue($result, 'Interface orclass exists: ' . $className);
+            $result = interface_exists($className) || class_exists($className) || trait_exists($className);
+            $this->assertTrue($result, 'Interface or class exists: ' . $className);
         }
     }
 
     /**
      * Test if we can take a moment while kreXX is disabled.
      *
-     * @covers Krexx::timerMoment
+     * @covers \Brainworxx\Krexx\Krexx::timerMoment
      */
     public function testTimerMomentDisabled()
     {
@@ -120,7 +142,7 @@ class KrexxTest extends AbstractTest
     /**
      * Test if we can take a moment while kreXX is analying something else.
      *
-     * @covers Krexx::timerMoment
+     * @covers \Brainworxx\Krexx\Krexx::timerMoment
      */
     public function testTimerMomentInProgress()
     {
@@ -145,7 +167,7 @@ class KrexxTest extends AbstractTest
     /**
      * Testing, if it can be disabled, as expected.
      *
-     * @covers Krexx::timerMoment
+     * @covers \Brainworxx\Krexx\Krexx::timerMoment
      */
     public function testTimerMomentEnabled()
     {
@@ -166,7 +188,7 @@ class KrexxTest extends AbstractTest
     /**
      * Testing if we get an output while kreXX is disabled.
      *
-     * @covers Krexx::timerEnd
+     * @covers \Brainworxx\Krexx\Krexx::timerEnd
      */
     public function testTimerEndDisabled()
     {
@@ -186,7 +208,7 @@ class KrexxTest extends AbstractTest
     /**
      * Test if we can get an output, while another analysis is in progress.
      *
-     * @covers Krexx::timerEnd
+     * @covers \Brainworxx\Krexx\Krexx::timerEnd
      */
     public function testTimerEndInProgress()
     {
@@ -206,7 +228,7 @@ class KrexxTest extends AbstractTest
     /**
      * Test if we can get an output at all.
      *
-     * @covers Krexx::timerEnd
+     * @covers \Brainworxx\Krexx\Krexx::timerEnd
      */
     public function testTimerEndNormal()
     {
@@ -223,7 +245,7 @@ class KrexxTest extends AbstractTest
     /**
      * Test if we can get an output when disabled.
      *
-     * @covers Krexx::open
+     * @covers \Brainworxx\Krexx\Krexx::open
      */
     public function testOpenDisabled()
     {
@@ -242,7 +264,7 @@ class KrexxTest extends AbstractTest
     /**
      * Test if we can get an output, while another analysis is in progress.
      *
-     * @covers Krexx::open
+     * @covers \Brainworxx\Krexx\Krexx::open
      */
     public function testOpenInProgress()
     {
@@ -261,7 +283,7 @@ class KrexxTest extends AbstractTest
     /**
      * Test if we can get an output at all.
      *
-     * @covers Krexx::open
+     * @covers \Brainworxx\Krexx\Krexx::open
      */
     public function testOpen()
     {
@@ -279,7 +301,7 @@ class KrexxTest extends AbstractTest
     /**
      * Test if we can get an output when disabled.
      *
-     * @covers Krexx::backtrace
+     * @covers \Brainworxx\Krexx\Krexx::backtrace
      */
     public function testBacktraceDisabled()
     {
@@ -298,7 +320,7 @@ class KrexxTest extends AbstractTest
     /**
      * Test if we can get an output, while another analysis is in progress.
      *
-     * @covers Krexx::backtrace
+     * @covers \Brainworxx\Krexx\Krexx::backtrace
      */
     public function testBacktraceInProgress()
     {
@@ -317,7 +339,7 @@ class KrexxTest extends AbstractTest
     /**
      * Test if we can get an output at all.
      *
-     * @covers Krexx::backtrace
+     * @covers \Brainworxx\Krexx\Krexx::backtrace
      */
     public function testBacktrace()
     {
@@ -337,7 +359,7 @@ class KrexxTest extends AbstractTest
     /**
      * Test if it sets the value if kreXX beeing disabled.
      *
-     * @covers Krexx::disable
+     * @covers \Brainworxx\Krexx\Krexx::disable
      */
     public function testDisable()
     {
@@ -349,7 +371,7 @@ class KrexxTest extends AbstractTest
     /**
      * Test if we can get an output when disabled.
      *
-     * @covers Krexx::editSettings
+     * @covers \Brainworxx\Krexx\Krexx::editSettings
      */
     public function testEditSettingsDisabled()
     {
@@ -368,7 +390,7 @@ class KrexxTest extends AbstractTest
     /**
      * Test if we can register our fatal error handler.
      *
-     * @covers Krexx::registerFatal
+     * @covers \Brainworxx\Krexx\Krexx::registerFatal
      * @incomplete
      *   We only test the php version.
      */
@@ -383,7 +405,7 @@ class KrexxTest extends AbstractTest
     /**
      * Test if we can unregister our fatal error handler.
      *
-     * @covers Krexx::unregisterFatal
+     * @covers \Brainworxx\Krexx\Krexx::unregisterFatal
      */
     public function testUnregisterFatal()
     {
@@ -448,9 +470,9 @@ class KrexxTest extends AbstractTest
         $this->assertNotEquals($settingsMockAjax, Krexx::$pool->config->settings[Fallback::SETTING_DETECT_AJAX]);
 
         // Test if we have a logfile.
-        $filesystemIterator = new \FilesystemIterator(
+        $filesystemIterator = new FilesystemIterator(
             Krexx::$pool->config->getLogDir(),
-            \FilesystemIterator::SKIP_DOTS
+            FilesystemIterator::SKIP_DOTS
         );
         $this->assertEquals(4, iterator_count($filesystemIterator));
     }
@@ -458,9 +480,9 @@ class KrexxTest extends AbstractTest
     /**
      * Test the forced logger.
      *
-     * @covers Krexx::log
-     * @covers Krexx::startForcedLog
-     * @covers Krexx::endForcedLog
+     * @covers \Brainworxx\Krexx\Krexx::log
+     * @covers \Brainworxx\Krexx\Krexx::startForcedLog
+     * @covers \Brainworxx\Krexx\Krexx::endForcedLog
      */
     public function testLog()
     {
@@ -486,9 +508,9 @@ class KrexxTest extends AbstractTest
     /**
      * Testing the backtrace logger.
      *
-     * @covers Krexx::logBacktrace
-     * @covers Krexx::startForcedLog
-     * @covers Krexx::endForcedLog
+     * @covers \Brainworxx\Krexx\Krexx::logBacktrace
+     * @covers \Brainworxx\Krexx\Krexx::startForcedLog
+     * @covers \Brainworxx\Krexx\Krexx::endForcedLog
      */
     public function testLogBacktrace()
     {
@@ -515,9 +537,9 @@ class KrexxTest extends AbstractTest
     /**
      * Testing the timer logging.
      *
-     * @covers Krexx::logTimerEnd
-     * @covers Krexx::startForcedLog
-     * @covers Krexx::endForcedLog
+     * @covers \Brainworxx\Krexx\Krexx::logTimerEnd
+     * @covers \Brainworxx\Krexx\Krexx::startForcedLog
+     * @covers \Brainworxx\Krexx\Krexx::endForcedLog
      */
     public function testLogTimerEnd()
     {
@@ -541,7 +563,7 @@ class KrexxTest extends AbstractTest
     /**
      * Testing a call with a wrong developer handle.
      *
-     * @covers Krexx::__callStatic
+     * @covers \Brainworxx\Krexx\Krexx::__callStatic
      */
     public function testCallStatic()
     {
@@ -587,7 +609,7 @@ class KrexxTest extends AbstractTest
     /**
      * Testing, if kreXX is disabled, if the call comes from the wrong IP.
      *
-     * @covers Krexx::open
+     * @covers \Brainworxx\Krexx\Krexx::open
      */
     public function testDisabledByIp()
     {
@@ -596,7 +618,7 @@ class KrexxTest extends AbstractTest
         Krexx::$pool->rewrite[Ini::class] = ConfigSupplier::class;
         ConfigSupplier::$overwriteValues[Fallback::SETTING_IP_RANGE] = '987.654.321.123';
         // Inject the IP.
-        $_SERVER[Config::REMOTE_ADDRESS] = '123.456.789.123';
+        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '123.456.789.123';
 
         // Reset the config.
         Config::$disabledByPhp = false;
@@ -605,7 +627,7 @@ class KrexxTest extends AbstractTest
         $this->assertTrue($config::$disabledByPhp);
 
         // Inject another ip.
-        $_SERVER[Config::REMOTE_ADDRESS] = '987.654.321.123';
+        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '987.654.321.123';
         // Reset the config.
         Config::$disabledByPhp = false;
         $config = new Config(Krexx::$pool);
@@ -619,11 +641,76 @@ class KrexxTest extends AbstractTest
         $this->assertFalse($config::$disabledByPhp);
 
         // Inject another ip.
-        $_SERVER[Config::REMOTE_ADDRESS] = '123.654.321.123';
+        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '123.654.321.123';
         // Reset the config.
         Config::$disabledByPhp = false;
         $config = new Config(Krexx::$pool);
         // Run the test
         $this->assertTrue($config::$disabledByPhp);
+    }
+
+    /**
+     * Test the registering of the exception handler, when kreXX is disabled.
+     *
+     * @covers \Brainworxx\Krexx\Krexx::registerExceptionHandler
+     */
+    public function testRegisterExceptionHandlerDisabled()
+    {
+        Config::$disabledByPhp = true;
+
+        $setExceptionHandlerMock = $this
+            ->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'set_exception_handler');
+        $setExceptionHandlerMock->expects($this->never());
+
+        Krexx::registerExceptionHandler();
+    }
+
+    /**
+     * Test the registering of the exception handler, when kreXX is enabled..
+     *
+     * @covers \Brainworxx\Krexx\Krexx::registerExceptionHandler
+     */
+    public function testRegisterExceptionHandler()
+    {
+        // Mock an already existing controller.
+        $stdClass = new \stdClass();
+        $this->setValueByReflection('exceptionController', $stdClass, ExceptionController::class);
+
+        $setExceptionHandlerMock = $this
+            ->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'set_exception_handler');
+        $setExceptionHandlerMock->expects($this->once())
+            ->with([$stdClass, 'exceptionAction']);
+
+        Krexx::registerExceptionHandler();
+    }
+
+    /**
+     * Test the registering of the exception handler, when kreXX is disabled.
+     *
+     * @covers \Brainworxx\Krexx\Krexx::unregisterExceptionHandler
+     */
+    public function testUnRegisterExceptionHandlerDisabled()
+    {
+        Config::$disabledByPhp = true;
+
+        $restoreExceptionHandlerMock = $this
+            ->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'restore_exception_handler');
+        $restoreExceptionHandlerMock->expects($this->never());
+
+        Krexx::unregisterExceptionHandler();
+    }
+
+     /**
+     * Test the registering of the exception handler, when kreXX is enabled.
+     *
+     * @covers \Brainworxx\Krexx\Krexx::unregisterExceptionHandler
+     */
+    public function testUnRegisterExceptionHandler()
+    {
+        $restoreExceptionHandlerMock = $this
+            ->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'restore_exception_handler');
+        $restoreExceptionHandlerMock->expects($this->once());
+
+        Krexx::unregisterExceptionHandler();
     }
 }

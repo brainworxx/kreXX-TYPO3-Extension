@@ -52,11 +52,10 @@ use Brainworxx\Krexx\Service\Misc\Registry;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
+use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Output\Chunks;
-use Brainworxx\Krexx\View\Render;
 use Brainworxx\Krexx\View\Skins\RenderHans;
-use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
 use stdClass;
 
 class PoolTest extends AbstractTest
@@ -76,7 +75,7 @@ class PoolTest extends AbstractTest
         $this->assertInstanceOf(Recursion::class, Krexx::$pool->recursionHandler);
         $this->assertInstanceOf(Codegen::class, Krexx::$pool->codegenHandler);
         $this->assertInstanceOf(Emergency::class, Krexx::$pool->emergencyHandler);
-        $this->assertInstanceOf(Render::class, Krexx::$pool->render);
+        $this->assertInstanceOf(RenderHans::class, Krexx::$pool->render);
         $this->assertInstanceOf(Config::class, Krexx::$pool->config);
         $this->assertInstanceOf(Messages::class, Krexx::$pool->messages);
         $this->assertInstanceOf(Chunks::class, Krexx::$pool->chunks);
@@ -89,7 +88,7 @@ class PoolTest extends AbstractTest
 
         // Testing the assigning of the right render class.
         // Smoky Grey is the standard render skin.
-        $this->assertInstanceOf(RenderSmokyGrey::class, Krexx::$pool->render);
+        $this->assertInstanceOf(AbstractRender::class, Krexx::$pool->render);
 
         Krexx::$pool = null;
         ConfigSupplier::$overwriteValues[Fallback::SETTING_SKIN] = Fallback::SKIN_HANS;
@@ -118,8 +117,8 @@ class PoolTest extends AbstractTest
 
         Krexx::$pool = null;
         Pool::createPool();
-        $this->assertAttributeEquals(true, 'useChunks', Krexx::$pool->chunks);
-        $this->assertAttributeEquals(true, 'useLogging', Krexx::$pool->chunks);
+        $this->assertAttributeEquals(true, 'chunksAreAllowed', Krexx::$pool->chunks);
+        $this->assertAttributeEquals(true, 'loggingIsAllowed', Krexx::$pool->chunks);
         $this->assertAttributeEmpty('keys', Krexx::$pool->messages);
     }
 
@@ -142,8 +141,8 @@ class PoolTest extends AbstractTest
             );
         Krexx::$pool = null;
         Pool::createPool();
-        $this->assertAttributeEquals(false, 'useChunks', Krexx::$pool->chunks);
-        $this->assertAttributeEquals(false, 'useLogging', Krexx::$pool->chunks);
+        $this->assertAttributeEquals(false, 'chunksAreAllowed', Krexx::$pool->chunks);
+        $this->assertAttributeEquals(false, 'loggingIsAllowed', Krexx::$pool->chunks);
         $this->assertAttributeCount(2, 'keys', Krexx::$pool->messages);
     }
 

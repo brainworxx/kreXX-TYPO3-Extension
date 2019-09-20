@@ -63,8 +63,15 @@ class ThroughArray extends AbstractCallback
         $output = $this->pool->render->renderSingeChildHr() .
             $this->dispatchStartEvent();
 
+        // Are we dealing with multiline code generation?
+        if ($this->parameters[static::PARAM_MULTILINE] === true) {
+            $multilineCodeGen = Codegen::ITERATOR_TO_ARRAY;
+        } else {
+            $multilineCodeGen = 0;
+        }
+
         $recursionMarker = $this->pool->recursionHandler->getMarker();
-        $isMultiline = $this->parameters[static::PARAM_MULTILINE];
+        $encodingService = $this->pool->encodingService;
 
         // Iterate through.
         foreach ($this->parameters[static::PARAM_DATA] as $key => &$value) {
@@ -77,19 +84,13 @@ class ThroughArray extends AbstractCallback
             }
 
             /** @var Model $model */
-            $model = $this->pool->createClass(Model::class);
-
-            // Are we dealing with multiline code generation?
-            if ($isMultiline === true) {
-                // Here we tell the Codegen service that we need some
-                // special handling.
-                $model->setMultiLineCodeGen(Codegen::ITERATOR_TO_ARRAY);
-            }
+            $model = $this->pool
+                ->createClass(Model::class)
+                ->setMultiLineCodeGen($multilineCodeGen);
 
             if (is_string($key) === true) {
                 $model->setData($value)
-                    ->setName($this->pool->encodingService
-                        ->encodeStringForCodeGeneration($this->pool->encodingService->encodeString($key)))
+                    ->setName($encodingService->encodeStringForCodeGeneration($encodingService->encodeString($key)))
                     ->setConnectorType(Connectors::ASSOCIATIVE_ARRAY);
             } else {
                 $model->setData($value)

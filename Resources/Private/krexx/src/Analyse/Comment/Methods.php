@@ -125,19 +125,8 @@ class Methods extends AbstractComment
         // Nothing on this level, we need to take a look at the parent.
         /** @var \ReflectionClass $parentReflection */
         $parentReflection = $reflectionClass->getParentClass();
-        if ($parentReflection instanceof ReflectionClass &&
-            $parentReflection->hasMethod($this->methodName) === true
-        ) {
-            // Going deeper into the rabid hole!
-            try {
-                $comment = $this->getMethodComment(
-                    $parentReflection->getMethod($this->methodName),
-                    $parentReflection
-                );
-            } catch (ReflectionException $e) {
-                // Do nothing.
-                // The feedback is a little bit further down.
-            }
+        if ($parentReflection instanceof ReflectionClass) {
+            $comment = $this->retrieveComment($comment, $parentReflection);
         }
 
         // Still here? Tell the dev that we could not resolve the comment.
@@ -166,23 +155,10 @@ class Methods extends AbstractComment
         // Now we should have an array with reflections of all
         // traits in the class we are currently looking at.
         foreach ($reflection->getTraits() as $trait) {
+            $originalComment = $this->retrieveComment($originalComment, $trait);
             if ($this->checkComment($originalComment) === true) {
                 // Looks like we've resolved them all.
                 return $originalComment;
-            }
-
-            // We need to look further!
-            if ($trait->hasMethod($this->methodName) === true) {
-                try {
-                    $traitComment = $this->prettifyComment(
-                        $trait->getMethod($this->methodName)->getDocComment()
-                    );
-                    // Replace it.
-                    $originalComment = $this->replaceInheritComment($originalComment, $traitComment);
-                } catch (ReflectionException $e) {
-                    // Do nothing.
-                    // We could not resolve anything.
-                }
             }
         }
 
@@ -207,26 +183,40 @@ class Methods extends AbstractComment
     protected function getInterfaceComment($originalComment, ReflectionClass $reflectionClass)
     {
         foreach ($reflectionClass->getInterfaces() as $interface) {
-            if ($interface->hasMethod($this->methodName) === true) {
-                try {
-                    $interfaceComment = $this->prettifyComment($interface->getMethod($this->methodName)
-                        ->getDocComment());
-                    // Replace it.
-                    $originalComment = $this->replaceInheritComment($originalComment, $interfaceComment);
-                } catch (ReflectionException $e) {
-                    // Failed to retrieve it from the interface.
-                    // Do nothing, and hope for the rst of the code to retrieve
-                    // the comment.
-                }
-            }
+            $originalComment = $this->retrieveComment($originalComment, $interface);
             if ($this->checkComment($originalComment) === true) {
                 // Looks like we've resolved them all.
                 return $originalComment;
             }
-            // We need to look further.
         }
 
         // Return what we could resolve so far.
+        return $originalComment;
+    }
+
+    /**
+     * @param string $originalComment
+     *   The comments so far.
+     * @param \ReflectionClass $reflection
+     *   Reflection of a class, trait or interface.
+     *
+     * @return string
+     *   The string with the comment.
+     */
+    protected function retrieveComment($originalComment, ReflectionClass $reflection)
+    {
+        if ($reflection->hasMethod($this->methodName) === true) {
+            try {
+                $newComment = $this->prettifyComment($reflection->getMethod($this->methodName)->getDocComment());
+                // Replace it.
+                $originalComment = $this->replaceInheritComment($originalComment, $newComment);
+            } catch (ReflectionException $e) {
+                // Failed to retrieve it.
+                // Do nothing, and hope for the rst of the code to retrieve
+                // the comment.
+            }
+        }
+
         return $originalComment;
     }
 }

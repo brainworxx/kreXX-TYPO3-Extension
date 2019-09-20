@@ -334,7 +334,7 @@ class Registration implements ConstInterface
         // Go through the remaining plugins.
         static::$plugins[$configClass][static::IS_ACTIVE] = false;
         foreach (static::$plugins as $pluginName => $plugin) {
-            if ($plugin[static::IS_ACTIVE]) {
+            if ($plugin[static::IS_ACTIVE] === true) {
                 call_user_func([static::$plugins[$pluginName][static::CONFIG_CLASS], 'exec']);
             }
         }

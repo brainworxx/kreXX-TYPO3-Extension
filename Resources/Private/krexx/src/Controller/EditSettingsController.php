@@ -61,7 +61,7 @@ class EditSettingsController extends AbstractController
         $this->pool->emergencyHandler->setDisable(true);
 
         // Find caller.
-        $caller = $this->callerFinder->findCaller('Cookie Configuration', []);
+        $caller = $this->callerFinder->findCaller(static::HEADLINE_COOKIE_CONF, []);
         $this->pool->chunks->addMetadata($caller);
 
         // Render it.
@@ -69,7 +69,7 @@ class EditSettingsController extends AbstractController
         $this->pool->chunks->detectEncoding($footer);
 
         $this->outputService
-            ->addChunkString($this->pool->render->renderHeader('Edit local settings', $this->outputCssAndJs()))
+            ->addChunkString($this->pool->render->renderHeader(static::HEADLINE_EDIT_SETTINGS, $this->outputCssAndJs()))
             ->addChunkString($footer);
         $this->pool->emergencyHandler->setDisable(false);
         $this->outputService->finalize();

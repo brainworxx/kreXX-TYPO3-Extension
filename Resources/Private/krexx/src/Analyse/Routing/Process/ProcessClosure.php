@@ -67,7 +67,6 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
             return '';
         }
 
-
         $result = [];
 
         // Adding comments from the file.
@@ -76,13 +75,7 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
             ->getComment($ref);
 
         // Adding the sourcecode
-        $highlight = $ref->getStartLine() -1;
-        $result[static::META_SOURCE] = $this->pool->fileService->readSourcecode(
-            $ref->getFileName(),
-            $highlight,
-            $highlight - 3,
-            $ref->getEndLine() -1
-        );
+        $result[static::META_SOURCE] = $this->retrieveSourceCode($ref);
 
         // Adding the place where it was declared.
         $result[static::META_DECLARED_IN] = $this->pool->fileService->filterFilePath($ref->getFileName()) . "\n";
@@ -94,9 +87,53 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
             $result[static::META_NAMESPACE] = $namespace;
         }
 
-        // Adding the parameters.
-        $paramList = '';
+        return $this->pool->render->renderExpandableChild(
+            $model->setType(static::TYPE_CLOSURE)
+                ->setNormal(static::UNKNOWN_VALUE)
+                // Remove the ',' after the last char.
+                ->setConnectorParameters($this->retrieveParameterList($ref, $result))
+                ->setDomid($this->generateDomIdFromObject($model->getData()))
+                ->setConnectorType(Connectors::METHOD)
+                ->addParameter(static::PARAM_DATA, $result)
+                ->injectCallback($this->pool->createClass(ThroughMeta::class))
+        );
+    }
 
+    /**
+     * Retrieve the sourcecode of the closure.
+     *
+     * @param \ReflectionFunction $ref
+     *   The reflection of the closure.
+     *
+     * @return string
+     *   The rendered HTML.
+     */
+    protected function retrieveSourceCode(ReflectionFunction $ref)
+    {
+        // Adding the sourcecode
+        $highlight = $ref->getStartLine() -1;
+        return $this->pool->fileService->readSourcecode(
+            $ref->getFileName(),
+            $highlight,
+            $highlight - 3,
+            $ref->getEndLine() -1
+        );
+    }
+
+    /**
+     * Retrieve the parameter list of the closure.
+     *
+     * @param \ReflectionFunction $ref
+     *   The reflection of the closure.
+     * @param array $result
+     *   The result, so far.
+     *
+     * @return string
+     *   Parameter list in a human readable form.
+     */
+    protected function retrieveParameterList(ReflectionFunction $ref, array &$result)
+    {
+        $paramList = '';
         foreach ($ref->getParameters() as $key => $reflectionParameter) {
             ++$key;
             $paramList .=  $result[static::META_PARAM_NO . $key] = $this->pool
@@ -107,17 +144,6 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
             $paramList .= ', ';
         }
 
-        return $this->pool->render->renderExpandableChild(
-            $model->setType(static::TYPE_CLOSURE)
-                ->setNormal(static::UNKNOWN_VALUE)
-                // Remove the ',' after the last char.
-                ->setConnectorParameters(rtrim($paramList, ', '))
-                ->setDomid($this->generateDomIdFromObject($model->getData()))
-                ->setConnectorType(Connectors::METHOD)
-                ->addParameter(static::PARAM_DATA, $result)
-                ->injectCallback(
-                    $this->pool->createClass(ThroughMeta::class)
-                )
-        );
+        return rtrim($paramList, ', ');
     }
 }

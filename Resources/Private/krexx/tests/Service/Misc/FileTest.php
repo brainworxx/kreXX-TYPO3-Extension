@@ -196,6 +196,12 @@ class FileTest extends AbstractTest
             $this->file->readFile($reflection->getFileName(), 41, 41),
             'Read a single line.'
         );
+
+        $this->assertEquals(
+            '<?php' . "\n",
+            $this->file->readFile($reflection->getFileName(), -41, -45),
+            'Test it with nonsense from to stuff.'
+        );
     }
 
     /**

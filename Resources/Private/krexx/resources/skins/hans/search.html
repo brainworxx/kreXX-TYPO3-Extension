@@ -1,4 +1,4 @@
-<div id="search-{KrexxId}" class="hidden search-wrapper" style="position: absolute;">
+<div id="search-{KrexxId}" class="khidden search-wrapper" style="position: absolute;">
     <div class="ksearch" style="position: relative;">
         <span class="kname">Search</span>
         <span>
@@ -9,6 +9,30 @@
 			<span class="koptions"></span>
 	        <span data-instance="{KrexxId}" class="kclose">&#10005;</span>
 	    </span>
-        <div class="koptionwrapper khidden"></div>
+        <div class="koptionwrapper khidden">
+			<hr class="ksearchhr"/>
+			<label class="koptionleft">
+				<input data-instance="{KrexxId}" class="ksearchcase" type="checkbox" autocomplete="off" name="searchcase" value="searchcase">
+				Case sensitive
+			</label>
+			<label class="koptionright">
+				<input data-instance="{KrexxId}" class="ksearchshort" type="checkbox" autocomplete="off" name="searchshort" value="searchshort" checked="checked">
+				Search short results
+			</label>
+			<br/>
+			<label class="koptionleft">
+				<input data-instance="{KrexxId}" class="ksearchkeys" type="checkbox" autocomplete="off" name="searchkeys" value="searchkeys" checked="checked">
+				Search keys
+			</label>
+			<label class="koptionright">
+				<input data-instance="{KrexxId}" class="ksearchlong" type="checkbox" autocomplete="off" name="searchlong" value="searchlong" checked="checked">
+				Search long results
+			</label>
+			<br/>
+			<label class="koptionleft">
+				<input data-instance="{KrexxId}" class="ksearchwhole" type="checkbox" autocomplete="off" name="searchwhole" value="searchwhole">
+				Search whole values
+			</label>
+		</div>
     </div>
 </div>

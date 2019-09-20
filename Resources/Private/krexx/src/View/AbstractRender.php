@@ -37,64 +37,14 @@ namespace Brainworxx\Krexx\View;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 
 /**
  * Protected helper methods for the real render class.
  *
  * @package Brainworxx\Krexx\View
  */
-abstract class AbstractRender implements RenderInterface, ConstInterface
+abstract class AbstractRender implements ConstInterface
 {
-    const MARKER_CALLER_FILE = '{callerFile}';
-    const MARKER_CALLER_LINE = '{callerLine}';
-    const MARKER_CALLER_DATE = '{date}';
-    const MARKER_HELP = '{help}';
-    const MARKER_HELP_TITLE = '{helptitle}';
-    const MARKER_HELP_TEXT = '{helptext}';
-    const MARKER_CONNECTOR = '{connector}';
-    const MARKER_KREXX_ID = '{KrexxId}';
-    const MARKER_STYLE = '{style}';
-    const MARKER_MAIN_FUNCTION = '{mainfunction}';
-    const MARKER_DOM_ID = '{domId}';
-    const MARKER_PLUGIN_TEXT = '{plugintext}';
-    const MARKER_PLUGIN_ACTIVE_TEXT = '{activetext}';
-    const MARKER_PLUGIN_ACTIVE_CLASS = '{activeclass}';
-
-    const DATA_ATTRIBUTE_SOURCE = 'source';
-    const DATA_ATTRIBUTE_WRAPPER_R = 'codewrapperRight';
-    const DATA_ATTRIBUTE_WRAPPER_L = 'codewrapperLeft';
-
-    const FILE_EX_CHILD_NORMAL = 'expandableChildNormal';
-    const FILE_SI_CHILD = 'singleChild';
-    const FILE_SI_CHILD_EX = 'singleChildExtra';
-    const FILE_SI_CHILD_CALL = 'singleChildCallable';
-    const FILE_SOURCE_BUTTON = 'sourcebutton';
-    const FILE_NEST = 'nest';
-    const FILE_BACKTRACE_SOURCELINE = 'backtraceSourceLine';
-    const FILE_CALLER = 'caller';
-    const FILE_HELPROW = 'helprow';
-    const FILE_HELP = 'help';
-    // @deprecated
-    const FILE_CONNECTOR = 'connector';
-    // @deprecated
-    const FILE_CONNECTOR_LEFT = 'connectorLeft';
-    const FILE_CONNECTOR_RIGHT = 'connectorRight';
-    const FILE_SI_PLUGIN = 'singlePlugin';
-    const FILE_SEARCH = 'search';
-    const FILE_RECURSION = 'recursion';
-    const FILE_HEADER = 'header';
-    const FILE_FOOTER = 'footer';
-    const FILE_CSSJS = 'cssJs';
-    const FILE_SI_SELECT_OPTIONS = 'singleSelectOptions';
-    const FILE_SI_EDIT_CHILD = 'singleEditableChild';
-    const FILE_SI_BUTTON = 'singleButton';
-    const FILE_FATAL_MAIN = 'fatalMain';
-    const FILE_FATAL_HEADER = 'fatalHeader';
-    const FILE_MESSAGE = 'message';
-    const FILE_SI_HR = 'singleChildHr';
-    const FILE_BR = 'br';
-
     /**
      * Here we store all relevant data.
      *
@@ -110,6 +60,13 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
     protected $skinPath;
 
     /**
+     * Caching the content fo the template files.
+     *
+     * @var array
+     */
+    protected static $fileCache = [];
+
+    /**
      * {@inheritdoc}
      */
     public function __construct(Pool $pool)
@@ -117,68 +74,6 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
         $this->pool = $pool;
         $this->pool->render = $this;
         $this->skinPath = $this->pool->config->getSkinDirectory();
-    }
-
-    /**
-     * Renders the footer part, where we display from where krexx was called.
-     *
-     * @param array $caller
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    protected function renderCaller(array $caller)
-    {
-        return str_replace(
-            [
-                static::MARKER_CALLER_FILE,
-                static::MARKER_CALLER_LINE,
-                static::MARKER_CALLER_DATE
-            ],
-            [
-                $caller[static::TRACE_FILE],
-                $caller[static::TRACE_LINE],
-                $caller[static::TRACE_DATE],
-            ],
-            $this->getTemplateFileContent(static::FILE_CALLER)
-        );
-    }
-
-    /**
-     * Renders the helptext.
-     *
-     * @param Model $model
-     *   The ID of the helptext.
-     *
-     * @see Usage
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    protected function renderHelp(Model $model)
-    {
-        $data = $model->getJson();
-
-        // Test if we have anything to display at all.
-        if (empty($data) === true) {
-            return '';
-        }
-
-        // We have at least something to display here.
-        $helpRow = $this->getTemplateFileContent(static::FILE_HELPROW);
-        $helpContent = '';
-
-        // Add the stuff from the json after the help text, if any.
-        foreach ($data as $title => $text) {
-            $helpContent .= str_replace(
-                [static::MARKER_HELP_TITLE, static::MARKER_HELP_TEXT],
-                [$title, $text],
-                $helpRow
-            );
-        }
-
-        // Add it into the wrapper.
-        return str_replace(static::MARKER_HELP, $helpContent, $this->getTemplateFileContent(static::FILE_HELP));
     }
 
     /**
@@ -198,101 +93,10 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
     protected function renderConnector($connector)
     {
         return str_replace(
-            static::MARKER_CONNECTOR,
+            Skins\Hans\ConstInterface::MARKER_CONNECTOR,
             $connector,
-            $this->getTemplateFileContent(static::FILE_CONNECTOR)
+            $this->getTemplateFileContent(Skins\Hans\ConstInterface::FILE_CONNECTOR)
         );
-    }
-
-    /**
-     * Renders the left connector.
-     *
-     * @param string $connector
-     *   The data to be displayed.
-     *
-     * @return string
-     *   The rendered connector.
-     */
-    protected function renderConnectorLeft($connector)
-    {
-        return str_replace(
-            static::MARKER_CONNECTOR,
-            $connector,
-            $this->getTemplateFileContent(static::FILE_CONNECTOR_LEFT)
-        );
-    }
-
-    /**
-     * Renders the right connector.
-     *
-     * @param string $connector
-     *   The data to be displayed.
-     *
-     * @return string
-     *   The rendered connector.
-     */
-    protected function renderConnectorRight($connector)
-    {
-        if (empty($connector) === true) {
-            // No connector, no display.
-            return '';
-        }
-
-        return str_replace(
-            static::MARKER_CONNECTOR,
-            $connector,
-            $this->getTemplateFileContent(static::FILE_CONNECTOR_RIGHT)
-        );
-    }
-
-    /**
-     * Renders the search button and the search menu.
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    protected function renderSearch()
-    {
-        return str_replace(
-            static::MARKER_KREXX_ID,
-            $this->pool->recursionHandler->getMarker(),
-            $this->getTemplateFileContent(static::FILE_SEARCH)
-        );
-    }
-
-    /**
-     * Render a list of all registered plugins.
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    protected function renderPluginList()
-    {
-        $result = '';
-        $template = $this->getTemplateFileContent(static::FILE_SI_PLUGIN);
-        foreach (SettingsGetter::getPlugins() as $plugin) {
-            if ($plugin[SettingsGetter::IS_ACTIVE] === true) {
-                $activeClass = 'kisactive';
-                $activeText = 'active';
-            } else {
-                $activeClass = 'kisinactive';
-                $activeText = 'inactive';
-            }
-            $result .= str_replace(
-                [
-                    static::MARKER_PLUGIN_ACTIVE_CLASS,
-                    static::MARKER_PLUGIN_ACTIVE_TEXT,
-                    static::MARKER_PLUGIN_TEXT,
-                ],
-                [
-                    $activeClass,
-                    $activeText,
-                    $plugin[SettingsGetter::PLUGIN_NAME] . ' ' . $plugin[SettingsGetter::PLUGIN_VERSION]
-                ],
-                $template
-            );
-        }
-        return $result;
     }
 
     /**
@@ -309,48 +113,6 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
     }
 
     /**
-     * Renders a nest with a anonymous function in the middle.
-     *
-     * @param Model $model
-     *   The model, which hosts all the data we need.
-     * @param bool $isExpanded
-     *   The only expanded nest is the settings menu, when we render only the
-     *   settings menu.
-     *
-     * @return string
-     *   The generated markup from the template files.
-     */
-    protected function renderNest(Model $model, $isExpanded = false)
-    {
-        // Get the dom id.
-        $domid = $model->getDomid();
-        if ($domid !== '') {
-            $domid = 'id="' . $domid . '"';
-        }
-
-        // Are we expanding this one?
-        if ($isExpanded === true) {
-            $style = '';
-        } else {
-            $style = 'khidden';
-        }
-
-        return str_replace(
-            [
-                static::MARKER_STYLE,
-                static::MARKER_MAIN_FUNCTION,
-                static::MARKER_DOM_ID,
-            ],
-            [
-                $style,
-                $model->renderMe(),
-                $domid,
-            ],
-            $this->getTemplateFileContent(static::FILE_NEST)
-        );
-    }
-
-    /**
      * Loads a template file from the skin folder.
      *
      * @param string $what
@@ -361,18 +123,16 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
      */
     protected function getTemplateFileContent($what)
     {
-        static $fileCache = [];
-
-        if (isset($fileCache[$what]) === true) {
-            return $fileCache[$what];
+        if (isset(static::$fileCache[$what]) === true) {
+            return static::$fileCache[$what];
         }
 
-        $fileCache[$what] = preg_replace(
+        static::$fileCache[$what] = preg_replace(
             '/\s+/',
             ' ',
             $this->pool->fileService->getFileContents($this->skinPath . $what . '.html')
         );
-        return $fileCache[$what];
+        return static::$fileCache[$what];
     }
 
     /**
@@ -390,13 +150,36 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
             return '';
         }
 
-        return json_encode($this->jsonEscape($array));
+        return json_encode(
+            str_replace(
+                [
+                    '"',
+                    "'",
+                    '&quot;',
+                    '&lt;',
+                    '&gt;',
+                ],
+                [
+                    "\\u0027",
+                    "\\u0022",
+                    "\\u0027",
+                    "\\u276E",
+                    "\\u02C3",
+                ],
+                $array
+            )
+        );
     }
 
     /**
      * Do some special escaping for the json and data attribute output.
      *
      * @param string|array $data
+     *
+     * @deprecated
+     *   Since 3.1.1 dev
+     * @codeCoverageIgnore
+     *   We will not test deprecated stuff.
      *
      * @return string|array
      *   The escaped json
@@ -445,5 +228,24 @@ abstract class AbstractRender implements RenderInterface, ConstInterface
         }
 
         return ' data-' . $name . '="' . str_replace('"', '&#34;', $data) . '" ';
+    }
+
+    /**
+     * Retrieve the css type classes form the model.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model.
+     *
+     * @return string
+     *   The css classes.
+     */
+    protected function retrieveTypeClasses(Model $model)
+    {
+        $typeClasses = '';
+        foreach (explode(' ', $model->getType()) as $typeClass) {
+            $typeClasses .= 'k' . $typeClass . ' ';
+        }
+
+        return $typeClasses;
     }
 }

@@ -113,6 +113,7 @@ class ThroughPropertiesTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDeclarationPlace
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveFilenameFromTraits
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
      * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::isPropertyNameNormal
      */
@@ -170,10 +171,10 @@ class ThroughPropertiesTest extends AbstractTest
         // Retrieve the result models and assert them.
         $models = $routeNothing->model;
 
-        $complexDeclarationString = '...' . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR .
+        $complexDeclarationString = DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR .
             'Fixtures' . DIRECTORY_SEPARATOR .
             'ComplexPropertiesFixture.php<br />in class: Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture';
-        $complexDeclarationStringInheritance = '...' . DIRECTORY_SEPARATOR . 'tests' .
+        $complexDeclarationStringInheritance = DIRECTORY_SEPARATOR . 'tests' .
             DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR .
             'ComplexPropertiesInheritanceFixture.php<br />in class: Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture';
 
@@ -360,9 +361,20 @@ class ThroughPropertiesTest extends AbstractTest
         string $connectorRight,
         string $additional
     ) {
+        // The declared in path may differ, depending where the kreXX lib is
+        // installed. We only test the ends with part.
+        $testJson = $model->getJson();
+        if (isset($testJson[static::JSON_DECLARED_KEY])) {
+            $testDeclaredIn = $testJson[static::JSON_DECLARED_KEY];
+            $declaredIn = $json[static::JSON_DECLARED_KEY];
+            unset($testJson[static::JSON_DECLARED_KEY]);
+            unset($json[static::JSON_DECLARED_KEY]);
+            $this->assertStringEndsWith($declaredIn, $testDeclaredIn);
+        }
+
+        $this->assertEquals($json, $testJson);
         $this->assertEquals($data, $model->getData());
         $this->assertEquals($name, $model->getName());
-        $this->assertEquals($json, $model->getJson());
         $this->assertEquals($conectorLeft, $model->getConnectorLeft());
         $this->assertEquals($connectorRight, $model->getConnectorRight());
         $this->assertEquals($additional, $model->getAdditional());

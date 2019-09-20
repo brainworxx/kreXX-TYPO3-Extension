@@ -103,59 +103,40 @@ class Codegen implements ConstInterface
      */
     public function generateSource(Model $model)
     {
-        if ($this->allowCodegen === true) {
+        $result = static::UNKNOWN_VALUE;
+
+        if ($this->allowCodegen === false) {
+            // Nothing to do here, early return
+            return $result;
+        } elseif ($this->firstRun === true) {
             // We handle the first one special, because we need to add the original
             // variable name to the source generation.
-            if ($this->firstRun === true) {
-                $this->firstRun = false;
-                return $this->concatenation($model);
-            }
-
+            $this->firstRun = false;
+            $result = $this->concatenation($model);
+        } elseif ($model->getIsMetaConstants() === true) {
             // Test for constants.
             // They have no connectors, but are marked as such.
             // although this is meta stuff, we need to add the stop info here.
-            if ($model->getIsMetaConstants() === true) {
-                // We must only take the stuff from the constant itself
-                return ';stop;';
-            }
-
-            $connectors = $model->getConnectorLeft() . $model->getConnectorRight();
-            if (empty($connectors) === true) {
-                // No connectors, no nothing. We must be dealing with meta stuff.
-                // We will ignore this one.
-                return '';
-            }
-
+            $result = ';stop;';
+        } elseif (empty($model->getConnectorLeft() . $model->getConnectorRight()) === true) {
+            // No connectors, no nothing. We must be dealing with meta stuff.
+            // We will ignore this one.
+            $result = '';
+        } elseif ($model->getType() === static::TYPE_DEBUG_METHOD) {
             // Debug methods are always public.
-            if ($model->getType() === static::TYPE_DEBUG_METHOD) {
-                return $this->concatenation($model);
-            }
-
+            $result = $this->concatenation($model);
+        } elseif ($model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY) {
             // Multi line code generation starts here.
-            if ($model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY) {
-                return 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
-            }
-
+            $result = 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
+        } elseif ($model->getIsPublic() === true) {
             // Test for private or protected access.
-            if ($model->getIsPublic() === true) {
-                return $this->concatenation($model);
-            }
-
+            $result = $this->concatenation($model);
+        } elseif ($this->pool->scope->testModelForCodegen($model) === true) {
             // Test if we are inside the scope. Everything within our scope is reachable.
-            if ($this->pool->scope->testModelForCodegen($model) === true) {
-                // We are inside the scope, this value, function or class is reachable.
-                return $this->concatenation($model);
-            }
-
-            // We are still here? Must be a protected method or property.
-            // The '. . .' will tell the code generation to stop in it's tracks
-            // and do nothing.
+            $result = $this->concatenation($model);
         }
 
-        // No code generation in this path.
-        // We must prevent code generation when copying stuff here by recursion
-        // resolving by adding these dots.
-        return static::UNKNOWN_VALUE;
+        return $result;
     }
 
     /**
@@ -255,21 +236,36 @@ class Codegen implements ConstInterface
             } catch (ReflectionException $e) {
                 $default = null;
             }
-            if (is_string($default)) {
-                $default = '\'' . $default . '\'';
-            } elseif (is_array($default)) {
-                $default = 'array()';
-            } elseif ($default ===  true) {
-                $default = 'TRUE';
-            } elseif ($default === false) {
-                $default = 'FALSE';
-            } elseif ($default === null) {
-                $default = 'NULL';
-            }
-            $name .= ' = ' . $default;
+
+            $name .= ' = ' . $this->translateDefaultValue($default);
         }
 
         // Escape it, just in case.
         return $this->pool->encodingService->encodeString($name);
+    }
+
+    /**
+     * Translate the default value into something human readable.
+     *
+     * @param mixed $default
+     *
+     * @return string
+     *   The type in a human readable form.
+     */
+    protected function translateDefaultValue($default)
+    {
+        if (is_string($default)) {
+            $default = '\'' . $default . '\'';
+        } elseif (is_array($default)) {
+            $default = 'array()';
+        } elseif ($default ===  true) {
+            $default = 'TRUE';
+        } elseif ($default === false) {
+            $default = 'FALSE';
+        } elseif ($default === null) {
+            $default = 'NULL';
+        }
+
+        return $default;
     }
 }

@@ -38,9 +38,9 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\View\Skins\RenderHans;
 
 class ConfigSectionTest extends AbstractTest
 {
@@ -108,7 +108,7 @@ class ConfigSectionTest extends AbstractTest
         Krexx::$pool->messages = $messageMock;
 
         // Test if editable or not
-        $renderMock = $this->createMock(AbstractRender::class);
+        $renderMock = $this->createMock(RenderHans::class);
         $renderMock->expects($this->once())
             ->method('renderSingleEditableChild')
             ->with($this->anything())

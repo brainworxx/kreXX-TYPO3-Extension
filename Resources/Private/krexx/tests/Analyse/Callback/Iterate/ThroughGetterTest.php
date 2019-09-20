@@ -35,6 +35,7 @@
 namespace Tests\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
+use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\DeepGetterFixture;
@@ -46,11 +47,24 @@ use Brainworxx\Krexx\Krexx;
 class ThroughGetterTest extends AbstractTest
 {
     /**
+     * Test the creation of the comment analysis.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::__construct
+     */
+    public function testConstruct()
+    {
+        $throughGetter = new ThroughGetter(Krexx::$pool);
+        $this->assertAttributeInstanceOf(Methods::class, 'commentAnalysis', $throughGetter);
+        $this->assertAttributeSame(Krexx::$pool, 'pool', $throughGetter);
+    }
+
+    /**
      * Testing the value retrieving in the getter analysis.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::retrievePropertyValue
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::prepareResult
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::getReflectionProperty
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::preparePropertyName
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::getReflectionPropertyDeep

@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\View\Output;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Misc\Cleanup;
 
 /**
  * Defining what is needed for an output class.
@@ -51,6 +52,29 @@ abstract class AbstractOutput
     protected $pool;
 
     /**
+     * Deleting old chunks and logfiles.
+     *
+     * @var \Brainworxx\Krexx\Service\Misc\Cleanup
+     */
+    protected $cleanupService;
+
+    /**
+     * [0] -> The chunkedup string, that we intend to send to
+     *        the browser.
+     * [1] -> Are we ignoring local settings?
+     *
+     * @var array
+     *   An array of all chunk strings.
+     *   A chunk string are be:
+     *   - header
+     *   - messages
+     *   - data part
+     *   - footer
+     *   This means, that every output is split in 4 parts
+     */
+    protected $chunkStrings = [];
+
+    /**
      * Injects the pool and register the shutdown function.
      *
      * @param Pool $pool
@@ -59,18 +83,31 @@ abstract class AbstractOutput
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
+        $this->cleanupService = $pool->createClass(Cleanup::class);
     }
 
     /**
-     * Adds output to our output service.
+     * Cleanup stuff, after all is said and done.
+     */
+    protected function destruct()
+    {
+        $this->cleanupService->cleanupOldChunks();
+    }
+
+    /**
+     * Adds output to our shutdown handler.
      *
      * @param string $chunkString
      *   The chunked output string.
      *
      * @return $this
-     *   For chaining.
+     *   Return $this, for chaining.
      */
-    abstract public function addChunkString($chunkString);
+    public function addChunkString($chunkString)
+    {
+        $this->chunkStrings[] = $chunkString;
+        return $this;
+    }
 
     /**
      * Tell the output service, that we are finished.

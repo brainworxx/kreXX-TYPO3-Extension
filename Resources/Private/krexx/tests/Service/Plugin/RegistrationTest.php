@@ -36,7 +36,6 @@ namespace Brainworxx\Krexx\Tests\Service\Plugin;
 
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\View\Messages;
 
@@ -45,46 +44,8 @@ use Brainworxx\Krexx\View\Messages;
  *
  * @package Brainworxx\Krexx\Tests\Service\Plugin
  */
-class RegistrationTest extends AbstractTest
+class RegistrationTest extends AbstractRegistration
 {
-    const PLUGINS = 'plugins';
-    const CHUNK_FOLDER = 'chunkFolder';
-    const LOG_FOLDER = 'logFolder';
-    const CONFIG_FILE = 'configFile';
-    const BLACK_LIST_METHODS = 'blacklistDebugMethods';
-    const BLACK_LIST_CLASS = 'blacklistDebugClass';
-    const ADD_HELP_FILES = 'additionalHelpFiles';
-    const REWRITE_LIST = 'rewriteList';
-    const EVENT_LIST = 'eventList';
-    const ADD_SKIN_LIST = 'additionalSkinList';
-
-    /**
-     * @var Registration
-     */
-    protected $registration;
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->registration = new Registration();
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        // Reset everything.
-        $this->setValueByReflection(static::PLUGINS, [], $this->registration);
-        $this->setValueByReflection(static::CHUNK_FOLDER, '', $this->registration);
-        $this->setValueByReflection(static::LOG_FOLDER, '', $this->registration);
-        $this->setValueByReflection(static::CONFIG_FILE, '', $this->registration);
-        $this->setValueByReflection(static::BLACK_LIST_METHODS, [], $this->registration);
-        $this->setValueByReflection(static::BLACK_LIST_CLASS, [], $this->registration);
-        $this->setValueByReflection(static::ADD_HELP_FILES, [], $this->registration);
-        $this->setValueByReflection(static::REWRITE_LIST, [], $this->registration);
-        $this->setValueByReflection(static::EVENT_LIST, [], $this->registration);
-        $this->setValueByReflection(static::ADD_SKIN_LIST, [], $this->registration);
-    }
 
     /**
      * Test the setting of a specific configuration file.

@@ -45,6 +45,7 @@ class ThroughConfigTest extends AbstractTest
 {
     /**
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig::renderAllSections
      */
     public function testCallMe()
     {

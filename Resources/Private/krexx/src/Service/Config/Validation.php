@@ -358,26 +358,19 @@ class Validation extends Fallback
      * @return bool
      *   Whether the function is allowed to be called.
      */
-    public function isAllowedDebugCall($data, $method = '')
+    public function isAllowedDebugCall($data, $method)
     {
         // Check if the class itself is blacklisted.
         foreach ($this->classBlacklist as $classname) {
-            if (is_a($data, $classname) === true) {
+            if ($data instanceof $classname) {
                 // No debug methods for you.
                 return false;
             }
         }
 
-        if (empty($method)) {
-            // No method specified.
-            return true;
-        }
-
         // Check if the combination of class and method is blacklisted.
         foreach ($this->methodBlacklist as $classname => $debugMethod) {
-            if (is_a($data, $classname) === true &&
-                in_array($method, $debugMethod, true) === true
-            ) {
+            if ($data instanceof $classname && in_array($method, $debugMethod, true) === true) {
                 return false;
             }
         }

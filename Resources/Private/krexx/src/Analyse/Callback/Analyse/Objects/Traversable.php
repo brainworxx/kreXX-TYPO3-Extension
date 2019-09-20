@@ -79,7 +79,23 @@ class Traversable extends AbstractObjectAnalysis
         }
 
         // Do the actual analysis
-        return $output . $this->getTaversableData();
+        return $output . $this->retrieveTraversableData();
+    }
+
+    /**
+     * Analyses the traversable data.
+     *
+     * @deprecated
+     *   Since 3.1.1 dev. Will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @return string
+     *   The generated markup.
+     */
+    protected function getTaversableData()
+    {
+        return $this->retrieveTraversableData();
     }
 
     /**
@@ -88,10 +104,10 @@ class Traversable extends AbstractObjectAnalysis
      * @return string
      *   The generated markup.
      */
-    protected function getTaversableData()
+    protected function retrieveTraversableData()
     {
         $data = $this->parameters[static::PARAM_DATA];
-        $name = $this->parameters[static::PARAM_NAME];
+
 
         // Add a try to prevent the hosting CMS from doing something stupid.
         try {
@@ -119,54 +135,66 @@ class Traversable extends AbstractObjectAnalysis
         restore_error_handler();
 
         if (is_array($parameter) === true) {
-            // Special Array Access here, resulting in more complicated source
-            // generation. So we tell the callback to to that.
-            $multiline = true;
-
-            // Normal ArrayAccess, direct access to the array. Nothing special
-            if ($data instanceof ArrayAccess) {
-                $multiline = false;
-            }
-
-            // SplObject pool use the object as keys, so we need some
-            // multiline stuff!
-            if ($data instanceof SplObjectStorage) {
-                $multiline = true;
-            }
-
-            $count = count($parameter);
-
-            /** @var Model $model */
-            $model = $this->pool->createClass(Model::class)
-                ->setName($name)
-                ->setType(static::TYPE_FOREACH)
-                ->addParameter(static::PARAM_DATA, $parameter)
-                ->addParameter(static::PARAM_MULTILINE, $multiline)
-                ->addToJson(static::META_LENGTH, count($parameter));
-
-            // Check, if we are handling a huge array. Huge arrays tend to result in a huge
-            // output, maybe even triggering a emergency break. to avoid this, we give them
-            // a special callback.
-            if ($count > (int) $this->pool->config->getSetting(Fallback::SETTING_ARRAY_COUNT_LIMIT)) {
-                $model->injectCallback(
-                    $this->pool->createClass(ThroughLargeArray::class)
-                )->setNormal('Simplified Traversable Info')
-                    ->setHelpid('simpleArray');
-            } else {
-                $model->injectCallback(
-                    $this->pool->createClass(ThroughArray::class)
-                )->setNormal('Traversable Info');
-            }
-
-            $result = $this->pool->render->renderExpandableChild(
-                $this->dispatchEventWithModel(static::EVENT_MARKER_ANALYSES_END, $model)
-            );
-            $this->pool->emergencyHandler->downOneNestingLevel();
-            return $result;
+            return $this->analyseTraversableResult($data, $parameter);
         }
 
-        // Still here?!? Return an empty string.
+        // Still here? Return an empty string.
         $this->pool->emergencyHandler->downOneNestingLevel();
         return '';
+    }
+
+    /**
+     * Analyse the traversable retrieval result.
+     *
+     * @param $originalClass
+     *   The class that we are analysing.
+     * @param array $result
+     *   The retrieved traversable result.
+     *
+     * @return string
+     *   The rendered HTML.
+     */
+    protected function analyseTraversableResult($originalClass, array $result)
+    {
+        // Special Array Access here, resulting in more complicated source
+        // generation. So we tell the callback to to that.
+        $multiline = true;
+
+        // Normal ArrayAccess, direct access to the array. Nothing special
+        // SplObject pool use the object as keys, so we need some
+        // multiline stuff!
+        // A SplObject is also an ArrayAccess btw.
+        if (($originalClass instanceof ArrayAccess) &&
+            ($originalClass instanceof SplObjectStorage) === false
+        ) {
+            $multiline = false;
+        }
+
+        /** @var Model $model */
+        $model = $this->pool->createClass(Model::class)
+            ->setName($this->parameters[static::PARAM_NAME])
+            ->setType(static::TYPE_FOREACH)
+            ->addParameter(static::PARAM_DATA, $result)
+            ->addParameter(static::PARAM_MULTILINE, $multiline)
+            ->addToJson(static::META_LENGTH, count($result));
+
+        // Check, if we are handling a huge array. Huge arrays tend to result in a huge
+        // output, maybe even triggering a emergency break. to avoid this, we give them
+        // a special callback.
+        if (count($result) > (int) $this->pool->config->getSetting(Fallback::SETTING_ARRAY_COUNT_LIMIT)) {
+            $model->injectCallback($this->pool->createClass(ThroughLargeArray::class))
+                ->setNormal('Simplified Traversable Info')
+                ->setHelpid('simpleArray');
+        } else {
+            $model->injectCallback($this->pool->createClass(ThroughArray::class))
+                ->setNormal('Traversable Info');
+        }
+
+        $analysisResult = $this->pool->render->renderExpandableChild(
+            $this->dispatchEventWithModel(static::EVENT_MARKER_ANALYSES_END, $model)
+        );
+
+        $this->pool->emergencyHandler->downOneNestingLevel();
+        return $analysisResult;
     }
 }

@@ -134,4 +134,23 @@ class EncodingTest extends AbstractTest
             );
         }
     }
+
+    /**
+     * Testing the wrapper around the mb_strlen.
+     *
+     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::mbStrLen
+     */
+    public function testMbStrLen()
+    {
+        $mbStrLen = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'mb_strlen');
+        $mbStrLen->expects($this->exactly(2))
+            ->withConsecutive(
+                ['string'],
+                ['another string', 'some encoding']
+            )
+            ->will($this->returnValue(42));
+
+        $this->assertEquals(42, $this->encoding->mbStrLen('string'));
+        $this->assertEquals(42, $this->encoding->mbStrLen('another string', 'some encoding'));
+    }
 }

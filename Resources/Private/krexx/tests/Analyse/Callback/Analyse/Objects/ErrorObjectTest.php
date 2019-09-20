@@ -62,6 +62,7 @@ class ErrorObjectTest extends AbstractTest
      * Test with a 'real' error object.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject::renderBacktrace
      */
     public function testCallMe()
     {

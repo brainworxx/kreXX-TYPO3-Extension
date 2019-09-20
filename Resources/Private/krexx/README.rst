@@ -1,8 +1,24 @@
-.. figure:: https://cloud.githubusercontent.com/assets/11192910/15508189/c3e07482-21ce-11e6-90e0-03cbe5dff276.png
-
 ==============
 kreXX Debugger
 ==============
+
+.. image:: https://travis-ci.com/brainworxx/kreXX.svg
+   :target: https://travis-ci.com/brainworxx/kreXX
+.. image:: https://api.codeclimate.com/v1/badges/c9d414a09928ede869c7/maintainability
+   :target: https://codeclimate.com/github/brainworxx/kreXX/maintainability
+.. image:: https://api.codeclimate.com/v1/badges/c9d414a09928ede869c7/test_coverage.svg
+   :target: https://codeclimate.com/github/brainworxx/kreXX/test_coverage
+.. image:: https://poser.pugx.org/brainworxx/krexx/v/stable
+   :target: https://packagist.org/packages/brainworxx/krexx
+.. image:: https://poser.pugx.org/brainworxx/krexx/license
+   :target: https://packagist.org/packages/brainworxx/krexx
+
+|
+
+.. figure:: https://cloud.githubusercontent.com/assets/11192910/15508189/c3e07482-21ce-11e6-90e0-03cbe5dff276.png
+  :alt: kreXX logo
+
+
 
 Key features:
 	- Dumping of protected variables
@@ -94,4 +110,5 @@ Force logging
 	// The following commands create a log file instead of a browser output.
 	\Krexx::log($myObject);
 	\Krexx::logBacktrace();
-	\Krexx::::logTimerEnd();
+	\Krexx::logTimerEnd();
+

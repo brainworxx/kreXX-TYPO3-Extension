@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Krexx\View\Output;
 
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -85,14 +84,14 @@ class Chunks
      *
      * @var bool
      */
-    protected $useChunks = true;
+    protected $chunksAreAllowed = true;
 
     /**
      * Is the log folder write protected?
      *
      * @var bool
      */
-    protected $useLogging = true;
+    protected $loggingIsAllowed = true;
 
     /**
      * The logfolder.
@@ -123,13 +122,6 @@ class Chunks
     protected $officialEncoding = 'utf8';
 
     /**
-     * List of encodings, where we do not change the $officialEncoding var.
-     *
-     * @var array
-     */
-    protected $doNothingEncoding = ['ASCII', 'UTF-8', false];
-
-    /**
      * Injects the pool.
      *
      * @param Pool $pool
@@ -140,8 +132,8 @@ class Chunks
         $this->pool = $pool;
         $this->chunkDir = $pool->config->getChunkDir();
         $this->logDir = $pool->config->getLogDir();
-        $this->fileStamp = explode(' ', microtime());
-        $this->fileStamp = $this->fileStamp[1] . str_replace('0.', '', $this->fileStamp[0]);
+        $stamp = explode(' ', microtime());
+        $this->fileStamp = $stamp[1] . str_replace('0.', '', $stamp[0]);
 
         $pool->chunks = $this;
     }
@@ -159,7 +151,7 @@ class Chunks
      */
     public function chunkMe($string)
     {
-        if ($this->useChunks === true && strlen($string) > 10000) {
+        if ($this->chunksAreAllowed === true && strlen($string) > 10000) {
             // Get the key.
             $key = $this->genKey();
             // Detect the encoding in the chunk.
@@ -222,12 +214,8 @@ class Chunks
      */
     public function sendDechunkedToBrowser($string)
     {
-        // Do some housekeeping. Unless something dreadful had happened, there
-        // should not be anything to cleanup.
-        $this->cleanupOldChunks();
-
         // Check for HTML output.
-        if ($this->isOutputHtml()) {
+        if ($this->pool->createClass(CheckOutput::class)->isOutputHtml()) {
             $chunkPos = strpos($string, static::STRING_DELIMITER);
 
             while ($chunkPos !== false) {
@@ -260,36 +248,18 @@ class Chunks
      * This one gets called during the shutdown phase of PHP. There is a high
      * chance, that the header was already set.
      *
+     * @deprecated
+     *   Since 3.1.1 dev. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
      * @return bool
      *   Well? Is it?
      */
     protected function isOutputHtml()
     {
-        static $result;
-
-        if ($result !== null) {
-            return $result;
-        }
-
-        if ($this->pool->config->getSetting(Fallback::SETTING_DETECT_AJAX) === Fallback::VALUE_FALSE) {
-            // We ignore the heades and send everything.
-            $result = true;
-        }
-
-        // When we have dispatched a PDF or Json, the browser will not be
-        // able to render the HTML output correctly.
-        foreach (headers_list() as $header) {
-            $header = strtolower($header);
-            if (strpos($header, 'content-type') !== false &&
-                strpos($header, 'html') === false
-            ) {
-                // We do have none html content type.
-                $result = false;
-            }
-        }
-
-        // Found nothing, must be HTML.
-        return $result = true;
+        return $this->pool->createClass(CheckOutput::class)->isOutputHtml();
     }
 
     /**
@@ -302,15 +272,11 @@ class Chunks
      */
     public function saveDechunkedToFile($string)
     {
-        $this->cleanupOldChunks();
-
-        if ($this->useLogging === false) {
+        if ($this->loggingIsAllowed === false) {
             // We have no write access. Do nothing.
             return;
         }
 
-        // Cleanup old logfiles to prevent a overflow.
-        $this->cleanupOldLogs($this->logDir);
 
         // Determine the filename.
         $filename = $this->logDir . $this->fileStamp . '.Krexx.html';
@@ -349,72 +315,36 @@ class Chunks
     }
 
     /**
-     * Deletes chunk files older then 1 hour, in case there are some left.
-     */
-    protected function cleanupOldChunks()
-    {
-        if ($this->useChunks === false) {
-            // We have no write access. Do nothing.
-            return;
-        }
-
-        static $beenHere = false;
-
-        // We only do this once.
-        if ($beenHere === true) {
-            return;
-        }
-
-        $beenHere = true;
-        // Clean up leftover files.
-        $chunkList = glob($this->chunkDir . '*.Krexx.tmp');
-        if (empty($chunkList) === false) {
-            $now = time();
-            foreach ($chunkList as $file) {
-                // We delete everything that is older than 15 minutes.
-                if (($this->pool->fileService->filetime($file) + 900) < $now) {
-                    $this->pool->fileService->deleteFile($file);
-                }
-            }
-        }
-    }
-
-    /**
-     * Deletes old logfiles.
+     * Setter for the $useChunks.
      *
-     * @param string $logDir
-     *   The directory with the logfiles.
+     * @deprecated
+     *   Since 3.1.1 dev. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @param bool $bool
+     *   Are we using chunks?
      */
-    protected function cleanupOldLogs($logDir)
+    public function setUseChunks($bool)
     {
-        if ($this->useLogging === false) {
-            // We have no write access. Do nothing.
-            return;
-        }
-
-        // Cleanup old logfiles to prevent a overflow.
-        $logList = glob($logDir . '*.Krexx.html');
-        if (empty($logList) === true) {
-            return;
-        }
-
-        array_multisort(
-            array_map([$this->pool->fileService, 'filetime'], $logList),
-            SORT_DESC,
-            $logList
-        );
-
-        $maxFileCount = (int)$this->pool->config->getSetting(Fallback::SETTING_MAX_FILES);
-        $count = 1;
-        // Cleanup logfiles.
-        foreach ($logList as $file) {
-            if ($count > $maxFileCount) {
-                $this->pool->fileService->deleteFile($file);
-                $this->pool->fileService->deleteFile($file . '.json');
-            }
-
-            ++$count;
-        }
+        $this->setChunksAreAllowed($bool);
+    }
+    /**
+     * Setter for the the the $useLogging. Here we determine, if the logfolder
+     * is accessible.
+     *
+     * @deprecated
+     *   Since 3.1.1 dev. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @param $bool
+     */
+    public function setUseLogging($bool)
+    {
+        $this->setLoggingIsAllowed($bool);
     }
 
     /**
@@ -426,9 +356,20 @@ class Chunks
      * @param bool $bool
      *   Are we using chunks?
      */
-    public function setUseChunks($bool)
+    public function setChunksAreAllowed($bool)
     {
-        $this->useChunks = $bool;
+        $this->chunksAreAllowed = $bool;
+    }
+
+    /**
+     * Getter for the useChunks value.
+     *
+     * @return bool
+     *   Are we using chunks?
+     */
+    public function getChunksAreAllowed()
+    {
+        return $this->chunksAreAllowed;
     }
 
     /**
@@ -436,10 +377,22 @@ class Chunks
      * is accessible.
      *
      * @param $bool
+     *   Is the log folder accessible?
      */
-    public function setUseLogging($bool)
+    public function setLoggingIsAllowed($bool)
     {
-        $this->useLogging = $bool;
+        $this->loggingIsAllowed = $bool;
+    }
+
+    /**
+     * Getter for the useLogging.
+     *
+     * @return bool
+     *   Is the log folder accessible?
+     */
+    public function getLoggingIsAllowed()
+    {
+        return $this->loggingIsAllowed;
     }
 
     /**
@@ -475,8 +428,6 @@ class Chunks
      *
      * We also try to track the encoding we need to add to the output, so
      * people can use unicode function names.
-     * We are not using it above, because there we are only handling broken
-     * string encoding by completely encoding it, every char in there.
      *
      * @see \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString
      *
@@ -485,12 +436,13 @@ class Chunks
      */
     public function detectEncoding($string)
     {
+        static $doNothingEncoding = ['ASCII', 'UTF-8', false];
         $encoding = $this->pool->encodingService->mbDetectEncoding($string);
 
         // We need to decide, if we need to change the official encoding of
         // the HTML output with a meta tag. We ignore everything in the
         // doNothingEncoding array.
-        if (in_array($encoding, $this->doNothingEncoding, true) === false) {
+        if (in_array($encoding, $doNothingEncoding, true) === false) {
             $this->officialEncoding = $encoding;
         }
     }

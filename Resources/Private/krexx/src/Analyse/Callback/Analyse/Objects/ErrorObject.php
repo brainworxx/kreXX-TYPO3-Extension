@@ -46,17 +46,54 @@ class ErrorObject extends AbstractObjectAnalysis
 {
 
     /**
+     * Error object analysis.
+     *
      * @return string
+     *   The rendered HTML.
      */
     public function callMe()
     {
         // Call the start event, even if this is not an error object.
-        $output = $this->dispatchStartEvent();
+        $output = $this->dispatchStartEvent() . $this->renderBacktrace();
 
         /** @var \Throwable|\Exception $data */
         $data = $this->parameters[static::PARAM_DATA];
+        $lineNo = ((int)$data->getLine()) - 1;
+        $source = trim(
+            $this->pool->fileService->readSourcecode(
+                $data->getFile(),
+                $lineNo,
+                $lineNo -5,
+                $lineNo +5
+            )
+        );
+        if (empty($source) === true) {
+            $source = $this->pool->messages->getHelp('noSourceAvailable');
+        }
 
-        $trace = $data->getTrace();
+        return $output . $this->pool->render->renderSingleChild(
+            $this->dispatchEventWithModel(
+                'source',
+                $this->pool->createClass(Model::class)
+                    ->setData($source)
+                    ->setName('Sourcecode')
+                    ->setNormal(static::UNKNOWN_VALUE)
+                    ->setHasExtra(true)
+                    ->setType(static::TYPE_PHP)
+            )
+        );
+    }
+
+    /**
+     * Retrieve and render the backtrace.
+     *
+     * @return string
+     *   The rendered HTML.
+     */
+    protected function renderBacktrace()
+    {
+        $output = '';
+        $trace = $this->parameters[static::PARAM_DATA]->getTrace();
         if (is_array($trace)) {
             $this->pool->codegenHandler->setAllowCodegen(false);
             $output .= $this->pool->render->renderExpandableChild(
@@ -74,28 +111,6 @@ class ErrorObject extends AbstractObjectAnalysis
             $this->pool->codegenHandler->setAllowCodegen(true);
         }
 
-        $lineNo = ((int)$data->getLine()) - 1;
-        $source = trim(
-            $this->pool->fileService->readSourcecode(
-                $data->getFile(),
-                $lineNo,
-                $lineNo -5,
-                $lineNo +5
-            )
-        );
-        if (empty($source) === true) {
-            $source = $this->pool->messages->getHelp('noSourceAvailable');
-        }
-        return $output .= $this->pool->render->renderSingleChild(
-            $this->dispatchEventWithModel(
-                'source',
-                $this->pool->createClass(Model::class)
-                    ->setData($source)
-                    ->setName('Sourcecode')
-                    ->setNormal(static::UNKNOWN_VALUE)
-                    ->setHasExtra(true)
-                    ->setType(static::TYPE_PHP)
-            )
-        );
+        return$output;
     }
 }

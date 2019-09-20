@@ -47,6 +47,17 @@ class FallbackTest extends AbstractTest
      * Test the construct of an abstract class. Sounds about right.
      *
      * @covers \Brainworxx\Krexx\Service\Config\Fallback::__construct
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnBoolSelectFalse
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnBoolSelectTrue
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnDebugMethods
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnDestination
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnDevHandle
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnInput
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnIpRange
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnMaxFiles
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnMaxRuntime
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnSkin
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::generateSkinConfiguration
      */
     public function testConstruct()
     {

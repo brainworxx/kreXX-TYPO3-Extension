@@ -63,37 +63,12 @@ class BacktraceStep extends AbstractCallback
         // We are handling the following values here:
         // file, line, function, object, type, args, sourcecode.
         return $this->dispatchStartEvent() .
-            $this->fileToOutput() .
+            $this->outputSingleChild('File', static::TRACE_FILE, 'fileToOutput') .
             $this->lineToOutput() .
-            $this->functionToOutput() .
-            $this->objectToOutput() .
-            $this->typeToOutput() .
-            $this->argsToOutput();
-    }
-
-    /**
-     * Analyse the 'file' key from the backtrace step.
-     *
-     * @return string
-     *   The generated dom.
-     */
-    protected function fileToOutput()
-    {
-        $stepData = $this->parameters[static::PARAM_DATA];
-        if (isset($stepData[static::TRACE_FILE]) === true) {
-            return $this->pool->render->renderSingleChild(
-                $this->dispatchEventWithModel(
-                    __FUNCTION__ . static::EVENT_MARKER_END,
-                    $this->pool->createClass(Model::class)
-                        ->setData($stepData[static::TRACE_FILE])
-                        ->setName('File')
-                        ->setNormal($stepData[static::TRACE_FILE])
-                        ->setType(static::TYPE_STRING . strlen($stepData[static::TRACE_FILE]))
-                )
-            );
-        }
-
-        return '';
+            $this->outputSingleChild('Last called function', static::TRACE_FUNCTION, 'functionToOutput') .
+            $this->outputProcessor('Calling object', static::TRACE_OBJECT, 'objectToOutput', ProcessObject::class) .
+            $this->outputSingleChild('Call type', static::TRACE_TYPE, 'typeToOutput') .
+            $this->outputProcessor('Arguments from the call', static::TRACE_ARGS, 'argsToOutput', ProcessArray::class);
     }
 
     /**
@@ -104,12 +79,37 @@ class BacktraceStep extends AbstractCallback
      */
     protected function lineToOutput()
     {
+        $model = $this->pool->createClass(Model::class)
+            ->setName('Sourcecode')
+            ->setNormal(static::UNKNOWN_VALUE)
+            ->setHasExtra(true)
+            ->setType(static::TYPE_PHP);
+
+        return $this->retrieveSource($model) . $this->pool->render->renderSingleChild(
+            $this->dispatchEventWithModel(
+                __FUNCTION__ . static::EVENT_MARKER_END,
+                $model
+            )
+        );
+    }
+
+    /**
+     * Retrieve the sourcecode and render it with some meta data.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model, where we assign the code.
+     *
+     * @return string
+     *   Th rendered HTML.
+     */
+    protected function retrieveSource(Model $model)
+    {
         $stepData = $this->parameters[static::PARAM_DATA];
         $output = '';
-        $source = '';
+
         if (isset($stepData[static::TRACE_LINE]) === true) {
             // Adding the line info to the output
-            $output .= $this->pool->render->renderSingleChild(
+            $output = $this->pool->render->renderSingleChild(
                 $this->pool->createClass(Model::class)
                     ->setData($stepData[static::TRACE_LINE])
                     ->setName('Line no.')
@@ -133,120 +133,73 @@ class BacktraceStep extends AbstractCallback
         if (empty($source) === true) {
             $source = $this->pool->messages->getHelp('noSourceAvailable');
         }
+        $model->setData($source);
 
-        // Add the prettified code to the analysis.
-        return $output . $this->pool->render->renderSingleChild(
-            $this->dispatchEventWithModel(
-                __FUNCTION__ . static::EVENT_MARKER_END,
-                $this->pool->createClass(Model::class)
-                    ->setData($source)
-                    ->setName('Sourcecode')
-                    ->setNormal(static::UNKNOWN_VALUE)
-                    ->setHasExtra(true)
-                    ->setType(static::TYPE_PHP)
-            )
-        );
+        return $output;
     }
 
     /**
-     * Analyse the 'function' key from the backtrace step.
+     * Directly render the output by an processor.
+     *
+     * @param $name
+     *   The human readable name of what we are rendering
+     * @param $type
+     *   The array key inside the backtrace
+     * @param $eventName
+     *   The event name of what we dispatch.
+     * @param $processorName
+     *   The class name of the processor.
      *
      * @return string
-     *   The generated dom.
+     *   The rendered HTML.
      */
-    protected function functionToOutput()
+    protected function outputProcessor($name, $type, $eventName, $processorName)
     {
         $stepData = $this->parameters[static::PARAM_DATA];
-
-        if (isset($stepData[static::TRACE_FUNCTION]) === true) {
-            return $this->pool->render->renderSingleChild(
-                $this->dispatchEventWithModel(
-                    __FUNCTION__ . static::EVENT_MARKER_END,
-                    $this->pool->createClass(Model::class)
-                        ->setData($stepData[static::TRACE_FUNCTION])
-                        ->setName('Last called function')
-                        ->setNormal($stepData[static::TRACE_FUNCTION])
-                        ->setType(static::TYPE_STRING . strlen($stepData[static::TRACE_FUNCTION]))
-                )
-            );
-        }
-
-        return '';
-    }
-
-    /**
-     * Analyse the 'object' key from the backtrace step.
-     *
-     * @return string
-     *   The generated dom.
-     */
-    protected function objectToOutput()
-    {
-        $stepData = $this->parameters[static::PARAM_DATA];
-
-        if (isset($stepData[static::TRACE_OBJECT]) === true) {
+        if (isset($stepData[$type]) === true) {
             return $this->pool
-                ->createClass(ProcessObject::class)
-                ->process($this->dispatchEventWithModel(
-                    __FUNCTION__ . static::EVENT_MARKER_END,
-                    $this->pool->createClass(Model::class)
-                        ->setData($stepData[static::TRACE_OBJECT])
-                        ->setName('Calling object')
-                ));
-        }
-
-        return '';
-    }
-
-    /**
-     * Analyse the 'type' key from the backtrace step.
-     *
-     * @return string
-     *   The generated dom.
-     */
-    protected function typeToOutput()
-    {
-        $stepData = $this->parameters[static::PARAM_DATA];
-
-        if (isset($stepData[static::TRACE_TYPE]) === true) {
-            return $this->pool->render->renderSingleChild(
-                $this->dispatchEventWithModel(
-                    __FUNCTION__ . static::EVENT_MARKER_END,
-                    $this->pool->createClass(Model::class)
-                        ->setData($stepData[static::TRACE_TYPE])
-                        ->setName('Call type')
-                        ->setNormal($stepData[static::TRACE_TYPE])
-                        ->setType(static::TYPE_STRING . strlen($stepData[static::TRACE_TYPE]))
-                )
-            );
-        }
-
-        return '';
-    }
-
-    /**
-     * Analyse the 'args' key from the backtrace step.
-     *
-     * @return string
-     *   The generated dom.
-     */
-    protected function argsToOutput()
-    {
-        $stepData = $this->parameters[static::PARAM_DATA];
-
-        if (isset($stepData[static::TRACE_ARGS]) === true) {
-            return $this->pool
-                ->createClass(ProcessArray::class)
+                ->createClass($processorName)
                     ->process(
                         $this->dispatchEventWithModel(
-                            __FUNCTION__ . static::EVENT_MARKER_END,
+                            $eventName . static::EVENT_MARKER_END,
                             $this->pool->createClass(Model::class)
-                                ->setData($stepData[static::TRACE_ARGS])
-                                ->setName('Arguments from the call')
+                                ->setData($stepData[$type])
+                                ->setName($name)
                         )
                     );
         }
 
+        return '';
+    }
+
+    /**
+     * Render a single child of the backtrace.
+     *
+     * @param string $name
+     *   The human readable name of what we are rendering
+     * @param string $type
+     *   The array key inside the backtrace
+     * @param string $eventName
+     *   The event name of what we dispatch.
+     *
+     * @return string
+     *   The rendered HTML.
+     */
+    protected function outputSingleChild($name, $type, $eventName)
+    {
+        $stepData = $this->parameters[static::PARAM_DATA];
+        if (isset($stepData[$type]) === true) {
+            return $this->pool->render->renderSingleChild(
+                $this->dispatchEventWithModel(
+                    $eventName . static::EVENT_MARKER_END,
+                    $this->pool->createClass(Model::class)
+                        ->setData($stepData[$type])
+                        ->setName($name)
+                        ->setNormal($stepData[$type])
+                        ->setType(static::TYPE_STRING . strlen($stepData[$type]))
+                )
+            );
+        }
         return '';
     }
 }

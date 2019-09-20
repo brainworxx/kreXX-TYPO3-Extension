@@ -76,26 +76,15 @@ class CallerFinder extends AbstractCaller
      */
     public function findCaller($headline, $data)
     {
-        $backtrace = debug_backtrace(false, 5);
+        $backtrace = array_reverse(debug_backtrace(false, 5));
 
         // Going from the first call of the first line up
         // through the first debug call.
-        // Using a foreach is definitely faster, but then we
-        // would have trouble using our pattern.
-        while ($caller = array_pop($backtrace)) {
-            if (isset($caller[static::TRACE_FUNCTION]) &&
-                strtolower($caller[static::TRACE_FUNCTION]) === static::FUNCTION_PATTERN
-            ) {
-                break;
-            }
-
-            if (isset($caller[static::TRACE_CLASS]) &&
-                strtolower($caller[static::TRACE_CLASS]) === static::CLASS_PATTERN
-            ) {
+        foreach ($backtrace as $caller) {
+            if ($this->identifyCaller($caller) === true) {
                 break;
             }
         }
-
         $varname = $this->getVarName($caller[static::TRACE_FILE], $caller[static::TRACE_LINE]);
 
         // We will not keep the whole backtrace im memory. We only return what we
@@ -107,6 +96,29 @@ class CallerFinder extends AbstractCaller
             static::TRACE_TYPE => $this->getType($headline, $varname, $data),
             static::TRACE_DATE => date('d-m-Y H:i:s', time()),
         ];
+    }
+
+    /**
+     * If clauses camped together in a method, trying to identify the current caller.
+     *
+     * @param array $caller
+     *   A backtrace step.
+     *
+     * @return bool
+     *   Well, is this our caller?
+     */
+    protected function identifyCaller(array $caller)
+    {
+        return (
+                // Check for a function trace.
+                isset($caller[static::TRACE_FUNCTION]) &&
+                strtolower($caller[static::TRACE_FUNCTION]) === static::FUNCTION_PATTERN
+            ) ||
+            (
+                // Check for a class trace.
+                isset($caller[static::TRACE_CLASS]) &&
+                strtolower($caller[static::TRACE_CLASS]) === static::CLASS_PATTERN
+            );
     }
 
     /**
@@ -147,17 +159,32 @@ class CallerFinder extends AbstractCaller
         if (count($possibleCommands) === 1) {
             // Now that we have our actual call, we must remove the krexx-part
             // from it.
-            foreach ($this->callPattern as $funcname) {
-                // This little baby tries to resolve everything inside the
-                // brackets of the kreXX call.
-                preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', reset($possibleCommands), $name);
-                if (isset($name[1]) === true) {
-                    $varname = $this->pool->encodingService->encodeString(trim($name[1], " \t\n\r\0\x0B'\""));
-                    break;
-                }
-            }
+            return $this->removeKrexxPartFromCommand($possibleCommands[0]);
         }
 
         return $varname;
+    }
+
+    /**
+     * Remove the kreXX part from the command to get the variable.
+     *
+     * @param string $command
+     *   The possible command
+     *
+     * @return string
+     *   The variable, or fallbck to '. . .'
+     */
+    protected function removeKrexxPartFromCommand($command)
+    {
+        foreach ($this->callPattern as $funcname) {
+            // This little baby tries to resolve everything inside the
+            // brackets of the kreXX call.
+            preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', $command, $name);
+            if (isset($name[1]) === true) {
+                return $this->pool->encodingService->encodeString(trim($name[1], " \t\n\r\0\x0B'\""));
+            }
+        }
+
+        return static::UNKNOWN_VALUE;
     }
 }

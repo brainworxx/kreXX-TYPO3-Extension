@@ -32,21 +32,38 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Plugins\Typo3\Rewrites;
+namespace Brainworxx\Krexx\View\Skins\SmokyGrey;
 
-use Brainworxx\Krexx\Service\Config\Config as OrgConfig;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
-/**
- * Using the cmpIP from the GeneralUtility in TYPO3.
- */
-class Config extends OrgConfig
+trait Header
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function isAllowedIp($whitelist)
+    public function renderHeader($headline, $cssJs)
     {
-        return GeneralUtility::cmpIP(GeneralUtility::getIndpEnv(static::REMOTE_ADDRESS), $whitelist);
+        // Doing special stuff for smokygrey:
+        // We hide the debug-tab when we are displaying the config-only and switch
+        // to the config as the current payload.
+        if ($headline === static::HEADLINE_EDIT_SETTINGS) {
+            $debugClass = static::STYLE_HIDDEN;
+            $configClass = static::STYLE_ACTIVE;
+        } else {
+            $debugClass = static::STYLE_ACTIVE;
+            $configClass = '';
+        }
+
+        return str_replace(
+            [
+                static::MARKER_K_DEBUG_CLASSES,
+                static::MARKER_K_CONFIG_CLASSES,
+                static::MARKER_PLUGINS,
+            ],
+            [
+                $debugClass,
+                $configClass,
+                $this->renderPluginList(),
+            ],
+            parent::renderHeader($headline, $cssJs)
+        );
     }
 }

@@ -178,6 +178,12 @@ class Messages
     /**
      * Read a help text file, and add its contents to the already read content.
      *
+     * @deprecated
+     *   Since 3.1.1 dev. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
      * @param string $file
      *   Absolute path to the file we want to read.
      */
@@ -196,10 +202,16 @@ class Messages
     {
         $this->helpArray = [];
 
-        $this->readHelpFile(KREXX_DIR . 'resources/language/Help.ini');
+        $fileList = array_merge(
+            [KREXX_DIR . 'resources/language/Help.ini'],
+            SettingsGetter::getAdditionalHelpFiles()
+        );
 
-        foreach (SettingsGetter::getAdditionelHelpFiles() as $filename) {
-            $this->readHelpFile($filename);
+        foreach ($fileList as $filename) {
+            $this->helpArray = array_merge(
+                $this->helpArray,
+                (array)parse_ini_string($this->pool->fileService->getFileContents($filename))
+            );
         }
     }
 }

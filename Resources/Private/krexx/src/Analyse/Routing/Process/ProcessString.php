@@ -88,19 +88,7 @@ class ProcessString extends AbstractRouting implements ProcessInterface
             $model->setIsCallback(true);
         }
 
-        // Checking the encoding.
-        $encoding = $this->pool->encodingService->mbDetectEncoding($data);
-        if ($encoding === false) {
-            // Looks like we have a mixed encoded string.
-            // We need to tell the dev!
-            $length = $this->pool->encodingService->mbStrLen($data);
-            $strlen = 'broken encoding ' . $length;
-            $model->addToJson(static::META_ENCODING, 'broken');
-        } else {
-            // Normal encoding, nothing special here.
-            $length = $strlen = $this->pool->encodingService->mbStrLen($data, $encoding);
-        }
-
+        $length = $this->retrieveLengthAndEncoding($data, $model);
         if ($length > 20) {
             // Getting mime type from the string.
             // With larger strings, there is a good chance that there is
@@ -126,9 +114,31 @@ class ProcessString extends AbstractRouting implements ProcessInterface
             $model->setNormal($this->pool->encodingService->encodeString($data));
         }
 
-        return $this->pool->render->renderSingleChild(
-            $model->setType(static::TYPE_STRING . $strlen)
-                ->addToJson(static::META_LENGTH, $length)
-        );
+        return $this->pool->render->renderSingleChild($model->addToJson(static::META_LENGTH, $length));
+    }
+
+    /**
+     * Retrieve the length and set the encoding in the model.
+     *
+     * @param $data
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @return int
+     */
+    protected function retrieveLengthAndEncoding($data, Model $model)
+    {
+        $encoding = $this->pool->encodingService->mbDetectEncoding($data);
+        if ($encoding === false) {
+            // Looks like we have a mixed encoded string.
+            // We need to tell the dev!
+            $length = $this->pool->encodingService->mbStrLen($data);
+            $strlen = 'broken encoding ' . $length;
+            $model->addToJson(static::META_ENCODING, 'broken');
+        } else {
+            // Normal encoding, nothing special here.
+            $length = $strlen = $this->pool->encodingService->mbStrLen($data, $encoding);
+        }
+        $model->setType(static::TYPE_STRING . $strlen);
+
+        return $length;
     }
 }

@@ -142,6 +142,7 @@ class PublicPropertyTest extends AbstractTest
         // Create the expectations.
         $expectations = [
             new \ReflectionProperty(PublicFixture::class, 'someValue'),
+            new \ReflectionProperty(PublicFixture::class, 'static'),
             new UndeclaredProperty($fixture['ref'], 'undeclared'),
             new \ReflectionProperty(PublicFixture::class, 'value1'),
             new \ReflectionProperty(SimpleFixture::class, 'value2'),

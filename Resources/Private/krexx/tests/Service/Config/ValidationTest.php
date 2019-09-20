@@ -98,8 +98,8 @@ class ValidationTest extends AbstractTest
         $stdClass = new stdClass();
         $objectStorage = new \SplObjectStorage();
 
-        $this->assertFalse($validation->isAllowedDebugCall($stdClass));
-        $this->assertTrue($validation->isAllowedDebugCall($validation));
+        $this->assertFalse($validation->isAllowedDebugCall($stdClass, ''));
+        $this->assertTrue($validation->isAllowedDebugCall($validation, ''));
         $this->assertFalse($validation->isAllowedDebugCall($objectStorage, 'readMailRealFast'));
         $this->assertTrue($validation->isAllowedDebugCall($validation, 'someMethod'));
     }

@@ -729,7 +729,7 @@ div.kwrapper {
     width: inherit;
 }
 
-.kwrapper .search-wrapper.hidden {
+.kwrapper .search-wrapper.khidden {
     display: none !important;
     visibility: hidden !important;
 }

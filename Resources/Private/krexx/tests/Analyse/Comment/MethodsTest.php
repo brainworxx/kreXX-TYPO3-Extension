@@ -82,6 +82,7 @@ class MethodsTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::getInterfaceComment
      * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::getTraitComment
      * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::replaceInheritComment
+     * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::retrieveComment
      */
     public function testGetComment()
     {

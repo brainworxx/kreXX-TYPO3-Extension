@@ -113,9 +113,15 @@ interface ConstInterface
     const META_INTERFACES = 'Interfaces';
     const META_TRAITS = 'Traits';
     const META_INHERITED_CLASS = 'Inherited class';
-
+    const META_PREDECLARED = 'n/a, is predeclared';
 
     // Stuff for the skin registration.
     const SKIN_CLASS = 'class';
     const SKIN_DIRECTORY = 'dir';
+
+    const HEADLINE_EDIT_SETTINGS = 'Edit local settings';
+    const HEADLINE_COOKIE_CONF = 'Cookie Configuration';
+
+    const STYLE_HIDDEN = 'khidden';
+    const STYLE_ACTIVE = 'kactive';
 }

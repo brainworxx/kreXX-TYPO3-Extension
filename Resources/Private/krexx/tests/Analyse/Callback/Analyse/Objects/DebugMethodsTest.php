@@ -95,6 +95,7 @@ class DebugMethodsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::checkIfAccessible
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::retrieveValue
      */
     public function testCallMeNothing()
     {
@@ -122,6 +123,7 @@ class DebugMethodsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::checkIfAccessible
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::retrieveValue
      */
     public function testCallMeNormal()
     {

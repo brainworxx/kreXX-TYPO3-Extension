@@ -43,34 +43,12 @@ class File extends AbstractOutput
 {
 
     /**
-     * [0] -> The chunkedup string, that we intend to send to
-     *        the browser.
-     * [1] -> Are we ignoring local settings?
-     *
-     * @var array
-     *   An array of all chunk strings.
-     *   A chunk string are be:
-     *   - header
-     *   - messages
-     *   - data part
-     *   - footer
-     *   This means, that every output is split in 4 parts
+     * Run the cleanup service.
      */
-    protected $chunkStrings = [];
-
-    /**
-     * Adds output to our shutdown handler.
-     *
-     * @param string $chunkString
-     *   The chunked output string.
-     *
-     * @return $this
-     *   For chaining.
-     */
-    public function addChunkString($chunkString)
+    protected function destruct()
     {
-        $this->chunkStrings[] = $chunkString;
-        return $this;
+        parent::destruct();
+        $this->cleanupService->cleanupOldLogs();
     }
 
     /**
@@ -85,5 +63,7 @@ class File extends AbstractOutput
             // Save everything to the file after we are done.
             $this->pool->chunks->saveDechunkedToFile($chunkString);
         }
+
+        $this->destruct();
     }
 }

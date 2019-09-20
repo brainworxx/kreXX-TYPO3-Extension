@@ -157,7 +157,7 @@ class SettingsGetter extends Registration
      * @return array
      *   List of these files
      */
-    public static function getAdditionelHelpFiles()
+    public static function getAdditionalHelpFiles()
     {
         return static::$additionalHelpFiles;
     }

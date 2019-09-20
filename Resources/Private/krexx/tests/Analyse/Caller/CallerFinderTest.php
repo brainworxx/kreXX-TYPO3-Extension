@@ -70,7 +70,7 @@ class CallerFinderTest extends AbstractTest
 
         // Create our test subject.
         $this->callerFinder = new CallerFinder(Krexx::$pool);
-        $this->pathToFixture = '...' . DIRECTORY_SEPARATOR . 'tests' .
+        $this->pathToFixture = DIRECTORY_SEPARATOR . 'tests' .
             DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'ComplexMethodFixture.php';
     }
 
@@ -127,6 +127,8 @@ class CallerFinderTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getVarName
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getType
+     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
+     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
      */
     public function testFindCallerNormal()
     {
@@ -138,7 +140,7 @@ class CallerFinderTest extends AbstractTest
         $result = $this->callerFinder->findCaller('', $this->subjectVar);
 
         // Check the result
-        $this->assertEquals($this->pathToFixture, $result[ConstInterface::TRACE_FILE]);
+        $this->assertStringEndsWith($this->pathToFixture, $result[ConstInterface::TRACE_FILE]);
         $this->assertEquals(74, $result[ConstInterface::TRACE_LINE]);
         $this->assertEquals('$parameter', $result[ConstInterface::TRACE_VARNAME]);
         $this->assertEquals('Analysis of $parameter, string', $result[ConstInterface::TRACE_TYPE]);
@@ -151,6 +153,8 @@ class CallerFinderTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getVarName
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getType
+     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
+     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
      */
     public function testFindCallerHeadline()
     {
@@ -163,7 +167,7 @@ class CallerFinderTest extends AbstractTest
         $result = $this->callerFinder->findCaller(static::HEADLINE_STRING, $this->subjectVar);
 
         // Check the result
-        $this->assertEquals($this->pathToFixture, $result[ConstInterface::TRACE_FILE]);
+        $this->assertStringEndsWith($this->pathToFixture, $result[ConstInterface::TRACE_FILE]);
         $this->assertEquals(74, $result[ConstInterface::TRACE_LINE]);
         $this->assertEquals('$parameter', $result[ConstInterface::TRACE_VARNAME]);
         $this->assertEquals(static::HEADLINE_STRING, $result[ConstInterface::TRACE_TYPE]);
@@ -176,6 +180,8 @@ class CallerFinderTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getVarName
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getType
+     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
+     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
      */
     public function testFindCallerUnreadableSource()
     {
@@ -191,7 +197,7 @@ class CallerFinderTest extends AbstractTest
         $result = $this->callerFinder->findCaller(static::HEADLINE_STRING, $this->subjectVar);
 
         // Check the result
-        $this->assertEquals($this->pathToFixture . ' file not there', $result[ConstInterface::TRACE_FILE]);
+        $this->assertStringEndsWith($this->pathToFixture . ' file not there', $result[ConstInterface::TRACE_FILE]);
         $this->assertEquals(74, $result[ConstInterface::TRACE_LINE]);
         $this->assertEquals('. . .', $result[ConstInterface::TRACE_VARNAME]);
         $this->assertEquals(static::HEADLINE_STRING, $result[ConstInterface::TRACE_TYPE]);
