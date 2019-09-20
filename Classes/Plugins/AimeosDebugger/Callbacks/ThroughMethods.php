@@ -50,11 +50,6 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 class ThroughMethods extends AbstractCallback
 {
     /**
-     * {@inheritdoc}
-     */
-    protected static $eventPrefix = 'Brainworxx\\Includekrexx\\Plugins\\AimeosDebugger\\Callbacks\\ThroughMethods';
-
-    /**
      * Preprocessing parameters before using the original ThroughMethods analysis.
      *
      * @return string
