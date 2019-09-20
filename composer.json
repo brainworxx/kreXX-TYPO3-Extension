@@ -16,6 +16,12 @@
     "typo3/cms-core": ">=7.6.0 <=10.0.99",
     "php": ">=5.5.0 <=7.3.99"
   },
+  "require-dev": {
+    "typo3/cms-base-distribution": "^9.5",
+    "php-mock/php-mock-phpunit": "^2.4",
+    "typo3/testing-framework": "^4.13",
+    "aimeos/aimeos-typo3": "^19"
+  },
   "authors": [
     {
       "name": "Brainworxx",
@@ -26,6 +32,14 @@
     "psr-4": {
       "Brainworxx\\Includekrexx\\": "Classes/",
       "Brainworxx\\Krexx\\": "Resources/Private/krexx/src/"
+    },
+    "files": [
+      "Resources/Private/krexx/bootstrap.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Brainworxx\\Krexx\\Tests\\": "Resources/Private/krexx/tests/"
     }
   },
   "replace": {
@@ -39,5 +53,8 @@
   },
   "support": {
     "issues": "https://github.com/brainworxx/kreXX-TYPO3-Extension/issues"
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit --color -d memory_limit=-1 -c Build/phpunit.xml"
   }
 }

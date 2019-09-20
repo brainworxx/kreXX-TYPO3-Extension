@@ -1,0 +1,16 @@
+<phpunit bootstrap="../Resources/Private/krexx/tests/Scripts/Bootstrap.php">
+    <testsuites>
+        <testsuite name="krexxsuit">
+            <directory>../Resources/Private/krexx/tests</directory>
+        </testsuite>
+        <testsuite name="includesuit">
+            <directory>../Tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory>../Resources/Private/krexx/src</directory>
+            <directory>../Classes</directory>
+        </whitelist>
+    </filter>
+</phpunit>
