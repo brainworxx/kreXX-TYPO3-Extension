@@ -35,7 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\Typo3;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
-use Brainworxx\Krexx\Service\Config\Config;
+use Brainworxx\Krexx\View\Output\CheckOutput;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Core\Environment;
@@ -85,7 +85,7 @@ class Configuration implements PluginConfigInterface
     public function exec()
     {
         // We are using the TYPO3 ip security, instead of the kreXX implementation.
-        Registration::addRewrite(Config::class, T3CheckOutput::class);
+        Registration::addRewrite(CheckOutput::class, T3CheckOutput::class);
 
         // Get the absolute site path. The constant PATH_site is deprecated
         // since 9.2.
