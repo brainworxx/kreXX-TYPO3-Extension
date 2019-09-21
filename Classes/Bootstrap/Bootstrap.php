@@ -111,8 +111,9 @@ class Bootstrap
         }
 
         // Register and activate the TYPO3 plugin.
-        Registration::register($this->objectManager->get(T3configuration::class));
-        Registration::activatePlugin(T3configuration::class);
+        $t3configuration = $this->objectManager->get(T3configuration::class);
+        Registration::register($t3configuration);
+        Registration::activatePlugin(get_class($t3configuration));
         // Register our modules for the admin panel.
         if (version_compare(TYPO3_version, '9.5', '>=') &&
             isset($GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
@@ -122,14 +123,7 @@ class Bootstrap
             [static::MODULES][static::DEBUG][static::SUBMODULES] = array_replace_recursive(
                 $GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
                 [static::MODULES][static::DEBUG][static::SUBMODULES],
-                [
-                    static::KREXX => [
-                        'module' => Log::class,
-                        'after' => [
-                            'log',
-                        ],
-                    ]
-                ]
+                [static::KREXX => ['module' => Log::class, 'after' => ['log']]]
             );
         }
 
@@ -151,13 +145,14 @@ class Bootstrap
         Registration::register($this->objectManager->get(FluidDataConfiguration::class));
 
         // Register the Aimoes Magic plugin.
-        Registration::register($this->objectManager->get(AimeosConfiguration::class));
+        $aimeosConfiguration = $this->objectManager->get(AimeosConfiguration::class);
+        Registration::register($aimeosConfiguration);
 
         // Check if we have the Aimeos shop available.
         if (class_exists(AimeosException::class) === true ||
             ExtensionManagementUtility::isLoaded('aimeos')
         ) {
-            Registration::activatePlugin(AimeosConfiguration::class);
+            Registration::activatePlugin(get_class($aimeosConfiguration));
         }
     }
 
@@ -177,7 +172,7 @@ class Bootstrap
     public function checkVersionNumber($version)
     {
         if ($version !== ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY)) {
-            GeneralUtility::makeInstance(CacheManager::class)
+            $this->objectManager->get(CacheManager::class)
                 ->flushCachesInGroup('system');
         }
 
