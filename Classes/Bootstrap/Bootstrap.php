@@ -44,6 +44,7 @@ use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfigur
 use Brainworxx\Includekrexx\Plugins\FluidDataViewer\Configuration as FluidDataConfiguration;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
 use Aimeos\MShop\Exception as AimeosException;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * There is no way to clear the cache after an extension update automatically
@@ -78,6 +79,25 @@ class Bootstrap
     const KREXX = 'krexx';
 
     /**
+     * The object manager.
+     *
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * "Inject" the object manager.
+     *
+     * The reflection cache may or may not be available when updating an
+     * extension. This means that injections may or may not work. Hence, we
+     * create the object manager here.
+     */
+    public function __construct()
+    {
+        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+    }
+
+    /**
      * Batch for the bootstrapping.
      */
     public function run()
@@ -91,7 +111,7 @@ class Bootstrap
         }
 
         // Register and activate the TYPO3 plugin.
-        Registration::register(new T3configuration());
+        Registration::register($this->objectManager->get(T3configuration::class));
         Registration::activatePlugin(T3configuration::class);
         // Register our modules for the admin panel.
         if (version_compare(TYPO3_version, '9.5', '>=') &&
@@ -115,7 +135,7 @@ class Bootstrap
 
         // Register the fluid plugins.
         // We activate them later in the viewhelper.
-        Registration::register(new FluidConfiguration());
+        Registration::register($this->objectManager->get(FluidConfiguration::class));
         // Register our debug-viewhelper globally, so people don't have to
         // do it inside the template. 'krexx' as a namespace should be unique enough.
         // Theoretically, this should be part of the fluid debugger plugin, but
@@ -128,10 +148,10 @@ class Bootstrap
             ];
         }
 
-        Registration::register(new FluidDataConfiguration());
+        Registration::register($this->objectManager->get(FluidDataConfiguration::class));
 
         // Register the Aimoes Magic plugin.
-        Registration::register(new AimeosConfiguration());
+        Registration::register($this->objectManager->get(AimeosConfiguration::class));
 
         // Check if we have the Aimeos shop available.
         if (class_exists(AimeosException::class) === true ||
