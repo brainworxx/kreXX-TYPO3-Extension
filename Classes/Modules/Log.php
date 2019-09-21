@@ -52,6 +52,9 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 /**
  * Frontend Access to the logfiles inside the admin panel.
  *
+ * This class *must-not-have* any class variables, because it gets serialized
+ * by the core. Any class variable would cause a fatal in the frontend.
+ *
  * @package Brainworxx\Includekrexx\Modules
  */
 class Log extends AbstractSubModule implements
