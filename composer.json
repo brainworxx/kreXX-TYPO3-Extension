@@ -39,7 +39,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Brainworxx\\Krexx\\Tests\\": "Resources/Private/krexx/tests/"
+      "Brainworxx\\Krexx\\Tests\\": "Resources/Private/krexx/tests/",
+      "Brainworxx\\Includekrexx\\Tests\\": "Tests/"
     }
   },
   "replace": {

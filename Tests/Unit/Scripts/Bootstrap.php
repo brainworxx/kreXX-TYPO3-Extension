@@ -32,14 +32,6 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
-}
+define('TYPO3_version', '1.2.3');
 
-$boot = function () {
-    \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)
-        ->checkVersionNumber('3.2.1 dev')
-        ->run();
-};
-$boot();
-unset($boot);
+include_once __DIR__ . '/../../../Resources/Private/krexx/tests/Scripts/Bootstrap.php';
