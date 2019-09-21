@@ -42,6 +42,7 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 abstract class AbstractCollector
 {
@@ -94,6 +95,21 @@ abstract class AbstractCollector
     protected $hasAccess = false;
 
     /**
+     * @var ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
+     * Inject the object manager.
+     *
+     * @param \TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager
+     */
+    public function injectObjectManager(ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
+    /**
      * Inject the pool.
      */
     public function __construct()
@@ -124,11 +140,9 @@ abstract class AbstractCollector
      */
     protected function getRoute($id)
     {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-
         if (version_compare(TYPO3_version, '9.0', '>=')) {
             /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
-            $uriBuilder = $objectManager->get(UriBuilder::class);
+            $uriBuilder = $this->objectManager->get(UriBuilder::class);
 
             return (string)$uriBuilder->buildUriFromRoute(
                 'tools_IncludekrexxKrexxConfiguration_dispatch',
@@ -140,7 +154,7 @@ abstract class AbstractCollector
             );
         } else {
             /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
-            $uriBuilder = $objectManager->get(\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class);
+            $uriBuilder = $this->objectManager->get(\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class);
             return $uriBuilder
                 ->reset()
                 ->setArguments(['M' => static::PLUGIN_NAME])
