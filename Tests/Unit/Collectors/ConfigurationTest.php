@@ -47,7 +47,7 @@ class ConfigurationTest extends UnitTestCase
     use TestTrait;
 
     /**
-     * The the assignning of data to the view.
+     * The the assigning of data to the view.
      *
      * @covers \Brainworxx\Includekrexx\Collectors\Configuration::assignData
      * @covers \Brainworxx\Includekrexx\Collectors\Configuration::retrieveConfiguration
@@ -71,9 +71,7 @@ class ConfigurationTest extends UnitTestCase
             [Config::CONFIG_FOLDER =>__DIR__ . '/../../Fixtures/Config.ini'],
             \Krexx::$pool->config
         );
-        $expectationIni = \Krexx::$pool->config->configFallback;
-        $expectationIni[Config::SETTING_SKIN] = 'Bernd';
-        $expectationIni[Config::SETTING_IP_RANGE] = 'testing . . .';
+
         // 'Mock' the backend users uc values.
         $this->setValueByReflection('userUc', [Config::SETTING_MAX_FILES => '1000'], $configuration);
 
