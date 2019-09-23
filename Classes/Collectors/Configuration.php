@@ -116,7 +116,7 @@ class Configuration extends AbstractCollector
             if (is_null($config[$settingsName][static::SETTINGS_VALUE])) {
                 // Check if we have a value from the last time a user has saved
                 // the settings.
-                if ($this->userUc[$settingsName]) {
+                if (isset($this->userUc[$settingsName])) {
                     $config[$settingsName][static::SETTINGS_VALUE] = $this->userUc[$settingsName];
                 } else {
                     // Fallback to the fallback for a possible value.
