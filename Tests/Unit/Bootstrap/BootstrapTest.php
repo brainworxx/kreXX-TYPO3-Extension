@@ -36,7 +36,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Bootstrap;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Modules\Log;
-use Brainworxx\Includekrexx\Tests\Unit\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\TestTrait;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Package\MetaData;
@@ -46,9 +46,12 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
 use Brainworxx\Includekrexx\Plugins\FluidDataViewer\Configuration as FluidDataConfiguration;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class BootstrapTest extends AbstractTest
+class BootstrapTest extends UnitTestCase
 {
+    use TestTrait;
+
     const OBJECT_MANAGER = 'objectManager';
 
     /**

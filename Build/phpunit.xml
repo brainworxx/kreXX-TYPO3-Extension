@@ -1,10 +1,10 @@
-<phpunit bootstrap="../Tests/Unit/Scripts/Bootstrap.php">
+<phpunit bootstrap="../Tests/Scripts/Bootstrap.php">
     <testsuites>
         <testsuite name="krexxsuit">
             <directory>../Resources/Private/krexx/tests</directory>
         </testsuite>
         <testsuite name="includesuit">
-            <directory>../Tests/Unit</directory>
+            <directory>../Tests</directory>
         </testsuite>
     </testsuites>
     <filter>

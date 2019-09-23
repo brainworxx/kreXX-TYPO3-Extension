@@ -32,16 +32,15 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Tests\Unit\Helpers;
+namespace Brainworxx\Includekrexx\Tests\Helpers;
 
-use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use phpmock\phpunit\PHPMock;
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-abstract class AbstractTest extends UnitTestCase
+
+Trait TestTrait
 {
     use PHPMock;
 

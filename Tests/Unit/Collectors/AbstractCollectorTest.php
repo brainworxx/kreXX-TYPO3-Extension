@@ -37,12 +37,15 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Controller\IndexController;
-use Brainworxx\Includekrexx\Tests\Unit\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\TestTrait;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class AbstractCollectorTest extends AbstractTest
+class AbstractCollectorTest extends UnitTestCase
 {
+    use TestTrait;
+
     /**
      * Test the injection of the object manager.
      *
