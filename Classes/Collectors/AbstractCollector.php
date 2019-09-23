@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Controller\IndexController;
+use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
@@ -44,6 +45,8 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 abstract class AbstractCollector
 {
+    use LanguageTrait;
+
     const MODULE_DATA = 'moduleData';
     const PLUGIN_NAME = 'tools_IncludekrexxKrexxConfiguration';
 

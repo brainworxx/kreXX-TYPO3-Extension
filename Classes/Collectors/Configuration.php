@@ -54,6 +54,44 @@ class Configuration extends AbstractCollector
             return;
         }
 
+        $view->assign('config', $this->retrieveConfiguration());
+        $view->assign('dropdown', $this->retrieveDropDowns());
+    }
+
+    /**
+     * Retrieve the values for the drop downs.
+     *
+     * @return array
+     *   The values for the drop downs.
+     */
+    protected function retrieveDropDowns()
+    {
+        // Adding the dropdown values.
+        $dropdown = [];
+        $dropdown['skins'] = [];
+        foreach ($this->pool->config->getSkinList() as $skin) {
+            $dropdown['skins'][$skin] = $skin;
+        }
+        $dropdown[Fallback::SETTING_DESTINATION] = [
+            Fallback::VALUE_BROWSER => static::translate(Fallback::VALUE_BROWSER, Bootstrap::EXT_KEY),
+            Fallback::VALUE_FILE => static::translate(Fallback::VALUE_FILE, Bootstrap::EXT_KEY),
+        ];
+        $dropdown['bool'] = [
+            Fallback::VALUE_TRUE => static::translate(Fallback::VALUE_TRUE, Bootstrap::EXT_KEY),
+            Fallback::VALUE_FALSE => static::translate(Fallback::VALUE_FALSE, Bootstrap::EXT_KEY),
+        ];
+
+        return $dropdown;
+    }
+
+    /**
+     * Retrieve the ini configuration, like the method name implies.
+     *
+     * @return array
+     *   The configuration array for the view
+     */
+    protected function retrieveConfiguration()
+    {
         /** @var Ini $iniReader */
         $iniReader = $this->pool->createClass(Ini::class)
             ->loadIniFile($this->pool->config->getPathToIniFile());
@@ -64,7 +102,7 @@ class Configuration extends AbstractCollector
             $group = $fallback[Fallback::SECTION];
             $config[$settingsName] = [];
             $config[$settingsName][static::SETTINGS_NAME] = $settingsName;
-            $config[$settingsName][static::SETTINGS_HELPTEXT] = LocalizationUtility::translate(
+            $config[$settingsName][static::SETTINGS_HELPTEXT] = static::translate(
                 $settingsName,
                 Bootstrap::EXT_KEY
             );
@@ -95,22 +133,6 @@ class Configuration extends AbstractCollector
             }
         }
 
-        // Adding the dropdown values.
-        $dropdown = [];
-        $dropdown['skins'] = [];
-        foreach ($this->pool->config->getSkinList() as $skin) {
-            $dropdown['skins'][$skin] = $skin;
-        }
-        $dropdown[Fallback::SETTING_DESTINATION] = [
-            Fallback::VALUE_BROWSER => LocalizationUtility::translate(Fallback::VALUE_BROWSER, Bootstrap::EXT_KEY),
-            Fallback::VALUE_FILE => LocalizationUtility::translate(Fallback::VALUE_FILE, Bootstrap::EXT_KEY),
-        ];
-        $dropdown['bool'] = [
-            Fallback::VALUE_TRUE => LocalizationUtility::translate(Fallback::VALUE_TRUE, Bootstrap::EXT_KEY),
-            Fallback::VALUE_FALSE => LocalizationUtility::translate(Fallback::VALUE_FALSE, Bootstrap::EXT_KEY),
-        ];
-
-        $view->assign('config', $config);
-        $view->assign('dropdown', $dropdown);
+        return $config;
     }
 }

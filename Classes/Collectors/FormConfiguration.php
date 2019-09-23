@@ -55,15 +55,15 @@ class FormConfiguration extends AbstractCollector
         }
 
         $dropdown = [
-            Fallback::RENDER_TYPE_INI_FULL => LocalizationUtility::translate(
+            Fallback::RENDER_TYPE_INI_FULL => static::translate(
                 Fallback::RENDER_TYPE_INI_FULL,
                 Bootstrap::EXT_KEY
             ),
-            Fallback::RENDER_TYPE_INI_DISPLAY => LocalizationUtility::translate(
+            Fallback::RENDER_TYPE_INI_DISPLAY => static::translate(
                 Fallback::RENDER_TYPE_INI_DISPLAY,
                 Bootstrap::EXT_KEY
             ),
-            Fallback::RENDER_TYPE_INI_NONE => LocalizationUtility::translate(
+            Fallback::RENDER_TYPE_INI_NONE => static::translate(
                 Fallback::RENDER_TYPE_INI_NONE,
                 Bootstrap::EXT_KEY
             )

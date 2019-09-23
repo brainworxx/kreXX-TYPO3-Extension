@@ -91,7 +91,7 @@ class AjaxController
 
         if ($this->hasAccess() === false) {
             $result->class  = 'error';
-            $result->text = LocalizationUtility::translate('accessDenied', Bootstrap::EXT_KEY);
+            $result->text = static::translate('accessDenied', Bootstrap::EXT_KEY);
         } else {
             Pool::createPool();
 
@@ -102,10 +102,10 @@ class AjaxController
 
             if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
                 $result->class  = 'success';
-                $result->text = LocalizationUtility::translate('fileDeleted', Bootstrap::EXT_KEY, [$id]);
+                $result->text = static::translate('fileDeleted', Bootstrap::EXT_KEY, [$id]);
             } else {
                 $result->class  = 'error';
-                $result->text = LocalizationUtility::translate('fileDeletedFail', Bootstrap::EXT_KEY, ['n/a']);
+                $result->text = static::translate('fileDeletedFail', Bootstrap::EXT_KEY, ['n/a']);
             }
         }
 

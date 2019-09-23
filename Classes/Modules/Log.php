@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Modules;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
+use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Psr\Http\Message\ServerRequestInterface;
@@ -62,6 +63,7 @@ class Log extends AbstractSubModule implements
     ContentProviderInterface,
     ResourceProviderInterface
 {
+    use LanguageTrait;
 
     const MESSAGE_SEVERITY_ERROR = 'error';
     const MESSAGE_SEVERITY_INFO = 'info';
@@ -84,7 +86,7 @@ class Log extends AbstractSubModule implements
      */
     public function getLabel(): string
     {
-        return LocalizationUtility::translate(static::TRANSLATION_PREFIX . 'mlang_tabs_tab');
+        return static::translate(static::TRANSLATION_PREFIX . 'mlang_tabs_tab');
     }
 
     /**
@@ -118,7 +120,7 @@ class Log extends AbstractSubModule implements
     {
         if ($this->hasAccess() === false) {
             return $this->renderMessage(
-                LocalizationUtility::translate(static::TRANSLATION_PREFIX . 'accessDenied'),
+                static::translate(static::TRANSLATION_PREFIX . 'accessDenied'),
                 static::MESSAGE_SEVERITY_ERROR
             );
         }
@@ -126,7 +128,7 @@ class Log extends AbstractSubModule implements
         $filelist = $data->getArrayCopy();
         if (empty($filelist['files'])) {
             return $this->retrieveKrexxMessages() . $this->renderMessage(
-                LocalizationUtility::translate(static::TRANSLATION_PREFIX . 'log.noresult'),
+                static::translate(static::TRANSLATION_PREFIX . 'log.noresult'),
                 static::MESSAGE_SEVERITY_INFO
             );
         }
@@ -221,7 +223,7 @@ class Log extends AbstractSubModule implements
 
         foreach (Krexx::$pool->messages->getKeys() as $message) {
             $renderedMessages .= $this->renderMessage(
-                LocalizationUtility::translate(
+                static::translate(
                     static::TRANSLATION_PREFIX . $message['key'],
                     Bootstrap::EXT_KEY,
                     $message['params']

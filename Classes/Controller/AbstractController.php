@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -53,6 +54,8 @@ use TYPO3\CMS\Install\Configuration\Context\LivePreset;
  */
 abstract class AbstractController extends ActionController
 {
+    use LanguageTrait;
+
     const MODULE_KEY = 'IncludekrexxKrexxConfiguration';
 
     /**
@@ -94,8 +97,8 @@ abstract class AbstractController extends ActionController
         if ($this->objectManager->get(LivePreset::class)->isActive()) {
             //Display a warning, if we are in Productive / Live settings.
             $this->addFlashMessage(
-                LocalizationUtility::translate('debugpreset.warning.message', Bootstrap::EXT_KEY),
-                LocalizationUtility::translate('debugpreset.warning.title', Bootstrap::EXT_KEY),
+                static::translate('debugpreset.warning.message', Bootstrap::EXT_KEY),
+                static::translate('debugpreset.warning.title', Bootstrap::EXT_KEY),
                 FlashMessage::WARNING
             );
         }
@@ -136,8 +139,8 @@ abstract class AbstractController extends ActionController
         foreach ($keys as $message) {
             // And translate them.
             $this->addFlashMessage(
-                LocalizationUtility::translate($message['key'], Bootstrap::EXT_KEY, $message['params']),
-                LocalizationUtility::translate('general.error.title', Bootstrap::EXT_KEY),
+                static::translate($message['key'], Bootstrap::EXT_KEY, $message['params']),
+                static::translate('general.error.title', Bootstrap::EXT_KEY),
                 FlashMessage::ERROR
             );
         }
