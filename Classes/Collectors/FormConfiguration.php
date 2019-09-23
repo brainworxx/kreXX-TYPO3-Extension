@@ -38,7 +38,6 @@ use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\From\Ini;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class FormConfiguration extends AbstractCollector
 {
@@ -54,20 +53,7 @@ class FormConfiguration extends AbstractCollector
             return;
         }
 
-        $dropdown = [
-            Fallback::RENDER_TYPE_INI_FULL => static::translate(
-                Fallback::RENDER_TYPE_INI_FULL,
-                Bootstrap::EXT_KEY
-            ),
-            Fallback::RENDER_TYPE_INI_DISPLAY => static::translate(
-                Fallback::RENDER_TYPE_INI_DISPLAY,
-                Bootstrap::EXT_KEY
-            ),
-            Fallback::RENDER_TYPE_INI_NONE => static::translate(
-                Fallback::RENDER_TYPE_INI_NONE,
-                Bootstrap::EXT_KEY
-            )
-        ];
+        $dropdown = $this->generateDropdown();
 
         /** @var Ini $iniReader */
         $iniReader = $this->pool->createClass(Ini::class)
@@ -99,6 +85,30 @@ class FormConfiguration extends AbstractCollector
         }
 
         $view->assign('formConfig', $config);
+    }
+
+    /**
+     * Generate the dropdown array.
+     *
+     * @return array
+     *   The dropdown array.
+     */
+    protected function generateDropdown()
+    {
+        return [
+            Fallback::RENDER_TYPE_INI_FULL => static::translate(
+                Fallback::RENDER_TYPE_INI_FULL,
+                Bootstrap::EXT_KEY
+            ),
+            Fallback::RENDER_TYPE_INI_DISPLAY => static::translate(
+                Fallback::RENDER_TYPE_INI_DISPLAY,
+                Bootstrap::EXT_KEY
+            ),
+            Fallback::RENDER_TYPE_INI_NONE => static::translate(
+                Fallback::RENDER_TYPE_INI_NONE,
+                Bootstrap::EXT_KEY
+            )
+        ];
     }
 
     /**
