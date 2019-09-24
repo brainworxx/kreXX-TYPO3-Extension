@@ -79,25 +79,6 @@ class Bootstrap
     const KREXX = 'krexx';
 
     /**
-     * The object manager.
-     *
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-     */
-    protected $objectManager;
-
-    /**
-     * "Inject" the object manager.
-     *
-     * The reflection cache may or may not be available when updating an
-     * extension. This means that injections may or may not work. Hence, we
-     * create the object manager here.
-     */
-    public function __construct()
-    {
-        $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-    }
-
-    /**
      * Batch for the bootstrapping.
      */
     public function run()
@@ -111,7 +92,7 @@ class Bootstrap
         }
 
         // Register and activate the TYPO3 plugin.
-        $t3configuration = $this->objectManager->get(T3configuration::class);
+        $t3configuration = GeneralUtility::makeInstance(T3configuration::class);
         Registration::register($t3configuration);
         Registration::activatePlugin(get_class($t3configuration));
         // Register our modules for the admin panel.
@@ -129,7 +110,7 @@ class Bootstrap
 
         // Register the fluid plugins.
         // We activate them later in the viewhelper.
-        Registration::register($this->objectManager->get(FluidConfiguration::class));
+        Registration::register(GeneralUtility::makeInstance(FluidConfiguration::class));
         // Register our debug-viewhelper globally, so people don't have to
         // do it inside the template. 'krexx' as a namespace should be unique enough.
         // Theoretically, this should be part of the fluid debugger plugin, but
@@ -142,10 +123,10 @@ class Bootstrap
             ];
         }
 
-        Registration::register($this->objectManager->get(FluidDataConfiguration::class));
+        Registration::register(GeneralUtility::makeInstance(FluidDataConfiguration::class));
 
         // Register the Aimoes Magic plugin.
-        $aimeosConfiguration = $this->objectManager->get(AimeosConfiguration::class);
+        $aimeosConfiguration = GeneralUtility::makeInstance(AimeosConfiguration::class);
         Registration::register($aimeosConfiguration);
 
         // Check if we have the Aimeos shop available.
@@ -172,7 +153,7 @@ class Bootstrap
     public function checkVersionNumber($version)
     {
         if ($version !== ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY)) {
-            $this->objectManager->get(CacheManager::class)
+            GeneralUtility::makeInstance(CacheManager::class)
                 ->flushCachesInGroup('system');
         }
 

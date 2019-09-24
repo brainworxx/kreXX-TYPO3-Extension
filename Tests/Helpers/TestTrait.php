@@ -38,6 +38,7 @@ use phpmock\phpunit\PHPMock;
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 Trait TestTrait
@@ -52,6 +53,26 @@ Trait TestTrait
         parent::tearDown();
 
         $this->setValueByReflection('packageManager', null, ExtensionManagementUtility::class);
+        // Reset the possible mocks in the general utility.
+        $this->setValueByReflection('finalClassNameCache', [], GeneralUtility::class);
+        $this->setValueByReflection('singletonInstances', [], GeneralUtility::class);
+    }
+
+    /**
+     * Inject a mock into the general utility.
+     *
+     * @param $className
+     * @param $mock
+     */
+    protected function injectIntoGeneralUtility($className, $mock)
+    {
+        $finalClassNameCache = $this->retrieveValueByReflection('finalClassNameCache', GeneralUtility::class);
+        $finalClassNameCache[$className] = $className;
+        $this->setValueByReflection('finalClassNameCache', $finalClassNameCache, GeneralUtility::class);
+
+        $singletonInstances = $this->retrieveValueByReflection('singletonInstances', GeneralUtility::class);
+        $singletonInstances[$className] = $mock;
+        $this->setValueByReflection('singletonInstances', $singletonInstances, GeneralUtility::class);
     }
 
     /**

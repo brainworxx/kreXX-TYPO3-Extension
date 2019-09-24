@@ -40,8 +40,6 @@ use Brainworxx\Includekrexx\Tests\Helpers\TestTrait;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Package\MetaData;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
 use Brainworxx\Includekrexx\Plugins\FluidDataViewer\Configuration as FluidDataConfiguration;
@@ -51,8 +49,6 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 class BootstrapTest extends UnitTestCase
 {
     use TestTrait;
-
-    const OBJECT_MANAGER = 'objectManager';
 
     /**
      * @var \Brainworxx\Includekrexx\Bootstrap\Bootstrap
@@ -64,19 +60,6 @@ class BootstrapTest extends UnitTestCase
         parent::setUp();
         $this->resetSingletonInstances = true;
         $this->bootstrap = new Bootstrap();
-    }
-
-    /**
-     * Test the dependency "injection" in the construct.
-     *
-     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::__construct
-     */
-    public function testConstruct()
-    {
-        $this->assertInstanceOf(
-            ObjectManagerInterface::class,
-            $this->retrieveValueByReflection(static::OBJECT_MANAGER, $this->bootstrap)
-        );
     }
 
     /**
@@ -100,10 +83,9 @@ class BootstrapTest extends UnitTestCase
             ->will($this->returnValue(false));
 
         // Should lead to an early return.
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->never())
-            ->method('get');
-        $this->setValueByReflection(static::OBJECT_MANAGER, $objectManagerMock, $this->bootstrap);
+        // Retrieving a standard class here would cause the test to fail.
+        $t3ConfigMock = new \StdClass();
+        $this->injectIntoGeneralUtility(T3configuration::class, $t3ConfigMock);
 
         // Since we as retrieving the extension path, we need to simulate the
         // existing of the includekrexx package.
@@ -119,10 +101,9 @@ class BootstrapTest extends UnitTestCase
      */
     public function testRunFail()
     {
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->never())
-            ->method('get');
-        $this->setValueByReflection(static::OBJECT_MANAGER, $objectManagerMock, $this->bootstrap);
+        // Retrieving a standard class here would cause the test to fail.
+        $t3ConfigMock = new \StdClass();
+        $this->injectIntoGeneralUtility(T3configuration::class, $t3ConfigMock);
 
         // We simulate a failed autoloading.
         // This normally happens during the update of the extension.
@@ -166,16 +147,10 @@ class BootstrapTest extends UnitTestCase
         $aimeosConfigMock->expects($this->once())
             ->method('exec');
 
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->exactly(4))
-            ->method('get')
-            ->will($this->returnValueMap([
-                [T3configuration::class, $t3ConfigMock],
-                [FluidConfiguration::class, $fluidConfigMock],
-                [FluidDataConfiguration::class, $fluidDataConfigMock],
-                [AimeosConfiguration::class, $aimeosConfigMock]
-            ]));
-        $this->setValueByReflection(static::OBJECT_MANAGER, $objectManagerMock, $this->bootstrap);
+        $this->injectIntoGeneralUtility(T3configuration::class, $t3ConfigMock);
+        $this->injectIntoGeneralUtility(FluidConfiguration::class, $fluidConfigMock);
+        $this->injectIntoGeneralUtility(FluidDataConfiguration::class, $fluidDataConfigMock);
+        $this->injectIntoGeneralUtility(AimeosConfiguration::class, $aimeosConfigMock);
 
         $this->bootstrap->run();
     }
@@ -194,16 +169,10 @@ class BootstrapTest extends UnitTestCase
         $fluidConfigMock = $this->createMock(FluidConfiguration::class);
         $fluidDataConfigMock = $this->createMock(FluidDataConfiguration::class);
         $aimeosConfigMock = $this->createMock(AimeosConfiguration::class);
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->exactly(4))
-            ->method('get')
-            ->will($this->returnValueMap([
-                [T3configuration::class, $t3ConfigMock],
-                [FluidConfiguration::class, $fluidConfigMock],
-                [FluidDataConfiguration::class, $fluidDataConfigMock],
-                [AimeosConfiguration::class, $aimeosConfigMock]
-            ]));
-        $this->setValueByReflection(static::OBJECT_MANAGER, $objectManagerMock, $this->bootstrap);
+        $this->injectIntoGeneralUtility(T3configuration::class, $t3ConfigMock);
+        $this->injectIntoGeneralUtility(FluidConfiguration::class, $fluidConfigMock);
+        $this->injectIntoGeneralUtility(FluidDataConfiguration::class, $fluidDataConfigMock);
+        $this->injectIntoGeneralUtility(AimeosConfiguration::class, $aimeosConfigMock);
 
         // You just have to love these large arrays inside the globals.
         $GLOBALS[$this->bootstrap::TYPO3_CONF_VARS][$this->bootstrap::EXTCONF]
@@ -231,14 +200,14 @@ class BootstrapTest extends UnitTestCase
      *
      * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::checkVersionNumber
      */
-    public function testCheckVersionNumber()
+    public function testCheckVersionNumberUpdate()
     {
         $metaMock = $this->createMock(MetaData::class);
-        $metaMock->expects($this->exactly(2))
+        $metaMock->expects($this->exactly(1))
             ->method('getVersion')
             ->will($this->returnValue('1.2.3'));
         $packageMock = $this->simulatePackage($this->bootstrap::EXT_KEY, 'any path');
-        $packageMock->expects($this->exactly(2))
+        $packageMock->expects($this->exactly(1))
             ->method('getPackageMetaData')
             ->will($this->returnValue($metaMock));
 
@@ -246,18 +215,35 @@ class BootstrapTest extends UnitTestCase
         $cacheManagerMock->expects($this->once())
             ->method('flushCachesInGroup')
             ->with('system');
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->exactly(1))
-            ->method('get')
-            ->with(CacheManager::class)
-            ->will($this->returnValue($cacheManagerMock));
-        $this->setValueByReflection(static::OBJECT_MANAGER, $objectManagerMock, $this->bootstrap);
+
+        $this->injectIntoGeneralUtility(CacheManager::class, $cacheManagerMock);
 
         $this->bootstrap->checkVersionNumber('abcd');
+    }
 
-        $objectManagerMock->expects($this->never())
-            ->method('get');
-        $this->setValueByReflection(static::OBJECT_MANAGER, $objectManagerMock, $this->bootstrap);
+    /**
+     * Test the clear cache, when getting the 'right' version number.
+     *
+     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::checkVersionNumber
+     */
+    public function testCheckVersionNumberNormal()
+    {
+        $metaMock = $this->createMock(MetaData::class);
+        $metaMock->expects($this->exactly(1))
+            ->method('getVersion')
+            ->will($this->returnValue('1.2.3'));
+        $packageMock = $this->simulatePackage($this->bootstrap::EXT_KEY, 'any path');
+        $packageMock->expects($this->exactly(1))
+            ->method('getPackageMetaData')
+            ->will($this->returnValue($metaMock));
+
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock->expects($this->never())
+            ->method('flushCachesInGroup')
+            ->with('system');
+
+        $this->injectIntoGeneralUtility(CacheManager::class, $cacheManagerMock);
+
         $this->bootstrap->checkVersionNumber('1.2.3');
     }
 }
