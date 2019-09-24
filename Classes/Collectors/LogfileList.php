@@ -34,6 +34,9 @@
 
 namespace Brainworxx\Includekrexx\Collectors;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder as BeUriBuilder;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use Throwable;
 use Exception;
@@ -70,11 +73,9 @@ class LogfileList extends AbstractCollector
             return $fileList;
         }
 
-        // 1. Get the log folder.
-        $dir = $this->pool->config->getLogDir();
+        // Get the log files anf sort them.
 
-        // 2. Get the file list and sort it.
-        $files = glob($dir . '*.Krexx.html');
+        $files = glob($this->pool->config->getLogDir() . '*.Krexx.html');
         if (!is_array($files)) {
             $files = [];
         }
@@ -83,37 +84,49 @@ class LogfileList extends AbstractCollector
             return filemtime($b) - filemtime($a);
         });
 
-        // 3. Get the file info.
+        return $this->retrieveFileInfo($files);
+    }
+
+    /**
+     * Get all the log file infos together.
+     *
+     * @param array $files
+     *   The list of files to process.
+     *
+     * @return array
+     *   The file info in a neat array.
+     */
+    protected function retrieveFileInfo($files)
+    {
+        if (version_compare(TYPO3_version, '9.0', '>=')) {
+            $uriBuilder = $this->objectManager->get(UriBuilder::class);
+        } else {
+            $uriBuilder = $this->objectManager->get(BeUriBuilder::class);
+        }
+
+        $fileList = [];
         foreach ($files as $file) {
-            try {
-                $fileinfo = [];
-                // Getting the basic info.
-                $fileinfo['name'] = basename($file);
-                $fileinfo['size'] = $this->fileSizeConvert(filesize($file));
-                $fileinfo['time'] = date("d.m.y H:i:s", filemtime($file));
-                $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
-                $fileinfo['dispatcher'] = $this->getRoute($fileinfo['id']);
+            $fileinfo = [];
+            // Getting the basic info.
+            $fileinfo['name'] = basename($file);
+            $fileinfo['size'] = $this->fileSizeConvert(filesize($file));
+            $fileinfo['time'] = date("d.m.y H:i:s", filemtime($file));
+            $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
+            $fileinfo['dispatcher'] = $this->getRoute($fileinfo['id'], $uriBuilder);
 
-                // Parsing a potentially 80MB file for it's content is not a good idea.
-                // That is why the kreXX lib provides some meta data. We will open
-                // this file and add it's content to the template.
-                if (is_readable($file . '.json')) {
-                    $fileinfo['meta'] = (array) json_decode(file_get_contents($file . '.json'), true);
-
-                    foreach ($fileinfo['meta'] as &$meta) {
-                        $meta['filename'] = basename($meta['file']);
-                        // Unescape the stuff from the json, to prevent double escaping.
-                        $meta['varname'] = htmlspecialchars_decode($meta['varname']);
-                    }
+            // Parsing a potentially 80MB file for it's content is not a good idea.
+            // That is why the kreXX lib provides some meta data. We will open
+            // this file and add it's content to the template.
+            if (is_readable($file . '.json')) {
+                $fileinfo['meta'] = (array)json_decode(file_get_contents($file . '.json'), true);
+                foreach ($fileinfo['meta'] as &$meta) {
+                    $meta['filename'] = basename($meta['file']);
+                    // Unescape the stuff from the json, to prevent double escaping.
+                    $meta['varname'] = htmlspecialchars_decode($meta['varname']);
                 }
-
-                $fileList[] = $fileinfo;
-            } catch (Throwable $e) {
-                // We simply skip this one on error.
-                continue;
-            } catch (Exception $e) {
-                continue;
             }
+
+            $fileList[] = $fileinfo;
         }
 
         return $fileList;
@@ -168,5 +181,44 @@ class LogfileList extends AbstractCollector
             }
         }
         return $result;
+    }
+
+    /**
+     * Depending on the TYPO3 version, we must use different classes to get a
+     * functioning link to the backend dispatcher.
+     *
+     * @param string $id
+     *   The id of the file we want to get the url from.
+     * @param UriBuilder|BeUriBuilder
+     *  The concrete uri builder, depending on the TYPO3 version.
+     *
+     * @return string
+     *   The URL
+     */
+    protected function getRoute($id, $uriBuilder)
+    {
+        if ($uriBuilder instanceof UriBuilder) {
+            /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
+            return (string)$uriBuilder->buildUriFromRoute(
+                'tools_IncludekrexxKrexxConfiguration_dispatch',
+                [
+                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[id]' => $id,
+                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[action]' => 'dispatch',
+                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[controller]' => 'Index'
+                ]
+            );
+        } else {
+            /** @var BeUriBuilder $uriBuilder */
+            return $uriBuilder
+                ->reset()
+                ->setArguments(['M' => static::PLUGIN_NAME])
+                ->uriFor(
+                    'dispatch',
+                    ['id' => $id],
+                    'Index',
+                    Bootstrap::EXT_KEY,
+                    static::PLUGIN_NAME
+                );
+        }
     }
 }

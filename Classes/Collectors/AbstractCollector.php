@@ -34,12 +34,10 @@
 
 namespace Brainworxx\Includekrexx\Collectors;
 
-use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
@@ -126,46 +124,6 @@ abstract class AbstractCollector
             isset($user->uc[static::MODULE_DATA][IndexController::MODULE_KEY])
         ) {
             $this->userUc = $user->uc[static::MODULE_DATA][IndexController::MODULE_KEY];
-        }
-    }
-
-    /**
-     * Depending on the TYPO3 version, we must use different classes to get a
-     * functioning link to the backend dispatcher.
-     *
-     * @param string $id
-     *   The id of the file we want to get the url from.
-     *
-     * @return string
-     *   The URL
-     */
-    protected function getRoute($id)
-    {
-        if (version_compare(TYPO3_version, '9.0', '>=')) {
-            /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
-            $uriBuilder = $this->objectManager->get(UriBuilder::class);
-
-            return (string)$uriBuilder->buildUriFromRoute(
-                'tools_IncludekrexxKrexxConfiguration_dispatch',
-                [
-                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[id]' => $id,
-                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[action]' => 'dispatch',
-                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[controller]' => 'Index'
-                ]
-            );
-        } else {
-            /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
-            $uriBuilder = $this->objectManager->get(\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class);
-            return $uriBuilder
-                ->reset()
-                ->setArguments(['M' => static::PLUGIN_NAME])
-                ->uriFor(
-                    'dispatch',
-                    ['id' => $id],
-                    'Index',
-                    Bootstrap::EXT_KEY,
-                    static::PLUGIN_NAME
-                );
         }
     }
 
