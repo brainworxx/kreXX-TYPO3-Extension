@@ -35,15 +35,19 @@
 namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
+use TYPO3\CMS\Core\Http\NullResponse;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Class Tx_Includekrexx_Controller_IndexController
@@ -74,6 +78,11 @@ abstract class AbstractController extends ActionController
      * @var \Brainworxx\Includekrexx\Collectors\FormConfiguration
      */
     protected $formConfiguration;
+
+    /**
+     * @var \Brainworxx\Includekrexx\Domain\Model\Settings
+     */
+    protected $settingsModel;
 
     /**
      * Set the pool and do the parent constructor.
@@ -122,6 +131,16 @@ abstract class AbstractController extends ActionController
     public function injectFormConfiguration(FormConfiguration $formConfiguration)
     {
         $this->formConfiguration = $formConfiguration;
+    }
+
+    /**
+     * Inject the settings model.
+     *
+     * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
+     */
+    protected function injectSettings(Settings $settings)
+    {
+        $this->settingsModel = $settings;
     }
 
     /**
@@ -179,5 +198,26 @@ abstract class AbstractController extends ActionController
     {
         return isset($GLOBALS['BE_USER']) &&
             $GLOBALS['BE_USER']->check('modules', 'tools_IncludekrexxKrexxConfiguration');
+    }
+
+    /**
+     * Create the response, depending on the calling context.
+     *
+     * @return ResponseInterface|NullResponse
+     */
+    protected function createResponse()
+    {
+        if (empty($this->objectManager)) {
+            // This is either 10.0 or 9.5 with frontend dispatching.
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            $response = $objectManager->get(NullResponse::class);
+        } else {
+            // 8.7 or 7.6 backend dispatching.
+            // And yes, we do need the shutdown here.
+            $response = $this->objectManager->get(ResponseInterface::class);
+            $response->shutdown();
+        }
+
+        return $response;
     }
 }

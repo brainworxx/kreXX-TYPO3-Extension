@@ -36,14 +36,9 @@ namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
-use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
-use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class IndexController extends AbstractController
 {
@@ -71,7 +66,7 @@ class IndexController extends AbstractController
 
         $this->configuration->assignData($this->view);
         $this->formConfiguration->assignData($this->view);
-        $this->view->assign('settings', $this->objectManager->get(Settings::class));
+        $this->view->assign('settings', $this->settingsModel);
 
         return null;
     }
@@ -151,26 +146,5 @@ class IndexController extends AbstractController
             $this->dispatchFile($file);
         }
         return $this->createResponse();
-    }
-
-    /**
-     * Create the response, depending on the calling context.
-     *
-     * @return ResponseInterface|NullResponse
-     */
-    protected function createResponse()
-    {
-        if (empty($this->objectManager)) {
-            // This is either 10.0 or 9.5 with frontend dispatching.
-            $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $response = $this->objectManager->get(NullResponse::class);
-        } else {
-            // 8.7 or 7.6 backend dispatching.
-            // And yes, we do need the shutdown here.
-            $response = $this->objectManager->get(ResponseInterface::class);
-            $response->shutdown();
-        }
-
-        return $response;
     }
 }
