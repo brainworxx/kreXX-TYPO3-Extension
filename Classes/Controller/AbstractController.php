@@ -85,6 +85,11 @@ abstract class AbstractController extends ActionController
     protected $settingsModel;
 
     /**
+     * @var LivePreset
+     */
+    protected $livePreset;
+
+    /**
      * Set the pool and do the parent constructor.
      */
     public function __construct()
@@ -103,7 +108,7 @@ abstract class AbstractController extends ActionController
      */
     protected function checkProductiveSetting()
     {
-        if ($this->objectManager->get(LivePreset::class)->isActive()) {
+        if ($this->livePreset->isActive()) {
             //Display a warning, if we are in Productive / Live settings.
             $this->addFlashMessage(
                 static::translate('debugpreset.warning.message', Bootstrap::EXT_KEY),
@@ -111,6 +116,16 @@ abstract class AbstractController extends ActionController
                 FlashMessage::WARNING
             );
         }
+    }
+
+    /**
+     * Inject the live preset.
+     *
+     * @param \TYPO3\CMS\Install\Configuration\Context\LivePreset $livePreset
+     */
+    public function injectLivePreset(LivePreset $livePreset)
+    {
+        $this->livePreset = $livePreset;
     }
 
     /**
@@ -138,7 +153,7 @@ abstract class AbstractController extends ActionController
      *
      * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
      */
-    protected function injectSettings(Settings $settings)
+    public function injectSettings(Settings $settings)
     {
         $this->settingsModel = $settings;
     }
