@@ -160,13 +160,9 @@ abstract class AbstractController extends ActionController
 
     /**
      * Move all messages from kreXX to the flash messages.
-     *
-     * @return array
-     *   The translated messages.
      */
     protected function retrieveKrexxMessages()
     {
-        $result = [];
         // Get the keys and the args.
         $keys = $this->pool->messages->getKeys();
 
@@ -178,8 +174,6 @@ abstract class AbstractController extends ActionController
                 FlashMessage::ERROR
             );
         }
-
-        return $result;
     }
 
     /**
