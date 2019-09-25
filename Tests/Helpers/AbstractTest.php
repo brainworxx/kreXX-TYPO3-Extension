@@ -34,16 +34,31 @@
 
 namespace Brainworxx\Includekrexx\Tests\Helpers;
 
+use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use phpmock\phpunit\PHPMock;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 
-Trait TestTrait
+abstract class AbstractTest extends UnitTestCase
 {
     use PHPMock;
+
+    /**
+     * Make sure, that we always havbe a working pool.
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->resetSingletonInstances = true;
+        Pool::createPool();
+    }
+
 
     /**
      * {@inheritDoc}
@@ -56,6 +71,11 @@ Trait TestTrait
         // Reset the possible mocks in the general utility.
         $this->setValueByReflection('finalClassNameCache', [], GeneralUtility::class);
         $this->setValueByReflection('singletonInstances', [], GeneralUtility::class);
+
+        $this->setValueByReflection('cli', null, Environment::class);
+
+        // Reset the pool, just in case.
+        Krexx::$pool = null;
     }
 
     /**
