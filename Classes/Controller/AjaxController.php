@@ -95,7 +95,7 @@ class AjaxController
         if ($response === null) {
             $response = GeneralUtility::makeInstance(Response::class);
         }
-        
+
         $result = new stdClass();
 
         if ($this->hasAccess() === false) {
@@ -135,7 +135,7 @@ class AjaxController
      */
     protected function delete($file)
     {
-        if (is_writeable(dirname(($file))) && file_exists($file)) {
+        if (is_writable(dirname(($file))) && file_exists($file)) {
             // Away with you!
             unlink($file);
             return true;
