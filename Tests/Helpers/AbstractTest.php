@@ -34,16 +34,20 @@
 
 namespace Brainworxx\Includekrexx\Tests\Helpers;
 
+use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use phpmock\phpunit\PHPMock;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Controller\AbstractController;
+use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
-
+use StdClass;
 
 abstract class AbstractTest extends UnitTestCase
 {
@@ -180,5 +184,51 @@ abstract class AbstractTest extends UnitTestCase
         }
 
         return null;
+    }
+
+    /**
+     * @var FlashMessageQueue
+     */
+    protected $flashMessageQueue;
+
+    /**
+     * Short circuiting the flash messages.
+     *
+     * @param \TYPO3\CMS\Extbase\Mvc\Controller\AbstractController $controller
+     */
+    protected function initFlashMessages(AbstractController $controller)
+    {
+        $this->flashMessageQueue = new FlashMessageQueue();
+
+        $controllerContextMock = $this->createMock(ControllerContext::class);
+        $controllerContextMock->expects($this->any())
+            ->method('getFlashMessageQueue')
+            ->will($this->returnValue($this->flashMessageQueue));
+        $this->setValueByReflection('controllerContext', $controllerContextMock, $controller);
+    }
+
+    /**
+     * Mock a backend user and inject it.
+     */
+    protected function mockBeUser()
+    {
+        $userMock = $this->createMock(BackendUserAuthentication::class);
+        $userMock->expects($this->once())
+            ->method('check')
+            ->with('modules', AbstractCollector::PLUGIN_NAME)
+            ->will($this->returnValue(true));
+
+        $GLOBALS['BE_USER'] = $userMock;
+    }
+
+    /**
+     * The tings you do, to have a simple redirect . . .
+     *
+     * @param \TYPO3\CMS\Extbase\Mvc\Controller\AbstractController $controller
+     */
+    protected function prepareRedirect(AbstractController $controller)
+    {
+        $request = new StdClass();
+        $this->setValueByReflection('request', $request, $controller);
     }
 }

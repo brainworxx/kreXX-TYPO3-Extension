@@ -34,77 +34,24 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Controller;
 
-use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Includekrexx\Tests\Helpers\FlashMessageQueue;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use StdClass;
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Http\ServerRequest;
-use TYPO3\CMS\Extbase\Mvc\Controller\AbstractController;
-use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class IndexControllerTest extends AbstractTest
 {
-
-    /**
-     * @var FlashMessageQueue
-     */
-    protected $flashMessageQueue;
-
-    /**
-     * Short circuiting the flash messages.
-     *
-     * @param \TYPO3\CMS\Extbase\Mvc\Controller\AbstractController $controller
-     */
-    protected function initFlashMessages(AbstractController $controller)
-    {
-        $this->flashMessageQueue = new FlashMessageQueue();
-
-        $controllerContextMock = $this->createMock(ControllerContext::class);
-        $controllerContextMock->expects($this->any())
-            ->method('getFlashMessageQueue')
-            ->will($this->returnValue($this->flashMessageQueue));
-        $this->setValueByReflection('controllerContext', $controllerContextMock, $controller);
-    }
-
-    /**
-     * Mock a backend user and inject it.
-     */
-    protected function mockBeUser()
-    {
-        $userMock = $this->createMock(BackendUserAuthentication::class);
-        $userMock->expects($this->once())
-            ->method('check')
-            ->with('modules', AbstractCollector::PLUGIN_NAME)
-            ->will($this->returnValue(true));
-
-        $GLOBALS['BE_USER'] = $userMock;
-    }
-
-    /**
-     * The tings you do, to have a simple redirect . . .
-     *
-     * @param \TYPO3\CMS\Extbase\Mvc\Controller\AbstractController $controller
-     */
-    protected function prepareRedirect(AbstractController $controller)
-    {
-        $request = new StdClass();
-        $this->setValueByReflection('request', $request, $controller);
-    }
-
     /**
      * Test the index action, without access.
      *
