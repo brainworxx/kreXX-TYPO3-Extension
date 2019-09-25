@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
+use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Http\Response;
@@ -46,6 +47,8 @@ use stdClass;
 
 class AjaxController
 {
+    use LanguageTrait;
+
     /**
      * List the logfiles with their corresponding meta data.
      *
@@ -76,7 +79,7 @@ class AjaxController
     /**
      * Deletes a logfile.
      *
-     * @param \TYPO3\CMS\Core\Http\ServerRequest $arg1
+     * @param \TYPO3\CMS\Core\Http\ServerRequest $serverRequest
      *   The current server request.
      * @param \TYPO3\CMS\Core\Http\Response $response
      *   The prepared response object.
@@ -84,7 +87,7 @@ class AjaxController
      * @return \TYPO3\CMS\Core\Http\Response
      *   The response with the json string.
      */
-    public function deleteAction(ServerRequest $arg1, Response $response)
+    public function deleteAction(ServerRequest $serverRequest, Response $response)
     {
         $result = new stdClass();
 
@@ -95,7 +98,7 @@ class AjaxController
             Pool::createPool();
 
             // No directory traversal for you!
-            $id = preg_replace('/[^0-9]/', '', GeneralUtility::_GET('fileid'));
+            $id = preg_replace('/[^0-9]/', '', $serverRequest->getQueryParams()['fileid']);
             // Directly add the delete result return value.
             $file = Krexx::$pool->config->getLogDir() . $id . '.Krexx';
 
