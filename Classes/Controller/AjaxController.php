@@ -54,8 +54,8 @@ class AjaxController
      *
      * @param \TYPO3\CMS\Core\Http\ServerRequest $serverRequest
      *   The current server request.
-     * @param \TYPO3\CMS\Core\Http\Response|null
-     *   The prepared response object. Since 10.0, we need to create thjis one
+     * @param \TYPO3\CMS\Core\Http\Response|null $response
+     *   The prepared response object. Since 10.0, we need to create this one
      *   by ourself.
      *
      * @return \TYPO3\CMS\Core\Http\Response
@@ -67,6 +67,8 @@ class AjaxController
             $response = GeneralUtility::makeInstance(Response::class);
         }
 
+        // There is already an accesscheck in the LogfileList.
+        // We will not check twice.
         $fileList = GeneralUtility::makeInstance(ObjectManager::class)
             ->get(LogfileList::class)
             ->retrieveFileList();
