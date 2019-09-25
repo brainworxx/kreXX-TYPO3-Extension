@@ -127,8 +127,7 @@ class IndexController extends AbstractController
     {
         // And I was so happy to get rid of the 4.5 compatibility nightmare.
         if ($this->request === null) {
-            $params = $serverRequest->getQueryParams();
-            $rawId = $params['tx_includekrexx_tools_includekrexxkrexxconfiguration']['id'];
+            $rawId = $serverRequest->getQueryParams()['tx_includekrexx_tools_includekrexxkrexxconfiguration']['id'];
         } else {
             try {
                 $rawId = $this->request->getArgument('id');
