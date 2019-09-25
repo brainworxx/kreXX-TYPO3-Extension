@@ -114,7 +114,7 @@ class LogfileListTest extends AbstractTest
             [
                 'name' => '123456.Krexx.html',
                 'size' => '390 B',
-                'time' => '01.01.70 01:01:44',
+                'time' => date("d.m.y H:i:s", 104),
                 'id' => '123456',
                 'dispatcher' => 'another backend url',
                 'meta' => [
@@ -131,7 +131,7 @@ class LogfileListTest extends AbstractTest
             [
                 'name' => '123457.Krexx.html',
                 'size' => '316 B',
-                'time' => '01.01.70 01:01:45',
+                'time' => date("d.m.y H:i:s", 105),
                 'id' => '123457',
                 'dispatcher' => 'another backend url',
                 'meta' => [
@@ -148,7 +148,7 @@ class LogfileListTest extends AbstractTest
             [
                 'name' => '123458.Krexx.html',
                 'size' => '205 B',
-                'time' => '01.01.70 01:01:46',
+                'time' => date("d.m.y H:i:s", 106),
                 'id' => '123458',
                 'dispatcher' => 'another backend url'
             ]
