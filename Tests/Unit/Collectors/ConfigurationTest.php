@@ -34,18 +34,13 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
-use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\Configuration;
-use Brainworxx\Includekrexx\Controller\IndexController;
-use Brainworxx\Includekrexx\Tests\Helpers\TestTrait;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class ConfigurationTest extends UnitTestCase
+class ConfigurationTest extends AbstractTest
 {
-    use TestTrait;
-
     /**
      * The the assigning of data to the view.
      *

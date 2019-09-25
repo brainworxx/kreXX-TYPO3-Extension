@@ -38,15 +38,12 @@ use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
-use Brainworxx\Includekrexx\Tests\Helpers\TestTrait;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class AbstractControllerTest extends UnitTestCase
+class AbstractControllerTest extends AbstractTest
 {
-    use TestTrait;
-
     /**
      * Test the creation of the pool and its assigning to the class.
      *

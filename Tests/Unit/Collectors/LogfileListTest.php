@@ -35,16 +35,13 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\LogfileList;
-use Brainworxx\Includekrexx\Tests\Helpers\TestTrait;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class LogfileListTest extends UnitTestCase
+class LogfileListTest extends AbstractTest
 {
-    use TestTrait;
-
     /**
      * Test the retrieval of logfile infos.
      *
