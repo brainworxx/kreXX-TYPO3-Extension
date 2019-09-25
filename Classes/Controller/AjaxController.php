@@ -82,13 +82,18 @@ class AjaxController
      * @param \TYPO3\CMS\Core\Http\ServerRequest $serverRequest
      *   The current server request.
      * @param \TYPO3\CMS\Core\Http\Response $response
-     *   The prepared response object.
+     *   The prepared response object. Since 10.0, we need to create this one
+     *   by ourself.
      *
      * @return \TYPO3\CMS\Core\Http\Response
      *   The response with the json string.
      */
-    public function deleteAction(ServerRequest $serverRequest, Response $response)
+    public function deleteAction(ServerRequest $serverRequest, Response $response = null)
     {
+        if ($response === null) {
+            $response = GeneralUtility::makeInstance(Response::class);
+        }
+        
         $result = new stdClass();
 
         if ($this->hasAccess() === false) {
