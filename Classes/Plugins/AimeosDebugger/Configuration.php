@@ -41,6 +41,11 @@ use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Methods;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods as AnalyseDebugMethods;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods as AnalyseMethods;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods as IterateThroughMethods;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -50,8 +55,6 @@ class Configuration implements PluginConfigInterface
 {
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
     public function getName()
     {
@@ -61,7 +64,6 @@ class Configuration implements PluginConfigInterface
     /**
      * {@inheritdoc}
      *
-     * @return string
      */
     public function getVersion()
     {
@@ -77,38 +79,38 @@ class Configuration implements PluginConfigInterface
     {
         // Resolving the __get().
         Registration::registerEvent(
-            'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::callMe::start',
+            PublicProperties::class . '::callMe::start',
             Properties::class
         );
 
         // Resolving the getter that get their values from an private array.
         Registration::registerEvent(
-            'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::retrievePropertyValue::resolving',
+            ThroughGetter::class . '::retrievePropertyValue::resolving',
             Getter::class
         );
 
         // Resolving the magical class methods of the decorator pattern.
         Registration::registerEvent(
-            'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start',
+            AnalyseMethods::class . '::callMe::start',
             Methods::class
         );
 
         // Resolving the magical factory for the view helpers (not to be confused
         // with fluid viewhelpers).
         Registration::registerEvent(
-            'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\Methods::callMe::start',
+            AnalyseMethods::class . '::callMe::start',
             ViewFactory::class
         );
 
         // Replacing the magical factory name in the method analysis.
         Registration::registerEvent(
-            'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods::callMe::end',
+            IterateThroughMethods::class . '::callMe::end',
             ThroughMethods::class
         );
 
         // Adding additional debug methods.
         Registration::registerEvent(
-            'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\DebugMethods::callMe::start',
+            AnalyseDebugMethods::class . '::callMe::start',
             DebugMethods::class
         );
 
