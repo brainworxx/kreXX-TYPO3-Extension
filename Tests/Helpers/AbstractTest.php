@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Helpers;
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 use phpmock\phpunit\PHPMock;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Core\Environment;
@@ -80,6 +81,18 @@ abstract class AbstractTest extends UnitTestCase
 
         // Reset the pool, just in case.
         Krexx::$pool = null;
+
+        // Reset the registered plugins.
+        $this->setValueByReflection('logFolder', '', Registration::class);
+        $this->setValueByReflection('chunkFolder', '', Registration::class);
+        $this->setValueByReflection('configFile', '', Registration::class);
+        $this->setValueByReflection('blacklistDebugMethods', [], Registration::class);
+        $this->setValueByReflection('blacklistDebugClass', [], Registration::class);
+        $this->setValueByReflection('additionalHelpFiles', [], Registration::class);
+        $this->setValueByReflection('eventList', [], Registration::class);
+        $this->setValueByReflection('rewriteList', [], Registration::class);
+        $this->setValueByReflection('additionalSkinList', [], Registration::class);
+        $this->setValueByReflection('plugins', [], Registration::class);
     }
 
     /**
