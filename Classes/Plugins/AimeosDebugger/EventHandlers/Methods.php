@@ -148,7 +148,7 @@ class Methods implements EventHandlerInterface, ConstInterface
             // Get all reflection methods together, from all the receivers.
             // The receivers in front overwrite the methods from the receivers
             // in the back.
-            $methods = array_merge($this->retreivePublicMethods($ref), $methods);
+            $methods = array_merge($this->retrievePublicMethods($ref), $methods);
         }
 
         if (empty($methods) === false) {
@@ -230,7 +230,7 @@ class Methods implements EventHandlerInterface, ConstInterface
         } catch (ReflectionException $e) {
             return false;
         }
-        
+
         $source = $this->pool->fileService->readFile(
             $methodRef->getFileName(),
             $methodRef->getStartLine(),
@@ -292,7 +292,7 @@ class Methods implements EventHandlerInterface, ConstInterface
      * @return array
      *   Name based array with the methods names.
      */
-    protected function retreivePublicMethods(ReflectionClass $ref)
+    protected function retrievePublicMethods(ReflectionClass $ref)
     {
         $methods = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
         $result = [];
