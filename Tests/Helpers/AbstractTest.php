@@ -213,11 +213,12 @@ abstract class AbstractTest extends UnitTestCase
     protected function mockBeUser()
     {
         $userMock = $this->createMock(BackendUserAuthentication::class);
-        $userMock->expects($this->once())
+        $userMock->expects($this->any())
             ->method('check')
             ->with('modules', AbstractCollector::PLUGIN_NAME)
             ->will($this->returnValue(true));
 
+        $userMock->uc = [];
         $GLOBALS['BE_USER'] = $userMock;
     }
 

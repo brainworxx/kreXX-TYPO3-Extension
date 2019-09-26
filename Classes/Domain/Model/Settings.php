@@ -252,6 +252,11 @@ class Settings
     protected $factory;
 
     /**
+     * @var string
+     */
+    protected $formdevHandle;
+
+    /**
      * @param string $analysePrivate
      */
     public function setAnalysePrivate($analysePrivate)
