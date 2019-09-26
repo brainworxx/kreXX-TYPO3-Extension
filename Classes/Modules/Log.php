@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Modules;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
@@ -76,7 +77,7 @@ class Log extends AbstractSubModule implements
      */
     public function getIdentifier(): string
     {
-        return 'krexx';
+        return Bootstrap::KREXX;
     }
 
     /**
@@ -176,7 +177,7 @@ class Log extends AbstractSubModule implements
     protected function hasAccess()
     {
         return isset($GLOBALS['BE_USER']) &&
-            $GLOBALS['BE_USER']->check('modules', 'tools_IncludekrexxKrexxConfiguration');
+            $GLOBALS['BE_USER']->check('modules', AbstractCollector::PLUGIN_NAME);
     }
 
     /**

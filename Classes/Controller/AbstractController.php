@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
@@ -206,7 +207,7 @@ abstract class AbstractController extends ActionController
     protected function hasAccess()
     {
         return isset($GLOBALS['BE_USER']) &&
-            $GLOBALS['BE_USER']->check('modules', 'tools_IncludekrexxKrexxConfiguration');
+            $GLOBALS['BE_USER']->check('modules', AbstractCollector::PLUGIN_NAME);
     }
 
     /**
