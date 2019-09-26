@@ -127,6 +127,8 @@ class Log extends AbstractSubModule implements
         }
 
         $filelist = $data->getArrayCopy();
+
+        // Handling an empty log file list.
         if (empty($filelist['files'])) {
             return $this->retrieveKrexxMessages() . $this->renderMessage(
                 static::translate(static::TRANSLATION_PREFIX . 'log.noresult'),
@@ -147,17 +149,13 @@ class Log extends AbstractSubModule implements
     }
 
     /**
-     * Returns a string array with css files that will be rendered after the module
-     * Example: return ['EXT:adminpanel/Resources/Public/JavaScript/Modules/Edit.css'];
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function getCssFiles(): array
     {
-        return [
-            'EXT:includekrexx/Resources/Public/Css/Adminpanel.css'
-        ];
+        return ['EXT:includekrexx/Resources/Public/Css/Adminpanel.css'];
     }
+
     /**
      * No JS so far.
      *
