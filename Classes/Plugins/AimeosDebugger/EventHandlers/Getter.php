@@ -81,6 +81,17 @@ class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterf
     protected $pool;
 
     /**
+     * The names of the internal storages if Aimeos items.
+     *
+     * @var array
+     */
+    protected $aimeosDataStorages = [
+        AimeosConstInterface::AIMEOS_B_DATA,
+        AimeosConstInterface::AIMEOS_DATA,
+        AimeosConstInterface::AIMEOS_VALUES
+    ];
+
+    /**
      * Inject the pool.
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
@@ -121,7 +132,7 @@ class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterf
         // 'getCustomerId' should be 'some.key.customerid'
         /** @var \ReflectionMethod $reflectionMethod */
         $reflectionMethod = $params[static::PARAM_ADDITIONAL]['refMethod'];
-        $possibleKey = strtolower(substr($reflectionMethod->name, 3));
+        $possibleKey = $this->retrievePossibleKey($reflectionMethod->name);
 
         $values = $this->retrieveValueArray($params, $reflectionMethod);
 
@@ -159,6 +170,29 @@ class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterf
     }
 
     /**
+     * Retrieve the possible key of the return value from the getter name.
+     *
+     * @param string $methodName
+     *   The name og the getter method.
+     *
+     * @return string
+     *   The possible key.
+     */
+    protected function retrievePossibleKey($methodName)
+    {
+        $possibleKey = strtolower(substr($methodName, 3));
+
+        // Not all stored data keys can be derived directly from the getter name.
+        if ($possibleKey === 'timemodified') {
+            $possibleKey = 'mtime';
+        } elseif ($possibleKey === 'timecreated') {
+            $possibleKey = 'ctime';
+        }
+
+        return $possibleKey;
+    }
+
+    /**
      * Retrieve the data array from the class.
      *
      * @param array $params
@@ -179,45 +213,19 @@ class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterf
         $reflectionClass = $reflectionMethod->getDeclaringClass();
         $data = $params[static::PARAM_REF]->getData();
 
-        if ($reflectionClass->hasProperty(static::AIMEOS_B_DATA)) {
-            try {
-                $reflectionProperty = $reflectionClass->getProperty(static::AIMEOS_B_DATA);
-                $reflectionProperty->setAccessible(true);
-                $bdata = $reflectionProperty->getValue($data);
-                if (is_array($bdata)) {
-                    $result = $bdata;
+        foreach ($this->aimeosDataStorages as $propertyName) {
+            if ($reflectionClass->hasProperty($propertyName)) {
+                try {
+                    $reflectionProperty = $reflectionClass->getProperty($propertyName);
+                    $reflectionProperty->setAccessible(true);
+                    $value = $reflectionProperty->getValue($data);
+                    if (is_array($value)) {
+                        $result = array_merge($result, $value);
+                    }
+                } catch (ReflectionException $e) {
+                    // We ignore this one.
+                    // Do nothing.
                 }
-            } catch (ReflectionException $e) {
-                // We ignore this one.
-                // Do nothing.
-            }
-        }
-
-        if ($reflectionClass->hasProperty(static::AIMEOS_DATA)) {
-            try {
-                $reflectionProperty = $reflectionClass->getProperty(static::AIMEOS_DATA);
-                $reflectionProperty->setAccessible(true);
-                $data = $reflectionProperty->getValue($data);
-                if (is_array($data)) {
-                    $result = array_merge($result, $data);
-                }
-            } catch (ReflectionException $e) {
-                // We ignore this one.
-                // Do nothing.
-            }
-        }
-
-        if ($reflectionClass->hasProperty(static::AIMEOS_VALUES)) {
-            try {
-                $reflectionProperty = $reflectionClass->getProperty(static::AIMEOS_VALUES);
-                $reflectionProperty->setAccessible(true);
-                $values = $reflectionProperty->getValue($data);
-                if (is_array($values)) {
-                    $result = array_merge($result, $values);
-                }
-            } catch (ReflectionException $e) {
-                // We ignore this one.
-                // Do nothing.
             }
         }
 
