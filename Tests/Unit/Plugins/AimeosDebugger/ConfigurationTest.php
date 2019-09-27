@@ -38,7 +38,7 @@ use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter;
-use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Methods;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ThroughMethods;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
@@ -110,7 +110,7 @@ class ConfigurationTest extends AbstractTest
                 Getter::class => Getter::class
             ],
             'Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods::callMe::start' => [
-                Methods::class => Methods::class,
+                Decorators::class => Decorators::class,
                 ViewFactory::class => ViewFactory::class
             ],
             'Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe::end' => [

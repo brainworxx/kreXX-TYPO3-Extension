@@ -55,6 +55,7 @@ use Aimeos\MW\View\Iface as ViewIface;
 use Aimeos\MShop\Service\Provider\Base as ProviderBase;
 use Aimeos\MW\Common\Manager\Base as ManagerBase;
 use Aimeos\Controller\Jobs\Common\Decorator\Base as DecoratorBase;
+use Aimeos\Controller\Jobs\Base as JobsBase;
 use ReflectionException;
 
 /**
@@ -62,7 +63,7 @@ use ReflectionException;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class Methods implements EventHandlerInterface, ConstInterface
+class Decorators implements EventHandlerInterface, ConstInterface
 {
     /**
      * List of classes that have potentially implemented this.
@@ -80,6 +81,7 @@ class Methods implements EventHandlerInterface, ConstInterface
         ProviderBase::class,
         ManagerBase::class,
         DecoratorBase::class,
+        JobsBase::class
     ];
 
     /**
@@ -119,8 +121,6 @@ class Methods implements EventHandlerInterface, ConstInterface
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
      *
-     * @throws \ReflectionException
-     *
      * @return string
      *   The generated markup.
      */
@@ -139,18 +139,7 @@ class Methods implements EventHandlerInterface, ConstInterface
         // Retrieve all piled up receiver objects. We may have decorators
         // inside of decorators.
         $allReceivers = [];
-
-        $receiver = $this->retrieveReceiverObject($data, $params[static::PARAM_REF]);
-        $methods = [];
-        while ($receiver !== false) {
-            $allReceivers[] = $receiver;
-            $ref = new ReflectionClass($receiver);
-            $receiver = $this->retrieveReceiverObject($receiver, $ref);
-            // Get all reflection methods together, from all the receivers.
-            // The receivers in front overwrite the methods from the receivers
-            // in the back.
-            $methods = array_merge($this->retrievePublicMethods($ref), $methods);
-        }
+        $methods = $this->retrieveMethods($params, $allReceivers);
 
         if (empty($methods) === false) {
             // Got to dump them all!
@@ -160,14 +149,9 @@ class Methods implements EventHandlerInterface, ConstInterface
                     ->setType('class internals decorator')
                     ->addParameter(static::PARAM_DATA, $methods)
                     ->setHelpid('aimeosDecoratorsInfo')
-                    ->injectCallback(
-                        $this->pool->createClass(
-                            ThroughMethods::class
-                        )
-                    )
+                    ->injectCallback($this->pool->createClass(ThroughMethods::class))
             );
         }
-
 
         // Do a normal analysis of all receiver objects.
         if (empty($allReceivers) === false) {
@@ -182,8 +166,42 @@ class Methods implements EventHandlerInterface, ConstInterface
             $this->pool->codegenHandler->setAllowCodegen(true);
         }
 
-
         return $result;
+    }
+
+    /**
+     * Retrieve the methods and the receiving class from the decorator.
+     *
+     * @param array $params
+     *   The parameters from the original callback.
+     * @param array $allReceivers
+     *   By value of all known recievers. We can only have one return value,
+     *   but we retrieve two different values.
+     *
+     * @return array
+     *   The  methods wqe need to analyse.
+     */
+    protected function retrieveMethods(array $params, array &$allReceivers)
+    {
+        $receiver = $this->retrieveReceiverObject($params[static::PARAM_DATA], $params[static::PARAM_REF]);
+        $methods = [];
+        while ($receiver !== false) {
+            $allReceivers[] = $receiver;
+            try {
+                $ref = new ReflectionClass($receiver);
+            } catch (ReflectionException $e) {
+                // We skip this one.
+                continue;
+            }
+
+            $receiver = $this->retrieveReceiverObject($receiver, $ref);
+            // Get all reflection methods together, from all the receivers.
+            // The receivers in front overwrite the methods from the receivers
+            // in the back.
+            $methods = array_merge($this->retrievePublicMethods($ref), $methods);
+        }
+
+        return $methods;
     }
 
     /**
@@ -212,7 +230,7 @@ class Methods implements EventHandlerInterface, ConstInterface
     }
 
     /**
-     * Retrieve the recipent object from the aimeos object.
+     * Retrieve the recipient object from the aimeos object.
      *
      * @param mixed $data
      *   The aimeos object we need to get the receiver class from.

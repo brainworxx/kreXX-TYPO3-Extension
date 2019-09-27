@@ -38,7 +38,7 @@ use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ThroughMethods;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter;
-use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Methods;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
@@ -92,7 +92,7 @@ class Configuration implements PluginConfigInterface
         // Resolving the magical class methods of the decorator pattern.
         Registration::registerEvent(
             AnalyseMethods::class . '::callMe::start',
-            Methods::class
+            Decorators::class
         );
 
         // Resolving the magical factory for the view helpers (not to be confused
