@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
@@ -161,7 +162,7 @@ class Methods implements EventHandlerInterface, ConstInterface
                     ->setHelpid('aimeosDecoratorsInfo')
                     ->injectCallback(
                         $this->pool->createClass(
-                            \Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods::class
+                            ThroughMethods::class
                         )
                     )
             );

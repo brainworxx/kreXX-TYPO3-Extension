@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
@@ -47,7 +48,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class ThroughMethods implements EventHandlerInterface
+class ThroughMethods implements EventHandlerInterface, ConstInterface
 {
     /**
      * Our pool.
@@ -81,8 +82,8 @@ class ThroughMethods implements EventHandlerInterface
     {
         $params = $callback->getParameters();
 
-        if (isset($params['factoryName'])) {
-            $model->setName($params['factoryName']);
+        if (isset($params[static::PARAM_FACTORY_NAME])) {
+            $model->setName($params[static::PARAM_FACTORY_NAME]);
         }
 
         return '';

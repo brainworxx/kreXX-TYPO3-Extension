@@ -106,7 +106,7 @@ class AddAnalysis implements EventHandlerInterface, ConstInterface
                             ->setName($code . '.value')
                             ->setConnectorType(Connectors::METHOD)
                             ->setData($value)
-                            ->addToJson('hint', 'Magic dataviewer getter method.'));
+                            ->addToJson(static::META_HINT, 'Magic dataviewer getter method.'));
                 }
             } catch (Throwable $e) {
                 // Something went wrong here.

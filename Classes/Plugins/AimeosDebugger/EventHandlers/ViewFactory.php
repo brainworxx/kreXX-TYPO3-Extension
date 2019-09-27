@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods;
+use \Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
@@ -65,7 +66,7 @@ use Aimeos\MW\View\Iface as ViewIface;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class ViewFactory implements EventHandlerInterface, ConstInterface
+class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstInterface
 {
     /**
      * The namespace of the view helpers.
@@ -244,7 +245,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface
                 ->addParameter(static::PARAM_DATA, $reflectionList)
                 // Tell the callback to pass on the factory name.
                 // Thanks to the magic factory, we must use this one.
-                ->addParameter('isFactoryMethod', $result)
+                ->addParameter(static::PARAM_IS_FACTORY_METHOD, $result)
                 ->setHelpid('aimeosViewInfo')
                 ->injectCallback($this->pool->createClass(ThroughMethods::class))
         );

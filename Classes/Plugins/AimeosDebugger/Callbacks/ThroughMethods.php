@@ -34,7 +34,9 @@
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks;
 
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods as IterateThroughMethods;
 
 /**
  * Simple wrapper around the original class.
@@ -47,7 +49,7 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks
  */
-class ThroughMethods extends AbstractCallback
+class ThroughMethods extends AbstractCallback implements ConstInterface
 {
     /**
      * Preprocessing parameters before using the original ThroughMethods analysis.
@@ -59,16 +61,10 @@ class ThroughMethods extends AbstractCallback
         $this->dispatchStartEvent();
 
         $data = $this->parameters[static::PARAM_DATA];
-        if (isset($this->parameters['isFactoryMethod'])) {
-            $isFactoryMethod = true;
-        } else {
-            $isFactoryMethod = false;
-        }
-
-
+        $isFactoryMethod = isset($this->parameters[static::PARAM_IS_FACTORY_METHOD]);
         $result = '';
         /** @var \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods $thoughMethods */
-        $thoughMethods = $this->pool->createClass(\Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::class);
+        $thoughMethods = $this->pool->createClass(IterateThroughMethods::class);
 
         /** @var \ReflectionMethod $reflectionMethod */
         foreach ($data as $factoryName => $reflectionMethod) {
@@ -78,8 +74,8 @@ class ThroughMethods extends AbstractCallback
             ];
             // We may not be able to use the method name here
             // @see ViewFactory
-            if ($isFactoryMethod) {
-                $params['factoryName'] = $factoryName;
+            if ($isFactoryMethod === true) {
+                $params[static::PARAM_FACTORY_NAME] = $factoryName;
             }
             // Now, that we have set the reflection class, we can call the original.
             $result .= $thoughMethods->setParameters($params)->callMe();

@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Analyse\ConstInterface;
@@ -70,7 +71,7 @@ use ReflectionException;
  * @uses array $additional
  *   Additional data from the event call.
  */
-class Getter implements EventHandlerInterface, ConstInterface
+class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterface
 {
     /**
      * Our pool.
@@ -142,7 +143,7 @@ class Getter implements EventHandlerInterface, ConstInterface
                 if ($possibleResult === null) {
                     // A NULL value might mean that the values does not
                     // exist, until the getter computes it.
-                    $model->addToJson('hint', $this->pool->messages->getHelp('getterNull'));
+                    $model->addToJson(static::META_HINT, $this->pool->messages->getHelp('getterNull'));
                 }
 
                 break;
@@ -178,9 +179,9 @@ class Getter implements EventHandlerInterface, ConstInterface
         $reflectionClass = $reflectionMethod->getDeclaringClass();
         $data = $params[static::PARAM_REF]->getData();
 
-        if ($reflectionClass->hasProperty('bdata')) {
+        if ($reflectionClass->hasProperty(static::AIMEOS_B_DATA)) {
             try {
-                $reflectionProperty = $reflectionClass->getProperty('bdata');
+                $reflectionProperty = $reflectionClass->getProperty(static::AIMEOS_B_DATA);
                 $reflectionProperty->setAccessible(true);
                 $bdata = $reflectionProperty->getValue($data);
                 if (is_array($bdata)) {
@@ -192,9 +193,9 @@ class Getter implements EventHandlerInterface, ConstInterface
             }
         }
 
-        if ($reflectionClass->hasProperty('data')) {
+        if ($reflectionClass->hasProperty(static::AIMEOS_DATA)) {
             try {
-                $reflectionProperty = $reflectionClass->getProperty('data');
+                $reflectionProperty = $reflectionClass->getProperty(static::AIMEOS_DATA);
                 $reflectionProperty->setAccessible(true);
                 $data = $reflectionProperty->getValue($data);
                 if (is_array($data)) {
@@ -206,9 +207,9 @@ class Getter implements EventHandlerInterface, ConstInterface
             }
         }
 
-        if ($reflectionClass->hasProperty('values')) {
+        if ($reflectionClass->hasProperty(static::AIMEOS_VALUES)) {
             try {
-                $reflectionProperty = $reflectionClass->getProperty('values');
+                $reflectionProperty = $reflectionClass->getProperty(static::AIMEOS_VALUES);
                 $reflectionProperty->setAccessible(true);
                 $values = $reflectionProperty->getValue($data);
                 if (is_array($values)) {

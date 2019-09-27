@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
@@ -51,7 +52,7 @@ use Aimeos\MW\View\Iface as ViewIface;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class Properties extends AbstractCallback implements EventHandlerInterface
+class Properties extends AbstractCallback implements EventHandlerInterface, ConstInterface
 {
 
     public function callMe()
@@ -78,11 +79,11 @@ class Properties extends AbstractCallback implements EventHandlerInterface
         $result = '';
 
         if (is_a($data, ItemIface::class)) {
-            $result .= $this->extractValues('bdata', $params);
+            $result .= $this->extractValues(static::AIMEOS_B_DATA, $params);
         } elseif (is_a($data, NodeIface::class)) {
-            $result .= $this->extractValues('values', $params);
+            $result .= $this->extractValues(static::AIMEOS_VALUES, $params);
         } elseif (is_a($data, ViewIface::class)) {
-            $result .= $this->extractValues('values', $params);
+            $result .= $this->extractValues(static::AIMEOS_VALUES, $params);
         }
 
         // Return the generated markup.
@@ -163,7 +164,7 @@ class Properties extends AbstractCallback implements EventHandlerInterface
                     ->setData($value)
                     ->setName($key)
                     ->setConnectorType($connectorType)
-                    ->addToJson('hint', 'Aimeos magical property')
+                    ->addToJson(static::META_HINT, 'Aimeos magical property')
             );
         }
 
