@@ -36,7 +36,6 @@ namespace Brainworxx\Includekrexx\Unit\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods;
 use Brainworxx\Includekrexx\Tests\Fixtures\AimeosItem;
-use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
@@ -50,6 +49,11 @@ use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 class DebugMethodsTest extends AbstractTest implements ConstInterface
 {
 
+    /**
+     * Subscribing our class to test to the right event.
+     *
+     * {@inheritDoc}
+     */
     public function setUp()
     {
         parent::setUp();
