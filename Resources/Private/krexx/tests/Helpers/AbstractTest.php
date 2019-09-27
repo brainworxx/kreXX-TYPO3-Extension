@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Tests\Helpers;
 
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Factory\Event;
@@ -247,5 +248,28 @@ abstract class AbstractTest extends TestCase
             ->will(
                 $this->returnValue('whatever')
             );
+    }
+
+    /**
+     * Trigger the start event in a class object, without the actual hostig
+     * object interference.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback $object
+     *   The object, triggering the event.
+     *
+     * @return string
+     *   The rendered html output.
+     */
+    protected function triggerStartEvent(AbstractCallback $object)
+    {
+        try {
+            $reflection = new \ReflectionClass($object);
+            $reflectionMethod = $reflection->getMethod('dispatchStartEvent');
+            $reflectionMethod->setAccessible(true);
+            return $reflectionMethod->invoke($object);
+        } catch (\ReflectionException $e) {
+            $this->fail($e->getMessage());
+            return '';
+        }
     }
 }
