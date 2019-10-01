@@ -45,17 +45,14 @@ use ReflectionClass;
 use Exception;
 use Throwable;
 use ReflectionMethod;
-use Aimeos\Controller\Frontend\Base as FrontendBase;
-use Aimeos\Client\JsonApi\Base as JsonApiBase;
-use Aimeos\Client\Html\Base as HtmlBase;
-use Aimeos\Admin\JsonAdm\Base as JsonAdmBase;
-use Aimeos\Admin\JQAdm\Base as JQAdmBase;
-use Aimeos\MW\View\Helper\Base as HelperBase;
-use Aimeos\MW\View\Iface as ViewIface;
-use Aimeos\MShop\Service\Provider\Base as ProviderBase;
-use Aimeos\MW\Common\Manager\Base as ManagerBase;
-use Aimeos\Controller\Jobs\Common\Decorator\Base as DecoratorBase;
-use Aimeos\Controller\Jobs\Base as JobsBase;
+use Aimeos\Admin\JQAdm\Common\Decorator\Iface as JQAdmDecoratorInterface;
+use Aimeos\Admin\JsonAdm\Common\Decorator\Iface as JsonAdmDecoratorInterface;
+use Aimeos\Client\Html\Common\Decorator\Iface as HtmlDecoratorInterface;
+use Aimeos\Client\JsonApi\Common\Decorator\Iface as JsonApiDecoratorInterface;
+use Aimeos\Controller\Frontend\Common\Decorator\Iface as FrontendDecoratorInterface;
+use Aimeos\Controller\Jobs\Common\Decorator\Iface as JobsDecoratorInterface;
+use Aimeos\MShop\Common\Manager\Decorator\Iface as ManagerDecoratorInterface;
+use Aimeos\MShop\Service\Provider\Decorator\Base as ServiceProviderDecoratorBase;
 use ReflectionException;
 
 /**
@@ -71,17 +68,14 @@ class Decorators implements EventHandlerInterface, ConstInterface
      * @var array
      */
     protected $classList = [
-        FrontendBase::class,
-        JsonApiBase::class,
-        HtmlBase::class,
-        JsonAdmBase::class,
-        JQAdmBase::class,
-        HelperBase::class,
-        ViewIface::class,
-        ProviderBase::class,
-        ManagerBase::class,
-        DecoratorBase::class,
-        JobsBase::class
+        JQAdmDecoratorInterface::class,
+        JsonAdmDecoratorInterface::class,
+        HtmlDecoratorInterface::class,
+        JsonApiDecoratorInterface::class,
+        FrontendDecoratorInterface::class,
+        JobsDecoratorInterface::class,
+        ManagerDecoratorInterface::class,
+        ServiceProviderDecoratorBase::class
     ];
 
     /**
