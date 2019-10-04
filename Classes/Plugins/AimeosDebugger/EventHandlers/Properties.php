@@ -34,11 +34,13 @@
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
-use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Exception;
 use Throwable;
 use Aimeos\MShop\Common\Item\Iface as ItemIface;
@@ -50,14 +52,30 @@ use Aimeos\MW\View\Iface as ViewIface;
  *
  * @event Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::callMe::start
  *
+ * @uses object data
+ *   The class we are currently analysing.
+ * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
+ *   A reflection of the class we are currently analysing.
+ *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class Properties extends AbstractCallback implements EventHandlerInterface, ConstInterface
+class Properties implements EventHandlerInterface, ConstInterface, AimeosConstInterface
 {
+    /**
+     * Our pool.
+     *
+     * @var \Brainworxx\Krexx\Service\Factory\Pool
+     */
+    protected $pool;
 
-    public function callMe()
+    /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(Pool $pool)
     {
-       // Do nothing. This is a event observer, and not a callback.
+        $this->pool = $pool;
     }
 
     /**
@@ -130,9 +148,10 @@ class Properties extends AbstractCallback implements EventHandlerInterface, Cons
         }
 
         // Huh, something went wrong here!
-        if (empty($result) || is_array($result) === false) {
+        if (empty($result) === true || is_array($result) === false) {
             return '';
         }
+
         return $this->dumpTheMagic($result);
     }
 
@@ -150,20 +169,14 @@ class Properties extends AbstractCallback implements EventHandlerInterface, Cons
         $result = '';
 
         foreach ($array as $key => $value) {
-            // Check for special stuff inside the key.
-            if ($this->isPropertyNameNormal($key) === false) {
-                $connectorType = Connectors::SPECIAL_CHARS_PROP;
-            } else {
-                $connectorType = Connectors::NORMAL_PROPERTY;
-            }
-
             // Could be anything.
             // We need to route it though the analysis hub.
             $result .= $this->pool->routing->analysisHub(
                 $this->pool->createClass(Model::class)
                     ->setData($value)
                     ->setName($key)
-                    ->setConnectorType($connectorType)
+                    // The key is always special, because of the prefix and the dot.
+                    ->setConnectorType(Connectors::SPECIAL_CHARS_PROP)
                     ->addToJson(static::META_HINT, 'Aimeos magical property')
             );
         }
