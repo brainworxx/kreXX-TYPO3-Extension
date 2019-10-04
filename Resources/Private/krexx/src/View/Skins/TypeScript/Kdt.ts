@@ -75,7 +75,7 @@ class Kdt
         }
 
         return result;
-    };
+    }
 
     /**
      * Determines if an element has a class.
@@ -90,7 +90,7 @@ class Kdt
         } else {
             return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
         }
-    };
+    }
 
     /**
      * Gets the first element from a list which hat that class.
@@ -109,7 +109,7 @@ class Kdt
             }
         }
         return null;
-    };
+    }
 
     /**
      * Adds a class to elements.
@@ -133,7 +133,7 @@ class Kdt
         for (let i = 0; i < elements.length; i++) {
             (elements[i] as Element).className += ' ' + className;
         }
-    };
+    }
 
     /**
      * Removes a class from elements
@@ -158,7 +158,7 @@ class Kdt
                 new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' '
             );
         }
-    };
+    }
 
     /**
      * Toggles the class of an element
@@ -186,7 +186,7 @@ class Kdt
 
             el.className = classes.join(' ');
         }
-    };
+    }
 
     /**
      * Gets the dataset from en element.
@@ -226,7 +226,7 @@ class Kdt
         }
 
         return result;
-    };
+    }
 
     /**
      * Sets the dataset from en element.
@@ -240,7 +240,7 @@ class Kdt
         if (typeof el !== 'undefined') {
             el.setAttribute('data-' + what, value);
         }
-    };
+    }
 
     /**
      * Selects some text
@@ -255,7 +255,7 @@ class Kdt
         range.selectNodeContents(el);
         selection.removeAllRanges();
         selection.addRange(range);
-    };
+    }
 
     /**
      * Reads the values from a cookie.
@@ -291,7 +291,7 @@ class Kdt
             }
         }
         return result;
-    };
+    }
 
     /**
      * Adds the value from a html element to the local cookie settings.
@@ -338,14 +338,13 @@ class Kdt
     public resetSetting(event:Event, element:Node) : void
     {
         // We do not delete the cookie, we simply remove all settings in it.
-        let settings:Object = {};
         let date:Date = new Date();
         date.setTime(date.getTime() + (99 * 24 * 60 * 60 * 1000));
         let expires:string = 'expires=' + date.toUTCString();
 
-        document.cookie = 'KrexxDebugSettings=' + JSON.stringify(settings) + '; ' + expires + '; path=/';
+        document.cookie = 'KrexxDebugSettings={}; ' + expires + '; path=/';
         alert('All local configuration have been reset.\n\nPlease reload the page to use the these settings.');
-    };
+    }
 
     /**
      * Wrapper to parse a json, without the danger of an error.
@@ -402,7 +401,7 @@ class Kdt
     {
         event.stop = true;
 
-        var wrapper:Node = this.getParents(element, '.kwrapper')[0];
+        let wrapper:Node = this.getParents(element, '.kwrapper')[0];
 
         // Remove all old classes within this debug "window"
         this.removeClass((wrapper as Element).querySelectorAll('.kfilterroot'), 'kfilterroot');
@@ -434,5 +433,5 @@ class Kdt
                 jumpTo(element, true);
             }, 100
         );
-    };
+    }
 }

@@ -232,7 +232,7 @@ class Hans
                 }
             }
         );
-    };
+    }
 
     /**
      * When clicked on s recursion, this function will
@@ -448,7 +448,7 @@ class Hans
         for (let i = 0; i < elements.length; i++) {
             (elements[i] as HTMLInputElement).disabled = true;
         }
-    };
+    }
 
     /**
      * The kreXX code generator.

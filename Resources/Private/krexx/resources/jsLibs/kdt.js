@@ -80,7 +80,6 @@ var Draxx = (function () {
             }
         }, 500);
     };
-    ;
     Draxx.prototype.getElementOffset = function (element) {
         var de = document.documentElement;
         var box = element.getBoundingClientRect();
@@ -88,7 +87,6 @@ var Draxx = (function () {
         var left = box.left + window.pageXOffset - de.clientLeft;
         return { top: top, left: left };
     };
-    ;
     Draxx.prototype.outerWidth = function (element) {
         var width = element.offsetWidth;
         var style = getComputedStyle(element);
@@ -143,24 +141,20 @@ var Eventhandler = (function () {
             }
         }
     };
-    ;
     Eventhandler.prototype.preventBubble = function (event) {
         event.stop = true;
     };
-    ;
     Eventhandler.prototype.addToStorage = function (selector, callback) {
         if (!(selector in this.storage)) {
             this.storage[selector] = [];
         }
         this.storage[selector].push(callback);
     };
-    ;
     Eventhandler.prototype.triggerEvent = function (el, eventName) {
         var event = document.createEvent('HTMLEvents');
         event.initEvent(eventName, true, false);
         el.dispatchEvent(event);
     };
-    ;
     return Eventhandler;
 }());
 var Kdt = (function () {
@@ -220,7 +214,6 @@ var Kdt = (function () {
         }
         return result;
     };
-    ;
     Kdt.prototype.hasClass = function (el, className) {
         if (el.classList) {
             return el.classList.contains(className);
@@ -229,7 +222,6 @@ var Kdt = (function () {
             return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
         }
     };
-    ;
     Kdt.prototype.findInDomlistByClass = function (elements, className) {
         className = " " + className + " ";
         for (var i = 0; i < elements.length; i++) {
@@ -239,7 +231,6 @@ var Kdt = (function () {
         }
         return null;
     };
-    ;
     Kdt.prototype.addClass = function (selector, className) {
         var elements;
         if (typeof selector === 'string') {
@@ -252,7 +243,6 @@ var Kdt = (function () {
             elements[i].className += ' ' + className;
         }
     };
-    ;
     Kdt.prototype.removeClass = function (selector, className) {
         var elements;
         if (typeof selector === 'string') {
@@ -265,7 +255,6 @@ var Kdt = (function () {
             elements[i].className = elements[i].className.replace(new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi'), ' ');
         }
     };
-    ;
     Kdt.prototype.toggleClass = function (el, className) {
         if (el.classList) {
             el.classList.toggle(className);
@@ -282,7 +271,6 @@ var Kdt = (function () {
             el.className = classes.join(' ');
         }
     };
-    ;
     Kdt.prototype.getDataset = function (el, what, mustEscape) {
         if (mustEscape === void 0) { mustEscape = false; }
         var result;
@@ -305,13 +293,11 @@ var Kdt = (function () {
         }
         return result;
     };
-    ;
     Kdt.prototype.setDataset = function (el, what, value) {
         if (typeof el !== 'undefined') {
             el.setAttribute('data-' + what, value);
         }
     };
-    ;
     Kdt.prototype.selectText = function (el) {
         var range = document.createRange();
         var selection = window.getSelection();
@@ -319,7 +305,6 @@ var Kdt = (function () {
         selection.removeAllRanges();
         selection.addRange(range);
     };
-    ;
     Kdt.prototype.readSettings = function (cookieName) {
         cookieName = cookieName + "=";
         var cookieArray = document.cookie.split(';');
@@ -341,16 +326,13 @@ var Kdt = (function () {
         }
         return result;
     };
-    ;
     Kdt.prototype.resetSetting = function (event, element) {
-        var settings = {};
         var date = new Date();
         date.setTime(date.getTime() + (99 * 24 * 60 * 60 * 1000));
         var expires = 'expires=' + date.toUTCString();
-        document.cookie = 'KrexxDebugSettings=' + JSON.stringify(settings) + '; ' + expires + '; path=/';
+        document.cookie = 'KrexxDebugSettings={}; ' + expires + '; path=/';
         alert('All local configuration have been reset.\n\nPlease reload the page to use the these settings.');
     };
-    ;
     Kdt.prototype.parseJson = function (string) {
         try {
             return JSON.parse(string);
@@ -738,7 +720,6 @@ var Hans = (function () {
             }
         });
     };
-    ;
     Hans.prototype.setHighlighting = function (el, noHighlight) {
         var nests = this.kdt.getParents(el, '.knest');
         this.kdt.removeClass(nests, 'khidden');
@@ -756,7 +737,6 @@ var Hans = (function () {
             elements[i].disabled = true;
         }
     };
-    ;
     return Hans;
 }());
 var Selectors = (function () {
@@ -877,6 +857,5 @@ var SmokyGrey = (function (_super) {
             }
         }
     };
-    ;
     return SmokyGrey;
 }(Hans));

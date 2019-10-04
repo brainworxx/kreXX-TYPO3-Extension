@@ -133,7 +133,7 @@ class Draxx
                 (elements[i] as HTMLElement).style.top = (oldOffset + viewportTop) + 'px';
             }
         }, 500);
-    };
+    }
 
     /**
      * Starts the dragging on a mousedown.
@@ -243,7 +243,7 @@ class Draxx
         let top:number = box.top + window.pageYOffset - de.clientTop;
         let left:number = box.left + window.pageXOffset - de.clientLeft;
         return {top: top, left: left};
-    };
+    }
 
     /**
      * Gets the outer width of an element.

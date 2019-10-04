@@ -81,7 +81,7 @@ class Eventhandler
                 elements[i].addEventListener(eventName, (callBack as EventListener));
             }
         }
-    };
+    }
 
     /**
      * Prevent the bubbling of an event in the kdt event handler.
@@ -91,7 +91,7 @@ class Eventhandler
     public preventBubble (event:Event) : void
     {
         event.stop = true;
-    };
+    }
 
     /**
      * Add another event to the storage.
@@ -105,7 +105,7 @@ class Eventhandler
             this.storage[selector] = [];
         }
         this.storage[selector].push(callback);
-    };
+    }
 
     /**
      * Whenever a click is bubbled on a kreXX instance, we try to find
@@ -163,5 +163,5 @@ class Eventhandler
         let event:Event = document.createEvent('HTMLEvents');
         event.initEvent(eventName, true, false);
         el.dispatchEvent(event);
-    };
+    }
 }

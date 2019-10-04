@@ -31,8 +31,17 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-return array (
+
+$result = [
     // Our old legacy namespace viewhelper
     'Tx_Includekrexx_ViewHelpers_DebugViewHelper' => 'Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper',
-    'TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper' => 'TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper'
-);
+];
+
+if (class_exists(\TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper::class) === false) {
+    // Registering this class mapping in a system, where it is *not* deprecated
+    // results in really strange fluid errors.
+    $result[\TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper::class] =
+        \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper::class;
+}
+
+return $result;

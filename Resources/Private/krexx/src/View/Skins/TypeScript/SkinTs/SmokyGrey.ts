@@ -262,5 +262,5 @@ class SmokyGrey extends Hans
                 (elements[i] as HTMLElement).style.maxHeight = height + 'px';
             }
         }
-    };
+    }
 }
