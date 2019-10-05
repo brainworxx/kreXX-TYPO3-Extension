@@ -80,9 +80,15 @@ class IndexControllerTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::hasAccess
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::checkProductiveSetting
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
+     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::assignCssJs
      */
     public function testIndexActionNormal()
     {
+        $jsCssFileContent = 'file content';
+        $fileGetContents =  $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Controller\\', 'file_get_contents');
+        $fileGetContents->expects($this->exactly(2))
+            ->will($this->returnValue($jsCssFileContent));
+
         // Prepare a BE user.
         $this->mockBeUser();
 
@@ -101,9 +107,13 @@ class IndexControllerTest extends AbstractTest
 
         // Mock the view.
         $viewMock = $this->createMock(ViewInterface::class);
-        $viewMock->expects($this->once())
+        $viewMock->expects($this->exactly(3))
             ->method('assign')
-            ->with('settings', $settingsModel);
+            ->withConsecutive(
+                ['settings', $settingsModel],
+                ['js', $jsCssFileContent],
+                ['css', $jsCssFileContent]
+            );
 
         // Prepare the collectors
         $configurationMock = $this->createMock(Configuration::class);
@@ -125,6 +135,7 @@ class IndexControllerTest extends AbstractTest
         $this->setValueByReflection('view', $viewMock, $indexController);
 
         // Run it through like a tunnel on a marathon route.
+        $this->simulatePackage('includekrexx', 'some path');
         $indexController->indexAction();
 
         // Test for the kreXX messages.

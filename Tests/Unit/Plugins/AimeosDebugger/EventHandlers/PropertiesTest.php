@@ -36,7 +36,6 @@ namespace Brainworxx\Includekrexx\Unit\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
-use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\Registration;
@@ -49,7 +48,7 @@ class PropertiesTest extends AbstractTest
     /**
      * Test the handling of the pool.
      *
-     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties::construct
+     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties::__construct
      */
     public function testConstruct()
     {
