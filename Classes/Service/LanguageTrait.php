@@ -69,7 +69,7 @@ trait LanguageTrait
         $key,
         $extensionName = null,
         $arguments = null,
-        string $languageKey = null,
+        $languageKey = null,
         array $alternativeLanguageKeys = null
     ) {
         if (defined('KREXX_TEST_IN_PROGRESS')) {
