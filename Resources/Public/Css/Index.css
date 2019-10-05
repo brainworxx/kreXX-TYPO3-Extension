@@ -559,16 +559,16 @@ body {
 }
 
 .krexx-backend .button.delete {
-    background: url("../Icons/delete.png") no-repeat center #dedede;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAYAAADAQbwGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjEuNWRHWFIAAACPSURBVDhP7ZRBCsAgDAQFf+ND/IIHwf//InUDLSnZYml6aw8DcdyEXDSJyKtQGYHKCFRGoHJnjCE555lKCure+7zieUDlDgbccRYnSinHRitqrbPl3H86HFK195arjBMqTfhObXFC5T9wVVucUPm9gavnBa4yTgB8AGjAFgzctdZm1Pc6EYXKCFRGoPI5kjbnp6VyUKDE2QAAAABJRU5ErkJggg==) no-repeat center #dedede;
 }
 
 .krexx-backend .button.tooltip-hover {
-    background: url("../Icons/info.png") no-repeat center #dedede;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAYAAADAQbwGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjEuNWRHWFIAAABmSURBVDhP7dExCgAhDAXRgF3uf9+sFgEJwy7rT2nxQCYSEC0iWmFUYFRgVGBUYKzGGOHu88jzHcaqfeEfGBUYd+u5Nq+1PTkXLnVGMFZ34SuMaf+Q9PXbGFP7whMYFRgVGBUYz4U9yHjoHbzM2h0AAAAASUVORK5CYII=) no-repeat center #dedede;
     cursor: help;
 }
 
 .krexx-backend .button.save {
-    background: url("../Icons/save.png") no-repeat left;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAYAAADAQbwGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAYdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjEuNWRHWFIAAADJSURBVDhP1ZSxDYQwDEUpImWDlHQUrJQ5MkoGYCiKbOMjPtnYloXQhYIrnvL/J/6IKGICgEdxwxHccAQ3HEGZlNKRTJeEECDnDK21Y0SXdbRBe2pCZn2ttcK6rm6pNmaYkBnpbdvcUhZozDAhM9KdUgp+vsxYoBED3nkuy8LPO/u+Q4xRZSzQoD39HewMCzR/VXh1J+VZdk8avTLiod0o6S8jbfexQHOzcJ7nY/lqu48FmtcX3vk5WOxlV4VP4IYjuOEIbvg7MH0AN7KFrfdtku0AAAAASUVORK5CYII=) no-repeat left;
     padding-left: 24px;
     width: auto;
     height: auto;
@@ -577,7 +577,7 @@ body {
 }
 
 .krexx-backend .button.cookies {
-    background: url("../Icons/close.png") no-repeat left;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAYAAADAQbwGAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMS41ZEdYUgAAAJ9JREFUOE+tkbsNBCEQQ2mGDgjICa8GeqD/ZA6j8wmNHK13pacdvWEsPiUiXkVKBykdpHSQ0kFKBykdpARrrRhj7BXlQ4e6tRbo0WWkBBjcAdF7P6Gg1nocenk9kRLcAQhl/fv/d52RkmBwfycI5CtQSEleDcTgfUz7yHwUBgCGPnqUOecZvHeDGg49uoyUDlI6SOkgpYOUDlI6SPmcKF9ejLsanjQbyAAAAABJRU5ErkJggg==) no-repeat left;
     width: auto;
     height: auto;
     margin: 0;
@@ -650,7 +650,7 @@ body {
  * Styling for the kreXX logo
  */
 .krexx-backend .krexx-icon {
-    background-image: url(../Icons/Extension.svg);
+    background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3Csvg version='1.1' id='Ebene_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 65.2 65.2' style='enable-background:new 0 0 65.2 65.2;' xml:space='preserve'%3E%3Cstyle type='text/css'%3E .st0%7Bfill:%23FFCD09;%7D%0A%3C/style%3E%3Cpath class='st0' d='M32.6,0C14.6,0,0,14.6,0,32.6c0,18,14.6,32.6,32.6,32.6c18,0,32.6-14.6,32.6-32.6C65.2,14.6,50.6,0,32.6,0z'/%3E%3Cg id='Ebene_2'%3E%3Cpath d='M24.9,47.2c-0.2-0.1-3.3-5.8-4.9-8.9h-0.2c-1.6,3.1-4.6,8.8-4.8,8.8c-1.3,0.2-6.5-1.3-6.5-1.6c-0.1-0.3,5.1-9.7,6.6-12.3 C14.8,33,8.9,22.5,8.9,22c0-0.5,5.7-2.1,6.2-2c0.2,0.1,3.3,5.7,4.6,8.8H20c1.6-3,4.7-8.8,5-8.8c0.4,0,6,1.5,6.1,1.9 c0,0.5-5.9,11-6.2,11.4c1.4,2.4,6.7,11.7,6.7,12'/%3E%3C/g%3E%3Cg id='Ebene_3'%3E%3Cpath d='M51.4,47.2c-0.2-0.1-3.3-5.8-4.9-8.9h-0.2c-1.6,3.1-4.6,8.8-4.8,8.8c-1.3,0.2-6.5-1.3-6.5-1.6c-0.1-0.3,5.1-9.7,6.6-12.3 c-0.2-0.3-6.1-10.9-6-11.4c0-0.5,5.7-2.1,6.2-2c0.2,0.1,3.3,5.7,4.6,8.8h0.2c1.6-3,4.7-8.8,5-8.8c0.4,0,6,1.5,6.1,1.9 c0,0.5-5.9,11-6.2,11.4c1.4,2.4,6.7,11.7,6.7,12'/%3E%3C/g%3E%3C/svg%3E");
     height: 12px;
     width: 12px;
     margin-top: 2px;

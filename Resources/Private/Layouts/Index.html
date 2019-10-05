@@ -1,24 +1,3 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
-
-<f:be.container includeCssFiles="{Backend: '{f:uri.resource(path:\'Css/Index.css\')}'}" includeJsFiles="{Backend: '{f:uri.resource(path:\'JavaScript/Index.js\')}'}">
-    <div class="message-container-outer"></div>
-    <div class="module krexx-backend">
-        <div class="module-loading-indicator"></div>
-        <div class="module-docheader">
-            <button id="main-save" class="button save" value="1" title="{f:translate(key: 'save')}"><f:translate key="save"/></button>
-            <div class="chevron">
-                <select id="mode-switch" autocomplete="off" name="simplicity">
-                    <option value="simple" selected="selected"><f:translate key="simple"/></option>
-                    <option value="expert"><f:translate key="expert"/></option>
-                </select>
-            </div>
-            <button id="clear-cookies" class="button cookies" value="1" title="{f:translate(key: 'clear.cookies')}"><f:translate key="clear.cookies"/></button>
-        </div>
-        <div id="typo3-inner-docbody" class="module-body">
-            <f:flashMessages />
-            <h1><f:translate key="mlang_tabs_tab"/> </h1>
-            <f:render section="main" />
-        </div>
-    </div>
-</f:be.container>
+    <f:render section="main" />
 </html>

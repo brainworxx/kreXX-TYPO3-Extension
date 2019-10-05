@@ -67,7 +67,7 @@ class IndexController extends AbstractController
         $this->configuration->assignData($this->view);
         $this->formConfiguration->assignData($this->view);
         $this->view->assign('settings', $this->settingsModel);
-
+        $this->assignCssJs();
         return null;
     }
 

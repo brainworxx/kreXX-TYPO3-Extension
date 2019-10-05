@@ -230,4 +230,25 @@ abstract class AbstractController extends ActionController
 
         return $response;
     }
+
+    /**
+     * With 10.0, the backend container became somewhat unable to handle css and
+     * js files. The path needs to be different, depending on the debug settings.
+     *
+     * @example
+     *   /typo3_100/typo3conf/ext/includekrexx/Resources/Public/Css/Index.css
+     *   --> with debug settings
+     *   /typo3conf/ext/includekrexx/Resources/Public/Css/Index.css
+     *   --> with productive settings.
+     *
+     * Imho the best way to deal with this is to (again) assign the css and js
+     * inline.
+     */
+    protected function assignCssJs()
+    {
+        $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
+        $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/Index.css');
+        $this->view->assign('js', file_get_contents($jsPath));
+        $this->view->assign('css', file_get_contents($cssPath));
+    }
 }
