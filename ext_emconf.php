@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
     'title' => 'kreXX Debugger',
     'description' => 'kreXX is a feature rich php debugger, featuring backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Fluid, Aimeos and DataViewer.',
     'category' => 'misc',
@@ -43,13 +43,13 @@ $EM_CONF[$_EXTKEY] = array(
     'clearCacheOnLoad' => 0,
     'author_email' => 'info@brainworxx.de',
     'author_company' => 'BRAINWORXX GmbH',
-    'constraints' => array(
-        'depends' => array(
-            'typo3' => '6.2.0-10.0.99',
-            'php' => '5.3.0-7.3.99',
-        ),
-        'conflicts' => array(),
-        'suggests' => array(),
-    ),
-);
+    'constraints' => [
+        'depends' => [
+            'typo3' => '7.6.0-10.1.99',
+            'php' => '5.5.0-7.3.99',
+        ],
+        'conflicts' => [],
+        'suggests' => [],
+    ],
+];
 

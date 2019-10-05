@@ -67,7 +67,7 @@ $boot = function () {
             ],
             [
                 'access' => 'user,group',
-                'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
+                'icon' => 'EXT:includekrexx/Resources/Public/Icons/Extension.svg',
                 'labels' => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf',
             ]
         );
