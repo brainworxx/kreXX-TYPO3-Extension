@@ -36,7 +36,7 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods;
-use \Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
@@ -45,10 +45,10 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionClass;
 use ReflectionException;
 use Aimeos\MW\View\Helper\Base as HelperBase;
-use Aimeos\MW\View\Iface as ViewIface;
+use Aimeos\MW\View\Iface as ViewInterface;
 
 /**
- * Resolving the Aimoes viewhelper factory. Not to be confused with fluid
+ * Resolving the Aimoes view helper factory. Not to be confused with fluid
  * viewhelpers.
  *
  * The Aimeos view has a factory method in the Aimeos\MW\View\Standard.
@@ -112,25 +112,30 @@ class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstI
      */
     public function handle(AbstractCallback $callback, Model $model = null)
     {
-        $result = '';
         $params = $callback->getParameters();
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $params[static::PARAM_REF];
-        /** @var ViewIface $data */
+        /** @var ViewInterface $data */
         $data = $ref->getData();
 
         // Test if we are facing an Aimeos view.
-        if (is_a($data, ViewIface::class) === false) {
+        if (is_a($data, ViewInterface::class) === false) {
             // This is not he view we are looking for.
             // Early return.
-            return $result;
+            return '';
         }
 
-        // Analyse the already existing view helpers
-        $result .= $this->retrieveHelpers($data, $ref);
-
         // Analyse the transform method of all possible view helpers.
-        return $this->retrievePossibleOtherHelpers() . $result;
+        // Analyse the already existing view helpers.
+        $result = '';
+        try {
+            $result = $this->retrieveHelpers($data, $ref);
+            $result .= $this->retrievePossibleOtherHelpers();
+        } catch (ReflectionException $e) {
+            // Do nothing. We skip this step.
+        }
+
+        return $result;
     }
 
     /**
@@ -140,22 +145,20 @@ class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstI
      *   The class we are analysing.
      * @param \ReflectionClass $ref
      *   The reflection of the class we are analysing.
+     *
+     * @throws \ReflectionException
+     *
      * @return string
      *   The generated html.
      */
-    protected function retrieveHelpers(ViewIface $data, ReflectionClass $ref)
+    protected function retrieveHelpers(ViewInterface $data, ReflectionClass $ref)
     {
         $result = '';
 
         if ($ref->hasProperty('helper')) {
             // Got our helpers right here.
             // Lets hope that other implementations use the same variable name.
-            try {
-                $propertyReflection = $ref->getProperty('helper');
-            } catch (ReflectionException $e) {
-                return $result;
-            }
-
+            $propertyReflection = $ref->getProperty('helper');
             $propertyReflection->setAccessible(true);
             // We store the helpers here, because we need them later for the
             // actual method analysis. It is possible to inject helpers.
@@ -184,13 +187,13 @@ class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstI
      * Get a list of all possible other helpers, and analyse their transform()
      * class method
      *
+     * @throws \ReflectionException
+     *
      * @return string
      *   The generated html.
      */
     protected function retrievePossibleOtherHelpers()
     {
-        $result = '';
-
         // The main problem here is, that we can not simply get all known
         // classes, filter them for their namespace and analyse them.
         // Thanks to composer, these may or may not be loaded.
@@ -202,42 +205,26 @@ class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstI
         // 3.) Replace the list with the ones from the already existing helpers
         // 4.) Analyse them all!
 
-        if (class_exists(HelperBase::class) === false) {
-            // This should not have happened.
-            // No main class, no view helpers.
-            // Early return
-            return $result;
-        }
-
         // Get a list of the core view helpers
         // Get the core view helpers directory
-        try {
-            $ref = new ReflectionClass(HelperBase::class);
-        } catch (ReflectionException $e) {
-            // Do nothing.
-            return $result;
-        }
 
+        $ref = new ReflectionClass(HelperBase::class);
         // Scan the main view helpers, to get a first impression.
         $reflectionList = $this->retrieveHelperList(dirname($ref->getFileName()));
 
         // Replace the ones in there with the already instantiated ones from the
         // helper array.
         foreach ($this->helpers as $key => $helperObject) {
-            try {
-                $ref = new ReflectionClass($helperObject);
-                $reflectionList[$key] = $ref->getMethod(static::METHOD);
-            } catch (ReflectionException $e) {
-                // We ignore this one.
-                continue;
-            }
+            $ref = new ReflectionClass($helperObject);
+            $reflectionList[$key] = $ref->getMethod(static::METHOD);
+        }
+
+        if (empty($reflectionList) === true) {
+            return '';
         }
 
         // Dump them, like there is no tomorrow.
-        if (empty($reflectionList) === true) {
-            return $result;
-        }
-
+        $isFactoryMethod = true;
         return $this->pool->render->renderExpandableChild(
             $this->pool->createClass(Model::class)
                 ->setName('Aimeos view factory')
@@ -245,7 +232,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstI
                 ->addParameter(static::PARAM_DATA, $reflectionList)
                 // Tell the callback to pass on the factory name.
                 // Thanks to the magic factory, we must use this one.
-                ->addParameter(static::PARAM_IS_FACTORY_METHOD, $result)
+                ->addParameter(static::PARAM_IS_FACTORY_METHOD, $isFactoryMethod)
                 ->setHelpid('aimeosViewInfo')
                 ->injectCallback($this->pool->createClass(ThroughMethods::class))
         );
@@ -257,19 +244,14 @@ class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstI
      * @param string $directory
      *   The directory we re processing.
      *
+     * @throws \ReflectionException
+     *
      * @return array
      *   The list with the reflections.
      */
     protected function retrieveHelperList($directory)
     {
-        static $doneSoFar = [];
         $reflectionList = [];
-
-        // Do some static caching.
-        if (isset($doneSoFar[$directory])) {
-            return $reflectionList;
-        }
-        $doneSoFar[$directory] = true;
         $subDirs = scandir($directory);
         $iface = static::AI_NAMESPACE . 'Iface';
 
@@ -286,15 +268,10 @@ class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstI
             if (is_dir($directory . '/' . $dir) &&
                 class_exists(static::AI_NAMESPACE . $dir . static::STANDARD)
             ) {
-                try {
-                    $ref = new ReflectionClass(static::AI_NAMESPACE . $dir . static::STANDARD);
-                    // Test for the view helper interface.
-                    if ($ref->implementsInterface($iface)) {
-                        $reflectionList[lcfirst($dir)] = $ref->getMethod(static::METHOD);
-                    }
-                } catch (ReflectionException $e) {
-                    // Move to the next target.
-                    continue;
+                $ref = new ReflectionClass(static::AI_NAMESPACE . $dir . static::STANDARD);
+                // Test for the view helper interface.
+                if ($ref->implementsInterface($iface)) {
+                    $reflectionList[lcfirst($dir)] = $ref->getMethod(static::METHOD);
                 }
             }
         }
