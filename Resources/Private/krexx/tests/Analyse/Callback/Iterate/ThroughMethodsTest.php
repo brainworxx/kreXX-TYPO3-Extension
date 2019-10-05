@@ -34,7 +34,7 @@
 
 namespace Tests\Analyse\Callback\Iterate;
 
-use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethodAnalysis;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
@@ -142,7 +142,7 @@ class ThroughMethodsTest extends AbstractTest
         $renderNothing = new RenderNothing(Krexx::$pool);
         Krexx::$pool->render = $renderNothing;
         // Overwrite the callback.
-        Krexx::$pool->rewrite[ThroughMethodAnalysis::class] = CallbackNothing::class;
+        Krexx::$pool->rewrite[ThroughMeta::class] = CallbackNothing::class;
 
         // Run the test.
         $this->throughMethods

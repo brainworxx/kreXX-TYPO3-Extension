@@ -176,6 +176,9 @@ abstract class AbstractCallback implements ConstInterface
      * @see https://stackoverflow.com/questions/29019484/validate-a-php-variable
      * @author AbraCadaver
      *
+     * @deprecated
+     *   Since 3.1.1. Will be removed.
+     *
      * @param $propName
      *   The property name we want to check.
      * @return bool
@@ -183,15 +186,6 @@ abstract class AbstractCallback implements ConstInterface
      */
     protected function isPropertyNameNormal($propName)
     {
-        static $cache = [];
-
-        if (isset($cache[$propName])) {
-            return $cache[$propName];
-        }
-
-        // The first regex detects all allowed characters.
-        // For some reason, they also allow BOM characters.
-        return $cache[$propName] = (bool) preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $propName) &&
-            !(bool) preg_match("/[\xEF\xBB\xBF]$/", $propName);
+        return $this->pool->encodingService->isPropertyNameNormal($propName);
     }
 }

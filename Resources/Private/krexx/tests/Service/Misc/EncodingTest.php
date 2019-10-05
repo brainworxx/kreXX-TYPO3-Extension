@@ -153,4 +153,16 @@ class EncodingTest extends AbstractTest
         $this->assertEquals(42, $this->encoding->mbStrLen('string'));
         $this->assertEquals(42, $this->encoding->mbStrLen('another string', 'some encoding'));
     }
+
+    /**
+     * Testing the property name analysis.
+     *
+     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::isPropertyNameNormal
+     */
+    public function testIsPropertyNameNormal()
+    {
+        $this->assertTrue($this->encoding->isPropertyNameNormal('getValue'));
+        $this->assertFalse($this->encoding->isPropertyNameNormal('get value'));
+        $this->assertTrue($this->encoding->isPropertyNameNormal('getValue'));
+    }
 }
