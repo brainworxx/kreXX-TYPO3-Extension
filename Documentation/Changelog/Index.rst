@@ -14,8 +14,22 @@ Changelog
 
 3.2.1 dev
     - [Feature] Introduce php-mock/php-mock-phpunit.
+    - [Feature] TYPO3 10.0 support.
+    - [Feature] TYPO3 10.1 support.
     - [Change] Remove the event prefix and use static::class instead.
+    - [Change] Move cleanup methods to their own class.
+    - [Change] Move the output check methods to an appropriate class.
+    - [Change] Deprecated classes and methods.
+    - [Change] Complete refactor of the rendering mechanism.
+    - [Change] Ported the javascript to type script.
     - [Change] Removed TYPO3 6.2 compatibility.
+    - [Bugfix] Missing encoding info in the error handler output
+    - [Bugfix] Removed the TER-SonarQube findings from the unit tests.
+    - [Bugfix] Warning when accessing the backend module
+    - [Bugfix] Warning when saving the settings.
+    - [Bugfix] Getter analysis of the Aimeos debugger misses mtime and ctime
+    - [Bugfix] Wrong class list in the aimeos decorator analysis.
+    - [Bugfix] Wrong PHP constraints in the ext_emconf
 
 3.2.0
     - [Feature] Use some real autoloading, with a fallback to manually including all files.
