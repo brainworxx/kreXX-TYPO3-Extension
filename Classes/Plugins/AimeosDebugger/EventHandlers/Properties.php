@@ -171,12 +171,17 @@ class Properties implements EventHandlerInterface, ConstInterface, AimeosConstIn
         foreach ($array as $key => $value) {
             // Could be anything.
             // We need to route it though the analysis hub.
+            if ($this->pool->encodingService->isPropertyNameNormal($key) === true) {
+                $connectorType = Connectors::NORMAL_PROPERTY;
+            } else {
+                $connectorType = Connectors::SPECIAL_CHARS_PROP;
+            }
+
             $result .= $this->pool->routing->analysisHub(
                 $this->pool->createClass(Model::class)
                     ->setData($value)
                     ->setName($key)
-                    // The key is always special, because of the prefix and the dot.
-                    ->setConnectorType(Connectors::SPECIAL_CHARS_PROP)
+                    ->setConnectorType($connectorType)
                     ->addToJson(static::META_HINT, 'Aimeos magical property')
             );
         }
