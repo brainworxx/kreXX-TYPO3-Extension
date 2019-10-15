@@ -39,7 +39,6 @@ use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use TYPO3\CMS\Core\Package\MetaData;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
