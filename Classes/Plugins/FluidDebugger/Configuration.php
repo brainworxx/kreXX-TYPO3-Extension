@@ -37,6 +37,8 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
@@ -104,12 +106,12 @@ class Configuration implements PluginConfigInterface
         // Register our event handler, to remove the 'get' from the getter
         // method names. Fluid does not use these.
         Registration::registerEvent(
-            'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::goThroughMethodList::end',
+            ThroughGetter::class . '::goThroughMethodList::end',
             GetterWithoutGet::class
         );
         // Another event switches to VHS code generation.
         Registration::registerEvent(
-            'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughMethods::callMe::end',
+            ThroughMethods::class . '::callMe::end',
             VhsMethods::class
         );
 
