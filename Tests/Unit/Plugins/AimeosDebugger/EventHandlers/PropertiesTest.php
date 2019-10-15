@@ -68,13 +68,13 @@ class PropertiesTest extends AbstractTest
         $values = [
             'log.id' => '123456',
             'log.siteid' => '42',
-            'log.mtime' => 'today',
-            'log.ctime' => 'yesterday',
             'log.editor' => 'me',
             'log.facility' => 'kreXX',
             'log.priority' => 'high',
             'log.message' => 'testing',
-            'log.request' => 'please'
+            'log.request' => 'please',
+            'log.mtime' => 'today',
+            'log.ctime' => 'yesterday',
         ];
 
         // Create a simple log item.
