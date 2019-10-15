@@ -135,9 +135,6 @@ class BootstrapTest extends AbstractTest
         $fluidConfigMock->expects($this->never())
             ->method('exec');
 
-        $fluidDataConfigMock = $this->createMock(FluidDataConfiguration::class);
-        $fluidDataConfigMock->expects($this->never())
-            ->method('exec');
 
         $aimeosConfigMock = $this->createMock(AimeosConfiguration::class);
         $aimeosConfigMock->expects($this->once())
@@ -145,7 +142,6 @@ class BootstrapTest extends AbstractTest
 
         $this->injectIntoGeneralUtility(T3configuration::class, $t3ConfigMock);
         $this->injectIntoGeneralUtility(FluidConfiguration::class, $fluidConfigMock);
-        $this->injectIntoGeneralUtility(FluidDataConfiguration::class, $fluidDataConfigMock);
         $this->injectIntoGeneralUtility(AimeosConfiguration::class, $aimeosConfigMock);
 
         $this->bootstrap->run();
@@ -163,11 +159,9 @@ class BootstrapTest extends AbstractTest
 
         $t3ConfigMock = $this->createMock(T3configuration::class);
         $fluidConfigMock = $this->createMock(FluidConfiguration::class);
-        $fluidDataConfigMock = $this->createMock(FluidDataConfiguration::class);
         $aimeosConfigMock = $this->createMock(AimeosConfiguration::class);
         $this->injectIntoGeneralUtility(T3configuration::class, $t3ConfigMock);
         $this->injectIntoGeneralUtility(FluidConfiguration::class, $fluidConfigMock);
-        $this->injectIntoGeneralUtility(FluidDataConfiguration::class, $fluidDataConfigMock);
         $this->injectIntoGeneralUtility(AimeosConfiguration::class, $aimeosConfigMock);
 
         // You just have to love these large arrays inside the globals.

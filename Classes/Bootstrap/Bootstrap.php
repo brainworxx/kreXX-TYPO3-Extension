@@ -123,8 +123,6 @@ class Bootstrap
             ];
         }
 
-        Registration::register(GeneralUtility::makeInstance(FluidDataConfiguration::class));
-
         // Register the Aimoes Magic plugin.
         $aimeosConfiguration = GeneralUtility::makeInstance(AimeosConfiguration::class);
         Registration::register($aimeosConfiguration);

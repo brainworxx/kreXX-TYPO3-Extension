@@ -39,7 +39,6 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
-use Brainworxx\Includekrexx\Plugins\FluidDataViewer\Configuration as FluidDataConfiguration;
 
 /**
  * Our fluid wrapper for kreXX.
@@ -102,17 +101,11 @@ class DebugViewHelper extends AbstractViewHelper
         Registration::activatePlugin(
             FluidConfiguration::class
         );
-        Registration::activatePlugin(
-            FluidDataConfiguration::class
-        );
 
         $this->analysis();
 
         Registration::deactivatePlugin(
             FluidConfiguration::class
-        );
-        Registration::deactivatePlugin(
-            FluidDataConfiguration::class
         );
 
         return '';
