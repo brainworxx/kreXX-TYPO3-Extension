@@ -133,10 +133,11 @@ abstract class AbstractFluid extends AbstractCaller
         parent::__construct($pool);
 
         $this->varname = static::FLUID_VARIABLE;
-        $debugViewhelper = $this->pool->registry->get('DebugViewHelper');
-        $this->view = $debugViewhelper->getView();
-        $this->viewReflection = new ReflectionClass($this->view);
-        $this->renderingContext = $debugViewhelper->getRenderingContext();
+
+        // Handling the injections.
+        $this->view = $this->pool->registry->get('view');
+        $this->viewReflection = $this->pool->registry->get('viewReflection');
+        $this->renderingContext = $this->pool->registry->get('renderingContext');
 
         // Get the parsed template and the rendering type from the rendering stack
         $renderingStackEntry = $this->retrieveLastRenderingStackEntry();

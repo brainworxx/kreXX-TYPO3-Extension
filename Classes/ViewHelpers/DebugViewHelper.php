@@ -96,7 +96,10 @@ class DebugViewHelper extends AbstractViewHelper
     public function render()
     {
         Pool::createPool();
-        Krexx::$pool->registry->set('DebugViewHelper', $this);
+        $view = $this->viewHelperVariableContainer->getView();
+        Krexx::$pool->registry->set('view', $view);
+        Krexx::$pool->registry->set('viewReflection', new \ReflectionClass($view));
+        Krexx::$pool->registry->set('renderingContext', $this->renderingContext);
 
         Registration::activatePlugin(
             FluidConfiguration::class
@@ -132,25 +135,5 @@ class DebugViewHelper extends AbstractViewHelper
             // Both are NULL, we must tell the dev!
             krexx(null);
         }
-    }
-
-    /**
-     * Getter for the view
-     *
-     * @return \TYPO3Fluid\Fluid\View\ViewInterface|\TYPO3\CMS\Fluid\View\AbstractTemplateView
-     */
-    public function getView()
-    {
-        return $this->viewHelperVariableContainer->getView();
-    }
-
-    /**
-     * Getter for the rendering context
-     *
-     * @return \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface|\TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface
-     */
-    public function getRenderingContext()
-    {
-        return $this->renderingContext;
     }
 }
