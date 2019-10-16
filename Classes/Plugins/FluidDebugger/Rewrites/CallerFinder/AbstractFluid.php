@@ -91,13 +91,6 @@ abstract class AbstractFluid extends AbstractCaller
     protected $parsedTemplate;
 
     /**
-     * The kreXX debug viewhelper class
-     *
-     * @var \Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper
-     */
-    protected $debugViewhelper;
-
-    /**
      * The line in the template file. that we were able to resolve.
      *
      * @var string
@@ -112,6 +105,24 @@ abstract class AbstractFluid extends AbstractCaller
     protected $varname;
 
     /**
+     * The regex should look something like this:
+     */
+     // \s*<krexx:debug value="{(.*)}"\/>\s*/u
+    /**
+     * Meh, the regex uncomments the doccomment.
+     *
+     * {@inheritdoc}
+     */
+    protected $callPattern = [
+        ['<krexx:debug>{', '}<\/krexx:debug>'],
+        ['<krexx:debug value="{', '}" \/>'],
+        ['<krexx:debug value="{', '}"\/>'],
+        ['<krexx:log>{', '}<\/krexx:log>'],
+        ['<krexx:log value="{', '}" \/>'],
+        ['<krexx:log value="{', '}"\/>']
+    ];
+
+    /**
      * Trying to get our stuff together.
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
@@ -121,45 +132,8 @@ abstract class AbstractFluid extends AbstractCaller
     {
         parent::__construct($pool);
 
-        // The regex should look something like this:
-        // \s*<krexx:debug value="{(.*)}"\/>\s*/u
-        $this->callPattern = [
-             [
-                '<krexx:debug>{',
-                // We need to escape the forward slash.
-                '}<\/krexx:debug>'
-             ],
-             [
-                '<krexx:debug value="{',
-                // We need to escape the forward slash.
-                '}" \/>'
-             ],
-             [
-                '<krexx:debug value="{',
-                // We need to escape the forward slash.
-                '}"\/>'
-             ],
-             [
-                '<krexx:log>{',
-                // We need to escape the forward slash.
-                '}<\/krexx:log>'
-             ],
-             [
-                '<krexx:log value="{',
-                // We need to escape the forward slash.
-                '}" \/>'
-             ],
-             [
-                '<krexx:log value="{',
-                // We need to escape the forward slash.
-                '}"\/>'
-             ]
-        ];
-
         $this->varname = static::FLUID_VARIABLE;
-
         $debugViewhelper = $this->pool->registry->get('DebugViewHelper');
-
         $this->view = $debugViewhelper->getView();
         $this->viewReflection = new ReflectionClass($this->view);
         $this->renderingContext = $debugViewhelper->getRenderingContext();
