@@ -36,7 +36,6 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use ReflectionClass;
 use ReflectionException;
 
 /**
@@ -126,63 +125,49 @@ abstract class AbstractFluid extends AbstractCaller
      * Trying to get our stuff together.
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
-     * @throws \ReflectionException
      */
     public function __construct(Pool $pool)
     {
         parent::__construct($pool);
 
-        $this->varname = static::FLUID_VARIABLE;
-
         // Handling the injections.
+        $this->varname = static::FLUID_VARIABLE;
         $this->view = $this->pool->registry->get('view');
         $this->viewReflection = $this->pool->registry->get('viewReflection');
         $this->renderingContext = $this->pool->registry->get('renderingContext');
 
-        // Get the parsed template and the rendering type from the rendering stack
-        $renderingStackEntry = $this->retrieveLastRenderingStackEntry();
-        if ($renderingStackEntry !== false) {
-            if (isset($renderingStackEntry['parsedTemplate'])) {
-                $this->parsedTemplate = $renderingStackEntry['parsedTemplate'];
-            } else {
-                $this->error = true;
-            }
-            if (isset($renderingStackEntry['type'])) {
-                $this->renderingType = $renderingStackEntry['type'];
-            } else {
-                $this->error = true;
-            }
-        }
+        // Assign the parsed template and the render type.
+        $this->assignParsedTemplateRenderType();
     }
 
     /**
      * Retrieves the rendering stack straight out of the view.
-     *
-     * @return bool|array
      */
-    protected function retrieveLastRenderingStackEntry()
+    protected function assignParsedTemplateRenderType()
     {
         if ($this->viewReflection->hasProperty('renderingStack')) {
             try {
                 $renderingStackReflection = $this->viewReflection->getProperty('renderingStack');
+                $renderingStackReflection->setAccessible(true);
+                $renderingStack = $renderingStackReflection->getValue($this->view);
             } catch (ReflectionException $e) {
                 $this->error = true;
-                return false;
+                return;
             }
-            $renderingStackReflection->setAccessible(true);
-            $renderingStack = $renderingStackReflection->getValue($this->view);
+
             $pos = count($renderingStack) -1;
-            if (isset($renderingStack[$pos])) {
-                return $renderingStack[$pos];
+            if (isset($renderingStack[$pos]) &&
+                isset($renderingStack[$pos]['parsedTemplate']) &&
+                isset($renderingStack[$pos]['type'])
+            ) {
+                $this->parsedTemplate = $renderingStack[$pos]['parsedTemplate'];
+                $this->renderingType = $renderingStack[$pos]['type'];
+                return;
             }
-            // No rendering stack, no template file  :-(
-            $this->error = true;
-            return false;
         }
 
         // No rendering stack, no template file  :-(
         $this->error = true;
-        return false;
     }
 
     /**
