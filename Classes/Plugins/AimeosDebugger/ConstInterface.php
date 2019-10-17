@@ -35,7 +35,7 @@
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger;
 
 /**
- * Constatns for the Aimeos debugger
+ * Constants for the Aimeos debugger
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger
  */
