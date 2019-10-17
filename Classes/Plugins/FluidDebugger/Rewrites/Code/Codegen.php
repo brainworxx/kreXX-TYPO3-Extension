@@ -65,13 +65,6 @@ class Codegen extends OrgCodegen implements ConstInterface
     protected $wrapperRight = '}';
 
     /**
-     * The recalculated nesting level.
-     *
-     * @var int
-     */
-    protected $currentNesting = 0;
-
-    /**
      * Are we analysing the dreaded {_all}?
      *
      * @var bool
@@ -87,7 +80,7 @@ class Codegen extends OrgCodegen implements ConstInterface
     public function generateSource(Model $model)
     {
         // Get out of here as soon as possible.
-        if (!$this->allowCodegen) {
+        if ($this->allowCodegen === false) {
             return '';
         }
 
@@ -119,7 +112,7 @@ class Codegen extends OrgCodegen implements ConstInterface
             return '';
         }
 
-        // Do the parent generation.
+        // Do the child generation.
         // We must also remove a leading dot, which may be there, if we are
         // analysing the dreaded {_all} in fluid.
         if ($this->isAll) {
@@ -176,13 +169,12 @@ class Codegen extends OrgCodegen implements ConstInterface
         $firstPart = ' -> v:call(method: \'';
         $secondPart = '\', arguments: {';
         $lastPart = '})';
-        $alternativeLastPart = '\')';
 
         if ($counter >= 2) {
             return $firstPart . $model->getName() . $secondPart . rtrim($args, ', ') . $lastPart;
         }
 
-        return $firstPart . $model->getName() . $alternativeLastPart;
+        return $firstPart . $model->getName() . '\')';
     }
 
     /**
