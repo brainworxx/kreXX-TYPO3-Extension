@@ -44,30 +44,21 @@ use Brainworxx\Krexx\Analyse\Code\Connectors as OrgConnectors;
 class Connectors extends OrgConnectors
 {
 
+    protected $connectorArray = [
+        Connectors::METHOD => ['.', '(@param@)'],
+        Connectors::STATIC_METHOD => ['.', '(@param@)'],
+        Connectors::NORMAL_ARRAY => ['.', ''],
+        Connectors::ASSOCIATIVE_ARRAY => ['.', ''],
+        Connectors::CONSTANT => ['.', ''],
+        Connectors::NORMAL_PROPERTY => ['.', ''],
+        Connectors::STATIC_PROPERTY => ['.', ''],
+        Connectors::SPECIAL_CHARS_PROP => ['.', ''],
+    ];
+
     /**
      * {@inheritdoc}
      */
     protected $language = 'fluid';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        // Setting (nearly) everything to the point connector.
-        $this->connectorArray = [
-            static::METHOD => ['.', '(@param@)'],
-            static::STATIC_METHOD => ['.', '(@param@)'],
-            static::NORMAL_ARRAY => ['.', ''],
-            static::ASSOCIATIVE_ARRAY => ['.', ''],
-            static::CONSTANT => ['.', ''],
-            static::NORMAL_PROPERTY => ['.', ''],
-            static::STATIC_PROPERTY => ['.', ''],
-            static::SPECIAL_CHARS_PROP => ['.', ''],
-        ];
-    }
 
     /**
      * Do nothing. There is no second connector in fluid.
