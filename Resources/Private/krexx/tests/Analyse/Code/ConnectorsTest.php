@@ -54,28 +54,6 @@ class ConnectorsTest extends AbstractTest
     protected $connectors;
 
     /**
-     * Test the assebmling of the connector array.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::__construct
-     */
-    public function testConstruct()
-    {
-        $expected = array(
-            $this->connectors::NOTHING => array('', ''),
-            $this->connectors::METHOD => array('->', '()'),
-            $this->connectors::STATIC_METHOD => array('::', '()'),
-            $this->connectors::NORMAL_ARRAY => array('[', ']'),
-            $this->connectors::ASSOCIATIVE_ARRAY => array('[\'', '\']'),
-            $this->connectors::CONSTANT => array('::', ''),
-            $this->connectors::NORMAL_PROPERTY => array('->', ''),
-            $this->connectors::STATIC_PROPERTY => array('::', ''),
-            $this->connectors::SPECIAL_CHARS_PROP => array('->{\'', '\'}'),
-        );
-
-        $this->assertAttributeEquals($expected, 'connectorArray', $this->connectors);
-    }
-
-    /**
      * Test the setting of the parameters
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::setParameters

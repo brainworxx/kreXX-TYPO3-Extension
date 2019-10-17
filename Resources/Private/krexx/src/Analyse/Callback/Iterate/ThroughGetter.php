@@ -237,6 +237,9 @@ class ThroughGetter extends AbstractCallback
      *   The reflection of the property that it may return.
      * @param \Brainworxx\Krexx\Analyse\Model $model
      *   The model so far.
+     *
+     * @deprecated
+     *   Since 3.1.1. Will be set to protected.
      */
     public function prepareResult(
         ReflectionClass $reflectionClass,
