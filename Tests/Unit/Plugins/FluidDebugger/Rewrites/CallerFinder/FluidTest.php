@@ -34,6 +34,7 @@
 
 namespace Brainworxx\IncludekrexxUnit\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
@@ -53,7 +54,7 @@ class FluidTest extends AbstractTest
     public function testFindCallerTemplate()
     {
         $renderingStack = [[AbstractCallerFinderTest::PARSED_TEMPLATE => new \StdClass(), 'type' => 1]];
-        $fluid = $this->createInstance($renderingStack);
+        $fluid = $this->createInstance($renderingStack, Fluid::class);
 
         $templatePath = realpath(__DIR__ . '/../../../../../Fixtures/FluidTemplate1.html');
 
@@ -104,7 +105,7 @@ class FluidTest extends AbstractTest
 
         $parsedTemplateMock = $this->createMock(ParsedTemplateInterface::class);
         $renderingStack = [[AbstractCallerFinderTest::PARSED_TEMPLATE => $parsedTemplateMock, 'type' => 3]];
-        $fluid = $this->createInstance($renderingStack);
+        $fluid = $this->createInstance($renderingStack, Fluid::class);
         $parsedTemplateMock->expects($this->once())
             ->method('getLayoutName')
             ->with(Krexx::$pool->registry->get('renderingContext'))
@@ -145,7 +146,7 @@ class FluidTest extends AbstractTest
         $templatePath = realpath(__DIR__ . '/../../../../../Fixtures/FluidTemplate3.html');
         $parsedTemplateMock = $this->createMock(ParsedTemplateInterface::class);
         $renderingStack = [[AbstractCallerFinderTest::PARSED_TEMPLATE => $parsedTemplateMock, 'type' => 2]];
-        $fluid = $this->createInstance($renderingStack);
+        $fluid = $this->createInstance($renderingStack, Fluid::class);
 
         $parsedTemplateMock->expects($this->once())
             ->method('getIdentifier')
@@ -181,7 +182,7 @@ class FluidTest extends AbstractTest
             '<v:variable.set value="{some: \'array\'}" name="fluidvar" /> {fluidvar}',
             Krexx::$pool->codegenHandler->generateWrapperLeft() . $result['varname'] .
             Krexx::$pool->codegenHandler->generateWrapperRight(),
-            'Testing the complicated code generaqtion stuff.'
+            'Testing the complicated code generation stuff.'
         );
     }
     /**
@@ -191,7 +192,7 @@ class FluidTest extends AbstractTest
      */
     public function testFindCallerError()
     {
-        $fluid = $this->createInstance([]);
+        $fluid = $this->createInstance([], Fluid::class);
         $this->setValueByReflection('error', true, $fluid);
 
         $result = $fluid->findCaller('bla', 'blub');

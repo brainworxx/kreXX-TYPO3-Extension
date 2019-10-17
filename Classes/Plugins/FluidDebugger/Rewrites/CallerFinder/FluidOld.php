@@ -54,11 +54,11 @@ class FluidOld extends AbstractFluid
         if ($this->viewReflection->hasMethod('getTemplatePathAndFilename')) {
             try {
                 $templatePathAndFilenameReflection = $this->viewReflection->getMethod('getTemplatePathAndFilename');
+                $templatePathAndFilenameReflection->setAccessible(true);
+                $result = $templatePathAndFilenameReflection->invoke($this->view, null);
             } catch (ReflectionException $e) {
-                return $result;
+                // Do nothing.
             }
-            $templatePathAndFilenameReflection->setAccessible(true);
-            $result = $templatePathAndFilenameReflection->invoke($this->view);
         }
 
         return $result;
@@ -75,12 +75,11 @@ class FluidOld extends AbstractFluid
             $fileName = $this->parsedTemplate->getLayoutName($this->renderingContext);
             try {
                 $layoutPathAndFilenameReflection = $this->viewReflection->getMethod('getLayoutPathAndFilename');
+                $layoutPathAndFilenameReflection->setAccessible(true);
+                $result = $layoutPathAndFilenameReflection->invoke($this->view, $fileName);
             } catch (ReflectionException $e) {
-                return $result;
+                // Do nothing.
             }
-
-            $layoutPathAndFilenameReflection->setAccessible(true);
-            $result = $layoutPathAndFilenameReflection->invoke($this->view, $fileName);
         }
 
         return $result;

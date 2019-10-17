@@ -37,7 +37,6 @@ namespace Brainworxx\IncludekrexxUnit\Plugins\FluidDebugger\Rewrites\CallerFinde
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest as AbstractKrexxTest;
 use TYPO3\CMS\Fluid\View\StandaloneView;
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
 
 abstract class AbstractTest extends AbstractKrexxTest
@@ -46,12 +45,13 @@ abstract class AbstractTest extends AbstractKrexxTest
      * Create a functioning fluid instance with the provided rendering stack.
      *
      * @param array $renderingStack
-     * @return \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid
+     * @param string $classname
+     * @return \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid
      */
-    protected function createInstance(array $renderingStack)
+    protected function createInstance(array $renderingStack, $classname)
     {
         // Mock the view
-        $viewMock = $this->createMock(StandaloneView::class);
+        $view = $this->createMock(StandaloneView::class);
         $renderingStackRefMock = $this->createMock(\ReflectionProperty::class);
         // Mock the property reflection of the rendering context.
         $renderingStackRefMock->expects($this->once())
@@ -61,23 +61,23 @@ abstract class AbstractTest extends AbstractKrexxTest
             ->method('getValue')
             ->will($this->returnValue($renderingStack));
         // Mock the reflection of the view
-        $reflectionMock = $this->createMock(\ReflectionClass::class);
-        $reflectionMock->expects($this->once())
+        $viewReflection = $this->createMock(\ReflectionClass::class);
+        $viewReflection->expects($this->once())
             ->method('hasProperty')
             ->with('renderingStack')
             ->will($this->returnValue(true));
-        $reflectionMock->expects($this->once())
+        $viewReflection->expects($this->once())
             ->method('getProperty')
             ->with('renderingStack')
             ->will($this->returnValue($renderingStackRefMock));
 
         // Mock the rendering context
-        $contextMock = $this->createMock(RenderingContext::class);
+        $renderingContext = $this->createMock(RenderingContext::class);
 
-        Krexx::$pool->registry->set('view', $viewMock);
-        Krexx::$pool->registry->set('viewReflection', $reflectionMock);
-        Krexx::$pool->registry->set('renderingContext', $contextMock);
+        Krexx::$pool->registry->set('view', $view);
+        Krexx::$pool->registry->set('viewReflection', $viewReflection);
+        Krexx::$pool->registry->set('renderingContext', $renderingContext);
 
-        return new Fluid(Krexx::$pool);
+        return new $classname(Krexx::$pool);
     }
 }
