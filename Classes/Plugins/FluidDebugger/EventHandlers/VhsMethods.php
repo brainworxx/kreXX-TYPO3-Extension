@@ -38,6 +38,7 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\ConstInterface as FluidConstInterface;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
@@ -47,7 +48,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe::end
  * @package Brainworxx\Includekrexx\Plugins\FluidCodeGen\EventHandlers
  */
-class VhsMethods implements EventHandlerInterface, ConstInterface
+class VhsMethods implements EventHandlerInterface, ConstInterface, FluidConstInterface
 {
     /**
      * The resource pool
@@ -89,7 +90,7 @@ class VhsMethods implements EventHandlerInterface, ConstInterface
 
         // Switch to VHS Viewhelper
         $model->setMultiLineCodeGen(Codegen::VHS_CALL_VIEWHELPER)
-            ->addParameter('paramArray', $paramArray);
+            ->addParameter(static::PARAM_ARRAY, $paramArray);
 
         return '';
     }

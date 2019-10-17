@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code;
 
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\ConstInterface;
 use Brainworxx\Krexx\Analyse\Code\Codegen as OrgCodegen;
 use Brainworxx\Krexx\Analyse\Model;
 
@@ -42,7 +43,7 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code
  */
-class Codegen extends OrgCodegen
+class Codegen extends OrgCodegen implements ConstInterface
 {
     /**
      * Constant identifier for the multiline code generation for fluid
@@ -98,12 +99,12 @@ class Codegen extends OrgCodegen
             $this->pool->scope->getScope() !== $name
         ) {
             $model->setHelpid('dotsInFluidVarName');
-            return '. . .';
+            return static::UNKNOWN_VALUE;
         }
 
          // Disallowing code generation for configured debug methods.
         if ($model->getType() === static::TYPE_DEBUG_METHOD) {
-            return '. . .';
+            return static::UNKNOWN_VALUE;
         }
 
         // Check for VHS values.
@@ -143,7 +144,7 @@ class Codegen extends OrgCodegen
         // really complicated.
         // Meh, we simply stop the generation in it's track.
         if ($model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY) {
-            return '. . .';
+            return static::UNKNOWN_VALUE;
         }
 
         return parent::generateSource($model);
@@ -167,7 +168,7 @@ class Codegen extends OrgCodegen
         $counter = 1;
         $args = '';
 
-        foreach ($data['paramArray'] as $parameter) {
+        foreach ($data[static::PARAM_ARRAY] as $parameter) {
             $args .= 'arg' . $counter . ': \'' . $parameter . '\', ';
             $counter++;
         }

@@ -98,9 +98,9 @@ class VhsMethodsTest extends AbstractTest implements ConstInterface
         foreach ($models as $model) {
             $this->assertEquals(Codegen::VHS_CALL_VIEWHELPER, $model->getMultiLineCodeGen());
             if ($model->getName() !== 'parameterizedMethod') {
-                $this->assertEquals([], $model->getParameters()['paramArray']);
+                $this->assertEquals([], $model->getParameters()[Codegen::PARAM_ARRAY]);
             } else {
-                $this->assertEquals('parameter', $model->getParameters()['paramArray'][0]);
+                $this->assertEquals('parameter', $model->getParameters()[Codegen::PARAM_ARRAY][0]);
             }
         }
     }
