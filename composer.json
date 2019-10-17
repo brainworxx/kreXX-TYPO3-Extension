@@ -44,7 +44,6 @@
     }
   },
   "replace": {
-    "includekrexx": "self.version",
     "typo3-ter/includekrexx": "self.version"
   },
   "extra": {
