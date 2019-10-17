@@ -83,6 +83,7 @@ class ConfigurationTest extends AbstractTest
     protected $expectedHelpFiles = [
         'what/ever/Resources/Private/Language/fluid.kreXX.ini'
     ];
+
     /**
      * {@inheritDoc}
      */
@@ -91,7 +92,6 @@ class ConfigurationTest extends AbstractTest
         parent::setUp();
         $this->configuration = new Configuration();
     }
-
 
     /**
      * Simple string contains assertion.
