@@ -87,8 +87,8 @@ class Fluid extends AbstractFluid
             return $result;
         }
         $hash = $identifier[count($identifier) -1];
-
         $templatePath = $this->renderingContext->getTemplatePaths();
+
         try {
             $templatePathReflection = new ReflectionClass($templatePath);
             if ($templatePathReflection->hasProperty('resolvedIdentifiers')) {

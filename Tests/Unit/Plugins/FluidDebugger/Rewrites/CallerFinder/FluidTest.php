@@ -1,0 +1,203 @@
+<?php
+/**
+ * kreXX: Krumo eXXtended
+ *
+ * kreXX is a debugging tool, which displays structured information
+ * about any PHP object. It is a nice replacement for print_r() or var_dump()
+ * which are used by a lot of PHP developers.
+ *
+ * kreXX is a fork of Krumo, which was originally written by:
+ * Kaloyan K. Tsvetkov <kaloyan@kaloyan.info>
+ *
+ * @author
+ *   brainworXX GmbH <info@brainworxx.de>
+ *
+ * @license
+ *   http://opensource.org/licenses/LGPL-2.1
+ *
+ *   GNU Lesser General Public License Version 2.1
+ *
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *
+ *   This library is free software; you can redistribute it and/or modify it
+ *   under the terms of the GNU Lesser General Public License as published by
+ *   the Free Software Foundation; either version 2.1 of the License, or (at
+ *   your option) any later version.
+ *   This library is distributed in the hope that it will be useful, but WITHOUT
+ *   ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *   FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
+ *   for more details.
+ *   You should have received a copy of the GNU Lesser General Public License
+ *   along with this library; if not, write to the Free Software Foundation,
+ *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+
+namespace Brainworxx\IncludekrexxUnit\Plugins\FluidDebugger\Rewrites\CallerFinder;
+
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
+use Brainworxx\Krexx\Krexx;
+use TYPO3\CMS\Fluid\View\TemplatePaths;
+use TYPO3Fluid\Fluid\Core\Parser\ParsedTemplateInterface;
+
+class FluidTest extends AbstractTest
+{
+    /**
+     * Test the template part.
+     *
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getTemplatePath
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveVarname
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::checkForComplicatedStuff
+     */
+    public function testFindCallerTemplate()
+    {
+        $renderingStack = [[AbstractCallerFinderTest::PARSED_TEMPLATE => new \StdClass(), 'type' => 1]];
+        $fluid = $this->createInstance($renderingStack);
+
+        $templatePath = realpath(__DIR__ . '/../../../../../Fixtures/FluidTemplate1.html');
+
+        $templatePathMock = $this->createMock(TemplatePaths::class);
+        $templatePathMock->expects($this->once())
+            ->method('getFormat')
+            ->will($this->returnValue('formatZeh'));
+        $templatePathMock->expects($this->once())
+            ->method('resolveTemplateFileForControllerAndActionAndFormat')
+            ->with('SomeController', 'andAction', 'formatZeh')
+            ->will($this->returnValue($templatePath));
+
+        // Adding stuff to the rednering context mock.
+        /** @var \PHPUnit\Framework\MockObject\MockObject $contextMock */
+        $contextMock = Krexx::$pool->registry->get('renderingContext');
+        $contextMock->expects($this->once())
+            ->method('getControllerName')
+            ->will($this->returnValue('SomeController'));
+        $contextMock->expects($this->once())
+            ->method('getControllerAction')
+            ->will($this->returnValue('andAction'));
+        $contextMock->expects($this->exactly(2))
+            ->method('getTemplatePaths')
+            ->will($this->returnValue($templatePathMock));
+
+        $headline = 'Breaking News!';
+        $data = new \StdClass();
+        $result = $fluid->findCaller($headline, $data);
+
+        $this->assertContains('FluidTemplate1.html', $result['file']);
+        $this->assertEquals('_all', $result['varname']);
+        $this->assertEquals('Fluid analysis of _all, stdClass', $result['type']);
+        $this->assertNotEmpty($result['date']);
+    }
+
+    /**
+     * Test the layout part.
+     *
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getLayoutPath
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveVarname
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::checkForComplicatedStuff
+     */
+    public function testFindCallerLayout()
+    {
+        $templatePath = realpath(__DIR__ . '/../../../../../Fixtures/FluidTemplate2.html');
+
+        $parsedTemplateMock = $this->createMock(ParsedTemplateInterface::class);
+        $renderingStack = [[AbstractCallerFinderTest::PARSED_TEMPLATE => $parsedTemplateMock, 'type' => 3]];
+        $fluid = $this->createInstance($renderingStack);
+        $parsedTemplateMock->expects($this->once())
+            ->method('getLayoutName')
+            ->with(Krexx::$pool->registry->get('renderingContext'))
+            ->will($this->returnValue('some filename'));
+
+        $templatePathMock = $this->createMock(TemplatePaths::class);
+        $templatePathMock->expects($this->once())
+            ->method('getLayoutPathAndFilename')
+            ->will($this->returnValue($templatePath));
+
+        /** @var \PHPUnit\Framework\MockObject\MockObject $contextMock */
+        $contextMock = Krexx::$pool->registry->get('renderingContext');
+        $contextMock->expects($this->once())
+            ->method('getTemplatePaths')
+            ->will($this->returnValue($templatePathMock));
+
+        $headline = 'H1';
+        $data = 'text';
+        $result = $fluid->findCaller($headline, $data);
+
+        $this->assertContains('FluidTemplate2.html', $result['file']);
+        $this->assertEquals($result['varname'], 'text');
+        $this->assertEquals($result['type'], 'Fluid analysis of text, string');
+        $this->assertNotEmpty($result['date']);
+    }
+
+    /**
+     * Test the partial part.
+     *
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getPartialPath
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveVarname
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::checkForComplicatedStuff
+     */
+    public function testFindCallerPartial()
+    {
+        $templatePath = realpath(__DIR__ . '/../../../../../Fixtures/FluidTemplate3.html');
+        $parsedTemplateMock = $this->createMock(ParsedTemplateInterface::class);
+        $renderingStack = [[AbstractCallerFinderTest::PARSED_TEMPLATE => $parsedTemplateMock, 'type' => 2]];
+        $fluid = $this->createInstance($renderingStack);
+
+        $parsedTemplateMock->expects($this->once())
+            ->method('getIdentifier')
+            ->will($this->returnValue('qwer_asdf_23409809afg'));
+
+        $resolvedIdentifiers = [];
+        $resolvedIdentifiers['partials']['qwer/asdf'] = 'qwer/asdf_23409809afg';
+        $templatePathMock = $this->createMock(TemplatePaths::class);
+        $this->setValueByReflection('resolvedIdentifiers', $resolvedIdentifiers, $templatePathMock);
+        $templatePathMock->expects($this->once())
+            ->method('getPartialPathAndFilename')
+            ->with('qwer/asdf')
+            ->will($this->returnValue($templatePath));
+        /** @var \PHPUnit\Framework\MockObject\MockObject $contextMock */
+        $contextMock = Krexx::$pool->registry->get('renderingContext');
+        $contextMock->expects($this->once())
+            ->method('getTemplatePaths')
+            ->will($this->returnValue($templatePathMock));
+
+        // We are going into the complicated stuff here.
+        Krexx::$pool->codegenHandler = new Codegen(Krexx::$pool);
+
+        $headline = 'H1';
+        $data =  [5];
+        $result = $fluid->findCaller($headline, $data);
+
+        $this->assertContains('FluidTemplate3.html', $result['file']);
+        $this->assertEquals($result['varname'], 'fluidvar');
+        $this->assertEquals($result['type'], 'Fluid analysis of fluidvar, array');
+        $this->assertNotEmpty($result['date']);
+
+        $this->assertEquals(
+            '<v:variable.set value="{some: \'array\'}" name="fluidvar" /> {fluidvar}',
+            Krexx::$pool->codegenHandler->generateWrapperLeft() . $result['varname'] .
+            Krexx::$pool->codegenHandler->generateWrapperRight(),
+            'Testing the complicated code generaqtion stuff.'
+        );
+    }
+    /**
+     * Test what happens when there is an error.
+     *
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
+     */
+    public function testFindCallerError()
+    {
+        $fluid = $this->createInstance([]);
+        $this->setValueByReflection('error', true, $fluid);
+
+        $result = $fluid->findCaller('bla', 'blub');
+        $this->assertEquals('n/a', $result['file']);
+        $this->assertEquals($result['varname'], 'fluidvar');
+        $this->assertEquals($result['type'], 'Fluid analysis of fluidvar, string');
+        $this->assertNotEmpty($result['date']);
+    }
+}

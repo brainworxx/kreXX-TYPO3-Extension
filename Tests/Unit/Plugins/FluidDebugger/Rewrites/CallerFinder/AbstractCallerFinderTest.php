@@ -76,7 +76,6 @@ class AbstractCallerFinderTest extends AbstractTest
             ->with('renderingStack')
             ->will($this->returnValue($renderingStackRefMock));
 
-
         // Mock the rendering context
         $contextMock = $this->createMock(RenderingContext::class);
 
