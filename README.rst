@@ -1,8 +1,18 @@
-.. figure:: https://cloud.githubusercontent.com/assets/11192910/15507768/3a5c86b6-21cd-11e6-8309-614e3afbe63c.png
-
 ========================================
 kreXX Debugger - TYPO3 Backend Extension
 ========================================
+
+.. image:: https://travis-ci.com/brainworxx/kreXX-TYPO3-Extension.svg?branch=master
+   :target: https://travis-ci.com/brainworxx/kreXX-TYPO3-Extension
+.. image:: https://poser.pugx.org/brainworxx/includekrexx/v/stable
+   :target: https://packagist.org/packages/brainworxx/includekrexx
+.. image:: https://poser.pugx.org/brainworxx/includekrexx/license
+   :target: https://packagist.org/packages/brainworxx/includekrexx
+   
+   
+.. figure:: https://cloud.githubusercontent.com/assets/11192910/15507768/3a5c86b6-21cd-11e6-8309-614e3afbe63c.png
+   :alt: kreXX logo
+
 
 This is a TYPO3 extension, providing backend configuration masks for kreXX.
 
