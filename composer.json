@@ -19,7 +19,7 @@
   "require-dev": {
     "typo3/cms-base-distribution": "*",
     "php-mock/php-mock-phpunit": "^2.4",
-    "typo3/testing-framework": "^4.13",
+    "typo3/testing-framework": "*",
     "aimeos/aimeos-typo3": "*"
   },
   "authors": [
