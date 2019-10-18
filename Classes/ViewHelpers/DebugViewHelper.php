@@ -123,19 +123,19 @@ class DebugViewHelper extends AbstractViewHelper
     {
         $found  = false;
         if (!is_null($this->arguments[static::ARGUMENT_VALUE])) {
-            krexx($this->arguments[static::ARGUMENT_VALUE]);
+            Krexx::open($this->arguments[static::ARGUMENT_VALUE]);
             $found = true;
         }
 
         $children = $this->renderChildren();
         if (!is_null($children)) {
-            krexx($children);
+            Krexx::open($children);
             $found = true;
         }
 
         if (!$found) {
             // Both are NULL, we must tell the dev!
-            krexx(null);
+            Krexx::open(null);
         }
     }
 }
