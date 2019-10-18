@@ -17,10 +17,10 @@
     "php": ">=5.5.0 <=7.3.99"
   },
   "require-dev": {
-    "typo3/cms-base-distribution": "^9.5",
+    "typo3/cms-base-distribution": "*",
     "php-mock/php-mock-phpunit": "^2.4",
     "typo3/testing-framework": "^4.13",
-    "aimeos/aimeos-typo3": "^19"
+    "aimeos/aimeos-typo3": "*"
   },
   "authors": [
     {
