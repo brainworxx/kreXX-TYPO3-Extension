@@ -64,6 +64,8 @@ class RegistryTest extends AbstractTest
 
         $registry->set($key, $value);
         $this->assertAttributeEquals([$key => $value], 'data', $registry);
+        $registry->set($key, null);
+        $this->assertAttributeEquals([], 'data', $registry);
     }
 
     /**

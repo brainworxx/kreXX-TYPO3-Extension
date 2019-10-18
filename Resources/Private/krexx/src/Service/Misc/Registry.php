@@ -75,8 +75,12 @@ class Registry
      */
     public function set($key, $value)
     {
-        // We don't really care if there is already a value.
-        $this->data[$key] = $value;
+        if ($value === null) {
+            unset($this->data[$key]);
+        } else {
+            // We don't really care if there is already a value.
+            $this->data[$key] = $value;
+        }
 
         return $this;
     }
