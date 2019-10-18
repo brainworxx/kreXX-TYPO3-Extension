@@ -66,7 +66,7 @@ class ConfigurationTest extends AbstractTest
      */
     public function testGetName()
     {
-        $this->assertStringContainsString('TYPO3', $this->configuration->getName());
+        $this->assertNotEmpty($this->configuration->getName());
     }
 
     /**

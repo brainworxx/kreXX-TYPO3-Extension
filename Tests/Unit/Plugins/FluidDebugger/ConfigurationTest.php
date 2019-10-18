@@ -100,7 +100,7 @@ class ConfigurationTest extends AbstractTest
      */
     public function testGetName()
     {
-        $this->assertStringContainsString('Fluid', $this->configuration->getName());
+        $this->assertNotEmpty($this->configuration->getName());
     }
 
     /**

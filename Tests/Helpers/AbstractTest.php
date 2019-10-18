@@ -61,9 +61,10 @@ abstract class AbstractTest extends UnitTestCase
     {
         parent::setUp();
         $this->resetSingletonInstances = true;
+        // Reset the pool, just in case.
+        Krexx::$pool = null;
         Pool::createPool();
     }
-
 
     /**
      * {@inheritDoc}
@@ -77,11 +78,10 @@ abstract class AbstractTest extends UnitTestCase
         $this->setValueByReflection('finalClassNameCache', [], GeneralUtility::class);
         $this->setValueByReflection('singletonInstances', [], GeneralUtility::class);
 
-        $this->setValueByReflection('cli', null, Environment::class);
-
-        // Reset the pool, just in case.
-        Krexx::$pool = null;
-
+        if (class_exists(Environment::class)) {
+            $this->setValueByReflection('cli', null, Environment::class);
+        }
+        
         // Reset the registered plugins.
         $this->setValueByReflection('logFolder', '', Registration::class);
         $this->setValueByReflection('chunkFolder', '', Registration::class);
