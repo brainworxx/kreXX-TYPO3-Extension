@@ -15,3 +15,6 @@ install:
   - composer require --no-update "typo3/cms-core:$TYPO3_VERSION"
   - composer require --no-update "aimeos/aimeos-typo3:$AIMEOS_VERSION"
   - composer install
+
+script:
+  - "./vendor/bin/phpunit -c Build/phpunit.xml"
