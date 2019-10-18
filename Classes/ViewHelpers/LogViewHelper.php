@@ -44,8 +44,8 @@ class LogViewHelper extends DebugViewHelper
     protected function analysis()
     {
         $found  = false;
-        if (!is_null($this->arguments['value'])) {
-            Krexx::log($this->arguments['value']);
+        if (!is_null($this->arguments[static::ARGUMENT_VALUE])) {
+            Krexx::log($this->arguments[static::ARGUMENT_VALUE]);
             $found = true;
         }
 
