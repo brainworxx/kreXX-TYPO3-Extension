@@ -4,6 +4,8 @@ kreXX Debugger - TYPO3 Backend Extension
 
 .. image:: https://travis-ci.com/brainworxx/kreXX-TYPO3-Extension.svg?branch=master
    :target: https://travis-ci.com/brainworxx/kreXX-TYPO3-Extension
+.. image:: https://api.codeclimate.com/v1/badges/43c23b7d829742003dab/maintainability
+   :target: https://codeclimate.com/github/brainworxx/kreXX-TYPO3-Extension/maintainability
 .. image:: https://poser.pugx.org/brainworxx/includekrexx/v/stable
    :target: https://packagist.org/packages/brainworxx/includekrexx
 .. image:: https://poser.pugx.org/brainworxx/includekrexx/license
