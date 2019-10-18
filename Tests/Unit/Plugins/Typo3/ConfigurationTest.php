@@ -100,7 +100,7 @@ class ConfigurationTest extends AbstractTest
             $pathSite = PATH_site;
         } else {
             $pathSite = 'somePath';
-            define('PATH_site', $pathSite, true);
+            define('PATH_site', $pathSite);
         }
         $classExistsMock = $this->getFunctionMock('\Brainworxx\\Includekrexx\\Plugins\\Typo3\\', 'class_exists');
         $classExistsMock->expects($this->once())
