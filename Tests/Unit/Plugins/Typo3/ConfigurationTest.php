@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Unit\Plugins\Typo3;
+namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;

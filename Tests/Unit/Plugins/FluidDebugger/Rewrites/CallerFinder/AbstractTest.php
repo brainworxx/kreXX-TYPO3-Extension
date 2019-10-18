@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\IncludekrexxUnit\Plugins\FluidDebugger\Rewrites\CallerFinder;
+namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest as AbstractKrexxTest;

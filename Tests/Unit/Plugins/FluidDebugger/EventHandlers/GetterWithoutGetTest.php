@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\IncludekrexxUnit\Plugins\FluidDebugger\EventHandlers;
+namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;

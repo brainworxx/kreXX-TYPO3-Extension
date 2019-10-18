@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Unit\Plugins\FluidDebugger\Rewrites\Code;
+namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\Code;
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Model;
