@@ -96,12 +96,8 @@ class ConfigurationTest extends AbstractTest
     public function testExec()
     {
         // Short circuit the getting of the system path.
-        if (defined('PATH_site')) {
-            $pathSite = PATH_site;
-        } else {
-            $pathSite = 'somePath';
-            define('PATH_site', $pathSite);
-        }
+        $pathSite = PATH_site;
+
         $classExistsMock = $this->getFunctionMock('\Brainworxx\\Includekrexx\\Plugins\\Typo3\\', 'class_exists');
         $classExistsMock->expects($this->once())
             ->with(Environment::class)
@@ -129,17 +125,17 @@ class ConfigurationTest extends AbstractTest
             'Test the rewrite.'
         );
         $this->assertEquals(
-            'somePathtypo3temp/tx_includekrexx/config/Krexx.ini',
+            'some/path/typo3temp/tx_includekrexx/config/Krexx.ini',
             SettingsGetter::getConfigFile(),
             'Test the new location of the configuration file.'
         );
         $this->assertEquals(
-            'somePathtypo3temp/tx_includekrexx/chunks/',
+            'some/path/typo3temp/tx_includekrexx/chunks/',
             SettingsGetter::getChunkFolder(),
             'Test the new location of the chunk folder.'
         );
         $this->assertEquals(
-            'somePathtypo3temp/tx_includekrexx/log/',
+            'some/path/typo3temp/tx_includekrexx/log/',
             SettingsGetter::getLogFolder(),
             'Test the new location of the log folder.'
         );

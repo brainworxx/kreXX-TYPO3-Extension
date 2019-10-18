@@ -33,5 +33,6 @@
  */
 
 define('TYPO3_version', '1.2.3');
+define('PATH_site', 'some/path/');
 
 include_once __DIR__ . '/../../Resources/Private/krexx/tests/Scripts/Bootstrap.php';

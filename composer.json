@@ -13,14 +13,14 @@
     "log"
   ],
   "require": {
-    "typo3/cms-core": ">=7.6.0 <=10.0.99",
+    "typo3/cms-core": ">=7.6.0 <=10.1.99",
     "php": ">=5.5.0 <=7.3.99"
   },
   "require-dev": {
-    "typo3/cms-base-distribution": "*",
+    "typo3/cms-base-distribution": "8.7 || ^9.5",
     "php-mock/php-mock-phpunit": "^2.4",
-    "typo3/testing-framework": "*",
-    "aimeos/aimeos-typo3": "*"
+    "typo3/testing-framework": "^2.0 || ^3.8 || ^4.13",
+    "aimeos/aimeos-typo3": "^18 || ^19"
   },
   "authors": [
     {
