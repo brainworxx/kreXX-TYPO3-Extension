@@ -57,6 +57,9 @@ class LogTest extends AbstractTest
      */
     public function setUp()
     {
+        if (class_exists(ModuleData::class) === false) {
+            return;
+        }
         parent::setUp();
         $this->simulatePackage('includekrexx', 'whatever');
         $this->log = new Log();
@@ -69,6 +72,9 @@ class LogTest extends AbstractTest
      */
     public function testGetIdentifier()
     {
+        if (class_exists(ModuleData::class) === false) {
+            $this->markTestSkipped('Wrong TYPO3 version.');
+        }
         $this->assertEquals(Bootstrap::KREXX, $this->log->getIdentifier());
     }
 
@@ -79,6 +85,9 @@ class LogTest extends AbstractTest
      */
     public function testGetLabel()
     {
+        if (class_exists(ModuleData::class) === false) {
+            $this->markTestSkipped('Wrong TYPO3 version.');
+        }
         $this->assertEquals($this->log::TRANSLATION_PREFIX . 'mlang_tabs_tab', $this->log->getLabel());
     }
 
@@ -89,6 +98,9 @@ class LogTest extends AbstractTest
      */
     public function testGetDataToStore()
     {
+        if (class_exists(ModuleData::class) === false) {
+            $this->markTestSkipped('Wrong TYPO3 version.');
+        }
         $fileList = ['file', 'list'];
         $expectations = new ModuleData(['files' => $fileList]);
 
@@ -116,6 +128,9 @@ class LogTest extends AbstractTest
      */
     public function testGetContentNoAccess()
     {
+        if (class_exists(ModuleData::class) === false) {
+            $this->markTestSkipped('Wrong TYPO3 version.');
+        }
         // Prepare the view for the messages.
         $viewMock = $this->mockView();
         $viewMock->expects($this->once())
@@ -143,6 +158,9 @@ class LogTest extends AbstractTest
      */
     public function testGetContentEmpty()
     {
+        if (class_exists(ModuleData::class) === false) {
+            $this->markTestSkipped('Wrong TYPO3 version.');
+        }
         $this->mockBeUser();
 
         Krexx::$pool->messages->addMessage('translationkey');
@@ -181,6 +199,9 @@ class LogTest extends AbstractTest
      */
     public function testGetContentNormal()
     {
+        if (class_exists(ModuleData::class) === false) {
+            $this->markTestSkipped('Wrong TYPO3 version.');
+        }
         $this->mockBeUser();
         $fileList = ['files' => ['just', 'some', 'files']];
         $expectations = 'list of files';
@@ -204,6 +225,9 @@ class LogTest extends AbstractTest
      */
     public function testGetCssFiles()
     {
+        if (class_exists(ModuleData::class) === false) {
+            $this->markTestSkipped('Wrong TYPO3 version.');
+        }
         $this->assertEquals(
             ['EXT:includekrexx/Resources/Public/Css/Adminpanel.css'],
             $this->log->getCssFiles()
@@ -217,6 +241,9 @@ class LogTest extends AbstractTest
      */
     public function testGetJavaScriptFiles()
     {
+        if (class_exists(ModuleData::class) === false) {
+            $this->markTestSkipped('Wrong TYPO3 version.');
+        }
         $this->assertEmpty($this->log->getJavaScriptFiles());
     }
 
