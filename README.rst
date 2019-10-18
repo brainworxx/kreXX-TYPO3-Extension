@@ -8,7 +8,8 @@ kreXX Debugger - TYPO3 Backend Extension
    :target: https://packagist.org/packages/brainworxx/includekrexx
 .. image:: https://poser.pugx.org/brainworxx/includekrexx/license
    :target: https://packagist.org/packages/brainworxx/includekrexx
-   
+
+|
    
 .. figure:: https://cloud.githubusercontent.com/assets/11192910/15507768/3a5c86b6-21cd-11e6-8309-614e3afbe63c.png
    :alt: kreXX logo
