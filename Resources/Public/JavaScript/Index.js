@@ -217,7 +217,6 @@
         var table = document.querySelector('table.krexx-logs tbody');
         request.onload = function (event) {
             var result = JSON.parse(request.responseText);
-            var html = '';
 
             // Are there any logiles, at all?
             if (result.length === 0) {
@@ -230,33 +229,7 @@
             document.querySelector('#tab-1 .table-wrapper').classList.remove('display-none');
             document.querySelector('#tab-1 .noresult').classList.add('display-none');
 
-            for (var key in result) {
-                if (!result.hasOwnProperty(key)) {
-                    continue;
-                }
-                var file = result[key];
-                html += '<tr ' + ajaxRefresh.generateBackgroundStyle(file.name) + '>';
-                html += '<td><a target="_blank" href="' + file.dispatcher + '"><div class="krexx-icon"></div></a></td>';
-                html += '<td><a target="_blank" href="' + file.dispatcher + '">  ' + file.name + '</a></td>';
-
-                html += '<td class="meta">';
-                for (var i = 0; i < file.meta.length; i++) {
-                    html += '<b>' + file.meta[i].type + '</b><br />';
-                    html += 'in ' + file.meta[i].filename + ', line ' + file.meta[i].line;
-                    if (i < file.meta.length -1) {
-                        html += '<div class="spacer"></div>';
-                    }
-                }
-                if (file.meta.length > 0) {
-                    html += '<div class="krexx-spacer"></div>'
-                }
-                html += '</td>';
-
-                html += '<td class="time">' + file.time + '</td>';
-                html += '<td class="size">' + file.size + '</td>';
-                html += '<td>' + '<div class="button delete" data-id="' + file.id + '"></div>' + '</td>';
-                html += '</tr>';
-            }
+            var html = ajaxRefresh.generateHtml(result);
 
             if (ajaxRefresh.lastAnswer !== html) {
                 table.innerHTML = html;
@@ -271,6 +244,47 @@
         };
 
         request.send();
+    };
+
+    /**
+     * Generate the HTML for the file list.
+     *
+     * @param result
+     * @return {string}
+     */
+    ajaxRefresh.generateHtml = function (result) {
+        var html = '';
+
+        for (var key in result) {
+            if (!result.hasOwnProperty(key)) {
+                continue;
+            }
+
+            var file = result[key];
+            html += '<tr ' + ajaxRefresh.generateBackgroundStyle(file.name) + '>';
+            html += '<td><a target="_blank" href="' + file.dispatcher + '"><div class="krexx-icon"></div></a></td>';
+            html += '<td><a target="_blank" href="' + file.dispatcher + '">  ' + file.name + '</a></td>';
+
+            html += '<td class="meta">';
+            for (var i = 0; i < file.meta.length; i++) {
+                html += '<b>' + file.meta[i].type + '</b><br />';
+                html += 'in ' + file.meta[i].filename + ', line ' + file.meta[i].line;
+                if (i < file.meta.length -1) {
+                    html += '<div class="spacer"></div>';
+                }
+            }
+            if (file.meta.length > 0) {
+                html += '<div class="krexx-spacer"></div>'
+            }
+            html += '</td>';
+
+            html += '<td class="time">' + file.time + '</td>';
+            html += '<td class="size">' + file.size + '</td>';
+            html += '<td>' + '<div class="button delete" data-id="' + file.id + '"></div>' + '</td>';
+            html += '</tr>';
+        }
+
+        return html;
     };
 
     /**
