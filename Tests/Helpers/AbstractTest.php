@@ -81,7 +81,7 @@ abstract class AbstractTest extends UnitTestCase
         if (class_exists(Environment::class)) {
             $this->setValueByReflection('cli', null, Environment::class);
         }
-        
+
         // Reset the registered plugins.
         $this->setValueByReflection('logFolder', '', Registration::class);
         $this->setValueByReflection('chunkFolder', '', Registration::class);

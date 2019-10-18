@@ -37,9 +37,17 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Rewrites;
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CheckOutputTest extends AbstractTest
 {
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        $this->setValueByReflection('indpEnvCache', [], GeneralUtility::class);
+    }
+
     /**
      * Test the calling of the general utility class. Sort of.
      *
@@ -48,6 +56,13 @@ class CheckOutputTest extends AbstractTest
     public function testIsAllowedIp()
     {
         $checkOutput = new CheckOutput(Krexx::$pool);
+
+        // Prepare the General Untility.
+        $this->setValueByReflection(
+            'indpEnvCache',
+            [CheckOutput::REMOTE_ADDRESS => '127.0.0.0'],
+            GeneralUtility::class
+        );
         $this->assertTrue($checkOutput->isAllowedIp('*'));
     }
 }
