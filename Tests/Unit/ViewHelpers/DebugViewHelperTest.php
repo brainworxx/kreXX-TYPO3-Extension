@@ -34,7 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\ViewHelpers;
 
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
@@ -55,7 +55,7 @@ class DebugViewHelperTest extends AbstractTest
 
         $this->assertArrayHasKey(
             DebugViewHelper::ARGUMENT_VALUE,
-            $this->retrieveValueByReflection('argumentDefinitions', $debugViewHelper)
+            $this->getValueByReflection('argumentDefinitions', $debugViewHelper)
         );
     }
 
