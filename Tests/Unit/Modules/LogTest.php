@@ -68,7 +68,7 @@ class LogTest extends AbstractTest
     /**
      * Testing the unique identifier.
      *
-     * \Brainworxx\Includekrexx\Modules\Log::getIdentifier
+     * @covers \Brainworxx\Includekrexx\Modules\Log::getIdentifier
      */
     public function testGetIdentifier()
     {
@@ -81,7 +81,7 @@ class LogTest extends AbstractTest
     /**
      * Test the 'translated' label getter.
      *
-     * \Brainworxx\Includekrexx\Modules\Log::getLabel
+     * @covers \Brainworxx\Includekrexx\Modules\Log::getLabel
      */
     public function testGetLabel()
     {
@@ -94,7 +94,7 @@ class LogTest extends AbstractTest
     /**
      * Test the retrieval of the log fil list class.
      *
-     * \Brainworxx\Includekrexx\Modules\Log::getDataToStore
+     * @covers \Brainworxx\Includekrexx\Modules\Log::getDataToStore
      */
     public function testGetDataToStore()
     {
@@ -122,9 +122,9 @@ class LogTest extends AbstractTest
     /**
      * Test the displaying of the file list, when having no access.
      *
-     * \Brainworxx\Includekrexx\Modules\Log::getContent
-     * \Brainworxx\Includekrexx\Modules\Log::hasAccess
-     * \Brainworxx\Includekrexx\Modules\Log::renderMessage
+     * @covers \Brainworxx\Includekrexx\Modules\Log::getContent
+     * @covers \Brainworxx\Includekrexx\Modules\Log::hasAccess
+     * @covers \Brainworxx\Includekrexx\Modules\Log::renderMessage
      */
     public function testGetContentNoAccess()
     {
@@ -151,10 +151,10 @@ class LogTest extends AbstractTest
      * Test the display of the no-logfiles-available message and the display of
      * kreXX messasges, complaining about stuff.
      *
-     * \Brainworxx\Includekrexx\Modules\Log::getContent
-     * \Brainworxx\Includekrexx\Modules\Log::hasAccess
-     * \Brainworxx\Includekrexx\Modules\Log::renderMessage
-     * \Brainworxx\Includekrexx\Modules\Log::retrieveKrexxMessages
+     * @covers \Brainworxx\Includekrexx\Modules\Log::getContent
+     * @covers \Brainworxx\Includekrexx\Modules\Log::hasAccess
+     * @covers \Brainworxx\Includekrexx\Modules\Log::renderMessage
+     * @covers \Brainworxx\Includekrexx\Modules\Log::retrieveKrexxMessages
      */
     public function testGetContentEmpty()
     {
@@ -193,9 +193,9 @@ class LogTest extends AbstractTest
     /**
      * Test the normal diosplay of the file list and without any messages.
      *
-     * \Brainworxx\Includekrexx\Modules\Log::getContent
-     * \Brainworxx\Includekrexx\Modules\Log::hasAccess
-     * \Brainworxx\Includekrexx\Modules\Log::retrieveKrexxMessages
+     * @covers \Brainworxx\Includekrexx\Modules\Log::getContent
+     * @covers \Brainworxx\Includekrexx\Modules\Log::hasAccess
+     * @covers \Brainworxx\Includekrexx\Modules\Log::retrieveKrexxMessages
      */
     public function testGetContentNormal()
     {
@@ -221,7 +221,7 @@ class LogTest extends AbstractTest
     /**
      * Test the assigning of the css file.
      *
-     * \Brainworxx\Includekrexx\Modules\Log::getCssFiles
+     * @covers \Brainworxx\Includekrexx\Modules\Log::getCssFiles
      */
     public function testGetCssFiles()
     {
@@ -237,7 +237,7 @@ class LogTest extends AbstractTest
     /**
      * Test the not-assigning of any js files.
      *
-     * \Brainworxx\Includekrexx\Modules\Log::getJavaScriptFiles
+     * @covers \Brainworxx\Includekrexx\Modules\Log::getJavaScriptFiles
      */
     public function testGetJavaScriptFiles()
     {
@@ -250,7 +250,7 @@ class LogTest extends AbstractTest
     /**
      * Mock the standalone view with the most standard values.
      *
-     * \PHPUnit\Framework\MockObject\MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function mockView() : MockObject
     {

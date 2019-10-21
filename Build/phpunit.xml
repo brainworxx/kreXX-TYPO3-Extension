@@ -8,7 +8,7 @@
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+        <whitelist>
             <directory>../Resources/Private/krexx/src</directory>
             <directory>../Classes</directory>
         </whitelist>
