@@ -86,16 +86,16 @@ class AbstractCallerFinderTest extends AbstractTest
         $newFluid = new Fluid(Krexx::$pool);
 
         // Check the injections from above.
-        $this->assertEquals($this->getValueByReflection('varname', $newFluid), AbstractFluid::FLUID_VARIABLE);
-        $this->assertSame($this->getValueByReflection('view', $newFluid), $viewMock);
-        $this->assertSame($this->getValueByReflection('viewReflection', $newFluid), $reflectionMock);
-        $this->assertSame($this->getValueByReflection('renderingContext', $newFluid), $contextMock);
+        $this->assertEquals($this->retrieveValueByReflection('varname', $newFluid), AbstractFluid::FLUID_VARIABLE);
+        $this->assertSame($this->retrieveValueByReflection('view', $newFluid), $viewMock);
+        $this->assertSame($this->retrieveValueByReflection('viewReflection', $newFluid), $reflectionMock);
+        $this->assertSame($this->retrieveValueByReflection('renderingContext', $newFluid), $contextMock);
         $this->assertSame(
-            $this->getValueByReflection(static::PARSED_TEMPLATE, $newFluid),
+            $this->retrieveValueByReflection(static::PARSED_TEMPLATE, $newFluid),
             $renderingStack[0][static::PARSED_TEMPLATE]
         );
-        $this->assertEquals($this->getValueByReflection('renderingType', $newFluid), 5);
-        $this->assertFalse($this->getValueByReflection('error', $newFluid));
+        $this->assertEquals($this->retrieveValueByReflection('renderingType', $newFluid), 5);
+        $this->assertFalse($this->retrieveValueByReflection('error', $newFluid));
     }
 
     /**
@@ -123,7 +123,7 @@ class AbstractCallerFinderTest extends AbstractTest
         Krexx::$pool->registry->set('renderingContext', $contextMock);
 
         $newFluid = new Fluid(Krexx::$pool);
-        $this->assertTrue($this->getValueByReflection('error', $newFluid));
+        $this->assertTrue($this->retrieveValueByReflection('error', $newFluid));
 
         // And now without the property.
         $reflectionMock = $this->createMock(\ReflectionClass::class);
@@ -134,6 +134,6 @@ class AbstractCallerFinderTest extends AbstractTest
         Krexx::$pool->registry->set('viewReflection', $reflectionMock);
 
         $newFluid = new Fluid(Krexx::$pool);
-        $this->assertTrue($this->getValueByReflection('error', $newFluid));
+        $this->assertTrue($this->retrieveValueByReflection('error', $newFluid));
     }
 }

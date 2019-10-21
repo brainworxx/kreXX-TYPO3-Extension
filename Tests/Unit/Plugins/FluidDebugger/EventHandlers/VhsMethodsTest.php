@@ -56,7 +56,7 @@ class VhsMethodsTest extends AbstractTest implements ConstInterface
     public function testConstruct()
     {
         $getter = new VhsMethods(Krexx::$pool);
-        $this->assertEquals(Krexx::$pool, $this->getValueByReflection('pool', $getter));
+        $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $getter));
     }
 
     /**

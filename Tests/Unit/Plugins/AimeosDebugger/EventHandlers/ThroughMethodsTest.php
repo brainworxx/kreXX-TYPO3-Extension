@@ -57,7 +57,7 @@ class ThroughMethodsTest extends AbstractTest
     public function testConstruct()
     {
         $properties = new ThroughMethods(Krexx::$pool);
-        $this->assertSame(Krexx::$pool, $this->getValueByReflection('pool', $properties));
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $properties));
     }
 
     /**

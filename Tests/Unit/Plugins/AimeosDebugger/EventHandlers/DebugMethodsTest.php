@@ -74,7 +74,7 @@ class DebugMethodsTest extends AbstractTest implements ConstInterface
     public function testConstruct()
     {
         $debugMethod = new DebugMethods(Krexx::$pool);
-        $this->assertEquals(Krexx::$pool, $this->getValueByReflection('pool', $debugMethod));
+        $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $debugMethod));
     }
 
     /**

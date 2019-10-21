@@ -55,7 +55,7 @@ class GetterWithoutGetTest extends AbstractTest implements ConstInterface
     public function testConstruct()
     {
         $getter = new GetterWithoutGet(Krexx::$pool);
-        $this->assertEquals(Krexx::$pool, $this->getValueByReflection('pool', $getter));
+        $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $getter));
     }
 
     /**

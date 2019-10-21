@@ -57,7 +57,7 @@ class DecoratorsTest extends AbstractTest
     public function testConstruct()
     {
         $getter = new Decorators(Krexx::$pool);
-        $this->assertEquals(Krexx::$pool, $this->getValueByReflection('pool', $getter));
+        $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $getter));
     }
 
     /**

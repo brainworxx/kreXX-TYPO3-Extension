@@ -99,7 +99,7 @@ class CodegenTest extends AbstractTest
         $model = new Model(Krexx::$pool);
         $model->setName('_all');
         $this->assertEquals('', $codeGen->generateSource($model));
-        $this->assertTrue($this->getValueByReflection('isAll', $codeGen));
+        $this->assertTrue($this->retrieveValueByReflection('isAll', $codeGen));
 
         // A child of _all. Sounds like a black metal song.
         $model = new Model(Krexx::$pool);

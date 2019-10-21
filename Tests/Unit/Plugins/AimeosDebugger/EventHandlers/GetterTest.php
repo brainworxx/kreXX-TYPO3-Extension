@@ -70,7 +70,7 @@ class GetterTest extends AbstractTest
     public function testConstruct()
     {
         $getter = new Getter(Krexx::$pool);
-        $this->assertEquals(Krexx::$pool, $this->getValueByReflection('pool', $getter));
+        $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $getter));
     }
 
     /**

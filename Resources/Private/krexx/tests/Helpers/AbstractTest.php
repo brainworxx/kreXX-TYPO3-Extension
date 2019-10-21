@@ -40,7 +40,7 @@ use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\KrexxTest;
+use Brainworxx\Krexx\Tests\Unit\KrexxTest;
 use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use PHPUnit\Framework\TestCase;
@@ -142,29 +142,33 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * Getting a protected value in the class we are testing.
+     * Getting a protected/private value by reflection.
      *
      * @param string $name
-     *   The name of the value.
-     * @param object $object
-     *   The instance where we want to set the value. Or the class name, when
-     *   setting static values.
+     *   The name of the property.
+     * @param object|string $object
+     *   The instance from where we want to get the value. Or the class name,
+     *   when getting static values.
      *
      * @return mixed
      *   The value.
      */
-    protected function getValueByReflection($name, $object)
+    protected function retrieveValueByReflection($name, $object)
     {
         try {
             $reflectionClass = new \ReflectionClass($object);
             $reflectionProperty = $reflectionClass->getProperty($name);
             $reflectionProperty->setAccessible(true);
-
-            return $reflectionProperty->getValue($object);
+            if (is_object($object)) {
+                return $reflectionProperty->getValue($object);
+            } else {
+                return $reflectionProperty->getValue();
+            }
         } catch (\ReflectionException $e) {
             $this->fail($e->getMessage());
         }
-        return '';
+
+        return null;
     }
 
     /**
