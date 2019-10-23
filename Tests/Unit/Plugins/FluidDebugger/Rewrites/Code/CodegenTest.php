@@ -62,9 +62,6 @@ class CodegenTest extends AbstractTest
         $model = new Model(Krexx::$pool);
         $model->setName('dotty.dot');
         $helpMock = $this->createMock(Messages::class);
-        $helpMock->expects($this->once())
-            ->method('getHelp')
-            ->with('dotsInFluidVarName');
         Krexx::$pool->messages = $helpMock;
         $this->assertEquals($codeGen::UNKNOWN_VALUE, $codeGen->generateSource($model));
 

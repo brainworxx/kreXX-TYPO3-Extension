@@ -136,12 +136,10 @@ class ConfigurationTest extends AbstractTest
         $versionCompMock->expects($this->exactly(1))
             ->will($this->returnValue(true));
 
-        $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/');
         $this->configuration->exec();
 
         $this->assertEquals($this->expectedRewrites, SettingsGetter::getRewriteList());
         $this->assertEquals($this->expectedEvents, SettingsGetter::getEventList());
-        $this->assertEquals($this->expectedHelpFiles, SettingsGetter::getAdditionalHelpFiles());
     }
     /**
      * Same as the testExecHighVersion, but with a lower TYPO3 version.

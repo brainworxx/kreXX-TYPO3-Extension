@@ -114,9 +114,5 @@ class Configuration implements PluginConfigInterface
             ThroughMethods::class . '::callMe::end',
             VhsMethods::class
         );
-
-        // Adding additional texts.
-        $extPath = ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
-        Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/fluid.kreXX.ini');
     }
 }

@@ -86,17 +86,19 @@ class Codegen extends OrgCodegen implements ConstInterface
 
         $name = $model->getName();
 
-        // Test for a point in a variable name.
-        // Stuff like this is not reachable by normal means.
-        if (strpos($name, '.') !== false &&
-            $this->pool->scope->getScope() !== $name
+        if ((strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
+            $model->getType() === static::TYPE_DEBUG_METHOD ||
+            $model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY
         ) {
-            $model->setHelpid('dotsInFluidVarName');
-            return static::UNKNOWN_VALUE;
-        }
-
-         // Disallowing code generation for configured debug methods.
-        if ($model->getType() === static::TYPE_DEBUG_METHOD) {
+            // Test for a point in a variable name.
+            // Stuff like this is not reachable by normal means.
+            // Disallowing code generation for configured debug methods.
+            // There is no real iterator_to_array method in vanilla fluid or vhs.
+            // The groupedFor viewhelper can be abused, but the new variable would
+            // only be visible inside the viewhelper scope. And adding a
+            // variable.set inside that scope would make the code generation
+            // really complicated.
+            // Meh, we simply stop the generation in it's track.
             return static::UNKNOWN_VALUE;
         }
 
@@ -128,16 +130,6 @@ class Codegen extends OrgCodegen implements ConstInterface
             if ($nestingLevel === 1) {
                 return trim(parent::generateSource($model), '.');
             }
-        }
-
-        // There is no real iterator_to_array method in vanilla fluid or vhs.
-        // The groupedFor viewhelper can be abused, but the new variable would
-        // only be visible inside the viewhelper scope. And adding a
-        // variable.set inside that scope would make the code generation
-        // really complicated.
-        // Meh, we simply stop the generation in it's track.
-        if ($model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY) {
-            return static::UNKNOWN_VALUE;
         }
 
         return parent::generateSource($model);
