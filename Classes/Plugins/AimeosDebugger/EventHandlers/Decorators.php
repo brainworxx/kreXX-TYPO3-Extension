@@ -224,6 +224,48 @@ class Decorators implements EventHandlerInterface, ConstInterface
     }
 
     /**
+     * Retrieve the recipient object name from the aimeos object.
+     *
+     * @param \ReflectionClass $ref
+     *   The reflection of the class we are analysing.
+     *
+     * @return string
+     *   Either a false, or the object that receives all method calls.
+     */
+    protected function retrieveReceiverObjectName(ReflectionClass $ref)
+    {
+        // First, we need to get the name of the object we need to retrieve.
+        // Get the __call() source code.
+        try {
+            $methodRef = $ref->getMethod('__call');
+        } catch (ReflectionException $e) {
+            return '';
+        }
+
+        $source = $this->pool->fileService->readFile(
+            $methodRef->getFileName(),
+            $methodRef->getStartLine(),
+            $methodRef->getStartLine() + 5
+        );
+
+        // Check if we are passing methods, at all.
+        if (strpos($source, 'call_user_func') === false) {
+            return '';
+        }
+
+        // Still here? Now for the serious stuff.
+        $objectName = '';
+        foreach ($this->internalObjectNames as $name => $needle) {
+            if (strpos($source, $needle) !== false) {
+                $objectName = $name;
+                break;
+            }
+        }
+
+        return $objectName;
+    }
+
+    /**
      * Retrieve the recipient object from the aimeos object.
      *
      * @param mixed $data
@@ -236,33 +278,7 @@ class Decorators implements EventHandlerInterface, ConstInterface
      */
     protected function retrieveReceiverObject($data, ReflectionClass $ref)
     {
-        // First, we need to get the name of the object we need to retrieve.
-        // Get the __call() source code.
-        try {
-            $methodRef = $ref->getMethod('__call');
-        } catch (ReflectionException $e) {
-            return false;
-        }
-
-        $source = $this->pool->fileService->readFile(
-            $methodRef->getFileName(),
-            $methodRef->getStartLine(),
-            $methodRef->getStartLine() + 5
-        );
-
-        // Check if we are passing methods, at all.
-        if (strpos($source, 'call_user_func') === false) {
-            return false;
-        }
-
-        // Still here? Now for the serious stuff.
-        $objectName = false;
-        foreach ($this->internalObjectNames as $name => $needle) {
-            if (strpos($source, $needle) !== false) {
-                $objectName = $name;
-                break;
-            }
-        }
+        $objectName = $this->retrieveReceiverObjectName($ref);
         if (empty($objectName)) {
             // Unable to retrieve the object name.
             return false;
