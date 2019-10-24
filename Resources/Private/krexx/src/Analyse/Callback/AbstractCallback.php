@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Analyse\Callback;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 
 /**
  * Abstract class for the callback classes inside the model.
@@ -140,7 +141,7 @@ abstract class AbstractCallback implements ConstInterface
     protected function dispatchStartEvent()
     {
         return $this->pool->eventService->dispatch(
-            static::class . '::callMe::start',
+            static::class . PluginConfigInterface::START_EVENT,
             $this
         );
     }

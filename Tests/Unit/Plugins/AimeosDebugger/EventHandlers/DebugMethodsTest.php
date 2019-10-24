@@ -39,6 +39,7 @@ use Brainworxx\Includekrexx\Tests\Fixtures\AimeosItem;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\DebugMethodFixture;
@@ -60,7 +61,7 @@ class DebugMethodsTest extends AbstractTest implements ConstInterface
 
         // Subscribing.
         Registration::registerEvent(
-            AnalyseDebugMethods::class . '::callMe::start',
+            AnalyseDebugMethods::class . PluginConfigInterface::START_EVENT,
             DebugMethods::class
         );
         Krexx::$pool->eventService = new Event(Krexx::$pool);

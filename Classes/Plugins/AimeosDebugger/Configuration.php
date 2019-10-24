@@ -79,7 +79,7 @@ class Configuration implements PluginConfigInterface
     {
         // Resolving the __get().
         Registration::registerEvent(
-            PublicProperties::class . '::callMe::start',
+            PublicProperties::class . static::START_EVENT,
             Properties::class
         );
 
@@ -91,26 +91,26 @@ class Configuration implements PluginConfigInterface
 
         // Resolving the magical class methods of the decorator pattern.
         Registration::registerEvent(
-            AnalyseMethods::class . '::callMe::start',
+            AnalyseMethods::class . static::START_EVENT,
             Decorators::class
         );
 
         // Resolving the magical factory for the view helpers (not to be confused
         // with fluid viewhelpers).
         Registration::registerEvent(
-            AnalyseMethods::class . '::callMe::start',
+            AnalyseMethods::class . static::START_EVENT,
             ViewFactory::class
         );
 
         // Replacing the magical factory name in the method analysis.
         Registration::registerEvent(
-            IterateThroughMethods::class . '::callMe::end',
+            IterateThroughMethods::class . static::END_EVENT,
             ThroughMethods::class
         );
 
         // Adding additional debug methods.
         Registration::registerEvent(
-            AnalyseDebugMethods::class . '::callMe::start',
+            AnalyseDebugMethods::class . static::START_EVENT,
             DebugMethods::class
         );
 

@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandler
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
@@ -71,7 +72,7 @@ class ViewFactoryTest extends AbstractTest
     {
         // Subscribing.
         Registration::registerEvent(
-            AnalyseMethods::class . '::callMe::start',
+            AnalyseMethods::class . PluginConfigInterface::START_EVENT,
             ViewFactory::class
         );
         Krexx::$pool->eventService = new Event(Krexx::$pool);

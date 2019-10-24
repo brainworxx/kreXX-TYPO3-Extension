@@ -111,7 +111,7 @@ class Configuration implements PluginConfigInterface
         );
         // Another event switches to VHS code generation.
         Registration::registerEvent(
-            ThroughMethods::class . '::callMe::end',
+            ThroughMethods::class . static::END_EVENT,
             VhsMethods::class
         );
     }

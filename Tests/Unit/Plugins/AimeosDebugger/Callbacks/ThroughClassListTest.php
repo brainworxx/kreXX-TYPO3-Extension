@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\Callbacks;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
@@ -55,7 +56,7 @@ class ThroughClassListTest extends AbstractTest
 
         $throughClassList = new ThroughClassList(Krexx::$pool);
         $this->mockEventService(
-            [ThroughClassList::class . '::callMe::start', $throughClassList],
+            [ThroughClassList::class . PluginConfigInterface::START_EVENT, $throughClassList],
             [ThroughClassList::class . '::' . ThroughClassList::EVENT_MARKER_ANALYSES_END, $throughClassList],
             [ThroughClassList::class . '::' . ThroughClassList::EVENT_MARKER_ANALYSES_END, $throughClassList],
             [ThroughClassList::class . '::' . ThroughClassList::EVENT_MARKER_ANALYSES_END, $throughClassList]

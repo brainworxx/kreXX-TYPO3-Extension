@@ -39,6 +39,7 @@ use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods as IterateThroughMethods;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
@@ -54,7 +55,7 @@ class ThroughMethodsTest extends AbstractTest
     {
         $thoughMethods = new ThroughMethods(Krexx::$pool);
         // Test the start event.
-        $this->mockEventService([ThroughMethods::class . '::callMe::start', $thoughMethods]);
+        $this->mockEventService([ThroughMethods::class . PluginConfigInterface::START_EVENT, $thoughMethods]);
 
         // Create a fixture with reflections and names as keys.
         $fixture = [

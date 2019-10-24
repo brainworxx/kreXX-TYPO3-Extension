@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
@@ -82,7 +83,7 @@ class VhsMethodsTest extends AbstractTest implements ConstInterface
 
         // Subscribing
         Registration::registerEvent(
-            ThroughMethods::class . '::callMe::end',
+            ThroughMethods::class . PluginConfigInterface::END_EVENT,
             VhsMethods::class
         );
         Krexx::$pool->eventService = new Event(Krexx::$pool);

@@ -41,6 +41,10 @@ namespace Brainworxx\Krexx\Service\Plugin;
  */
 interface PluginConfigInterface
 {
+
+    const START_EVENT = '::callMe::start';
+    const END_EVENT = '::callMe::end';
+
     /**
      * Get the name of the plugin.
      *

@@ -42,6 +42,7 @@ use Brainworxx\Includekrexx\Tests\Fixtures\FixtureJob;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
@@ -84,7 +85,7 @@ class DecoratorsTest extends AbstractTest
 
         // Subscribing.
         Registration::registerEvent(
-            Methods::class . '::callMe::start',
+            Methods::class . PluginConfigInterface::START_EVENT,
             Decorators::class
         );
         Krexx::$pool->eventService = new Event(Krexx::$pool);
