@@ -122,7 +122,7 @@ var Eventhandler = (function () {
                 if (element === event.currentTarget) {
                     element = null;
                 }
-            } while (element !== null);
+            } while (element !== null && typeof element.matches === 'function');
         };
         this.kdt = new Kdt();
         var elements = document.querySelectorAll(selector);
@@ -849,11 +849,25 @@ var SmokyGrey = (function (_super) {
         this.eventHandler.addEvent('.kwrapper .kel', 'click', this.setAdditionalData);
     };
     SmokyGrey.prototype.setPayloadMaxHeight = function () {
-        var height = Math.round(Math.max(document.documentElement.clientHeight, window.innerHeight || 0) * 0.60);
-        if (height > 0) {
-            var elements = document.querySelectorAll('.krela-wrapper .kpayload');
-            for (var i = 0; i < elements.length; i++) {
+        var height = Math.round(Math.min(document.documentElement.clientHeight, window.innerHeight || 0) * 0.70);
+        var elements;
+        var i;
+        if (height > 350) {
+            elements = document.querySelectorAll('.krela-wrapper .kpayload');
+            for (i = 0; i < elements.length; i++) {
                 elements[i].style.maxHeight = height + 'px';
+            }
+        }
+        elements = document.querySelectorAll('.kfatalwrapper-outer .kpayload');
+        if (elements.length > 0) {
+            var header = document.querySelector('.kfatalwrapper-outer ul.knode.kfirst').offsetHeight;
+            var footer = document.querySelector('.kfatalwrapper-outer .kinfo-wrapper').offsetHeight;
+            var handler = document.querySelector('.kfatalwrapper-outer').offsetHeight;
+            height = handler - header - footer - 17;
+            if (height > 350) {
+                for (i = 0; i < elements.length; i++) {
+                    elements[i].style.maxHeight = height + 'px';
+                }
             }
         }
     };

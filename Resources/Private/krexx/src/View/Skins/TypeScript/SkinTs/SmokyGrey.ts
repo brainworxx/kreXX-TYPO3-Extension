@@ -254,12 +254,31 @@ class SmokyGrey extends Hans
     protected setPayloadMaxHeight() : void
     {
         // Get the height.
-        let height:number = Math.round(Math.max(document.documentElement.clientHeight, window.innerHeight || 0) * 0.60);
+        let height = Math.round(Math.min(document.documentElement.clientHeight, window.innerHeight || 0) * 0.70);
+        let elements;
+        let i;
 
-        if (height > 0) {
-            let elements:NodeList = document.querySelectorAll('.krela-wrapper .kpayload');
-            for (let i = 0; i < elements.length; i++) {
-                (elements[i] as HTMLElement).style.maxHeight = height + 'px';
+        if (height > 350) {
+            // For the debug display
+            elements = document.querySelectorAll('.krela-wrapper .kpayload');
+            for (i = 0; i < elements.length; i++) {
+                elements[i].style.maxHeight = height + 'px';
+            }
+        }
+
+        // For the fatal error handler.
+        elements = document.querySelectorAll('.kfatalwrapper-outer .kpayload');
+        if (elements.length > 0) {
+            let header = (document.querySelector('.kfatalwrapper-outer ul.knode.kfirst') as HTMLElement).offsetHeight;
+            let footer = (document.querySelector('.kfatalwrapper-outer .kinfo-wrapper') as HTMLElement).offsetHeight;
+            let handler = (document.querySelector('.kfatalwrapper-outer') as HTMLElement).offsetHeight;
+            // This sets the max payload height to the remaining height of the window,
+            // sending the footer straight to the bottom of the viewport.
+            height = handler - header - footer - 17;
+            if (height > 350) {
+                for (i = 0; i < elements.length; i++) {
+                    elements[i].style.maxHeight = height + 'px';
+                }
             }
         }
     }

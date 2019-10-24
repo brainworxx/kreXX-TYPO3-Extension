@@ -148,7 +148,7 @@ class Eventhandler
                 element = null;
             }
 
-        } while (element !== null);
+        } while (element !== null && typeof (element as Element).matches === 'function');
     };
 
     /**
