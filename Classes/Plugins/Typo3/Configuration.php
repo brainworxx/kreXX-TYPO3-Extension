@@ -35,6 +35,8 @@
 namespace Brainworxx\Includekrexx\Plugins\Typo3;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
@@ -45,6 +47,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\RepositoryInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 /**
  * Configuration file for the TYPO3 kreXX plugin.
@@ -86,6 +89,12 @@ class Configuration implements PluginConfigInterface
     {
         // We are using the TYPO3 ip security, instead of the kreXX implementation.
         Registration::addRewrite(CheckOutput::class, T3CheckOutput::class);
+
+        // Registering some specil stuff for the model analysis.
+        Registration::registerEvent(
+            ProcessObject::class . static::START_PROCESS,
+            DirtyModels::class
+        );
 
         // Get the absolute site path. The constant PATH_site is deprecated
         // since 9.2.

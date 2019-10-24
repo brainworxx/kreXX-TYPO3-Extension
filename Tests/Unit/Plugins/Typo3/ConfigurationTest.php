@@ -36,7 +36,9 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
+use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\MetaData;
@@ -118,6 +120,13 @@ class ConfigurationTest extends AbstractTest
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/');
 
         $this->configuration->exec();
+
+        $this->assertEquals(
+            [ProcessObject::class . Configuration::START_PROCESS =>
+                [DirtyModels::class => DirtyModels::class]
+            ],
+            SettingsGetter::getEventList()
+        );
 
         $this->assertEquals(
             [CheckOutput::class => T3CheckOutput::class],
