@@ -55,8 +55,8 @@ interface EventHandlerInterface
     /**
      * Blueprint for the event handler.
      *
-     * @param AbstractCallback $callback
-     *   The original callback.
+     * @param AbstractCallback|null $callback
+     *   The original callback. Or null, when coming from the processing.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
      *

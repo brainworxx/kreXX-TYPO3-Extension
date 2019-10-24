@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File as Fileservice;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
@@ -52,6 +53,7 @@ class ProcessClosureTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::process
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveParameterList
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveSourceCode
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
     {
@@ -88,6 +90,9 @@ class ProcessClosureTest extends AbstractTest
 
         // Run the test
         $processClosure = new ProcessClosure(Krexx::$pool);
+        $this->mockEventService(
+            [ProcessClosure::class . PluginConfigInterface::START_PROCESS, null, $model]
+        );
         $processClosure->process($model);
 
         // Run the tests, model.

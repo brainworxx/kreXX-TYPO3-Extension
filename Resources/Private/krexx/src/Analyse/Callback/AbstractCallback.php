@@ -147,7 +147,7 @@ abstract class AbstractCallback implements ConstInterface
     }
 
     /**
-     * Dispatches an event where the modes is available.
+     * Dispatches an event where the model is available.
      *
      * @param string $name
      *   The name of the event.

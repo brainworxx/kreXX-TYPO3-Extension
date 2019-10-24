@@ -58,7 +58,9 @@ class ProcessNull extends AbstractRouting implements ProcessInterface
     {
         $data = 'NULL';
         return $this->pool->render->renderSingleChild(
-            $model->setData($data)->setNormal($data)->setType(static::TYPE_NULL)
+            $this->dispatchProcessEvent(
+                $model->setData($data)->setNormal($data)->setType(static::TYPE_NULL)
+            )
         );
     }
 }

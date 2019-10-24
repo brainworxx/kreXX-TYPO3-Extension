@@ -88,14 +88,16 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
         }
 
         return $this->pool->render->renderExpandableChild(
-            $model->setType(static::TYPE_CLOSURE)
-                ->setNormal(static::UNKNOWN_VALUE)
-                // Remove the ',' after the last char.
-                ->setConnectorParameters($this->retrieveParameterList($ref, $result))
-                ->setDomid($this->generateDomIdFromObject($model->getData()))
-                ->setConnectorType(Connectors::METHOD)
-                ->addParameter(static::PARAM_DATA, $result)
-                ->injectCallback($this->pool->createClass(ThroughMeta::class))
+            $this->dispatchProcessEvent(
+                $model->setType(static::TYPE_CLOSURE)
+                    ->setNormal(static::UNKNOWN_VALUE)
+                    // Remove the ',' after the last char.
+                    ->setConnectorParameters($this->retrieveParameterList($ref, $result))
+                    ->setDomid($this->generateDomIdFromObject($model->getData()))
+                    ->setConnectorType(Connectors::METHOD)
+                    ->addParameter(static::PARAM_DATA, $result)
+                    ->injectCallback($this->pool->createClass(ThroughMeta::class))
+            )
         );
     }
 

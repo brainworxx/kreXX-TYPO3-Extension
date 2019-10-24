@@ -35,7 +35,9 @@
 namespace Brainworxx\Krexx\Analyse\Routing;
 
 use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 
 /**
  * Abstract class for further processing of found class properties.
@@ -78,5 +80,47 @@ abstract class AbstractRouting implements ConstInterface
     protected function generateDomIdFromObject($data)
     {
         return 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_' . spl_object_hash($data);
+    }
+
+    /**
+     * Dispatches the process event of the routing.
+     *
+     * @param Model $model
+     *   The model so far.
+     *
+     * @return Model
+     *   The changed Model.
+     */
+    protected function dispatchProcessEvent(Model $model)
+    {
+        $this->pool->eventService->dispatch(
+            static::class . PluginConfigInterface::START_PROCESS,
+            null,
+            $model
+        );
+
+        return $model;
+    }
+
+    /**
+     * Dispatch a named event.
+     *
+     * @param string $name
+     *   The event name.
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model, so far.
+     *
+     * @return \Brainworxx\Krexx\Analyse\Model
+     *   The changed model.
+     */
+    protected function dispatchNamedEvent($name, Model $model)
+    {
+        $this->pool->eventService->dispatch(
+            static::class . '::' . $name,
+            null,
+            $model
+        );
+
+        return $model;
     }
 }

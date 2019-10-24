@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 
@@ -46,6 +47,7 @@ class ProcessOtherTest extends AbstractTest
      * Testing of not yet handled stuff, aka 'other'.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
     {
@@ -56,6 +58,9 @@ class ProcessOtherTest extends AbstractTest
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
         $processor = new ProcessOther(Krexx::$pool);
+        $this->mockEventService(
+            [ProcessOther::class . PluginConfigInterface::START_PROCESS, null, $model]
+        );
         $processor->process($model);
 
         $this->assertEquals('string', $model->getType());

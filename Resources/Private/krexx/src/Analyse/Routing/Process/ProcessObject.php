@@ -59,14 +59,16 @@ class ProcessObject extends AbstractRouting implements ProcessInterface
         $object = $model->getData();
         // Output data from the class.
         return $this->pool->render->renderExpandableChild(
-            $model->setType(static::TYPE_CLASS)
-                ->addParameter(static::PARAM_DATA, $object)
-                ->addParameter(static::PARAM_NAME, $model->getName())
-                ->setNormal('\\' . get_class($object))
-                ->setDomid($this->generateDomIdFromObject($object))
-                ->injectCallback(
-                    $this->pool->createClass(Objects::class)
-                )
+            $this->dispatchProcessEvent(
+                $model->setType(static::TYPE_CLASS)
+                    ->addParameter(static::PARAM_DATA, $object)
+                    ->addParameter(static::PARAM_NAME, $model->getName())
+                    ->setNormal('\\' . get_class($object))
+                    ->setDomid($this->generateDomIdFromObject($object))
+                    ->injectCallback(
+                        $this->pool->createClass(Objects::class)
+                    )
+            )
         );
     }
 }

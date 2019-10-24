@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
@@ -46,6 +47,7 @@ class ProcessBooleanTest extends AbstractTest
      * Testing the processing of booleans.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
     {
@@ -61,6 +63,9 @@ class ProcessBooleanTest extends AbstractTest
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
         $processor = new ProcessBoolean(Krexx::$pool);
+        $this->mockEventService(
+            [ProcessBoolean::class . PluginConfigInterface::START_PROCESS, null, $model]
+        );
         $processor->process($model);
 
         $models = $renderNothing->model['renderSingleChild'];

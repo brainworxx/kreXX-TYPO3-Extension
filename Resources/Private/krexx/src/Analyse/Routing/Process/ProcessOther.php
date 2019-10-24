@@ -60,9 +60,11 @@ class ProcessOther extends AbstractRouting implements ProcessInterface
         // Unknown type, better encode it, just to be sure.
         $type = $this->pool->encodingService->encodeString(gettype($model->getData()));
         return $this->pool->render->renderSingleChild(
-            $model->setType($type)
-                ->setNormal('Unhandled type: ' . $type)
-                ->setHelpid('unhandedOtherHelp')
+            $this->dispatchProcessEvent(
+                $model->setType($type)
+                    ->setNormal('Unhandled type: ' . $type)
+                    ->setHelpid('unhandedOtherHelp')
+            )
         );
     }
 }

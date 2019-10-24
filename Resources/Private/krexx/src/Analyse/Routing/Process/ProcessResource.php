@@ -81,10 +81,12 @@ class ProcessResource extends AbstractRouting implements ProcessInterface
 
         // Output meta data from the class.
         return $this->pool->render->renderExpandableChild(
-            $model->setType(static::TYPE_RESOURCE)
-                ->addParameter(static::PARAM_DATA, $meta)
-                ->setNormal($typeString)
-                ->injectCallback($this->pool->createClass(ThroughResource::class))
+            $this->dispatchProcessEvent(
+                $model->setType(static::TYPE_RESOURCE)
+                    ->addParameter(static::PARAM_DATA, $meta)
+                    ->setNormal($typeString)
+                    ->injectCallback($this->pool->createClass(ThroughResource::class))
+            )
         );
     }
 
@@ -110,9 +112,11 @@ class ProcessResource extends AbstractRouting implements ProcessInterface
         }
 
         return $this->pool->render->renderSingleChild(
-            $model->setData($typeString)
-                ->setNormal($typeString)
-                ->setType(static::TYPE_RESOURCE)
+            $this->dispatchNamedEvent(
+                __FUNCTION__,
+                $model->setNormal($typeString)
+                    ->setType(static::TYPE_RESOURCE)
+            )
         );
     }
 }

@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessString;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\FileinfoDummy;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use finfo;
 
@@ -87,6 +88,7 @@ class ProcessStringTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessNormal()
     {
@@ -113,6 +115,7 @@ class ProcessStringTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessBrokenEncodung()
     {
@@ -139,6 +142,7 @@ class ProcessStringTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessLargerString()
     {
@@ -167,6 +171,7 @@ class ProcessStringTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessHugeString()
     {
@@ -196,6 +201,7 @@ class ProcessStringTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessWithCallback()
     {
@@ -224,6 +230,7 @@ class ProcessStringTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessWithLinebreaks()
     {
@@ -312,6 +319,9 @@ class ProcessStringTest extends AbstractTest
 
         $processString = new ProcessString(Krexx::$pool);
         $this->setValueByReflection(static::BUFFER_INFO, $fileinfoMock, $processString);
+        $this->mockEventService(
+            [ProcessString::class . PluginConfigInterface::START_PROCESS, null, $model]
+        );
         $processString->process($model);
 
         return $model;

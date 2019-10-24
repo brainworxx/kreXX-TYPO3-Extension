@@ -38,6 +38,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 
@@ -47,6 +48,7 @@ class ProcessResourceTest extends AbstractTest
      * Testing the processing of a stream resource.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessStream()
     {
@@ -70,6 +72,7 @@ class ProcessResourceTest extends AbstractTest
      * Testing the processing of a curl resource.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessCurl()
     {
@@ -94,6 +97,7 @@ class ProcessResourceTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::process
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::renderUnknownOrClosed
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchNamedEvent
      */
     public function testProcessOtherNotPhp72()
     {
@@ -107,7 +111,7 @@ class ProcessResourceTest extends AbstractTest
         $versionCompare->expects($this->once())
             ->will($this->returnValue(false));
 
-        $this->runTheTest($resource, 0, 'resource (whatever)', 'resource (whatever)');
+        $this->runTheTest($resource, 0, 'resource (whatever)', $resource);
     }
 
     /**
@@ -115,6 +119,7 @@ class ProcessResourceTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::process
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::renderUnknownOrClosed
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchNamedEvent
      */
     public function testProcessOtherPhp72()
     {
@@ -128,7 +133,7 @@ class ProcessResourceTest extends AbstractTest
         $versionCompare->expects($this->once())
             ->will($this->returnValue(true));
 
-        $this->runTheTest($resource, 0, 'string', 'string');
+        $this->runTheTest($resource, 0, 'string', $resource);
     }
 
     /**
@@ -152,6 +157,16 @@ class ProcessResourceTest extends AbstractTest
         $model->setData($resource);
 
         $processor = new ProcessResource(Krexx::$pool);
+        if ($counter > 0) {
+            $this->mockEventService(
+                [ProcessResource::class . PluginConfigInterface::START_PROCESS, null, $model]
+            );
+        } else {
+            $this->mockEventService(
+                [ProcessResource::class . '::renderUnknownOrClosed', null, $model]
+            );
+        }
+
         $processor->process($model);
 
         $this->assertEquals($model::TYPE_RESOURCE, $model->getType());

@@ -76,10 +76,12 @@ class ProcessArray extends AbstractRouting implements ProcessInterface
 
         // Dumping all Properties.
         return $this->pool->render->renderExpandableChild(
-            $model->setType(static::TYPE_ARRAY)
-                ->setNormal($count . ' elements')
-                ->addParameter(static::PARAM_DATA, $model->getData())
-                ->addParameter(static::PARAM_MULTILINE, $multiline)
+            $this->dispatchProcessEvent(
+                $model->setType(static::TYPE_ARRAY)
+                    ->setNormal($count . ' elements')
+                    ->addParameter(static::PARAM_DATA, $model->getData())
+                    ->addParameter(static::PARAM_MULTILINE, $multiline)
+            )
         );
     }
 }

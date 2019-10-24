@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 
@@ -46,6 +47,7 @@ class ProcessFloatTest extends AbstractTest
      * Testing the float value processing.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
     {
@@ -54,6 +56,9 @@ class ProcessFloatTest extends AbstractTest
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
         $processor = new ProcessFloat(Krexx::$pool);
+        $this->mockEventService(
+            [ProcessFloat::class . PluginConfigInterface::START_PROCESS, null, $model]
+        );
         $processor->process($model);
 
         $this->assertEquals($fixture, $model->getData());

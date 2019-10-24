@@ -78,15 +78,16 @@ class Event
      *
      * @param string $name
      *   The name of the event.
-     * @param AbstractCallback $callback
+     * @param AbstractCallback|null $callback
      *   The callback, that emitted the event.
+     *   Null, when coming from the routing.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far, if available.
      *
      * @return string
      *   The generated markup from the event handlers
      */
-    public function dispatch($name, AbstractCallback $callback, Model $model = null)
+    public function dispatch($name, AbstractCallback $callback = null, Model $model = null)
     {
         if (isset($this->register[$name]) === false) {
             // No registered handler. Early return.

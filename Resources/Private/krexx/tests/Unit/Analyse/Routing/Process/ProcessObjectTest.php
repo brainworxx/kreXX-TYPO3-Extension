@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
@@ -47,6 +48,7 @@ class ProcessObjectTest extends AbstractTest
      * Testing the initial object processing.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
     {
@@ -56,6 +58,9 @@ class ProcessObjectTest extends AbstractTest
         $model->setData($fixture);
         $model->setName('$myObject');
         $processor = new ProcessObject(Krexx::$pool);
+        $this->mockEventService(
+            [ProcessObject::class . PluginConfigInterface::START_PROCESS, null, $model]
+        );
         $processor->process($model);
 
         $this->assertEquals(ProcessObject::TYPE_CLASS, $model->getType());

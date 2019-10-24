@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 
@@ -46,6 +47,7 @@ class ProcessIntegerTest extends AbstractTest
      * Testing the integer value processing.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
     {
@@ -54,6 +56,9 @@ class ProcessIntegerTest extends AbstractTest
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
         $processor = new ProcessInteger(Krexx::$pool);
+        $this->mockEventService(
+            [ProcessInteger::class . PluginConfigInterface::START_PROCESS, null, $model]
+        );
         $processor->process($model);
 
         $this->assertEquals($fixture, $model->getData());

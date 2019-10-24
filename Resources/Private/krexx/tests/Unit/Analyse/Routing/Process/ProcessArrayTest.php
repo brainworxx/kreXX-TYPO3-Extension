@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
@@ -54,6 +55,10 @@ class ProcessArrayTest extends AbstractTest
         $model->setData($fixture);
 
         $processArray = new ProcessArray(Krexx::$pool);
+        $this->mockEventService(
+            [ProcessArray::class . PluginConfigInterface::START_PROCESS, null, $model]
+        );
+
         $processArray->process($model);
 
         $this->assertEquals(1, CallbackCounter::$counter);
@@ -67,6 +72,7 @@ class ProcessArrayTest extends AbstractTest
      * Test the processing of a normal array.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessNormal()
     {
@@ -78,6 +84,7 @@ class ProcessArrayTest extends AbstractTest
      * Test the processing of a large array.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessLargeArray()
     {

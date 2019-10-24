@@ -1,6 +1,7 @@
 3.1.1 dev
 - Introduce php-mock/php-mock-phpunit
 - Removed the TER-SonarQube findings from the unit tests.
+- Added event system to the process classes.
 - Change: Remove the event prefix and use static::class instead.
 - Change: Move cleanup methods to their own class.
 - Change: Move the output check methods to an appropriate class.
