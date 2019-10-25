@@ -39,11 +39,15 @@ use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder as DbQueryBuilder;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use Exception;
 use Throwable;
 
-class QueryBuilder implements EventHandlerInterface, ConstInterface
+class QueryDebugger implements EventHandlerInterface, ConstInterface
 {
     /**
      * The resource pool
@@ -73,11 +77,9 @@ class QueryBuilder implements EventHandlerInterface, ConstInterface
      */
     public function handle(AbstractCallback $callback = null, Model $model = null)
     {
-        /** @var DbQueryBuilder $queryBuilder */
+        /** @var QueryBuilder $queryBuilder */
         $queryBuilder = $callback->getParameters()[static::PARAM_DATA];
-        if ($queryBuilder instanceof DbQueryBuilder === false ||
-            empty($sql = $this->retrieveSql($queryBuilder))  === true
-        ) {
+        if (empty($sql = $this->retrieveSql($queryBuilder))  === true) {
             // Wrong object type, or problems with the SQL retrieval.
             return '';
         }
@@ -113,20 +115,32 @@ class QueryBuilder implements EventHandlerInterface, ConstInterface
     /**
      * Retrieve the SQL from a query builder object.
      *
-     * @param AbstractCallback $callback
+     * @param QueryBuilder|QueryInterface $query
      *   The callback with the QueryBuilder
      *
      * @return string
      *   The SQL, or an empty string in case of an error.
      */
-    protected function retrieveSql(DbQueryBuilder $queryBuilder)
+    protected function retrieveSql($query)
     {
         $result = '';
-
         try {
-            $sql = $queryBuilder->getSQL();
+            // Retrieving the SQL, depending on the object class.
+            if ($query instanceof QueryBuilder) {
+                $sql = $query->getSQL();
+                $parameters = $query->getParameters();
+            } elseif ($query instanceof QueryInterface) {
+                $doctrineQuery = GeneralUtility::makeInstance(ObjectManager::class)
+                    ->get(Typo3DbQueryParser::class)
+                    ->convertQueryToDoctrineQueryBuilder($query);
+                $sql = $doctrineQuery->getSQL();
+                $parameters = $doctrineQuery->getParameters();
+            } else {
+                return '';
+            }
+
             // Insert the parameters into the sql
-            foreach ($queryBuilder->getParameters() as $key => $parameter) {
+            foreach ($parameters as $key => $parameter) {
                 if (is_string($parameter)) {
                     $parameter = '\'' . $parameter . '\'';
                 }

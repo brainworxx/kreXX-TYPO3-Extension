@@ -36,7 +36,7 @@ namespace Brainworxx\Includekrexx\Plugins\Typo3;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
-use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryBuilder;
+use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -102,7 +102,7 @@ class Configuration implements PluginConfigInterface
         // The QueryBuilder special analysis.
         Registration::registerEvent(
             Objects::class . static::START_EVENT,
-            QueryBuilder::class
+            QueryDebugger::class
         );
 
         // Get the absolute site path. The constant PATH_site is deprecated
