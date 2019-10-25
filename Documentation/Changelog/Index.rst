@@ -14,8 +14,9 @@ Changelog
 
 3.2.1 dev
     - [Feature] Introduce php-mock/php-mock-phpunit.
-    - [Feature] TYPO3 10.0 support.
     - [Feature] TYPO3 10.1 support.
+    - [Feature] Added event system to the process classes
+    - [Feature] Added better model analysis for TYPO3 standard models.
     - [Change] Remove the event prefix and use static::class instead.
     - [Change] Move cleanup methods to their own class.
     - [Change] Move the output check methods to an appropriate class.
@@ -23,6 +24,7 @@ Changelog
     - [Change] Complete refactor of the rendering mechanism.
     - [Change] Ported the javascript to type script.
     - [Change] Removed TYPO3 6.2 compatibility.
+    - [Change] Removed DataViewer support.
     - [Bugfix] Missing encoding info in the error handler output
     - [Bugfix] Removed the TER-SonarQube findings from the unit tests.
     - [Bugfix] Warning when accessing the backend module

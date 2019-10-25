@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception\TooDirtyException;
 
@@ -71,7 +72,7 @@ class DirtyModels implements EventHandlerInterface, ConstInterface
     }
 
     /**
-     * We simply remove the 'get' from the method name in the model.
+     * Running three very special debug methods, on TYPO3 models.
      *
      * @param AbstractCallback $callback
      *   The calling class.
@@ -92,13 +93,21 @@ class DirtyModels implements EventHandlerInterface, ConstInterface
         }
 
         try {
-            $model->addToJson('Is dirty', $this->createReadableBoolean($data->_isDirty()));
-        } catch (TooDirtyException $e) {
-            $model->addToJson('Is dirty', 'TRUE, even the UID was modified!');
-        }
+            try {
+                $model->addToJson('Is dirty', $this->createReadableBoolean($data->_isDirty()));
+            } catch (TooDirtyException $e) {
+                $model->addToJson('Is dirty', 'TRUE, even the UID was modified!');
+            }
 
-        $model->addToJson('Is a clone', $this->createReadableBoolean($data->_isClone()));
-        $model->addToJson('Is a new', $this->createReadableBoolean($data->_isNew()));
+            $model->addToJson('Is a clone', $this->createReadableBoolean($data->_isClone()));
+            $model->addToJson('Is a new', $this->createReadableBoolean($data->_isNew()));
+        } catch (Exception $e) {
+            // Do nothing.
+            // Somebody has messed with the models.
+        } catch (\Throwable $e) {
+            // Do nothing.
+            // Somebody has messed with the models.
+        }
 
         return '';
     }
