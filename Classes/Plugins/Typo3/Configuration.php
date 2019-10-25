@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Plugins\Typo3;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
+use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryBuilder;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -47,7 +48,9 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\RepositoryInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper as NewAbstractViewHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder as DbQueryBuilder;
 
 /**
  * Configuration file for the TYPO3 kreXX plugin.
@@ -94,6 +97,12 @@ class Configuration implements PluginConfigInterface
         Registration::registerEvent(
             ProcessObject::class . static::START_PROCESS,
             DirtyModels::class
+        );
+
+        // The QueryBuilder special analysis.
+        Registration::registerEvent(
+            Objects::class . static::START_EVENT,
+            QueryBuilder::class
         );
 
         // Get the absolute site path. The constant PATH_site is deprecated
@@ -149,7 +158,7 @@ class Configuration implements PluginConfigInterface
             '__toString'
         );
         Registration::addMethodToDebugBlacklist(
-            \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper::class,
+            NewAbstractViewHelper::class,
             '__toString'
         );
 
@@ -163,6 +172,12 @@ class Configuration implements PluginConfigInterface
         // The lazy loading proxy may not have loaded the object at this time.
         Registration::addMethodToDebugBlacklist(
             LazyLoadingProxy::class,
+            '__toString'
+        );
+
+        // We now have a better variant for the QueryBuilder analysis.
+        Registration::addMethodToDebugBlacklist(
+            DbQueryBuilder::class,
             '__toString'
         );
 
