@@ -73,17 +73,20 @@ class QueryBuilder implements EventHandlerInterface, ConstInterface
      */
     public function handle(AbstractCallback $callback = null, Model $model = null)
     {
-        $sql = $this->retrieveSql($callback);
-        if (empty($sql)) {
-            // Something went wrong here.
-            // Early return.
+        /** @var DbQueryBuilder $queryBuilder */
+        $queryBuilder = $callback->getParameters()[static::PARAM_DATA];
+        if ($queryBuilder instanceof DbQueryBuilder === false ||
+            empty($sql = $this->retrieveSql($queryBuilder))  === true
+        ) {
+            // Wrong object type, or problems with the SQL retrieval.
             return '';
         }
 
         $length = strlen($sql);
+        $sqlEscaped = $this->pool->encodingService->encodeString($sql);
         /** @var Model $model */
         $model = $this->pool->createClass(Model::class)
-            ->setData($sql)
+            ->setData($sqlEscaped)
             ->setHelpid('queryBuilderHelp')
             ->setName('SQL')
             ->setType(static::TYPE_STRING . $length);
@@ -94,7 +97,7 @@ class QueryBuilder implements EventHandlerInterface, ConstInterface
             ) . static::UNKNOWN_VALUE;
             $model->setNormal($cut)->setHasExtra(true);
         } else {
-            $model->setNormal($sql);
+            $model->setNormal($sqlEscaped);
         }
 
         // Disable source generation
@@ -116,22 +119,18 @@ class QueryBuilder implements EventHandlerInterface, ConstInterface
      * @return string
      *   The SQL, or an empty string in case of an error.
      */
-    protected function retrieveSql(AbstractCallback $callback)
+    protected function retrieveSql(DbQueryBuilder $queryBuilder)
     {
         $result = '';
-
-        /** @var DbQueryBuilder $queryBuilder */
-        $queryBuilder = $callback->getParameters()[static::PARAM_DATA];
-        if ($queryBuilder instanceof DbQueryBuilder === false) {
-            // Wrong object type.
-            return $result;
-        }
 
         try {
             $sql = $queryBuilder->getSQL();
             // Insert the parameters into the sql
             foreach ($queryBuilder->getParameters() as $key => $parameter) {
-                $sql = str_replace(':' . $key, (string)$parameter, $sql);
+                if (is_string($parameter)) {
+                    $parameter = '\'' . $parameter . '\'';
+                }
+                $sql = str_replace(':' . $key, $parameter, $sql);
             }
 
             $result = $sql;
