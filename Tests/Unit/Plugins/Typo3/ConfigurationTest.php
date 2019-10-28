@@ -37,7 +37,9 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
+use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use TYPO3\CMS\Core\Core\Environment;
@@ -122,8 +124,9 @@ class ConfigurationTest extends AbstractTest
         $this->configuration->exec();
 
         $this->assertEquals(
-            [ProcessObject::class . Configuration::START_PROCESS =>
-                [DirtyModels::class => DirtyModels::class]
+            [
+                ProcessObject::class . Configuration::START_PROCESS => [DirtyModels::class => DirtyModels::class],
+                Objects::class . Configuration::START_EVENT => [QueryDebugger::class => QueryDebugger::class]
             ],
             SettingsGetter::getEventList()
         );
@@ -153,7 +156,8 @@ class ConfigurationTest extends AbstractTest
                 'TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper' => ['__toString'],
                 'TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper' => ['__toString'],
                 'TYPO3\CMS\Extbase\Persistence\RepositoryInterface' => ['removeAll'],
-                'TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy' => ['__toString']
+                'TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy' => ['__toString'],
+                'TYPO3\CMS\Core\Database\Query\QueryBuilder' => ['__toString'],
             ],
             SettingsGetter::getBlacklistDebugMethods(),
             'What the method name says.'
