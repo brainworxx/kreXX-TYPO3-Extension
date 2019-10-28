@@ -47,6 +47,13 @@ use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use Exception;
 use Throwable;
 
+/**
+ * TYPO3 Query debugger.
+ *
+ * @event Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe::start
+ *
+ * @package Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers
+ */
 class QueryDebugger implements EventHandlerInterface, ConstInterface
 {
     /**
@@ -77,9 +84,7 @@ class QueryDebugger implements EventHandlerInterface, ConstInterface
      */
     public function handle(AbstractCallback $callback = null, Model $model = null)
     {
-        /** @var QueryBuilder $queryBuilder */
-        $queryBuilder = $callback->getParameters()[static::PARAM_DATA];
-        if (empty($sql = $this->retrieveSql($queryBuilder))  === true) {
+        if (empty($sql = $this->retrieveSql($callback->getParameters()[static::PARAM_DATA]))  === true) {
             // Wrong object type, or problems with the SQL retrieval.
             return '';
         }
