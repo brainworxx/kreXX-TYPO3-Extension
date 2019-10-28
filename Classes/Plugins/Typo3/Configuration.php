@@ -68,7 +68,7 @@ class Configuration implements PluginConfigInterface
      */
     public function getName()
     {
-        return 'TYPO3 configuration';
+        return 'TYPO3';
     }
 
     /**
