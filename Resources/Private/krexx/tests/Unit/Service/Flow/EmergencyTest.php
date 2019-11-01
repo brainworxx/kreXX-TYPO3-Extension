@@ -244,6 +244,11 @@ class EmergencyTest extends AbstractTest
         $memoryGetUsage = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'memory_get_usage');
         $memoryGetUsage->expects($this->once())
             ->will($this->returnValue(500));
+
+        $phpSapiName = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'php_sapi_name');
+        $phpSapiName->expects($this->once())
+            ->will($this->returnValue('brauser'));
+
         // Make sure the runtime check fails.
         $this->setValueByReflection(static::TIMER, 12345, $this->emergency);
         $time = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'time');
@@ -351,9 +356,33 @@ class EmergencyTest extends AbstractTest
         $this->emergency->initTimer();
         $this->assertEquals(5060, $this->retrieveValueByReflection(static::TIMER, $this->emergency));
 
-        // Re-initialize should not change the alredy existing value.
+        $phpSapiName = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'php_sapi_name');
+        $phpSapiName->expects($this->once())
+            ->will($this->returnValue('brauser'));
+
+        // Re-initialize should not change the already existing value.
         $this->emergency->initTimer();
         $this->assertEquals(5060, $this->retrieveValueByReflection(static::TIMER, $this->emergency));
+    }
+
+    /**
+     * Test the re-initializing of the timer on cli.
+     *
+     * @covers \Brainworxx\Krexx\Service\Flow\Emergency::initTimer
+     */
+    public function testInitTimerOnCli()
+    {
+        $time = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'time');
+        $time->expects($this->exactly(2))
+            ->will($this->returnValue(5000));
+
+        // The sapi gets only called once, because the timer value is empty
+        // on the first run.
+        $phpSapiName = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'php_sapi_name');
+        $phpSapiName->expects($this->exactly(1))
+            ->will($this->returnValue('cli'));
+        $this->emergency->initTimer();
+        $this->emergency->initTimer();
     }
 
     /**

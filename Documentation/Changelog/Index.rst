@@ -18,6 +18,9 @@ Changelog
     - [Feature] Added event system to the process classes.
     - [Feature] Added better model analysis for TYPO3 standard models.
     - [Feature] Added SQL debugger.
+    - [Feature] Clean(er) interface list inside the meta analysis.
+    - [Feature] Added current url to the caller finder output.
+    - [Feature] Better timer-emergency management on CLI
     - [Change] Remove the event prefix and use static::class instead.
     - [Change] Move cleanup methods to their own class.
     - [Change] Move the output check methods to an appropriate class.

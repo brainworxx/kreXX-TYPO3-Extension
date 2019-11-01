@@ -95,6 +95,7 @@ class CallerFinder extends AbstractCaller
             static::TRACE_VARNAME => $varname,
             static::TRACE_TYPE => $this->getType($headline, $varname, $data),
             static::TRACE_DATE => date('d-m-Y H:i:s', time()),
+            static::TRACE_URL => $this->getCurrentUrl(),
         ];
     }
 

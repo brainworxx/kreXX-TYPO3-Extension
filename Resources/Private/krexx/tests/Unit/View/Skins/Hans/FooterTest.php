@@ -58,7 +58,8 @@ class FooterTest extends AbstractRenderHans
         $caller = [
             $this->renderHans::TRACE_FILE => 'filename',
             $this->renderHans::TRACE_LINE => 'line 123',
-            $this->renderHans::TRACE_DATE => 'yesteryear'
+            $this->renderHans::TRACE_DATE => 'yesteryear',
+            $this->renderHans::TRACE_URL => 'https://www.google.biz',
         ];
 
         // Mock the model for the renderExpandableChild, which we will not test

@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Service\Reflection;
 
 use ReflectionProperty;
+use ReflectionException;
 
 /**
  * Added a better possibility to retrieve the object values.
@@ -43,6 +44,9 @@ use ReflectionProperty;
  */
 class ReflectionClass extends \ReflectionClass
 {
+
+    protected static $cache = [];
+
     /**
      * The object, cast into an array.
      *
@@ -127,5 +131,93 @@ class ReflectionClass extends \ReflectionClass
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Retrieve the actually implemented interfaces.
+     *
+     * @return ReflectionClass[]
+     *   Array with the interfaces.
+     */
+
+    public function getInterfaces()
+    {
+        // Get a list of the names.
+        $interfaceNames = $this->getInterfaceNames();
+        if (empty($interfaceNames)) {
+            return [];
+        }
+
+        // Compare the names with the ones from the parent.
+        $parent = $this->getParentClass();
+        if ($parent !== false) {
+            $parentInterfaces = $parent->getInterfaceNames();
+            $interfaceNames = array_diff($interfaceNames, $parentInterfaces);
+        }
+        if (empty($interfaceNames)) {
+            return [];
+        }
+
+        // Get the instances.
+        $result = [];
+        foreach ($interfaceNames as $interfaceName) {
+            try {
+                $result[$interfaceName] = new ReflectionClass($interfaceName);
+            } catch (ReflectionException $e) {
+                // Do nothing. We skip this one.
+                // Not sure how this could happen.
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Wrapper around the getTraits, to make sure we get our ReflectionClass.
+     *
+     * @return array|\ReflectionClass[]
+     */
+    public function getTraits()
+    {
+        $traits = parent::getTraitNames();
+        if (empty($traits)) {
+            return [];
+        }
+
+        $result = [];
+        foreach ($traits as $trait) {
+            try {
+                $result[$trait] = new ReflectionClass($trait);
+            } catch (ReflectionException $e) {
+                // We skip this one.
+            }
+
+        }
+
+        return $result;
+    }
+
+    /**
+     * Wrapper around the getParentClass, to make sure we get our ReflectionClass.
+     *
+     * @return bool|\ReflectionClass[]
+     */
+    public function getParentClass()
+    {
+        // Do some static caching. This one is called quite often.
+        if (isset(static::$cache[$this->name])) {
+            return static::$cache[$this->name];
+        }
+        $result = false;
+        $parent = parent::getParentClass();
+        if (empty($parent) === false) {
+            try {
+                $result = new ReflectionClass($parent->name);
+            } catch (ReflectionException $e) {
+                // Do nothing.
+            }
+        }
+
+        return static::$cache[$this->name] = $result;
     }
 }

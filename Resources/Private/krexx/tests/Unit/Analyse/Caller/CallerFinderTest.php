@@ -36,6 +36,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Caller;
 
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
@@ -68,8 +69,31 @@ class CallerFinderTest extends AbstractTest
     {
         parent::setUp();
 
+        // Prepare the uri.
+        // The things you do, to mock an uri call . . .
+        $poolMock = $this->createMock(Pool::class);
+        $poolMock->expects($this->any())
+            ->method('getServer')
+            ->will($this->returnValue([
+                'SERVER_PROTOCOL' => 'abcd/',
+                'SERVER_PORT' => 123,
+                'SERVER_NAME' => 'localhorst',
+                'HTTPS' => 'on',
+                'REQUEST_URI' => 'some/uri'
+            ]));
+        $poolMock->fileService = Krexx::$pool->fileService;
+        $poolMock->encodingService = Krexx::$pool->encodingService;
+        $poolMock->config = Krexx::$pool->config;
+        $poolMock->emergencyHandler = Krexx::$pool->emergencyHandler;
+        $poolMock->messages = Krexx::$pool->messages;
+        $poolMock->expects($this->any())
+            ->method('createClass')
+            ->will($this->returnCallback(function ($classname){
+                return Krexx::$pool->createClass($classname);
+            }));
+
         // Create our test subject.
-        $this->callerFinder = new CallerFinder(Krexx::$pool);
+        $this->callerFinder = new CallerFinder($poolMock);
         $this->pathToFixture = DIRECTORY_SEPARATOR . 'tests' .
             DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'ComplexMethodFixture.php';
     }
@@ -128,6 +152,7 @@ class CallerFinderTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getType
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
+     * @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::getCurrentUrl
      */
     public function testFindCallerNormal()
     {
@@ -144,6 +169,7 @@ class CallerFinderTest extends AbstractTest
         $this->assertEquals('$parameter', $result[ConstInterface::TRACE_VARNAME]);
         $this->assertEquals('Analysis of $parameter, string', $result[ConstInterface::TRACE_TYPE]);
         $this->assertArrayHasKey(ConstInterface::TRACE_DATE, $result);
+        $this->assertEquals('abcds://localhorst:123some/uri', $result[ConstInterface::TRACE_URL]);
     }
 
     /**

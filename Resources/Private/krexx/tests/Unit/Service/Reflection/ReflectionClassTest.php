@@ -35,7 +35,11 @@
 namespace Brainworxx\Krexx\Tests\Unit\Service\Reflection;
 
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
+use Brainworxx\Krexx\Tests\Fixtures\InheritDocFixture;
+use Brainworxx\Krexx\Tests\Fixtures\InterfaceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
+use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use ReflectionClass as OriginalReflectionClass;
 use stdClass;
@@ -84,7 +88,7 @@ class ReflectionClassTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::retrieveValue
      */
-    public function testRetreiveValue()
+    public function testRetrieveValue()
     {
         $fixture = new PublicFixture();
         unset($fixture->value2);
@@ -113,5 +117,64 @@ class ReflectionClassTest extends AbstractTest
                 $this->assertTrue($refProperty->isUnset);
             }
         }
+    }
+
+    /**
+     * Test the retrieval of the actually implemented interfaces of this class.
+     *
+     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getInterfaces
+     */
+    public function testGetInterfaces()
+    {
+        $fixture = new PublicFixture();
+        $reflection = new ReflectionClass($fixture);
+        $this->assertEmpty($reflection->getInterfaces(), 'There are no interfaces in there.');
+
+        $fixture = new InheritDocFixture();
+        $reflection = new ReflectionClass($fixture);
+        $this->assertEmpty($reflection->getInterfaces(), 'There are only some underlying interfaces.');
+
+        $fixture = new ComplexMethodFixture();
+        $reflection = new ReflectionClass($fixture);
+        $interfaces = $reflection->getInterfaces();
+        $this->assertCount(1, $interfaces, 'There is only one direct interface in here.');
+        $this->assertArrayHasKey(InterfaceFixture::class, $interfaces);
+    }
+
+    /**
+     * Test the retrieval of the traits.
+     *
+     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getTraits
+     */
+    public function testGetTraits()
+    {
+        $fixture = new ComplexMethodFixture();
+        $reflection = new ReflectionClass($fixture);
+        $result = $reflection->getTraits();
+        $this->assertCount(1, $result);
+        $this->assertInstanceOf(ReflectionClass::class, array_shift($result));
+
+        $fixture = new SimpleFixture();
+        $reflection = new ReflectionClass($fixture);
+        $this->assertEmpty($reflection->getTraits());
+    }
+
+    /**
+     * Test the retrieval and caching of the parent class.
+     *
+     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getParentClass
+     */
+    public function testGetParentClass()
+    {
+        $fixture = new SimpleFixture();
+        $reflection = new ReflectionClass($fixture);
+        $this->assertFalse($reflection->getParentClass());
+
+        $fixture = new ComplexMethodFixture();
+        $reflection = new ReflectionClass($fixture);
+        $result = $reflection->getParentClass();
+        $this->assertInstanceOf(ReflectionClass::class, $result);
+        $reflection = new ReflectionClass($fixture);
+        $this->assertSame($result, $reflection->getParentClass(), 'Test the caching.');
     }
 }

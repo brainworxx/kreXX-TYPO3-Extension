@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Unit\KrexxTest;
 use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Output\CheckOutput;
@@ -109,6 +110,9 @@ abstract class AbstractTest extends TestCase
         $this->setValueByReflection('rewriteList', [], Registration::class);
         $this->setValueByReflection('additionalSkinList', [], Registration::class);
         $this->setValueByReflection('plugins', [], Registration::class);
+
+        // Reset the cache in the ReflectionClass.
+        $this->setValueByReflection('cache', [], ReflectionClass::class);
 
         // Reset the cached template files.
         $this->setValueByReflection('fileCache', [], AbstractRender::class);

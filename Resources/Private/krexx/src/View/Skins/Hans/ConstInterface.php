@@ -83,6 +83,7 @@ interface ConstInterface
     const MARKER_CALLER_FILE = '{callerFile}';
     const MARKER_CALLER_LINE = '{callerLine}';
     const MARKER_CALLER_DATE = '{date}';
+    const MARKER_CALLER_URL = '{callerUrl}';
     const MARKER_HELP = '{help}';
     const MARKER_HELP_TITLE = '{helptitle}';
     const MARKER_HELP_TEXT = '{helptext}';

@@ -37,14 +37,14 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Comment\Classes;
 use Brainworxx\Krexx\Analyse\Model;
-use ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 
 /**
  * Class Meta
  *
- * @uses ref \ReflectionClass
+ * @uses ref \Brainworxx\Krexx\Service\Reflection\ReflectionClass
  *   Here we get all out data.
- * @uses netaname string
+ * @uses metaname string
  *   The name of the meta data, if available.
  *   Fallback to static::META_CLASS_DATA
  *

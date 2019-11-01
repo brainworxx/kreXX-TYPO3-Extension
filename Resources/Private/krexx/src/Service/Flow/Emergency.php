@@ -298,10 +298,12 @@ class Emergency
      * prevent too large output (or no output at all (WSOD)).
      * The first kreXX request triggers the timer, we then measure the rest
      * of the time.
+     * When coming from cli, we will reset the timer, because cli has normally
+     * a much greater execution time.
      */
     public function initTimer()
     {
-        if (empty($this->timer) === true) {
+        if (empty($this->timer) === true || php_sapi_name() === 'cli') {
             $this->timer = time() + $this->maxRuntime;
         }
     }

@@ -79,12 +79,14 @@ trait Footer
             [
                 static::MARKER_CALLER_FILE,
                 static::MARKER_CALLER_LINE,
-                static::MARKER_CALLER_DATE
+                static::MARKER_CALLER_DATE,
+                static::MARKER_CALLER_URL,
             ],
             [
                 $caller[static::TRACE_FILE],
                 $caller[static::TRACE_LINE],
                 $caller[static::TRACE_DATE],
+                $caller[static::TRACE_URL],
             ],
             $this->getTemplateFileContent(static::FILE_CALLER)
         );

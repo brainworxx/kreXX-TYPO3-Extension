@@ -39,13 +39,14 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
+use Brainworxx\Krexx\Tests\Fixtures\EmptyInterfaceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\InterfaceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MultitraitFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
-use ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 
 class MetaTest extends AbstractTest
 {
@@ -185,6 +186,7 @@ class MetaTest extends AbstractTest
             $data[$meta::META_DECLARED_IN]
         );
         $this->assertArrayHasKey(InterfaceFixture::class, $data[$meta::META_INTERFACES]);
+        $this->assertArrayNotHasKey(EmptyInterfaceFixture::class, $data[$meta::META_INTERFACES]);
         $this->assertCount(1, $data[$meta::META_INTERFACES]);
         $this->assertArrayHasKey(MultitraitFixture::class, $data[$meta::META_TRAITS]);
         $this->assertCount(1, $data[$meta::META_TRAITS]);

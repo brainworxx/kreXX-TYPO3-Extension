@@ -94,6 +94,7 @@ interface ConstInterface
     const TRACE_ERROR_LINE = 'errline';
     const TRACE_BACKTRACE = 'backtrace';
     const TRACE_DATE = 'date';
+    const TRACE_URL = 'url';
 
     // Stuff directly displaysed in the FE, not just array keys.
     const META_DECLARED_IN = 'Declared in';

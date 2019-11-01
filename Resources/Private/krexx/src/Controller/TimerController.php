@@ -130,7 +130,6 @@ class TimerController extends AbstractController
         // Get the very first key.
         $start = key($timeKeeping);
         $totalTime = round((end($timeKeeping) - $timeKeeping[$start]) * 1000, 4);
-        $result['url'] = $this->getCurrentUrl();
         $result['total_time'] = $totalTime;
         $prevMomentName = $start;
         $prevMomentStart = $timeKeeping[$start];
@@ -151,52 +150,16 @@ class TimerController extends AbstractController
     /**
      * Return the current URL.
      *
-     * @see http://stackoverflow.com/questions/6768793/get-the-full-url-in-php
-     * @author Timo Huovinen
+     * @deprecated
+     *   Since 3.1.1. Will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated stuff.
      *
      * @return string
      *   The current URL.
      */
     protected function getCurrentUrl()
     {
-        $server = $this->pool->getServer();
-
-        // Check if someone has been messing with the $_SERVER, to prevent
-        // warnings and notices.
-        if (empty($server) === true ||
-            empty($server['SERVER_PROTOCOL']) === true ||
-            empty($server['SERVER_PORT']) === true ||
-            empty($server['SERVER_NAME']) === true ||
-            empty($server['REQUEST_URI']) === true
-        ) {
-            return 'n/a';
-        }
-
-        // SSL or no SSL.
-        $ssl = (!empty($server['HTTPS']) && $server['HTTPS'] === 'on');
-
-        $protocol = strtolower($server['SERVER_PROTOCOL']);
-        $protocol = substr($protocol, 0, strpos($protocol, '/'));
-        if ($ssl === true) {
-            $protocol .= 's';
-        }
-
-        $port = $server['SERVER_PORT'];
-
-        if (($ssl === false && $port === '80') || ($ssl === true && $port === '443')) {
-            // Normal combo with port and protocol.
-            $port = '';
-        } else {
-            // We have a special port here.
-            $port = ':' . $port;
-        }
-
-        if (isset($server['HTTP_HOST']) === true) {
-            $host = $server['HTTP_HOST'];
-        } else {
-            $host = $server['SERVER_NAME'] . $port;
-        }
-
-        return $this->pool->encodingService->encodeString($protocol . '://' . $host . $server['REQUEST_URI']);
+        return $this->callerFinder->findCaller('', '')[static::TRACE_URL];
     }
 }
