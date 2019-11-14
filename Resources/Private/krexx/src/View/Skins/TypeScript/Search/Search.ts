@@ -248,8 +248,8 @@ class Search
                 if (config.caseSensitive === false) {
                     textContent = textContent.toLowerCase();
                 }
-                if (textContent === config.searchtext ||
-                    textContent.indexOf(config.searchtext) > -1
+                if ((config.searchWhole === true && textContent === config.searchtext) ||
+                    (config.searchWhole === false && textContent.indexOf(config.searchtext) > -1)
                 ) {
                     this.kdt.toggleClass((list[i] as Element), 'ksearch-found-highlight');
                     this.results[config.instance][config.searchtext]['data'].push(list[i]);

@@ -179,6 +179,8 @@ abstract class AbstractCallback implements ConstInterface
      *
      * @deprecated
      *   Since 3.1.1. Will be removed.
+     * @codeCoverageIgnore
+     *   Wi will not test deprecated methods.
      *
      * @param $propName
      *   The property name we want to check.

@@ -445,8 +445,8 @@ var Search = (function () {
                     if (config.caseSensitive === false) {
                         textContent = textContent.toLowerCase();
                     }
-                    if (textContent === config.searchtext ||
-                        textContent.indexOf(config.searchtext) > -1) {
+                    if ((config.searchWhole === true && textContent === config.searchtext) ||
+                        (config.searchWhole === false && textContent.indexOf(config.searchtext) > -1)) {
                         _this.kdt.toggleClass(list[i], 'ksearch-found-highlight');
                         _this.results[config.instance][config.searchtext]['data'].push(list[i]);
                     }

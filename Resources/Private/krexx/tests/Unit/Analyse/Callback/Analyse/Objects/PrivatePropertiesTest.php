@@ -76,6 +76,7 @@ class PrivatePropertiesTest extends AbstractTest
      * fixture.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PrivateProperties::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
      */
     public function testCallMeNoPrivates()
     {
@@ -108,6 +109,7 @@ class PrivatePropertiesTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PrivateProperties::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::getReflectionPropertiesData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
      */
     public function testCallMeWithPrivates()
     {

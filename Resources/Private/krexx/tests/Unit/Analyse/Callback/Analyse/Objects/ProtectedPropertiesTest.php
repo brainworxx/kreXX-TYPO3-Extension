@@ -76,6 +76,7 @@ class ProtectedPropertiesTest extends AbstractTest
      * fixture.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
      */
     public function testCallMeNoProtected()
     {
@@ -107,6 +108,7 @@ class ProtectedPropertiesTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::getReflectionPropertiesData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
      */
     public function testCallMeWithProtected()
     {
