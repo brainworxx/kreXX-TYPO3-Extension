@@ -102,6 +102,11 @@ class ConfigurationTest extends AbstractTest
         // Short circuit the getting of the system path.
         $pathSite = PATH_site;
 
+        $versionMock = $this->getFunctionMock('\Brainworxx\\Includekrexx\\Plugins\\Typo3\\', 'version_compare');
+        $versionMock->expects($this->once())
+            ->with('1.2.3', '8.3', '>')
+            ->will($this->returnValue(true));
+
         $classExistsMock = $this->getFunctionMock('\Brainworxx\\Includekrexx\\Plugins\\Typo3\\', 'class_exists');
         $classExistsMock->expects($this->once())
             ->with(Environment::class)

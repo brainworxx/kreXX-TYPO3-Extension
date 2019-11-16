@@ -100,10 +100,10 @@ class Configuration implements PluginConfigInterface
         );
 
         // The QueryBuilder special analysis.
-        Registration::registerEvent(
-            Objects::class . static::START_EVENT,
-            QueryDebugger::class
-        );
+        // Only for Doctrine stuff.
+        if (version_compare(TYPO3_version, '8.3', '>')) {
+            Registration::registerEvent(Objects::class . static::START_EVENT, QueryDebugger::class);
+        }
 
         // Get the absolute site path. The constant PATH_site is deprecated
         // since 9.2.
