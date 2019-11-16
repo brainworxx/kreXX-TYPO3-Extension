@@ -106,7 +106,7 @@ class Meta extends AbstractObjectAnalysis
      *
      * @param string $domId
      *   The dom id for the recursion handler.
-     * @param \ReflectionClass $ref
+     * @param ReflectionClass $ref
      *   The reflection class, the main source of information.
      * @param string $name
      *   The name of the property.
@@ -189,7 +189,7 @@ class Meta extends AbstractObjectAnalysis
     /**
      * Generate the class name with all "attributes" (abstract final whatever).
      *
-     * @param \ReflectionClass $ref
+     * @param ReflectionClass $ref
      *   Reflection of the class we are analysing.
      *
      * @return string

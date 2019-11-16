@@ -201,12 +201,36 @@ class CodegenTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
-    public function testGenerateSourceMultiline()
+    public function testGenerateSourceIteratorToArray()
     {
         $this->expectConnectorCalls(2, 2);
         $this->fixture->setMultiLineCodeGen($this->codegenHandler::ITERATOR_TO_ARRAY);
         $this->assertEquals(
             'iterator_to_array(;firstMarker;)getConnectorLeftnamegetConnectorRight',
+            $this->codegenHandler->generateSource($this->fixture)
+        );
+    }
+
+    /**
+     * Test the coegeneration for unaccessible array values.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     */
+    public function testGenerateSourceArrayValueAccess()
+    {
+        $this->expectConnectorCalls(1, 1);
+        $this->connectorMock->expects($this->once())
+            ->method('setParameters')
+            ->with('0');
+        $this->connectorMock->expects($this->once())
+            ->method('getParameters')
+            ->will($this->returnValue('0'));
+
+        $this->fixture
+            ->setMultiLineCodeGen($this->codegenHandler::ARRAY_VALUES_ACCESS)
+            ->setConnectorParameters('0');
+        $this->assertEquals(
+            'array_values(;firstMarker;)[0]',
             $this->codegenHandler->generateSource($this->fixture)
         );
     }

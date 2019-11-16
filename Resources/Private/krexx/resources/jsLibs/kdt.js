@@ -486,6 +486,9 @@ var Hans = (function () {
         this.copyFrom = function (event, element) {
             var i;
             var domid = _this.kdt.getDataset(element, 'domid');
+            if (domid === '') {
+                return;
+            }
             var orgNest = document.querySelector('#' + domid);
             if (orgNest) {
                 var orgEl = orgNest.previousElementSibling;

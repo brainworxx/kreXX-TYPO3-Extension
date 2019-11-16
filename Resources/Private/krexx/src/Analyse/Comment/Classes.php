@@ -47,7 +47,7 @@ class Classes extends AbstractComment
     /**
      * Get the prettified class comment.
      *
-     * @param \ReflectionClass $reflection
+     * @param Reflector $reflection
      *   The actual reflection class.
      * @param \ReflectionClass|null $reflectionClass
      *   Not used.

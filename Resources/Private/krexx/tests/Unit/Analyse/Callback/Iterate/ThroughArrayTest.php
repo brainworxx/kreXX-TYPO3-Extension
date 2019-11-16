@@ -35,10 +35,12 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
+use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
+use stdClass;
 
 class ThroughArrayTest extends AbstractTest
 {
@@ -75,7 +77,7 @@ class ThroughArrayTest extends AbstractTest
            'data' => [
                0 => 'some value',
                'recursion marker' => true,
-               'one' => new \stdClass()
+               'one' => new stdClass()
            ]
         ];
 
@@ -84,19 +86,58 @@ class ThroughArrayTest extends AbstractTest
             ->callMe();
 
         // Check the result
+        /** @var \Brainworxx\Krexx\Analyse\Model[] $models */
         $models = Krexx::$pool->routing->model;
         $this->assertEquals(2, count($models));
 
         // Test for multiline
-        $this->assertEquals(1, $models[0]->getMultiLineCodeGen());
-        $this->assertEquals(1, $models[1]->getMultiLineCodeGen());
+        $this->assertEquals(Codegen::ITERATOR_TO_ARRAY, $models[0]->getMultiLineCodeGen());
+        $this->assertEquals(Codegen::ITERATOR_TO_ARRAY, $models[1]->getMultiLineCodeGen());
         // Test the names
-        $this->assertEquals(0, $models[0]->getName());
+        $this->assertEmpty($models[0]->getName());
         $this->assertEquals('one', $models[1]->getName());
         // Test the connectors.
         $this->assertEquals('[', $models[0]->getConnectorLeft());
         $this->assertEquals(']', $models[0]->getConnectorRight());
         $this->assertEquals('[\'', $models[1]->getConnectorLeft());
         $this->assertEquals('\']', $models[1]->getConnectorRight());
+    }
+
+    /**
+     * Testing the special handling of a PHP bug.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray::callMe
+     */
+    public function testCallMeInaccessibleArray()
+    {
+        // Listen for the start event.
+        $throughArray = new ThroughArray(Krexx::$pool);
+        $this->mockEventService(
+            ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughArray::callMe::start', $throughArray]
+        );
+
+        $arrayCast = new stdClass();
+        $arrayCast->{5} = 'hidden';
+        $fixture = [
+            'multiline' => false,
+           'data' => (array) $arrayCast
+        ];
+
+        // Run the test.
+        $throughArray->setParameters($fixture)
+            ->callMe();
+
+        // Check the result
+        /** @var \Brainworxx\Krexx\Analyse\Model[] $models */
+        $models = Krexx::$pool->routing->model;
+        $this->assertEquals(1, count($models));
+        // This bug may or may not be fixed on the used PHP version.
+        // Hence, we need to test it
+        if (array_key_exists(5, $fixture['data'])) {
+            $this->assertEmpty($models[0]->getMultiLineCodeGen());
+        } else {
+            $this->assertEquals(Codegen::ARRAY_VALUES_ACCESS, $models[0]->getMultiLineCodeGen());
+        }
+        $this->assertEquals(5, $models[0]->getName());
     }
 }

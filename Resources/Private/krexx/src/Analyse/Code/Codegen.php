@@ -50,8 +50,12 @@ class Codegen implements ConstInterface
     /**
      * Constant identifier for the array multiline code generation.
      */
-    const ITERATOR_TO_ARRAY = 1;
+    const ITERATOR_TO_ARRAY = 'iteratorToArray';
 
+    /**
+     * Identifier for inaccessible array multiline code generation.
+     */
+    const ARRAY_VALUES_ACCESS = 'arrayValuesAccess';
 
     /**
      * Here we store all relevant data.
@@ -128,6 +132,8 @@ class Codegen implements ConstInterface
         } elseif ($model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY) {
             // Multi line code generation starts here.
             $result = 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
+        } elseif ($model->getMultiLineCodeGen() === static::ARRAY_VALUES_ACCESS) {
+            $result = 'array_values(;firstMarker;)[' . $model->getConnectorParameters() . ']';
         } elseif ($model->getIsPublic() === true) {
             // Test for private or protected access.
             $result = $this->concatenation($model);

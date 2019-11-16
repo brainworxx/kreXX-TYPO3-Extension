@@ -67,14 +67,15 @@ class ThroughArray extends AbstractCallback
         if ($this->parameters[static::PARAM_MULTILINE] === true) {
             $multilineCodeGen = Codegen::ITERATOR_TO_ARRAY;
         } else {
-            $multilineCodeGen = 0;
+            $multilineCodeGen = '';
         }
 
         $recursionMarker = $this->pool->recursionHandler->getMarker();
         $encodingService = $this->pool->encodingService;
+        $array =& $this->parameters[static::PARAM_DATA];
 
         // Iterate through.
-        foreach ($this->parameters[static::PARAM_DATA] as $key => &$value) {
+        foreach ($array as $key => &$value) {
             // We will not output our recursion marker.
             // Meh, the only reason for the recursion marker
             // in arrays is because of the $GLOBAL array, which
@@ -87,6 +88,13 @@ class ThroughArray extends AbstractCallback
             $model = $this->pool
                 ->createClass(Model::class)
                 ->setMultiLineCodeGen($multilineCodeGen);
+
+            if (array_key_exists($key, $array) === false) {
+                // Looks like we have an inaccessible array value here.
+                // was fixed later.
+                $model->setMultiLineCodeGen(Codegen::ARRAY_VALUES_ACCESS)
+                    ->setConnectorParameters(array_search($key, array_keys($array)));
+            }
 
             if (is_string($key) === true) {
                 $model->setData($value)

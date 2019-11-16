@@ -1,17 +1,20 @@
 3.1.1 dev
-- Introduce php-mock/php-mock-phpunit
+- Introduce php-mock/php-mock-phpunit.
 - Removed the TER-SonarQube findings from the unit tests.
 - Added event system to the process classes.
 - Clean(er) interface list inside the meta analysis.
 - Added current url to the caller finder output.
-- Better timer-emergency management on CLI
+- Better timer-emergency management on CLI.
 - Change: Remove the event prefix and use static::class instead.
 - Change: Move cleanup methods to their own class.
 - Change: Move the output check methods to an appropriate class.
 - Change: Deprecated classes and methods.
 - Change: Complete refactor of the rendering mechanism.
 - Change: Ported the javascript to type script.
-- Bugfix: Missing encoding info in the error handler output
+- Bugfix: Missing encoding info in the error handler output.
+- Bugfix: Wrong null values for dynamically declared properties.
+- Bugfix: Inaccessible array values from array casted objects.
+- Bugfix: Wrong variable name retrieval when used inline.
 
 3.1.0
 - Use some real autoloading, with a fallback to manually including

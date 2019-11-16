@@ -35,6 +35,7 @@
 namespace Brainworxx\Krexx\Tests\Unit\Service\Reflection;
 
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\InheritDocFixture;
 use Brainworxx\Krexx\Tests\Fixtures\InterfaceFixture;
@@ -91,6 +92,7 @@ class ReflectionClassTest extends AbstractTest
     public function testRetrieveValue()
     {
         $fixture = new PublicFixture();
+        $fixture->{50} = 'special';
         unset($fixture->value2);
 
         $reflection = new ReflectionClass($fixture);
@@ -102,12 +104,16 @@ class ReflectionClassTest extends AbstractTest
             'value4' => 4,
             'value5' => 'dont\'t look at me!',
             'static' => 'static stuff',
+            50 => 'special'
         ];
 
         foreach ($expectations as $name => $expectation) {
             if ($name === 'value5') {
                 // That is a private in a deeper class.
                 $refProperty = $reflection->getParentClass()->getProperty($name);
+            } elseif ($name === 50) {
+                // This one is dynamically declared.
+                $refProperty = new UndeclaredProperty($reflection, 50);
             } else {
                 $refProperty = $reflection->getProperty($name);
             }

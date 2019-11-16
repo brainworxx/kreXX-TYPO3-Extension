@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\Service\Reflection;
 
+use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
 use ReflectionException;
 
@@ -106,6 +107,17 @@ class ReflectionClass extends \ReflectionClass
             // Static values are not inside the value array.
             $refProperty->setAccessible(true);
             return $refProperty->getValue($this->data);
+        }
+
+        // We are facing a numeric property name (yes, that is possible).
+        // To be honest, this one of the most bizarre things I've encountered so
+        // far. Depending on your PHP version, that value may not be accessible
+        // via normal means from the array we have got here.. And no, we are not
+        // accessing the object directly.
+        if (is_int($propName) === true) {
+            return array_values($this->objectArray)[
+                array_search($propName, array_keys($this->objectArray))
+            ];
         }
 
         // If we are facing multiple declarations, the declaring class name
@@ -191,7 +203,6 @@ class ReflectionClass extends \ReflectionClass
             } catch (ReflectionException $e) {
                 // We skip this one.
             }
-
         }
 
         return $result;

@@ -20,7 +20,7 @@ Changelog
     - [Feature] Added SQL debugger.
     - [Feature] Clean(er) interface list inside the meta analysis.
     - [Feature] Added current url to the caller finder output.
-    - [Feature] Better timer-emergency management on CLI
+    - [Feature] Better timer-emergency management on CLI.
     - [Change] Remove the event prefix and use static::class instead.
     - [Change] Move cleanup methods to their own class.
     - [Change] Move the output check methods to an appropriate class.
@@ -36,6 +36,9 @@ Changelog
     - [Bugfix] Getter analysis of the Aimeos debugger misses mtime and ctime.
     - [Bugfix] Wrong class list in the aimeos decorator analysis.
     - [Bugfix] Wrong PHP constraints in the ext_emconf.
+    - [Bugfix] Wrong null values for dynamically declared properties.
+    - [Bugfix] Inaccessible array values from array casted objects.
+    - [Bugfix] Wrong variable name retrieval when used inline.
 
 3.2.0
     - [Feature] Use some real autoloading, with a fallback to manually including all files.

@@ -251,6 +251,10 @@ class Hans
 
         // Get the DOM id of the original analysis.
         let domid:string = this.kdt.getDataset((element as Element), 'domid');
+        if (domid === '') {
+            // Do nothing.
+            return;
+        }
         // Get the analysis data.
         let orgNest:Node = document.querySelector('#' + domid);
 

@@ -79,7 +79,8 @@ class ComplexMethodFixture extends MethodsFixture implements InterfaceFixture
      */
     public function interfaceMethod()
     {
-        return $this->privateMethod();
+        // Inline stuff for the caller finder.
+        return json_encode(krexx($this->parameterizedMethod('()"2')));
     }
 
     /**

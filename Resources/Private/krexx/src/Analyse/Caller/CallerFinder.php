@@ -173,7 +173,7 @@ class CallerFinder extends AbstractCaller
      *   The possible command
      *
      * @return string
-     *   The variable, or fallbck to '. . .'
+     *   The variable, or fallback to '. . .'
      */
     protected function removeKrexxPartFromCommand($command)
     {
@@ -182,10 +182,55 @@ class CallerFinder extends AbstractCaller
             // brackets of the kreXX call.
             preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', $command, $name);
             if (isset($name[1]) === true) {
-                return $this->pool->encodingService->encodeString(trim($name[1], " \t\n\r\0\x0B'\""));
+                return $this->pool
+                    ->encodingService
+                    ->encodeString($this->cleanupVarName(trim($name[1], " \t\n\r\0\x0B'\"")));
             }
         }
 
         return static::UNKNOWN_VALUE;
+    }
+
+    /**
+     * What the method name says.
+     *
+     * When used inline, may have some trailing ')' at the end.
+     * Things may get really confusing, if we have a string with '(' somewhere
+     * in there. Hence, we need to actually count them, and try to identify any
+     * string.
+     *
+     * @param string $name
+     *   The variable name, before the cleanup.
+     *
+     * @return string
+     *   The variable name, after the cleanup.
+     */
+    protected function cleanupVarName($name)
+    {
+        $level = 0;
+        $singleQuoteInactive = true;
+        $doubleQuoteInactive = true;
+
+        // Counting all real round brackets, while ignoring the ones inside strings.
+        foreach (str_split($name) as $char) {
+            if ($singleQuoteInactive === true && $doubleQuoteInactive === true) {
+                if ($char === '(') {
+                    ++$level;
+                } elseif ($char === ')') {
+                    --$level;
+                }
+            }
+
+            // Reassign the booleans for the next char.
+            // Nice, huh?
+            $singleQuoteInactive = $singleQuoteInactive === !($char === '\'' && $doubleQuoteInactive);
+            $doubleQuoteInactive = $doubleQuoteInactive === !($char === '"' && $singleQuoteInactive);
+        }
+
+        if ($level < 0) {
+            $name = substr($name, 0, $level);
+        }
+
+        return $name;
     }
 }

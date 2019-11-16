@@ -96,9 +96,9 @@ class Model extends AbstractModel
     /**
      * Are we dealing with multiline code generation?
      *
-     * @var int
+     * @var string
      */
-    protected $multiLineCodeGen = 0;
+    protected $multiLineCodeGen = '';
 
     /**
      * Defines if the content of the variable qualifies as a callback.
@@ -342,7 +342,7 @@ class Model extends AbstractModel
     /**
      * Setter for the multiline code generation.
      *
-     * @param int $multiLineCodeGen
+     * @param string $multiLineCodeGen
      *   The constant from the Codegen class.
      *
      * @return $this

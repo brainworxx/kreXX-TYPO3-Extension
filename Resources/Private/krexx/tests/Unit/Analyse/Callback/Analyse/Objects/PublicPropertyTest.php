@@ -152,4 +152,5 @@ class PublicPropertyTest extends AbstractTest
 
         $this->assertEquals($expectations, $params['data']);
     }
+
 }

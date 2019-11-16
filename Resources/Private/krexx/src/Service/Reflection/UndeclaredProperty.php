@@ -82,7 +82,7 @@ class UndeclaredProperty extends ReflectionProperty
      *
      * @param \ReflectionClass $ref
      *   The instance of the class with the property.
-     * @param $name
+     * @param string|int $name
      *   The name of the property.
      */
     public function __construct(\ReflectionClass $ref, $name)
