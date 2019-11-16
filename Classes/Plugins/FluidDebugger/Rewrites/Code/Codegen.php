@@ -48,7 +48,7 @@ class Codegen extends OrgCodegen implements ConstInterface
     /**
      * Constant identifier for the multiline code generation for fluid
      */
-    const VHS_CALL_VIEWHELPER = 2;
+    const VHS_CALL_VIEWHELPER = 'vhsCallViewhelper';
 
     /**
      * The we wrap this one around the fluid code generation, on the left.
