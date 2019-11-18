@@ -1,4 +1,4 @@
-3.2.0 dev
+3.2.0
 - Introduce php-mock/php-mock-phpunit.
 - Removed the TER-SonarQube findings from the unit tests.
 - Added event system to the process classes.
