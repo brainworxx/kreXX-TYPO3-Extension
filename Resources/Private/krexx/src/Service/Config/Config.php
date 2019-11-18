@@ -280,10 +280,10 @@ class Config extends Fallback
      * Check if the current request is an AJAX request.
      *
      * @deprecated
-     *   Since 3.1.1 dev. Will be removed.
+     *   Since 3.2.0. Will be removed.
      *
      * @codeCoverageIgnore
-     *   Since 3.1.1 dev. We will not test deprecated methods.
+     *   Since 3.2.0. We will not test deprecated methods.
      *
      * @return bool
      *   TRUE when this is AJAX, FALSE if not
@@ -336,7 +336,7 @@ class Config extends Fallback
      *   The ip whitelist.
      *
      * @deprecated
-     *   Since 3.1.1 dev. Will be removed.
+     *   Since 3.2.0. Will be removed.
      *
      * @codeCoverageIgnore
      *   We will not test deprecated stuff.

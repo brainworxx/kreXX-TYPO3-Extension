@@ -43,7 +43,7 @@ use Brainworxx\Krexx\View\Skins\RenderHans;
  * some special stuff.
  *
  * @deprecated
- *   Since 3.1.1 dev. Will be removed.
+ *   Since 3.2.0. Will be removed.
  *
  * @package Brainworxx\Krexx\View
  */

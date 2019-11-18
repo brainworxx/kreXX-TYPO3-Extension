@@ -179,7 +179,7 @@ class Messages
      * Read a help text file, and add its contents to the already read content.
      *
      * @deprecated
-     *   Since 3.1.1 dev. Will be removed.
+     *   Since 3.2.0. Will be removed.
      *
      * @codeCoverageIgnore
      *   We will not test deprecated methods.

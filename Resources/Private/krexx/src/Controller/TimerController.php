@@ -151,7 +151,7 @@ class TimerController extends AbstractController
      * Return the current URL.
      *
      * @deprecated
-     *   Since 3.1.1. Will be removed.
+     *   Since 3.2.0. Will be removed.
      * @codeCoverageIgnore
      *   We will not test deprecated stuff.
      *

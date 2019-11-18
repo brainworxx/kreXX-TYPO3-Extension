@@ -86,7 +86,7 @@ class Traversable extends AbstractObjectAnalysis
      * Analyses the traversable data.
      *
      * @deprecated
-     *   Since 3.1.1 dev. Will be removed.
+     *   Since 3.2.0 dev. Will be removed.
      * @codeCoverageIgnore
      *   We will not test deprecated methods.
      *

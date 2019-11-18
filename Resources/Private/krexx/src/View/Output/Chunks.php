@@ -249,7 +249,7 @@ class Chunks
      * chance, that the header was already set.
      *
      * @deprecated
-     *   Since 3.1.1 dev. Will be removed.
+     *   Since 3.2.0. Will be removed.
      *
      * @codeCoverageIgnore
      *   We will not test deprecated methods.
@@ -318,7 +318,7 @@ class Chunks
      * Setter for the $useChunks.
      *
      * @deprecated
-     *   Since 3.1.1 dev. Will be removed.
+     *   Since 3.2.0. Will be removed.
      *
      * @codeCoverageIgnore
      *   We will not test deprecated methods.
@@ -335,7 +335,7 @@ class Chunks
      * is accessible.
      *
      * @deprecated
-     *   Since 3.1.1 dev. Will be removed.
+     *   Since 3.2.0. Will be removed.
      *
      * @codeCoverageIgnore
      *   We will not test deprecated methods.

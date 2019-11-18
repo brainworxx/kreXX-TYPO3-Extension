@@ -177,7 +177,7 @@ abstract class AbstractRender implements ConstInterface
      * @param string|array $data
      *
      * @deprecated
-     *   Since 3.1.1 dev
+     *   Since 3.2.0
      * @codeCoverageIgnore
      *   We will not test deprecated stuff.
      *

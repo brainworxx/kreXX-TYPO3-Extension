@@ -207,17 +207,23 @@ class CallerFinder extends AbstractCaller
      */
     protected function cleanupVarName($name)
     {
-        $level = 0;
+        // We start with a -1, because we need to stop right before. every opening
+        // bracket has a closing one.
+        $level = -1;
         $singleQuoteInactive = true;
         $doubleQuoteInactive = true;
 
         // Counting all real round brackets, while ignoring the ones inside strings.
-        foreach (str_split($name) as $char) {
+        foreach (str_split($name) as $count => $char) {
             if ($singleQuoteInactive === true && $doubleQuoteInactive === true) {
                 if ($char === '(') {
-                    ++$level;
-                } elseif ($char === ')') {
                     --$level;
+                } elseif ($char === ')') {
+                    ++$level;
+                }
+                if ($level === 0) {
+                    $name = substr($name, 0, $count);
+                    break;
                 }
             }
 
@@ -225,10 +231,6 @@ class CallerFinder extends AbstractCaller
             // Nice, huh?
             $singleQuoteInactive = $singleQuoteInactive === !($char === '\'' && $doubleQuoteInactive);
             $doubleQuoteInactive = $doubleQuoteInactive === !($char === '"' && $singleQuoteInactive);
-        }
-
-        if ($level < 0) {
-            $name = substr($name, 0, $level);
         }
 
         return $name;

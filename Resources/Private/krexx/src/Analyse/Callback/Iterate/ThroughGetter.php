@@ -239,7 +239,7 @@ class ThroughGetter extends AbstractCallback
      *   The model so far.
      *
      * @deprecated
-     *   Since 3.1.1. Will be set to protected.
+     *   Since 3.2.0. Will be set to protected.
      */
     public function prepareResult(
         ReflectionClass $reflectionClass,
