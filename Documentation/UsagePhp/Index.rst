@@ -17,8 +17,12 @@ Main analytic function
 .. code-block:: php
 
     krexx($myObject);
-    // or as an alias:
+    // Or as an alias:
     \Krexx::open($myObject);
+    // Or even inline.
+    json_encode(krexx($myObject));
+    json_encode(\Krexx::open($myObject));
+
 
 .. figure:: ../Images/main_function.png
     :width: 678px

@@ -39,6 +39,7 @@ Changelog
     - [Bugfix] Wrong null values for dynamically declared properties.
     - [Bugfix] Inaccessible array values from array casted objects.
     - [Bugfix] Wrong variable name retrieval when used inline.
+    - [Bugfix] Wrong return value from the developer handle.
 
 3.2.0
     - [Feature] Use some real autoloading, with a fallback to manually including all files.
