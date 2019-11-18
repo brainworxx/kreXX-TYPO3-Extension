@@ -40,7 +40,10 @@ When analysing a query builder or a query object itself, kreXX tries to extract 
     $result = $queryBuilder->execute();
     krexx($result);
 
+|
+|
 
 .. figure:: ../../Images/Typo3/sql_debugger.png
     :width: 1528px
-    :alt: sql debugger in action
+    :alt: SQL debugger in action
+    SQL debugger in action
