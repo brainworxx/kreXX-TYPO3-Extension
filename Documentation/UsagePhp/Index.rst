@@ -23,6 +23,7 @@ Main analytic function
     json_encode(krexx($myObject));
     json_encode(\Krexx::open($myObject));
 
+|
 
 .. figure:: ../Images/main_function.png
     :width: 678px
@@ -60,6 +61,8 @@ Benchmarking
     $this->view->assign('notixxes', $notixxes);
     \Krexx::timerEnd();
 
+|
+
 .. figure:: ../Images/Usage/timer.png
     :width: 624px
     :alt: benchmarking result
@@ -71,6 +74,8 @@ Backtrace
 .. code-block:: php
 
     \Krexx::backtrace();
+
+|
 
 .. figure:: ../Images/Usage/backtrace.png
     :width: 934px
@@ -102,6 +107,7 @@ Exception handler
     // unregister the exception handler
     \Krexx::unregisterExceptionHandler();
 
+|
 
 .. figure:: ../Images/Usage/error_handler.png
     :width: 1049px
