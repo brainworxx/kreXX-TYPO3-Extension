@@ -89,7 +89,7 @@ class Krexx
             static::open();
         }
 
-        return null;
+        return isset($arguments[0]) ? $arguments[0] : null;
     }
 
     /**
