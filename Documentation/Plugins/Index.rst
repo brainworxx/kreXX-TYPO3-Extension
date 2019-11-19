@@ -23,5 +23,4 @@ We've bundled the following plugins:
 
    Typo3/Index
    Fluid/Index
-   Dataviewer/Index
    Aimeos/Index
