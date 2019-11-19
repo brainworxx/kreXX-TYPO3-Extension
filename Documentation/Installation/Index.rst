@@ -16,7 +16,7 @@ Installation via extension manager
 
 The installation process is pretty much straight forward (partly copy pasta from the TER itself):
 
-#. Go to the TER `https://extensions.typo3.org/extension/includekrexx/`_.
+#. Go to the TER `<https://extensions.typo3.org/extension/includekrexx/>`_.
 #. Download the Zip.
 #. Log into your TYPO3 backend.
 #. Go to Extension Manager module.
@@ -29,7 +29,7 @@ Upgrade via extension manager
 
 kreXX has always been under heavy development. When Upgrading (or downgrading) to an other version of kreXX, you need to do an additional steps (the **bold** ones).
 
-#. Go to the TER `https://extensions.typo3.org/extension/includekrexx/`_.
+#. Go to the TER `<https://extensions.typo3.org/extension/includekrexx/>`_.
 #. Download the Zip.
 #. Log into your TYPO3 backend.
 #. Go to Extension Manager module.
