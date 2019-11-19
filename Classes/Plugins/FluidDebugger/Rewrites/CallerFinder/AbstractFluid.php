@@ -184,6 +184,7 @@ abstract class AbstractFluid extends AbstractCaller
                 static::TRACE_VARNAME => static::FLUID_VARIABLE,
                 static::TRACE_TYPE => $this->getType('Fluid analysis', static::FLUID_VARIABLE, $data),
                 static::TRACE_DATE => date('d-m-Y H:i:s', time()),
+                static::TRACE_URL => $this->getCurrentUrl(),
             ];
         }
 
@@ -213,6 +214,7 @@ abstract class AbstractFluid extends AbstractCaller
              static::TRACE_VARNAME => $this->varname,
              static::TRACE_TYPE => $this->getType('Fluid analysis', $this->varname, $data),
              static::TRACE_DATE => date('d-m-Y H:i:s', time()),
+             static::TRACE_URL => $this->getCurrentUrl(),
          ];
     }
 
