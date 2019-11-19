@@ -293,16 +293,12 @@ class File
             );
             // Make sure it is unlinkable.
             chmod($realpath, 0777);
-            if (unlink($realpath) === true) {
-                restore_error_handler();
-                return;
-            } else {
+            if (unlink($realpath) === false) {
                 // We have a permission problem here!
                 $this->pool->messages->addMessage('fileserviceDelete', [$this->filterFilePath($realpath)]);
             }
+            restore_error_handler();
         }
-
-        restore_error_handler();
     }
 
     /**
