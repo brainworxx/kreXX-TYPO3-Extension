@@ -12,7 +12,7 @@
 Changelog
 =============================================================
 
-3.2.1 dev
+3.3.0
     - [Feature] Introduce php-mock/php-mock-phpunit.
     - [Feature] TYPO3 10.1 support.
     - [Feature] Added event system to the process classes.
