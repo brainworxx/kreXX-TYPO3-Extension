@@ -37,9 +37,11 @@ if (!defined('TYPO3_MODE')) {
 }
 
 $boot = function () {
-    \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)
-        ->checkVersionNumber('3.2.1 dev')
-        ->run();
+    if (class_exists(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)) {
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)
+            ->checkVersionNumber('3.3.0')
+            ->run();
+    }
 };
 $boot();
 unset($boot);
