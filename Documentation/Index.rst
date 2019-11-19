@@ -64,6 +64,7 @@ kreXX Debugger
 	:glob:
 
 	WhatDoesItDo/Index
+	Installation/Index
 	UsagePhp/Index
 	UsageFluid/Index
 	AccessLogfiles/Index
