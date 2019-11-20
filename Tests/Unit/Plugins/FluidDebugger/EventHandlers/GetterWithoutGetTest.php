@@ -93,12 +93,13 @@ class GetterWithoutGetTest extends AbstractTest implements ConstInterface
         $throughGetter = new ThroughGetter(Krexx::$pool);
         $throughGetter->setParameters($fixture)->callMe();
 
+        $methodName = 'method name';
         $this->assertEquals('something', $routing->model[0]->getName());
-        $this->assertEquals('getSomething()', $routing->model[0]->getJson()['method name']);
+        $this->assertEquals('getSomething()', $routing->model[0]->getJson()[$methodName]);
         // We expect the getProtectedStuff to be ignored.
         $this->assertEquals('good', $routing->model[1]->getName());
-        $this->assertEquals('isGood()', $routing->model[1]->getJson()['method name']);
+        $this->assertEquals('isGood()', $routing->model[1]->getJson()[$methodName]);
         $this->assertEquals('value', $routing->model[2]->getName());
-        $this->assertEquals('hasValue()', $routing->model[2]->getJson()['method name']);
+        $this->assertEquals('hasValue()', $routing->model[2]->getJson()[$methodName]);
     }
 }
