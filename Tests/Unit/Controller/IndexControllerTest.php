@@ -52,6 +52,10 @@ use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 
 class IndexControllerTest extends AbstractTest
 {
+    const NO_MORE_MESSAGES = 'No more messages here.';
+    const CONTROLLER_NAMESPACE = '\\Brainworxx\\Includekrexx\\Controller\\';
+    const REDIRECT_MESSAGE = 'We did have an redirect here.';
+
     /**
      * Test the index action, without access.
      *
@@ -70,7 +74,7 @@ class IndexControllerTest extends AbstractTest
             $this->flashMessageQueue->getMessages()[0]->getMessage(),
             'We did not mock a BE session, hence no access for you!'
         );
-        $this->assertArrayNotHasKey(1, $this->flashMessageQueue->getMessages(), 'No more messages here.');
+        $this->assertArrayNotHasKey(1, $this->flashMessageQueue->getMessages(), static::NO_MORE_MESSAGES);
     }
 
     /**
@@ -85,7 +89,7 @@ class IndexControllerTest extends AbstractTest
     public function testIndexActionNormal()
     {
         $jsCssFileContent = 'file content';
-        $fileGetContents =  $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Controller\\', 'file_get_contents');
+        $fileGetContents =  $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_get_contents');
         $fileGetContents->expects($this->exactly(2))
             ->will($this->returnValue($jsCssFileContent));
 
@@ -149,7 +153,7 @@ class IndexControllerTest extends AbstractTest
             $this->flashMessageQueue->getMessages()[1]->getMessage(),
             'A message from kreXX'
         );
-        $this->assertArrayNotHasKey(2, $this->flashMessageQueue->getMessages(), 'No more messages here.');
+        $this->assertArrayNotHasKey(2, $this->flashMessageQueue->getMessages(), static::NO_MORE_MESSAGES);
     }
 
     /**
@@ -171,14 +175,14 @@ class IndexControllerTest extends AbstractTest
             // We expect this one.
             $exceptionWasThrown = true;
         }
-        $this->assertTrue($exceptionWasThrown, 'We did have an redirect here.');
+        $this->assertTrue($exceptionWasThrown, static::REDIRECT_MESSAGE);
 
         $this->assertEquals(
             'accessDenied',
             $this->flashMessageQueue->getMessages()[0]->getMessage(),
             'We did not mock a BE session, hence no access for you!'
         );
-        $this->assertArrayNotHasKey(1, $this->flashMessageQueue->getMessages(), 'No more messages here.');
+        $this->assertArrayNotHasKey(1, $this->flashMessageQueue->getMessages(), static::NO_MORE_MESSAGES);
     }
 
     /**
@@ -202,7 +206,7 @@ class IndexControllerTest extends AbstractTest
             ->method('generateIniContent')
             ->will($this->returnValue($iniContent));
 
-        $filePutContentsMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Controller\\', 'file_put_contents');
+        $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
         $filePutContentsMock->expects($this->once())
             ->with(Krexx::$pool->config->getPathToIniFile(), $iniContent)
             ->will($this->returnValue(true));
@@ -213,14 +217,14 @@ class IndexControllerTest extends AbstractTest
             // We expect this one.
             $exceptionWasThrown = true;
         }
-        $this->assertTrue($exceptionWasThrown, 'We did have an redirect here.');
+        $this->assertTrue($exceptionWasThrown, static::REDIRECT_MESSAGE);
 
         $this->assertEquals(
             'save.success.text',
             $this->flashMessageQueue->getMessages()[0]->getMessage(),
             'Expecting the success message here.'
         );
-        $this->assertArrayNotHasKey(1, $this->flashMessageQueue->getMessages(), 'No more messages here.');
+        $this->assertArrayNotHasKey(1, $this->flashMessageQueue->getMessages(), static::NO_MORE_MESSAGES);
     }
 
     /**
@@ -244,7 +248,7 @@ class IndexControllerTest extends AbstractTest
             ->method('generateIniContent')
             ->will($this->returnValue($iniContent));
 
-        $filePutContentsMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Controller\\', 'file_put_contents');
+        $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
         $filePutContentsMock->expects($this->once())
             ->with(Krexx::$pool->config->getPathToIniFile(), $iniContent)
             ->will($this->returnValue(false));
@@ -255,14 +259,14 @@ class IndexControllerTest extends AbstractTest
             // We expect this one.
             $exceptionWasThrown = true;
         }
-        $this->assertTrue($exceptionWasThrown, 'We did have an redirect here.');
+        $this->assertTrue($exceptionWasThrown, static::REDIRECT_MESSAGE);
 
         $this->assertEquals(
             'file.not.writable',
             $this->flashMessageQueue->getMessages()[0]->getMessage(),
             'Expecting the failure message here.'
         );
-        $this->assertArrayNotHasKey(1, $this->flashMessageQueue->getMessages(), 'No more messages here.');
+        $this->assertArrayNotHasKey(1, $this->flashMessageQueue->getMessages(), static::NO_MORE_MESSAGES);
     }
 
     /**
@@ -283,7 +287,7 @@ class IndexControllerTest extends AbstractTest
             ->method('getQueryParams')
             ->will($this->returnValue($request));
 
-        $headerMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Controller\\', 'header');
+        $headerMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'header');
         $headerMock->expects($this->never());
 
         // Mocking a class via StdClass. I love this job.
@@ -339,10 +343,10 @@ class IndexControllerTest extends AbstractTest
         $this->expectOutputString('Et dico vide nec, sed in mazim phaedrum voluptatibus. Eum clita meliore tincidunt ei, sed utinam pertinax theophrastus ad. Porro quodsi detracto ea pri. Et vis mollis voluptaria. Per ut saperet intellegam.');
 
         // Prevent the dispatcher from doing something stupid.
-        $headerMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Controller\\', 'header');
+        $headerMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'header');
         $headerMock->expects($this->exactly(2));
-        $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Controller\\', 'ob_flush');
-        $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Controller\\', 'flush');
+        $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'ob_flush');
+        $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'flush');
 
         $this->assertSame($responseMock, $controller->dispatchAction());
     }
