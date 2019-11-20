@@ -101,7 +101,7 @@ class AjaxController
 
         if ($this->hasAccess() === false) {
             $result->class  = 'error';
-            $result->text = static::translate('accessDenied', Bootstrap::EXT_KEY);
+            $result->text = static::translate(AbstractController::ACCESS_DENIED, Bootstrap::EXT_KEY);
         } else {
             Pool::createPool();
 

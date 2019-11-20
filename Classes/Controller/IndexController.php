@@ -52,8 +52,8 @@ class IndexController extends AbstractController
         if ($this->hasAccess() === false) {
             // Sorry!
             $this->addFlashMessage(
-                static::translate('accessDenied', Bootstrap::EXT_KEY),
-                static::translate('accessDenied', Bootstrap::EXT_KEY),
+                static::translate(static::ACCESS_DENIED, Bootstrap::EXT_KEY),
+                static::translate(static::ACCESS_DENIED, Bootstrap::EXT_KEY),
                 FlashMessage::ERROR
             );
             return '';
@@ -82,8 +82,8 @@ class IndexController extends AbstractController
     {
         if ($this->hasAccess() === false) {
             $this->addFlashMessage(
-                static::translate('accessDenied', Bootstrap::EXT_KEY),
-                static::translate('save.fail.title', Bootstrap::EXT_KEY),
+                static::translate(static::ACCESS_DENIED, Bootstrap::EXT_KEY),
+                static::translate(static::SAVE_FAIL_TITLE, Bootstrap::EXT_KEY),
                 FlashMessage::ERROR
             );
             $this->redirect('index');
@@ -98,15 +98,15 @@ class IndexController extends AbstractController
         ) {
             // File was saved successfully.
             $this->addFlashMessage(
-                static::translate('save.success.text', Bootstrap::EXT_KEY, [$filepath]),
-                static::translate('save.success.title', Bootstrap::EXT_KEY),
+                static::translate(static::SAVE_SUCCESS_TEXT, Bootstrap::EXT_KEY, [$filepath]),
+                static::translate(static::SAVE_SUCCESS_TITLE, Bootstrap::EXT_KEY),
                 FlashMessage::OK
             );
         } else {
             // Something went wrong here!
             $this->addFlashMessage(
-                static::translate('file.not.writable', Bootstrap::EXT_KEY, [$filepath]),
-                static::translate('save.fail.title', Bootstrap::EXT_KEY),
+                static::translate(static::FILE_NOT_WRITABLE, Bootstrap::EXT_KEY, [$filepath]),
+                static::translate(static::SAVE_FAIL_TITLE, Bootstrap::EXT_KEY),
                 FlashMessage::ERROR
             );
         }

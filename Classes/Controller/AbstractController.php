@@ -62,6 +62,12 @@ abstract class AbstractController extends ActionController
     use LanguageTrait;
 
     const MODULE_KEY = 'IncludekrexxKrexxConfiguration';
+    const ACCESS_DENIED = 'accessDenied';
+    const SAVE_FAIL_TITLE = 'save.fail.title';
+    const SAVE_SUCCESS_TEXT = 'save.success.text';
+    const SAVE_SUCCESS_TITLE = 'save.success.title';
+    const FILE_NOT_WRITABLE = 'file.not.writable';
+
 
     /**
      * The kreXX framework.

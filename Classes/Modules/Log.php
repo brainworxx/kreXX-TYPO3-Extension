@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Modules;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
+use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -121,7 +122,7 @@ class Log extends AbstractSubModule implements
     {
         if ($this->hasAccess() === false) {
             return $this->renderMessage(
-                static::translate(static::TRANSLATION_PREFIX . 'accessDenied'),
+                static::translate(static::TRANSLATION_PREFIX . AbstractController::ACCESS_DENIED),
                 static::MESSAGE_SEVERITY_ERROR
             );
         }
