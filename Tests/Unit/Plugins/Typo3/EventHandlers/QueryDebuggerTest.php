@@ -54,7 +54,18 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser;
 
 class QueryDebuggerTest extends AbstractTest implements ConstInterface
 {
+    const FINAL_CLASS_NAME_CACHE = 'finalClassNameCache';
+    const SINGLETON_INSTANCES = 'singletonInstances';
+
     protected $expectation = 'SELECT * FROM whatever WHERE uid=\'nothing\'';
+
+    /**
+     * @return \PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function mockStrLen()
+    {
+        return $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\EventHandlers\\', 'strlen');
+    }
 
     /**
      * Subscribing our class to test to the right event.
@@ -78,8 +89,8 @@ class QueryDebuggerTest extends AbstractTest implements ConstInterface
         parent::tearDown();
 
         // Reset the possible mocks in the general utility.
-        $this->setValueByReflection('finalClassNameCache', [], GeneralUtility::class);
-        $this->setValueByReflection('singletonInstances', [], GeneralUtility::class);
+        $this->setValueByReflection(static::FINAL_CLASS_NAME_CACHE, [], GeneralUtility::class);
+        $this->setValueByReflection(static::SINGLETON_INSTANCES, [], GeneralUtility::class);
     }
 
     /**
@@ -106,8 +117,7 @@ class QueryDebuggerTest extends AbstractTest implements ConstInterface
             static::PARAM_NAME => 'whatever'
         ];
 
-        $strLenMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\EventHandlers\\', 'strlen');
-        $strLenMock->expects($this->never());
+        $this->mockStrLen()->expects($this->never());
 
         $objectAnalyser = new Objects(Krexx::$pool);
         $objectAnalyser->setParameters($fixture)->callMe();
@@ -129,8 +139,8 @@ class QueryDebuggerTest extends AbstractTest implements ConstInterface
             static::PARAM_NAME => 'queryBuilder'
         ];
 
-        $strLenMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\EventHandlers\\', 'strlen');
-        $strLenMock->expects($this->once())
+        $this->mockStrLen()
+            ->expects($this->once())
             ->with($this->expectation);
 
         $objectAnalyser = new Objects(Krexx::$pool);
@@ -171,8 +181,8 @@ class QueryDebuggerTest extends AbstractTest implements ConstInterface
             ->will($this->returnValue($queryParserMock));
         $this->injectIntoGeneralUtility(ObjectManager::class, $objectManagerMock);
 
-        $strLenMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\EventHandlers\\', 'strlen');
-        $strLenMock->expects($this->once())
+        $this->mockStrLen()
+            ->expects($this->once())
             ->with($this->expectation)
             ->will($this->returnValue(500));
 
@@ -210,12 +220,12 @@ class QueryDebuggerTest extends AbstractTest implements ConstInterface
      */
     protected function injectIntoGeneralUtility($className, $mock)
     {
-        $finalClassNameCache = $this->retrieveValueByReflection('finalClassNameCache', GeneralUtility::class);
+        $finalClassNameCache = $this->retrieveValueByReflection(static::FINAL_CLASS_NAME_CACHE, GeneralUtility::class);
         $finalClassNameCache[$className] = $className;
-        $this->setValueByReflection('finalClassNameCache', $finalClassNameCache, GeneralUtility::class);
+        $this->setValueByReflection(static::FINAL_CLASS_NAME_CACHE, $finalClassNameCache, GeneralUtility::class);
 
-        $singletonInstances = $this->retrieveValueByReflection('singletonInstances', GeneralUtility::class);
+        $singletonInstances = $this->retrieveValueByReflection(static::SINGLETON_INSTANCES, GeneralUtility::class);
         $singletonInstances[$className] = $mock;
-        $this->setValueByReflection('singletonInstances', $singletonInstances, GeneralUtility::class);
+        $this->setValueByReflection(static::SINGLETON_INSTANCES, $singletonInstances, GeneralUtility::class);
     }
 }
