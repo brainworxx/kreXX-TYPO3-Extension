@@ -44,6 +44,11 @@ use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
 class AbstractCallerFinderTest extends AbstractTest
 {
     const PARSED_TEMPLATE = 'parsedTemplate';
+    const HAS_PROPERTY = 'hasProperty';
+    const RENDERING_STACK = 'renderingStack';
+    const VIEW_REFLECTION = 'viewReflection';
+    const RENDERING_CONTEXT = 'renderingContext';
+    const ERROR = 'error';
 
     /**
      * Test the retrieval of all necessary objects from the ViewHelper.
@@ -68,34 +73,34 @@ class AbstractCallerFinderTest extends AbstractTest
         // Mock the reflection of the view
         $reflectionMock = $this->createMock(\ReflectionClass::class);
         $reflectionMock->expects($this->once())
-            ->method('hasProperty')
-            ->with('renderingStack')
+            ->method(static::HAS_PROPERTY)
+            ->with(static::RENDERING_STACK)
             ->will($this->returnValue(true));
         $reflectionMock->expects($this->once())
             ->method('getProperty')
-            ->with('renderingStack')
+            ->with(static::RENDERING_STACK)
             ->will($this->returnValue($renderingStackRefMock));
 
         // Mock the rendering context
         $contextMock = $this->createMock(RenderingContext::class);
 
         Krexx::$pool->registry->set('view', $viewMock);
-        Krexx::$pool->registry->set('viewReflection', $reflectionMock);
-        Krexx::$pool->registry->set('renderingContext', $contextMock);
+        Krexx::$pool->registry->set(static::VIEW_REFLECTION, $reflectionMock);
+        Krexx::$pool->registry->set(static::RENDERING_CONTEXT, $contextMock);
 
         $newFluid = new Fluid(Krexx::$pool);
 
         // Check the injections from above.
         $this->assertEquals($this->retrieveValueByReflection('varname', $newFluid), AbstractFluid::FLUID_VARIABLE);
         $this->assertSame($this->retrieveValueByReflection('view', $newFluid), $viewMock);
-        $this->assertSame($this->retrieveValueByReflection('viewReflection', $newFluid), $reflectionMock);
-        $this->assertSame($this->retrieveValueByReflection('renderingContext', $newFluid), $contextMock);
+        $this->assertSame($this->retrieveValueByReflection(static::VIEW_REFLECTION, $newFluid), $reflectionMock);
+        $this->assertSame($this->retrieveValueByReflection(static::RENDERING_CONTEXT, $newFluid), $contextMock);
         $this->assertSame(
             $this->retrieveValueByReflection(static::PARSED_TEMPLATE, $newFluid),
             $renderingStack[0][static::PARSED_TEMPLATE]
         );
         $this->assertEquals($this->retrieveValueByReflection('renderingType', $newFluid), 5);
-        $this->assertFalse($this->retrieveValueByReflection('error', $newFluid));
+        $this->assertFalse($this->retrieveValueByReflection(static::ERROR, $newFluid));
     }
 
     /**
@@ -110,30 +115,30 @@ class AbstractCallerFinderTest extends AbstractTest
         $contextMock = 'taken out of context';
         $reflectionMock = $this->createMock(\ReflectionClass::class);
         $reflectionMock->expects($this->once())
-            ->method('hasProperty')
-            ->with('renderingStack')
+            ->method(static::HAS_PROPERTY)
+            ->with(static::RENDERING_STACK)
             ->will($this->returnValue(true));
         $reflectionMock->expects($this->once())
             ->method('getProperty')
-            ->with('renderingStack')
+            ->with(static::RENDERING_STACK)
             ->will($this->throwException(new \ReflectionException()));
 
         Krexx::$pool->registry->set('view', $viewMock);
-        Krexx::$pool->registry->set('viewReflection', $reflectionMock);
-        Krexx::$pool->registry->set('renderingContext', $contextMock);
+        Krexx::$pool->registry->set(static::VIEW_REFLECTION, $reflectionMock);
+        Krexx::$pool->registry->set(static::RENDERING_CONTEXT, $contextMock);
 
         $newFluid = new Fluid(Krexx::$pool);
-        $this->assertTrue($this->retrieveValueByReflection('error', $newFluid));
+        $this->assertTrue($this->retrieveValueByReflection(static::ERROR, $newFluid));
 
         // And now without the property.
         $reflectionMock = $this->createMock(\ReflectionClass::class);
         $reflectionMock->expects($this->once())
-            ->method('hasProperty')
-            ->with('renderingStack')
+            ->method(static::HAS_PROPERTY)
+            ->with(static::RENDERING_STACK)
             ->will($this->returnValue(false));
-        Krexx::$pool->registry->set('viewReflection', $reflectionMock);
+        Krexx::$pool->registry->set(static::VIEW_REFLECTION, $reflectionMock);
 
         $newFluid = new Fluid(Krexx::$pool);
-        $this->assertTrue($this->retrieveValueByReflection('error', $newFluid));
+        $this->assertTrue($this->retrieveValueByReflection(static::ERROR, $newFluid));
     }
 }
