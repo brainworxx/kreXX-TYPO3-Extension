@@ -153,32 +153,34 @@ class Configuration implements PluginConfigInterface
         // In the TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper the private
         // $viewHelperNode might not be an object, and trying to render it might
         // cause a fatal error!
+        $toString = '__toString';
+        $removeAll = 'removeAll';
         Registration::addMethodToDebugBlacklist(
             AbstractViewHelper::class,
-            '__toString'
+            $toString
         );
         Registration::addMethodToDebugBlacklist(
             NewAbstractViewHelper::class,
-            '__toString'
+            $toString
         );
 
         // Deleting all rows from the DB via typo3 repository is NOT a good
         // debug method!
         Registration::addMethodToDebugBlacklist(
             RepositoryInterface::class,
-            'removeAll'
+            $removeAll
         );
 
         // The lazy loading proxy may not have loaded the object at this time.
         Registration::addMethodToDebugBlacklist(
             LazyLoadingProxy::class,
-            '__toString'
+            $toString
         );
 
         // We now have a better variant for the QueryBuilder analysis.
         Registration::addMethodToDebugBlacklist(
             DbQueryBuilder::class,
-            '__toString'
+            $toString
         );
 
         // Add additional texts to the help.
