@@ -54,6 +54,9 @@ abstract class AbstractTest extends UnitTestCase
 {
     use PHPMock;
 
+    const FINAL_CLASS_NAME_CACHE = 'finalClassNameCache';
+    const SINGLETON_INSTANCES = 'singletonInstances';
+
     /**
      * Make sure, that we always havbe a working pool.
      */
@@ -75,8 +78,8 @@ abstract class AbstractTest extends UnitTestCase
 
         $this->setValueByReflection('packageManager', null, ExtensionManagementUtility::class);
         // Reset the possible mocks in the general utility.
-        $this->setValueByReflection('finalClassNameCache', [], GeneralUtility::class);
-        $this->setValueByReflection('singletonInstances', [], GeneralUtility::class);
+        $this->setValueByReflection(static::FINAL_CLASS_NAME_CACHE, [], GeneralUtility::class);
+        $this->setValueByReflection(static::SINGLETON_INSTANCES, [], GeneralUtility::class);
 
         if (class_exists(Environment::class)) {
             $this->setValueByReflection('cli', null, Environment::class);
@@ -103,13 +106,13 @@ abstract class AbstractTest extends UnitTestCase
      */
     protected function injectIntoGeneralUtility($className, $mock)
     {
-        $finalClassNameCache = $this->retrieveValueByReflection('finalClassNameCache', GeneralUtility::class);
+        $finalClassNameCache = $this->retrieveValueByReflection(static::FINAL_CLASS_NAME_CACHE, GeneralUtility::class);
         $finalClassNameCache[$className] = $className;
-        $this->setValueByReflection('finalClassNameCache', $finalClassNameCache, GeneralUtility::class);
+        $this->setValueByReflection(static::FINAL_CLASS_NAME_CACHE, $finalClassNameCache, GeneralUtility::class);
 
-        $singletonInstances = $this->retrieveValueByReflection('singletonInstances', GeneralUtility::class);
+        $singletonInstances = $this->retrieveValueByReflection(static::SINGLETON_INSTANCES, GeneralUtility::class);
         $singletonInstances[$className] = $mock;
-        $this->setValueByReflection('singletonInstances', $singletonInstances, GeneralUtility::class);
+        $this->setValueByReflection(static::SINGLETON_INSTANCES, $singletonInstances, GeneralUtility::class);
     }
 
     /**
