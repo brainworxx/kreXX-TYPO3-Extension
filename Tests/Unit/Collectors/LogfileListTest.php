@@ -53,12 +53,19 @@ class LogfileListTest extends AbstractTest
      */
     public function testAssignData()
     {
+        $assign = 'assign';
+        $fileList = 'filelist';
+        $someBeUrl = 'some backend url';
+        $anotherBeUrl = 'another backend url';
+        $dateFormat = 'd.m.y H:i:s';
+        $dispatcher = 'dispatcher';
+
         // No access. Show no files at all.
         $logLister = new LogfileList();
         $viewMock = $this->createMock(ViewInterface::class);
         $viewMock->expects($this->once())
-            ->method('assign')
-            ->with('filelist', []);
+            ->method($assign)
+            ->with($fileList, []);
         $logLister->assignData($viewMock);
 
         // Normal access.
@@ -83,12 +90,12 @@ class LogfileListTest extends AbstractTest
             ->willReturnSelf();
         $uriBuilderMock->expects($this->exactly(3))
             ->method('uriFor')
-            ->will($this->returnValue('some backend url'));
+            ->will($this->returnValue($someBeUrl));
 
         $uriBeBuilderMock = $this->createMock(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
         $uriBeBuilderMock->expects($this->exactly(3))
             ->method('buildUriFromRoute')
-            ->will($this->returnValue('another backend url'));
+            ->will($this->returnValue($anotherBeUrl));
 
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock->expects($this->exactly(2))
@@ -114,9 +121,9 @@ class LogfileListTest extends AbstractTest
             [
                 'name' => '123456.Krexx.html',
                 'size' => '390 B',
-                'time' => date("d.m.y H:i:s", 104),
+                'time' => date($dateFormat, 104),
                 'id' => '123456',
-                'dispatcher' => 'another backend url',
+                $dispatcher => $anotherBeUrl,
                 'meta' => [
                     [
                         'file' => '.../some/directory/file.php',
@@ -131,9 +138,9 @@ class LogfileListTest extends AbstractTest
             [
                 'name' => '123457.Krexx.html',
                 'size' => '316 B',
-                'time' => date("d.m.y H:i:s", 105),
+                'time' => date($dateFormat, 105),
                 'id' => '123457',
-                'dispatcher' => 'another backend url',
+                $dispatcher => $anotherBeUrl,
                 'meta' => [
                     [
                         'file' => '.../some/directory/anotherFile.php',
@@ -148,24 +155,24 @@ class LogfileListTest extends AbstractTest
             [
                 'name' => '123458.Krexx.html',
                 'size' => '205 B',
-                'time' => date("d.m.y H:i:s", 106),
+                'time' => date($dateFormat, 106),
                 'id' => '123458',
-                'dispatcher' => 'another backend url'
+                $dispatcher => $anotherBeUrl
             ]
         ];
         $viewMock = $this->createMock(ViewInterface::class);
         $viewMock->expects($this->once())
-            ->method('assign')
-            ->with('filelist', $expectation);
+            ->method($assign)
+            ->with($fileList, $expectation);
         $logLister->assignData($viewMock);
 
-        $expectation[0]['dispatcher'] = 'some backend url';
-        $expectation[1]['dispatcher'] = 'some backend url';
-        $expectation[2]['dispatcher'] = 'some backend url';
+        $expectation[0][$dispatcher] = $someBeUrl;
+        $expectation[1][$dispatcher] = $someBeUrl;
+        $expectation[2][$dispatcher] = $someBeUrl;
         $viewMock = $this->createMock(ViewInterface::class);
         $viewMock->expects($this->once())
-            ->method('assign')
-            ->with('filelist', $expectation);
+            ->method($assign)
+            ->with($fileList, $expectation);
         $logLister->assignData($viewMock);
     }
 }
