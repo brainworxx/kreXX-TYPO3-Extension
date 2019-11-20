@@ -67,10 +67,11 @@ class AbstractCollectorTest extends AbstractTest
      */
     public function testConstruct()
     {
+        $hasAccess = 'hasAccess';
         // No BE User available.
         $collector = new Configuration();
         $this->assertFalse(
-            $this->retrieveValueByReflection('hasAccess', $collector)
+            $this->retrieveValueByReflection($hasAccess, $collector)
         );
 
         // BE user without access.
@@ -82,7 +83,7 @@ class AbstractCollectorTest extends AbstractTest
         $GLOBALS['BE_USER'] = $userMock;
         $collector = new Configuration();
         $this->assertFalse(
-            $this->retrieveValueByReflection('hasAccess', $collector)
+            $this->retrieveValueByReflection($hasAccess, $collector)
         );
 
         // BE user with access.
@@ -100,7 +101,7 @@ class AbstractCollectorTest extends AbstractTest
         $GLOBALS['BE_USER'] = $userMock;
         $collector = new Configuration();
         $this->assertTrue(
-            $this->retrieveValueByReflection('hasAccess', $collector)
+            $this->retrieveValueByReflection($hasAccess, $collector)
         );
         $this->assertEquals(
             ['some', 'settings'],
