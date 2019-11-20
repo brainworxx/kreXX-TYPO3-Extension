@@ -161,10 +161,19 @@ class Bootstrap
      */
     public function checkVersionNumber($version)
     {
-        if ($version !== ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY)) {
-            GeneralUtility::makeInstance(CacheManager::class)
-                ->flushCachesInGroup('system');
+        try {
+            if ($version !== ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY)) {
+                GeneralUtility::makeInstance(CacheManager::class)
+                    ->flushCachesInGroup('system');
+            }
+        } catch (Exception $exception) {
+            // Do nothing.
+            // Flushing the cache just failed. There are deeper issues at work
+            // here. The only thing to do now is trying not to brick the system.
+        } catch (Throwable $exception) {
+            // Same as above.
         }
+
 
         return $this;
     }
