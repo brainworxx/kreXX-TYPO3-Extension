@@ -101,19 +101,20 @@ class ConfigurationTest extends AbstractTest
     {
         // Short circuit the getting of the system path.
         $pathSite = PATH_site;
+        $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
 
-        $versionMock = $this->getFunctionMock('\Brainworxx\\Includekrexx\\Plugins\\Typo3\\', 'version_compare');
+        $versionMock = $this->getFunctionMock($typo3Namespace, 'version_compare');
         $versionMock->expects($this->once())
             ->with(AbstractTest::TYPO3_VERSION, '8.3', '>')
             ->will($this->returnValue(true));
 
-        $classExistsMock = $this->getFunctionMock('\Brainworxx\\Includekrexx\\Plugins\\Typo3\\', 'class_exists');
+        $classExistsMock = $this->getFunctionMock($typo3Namespace, 'class_exists');
         $classExistsMock->expects($this->once())
             ->with(Environment::class)
             ->will($this->returnValue(false));
 
         // Mock the is_dir method. We will not create any files.
-        $isDirMock = $this->getFunctionMock('\Brainworxx\\Includekrexx\\Plugins\\Typo3\\', 'is_dir');
+        $isDirMock = $this->getFunctionMock($typo3Namespace, 'is_dir');
         $isDirMock->expects($this->exactly(4))
             ->withConsecutive(
                 [$pathSite . 'typo3temp/tx_includekrexx'],
@@ -156,13 +157,15 @@ class ConfigurationTest extends AbstractTest
             SettingsGetter::getLogFolder(),
             'Test the new location of the log folder.'
         );
+
+        $toString = '__toString';
         $this->assertEquals(
             [
-                'TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper' => ['__toString'],
-                'TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper' => ['__toString'],
+                'TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper' => [$toString],
+                'TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper' => [$toString],
                 'TYPO3\CMS\Extbase\Persistence\RepositoryInterface' => ['removeAll'],
-                'TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy' => ['__toString'],
-                'TYPO3\CMS\Core\Database\Query\QueryBuilder' => ['__toString'],
+                'TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy' => [$toString],
+                'TYPO3\CMS\Core\Database\Query\QueryBuilder' => [$toString],
             ],
             SettingsGetter::getBlacklistDebugMethods(),
             'What the method name says.'
