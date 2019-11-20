@@ -105,7 +105,7 @@ class SettingsTest extends AbstractTest
         $this->mockBeUser();
 
         // Fill this one, according to the fallback settings.
-        foreach (Krexx::$pool->config->configFallback as $group => $settings) {
+        foreach (Krexx::$pool->config->configFallback as $settings) {
             foreach ($settings as $settingName) {
                 $settingsModel->{'set' . $settingName}($settingName);
             }
