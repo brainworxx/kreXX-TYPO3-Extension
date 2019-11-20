@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Tests\Fixtures;
 
+use Aimeos\Controller\Frontend\Exception;
 use Aimeos\Controller\Jobs\Iface;
 
 class FixtureJob implements Iface
@@ -77,7 +78,7 @@ class FixtureJob implements Iface
      */
     public function decoratedMethod()
     {
-        throw new \Exception('Not be called');
+        throw new Exception('Not be called');
     }
 
     /**
