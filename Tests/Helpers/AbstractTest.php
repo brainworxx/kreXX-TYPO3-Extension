@@ -56,6 +56,7 @@ abstract class AbstractTest extends UnitTestCase
 
     const FINAL_CLASS_NAME_CACHE = 'finalClassNameCache';
     const SINGLETON_INSTANCES = 'singletonInstances';
+    const TYPO3_VERSION = '1.2.3';
 
     /**
      * Make sure, that we always havbe a working pool.

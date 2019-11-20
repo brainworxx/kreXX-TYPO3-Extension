@@ -39,7 +39,6 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Includekrexx\Tests\Unit\Bootstrap\BootstrapTest;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
@@ -84,13 +83,13 @@ class ConfigurationTest extends AbstractTest
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue(BootstrapTest::TYPO3_VERSION));
+            ->will($this->returnValue(AbstractTest::TYPO3_VERSION));
         $packageMock = $this->simulatePackage(Bootstrap::EXT_KEY, 'whatever');
         $packageMock->expects($this->once())
             ->method('getPackageMetaData')
             ->will($this->returnValue($metaData));
 
-        $this->assertEquals(BootstrapTest::TYPO3_VERSION, $this->configuration->getVersion());
+        $this->assertEquals(AbstractTest::TYPO3_VERSION, $this->configuration->getVersion());
     }
 
     /**
@@ -105,7 +104,7 @@ class ConfigurationTest extends AbstractTest
 
         $versionMock = $this->getFunctionMock('\Brainworxx\\Includekrexx\\Plugins\\Typo3\\', 'version_compare');
         $versionMock->expects($this->once())
-            ->with(BootstrapTest::TYPO3_VERSION, '8.3', '>')
+            ->with(AbstractTest::TYPO3_VERSION, '8.3', '>')
             ->will($this->returnValue(true));
 
         $classExistsMock = $this->getFunctionMock('\Brainworxx\\Includekrexx\\Plugins\\Typo3\\', 'class_exists');

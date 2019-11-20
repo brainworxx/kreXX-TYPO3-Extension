@@ -48,7 +48,7 @@ class BootstrapTest extends AbstractTest
 {
     const BOOTSTRAP_NAMESPACE = '\\Brainworxx\\Includekrexx\\Bootstrap\\';
     const DEFINED = 'defined';
-    const TYPO3_VERSION = '1.2.3';
+
     /**
      * @var \Brainworxx\Includekrexx\Bootstrap\Bootstrap
      */

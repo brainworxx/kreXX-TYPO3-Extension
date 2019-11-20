@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-define('TYPO3_version', \Brainworxx\Includekrexx\Tests\Unit\Bootstrap\BootstrapTest::TYPO3_VERSION);
+define('TYPO3_version', \Brainworxx\Includekrexx\Tests\Helpers\AbstractTest::TYPO3_VERSION);
 define('PATH_site', 'some/path/');
 
 include_once __DIR__ . '/../../Resources/Private/krexx/tests/Scripts/Bootstrap.php';

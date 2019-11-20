@@ -43,7 +43,6 @@ use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ThroughMethods;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Includekrexx\Tests\Unit\Bootstrap\BootstrapTest;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use TYPO3\CMS\Core\Package\MetaData;
 use Aimeos\MW\DB\Statement\Base as StatementBase;
@@ -84,13 +83,13 @@ class ConfigurationTest extends AbstractTest
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue(BootstrapTest::TYPO3_VERSION));
+            ->will($this->returnValue(AbstractTest::TYPO3_VERSION));
         $packageMock = $this->simulatePackage(Bootstrap::EXT_KEY, 'whatever');
         $packageMock->expects($this->once())
             ->method('getPackageMetaData')
             ->will($this->returnValue($metaData));
 
-        $this->assertEquals(BootstrapTest::TYPO3_VERSION, $this->configuraton->getVersion());
+        $this->assertEquals(AbstractTest::TYPO3_VERSION, $this->configuraton->getVersion());
     }
 
     /**
