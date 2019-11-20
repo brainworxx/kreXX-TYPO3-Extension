@@ -46,6 +46,9 @@ use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfig
 
 class BootstrapTest extends AbstractTest
 {
+    const BOOTSTRAP_NAMESPACE = '\\Brainworxx\\Includekrexx\\Bootstrap\\';
+    const DEFINED = 'defined';
+    const TYPO3_VERSION = '1.2.3';
     /**
      * @var \Brainworxx\Includekrexx\Bootstrap\Bootstrap
      */
@@ -66,13 +69,13 @@ class BootstrapTest extends AbstractTest
     public function testRunEarlyFail()
     {
         // The kreXX directory is not defined . . .
-        $definedMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Bootstrap\\', 'defined');
+        $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, static::DEFINED);
         $definedMock->expects($this->once())
             ->with('KREXX_DIR')
             ->will($this->returnValue(false));
 
         // And the kreXX bootstrap script is not available.
-        $fileExistsMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Bootstrap\\', 'file_exists');
+        $fileExistsMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'file_exists');
         $fileExistsMock->expects($this->once())
             ->with($this->anything())
             ->will($this->returnValue(false));
@@ -102,7 +105,7 @@ class BootstrapTest extends AbstractTest
 
         // We simulate a failed autoloading.
         // This normally happens during the update of the extension.
-        $classExistsMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Bootstrap\\', 'class_exists');
+        $classExistsMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'class_exists');
         $classExistsMock->expects($this->once())
             ->with(Registration::class)
             ->will($this->returnValue(false));
@@ -118,11 +121,11 @@ class BootstrapTest extends AbstractTest
      */
     public function testRunLowT3Version()
     {
-        $definedMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Bootstrap\\', 'defined');
+        $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, static::DEFINED);
         $definedMock->expects($this->once())
             ->will($this->returnValue(true));
 
-        $versionCompMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Bootstrap\\', 'version_compare');
+        $versionCompMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'version_compare');
         $versionCompMock->expects($this->exactly(2))
             ->will($this->returnValue(false));
 
@@ -148,11 +151,11 @@ class BootstrapTest extends AbstractTest
 
     public function testRunHighT3Version()
     {
-        $definedMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Bootstrap\\', 'defined');
+        $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, static::DEFINED);
         $definedMock->expects($this->once())
             ->will($this->returnValue(true));
 
-        $versionCompMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Bootstrap\\', 'version_compare');
+        $versionCompMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'version_compare');
         $versionCompMock->expects($this->exactly(2))
             ->will($this->returnValue(true));
 
@@ -169,7 +172,7 @@ class BootstrapTest extends AbstractTest
             [$this->bootstrap::SUBMODULES] = ['module' => Log::class, 'after' => ['log']];
 
         $arrayReplaceRecursiveMock = $this->getFunctionMock(
-            '\\Brainworxx\\Includekrexx\\Bootstrap\\',
+            static::BOOTSTRAP_NAMESPACE,
             'array_replace_recursive'
         );
         $arrayReplaceRecursiveMock->expects($this->once())
@@ -194,7 +197,7 @@ class BootstrapTest extends AbstractTest
         $metaMock = $this->createMock(MetaData::class);
         $metaMock->expects($this->exactly(1))
             ->method('getVersion')
-            ->will($this->returnValue('1.2.3'));
+            ->will($this->returnValue(static::TYPO3_VERSION));
         $packageMock = $this->simulatePackage($this->bootstrap::EXT_KEY, 'any path');
         $packageMock->expects($this->exactly(1))
             ->method('getPackageMetaData')
@@ -220,7 +223,7 @@ class BootstrapTest extends AbstractTest
         $metaMock = $this->createMock(MetaData::class);
         $metaMock->expects($this->exactly(1))
             ->method('getVersion')
-            ->will($this->returnValue('1.2.3'));
+            ->will($this->returnValue(static::TYPO3_VERSION));
         $packageMock = $this->simulatePackage($this->bootstrap::EXT_KEY, 'any path');
         $packageMock->expects($this->exactly(1))
             ->method('getPackageMetaData')
@@ -233,6 +236,6 @@ class BootstrapTest extends AbstractTest
 
         $this->injectIntoGeneralUtility(CacheManager::class, $cacheManagerMock);
 
-        $this->bootstrap->checkVersionNumber('1.2.3');
+        $this->bootstrap->checkVersionNumber(static::TYPO3_VERSION);
     }
 }

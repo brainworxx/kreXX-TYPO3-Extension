@@ -39,6 +39,7 @@ use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Unit\Bootstrap\BootstrapTest;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use TYPO3\CMS\Core\Package\MetaData;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
@@ -113,13 +114,13 @@ class ConfigurationTest extends AbstractTest
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue('1.2.3'));
+            ->will($this->returnValue(BootstrapTest::TYPO3_VERSION));
         $packageMock = $this->simulatePackage(Bootstrap::EXT_KEY, 'whatever');
         $packageMock->expects($this->once())
             ->method('getPackageMetaData')
             ->will($this->returnValue($metaData));
 
-        $this->assertEquals('1.2.3', $this->configuration->getVersion());
+        $this->assertEquals(BootstrapTest::TYPO3_VERSION, $this->configuration->getVersion());
     }
 
     /**
