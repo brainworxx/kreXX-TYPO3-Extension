@@ -190,20 +190,6 @@ class Pool extends AbstractFactory
     }
 
     /**
-     * (Re)initializes everything in the pool, in case in-runtime
-     * factory overwrites.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     */
-    public function init()
-    {
-        $this->__construct();
-    }
-
-    /**
      * Check if the environment is as it should be.
      */
     protected function checkEnvironment()

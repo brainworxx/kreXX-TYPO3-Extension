@@ -176,26 +176,6 @@ class Messages
     }
 
     /**
-     * Read a help text file, and add its contents to the already read content.
-     *
-     * @deprecated
-     *   Since 3.2.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @param string $file
-     *   Absolute path to the file we want to read.
-     */
-    public function readHelpFile($file)
-    {
-        $this->helpArray = array_merge(
-            $this->helpArray,
-            (array)parse_ini_string($this->pool->fileService->getFileContents($file))
-        );
-    }
-
-    /**
      * Reset the read help texts to factory settings.
      */
     public function readHelpTexts()

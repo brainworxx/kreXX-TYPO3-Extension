@@ -119,9 +119,7 @@ class Krexx
         AbstractController::$analysisInProgress = true;
 
         static::$pool->createClass(TimerController::class)
-            ->noFatalForKrexx()
-            ->timerAction($string)
-            ->reFatalAfterKrexx();
+            ->timerAction($string);
 
         AbstractController::$analysisInProgress = false;
     }
@@ -146,9 +144,7 @@ class Krexx
         AbstractController::$analysisInProgress = true;
 
         static::$pool->createClass(TimerController::class)
-            ->noFatalForKrexx()
-            ->timerEndAction()
-            ->reFatalAfterKrexx();
+            ->timerEndAction();
 
         AbstractController::$analysisInProgress = false;
     }
@@ -179,9 +175,7 @@ class Krexx
         AbstractController::$analysisInProgress = true;
 
         static::$pool->createClass(DumpController::class)
-            ->noFatalForKrexx()
-            ->dumpAction($data)
-            ->reFatalAfterKrexx();
+            ->dumpAction($data);
 
         AbstractController::$analysisInProgress = false;
 
@@ -214,9 +208,7 @@ class Krexx
         AbstractController::$analysisInProgress = true;
 
         static::$pool->createClass(BacktraceController::class)
-            ->noFatalForKrexx()
-            ->backtraceAction($backtrace)
-            ->reFatalAfterKrexx();
+            ->backtraceAction($backtrace);
 
         AbstractController::$analysisInProgress = false;
     }
@@ -231,8 +223,7 @@ class Krexx
         Pool::createPool();
 
         static::$pool->config->setDisabled(true);
-        static::$pool->createClass(DumpController::class)
-            ->noFatalForKrexx();
+        static::$pool->createClass(DumpController::class);
 
         Config::$disabledByPhp = true;
     }
@@ -257,74 +248,7 @@ class Krexx
         }
 
          static::$pool->createClass(EditSettingsController::class)
-            ->noFatalForKrexx()
-            ->editSettingsAction()
-            ->reFatalAfterKrexx();
-    }
-
-    /**
-     * Registers a shutdown function.
-     *
-     * Our fatal errorhandler is located there.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed when dropping PHP 5 support.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @api
-     */
-    public static function registerFatal()
-    {
-        Pool::createPool();
-
-        // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
-            Config::$disabledByPhp
-        ) {
-            return;
-        }
-
-        // Wrong PHP version?
-        if (version_compare(phpversion(), '7.0.0', '>=')) {
-            static::$pool->messages->addMessage('php7');
-            // In case that there is no other kreXX output, we show the configuration
-            // with the message.
-            static::editSettings();
-            return;
-        }
-
-        static::$pool->createClass(ErrorController::class)
-            ->registerFatalAction();
-    }
-
-    /**
-     * Tells the registered shutdown function to do nothing.
-     *
-     * We can not unregister a once declared shutdown function,
-     * so we need to tell our errorhandler to do nothing, in case
-     * there is a fatal.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed when dropping PHP 5 support.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @api
-     */
-    public static function unregisterFatal()
-    {
-        Pool::createPool();
-
-        // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
-            Config::$disabledByPhp
-        ) {
-            return;
-        }
-
-        static::$pool->createClass(ErrorController::class)
-            ->unregisterFatalAction();
+            ->editSettingsAction();
     }
 
     /**

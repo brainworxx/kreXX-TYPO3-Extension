@@ -73,22 +73,4 @@ class RenderSmokyGrey extends RenderHans implements RenderInterface
 
     const DATA_ATTRIBUTE_JSON = 'addjson';
 
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     */
-    protected function renderConnector($connector)
-    {
-        if (strlen($connector) > 17) {
-            // Something big, we should display it.
-            // Most likely the parameters of a method.
-            return parent::renderConnector($connector);
-        }
-
-        return '';
-    }
 }

@@ -77,7 +77,6 @@ class BacktraceControllerTest extends AbstractController
      * @covers \Brainworxx\Krexx\Controller\BacktraceController::backtraceAction
      * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputFooter
      * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputCssAndJs
-     * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputHeader
      */
     public function testBacktraceAction()
     {

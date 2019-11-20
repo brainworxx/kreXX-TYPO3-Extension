@@ -76,7 +76,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface
             default:
                 return $this->renderUnknownOrClosed($model, $resource, $typeString);
         }
-        
+
         // Output meta data from the class.
         return $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(

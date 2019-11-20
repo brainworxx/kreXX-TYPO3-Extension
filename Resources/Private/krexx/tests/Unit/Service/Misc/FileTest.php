@@ -40,7 +40,7 @@ use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Fixtures\TraversableFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Krexx\View\Render;
+use Brainworxx\Krexx\View\Skins\RenderHans;
 use ReflectionClass;
 
 class FileTest extends AbstractTest
@@ -99,7 +99,7 @@ class FileTest extends AbstractTest
         $source = 'source';
 
         // Mock the renderer.
-        $renderMock = $this->createMock(Render::class);
+        $renderMock = $this->createMock(RenderHans::class);
         $renderMock->expects($this->exactly(11))
             ->method('renderBacktraceSourceLine')
             ->withConsecutive(

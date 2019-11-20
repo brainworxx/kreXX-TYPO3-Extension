@@ -13,6 +13,9 @@ Changelog
 =============================================================
 
 4.0.0
+    - [Change] Removed all deprecations.
+    - [Change] Removed the PHP 5.x fatal error handler.
+    - [Bugfix] The process other routing is never called.
 
 3.3.0
     - [Feature] Introduce php-mock/php-mock-phpunit.

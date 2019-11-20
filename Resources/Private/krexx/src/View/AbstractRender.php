@@ -77,42 +77,6 @@ abstract class AbstractRender implements ConstInterface
     }
 
     /**
-     * Renders the connector between analysis objects, params and results.
-     *
-     * @param string $connector
-     *   The data to be displayed.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will beremoved.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return string
-     *   The rendered connector.
-     */
-    protected function renderConnector($connector)
-    {
-        return str_replace(
-            Skins\Hans\ConstInterface::MARKER_CONNECTOR,
-            $connector,
-            $this->getTemplateFileContent(Skins\Hans\ConstInterface::FILE_CONNECTOR)
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     */
-    public function getSkinList()
-    {
-        return $this->pool->config->getSkinList();
-    }
-
-    /**
      * Loads a template file from the skin folder.
      *
      * @param string $what
@@ -168,43 +132,6 @@ abstract class AbstractRender implements ConstInterface
                 ],
                 $array
             )
-        );
-    }
-
-    /**
-     * Do some special escaping for the json and data attribute output.
-     *
-     * @param string|array $data
-     *
-     * @deprecated
-     *   Since 3.2.0
-     * @codeCoverageIgnore
-     *   We will not test deprecated stuff.
-     *
-     * @return string|array
-     *   The escaped json
-     */
-    protected function jsonEscape($data)
-    {
-        // Our js has some problems with single quotes and escaped quotes.
-        // We remove them as well as linebreaks.
-        // Unicode greater-than and smaller-then values.
-        return str_replace(
-            [
-                '"',
-                "'",
-                '&quot;',
-                '&lt;',
-                '&gt;',
-            ],
-            [
-                "\\u0027",
-                "\\u0022",
-                "\\u0027",
-                "\\u276E",
-                "\\u02C3",
-            ],
-            $data
         );
     }
 

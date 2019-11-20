@@ -85,22 +85,6 @@ class Traversable extends AbstractObjectAnalysis
     /**
      * Analyses the traversable data.
      *
-     * @deprecated
-     *   Since 3.2.0 dev. Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return string
-     *   The generated markup.
-     */
-    protected function getTaversableData()
-    {
-        return $this->retrieveTraversableData();
-    }
-
-    /**
-     * Analyses the traversable data.
-     *
      * @return string
      *   The generated markup.
      */

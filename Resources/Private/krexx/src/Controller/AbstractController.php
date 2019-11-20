@@ -76,29 +76,6 @@ abstract class AbstractController implements ConstInterface
     protected static $jsCssSend = [];
 
     /**
-     * Here we store the fatal error handler.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed when dropping PHP support.
-     *
-     * @var \Brainworxx\Krexx\Errorhandler\Fatal
-     */
-    protected static $krexxFatal;
-
-    /**
-     * Stores whether out fatal error handler should be active.
-     *
-     * During a kreXX analysis, we deactivate it to improve performance.
-     * Here we save, whether we should reactivate it.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed when dropping PHP support.
-     *
-     * @var bool
-     */
-    protected $fatalShouldActive = false;
-
-    /**
      * Our pool where we keep all relevant classes.
      *
      * @var Pool
@@ -140,25 +117,6 @@ abstract class AbstractController implements ConstInterface
         } elseif ($this->destination === Fallback::VALUE_FILE) {
             $this->outputService = $pool->createClass(File::class);
         }
-    }
-
-    /**
-     * Simply outputs the Header of kreXX.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @param string $headline
-     *   The headline, displayed in the header.
-     *
-     * @return string
-     *   The generated markup
-     */
-    protected function outputHeader($headline)
-    {
-        return $this->pool->render->renderHeader($headline, $this->outputCssAndJs());
     }
 
     /**
@@ -240,56 +198,5 @@ abstract class AbstractController implements ConstInterface
         $jsCode .= $this->pool->fileService->getFileContents($skinJsPath);
 
         return $this->pool->render->renderCssJs($css, $jsCode);
-    }
-
-    /**
-     * Disables the fatal handler and the tick callback.
-     *
-     * We disable the tick callback and the error handler during
-     * a analysis, to generate faster output. We also disable
-     * other kreXX calls, which may be caused by the debug callbacks
-     * to prevent kreXX from starting other kreXX calls.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return $this
-     *   Return $this for chaining.
-     */
-    public function noFatalForKrexx()
-    {
-        if ($this->fatalShouldActive === true) {
-            $this::$krexxFatal->setIsActive(false);
-            unregister_tick_function([$this::$krexxFatal, 'tickCallback']);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Re-enable the fatal handler and the tick callback.
-     *
-     * We disable the tick callback and the error handler during
-     * a analysis, to generate faster output. We re-enable kreXX
-     * afterwards, so the dev can use it again.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return $this
-     *   Return $this for chaining.
-     */
-    public function reFatalAfterKrexx()
-    {
-        if ($this->fatalShouldActive === true) {
-            $this::$krexxFatal->setIsActive(true);
-            register_tick_function([$this::$krexxFatal, 'tickCallback']);
-        }
-
-        return $this;
     }
 }

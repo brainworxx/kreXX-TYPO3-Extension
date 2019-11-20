@@ -78,7 +78,6 @@ class DumpControllerTest extends AbstractController
      * @covers \Brainworxx\Krexx\Controller\DumpController::dumpAction
      * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputFooter
      * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputCssAndJs
-     * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputHeader
      */
     public function testDumpAction()
     {

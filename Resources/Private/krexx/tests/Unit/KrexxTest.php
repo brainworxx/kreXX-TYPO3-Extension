@@ -331,41 +331,6 @@ class KrexxTest extends AbstractTest
     }
 
     /**
-     * Test if we can register our fatal error handler.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::registerFatal
-     * @incomplete
-     *   We only test the php version.
-     */
-    public function testRegisterFatal()
-    {
-        $this->mockDebugBacktraceStandard();
-
-        Krexx::registerFatal();
-        $this->assertEquals(['php7' => ['key' => 'php7', 'params' => []]], Krexx::$pool->messages->getKeys());
-    }
-
-    /**
-     * Test if we can unregister our fatal error handler.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::unregisterFatal
-     */
-    public function testUnregisterFatal()
-    {
-        // Create a mock of the error handler.
-        $errorMock = $this->createMock(
-            \Brainworxx\Krexx\Errorhandler\Fatal::class
-        );
-        $errorMock->expects($this->once())
-            ->method('setIsActive')
-            ->will($this->returnValue(null));
-
-        // Inject it into the controller.
-        $this->setValueByReflection('krexxFatal', $errorMock, AbstractController::class);
-        Krexx::unregisterFatal();
-    }
-
-    /**
      * Prepare the forced logger test.
      */
     protected function beginForcedLogger()

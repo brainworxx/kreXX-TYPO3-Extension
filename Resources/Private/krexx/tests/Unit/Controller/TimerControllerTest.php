@@ -115,7 +115,6 @@ class TimerControllerTest extends AbstractController
      *
      * @covers \Brainworxx\Krexx\Controller\TimerController::timerEndAction
      * @covers \Brainworxx\Krexx\Controller\TimerController::miniBenchTo
-     * @covers \Brainworxx\Krexx\Controller\TimerController::getCurrentUrl
      */
     public function testTimerEndAction()
     {
