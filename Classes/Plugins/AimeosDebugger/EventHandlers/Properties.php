@@ -98,9 +98,9 @@ class Properties implements EventHandlerInterface, ConstInterface, AimeosConstIn
 
         if (is_a($data, ItemIface::class)) {
             $result .= $this->extractValues(static::AIMEOS_B_DATA, $params);
-        } elseif (is_a($data, NodeIface::class)) {
-            $result .= $this->extractValues(static::AIMEOS_VALUES, $params);
-        } elseif (is_a($data, ViewIface::class)) {
+        } elseif (is_a($data, NodeIface::class) ||
+            is_a($data, ViewIface::class)
+        ) {
             $result .= $this->extractValues(static::AIMEOS_VALUES, $params);
         }
 
