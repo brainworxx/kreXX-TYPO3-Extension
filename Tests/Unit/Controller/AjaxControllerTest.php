@@ -93,19 +93,21 @@ class AjaxControllerTest extends AbstractTest
      */
     public function testDeleteActionNormal()
     {
+        $controllerNamespace = '\\Brainworxx\\Includekrexx\\Controller\\';
+
         $this->mockBeUser();
         $serverRequest = $this->createMock(ServerRequest::class);
         $serverRequest->expects($this->once())
             ->method('getQueryParams')
             ->will($this->returnValue(['fileid' => '123456']));
 
-        $fileExistsMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Controller\\', 'file_exists');
+        $fileExistsMock = $this->getFunctionMock($controllerNamespace, 'file_exists');
         $fileExistsMock->expects($this->exactly(2))
             ->will($this->returnValue(true));
-        $isWritableMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Controller\\', 'is_writable');
+        $isWritableMock = $this->getFunctionMock($controllerNamespace, 'is_writable');
         $isWritableMock->expects($this->exactly(2))
             ->will($this->returnValue(true));
-        $unlinkMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Controller\\', 'unlink');
+        $unlinkMock = $this->getFunctionMock($controllerNamespace, 'unlink');
         $unlinkMock->expects($this->exactly(2));
 
         $controller = new AjaxController();
