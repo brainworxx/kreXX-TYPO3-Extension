@@ -259,7 +259,7 @@ abstract class AbstractFluid extends AbstractCaller
 
         $fileContent = $this->pool->fileService->getFileContents($filePath, false);
 
-        $varname = static::FLUID_VARIABLE;
+        $result = static::FLUID_VARIABLE;
         $alreadyFound = false;
 
         foreach ($this->callPattern as $funcname) {
@@ -276,16 +276,16 @@ abstract class AbstractFluid extends AbstractCaller
                     return;
                 }
 
-                $varname =  $this->checkForComplicatedStuff(
+                $result =  $this->checkForComplicatedStuff(
                     $this->pool->encodingService->encodeString(trim($name[1][0], " \t\n\r\0\x0B"))
                 );
                 $alreadyFound = true;
             }
         }
 
-        // Still here? Set our varname.
+        // Still here? Set our variable name.
         if ($alreadyFound) {
-            $this->varname = $varname;
+            $this->varname = $result;
         }
     }
 
