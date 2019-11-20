@@ -134,10 +134,10 @@ class Codegen implements ConstInterface
             $result = 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
         } elseif ($model->getMultiLineCodeGen() === static::ARRAY_VALUES_ACCESS) {
             $result = 'array_values(;firstMarker;)[' . $model->getConnectorParameters() . ']';
-        } elseif ($model->getIsPublic() === true) {
+        } elseif ($model->getIsPublic() === true ||
+            $this->pool->scope->testModelForCodegen($model) === true
+        ) {
             // Test for private or protected access.
-            $result = $this->concatenation($model);
-        } elseif ($this->pool->scope->testModelForCodegen($model) === true) {
             // Test if we are inside the scope. Everything within our scope is reachable.
             $result = $this->concatenation($model);
         }

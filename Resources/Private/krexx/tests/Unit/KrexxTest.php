@@ -53,6 +53,7 @@ class KrexxTest extends AbstractTest
     const KREXX_COUNT = 'krexxCount';
     const TIME_KEEPING = 'timekeeping';
     const COUNTER_CACHE = 'counterCache';
+    const CONTROLLER_NAMESPACE = '\\Brainworxx\\Krexx\\Controller\\';
 
     protected function getDirContents($dir, &$results = array())
     {
@@ -581,7 +582,7 @@ class KrexxTest extends AbstractTest
         Config::$disabledByPhp = true;
 
         $setExceptionHandlerMock = $this
-            ->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'set_exception_handler');
+            ->getFunctionMock(static::CONTROLLER_NAMESPACE, 'set_exception_handler');
         $setExceptionHandlerMock->expects($this->never());
 
         Krexx::registerExceptionHandler();
@@ -599,7 +600,7 @@ class KrexxTest extends AbstractTest
         $this->setValueByReflection('exceptionController', $stdClass, ExceptionController::class);
 
         $setExceptionHandlerMock = $this
-            ->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'set_exception_handler');
+            ->getFunctionMock(static::CONTROLLER_NAMESPACE, 'set_exception_handler');
         $setExceptionHandlerMock->expects($this->once())
             ->with([$stdClass, 'exceptionAction']);
 
@@ -616,7 +617,7 @@ class KrexxTest extends AbstractTest
         Config::$disabledByPhp = true;
 
         $restoreExceptionHandlerMock = $this
-            ->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'restore_exception_handler');
+            ->getFunctionMock(static::CONTROLLER_NAMESPACE, 'restore_exception_handler');
         $restoreExceptionHandlerMock->expects($this->never());
 
         Krexx::unregisterExceptionHandler();
@@ -630,7 +631,7 @@ class KrexxTest extends AbstractTest
     public function testUnRegisterExceptionHandler()
     {
         $restoreExceptionHandlerMock = $this
-            ->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'restore_exception_handler');
+            ->getFunctionMock(static::CONTROLLER_NAMESPACE, 'restore_exception_handler');
         $restoreExceptionHandlerMock->expects($this->once());
 
         Krexx::unregisterExceptionHandler();

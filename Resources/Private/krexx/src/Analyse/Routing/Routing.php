@@ -171,7 +171,7 @@ class Routing extends AbstractRouting
         } elseif (is_float($data) === true) {
             // Float?
             $result =  $this->processFloat->process($model);
-        } elseif (empty($result) === true) {
+        } else {
             // Resource?
             // The is_resource can not identify closed stream resource types.
             // And the get_resource_type() throws a warning, in case this is not a
@@ -180,11 +180,12 @@ class Routing extends AbstractRouting
                 // Do nothing. We need to catch a possible warning.
             });
             if (get_resource_type($data) !== null) {
-                restore_error_handler();
                 $result =  $this->processResource->process($model);
             }
             restore_error_handler();
-        } elseif (empty($result) === true) {
+        }
+
+        if (empty($result) === true) {
             // Tell the dev that we can not analyse this one.
             $result = $this->processOther->process($model);
         }

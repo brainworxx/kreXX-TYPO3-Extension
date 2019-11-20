@@ -72,13 +72,11 @@ class ProcessResource extends AbstractRouting implements ProcessInterface
                 // facing a curl instance right here.
                 $meta = curl_getinfo($resource);
                 break;
-        }
 
-        // Check, if we have something useful.
-        if (empty($meta)) {
-            return $this->renderUnknownOrClosed($model, $resource, $typeString);
+            default:
+                return $this->renderUnknownOrClosed($model, $resource, $typeString);
         }
-
+        
         // Output meta data from the class.
         return $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(

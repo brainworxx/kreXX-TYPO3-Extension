@@ -72,6 +72,7 @@ class ComplexMethodFixture extends MethodsFixture implements InterfaceFixture
     {
         // Stuff for the CallerFinder.
         krexx($parameter);
+        $this->privateMethod();
     }
 
     /**

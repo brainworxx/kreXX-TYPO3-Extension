@@ -79,8 +79,6 @@ class ModelTest extends AbstractTest
      */
     public function testSetValue()
     {
-        $value = 'value';
-
         $this->assertSame($this->model, $this->model->setValue(static::VALUE));
         $this->assertEquals(static::VALUE, $this->model->getValue());
 

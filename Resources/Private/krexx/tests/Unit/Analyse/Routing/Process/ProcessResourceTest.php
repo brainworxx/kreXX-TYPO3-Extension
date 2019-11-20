@@ -44,6 +44,9 @@ use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 
 class ProcessResourceTest extends AbstractTest
 {
+    const PROCESS_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\';
+    const GET_RESOURCE_TYPE = 'get_resource_type';
+
     /**
      * Testing the processing of a stream resource.
      *
@@ -58,10 +61,10 @@ class ProcessResourceTest extends AbstractTest
         $metaResults = [
             'best', 'stream', 'resource', 'ever'
         ];
-        $getResourceType = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'get_resource_type');
+        $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
         $getResourceType->expects($this->once())
             ->will($this->returnValue('stream'));
-        $streamGetMetsData = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'stream_get_meta_data');
+        $streamGetMetsData = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'stream_get_meta_data');
         $streamGetMetsData->expects($this->once())
             ->will($this->returnValue($metaResults));
 
@@ -82,10 +85,10 @@ class ProcessResourceTest extends AbstractTest
         $metaResults = [
             'everybody', 'likes', 'curling'
         ];
-        $getResourceType = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'get_resource_type');
+        $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
         $getResourceType->expects($this->once())
             ->will($this->returnValue('curl'));
-        $getResourceType = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'curl_getinfo');
+        $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'curl_getinfo');
         $getResourceType->expects($this->once())
             ->will($this->returnValue($metaResults));
 
@@ -104,10 +107,10 @@ class ProcessResourceTest extends AbstractTest
         $this->mockEmergencyHandler();
 
         $resource = 'Letting a string look like a resource is easy.';
-        $getResourceType = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'get_resource_type');
+        $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
         $getResourceType->expects($this->once())
             ->will($this->returnValue('whatever'));
-        $versionCompare = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'version_compare');
+        $versionCompare = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'version_compare');
         $versionCompare->expects($this->once())
             ->will($this->returnValue(false));
 
@@ -126,10 +129,10 @@ class ProcessResourceTest extends AbstractTest
         $this->mockEmergencyHandler();
 
         $resource = 'Meh, here I might not really look like a resource at all.';
-        $getResourceType = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'get_resource_type');
+        $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
         $getResourceType->expects($this->once())
             ->will($this->returnValue('not a string'));
-        $versionCompare = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'version_compare');
+        $versionCompare = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'version_compare');
         $versionCompare->expects($this->once())
             ->will($this->returnValue(true));
 

@@ -1,3 +1,6 @@
+3.2.2
+- Bugfix: The process other routing is never called.
+
 3.2.1
 - Bugfix: Wrong error handler restoration after deleting
   a file.

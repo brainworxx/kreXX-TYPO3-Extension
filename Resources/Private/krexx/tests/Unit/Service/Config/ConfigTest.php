@@ -57,6 +57,14 @@ class ConfigTest extends AbstractTest
     const KREXX_INI_SETTINGS = 'Krexx.ini settings';
 
     /**
+     * @return \PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function mockSapi()
+    {
+        return $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'php_sapi_name');
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function setUp()
@@ -98,8 +106,8 @@ class ConfigTest extends AbstractTest
         Registration::addClassToDebugBlacklist($evilClassOne);
 
         // Simulate a normal call (not cli or ajax).
-        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'php_sapi_name');
-        $sapiMock->expects($this->exactly(2))
+        $this->mockSapi()
+            ->expects($this->exactly(2))
             ->will($this->returnValue(static::NOT_CLI));
 
         // Create the test subject.
@@ -135,8 +143,8 @@ class ConfigTest extends AbstractTest
      */
     public function testConstructCliBrowser()
     {
-        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'php_sapi_name');
-        $sapiMock->expects($this->exactly(2))
+        $this->mockSapi()
+            ->expects($this->exactly(2))
             ->will($this->returnValue('cli'));
         $config = new Config(Krexx::$pool);
         $this->assertEquals(
@@ -154,8 +162,8 @@ class ConfigTest extends AbstractTest
      */
     public function testConstructAjaxBrowser()
     {
-        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'php_sapi_name');
-        $sapiMock->expects($this->exactly(1))
+        $this->mockSapi()
+            ->expects($this->exactly(1))
             ->will($this->returnValue(static::NOT_CLI));
         $_SERVER['HTTP_X_REQUESTED_WITH'] = 'xmlhttprequest';
         $config = new Config(Krexx::$pool);
@@ -174,8 +182,8 @@ class ConfigTest extends AbstractTest
      */
     public function testConstructCliFile()
     {
-        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'php_sapi_name');
-        $sapiMock->expects($this->exactly(1))
+        $this->mockSapi()
+            ->expects($this->exactly(1))
             ->will($this->returnValue('cli'));
         ConfigSupplier::$overwriteValues = [
             Config::SETTING_DESTINATION => 'file'
@@ -201,8 +209,8 @@ class ConfigTest extends AbstractTest
             Config::SETTING_IP_RANGE => '1.2.3.4.5, 127.0.0.1'
         ];
         Krexx::$pool->rewrite[Ini::class] = ConfigSupplier::class;
-        $sapiMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'php_sapi_name');
-        $sapiMock->expects($this->exactly(4))
+        $this->mockSapi()
+            ->expects($this->exactly(4))
             ->will($this->returnValue(static::NOT_CLI));
 
         // Testing coming from the wrong ip

@@ -44,6 +44,7 @@ class MessagesTest extends AbstractTest
 {
 
     const KEY_VARIABLE_NAME = 'keys';
+    const PARAMS = 'params';
 
     /**
      * @var Messages
@@ -82,7 +83,7 @@ class MessagesTest extends AbstractTest
 
         $this->messagesClass->addMessage($messageKey, []);
         $this->assertEquals(
-            [$messageKey => ['key' => $messageKey, 'params' => []]],
+            [$messageKey => ['key' => $messageKey, static::PARAMS => []]],
             $this->messagesClass->getKeys()
         );
         $this->assertEquals([''], $this->retrieveValueByReflection('messages', $this->messagesClass));
@@ -111,13 +112,13 @@ class MessagesTest extends AbstractTest
     {
         $keys = [
             'California' => [
-                'key' => 'California', 'params' => []
+                'key' => 'California', static::PARAMS => []
             ],
             'House' => [
-                'key' => 'House', 'params' => []
+                'key' => 'House', static::PARAMS => []
             ],
             'Keeper of the seven' => [
-                'key' => 'Keeper of the seven', 'params' => []
+                'key' => 'Keeper of the seven', static::PARAMS => []
             ]
         ];
         $this->setValueByReflection(static::KEY_VARIABLE_NAME, $keys, $this->messagesClass);

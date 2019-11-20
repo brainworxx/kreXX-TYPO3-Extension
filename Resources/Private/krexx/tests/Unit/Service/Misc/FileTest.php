@@ -48,6 +48,10 @@ class FileTest extends AbstractTest
     const DOC_ROOT = 'docRoot';
     const IS_READABLE_CACHE = 'isReadableCache';
     const FILE_NAME = 'some file';
+    const MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
+    const CHMOD = 'chmod';
+    const UNLINK = 'unlink';
+    const IS_FILE = 'is_file';
 
     /**
      * @var \Brainworxx\Krexx\Service\Misc\File
@@ -66,7 +70,7 @@ class FileTest extends AbstractTest
         // Reset the writable cache in the file service.
         $this->setValueByReflection(static::IS_READABLE_CACHE, [], $this->file);
         // Mock the realpath of the not existing files.
-        $realpath = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'realpath');
+        $realpath = $this->getFunctionMock(static::MISC_NAMESPACE, 'realpath');
         $realpath->expects($this->any())
             ->will($this->returnArgument(1));
     }
@@ -227,7 +231,7 @@ class FileTest extends AbstractTest
     public function testPutFileContents()
     {
         // We will not really write a file here.
-        $filePutContents = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'file_put_contents');
+        $filePutContents = $this->getFunctionMock(static::MISC_NAMESPACE, 'file_put_contents');
         $filePutContents->expects($this->once())
             ->will($this->returnValue(42));
 
@@ -244,11 +248,11 @@ class FileTest extends AbstractTest
     public function testDeleteFileRegistered()
     {
         // Start the mocking.
-        $chmod = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'chmod');
+        $chmod = $this->getFunctionMock(static::MISC_NAMESPACE, static::CHMOD);
         $chmod->expects($this->never());
 
         $payload = 'some_file.txt';
-        $unlink = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'unlink');
+        $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, static::UNLINK);
         $unlink->expects($this->once())
             ->with($payload)
             ->will($this->returnValue(true));
@@ -270,9 +274,9 @@ class FileTest extends AbstractTest
     public function testDeleteFileNotExisting()
     {
         // Start the mocking.
-        $unlink = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'unlink');
+        $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, static::UNLINK);
         $unlink->expects($this->never());
-        $chmod = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'chmod');
+        $chmod = $this->getFunctionMock(static::MISC_NAMESPACE, static::CHMOD);
         $chmod->expects($this->never());
 
         // Execute the test.
@@ -298,15 +302,15 @@ class FileTest extends AbstractTest
     {
         // Start the mocking.
         $payload = 'unregistered_file.txt';
-        $unlink = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'unlink');
+        $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, static::UNLINK);
         $unlink->expects($this->once())
             ->with($payload)
             ->will($this->returnValue(true));
-        $chmod = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'chmod');
+        $chmod = $this->getFunctionMock(static::MISC_NAMESPACE, static::CHMOD);
         $chmod->expects($this->once())
             ->with($payload);
 
-        $isFile = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'is_file');
+        $isFile = $this->getFunctionMock(static::MISC_NAMESPACE, static::IS_FILE);
         $isFile->expects($this->once())
             ->will($this->returnValue(true));
 
@@ -325,12 +329,12 @@ class FileTest extends AbstractTest
      */
     public function testDeleteFileWithProblems()
     {
-        $isFile = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'is_file');
+        $isFile = $this->getFunctionMock(static::MISC_NAMESPACE, static::IS_FILE);
         $isFile->expects($this->once())
             ->will($this->returnValue(true));
 
         $payload = 'unregistered_file.txt';
-        $chmod = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'chmod');
+        $chmod = $this->getFunctionMock(static::MISC_NAMESPACE, static::CHMOD);
         $chmod->expects($this->once())
             ->with($payload);
 
@@ -392,11 +396,11 @@ class FileTest extends AbstractTest
      */
     public function testFileIsReadableUnregistered()
     {
-        $isFile = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'is_file');
+        $isFile = $this->getFunctionMock(static::MISC_NAMESPACE, static::IS_FILE);
         $isFile->expects($this->once())
             ->will($this->returnValue(true));
         $filename = static::FILE_NAME;
-        $isReadable = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'is_readable');
+        $isReadable = $this->getFunctionMock(static::MISC_NAMESPACE, 'is_readable');
         $isReadable->expects($this->once())
             ->with($filename)
             ->will($this->returnValue(true));
@@ -429,7 +433,7 @@ class FileTest extends AbstractTest
         $fileService = new File(Krexx::$pool);
         $this->setValueByReflection(static::IS_READABLE_CACHE, [$filename => true], $fileService);
 
-        $filemtime = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'filemtime');
+        $filemtime = $this->getFunctionMock(static::MISC_NAMESPACE, 'filemtime');
         $filemtime->expects($this->once())
             ->with($filename)
             ->will($this->returnValue(42));
@@ -441,7 +445,7 @@ class FileTest extends AbstractTest
     {
         $fileService = new File(Krexx::$pool);
         $filePath = 'I am not here';
-        $time = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'time');
+        $time = $this->getFunctionMock(static::MISC_NAMESPACE, 'time');
         $time->expects($this->once())
             ->will($this->returnValue(41));
 

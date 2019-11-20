@@ -37,24 +37,31 @@ use phpmock\phpunit\PHPMock;
 define('KREXX_TEST_IN_PROGRESS', true);
 
 // Make sure, that we are able to mock the living hell out of this baby.
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\', 'class_exists');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\Service\\Factory\\', 'is_writable');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'ini_get');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'time');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'memory_get_usage');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'file_put_contents');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'unlink');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'is_file');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'is_readable');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'filemtime');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'mb_strlen');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'glob');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'time');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'register_shutdown_function');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'microtime');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'glob');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\View', 'php_sapi_name');
-PHPMock::defineFunctionMock('\\Brainworxx\\Krexx\\View', 'defined');
+$analyseRoutingProcess = '\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\';
+$serviceFactory = '\\Brainworxx\\Krexx\\Service\\Factory\\';
+$serviceFlow = '\\Brainworxx\\Krexx\\Service\\Flow\\';
+$serviceMisc = '\\Brainworxx\\Krexx\\Service\\Misc\\';
+$viewOutput = '\\Brainworxx\\Krexx\\View\\Output\\';
+$view = '\\Brainworxx\\Krexx\\View';
+
+PHPMock::defineFunctionMock($analyseRoutingProcess, 'class_exists');
+PHPMock::defineFunctionMock($serviceFactory, 'is_writable');
+PHPMock::defineFunctionMock($serviceFlow, 'ini_get');
+PHPMock::defineFunctionMock($serviceFlow, 'time');
+PHPMock::defineFunctionMock($serviceFlow, 'memory_get_usage');
+PHPMock::defineFunctionMock($serviceMisc, 'file_put_contents');
+PHPMock::defineFunctionMock($serviceMisc, 'unlink');
+PHPMock::defineFunctionMock($serviceMisc, 'is_file');
+PHPMock::defineFunctionMock($serviceMisc, 'is_readable');
+PHPMock::defineFunctionMock($serviceMisc, 'filemtime');
+PHPMock::defineFunctionMock($serviceMisc, 'mb_strlen');
+PHPMock::defineFunctionMock($serviceMisc, 'glob');
+PHPMock::defineFunctionMock($serviceMisc, 'time');
+PHPMock::defineFunctionMock($viewOutput, 'register_shutdown_function');
+PHPMock::defineFunctionMock($viewOutput, 'microtime');
+PHPMock::defineFunctionMock($viewOutput, 'glob');
+PHPMock::defineFunctionMock($view, 'php_sapi_name');
+PHPMock::defineFunctionMock($view, 'defined');
 
 // Register a shutdown method to die, so we get no output on the shell.
 register_shutdown_function(function () {
