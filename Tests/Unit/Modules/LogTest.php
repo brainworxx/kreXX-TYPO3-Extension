@@ -47,6 +47,13 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class LogTest extends AbstractTest
 {
+    const WRONG_VERSION = 'Wrong TYPO3 version.';
+    const FILES = 'files';
+    const ASSIGN_MULTIPLE = 'assignMultiple';
+    const SEVERITY = 'severity';
+    const TEXT = 'text';
+    const RENDER = 'render';
+
     /**
      * @var \Brainworxx\Includekrexx\Modules\Log
      */
@@ -73,7 +80,7 @@ class LogTest extends AbstractTest
     public function testGetIdentifier()
     {
         if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped('Wrong TYPO3 version.');
+            $this->markTestSkipped(static::WRONG_VERSION);
         }
         $this->assertEquals(Bootstrap::KREXX, $this->log->getIdentifier());
     }
@@ -86,7 +93,7 @@ class LogTest extends AbstractTest
     public function testGetLabel()
     {
         if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped('Wrong TYPO3 version.');
+            $this->markTestSkipped(static::WRONG_VERSION);
         }
         $this->assertEquals($this->log::TRANSLATION_PREFIX . 'mlang_tabs_tab', $this->log->getLabel());
     }
@@ -99,10 +106,10 @@ class LogTest extends AbstractTest
     public function testGetDataToStore()
     {
         if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped('Wrong TYPO3 version.');
+            $this->markTestSkipped(static::WRONG_VERSION);
         }
         $fileList = ['file', 'list'];
-        $expectations = new ModuleData(['files' => $fileList]);
+        $expectations = new ModuleData([static::FILES => $fileList]);
 
         $logfileListMock = $this->createMock(LogfileList::class);
         $logfileListMock->expects($this->once())
@@ -129,18 +136,18 @@ class LogTest extends AbstractTest
     public function testGetContentNoAccess()
     {
         if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped('Wrong TYPO3 version.');
+            $this->markTestSkipped(static::WRONG_VERSION);
         }
         // Prepare the view for the messages.
         $viewMock = $this->mockView();
         $viewMock->expects($this->once())
-            ->method('assignMultiple')
+            ->method(static::ASSIGN_MULTIPLE)
             ->with([
-                'text' => $this->log::TRANSLATION_PREFIX . 'accessDenied',
-                'severity' => $this->log::MESSAGE_SEVERITY_ERROR,
+                static::TEXT => $this->log::TRANSLATION_PREFIX . 'accessDenied',
+                static::SEVERITY => $this->log::MESSAGE_SEVERITY_ERROR,
             ]);
         $viewMock->expects($this->once())
-            ->method('render')
+            ->method(static::RENDER)
             ->will($this->returnValue('Rendered Messages'));
 
         $moduleData = new ModuleData();
@@ -159,32 +166,32 @@ class LogTest extends AbstractTest
     public function testGetContentEmpty()
     {
         if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped('Wrong TYPO3 version.');
+            $this->markTestSkipped(static::WRONG_VERSION);
         }
         $this->mockBeUser();
 
         Krexx::$pool->messages->addMessage('translationkey');
-        $moduleData = new ModuleData(['files' => []]);
+        $moduleData = new ModuleData([static::FILES => []]);
 
         $viewMock = $this->mockView();
         $viewMock->expects($this->exactly(2))
-            ->method('assignMultiple')
+            ->method(static::ASSIGN_MULTIPLE)
             ->withConsecutive(
                 [
                     [
-                        'text' => $this->log::TRANSLATION_PREFIX . 'translationkey',
-                        'severity' => $this->log::MESSAGE_SEVERITY_ERROR,
+                        static::TEXT => $this->log::TRANSLATION_PREFIX . 'translationkey',
+                        static::SEVERITY => $this->log::MESSAGE_SEVERITY_ERROR,
                     ]
                 ],
                 [
                     [
-                        'text' => $this->log::TRANSLATION_PREFIX . 'log.noresult',
-                        'severity' => $this->log::MESSAGE_SEVERITY_INFO,
+                        static::TEXT => $this->log::TRANSLATION_PREFIX . 'log.noresult',
+                        static::SEVERITY => $this->log::MESSAGE_SEVERITY_INFO,
                     ]
                 ]
             );
         $viewMock->expects($this->exactly(2))
-            ->method('render')
+            ->method(static::RENDER)
             ->will($this->returnValue('rendering'));
 
         $this->assertEquals('renderingrendering', $this->log->getContent($moduleData));
@@ -200,19 +207,19 @@ class LogTest extends AbstractTest
     public function testGetContentNormal()
     {
         if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped('Wrong TYPO3 version.');
+            $this->markTestSkipped(static::WRONG_VERSION);
         }
         $this->mockBeUser();
-        $fileList = ['files' => ['just', 'some', 'files']];
+        $fileList = [static::FILES => ['just', 'some', 'files']];
         $expectations = 'list of files';
         $moduleData = new ModuleData($fileList);
 
         $viewMock = $this->mockView();
         $viewMock->expects($this->once())
-            ->method('assignMultiple')
+            ->method(static::ASSIGN_MULTIPLE)
             ->with($fileList);
         $viewMock->expects($this->once())
-            ->method('render')
+            ->method(static::RENDER)
             ->will($this->returnValue($expectations));
 
          $this->assertEquals($expectations, $this->log->getContent($moduleData));
@@ -226,7 +233,7 @@ class LogTest extends AbstractTest
     public function testGetCssFiles()
     {
         if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped('Wrong TYPO3 version.');
+            $this->markTestSkipped(static::WRONG_VERSION);
         }
         $this->assertEquals(
             ['EXT:includekrexx/Resources/Public/Css/Adminpanel.css'],
@@ -242,7 +249,7 @@ class LogTest extends AbstractTest
     public function testGetJavaScriptFiles()
     {
         if (class_exists(ModuleData::class) === false) {
-            $this->markTestSkipped('Wrong TYPO3 version.');
+            $this->markTestSkipped(static::WRONG_VERSION);
         }
         $this->assertEmpty($this->log->getJavaScriptFiles());
     }
