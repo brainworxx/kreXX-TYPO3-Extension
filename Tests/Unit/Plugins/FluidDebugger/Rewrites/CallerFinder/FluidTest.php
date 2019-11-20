@@ -42,6 +42,10 @@ use TYPO3Fluid\Fluid\Core\Parser\ParsedTemplateInterface;
 
 class FluidTest extends AbstractTest
 {
+    const RENDERING_CONTEXT = 'renderingContext';
+    const GET_TEMPLATE_PATHS = 'getTemplatePaths';
+    const VARMANE = 'varname';
+
     /**
      * Test the template part.
      *
@@ -69,7 +73,7 @@ class FluidTest extends AbstractTest
 
         // Adding stuff to the rednering context mock.
         /** @var \PHPUnit\Framework\MockObject\MockObject $contextMock */
-        $contextMock = Krexx::$pool->registry->get('renderingContext');
+        $contextMock = Krexx::$pool->registry->get(static::RENDERING_CONTEXT);
         $contextMock->expects($this->once())
             ->method('getControllerName')
             ->will($this->returnValue('SomeController'));
@@ -77,7 +81,7 @@ class FluidTest extends AbstractTest
             ->method('getControllerAction')
             ->will($this->returnValue('andAction'));
         $contextMock->expects($this->exactly(2))
-            ->method('getTemplatePaths')
+            ->method(static::GET_TEMPLATE_PATHS)
             ->will($this->returnValue($templatePathMock));
 
         $headline = 'Breaking News!';
@@ -85,7 +89,7 @@ class FluidTest extends AbstractTest
         $result = $fluid->findCaller($headline, $data);
 
         $this->assertContains('FluidTemplate1.html', $result['file']);
-        $this->assertEquals('_all', $result['varname']);
+        $this->assertEquals('_all', $result[static::VARMANE]);
         $this->assertEquals('Fluid analysis of _all, stdClass', $result['type']);
         $this->assertNotEmpty($result['date']);
     }
@@ -108,7 +112,7 @@ class FluidTest extends AbstractTest
         $fluid = $this->createInstance($renderingStack, Fluid::class);
         $parsedTemplateMock->expects($this->once())
             ->method('getLayoutName')
-            ->with(Krexx::$pool->registry->get('renderingContext'))
+            ->with(Krexx::$pool->registry->get(static::RENDERING_CONTEXT))
             ->will($this->returnValue('some filename'));
 
         $templatePathMock = $this->createMock(TemplatePaths::class);
@@ -117,9 +121,9 @@ class FluidTest extends AbstractTest
             ->will($this->returnValue($templatePath));
 
         /** @var \PHPUnit\Framework\MockObject\MockObject $contextMock */
-        $contextMock = Krexx::$pool->registry->get('renderingContext');
+        $contextMock = Krexx::$pool->registry->get(static::RENDERING_CONTEXT);
         $contextMock->expects($this->once())
-            ->method('getTemplatePaths')
+            ->method(static::GET_TEMPLATE_PATHS)
             ->will($this->returnValue($templatePathMock));
 
         $headline = 'H1';
@@ -127,7 +131,7 @@ class FluidTest extends AbstractTest
         $result = $fluid->findCaller($headline, $data);
 
         $this->assertContains('FluidTemplate2.html', $result['file']);
-        $this->assertEquals($result['varname'], 'text');
+        $this->assertEquals($result[static::VARMANE], 'text');
         $this->assertEquals($result['type'], 'Fluid analysis of text, string');
         $this->assertNotEmpty($result['date']);
     }
@@ -161,9 +165,9 @@ class FluidTest extends AbstractTest
             ->with('qwer/asdf')
             ->will($this->returnValue($templatePath));
         /** @var \PHPUnit\Framework\MockObject\MockObject $contextMock */
-        $contextMock = Krexx::$pool->registry->get('renderingContext');
+        $contextMock = Krexx::$pool->registry->get(static::RENDERING_CONTEXT);
         $contextMock->expects($this->once())
-            ->method('getTemplatePaths')
+            ->method(static::GET_TEMPLATE_PATHS)
             ->will($this->returnValue($templatePathMock));
 
         // We are going into the complicated stuff here.
@@ -174,13 +178,13 @@ class FluidTest extends AbstractTest
         $result = $fluid->findCaller($headline, $data);
 
         $this->assertContains('FluidTemplate3.html', $result['file']);
-        $this->assertEquals($result['varname'], 'fluidvar');
+        $this->assertEquals($result[static::VARMANE], 'fluidvar');
         $this->assertEquals($result['type'], 'Fluid analysis of fluidvar, array');
         $this->assertNotEmpty($result['date']);
 
         $this->assertEquals(
             '<v:variable.set value="{some: \'array\'}" name="fluidvar" /> {fluidvar}',
-            Krexx::$pool->codegenHandler->generateWrapperLeft() . $result['varname'] .
+            Krexx::$pool->codegenHandler->generateWrapperLeft() . $result[static::VARMANE] .
             Krexx::$pool->codegenHandler->generateWrapperRight(),
             'Testing the complicated code generation stuff.'
         );
@@ -197,7 +201,7 @@ class FluidTest extends AbstractTest
 
         $result = $fluid->findCaller('bla', 'blub');
         $this->assertEquals('n/a', $result['file']);
-        $this->assertEquals($result['varname'], 'fluidvar');
+        $this->assertEquals($result[static::VARMANE], 'fluidvar');
         $this->assertEquals($result['type'], 'Fluid analysis of fluidvar, string');
         $this->assertNotEmpty($result['date']);
     }
