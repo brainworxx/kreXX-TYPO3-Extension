@@ -35,7 +35,7 @@ kreXX Debugger
 		debug, debugging, object, analysis
 
 	:Copyright:
-		2014 - 2019
+		2014 - 2020
 
 	:Author:
 		BRAINWORXX GmbH
