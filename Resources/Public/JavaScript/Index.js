@@ -46,6 +46,8 @@
     function tabs() {}
 
     /**
+     * Initializing the tabs handling.
+     *
      * @event DOMContentLoaded
      */
     tabs.onDocumentReady = function () {
@@ -87,6 +89,11 @@
      */
     function formSupport(){}
 
+    /**
+     * Initializing the form support.
+     *
+     * @event DOMContentLoaded
+     */
     formSupport.onDocumentReady = function () {
         var checkboxes = document.getElementsByName('tx_includekrexx_tools_includekrexxkrexxconfiguration[settings][factory]');
 
@@ -175,6 +182,11 @@
      */
     function ajaxRefresh() {}
 
+    /**
+     * Initializing the ajax handling
+     *
+     * @event DOMContentLoaded
+     */
     ajaxRefresh.onDocumentReady = function () {
         // Get a first impression.
         ajaxRefresh.call();
@@ -389,6 +401,5 @@
             }, 600);
         }, 4000);
     }
-
 
 })(TYPO3);
