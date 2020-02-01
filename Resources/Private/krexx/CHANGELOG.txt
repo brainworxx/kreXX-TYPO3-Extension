@@ -1,4 +1,5 @@
 3.2.2 dev
+- Updated to PHP 7.4
 - Bugfix: The process other routing is never called.
 - Bugfix: The cookie editor needs to be "initialized" prior usage.
 - Bugfix: Wrong meta data, when using dual output.

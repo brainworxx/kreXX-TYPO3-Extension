@@ -12,10 +12,14 @@
 Changelog
 =============================================================
 
-4.0.0
-    - [Change] Removed all deprecations.
-    - [Change] Removed the PHP 5.x fatal error handler.
+3.3.1
+    - [Feature] Updated to PHP 7.4
     - [Bugfix] The process other routing is never called.
+    - [Bugfix] The cookie editor needs to be "initialized" prior usage.
+    - [Bugfix] Wrong meta data, when using dual output.
+    - [Bugfix] Missing css definitions for label.
+    - [Bugfix] Unwanted re-enabling of the source generation.
+    - [Bugfix] Environment check may fail
 
 3.3.0
     - [Feature] Introduce php-mock/php-mock-phpunit.
