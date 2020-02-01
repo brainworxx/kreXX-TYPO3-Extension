@@ -263,7 +263,7 @@ class Kdt
      * @param {string} cookieName
      *   Name of the cookie.
      *
-     * @return {string|object}
+     * @return {object}
      *   The value, set in the cookie.
      */
     public readSettings(cookieName:string) : string|object
@@ -271,7 +271,7 @@ class Kdt
         /** @type {string} */
         cookieName = cookieName + "=";
         let cookieArray:string[] = document.cookie.split(';');
-        let result:string = '';
+        let result:object = JSON.parse('{}');
         let c:string;
 
         for (let i = 0; i < cookieArray.length; i++) {
@@ -285,11 +285,16 @@ class Kdt
                     result = JSON.parse(c.substring(cookieName.length, c.length));
                 }
                 catch (error) {
-                    // Return the value.
-                    result = c.substring(cookieName.length, c.length);
+                    // Do nothing, we already have a fallback.
                 }
             }
         }
+
+        // A last test, if we have an actual object to send.
+        if (typeof result !== 'object') {
+            result = JSON.parse('{}');
+        }
+
         return result;
     }
 

@@ -92,6 +92,45 @@ class Ini extends Fallback
      * Get the configuration of the frontend config form.
      *
      * @param string $name
+     *   The parameter name you want to render.
+     *
+     * @deprecated
+     *   Since 3.1.0. Will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @return array
+     *   The configuration (is it editable, a dropdown, a textfield, ...)
+     */
+    public function getFeConfig($name)
+    {
+        // Load it from the file.
+        $filevalue = $this->getFeConfigFromFile($name);
+
+        // Do we have a value?
+        if (empty($filevalue) === true) {
+            // Fallback to factory settings.
+            if (isset($this->feConfigFallback[$name]) === true) {
+                return [
+                    ($this->feConfigFallback[$name][static::RENDER][static::RENDER_EDITABLE] === static::VALUE_TRUE),
+                    $this->feConfigFallback[$name][static::RENDER][static::RENDER_TYPE]
+                ];
+            }
+            // Unknown parameter and nothing in the fallback!
+            // This should never happen, btw.
+            return [false, static::RENDER_TYPE_NONE];
+        }
+
+        return [
+            ($filevalue[static::RENDER_EDITABLE] === static::VALUE_TRUE),
+            $filevalue[static::RENDER_TYPE]
+        ];
+    }
+
+    /**
+     * Get the configuration of the frontend config form.
+     *
+     * @param string $name
      *
      * @return bool
      *   Well? is it editable?

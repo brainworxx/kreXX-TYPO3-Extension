@@ -190,6 +190,20 @@ class Pool extends AbstractFactory
     }
 
     /**
+     * (Re)initializes everything in the pool, in case in-runtime
+     * factory overwrites.
+     *
+     * @deprecated
+     *   Since 3.1.0. Will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     */
+    public function init()
+    {
+        $this->__construct();
+    }
+
+    /**
      * Check if the environment is as it should be.
      */
     protected function checkEnvironment()
@@ -197,7 +211,7 @@ class Pool extends AbstractFactory
         // Check chunk folder is writable.
         // If not, give feedback!
         $chunkFolder = $this->config->getChunkDir();
-        if (is_writable($chunkFolder) === false) {
+        if ($this->fileService->isDirectoryWritable($chunkFolder) === false) {
             $this->messages->addMessage(
                 'chunksNotWritable',
                 [$this->fileService->filterFilePath($chunkFolder)]
@@ -209,7 +223,7 @@ class Pool extends AbstractFactory
         // Check if the log folder is writable.
         // If not, give feedback!
         $logFolder = $this->config->getLogDir();
-        if (is_writable($logFolder) === false) {
+        if ($this->fileService->isDirectoryWritable($logFolder) === false) {
             $this->messages->addMessage(
                 'logNotWritable',
                 [$this->fileService->filterFilePath($logFolder)]

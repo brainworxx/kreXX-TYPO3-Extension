@@ -32,61 +32,22 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Tests\Fixtures;
+namespace Brainworxx\Krexx\View;
+
+use Brainworxx\Krexx\View\Skins\RenderHans;
 
 /**
- * Just another meaningless class comment.
+ * Render methods.
+ *
+ * It get extended by the render class of the used skin, so every skin can do
+ * some special stuff.
+ *
+ * @deprecated
+ *   Since 3.2.0. Will be removed.
+ *
+ * @package Brainworxx\Krexx\View
  */
-class ComplexMethodFixture extends MethodsFixture implements InterfaceFixture
+class Render extends RenderHans
 {
-    use MultitraitFixture;
 
-    /**
-     * Final function
-     */
-    final public function finalMethod()
-    {
-    }
-
-    /**
-     * Private function
-     *
-     * @return string
-     */
-    private function privateMethod()
-    {
-        return '';
-    }
-
-    /**
-     * Static function
-     */
-    public static function staticMethod()
-    {
-    }
-
-    /**
-     * @param $parameter
-     */
-    public function parameterizedMethod($parameter)
-    {
-        // Stuff for the CallerFinder.
-        krexx($parameter);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function interfaceMethod()
-    {
-        // Inline stuff for the caller finder.
-        return json_encode(krexx($this->parameterizedMethod('()"2'))->whatever());
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function traitComment()
-    {
-    }
 }

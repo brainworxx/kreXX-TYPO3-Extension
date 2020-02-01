@@ -80,6 +80,20 @@ class Codegen implements ConstInterface
     protected $firstRun = true;
 
     /**
+     * Here we count haw often the code generation was disabled.
+     *
+     * We ony enable it, when it is 0.
+     *
+     * Background:
+     * Some code may disable it, while it is still disabled.
+     * When that code part re-enables it, it is not aware that it must not
+     * re-enable it, because it was disabled before hand.
+     *
+     * @var int
+     */
+    protected $disableCount = 0;
+
+    /**
      * Initializes the code generation.
      *
      * @param Pool $pool
@@ -134,10 +148,10 @@ class Codegen implements ConstInterface
             $result = 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
         } elseif ($model->getMultiLineCodeGen() === static::ARRAY_VALUES_ACCESS) {
             $result = 'array_values(;firstMarker;)[' . $model->getConnectorParameters() . ']';
-        } elseif ($model->getIsPublic() === true ||
-            $this->pool->scope->testModelForCodegen($model) === true
-        ) {
+        } elseif ($model->getIsPublic() === true) {
             // Test for private or protected access.
+            $result = $this->concatenation($model);
+        } elseif ($this->pool->scope->testModelForCodegen($model) === true) {
             // Test if we are inside the scope. Everything within our scope is reachable.
             $result = $this->concatenation($model);
         }
@@ -192,7 +206,20 @@ class Codegen implements ConstInterface
      */
     public function setAllowCodegen($bool)
     {
-        $this->allowCodegen = $bool;
+        if ($bool === false) {
+            $this->allowCodegen = false;
+            ++$this->disableCount;
+            return;
+        } else {
+            --$this->disableCount;
+            if ($this->disableCount < 1) {
+                $this->allowCodegen = true;
+            }
+        }
+
+        if ($this->disableCount < 0) {
+            $this->disableCount = 0;
+        }
     }
 
     /**

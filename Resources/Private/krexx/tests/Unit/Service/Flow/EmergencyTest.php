@@ -53,10 +53,6 @@ class EmergencyTest extends AbstractTest
     const MESSAGE_PARAMETERS = 'params';
     const TIMER = 'timer';
     const KREXX_COUNT = 'krexxCount';
-    const FLOW_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Flow\\';
-    const INI_GET = 'ini_get';
-    const MEMORY_GET_USAGE = 'memory_get_usage';
-    const PHP_SAPI_NAME = 'php_sapi_name';
 
     /**
      * @var Emergency
@@ -116,7 +112,7 @@ class EmergencyTest extends AbstractTest
         $this->setConfigMock();
 
         // Mock kb memory limit
-        $iniGet = $this->getFunctionMock(static::FLOW_NAMESPACE, static::INI_GET);
+        $iniGet = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'ini_get');
         $iniGet->expects($this->once())
             ->will($this->returnValue('50k'));
 
@@ -145,7 +141,7 @@ class EmergencyTest extends AbstractTest
         $this->setConfigMock();
 
         // Mock MB memory limit.
-        $iniGet = $this->getFunctionMock(static::FLOW_NAMESPACE, static::INI_GET);
+        $iniGet = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'ini_get');
         $iniGet->expects($this->once())
             ->will($this->returnValue('50m'));
 
@@ -164,7 +160,7 @@ class EmergencyTest extends AbstractTest
         $this->setConfigMock();
 
         // No limit
-        $iniGet = $this->getFunctionMock(static::FLOW_NAMESPACE, static::INI_GET);
+        $iniGet = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'ini_get');
         $iniGet->expects($this->once())
             ->will($this->returnValue('nothing'));
 
@@ -220,7 +216,7 @@ class EmergencyTest extends AbstractTest
         $this->mockDebugBacktraceStandard();
         $this->setValueByReflection(static::SERVER_MEMORY_LIMIT, 550, $this->emergency);
         $this->setValueByReflection(static::MIN_MEMORY_LEFT, 100, $this->emergency);
-        $memoryGetUsage = $this->getFunctionMock(static::FLOW_NAMESPACE, static::MEMORY_GET_USAGE);
+        $memoryGetUsage = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'memory_get_usage');
         $memoryGetUsage->expects($this->once())
             ->will($this->returnValue(500));
         $this->assertEquals(true, $this->emergency->checkEmergencyBreak());
@@ -245,17 +241,17 @@ class EmergencyTest extends AbstractTest
         // Make sure that the memory check succeeds.
         $this->setValueByReflection(static::SERVER_MEMORY_LIMIT, 5000, $this->emergency);
         $this->setValueByReflection(static::MIN_MEMORY_LEFT, 100, $this->emergency);
-        $memoryGetUsage = $this->getFunctionMock(static::FLOW_NAMESPACE, static::MEMORY_GET_USAGE);
+        $memoryGetUsage = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'memory_get_usage');
         $memoryGetUsage->expects($this->once())
             ->will($this->returnValue(500));
 
-        $phpSapiName = $this->getFunctionMock(static::FLOW_NAMESPACE, static::PHP_SAPI_NAME);
+        $phpSapiName = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'php_sapi_name');
         $phpSapiName->expects($this->once())
             ->will($this->returnValue('brauser'));
 
         // Make sure the runtime check fails.
         $this->setValueByReflection(static::TIMER, 12345, $this->emergency);
-        $time = $this->getFunctionMock(static::FLOW_NAMESPACE, 'time');
+        $time = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'time');
         $time->expects($this->once())
             ->will($this->returnValue(92345));
 
@@ -279,12 +275,12 @@ class EmergencyTest extends AbstractTest
         // Make sure that the memory check succeeds.
         $this->setValueByReflection(static::SERVER_MEMORY_LIMIT, 5000, $this->emergency);
         $this->setValueByReflection(static::MIN_MEMORY_LEFT, 100, $this->emergency);
-        $memoryGetUsage = $this->getFunctionMock(static::FLOW_NAMESPACE, static::MEMORY_GET_USAGE);
+        $memoryGetUsage = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'memory_get_usage');
         $memoryGetUsage->expects($this->once())
             ->will($this->returnValue(500));
         // Make sure the runtime check succeeds.
         $this->setValueByReflection(static::TIMER, 92345, $this->emergency);
-        $time = $this->getFunctionMock(static::FLOW_NAMESPACE, 'time');
+        $time = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'time');
         $time->expects($this->once())
             ->will($this->returnValue(12345));
 
@@ -351,7 +347,7 @@ class EmergencyTest extends AbstractTest
      */
     public function testInitTimer()
     {
-        $time = $this->getFunctionMock(static::FLOW_NAMESPACE, 'time');
+        $time = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'time');
         $time->expects($this->once())
             ->will($this->returnValue(5000));
         $this->setValueByReflection(static::MAX_RUNTIME, 60, $this->emergency);
@@ -360,7 +356,7 @@ class EmergencyTest extends AbstractTest
         $this->emergency->initTimer();
         $this->assertEquals(5060, $this->retrieveValueByReflection(static::TIMER, $this->emergency));
 
-        $phpSapiName = $this->getFunctionMock(static::FLOW_NAMESPACE, static::PHP_SAPI_NAME);
+        $phpSapiName = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'php_sapi_name');
         $phpSapiName->expects($this->once())
             ->will($this->returnValue('brauser'));
 
@@ -376,13 +372,13 @@ class EmergencyTest extends AbstractTest
      */
     public function testInitTimerOnCli()
     {
-        $time = $this->getFunctionMock(static::FLOW_NAMESPACE, 'time');
+        $time = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'time');
         $time->expects($this->exactly(2))
             ->will($this->returnValue(5000));
 
         // The sapi gets only called once, because the timer value is empty
         // on the first run.
-        $phpSapiName = $this->getFunctionMock(static::FLOW_NAMESPACE, static::PHP_SAPI_NAME);
+        $phpSapiName = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Flow\\', 'php_sapi_name');
         $phpSapiName->expects($this->exactly(1))
             ->will($this->returnValue('cli'));
         $this->emergency->initTimer();

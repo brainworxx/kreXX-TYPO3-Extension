@@ -101,17 +101,27 @@ class PoolTest extends AbstractTest
      * Test the checking of the environment, where kreXX is running.
      *
      * @covers \Brainworxx\Krexx\Service\Factory\Pool::checkEnvironment
+     * @covers \Brainworxx\Krexx\Service\Misc\File::isDirectoryWritable
      */
     public function testCheckEnvironmentIsWritable()
     {
+        $filename = 'test';
         // Chunks folder is writable
         // Log folder is writable
-        $isWritable = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Factory\\', 'is_writable');
-        $isWritable->expects($this->exactly(2))
+        $filePutContents = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'file_put_contents');
+        $filePutContents->expects($this->exactly(2))
             ->will(
                 $this->returnValueMap([
-                    [Krexx::$pool->config->getChunkDir(), true],
-                    [Krexx::$pool->config->getLogDir(), true]
+                    [Krexx::$pool->config->getChunkDir() . $filename, 'x', true],
+                    [Krexx::$pool->config->getLogDir() . $filename, 'x', true]
+                ])
+            );
+        $unlink = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'unlink');
+        $unlink->expects($this->exactly(2))
+            ->will(
+                $this->returnValueMap([
+                    [Krexx::$pool->config->getChunkDir() . $filename, true],
+                    [Krexx::$pool->config->getLogDir() . $filename, true]
                 ])
             );
 
@@ -126,19 +136,25 @@ class PoolTest extends AbstractTest
      * Test the checking of the environment, where kreXX is running.
      *
      * @covers \Brainworxx\Krexx\Service\Factory\Pool::checkEnvironment
+     * @covers \Brainworxx\Krexx\Service\Misc\File::isDirectoryWritable
      */
     public function testCheckEnvironmentIsNotWritable()
     {
+        $filename = 'test';
         // Chunks folder is not writable
         // Log folder is not writable
-        $isWritable = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Factory\\', 'is_writable');
-        $isWritable->expects($this->exactly(2))
+        $filePutContents = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'file_put_contents');
+        $filePutContents->expects($this->exactly(2))
             ->will(
                 $this->returnValueMap([
-                    [Krexx::$pool->config->getChunkDir(), false],
-                    [Krexx::$pool->config->getLogDir(), false]
+                    [Krexx::$pool->config->getChunkDir() . $filename, 'x', false],
+                    [Krexx::$pool->config->getLogDir() . $filename, 'x', false]
                 ])
             );
+        $unlink = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'unlink');
+        // There was no file "created", hence there is no unlink'ing done.
+        $unlink->expects($this->never());
+
         Krexx::$pool = null;
         Pool::createPool();
         $this->assertEquals(false, Krexx::$pool->chunks->getChunksAreAllowed());

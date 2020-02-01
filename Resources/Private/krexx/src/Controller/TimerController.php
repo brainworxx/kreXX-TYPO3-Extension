@@ -146,4 +146,20 @@ class TimerController extends AbstractController
 
         return $result;
     }
+
+    /**
+     * Return the current URL.
+     *
+     * @deprecated
+     *   Since 3.2.0. Will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated stuff.
+     *
+     * @return string
+     *   The current URL.
+     */
+    protected function getCurrentUrl()
+    {
+        return $this->callerFinder->findCaller('', '')[static::TRACE_URL];
+    }
 }

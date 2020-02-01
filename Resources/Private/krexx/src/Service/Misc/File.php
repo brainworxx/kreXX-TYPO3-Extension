@@ -390,4 +390,27 @@ class File
 
         return $realpath;
     }
+
+    /**
+     * Check if we can create and delete files in the specified directory.
+     *
+     * The php method is_writable is unreliable. We need to check ourselves.
+     *
+     * @param string $path
+     *   The absolute directory path, ending with a '/'
+     *
+     * @return bool
+     *   Well? Can we create and delete files in there?
+     */
+    public function isDirectoryWritable($path)
+    {
+        $filename = 'test';
+        set_error_handler(function () {
+            // do nothing
+        });
+        $result = (bool)file_put_contents($path . $filename, 'x') && unlink($path . $filename);
+        restore_error_handler();
+
+        return $result;
+    }
 }

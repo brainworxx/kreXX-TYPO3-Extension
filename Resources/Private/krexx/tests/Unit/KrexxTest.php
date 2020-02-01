@@ -53,7 +53,6 @@ class KrexxTest extends AbstractTest
     const KREXX_COUNT = 'krexxCount';
     const TIME_KEEPING = 'timekeeping';
     const COUNTER_CACHE = 'counterCache';
-    const CONTROLLER_NAMESPACE = '\\Brainworxx\\Krexx\\Controller\\';
 
     protected function getDirContents($dir, &$results = array())
     {
@@ -331,6 +330,41 @@ class KrexxTest extends AbstractTest
     }
 
     /**
+     * Test if we can register our fatal error handler.
+     *
+     * @covers \Brainworxx\Krexx\Krexx::registerFatal
+     * @incomplete
+     *   We only test the php version.
+     */
+    public function testRegisterFatal()
+    {
+        $this->mockDebugBacktraceStandard();
+
+        Krexx::registerFatal();
+        $this->assertEquals(['php7' => ['key' => 'php7', 'params' => []]], Krexx::$pool->messages->getKeys());
+    }
+
+    /**
+     * Test if we can unregister our fatal error handler.
+     *
+     * @covers \Brainworxx\Krexx\Krexx::unregisterFatal
+     */
+    public function testUnregisterFatal()
+    {
+        // Create a mock of the error handler.
+        $errorMock = $this->createMock(
+            \Brainworxx\Krexx\Errorhandler\Fatal::class
+        );
+        $errorMock->expects($this->once())
+            ->method('setIsActive')
+            ->will($this->returnValue(null));
+
+        // Inject it into the controller.
+        $this->setValueByReflection('krexxFatal', $errorMock, AbstractController::class);
+        Krexx::unregisterFatal();
+    }
+
+    /**
      * Prepare the forced logger test.
      */
     protected function beginForcedLogger()
@@ -547,7 +581,7 @@ class KrexxTest extends AbstractTest
         Config::$disabledByPhp = true;
 
         $setExceptionHandlerMock = $this
-            ->getFunctionMock(static::CONTROLLER_NAMESPACE, 'set_exception_handler');
+            ->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'set_exception_handler');
         $setExceptionHandlerMock->expects($this->never());
 
         Krexx::registerExceptionHandler();
@@ -565,7 +599,7 @@ class KrexxTest extends AbstractTest
         $this->setValueByReflection('exceptionController', $stdClass, ExceptionController::class);
 
         $setExceptionHandlerMock = $this
-            ->getFunctionMock(static::CONTROLLER_NAMESPACE, 'set_exception_handler');
+            ->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'set_exception_handler');
         $setExceptionHandlerMock->expects($this->once())
             ->with([$stdClass, 'exceptionAction']);
 
@@ -582,7 +616,7 @@ class KrexxTest extends AbstractTest
         Config::$disabledByPhp = true;
 
         $restoreExceptionHandlerMock = $this
-            ->getFunctionMock(static::CONTROLLER_NAMESPACE, 'restore_exception_handler');
+            ->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'restore_exception_handler');
         $restoreExceptionHandlerMock->expects($this->never());
 
         Krexx::unregisterExceptionHandler();
@@ -596,7 +630,7 @@ class KrexxTest extends AbstractTest
     public function testUnRegisterExceptionHandler()
     {
         $restoreExceptionHandlerMock = $this
-            ->getFunctionMock(static::CONTROLLER_NAMESPACE, 'restore_exception_handler');
+            ->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'restore_exception_handler');
         $restoreExceptionHandlerMock->expects($this->once());
 
         Krexx::unregisterExceptionHandler();

@@ -98,7 +98,7 @@ $fontLight: lighter 10px tahoma, verdana;
 
   // We need to secure some initial formating for our elements, to prevent the
   // host-system from making them unusable with css formatting.
-  div, span, em, ul, li, a, input, table, caption, tbody, tr, td, strong, hr, select, option {
+  div, span, em, ul, li, a, input, table, caption, tbody, tr, td, strong, hr, select, option, label {
     padding: 0;
     margin: 0;
     background-color: transparent;
@@ -119,6 +119,7 @@ $fontLight: lighter 10px tahoma, verdana;
   }
   span, em, a, input, strong {
     display: inline;
+    height: auto;
   }
   br {
     line-height: normal;

@@ -48,16 +48,7 @@ use Brainworxx\Krexx\View\Output\Chunks;
 
 class CleanupTest extends AbstractTest
 {
-    const CHUNKS_DONE = 'chunksDone';
-    const GET_LOGGING_IS_ALLOWED = 'getLoggingIsAllowed';
-    const MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
-
     protected $cleanup;
-
-    protected function mockGlob()
-    {
-        return $this->getFunctionMock(static::MISC_NAMESPACE, 'glob');
-    }
 
     /**
      * {@inheritDoc}
@@ -71,7 +62,7 @@ class CleanupTest extends AbstractTest
     public function tearDown()
     {
         parent::tearDown();
-        $this->setValueByReflection(static::CHUNKS_DONE, false, $this->cleanup);
+        $this->setValueByReflection('chunksDone', false, $this->cleanup);
     }
 
     /**
@@ -99,7 +90,8 @@ class CleanupTest extends AbstractTest
         Krexx::$pool->chunks = $chunksMock;
 
         // The log directory will not get globbed.
-        $this->mockGlob()->expects($this->never());
+        $glob = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'glob');
+        $glob->expects($this->never());
 
         $this->cleanup->cleanupOldLogs();
     }
@@ -121,7 +113,8 @@ class CleanupTest extends AbstractTest
         Krexx::$pool->chunks = $chunksMock;
 
         // No logs stored.
-        $this->mockGlob()->expects($this->once())
+        $glob = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'glob');
+        $glob->expects($this->once())
             ->with($logDir . '*.Krexx.html')
             ->will($this->returnValue([]));
 
@@ -149,7 +142,8 @@ class CleanupTest extends AbstractTest
         $file2 = 'file 2';
         $file3 = 'file 3';
 
-        $this->mockGlob()->expects($this->once())
+        $glob = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'glob');
+        $glob->expects($this->once())
             ->with($logDir . '*.Krexx.html')
             ->will($this->returnValue([$file1, $file2, $file3]));
 
@@ -220,7 +214,7 @@ class CleanupTest extends AbstractTest
         $this->cleanup->cleanupOldChunks();
         $this->assertEquals(
             false,
-            $this->retrieveValueByReflection(static::CHUNKS_DONE, $this->cleanup),
+            $this->retrieveValueByReflection('chunksDone', $this->cleanup),
             'did not remove any chunks, should be untouched.'
         );
     }
@@ -249,10 +243,11 @@ class CleanupTest extends AbstractTest
             ->will($this->returnValue($chunkDir));
         Krexx::$pool->config = $configMock;
 
-        $this->mockGlob()->expects($this->once())
+        $glob = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'glob');
+        $glob->expects($this->once())
             ->with($chunkDir . '*.Krexx.tmp')
             ->will($this->returnValue([$file1, $file2, $file3]));
-        $time = $this->getFunctionMock(static::MISC_NAMESPACE, 'time');
+        $time = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'time');
         $time->expects($this->once())
             ->will($this->returnValue(10000));
 
@@ -288,7 +283,7 @@ class CleanupTest extends AbstractTest
         $this->cleanup->cleanupOldChunks();
         $this->assertEquals(
             true,
-            $this->retrieveValueByReflection(static::CHUNKS_DONE, $this->cleanup),
+            $this->retrieveValueByReflection('chunksDone', $this->cleanup),
             'Remember, that we did this before.'
         );
     }

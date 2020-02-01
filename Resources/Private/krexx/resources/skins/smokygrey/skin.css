@@ -55,7 +55,7 @@
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
   overflow: hidden; }
-  .kwrapper div, .kwrapper span, .kwrapper em, .kwrapper ul, .kwrapper li, .kwrapper a, .kwrapper input, .kwrapper table, .kwrapper caption, .kwrapper tbody, .kwrapper tr, .kwrapper td, .kwrapper strong, .kwrapper hr, .kwrapper select, .kwrapper option, .kfatalwrapper-outer div, .kfatalwrapper-outer span, .kfatalwrapper-outer em, .kfatalwrapper-outer ul, .kfatalwrapper-outer li, .kfatalwrapper-outer a, .kfatalwrapper-outer input, .kfatalwrapper-outer table, .kfatalwrapper-outer caption, .kfatalwrapper-outer tbody, .kfatalwrapper-outer tr, .kfatalwrapper-outer td, .kfatalwrapper-outer strong, .kfatalwrapper-outer hr, .kfatalwrapper-outer select, .kfatalwrapper-outer option {
+  .kwrapper div, .kwrapper span, .kwrapper em, .kwrapper ul, .kwrapper li, .kwrapper a, .kwrapper input, .kwrapper table, .kwrapper caption, .kwrapper tbody, .kwrapper tr, .kwrapper td, .kwrapper strong, .kwrapper hr, .kwrapper select, .kwrapper option, .kwrapper label, .kfatalwrapper-outer div, .kfatalwrapper-outer span, .kfatalwrapper-outer em, .kfatalwrapper-outer ul, .kfatalwrapper-outer li, .kfatalwrapper-outer a, .kfatalwrapper-outer input, .kfatalwrapper-outer table, .kfatalwrapper-outer caption, .kfatalwrapper-outer tbody, .kfatalwrapper-outer tr, .kfatalwrapper-outer td, .kfatalwrapper-outer strong, .kfatalwrapper-outer hr, .kfatalwrapper-outer select, .kfatalwrapper-outer option, .kfatalwrapper-outer label {
     padding: 0;
     margin: 0;
     background-color: transparent;
@@ -71,7 +71,8 @@
   .kwrapper div, .kwrapper ul, .kwrapper hr, .kwrapper option, .kfatalwrapper-outer div, .kfatalwrapper-outer ul, .kfatalwrapper-outer hr, .kfatalwrapper-outer option {
     display: block; }
   .kwrapper span, .kwrapper em, .kwrapper a, .kwrapper input, .kwrapper strong, .kfatalwrapper-outer span, .kfatalwrapper-outer em, .kfatalwrapper-outer a, .kfatalwrapper-outer input, .kfatalwrapper-outer strong {
-    display: inline; }
+    display: inline;
+    height: auto; }
   .kwrapper br, .kfatalwrapper-outer br {
     line-height: normal; }
   .kwrapper li, .kfatalwrapper-outer li {

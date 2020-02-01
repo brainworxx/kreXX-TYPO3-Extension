@@ -276,6 +276,22 @@ class Emergency
     }
 
     /**
+     * Resets the timer.
+     *
+     * When a certain time has passed, kreXX will use an emergency break to
+     * prevent too large output (or no output at all (WSOD)).
+     *
+     * @deprecated
+     *   Since 3.1.0. Will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     */
+    public function resetTimer()
+    {
+        $this->initTimer();
+    }
+
+    /**
      * Initialize the timer.
      *
      * When a certain time has passed, kreXX will use an emergency break to

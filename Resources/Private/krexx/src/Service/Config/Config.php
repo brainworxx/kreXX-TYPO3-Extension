@@ -66,6 +66,16 @@ class Config extends Fallback
     public $debugFuncList = [];
 
     /**
+     * Our security handler.
+     *
+     * @deprecated
+     *   Since 3.1.0. Will be removed.
+     *
+     * @var Security
+     */
+    public $security;
+
+    /**
      * Validating configuration settings.
      *
      * @var Validation
@@ -75,16 +85,22 @@ class Config extends Fallback
     /**
      * Our ini file configuration handler.
      *
+     * @deprecated
+     *   Since 3.1.0. Will be set to protected.
+     *
      * @var Ini
      */
-    protected $iniConfig;
+    public $iniConfig;
 
     /**
      * Our cookie configuration handler.
      *
+     * @deprecated
+     *   Since 3.1.0. Will be set to protected.
+     *
      * @var Cookie
      */
-    protected $cookieConfig;
+    public $cookieConfig;
 
     /**
      * Here we store the paths to our files and directories.
@@ -121,6 +137,7 @@ class Config extends Fallback
             static::CONFIG_FOLDER => SettingsGetter::getConfigFile(),
         ];
 
+        $this->security = $pool->createClass(Security::class);
         $this->validation = $pool->createClass(Validation::class);
         $pool->config = $this;
 
@@ -260,6 +277,23 @@ class Config extends Fallback
     }
 
     /**
+     * Check if the current request is an AJAX request.
+     *
+     * @deprecated
+     *   Since 3.2.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   Since 3.2.0. We will not test deprecated methods.
+     *
+     * @return bool
+     *   TRUE when this is AJAX, FALSE if not
+     */
+    protected function isRequestAjaxOrCli()
+    {
+        return $this->checkOutput->isCli() ||$this->checkOutput->isAjax();
+    }
+
+    /**
      * Get the path to the chunks directory.
      *
      * @return string
@@ -290,6 +324,48 @@ class Config extends Fallback
     public function getPathToIniFile()
     {
         return $this->directories[static::CONFIG_FOLDER];
+    }
+
+    /**
+     * Checks if the current client ip is allowed.
+     *
+     * @author Chin Leung
+     * @see https://stackoverflow.com/questions/35559119/php-ip-address-whitelist-with-wildcards
+     *
+     * @param string $whitelist
+     *   The ip whitelist.
+     *
+     * @deprecated
+     *   Since 3.2.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated stuff.
+     *
+     * @return bool
+     *   Whether the current client ip is allowed or not.
+     */
+    protected function isAllowedIp($whitelist)
+    {
+        return $this->checkOutput->isAllowedIp($whitelist);
+    }
+
+    /**
+     * Determines if the specific class is blacklisted for debug methods.
+     *
+     * @param object $data
+     *   The class we are analysing.
+     *
+     * @deprecated
+     *   Sinde 3.1.0. Will be removed
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @return bool
+     *   Whether the function is allowed to be called.
+     */
+    public function isAllowedDebugCall($data)
+    {
+        return $this->validation->isAllowedDebugCall($data, '');
     }
 
     /**

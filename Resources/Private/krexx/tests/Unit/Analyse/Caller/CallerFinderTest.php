@@ -62,14 +62,6 @@ class CallerFinderTest extends AbstractTest
     protected $pathToFixture;
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function mockDebugBacktrace()
-    {
-        return $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Caller\\', 'debug_backtrace');
-    }
-
-    /**
      * Creating the Caller finder.
      * {@inheritdoc}
      */
@@ -166,8 +158,8 @@ class CallerFinderTest extends AbstractTest
      */
     public function testFindCallerNormal()
     {
-        $this->mockDebugBacktrace()
-            ->expects($this->once())
+        $debugBacktrace = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Caller\\', 'debug_backtrace');
+        $debugBacktrace->expects($this->once())
             ->willReturn($this->createFixture(74));
 
         // Run the test
@@ -190,9 +182,9 @@ class CallerFinderTest extends AbstractTest
      */
     public function testFindCallerInline()
     {
-        $this->mockDebugBacktrace()
-            ->expects($this->once())
-            ->willReturn($this->createFixture(84));
+        $debugBacktrace = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Caller\\', 'debug_backtrace');
+        $debugBacktrace->expects($this->once())
+            ->willReturn($this->createFixture(83));
 
         // Run the test
         $result = $this->callerFinder->findCaller('', $this->subjectVar);
@@ -213,8 +205,8 @@ class CallerFinderTest extends AbstractTest
     public function testFindCallerHeadline()
     {
 
-        $this->mockDebugBacktrace()
-            ->expects($this->once())
+        $debugBacktrace = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Caller\\', 'debug_backtrace');
+        $debugBacktrace->expects($this->once())
             ->willReturn($this->createFixture(74));
 
         // Run the test

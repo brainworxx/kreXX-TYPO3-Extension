@@ -65,7 +65,8 @@ div.kwrapper {
 .kwrapper strong,
 .kwrapper hr,
 .kwrapper select,
-.kwrapper option {
+.kwrapper option,
+.kwrapper label {
     padding: 0;
     margin: 0;
     background-color: transparent;
@@ -95,6 +96,7 @@ div.kwrapper {
 .kwrapper input,
 .kwrapper strong {
     display: inline;
+    height: auto;
 }
 
 .kwrapper br {

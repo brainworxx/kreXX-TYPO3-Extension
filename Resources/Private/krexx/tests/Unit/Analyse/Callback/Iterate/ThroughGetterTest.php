@@ -41,8 +41,8 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\DeepGetterFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
+use Brainworxx\Krexx\View\Render;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\View\Skins\RenderHans;
 
 class ThroughGetterTest extends AbstractTest
 {
@@ -97,7 +97,7 @@ class ThroughGetterTest extends AbstractTest
         Krexx::$pool->routing = new RoutingNothing(Krexx::$pool);
 
         // Mock the render object.
-        $renderMock = $this->createMock(RenderHans::class);
+        $renderMock = $this->createMock(Render::class);
         $renderMock->expects($this->once())
             ->method('renderSingleChild')
             ->will($this->returnValue(''));

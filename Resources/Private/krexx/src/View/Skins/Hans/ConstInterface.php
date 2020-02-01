@@ -110,6 +110,9 @@ interface ConstInterface
     const FILE_CALLER = 'caller';
     const FILE_HELPROW = 'helprow';
     const FILE_HELP = 'help';
+    // @deprecated
+    const FILE_CONNECTOR = 'connector';
+    // @deprecated
     const FILE_CONNECTOR_LEFT = 'connectorLeft';
     const FILE_CONNECTOR_RIGHT = 'connectorRight';
     const FILE_SI_PLUGIN = 'singlePlugin';

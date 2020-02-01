@@ -32,61 +32,19 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Tests\Fixtures;
+namespace Brainworxx\Krexx\Service\Config;
 
 /**
- * Just another meaningless class comment.
+ * Security measures for the configuration
+ *
+ * @deprecated
+ *   Since 3.1.0. Will be removed.
+ * @codeCoverageIgnore
+ *   We will not test deprecated classes.
+ *
+ * @package Brainworxx\Krexx\Service\Config
  */
-class ComplexMethodFixture extends MethodsFixture implements InterfaceFixture
+class Security extends Validation
 {
-    use MultitraitFixture;
 
-    /**
-     * Final function
-     */
-    final public function finalMethod()
-    {
-    }
-
-    /**
-     * Private function
-     *
-     * @return string
-     */
-    private function privateMethod()
-    {
-        return '';
-    }
-
-    /**
-     * Static function
-     */
-    public static function staticMethod()
-    {
-    }
-
-    /**
-     * @param $parameter
-     */
-    public function parameterizedMethod($parameter)
-    {
-        // Stuff for the CallerFinder.
-        krexx($parameter);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function interfaceMethod()
-    {
-        // Inline stuff for the caller finder.
-        return json_encode(krexx($this->parameterizedMethod('()"2'))->whatever());
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function traitComment()
-    {
-    }
 }

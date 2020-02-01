@@ -36,9 +36,14 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Output;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
+use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\From\Ini;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\File;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\View\Output\Chunks;
 
 /**
@@ -49,15 +54,6 @@ use Brainworxx\Krexx\View\Output\Chunks;
  */
 class ChunksTest extends AbstractTest
 {
-    const CHUNK_DIR = 'chunkDir';
-    const LOG_DIR = 'logDir';
-    const FILE_STAMP = 'fileStamp';
-    const PUT_FILE_CONTENTS = 'putFileContents';
-    const DELETE_FILE = 'deleteFile';
-    const LOGGING_IS_ALLOWED = 'loggingIsAllowed';
-    const OFFICIAL_ENCODING = 'officialEncoding';
-    const META_DATA = 'metadata';
-
     /**
      * Test the initialization of a new chunks class.
      *
@@ -70,10 +66,10 @@ class ChunksTest extends AbstractTest
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->once())
             ->method('getChunkDir')
-            ->will($this->returnValue(static::CHUNK_DIR));
+            ->will($this->returnValue('chunkdir'));
         $configMock->expects($this->once())
             ->method('getLogDir')
-            ->will($this->returnValue(static::LOG_DIR));
+            ->will($this->returnValue('logdir'));
         $pool->config = $configMock;
 
         // Mock the microtime.
@@ -85,10 +81,10 @@ class ChunksTest extends AbstractTest
         // Setting of the pool.
         $this->assertSame($pool, $this->retrieveValueByReflection('pool', $chunks));
         // Retrieval of the directories.
-        $this->assertEquals(static::CHUNK_DIR, $this->retrieveValueByReflection(static::CHUNK_DIR, $chunks));
-        $this->assertEquals(static::LOG_DIR, $this->retrieveValueByReflection(static::LOG_DIR, $chunks));
+        $this->assertEquals('chunkdir', $this->retrieveValueByReflection('chunkDir', $chunks));
+        $this->assertEquals('logdir', $this->retrieveValueByReflection('logDir', $chunks));
         // Setting of the file stamp.
-        $this->assertEquals('156501605696136800', $this->retrieveValueByReflection(static::FILE_STAMP, $chunks));
+        $this->assertEquals('156501605696136800', $this->retrieveValueByReflection('fileStamp', $chunks));
         // Assigning itself to the pool.
         $this->assertSame($chunks, $pool->chunks);
     }
@@ -105,7 +101,7 @@ class ChunksTest extends AbstractTest
 
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->never())
-            ->method(static::PUT_FILE_CONTENTS);
+            ->method('putFileContents');
         Krexx::$pool->fileService = $fileServiceMock;
 
         $this->assertEquals($fixture, $chunks->chunkMe($fixture));
@@ -123,7 +119,7 @@ class ChunksTest extends AbstractTest
 
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->never())
-            ->method(static::PUT_FILE_CONTENTS);
+            ->method('putFileContents');
         Krexx::$pool->fileService = $fileServiceMock;
 
         $fixture = 'chunkable string';
@@ -145,12 +141,12 @@ class ChunksTest extends AbstractTest
         $fixture = str_pad($fixture, 10005, '*');
         $fileStamp = '12345';
 
-        $this->setValueByReflection(static::FILE_STAMP, $fileStamp, $chunks);
-        $this->setValueByReflection(static::CHUNK_DIR, 'chunkDir/', $chunks);
+        $this->setValueByReflection('fileStamp', $fileStamp, $chunks);
+        $this->setValueByReflection('chunkDir', 'chunkDir/', $chunks);
 
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->once())
-            ->method(static::PUT_FILE_CONTENTS)
+            ->method('putFileContents')
             ->with(
                 $this->callback(
                     function ($fileName) use ($fileStamp) {
@@ -211,7 +207,7 @@ class ChunksTest extends AbstractTest
                 )
             );
         $fileServiceMock->expects($this->exactly(3))
-            ->method(static::DELETE_FILE)
+            ->method('deleteFile')
             ->withConsecutive(
                 [$chunk1File],
                 [$chunk2File],
@@ -227,7 +223,7 @@ class ChunksTest extends AbstractTest
 
         // Create the chunks class and set the simulated chunks directory.
         $chunks = new Chunks(Krexx::$pool);
-        $this->setValueByReflection(static::CHUNK_DIR, $chunkDir, $chunks);
+        $this->setValueByReflection('chunkDir', $chunkDir, $chunks);
 
         // Run the actual test.
         $this->expectOutputString($expected);
@@ -278,7 +274,7 @@ class ChunksTest extends AbstractTest
                 )
             );
         $fileServiceMock->expects($this->exactly(4))
-            ->method(static::DELETE_FILE)
+            ->method('deleteFile')
             ->withConsecutive(
                 [$chunk1File],
                 [$chunk2File],
@@ -286,7 +282,7 @@ class ChunksTest extends AbstractTest
                 [$metaFileName]
             );
         $fileServiceMock->expects($this->exactly(5))
-            ->method(static::PUT_FILE_CONTENTS)
+            ->method('putFileContents')
             ->withConsecutive(
                 [$logFileName, 'Murry '],
                 [$logFileName, 'had '],
@@ -298,16 +294,16 @@ class ChunksTest extends AbstractTest
 
         // Create the chunks class and set the simulated chunks directory.
         $chunks = new Chunks(Krexx::$pool);
-        $this->setValueByReflection(static::CHUNK_DIR, $chunkDir, $chunks);
-        $this->setValueByReflection(static::LOG_DIR, $logDir, $chunks);
-        $this->setValueByReflection(static::FILE_STAMP, $fileStamp, $chunks);
-        $this->setValueByReflection(static::META_DATA, $metaData, $chunks);
+        $this->setValueByReflection('chunkDir', $chunkDir, $chunks);
+        $this->setValueByReflection('logDir', $logDir, $chunks);
+        $this->setValueByReflection('fileStamp', $fileStamp, $chunks);
+        $this->setValueByReflection('metadata', $metaData, $chunks);
 
         // Run the actual test.
         $chunks->saveDechunkedToFile($startChunk);
 
         // And now with forbidden logging.
-        $this->setValueByReflection(static::LOGGING_IS_ALLOWED, false, $chunks);
+        $this->setValueByReflection('loggingIsAllowed', false, $chunks);
         $chunks->saveDechunkedToFile($startChunk);
     }
 
@@ -364,10 +360,10 @@ class ChunksTest extends AbstractTest
     public function testGetLoggingIsAllowed()
     {
         $chunks = new Chunks(Krexx::$pool);
-        $this->setValueByReflection(static::LOGGING_IS_ALLOWED, true, $chunks);
+        $this->setValueByReflection('loggingIsAllowed', true, $chunks);
         $this->assertTrue($chunks->getLoggingIsAllowed());
 
-        $this->setValueByReflection(static::LOGGING_IS_ALLOWED, false, $chunks);
+        $this->setValueByReflection('loggingIsAllowed', false, $chunks);
         $this->assertFalse($chunks->getLoggingIsAllowed());
     }
 
@@ -379,9 +375,20 @@ class ChunksTest extends AbstractTest
     public function testAddMetaData()
     {
         $metadata = ['some meta stuff'];
+
+        // Test with browser output.
         $chunks = new Chunks(Krexx::$pool);
         $chunks->addMetadata($metadata);
-        $this->assertEquals([$metadata], $this->retrieveValueByReflection(static::META_DATA, $chunks));
+        $this->assertEmpty($this->retrieveValueByReflection('metadata', $chunks));
+
+        // Test with file output
+        ConfigSupplier::$overwriteValues[Fallback::SETTING_DESTINATION] = Fallback::VALUE_FILE;
+        Registration::addRewrite(Ini::class, ConfigSupplier::class);
+        Krexx::$pool = null;
+        Pool::createPool();
+        $chunks = new Chunks(Krexx::$pool);
+        $chunks->addMetadata($metadata);
+        $this->assertEquals([$metadata], $this->retrieveValueByReflection('metadata', $chunks));
     }
 
     /**
@@ -401,8 +408,8 @@ class ChunksTest extends AbstractTest
         $fileStamp = 'stampede';
 
         $chunks = new Chunks(Krexx::$pool);
-        $this->setValueByReflection(static::CHUNK_DIR, $chunkDir, $chunks);
-        $this->setValueByReflection(static::FILE_STAMP, $fileStamp, $chunks);
+        $this->setValueByReflection('chunkDir', $chunkDir, $chunks);
+        $this->setValueByReflection('fileStamp', $fileStamp, $chunks);
 
         $globMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'glob');
         $globMock->expects($this->once())
@@ -411,7 +418,7 @@ class ChunksTest extends AbstractTest
 
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->exactly(count($fileList)))
-            ->method(static::DELETE_FILE)
+            ->method('deleteFile')
             ->withConsecutive(
                 [$fileList[0]],
                 [$fileList[1]],
@@ -441,7 +448,7 @@ class ChunksTest extends AbstractTest
            ->will($this->returnValue($specialEncoding));
         Krexx::$pool->encodingService = $encodingMock;
         $chunks->detectEncoding($string);
-        $this->assertEquals($specialEncoding, $this->retrieveValueByReflection(static::OFFICIAL_ENCODING, $chunks));
+        $this->assertEquals($specialEncoding, $this->retrieveValueByReflection('officialEncoding', $chunks));
 
         $encodingMock = $this->createMock(Encoding::class);
         $encodingMock->expects($this->once())
@@ -449,7 +456,7 @@ class ChunksTest extends AbstractTest
            ->will($this->returnValue(false));
         Krexx::$pool->encodingService = $encodingMock;
         $chunks->detectEncoding($string);
-        $this->assertEquals($specialEncoding, $this->retrieveValueByReflection(static::OFFICIAL_ENCODING, $chunks));
+        $this->assertEquals($specialEncoding, $this->retrieveValueByReflection('officialEncoding', $chunks));
     }
 
     /**
@@ -460,7 +467,7 @@ class ChunksTest extends AbstractTest
     public function testGetOfficialEncoding()
     {
         $chunks = new Chunks(Krexx::$pool);
-        $this->setValueByReflection(static::OFFICIAL_ENCODING, 'whatever', $chunks);
+        $this->setValueByReflection('officialEncoding', 'whatever', $chunks);
 
         $this->assertEquals('whatever', $chunks->getOfficialEncoding());
     }

@@ -89,6 +89,25 @@ abstract class AbstractCallback implements ConstInterface
     /**
      * Add callback parameters at class construction.
      *
+     * @deprecated
+     *   Since 3.1.0. Will be removed.
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @param array $params
+     *   The parameters for the callMe() method.
+     *
+     * @return $this
+     *   Return $this, for chaining.
+     */
+    public function setParams(array &$params)
+    {
+        return $this->setParameters($params);
+    }
+
+    /**
+     * Add callback parameters at class construction.
+     *
      * @param array $parameters
      *   The parameters for the callMe() method.
      *
@@ -147,5 +166,29 @@ abstract class AbstractCallback implements ConstInterface
         );
 
         return $model;
+    }
+
+    /**
+     * Check for special chars in properties.
+     *
+     * AFAIK this is only possible for dynamically declared properties
+     * or some magical stuff from __get()
+     *
+     * @see https://stackoverflow.com/questions/29019484/validate-a-php-variable
+     * @author AbraCadaver
+     *
+     * @deprecated
+     *   Since 3.2.0. Will be removed.
+     * @codeCoverageIgnore
+     *   Wi will not test deprecated methods.
+     *
+     * @param $propName
+     *   The property name we want to check.
+     * @return bool
+     *   Whether we have a special char in there, or not.
+     */
+    protected function isPropertyNameNormal($propName)
+    {
+        return $this->pool->encodingService->isPropertyNameNormal($propName);
     }
 }

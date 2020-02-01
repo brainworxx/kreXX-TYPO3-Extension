@@ -44,6 +44,7 @@ use Brainworxx\Krexx\Krexx;
 class CodegenTest extends AbstractTest
 {
     const FIRST_RUN = 'firstRun';
+    const DISABLE_COUNT = 'disableCount';
     const GET_CONNECTOR_LEFT = 'getConnectorLeft';
     const GET_CONNECTOR_RIGHT = 'getConnectorRight';
     const CONCATENATED_CONNECTORS = 'getConnectorLeftnamegetConnectorRight';
@@ -73,6 +74,7 @@ class CodegenTest extends AbstractTest
 
         $this->codegenHandler = new Codegen(Krexx::$pool);
         $this->codegenHandler->setAllowCodegen(true);
+        $this->setValueByReflection(static::DISABLE_COUNT, 0, $this->codegenHandler);
         $this->setValueByReflection(static::FIRST_RUN, false, $this->codegenHandler);
 
         $this->fixture = new Model(Krexx::$pool);
@@ -310,6 +312,38 @@ class CodegenTest extends AbstractTest
         // This is set during the setUp
         $this->assertEquals(true, $this->codegenHandler->getAllowCodegen());
         $this->assertEquals(true, $this->codegenHandler->getAllowCodegen());
+    }
+
+    /**
+     * Test the multiple enabling / disabling of the code generation.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::setAllowCodegen
+     */
+    public function testSetAllowCodegen()
+    {
+        $this->codegenHandler->setAllowCodegen(false);
+        $this->assertFalse(
+            $this->codegenHandler->getAllowCodegen(),
+            'Normal getter test.'
+        );
+        $this->codegenHandler->setAllowCodegen(false);
+        $this->codegenHandler->setAllowCodegen(true);
+        $this->assertFalse(
+            $this->codegenHandler->getAllowCodegen(),
+            'Should still be disabled, because we enabled it ony once.'
+        );
+        $this->codegenHandler->setAllowCodegen(true);
+        $this->assertTrue(
+            $this->codegenHandler->getAllowCodegen(),
+            'Should be enabled, because we enabled it twice.'
+        );
+
+        $this->codegenHandler->setAllowCodegen(true);
+        $this->codegenHandler->setAllowCodegen(false);
+        $this->assertFalse(
+            $this->codegenHandler->getAllowCodegen(),
+            'Should be disabled, because we are not counting the enableding after 0.'
+        );
     }
 
     /**

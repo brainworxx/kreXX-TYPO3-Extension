@@ -78,6 +78,9 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughConstants.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughGetter.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughLargeArray.php';
+        // deprecated
+        include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughMethodAnalysis.php';
+        // deprecated
         include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughMethods.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughProperties.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Iterate/ThroughResource.php';
@@ -101,6 +104,9 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Routing/Routing.php';
 
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessInterface.php';
+        // deprecated
+        include_once KREXX_DIR . 'src/Analyse/Routing/Process/AbstractProcess.php';
+        // deprecated
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessArray.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessBacktrace.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessBoolean.php';
@@ -121,13 +127,20 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Controller/DumpController.php';
         include_once KREXX_DIR . 'src/Controller/TimerController.php';
         include_once KREXX_DIR . 'src/Controller/EditSettingsController.php';
+        include_once KREXX_DIR . 'src/Controller/ErrorController.php';
         include_once KREXX_DIR . 'src/Controller/ExceptionController.php';
+
+        include_once KREXX_DIR . 'src/Errorhandler/AbstractError.php';
+        include_once KREXX_DIR . 'src/Errorhandler/Fatal.php';
 
         include_once KREXX_DIR . 'src/Service/Config/ConfigConstInterface.php';
         include_once KREXX_DIR . 'src/Service/Config/Fallback.php';
         include_once KREXX_DIR . 'src/Service/Config/Config.php';
         include_once KREXX_DIR . 'src/Service/Config/Model.php';
         include_once KREXX_DIR . 'src/Service/Config/Validation.php';
+        // deprecated
+        include_once KREXX_DIR . 'src/Service/Config/Security.php';
+        // deprecated
 
         include_once KREXX_DIR . 'src/Service/Config/From/Cookie.php';
         include_once KREXX_DIR . 'src/Service/Config/From/Ini.php';
@@ -184,6 +197,9 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/View/Skins/Hans/Search.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/ConstInterface.php';
         include_once KREXX_DIR . 'src/View/Skins/RenderHans.php';
+        // deprecated
+        include_once KREXX_DIR . 'src/View/Render.php';
+        // deprecated
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Button.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/ExpandableChild.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/FatalMain.php';

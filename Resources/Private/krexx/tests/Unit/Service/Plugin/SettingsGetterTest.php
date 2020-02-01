@@ -44,8 +44,6 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
  */
 class SettingsGetterTest extends AbstractRegistration
 {
-    const TEST_THE_FALLBACK = 'Test the fallback value.';
-    const TEST_THE_NEW_VALUE = 'Test the new value.';
     /**
      * Test the getting of the getter for the configuration file, and it's fallback.
      *
@@ -56,14 +54,14 @@ class SettingsGetterTest extends AbstractRegistration
         $this->assertEquals(
             KREXX_DIR . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini',
             SettingsGetter::getConfigFile(),
-            static::TEST_THE_FALLBACK
+            'Test the fallback value.'
         );
 
         $this->setValueByReflection(static::CONFIG_FILE, 'filepath', $this->registration);
         $this->assertEquals(
             'filepath',
             SettingsGetter::getConfigFile(),
-            static::TEST_THE_NEW_VALUE
+            'Test the new value.'
         );
     }
 
@@ -77,14 +75,14 @@ class SettingsGetterTest extends AbstractRegistration
         $this->assertEquals(
             KREXX_DIR . 'chunks' . DIRECTORY_SEPARATOR,
             SettingsGetter::getChunkFolder(),
-            static::TEST_THE_FALLBACK
+            'Test the fallback value.'
         );
 
         $this->setValueByReflection(static::CHUNK_FOLDER, 'some/folder', $this->registration);
         $this->assertEquals(
             'some/folder',
             SettingsGetter::getChunkFolder(),
-            static::TEST_THE_NEW_VALUE
+            'Test the new value.'
         );
     }
 
@@ -98,14 +96,14 @@ class SettingsGetterTest extends AbstractRegistration
         $this->assertEquals(
             KREXX_DIR . 'log' . DIRECTORY_SEPARATOR,
             SettingsGetter::getLogFolder(),
-            static::TEST_THE_FALLBACK
+            'Test the fallback value.'
         );
 
         $this->setValueByReflection(static::LOG_FOLDER, 'some/logging', $this->registration);
         $this->assertEquals(
             'some/logging',
             SettingsGetter::getLogFolder(),
-            static::TEST_THE_NEW_VALUE
+            'Test the new value.'
         );
     }
 

@@ -35,14 +35,14 @@
 namespace Brainworxx\Krexx\Tests\Helpers;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\View\Skins\RenderHans;
+use Brainworxx\Krexx\View\Render;
 
 /**
  * Short circut the render class.
  *
  * @package Brainworxx\Krexx\Tests\Helpers
  */
-class RenderNothing extends RenderHans
+class RenderNothing extends Render
 {
     /**
      * Storing the model classes, for tersting purpose.

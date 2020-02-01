@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Krexx\View\Output;
 
+use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -243,6 +244,26 @@ class Chunks
     }
 
     /**
+     * Is the output so far HTML?
+     *
+     * This one gets called during the shutdown phase of PHP. There is a high
+     * chance, that the header was already set.
+     *
+     * @deprecated
+     *   Since 3.2.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @return bool
+     *   Well? Is it?
+     */
+    protected function isOutputHtml()
+    {
+        return $this->pool->createClass(CheckOutput::class)->isOutputHtml();
+    }
+
+    /**
      * Replaces all chunk keys from a string with the original data.
      *
      * Saves the output to a file.
@@ -292,6 +313,39 @@ class Chunks
             // Create a new metadata file with new info.
             $this->pool->fileService->putFileContents($filename, json_encode($this->metadata));
         }
+    }
+
+    /**
+     * Setter for the $useChunks.
+     *
+     * @deprecated
+     *   Since 3.2.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @param bool $bool
+     *   Are we using chunks?
+     */
+    public function setUseChunks($bool)
+    {
+        $this->setChunksAreAllowed($bool);
+    }
+    /**
+     * Setter for the the the $useLogging. Here we determine, if the logfolder
+     * is accessible.
+     *
+     * @deprecated
+     *   Since 3.2.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @param $bool
+     */
+    public function setUseLogging($bool)
+    {
+        $this->setLoggingIsAllowed($bool);
     }
 
     /**
@@ -350,7 +404,9 @@ class Chunks
      */
     public function addMetadata($caller)
     {
-        $this->metadata[] = $caller;
+        if ($this->pool->config->getSetting(Fallback::SETTING_DESTINATION) === Fallback::VALUE_FILE) {
+            $this->metadata[] = $caller;
+        }
     }
 
     /**

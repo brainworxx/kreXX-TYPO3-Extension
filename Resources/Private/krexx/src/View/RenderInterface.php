@@ -220,6 +220,17 @@ interface RenderInterface
     public function renderSingeChildHr();
 
     /**
+     * Gets a list of all available skins for the frontend config.
+     *
+     * @deprecated
+     *   Since 3.1.0. Will be removed.
+     *
+     * @return array
+     *   An array with the skin names.
+     */
+    public function getSkinList();
+
+    /**
      * Render a simple line break.
      *
      * @return string
