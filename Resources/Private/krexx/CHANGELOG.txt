@@ -1,4 +1,4 @@
-3.2.2 dev
+3.2.2
 - Updated to PHP 7.4
 - Bugfix: The process other routing is never called.
 - Bugfix: The cookie editor needs to be "initialized" prior usage.
