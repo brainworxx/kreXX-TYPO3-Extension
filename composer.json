@@ -14,7 +14,7 @@
   ],
   "require": {
     "typo3/cms-core": ">=7.6.0 <=10.2.99",
-    "php": ">=5.5.0 <=7.4.99"
+    "php": ">=7.0.0 <=7.4.99"
   },
   "require-dev": {
     "typo3/cms-base-distribution": "8.7 || ^9.5",

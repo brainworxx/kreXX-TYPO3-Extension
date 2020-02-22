@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,7 +37,6 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMetaReflections;
-use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMetaSingle;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
@@ -80,7 +80,6 @@ class ThroughMetaTest extends AbstractTest
         Krexx::$pool->render = $this->renderNothing;
         // Overwrite the callbacks, to prevent further processing.
         Krexx::$pool->rewrite[ThroughMetaReflections::class] = CallbackNothing::class;
-        Krexx::$pool->rewrite[ThroughMetaSingle::class] = CallbackNothing::class;
     }
 
     /**
@@ -161,13 +160,15 @@ class ThroughMetaTest extends AbstractTest
         $this->assertEquals($key, $model->getName());
         $this->assertEquals($this->throughMeta::TYPE_REFLECTION, $model->getType());
         $this->assertEquals($this->throughMeta::UNKNOWN_VALUE, $model->getNormal());
-        $this->assertTrue($model->getHasExtra());
+        $this->assertTrue($model->hasExtra());
     }
 
     /**
      * Test the interface processing.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeInterfaces()
     {
@@ -178,12 +179,19 @@ class ThroughMetaTest extends AbstractTest
      * Test the trait processing.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeTraits()
     {
         $this->handleReflections($this->throughMeta::META_TRAITS);
     }
 
+    /**
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
+     *
+     * @throws \ReflectionException
+     */
     public function testCallMeInherited()
     {
         $this->handleReflections($this->throughMeta::META_INHERITED_CLASS);

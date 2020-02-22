@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Flow;
 
@@ -93,7 +96,7 @@ class Recursion
      *
      * @param Pool $pool
      */
-    public function __construct($pool)
+    public function __construct(Pool $pool)
     {
         $this->recursionMarker = 'Krexx' . substr(str_shuffle(md5(microtime())), 0, 10);
         // Mark the $GLOBALS array.
@@ -133,7 +136,7 @@ class Recursion
      * @return bool
      *   Boolean which shows whether we are facing a recursion.
      */
-    public function isInHive($bee)
+    public function isInHive($bee): bool
     {
         // Check objects.
         if (is_object($bee) === true) {
@@ -164,7 +167,7 @@ class Recursion
      * @return string
      *   The marker.
      */
-    public function getMarker()
+    public function getMarker(): string
     {
         return $this->recursionMarker;
     }
@@ -178,7 +181,7 @@ class Recursion
      * @return bool
      *   Boolean which shows whether we are facing a recursion.
      */
-    public function isInMetaHive($domId)
+    public function isInMetaHive(string $domId): bool
     {
         return isset($this->metaRecursionHive[$domId]);
     }
@@ -189,8 +192,8 @@ class Recursion
      * @param string $domId
      *   The dom id we want to track.
      */
-    public function addToMetaHive($domId)
+    public function addToMetaHive(string $domId)
     {
-        $this->metaRecursionHive[$domId]= true;
+        $this->metaRecursionHive[$domId] = true;
     }
 }

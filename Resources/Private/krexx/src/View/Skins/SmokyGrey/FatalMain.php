@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,22 +33,29 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\SmokyGrey;
 
 trait FatalMain
 {
     /**
+     * @var array
+     */
+    private $markerFatalMain = [
+        '{search}',
+        '{KrexxId}',
+        '{plugins}'
+    ];
+
+    /**
      * {@inheritDoc}
      */
-    public function renderFatalMain($errstr, $errfile, $errline)
+    public function renderFatalMain(string $errstr, string $errfile, int $errline): string
     {
         // Add the search.
         return str_replace(
-            [
-                static::MARKER_SEARCH,
-                static::MARKER_KREXX_ID,
-                static::MARKER_PLUGINS
-            ],
+            $this->markerFatalMain,
             [
                 $this->renderSearch(),
                 $this->pool->recursionHandler->getMarker(),
@@ -55,5 +63,19 @@ trait FatalMain
             ],
             parent::renderFatalMain($errstr, $errfile, $errline)
         );
+    }
+
+    /**
+     * Getter of the fatal header for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerFatalMain(): array
+    {
+        return $this->markerFatalMain;
     }
 }

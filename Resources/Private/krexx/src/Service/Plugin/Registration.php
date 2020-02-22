@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Plugin;
 
@@ -127,10 +130,10 @@ class Registration implements ConstInterface
      *
      * @api
      *
-     * @param $path
+     * @param string $path
      *   The absolute path to the configuration file.
      */
-    public static function setConfigFile($path)
+    public static function setConfigFile(string $path)
     {
         static::$configFile = $path;
     }
@@ -140,10 +143,10 @@ class Registration implements ConstInterface
      *
      * @api
      *
-     * @param $path
+     * @param string $path
      *   The absolute path to the chunks folder.
      */
-    public static function setChunksFolder($path)
+    public static function setChunksFolder(string $path)
     {
         static::$chunkFolder = $path;
     }
@@ -153,10 +156,10 @@ class Registration implements ConstInterface
      *
      * @api
      *
-     * @param $path
+     * @param string $path
      *   The absolute path to the log folder.
      */
-    public static function setLogFolder($path)
+    public static function setLogFolder(string $path)
     {
         static::$logFolder = $path;
     }
@@ -171,7 +174,7 @@ class Registration implements ConstInterface
      * @param string $methodName
      *   The name of the method.
      */
-    public static function addMethodToDebugBlacklist($className, $methodName)
+    public static function addMethodToDebugBlacklist(string $className, string $methodName)
     {
         if (isset(static::$blacklistDebugMethods[$className]) === false) {
             static::$blacklistDebugMethods[$className] = [];
@@ -190,7 +193,7 @@ class Registration implements ConstInterface
      * @param string $class
      *   The class name that gets blacklisted.
      */
-    public static function addClassToDebugBlacklist($class)
+    public static function addClassToDebugBlacklist(string $class)
     {
         if (in_array($class, static::$blacklistDebugClass) === false) {
             static::$blacklistDebugClass[] = $class;
@@ -207,7 +210,7 @@ class Registration implements ConstInterface
      * @param string $originalClass
      * @param string $rewriteClass
      */
-    public static function addRewrite($originalClass, $rewriteClass)
+    public static function addRewrite(string $originalClass, string $rewriteClass)
     {
         static::$rewriteList[$originalClass] = $rewriteClass;
     }
@@ -222,7 +225,7 @@ class Registration implements ConstInterface
      * @param string $className
      *   The class name.
      */
-    public static function registerEvent($name, $className)
+    public static function registerEvent(string $name, string $className)
     {
         if (isset(static::$eventList[$name]) === false) {
             static::$eventList[$name] = [];
@@ -242,7 +245,7 @@ class Registration implements ConstInterface
      *
      * @param string $path
      */
-    public static function registerAdditionalHelpFile($path)
+    public static function registerAdditionalHelpFile(string $path)
     {
         static::$additionalHelpFiles[] = $path;
     }
@@ -252,13 +255,13 @@ class Registration implements ConstInterface
      * skins, if you use their name.
      *
      * @param string $name
-     *   The name of the skin. 'hans' and 'smokygrey' are the bundeled ones.
+     *   The name of the skin. 'hans' and 'smokygrey' are the bundled ones.
      * @param string $className
      *   The full qualified class name of the renderer
      * @param string $directory
      *   The absolute path to the skin html files.
      */
-    public static function registerAdditionalskin($name, $className, $directory)
+    public static function registerAdditionalskin(string $name, string $className, string $directory)
     {
         static::$additionalSkinList[$name] = [
             static::SKIN_CLASS => $className,
@@ -289,7 +292,7 @@ class Registration implements ConstInterface
      * @param string $configClass
      *   The class name of the configuration class for this plugin.
      */
-    public static function activatePlugin($configClass)
+    public static function activatePlugin(string $configClass)
     {
         if (isset(static::$plugins[$configClass])) {
             static::$plugins[$configClass][static::IS_ACTIVE] = true;
@@ -313,7 +316,7 @@ class Registration implements ConstInterface
      * @param string $configClass
      *   The name of the plugin.
      */
-    public static function deactivatePlugin($configClass)
+    public static function deactivatePlugin(string $configClass)
     {
         if (empty(static::$plugins[$configClass][static::IS_ACTIVE]) === true) {
             // We will not purge everything for a already deactivated plugin.

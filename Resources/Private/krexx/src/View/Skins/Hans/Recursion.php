@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Model;
@@ -39,20 +42,25 @@ use Brainworxx\Krexx\Analyse\Model;
 trait Recursion
 {
     /**
+     * @var array
+     */
+    private $markerRecursion = [
+        '{name}',
+        '{domId}',
+        '{normal}',
+        '{connectorLeft}',
+        '{connectorRight}',
+        '{gensource}',
+        '{help}',
+    ];
+
+    /**
      * {@inheritdoc}
      */
-    public function renderRecursion(Model $model)
+    public function renderRecursion(Model $model): string
     {
         return str_replace(
-            [
-                static::MARKER_NAME,
-                static::MARKER_DOM_ID,
-                static::MARKER_NORMAL,
-                static::MARKER_CONNECTOR_LEFT,
-                static::MARKER_CONNECTOR_RIGHT,
-                static::MARKER_GEN_SOURCE,
-                static::MARKER_HELP,
-            ],
+            $this->markerRecursion,
             [
                 $model->getName(),
                 $model->getDomid(),
@@ -67,5 +75,19 @@ trait Recursion
             ],
             $this->getTemplateFileContent(static::FILE_RECURSION)
         );
+    }
+
+    /**
+     * Getter of the recursion for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerRecursion(): array
+    {
+        return $this->markerRecursion;
     }
 }

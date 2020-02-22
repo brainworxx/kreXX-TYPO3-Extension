@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Factory;
 
@@ -187,20 +190,6 @@ class Pool extends AbstractFactory
         $this->createClass(Registry::class);
         // Check the environment and prepare the feedback, if necessary.
         $this->checkEnvironment();
-    }
-
-    /**
-     * (Re)initializes everything in the pool, in case in-runtime
-     * factory overwrites.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     */
-    public function init()
-    {
-        $this->__construct();
     }
 
     /**

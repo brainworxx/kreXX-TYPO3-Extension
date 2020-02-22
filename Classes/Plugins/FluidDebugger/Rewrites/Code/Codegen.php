@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code;
 
@@ -77,7 +80,7 @@ class Codegen extends OrgCodegen implements ConstInterface
      *
      * {@inheritdoc}
      */
-    public function generateSource(Model $model)
+    public function generateSource(Model $model): string
     {
         // Get out of here as soon as possible.
         if ($this->allowCodegen === false) {
@@ -86,7 +89,8 @@ class Codegen extends OrgCodegen implements ConstInterface
 
         $name = $model->getName();
 
-        if ((strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
+        if (
+            (strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
             $model->getType() === static::TYPE_DEBUG_METHOD ||
             $model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY
         ) {
@@ -147,7 +151,7 @@ class Codegen extends OrgCodegen implements ConstInterface
      * @return string
      *   The generated fluid source.
      */
-    protected function generateVhsCall(Model $model)
+    protected function generateVhsCall(Model $model): string
     {
         $data = $model->getParameters();
         $counter = 1;
@@ -178,7 +182,7 @@ class Codegen extends OrgCodegen implements ConstInterface
      * @return $this
      *   Return this, for chaining.
      */
-    public function setComplicatedWrapperLeft($wrapper)
+    public function setComplicatedWrapperLeft($wrapper): Codegen
     {
         $this->wrapperLeft = $wrapper;
         return $this;
@@ -193,7 +197,7 @@ class Codegen extends OrgCodegen implements ConstInterface
      * @return $this
      *   Return this, for chaining.
      */
-    public function setComplicatedWrapperRight($wrapper)
+    public function setComplicatedWrapperRight($wrapper): Codegen
     {
         $this->wrapperRight = $wrapper;
         return $this;
@@ -204,7 +208,7 @@ class Codegen extends OrgCodegen implements ConstInterface
      *
      * @return string
      */
-    public function generateWrapperLeft()
+    public function generateWrapperLeft(): string
     {
         return $this->wrapperLeft;
     }
@@ -214,7 +218,7 @@ class Codegen extends OrgCodegen implements ConstInterface
      *
      * @return string
      */
-    public function generateWrapperRight()
+    public function generateWrapperRight(): string
     {
         return $this->wrapperRight;
     }

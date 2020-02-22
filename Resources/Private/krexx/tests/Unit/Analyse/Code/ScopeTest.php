@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,6 +41,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
+use stdClass;
 
 class ScopeTest extends AbstractTest
 {
@@ -118,7 +120,7 @@ class ScopeTest extends AbstractTest
     public function testTestModelForCodegen()
     {
         // Some fixtures
-        $object = new \stdClass();
+        $object = new stdClass();
         $array = [];
         $string = 'whatever';
 
@@ -163,7 +165,7 @@ class ScopeTest extends AbstractTest
     /**
      * Set the nesting level in the emergengcy handler moch
      *
-     * @param integer $level
+     * @param int $level
      */
     protected function setNestingLevel($level)
     {

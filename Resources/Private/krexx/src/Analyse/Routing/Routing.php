@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Routing;
 
@@ -141,7 +144,7 @@ class Routing extends AbstractRouting
      * @return string
      *   The generated markup.
      */
-    public function analysisHub(Model $model)
+    public function analysisHub(Model $model): string
     {
         // Check memory and runtime.
         if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
@@ -204,7 +207,7 @@ class Routing extends AbstractRouting
      * @return string
      *   The rendered HTML code.
      */
-    protected function handleNoneSimpleTypes($data, Model $model)
+    protected function handleNoneSimpleTypes($data, Model $model): string
     {
         // Check the nesting level.
         if ($this->pool->emergencyHandler->checkNesting() === true) {
@@ -231,7 +234,7 @@ class Routing extends AbstractRouting
      * @return string
      *   The rendered HTML.
      */
-    protected function handleRecursion($data, Model $model)
+    protected function handleRecursion($data, Model $model): string
     {
         if (is_object($data) === true) {
             $normal = '\\' . get_class($data);
@@ -258,7 +261,7 @@ class Routing extends AbstractRouting
      * @return string
      *   The rendered HTML.
      */
-    protected function handleNestedTooDeep($data, Model $model)
+    protected function handleNestedTooDeep($data, Model $model): string
     {
         $text = $this->pool->messages->getHelp('maximumLevelReached2');
 
@@ -288,7 +291,7 @@ class Routing extends AbstractRouting
      * @return string
      *   The rendered HTML code.
      */
-    protected function preprocessNoneSimpleTypes($data, Model $model)
+    protected function preprocessNoneSimpleTypes($data, Model $model): string
     {
         if (is_object($data) === true) {
             // Object?

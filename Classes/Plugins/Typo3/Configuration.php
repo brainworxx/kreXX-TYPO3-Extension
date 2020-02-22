@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Plugins\Typo3;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
@@ -48,7 +51,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\RepositoryInterface;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
-use \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper as NewAbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper as NewAbstractViewHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder as DbQueryBuilder;
 
@@ -66,17 +69,15 @@ class Configuration implements PluginConfigInterface
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'TYPO3';
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return ExtensionManagementUtility::getExtensionVersion(Bootstrap::EXT_KEY);
     }
@@ -93,7 +94,7 @@ class Configuration implements PluginConfigInterface
         // We are using the TYPO3 ip security, instead of the kreXX implementation.
         Registration::addRewrite(CheckOutput::class, T3CheckOutput::class);
 
-        // Registering some specil stuff for the model analysis.
+        // Registering some special stuff for the model analysis.
         Registration::registerEvent(
             ProcessObject::class . static::START_PROCESS,
             DirtyModels::class
@@ -148,7 +149,7 @@ class Configuration implements PluginConfigInterface
         Registration::setChunksFolder($tempPaths['chunks'] . '/');
         Registration::setLogFolder($tempPaths['log'] . '/');
 
-        // Adding our debugging balcklist.
+        // Adding our debugging blacklist.
         // TYPO3 viewhelpers dislike this function.
         // In the TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper the private
         // $viewHelperNode might not be an object, and trying to render it might

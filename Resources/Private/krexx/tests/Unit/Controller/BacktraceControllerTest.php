@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -77,7 +78,6 @@ class BacktraceControllerTest extends AbstractController
      * @covers \Brainworxx\Krexx\Controller\BacktraceController::backtraceAction
      * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputFooter
      * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputCssAndJs
-     * @covers \Brainworxx\Krexx\Controller\BacktraceController::outputHeader
      */
     public function testBacktraceAction()
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Model;
@@ -39,30 +42,37 @@ use Brainworxx\Krexx\Analyse\Model;
 trait ExpandableChild
 {
     /**
-     * The array we use for the string replace.
-     *
      * @var array
      */
-    protected $renderExpandableChildHansArray = [
-        ConstInterface::MARKER_NAME,
-        ConstInterface::MARKER_TYPE,
-        ConstInterface::MARKER_K_TYPE,
-        ConstInterface::MARKER_NORMAL,
-        ConstInterface::MARKER_CONNECTOR_LEFT,
-        ConstInterface::MARKER_CONNECTOR_RIGHT,
-        ConstInterface::MARKER_GEN_SOURCE,
-        ConstInterface::MARKER_SOURCE_BUTTON,
-        ConstInterface::MARKER_IS_EXPANDED,
-        ConstInterface::MARKER_NEST,
-        ConstInterface::MARKER_CODE_WRAPPER_LEFT,
-        ConstInterface::MARKER_CODE_WRAPPER_RIGHT,
-        ConstInterface::MARKER_HELP,
+    private $markerExpandableChild = [
+        '{name}',
+        '{type}',
+        '{ktype}',
+        '{normal}',
+        '{connectorLeft}',
+        '{connectorRight}',
+        '{gensource}',
+        '{sourcebutton}',
+        '{isExpanded}',
+        '{nest}',
+        '{codewrapperLeft}',
+        '{codewrapperRight}',
+        '{help}',
+    ];
+
+    /**
+     * @var array
+     */
+    private $markerNest = [
+        '{style}',
+        '{mainfunction}',
+        '{domId}',
     ];
 
     /**
      * {@inheritdoc}
      */
-    public function renderExpandableChild(Model $model, $isExpanded = false)
+    public function renderExpandableChild(Model $model, bool $isExpanded = false): string
     {
         // Check for emergency break.
         if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
@@ -70,10 +80,10 @@ trait ExpandableChild
         }
 
         // Generating our code.
-        $gencode = $this->pool->codegenHandler->generateSource($model);
-
+        $codegenHandler = $this->pool->codegenHandler;
+        $generateSource = $codegenHandler->generateSource($model);
         return str_replace(
-            $this->renderExpandableChildHansArray,
+            $this->markerExpandableChild,
             [
                 $model->getName(),
                 $model->getType(),
@@ -81,18 +91,12 @@ trait ExpandableChild
                 $model->getNormal(),
                 $this->renderConnectorLeft($model->getConnectorLeft()),
                 $this->renderConnectorRight($model->getConnectorRight(128)),
-                $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $gencode),
-                $this->renderSourceButtonWithStop($gencode),
+                $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $generateSource),
+                $this->renderSourceButtonWithStop($generateSource),
                 $this->retrieveOpenedClass($isExpanded),
                 $this->pool->chunks->chunkMe($this->renderNest($model, $isExpanded)),
-                $this->generateDataAttribute(
-                    static::DATA_ATTRIBUTE_WRAPPER_L,
-                    $this->pool->codegenHandler->generateWrapperLeft()
-                ),
-                $this->generateDataAttribute(
-                    static::DATA_ATTRIBUTE_WRAPPER_R,
-                    $this->pool->codegenHandler->generateWrapperRight()
-                ),
+                $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_L, $codegenHandler->generateWrapperLeft()),
+                $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_R, $codegenHandler->generateWrapperRight()),
                 $this->renderHelp($model),
             ],
             $this->getTemplateFileContent(static::FILE_EX_CHILD_NORMAL)
@@ -108,7 +112,7 @@ trait ExpandableChild
      * @return string
      *   The css class name.
      */
-    protected function retrieveOpenedClass($isExpanded)
+    protected function retrieveOpenedClass(bool $isExpanded): string
     {
         if ($isExpanded === true) {
             return 'kopened';
@@ -126,9 +130,10 @@ trait ExpandableChild
      * @return string
      *   Th rendered HTML.
      */
-    protected function renderSourceButtonWithStop($gencode)
+    protected function renderSourceButtonWithStop(string $gencode): string
     {
-        if ($gencode === ';stop;' ||
+        if (
+            $gencode === ';stop;' ||
             empty($gencode) === true ||
             $this->pool->codegenHandler->getAllowCodegen() === false
         ) {
@@ -152,7 +157,7 @@ trait ExpandableChild
      * @return string
      *   The generated markup from the template files.
      */
-    protected function renderNest(Model $model, $isExpanded = false)
+    protected function renderNest(Model $model, bool $isExpanded = false): string
     {
         // Get the dom id.
         $domid = $model->getDomid();
@@ -168,11 +173,7 @@ trait ExpandableChild
         }
 
         return str_replace(
-            [
-                static::MARKER_STYLE,
-                static::MARKER_MAIN_FUNCTION,
-                static::MARKER_DOM_ID,
-            ],
+            $this->markerNest,
             [
                 $style,
                 $model->renderMe(),
@@ -180,5 +181,33 @@ trait ExpandableChild
             ],
             $this->getTemplateFileContent(static::FILE_NEST)
         );
+    }
+
+    /**
+     * Getter of the expandable child for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerExpandableChild(): array
+    {
+        return $this->markerExpandableChild;
+    }
+
+    /**
+     * Getter of the nest for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerNest(): array
+    {
+        return $this->markerNest;
     }
 }

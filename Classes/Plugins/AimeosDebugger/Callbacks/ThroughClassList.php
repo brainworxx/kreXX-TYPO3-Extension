@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
@@ -56,7 +59,7 @@ class ThroughClassList extends AbstractCallback
      * @return string
      *   The generated markup
      */
-    public function callMe()
+    public function callMe(): string
     {
         $this->dispatchStartEvent();
 

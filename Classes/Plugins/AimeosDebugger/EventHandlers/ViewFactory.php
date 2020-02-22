@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
@@ -110,7 +113,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstI
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, Model $model = null)
+    public function handle(AbstractCallback $callback, Model $model = null): string
     {
         $params = $callback->getParameters();
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
@@ -151,7 +154,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstI
      * @return string
      *   The generated html.
      */
-    protected function retrieveHelpers(ViewInterface $data, ReflectionClass $ref)
+    protected function retrieveHelpers(ViewInterface $data, ReflectionClass $ref): string
     {
         $result = '';
 
@@ -192,7 +195,7 @@ class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstI
      * @return string
      *   The generated html.
      */
-    protected function retrievePossibleOtherHelpers()
+    protected function retrievePossibleOtherHelpers(): string
     {
         // The main problem here is, that we can not simply get all known
         // classes, filter them for their namespace and analyse them.
@@ -249,25 +252,20 @@ class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstI
      * @return array
      *   The list with the reflections.
      */
-    protected function retrieveHelperList($directory)
+    protected function retrieveHelperList(string $directory): array
     {
         $reflectionList = [];
         $subDirs = scandir($directory);
         $iface = static::AI_NAMESPACE . 'Iface';
 
         foreach ($subDirs as $dir) {
-            if ($dir === '.' ||
-                $dir === '..' ||
-                isset($this->helpers[$dir])
-            ) {
+            if ($dir === '.' || $dir === '..' || isset($this->helpers[$dir])) {
                 // Either not a class, tzhe dot ones.
                 // or we will add it later on, if already inside the helpers.
                 continue;
             }
 
-            if (is_dir($directory . '/' . $dir) &&
-                class_exists(static::AI_NAMESPACE . $dir . static::STANDARD)
-            ) {
+            if (is_dir($directory . '/' . $dir) && class_exists(static::AI_NAMESPACE . $dir . static::STANDARD)) {
                 $ref = new ReflectionClass(static::AI_NAMESPACE . $dir . static::STANDARD);
                 // Test for the view helper interface.
                 if ($ref->implementsInterface($iface)) {

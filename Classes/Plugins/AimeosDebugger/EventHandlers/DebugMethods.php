@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
@@ -103,12 +106,10 @@ class DebugMethods implements EventHandlerInterface, ConstInterface
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
      *
-     * @throws \ReflectionException
-     *
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, Model $model = null)
+    public function handle(AbstractCallback $callback, Model $model = null): string
     {
         $output = '';
         $params = $callback->getParameters();
@@ -140,7 +141,7 @@ class DebugMethods implements EventHandlerInterface, ConstInterface
      * @return string
      *   The rendered html dom.
      */
-    protected function callDebugMethod($data, $methodName)
+    protected function callDebugMethod($data, string $methodName): string
     {
         $result = $data->$methodName();
         // We are expecting arrays, btw.

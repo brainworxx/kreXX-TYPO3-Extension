@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -182,7 +183,7 @@ class MetaTest extends AbstractTest
         );
         $this->assertContains('Just another meaningless class comment.', $data[$meta::META_COMMENT]);
         $this->assertStringEndsWith(
-            DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'ComplexMethodFixture.php, line 40',
+            DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'ComplexMethodFixture.php, line 41',
             $data[$meta::META_DECLARED_IN]
         );
         $this->assertArrayHasKey(InterfaceFixture::class, $data[$meta::META_INTERFACES]);

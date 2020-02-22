@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface;
@@ -52,11 +55,11 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods as IterateThroughMe
 class ThroughMethods extends AbstractCallback implements ConstInterface
 {
     /**
-     * Preprocessing parameters before using the original ThroughMethods analysis.
+     * Pre-processing parameters before using the original ThroughMethods analysis.
      *
      * @return string
      */
-    public function callMe()
+    public function callMe(): string
     {
         $this->dispatchStartEvent();
 

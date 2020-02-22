@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Controller;
 
@@ -77,7 +80,7 @@ class TimerController extends AbstractController
      * @return $this
      *   Return $this for chaining
      */
-    public function timerAction($string)
+    public function timerAction(string $string): TimerController
     {
         // Did we use this one before?
         if (isset(static::$counterCache[$string]) === true) {
@@ -99,7 +102,7 @@ class TimerController extends AbstractController
      * @return $this
      *   Return $this for chaining
      */
-    public function timerEndAction()
+    public function timerEndAction(): TimerController
     {
         $this->timerAction('end');
         // And we are done. Feedback to the user.
@@ -125,7 +128,7 @@ class TimerController extends AbstractController
      * @see http://php.net/manual/de/function.microtime.php
      * @author gomodo at free dot fr
      */
-    protected function miniBenchTo(array $timeKeeping)
+    protected function miniBenchTo(array $timeKeeping): array
     {
         // Get the very first key.
         $start = key($timeKeeping);
@@ -145,21 +148,5 @@ class TimerController extends AbstractController
         }
 
         return $result;
-    }
-
-    /**
-     * Return the current URL.
-     *
-     * @deprecated
-     *   Since 3.2.0. Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated stuff.
-     *
-     * @return string
-     *   The current URL.
-     */
-    protected function getCurrentUrl()
-    {
-        return $this->callerFinder->findCaller('', '')[static::TRACE_URL];
     }
 }

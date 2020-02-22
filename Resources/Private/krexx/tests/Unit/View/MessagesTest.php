@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -44,6 +45,7 @@ class MessagesTest extends AbstractTest
 {
 
     const KEY_VARIABLE_NAME = 'keys';
+    const PARAMS = 'params';
 
     /**
      * @var Messages
@@ -82,7 +84,7 @@ class MessagesTest extends AbstractTest
 
         $this->messagesClass->addMessage($messageKey, []);
         $this->assertEquals(
-            [$messageKey => ['key' => $messageKey, 'params' => []]],
+            [$messageKey => ['key' => $messageKey, static::PARAMS => []]],
             $this->messagesClass->getKeys()
         );
         $this->assertEquals([''], $this->retrieveValueByReflection('messages', $this->messagesClass));
@@ -111,13 +113,13 @@ class MessagesTest extends AbstractTest
     {
         $keys = [
             'California' => [
-                'key' => 'California', 'params' => []
+                'key' => 'California', static::PARAMS => []
             ],
             'House' => [
-                'key' => 'House', 'params' => []
+                'key' => 'House', static::PARAMS => []
             ],
             'Keeper of the seven' => [
-                'key' => 'Keeper of the seven', 'params' => []
+                'key' => 'Keeper of the seven', static::PARAMS => []
             ]
         ];
         $this->setValueByReflection(static::KEY_VARIABLE_NAME, $keys, $this->messagesClass);
@@ -196,6 +198,9 @@ class MessagesTest extends AbstractTest
         Krexx::$pool->fileService = $fileServiceMock;
 
         $this->messagesClass->readHelpTexts();
-        $this->assertEquals(['someKey' => 'a string'], $this->retrieveValueByReflection('helpArray', $this->messagesClass));
+        $this->assertEquals(
+            ['someKey' => 'a string'],
+            $this->retrieveValueByReflection('helpArray', $this->messagesClass)
+        );
     }
 }

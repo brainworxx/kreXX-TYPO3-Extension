@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,9 +33,11 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 $result = [
     // Our old legacy namespace viewhelper
-    'Tx_Includekrexx_ViewHelpers_DebugViewHelper' => 'Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper',
+    'Tx_Includekrexx_ViewHelpers_DebugViewHelper' => Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper::class,
 ];
 
 if (version_compare(TYPO3_version, '10.0', '>=')) {

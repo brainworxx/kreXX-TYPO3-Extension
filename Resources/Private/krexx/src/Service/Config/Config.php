@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Config;
 
@@ -66,16 +69,6 @@ class Config extends Fallback
     public $debugFuncList = [];
 
     /**
-     * Our security handler.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed.
-     *
-     * @var Security
-     */
-    public $security;
-
-    /**
      * Validating configuration settings.
      *
      * @var Validation
@@ -85,22 +78,16 @@ class Config extends Fallback
     /**
      * Our ini file configuration handler.
      *
-     * @deprecated
-     *   Since 3.1.0. Will be set to protected.
-     *
      * @var Ini
      */
-    public $iniConfig;
+    protected $iniConfig;
 
     /**
      * Our cookie configuration handler.
      *
-     * @deprecated
-     *   Since 3.1.0. Will be set to protected.
-     *
      * @var Cookie
      */
-    public $cookieConfig;
+    protected $cookieConfig;
 
     /**
      * Here we store the paths to our files and directories.
@@ -137,7 +124,6 @@ class Config extends Fallback
             static::CONFIG_FOLDER => SettingsGetter::getConfigFile(),
         ];
 
-        $this->security = $pool->createClass(Security::class);
         $this->validation = $pool->createClass(Validation::class);
         $pool->config = $this;
 
@@ -165,7 +151,8 @@ class Config extends Fallback
      */
     protected function checkEnabledStatus()
     {
-        if ($this->getSetting(static::SETTING_DESTINATION) !==  static::VALUE_FILE &&
+        if (
+            $this->getSetting(static::SETTING_DESTINATION) !==  static::VALUE_FILE &&
             ($this->checkOutput->isAjax() === true || $this->checkOutput->isCli() === true)
         ) {
             // No kreXX for you. At least until you start forced logging.
@@ -187,7 +174,7 @@ class Config extends Fallback
      * @param bool $value
      *   Whether it it enabled, or not.
      */
-    public function setDisabled($value)
+    public function setDisabled(bool $value)
     {
         $this->settings[static::SETTING_DISABLED]
             ->setValue($value)
@@ -197,8 +184,8 @@ class Config extends Fallback
     /**
      * Returns the developer handle from the cookies.
      *
-     * @return string
-     *   The Developer handle.
+     * @return string|null
+     *   The Developer handle. Null when nothing was set.
      */
     public function getDevHandler()
     {
@@ -217,10 +204,10 @@ class Config extends Fallback
      * @param string $name
      *   The name of the setting.
      *
-     * @return string|null
+     * @return int|bool|string|null
      *   The setting.
      */
-    public function getSetting($name)
+    public function getSetting(string $name)
     {
         return $this->settings[$name]->getValue();
     }
@@ -234,14 +221,13 @@ class Config extends Fallback
      * @return $this
      *   Return this, for chaining.
      */
-    public function loadConfigValue($name)
+    public function loadConfigValue(string $name): Config
     {
         $isEditable = $this->iniConfig->getFeIsEditable($name);
         $section = $this->feConfigFallback[$name][static::SECTION];
 
         /** @var Model $model */
-        $model = $this->pool->createClass(Model::class)
-            ->setSection($section)
+        $model = $this->pool->createClass(Model::class)->setSection($section)
             ->setEditable($isEditable)
             ->setType($this->feConfigFallback[$name][static::RENDER][static::RENDER_TYPE]);
 
@@ -249,7 +235,8 @@ class Config extends Fallback
         if ($isEditable === true) {
             $cookieSetting = $this->cookieConfig->getConfigFromCookies($section, $name);
             // Do we have a value in the cookies?
-            if ($cookieSetting  !== null &&
+            if (
+                $cookieSetting  !== null &&
                 ($name === static::SETTING_DISABLED && $cookieSetting === static::VALUE_FALSE) === false
             ) {
                 // We must not overwrite a disabled=true with local cookie settings!
@@ -277,29 +264,12 @@ class Config extends Fallback
     }
 
     /**
-     * Check if the current request is an AJAX request.
-     *
-     * @deprecated
-     *   Since 3.2.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   Since 3.2.0. We will not test deprecated methods.
-     *
-     * @return bool
-     *   TRUE when this is AJAX, FALSE if not
-     */
-    protected function isRequestAjaxOrCli()
-    {
-        return $this->checkOutput->isCli() ||$this->checkOutput->isAjax();
-    }
-
-    /**
      * Get the path to the chunks directory.
      *
      * @return string
      *   The absolute path, trailed by the '/'
      */
-    public function getChunkDir()
+    public function getChunkDir(): string
     {
         return $this->directories[static::CHUNKS_FOLDER];
     }
@@ -310,7 +280,7 @@ class Config extends Fallback
      * @return string
      *   The absolute path, trailed by the '/'
      */
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return $this->directories[static::LOG_FOLDER];
     }
@@ -321,51 +291,9 @@ class Config extends Fallback
      * @return string
      *   The absolute path to the Krexx.ini.
      */
-    public function getPathToIniFile()
+    public function getPathToIniFile(): string
     {
         return $this->directories[static::CONFIG_FOLDER];
-    }
-
-    /**
-     * Checks if the current client ip is allowed.
-     *
-     * @author Chin Leung
-     * @see https://stackoverflow.com/questions/35559119/php-ip-address-whitelist-with-wildcards
-     *
-     * @param string $whitelist
-     *   The ip whitelist.
-     *
-     * @deprecated
-     *   Since 3.2.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated stuff.
-     *
-     * @return bool
-     *   Whether the current client ip is allowed or not.
-     */
-    protected function isAllowedIp($whitelist)
-    {
-        return $this->checkOutput->isAllowedIp($whitelist);
-    }
-
-    /**
-     * Determines if the specific class is blacklisted for debug methods.
-     *
-     * @param object $data
-     *   The class we are analysing.
-     *
-     * @deprecated
-     *   Sinde 3.1.0. Will be removed
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return bool
-     *   Whether the function is allowed to be called.
-     */
-    public function isAllowedDebugCall($data)
-    {
-        return $this->validation->isAllowedDebugCall($data, '');
     }
 
     /**
@@ -373,7 +301,7 @@ class Config extends Fallback
      *
      * @return string
      */
-    public function getSkinClass()
+    public function getSkinClass(): string
     {
         return $this->skinConfiguration[$this->getSetting(static::SETTING_SKIN)][static::SKIN_CLASS];
     }
@@ -383,7 +311,7 @@ class Config extends Fallback
      *
      * @return string
      */
-    public function getSkinDirectory()
+    public function getSkinDirectory(): string
     {
         return $this->skinConfiguration[$this->getSetting(static::SETTING_SKIN)][static::SKIN_DIRECTORY];
     }
@@ -393,7 +321,7 @@ class Config extends Fallback
      *
      * @return array
      */
-    public function getSkinList()
+    public function getSkinList(): array
     {
         return array_keys($this->skinConfiguration);
     }

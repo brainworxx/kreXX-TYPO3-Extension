@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,24 +33,36 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 trait FatalMain
 {
     /**
+     * @var array
+     */
+    private $markerFatalMain = [
+        '{errstr}',
+        '{file}',
+        '{source}',
+        '{line}',
+    ];
+
+    /**
      * {@inheritdoc}
      */
-    public function renderFatalMain($errstr, $errfile, $errline)
+    public function renderFatalMain(string $errstr, string $errfile, int $errline): string
     {
-        $source = $this->pool->fileService->readSourcecode($errfile, $errline -1, $errline -6, $errline +4);
+        $source = $this->pool->fileService->readSourcecode(
+            $errfile,
+            $errline - 1,
+            $errline - 6,
+            $errline + 4
+        );
 
         return str_replace(
-            [
-                static::MARKER_ERROR_STRING,
-                static::MARKER_FILE,
-                static::MARKER_SOURCE,
-                static::MARKER_LINE,
-            ],
+            $this->markerFatalMain,
             [
                 $errstr,
                 $errfile,
@@ -58,5 +71,19 @@ trait FatalMain
             ],
             $this->getTemplateFileContent(static::FILE_FATAL_MAIN)
         );
+    }
+
+    /**
+     * Getter of the fatal header for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerFatalMain(): array
+    {
+        return $this->markerFatalMain;
     }
 }

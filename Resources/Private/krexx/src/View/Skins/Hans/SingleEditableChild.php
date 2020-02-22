@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Model;
@@ -39,24 +42,40 @@ use Brainworxx\Krexx\Service\Config\Fallback;
 
 trait SingleEditableChild
 {
-
     /**
-     * The array we use for the string replace.
-     *
      * @var array
      */
-    protected $renderSingleEditableChildArray = [
-        ConstInterface::MARKER_NAME,
-        ConstInterface::MARKER_SOURCE,
-        ConstInterface::MARKER_NORMAL,
-        ConstInterface::MARKER_TYPE,
-        ConstInterface::MARKER_HELP,
+    private $markerSingleEditableChild = [
+        '{name}',
+        '{source}',
+        '{normal}',
+        '{type}',
+        '{help}',
+    ];
+
+    /**
+     * @var string
+     */
+    private $markerDropdownOptions = '{options}';
+
+    /**
+     * @var array
+     */
+    private $markerSelectOption = [
+        '{text}',
+        '{value}',
+        '{selected}'
+    ];
+
+    private $markerSingleInput = [
+        '{id}',
+        '{value}',
     ];
 
     /**
      * {@inheritdoc}
      */
-    public function renderSingleEditableChild(Model $model)
+    public function renderSingleEditableChild(Model $model): string
     {
         // For dropdown elements, we need to render the options.
         $options = '';
@@ -65,11 +84,11 @@ trait SingleEditableChild
         }
 
         return str_replace(
-            $this->renderSingleEditableChildArray,
+            $this->markerSingleEditableChild,
             [
                 $model->getData(),
                 $model->getNormal(),
-                str_replace(static::MARKER_OPTIONS, $options, $this->renderSpecificEditableElement($model)),
+                str_replace($this->markerDropdownOptions, $options, $this->renderSpecificEditableElement($model)),
                 Fallback::RENDER_EDITABLE,
                 $this->renderHelp($model),
             ],
@@ -86,7 +105,7 @@ trait SingleEditableChild
      * @return string
      *   The rendered HTML.
      */
-    protected function renderSelectOptions(Model $model)
+    protected function renderSelectOptions(Model $model): string
     {
         // Here we store what the list of possible values.
         if ($model->getDomid() === Fallback::SETTING_SKIN) {
@@ -99,15 +118,9 @@ trait SingleEditableChild
         // Paint it.
         $options = '';
         foreach ($valueList as $value) {
-            if ($value === $model->getName()) {
-                // This one is selected.
-                $selected = 'selected="selected"';
-            } else {
-                $selected = '';
-            }
-
+            $value === $model->getName() ? $selected = 'selected="selected"' : $selected = '';
             $options .= str_replace(
-                [static::MARKER_TEXT, static::MARKER_VALUE, static::MARKER_SELECTED],
+                $this->markerSelectOption,
                 [$value, $value, $selected],
                 $this->getTemplateFileContent(static::FILE_SI_SELECT_OPTIONS)
             );
@@ -125,18 +138,71 @@ trait SingleEditableChild
      * @return string
      *   The rendered HTML.
      */
-    protected function renderSpecificEditableElement(Model $model)
+    protected function renderSpecificEditableElement(Model $model): string
     {
         return str_replace(
-            [
-                static::MARKER_ID,
-                static::MARKER_VALUE,
-            ],
+            $this->markerSingleInput,
             [
                 $model->getDomid(),
                 $model->getName()
             ],
             $this->getTemplateFileContent('single' . $model->getType())
         );
+    }
+
+    /**
+     * Getter of the single editable child for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerSingleEditableChild(): array
+    {
+        return $this->markerSingleEditableChild;
+    }
+
+    /**
+     * Getter of the dropdown option for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerDropdownOptions(): array
+    {
+        return [$this->markerDropdownOptions];
+    }
+
+    /**
+     * Getter of the select options for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerSelectOption(): array
+    {
+        return $this->markerSelectOption;
+    }
+
+    /**
+     * Getter of the specific element for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerSingleInput(): array
+    {
+        return $this->markerSingleInput;
     }
 }

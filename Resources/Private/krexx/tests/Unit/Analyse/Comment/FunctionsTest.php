@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,6 +38,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 use Brainworxx\Krexx\Analyse\Comment\Functions;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
+use ReflectionFunction;
 
 class FunctionsTest extends AbstractTest
 {
@@ -46,6 +48,8 @@ class FunctionsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Comment\Functions::getComment
      * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::prettifyComment
+     *
+     * @throws \ReflectionException
      */
     public function testGetComment()
     {
@@ -57,7 +61,7 @@ class FunctionsTest extends AbstractTest
             return 1;
         };
         $functionComment = new Functions(Krexx::$pool);
-        $reflection = new \ReflectionFunction($fixture);
+        $reflection = new ReflectionFunction($fixture);
 
         $this->assertEquals('Do something.', $functionComment->getComment($reflection));
     }

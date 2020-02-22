@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Model;
@@ -39,16 +42,21 @@ use Brainworxx\Krexx\Analyse\Model;
 trait Button
 {
     /**
+     * @var array
+     */
+    private $markerSingleButton = [
+        '{text}',
+        '{class}',
+        '{help}',
+    ];
+
+    /**
      * {@inheritdoc}
      */
-    public function renderButton(Model $model)
+    public function renderButton(Model $model): string
     {
         return str_replace(
-            [
-                static::MARKER_TEXT,
-                static::MARKER_CLASS,
-                static::MARKER_HELP,
-            ],
+            $this->markerSingleButton,
             [
                 $model->getNormal(),
                 $model->getName(),
@@ -56,5 +64,19 @@ trait Button
             ],
             $this->getTemplateFileContent(static::FILE_SI_BUTTON)
         );
+    }
+
+    /**
+     * Getter of the button for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerSingleButton(): array
+    {
+        return $this->markerSingleButton;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,30 +33,63 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Analyse\Routing\Process;
+declare(strict_types=1);
+
+namespace Brainworxx\Krexx\Analyse\Model;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 
-/**
- * Abstract class for (nearly) all processing classes.
- *
- * @deprecated
- *   Since 3.1.0. Will be removed.
- * @codeCoverageIgnore
- *   We will not test deprecated classes.
- *
- * @package Brainworxx\Krexx\Analyse\Routing\Process
- */
-abstract class AbstractProcess extends AbstractRouting
+trait HasExtra
 {
+    /**
+     * Info, if we have "extra" data to render.
+     *
+     * @see \Brainworxx\Krexx\View\Render::renderSingleChild
+     *
+     * @var bool
+     */
+    protected $hasExtra = false;
 
     /**
-     * Processes the model according to the type of the variable.
+     * Getter for the hasExtra property.
      *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @deprecated
+     *   Since 4.0.0. Use $this->hasExtra() instead.
      *
-     * @return string
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @return bool
+     *   Info for the render class, if we need to render the extras part.
      */
-    abstract public function process(Model $model);
+    public function getHasExtra(): bool
+    {
+        return $this->hasExtra();
+    }
+
+    /**
+     * Getter for the hasExtra property.
+     *
+     * @return bool
+     *   Info for the render class, if we need to render the extras part.
+     */
+    public function hasExtra(): bool
+    {
+        return $this->hasExtra;
+    }
+
+    /**
+     * "Setter" for the hasExtra property.
+     *
+     * @param bool $value
+     *   The value we want to set.
+     *
+     * @return Model
+     *   $this, for chaining.
+     */
+    public function setHasExtra(bool $value): Model
+    {
+        $this->hasExtra = $value;
+        return $this;
+    }
 }

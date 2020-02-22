@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,14 +33,14 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder as BeUriBuilder;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use Throwable;
-use Exception;
 
 /**
  * Collection the log file list for the frontend and the backend.
@@ -51,6 +52,8 @@ class LogfileList extends AbstractCollector
     /**
      * Assigning the list to the view. Used by out adminpanel logging module.
      *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     *
      * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
      */
     public function assignData(ViewInterface $view)
@@ -61,10 +64,12 @@ class LogfileList extends AbstractCollector
     /**
      * Retrieve the file list, like the method name says. Used by the ajax controller.
      *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     *
      * @return array
      *   The file list with the info.
      */
-    public function retrieveFileList()
+    public function retrieveFileList(): array
     {
         $fileList = [];
 
@@ -93,10 +98,12 @@ class LogfileList extends AbstractCollector
      * @param array $files
      *   The list of files to process.
      *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     *
      * @return array
      *   The file info in a neat array.
      */
-    protected function retrieveFileInfo($files)
+    protected function retrieveFileInfo(array $files): array
     {
         if (version_compare(TYPO3_version, '9.0', '>=')) {
             $uriBuilder = $this->objectManager->get(UriBuilder::class);
@@ -137,13 +144,13 @@ class LogfileList extends AbstractCollector
      *
      * @author Mogilev Arseny
      *
-     * @param string $bytes
+     * @param false|int $bytes
      *   The bytes value we want to make readable.
      *
      * @return string
      *   Human readable file size.
      */
-    protected function fileSizeConvert($bytes)
+    protected function fileSizeConvert($bytes): string
     {
         $bytes = floatval($bytes);
         $unit = 'UNIT';
@@ -192,10 +199,12 @@ class LogfileList extends AbstractCollector
      * @param UriBuilder|BeUriBuilder
      *  The concrete uri builder, depending on the TYPO3 version.
      *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     *
      * @return string
      *   The URL
      */
-    protected function getRoute($id, $uriBuilder)
+    protected function getRoute(string $id, $uriBuilder): string
     {
         if ($uriBuilder instanceof UriBuilder) {
             /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */

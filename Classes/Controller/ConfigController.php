@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Controller;
 
 use TYPO3\CMS\Core\Cache\CacheManager;
@@ -51,6 +54,10 @@ class ConfigController extends ActionController
      * The editAction is the old standard action of the old 3.0.1 backend
      * module. When this one gets called, we clear the cache and redirect to
      * the new controller
+     *
+     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheGroupException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
     public function editAction()
     {

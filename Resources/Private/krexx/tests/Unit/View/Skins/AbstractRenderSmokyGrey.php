@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -48,12 +49,8 @@ abstract class AbstractRenderSmokyGrey extends AbstractTest
     const GET_NAME = 'getName';
     const GET_DOMID = 'getDomid';
     const GET_NORMAL = 'getNormal';
-    const GET_CONNECTOR_LEFT = 'getConnectorLeft';
     const GET_CONNECTOR_RIGHT = 'getConnectorRight';
     const GET_JSON = 'getJson';
-    const GET_HAS_EXTRAS = 'getHasExtra';
-    const GET_DATA = 'getData';
-    const GET_IS_CALLBACK = 'getIsCallback';
     const GET_TYPE = 'getType';
     const RENDER_ME = 'renderMe';
     const GET_CONNECTOR_LANGUAGE = 'getConnectorLanguage';
@@ -101,90 +98,111 @@ abstract class AbstractRenderSmokyGrey extends AbstractTest
                 [
                     static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_SOURCE_BUTTON . $fileSuffix,
                     true,
-                    $this->renderSmokyGrey::MARKER_LANGUAGE
+                    implode('', $this->renderSmokyGrey->getMarkerSourceButton())
                 ],
                 // singleChild.html
                 [
                     static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_SI_CHILD . $fileSuffix,
                     true,
-                    $this->renderSmokyGrey::MARKER_SOURCE_BUTTON .
-                    $this->renderSmokyGrey::MARKER_ADDITIONAL_JSON
+                    implode('', $this->renderSmokyGrey->getMarkerSingleChild())
                 ],
                 // nest.html
                 [
                     static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_NEST . $fileSuffix,
                     true,
-                    $this->renderSmokyGrey::MARKER_STYLE .
-                    $this->renderSmokyGrey::MARKER_MAIN_FUNCTION .
-                    $this->renderSmokyGrey::MARKER_DOM_ID
+                    implode('', $this->renderSmokyGrey->getMarkerNest())
                 ],
                 // expandableChildNormal.html
                 [
                     static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_EX_CHILD_NORMAL . $fileSuffix,
                     true,
-                    $this->renderSmokyGrey::MARKER_GEN_SOURCE .
-                    $this->renderSmokyGrey::MARKER_CODE_WRAPPER_LEFT .
-                    $this->renderSmokyGrey::MARKER_CODE_WRAPPER_RIGHT .
-                    $this->renderSmokyGrey::MARKER_IS_EXPANDED .
-                    $this->renderSmokyGrey::MARKER_K_TYPE .
-                    $this->renderSmokyGrey::MARKER_CONNECTOR_LEFT .
-                    $this->renderSmokyGrey::MARKER_CONNECTOR_RIGHT .
-                    $this->renderSmokyGrey::MARKER_NAME .
-                    $this->renderSmokyGrey::MARKER_NORMAL .
-                    $this->renderSmokyGrey::MARKER_TYPE .
-                    $this->renderSmokyGrey::MARKER_SOURCE_BUTTON .
-                    $this->renderSmokyGrey::MARKER_HELP .
-                    $this->renderSmokyGrey::MARKER_NEST .
-                    $this->renderSmokyGrey::MARKER_ADDITIONAL_JSON
+                    implode('', $this->renderSmokyGrey->getMarkerExpandableChild())
                 ],
                 // connectorRight.html
                 [
                     static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_CONNECTOR_RIGHT . $fileSuffix,
                     true,
-                    $this->renderSmokyGrey::MARKER_CONNECTOR
+                    implode('', $this->renderSmokyGrey->getMarkerConnectorRight())
                 ],
                 // recursion.html
                 [
                     static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_RECURSION . $fileSuffix,
                     true,
-                    $this->renderSmokyGrey::MARKER_ADDITIONAL_JSON
+                    implode('', $this->renderSmokyGrey->getMarkerRecursion())
                 ],
                 // singleEditableChild.html
                 [
                     static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_SI_EDIT_CHILD . $fileSuffix,
                     true,
-                    $this->renderSmokyGrey::MARKER_ADDITIONAL_JSON
+                    implode('', $this->renderSmokyGrey->getMarkerSingleEditableChild())
                 ],
                 // singleButton.html
                 [
                     static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_SI_BUTTON . $fileSuffix,
                     true,
-                    $this->renderSmokyGrey::MARKER_CLASS .
-                    $this->renderSmokyGrey::MARKER_TEXT .
-                    $this->renderSmokyGrey::MARKER_ADDITIONAL_JSON
+                    implode('', $this->renderSmokyGrey->getMarkerSingleButton())
                 ],
                 // header.html
                 [
                     static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_HEADER . $fileSuffix,
                     true,
-                    $this->renderSmokyGrey::MARKER_K_DEBUG_CLASSES .
-                    $this->renderSmokyGrey::MARKER_K_CONFIG_CLASSES
+                    implode('', $this->renderSmokyGrey->getMarkerHeader())
                 ],
                 // footer.html
                 [
                     static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_FOOTER . $fileSuffix,
                     true,
-                    $this->renderSmokyGrey::MARKER_K_CONFIG_CLASSES
+                    implode('', $this->renderSmokyGrey->getMarkerFooter())
                 ],
                 // fatalMain.html
                 [
                     static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_FATAL_MAIN . $fileSuffix,
                     true,
-                    $this->renderSmokyGrey::MARKER_SEARCH .
-                    $this->renderSmokyGrey::MARKER_KREXX_ID .
-                    $this->renderSmokyGrey::MARKER_PLUGINS
+                    implode('', $this->renderSmokyGrey->getMarkerFatalMain())
                 ],
-
+                // search.html
+                [
+                    static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_SEARCH . $fileSuffix,
+                    true,
+                    implode('', $this->renderSmokyGrey->getMarkerSearch())
+                ],
+                // singlePlugin.html
+                [
+                    static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_SI_PLUGIN . $fileSuffix,
+                    true,
+                    implode('', $this->renderSmokyGrey->getMarkerSinglePlugin())
+                ],
+                // connectorLeft.html
+                [
+                    static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_CONNECTOR_LEFT . $fileSuffix,
+                    true,
+                    implode('', $this->renderSmokyGrey->getMarkerConnectorLeft())
+                ],
+                // connectorRight.html
+                [
+                    static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_CONNECTOR_RIGHT . $fileSuffix,
+                    true,
+                    implode('', $this->renderSmokyGrey->getMarkerConnectorRight())
+                ],
+                // singleSelectOption.html
+                [
+                    static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_SI_SELECT_OPTIONS . $fileSuffix,
+                    true,
+                    implode('', $this->renderSmokyGrey->getMarkerSelectOption())
+                ],
+                // single.html
+                // Meh, whatever. Rendering of a 'single' undefined editable child.
+                [
+                    static::PATH_TO_SKIN . 'single' . $fileSuffix,
+                    true,
+                    implode('', [])
+                ],
+                // message.html
+                [
+                    static::PATH_TO_SKIN . $this->renderSmokyGrey::FILE_MESSAGE . $fileSuffix,
+                    true,
+                    implode('', $this->renderSmokyGrey->getMarkerMessages())
+                ],
             ]));
 
         Krexx::$pool->fileService = $this->fileServiceMock;

@@ -198,6 +198,42 @@ var Kdt = (function () {
                 jumpTo(element, true);
             }, 100);
         };
+        this.copyFrom = function (event, element) {
+            var i;
+            var domid = _this.getDataset(element, 'domid');
+            if (domid === '') {
+                return;
+            }
+            var orgNest = document.querySelector('#' + domid);
+            if (orgNest) {
+                var orgEl = orgNest.previousElementSibling;
+                element.parentNode.insertBefore(orgNest.cloneNode(true), element.nextSibling);
+                var newEl = orgEl.cloneNode(true);
+                element.parentNode.insertBefore(newEl, element.nextSibling);
+                _this.findInDomlistByClass(newEl.children, 'kname').innerHTML = _this.findInDomlistByClass(element.children, 'kname').innerHTML;
+                var allChildren = newEl.nextElementSibling.getElementsByTagName("*");
+                for (i = 0; i < allChildren.length; i++) {
+                    allChildren[i].removeAttribute('id');
+                }
+                newEl.nextElementSibling.removeAttribute('id');
+                _this.setDataset(newEl.parentNode, 'domid', domid);
+                var newInfobox = newEl.querySelector('.khelp');
+                var newButton = newEl.querySelector('.kinfobutton');
+                var realInfobox = element.querySelector('.khelp');
+                var realButton = element.querySelector('.kinfobutton');
+                if (newInfobox !== null) {
+                    newInfobox.parentNode.removeChild(newInfobox);
+                }
+                if (newButton !== null) {
+                    newButton.parentNode.removeChild(newButton);
+                }
+                if (realInfobox !== null) {
+                    newEl.appendChild(realButton);
+                    newEl.appendChild(realInfobox);
+                }
+                element.parentNode.removeChild(element);
+            }
+        };
     }
     Kdt.prototype.getParents = function (el, selector) {
         var result = [];
@@ -308,23 +344,20 @@ var Kdt = (function () {
     Kdt.prototype.readSettings = function (cookieName) {
         cookieName = cookieName + "=";
         var cookieArray = document.cookie.split(';');
-        var result = JSON.parse('{}');
-        var c;
+        var result = {};
+        var cookieString;
         for (var i = 0; i < cookieArray.length; i++) {
-            c = cookieArray[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1, c.length);
+            cookieString = cookieArray[i];
+            while (cookieString.charAt(0) === ' ') {
+                cookieString = cookieString.substring(1, cookieString.length);
             }
-            if (c.indexOf(cookieName) === 0) {
+            if (cookieString.indexOf(cookieName) === 0) {
                 try {
-                    result = JSON.parse(c.substring(cookieName.length, c.length));
+                    result = JSON.parse(cookieString.substring(cookieName.length, cookieString.length));
                 }
                 catch (error) {
                 }
             }
-        }
-        if (typeof result !== 'object') {
-            result = JSON.parse('{}');
         }
         return result;
     };
@@ -485,42 +518,6 @@ var SearchConfig = (function () {
 var Hans = (function () {
     function Hans() {
         var _this = this;
-        this.copyFrom = function (event, element) {
-            var i;
-            var domid = _this.kdt.getDataset(element, 'domid');
-            if (domid === '') {
-                return;
-            }
-            var orgNest = document.querySelector('#' + domid);
-            if (orgNest) {
-                var orgEl = orgNest.previousElementSibling;
-                element.parentNode.insertBefore(orgNest.cloneNode(true), element.nextSibling);
-                var newEl = orgEl.cloneNode(true);
-                element.parentNode.insertBefore(newEl, element.nextSibling);
-                _this.kdt.findInDomlistByClass(newEl.children, 'kname').innerHTML = _this.kdt.findInDomlistByClass(element.children, 'kname').innerHTML;
-                var allChildren = newEl.nextElementSibling.getElementsByTagName("*");
-                for (i = 0; i < allChildren.length; i++) {
-                    allChildren[i].removeAttribute('id');
-                }
-                newEl.nextElementSibling.removeAttribute('id');
-                _this.kdt.setDataset(newEl.parentNode, 'domid', domid);
-                var newInfobox = newEl.querySelector('.khelp');
-                var newButton = newEl.querySelector('.kinfobutton');
-                var realInfobox = element.querySelector('.khelp');
-                var realButton = element.querySelector('.kinfobutton');
-                if (newInfobox !== null) {
-                    newInfobox.parentNode.removeChild(newInfobox);
-                }
-                if (newButton !== null) {
-                    newButton.parentNode.removeChild(newButton);
-                }
-                if (realInfobox !== null) {
-                    newEl.appendChild(realButton);
-                    newEl.appendChild(realInfobox);
-                }
-                element.parentNode.removeChild(element);
-            }
-        };
         this.toggle = function (event, element) {
             _this.kdt.toggleClass(element, 'kopened');
             _this.kdt.toggleClass(element.nextElementSibling, 'khidden');
@@ -696,7 +693,7 @@ var Hans = (function () {
         this.eventHandler.addEvent(this.selectors.toggle, 'click', this.toggle);
         this.eventHandler.addEvent(this.selectors.setSetting, 'change', this.kdt.setSetting);
         this.eventHandler.addEvent(this.selectors.resetSetting, 'click', this.kdt.resetSetting);
-        this.eventHandler.addEvent(this.selectors.copyFrom, 'click', this.copyFrom);
+        this.eventHandler.addEvent(this.selectors.copyFrom, 'click', this.kdt.copyFrom);
         this.eventHandler.addEvent(this.selectors.displaySearch, 'click', this.displaySearch);
         this.eventHandler.addEvent(this.selectors.performSearch, 'click', this.search.performSearch);
         this.eventHandler.addEvent(this.selectors.collapse, 'click', this.kdt.collapse);
@@ -771,7 +768,7 @@ var SmokyGrey = (function (_super) {
         };
         _this.setAdditionalData = function (event, element) {
             var kdt = _this.kdt;
-            var setPayloadMaxHeight = _this.setPayloadMaxHeight;
+            var setPayloadMaxHeight = _this.setPayloadMaxHeight.bind(_this);
             setTimeout(function () {
                 var wrapper = kdt.getParents(element, '.kwrapper')[0];
                 if (typeof wrapper === 'undefined') {
@@ -854,25 +851,21 @@ var SmokyGrey = (function (_super) {
         this.eventHandler.addEvent('.kwrapper .kel', 'click', this.setAdditionalData);
     };
     SmokyGrey.prototype.setPayloadMaxHeight = function () {
-        var height = Math.round(Math.min(document.documentElement.clientHeight, window.innerHeight || 0) * 0.70);
-        var elements;
-        var i;
-        if (height > 350) {
-            elements = document.querySelectorAll('.krela-wrapper .kpayload');
-            for (i = 0; i < elements.length; i++) {
-                elements[i].style.maxHeight = height + 'px';
-            }
-        }
+        var elements = document.querySelectorAll('.krela-wrapper .kpayload');
+        this.handlePayloadMinHeight(Math.round(Math.min(document.documentElement.clientHeight, window.innerHeight || 0) * 0.70), elements);
         elements = document.querySelectorAll('.kfatalwrapper-outer .kpayload');
         if (elements.length > 0) {
             var header = document.querySelector('.kfatalwrapper-outer ul.knode.kfirst').offsetHeight;
             var footer = document.querySelector('.kfatalwrapper-outer .kinfo-wrapper').offsetHeight;
             var handler = document.querySelector('.kfatalwrapper-outer').offsetHeight;
-            height = handler - header - footer - 17;
-            if (height > 350) {
-                for (i = 0; i < elements.length; i++) {
-                    elements[i].style.maxHeight = height + 'px';
-                }
+            this.handlePayloadMinHeight(handler - header - footer - 17, elements);
+        }
+    };
+    SmokyGrey.prototype.handlePayloadMinHeight = function (height, elements) {
+        var i;
+        if (height > 350) {
+            for (i = 0; i < elements.length; i++) {
+                elements[i].style.maxHeight = height + 'px';
             }
         }
     };

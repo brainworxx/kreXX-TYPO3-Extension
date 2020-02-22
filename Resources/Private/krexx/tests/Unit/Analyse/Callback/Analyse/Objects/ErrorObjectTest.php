@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,6 +42,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use Exception;
 
 class ErrorObjectTest extends AbstractTest
 {
@@ -63,6 +65,8 @@ class ErrorObjectTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject::renderBacktrace
+     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
+     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchEventWithModel
      */
     public function testCallMe()
     {
@@ -79,7 +83,7 @@ class ErrorObjectTest extends AbstractTest
         $file = 'some file';
         $code = 'some code';
 
-        $exception = new \Exception();
+        $exception = new Exception();
         $this->setValueByReflection('trace', $backtrace, $exception);
         $this->setValueByReflection('line', $line, $exception);
         $this->setValueByReflection('file', $file, $exception);
@@ -91,6 +95,9 @@ class ErrorObjectTest extends AbstractTest
                 [false],
                 [true]
             );
+        $codegenMock->expects($this->exactly(2))
+            ->method('generateSource')
+            ->will($this->returnValue(''));
         Krexx::$pool->codegenHandler = $codegenMock;
 
         $fileServiceMock = $this->createMock(File::class);

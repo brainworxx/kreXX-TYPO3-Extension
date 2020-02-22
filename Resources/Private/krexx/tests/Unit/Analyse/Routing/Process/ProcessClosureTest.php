@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -34,7 +35,6 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
-use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethodAnalysis;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure;
@@ -85,7 +85,6 @@ class ProcessClosureTest extends AbstractTest
             ->will($this->returnValue($filePath));
         $renderNothing = new RenderNothing(Krexx::$pool);
         Krexx::$pool->fileService = $fileserviceMock;
-        Krexx::$pool->rewrite[ThroughMethodAnalysis::class] = CallbackNothing::class;
         Krexx::$pool->render = $renderNothing;
 
         // Run the test
@@ -97,7 +96,11 @@ class ProcessClosureTest extends AbstractTest
 
         // Run the tests, model.
         $this->assertEquals(ProcessClosure::TYPE_CLOSURE, $model->getType());
-        $this->assertEquals(ProcessClosure::UNKNOWN_VALUE, $model->getNormal(), 'We are expecting "...", it\'s not really unknown. ');
+        $this->assertEquals(
+            ProcessClosure::UNKNOWN_VALUE,
+            $model->getNormal(),
+            'We are expecting "...", it\'s not really unknown. '
+        );
         $this->assertEquals($parameter, $model->getConnectorParameters());
         $this->assertNotEmpty($model->getDomid());
         /** @var \Brainworxx\Krexx\Analyse\Code\Connectors $connectorService */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
@@ -41,7 +44,6 @@ use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Exception;
 use Throwable;
 use Aimeos\MShop\Common\Item\Iface as ItemIface;
 use Aimeos\MW\Tree\Node\Iface as NodeIface;
@@ -90,7 +92,7 @@ class Properties implements EventHandlerInterface, ConstInterface, AimeosConstIn
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, Model $model = null)
+    public function handle(AbstractCallback $callback, Model $model = null): string
     {
         $params = $callback->getParameters();
         $data = $params[static::PARAM_DATA];
@@ -98,9 +100,7 @@ class Properties implements EventHandlerInterface, ConstInterface, AimeosConstIn
 
         if (is_a($data, ItemIface::class)) {
             $result .= $this->extractValues(static::AIMEOS_B_DATA, $params);
-        } elseif (is_a($data, NodeIface::class) ||
-            is_a($data, ViewIface::class)
-        ) {
+        } elseif (is_a($data, NodeIface::class) || is_a($data, ViewIface::class)) {
             $result .= $this->extractValues(static::AIMEOS_VALUES, $params);
         }
 
@@ -119,7 +119,7 @@ class Properties implements EventHandlerInterface, ConstInterface, AimeosConstIn
      * @return string
      *   The generated markup.
      */
-    protected function extractValues($name, array $params)
+    protected function extractValues(string $name, array $params): string
     {
         $result = [];
         $data = $params[static::PARAM_DATA];
@@ -143,8 +143,6 @@ class Properties implements EventHandlerInterface, ConstInterface, AimeosConstIn
             }
         } catch (Throwable $e) {
             // Do nothing.
-        } catch (Exception $e) {
-            // Do nothing.
         }
 
         // Huh, something went wrong here!
@@ -164,7 +162,7 @@ class Properties implements EventHandlerInterface, ConstInterface, AimeosConstIn
      * @return string
      *   The generated DOM.
      */
-    protected function dumpTheMagic(array $array)
+    protected function dumpTheMagic(array $array): string
     {
         $result = '';
 

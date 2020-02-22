@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -45,6 +46,7 @@ use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\View\Output\Chunks;
+use Exception;
 
 class ExceptionControllerTest extends AbstractController
 {
@@ -60,7 +62,7 @@ class ExceptionControllerTest extends AbstractController
 
         // One can not simply mock an exception.
         // But we can adjust its values.
-        $fixture = new \Exception();
+        $fixture = new Exception();
         $this->setValueByReflection('message', 'some string', $fixture);
         $this->setValueByReflection('file', 'just another path', $fixture);
         $this->setValueByReflection('line', 40, $fixture);
@@ -82,7 +84,6 @@ class ExceptionControllerTest extends AbstractController
                 [ProcessBacktrace::class],
                 [Model::class],
                 [ThroughConfig::class]
-
             )->will($this->returnValueMap(
                 [
                     [ProcessBacktrace::class, $backtraceMock],
@@ -118,7 +119,10 @@ class ExceptionControllerTest extends AbstractController
      */
     public function testUnregisterAction()
     {
-        $restoreExceptionHandler = $this->getFunctionMock('\\Brainworxx\\Krexx\\Controller\\', 'restore_exception_handler');
+        $restoreExceptionHandler = $this->getFunctionMock(
+            '\\Brainworxx\\Krexx\\Controller\\',
+            'restore_exception_handler'
+        );
         $restoreExceptionHandler->expects($this->once());
 
         $exceptionController = new ExceptionController(Krexx::$pool);
@@ -130,7 +134,6 @@ class ExceptionControllerTest extends AbstractController
      *
      * @param \Brainworxx\Krexx\Controller\AbstractController $controller
      * @return \PHPUnit\Framework\MockObject\MockObject
-     * @throws \ReflectionException
      */
     protected function mockMainOutput(\Brainworxx\Krexx\Controller\AbstractController $controller)
     {

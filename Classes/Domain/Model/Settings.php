@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Domain\Model;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
@@ -49,217 +52,217 @@ class Settings
     /**
      * @var string
      */
-    protected $disabled;
+    protected $disabled = '';
 
     /**
      * @var string
      */
-    protected $iprange;
+    protected $iprange = '';
 
     /**
      * @var string
      */
-    protected $detectAjax;
+    protected $detectAjax = '';
 
     /**
      * @var string
      */
-    protected $skin;
+    protected $skin = '';
 
     /**
      * @var string
      */
-    protected $destination;
+    protected $destination = '';
 
     /**
      * @var string
      */
-    protected $maxfiles;
+    protected $maxfiles = '';
 
     /**
      * @var string
      */
-    protected $useScopeAnalysis;
+    protected $useScopeAnalysis = '';
 
     /**
      * @var string
      */
-    protected $maxStepNumber;
+    protected $maxStepNumber = '';
 
     /**
      * @var string
      */
-    protected $arrayCountLimit;
+    protected $arrayCountLimit = '';
 
     /**
      * @var string
      */
-    protected $level;
+    protected $level = '';
 
     /**
      * @var string
      */
-    protected $analyseProtected;
+    protected $analyseProtected = '';
 
     /**
      * @var string
      */
-    protected $analysePrivate;
+    protected $analysePrivate = '';
 
     /**
      * @var string
      */
-    protected $analyseTraversable;
+    protected $analyseTraversable = '';
 
     /**
      * @var string
      */
-    protected $analyseProtectedMethods;
+    protected $analyseProtectedMethods = '';
 
     /**
      * @var string
      */
-    protected $analysePrivateMethods;
+    protected $analysePrivateMethods = '';
 
     /**
      * @var string
      */
-    protected $analyseGetter;
+    protected $analyseGetter = '';
 
     /**
      * @var string
      */
-    protected $debugMethods;
+    protected $debugMethods = '';
 
     /**
      * @var string
      */
-    protected $maxCall;
+    protected $maxCall = '';
 
     /**
      * @var string
      */
-    protected $maxRuntime;
+    protected $maxRuntime = '';
 
     /**
      * @var string
      */
-    protected $memoryLeft;
+    protected $memoryLeft = '';
 
     /**
      * @var string
      */
-    protected $formdisabled;
+    protected $formdisabled = '';
 
     /**
      * @var string
      */
-    protected $formiprange;
+    protected $formiprange = '';
 
     /**
      * @var string
      */
-    protected $formdetectAjax;
+    protected $formdetectAjax = '';
 
     /**
      * @var string
      */
-    protected $formskin;
+    protected $formskin = '';
 
     /**
      * @var string
      */
-    protected $formdestination;
+    protected $formdestination = '';
 
     /**
      * @var string
      */
-    protected $formmaxfiles;
+    protected $formmaxfiles = '';
 
     /**
      * @var string
      */
-    protected $formuseScopeAnalysis;
+    protected $formuseScopeAnalysis = '';
 
     /**
      * @var string
      */
-    protected $formmaxStepNumber;
+    protected $formmaxStepNumber = '';
 
     /**
      * @var string
      */
-    protected $formarrayCountLimit;
+    protected $formarrayCountLimit = '';
 
     /**
      * @var string
      */
-    protected $formlevel;
+    protected $formlevel = '';
 
     /**
      * @var string
      */
-    protected $formanalyseProtected;
+    protected $formanalyseProtected = '';
 
     /**
      * @var string
      */
-    protected $formanalysePrivate;
+    protected $formanalysePrivate = '';
 
     /**
      * @var string
      */
-    protected $formanalyseTraversable;
+    protected $formanalyseTraversable = '';
 
     /**
      * @var string
      */
-    protected $formanalyseProtectedMethods;
+    protected $formanalyseProtectedMethods = '';
 
     /**
      * @var string
      */
-    protected $formanalysePrivateMethods;
+    protected $formanalysePrivateMethods = '';
 
     /**
      * @var string
      */
-    protected $formanalyseGetter;
+    protected $formanalyseGetter = '';
 
     /**
      * @var string
      */
-    protected $formdebugMethods;
+    protected $formdebugMethods = '';
 
     /**
      * @var string
      */
-    protected $formmaxCall;
+    protected $formmaxCall = '';
 
     /**
      * @var string
      */
-    protected $formmaxRuntime;
+    protected $formmaxRuntime = '';
 
     /**
      * @var string
      */
-    protected $formmemoryLeft;
+    protected $formmemoryLeft = '';
 
     /**
      * @var string
      */
-    protected $factory;
+    protected $factory = '';
 
     /**
      * @var string
      */
-    protected $formdevHandle;
+    protected $formdevHandle = '';
 
     /**
      * @param string $analysePrivate
      */
-    public function setAnalysePrivate($analysePrivate)
+    public function setAnalysePrivate(string $analysePrivate)
     {
         $this->analysePrivate = $analysePrivate;
     }
@@ -267,7 +270,7 @@ class Settings
     /**
      * @param string $analyseGetter
      */
-    public function setAnalyseGetter($analyseGetter)
+    public function setAnalyseGetter(string $analyseGetter)
     {
         $this->analyseGetter = $analyseGetter;
     }
@@ -275,7 +278,7 @@ class Settings
     /**
      * @param string $analysePrivateMethods
      */
-    public function setAnalysePrivateMethods($analysePrivateMethods)
+    public function setAnalysePrivateMethods(string $analysePrivateMethods)
     {
         $this->analysePrivateMethods = $analysePrivateMethods;
     }
@@ -283,7 +286,7 @@ class Settings
     /**
      * @param string $analyseProtected
      */
-    public function setAnalyseProtected($analyseProtected)
+    public function setAnalyseProtected(string $analyseProtected)
     {
         $this->analyseProtected = $analyseProtected;
     }
@@ -291,7 +294,7 @@ class Settings
     /**
      * @param string $analyseProtectedMethods
      */
-    public function setAnalyseProtectedMethods($analyseProtectedMethods)
+    public function setAnalyseProtectedMethods(string $analyseProtectedMethods)
     {
         $this->analyseProtectedMethods = $analyseProtectedMethods;
     }
@@ -299,7 +302,7 @@ class Settings
     /**
      * @param string $analyseTraversable
      */
-    public function setAnalyseTraversable($analyseTraversable)
+    public function setAnalyseTraversable(string $analyseTraversable)
     {
         $this->analyseTraversable = $analyseTraversable;
     }
@@ -307,7 +310,7 @@ class Settings
     /**
      * @param string $arrayCountLimit
      */
-    public function setArrayCountLimit($arrayCountLimit)
+    public function setArrayCountLimit(string $arrayCountLimit)
     {
         $this->arrayCountLimit = $arrayCountLimit;
     }
@@ -315,7 +318,7 @@ class Settings
     /**
      * @param string $debugMethods
      */
-    public function setDebugMethods($debugMethods)
+    public function setDebugMethods(string $debugMethods)
     {
         $this->debugMethods = $debugMethods;
     }
@@ -323,7 +326,7 @@ class Settings
     /**
      * @param string $destination
      */
-    public function setDestination($destination)
+    public function setDestination(string $destination)
     {
         $this->destination = $destination;
     }
@@ -331,7 +334,7 @@ class Settings
     /**
      * @param string $detectAjax
      */
-    public function setDetectAjax($detectAjax)
+    public function setDetectAjax(string $detectAjax)
     {
         $this->detectAjax = $detectAjax;
     }
@@ -339,7 +342,7 @@ class Settings
     /**
      * @param string $disabled
      */
-    public function setDisabled($disabled)
+    public function setDisabled(string $disabled)
     {
         $this->disabled = $disabled;
     }
@@ -347,7 +350,7 @@ class Settings
     /**
      * @param string $factory
      */
-    public function setFactory($factory)
+    public function setFactory(string $factory)
     {
         $this->factory = $factory;
     }
@@ -355,7 +358,7 @@ class Settings
     /**
      * @param string $formanalyseGetter
      */
-    public function setFormanalyseGetter($formanalyseGetter)
+    public function setFormanalyseGetter(string $formanalyseGetter)
     {
         $this->formanalyseGetter = $formanalyseGetter;
     }
@@ -363,7 +366,7 @@ class Settings
     /**
      * @param string $formanalysePrivate
      */
-    public function setFormanalysePrivate($formanalysePrivate)
+    public function setFormanalysePrivate(string $formanalysePrivate)
     {
         $this->formanalysePrivate = $formanalysePrivate;
     }
@@ -371,7 +374,7 @@ class Settings
     /**
      * @param string $formanalysePrivateMethods
      */
-    public function setFormanalysePrivateMethods($formanalysePrivateMethods)
+    public function setFormanalysePrivateMethods(string $formanalysePrivateMethods)
     {
         $this->formanalysePrivateMethods = $formanalysePrivateMethods;
     }
@@ -379,7 +382,7 @@ class Settings
     /**
      * @param string $formanalyseProtected
      */
-    public function setFormanalyseProtected($formanalyseProtected)
+    public function setFormanalyseProtected(string $formanalyseProtected)
     {
         $this->formanalyseProtected = $formanalyseProtected;
     }
@@ -387,7 +390,7 @@ class Settings
     /**
      * @param string $formanalyseProtectedMethods
      */
-    public function setFormanalyseProtectedMethods($formanalyseProtectedMethods)
+    public function setFormanalyseProtectedMethods(string $formanalyseProtectedMethods)
     {
         $this->formanalyseProtectedMethods = $formanalyseProtectedMethods;
     }
@@ -395,7 +398,7 @@ class Settings
     /**
      * @param string $formanalyseTraversable
      */
-    public function setFormanalyseTraversable($formanalyseTraversable)
+    public function setFormanalyseTraversable(string $formanalyseTraversable)
     {
         $this->formanalyseTraversable = $formanalyseTraversable;
     }
@@ -403,7 +406,7 @@ class Settings
     /**
      * @param string $formarrayCountLimit
      */
-    public function setFormarrayCountLimit($formarrayCountLimit)
+    public function setFormarrayCountLimit(string $formarrayCountLimit)
     {
         $this->formarrayCountLimit = $formarrayCountLimit;
     }
@@ -411,7 +414,7 @@ class Settings
     /**
      * @param string $formdebugMethods
      */
-    public function setFormdebugMethods($formdebugMethods)
+    public function setFormdebugMethods(string $formdebugMethods)
     {
         $this->formdebugMethods = $formdebugMethods;
     }
@@ -419,7 +422,7 @@ class Settings
     /**
      * @param string $formdestination
      */
-    public function setFormdestination($formdestination)
+    public function setFormdestination(string $formdestination)
     {
         $this->formdestination = $formdestination;
     }
@@ -427,7 +430,7 @@ class Settings
     /**
      * @param string $formdetectAjax
      */
-    public function setFormdetectAjax($formdetectAjax)
+    public function setFormdetectAjax(string $formdetectAjax)
     {
         $this->formdetectAjax = $formdetectAjax;
     }
@@ -435,7 +438,7 @@ class Settings
     /**
      * @param string $formdisabled
      */
-    public function setFormdisabled($formdisabled)
+    public function setFormdisabled(string $formdisabled)
     {
         $this->formdisabled = $formdisabled;
     }
@@ -443,7 +446,7 @@ class Settings
     /**
      * @param string $formiprange
      */
-    public function setFormiprange($formiprange)
+    public function setFormiprange(string $formiprange)
     {
         $this->formiprange = $formiprange;
     }
@@ -451,7 +454,7 @@ class Settings
     /**
      * @param string $formlevel
      */
-    public function setFormlevel($formlevel)
+    public function setFormlevel(string $formlevel)
     {
         $this->formlevel = $formlevel;
     }
@@ -459,7 +462,7 @@ class Settings
     /**
      * @param string $formmaxCall
      */
-    public function setFormmaxCall($formmaxCall)
+    public function setFormmaxCall(string $formmaxCall)
     {
         $this->formmaxCall = $formmaxCall;
     }
@@ -467,7 +470,7 @@ class Settings
     /**
      * @param string $formmaxfiles
      */
-    public function setFormmaxfiles($formmaxfiles)
+    public function setFormmaxfiles(string $formmaxfiles)
     {
         $this->formmaxfiles = $formmaxfiles;
     }
@@ -475,7 +478,7 @@ class Settings
     /**
      * @param string $formmaxRuntime
      */
-    public function setFormmaxRuntime($formmaxRuntime)
+    public function setFormmaxRuntime(string $formmaxRuntime)
     {
         $this->formmaxRuntime = $formmaxRuntime;
     }
@@ -483,7 +486,7 @@ class Settings
     /**
      * @param string $formmaxStepNumber
      */
-    public function setFormmaxStepNumber($formmaxStepNumber)
+    public function setFormmaxStepNumber(string $formmaxStepNumber)
     {
         $this->formmaxStepNumber = $formmaxStepNumber;
     }
@@ -491,7 +494,7 @@ class Settings
     /**
      * @param string $formmemoryLeft
      */
-    public function setFormmemoryLeft($formmemoryLeft)
+    public function setFormmemoryLeft(string $formmemoryLeft)
     {
         $this->formmemoryLeft = $formmemoryLeft;
     }
@@ -499,7 +502,7 @@ class Settings
     /**
      * @param string $formskin
      */
-    public function setFormskin($formskin)
+    public function setFormskin(string $formskin)
     {
         $this->formskin = $formskin;
     }
@@ -507,7 +510,7 @@ class Settings
     /**
      * @param string $formuseScopeAnalysis
      */
-    public function setFormuseScopeAnalysis($formuseScopeAnalysis)
+    public function setFormuseScopeAnalysis(string $formuseScopeAnalysis)
     {
         $this->formuseScopeAnalysis = $formuseScopeAnalysis;
     }
@@ -515,7 +518,7 @@ class Settings
     /**
      * @param string $iprange
      */
-    public function setIprange($iprange)
+    public function setIprange(string $iprange)
     {
         $this->iprange = $iprange;
     }
@@ -523,7 +526,7 @@ class Settings
     /**
      * @param string $level
      */
-    public function setLevel($level)
+    public function setLevel(string $level)
     {
         $this->level = $level;
     }
@@ -531,7 +534,7 @@ class Settings
     /**
      * @param string $maxCall
      */
-    public function setMaxCall($maxCall)
+    public function setMaxCall(string $maxCall)
     {
         $this->maxCall = $maxCall;
     }
@@ -539,7 +542,7 @@ class Settings
     /**
      * @param string $maxfiles
      */
-    public function setMaxfiles($maxfiles)
+    public function setMaxfiles(string $maxfiles)
     {
         $this->maxfiles = $maxfiles;
     }
@@ -547,7 +550,7 @@ class Settings
     /**
      * @param string $maxRuntime
      */
-    public function setMaxRuntime($maxRuntime)
+    public function setMaxRuntime(string $maxRuntime)
     {
         $this->maxRuntime = $maxRuntime;
     }
@@ -555,7 +558,7 @@ class Settings
     /**
      * @param string $maxStepNumber
      */
-    public function setMaxStepNumber($maxStepNumber)
+    public function setMaxStepNumber(string $maxStepNumber)
     {
         $this->maxStepNumber = $maxStepNumber;
     }
@@ -563,7 +566,7 @@ class Settings
     /**
      * @param string $memoryLeft
      */
-    public function setMemoryLeft($memoryLeft)
+    public function setMemoryLeft(string $memoryLeft)
     {
         $this->memoryLeft = $memoryLeft;
     }
@@ -571,7 +574,7 @@ class Settings
     /**
      * @param string $skin
      */
-    public function setSkin($skin)
+    public function setSkin(string $skin)
     {
         $this->skin = $skin;
     }
@@ -579,7 +582,7 @@ class Settings
     /**
      * @param string $useScopeAnalysis
      */
-    public function setUseScopeAnalysis($useScopeAnalysis)
+    public function setUseScopeAnalysis(string $useScopeAnalysis)
     {
         $this->useScopeAnalysis = $useScopeAnalysis;
     }
@@ -591,7 +594,7 @@ class Settings
      * @return string
      *   The generated contend of the ini file.
      */
-    public function generateIniContent()
+    public function generateIniContent(): string
     {
         Pool::createPool();
         $validation = Krexx::$pool->config->validation;
@@ -603,8 +606,10 @@ class Settings
         foreach (Krexx::$pool->config->configFallback as $group => $settings) {
             $result .= '[' . $group . ']' . "\n";
             foreach ($settings as $settingName) {
-                if (!is_null($this->$settingName) &&
-                    $validation->evaluateSetting($group, $settingName, $this->$settingName)) {
+                if (
+                    !is_null($this->$settingName) &&
+                    $validation->evaluateSetting($group, $settingName, $this->$settingName)
+                ) {
                     $result .= $settingName . ' = "' . $this->$settingName . '"'  . "\n";
                     $moduleSettings[$settingName] = $this->$settingName;
                 }
@@ -616,7 +621,8 @@ class Settings
         $allowedValues = ['full', 'display', 'none'];
         foreach (Krexx::$pool->config->feConfigFallback as $settingName => $settings) {
             $settingNameInModel = 'form' . $settingName;
-            if ($settings['render']['Editable'] === 'true' &&
+            if (
+                $settings['render']['Editable'] === 'true' &&
                 in_array($this->$settingNameInModel, $allowedValues)
             ) {
                 $result .= $settingName . ' = "' . $this->$settingNameInModel . '"'  . "\n";

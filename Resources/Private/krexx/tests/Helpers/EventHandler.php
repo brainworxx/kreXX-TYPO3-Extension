@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -49,17 +50,17 @@ class EventHandler implements EventHandlerInterface
     /**
      * @var Pool
      */
-    static public $pool;
+    public static $pool;
 
     /**
      * @var AbstractCallback
      */
-    static public $callback;
+    public static $callback;
 
     /**
      * @var Model
      */
-    static public $model;
+    public static $model;
 
     /**
      * Setting the pool.
@@ -76,11 +77,13 @@ class EventHandler implements EventHandlerInterface
      *
      * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback $callback
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
-     * @return string|void
+     * @return string
      */
-    public function handle(AbstractCallback $callback = null, Model $model = null)
+    public function handle(AbstractCallback $callback = null, Model $model = null): string
     {
         static::$callback = $callback;
         static::$model = $model;
+
+        return '';
     }
 }

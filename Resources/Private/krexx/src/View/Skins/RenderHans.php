@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins;
 
 use Brainworxx\Krexx\View\AbstractRender;
@@ -40,7 +43,6 @@ use Brainworxx\Krexx\View\Skins\Hans\BacktraceSourceLine;
 use Brainworxx\Krexx\View\Skins\Hans\Button;
 use Brainworxx\Krexx\View\Skins\Hans\ConnectorLeft;
 use Brainworxx\Krexx\View\Skins\Hans\ConnectorRight;
-use Brainworxx\Krexx\View\Skins\Hans\ConstInterface;
 use Brainworxx\Krexx\View\Skins\Hans\CssJs;
 use Brainworxx\Krexx\View\Skins\Hans\ExpandableChild;
 use Brainworxx\Krexx\View\Skins\Hans\FatalHeader;
@@ -62,25 +64,56 @@ use Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild;
  *
  * @package Brainworxx\Krexx\View\Hans
  */
-class RenderHans extends AbstractRender implements RenderInterface, ConstInterface
+class RenderHans extends AbstractRender implements RenderInterface
 {
-    use Recursion;
-    use Header;
-    use Footer;
-    use CssJs;
-    use SingleChild;
-    use ExpandableChild;
-    use SingleEditableChild;
-    use Button;
-    use FatalMain;
-    use FatalHeader;
-    use Messages;
     use BacktraceSourceLine;
-    use SingeChildHr;
-    use Linebreak;
-    use PluginList;
-    use Help;
+    use Button;
     use ConnectorLeft;
     use ConnectorRight;
+    use CssJs;
+    use ExpandableChild;
+    use FatalHeader;
+    use FatalMain;
+    use Footer;
+    use Header;
+    use Help;
+    use Linebreak;
+    use Messages;
+    use PluginList;
+    use Recursion;
     use Search;
+    use SingeChildHr;
+    use SingleChild;
+    use SingleEditableChild;
+
+    const FILE_EX_CHILD_NORMAL = 'expandableChildNormal';
+    const FILE_SI_CHILD = 'singleChild';
+    const FILE_SI_CHILD_EX = 'singleChildExtra';
+    const FILE_SI_CHILD_CALL = 'singleChildCallable';
+    const FILE_SOURCE_BUTTON = 'sourcebutton';
+    const FILE_NEST = 'nest';
+    const FILE_BACKTRACE_SOURCELINE = 'backtraceSourceLine';
+    const FILE_CALLER = 'caller';
+    const FILE_HELPROW = 'helprow';
+    const FILE_HELP = 'help';
+    const FILE_CONNECTOR_LEFT = 'connectorLeft';
+    const FILE_CONNECTOR_RIGHT = 'connectorRight';
+    const FILE_SI_PLUGIN = 'singlePlugin';
+    const FILE_SEARCH = 'search';
+    const FILE_RECURSION = 'recursion';
+    const FILE_HEADER = 'header';
+    const FILE_FOOTER = 'footer';
+    const FILE_CSSJS = 'cssJs';
+    const FILE_SI_SELECT_OPTIONS = 'singleSelectOptions';
+    const FILE_SI_EDIT_CHILD = 'singleEditableChild';
+    const FILE_SI_BUTTON = 'singleButton';
+    const FILE_FATAL_MAIN = 'fatalMain';
+    const FILE_FATAL_HEADER = 'fatalHeader';
+    const FILE_MESSAGE = 'message';
+    const FILE_SI_HR = 'singleChildHr';
+    const FILE_BR = 'br';
+
+    const DATA_ATTRIBUTE_SOURCE = 'source';
+    const DATA_ATTRIBUTE_WRAPPER_R = 'codewrapperRight';
+    const DATA_ATTRIBUTE_WRAPPER_L = 'codewrapperLeft';
 }

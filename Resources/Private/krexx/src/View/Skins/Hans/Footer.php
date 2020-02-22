@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,16 +33,37 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Model;
 
 trait Footer
 {
+    /**
+     * @var array
+     */
+    private $markerFooter = [
+        '{configInfo}',
+        '{caller}',
+        '{plugins}',
+    ];
+
+    /**
+     * @var array
+     */
+    private $markerCaller = [
+        '{callerFile}',
+        '{callerLine}',
+        '{date}',
+        '{callerUrl}',
+    ];
+
      /**
      * {@inheritdoc}
      */
-    public function renderFooter(array $caller, Model $model, $configOnly = false)
+    public function renderFooter(array $caller, Model $model, bool $configOnly = false): string
     {
         if (isset($caller[static::TRACE_FILE]) === true) {
             $callerString = $this->renderCaller($caller);
@@ -51,11 +73,7 @@ trait Footer
         }
 
         return str_replace(
-            [
-                static::MARKER_CONFIG_INFO,
-                static::MARKER_CALLER,
-                static::MARKER_PLUGINS,
-            ],
+            $this->markerFooter,
             [
                 $this->renderExpandableChild($model, $configOnly),
                 $callerString,
@@ -73,15 +91,10 @@ trait Footer
      * @return string
      *   The generated markup from the template files.
      */
-    protected function renderCaller(array $caller)
+    protected function renderCaller(array $caller): string
     {
         return str_replace(
-            [
-                static::MARKER_CALLER_FILE,
-                static::MARKER_CALLER_LINE,
-                static::MARKER_CALLER_DATE,
-                static::MARKER_CALLER_URL,
-            ],
+            $this->markerCaller,
             [
                 $caller[static::TRACE_FILE],
                 $caller[static::TRACE_LINE],
@@ -90,5 +103,33 @@ trait Footer
             ],
             $this->getTemplateFileContent(static::FILE_CALLER)
         );
+    }
+
+    /**
+     * Getter of the footer for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerFooter(): array
+    {
+        return $this->markerFooter;
+    }
+
+    /**
+     * Getter of the caller for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerCaller(): array
+    {
+        return $this->markerCaller;
     }
 }

@@ -16,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -97,7 +97,7 @@ class Search
      *
      * @event change
      */
-    protected clearSearch = (event:Event) : void =>
+    protected clearSearch = (event:Event): void =>
     {
         // Wipe our instance data, nothing more
         this.results[this.kdt.getDataset((event.target as Element), 'instance')] = [];
@@ -112,7 +112,7 @@ class Search
      * @param {Node} element
      *   The element that was clicked.
      */
-    protected displaySearchOptions = (event:Event, element:Node) : void =>
+    protected displaySearchOptions = (event:Event, element:Node): void =>
     {
         // Get the options and switch the display class.
         this.kdt.toggleClass((element.parentNode as Element).nextElementSibling, 'khidden');
@@ -126,7 +126,7 @@ class Search
      * @param {Element} element
      *   The element that was clicked.
      */
-    public performSearch = (event:Event, element:Element) : void =>
+    public performSearch = (event:Event, element:Element): void =>
     {
         // Hide the search options.
         this.kdt.addClass([(element.parentNode as HTMLElement).nextElementSibling], 'khidden');
@@ -214,7 +214,7 @@ class Search
      *
      * @param {SearchConfig} config
      */
-    protected refreshResultlist = (config:SearchConfig) : void =>
+    protected refreshResultlist = (config:SearchConfig): void =>
     {
         // Remove all previous highlights
         this.kdt.removeClass('.ksearch-found-highlight', 'ksearch-found-highlight');
@@ -268,7 +268,7 @@ class Search
      * @param {KeyboardEvent} event
      * @event keyUp
      */
-    public searchfieldReturn = (event:KeyboardEvent) : void =>
+    public searchfieldReturn = (event:KeyboardEvent): void =>
     {
         // Prevents the default event behavior (ie: click).
         event.preventDefault();

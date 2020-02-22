@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
@@ -60,80 +63,94 @@ class ThroughMethods extends AbstractCallback
      * @return string
      *   The rendered markup.
      */
-    public function callMe()
+    public function callMe(): string
     {
         $result = $this->dispatchStartEvent();
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
-        $reflectionClass = $this->parameters[static::PARAM_REF];
+        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $refClass */
+        $refClass = $this->parameters[static::PARAM_REF];
+        /** @var Methods $commentAnalysis */
         $commentAnalysis = $this->pool->createClass(Methods::class);
 
         // Deep analysis of the methods.
-        /** @var \ReflectionMethod $reflectionMethod */
-        foreach ($this->parameters[static::PARAM_DATA] as $reflectionMethod) {
+        /** @var \ReflectionMethod $refMethod */
+        foreach ($this->parameters[static::PARAM_DATA] as $refMethod) {
             $methodData = [];
 
             // Get the comment from the class, it's parents, interfaces or traits.
-            $methodComment = $commentAnalysis->getComment($reflectionMethod, $reflectionClass);
-            if (empty($methodComment) === false) {
+            if (empty($methodComment = $commentAnalysis->getComment($refMethod, $refClass)) === false) {
                 $methodData[static::META_COMMENT] = $methodComment;
             }
 
             // Get declaration place.
-            $declaringClass = $reflectionMethod->getDeclaringClass();
-            $methodData[static::META_DECLARED_IN] = $this->getDeclarationPlace($reflectionMethod, $declaringClass);
-
-            // Get parameters.
-            $paramList = '';
-            foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
-                ++$key;
-                $paramList .= $methodData[static::META_PARAM_NO . $key] = $this->pool
-                    ->codegenHandler
-                    ->parameterToString($reflectionParameter);
-                // We add a comma to the parameter list, to separate them for a
-                // better readability.
-                $paramList .= ', ';
-            }
-
-            // Get declaring keywords.
-            $methodData['declaration keywords'] = $this->getDeclarationKeywords(
-                $reflectionMethod,
-                $declaringClass,
-                $reflectionClass
-            );
-
-            // Get the connector.
-            if ($reflectionMethod->isStatic() === true) {
-                $connectorType = Connectors::STATIC_METHOD;
-            } else {
-                $connectorType = Connectors::METHOD;
-            }
+            $declaringClass = $refMethod->getDeclaringClass();
+            $methodData[static::META_DECLARED_IN] = $this->getDeclarationPlace($refMethod, $declaringClass);
 
             // Update the reflection method, so an event subscriber can do
             // something with it.
-            $this->parameters[static::PARAM_REF_METHOD] = $reflectionMethod;
+            $this->parameters[static::PARAM_REF_METHOD] = $refMethod;
 
             // Render it!
-            $result .= $this->pool->render->renderExpandableChild(
-                $this->dispatchEventWithModel(
-                    __FUNCTION__ . static::EVENT_MARKER_END,
-                    $this->pool->createClass(Model::class)
-                        ->setName($reflectionMethod->name)
-                        ->setType($methodData['declaration keywords'] . static::TYPE_METHOD)
-                        ->setConnectorType($connectorType)
-                        // Remove the ',' after the last char.
-                        ->setConnectorParameters(rtrim($paramList, ', '))
-                        ->addParameter(static::PARAM_DATA, $methodData)
-                        ->setIsPublic($reflectionMethod->isPublic())
-                        ->injectCallback(
-                            $this->pool->createClass(
-                                ThroughMeta::class
-                            )
-                        )
-                )
-            );
+            $result .= $this->pool->render->renderExpandableChild($this->dispatchEventWithModel(
+                __FUNCTION__ . static::EVENT_MARKER_END,
+                $this->pool->createClass(Model::class)
+                    ->setName($refMethod->name)
+                    // Remove the ',' after the last char.
+                    ->setConnectorParameters(rtrim($this->retrieveParameters($refMethod, $methodData), ', '))
+                    ->setType(
+                        $this->getDeclarationKeywords($refMethod, $declaringClass, $refClass) . static::TYPE_METHOD
+                    )->setConnectorType($this->retrieveConnectorType($refMethod))
+                    ->addParameter(static::PARAM_DATA, $methodData)
+                    ->setIsPublic($refMethod->isPublic())
+                    ->injectCallback($this->pool->createClass(ThroughMeta::class))
+            ));
         }
 
         return $result;
+    }
+
+    /**
+     * Retrieve the connector type.
+     *
+     * @param \ReflectionMethod $reflectionMethod
+     *   The reflection method.
+     *
+     * @return int
+     *   The connector type,
+     */
+    protected function retrieveConnectorType(ReflectionMethod $reflectionMethod): int
+    {
+        if ($reflectionMethod->isStatic() === true) {
+            return Connectors::STATIC_METHOD;
+        }
+
+        return Connectors::METHOD;
+    }
+
+    /**
+     * Retrieve the parameter data from the reflection method.
+     *
+     * @param \ReflectionMethod $reflectionMethod
+     *   The reflection method.
+     * @param array $methodData
+     *   The method data so far.
+     *
+     * @return string
+     *   The human readable parameter list.
+     */
+    protected function retrieveParameters(ReflectionMethod $reflectionMethod, array &$methodData): string
+    {
+        $paramList = '';
+        foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
+            ++$key;
+            $paramList .= $methodData[static::META_PARAM_NO . $key] = $this->pool
+                ->codegenHandler
+                ->parameterToString($reflectionParameter);
+            // We add a comma to the parameter list, to separate them for a
+            // better readability.
+            $paramList .= ', ';
+        }
+
+        return $paramList;
     }
 
     /**
@@ -147,7 +164,7 @@ class ThroughMethods extends AbstractCallback
      * @return string
      *   The analysis result.
      */
-    protected function getDeclarationPlace(ReflectionMethod $reflectionMethod, ReflectionClass $declaringClass)
+    protected function getDeclarationPlace(ReflectionMethod $reflectionMethod, ReflectionClass $declaringClass): string
     {
         if ($declaringClass->isInternal() === true) {
             return static::META_PREDECLARED;
@@ -173,11 +190,11 @@ class ThroughMethods extends AbstractCallback
             return $filename . "\n" .
                 'in trait: ' . $traitName . "\n" .
                 'in line: ' . $reflectionMethod->getStartLine();
-        } else {
-            return $filename . "\n" .
-                'in class: ' . $reflectionMethod->class . "\n" .
-                'in line: ' . $reflectionMethod->getStartLine();
         }
+
+        return $filename . "\n" .
+            'in class: ' . $reflectionMethod->class . "\n" .
+            'in line: ' . $reflectionMethod->getStartLine();
     }
 
     /**
@@ -189,13 +206,11 @@ class ThroughMethods extends AbstractCallback
      *   The original declaring class, the one with the traits.
      *
      * @return bool|\ReflectionClass
-     *   false = unable to retrieve someting.
+     *   false = unable to retrieve something.
      *   Otherwise return a reflection class.
      */
-    protected function retrieveDeclaringReflection(
-        ReflectionMethod $reflectionMethod,
-        ReflectionClass $declaringClass
-    ) {
+    protected function retrieveDeclaringReflection(ReflectionMethod $reflectionMethod, ReflectionClass $declaringClass)
+    {
         // Get a first impression.
         if ($reflectionMethod->getFileName() === $declaringClass->getFileName()) {
             return $declaringClass;
@@ -230,15 +245,13 @@ class ThroughMethods extends AbstractCallback
         ReflectionMethod $reflectionMethod,
         ReflectionClass $declaringClass,
         ReflectionClass $reflectionClass
-    ) {
-        $result = '';
-
-        if ($reflectionMethod->isPrivate() === true) {
-            $result .= ' private';
+    ): string {
+        if ($reflectionMethod->isPublic() === true) {
+            $result = ' public';
         } elseif ($reflectionMethod->isProtected() === true) {
-            $result .= ' protected';
-        } elseif ($reflectionMethod->isPublic() === true) {
-            $result .= ' public';
+            $result = ' protected';
+        } else {
+            $result = ' private';
         }
 
         if ($declaringClass->getName() !== $reflectionClass->getName()) {

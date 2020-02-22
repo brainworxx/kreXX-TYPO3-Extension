@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,6 +37,8 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Reflection;
 
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use stdClass;
+use ReflectionClass;
 
 class UndeclaredPropertyTest extends AbstractTest
 {
@@ -53,15 +56,17 @@ class UndeclaredPropertyTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::isPublic
      * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::getName
      * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::__toString
+     *
+     * @throws \ReflectionException
      */
     public function testThemAll()
     {
-        $fixture = new \stdClass();
-        $reflectionClass = new \ReflectionClass($fixture);
+        $fixture = new stdClass();
+        $reflectionClass = new ReflectionClass($fixture);
         $name = 'varname';
         $undeclaredProperty = new UndeclaredProperty($reflectionClass, $name);
 
-        $this->assertSame($reflectionClass,  $undeclaredProperty->getDeclaringClass());
+        $this->assertSame($reflectionClass, $undeclaredProperty->getDeclaringClass());
         $this->assertSame($name, $undeclaredProperty->getName());
         $this->assertFalse($undeclaredProperty->isStatic());
         $this->assertSame($reflectionClass, $undeclaredProperty->getDeclaringClass());

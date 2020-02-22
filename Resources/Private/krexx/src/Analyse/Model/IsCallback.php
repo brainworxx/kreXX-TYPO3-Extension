@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,22 +33,59 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\View;
+declare(strict_types=1);
 
-use Brainworxx\Krexx\View\Skins\RenderHans;
+namespace Brainworxx\Krexx\Analyse\Model;
 
-/**
- * Render methods.
- *
- * It get extended by the render class of the used skin, so every skin can do
- * some special stuff.
- *
- * @deprecated
- *   Since 3.2.0. Will be removed.
- *
- * @package Brainworxx\Krexx\View
- */
-class Render extends RenderHans
+use Brainworxx\Krexx\Analyse\Model;
+
+trait IsCallback
 {
+    /**
+     * Defines if the content of the variable qualifies as a callback.
+     *
+     * @var bool
+     */
+    protected $isCallback = false;
 
+    /**
+     * Getter for the $isCallback.
+     *
+     * @return bool
+     */
+    public function isCallback(): bool
+    {
+        return $this->isCallback;
+    }
+
+    /**
+     * Getter for the $isCallback.
+     *
+     * @deprecated
+     *   Since 4.0.0. Use $this->isCallback()
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @return bool
+     */
+    public function getIsCallback(): bool
+    {
+        return $this->isCallback();
+    }
+
+    /**
+     * Setter for the $isCallback.
+     *
+     * @param bool $isCallback
+     *   The value we want to set.
+     *
+     * @return $this
+     *   $this for chaining.
+     */
+    public function setIsCallback(bool $isCallback): Model
+    {
+        $this->isCallback = $isCallback;
+        return $this;
+    }
 }

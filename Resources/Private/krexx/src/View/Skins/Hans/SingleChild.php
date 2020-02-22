@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Model;
@@ -39,26 +42,34 @@ use Brainworxx\Krexx\Analyse\Model;
 trait SingleChild
 {
     /**
-     * The array we use for the string replace.
-     *
      * @var array
      */
-    protected $renderSingleChildArray = [
-        ConstInterface::MARKER_GEN_SOURCE,
-        ConstInterface::MARKER_SOURCE_BUTTON,
-        ConstInterface::MARKER_EXPAND,
-        ConstInterface::MARKER_CALLABLE,
-        ConstInterface::MARKER_EXTRA,
-        ConstInterface::MARKER_NAME,
-        ConstInterface::MARKER_TYPE,
-        ConstInterface::MARKER_TYPE_CLASSES,
-        ConstInterface::MARKER_NORMAL,
-        ConstInterface::MARKER_CONNECTOR_LEFT,
-        ConstInterface::MARKER_CONNECTOR_RIGHT,
-        ConstInterface::MARKER_CODE_WRAPPER_LEFT,
-        ConstInterface::MARKER_CODE_WRAPPER_RIGHT,
-        ConstInterface::MARKER_HELP,
+    private $markerSingleChild = [
+        '{gensource}',
+        '{sourcebutton}',
+        '{expand}',
+        '{callable}',
+        '{extra}',
+        '{name}',
+        '{type}',
+        '{type-classes}',
+        '{normal}',
+        '{connectorLeft}',
+        '{connectorRight}',
+        '{codewrapperLeft}',
+        '{codewrapperRight}',
+        '{help}',
     ];
+
+    /**
+     * @var string
+     */
+    private $markerSingleChildCallable = '{normal}';
+
+    /**
+     * @var string
+     */
+    private $markerSingleChildExtra = '{data}';
 
     /**
      * Renders a "single child", containing a single not expandable value.
@@ -71,26 +82,18 @@ trait SingleChild
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderSingleChild(Model $model)
+    public function renderSingleChild(Model $model): string
     {
-        // This one is a little bit more complicated than the others,
-        // because it assembles some partials and stitches them together.
-        $partExpand = '';
-        if ($model->getHasExtra() === true) {
-            // We have a lot of text, so we render this one expandable (yellow box).
-            $partExpand = 'kexpand';
-        }
-
         // Generating our code.
-        $gensource = $this->pool->codegenHandler->generateSource($model);
-
+        $codegenHandler = $this->pool->codegenHandler;
+        $generateSource = $codegenHandler->generateSource($model);
         // Stitching it together.
         return str_replace(
-            $this->renderSingleChildArray,
+            $this->markerSingleChild,
             [
-                $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $gensource),
-                $this->renderSourceButton($gensource),
-                $partExpand,
+                $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $generateSource),
+                $this->renderSourceButton($generateSource),
+                $model->hasExtra() === true ?  'kexpand' :  '',
                 $this->renderCallable($model),
                 $this->renderExtra($model),
                 $model->getName(),
@@ -99,14 +102,8 @@ trait SingleChild
                 $model->getNormal(),
                 $this->renderConnectorLeft($model->getConnectorLeft()),
                 $this->renderConnectorRight($model->getConnectorRight()),
-                $this->generateDataAttribute(
-                    static::DATA_ATTRIBUTE_WRAPPER_L,
-                    $this->pool->codegenHandler->generateWrapperLeft()
-                ),
-                $this->generateDataAttribute(
-                    static::DATA_ATTRIBUTE_WRAPPER_R,
-                    $this->pool->codegenHandler->generateWrapperRight()
-                ),
+                $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_L, $codegenHandler->generateWrapperLeft()),
+                $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_R, $codegenHandler->generateWrapperRight()),
                 $this->renderHelp($model),
             ],
             $this->getTemplateFileContent(static::FILE_SI_CHILD)
@@ -122,7 +119,7 @@ trait SingleChild
      * @return string
      *   The rendered HTML output.
      */
-    protected function renderSourceButton($gensource)
+    protected function renderSourceButton(string $gensource): string
     {
         if (empty($gensource) === true || $this->pool->codegenHandler->getAllowCodegen() === false) {
              // No source button for you!
@@ -141,11 +138,11 @@ trait SingleChild
      * @return string
      *   The rendered HTML output.
      */
-    protected function renderExtra(Model $model)
+    protected function renderExtra(Model $model): string
     {
-        if ($model->getHasExtra() === true) {
+        if ($model->hasExtra() === true) {
             return str_replace(
-                static::MARKER_DATA,
+                $this->markerSingleChildExtra,
                 $model->getData(),
                 $this->getTemplateFileContent(static::FILE_SI_CHILD_EX)
             );
@@ -163,17 +160,59 @@ trait SingleChild
      * @return string
      *   The rendered HTML
      */
-    protected function renderCallable(Model $model)
+    protected function renderCallable(Model $model): string
     {
-        if ($model->getIsCallback() === true) {
+        if ($model->isCallback() === true) {
             // Add callable partial.
             return str_replace(
-                static::MARKER_NORMAL,
+                $this->markerSingleChildCallable,
                 $model->getNormal(),
                 $this->getTemplateFileContent(static::FILE_SI_CHILD_CALL)
             );
         }
 
         return '';
+    }
+
+    /**
+     * Getter of the single child for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerSingleChild(): array
+    {
+        return $this->markerSingleChild;
+    }
+
+    /**
+     * Getter of the extra for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerSingleChildExtra(): array
+    {
+        return [$this->markerSingleChildExtra];
+    }
+
+    /**
+     * Getter of the callable for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerSingleChildCallable(): array
+    {
+        return [$this->markerSingleChildCallable];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Controller;
 
@@ -189,7 +192,7 @@ abstract class AbstractController extends ActionController
      * @param string $path
      *   The path of the file we want to dispatch to the browser.
      */
-    protected function dispatchFile($path)
+    protected function dispatchFile(string $path)
     {
         header('Content-Type: text/html; charset=utf-8');
         header('Content-length: ' . filesize($path));
@@ -210,7 +213,7 @@ abstract class AbstractController extends ActionController
      * @return bool
      *   The result of the check.
      */
-    protected function hasAccess()
+    protected function hasAccess(): bool
     {
         return isset($GLOBALS['BE_USER']) &&
             $GLOBALS['BE_USER']->check('modules', AbstractCollector::PLUGIN_NAME);

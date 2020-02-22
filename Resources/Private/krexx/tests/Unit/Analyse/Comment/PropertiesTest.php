@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Comment\Properties;
 use Brainworxx\Krexx\Tests\Fixtures\PrivateFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
+use ReflectionProperty;
 
 class PropertiesTest extends AbstractTest
 {
@@ -50,7 +52,7 @@ class PropertiesTest extends AbstractTest
     public function testGetComment()
     {
         $propertiesComment = new Properties(Krexx::$pool);
-        $reflectionProperty = new \ReflectionProperty(PrivateFixture::class, 'value5');
+        $reflectionProperty = new ReflectionProperty(PrivateFixture::class, 'value5');
 
         $this->assertContains(
             'A private that overwrites a property from the SimpleFixture',

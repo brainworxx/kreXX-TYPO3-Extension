@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 use ReflectionClass;
@@ -48,7 +51,7 @@ class Fluid extends AbstractFluid
     /**
      * {@inheritdoc}
      */
-    protected function getTemplatePath()
+    protected function getTemplatePath(): string
     {
         $controllerName = $this->renderingContext->getControllerName();
         $actionName = $this->renderingContext->getControllerAction();
@@ -60,7 +63,7 @@ class Fluid extends AbstractFluid
     /**
      * {@inheritdoc}
      */
-    protected function getLayoutPath()
+    protected function getLayoutPath(): string
     {
         // Resolve the layout file without any hacks by the framework.
         $fileName = $this->parsedTemplate->getLayoutName($this->renderingContext);
@@ -71,7 +74,7 @@ class Fluid extends AbstractFluid
     /**
      * {@inheritdoc}
      */
-    protected function getPartialPath()
+    protected function getPartialPath(): string
     {
         $result = 'n/a';
         $identifier = explode('_', $this->parsedTemplate->getIdentifier());
@@ -82,11 +85,11 @@ class Fluid extends AbstractFluid
         // partial_Deep_Blargh_8dd0b1c4bad125962c0e339d5d5012c10226f77f
         // We are using the hash value, hoping not to run into any
         // collision.
-        if (!isset($identifier[count($identifier) -1])) {
+        if (!isset($identifier[count($identifier) - 1])) {
             // No hash, no filename!
             return $result;
         }
-        $hash = $identifier[count($identifier) -1];
+        $hash = $identifier[count($identifier) - 1];
         $templatePath = $this->renderingContext->getTemplatePaths();
 
         try {

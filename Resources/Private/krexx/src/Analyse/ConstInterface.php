@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\Analyse;
 
 /**
@@ -41,7 +44,7 @@ namespace Brainworxx\Krexx\Analyse;
  */
 interface ConstInterface
 {
-    // Variable types. Css, array keys and frontend dosplay.
+    // Variable types. Css, array keys and frontend display.
     const TYPE_STRING = 'string ';
     const TYPE_INTEGER = 'integer';
     const TYPE_PHP = 'PHP';
@@ -89,14 +92,11 @@ interface ConstInterface
     const TRACE_CLASS = 'class';
     const TRACE_OBJECT = 'object';
     const TRACE_ARGS = 'args';
-    const TRACE_ERROR_STRING = 'errstr';
-    const TRACE_ERROR_FILE = 'errfile';
-    const TRACE_ERROR_LINE = 'errline';
     const TRACE_BACKTRACE = 'backtrace';
     const TRACE_DATE = 'date';
     const TRACE_URL = 'url';
 
-    // Stuff directly displaysed in the FE, not just array keys.
+    // Stuff directly displayed in the FE, not just array keys.
     const META_DECLARED_IN = 'Declared in';
     const META_COMMENT = 'Comment';
     const META_SOURCE = 'Source';

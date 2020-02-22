@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Misc;
 
@@ -74,7 +77,7 @@ class Cleanup
      * @return $this
      *   For chaining.
      */
-    public function cleanupOldLogs()
+    public function cleanupOldLogs(): Cleanup
     {
         if ($this->pool->chunks->getLoggingIsAllowed() === false) {
             // We have no write access. Do nothing.
@@ -114,7 +117,7 @@ class Cleanup
      * @return $this
      *   For chaining.
      */
-    public function cleanupOldChunks()
+    public function cleanupOldChunks(): Cleanup
     {
         // Check for write access. We also do this only once.
         if (static::$chunksDone === true || $this->pool->chunks->getChunksAreAllowed() === false) {

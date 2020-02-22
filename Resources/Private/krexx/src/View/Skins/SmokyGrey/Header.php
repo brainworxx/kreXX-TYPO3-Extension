@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,14 +33,25 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\SmokyGrey;
 
 trait Header
 {
     /**
+     * @var array
+     */
+    private $markerHeader = [
+        '{kdebug-classes}',
+        '{kconfiguration-classes}',
+        '{plugins}'
+    ];
+
+    /**
      * {@inheritDoc}
      */
-    public function renderHeader($headline, $cssJs)
+    public function renderHeader(string $headline, string $cssJs): string
     {
         // Doing special stuff for smokygrey:
         // We hide the debug-tab when we are displaying the config-only and switch
@@ -53,11 +65,7 @@ trait Header
         }
 
         return str_replace(
-            [
-                static::MARKER_K_DEBUG_CLASSES,
-                static::MARKER_K_CONFIG_CLASSES,
-                static::MARKER_PLUGINS,
-            ],
+            $this->markerHeader,
             [
                 $debugClass,
                 $configClass,
@@ -65,5 +73,19 @@ trait Header
             ],
             parent::renderHeader($headline, $cssJs)
         );
+    }
+
+    /**
+     * Getter of the header for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerHeader(): array
+    {
+        return $this->markerHeader;
     }
 }

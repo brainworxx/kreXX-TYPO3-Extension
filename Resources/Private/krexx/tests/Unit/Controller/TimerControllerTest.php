@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -99,13 +100,19 @@ class TimerControllerTest extends AbstractController
 
         // Adding a second entry.
         $this->controller->timerAction($second);
-        $this->assertEquals([$first => 1, $second => 1], $this->retrieveValueByReflection(static::COUNTER_CACHE, $this->controller));
+        $this->assertEquals(
+            [$first => 1, $second => 1],
+            $this->retrieveValueByReflection(static::COUNTER_CACHE, $this->controller)
+        );
         $this->assertArrayHasKey($first, $this->getObjectAttribute($this->controller, static::TIME_KEEPING));
         $this->assertArrayHasKey($second, $this->getObjectAttribute($this->controller, static::TIME_KEEPING));
 
         // Adding the first entry again.
         $this->controller->timerAction($first);
-        $this->assertEquals([$first => 2, $second => 1], $this->retrieveValueByReflection(static::COUNTER_CACHE, $this->controller));
+        $this->assertEquals(
+            [$first => 2, $second => 1],
+            $this->retrieveValueByReflection(static::COUNTER_CACHE, $this->controller)
+        );
         $this->assertArrayHasKey('[2]' . $first, $this->getObjectAttribute($this->controller, static::TIME_KEEPING));
         $this->assertArrayHasKey($second, $this->getObjectAttribute($this->controller, static::TIME_KEEPING));
     }
@@ -115,7 +122,6 @@ class TimerControllerTest extends AbstractController
      *
      * @covers \Brainworxx\Krexx\Controller\TimerController::timerEndAction
      * @covers \Brainworxx\Krexx\Controller\TimerController::miniBenchTo
-     * @covers \Brainworxx\Krexx\Controller\TimerController::getCurrentUrl
      */
     public function testTimerEndAction()
     {
@@ -133,6 +139,7 @@ class TimerControllerTest extends AbstractController
                         ],
                         $bench
                     );
+                    return new DumpController(new Pool());
                 }
             ));
 

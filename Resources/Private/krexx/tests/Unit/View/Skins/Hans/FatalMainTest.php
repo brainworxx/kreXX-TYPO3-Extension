@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -51,7 +52,7 @@ class FatalMainTest extends AbstractRenderHans
 
         $this->fileServiceMock->expects($this->once())
             ->method('readSourcecode')
-            ->with($inFile, $line -1, $line -6, $line+4)
+            ->with($inFile, $line - 1, $line - 6, $line + 4)
             ->will($this->returnValue('faulty code line'));
 
         $result = $this->renderHans->renderFatalMain($errorString, $inFile, $line);

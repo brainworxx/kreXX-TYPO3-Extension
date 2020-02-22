@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,12 +33,13 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
-use phpDocumentor\Reflection\Types\Resource_;
 
 /**
  * Processing of resources.
@@ -56,7 +58,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface
      * @return string
      *   The rendered markup.
      */
-    public function process(Model $model)
+    public function process(Model $model): string
     {
         $resource = $model->getData();
         $type = get_resource_type($resource);
@@ -72,11 +74,9 @@ class ProcessResource extends AbstractRouting implements ProcessInterface
                 // facing a curl instance right here.
                 $meta = curl_getinfo($resource);
                 break;
-        }
 
-        // Check, if we have something useful.
-        if (empty($meta)) {
-            return $this->renderUnknownOrClosed($model, $resource, $typeString);
+            default:
+                return $this->renderUnknownOrClosed($model, $resource, $typeString);
         }
 
         // Output meta data from the class.
@@ -98,12 +98,12 @@ class ProcessResource extends AbstractRouting implements ProcessInterface
      * @param resource $resource
      *   The resource, that we are analysing.
      * @param string $typeString
-     *   The hunam readable type string.
+     *   The human readable type string.
      *
      * @return string
      *   The rendered HTML.
      */
-    protected function renderUnknownOrClosed(Model $model, $resource, $typeString)
+    protected function renderUnknownOrClosed(Model $model, $resource, $typeString): string
     {
         // If we are facing a closed resource, 'Unknown' is a little bit sparse.
         // PHP 7.2 can provide more info by calling gettype().

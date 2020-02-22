@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -44,6 +45,7 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
+use ReflectionProperty;
 
 class PublicPropertyTest extends AbstractTest
 {
@@ -79,6 +81,8 @@ class PublicPropertyTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::getReflectionPropertiesData
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeNoPublic()
     {
@@ -109,7 +113,10 @@ class PublicPropertyTest extends AbstractTest
      * We also add some undeclared ones to the mix.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::getReflectionPropertiesData
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeWithPublic()
     {
@@ -143,14 +150,13 @@ class PublicPropertyTest extends AbstractTest
 
         // Create the expectations.
         $expectations = [
-            new \ReflectionProperty(PublicFixture::class, 'someValue'),
-            new \ReflectionProperty(PublicFixture::class, 'static'),
+            new ReflectionProperty(PublicFixture::class, 'someValue'),
+            new ReflectionProperty(PublicFixture::class, 'static'),
             new UndeclaredProperty($fixture['ref'], 'undeclared'),
-            new \ReflectionProperty(PublicFixture::class, 'value1'),
-            new \ReflectionProperty(SimpleFixture::class, 'value2'),
+            new ReflectionProperty(PublicFixture::class, 'value1'),
+            new ReflectionProperty(SimpleFixture::class, 'value2'),
         ];
 
         $this->assertEquals($expectations, $params['data']);
     }
-
 }

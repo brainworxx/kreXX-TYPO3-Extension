@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Collectors;
 
@@ -118,7 +121,7 @@ class FormConfiguration extends AbstractCollector
      * be used does not really make sense. We will convert the
      * original kreXX settings to a more usable form for the editor.
      *
-     * @param array $values
+     * @param array|string|int $values
      *   The values we want to convert.
      *
      * @return string|null
@@ -137,19 +140,24 @@ class FormConfiguration extends AbstractCollector
                 // It's not visible, thus we do not accept any values from it.
                 $result = Fallback::RENDER_TYPE_INI_NONE;
             }
-            if ($values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_TRUE &&
+
+            if (
+                $values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_TRUE &&
                 $values[Fallback::RENDER_TYPE] !== Fallback::RENDER_TYPE_NONE
             ) {
                 // It's editable and visible.
                 $result = Fallback::RENDER_TYPE_INI_FULL;
             }
-            if ($values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_FALSE &&
+
+            if (
+                $values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_FALSE &&
                 $values[Fallback::RENDER_TYPE] !== Fallback::RENDER_TYPE_NONE
             ) {
                 // It's only visible.
                 $result = Fallback::RENDER_TYPE_INI_DISPLAY;
             }
         }
+
         return $result;
     }
 }

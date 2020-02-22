@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,7 +33,44 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-/**
- * @deprecated
- */
-include_once __DIR__ .  'bootstrap.php';
+declare(strict_types=1);
+
+namespace Brainworxx\Krexx\Analyse\Model;
+
+use Brainworxx\Krexx\Analyse\Model;
+
+trait DomId
+{
+    /**
+     * A unique ID for the dom. We use this one for recursion resolving via JS.
+     *
+     * @var string
+     */
+    protected $domid = '';
+
+    /**
+     * Setter for domid.
+     *
+     * @param string $domid
+     *   The dom id, of cause.
+     *
+     * @return Model
+     *   $this, for chaining.
+     */
+    public function setDomid(string $domid): Model
+    {
+        $this->domid = $domid;
+        return $this;
+    }
+
+    /**
+     * Getter for domid.
+     *
+     * @return string
+     *   The dom id, of cause.
+     */
+    public function getDomid(): string
+    {
+        return $this->domid;
+    }
+}

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,22 +33,43 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 trait Search
 {
+    /**
+     * @var string
+     */
+    private $markerSearch = '{KrexxId}';
+
     /**
      * Renders the search button and the search menu.
      *
      * @return string
      *   The generated markup from the template files.
      */
-    protected function renderSearch()
+    protected function renderSearch(): string
     {
         return str_replace(
-            static::MARKER_KREXX_ID,
+            $this->markerSearch,
             $this->pool->recursionHandler->getMarker(),
             $this->getTemplateFileContent(static::FILE_SEARCH)
         );
+    }
+
+    /**
+     * Getter of the search for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerSearch(): array
+    {
+        return [$this->markerSearch];
     }
 }

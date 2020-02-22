@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Config;
 
@@ -84,7 +87,7 @@ class Model
      * @return $this
      *   Return $this for Chaining.
      */
-    public function setEditable($editable)
+    public function setEditable(bool $editable): Model
     {
         $this->editable = $editable;
         return $this;
@@ -98,7 +101,7 @@ class Model
      * @return $this
      *   Return $this for Chaining.
      */
-    public function setType($type)
+    public function setType(string $type): Model
     {
         $this->type = $type;
         return $this;
@@ -107,12 +110,12 @@ class Model
     /**
      * Setter for the value.
      *
-     * @param string $value
+     * @param string|int|null $value
      *
      * @return $this
      *   Return $this for Chaining.
      */
-    public function setValue($value)
+    public function setValue($value): Model
     {
         if ($value === Fallback::VALUE_TRUE) {
             $value = true;
@@ -129,7 +132,7 @@ class Model
      *
      * @return bool
      */
-    public function getEditable()
+    public function getEditable(): bool
     {
         return $this->editable;
     }
@@ -139,7 +142,7 @@ class Model
      *
      * @return string
      */
-    public function getSection()
+    public function getSection(): string
     {
         return $this->section;
     }
@@ -149,7 +152,7 @@ class Model
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -157,7 +160,7 @@ class Model
     /**
      * Getter for the value.
      *
-     * @return string
+     * @return int|string|bool|null
      */
     public function getValue()
     {
@@ -172,7 +175,7 @@ class Model
      * @return $this
      *   Return $this for Chaining.
      */
-    public function setSection($section)
+    public function setSection(string $section): Model
     {
         $this->section = $section;
         return $this;
@@ -183,7 +186,7 @@ class Model
      *
      * @return string
      */
-    public function getSource()
+    public function getSource(): string
     {
         return $this->source;
     }
@@ -196,7 +199,7 @@ class Model
      * @return $this
      *   Return $this for Chaining.
      */
-    public function setSource($source)
+    public function setSource(string $source): Model
     {
         $this->source = $source;
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -49,6 +50,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Krexx;
 use phpmock\phpunit\PHPMock;
+use ReflectionException;
 
 abstract class AbstractTest extends TestCase
 {
@@ -92,8 +94,6 @@ abstract class AbstractTest extends TestCase
 
         // Reset the pool and the settings.
         AbstractController::$analysisInProgress = false;
-        Krexx::$pool->config = new Config(Krexx::$pool);
-        Krexx::$pool->config->setDisabled(false);
         Krexx::$pool = null;
         Config::$disabledByPhp = false;
         CallbackCounter::$counter = 0;
@@ -140,7 +140,7 @@ abstract class AbstractTest extends TestCase
             } else {
                 $reflectionProperty->setValue($value);
             }
-        } catch (\ReflectionException $e) {
+        } catch (ReflectionException $e) {
             $this->fail($e->getMessage());
         }
     }
@@ -168,7 +168,7 @@ abstract class AbstractTest extends TestCase
             } else {
                 return $reflectionProperty->getValue();
             }
-        } catch (\ReflectionException $e) {
+        } catch (ReflectionException $e) {
             $this->fail($e->getMessage());
         }
 
@@ -275,7 +275,7 @@ abstract class AbstractTest extends TestCase
             $reflectionMethod = $reflection->getMethod('dispatchStartEvent');
             $reflectionMethod->setAccessible(true);
             return $reflectionMethod->invoke($object);
-        } catch (\ReflectionException $e) {
+        } catch (ReflectionException $e) {
             $this->fail($e->getMessage());
             return '';
         }

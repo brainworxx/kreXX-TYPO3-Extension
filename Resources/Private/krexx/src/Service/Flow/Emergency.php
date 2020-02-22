@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Flow;
 
@@ -155,10 +158,10 @@ class Emergency
     /**
      * Setter for the enabling of the break.
      *
-     * @param $bool
+     * @param bool $bool
      *  Whether it is enabled, or not.
      */
-    public function setDisable($bool)
+    public function setDisable(bool $bool)
     {
         $this->disabled = $bool;
     }
@@ -171,7 +174,7 @@ class Emergency
      *   FALSE = all is OK.
      *   TRUE = we have a problem.
      */
-    public function checkEmergencyBreak()
+    public function checkEmergencyBreak(): bool
     {
         if ($this->disabled === true) {
             // Tell them, everything is OK!
@@ -195,7 +198,7 @@ class Emergency
      *   FALSE = all is OK.
      *   TRUE = we have a problem.
      */
-    protected function checkRuntime()
+    protected function checkRuntime(): bool
     {
         // Check Runtime.
         if ($this->timer < time()) {
@@ -218,7 +221,7 @@ class Emergency
      *   FALSE = all is OK.
      *   TRUE = we have a problem.
      */
-    protected function checkMemory()
+    protected function checkMemory(): bool
     {
         // We will only check, if we were able to determine a memory limit
         // in the first place.
@@ -260,7 +263,7 @@ class Emergency
      * @return bool
      *   TRUE if we are too deep.
      */
-    public function checkNesting()
+    public function checkNesting(): bool
     {
         return ($this->nestingLevel > $this->maxNestingLevel);
     }
@@ -270,25 +273,9 @@ class Emergency
      *
      * @return int
      */
-    public function getNestingLevel()
+    public function getNestingLevel(): int
     {
         return $this->nestingLevel;
-    }
-
-    /**
-     * Resets the timer.
-     *
-     * When a certain time has passed, kreXX will use an emergency break to
-     * prevent too large output (or no output at all (WSOD)).
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     */
-    public function resetTimer()
-    {
-        $this->initTimer();
     }
 
     /**
@@ -314,7 +301,7 @@ class Emergency
      * @return bool
      *   Whether kreXX was called too often or not.
      */
-    public function checkMaxCall()
+    public function checkMaxCall(): bool
     {
         if ($this->krexxCount >= $this->maxCall) {
             // Called too often, we might get into trouble here!
@@ -338,7 +325,7 @@ class Emergency
      * @return int
      *   How often kreXX was called.
      */
-    public function getKrexxCount()
+    public function getKrexxCount(): int
     {
         return $this->krexxCount;
     }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Config;
 
@@ -51,17 +54,17 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
 {
 
     /**
-     * Defining the layout of the frontend editing form.
+     * The fallback configuration.
      *
-     * @var array
+     * @internal
      */
-    public $configFallback = [
+    const CONFIG_FALLBACK = [
         Fallback::SECTION_OUTPUT => [
             Fallback::SETTING_DISABLED,
             Fallback::SETTING_IP_RANGE,
             Fallback::SETTING_DETECT_AJAX,
         ],
-        Fallback::SECTION_BEHAVIOR =>[
+        Fallback::SECTION_BEHAVIOR => [
             Fallback::SETTING_SKIN,
             Fallback::SETTING_DESTINATION,
             Fallback::SETTING_MAX_FILES,
@@ -91,14 +94,67 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     ];
 
     /**
-     * Values, rendering settings and the actual fallback value.
+     * Render settings for a editable select field.
+     *
+     * @internal
+     */
+    const EDITABLE_SELECT = [
+        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_SELECT,
+        Fallback::RENDER_EDITABLE => Fallback::VALUE_TRUE,
+    ];
+
+    /**
+     * Render settings for a display only input field.
+     *
+     * @internal
+     */
+    const DISPLAY_ONLY_INPUT = [
+        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_INPUT,
+        Fallback::RENDER_EDITABLE => Fallback::VALUE_FALSE,
+    ];
+
+    /**
+     * Render settings for a editable input field.
+     *
+     * @internal
+     */
+    const EDITABLE_INPUT = [
+        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_INPUT,
+        Fallback::RENDER_EDITABLE => Fallback::VALUE_TRUE,
+    ];
+
+    /**
+     * Render settings for a display only select field.
+     *
+     * @internal
+     */
+    const DISPLAY_ONLY_SELECT = [
+        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_SELECT,
+        Fallback::RENDER_EDITABLE => Fallback::VALUE_FALSE,
+    ];
+
+    /**
+     * Render settings for a field which will not be displayed, or accept values.
+     *
+     * @internal
+     */
+    const DISPLAY_NOTHING = [
+        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_NONE,
+        Fallback::RENDER_EDITABLE => Fallback::VALUE_FALSE,
+    ];
+
+    /**
+     * Defining the layout of the frontend editing form.
      *
      * @var array
      */
-    public $feConfigFallback = [];
+    public $configFallback = [];
 
     /**
      * Render settings for a editable select field.
+     *
+     * @deprecated
+     *   Since 4.0.0. Use Fallback::EDITABLE_SELECT
      *
      * @var array
      */
@@ -110,6 +166,9 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     /**
      * Render settings for a editable input field.
      *
+     * @deprecated
+     *   Since 4.0.0. Use Fallback::EDITABLE_INPUT.
+     *
      * @var array
      */
     protected $editableInput = [
@@ -119,6 +178,9 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
 
     /**
      * Render settings for a display only input field.
+     *
+     * @deprecated
+     *   Since 4.0.0. Use Fallback::DISPLAY_ONLY_INPUT.
      *
      * @var array
      */
@@ -130,6 +192,8 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     /**
      * Render settings for a display only select field.
      *
+     * @deprecated
+     *   Since 4.0.0. Use FALLBACK::DISPLAY_ONLY_SELECT
      * @var array
      */
     protected $displayOnlySelect = [
@@ -140,12 +204,22 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     /**
      * Render settings for a field which will not be displayed, or accept values.
      *
+     * @deprecated
+     *   Since 4.0.0. Use Fallback::DISPLAY_NOTHING.
+     *
      * @var array
      */
     protected $displayNothing = [
         Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_NONE,
         Fallback::RENDER_EDITABLE => Fallback::VALUE_FALSE,
     ];
+
+    /**
+     * Values, rendering settings and the actual fallback value.
+     *
+     * @var array
+     */
+    public $feConfigFallback = [];
 
     /**
      * The skin configuration.
@@ -170,6 +244,28 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     {
         $this->pool = $pool;
 
+        // Generate the configuration fallback.
+        $this->generateConfigFallback();
+        // Generate the configuration for the fe editor.
+        $this->generateFeConfigFallback();
+        // Setting up out two bundled skins.
+        $this->generateSkinConfiguration();
+    }
+
+    /**
+     * Generate the configuration fallback.
+     */
+    protected function generateConfigFallback()
+    {
+        // Not much so far. . .
+        $this->configFallback = static::CONFIG_FALLBACK;
+    }
+
+    /**
+     * Generate the frontend configuration fallback.
+     */
+    protected function generateFeConfigFallback()
+    {
         $this->feConfigFallback = [
             Fallback::SETTING_ANALYSE_PROTECTED_METHODS => $this->returnBoolSelectFalse(Fallback::SECTION_METHODS),
             Fallback::SETTING_ANALYSE_PRIVATE_METHODS => $this->returnBoolSelectFalse(Fallback::SECTION_METHODS),
@@ -193,9 +289,6 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
             Fallback::SETTING_MAX_STEP_NUMBER => $this->returnInput(Fallback::SECTION_PRUNE, 10),
             Fallback::SETTING_ARRAY_COUNT_LIMIT => $this->returnInput(Fallback::SECTION_PRUNE, 300),
         ];
-
-        // Setting up out two bundled skins.
-        $this->generateSkinConfiguration();
     }
 
     /**
@@ -227,11 +320,11 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      * @return array
      *   The settings.
      */
-    protected function returnBoolSelectFalse($section)
+    protected function returnBoolSelectFalse(string $section): array
     {
         return [
             Fallback::VALUE => Fallback::VALUE_FALSE,
-            Fallback::RENDER => $this->editableSelect,
+            Fallback::RENDER => Fallback::EDITABLE_SELECT,
             Fallback::EVALUATE => Fallback::EVAL_BOOL,
             Fallback::SECTION => $section,
         ];
@@ -246,11 +339,11 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      * @return array
      *   The settings.
      */
-    protected function returnBoolSelectTrue($section)
+    protected function returnBoolSelectTrue(string $section): array
     {
         return [
             Fallback::VALUE => Fallback::VALUE_TRUE,
-            Fallback::RENDER => $this->editableSelect,
+            Fallback::RENDER => Fallback::EDITABLE_SELECT,
             Fallback::EVALUATE => Fallback::EVAL_BOOL,
             Fallback::SECTION => $section,
         ];
@@ -267,11 +360,11 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      * @return array
      *   The settings.
      */
-    protected function returnInput($section, $value)
+    protected function returnInput(string $section, int $value): array
     {
         return [
             Fallback::VALUE => $value,
-            Fallback::RENDER => $this->editableInput,
+            Fallback::RENDER => Fallback::EDITABLE_INPUT,
             Fallback::EVALUATE => Fallback::EVAL_INT,
             Fallback::SECTION => $section,
         ];
@@ -282,14 +375,14 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      *
      * @return array
      */
-    protected function returnDebugMethods()
+    protected function returnDebugMethods(): array
     {
         return [
             // Debug methods that get called.
             // A debug method must be public and have no parameters.
             // Change these only if you know what you are doing.
             Fallback::VALUE => Fallback::VALUE_DEBUG_METHODS,
-            Fallback::RENDER => $this->displayOnlyInput,
+            Fallback::RENDER => Fallback::DISPLAY_ONLY_INPUT,
             Fallback::EVALUATE => Fallback::EVAL_DEBUG_METHODS,
             Fallback::SECTION =>  Fallback::SECTION_METHODS,
         ];
@@ -300,12 +393,12 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      *
      * @return array
      */
-    protected function returnDestination()
+    protected function returnDestination(): array
     {
         return [
                 // Either 'file' or 'browser'.
                 Fallback::VALUE => Fallback::VALUE_BROWSER,
-                Fallback::RENDER => $this->displayOnlySelect,
+                Fallback::RENDER => FALLBACK::DISPLAY_ONLY_SELECT,
                 Fallback::EVALUATE => Fallback::EVAL_DESTINATION,
                 Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
             ];
@@ -316,12 +409,12 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      *
      * @return array
      */
-    protected function returnMaxFiles()
+    protected function returnMaxFiles(): array
     {
         return [
             // Maximum files that are kept inside the logfolder.
             Fallback::VALUE => 10,
-            Fallback::RENDER => $this->displayOnlyInput,
+            Fallback::RENDER => Fallback::DISPLAY_ONLY_INPUT,
             Fallback::EVALUATE => Fallback::EVAL_INT,
             Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
         ];
@@ -332,11 +425,11 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      *
      * @return array
      */
-    protected function returnSkin()
+    protected function returnSkin(): array
     {
         return [
             Fallback::VALUE => Fallback::SKIN_SMOKY_GREY,
-            Fallback::RENDER => $this->editableSelect,
+            Fallback::RENDER => Fallback::EDITABLE_SELECT,
             Fallback::EVALUATE => Fallback::EVAL_SKIN,
             Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
         ];
@@ -347,13 +440,13 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      *
      * @return array
      */
-    protected function returnIpRange()
+    protected function returnIpRange(): array
     {
         return [
             // IP range for calling kreXX.
             // kreXX is disabled for everyone who dies not fit into this range.
             Fallback::VALUE => '*',
-            Fallback::RENDER => $this->displayNothing,
+            Fallback::RENDER => Fallback::DISPLAY_NOTHING,
             Fallback::EVALUATE => Fallback::EVAL_IP_RANGE,
             Fallback::SECTION => Fallback::SECTION_OUTPUT,
         ];
@@ -364,11 +457,11 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      *
      * @return array
      */
-    protected function returnDevHandle()
+    protected function returnDevHandle(): array
     {
         return [
             Fallback::VALUE => '',
-            Fallback::RENDER => $this->editableInput,
+            Fallback::RENDER => Fallback::EDITABLE_INPUT,
             Fallback::EVALUATE => Fallback::EVAL_DEV_HANDLE,
             Fallback::SECTION => ''
         ];
@@ -379,12 +472,12 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      *
      * @return array
      */
-    protected function returnMaxRuntime()
+    protected function returnMaxRuntime(): array
     {
         return [
             // Maximum runtime in seconds, before triggering an emergency break.
             Fallback::VALUE => 60,
-            Fallback::RENDER => $this->editableInput,
+            Fallback::RENDER => Fallback::EDITABLE_INPUT,
             Fallback::EVALUATE => Fallback::EVAL_MAX_RUNTIME,
             Fallback::SECTION => Fallback::SECTION_EMERGENCY,
         ];
@@ -395,5 +488,5 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      *
      * @var string
      */
-    public $version = '3.2.2';
+    public $version = '4.0.0 dev';
 }

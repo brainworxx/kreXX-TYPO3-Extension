@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Misc;
 
@@ -165,7 +168,7 @@ class Encoding
      * @return string
      *   The encoded string.
      */
-    public function encodeString($data, $code = false)
+    public function encodeString(string $data, bool $code = false): string
     {
         // We will not encode an empty string.
         if ($data === '') {
@@ -197,29 +200,45 @@ class Encoding
         // Check if encoding was successful.
         // 99.99% of the time, the encoding works.
         if (empty($result) === true) {
-            // Here we have another SPOF. When the string is large enough
-            // we will run out of memory!
-            // @see https://sourceforge.net/p/krexx/bugs/21/
-            // We will *NOT* return the unescaped string. So we must check if it
-            // is small enough for the unpack().
-            // 100 kb should be save enough.
-            if (strlen($data) > 102400) {
-                $result = $this->pool->messages->getHelp('stringTooLarge');
-            } else {
-                // Something went wrong with the encoding, we need to
-                // completely encode this one to be able to display it at all!
-                $data = mb_convert_encoding($data, 'UTF-32', mb_detect_encoding($data));
-                if ($code === true) {
-                    $sortingCallback = [$this, 'arrayMapCallbackCode'];
-                } else {
-                    $sortingCallback = [$this, 'arrayMapCallbackNormal'];
-                }
-                $result = implode("", array_map($sortingCallback, unpack("N*", $data)));
-            }
+            $result = $this->encodeCompletely($data, $code);
         }
 
         // Reactivate whatever error handling we had previously.
         restore_error_handler();
+
+        return $result;
+    }
+
+    /**
+     * Something went wrong with the encoding, we need to completely encode
+     * this one to be able to display it at all!
+     *
+     * Here we have another SPOF. When the string is large enough we will run
+     * out of memory!
+     * We will *NOT* return the unescaped string. So we must check if it is small
+     * enough for the unpack(). 100 kb should be save enough.
+     *
+     * @param string $data
+     *   The data which needs to be sanitized.
+     * @param bool $code
+     *   Do we need to format the string as code?
+     *
+     * @return string
+     *   The encoded string.
+     */
+    protected function encodeCompletely(string &$data, bool $code): string
+    {
+        if (strlen($data) > 102400) {
+            $result = $this->pool->messages->getHelp('stringTooLarge');
+        } else {
+            $data = mb_convert_encoding($data, 'UTF-32', mb_detect_encoding($data));
+            if ($code === true) {
+                $sortingCallback = [$this, 'arrayMapCallbackCode'];
+            } else {
+                $sortingCallback = [$this, 'arrayMapCallbackNormal'];
+            }
+            $result = implode("", array_map($sortingCallback, unpack("N*", $data)));
+        }
 
         return $result;
     }
@@ -238,10 +257,10 @@ class Encoding
      * @codeCoverageIgnore
      *   We will not tests simple wrappers
      *
-     * @return string
+     * @return string|false
      *   The result.
      */
-    public function mbDetectEncoding($string, $encodinglist = 'auto', $strict = null)
+    public function mbDetectEncoding(string $string, string $encodinglist = 'auto', $strict = false)
     {
         return mb_detect_encoding($string, $encodinglist, $strict);
     }
@@ -258,7 +277,7 @@ class Encoding
      * @return int
      *   The result.
      */
-    public function mbStrLen($string, $encoding = null)
+    public function mbStrLen(string $string, string $encoding = null): int
     {
         // Meh, the original mb_strlen interprets a null here as an empty string.
         if ($encoding === null) {
@@ -284,7 +303,7 @@ class Encoding
      * @return string
      *   The result.
      */
-    public function mbSubStr($string, $start, $length)
+    public function mbSubStr(string $string, int $start, int $length): string
     {
         return mb_substr($string, $start, $length);
     }
@@ -298,37 +317,25 @@ class Encoding
      * If anybody is actually reading this, and knows of a fast solution,
      * please open a ticket in our bug tracker.
      *
-     * @param string $name
+     * @param string|int $name
      *
-     * @return string
+     * @return string|int
      */
     public function encodeStringForCodeGeneration($name)
     {
         static $cache = [];
+
+        if (is_int($name)) {
+            return $name;
+        }
 
         if (isset($cache[$name])) {
             return $cache[$name];
         }
 
         $result = str_replace(
-            [
-                '"',
-                '\'',
-                "\0",
-                // BOM stuff
-                "\xEF",
-                "\xBB",
-                "\xBF"
-            ],
-            [
-                '&#034;',
-                '&#039;',
-                '\' . "\0" . \'',
-                // BOM stuff
-                '\' . "\xEF" . \'',
-                '\' . "\xBB" . \'',
-                '\' . "\xBF" . \'',
-            ],
+            ['"', '\'', "\0", "\xEF", "\xBB", "\xBF"],
+            ['&#034;', '&#039;', '\' . "\0" . \'', '\' . "\xEF" . \'', '\' . "\xBB" . \'', '\' . "\xBF" . \''],
             $name
         );
 
@@ -346,7 +353,7 @@ class Encoding
      * @return string
      *   The extra escaped result for code.
      */
-    protected function arrayMapCallbackCode($charCode)
+    protected function arrayMapCallbackCode(int $charCode): string
     {
         if ($charCode === 9) {
             // Replace TAB with two spaces, it's better readable that way.
@@ -364,7 +371,7 @@ class Encoding
      * @return string
      *   The extra escaped result.
      */
-    protected function arrayMapCallbackNormal($charCode)
+    protected function arrayMapCallbackNormal(int $charCode): string
     {
         return '&#' . $charCode . ';';
     }
@@ -378,12 +385,12 @@ class Encoding
      * @see https://stackoverflow.com/questions/29019484/validate-a-php-variable
      * @author AbraCadaver
      *
-     * @param $propName
+     * @param string|int $propName
      *   The property name we want to check.
      * @return bool
      *   Whether we have a special char in there, or not.
      */
-    public function isPropertyNameNormal($propName)
+    public function isPropertyNameNormal($propName): bool
     {
         static $cache = [];
 

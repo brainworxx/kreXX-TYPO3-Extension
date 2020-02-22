@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
@@ -78,7 +81,7 @@ class ThroughMethods implements EventHandlerInterface, ConstInterface
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, Model $model = null)
+    public function handle(AbstractCallback $callback, Model $model = null): string
     {
         $params = $callback->getParameters();
 

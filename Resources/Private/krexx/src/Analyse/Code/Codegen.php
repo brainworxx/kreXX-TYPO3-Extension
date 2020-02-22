@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\Analyse\Code;
 
 use Brainworxx\Krexx\Analyse\ConstInterface;
@@ -39,6 +42,8 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
 use ReflectionParameter;
+use ReflectionNamedType;
+use ReflectionType;
 
 /**
  * Code generation methods.
@@ -119,7 +124,7 @@ class Codegen implements ConstInterface
      * @return string
      *   The generated PHP source.
      */
-    public function generateSource(Model $model)
+    public function generateSource(Model $model): string
     {
         $result = static::UNKNOWN_VALUE;
 
@@ -131,7 +136,7 @@ class Codegen implements ConstInterface
             // variable name to the source generation.
             $this->firstRun = false;
             $result = $this->concatenation($model);
-        } elseif ($model->getIsMetaConstants() === true) {
+        } elseif ($model->isMetaConstants() === true) {
             // Test for constants.
             // They have no connectors, but are marked as such.
             // although this is meta stuff, we need to add the stop info here.
@@ -148,10 +153,11 @@ class Codegen implements ConstInterface
             $result = 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
         } elseif ($model->getMultiLineCodeGen() === static::ARRAY_VALUES_ACCESS) {
             $result = 'array_values(;firstMarker;)[' . $model->getConnectorParameters() . ']';
-        } elseif ($model->getIsPublic() === true) {
+        } elseif (
+            $model->isPublic() === true ||
+            $this->pool->scope->testModelForCodegen($model) === true
+        ) {
             // Test for private or protected access.
-            $result = $this->concatenation($model);
-        } elseif ($this->pool->scope->testModelForCodegen($model) === true) {
             // Test if we are inside the scope. Everything within our scope is reachable.
             $result = $this->concatenation($model);
         }
@@ -166,7 +172,7 @@ class Codegen implements ConstInterface
      * @return string
      *   Return an empty string.
      */
-    public function generateWrapperLeft()
+    public function generateWrapperLeft(): string
     {
         return '';
     }
@@ -178,7 +184,7 @@ class Codegen implements ConstInterface
      * @return string
      *   Return an empty string.
      */
-    public function generateWrapperRight()
+    public function generateWrapperRight(): string
     {
         return '';
     }
@@ -191,7 +197,7 @@ class Codegen implements ConstInterface
      * @return string
      *   The generated code.
      */
-    protected function concatenation(Model $model)
+    protected function concatenation(Model $model): string
     {
         // We simply add the connectors for public access.
         return $model->getConnectorLeft() .
@@ -227,18 +233,13 @@ class Codegen implements ConstInterface
      *
      * @return bool
      */
-    public function getAllowCodegen()
+    public function getAllowCodegen(): bool
     {
         return $this->allowCodegen;
     }
 
     /**
-     * Abusing the __toString() magic to get informations about a parameter.
-     *
-     * If a parameter must have a specific class, that is not present in the
-     * system, we will get a reflection error. That is why we abuse the
-     * __string() method.
-     * The method getType() is available for PHP 7 only.
+     * Transorm a reflection parameter into a human readable form.
      *
      * @param \ReflectionParameter $reflectionParameter
      *   The reflection parameter we want to wrap.
@@ -246,21 +247,15 @@ class Codegen implements ConstInterface
      * @return string
      *   The parameter data in a human readable form.
      */
-    public function parameterToString(ReflectionParameter $reflectionParameter)
+    public function parameterToString(ReflectionParameter $reflectionParameter): string
     {
-        $type = explode(' ', $reflectionParameter->__toString())[4];
-        $name = '';
-
         // Retrieve the type and the name, without calling a possible autoloader.
+        $prefix = '';
         if ($reflectionParameter->isPassedByReference() === true) {
-            $prefix = '&$';
-        } else {
-            $prefix = '$';
+            $prefix = '&' ;
         }
-        if (strpos($type, $prefix) !== 0) {
-            $name = $type . ' ';
-        }
-        $name .= $prefix . $reflectionParameter->getName();
+
+        $name = $this->retrieveParameterType($reflectionParameter) . $prefix . '$' . $reflectionParameter->getName();
 
         // Retrieve the default value, if available.
         if ($reflectionParameter->isDefaultValueAvailable() === true) {
@@ -278,6 +273,36 @@ class Codegen implements ConstInterface
     }
 
     /**
+     * Retrieve the parameter type.
+     *
+     * Depending on the available PHP version, we need to take different measures.
+     *
+     * @param \ReflectionParameter $reflectionParameter
+     *   The reflection parameter, what the variable name says.
+     *
+     * @return string
+     *   The parameter type, if available.
+     */
+    protected function retrieveParameterType(ReflectionParameter $reflectionParameter): string
+    {
+        $type = '';
+        if ($reflectionParameter->hasType() === true) {
+            $reflectionNamedType = $reflectionParameter->getType();
+            if (is_a($reflectionNamedType, '\\ReflectionNamedType')) {
+                // PHP 7.1 and later
+                /** @var ReflectionNamedType $reflectionNamedType */
+                $type = $reflectionNamedType->getName() . ' ';
+            } else {
+                // PHP 7.0 only.
+                /** @var ReflectionType $reflectionNamedType */
+                $type = $reflectionNamedType->__toString() . ' ';
+            }
+        }
+
+        return $type;
+    }
+
+    /**
      * Translate the default value into something human readable.
      *
      * @param mixed $default
@@ -285,7 +310,7 @@ class Codegen implements ConstInterface
      * @return string
      *   The type in a human readable form.
      */
-    protected function translateDefaultValue($default)
+    protected function translateDefaultValue($default): string
     {
         if (is_string($default)) {
             $default = '\'' . $default . '\'';

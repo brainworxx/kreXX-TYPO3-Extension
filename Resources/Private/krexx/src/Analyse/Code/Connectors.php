@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Code;
 
@@ -168,7 +171,7 @@ class Connectors
      * @return string
      *   The connection parameters.
      */
-    public function getParameters()
+    public function getParameters(): string
     {
         return $this->params;
     }
@@ -190,7 +193,7 @@ class Connectors
      * @return string
      *   The PHP connector, what else?
      */
-    public function getConnectorLeft()
+    public function getConnectorLeft(): string
     {
         if ($this->customConnectorLeft === null) {
             return $this->connectorArray[$this->type][0];
@@ -208,9 +211,10 @@ class Connectors
      * @return string
      *   The PHP connector, what else?
      */
-    public function getConnectorRight($cap)
+    public function getConnectorRight($cap): string
     {
-        if (empty($this->params) === true ||
+        if (
+            empty($this->params) === true ||
             ($this->type !== static::METHOD && $this->type !== static::STATIC_METHOD)
         ) {
             return $this->connectorArray[$this->type][1];
@@ -243,7 +247,7 @@ class Connectors
      *
      * @return string
      */
-    public function getLanguage()
+    public function getLanguage(): string
     {
         return $this->language;
     }

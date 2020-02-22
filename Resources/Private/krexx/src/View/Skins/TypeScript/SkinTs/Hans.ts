@@ -16,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -93,7 +93,7 @@ class Hans
     /**
      * Getting our act together.
      */
-    public run() : void
+    public run(): void
     {
         // Init our libs before usage.
         this.kdt = new Kdt();
@@ -151,7 +151,7 @@ class Hans
          *   When a recursion is clicked, krexx tries to locate the
          *   first output of the object and highlight it.
          */
-        this.eventHandler.addEvent(this.selectors.copyFrom, 'click', this.copyFrom);
+        this.eventHandler.addEvent(this.selectors.copyFrom, 'click', this.kdt.copyFrom);
 
         /**
          * Register the displaying of the search menu
@@ -210,7 +210,7 @@ class Hans
     /**
      * Initialize the draggable.
      */
-    protected initDraxx() : void
+    protected initDraxx(): void
     {
         this.draxx = new Draxx(
             '.kwrapper',
@@ -235,80 +235,6 @@ class Hans
     }
 
     /**
-     * When clicked on s recursion, this function will
-     * copy the original analysis result there and delete
-     * the recursion.
-     *
-     * @event click
-     * @param {Event} event
-     *   The click event.
-     * @param {HTMLElement} element
-     *   The element that was clicked.
-     */
-    protected copyFrom = (event:Event, element:HTMLElement) : void =>
-    {
-        let i:number;
-
-        // Get the DOM id of the original analysis.
-        let domid:string = this.kdt.getDataset((element as Element), 'domid');
-        if (domid === '') {
-            // Do nothing.
-            return;
-        }
-        // Get the analysis data.
-        let orgNest:Node = document.querySelector('#' + domid);
-
-        // Does the element exist?
-        if (orgNest) {
-            // Get the EL of the data (element with the arrow).
-            let orgEl:Node = (orgNest as HTMLElement).previousElementSibling;
-            // Clone the analysis data and insert it after the recursion EL.
-            element.parentNode.insertBefore(orgNest.cloneNode(true), element.nextSibling);
-            // Clone the EL of the analysis data and insert it after the recursion EL.
-            let newEl:Element = (orgEl.cloneNode(true) as Element);
-            element.parentNode.insertBefore(newEl, element.nextSibling);
-
-            // Change the key of the just cloned EL to the one from the recursion.
-            (this.kdt.findInDomlistByClass(newEl.children, 'kname') as HTMLElement).innerHTML = (this.kdt.findInDomlistByClass(element.children, 'kname') as HTMLElement).innerHTML;
-            // We  need to remove the ids from the copy to avoid double ids.
-            let allChildren = newEl.nextElementSibling.getElementsByTagName("*");
-            for (i = 0; i < allChildren.length; i++) {
-                allChildren[i].removeAttribute('id');
-            }
-            newEl.nextElementSibling.removeAttribute('id');
-
-            // Now we add the dom-id to the clone, as a data-field. this way we can
-            // make sure to always produce the right path to this value during source
-            // generation.
-            this.kdt.setDataset((newEl.parentNode as Element), 'domid', domid);
-
-            // Remove the infobox from the copy, if available and add the one from the
-            // recursion.
-            let newInfobox = newEl.querySelector('.khelp');
-            let newButton = newEl.querySelector('.kinfobutton');
-            let realInfobox = element.querySelector('.khelp');
-            let realButton = element.querySelector('.kinfobutton');
-
-            // We don't need the infobox on newEl, so we will remove it.
-            if (newInfobox !== null) {
-                newInfobox.parentNode.removeChild(newInfobox);
-            }
-            if (newButton !== null) {
-                newButton.parentNode.removeChild(newButton);
-            }
-
-            // We copy the Infobox from the recursion to the newEl, if it exists.
-            if (realInfobox !== null) {
-                newEl.appendChild(realButton);
-                newEl.appendChild(realInfobox);
-            }
-
-            // Remove the recursion EL.
-            element.parentNode.removeChild(element);
-        }
-    };
-
-    /**
      * Hides or displays the nest under an expandable element.
      *
      * @event click
@@ -317,7 +243,7 @@ class Hans
      * @param {Node} element
      *   The element that was clicked.
      */
-    protected toggle = (event:Event, element:Element) : void =>
+    protected toggle = (event:Event, element:Element): void =>
     {
         this.kdt.toggleClass(element, 'kopened');
         this.kdt.toggleClass(element.nextElementSibling, 'khidden');
@@ -329,7 +255,7 @@ class Hans
      * @param {Element} el
      * @param {boolean} noHighlight
      */
-    protected setHighlighting(el:Element, noHighlight:boolean) : void
+    protected setHighlighting(el:Element, noHighlight:boolean): void
     {
         let nests:Node[] = this.kdt.getParents(el, '.knest');
 
@@ -357,9 +283,9 @@ class Hans
      * @param {Element} el
      *   The element you want to focus on.
      * @param {boolean} noHighlight
-     *   Do we need to highlight the elenemt we arejuming to?
+     *   Do we need to highlight the element we are jumping to?
      */
-    protected jumpTo = (el:Element, noHighlight:boolean) : void =>
+    protected jumpTo = (el:Element, noHighlight:boolean): void =>
     {
         this.setHighlighting(el, noHighlight);
 
@@ -420,7 +346,7 @@ class Hans
      * @param {Element} element
      *   The element that was clicked.
      */
-    protected close = (event:Event, element:Element) : void =>
+    protected close = (event:Event, element:Element): void =>
     {
         let instance:string = this.kdt.getDataset(element, 'instance');
         let elInstance:HTMLElement = document.querySelector('#' + instance);
@@ -446,7 +372,7 @@ class Hans
      * nothing at all, because they would land inside a cookie
      * for that file, and not for the server.
      */
-    protected disableForms() : void
+    protected disableForms(): void
     {
         let elements:NodeList = document.querySelectorAll('.kwrapper .keditable input, .kwrapper .keditable select');
         for (let i = 0; i < elements.length; i++) {
@@ -463,7 +389,7 @@ class Hans
      * @param {Element} element
      *   The element that was clicked.
      */
-    protected generateCode = (event:Event, element:Element) : void =>
+    protected generateCode = (event:Event, element:Element): void =>
     {
         // We don't want to bubble the click any further.
         event.stop = true;
@@ -548,7 +474,7 @@ class Hans
      * Checks if the search form is inside the viewport. If not, fixes it on top.
      * Gets triggered on,y when scolling the fatal error handler.
      */
-    protected checkSearchInViewport = () : void =>
+    protected checkSearchInViewport = (): void =>
     {
         // Get the search
         let search:HTMLElement = document.querySelector('.kfatalwrapper-outer .search-wrapper');
@@ -573,7 +499,7 @@ class Hans
      *
      * @event keyUp
      */
-    protected displayInfoBox = (event:Event, element:Element) : void =>
+    protected displayInfoBox = (event:Event, element:Element): void =>
     {
         // We don't want to bubble the click any further.
         event.stop = true;
@@ -597,7 +523,7 @@ class Hans
      * @param {Node} element
      *   The element that was clicked.
      */
-    protected displaySearch = (event:Event, element:Node) : void =>
+    protected displaySearch = (event:Event, element:Node): void =>
     {
         let instance:string = this.kdt.getDataset((element as Element), 'instance');
         let search:HTMLElement = document.querySelector('#search-' + instance);

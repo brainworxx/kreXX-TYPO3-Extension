@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\ViewHelpers;
 
 use Brainworxx\Krexx\Krexx;
@@ -39,6 +42,7 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
+use ReflectionClass;
 
 /**
  * Our fluid wrapper for kreXX.
@@ -90,15 +94,17 @@ class DebugViewHelper extends AbstractViewHelper
     /**
      * A wrapper for kreXX();
      *
+     * @throws \ReflectionException
+     *
      * @return string
      *   Returns an empty string.
      */
-    public function render()
+    public function render(): string
     {
         Pool::createPool();
         $view = $this->viewHelperVariableContainer->getView();
         Krexx::$pool->registry->set('view', $view);
-        Krexx::$pool->registry->set('viewReflection', new \ReflectionClass($view));
+        Krexx::$pool->registry->set('viewReflection', new ReflectionClass($view));
         Krexx::$pool->registry->set('renderingContext', $this->renderingContext);
         Registration::activatePlugin(
             FluidConfiguration::class

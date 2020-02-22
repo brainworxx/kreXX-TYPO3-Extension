@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,6 +44,7 @@ use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
+use ArrayObject;
 
 class TraversableTest extends AbstractTest
 {
@@ -88,6 +90,8 @@ class TraversableTest extends AbstractTest
      * Test, if we do not ignore the emergency handler.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeWithEmergency()
     {
@@ -146,6 +150,8 @@ class TraversableTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::retrieveTraversableData
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::analyseTraversableResult
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeWithErrors()
     {
@@ -184,6 +190,8 @@ class TraversableTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::retrieveTraversableData
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::analyseTraversableResult
+     *
+     * @throws \ReflectionException
      */
     public function testMeWithSmallArray()
     {
@@ -205,7 +213,7 @@ class TraversableTest extends AbstractTest
             2 => 'not',
             'long'
         ];
-        $data = new \ArrayObject($array);
+        $data = new ArrayObject($array);
         $fixture = [
             'data' => $data,
             'name' => 'whoopie',
@@ -239,6 +247,8 @@ class TraversableTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::retrieveTraversableData
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable::analyseTraversableResult
+     *
+     * @throws \ReflectionException
      */
     public function testMeWithLargeArray()
     {
@@ -255,7 +265,7 @@ class TraversableTest extends AbstractTest
 
         // Create a small iterateable fixture.
         $array = array_fill(0, 1000, 'whatever');
-        $data = new \ArrayObject($array);
+        $data = new ArrayObject($array);
         $fixture = [
             'data' => $data,
             'name' => 'tipsy',

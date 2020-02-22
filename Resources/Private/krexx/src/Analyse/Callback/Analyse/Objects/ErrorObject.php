@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
@@ -51,7 +54,7 @@ class ErrorObject extends AbstractObjectAnalysis
      * @return string
      *   The rendered HTML.
      */
-    public function callMe()
+    public function callMe(): string
     {
         // Call the start event, even if this is not an error object.
         $output = $this->dispatchStartEvent() . $this->renderBacktrace();
@@ -63,8 +66,8 @@ class ErrorObject extends AbstractObjectAnalysis
             $this->pool->fileService->readSourcecode(
                 $data->getFile(),
                 $lineNo,
-                $lineNo -5,
-                $lineNo +5
+                $lineNo - 5,
+                $lineNo + 5
             )
         );
         if (empty($source) === true) {
@@ -90,7 +93,7 @@ class ErrorObject extends AbstractObjectAnalysis
      * @return string
      *   The rendered HTML.
      */
-    protected function renderBacktrace()
+    protected function renderBacktrace(): string
     {
         $output = '';
         $trace = $this->parameters[static::PARAM_DATA]->getTrace();

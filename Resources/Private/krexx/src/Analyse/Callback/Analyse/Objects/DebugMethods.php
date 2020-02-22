@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
@@ -39,7 +42,6 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Exception;
 use ReflectionException;
 use Throwable;
 
@@ -69,7 +71,7 @@ class DebugMethods extends AbstractObjectAnalysis
      * @return string
      *   The generated markup.
      */
-    public function callMe()
+    public function callMe(): string
     {
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters[static::PARAM_REF];
@@ -77,27 +79,25 @@ class DebugMethods extends AbstractObjectAnalysis
         $output = $this->dispatchStartEvent();
 
         foreach (explode(',', $this->pool->config->getSetting(Fallback::SETTING_DEBUG_METHODS)) as $funcName) {
-            if ($this->checkIfAccessible($data, $funcName, $reflectionClass) === true) {
+            if (
+                $this->checkIfAccessible($data, $funcName, $reflectionClass) === true &&
                 // We ignore NULL values.
-                $result = $this->retrieveValue($data, $funcName);
-                if (isset($result) === true) {
-                    $output .= $this->pool->render->renderExpandableChild(
-                        $this->dispatchEventWithModel(
-                            $funcName,
-                            $this->pool->createClass(Model::class)
-                                ->setName($funcName)
-                                ->setType(static::TYPE_DEBUG_METHOD)
-                                ->setNormal(static::UNKNOWN_VALUE)
-                                ->setHelpid($funcName)
-                                ->setConnectorType(Connectors::METHOD)
-                                ->addParameter(static::PARAM_DATA, $result)
-                                ->injectCallback(
-                                    $this->pool->createClass(Debug::class)
-                                )
-                        )
-                    );
-                    unset($result);
-                }
+                ($result = $this->retrieveValue($data, $funcName)) !== null
+            ) {
+                $output .= $this->pool->render->renderExpandableChild(
+                    $this->dispatchEventWithModel(
+                        $funcName,
+                        $this->pool->createClass(Model::class)
+                            ->setName($funcName)
+                            ->setType(static::TYPE_DEBUG_METHOD)
+                            ->setNormal(static::UNKNOWN_VALUE)
+                            ->setHelpid($funcName)
+                            ->setConnectorType(Connectors::METHOD)
+                            ->addParameter(static::PARAM_DATA, $result)
+                            ->injectCallback($this->pool->createClass(Debug::class))
+                    )
+                );
+                unset($result);
             }
         }
 
@@ -115,7 +115,7 @@ class DebugMethods extends AbstractObjectAnalysis
      * @return mixed
      *   Whatever the method would return.
      */
-    protected function retrieveValue($object, $methodName)
+    protected function retrieveValue($object, string $methodName)
     {
         $result = null;
         // Add a try to prevent the hosting CMS from doing something stupid.
@@ -127,8 +127,6 @@ class DebugMethods extends AbstractObjectAnalysis
         try {
             $result = $object->$methodName();
         } catch (Throwable $e) {
-            // Do nothing.
-        } catch (Exception $e) {
             // Do nothing.
         }
 
@@ -151,15 +149,17 @@ class DebugMethods extends AbstractObjectAnalysis
      * @return bool
      *   Whether or not we are allowed toi access this method.
      */
-    protected function checkIfAccessible($data, $funcName, ReflectionClass $reflectionClass)
+    protected function checkIfAccessible($data, string $funcName, ReflectionClass $reflectionClass): bool
     {
         // We need to check if:
         // 1.) Method exists. It may be protected though.
         // 2.) Method can be called. There may be a magical method, though.
         // 3.) It's not blacklisted.
-        if (method_exists($data, $funcName) === true &&
+        if (
+            method_exists($data, $funcName) === true &&
             is_callable([$data, $funcName]) === true &&
-            $this->pool->config->validation->isAllowedDebugCall($data, $funcName) === true) {
+            $this->pool->config->validation->isAllowedDebugCall($data, $funcName) === true
+        ) {
             // We need to check if the callable function requires any parameters.
             // We will not call those, because we simply can not provide them.
             try {

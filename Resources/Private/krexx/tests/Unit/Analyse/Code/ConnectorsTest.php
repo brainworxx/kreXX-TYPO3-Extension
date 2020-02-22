@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -57,19 +58,9 @@ class ConnectorsTest extends AbstractTest
      * Test the setting of the parameters
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::setParameters
-     */
-    public function testSetParameters()
-    {
-        $this->connectors->setParameters(static::TEST_STRING);
-        $this->assertEquals(static::TEST_STRING, $this->connectors->getParameters());
-    }
-
-    /**
-     * Test the getter of the parameters.
-     *
      * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::getParameters
      */
-    public function testGetParameters()
+    public function testSetParameters()
     {
         $this->connectors->setParameters(static::TEST_STRING);
         $this->assertEquals(static::TEST_STRING, $this->connectors->getParameters());

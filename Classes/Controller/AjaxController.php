@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
@@ -57,18 +60,20 @@ class AjaxController
      *   The current server request.
      * @param \TYPO3\CMS\Core\Http\Response|null $response
      *   The prepared response object. Since 10.0, we need to create this one
-     *   by ourself.
+     *   by ourselves.
+     *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
      * @return \TYPO3\CMS\Core\Http\Response
      *   The response with the json string.
      */
-    public function refreshLoglistAction(ServerRequest $serverRequest, Response $response = null)
+    public function refreshLoglistAction(ServerRequest $serverRequest, Response $response = null): Response
     {
         if ($response === null) {
             $response = GeneralUtility::makeInstance(Response::class);
         }
 
-        // There is already an accesscheck in the LogfileList.
+        // There is already an access check in the LogfileList.
         // We will not check twice.
         $fileList = GeneralUtility::makeInstance(ObjectManager::class)
             ->get(LogfileList::class)
@@ -86,12 +91,12 @@ class AjaxController
      *   The current server request.
      * @param \TYPO3\CMS\Core\Http\Response $response
      *   The prepared response object. Since 10.0, we need to create this one
-     *   by ourself.
+     *   by ourselves.
      *
      * @return \TYPO3\CMS\Core\Http\Response
      *   The response with the json string.
      */
-    public function deleteAction(ServerRequest $serverRequest, Response $response = null)
+    public function deleteAction(ServerRequest $serverRequest, Response $response = null): Response
     {
         if ($response === null) {
             $response = GeneralUtility::makeInstance(Response::class);
@@ -131,10 +136,10 @@ class AjaxController
      * @param string $file
      *   Path to the file we want to delete.
      *
-     * @return boolean
+     * @return bool
      *   The success status of the deleting.
      */
-    protected function delete($file)
+    protected function delete($file): bool
     {
         if (is_writable(dirname(($file))) && file_exists($file)) {
             // Away with you!
@@ -151,7 +156,7 @@ class AjaxController
      * @return bool
      *   The result of the check.
      */
-    protected function hasAccess()
+    protected function hasAccess(): bool
     {
         return isset($GLOBALS['BE_USER']) &&
             $GLOBALS['BE_USER']->check('modules', AbstractCollector::PLUGIN_NAME);

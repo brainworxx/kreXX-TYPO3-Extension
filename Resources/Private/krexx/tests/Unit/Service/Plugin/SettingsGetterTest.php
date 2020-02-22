@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -44,6 +45,8 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
  */
 class SettingsGetterTest extends AbstractRegistration
 {
+    const TEST_THE_FALLBACK = 'Test the fallback value.';
+    const TEST_THE_NEW_VALUE = 'Test the new value.';
     /**
      * Test the getting of the getter for the configuration file, and it's fallback.
      *
@@ -54,14 +57,14 @@ class SettingsGetterTest extends AbstractRegistration
         $this->assertEquals(
             KREXX_DIR . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini',
             SettingsGetter::getConfigFile(),
-            'Test the fallback value.'
+            static::TEST_THE_FALLBACK
         );
 
         $this->setValueByReflection(static::CONFIG_FILE, 'filepath', $this->registration);
         $this->assertEquals(
             'filepath',
             SettingsGetter::getConfigFile(),
-            'Test the new value.'
+            static::TEST_THE_NEW_VALUE
         );
     }
 
@@ -75,14 +78,14 @@ class SettingsGetterTest extends AbstractRegistration
         $this->assertEquals(
             KREXX_DIR . 'chunks' . DIRECTORY_SEPARATOR,
             SettingsGetter::getChunkFolder(),
-            'Test the fallback value.'
+            static::TEST_THE_FALLBACK
         );
 
         $this->setValueByReflection(static::CHUNK_FOLDER, 'some/folder', $this->registration);
         $this->assertEquals(
             'some/folder',
             SettingsGetter::getChunkFolder(),
-            'Test the new value.'
+            static::TEST_THE_NEW_VALUE
         );
     }
 
@@ -96,14 +99,14 @@ class SettingsGetterTest extends AbstractRegistration
         $this->assertEquals(
             KREXX_DIR . 'log' . DIRECTORY_SEPARATOR,
             SettingsGetter::getLogFolder(),
-            'Test the fallback value.'
+            static::TEST_THE_FALLBACK
         );
 
         $this->setValueByReflection(static::LOG_FOLDER, 'some/logging', $this->registration);
         $this->assertEquals(
             'some/logging',
             SettingsGetter::getLogFolder(),
-            'Test the new value.'
+            static::TEST_THE_NEW_VALUE
         );
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
@@ -47,7 +50,6 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Exception;
 use Throwable;
 
 /**
@@ -71,64 +73,79 @@ class Objects extends AbstractCallback
      * @return string
      *   The generated markup.
      */
-    public function callMe()
+    public function callMe(): string
     {
         $output = $this->pool->render->renderSingeChildHr() . $this->dispatchStartEvent();
 
-        $ref = $this->parameters[static::PARAM_REF] = new ReflectionClass($this->parameters[static::PARAM_DATA]);
-
-        // Dumping public properties.
-        $output .= $this->dumpStuff(PublicProperties::class);
-
-        // Dumping getter methods.
-        // We will not dump the getters for internal classes, though.
-        if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_GETTER) === true &&
-            $ref->isUserDefined() === true
-        ) {
-            $output .= $this->dumpStuff(Getter::class);
-        }
-
-        $output .= $this->dumpStuff(Meta::class);
-
-        // Anaylsing error objects.
-        if (is_a($this->parameters[static::PARAM_DATA], Throwable::class) ||
-            is_a($this->parameters[static::PARAM_DATA], Exception::class)
-        ) {
-            $output .= $this->dumpStuff(ErrorObject::class);
-        }
-
-        // Dumping protected properties.
-        if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_PROTECTED) === true ||
-            $this->pool->scope->isInScope() === true
-        ) {
-            $output .= $this->dumpStuff(ProtectedProperties::class);
-        }
-
-        // Dumping private properties.
-        if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_PRIVATE) === true ||
-            $this->pool->scope->isInScope() === true
-        ) {
-            $output .= $this->dumpStuff(PrivateProperties::class);
-        }
-
-        // Dumping class constants.
-        $output .= $this->dumpStuff(Constants::class);
-
-        // Dumping all methods.
-        $output .= $this->dumpStuff(Methods::class);
-
-        // Dumping traversable data.
-        if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_TRAVERSABLE) === true &&
-            $this->parameters[static::PARAM_DATA] instanceof \Traversable
-        ) {
-            $output .= $this->dumpStuff(Traversable::class);
+        foreach ($this->generateDumperList() as $classname) {
+            $output .= $this->pool
+                ->createClass($classname)
+                ->setParameters($this->parameters)
+                ->callMe();
         }
 
         // Dumping all configured debug functions.
         // Adding a HR for a better readability.
-        return $output .
-            $this->dumpStuff(DebugMethods::class) .
-            $this->pool->render->renderSingeChildHr();
+        return $output . $this->pool->render->renderSingeChildHr();
+    }
+
+    /**
+     * Generate a list of classes that will analyse the object.
+     *
+     * @throws \ReflectionException
+     *
+     * @return array
+     *   The list with class names for the analysis.
+     */
+    protected function generateDumperList()
+    {
+        $ref = $this->parameters[static::PARAM_REF] = new ReflectionClass($this->parameters[static::PARAM_DATA]);
+        $isInScope = $this->pool->scope->isInScope();
+        $config = $this->pool->config;
+
+        $stuffToDump = [PublicProperties::class];
+
+        // Dumping getter methods.
+        // We will not dump the getters for internal classes, though.
+        if ($config->getSetting(Fallback::SETTING_ANALYSE_GETTER) === true && $ref->isUserDefined() === true) {
+            $stuffToDump[] = Getter::class;
+        }
+
+        $stuffToDump[] = Meta::class;
+
+        // Analysing error objects.
+        if (is_a($this->parameters[static::PARAM_DATA], Throwable::class)) {
+            $stuffToDump[] = ErrorObject::class;
+        }
+
+        // Dumping protected properties.
+        if ($isInScope === true || $config->getSetting(Fallback::SETTING_ANALYSE_PROTECTED) === true) {
+            $stuffToDump[] = ProtectedProperties::class;
+        }
+
+        // Dumping private properties.
+        if ($isInScope === true || $config->getSetting(Fallback::SETTING_ANALYSE_PRIVATE) === true) {
+            $stuffToDump[] = PrivateProperties::class;
+        }
+
+        // Dumping class constants.
+        $stuffToDump[] = Constants::class;
+
+        // Dumping all methods.
+        $stuffToDump[] = Methods::class;
+
+        // Dumping traversable data.
+        if (
+            $config->getSetting(Fallback::SETTING_ANALYSE_TRAVERSABLE) === true &&
+            $this->parameters[static::PARAM_DATA] instanceof \Traversable
+        ) {
+            $stuffToDump[] = Traversable::class;
+        }
+
+        // Dumping debug methods.
+        $stuffToDump[] = DebugMethods::class;
+
+        return $stuffToDump;
     }
 
     /**
@@ -137,10 +154,16 @@ class Objects extends AbstractCallback
      * @var string $classname
      *   The name of the callback class we are using.
      *
+     * @deprecated
+     *   Since 4.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
      * @return string
      *   The generated html markup.
      */
-    protected function dumpStuff($classname)
+    protected function dumpStuff(string $classname): string
     {
         return $this->pool
             ->createClass($classname)

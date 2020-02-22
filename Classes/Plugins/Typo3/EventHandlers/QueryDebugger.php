@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
@@ -44,7 +47,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
-use Exception;
 use Throwable;
 
 /**
@@ -82,7 +84,7 @@ class QueryDebugger implements EventHandlerInterface, ConstInterface
      * @return string
      *   Return an empty string.
      */
-    public function handle(AbstractCallback $callback = null, Model $model = null)
+    public function handle(AbstractCallback $callback = null, Model $model = null): string
     {
         if (empty($sql = $this->retrieveSql($callback->getParameters()[static::PARAM_DATA]))  === true) {
             // Wrong object type, or problems with the SQL retrieval.
@@ -126,7 +128,7 @@ class QueryDebugger implements EventHandlerInterface, ConstInterface
      * @return string
      *   The SQL, or an empty string in case of an error.
      */
-    protected function retrieveSql($query)
+    protected function retrieveSql($query): string
     {
         $result = '';
         try {
@@ -153,8 +155,6 @@ class QueryDebugger implements EventHandlerInterface, ConstInterface
             }
 
             $result = $sql;
-        } catch (Exception $e) {
-            // Do nothing.
         } catch (Throwable $e) {
             // Do nothing.
         }

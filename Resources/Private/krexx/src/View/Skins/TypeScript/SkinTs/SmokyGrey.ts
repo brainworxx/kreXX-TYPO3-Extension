@@ -16,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -73,7 +73,7 @@ class SmokyGrey extends Hans
     /**
      * Initialize the draggable.
      */
-    protected initDraxx = () : void =>
+    protected initDraxx = (): void =>
     {
         this.draxx = new Draxx('.kwrapper', '.khandle', function (){},function (){});
     };
@@ -86,7 +86,7 @@ class SmokyGrey extends Hans
      * @param {Node} element
      *   The element that was clicked.
      */
-    protected switchTab = (event:Event, element:Element) : void =>
+    protected switchTab = (event:Event, element:Element): void =>
     {
         let instance = this.kdt.getDataset((element.parentNode as Element), 'instance');
         let what = this.kdt.getDataset(element, 'what');
@@ -113,10 +113,10 @@ class SmokyGrey extends Hans
      * @param {Node} element
      *   The element that was clicked.
      */
-    protected setAdditionalData = (event:Event, element:Node) : void =>
+    protected setAdditionalData = (event:Event, element:Node): void =>
     {
         let kdt:Kdt = this.kdt;
-        let setPayloadMaxHeight:Function = this.setPayloadMaxHeight;
+        let setPayloadMaxHeight:Function = this.setPayloadMaxHeight.bind(this);
         // When dealing with 400MB output, or more, this one takes more time than anything else.
         // We will delay it, so that is does not slow down other stuff.
         setTimeout(function() {
@@ -208,7 +208,7 @@ class SmokyGrey extends Hans
      * @param {Element} el
      *   The element you want to focus on.
      * @param {boolean} noHighlight
-     *   Do we need to highlight the elenemt we arejuming to?
+     *   Do we need to highlight the element we are jumping to?
      */
     protected jumpTo = (el:Element, noHighlight:boolean) =>
     {
@@ -233,7 +233,7 @@ class SmokyGrey extends Hans
                 step = Math.round(diff / 12) * -1;
             }
 
-            // We also need to check if the setting of the new valkue was successful.
+            // We also need to check if the setting of the new value was successful.
             let lastValue:number = (container[0] as Element).scrollTop;
             let interval:number = setInterval(function () {
                 (container[0] as Element).scrollTop += step;
@@ -251,20 +251,13 @@ class SmokyGrey extends Hans
     /**
      * Sets the max-height on the payload elements, depending on the viewport.
      */
-    protected setPayloadMaxHeight() : void
+    protected setPayloadMaxHeight(): void
     {
-        // Get the height.
-        let height = Math.round(Math.min(document.documentElement.clientHeight, window.innerHeight || 0) * 0.70);
-        let elements;
-        let i;
-
-        if (height > 350) {
-            // For the debug display
-            elements = document.querySelectorAll('.krela-wrapper .kpayload');
-            for (i = 0; i < elements.length; i++) {
-                elements[i].style.maxHeight = height + 'px';
-            }
-        }
+        let elements = document.querySelectorAll('.krela-wrapper .kpayload');
+        this.handlePayloadMinHeight(
+            Math.round(Math.min(document.documentElement.clientHeight, window.innerHeight || 0) * 0.70),
+            elements
+        );
 
         // For the fatal error handler.
         elements = document.querySelectorAll('.kfatalwrapper-outer .kpayload');
@@ -274,11 +267,23 @@ class SmokyGrey extends Hans
             let handler = (document.querySelector('.kfatalwrapper-outer') as HTMLElement).offsetHeight;
             // This sets the max payload height to the remaining height of the window,
             // sending the footer straight to the bottom of the viewport.
-            height = handler - header - footer - 17;
-            if (height > 350) {
-                for (i = 0; i < elements.length; i++) {
-                    elements[i].style.maxHeight = height + 'px';
-                }
+            this.handlePayloadMinHeight(handler - header - footer - 17, elements);
+        }
+    }
+
+    /**
+     * What the method name says. We handle the minimum height of the payload.
+     *
+     * @param {number} height
+     * @param {NodeList} elements
+     */
+    protected handlePayloadMinHeight(height:number, elements:NodeList): void
+    {
+        let i:number;
+
+        if (height > 350) {
+            for (i = 0; i < elements.length; i++) {
+                (elements[i] as HTMLElement).style.maxHeight = height + 'px';
             }
         }
     }

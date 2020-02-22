@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -46,6 +47,9 @@ class RecursionTest extends AbstractRenderSmokyGrey
     public function testRenderRecursion()
     {
         $this->mockModel(static::GET_JSON, ['jay' => 'son']);
+        $this->mockModel('getConnectorRight', '');
+        $this->mockModel('getConnectorLeft', '');
+
         $result = $this->renderSmokyGrey->renderRecursion($this->modelMock);
         $this->assertContains('jay', $result);
         $this->assertContains('son', $result);

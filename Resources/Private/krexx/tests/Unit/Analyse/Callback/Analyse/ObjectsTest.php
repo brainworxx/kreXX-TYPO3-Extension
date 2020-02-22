@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -113,7 +114,10 @@ class ObjectsTest extends AbstractTest
      * according to the configuration.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeEvent()
     {
@@ -130,7 +134,9 @@ class ObjectsTest extends AbstractTest
      * Test, if the public properties are getting analysed.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     *
+     * @throws \ReflectionException
      */
     public function testCallMePublic()
     {
@@ -150,7 +156,9 @@ class ObjectsTest extends AbstractTest
      * Test, if the getter get analysed.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeGetter()
     {
@@ -178,6 +186,8 @@ class ObjectsTest extends AbstractTest
 
     /**
      * Test, if the meta stuff is analysed.
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeMeta()
     {
@@ -192,7 +202,9 @@ class ObjectsTest extends AbstractTest
      * Test, if the protected properties are analysed.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeProtected()
     {
@@ -221,7 +233,9 @@ class ObjectsTest extends AbstractTest
      * Test, if the private properties are analysed.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     *
+     * @throws \ReflectionException
      */
     public function testCallMePrivate()
     {
@@ -252,7 +266,9 @@ class ObjectsTest extends AbstractTest
      * Pun not intended.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeConstants()
     {
@@ -270,7 +286,9 @@ class ObjectsTest extends AbstractTest
      * Test, if the method analysis is used.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeMethods()
     {
@@ -288,7 +306,9 @@ class ObjectsTest extends AbstractTest
      * Test with traversable deactivated and with a traversable class
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeTraversableDeactivatedTraversable()
     {
@@ -303,7 +323,9 @@ class ObjectsTest extends AbstractTest
      * Test with traversable deactivated and with a normal class
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeTraversableDeactivatedNormal()
     {
@@ -317,7 +339,9 @@ class ObjectsTest extends AbstractTest
      * Test with traversable activated and with a normal class
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeTraversableActivatedTraversable()
     {
@@ -331,7 +355,9 @@ class ObjectsTest extends AbstractTest
      * Test, if the traversable part is called.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeTraversableActivated()
     {
@@ -349,11 +375,31 @@ class ObjectsTest extends AbstractTest
      * Test, if the debug methods analysis is triggered.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeDebugMethods()
     {
         Krexx::$pool->rewrite[DebugMethods::class] = CallbackCounter::class;
+        $this->objects->setParameters($this->fixture)
+            ->callMe();
+        $this->assertEquals(1, CallbackCounter::$counter);
+        $this->parametersTest(CallbackCounter::$staticParameters[0]);
+    }
+
+    /**
+     * Tst, if the analysis of an error object works.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     *
+     * @throws \ReflectionException
+     */
+    public function testCallMeException()
+    {
+        Krexx::$pool->rewrite[ErrorObject::class] = CallbackCounter::class;
+        $this->fixture['data'] = new \Exception('message', 123);
         $this->objects->setParameters($this->fixture)
             ->callMe();
         $this->assertEquals(1, CallbackCounter::$counter);

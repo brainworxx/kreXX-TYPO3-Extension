@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
@@ -39,12 +42,12 @@ use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use TYPO3\CMS\Core\Exception;
 use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception\TooDirtyException;
+use Throwable;
 
 /**
- * Adding the result fro mthe following methods to the output:
+ * Adding the result from the following methods to the output:
  *   _isDirty
  *   _isClone
  *   _isNew
@@ -82,7 +85,7 @@ class DirtyModels implements EventHandlerInterface, ConstInterface
      * @return string
      *   Return an empty string.
      */
-    public function handle(AbstractCallback $callback = null, Model $model = null)
+    public function handle(AbstractCallback $callback = null, Model $model = null): string
     {
         /** @var AbstractDomainObject $data */
         $data = $model->getData();
@@ -101,10 +104,7 @@ class DirtyModels implements EventHandlerInterface, ConstInterface
 
             $model->addToJson('Is a clone', $this->createReadableBoolean($data->_isClone()));
             $model->addToJson('Is a new', $this->createReadableBoolean($data->_isNew()));
-        } catch (Exception $e) {
-            // Do nothing.
-            // Somebody has messed with the models.
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Do nothing.
             // Somebody has messed with the models.
         }
@@ -115,13 +115,13 @@ class DirtyModels implements EventHandlerInterface, ConstInterface
     /**
      * Make a boolean human readable.
      *
-     * @param $bool
+     * @param bool $bool
      *   The boolean, like the parameter name says.
      *
      * @return string
      *   'TRUE' or 'FALSE' or an empty string when not dealing with a boolean.
      */
-    protected function createReadableBoolean($bool)
+    protected function createReadableBoolean(bool $bool): string
     {
         if ($bool === true) {
             return 'TRUE';

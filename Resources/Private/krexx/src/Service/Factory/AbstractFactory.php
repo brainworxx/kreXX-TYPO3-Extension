@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Factory;
 
@@ -62,10 +65,10 @@ abstract class AbstractFactory
      *
      * @param string $classname
      *
-     * @return mixed
+     * @return object
      *   The requested object.
      */
-    public function createClass($classname)
+    public function createClass(string $classname)
     {
         // Check for possible overwrite.
         if (isset($this->rewrite[$classname]) === true) {
@@ -78,10 +81,10 @@ abstract class AbstractFactory
     /**
      * Return a part the superglobal $GLOBALS.
      *
-     * @param string $what
+     * @param string|int $what
      *   The part of the globals we want to access.
      *
-     * @return array
+     * @return mixed
      *   The part we are requesting.
      */
     public function &getGlobals($what = '')
@@ -99,7 +102,7 @@ abstract class AbstractFactory
      * @return array
      *   The superglobal $_SERVER
      */
-    public function &getServer()
+    public function &getServer(): array
     {
         return $_SERVER;
     }

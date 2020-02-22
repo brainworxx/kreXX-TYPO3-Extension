@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,18 +33,44 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\View\Hans;
+declare(strict_types=1);
 
-use Brainworxx\Krexx\View\Skins\RenderHans;
+namespace Brainworxx\Krexx\Analyse\Model;
 
-/**
- * Individual render class for the Hans skin.
- *
- * @deprecated
- *
- * @package Brainworxx\Krexx\View\Hans
- */
-class Render extends RenderHans
+use Brainworxx\Krexx\Analyse\Model;
+
+trait Name
 {
+    /**
+     * The name/key of it.
+     *
+     * @var string|int
+     */
+    protected $name = '';
 
+    /**
+     * Setter for the name.
+     *
+     * @param int|string $name
+     *   The name/key we are analysing.
+     *
+     * @return Model
+     *   $this, for chaining.
+     */
+    public function setName($name): Model
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Getter for the name.
+     *
+     * @return int|string
+     *   The name/key we are analysing.
+     */
+    public function &getName()
+    {
+        return $this->name;
+    }
 }

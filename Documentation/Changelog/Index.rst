@@ -12,6 +12,19 @@
 Changelog
 =============================================================
 
+4.0.0 dev
+    - [Change] Removed all deprecations.
+    - [Change] Removed the PHP 5.x fatal error handler.
+    - [Change] Dropped PHP 5.x support.
+    - [Change] Remove all double Exception / Throwable catching
+    - [Change] Introduced PSR-12 coding style
+    - [Change] Simplified the skin rendering.
+    - [Change] Deprecations for the fallback settings class.
+    - [Change] Introduced strict mode.
+    - [Change] Introduced scalar type hints.
+    - [Change] Introduced method return types.
+    - [Change] Simplified the Model.
+
 3.3.1
     - [Feature] Updated to PHP 7.4
     - [Bugfix] The process other routing is never called.

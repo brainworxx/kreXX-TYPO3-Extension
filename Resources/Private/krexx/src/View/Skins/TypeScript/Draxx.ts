@@ -16,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -106,7 +106,7 @@ class Draxx
      *
      * @param {string} selector
      */
-    public moveToViewport(selector:string) : void
+    public moveToViewport(selector:string): void
     {
         // Meh, we need to use the timeout to make this work on MS-Edge.
         // Edge remembers the last scrolling position *after* the onDocumentReady
@@ -141,7 +141,7 @@ class Draxx
      * @event mousedown
      * @param {MouseEvent} event
      */
-    protected startDraxx = (event:MouseEvent) : void =>
+    protected startDraxx = (event:MouseEvent): void =>
     {
         // The selector has an ID, we only have one of them.
         let elContent:HTMLElement = (this.kdt.getParents((event.target as Node), this.selector)[0] as HTMLElement);
@@ -198,7 +198,7 @@ class Draxx
      * @event mouseup
      * @param {MouseEvent} event
      */
-    protected mouseUp = (event:MouseEvent) : void =>
+    protected mouseUp = (event:MouseEvent): void =>
     {
         event.preventDefault();
         event.stopPropagation();
@@ -217,7 +217,7 @@ class Draxx
      * @event mouseDown
      * @param {MouseEvent} event
      */
-    protected drag = (event:MouseEvent) : void =>
+    protected drag = (event:MouseEvent): void =>
     {
         event.preventDefault();
         event.stopPropagation();
@@ -236,7 +236,7 @@ class Draxx
      *
      * @returns {Offset}
      */
-    protected getElementOffset(element:Element) : Offset
+    protected getElementOffset(element:Element): Offset
     {
         let de:Element = document.documentElement;
         let box:ClientRect = element.getBoundingClientRect();
@@ -252,7 +252,7 @@ class Draxx
      *
      * @returns {number}
      */
-    protected outerWidth(element:HTMLElement) : number
+    protected outerWidth(element:HTMLElement): number
     {
         let width:number = element.offsetWidth;
         let style:CSSStyleDeclaration = getComputedStyle(element);

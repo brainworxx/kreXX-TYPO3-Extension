@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,6 +41,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\View\Skins\RenderHans;
+use ReflectionClass;
 
 class ConstantsTest extends AbstractTest
 {
@@ -58,11 +60,12 @@ class ConstantsTest extends AbstractTest
      * Testing the analysis of constants (without any constants).
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Constants::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
      */
     public function testCallMeNoConstants()
     {
         // Create the fixture mock, without any constants.
-        $reflectionMock = $this->createMock(\ReflectionClass::class);
+        $reflectionMock = $this->createMock(ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method('getConstants')
             ->will($this->returnValue([]));
@@ -93,15 +96,17 @@ class ConstantsTest extends AbstractTest
         $this->assertEquals(0, CallbackCounter::$counter);
     }
 
-     /**
+    /**
      * Testing the analysis of constants,
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Constants::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
+     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchEventWithModel
      */
     public function testCallMeWithConstants()
     {
         // Create the fixture mock, without any constants.
-        $reflectionMock = $this->createMock(\ReflectionClass::class);
+        $reflectionMock = $this->createMock(ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method('getConstants')
             ->will($this->returnValue('some constants'));

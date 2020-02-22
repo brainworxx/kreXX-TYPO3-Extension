@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -104,6 +105,8 @@ class ThroughMethodsTest extends AbstractTest
      * Normal testrun for the method analysis.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveConnectorType
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveParameters
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::getDeclarationPlace
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::getDeclarationKeywords
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveDeclaringReflection
@@ -304,7 +307,7 @@ class ThroughMethodsTest extends AbstractTest
             $model->getParameters()[$this->throughMethods::PARAM_DATA][ConstInterface::META_DECLARED_IN]
         );
         $this->assertTrue(
-            $this->throughMethods->getParameters()[$this->throughMethods::PARAM_REF_METHOD] instanceof \ReflectionMethod
+            $this->throughMethods->getParameters()[$this->throughMethods::PARAM_REF_METHOD] instanceof ReflectionMethod
         );
     }
 }

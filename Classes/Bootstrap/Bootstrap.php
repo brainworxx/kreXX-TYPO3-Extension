@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Bootstrap;
 
 use Brainworxx\Includekrexx\Modules\Log;
@@ -43,7 +46,6 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
 use Aimeos\MShop\Exception as AimeosException;
-use Exception;
 use Throwable;
 use Krexx;
 
@@ -85,9 +87,7 @@ class Bootstrap
     public function run()
     {
         try {
-            if ($this->loadKrexx() === false ||
-                class_exists(Registration::class) === false
-            ) {
+            if ($this->loadKrexx() === false || class_exists(Registration::class) === false) {
                 // "Autoloading" failed.
                 // There is no point in continuing here.
                 return;
@@ -98,7 +98,8 @@ class Bootstrap
             Registration::register($t3configuration);
             Registration::activatePlugin(get_class($t3configuration));
             // Register our modules for the admin panel.
-            if (version_compare(TYPO3_version, '9.5', '>=') &&
+            if (
+                version_compare(TYPO3_version, '9.5', '>=') &&
                 isset($GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
                     [static::MODULES][static::DEBUG])
             ) {
@@ -117,7 +118,8 @@ class Bootstrap
             // do it inside the template. 'krexx' as a namespace should be unique enough.
             // Theoretically, this should be part of the fluid debugger plugin, but
             // activating it in the viewhelper is too late, for obvious reason.
-            if (version_compare(TYPO3_version, '8.5', '>=') &&
+            if (
+                version_compare(TYPO3_version, '8.5', '>=') &&
                 empty($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
                 [static::FLUID_NAMESPACE][static::KREXX])
             ) {
@@ -130,19 +132,15 @@ class Bootstrap
             Registration::register($aimeosConfiguration);
 
             // Check if we have the Aimeos shop available.
-            if (class_exists(AimeosException::class) === true ||
-                ExtensionManagementUtility::isLoaded('aimeos')
-            ) {
+            if (class_exists(AimeosException::class) === true || ExtensionManagementUtility::isLoaded('aimeos')) {
                 Registration::activatePlugin(get_class($aimeosConfiguration));
             }
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             // Do nothing.
             // When updating the extension via ExtensionManager, there is a
             // big chance that the cache is not cleared. And that means that
             // the part above may not work anymore. Hence, we need to make
             // sure that the user does not brick the system.
-        } catch (Throwable $exception) {
-            // Same as above.
         }
     }
 
@@ -153,25 +151,20 @@ class Bootstrap
      * @param string $version
      *   The version number from the ext_localconf.
      *
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheGroupException
-     * @throws \TYPO3\CMS\Core\Package\Exception
-     *
      * @return $this
      *   Return $this, for chaining.
      */
-    public function checkVersionNumber($version)
+    public function checkVersionNumber(string $version): Bootstrap
     {
         try {
             if ($version !== ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY)) {
                 GeneralUtility::makeInstance(CacheManager::class)
                     ->flushCachesInGroup('system');
             }
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             // Do nothing.
             // Flushing the cache just failed. There are deeper issues at work
             // here. The only thing to do now is trying not to brick the system.
-        } catch (Throwable $exception) {
-            // Same as above.
         }
 
 
@@ -185,7 +178,7 @@ class Bootstrap
      *   Was the "autoloading" successful?
      *   We will not continue with a failed autoloading.
      */
-    protected function loadKrexx()
+    protected function loadKrexx(): bool
     {
         // There may be a composer version of kreXX installed.
         // We will not load the bundled one.
@@ -195,9 +188,7 @@ class Bootstrap
 
         // Simply load the main file.
         $krexxFile =  ExtensionManagementUtility::extPath(static::EXT_KEY) . 'Resources/Private/krexx/bootstrap.php';
-        if (file_exists($krexxFile) === true &&
-            class_exists(Krexx::class, false) === false
-        ) {
+        if (file_exists($krexxFile) === true && class_exists(Krexx::class, false) === false) {
             include_once $krexxFile;
             return true;
         }

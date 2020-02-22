@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,13 +33,14 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx;
 
 use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Controller\BacktraceController;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Controller\EditSettingsController;
-use Brainworxx\Krexx\Controller\ErrorController;
 use Brainworxx\Krexx\Controller\ExceptionController;
 use Brainworxx\Krexx\Controller\TimerController;
 use Brainworxx\Krexx\Service\Config\Config;
@@ -73,9 +75,9 @@ class Krexx
      *   The arguments of said function.
      *
      * @return mixed|null
-     *   Return the original anslysis value.
+     *   Return the original analysis value.
      */
-    public static function __callStatic($name, array $arguments)
+    public static function __callStatic(string $name, array $arguments)
     {
         Pool::createPool();
 
@@ -101,7 +103,7 @@ class Krexx
      *   Defines a "moment" during a benchmark test.
      *   The string should be something meaningful, like "Model invoice db call".
      */
-    public static function timerMoment($string)
+    public static function timerMoment(string $string)
     {
         Pool::createPool();
 
@@ -119,9 +121,7 @@ class Krexx
         AbstractController::$analysisInProgress = true;
 
         static::$pool->createClass(TimerController::class)
-            ->noFatalForKrexx()
-            ->timerAction($string)
-            ->reFatalAfterKrexx();
+            ->timerAction($string);
 
         AbstractController::$analysisInProgress = false;
     }
@@ -136,7 +136,8 @@ class Krexx
         Pool::createPool();
 
         // Disabled ?
-        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+        if (
+            static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -146,9 +147,7 @@ class Krexx
         AbstractController::$analysisInProgress = true;
 
         static::$pool->createClass(TimerController::class)
-            ->noFatalForKrexx()
-            ->timerEndAction()
-            ->reFatalAfterKrexx();
+            ->timerEndAction();
 
         AbstractController::$analysisInProgress = false;
     }
@@ -162,14 +161,15 @@ class Krexx
      *   The variable we want to analyse.
      *
      * @return mixed
-     *   Return the original anslysis value.
+     *   Return the original analysis value.
      */
     public static function open($data = null)
     {
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+        if (
+            static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -179,9 +179,7 @@ class Krexx
         AbstractController::$analysisInProgress = true;
 
         static::$pool->createClass(DumpController::class)
-            ->noFatalForKrexx()
-            ->dumpAction($data)
-            ->reFatalAfterKrexx();
+            ->dumpAction($data);
 
         AbstractController::$analysisInProgress = false;
 
@@ -204,7 +202,8 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+        if (
+            static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -214,9 +213,7 @@ class Krexx
         AbstractController::$analysisInProgress = true;
 
         static::$pool->createClass(BacktraceController::class)
-            ->noFatalForKrexx()
-            ->backtraceAction($backtrace)
-            ->reFatalAfterKrexx();
+            ->backtraceAction($backtrace);
 
         AbstractController::$analysisInProgress = false;
     }
@@ -231,8 +228,7 @@ class Krexx
         Pool::createPool();
 
         static::$pool->config->setDisabled(true);
-        static::$pool->createClass(DumpController::class)
-            ->noFatalForKrexx();
+        static::$pool->createClass(DumpController::class);
 
         Config::$disabledByPhp = true;
     }
@@ -250,81 +246,15 @@ class Krexx
 
         // Disabled?
         // We are ignoring local settings here.
-        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+        if (
+            static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
         }
 
          static::$pool->createClass(EditSettingsController::class)
-            ->noFatalForKrexx()
-            ->editSettingsAction()
-            ->reFatalAfterKrexx();
-    }
-
-    /**
-     * Registers a shutdown function.
-     *
-     * Our fatal errorhandler is located there.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed when dropping PHP 5 support.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @api
-     */
-    public static function registerFatal()
-    {
-        Pool::createPool();
-
-        // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
-            Config::$disabledByPhp
-        ) {
-            return;
-        }
-
-        // Wrong PHP version?
-        if (version_compare(phpversion(), '7.0.0', '>=')) {
-            static::$pool->messages->addMessage('php7');
-            // In case that there is no other kreXX output, we show the configuration
-            // with the message.
-            static::editSettings();
-            return;
-        }
-
-        static::$pool->createClass(ErrorController::class)
-            ->registerFatalAction();
-    }
-
-    /**
-     * Tells the registered shutdown function to do nothing.
-     *
-     * We can not unregister a once declared shutdown function,
-     * so we need to tell our errorhandler to do nothing, in case
-     * there is a fatal.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed when dropping PHP 5 support.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @api
-     */
-    public static function unregisterFatal()
-    {
-        Pool::createPool();
-
-        // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
-            Config::$disabledByPhp
-        ) {
-            return;
-        }
-
-        static::$pool->createClass(ErrorController::class)
-            ->unregisterFatalAction();
+            ->editSettingsAction();
     }
 
     /**
@@ -337,7 +267,8 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+        if (
+            static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
@@ -348,7 +279,7 @@ class Krexx
     }
 
     /**
-     * Ungistering our exception handler.
+     * Unregistering our exception handler.
      *
      * @api
      */
@@ -357,7 +288,8 @@ class Krexx
         Pool::createPool();
 
         // Disabled?
-        if (static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+        if (
+            static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
@@ -376,7 +308,7 @@ class Krexx
      *   The variable we want to analyse.
      *
      * @return mixed
-     *   Return the original anslysis value.
+     *   Return the original analysis value.
      */
     public static function log($data = null)
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
@@ -39,12 +42,21 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 trait PluginList
 {
     /**
+     * @var array
+     */
+    private $markerSinglePlugin = [
+        '{activeclass}',
+        '{activetext}',
+        '{plugintext}',
+    ];
+
+    /**
      * Render a list of all registered plugins.
      *
      * @return string
      *   The generated markup from the template files.
      */
-    protected function renderPluginList()
+    protected function renderPluginList(): string
     {
         $result = '';
         $template = $this->getTemplateFileContent(static::FILE_SI_PLUGIN);
@@ -56,12 +68,9 @@ trait PluginList
                 $activeClass = 'kisinactive';
                 $activeText = 'inactive';
             }
+
             $result .= str_replace(
-                [
-                    static::MARKER_PLUGIN_ACTIVE_CLASS,
-                    static::MARKER_PLUGIN_ACTIVE_TEXT,
-                    static::MARKER_PLUGIN_TEXT,
-                ],
+                $this->markerSinglePlugin,
                 [
                     $activeClass,
                     $activeText,
@@ -71,5 +80,19 @@ trait PluginList
             );
         }
         return $result;
+    }
+
+    /**
+     * Getter of the plugin list for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerSinglePlugin(): array
+    {
+        return $this->markerSinglePlugin;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback;
 
@@ -73,7 +76,7 @@ abstract class AbstractCallback implements ConstInterface
      * @return string
      *   The generated markup.
      */
-    abstract public function callMe();
+    abstract public function callMe(): string;
 
     /**
      * Injects the pool.
@@ -89,32 +92,13 @@ abstract class AbstractCallback implements ConstInterface
     /**
      * Add callback parameters at class construction.
      *
-     * @deprecated
-     *   Since 3.1.0. Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @param array $params
-     *   The parameters for the callMe() method.
-     *
-     * @return $this
-     *   Return $this, for chaining.
-     */
-    public function setParams(array &$params)
-    {
-        return $this->setParameters($params);
-    }
-
-    /**
-     * Add callback parameters at class construction.
-     *
      * @param array $parameters
      *   The parameters for the callMe() method.
      *
      * @return $this
      *   Return $this, for chaining.
      */
-    public function setParameters(array &$parameters)
+    public function setParameters(array &$parameters): AbstractCallback
     {
         $this->parameters = $parameters;
         return $this;
@@ -127,7 +111,7 @@ abstract class AbstractCallback implements ConstInterface
      * @return array
      *   The internal parameters for the callback.
      */
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->parameters;
     }
@@ -138,7 +122,7 @@ abstract class AbstractCallback implements ConstInterface
      * @return string
      *   The generated markup from the event handler.
      */
-    protected function dispatchStartEvent()
+    protected function dispatchStartEvent(): string
     {
         return $this->pool->eventService->dispatch(
             static::class . PluginConfigInterface::START_EVENT,
@@ -157,7 +141,7 @@ abstract class AbstractCallback implements ConstInterface
      * @return Model
      *   Return the model for chaining.
      */
-    protected function dispatchEventWithModel($name, Model $model)
+    protected function dispatchEventWithModel(string $name, Model $model): Model
     {
         $this->pool->eventService->dispatch(
             static::class . '::' . $name,
@@ -166,29 +150,5 @@ abstract class AbstractCallback implements ConstInterface
         );
 
         return $model;
-    }
-
-    /**
-     * Check for special chars in properties.
-     *
-     * AFAIK this is only possible for dynamically declared properties
-     * or some magical stuff from __get()
-     *
-     * @see https://stackoverflow.com/questions/29019484/validate-a-php-variable
-     * @author AbraCadaver
-     *
-     * @deprecated
-     *   Since 3.2.0. Will be removed.
-     * @codeCoverageIgnore
-     *   Wi will not test deprecated methods.
-     *
-     * @param $propName
-     *   The property name we want to check.
-     * @return bool
-     *   Whether we have a special char in there, or not.
-     */
-    protected function isPropertyNameNormal($propName)
-    {
-        return $this->pool->encodingService->isPropertyNameNormal($propName);
     }
 }

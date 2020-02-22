@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
@@ -61,7 +64,7 @@ class Methods extends AbstractObjectAnalysis
      * @return string
      *   The generated markup.
      */
-    public function callMe()
+    public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
 
@@ -95,37 +98,31 @@ class Methods extends AbstractObjectAnalysis
     }
 
     /**
-     * Do the real analysis.
-     */
-    /**
+     * Dumping all methods but only if we have any.
+     *
      * @param \ReflectionClass $ref
      *   The reflection of t he class we are analysing
-     * @param $domId
+     * @param string $domId
      *   The already generated dom id.
-     * @param $doProtected
+     * @param bool $doProtected
      *   Are we analysing the protected methods here?
-     * @param $doPrivate
+     * @param bool $doPrivate
      *   Are we analysing private methods here?
+     *
      * @return string
      *   The generated markup.
      */
-    protected function analyseMethods(ReflectionClass $ref, $domId, $doProtected, $doPrivate)
+    protected function analyseMethods(ReflectionClass $ref, string $domId, bool $doProtected, bool $doPrivate): string
     {
-        // Dumping all methods but only if we have any.
-        $protected = [];
-        $private = [];
-        $public = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
-
+        $methods = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
         if ($doProtected === true) {
-            $protected = $ref->getMethods(ReflectionMethod::IS_PROTECTED);
+            $methods = array_merge($methods, $ref->getMethods(ReflectionMethod::IS_PROTECTED));
         }
-
         if ($doPrivate === true) {
-            $private = $ref->getMethods(ReflectionMethod::IS_PRIVATE);
+            $methods = array_merge($methods, $ref->getMethods(ReflectionMethod::IS_PRIVATE));
         }
 
         // Is there anything to analyse?
-        $methods = array_merge($public, $protected, $private);
         if (empty($methods) === true) {
             return '';
         }
@@ -145,9 +142,7 @@ class Methods extends AbstractObjectAnalysis
                     ->addParameter(static::PARAM_DATA, $methods)
                     ->addParameter(static::PARAM_REF, $ref)
                     ->setDomId($domId)
-                    ->injectCallback(
-                        $this->pool->createClass(ThroughMethods::class)
-                    )
+                    ->injectCallback($this->pool->createClass(ThroughMethods::class))
             )
         );
     }
@@ -168,7 +163,7 @@ class Methods extends AbstractObjectAnalysis
      * @return string
      *   The generated id.
      */
-    protected function generateDomIdFromClassname($data, $doProtected, $doPrivate)
+    protected function generateDomIdFromClassname(string $data, bool $doProtected, bool $doPrivate): string
     {
         $string = 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_m_';
         if ($doProtected === true) {

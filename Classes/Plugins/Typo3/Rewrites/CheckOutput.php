@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Plugins\Typo3\Rewrites;
 
 use Brainworxx\Krexx\View\Output\CheckOutput as OrgCheckOutput;
@@ -45,7 +48,7 @@ class CheckOutput extends OrgCheckOutput
     /**
      * {@inheritdoc}
      */
-    public function isAllowedIp($whitelist)
+    public function isAllowedIp(string $whitelist): bool
     {
         return GeneralUtility::cmpIP(GeneralUtility::getIndpEnv(static::REMOTE_ADDRESS), $whitelist);
     }

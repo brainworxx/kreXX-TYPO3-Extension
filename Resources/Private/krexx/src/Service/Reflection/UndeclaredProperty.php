@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Reflection;
 
@@ -68,7 +71,7 @@ class UndeclaredProperty extends ReflectionProperty
      *
      * @var string
      */
-    protected $propertyName;
+    public $propertyName;
 
     /**
      * A reflection of the class, where the property was declared.
@@ -97,7 +100,7 @@ class UndeclaredProperty extends ReflectionProperty
      * @return bool
      *   Always false.
      */
-    public function isStatic()
+    public function isStatic(): bool
     {
         return false;
     }
@@ -108,7 +111,7 @@ class UndeclaredProperty extends ReflectionProperty
      * @return \ReflectionClass
      *   The refection.
      */
-    public function getDeclaringClass()
+    public function getDeclaringClass(): \ReflectionClass
     {
         return $this->declaringClass;
     }
@@ -119,7 +122,7 @@ class UndeclaredProperty extends ReflectionProperty
      * @return bool
      *   Always false.
      */
-    public function isDefault()
+    public function isDefault(): bool
     {
         return false;
     }
@@ -130,7 +133,7 @@ class UndeclaredProperty extends ReflectionProperty
      * @return bool
      *   Always false.
      */
-    public function isPrivate()
+    public function isPrivate(): bool
     {
         return false;
     }
@@ -141,7 +144,7 @@ class UndeclaredProperty extends ReflectionProperty
      * @return bool
      *   Always false.
      */
-    public function isProtected()
+    public function isProtected(): bool
     {
         return false;
     }
@@ -152,7 +155,7 @@ class UndeclaredProperty extends ReflectionProperty
      * @return bool
      *   Always true.
      */
-    public function isPublic()
+    public function isPublic(): bool
     {
         return true;
     }
@@ -163,9 +166,9 @@ class UndeclaredProperty extends ReflectionProperty
      * @return string
      *   The property name.
      */
-    public function getName()
+    public function getName(): string
     {
-        return $this->propertyName;
+        return (string)$this->propertyName;
     }
 
     /**
@@ -175,7 +178,7 @@ class UndeclaredProperty extends ReflectionProperty
      * @return string
      *   Always an empty string.
      */
-    public function __toString()
+    public function __toString(): string
     {
         return '';
     }

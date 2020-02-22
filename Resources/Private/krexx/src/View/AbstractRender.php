@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View;
 
@@ -77,42 +80,6 @@ abstract class AbstractRender implements ConstInterface
     }
 
     /**
-     * Renders the connector between analysis objects, params and results.
-     *
-     * @param string $connector
-     *   The data to be displayed.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will beremoved.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return string
-     *   The rendered connector.
-     */
-    protected function renderConnector($connector)
-    {
-        return str_replace(
-            Skins\Hans\ConstInterface::MARKER_CONNECTOR,
-            $connector,
-            $this->getTemplateFileContent(Skins\Hans\ConstInterface::FILE_CONNECTOR)
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     */
-    public function getSkinList()
-    {
-        return $this->pool->config->getSkinList();
-    }
-
-    /**
      * Loads a template file from the skin folder.
      *
      * @param string $what
@@ -121,7 +88,7 @@ abstract class AbstractRender implements ConstInterface
      * @return string
      *   The template file, without whitespaces.
      */
-    protected function getTemplateFileContent($what)
+    protected function getTemplateFileContent($what): string
     {
         if (isset(static::$fileCache[$what]) === true) {
             return static::$fileCache[$what];
@@ -143,7 +110,7 @@ abstract class AbstractRender implements ConstInterface
      * @return string
      *   The json from the array.
      */
-    protected function encodeJson(array $array)
+    protected function encodeJson(array $array): string
     {
         // No data, no json!
         if (empty($array) === true) {
@@ -172,43 +139,6 @@ abstract class AbstractRender implements ConstInterface
     }
 
     /**
-     * Do some special escaping for the json and data attribute output.
-     *
-     * @param string|array $data
-     *
-     * @deprecated
-     *   Since 3.2.0
-     * @codeCoverageIgnore
-     *   We will not test deprecated stuff.
-     *
-     * @return string|array
-     *   The escaped json
-     */
-    protected function jsonEscape($data)
-    {
-        // Our js has some problems with single quotes and escaped quotes.
-        // We remove them as well as linebreaks.
-        // Unicode greater-than and smaller-then values.
-        return str_replace(
-            [
-                '"',
-                "'",
-                '&quot;',
-                '&lt;',
-                '&gt;',
-            ],
-            [
-                "\\u0027",
-                "\\u0022",
-                "\\u0027",
-                "\\u276E",
-                "\\u02C3",
-            ],
-            $data
-        );
-    }
-
-    /**
      * Generates a data attribute, to be inserted into the HTML tags.
      * If no value is in the data, we return an empty string.
      * Double quotes gets replaced by &#34;
@@ -221,7 +151,7 @@ abstract class AbstractRender implements ConstInterface
      * @return string
      *   The generated data attribute.
      */
-    protected function generateDataAttribute($name, $data)
+    protected function generateDataAttribute($name, $data): string
     {
         if (empty($data) === true) {
             return '';
@@ -239,7 +169,7 @@ abstract class AbstractRender implements ConstInterface
      * @return string
      *   The css classes.
      */
-    protected function retrieveTypeClasses(Model $model)
+    protected function retrieveTypeClasses(Model $model): string
     {
         $typeClasses = '';
         foreach (explode(' ', $model->getType()) as $typeClass) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Analyse\Model;
@@ -39,25 +42,44 @@ use Brainworxx\Krexx\Analyse\Model;
 trait Footer
 {
     /**
+     * @var string
+     */
+    private $markerFooter = '{kconfiguration-classes}';
+
+    /**
      * {@inheritDoc}
      */
-    public function renderFooter(array $caller, Model $model, $configOnly = false)
+    public function renderFooter(array $caller, Model $model, bool $configOnly = false): string
     {
         // Doing special stuff for smokygrey:
         // We hide the debug-tab when we are displaying the config-only and switch
         // to the config as the current payload.
         if ($configOnly === true) {
             return str_replace(
-                static::MARKER_K_CONFIG_CLASSES,
+                $this->markerFooter,
                 '',
                 parent::renderFooter($caller, $model, $configOnly)
             );
         }
 
         return str_replace(
-            static::MARKER_K_CONFIG_CLASSES,
+            $this->markerFooter,
             static::STYLE_HIDDEN,
             parent::renderFooter($caller, $model, $configOnly)
         );
+    }
+
+    /**
+     * Getter of the footer for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerFooter(): array
+    {
+        return [$this->markerFooter];
     }
 }

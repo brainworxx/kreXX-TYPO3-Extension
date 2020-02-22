@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,10 +33,17 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 trait ConnectorLeft
 {
+    /**
+     * @var string
+     */
+    private $markerConnectorLeft = '{connector}';
+
     /**
      * Renders the left connector.
      *
@@ -45,12 +53,26 @@ trait ConnectorLeft
      * @return string
      *   The rendered connector.
      */
-    protected function renderConnectorLeft($connector)
+    protected function renderConnectorLeft(string $connector): string
     {
         return str_replace(
-            static::MARKER_CONNECTOR,
+            $this->markerConnectorLeft,
             $connector,
             $this->getTemplateFileContent(static::FILE_CONNECTOR_LEFT)
         );
+    }
+
+    /**
+     * Getter of the connector left for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerConnectorLeft(): array
+    {
+        return [$this->markerConnectorLeft];
     }
 }

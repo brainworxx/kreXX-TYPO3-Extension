@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
@@ -56,7 +59,7 @@ class ThroughMeta extends AbstractCallback
      * @return string
      *   The generated markup.
      */
-    public function callMe()
+    public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
         $reflectionStuff = [static::META_INHERITED_CLASS, static::META_INTERFACES, static::META_TRAITS];
@@ -94,7 +97,7 @@ class ThroughMeta extends AbstractCallback
      * @return string
      *   The rendered html.
      */
-    protected function handleNoneReflections($key, $meta)
+    protected function handleNoneReflections(string $key, string $meta): string
     {
         /** @var Model $model */
         $model = $this->pool->createClass(Model::class)
@@ -102,7 +105,8 @@ class ThroughMeta extends AbstractCallback
             ->setName($key)
             ->setType(static::TYPE_REFLECTION);
 
-        if ($key === static::META_COMMENT ||
+        if (
+            $key === static::META_COMMENT ||
             $key === static::META_DECLARED_IN ||
             $key === static::META_SOURCE
         ) {

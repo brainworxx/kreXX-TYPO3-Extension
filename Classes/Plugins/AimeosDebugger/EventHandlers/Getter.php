@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
@@ -112,14 +115,15 @@ class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterf
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, Model $model = null)
+    public function handle(AbstractCallback $callback, Model $model = null): string
     {
         // We will only act, if we have no value so far.
         // Also, we only do this for Aimeos items.
         $params = $callback->getParameters();
         $data = $params[static::PARAM_REF]->getData();
 
-        if ($params[static::PARAM_ADDITIONAL]['nothingFound'] === false ||
+        if (
+            $params[static::PARAM_ADDITIONAL]['nothingFound'] === false ||
             $params[ThroughGetter::CURRENT_PREFIX] !== 'get' ||
             is_a($data, Iface::class) === false
         ) {
@@ -178,7 +182,7 @@ class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterf
      * @return string
      *   The possible key.
      */
-    protected function retrievePossibleKey($methodName)
+    protected function retrievePossibleKey(string $methodName): string
     {
         $possibleKey = strtolower(substr($methodName, 3));
 
@@ -203,7 +207,7 @@ class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterf
      * @return array
      *   The values array from the class.
      */
-    protected function retrieveValueArray(array &$params, ReflectionMethod $reflectionMethod)
+    protected function retrieveValueArray(array &$params, ReflectionMethod $reflectionMethod): array
     {
         $result = [];
         // Retrieve the value array from the class.

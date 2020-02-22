@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -130,7 +131,11 @@ class CookieTest extends AbstractTest
         $cookies = new Cookie(Krexx::$pool);
         $this->setValueByReflection('validation', $validationMock, $cookies);
         $this->setValueByReflection(static::SETTINGS, $this->fixture, $cookies);
-        $this->assertEquals(static::VALUE_01, $cookies->getConfigFromCookies($someGroup, static::SETTING_01), 'validation correct');
+        $this->assertEquals(
+            static::VALUE_01,
+            $cookies->getConfigFromCookies($someGroup, static::SETTING_01),
+            'validation correct'
+        );
         $this->assertNull($cookies->getConfigFromCookies($someGroup, static::SETTING_02), 'validation failed');
         $this->assertNull($cookies->getConfigFromCookies($someGroup, 'setting03'), 'an unknown setting');
     }

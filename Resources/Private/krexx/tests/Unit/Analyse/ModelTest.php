@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,6 +39,9 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
+use stdClass;
+use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\View\Messages;
 
 class ModelTest extends AbstractTest
 {
@@ -56,7 +60,6 @@ class ModelTest extends AbstractTest
      *
      * {@inheritdoc}
      *
-     * @throws \ReflectionException
      */
     public function setUp()
     {
@@ -76,13 +79,169 @@ class ModelTest extends AbstractTest
     }
 
     /**
+     * Test if we get the pool as well as the connector service.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Model::__construct
+     */
+    public function testConstruct()
+    {
+        $model = new Model(Krexx::$pool);
+        $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $model));
+
+        $this->assertInstanceOf(Connectors::class, $this->retrieveValueByReflection('connectorService', $model));
+    }
+
+    /**
+     * Test if the callback gets set.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Model::injectCallback
+     */
+    public function testInjectCallback()
+    {
+        $mockCallback = $this->createMock(
+            AbstractCallback::class
+        );
+
+        $mockCallback->expects($this->never())
+            ->method('callMe')
+            ->will($this->returnValue(null));
+
+        $mockCallback->expects($this->never())
+            ->method('setParameters')
+            ->will($this->returnValue(null));
+
+        $model = new Model(Krexx::$pool);
+        $this->assertEquals($model, $model->injectCallback($mockCallback));
+
+        $this->assertEquals($mockCallback, $this->retrieveValueByReflection('callback', $model));
+    }
+
+    /**
+     * The rendering will call the callback. We will mock the callback and test
+     * if we get the actual output from it.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Model::renderMe
+     */
+    public function testRenderMe()
+    {
+        $mockCallback = $this->createMock(
+            AbstractCallback::class
+        );
+
+        $htmlResult = 'Rendered HTML';
+
+        // The callback should return the HTML result, which gets mocked here.
+        $mockCallback->expects($this->once())
+            ->method('callMe')
+            ->will($this->returnValue($htmlResult));
+
+        $mockCallback->expects($this->once())
+            ->method('setParameters')
+            ->will($this->returnValue($mockCallback));
+
+        $model = new Model(Krexx::$pool);
+
+        // Test id the HTML result gates returned and both methods gets called once.
+        $this->assertEquals($htmlResult, $model->injectCallback($mockCallback)->renderMe());
+    }
+
+    /**
+     * Test if we can add several parameters.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Model::addParameter
+     */
+    public function testAddParameter()
+    {
+        $parameterOne = new stdClass();
+        $parameterTwo = "some value";
+
+        $model = new Model(Krexx::$pool);
+
+        $model->addParameter('parameterOne', $parameterOne);
+        $model->addParameter('parameterTwo', $parameterTwo);
+
+        $expectedResult = [
+            'parameterOne' => $parameterOne,
+            'parameterTwo' => $parameterTwo,
+        ];
+
+        $this->assertEquals($expectedResult, $model->getParameters());
+    }
+
+    /**
+     * Test the setting of the help id. The help id sets additional text to the
+     * specific analysis, to explain the output.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Model::setHelpid
+     */
+    public function testSetHelpId()
+    {
+        $model = new Model(Krexx::$pool);
+
+        // Mock the message class, which will provide the help text.
+        $helpText = 'some help text';
+        $messageMock = $this->createMock(Messages::class);
+        $messageMock->expects($this->once())
+            ->method('getHelp')
+            ->will($this->returnValue($helpText));
+        Krexx::$pool->messages = $messageMock;
+
+        // Test the return value for chaining
+        $this->assertEquals($model, $model->setHelpid('some id'));
+
+        // Test if the $helpText got set inside the json.
+        $this->assertEquals(['Help' => $helpText], $model->getJson());
+    }
+
+    /**
+     * Test if we can add stuff to the json. Linebreaks should be removed.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Model::addToJson
+     */
+    public function testAddToJson()
+    {
+        $model = new Model(Krexx::$pool);
+        $text = "Look\n at\r me\n\r, I'm\n\r a string";
+        $key = 'some key';
+        $expected = [
+            $key => "Look at me, I'm a string"
+        ];
+
+        // Set the value.
+        $this->assertEquals($model, $model->addToJson($key, $text));
+        $this->assertEquals($expected, $model->getJson());
+
+        //Remove the value. Should be empty now.
+        $this->assertEquals($model, $model->addToJson($key, ''));
+        $this->assertEquals([], $model->getJson());
+    }
+
+    /**
+     * Test the getter for the json value.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Model::getJson
+     */
+    public function testGetJson()
+    {
+        $model = new Model(Krexx::$pool);
+        $jsonData = [
+            'some' => 'value',
+            'to' => 'check',
+        ];
+
+        // Set it via reflections.
+        $this->setValueByReflection('json', $jsonData, $model);
+        $this->assertEquals($jsonData, $model->getJson());
+    }
+
+    /**
      * Testing the setter for the data value.
      *
      * @covers \Brainworxx\Krexx\Analyse\Model::setData
      */
     public function testSetData()
     {
-        $data = new \stdClass();
+        $data = new stdClass();
         $this->assertEquals($this->model, $this->model->setData($data));
         $this->assertEquals($data, $this->model->getData());
     }
@@ -94,7 +253,7 @@ class ModelTest extends AbstractTest
      */
     public function testGetData()
     {
-        $data = new \stdClass();
+        $data = new stdClass();
         $this->setValueByReflection('data', $data, $this->model);
         $this->assertEquals($data, $this->model->getData());
     }
@@ -262,14 +421,14 @@ class ModelTest extends AbstractTest
     /**
      * Testing the getter for the extras boolean.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getHasExtra
+     * @covers \Brainworxx\Krexx\Analyse\Model::hasExtra
      */
     public function testGetHasExtra()
     {
         $data = true;
 
         $this->setValueByReflection('hasExtra', $data, $this->model);
-        $this->assertEquals($data, $this->model->getHasExtra());
+        $this->assertEquals($data, $this->model->hasExtra());
     }
 
     /**
@@ -282,7 +441,7 @@ class ModelTest extends AbstractTest
         $data = true;
 
         $this->assertEquals($this->model, $this->model->setHasExtra($data));
-        $this->assertEquals($data, $this->model->getHasExtra());
+        $this->assertEquals($data, $this->model->hasExtra());
     }
 
     /**
@@ -314,14 +473,14 @@ class ModelTest extends AbstractTest
     /**
      * Testing the getter of the isCallback.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getIsCallback
+     * @covers \Brainworxx\Krexx\Analyse\Model::isCallback
      */
     public function testGetIsCallback()
     {
         $data = true;
 
         $this->setValueByReflection('isCallback', $data, $this->model);
-        $this->assertEquals($data, $this->model->getIsCallback());
+        $this->assertEquals($data, $this->model->isCallback());
     }
 
     /**
@@ -334,7 +493,7 @@ class ModelTest extends AbstractTest
         $data = true;
 
         $this->assertEquals($this->model, $this->model->setIsCallback($data));
-        $this->assertEquals($data, $this->model->getIsCallback());
+        $this->assertEquals($data, $this->model->isCallback());
     }
 
     /**
@@ -381,7 +540,7 @@ class ModelTest extends AbstractTest
      */
     public function testSetConnectorType()
     {
-        $data = static::SOME_STRING_TO_PASS_THROUGH;
+        $data = 1234;
 
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
@@ -399,7 +558,7 @@ class ModelTest extends AbstractTest
      */
     public function testSetCustomConnectorLeft()
     {
-        $data = static::SOME_STRING_TO_PASS_THROUGH;
+        $data = 5678;
 
         $mockConnector = $this->createMock(Connectors::class);
         $mockConnector->expects($this->once())
@@ -447,14 +606,14 @@ class ModelTest extends AbstractTest
     /**
      * Testing the getter of the isMetaConstants
      *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getIsMetaConstants
+     * @covers \Brainworxx\Krexx\Analyse\Model::isMetaConstants
      */
     public function testGetIsMetaConstants()
     {
         $data = true;
 
         $this->setValueByReflection('isMetaConstants', $data, $this->model);
-        $this->assertEquals($data, $this->model->getIsMetaConstants());
+        $this->assertEquals($data, $this->model->isMetaConstants());
     }
 
     /**
@@ -467,7 +626,7 @@ class ModelTest extends AbstractTest
         $data = true;
 
         $this->assertEquals($this->model, $this->model->setIsMetaConstants($data));
-        $this->assertEquals($data, $this->model->getIsMetaConstants());
+        $this->assertEquals($data, $this->model->isMetaConstants());
     }
 
     /**
@@ -480,19 +639,19 @@ class ModelTest extends AbstractTest
         $data = true;
 
         $this->assertEquals($this->model, $this->model->setIsPublic($data));
-        $this->assertEquals($data, $this->model->getIsPublic());
+        $this->assertEquals($data, $this->model->isPublic());
     }
 
     /**
      * Testing the getting of the isPublic.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getIsPublic
+     * @covers \Brainworxx\Krexx\Analyse\Model::isPublic
      */
     public function testGetIsPublic()
     {
         $data = true;
 
         $this->setValueByReflection('isPublic', $data, $this->model);
-        $this->assertEquals($data, $this->model->getIsPublic());
+        $this->assertEquals($data, $this->model->isPublic());
     }
 }

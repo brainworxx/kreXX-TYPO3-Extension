@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -52,6 +53,8 @@ class ReflectionClassTest extends AbstractTest
      * reflection.
      *
      * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::__construct
+     *
+     * @throws \ReflectionException
      */
     public function testConstruct()
     {
@@ -74,6 +77,8 @@ class ReflectionClassTest extends AbstractTest
      * Simple getter tester.
      *
      * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getData
+     *
+     * @throws \ReflectionException
      */
     public function testGetData()
     {
@@ -88,11 +93,15 @@ class ReflectionClassTest extends AbstractTest
      * Here we retrieve the values from objects.
      *
      * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::retrieveValue
+     *
+     * @throws \ReflectionException
      */
     public function testRetrieveValue()
     {
+        $normal = 'normal';
         $fixture = new PublicFixture();
         $fixture->{50} = 'special';
+        $fixture->notSoSpecial = $normal;
         unset($fixture->value2);
 
         $reflection = new ReflectionClass($fixture);
@@ -104,7 +113,8 @@ class ReflectionClassTest extends AbstractTest
             'value4' => 4,
             'value5' => 'dont\'t look at me!',
             'static' => 'static stuff',
-            50 => 'special'
+            50 => 'special',
+            'notSoSpecial' => $normal
         ];
 
         foreach ($expectations as $name => $expectation) {
@@ -114,6 +124,8 @@ class ReflectionClassTest extends AbstractTest
             } elseif ($name === 50) {
                 // This one is dynamically declared.
                 $refProperty = new UndeclaredProperty($reflection, 50);
+            } elseif ($name === 'notSoSpecial') {
+                $refProperty = new UndeclaredProperty($reflection, 'notSoSpecial');
             } else {
                 $refProperty = $reflection->getProperty($name);
             }
@@ -129,6 +141,8 @@ class ReflectionClassTest extends AbstractTest
      * Test the retrieval of the actually implemented interfaces of this class.
      *
      * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getInterfaces
+     *
+     * @throws \ReflectionException
      */
     public function testGetInterfaces()
     {
@@ -151,6 +165,8 @@ class ReflectionClassTest extends AbstractTest
      * Test the retrieval of the traits.
      *
      * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getTraits
+     *
+     * @throws \ReflectionException
      */
     public function testGetTraits()
     {
@@ -169,6 +185,8 @@ class ReflectionClassTest extends AbstractTest
      * Test the retrieval and caching of the parent class.
      *
      * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::getParentClass
+     *
+     * @throws \ReflectionException
      */
     public function testGetParentClass()
     {

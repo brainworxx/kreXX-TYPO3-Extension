@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Controller;
 
@@ -93,9 +96,7 @@ class IndexController extends AbstractController
 
         // Check for writing permission.
         // Check the actual writing process.
-        if (is_writable(dirname($filepath)) &&
-            file_put_contents($filepath, $settings->generateIniContent())
-        ) {
+        if (is_writable(dirname($filepath)) && file_put_contents($filepath, $settings->generateIniContent())) {
             // File was saved successfully.
             $this->addFlashMessage(
                 static::translate(static::SAVE_SUCCESS_TEXT, Bootstrap::EXT_KEY, [$filepath]),
@@ -121,7 +122,7 @@ class IndexController extends AbstractController
      *
      * @param ServerRequest|null $serverRequest
      *
-     * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface
+     * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface|\TYPO3\CMS\Core\Http\NullResponse
      */
     public function dispatchAction(ServerRequest $serverRequest = null)
     {

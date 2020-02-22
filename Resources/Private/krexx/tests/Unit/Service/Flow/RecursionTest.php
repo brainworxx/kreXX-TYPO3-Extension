@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -69,7 +70,10 @@ class RecursionTest extends AbstractTest
         $this->assertContains('Krexx', $this->recursion->getMarker());
         $this->assertSame($GLOBALS, $this->retrieveValueByReflection('globals', $this->recursion));
         $this->assertTrue($GLOBALS[$this->recursion->getMarker()]);
-        $this->assertEquals(new SplObjectStorage(), $this->retrieveValueByReflection(static::RECURSION_HIVE, $this->recursion));
+        $this->assertEquals(
+            new SplObjectStorage(),
+            $this->retrieveValueByReflection(static::RECURSION_HIVE, $this->recursion)
+        );
         $this->assertSame($this->recursion, Krexx::$pool->recursionHandler);
     }
 

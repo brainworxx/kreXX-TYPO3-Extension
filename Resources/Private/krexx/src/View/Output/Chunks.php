@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Output;
 
@@ -150,7 +153,7 @@ class Chunks
      * @return string
      *   The key to the chunk, wrapped up in @@@@@@.
      */
-    public function chunkMe($string)
+    public function chunkMe(string $string): string
     {
         if ($this->chunksAreAllowed === true && strlen($string) > 10000) {
             // Get the key.
@@ -173,7 +176,7 @@ class Chunks
      * @return string
      *   The generated key.
      */
-    protected function genKey()
+    protected function genKey(): string
     {
         static $counter = 0;
         ++$counter;
@@ -193,9 +196,8 @@ class Chunks
      *
      * @return string
      *   The original date
-     *
      */
-    protected function dechunkMe($key)
+    protected function dechunkMe(string $key): string
     {
         $filename = $this->chunkDir . $key . '.Krexx.tmp';
         // Read the file.
@@ -213,7 +215,7 @@ class Chunks
      * @param string $string
      *   The chunk string.
      */
-    public function sendDechunkedToBrowser($string)
+    public function sendDechunkedToBrowser(string $string)
     {
         // Check for HTML output.
         if ($this->pool->createClass(CheckOutput::class)->isOutputHtml()) {
@@ -244,26 +246,6 @@ class Chunks
     }
 
     /**
-     * Is the output so far HTML?
-     *
-     * This one gets called during the shutdown phase of PHP. There is a high
-     * chance, that the header was already set.
-     *
-     * @deprecated
-     *   Since 3.2.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return bool
-     *   Well? Is it?
-     */
-    protected function isOutputHtml()
-    {
-        return $this->pool->createClass(CheckOutput::class)->isOutputHtml();
-    }
-
-    /**
      * Replaces all chunk keys from a string with the original data.
      *
      * Saves the output to a file.
@@ -271,7 +253,7 @@ class Chunks
      * @param string $string
      *   The chunked version of the output.
      */
-    public function saveDechunkedToFile($string)
+    public function saveDechunkedToFile(string $string)
     {
         if ($this->loggingIsAllowed === false) {
             // We have no write access. Do nothing.
@@ -318,46 +300,13 @@ class Chunks
     /**
      * Setter for the $useChunks.
      *
-     * @deprecated
-     *   Since 3.2.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @param bool $bool
-     *   Are we using chunks?
-     */
-    public function setUseChunks($bool)
-    {
-        $this->setChunksAreAllowed($bool);
-    }
-    /**
-     * Setter for the the the $useLogging. Here we determine, if the logfolder
-     * is accessible.
-     *
-     * @deprecated
-     *   Since 3.2.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @param $bool
-     */
-    public function setUseLogging($bool)
-    {
-        $this->setLoggingIsAllowed($bool);
-    }
-
-    /**
-     * Setter for the $useChunks.
-     *
      * When the chunks folder is not writable, we will not use chunks.
      * This will increase the memory usage significantly!
      *
      * @param bool $bool
      *   Are we using chunks?
      */
-    public function setChunksAreAllowed($bool)
+    public function setChunksAreAllowed(bool $bool)
     {
         $this->chunksAreAllowed = $bool;
     }
@@ -368,7 +317,7 @@ class Chunks
      * @return bool
      *   Are we using chunks?
      */
-    public function getChunksAreAllowed()
+    public function getChunksAreAllowed(): bool
     {
         return $this->chunksAreAllowed;
     }
@@ -380,7 +329,7 @@ class Chunks
      * @param $bool
      *   Is the log folder accessible?
      */
-    public function setLoggingIsAllowed($bool)
+    public function setLoggingIsAllowed(bool $bool)
     {
         $this->loggingIsAllowed = $bool;
     }
@@ -391,7 +340,7 @@ class Chunks
      * @return bool
      *   Is the log folder accessible?
      */
-    public function getLoggingIsAllowed()
+    public function getLoggingIsAllowed(): bool
     {
         return $this->loggingIsAllowed;
     }
@@ -402,7 +351,7 @@ class Chunks
      * @param array $caller
      *   The caller from the caller finder.
      */
-    public function addMetadata($caller)
+    public function addMetadata(array $caller)
     {
         if ($this->pool->config->getSetting(Fallback::SETTING_DESTINATION) === Fallback::VALUE_FILE) {
             $this->metadata[] = $caller;
@@ -437,7 +386,7 @@ class Chunks
      * @param string $string
      *   The string we are processing.
      */
-    public function detectEncoding($string)
+    public function detectEncoding(string $string)
     {
         static $doNothingEncoding = ['ASCII', 'UTF-8', false];
         $encoding = $this->pool->encodingService->mbDetectEncoding($string);
@@ -455,7 +404,7 @@ class Chunks
      *
      * @return string
      */
-    public function getOfficialEncoding()
+    public function getOfficialEncoding(): string
     {
         return $this->officialEncoding;
     }

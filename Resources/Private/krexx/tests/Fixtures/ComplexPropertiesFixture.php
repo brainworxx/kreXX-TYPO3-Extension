@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -33,6 +34,8 @@
  */
 
 namespace Brainworxx\Krexx\Tests\Fixtures;
+
+use stdClass;
 
 class ComplexPropertiesFixture extends ComplexPropertiesInheritanceFixture
 {
@@ -90,6 +93,6 @@ class ComplexPropertiesFixture extends ComplexPropertiesInheritanceFixture
         unset($this->unsetProperty);
         $this->undeclaredProperty = 'dynamically declaration';
         $this->myProperty = 'asdf';
-        $this->inheritedProtected = new \stdClass();
+        $this->inheritedProtected = new stdClass();
     }
 }

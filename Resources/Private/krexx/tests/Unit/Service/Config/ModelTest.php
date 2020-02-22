@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -59,8 +60,8 @@ class ModelTest extends AbstractTest
      */
     public function testSetEditable()
     {
-        $this->assertSame($this->model, $this->model->setEditable(static::VALUE));
-        $this->assertEquals(static::VALUE, $this->model->getEditable());
+        $this->assertSame($this->model, $this->model->setEditable(true));
+        $this->assertEquals(true, $this->model->getEditable());
     }
 
     /**
@@ -79,8 +80,6 @@ class ModelTest extends AbstractTest
      */
     public function testSetValue()
     {
-        $value = 'value';
-
         $this->assertSame($this->model, $this->model->setValue(static::VALUE));
         $this->assertEquals(static::VALUE, $this->model->getValue());
 
@@ -96,8 +95,8 @@ class ModelTest extends AbstractTest
      */
     public function testGetEditable()
     {
-        $this->setValueByReflection('editable', static::VALUE, $this->model);
-        $this->assertEquals(static::VALUE, $this->model->getEditable());
+        $this->setValueByReflection('editable', true, $this->model);
+        $this->assertEquals(true, $this->model->getEditable());
     }
 
     /**

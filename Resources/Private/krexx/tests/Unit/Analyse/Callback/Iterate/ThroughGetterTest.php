@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,8 +42,9 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\DeepGetterFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
-use Brainworxx\Krexx\View\Render;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\View\Skins\RenderHans;
+use ReflectionMethod;
 
 class ThroughGetterTest extends AbstractTest
 {
@@ -68,9 +70,12 @@ class ThroughGetterTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::getReflectionProperty
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::preparePropertyName
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::getReflectionPropertyDeep
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::retrievePropertyByName
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::convertToSnakeCase
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::findIt
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::regexEscaping
+     *
+     * @throws \ReflectionException
      */
     public function testCallMe()
     {
@@ -97,7 +102,7 @@ class ThroughGetterTest extends AbstractTest
         Krexx::$pool->routing = new RoutingNothing(Krexx::$pool);
 
         // Mock the render object.
-        $renderMock = $this->createMock(Render::class);
+        $renderMock = $this->createMock(RenderHans::class);
         $renderMock->expects($this->once())
             ->method('renderSingleChild')
             ->will($this->returnValue(''));
@@ -108,16 +113,16 @@ class ThroughGetterTest extends AbstractTest
         $ref = new ReflectionClass($data);
         $fixture = [
           'normalGetter' => [
-              new \ReflectionMethod($data, 'getMyPropertyOne'),
-              new \ReflectionMethod($data, 'getMyPropertyTwo'),
-              new \ReflectionMethod($data, 'getMyPropertyThree'),
-              new \ReflectionMethod($data, 'getMyPropertyFour'),
-              new \ReflectionMethod($data, 'getMyPropertyFive'),
-              new \ReflectionMethod($data, 'getMyPropertySix'),
-              new \ReflectionMethod($data, 'getMyPropertySeven'),
-              new \ReflectionMethod($data, 'getMyPropertyEight'),
-              new \ReflectionMethod($data, 'getMyPropertyNine'),
-              new \ReflectionMethod($data, 'getLiterallyNoting'),
+              new ReflectionMethod($data, 'getMyPropertyOne'),
+              new ReflectionMethod($data, 'getMyPropertyTwo'),
+              new ReflectionMethod($data, 'getMyPropertyThree'),
+              new ReflectionMethod($data, 'getMyPropertyFour'),
+              new ReflectionMethod($data, 'getMyPropertyFive'),
+              new ReflectionMethod($data, 'getMyPropertySix'),
+              new ReflectionMethod($data, 'getMyPropertySeven'),
+              new ReflectionMethod($data, 'getMyPropertyEight'),
+              new ReflectionMethod($data, 'getMyPropertyNine'),
+              new ReflectionMethod($data, 'getLiterallyNoting'),
           ],
           'isGetter' => [],
           'hasGetter' => [],

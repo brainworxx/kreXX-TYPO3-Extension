@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,19 +33,44 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Service\Config;
+declare(strict_types=1);
 
-/**
- * Security measures for the configuration
- *
- * @deprecated
- *   Since 3.1.0. Will be removed.
- * @codeCoverageIgnore
- *   We will not test deprecated classes.
- *
- * @package Brainworxx\Krexx\Service\Config
- */
-class Security extends Validation
+namespace Brainworxx\Krexx\Analyse\Model;
+
+use Brainworxx\Krexx\Analyse\Model;
+
+trait Data
 {
+    /**
+     * The object/string/array/whatever we are analysing right now
+     *
+     * @var mixed
+     */
+    protected $data;
 
+    /**
+     * Setter for the data.
+     *
+     * @param mixed $data
+     *   The current variable we are rendering.
+     *
+     * @return $this
+     *   $this, for chaining.
+     */
+    public function setData(&$data): Model
+    {
+        $this->data = $data;
+        return $this;
+    }
+
+    /**
+     * Getter for the data.
+     *
+     * @return mixed
+     *   The variable, we are currently analysing.
+     */
+    public function &getData()
+    {
+        return $this->data;
+    }
 }

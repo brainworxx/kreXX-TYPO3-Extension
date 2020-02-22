@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,17 +44,18 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
  */
 class CallbackCounter extends AbstractCallback
 {
-    static public $counter = 0;
+    public static $counter = 0;
 
-    static public $staticParameters = [];
+    public static $staticParameters = [];
 
-    public function callMe()
+    public function callMe(): string
     {
         // Update the counter.
         ++static::$counter;
+        return '';
     }
 
-    public function setParameters(array &$params)
+    public function setParameters(array &$params): AbstractCallback
     {
         static::$staticParameters[static::$counter] = $params;
         return parent::setParameters($params);

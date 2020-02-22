@@ -16,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -69,7 +69,7 @@ class Eventhandler
      * @param {Function} callBack
      *
      */
-    public addEvent(selector:string, eventName:string, callBack:EventListener|Function) : void
+    public addEvent(selector:string, eventName:string, callBack:EventListener|Function): void
     {
         // We use the clickHandler instead.
         if (eventName === 'click') {
@@ -88,7 +88,7 @@ class Eventhandler
      *
      * @param {Event} event
      */
-    public preventBubble (event:Event) : void
+    public preventBubble (event:Event): void
     {
         event.stop = true;
     }
@@ -99,7 +99,7 @@ class Eventhandler
      * @param {string} selector
      * @param {Function} callback
      */
-    protected addToStorage(selector:string, callback:Function) : void
+    protected addToStorage(selector:string, callback:Function): void
     {
         if (!(selector in this.storage)) {
             this.storage[selector] = [];
@@ -114,7 +114,7 @@ class Eventhandler
      * @param {Event} event
      * @event click
      */
-    protected handle = (event:Event) : void =>
+    protected handle = (event:Event): void =>
     {
         // We stop the event in it's tracks.
         event.stopPropagation();
@@ -157,7 +157,7 @@ class Eventhandler
      * @param {Element} el
      * @param {string} eventName
      */
-    public triggerEvent(el:Element, eventName:string) : void
+    public triggerEvent(el:Element, eventName:string): void
     {
         /** @type {Event} */
         let event:Event = document.createEvent('HTMLEvents');

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,17 +33,43 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\View\Smokygrey;
+declare(strict_types=1);
 
-use Brainworxx\Krexx\View\Skins\Render;
+namespace Brainworxx\Krexx\Analyse\Model;
 
-/**
- * Individual render class for the smokey-grey skin.
- *
- * @deprecated
- *
- * @package Brainworxx\Krexx\View\Smokygrey
- */
-class Render extends Render
+use Brainworxx\Krexx\Analyse\Model;
+
+trait MultiLineCodeGen
 {
+    /**
+     * Are we dealing with multiline code generation?
+     *
+     * @var string
+     */
+    protected $multiLineCodeGen = '';
+
+    /**
+     * Getter for the multiline code generation.
+     *
+     * @return string
+     */
+    public function getMultiLineCodeGen(): string
+    {
+        return $this->multiLineCodeGen;
+    }
+
+    /**
+     * Setter for the multiline code generation.
+     *
+     * @param string $multiLineCodeGen
+     *   The constant from the Codegen class.
+     *
+     * @return Model
+     *   $this, for chaining.
+     */
+    public function setMultiLineCodeGen(string $multiLineCodeGen): Model
+    {
+        $this->multiLineCodeGen = $multiLineCodeGen;
+        return $this;
+    }
 }

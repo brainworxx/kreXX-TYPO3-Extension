@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Comment;
 
@@ -84,10 +87,7 @@ abstract class AbstractComment
      * @return string
      *   The prettified comment.
      */
-    abstract public function getComment(
-        Reflector $reflection,
-        ReflectionClass $reflectionClass = null
-    );
+    abstract public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string;
 
     /**
      * Removes the comment-chars from the comment string.
@@ -98,7 +98,7 @@ abstract class AbstractComment
      * @return string
      *   The better readable comment
      */
-    protected function prettifyComment($comment)
+    protected function prettifyComment($comment): string
     {
         if (empty($comment) === true) {
             return '';
@@ -133,8 +133,11 @@ abstract class AbstractComment
      *   The original comment, featuring the inheritance documentor.
      * @param string $comment
      *   The string to replace the inheritance documentor.
+     *
+     * @return string
+     *   The comment, where the inheritdoc doc comment was replaced.
      */
-    protected function replaceInheritComment($originalComment, $comment)
+    protected function replaceInheritComment($originalComment, $comment): string
     {
         foreach ($this->inheritdocPattern as $pattern) {
             // Replace the first we find. There may be others in there,
@@ -160,7 +163,7 @@ abstract class AbstractComment
      *   true = found them all
      *   false = we need to look further
      */
-    protected function checkComment($comment)
+    protected function checkComment($comment): bool
     {
         return (strpos($comment, 'inheritdoc') === false);
     }

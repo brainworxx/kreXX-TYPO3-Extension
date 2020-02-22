@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Caller;
 
@@ -89,7 +92,7 @@ abstract class AbstractCaller implements ConstInterface
      * @return $this
      *   Return this for chaining.
      */
-    public function setPattern($pattern)
+    public function setPattern($pattern): AbstractCaller
     {
         $this->pattern = strtolower($pattern);
         return $this;
@@ -100,7 +103,7 @@ abstract class AbstractCaller implements ConstInterface
      *
      * @return string
      */
-    public function getPattern()
+    public function getPattern(): string
     {
         return $this->pattern;
     }
@@ -122,7 +125,7 @@ abstract class AbstractCaller implements ConstInterface
      *     'type' => 'Analysis of $myString, string'
      *   );
      */
-    abstract public function findCaller($headline, $data);
+    abstract public function findCaller($headline, $data): array;
 
     /**
      * Get the analysis type for the metadata and the page title.
@@ -137,14 +140,11 @@ abstract class AbstractCaller implements ConstInterface
      * @return string
      *   The analysis type.
      */
-    protected function getType($headline, $varname, $data)
+    protected function getType($headline, $varname, $data): string
     {
         if (empty($headline) === true) {
-            if (is_object($data) === true) {
-                $type = get_class($data);
-            } else {
-                $type = gettype($data);
-            }
+            is_object($data) === true ? $type = get_class($data) : $type = gettype($data);
+
             return 'Analysis of ' . $varname . ', ' . $type;
         }
 
@@ -161,13 +161,14 @@ abstract class AbstractCaller implements ConstInterface
      * @return string
      *   The current URL.
      */
-    protected function getCurrentUrl()
+    protected function getCurrentUrl(): string
     {
         $server = $this->pool->getServer();
 
         // Check if someone has been messing with the $_SERVER, to prevent
         // warnings and notices.
-        if (empty($server) === true ||
+        if (
+            empty($server) === true ||
             empty($server['SERVER_PROTOCOL']) === true ||
             empty($server['SERVER_PORT']) === true ||
             empty($server['SERVER_NAME']) === true ||
@@ -187,13 +188,7 @@ abstract class AbstractCaller implements ConstInterface
 
         $port = $server['SERVER_PORT'];
 
-        if (($ssl === false && $port === '80') || ($ssl === true && $port === '443')) {
-            // Normal combo with port and protocol.
-            $port = '';
-        } else {
-            // We have a special port here.
-            $port = ':' . $port;
-        }
+        ($ssl === false && $port === '80') || ($ssl === true && $port === '443') ? $port = '' : $port = ':' . $port;
 
         if (isset($server['HTTP_HOST']) === true) {
             $host = $server['HTTP_HOST'];

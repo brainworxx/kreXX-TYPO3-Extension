@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
@@ -58,7 +61,7 @@ class BacktraceStep extends AbstractCallback
      * @return string
      *   The generated markup.
      */
-    public function callMe()
+    public function callMe(): string
     {
         // We are handling the following values here:
         // file, line, function, object, type, args, sourcecode.
@@ -77,7 +80,7 @@ class BacktraceStep extends AbstractCallback
      * @return string
      *   The generated dom.
      */
-    protected function lineToOutput()
+    protected function lineToOutput(): string
     {
         $model = $this->pool->createClass(Model::class)
             ->setName('Sourcecode')
@@ -100,9 +103,9 @@ class BacktraceStep extends AbstractCallback
      *   The model, where we assign the code.
      *
      * @return string
-     *   Th rendered HTML.
+     *   The rendered HTML.
      */
-    protected function retrieveSource(Model $model)
+    protected function retrieveSource(Model $model): string
     {
         $stepData = $this->parameters[static::PARAM_DATA];
         $output = '';
@@ -123,8 +126,8 @@ class BacktraceStep extends AbstractCallback
                 $this->pool->fileService->readSourcecode(
                     $stepData[static::TRACE_FILE],
                     $lineNo,
-                    $lineNo -5,
-                    $lineNo +5
+                    $lineNo - 5,
+                    $lineNo + 5
                 )
             );
         }
@@ -141,19 +144,19 @@ class BacktraceStep extends AbstractCallback
     /**
      * Directly render the output by an processor.
      *
-     * @param $name
+     * @param string $name
      *   The human readable name of what we are rendering
-     * @param $type
+     * @param string $type
      *   The array key inside the backtrace
-     * @param $eventName
+     * @param string $eventName
      *   The event name of what we dispatch.
-     * @param $processorName
+     * @param string $processorName
      *   The class name of the processor.
      *
      * @return string
      *   The rendered HTML.
      */
-    protected function outputProcessor($name, $type, $eventName, $processorName)
+    protected function outputProcessor(string $name, string $type, string $eventName, string $processorName): string
     {
         $stepData = $this->parameters[static::PARAM_DATA];
         if (isset($stepData[$type]) === true) {
@@ -185,7 +188,7 @@ class BacktraceStep extends AbstractCallback
      * @return string
      *   The rendered HTML.
      */
-    protected function outputSingleChild($name, $type, $eventName)
+    protected function outputSingleChild(string $name, string $type, string $eventName): string
     {
         $stepData = $this->parameters[static::PARAM_DATA];
         if (isset($stepData[$type]) === true) {

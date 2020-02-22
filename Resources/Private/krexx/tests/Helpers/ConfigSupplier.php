@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -53,7 +54,7 @@ class ConfigSupplier extends Ini
     /**
      * {@inheritdoc}
      */
-    public function getConfigFromFile($group, $name)
+    public function getConfigFromFile(string $group, string $name)
     {
         // Deliver the overwrites.
         if (isset(static::$overwriteValues[$name])) {

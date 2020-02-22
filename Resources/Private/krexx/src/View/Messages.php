@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View;
 
@@ -121,7 +124,7 @@ class Messages
      * @return array
      *   The language keys we added beforehand.
      */
-    public function getKeys()
+    public function getKeys(): array
     {
         return $this->keys;
     }
@@ -132,10 +135,11 @@ class Messages
      * @return string
      *   The rendered html output of the messages.
      */
-    public function outputMessages()
+    public function outputMessages(): string
     {
         // Simple Wrapper for OutputActions::$render->renderMessages
-        if (php_sapi_name() === 'cli' &&
+        if (
+            php_sapi_name() === 'cli' &&
             empty($this->messages) === false &&
             defined('KREXX_TEST_IN_PROGRESS') === false
         ) {
@@ -164,7 +168,7 @@ class Messages
      * @return string
      *   The help text.
      */
-    public function getHelp($key, array $args = [])
+    public function getHelp($key, array $args = []): string
     {
         // Check if we can get a value, at all.
         if (empty($this->helpArray[$key]) === true) {
@@ -173,26 +177,6 @@ class Messages
 
         // Return the value
         return vsprintf($this->helpArray[$key], $args);
-    }
-
-    /**
-     * Read a help text file, and add its contents to the already read content.
-     *
-     * @deprecated
-     *   Since 3.2.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @param string $file
-     *   Absolute path to the file we want to read.
-     */
-    public function readHelpFile($file)
-    {
-        $this->helpArray = array_merge(
-            $this->helpArray,
-            (array)parse_ini_string($this->pool->fileService->getFileContents($file))
-        );
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -61,6 +62,15 @@ class FooterTest extends AbstractRenderHans
             $this->renderHans::TRACE_DATE => 'yesteryear',
             $this->renderHans::TRACE_URL => 'https://www.google.biz',
         ];
+        Krexx::$pool->fileService->expects($this->once())
+            ->method('readFile')
+            ->will($this->returnValue(''));
+        Krexx::$pool->fileService->expects($this->any())
+            ->method('filterFilePath')
+            ->will($this->returnValue(''));
+        Krexx::$pool->fileService->expects($this->exactly(2))
+            ->method('fileIsReadable')
+            ->will($this->returnValue(true));
 
         // Mock the model for the renderExpandableChild, which we will not test
         // here.

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -50,7 +51,14 @@ class SingleChildTest extends AbstractRenderSmokyGrey
     public function testRenderSingleChild()
     {
         $this->mockModel(static::GET_CONNECTOR_LANGUAGE, 'Fortran');
-        $this->mockModel(static::GET_JSON, ['Friday' =>'the 12\'th']);
+        $this->mockModel(static::GET_JSON, ['Friday' => 'the 12\'th']);
+        $this->mockModel('getConnectorLeft', '');
+        $this->modelMock->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue(''));
+        $this->modelMock->expects($this->any())
+            ->method('getConnectorRight')
+            ->will($this->returnValue(''));
 
         $codeGenMock = $this->createMock(Codegen::class);
         $codeGenMock->expects($this->once())

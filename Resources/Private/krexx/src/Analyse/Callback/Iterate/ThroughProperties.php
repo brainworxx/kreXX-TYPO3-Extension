@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,13 +33,14 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Comment\Properties;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Misc\File;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -56,19 +58,12 @@ class ThroughProperties extends AbstractCallback
 {
 
     /**
-     * The file service, used to read and write files.
-     *
-     * @var File
-     */
-    protected $fileService;
-
-    /**
      * Renders the properties of a class.
      *
      * @return string
      *   The generated markup.
      */
-    public function callMe()
+    public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
 
@@ -83,17 +78,11 @@ class ThroughProperties extends AbstractCallback
                 return '';
             }
 
-            // Stitch together our additional info about the data:
-            // public access, protected access, private access and info if it was
-            // inherited from somewhere.
-            $additional = $this->getAdditionalData($refProperty, $ref);
-
             // Every other additional string requires a special connector,
             // so we do this here.
             $connectorType = Connectors::NORMAL_PROPERTY;
             /** @var \ReflectionProperty $refProperty */
             $propName = $refProperty->getName();
-
             // Static properties are very special.
             if ($refProperty->isStatic() === true) {
                 $connectorType = Connectors::STATIC_PROPERTY;
@@ -101,8 +90,11 @@ class ThroughProperties extends AbstractCallback
                 $propName = '$' . $propName;
             }
 
+            // Stitch together our additional info about the data:
+            // public access, protected access, private access and info if it was
+            // inherited from somewhere.
+            $additional = $this->getAdditionalData($refProperty, $ref);
             $value = $ref->retrieveValue($refProperty);
-
             if (isset($refProperty->isUnset) === true) {
                 $additional .= 'unset ';
             }
@@ -126,9 +118,7 @@ class ThroughProperties extends AbstractCallback
             } else {
                 // Since we are dealing with a declared Property here, we can
                 // get the comment and the declaration place.
-                $comment = $this->pool
-                    ->createClass(Properties::class)
-                    ->getComment($refProperty);
+                $comment = $this->pool->createClass(Properties::class)->getComment($refProperty);
                 $declarationPlace = $this->retrieveDeclarationPlace($refProperty);
             }
 
@@ -161,7 +151,7 @@ class ThroughProperties extends AbstractCallback
      *
      * @return string
      */
-    protected function getAdditionalData(ReflectionProperty $refProperty, ReflectionClass $ref)
+    protected function getAdditionalData(ReflectionProperty $refProperty, ReflectionClass $ref): string
     {
         // Now that we have the key and the value, we can analyse it.
         // Stitch together our additional info about the data:
@@ -194,9 +184,12 @@ class ThroughProperties extends AbstractCallback
      * Retrieve the declaration place of a property.
      *
      * @param \ReflectionProperty $refProperty
+     *   A reflection of the property we are analysing.
+     *
      * @return string
+     *   Human readable string, where the property was declared.
      */
-    protected function retrieveDeclarationPlace(ReflectionProperty $refProperty)
+    protected function retrieveDeclarationPlace(ReflectionProperty $refProperty): string
     {
         static $declarationCache = [];
 

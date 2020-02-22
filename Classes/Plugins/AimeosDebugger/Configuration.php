@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
@@ -56,16 +59,15 @@ class Configuration implements PluginConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         return 'Aimeos debugger';
     }
 
     /**
      * {@inheritdoc}
-     *
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return ExtensionManagementUtility::getExtensionVersion(Bootstrap::EXT_KEY);
     }

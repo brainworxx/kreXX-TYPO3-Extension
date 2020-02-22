@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Output;
 
@@ -71,7 +74,7 @@ class CheckOutput
      * @return bool
      *   Well? Is it an ajax request?
      */
-    public function isAjax()
+    public function isAjax(): bool
     {
         $server = $this->pool->getServer();
 
@@ -80,12 +83,12 @@ class CheckOutput
     }
 
     /**
-     * Check for a cli request, simple wrapper aound php_sapi_name.
+     * Check for a cli request, simple wrapper around php_sapi_name.
      *
      * @return bool
      *   Well? Is it an cli request?
      */
-    public function isCli()
+    public function isCli(): bool
     {
         return php_sapi_name() === 'cli';
     }
@@ -96,13 +99,14 @@ class CheckOutput
      * @return bool
      *   Well? Is did we output HTML so far?
      */
-    public function isOutputHtml()
+    public function isOutputHtml(): bool
     {
         // When we have dispatched a PDF or Json, the browser will not be
         // able to render the HTML output correctly.
         foreach (headers_list() as $header) {
             $header = strtolower($header);
-            if (strpos($header, 'content-type') !== false &&
+            if (
+                strpos($header, 'content-type') !== false &&
                 strpos($header, 'html') === false
             ) {
                 // We do have none html content type.
@@ -127,7 +131,7 @@ class CheckOutput
      * @return bool
      *   Whether the current client ip is allowed or not.
      */
-    public function isAllowedIp($whitelist)
+    public function isAllowedIp(string $whitelist): bool
     {
         if ($this->isCli() === true || $whitelist === '*') {
             // There is no IP on the shell.

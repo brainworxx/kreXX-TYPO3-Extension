@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,6 +42,9 @@ use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
+use ReflectionClass;
+use ReflectionProperty;
+use stdClass;
 
 class RoutingTest extends AbstractTest
 {
@@ -54,6 +58,9 @@ class RoutingTest extends AbstractTest
      */
     protected $routing;
 
+    /**
+     * {@inheritDoc}
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -67,18 +74,22 @@ class RoutingTest extends AbstractTest
      * We inject mock routes, to test if they are called, and with what parameter.
      *
      * @param string $allowedRoute
-     * @param mixed $parameter
+     * @param Model $model
+     *
+     * @throws \ReflectionException
+     *
+     * @return string
      */
     protected function mockRouting(string $allowedRoute, Model $model)
     {
-        $reflectionClass = new \ReflectionClass($this->routing);
-        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PROTECTED);
+        $reflectionClass = new ReflectionClass($this->routing);
+        $properties = $reflectionClass->getProperties(ReflectionProperty::IS_PROTECTED);
 
         foreach ($properties as $reflectionProperty) {
             if ($reflectionProperty->name === 'pool') {
                 continue;
             }
-            $className = $reflectionClass->getNamespaceName() .'\\Process\\' . ucfirst($reflectionProperty->name);
+            $className = $reflectionClass->getNamespaceName() . '\\Process\\' . ucfirst($reflectionProperty->name);
             $mock = $this->createMock($className);
             if ($reflectionProperty->name === $allowedRoute) {
                 $mock->expects($this->once())
@@ -139,20 +150,22 @@ class RoutingTest extends AbstractTest
      * set in the pool.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::__construct
+     *
+     * @throws \ReflectionException
      */
     public function testConstruct()
     {
         $this->assertEquals(123, Krexx::$pool->routing->testValue);
 
-        $reflectionClass = new \ReflectionClass($this->routing);
-        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PROTECTED);
+        $reflectionClass = new ReflectionClass($this->routing);
+        $properties = $reflectionClass->getProperties(ReflectionProperty::IS_PROTECTED);
 
         foreach ($properties as $reflectionProperty) {
             if ($reflectionProperty->name === 'pool') {
                 continue;
             }
             $this->assertInstanceOf(
-                $reflectionClass->getNamespaceName() .'\\Process\\' . ucfirst($reflectionProperty->name),
+                $reflectionClass->getNamespaceName() . '\\Process\\' . ucfirst($reflectionProperty->name),
                 $this->retrieveValueByReflection($reflectionProperty->name, $this->routing)
             );
         }
@@ -162,6 +175,8 @@ class RoutingTest extends AbstractTest
      * Simply test, if an emergency break gets respected.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubEmergencyBreak()
     {
@@ -184,6 +199,8 @@ class RoutingTest extends AbstractTest
      * Simple routing of a string.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubString()
     {
@@ -199,6 +216,8 @@ class RoutingTest extends AbstractTest
      * Simple routing of an integer.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubInteger()
     {
@@ -214,6 +233,8 @@ class RoutingTest extends AbstractTest
      * Simple routing of a null value.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubNull()
     {
@@ -229,6 +250,8 @@ class RoutingTest extends AbstractTest
      * Simple routing of a boolean value.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubBoolean()
     {
@@ -244,6 +267,8 @@ class RoutingTest extends AbstractTest
      * Simple routing of a float value.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubFloat()
     {
@@ -259,6 +284,8 @@ class RoutingTest extends AbstractTest
      * Simple routing of a resource.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubResource()
     {
@@ -288,6 +315,8 @@ class RoutingTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNoneSimpleTypes
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::preprocessNoneSimpleTypes
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubArrayNormal()
     {
@@ -315,6 +344,8 @@ class RoutingTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNoneSimpleTypes
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNestedTooDeep
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubArrayNesting()
     {
@@ -342,6 +373,8 @@ class RoutingTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNoneSimpleTypes
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleRecursion
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubGlobalsInHive()
     {
@@ -372,13 +405,15 @@ class RoutingTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNoneSimpleTypes
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::preprocessNoneSimpleTypes
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubObjectNormal()
     {
         // Create the model.
         $model = new Model(Krexx::$pool);
         // We are not really using the globals.
-        $parameter = new \stdClass();
+        $parameter = new stdClass();
         $model->setData($parameter);
 
         $this->assertEmergencyHandler(false, false);
@@ -402,13 +437,15 @@ class RoutingTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNoneSimpleTypes
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::generateDomIdFromObject
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleRecursion
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubObjectInHive()
     {
         // Create the model.
         $model = new Model(Krexx::$pool);
         // We are not really using the globals.
-        $parameter = new \stdClass();
+        $parameter = new stdClass();
         $model->setData($parameter);
 
         $this->assertEmergencyHandler(false, false);
@@ -432,13 +469,15 @@ class RoutingTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNoneSimpleTypes
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNestedTooDeep
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubObjectNesting()
     {
         // Create the model.
         $model = new Model(Krexx::$pool);
         // We are not really using the globals.
-        $parameter = new \stdClass();
+        $parameter = new stdClass();
         $model->setData($parameter);
 
         $this->assertEmergencyHandler(false, true);
@@ -452,6 +491,8 @@ class RoutingTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::handleNoneSimpleTypes
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::preprocessNoneSimpleTypes
+     *
+     * @throws \ReflectionException
      */
     public function testAnalysisHubObjectClosure()
     {

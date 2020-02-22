@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -52,6 +53,11 @@ class DebugMethodsTest extends AbstractTest
      */
     protected $debugMethods;
 
+    /**
+     * {@inheritDoc}
+     *
+     * @throws \ReflectionException
+     */
     public function setUp()
     {
         parent::setUp();
@@ -65,7 +71,7 @@ class DebugMethodsTest extends AbstractTest
          // Setup the fixture.
         $fixtureClass = new DebugMethodFixture();
         $fixture = [
-            'data' =>$fixtureClass,
+            'data' => $fixtureClass,
             'name' => 'some name,',
             'ref' => new ReflectionClass($fixtureClass)
         ];
@@ -96,6 +102,7 @@ class DebugMethodsTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::checkIfAccessible
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::retrieveValue
+     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
      */
     public function testCallMeNothing()
     {
@@ -124,6 +131,8 @@ class DebugMethodsTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::checkIfAccessible
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::retrieveValue
+     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
+     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchEventWithModel
      */
     public function testCallMeNormal()
     {

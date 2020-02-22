@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,26 +33,33 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 trait Header
 {
     /**
+     * @var array
+     */
+    private $markerHeader = [
+        '{version}',
+        '{KrexxCount}',
+        '{headline}',
+        '{cssJs}',
+        '{KrexxId}',
+        '{search}',
+        '{messages}',
+        '{encoding}',
+    ];
+
+    /**
      * {@inheritdoc}
      */
-    public function renderHeader($headline, $cssJs)
+    public function renderHeader(string $headline, string $cssJs): string
     {
         return str_replace(
-            [
-                static::MARKER_VERSION,
-                static::MARKER_KREXX_COUNT,
-                static::MARKER_HEADLINE,
-                static::MARKER_CSS_JS,
-                static::MARKER_KREXX_ID,
-                static::MARKER_SEARCH,
-                static::MARKER_MESSAGES,
-                static::MARKER_ENCODING,
-            ],
+            $this->markerHeader,
             [
                 $this->pool->config->version,
                 $this->pool->emergencyHandler->getKrexxCount(),
@@ -64,5 +72,19 @@ trait Header
             ],
             $this->getTemplateFileContent(static::FILE_HEADER)
         );
+    }
+
+    /**
+     * Getter of the header for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerHeader(): array
+    {
+        return $this->markerHeader;
     }
 }

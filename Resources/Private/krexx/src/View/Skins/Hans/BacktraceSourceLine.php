@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,21 +33,28 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 trait BacktraceSourceLine
 {
     /**
+     * @var array
+     */
+    private $markerBacktraceSourceLine = [
+        '{className}',
+        '{lineNo}',
+        '{sourceCode}',
+    ];
+
+    /**
      * {@inheritdoc}
      */
-    public function renderBacktraceSourceLine($className, $lineNo, $sourceCode)
+    public function renderBacktraceSourceLine(string $className, int $lineNo, string $sourceCode): string
     {
         return str_replace(
-            [
-                static::MARKER_CLASS_NAME,
-                static::MARKER_LINE_NO,
-                static::MARKER_SOURCE_CODE,
-            ],
+            $this->markerBacktraceSourceLine,
             [
                 $className,
                 $lineNo,
@@ -54,5 +62,19 @@ trait BacktraceSourceLine
             ],
             $this->getTemplateFileContent(static::FILE_BACKTRACE_SOURCELINE)
         );
+    }
+
+    /**
+     * Getter of the backtrace source line for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerBacktraceSourceLine(): array
+    {
+        return $this->markerBacktraceSourceLine;
     }
 }

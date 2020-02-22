@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Service;
 
@@ -65,11 +68,11 @@ trait LanguageTrait
      * @return string|null
      *   The value from LOCAL_LANG or null if no translation was found.
      */
-    static function translate(
-        $key,
+    public static function translate(
+        string $key,
         $extensionName = null,
-        $arguments = null,
-        $languageKey = null,
+        array $arguments = null,
+        string $languageKey = null,
         array $alternativeLanguageKeys = null
     ) {
         if (defined('KREXX_TEST_IN_PROGRESS')) {

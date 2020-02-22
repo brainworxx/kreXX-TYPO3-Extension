@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -31,6 +32,9 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
+
 namespace {
     die('Access denied');
 }
@@ -38,6 +42,7 @@ namespace {
 namespace {
     class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper {}
 }
+
 namespace TYPO3\CMS\Fluid\Core\ViewHelper {
     class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper {}
 }

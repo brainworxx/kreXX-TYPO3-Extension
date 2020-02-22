@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -44,6 +45,7 @@ use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
+use ReflectionProperty;
 
 class ThroughPropertiesTest extends AbstractTest
 {
@@ -115,6 +117,8 @@ class ThroughPropertiesTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDeclarationPlace
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveFilenameFromTraits
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
+     *
+     * @throws \ReflectionException
      */
     public function testCallMeNormal()
     {
@@ -142,17 +146,17 @@ class ThroughPropertiesTest extends AbstractTest
         $fixture = [
             $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
             $this->throughProperties::PARAM_DATA => [
-                new \ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_STRING_PROPERTY),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_INT_PROPERTY),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, static::UNSET_PROPERTY),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, static::PROTECTED_PROPERTY),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, static::MY_PROPERTY),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, static::LONG_STRING),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_STATIC),
-                new \ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::MY_PROPERTY),
-                new \ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::INHERITED_PUBLIC),
-                new \ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::INHERITED_NULL),
-                new \ReflectionProperty(ComplexPropertiesFixture::class, static::TRAIT_PROPERTY),
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_STRING_PROPERTY),
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_INT_PROPERTY),
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::UNSET_PROPERTY),
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::PROTECTED_PROPERTY),
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::MY_PROPERTY),
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::LONG_STRING),
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_STATIC),
+                new ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::MY_PROPERTY),
+                new ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::INHERITED_PUBLIC),
+                new ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::INHERITED_NULL),
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::TRAIT_PROPERTY),
                 new UndeclaredProperty(new ReflectionClass($subject), $undeclaredProp)
             ]
         ];
@@ -168,6 +172,7 @@ class ThroughPropertiesTest extends AbstractTest
             ->callMe();
 
         // Retrieve the result models and assert them.
+        $public = 'public ';
         $models = $routeNothing->model;
 
         $complexDeclarationString = DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR .
@@ -188,7 +193,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->',
             '',
-            'public '
+            $public
         );
 
         // publicIntProperty
@@ -202,7 +207,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->',
             '',
-            'public '
+            $public
         );
 
         // unsetProperty
@@ -258,7 +263,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->',
             '',
-            'public '
+            $public
         );
 
         // publicStatic
@@ -278,7 +283,7 @@ class ThroughPropertiesTest extends AbstractTest
             'my property',
             static::MY_PROPERTY,
             [
-                static::JSON_COMMENT_KEY =>'My private Property<br /><br />&#64;var string',
+                static::JSON_COMMENT_KEY => 'My private Property<br /><br />&#64;var string',
                 static::JSON_DECLARED_KEY => $complexDeclarationStringInheritance
             ],
             '->',
@@ -350,6 +355,7 @@ class ThroughPropertiesTest extends AbstractTest
      * @param array $json
      * @param string $conectorLeft
      * @param string $connectorRight
+     * @param string $additional
      */
     protected function assertModelValues(
         Model $model,

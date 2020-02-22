@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View;
 
@@ -64,7 +67,7 @@ interface RenderInterface
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderSingleChild(Model $model);
+    public function renderSingleChild(Model $model): string;
 
     /**
      * Render a block of a detected recursion.
@@ -78,7 +81,7 @@ interface RenderInterface
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderRecursion(Model $model);
+    public function renderRecursion(Model $model): string;
 
     /**
      * Renders the kreXX header.
@@ -91,7 +94,7 @@ interface RenderInterface
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderHeader($headline, $cssJs);
+    public function renderHeader(string $headline, string $cssJs): string;
 
     /**
      * Renders the kreXX footer.
@@ -106,7 +109,7 @@ interface RenderInterface
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderFooter(array $caller, Model $model, $configOnly = false);
+    public function renderFooter(array $caller, Model $model, bool $configOnly = false): string;
 
     /**
      * Simply outputs the css and js stuff.
@@ -119,7 +122,7 @@ interface RenderInterface
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderCssJs(&$css, &$javascript);
+    public function renderCssJs(string &$css, string &$javascript): string;
 
     /**
      * Renders a expandable child with a callback in the middle.
@@ -133,7 +136,7 @@ interface RenderInterface
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderExpandableChild(Model $model, $isExpanded = false);
+    public function renderExpandableChild(Model $model, bool $isExpanded = false): string;
 
     /**
      * Renders a simple editable child node.
@@ -144,7 +147,7 @@ interface RenderInterface
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderSingleEditableChild(Model $model);
+    public function renderSingleEditableChild(Model $model): string;
 
     /**
      * Renders a simple button.
@@ -155,7 +158,7 @@ interface RenderInterface
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderButton(Model $model);
+    public function renderButton(Model $model): string;
 
     /**
      * Renders the second part of the fatal error handler.
@@ -170,7 +173,7 @@ interface RenderInterface
      * @return string
      *   The template file, with all markers replaced.
      */
-    public function renderFatalMain($errstr, $errfile, $errline);
+    public function renderFatalMain(string $errstr, string $errfile, int $errline): string;
 
     /**
      * Renders the header part of the fatal error handler.
@@ -183,7 +186,7 @@ interface RenderInterface
      * @return string
      *   The template file, with all markers replaced.
      */
-    public function renderFatalHeader($cssJs, $errorType);
+    public function renderFatalHeader(string $cssJs, string $errorType): string;
 
     /**
      * Renders all internal messages.
@@ -194,22 +197,22 @@ interface RenderInterface
      * @return string
      *   The generates html output
      */
-    public function renderMessages(array $messages);
+    public function renderMessages(array $messages): string;
 
     /**
      * Renders the line of the sourcecode, from where the backtrace is coming.
      *
      * @param string $className
      *   The class name where the sourcecode is from.
-     * @param string $lineNo
-     *   The kine number from the file.
+     * @param int $lineNo
+     *   The line number from the file.
      * @param string $sourceCode
      *   Part of the sourcecode, where the backtrace is coming from.
      *
      * @return string
      *   The generated markup from the template files.
      */
-    public function renderBacktraceSourceLine($className, $lineNo, $sourceCode);
+    public function renderBacktraceSourceLine(string $className, int $lineNo, string $sourceCode): string;
 
     /**
      * Renders the hr.
@@ -217,23 +220,12 @@ interface RenderInterface
      * @return string
      *   The generated markup from the template file.
      */
-    public function renderSingeChildHr();
-
-    /**
-     * Gets a list of all available skins for the frontend config.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed.
-     *
-     * @return array
-     *   An array with the skin names.
-     */
-    public function getSkinList();
+    public function renderSingeChildHr(): string;
 
     /**
      * Render a simple line break.
      *
      * @return string
      */
-    public function renderLinebreak();
+    public function renderLinebreak(): string;
 }

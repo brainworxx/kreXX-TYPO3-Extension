@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 use ReflectionException;
@@ -47,7 +50,7 @@ class FluidOld extends AbstractFluid
     /**
      * {@inheritdoc}
      */
-    protected function getTemplatePath()
+    protected function getTemplatePath(): string
     {
         $result = 'n/a';
 
@@ -67,7 +70,7 @@ class FluidOld extends AbstractFluid
     /**
      * {@inheritdoc}
      */
-    protected function getLayoutPath()
+    protected function getLayoutPath(): string
     {
         $result = 'n/a';
 
@@ -92,7 +95,7 @@ class FluidOld extends AbstractFluid
      * @return string
      *   The partial filename and it's path.
      */
-    protected function getPartialPath()
+    protected function getPartialPath(): string
     {
         $result = 'n/a';
 
@@ -100,7 +103,7 @@ class FluidOld extends AbstractFluid
         // render class. Oh boy, this must be the most hacky thing I have ever
         // written.
         $identifier = explode('_', get_class($this->parsedTemplate));
-        $hash = $identifier[count($identifier) -1];
+        $hash = $identifier[count($identifier) - 1];
 
         try {
             if ($this->viewReflection->hasProperty('partialIdentifierCache')) {

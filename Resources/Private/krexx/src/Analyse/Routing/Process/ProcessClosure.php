@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
@@ -58,7 +61,7 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
      * @return string
      *   The generated markup.
      */
-    public function process(Model $model)
+    public function process(Model $model): string
     {
         try {
             $ref = new ReflectionFunction($model->getData());
@@ -70,9 +73,7 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
         $result = [];
 
         // Adding comments from the file.
-        $result[static::META_COMMENT] =  $this->pool
-            ->createClass(Functions::class)
-            ->getComment($ref);
+        $result[static::META_COMMENT] =  $this->pool->createClass(Functions::class)->getComment($ref);
 
         // Adding the sourcecode
         $result[static::META_SOURCE] = $this->retrieveSourceCode($ref);
@@ -110,15 +111,15 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
      * @return string
      *   The rendered HTML.
      */
-    protected function retrieveSourceCode(ReflectionFunction $ref)
+    protected function retrieveSourceCode(ReflectionFunction $ref): string
     {
         // Adding the sourcecode
-        $highlight = $ref->getStartLine() -1;
+        $highlight = $ref->getStartLine() - 1;
         return $this->pool->fileService->readSourcecode(
             $ref->getFileName(),
             $highlight,
             $highlight - 3,
-            $ref->getEndLine() -1
+            $ref->getEndLine() - 1
         );
     }
 
@@ -133,7 +134,7 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
      * @return string
      *   Parameter list in a human readable form.
      */
-    protected function retrieveParameterList(ReflectionFunction $ref, array &$result)
+    protected function retrieveParameterList(ReflectionFunction $ref, array &$result): string
     {
         $paramList = '';
         foreach ($ref->getParameters() as $key => $reflectionParameter) {

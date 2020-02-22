@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList;
@@ -42,7 +45,6 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionClass;
-use Exception;
 use Throwable;
 use ReflectionMethod;
 use Aimeos\Admin\JQAdm\Common\Decorator\Iface as JQAdmDecoratorInterface;
@@ -118,7 +120,7 @@ class Decorators implements EventHandlerInterface, ConstInterface
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, Model $model = null)
+    public function handle(AbstractCallback $callback, Model $model = null): string
     {
         $result = '';
         $params = $callback->getParameters();
@@ -169,13 +171,13 @@ class Decorators implements EventHandlerInterface, ConstInterface
      * @param array $params
      *   The parameters from the original callback.
      * @param array $allReceivers
-     *   By value of all known recievers. We can only have one return value,
+     *   By value of all known receivers. We can only have one return value,
      *   but we retrieve two different values.
      *
      * @return array
-     *   The  methods wqe need to analyse.
+     *   The  methods we need to analyse.
      */
-    protected function retrieveMethods(array $params, array &$allReceivers)
+    protected function retrieveMethods(array $params, array &$allReceivers): array
     {
         $receiver = $this->retrieveReceiverObject($params[static::PARAM_DATA], $params[static::PARAM_REF]);
         $methods = [];
@@ -211,7 +213,7 @@ class Decorators implements EventHandlerInterface, ConstInterface
      * @return boolean
      *   Whether we have found a potential class.
      */
-    protected function checkClassName($data)
+    protected function checkClassName($data): bool
     {
         foreach ($this->classList as $className) {
             if (is_a($data, $className) && method_exists($data, '__call')) {
@@ -232,7 +234,7 @@ class Decorators implements EventHandlerInterface, ConstInterface
      * @return string
      *   Either a false, or the object that receives all method calls.
      */
-    protected function retrieveReceiverObjectName(ReflectionClass $ref)
+    protected function retrieveReceiverObjectName(ReflectionClass $ref): string
     {
         // First, we need to get the name of the object we need to retrieve.
         // Get the __call() source code.
@@ -304,8 +306,6 @@ class Decorators implements EventHandlerInterface, ConstInterface
             }
         } catch (Throwable $e) {
             // Do nothing.
-        } catch (Exception $e) {
-            // Do nothing.
         }
 
         // Still here?
@@ -321,7 +321,7 @@ class Decorators implements EventHandlerInterface, ConstInterface
      * @return array
      *   Name based array with the methods names.
      */
-    protected function retrievePublicMethods(ReflectionClass $ref)
+    protected function retrievePublicMethods(ReflectionClass $ref): array
     {
         $methods = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
         $result = [];

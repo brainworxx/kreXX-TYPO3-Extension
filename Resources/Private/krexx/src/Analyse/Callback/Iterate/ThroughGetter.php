@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
@@ -42,7 +45,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
-use ReflectionProperty;
 
 /**
  * Getter method analysis methods.
@@ -118,7 +120,7 @@ class ThroughGetter extends AbstractCallback
      * @return string
      *   The generated markup.
      */
-    public function callMe()
+    public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
 
@@ -141,7 +143,7 @@ class ThroughGetter extends AbstractCallback
      * @return string
      *   The generated DOM.
      */
-    protected function goThroughMethodList(array $methodList)
+    protected function goThroughMethodList(array $methodList): string
     {
         $output = '';
 
@@ -195,7 +197,7 @@ class ThroughGetter extends AbstractCallback
      * @return string
      *   The rendered markup.
      */
-    protected function retrievePropertyValue(ReflectionMethod $reflectionMethod, Model $model)
+    protected function retrievePropertyValue(ReflectionMethod $reflectionMethod, Model $model): string
     {
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters[static::PARAM_REF];
@@ -232,16 +234,13 @@ class ThroughGetter extends AbstractCallback
      * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass
      *   The reflection class of the object we are analysing.
      * @param \ReflectionMethod $reflectionMethod
-     *   The reflection of the getter where we want to retive the return value
+     *   The reflection of the getter where we want to retrieve the return value
      * @param \ReflectionProperty|null $refProp
      *   The reflection of the property that it may return.
      * @param \Brainworxx\Krexx\Analyse\Model $model
      *   The model so far.
-     *
-     * @deprecated
-     *   Since 3.2.0. Will be set to protected.
      */
-    public function prepareResult(
+    protected function prepareResult(
         ReflectionClass $reflectionClass,
         ReflectionMethod $reflectionMethod,
         $refProp,
@@ -303,19 +302,19 @@ class ThroughGetter extends AbstractCallback
             // myProperty
             $propertyName = $this->preparePropertyName($reflectionMethod),
             // _myProperty
-            $testName = '_' . $propertyName,
+            '_' . $propertyName,
             // MyProperty
-            $testName = ucfirst($propertyName),
+            ucfirst($propertyName),
             // _MyProperty
-            $testName = '_' . ucfirst($propertyName),
+            '_' . ucfirst($propertyName),
             // myproperty
-            $testName = strtolower($propertyName),
+            strtolower($propertyName),
             // _myproperty
-            $testName = '_' . strtolower($propertyName),
+            '_' . strtolower($propertyName),
             // my_property
-            $testName = $this->convertToSnakeCase($propertyName),
+            $this->convertToSnakeCase($propertyName),
             // _my_property
-            $testName = '_' . $this->convertToSnakeCase($propertyName)
+            '_' . $this->convertToSnakeCase($propertyName)
         ];
 
         foreach ($names as $name) {
@@ -337,7 +336,7 @@ class ThroughGetter extends AbstractCallback
      * @return string
      *   The first impression of the property name.
      */
-    protected function preparePropertyName(ReflectionMethod $reflectionMethod)
+    protected function preparePropertyName(ReflectionMethod $reflectionMethod): string
     {
         $currentPrefix = $this->parameters[static::CURRENT_PREFIX];
 
@@ -387,29 +386,49 @@ class ThroughGetter extends AbstractCallback
         // Later on, we may also try to parse deeper for stuff.
         foreach ($this->findIt(['return $this->', ';'], $sourcecode) as $propertyName) {
             // Check if this is a property and return the first we find.
-            $parentClass = $classReflection;
-            while ($parentClass !== false) {
-                // Check if it was declared somewhere deeper in the
-                // class structure.
-                if ($parentClass->hasProperty($propertyName) === true) {
-                    return $parentClass->getProperty($propertyName);
-                }
-                $parentClass = $parentClass->getParentClass();
+            if (($result = $this->retrievePropertyByName($propertyName, $classReflection)) !== null) {
+                return $result;
             }
-
             // Check if this is a method and go deeper!
             $methodName = rtrim($propertyName, '()');
-            if ($classReflection->hasMethod($methodName) === true) {
+            if (
+                $classReflection->hasMethod($methodName) === true &&
+                ++$this->deep < 3
+            ) {
                 // We need to be careful not to goo too deep, we might end up
                 // in a loop.
-                ++$this->deep;
-                if ($this->deep < 3) {
-                    return $this->getReflectionProperty($classReflection, $classReflection->getMethod($methodName));
-                }
+                return $this->getReflectionProperty($classReflection, $classReflection->getMethod($methodName));
             }
         }
 
         // Nothing?
+        return null;
+    }
+
+    /**
+     * Retrieve the property by name from a reflection class.
+     *
+     * @param string $propertyName
+     *   The name of the property.
+     * @param \ReflectionClass $parentClass
+     *   The class where it may be located.
+     *
+     * @throws \ReflectionException
+     *
+     * @return \ReflectionProperty|null
+     *   The reflection property, if found.
+     */
+    protected function retrievePropertyByName(string $propertyName, \ReflectionClass $parentClass)
+    {
+        while ($parentClass !== false) {
+            // Check if it was declared somewhere deeper in the
+            // class structure.
+            if ($parentClass->hasProperty($propertyName) === true) {
+                return $parentClass->getProperty($propertyName);
+            }
+            $parentClass = $parentClass->getParentClass();
+        }
+
         return null;
     }
 
@@ -425,7 +444,7 @@ class ThroughGetter extends AbstractCallback
      * @return string
      *   The de-camelized string.
      */
-    protected function convertToSnakeCase($string)
+    protected function convertToSnakeCase(string $string): string
     {
         return strtolower(preg_replace(['/([a-z\d])([A-Z])/', '/([^_])([A-Z][a-z])/'], '$1_$2', $string));
     }
@@ -442,7 +461,7 @@ class ThroughGetter extends AbstractCallback
      * @return array
      *   The findings.
      */
-    protected function findIt(array $searchArray, $haystack)
+    protected function findIt(array $searchArray, string $haystack): array
     {
 
         // Defining our regex.
@@ -472,7 +491,7 @@ class ThroughGetter extends AbstractCallback
      * @return string
      *   The escaped string.
      */
-    protected function regexEscaping($string)
+    protected function regexEscaping(string $string): string
     {
         return str_replace(
             $this->regexEscapeFind,

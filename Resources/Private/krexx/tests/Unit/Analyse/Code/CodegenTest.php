@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,6 +41,7 @@ use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
+use ReflectionParameter;
 
 class CodegenTest extends AbstractTest
 {
@@ -89,8 +91,8 @@ class CodegenTest extends AbstractTest
     /**
      * Add the expects calls to the already injected connector mock.
      *
-     * @param integer $left
-     * @param integer $right
+     * @param int $left
+     * @param int $right
      */
     protected function expectConnectorCalls($left, $right)
     {
@@ -350,15 +352,23 @@ class CodegenTest extends AbstractTest
      * Test the parameter analysis, with a default parameter
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
      */
     public function testParameterToStringWithDefaultPhpFive()
     {
         // Create a mock with some supply data.
-        $refParamMock = $this->createMock(\ReflectionParameter::class);
-        $refParamMock->expects($this->once())
+        $refTypeMock = $this->createMock(\ReflectionType::class);
+        $refTypeMock->expects($this->once())
             ->method('__toString')
-            ->will($this->returnValue('Parameter #8 [ <required> Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection $wahtever = \'<h1>Default Stuff</h...\' ]'));
+            ->will($this->returnValue('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\ConfigSection'));
+        $refParamMock = $this->createMock(ReflectionParameter::class);
+        $refParamMock->expects($this->once())
+            ->method('hasType')
+            ->will($this->returnValue(true));
+        $refParamMock->expects($this->once())
+            ->method('getType')
+            ->will($this->returnValue($refTypeMock));
         $refParamMock->expects($this->once())
             ->method('isDefaultValueAvailable')
             ->will($this->returnValue(true));
@@ -380,18 +390,26 @@ class CodegenTest extends AbstractTest
 
     /**
      * Test the parameter analysis, with a required parameter.
-     * We use a speciaql DetTime parameter as a fixture.
+     * We use a special DetTime parameter as a fixture.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
      */
     public function testParameterToStringWithRequiredPhpSeven()
     {
         // Create a mock with some supply data.
-        $refParamMock = $this->createMock(\ReflectionParameter::class);
-        $refParamMock->expects($this->once())
+        $refTypeMock = $this->createMock(\ReflectionType::class);
+        $refTypeMock->expects($this->once())
             ->method('__toString')
-            ->will($this->returnValue('Parameter #2 [ <required> DateTimeZone $object ]'));
+            ->will($this->returnValue('DateTimeZone'));
+        $refParamMock = $this->createMock(ReflectionParameter::class);
+        $refParamMock->expects($this->once())
+            ->method('hasType')
+            ->will($this->returnValue(true));
+        $refParamMock->expects($this->once())
+            ->method('getType')
+            ->will($this->returnValue($refTypeMock));
         $refParamMock->expects($this->once())
             ->method('isDefaultValueAvailable')
             ->will($this->returnValue(false));

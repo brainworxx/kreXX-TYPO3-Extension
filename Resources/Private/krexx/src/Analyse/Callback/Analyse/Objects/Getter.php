@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
@@ -81,7 +84,7 @@ class Getter extends AbstractObjectAnalysis
      * @return string
      *   The generated markup.
      */
-    public function callMe()
+    public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
 
@@ -123,7 +126,8 @@ class Getter extends AbstractObjectAnalysis
         // Check, if the method is really available, inside the analysis
         // context. A inherited private method can not be called inside the
         // $this context.
-        if (($method->isPrivate() === true && $method->getDeclaringClass()->getName() !== $ref->getName()) ||
+        if (
+            ($method->isPrivate() === true && $method->getDeclaringClass()->getName() !== $ref->getName()) ||
             empty($method->getParameters()) === false
         ) {
             // We skip this one. Either its an out-of-scope private getter,
@@ -141,7 +145,7 @@ class Getter extends AbstractObjectAnalysis
     }
 
     /**
-     * Retrieve the possible getter methos list from the class reflection.
+     * Retrieve the possible getter methods list from the class reflection.
      *
      * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
      *   The reflection of the class we are analysing.

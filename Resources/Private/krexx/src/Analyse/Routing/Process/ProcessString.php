@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
@@ -77,7 +80,7 @@ class ProcessString extends AbstractRouting implements ProcessInterface
      * @return string
      *   The rendered markup.
      */
-    public function process(Model $model)
+    public function process(Model $model): string
     {
         $data = $model->getData();
 
@@ -124,11 +127,15 @@ class ProcessString extends AbstractRouting implements ProcessInterface
     /**
      * Retrieve the length and set the encoding in the model.
      *
-     * @param $data
+     * @param string $data
+     *   The string of which we want ot know the length and encoding.
      * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model so far.
+     *
      * @return int
+     *   the length of the string.
      */
-    protected function retrieveLengthAndEncoding($data, Model $model)
+    protected function retrieveLengthAndEncoding(string $data, Model $model): int
     {
         $encoding = $this->pool->encodingService->mbDetectEncoding($data);
         if ($encoding === false) {

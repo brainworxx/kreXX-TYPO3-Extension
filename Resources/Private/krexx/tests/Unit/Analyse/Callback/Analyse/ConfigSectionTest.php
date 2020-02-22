@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -48,6 +49,8 @@ class ConfigSectionTest extends AbstractTest
      * Testing if the configuration is rendered correctly.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection::prepareValue
+     * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
      */
     public function testCallMe()
     {

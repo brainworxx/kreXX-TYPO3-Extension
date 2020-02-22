@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,14 +36,14 @@
 namespace Brainworxx\Krexx\Tests\Helpers;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\View\Render;
+use Brainworxx\Krexx\View\Skins\RenderHans;
 
 /**
  * Short circut the render class.
  *
  * @package Brainworxx\Krexx\Tests\Helpers
  */
-class RenderNothing extends Render
+class RenderNothing extends RenderHans
 {
     /**
      * Storing the model classes, for tersting purpose.
@@ -79,7 +80,7 @@ class RenderNothing extends Render
      * @param \Brainworxx\Krexx\Analyse\Model $model
      * @return string
      */
-    public function renderSingleChild(Model $model)
+    public function renderSingleChild(Model $model): string
     {
         $this->model[__FUNCTION__][] = $model;
         return '';
@@ -89,7 +90,7 @@ class RenderNothing extends Render
      * @param \Brainworxx\Krexx\Analyse\Model $model
      * @return mixed|string
      */
-    public function renderRecursion(Model $model)
+    public function renderRecursion(Model $model): string
     {
         $this->model[__FUNCTION__][] = $model;
         return '';
@@ -100,7 +101,7 @@ class RenderNothing extends Render
      * @param bool $is
      * @return string
      */
-    public function renderExpandableChild(Model $model, $is = false)
+    public function renderExpandableChild(Model $model, bool $is = false): string
     {
         $this->model[__FUNCTION__][] = $model;
         return '';
@@ -109,9 +110,10 @@ class RenderNothing extends Render
     /**
      * @param $caller
      * @param Model $model
+     * @param bool $configOnly
      * @return string
      */
-    public function renderFooter(array $caller, Model $model, $configOnly = false)
+    public function renderFooter(array $caller, Model $model, bool $configOnly = false): string
     {
         $this->model[__FUNCTION__][] = $model;
         return $this->footer;
@@ -122,7 +124,7 @@ class RenderNothing extends Render
      * @param $javascript
      * @return mixed|string
      */
-    public function renderCssJs(&$css, &$javascript)
+    public function renderCssJs(string &$css, string &$javascript): string
     {
         $this->css = $css;
         $this->js = $javascript;
@@ -138,13 +140,12 @@ class RenderNothing extends Render
     }
 
     /**
-     * @param $type
      * @param $errstr
      * @param $errfile
      * @param $errline
      * @return string
      */
-    public function renderFatalMain($errstr, $errfile, $errline): string
+    public function renderFatalMain(string $errstr, string $errfile, int $errline): string
     {
         return $this->fatalMain;
     }

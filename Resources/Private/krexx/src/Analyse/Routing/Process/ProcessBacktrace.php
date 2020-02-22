@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
@@ -48,12 +51,12 @@ use Brainworxx\Krexx\Service\Config\Fallback;
 class ProcessBacktrace extends AbstractCallback
 {
     /**
-     * Wrapper arround the process method, so we can use this one as a callback.
+     * Wrapper around the process method, so we can use this one as a callback.
      *
      * @return string
      *   The generated DOM.
      */
-    public function callMe()
+    public function callMe(): string
     {
         return $this->process($this->parameters[static::PARAM_DATA]);
     }
@@ -68,7 +71,7 @@ class ProcessBacktrace extends AbstractCallback
      * @return string
      *   The rendered backtrace.
      */
-    public function process(&$backtrace = [])
+    public function process(&$backtrace = []): string
     {
         if (empty($backtrace) === true) {
             $backtrace = $this->getBacktrace();
@@ -107,7 +110,7 @@ class ProcessBacktrace extends AbstractCallback
      * @return array
      *   The scrubbed backtrace.
      */
-    protected function getBacktrace()
+    protected function getBacktrace(): array
     {
         // Remove the fist step from the backtrace,
         // because that is the internal function in kreXX.
@@ -119,7 +122,7 @@ class ProcessBacktrace extends AbstractCallback
             if (isset($step[static::TRACE_FILE]) && strpos($step[static::TRACE_FILE], $krexxScr) !== false) {
                 unset($backtrace[$key]);
             } else {
-                // No need to ga wurther, because we should have passed the
+                // No need to go further, because we should have passed the
                 // kreXX part.
                 break;
             }

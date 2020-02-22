@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Misc;
 
@@ -73,7 +76,7 @@ class Registry
      * @return $this
      *   Return $this for chaining.
      */
-    public function set($key, $value)
+    public function set($key, $value): Registry
     {
         if ($value === null) {
             unset($this->data[$key]);
@@ -88,10 +91,10 @@ class Registry
     /**
      * Getter for the registry.
      *
-     * @param $key
+     * @param mixed $key
      *   The key under what we once stored the $value,
      *
-     * @return null|mixed
+     * @return mixed
      *   The value, if available.
      */
     public function get($key)
@@ -106,13 +109,13 @@ class Registry
     /**
      * Check if we actually have a value to this key.
      *
-     * @param $key
+     * @param mixed $key
      *   The key we want to check.
      *
      * @return bool
      *   If we have a value, or not.
      */
-    public function has($key)
+    public function has($key): bool
     {
         return isset($this->data[$key]);
     }

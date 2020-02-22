@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,7 +36,6 @@
 namespace Brainworxx\Krexx\Tests\Unit\Controller;
 
 use Brainworxx\Krexx\Controller\DumpController;
-use Brainworxx\Krexx\Errorhandler\Fatal;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
@@ -45,11 +45,6 @@ use Brainworxx\Krexx\View\Output\File;
 
 class AbstractControllerTest extends AbstractTest
 {
-
-    const FATAL_SHOULD_ACTIVATE = 'fatalShouldActive';
-    const SET_IS_ACTIVE = 'setIsActive';
-    const KREXX_FATAL = 'krexxFatal';
-
     /**
      * Testing the construction phase of the controller
      *
@@ -78,95 +73,5 @@ class AbstractControllerTest extends AbstractTest
         $dumpController = new DumpController(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $dumpController));
         $this->assertInstanceOf(Browser::class, $this->retrieveValueByReflection('outputService', $dumpController));
-    }
-
-    /**
-     * Test the deactivation of the fatal error handler during a analysis.
-     *
-     * @covers \Brainworxx\Krexx\Controller\AbstractController::noFatalForKrexx
-     */
-    public function testNoFatalForKrexx()
-    {
-        // Test with a fatal error handler mock in place.
-        $dumpController = new DumpController(Krexx::$pool);
-        $this->setValueByReflection(
-            static::FATAL_SHOULD_ACTIVATE,
-            true,
-            $dumpController
-        );
-        $handlerMock = $this->createMock(Fatal::class);
-        $handlerMock->expects($this->once())
-            ->method(static::SET_IS_ACTIVE)
-            ->with(false);
-        $this->setValueByReflection(
-            static::KREXX_FATAL,
-            $handlerMock,
-            $dumpController
-        );
-
-        $dumpController->noFatalForKrexx();
-
-        // No fatal error handler active.
-        $dumpController = new DumpController(Krexx::$pool);
-        $this->setValueByReflection(
-            static::FATAL_SHOULD_ACTIVATE,
-            false,
-            $dumpController
-        );
-        $handlerMock = $this->createMock(Fatal::class);
-        $handlerMock->expects($this->never())
-            ->method(static::SET_IS_ACTIVE);
-        $this->setValueByReflection(
-            static::KREXX_FATAL,
-            $handlerMock,
-            $dumpController
-        );
-
-        $dumpController->noFatalForKrexx();
-    }
-
-    /**
-     * Test the reactivation of the fatal error handler after a analysis
-     *
-     * @covers \Brainworxx\Krexx\Controller\AbstractController::reFatalAfterKrexx
-     */
-    public function testReFatalAfterKrexx()
-    {
-        // Test with a fatal error handler mock in place.
-        $dumpController = new DumpController(Krexx::$pool);
-        $this->setValueByReflection(
-            static::FATAL_SHOULD_ACTIVATE,
-            true,
-            $dumpController
-        );
-        $handlerMock = $this->createMock(Fatal::class);
-        $handlerMock->expects($this->once())
-            ->method(static::SET_IS_ACTIVE)
-            ->with(true);
-        $this->setValueByReflection(
-            static::KREXX_FATAL,
-            $handlerMock,
-            $dumpController
-        );
-
-        $dumpController->reFatalAfterKrexx();
-
-         // No fatal error handler active.
-        $dumpController = new DumpController(Krexx::$pool);
-        $this->setValueByReflection(
-            static::FATAL_SHOULD_ACTIVATE,
-            false,
-            $dumpController
-        );
-        $handlerMock = $this->createMock(Fatal::class);
-        $handlerMock->expects($this->never())
-            ->method(static::SET_IS_ACTIVE);
-        $this->setValueByReflection(
-            static::KREXX_FATAL,
-            $handlerMock,
-            $dumpController
-        );
-
-        $dumpController->reFatalAfterKrexx();
     }
 }

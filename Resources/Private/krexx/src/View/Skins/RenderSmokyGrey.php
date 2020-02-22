@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,10 +33,10 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins;
 
-use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\View\RenderInterface;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Button;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild;
@@ -52,9 +53,8 @@ use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
  *
  * @package Brainworxx\Krexx\View\Smokygrey
  */
-class RenderSmokyGrey extends RenderHans implements RenderInterface
+class RenderSmokyGrey extends RenderHans
 {
-
     use SingleChild;
     use ExpandableChild;
     use Recursion;
@@ -66,29 +66,5 @@ class RenderSmokyGrey extends RenderHans implements RenderInterface
     use ConnectorRight;
     use Help;
 
-    const MARKER_LANGUAGE = '{language}';
-    const MARKER_ADDITIONAL_JSON = '{addjson}';
-    const MARKER_K_DEBUG_CLASSES = '{kdebug-classes}';
-    const MARKER_K_CONFIG_CLASSES = '{kconfiguration-classes}';
-
     const DATA_ATTRIBUTE_JSON = 'addjson';
-
-    /**
-     * {@inheritDoc}
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     */
-    protected function renderConnector($connector)
-    {
-        if (strlen($connector) > 17) {
-            // Something big, we should display it.
-            // Most likely the parameters of a method.
-            return parent::renderConnector($connector);
-        }
-
-        return '';
-    }
 }

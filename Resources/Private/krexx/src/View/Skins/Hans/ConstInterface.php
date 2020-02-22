@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,8 +33,18 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
+/**
+ * Interface ConstInterface
+ *
+ * @deprecated
+ *   Since 4.0.0. Will be removed.
+ *
+ * @package Brainworxx\Krexx\View\Skins\Hans
+ */
 interface ConstInterface
 {
     const MARKER_NAME = '{name}';
@@ -95,7 +106,12 @@ interface ConstInterface
     const MARKER_PLUGIN_TEXT = '{plugintext}';
     const MARKER_PLUGIN_ACTIVE_TEXT = '{activetext}';
     const MARKER_PLUGIN_ACTIVE_CLASS = '{activeclass}';
+    const MARKER_LANGUAGE = '{language}';
+    const MARKER_ADDITIONAL_JSON = '{addjson}';
+    const MARKER_K_DEBUG_CLASSES = '{kdebug-classes}';
+    const MARKER_K_CONFIG_CLASSES = '{kconfiguration-classes}';
 
+    const DATA_ATTRIBUTE_JSON = 'addjson';
     const DATA_ATTRIBUTE_SOURCE = 'source';
     const DATA_ATTRIBUTE_WRAPPER_R = 'codewrapperRight';
     const DATA_ATTRIBUTE_WRAPPER_L = 'codewrapperLeft';
@@ -110,9 +126,6 @@ interface ConstInterface
     const FILE_CALLER = 'caller';
     const FILE_HELPROW = 'helprow';
     const FILE_HELP = 'help';
-    // @deprecated
-    const FILE_CONNECTOR = 'connector';
-    // @deprecated
     const FILE_CONNECTOR_LEFT = 'connectorLeft';
     const FILE_CONNECTOR_RIGHT = 'connectorRight';
     const FILE_SI_PLUGIN = 'singlePlugin';

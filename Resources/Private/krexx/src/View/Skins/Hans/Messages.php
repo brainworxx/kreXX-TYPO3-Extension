@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,21 +33,42 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 trait Messages
 {
     /**
+     * @var string
+     */
+    private $markerMessages = '{message}';
+
+    /**
      * {@inheritdoc}
      */
-    public function renderMessages(array $messages)
+    public function renderMessages(array $messages): string
     {
         $result = '';
         $messageTemplate = $this->getTemplateFileContent(static::FILE_MESSAGE);
         foreach ($messages as $message) {
-            $result .= str_replace(static::MARKER_MESSAGE, $message, $messageTemplate);
+            $result .= str_replace($this->markerMessages, $message, $messageTemplate);
         }
 
         return $result;
+    }
+
+   /**
+     * Getter of the messages for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerMessages(): array
+    {
+        return [$this->markerMessages];
     }
 }

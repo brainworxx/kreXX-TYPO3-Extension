@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,9 +33,10 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\Service\Reflection;
 
-use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
 use ReflectionException;
 
@@ -65,7 +67,7 @@ class ReflectionClass extends \ReflectionClass
     /**
      * ReflectionClass constructor.
      *
-     * @param $data
+     * @param object $data
      *   The class we are currently analysing.
      *
      * @throws \ReflectionException
@@ -112,9 +114,9 @@ class ReflectionClass extends \ReflectionClass
         // We are facing a numeric property name (yes, that is possible).
         // To be honest, this one of the most bizarre things I've encountered so
         // far. Depending on your PHP version, that value may not be accessible
-        // via normal means from the array we have got here.. And no, we are not
+        // via normal means from the array we have got here. And no, we are not
         // accessing the object directly.
-        if (is_int($propName) === true) {
+        if ($refProperty instanceof UndeclaredProperty && is_int($refProperty->propertyName)) {
             return array_values($this->objectArray)[
                 array_search($propName, array_keys($this->objectArray))
             ];
@@ -152,7 +154,7 @@ class ReflectionClass extends \ReflectionClass
      *   Array with the interfaces.
      */
 
-    public function getInterfaces()
+    public function getInterfaces(): array
     {
         // Get a list of the names.
         $interfaceNames = $this->getInterfaceNames();
@@ -161,10 +163,10 @@ class ReflectionClass extends \ReflectionClass
         }
 
         // Compare the names with the ones from the parent.
+        /** @var \ReflectionClass $parent */
         $parent = $this->getParentClass();
         if ($parent !== false) {
-            $parentInterfaces = $parent->getInterfaceNames();
-            $interfaceNames = array_diff($interfaceNames, $parentInterfaces);
+            $interfaceNames = array_diff($interfaceNames, $parent->getInterfaceNames());
         }
         if (empty($interfaceNames)) {
             return [];
@@ -189,7 +191,7 @@ class ReflectionClass extends \ReflectionClass
      *
      * @return array|\ReflectionClass[]
      */
-    public function getTraits()
+    public function getTraits(): array
     {
         $traits = parent::getTraitNames();
         if (empty($traits)) {

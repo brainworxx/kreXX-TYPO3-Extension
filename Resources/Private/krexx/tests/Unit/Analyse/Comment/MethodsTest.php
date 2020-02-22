@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,6 +40,7 @@ use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\InheritDocFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
+use ReflectionClass;
 
 class MethodsTest extends AbstractTest
 {
@@ -62,11 +64,13 @@ class MethodsTest extends AbstractTest
      * @param string $className
      * @param string $methodName
      *
+     * @throws \ReflectionException
+     *
      * @return string
      */
     protected function returnTestResult($className, $methodName)
     {
-        $reflectionClass = new \ReflectionClass($className);
+        $reflectionClass = new ReflectionClass($className);
         return $this->methodComment->getComment($reflectionClass->getMethod($methodName), $reflectionClass);
     }
 
@@ -83,6 +87,8 @@ class MethodsTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::getTraitComment
      * @covers \Brainworxx\Krexx\Analyse\Comment\AbstractComment::replaceInheritComment
      * @covers \Brainworxx\Krexx\Analyse\Comment\Methods::retrieveComment
+     *
+     * @throws \ReflectionException
      */
     public function testGetComment()
     {

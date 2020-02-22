@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
@@ -77,7 +80,7 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
      * @return string
      *   The generated markup.
      */
-    protected function getReflectionPropertiesData(array $refProps, ReflectionClass $ref, $label = null)
+    protected function getReflectionPropertiesData(array $refProps, ReflectionClass $ref, string $label = null): string
     {
         // We are dumping public properties direct into the main-level, without
         // any "abstraction level", because they can be accessed directly.
@@ -118,7 +121,7 @@ abstract class AbstractObjectAnalysis extends AbstractCallback
      *   The second reflection.
      * @return int
      */
-    protected function reflectionSorting(Reflector $reflectionA, Reflector $reflectionB)
+    protected function reflectionSorting(Reflector $reflectionA, Reflector $reflectionB): int
     {
         /** @var \ReflectionMethod | \ReflectionProperty $reflectionA */
         /** @var \ReflectionMethod | \ReflectionProperty $reflectionB */

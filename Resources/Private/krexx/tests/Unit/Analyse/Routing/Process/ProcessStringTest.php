@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -64,7 +65,10 @@ class ProcessStringTest extends AbstractTest
 
         $processor = new ProcessString(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $processor));
-        $this->assertInstanceOf(FileinfoDummy::class, $this->retrieveValueByReflection(static::BUFFER_INFO, $processor));
+        $this->assertInstanceOf(
+            FileinfoDummy::class,
+            $this->retrieveValueByReflection(static::BUFFER_INFO, $processor)
+        );
     }
 
     /**
@@ -104,8 +108,8 @@ class ProcessStringTest extends AbstractTest
         $this->assertEquals($model::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
-        $this->assertEquals(false, $model->getHasExtra());
-        $this->assertEquals(false, $model->getIsCallback());
+        $this->assertEquals(false, $model->hasExtra());
+        $this->assertEquals(false, $model->isCallback());
         $this->assertArrayNotHasKey($model::META_ENCODING, $model->getJson());
         $this->assertArrayNotHasKey($model::META_MIME_TYPE, $model->getJson());
     }
@@ -132,8 +136,8 @@ class ProcessStringTest extends AbstractTest
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
         $this->assertEquals('broken', $model->getJson()[$model::META_ENCODING]);
-        $this->assertEquals(false, $model->getHasExtra());
-        $this->assertEquals(false, $model->getIsCallback());
+        $this->assertEquals(false, $model->hasExtra());
+        $this->assertEquals(false, $model->isCallback());
         $this->assertArrayNotHasKey($model::META_MIME_TYPE, $model->getJson());
     }
 
@@ -161,8 +165,8 @@ class ProcessStringTest extends AbstractTest
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
         $this->assertEquals($fileInfo, $model->getJson()[$model::META_MIME_TYPE]);
-        $this->assertEquals(false, $model->getHasExtra());
-        $this->assertEquals(false, $model->getIsCallback());
+        $this->assertEquals(false, $model->hasExtra());
+        $this->assertEquals(false, $model->isCallback());
         $this->assertArrayNotHasKey($model::META_ENCODING, $model->getJson());
     }
 
@@ -188,11 +192,14 @@ class ProcessStringTest extends AbstractTest
 
         $this->assertEquals($model::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
-        $this->assertEquals(static::ENCODING_PREFIX . substr($fixture, 0, 50) .  $model::UNKNOWN_VALUE, $model->getNormal());
+        $this->assertEquals(
+            static::ENCODING_PREFIX . substr($fixture, 0, 50) .  $model::UNKNOWN_VALUE,
+            $model->getNormal()
+        );
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getData());
         $this->assertEquals($fileInfo, $model->getJson()[$model::META_MIME_TYPE]);
-        $this->assertEquals(true, $model->getHasExtra());
-        $this->assertEquals(false, $model->getIsCallback());
+        $this->assertEquals(true, $model->hasExtra());
+        $this->assertEquals(false, $model->isCallback());
         $this->assertArrayNotHasKey($model::META_ENCODING, $model->getJson());
     }
 
@@ -217,16 +224,14 @@ class ProcessStringTest extends AbstractTest
         $this->assertEquals($model::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
-        $this->assertEquals(false, $model->getHasExtra());
-        $this->assertEquals(true, $model->getIsCallback());
+        $this->assertEquals(false, $model->hasExtra());
+        $this->assertEquals(true, $model->isCallback());
         $this->assertArrayNotHasKey($model::META_ENCODING, $model->getJson());
         $this->assertArrayNotHasKey($model::META_MIME_TYPE, $model->getJson());
     }
 
     /**
      * Testing with linebreaks in the fixture.
-     *
-     * @throws \ReflectionException
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
@@ -246,8 +251,8 @@ class ProcessStringTest extends AbstractTest
         $this->assertEquals($model::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture . $model::UNKNOWN_VALUE, $model->getNormal());
-        $this->assertEquals(true, $model->getHasExtra());
-        $this->assertEquals(false, $model->getIsCallback());
+        $this->assertEquals(true, $model->hasExtra());
+        $this->assertEquals(false, $model->isCallback());
         $this->assertArrayNotHasKey($model::META_ENCODING, $model->getJson());
         $this->assertArrayNotHasKey($model::META_MIME_TYPE, $model->getJson());
     }
@@ -259,8 +264,7 @@ class ProcessStringTest extends AbstractTest
      * @param string $fixture
      * @param $encoding
      * @param int $length
-     *
-     * @throws \ReflectionException
+     * @param $bufferOutput
      *
      * @return \Brainworxx\Krexx\Analyse\Model
      */
@@ -303,7 +307,7 @@ class ProcessStringTest extends AbstractTest
         }
         Krexx::$pool->encodingService = $encodingMock;
 
-        $fileinfoMock = $this->createMock(\finfo::class);
+        $fileinfoMock = $this->createMock(finfo::class);
         if (empty($bufferOutput)) {
              $fileinfoMock->expects($this->never())
                 ->method('buffer');

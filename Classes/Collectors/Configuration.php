@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
@@ -63,7 +66,7 @@ class Configuration extends AbstractCollector
      * @return array
      *   The values for the drop downs.
      */
-    protected function retrieveDropDowns()
+    protected function retrieveDropDowns(): array
     {
         // Adding the dropdown values.
         $dropdown = [];
@@ -89,7 +92,7 @@ class Configuration extends AbstractCollector
      * @return array
      *   The configuration array for the view
      */
-    protected function retrieveConfiguration()
+    protected function retrieveConfiguration(): array
     {
         /** @var Ini $iniReader */
         $iniReader = $this->pool->createClass(Ini::class)
@@ -125,7 +128,8 @@ class Configuration extends AbstractCollector
             }
 
             // Assign the mode-class.
-            if (in_array($settingsName, $this->expertOnly) &&
+            if (
+                in_array($settingsName, $this->expertOnly) &&
                 $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS]
             ) {
                 $config[$settingsName][static::SETTINGS_MODE] = 'expert';

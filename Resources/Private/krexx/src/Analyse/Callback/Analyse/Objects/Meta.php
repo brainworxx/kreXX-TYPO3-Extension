@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
@@ -66,7 +69,7 @@ class Meta extends AbstractObjectAnalysis
      * @return string
      *   The generated markup.
      */
-    public function callMe()
+    public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
         $this->pool->codegenHandler->setAllowCodegen(false);
@@ -114,25 +117,20 @@ class Meta extends AbstractObjectAnalysis
      * @return string
      *   The generated DOM.
      */
-    protected function analyseMeta($domId, ReflectionClass $ref, $name)
+    protected function analyseMeta(string $domId, ReflectionClass $ref, string $name): string
     {
         $this->pool->recursionHandler->addToMetaHive($domId);
 
         $data = [];
         // Get the naming on the way.
         $data[static::META_CLASS_NAME] = $this->generateName($ref);
-
-        $data[static::META_COMMENT] = $this->pool
-            ->createClass(Classes::class)
-            ->getComment($ref);
+        $data[static::META_COMMENT] = $this->pool->createClass(Classes::class)->getComment($ref);
 
         if ($ref->isInternal()) {
             $data[static::META_DECLARED_IN] = static::META_PREDECLARED;
         } else {
-            $data[static::META_DECLARED_IN] = $this->pool
-                ->fileService
-                ->filterFilePath($ref->getFileName()) .
-                ', line ' . $ref->getStartLine();
+            $data[static::META_DECLARED_IN] = $this->pool->fileService
+                    ->filterFilePath($ref->getFileName()) . ', line ' . $ref->getStartLine();
         }
 
         // Now to collect the inheritance stuff.
@@ -145,28 +143,24 @@ class Meta extends AbstractObjectAnalysis
         if (!empty($traitList)) {
             $data[static::META_TRAITS] = $traitList;
         }
+
+        /** @var ReflectionClass $previousClass */
         $previousClass = $ref->getParentClass();
         if (!empty($previousClass)) {
             // We add it via array, because the other inheritance getters
-            // aare also supplying one.
-            $data[static::META_INHERITED_CLASS] = [
-                $previousClass->getName() => $previousClass
-            ];
+            // are also supplying one.
+            $data[static::META_INHERITED_CLASS] = [$previousClass->getName() => $previousClass];
         }
 
-        return $this->pool->render->renderExpandableChild(
-            $this->dispatchEventWithModel(
-                static::EVENT_MARKER_ANALYSES_END,
-                $this->pool->createClass(Model::class)
-                    ->setName($name)
-                    ->setDomid($domId)
-                    ->setType(static::TYPE_INTERNALS)
-                    ->addParameter(static::PARAM_DATA, $data)
-                    ->injectCallback(
-                        $this->pool->createClass(ThroughMeta::class)
-                    )
-            )
-        );
+        return $this->pool->render->renderExpandableChild($this->dispatchEventWithModel(
+            static::EVENT_MARKER_ANALYSES_END,
+            $this->pool->createClass(Model::class)
+                ->setName($name)
+                ->setDomid($domId)
+                ->setType(static::TYPE_INTERNALS)
+                ->addParameter(static::PARAM_DATA, $data)
+                ->injectCallback($this->pool->createClass(ThroughMeta::class))
+        ));
     }
 
     /**
@@ -181,7 +175,7 @@ class Meta extends AbstractObjectAnalysis
      * @return string
      *   The generated id.
      */
-    protected function generateDomIdFromClassname($data)
+    protected function generateDomIdFromClassname(string $data): string
     {
         return 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_c_' . md5($data);
     }
@@ -195,7 +189,7 @@ class Meta extends AbstractObjectAnalysis
      * @return string
      *   The generated class name
      */
-    protected function generateName(ReflectionClass $ref)
+    protected function generateName(ReflectionClass $ref): string
     {
         $result = '';
         if ($ref->isFinal() === true) {

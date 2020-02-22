@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Includekrexx\Modules;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
@@ -49,7 +52,6 @@ use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Adminpanel\ModuleApi\ResourceProviderInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -96,6 +98,8 @@ class Log extends AbstractSubModule implements
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *   The frontend request. Currently not used.
+     *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
      * @return \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData
      *   The data we will assign to the admin panel.
@@ -173,7 +177,7 @@ class Log extends AbstractSubModule implements
      * @return bool
      *   The result of the check.
      */
-    protected function hasAccess()
+    protected function hasAccess(): bool
     {
         return isset($GLOBALS['BE_USER']) &&
             $GLOBALS['BE_USER']->check('modules', AbstractCollector::PLUGIN_NAME);
@@ -191,7 +195,7 @@ class Log extends AbstractSubModule implements
      * @return string
      *   The rendered HTML message.
      */
-    protected function renderMessage($text, string $severity): string
+    protected function renderMessage(string $text, string $severity): string
     {
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setTemplatePathAndFilename(

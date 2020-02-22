@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
@@ -66,19 +69,12 @@ class ThroughLargeArray extends AbstractCallback
      * @return string
      *   The generated markup.
      */
-    public function callMe()
+    public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
 
         $recursionMarker = $this->pool->recursionHandler->getMarker();
         $output .= $this->pool->render->renderSingeChildHr();
-
-        // Are we dealing with multiline code generation?
-        if ($this->parameters[static::PARAM_MULTILINE] === true) {
-            $multilineCodeGen = Codegen::ITERATOR_TO_ARRAY;
-        } else {
-            $multilineCodeGen = 0;
-        }
 
         // Iterate through.
         foreach ($this->parameters[static::PARAM_DATA] as $key => &$value) {
@@ -91,8 +87,9 @@ class ThroughLargeArray extends AbstractCallback
             }
 
             /** @var Model $model */
-            $model = $this->pool->createClass(Model::class)
-                ->setMultiLineCodeGen($multilineCodeGen);
+            $model = $this->pool->createClass(Model::class)->setMultiLineCodeGen(
+                $this->parameters[static::PARAM_MULTILINE] === true ?  Codegen::ITERATOR_TO_ARRAY : ''
+            );
 
             // Handling string keys of the array.
             $this->handleKey($key, $model);
@@ -134,7 +131,7 @@ class ThroughLargeArray extends AbstractCallback
      * @return string
      *   The generated markup
      */
-    protected function handleValue($value, Model $model)
+    protected function handleValue($value, Model $model): string
     {
         if (is_object($value) === true) {
             // We will not go too deep here, and say only what it is.

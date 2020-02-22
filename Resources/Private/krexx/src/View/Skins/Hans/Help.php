@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,24 +33,37 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Model;
 
 trait Help
 {
+    /**
+     * @var array
+     */
+    private $markerHelpRow = [
+        '{helptitle}',
+        '{helptext}'
+    ];
+
+    /**
+     * @var string
+     */
+    private $markerHelp = '{help}';
+
      /**
      * Renders the helptext.
      *
      * @param Model $model
      *   The ID of the helptext.
      *
-     * @see Usage
-     *
      * @return string
      *   The generated markup from the template files.
      */
-    protected function renderHelp(Model $model)
+    protected function renderHelp(Model $model): string
     {
         $data = $model->getJson();
 
@@ -65,13 +79,41 @@ trait Help
         // Add the stuff from the json after the help text, if any.
         foreach ($data as $title => $text) {
             $helpContent .= str_replace(
-                [static::MARKER_HELP_TITLE, static::MARKER_HELP_TEXT],
+                $this->markerHelpRow,
                 [$title, $text],
                 $helpRow
             );
         }
 
         // Add it into the wrapper.
-        return str_replace(static::MARKER_HELP, $helpContent, $this->getTemplateFileContent(static::FILE_HELP));
+        return str_replace($this->markerHelp, $helpContent, $this->getTemplateFileContent(static::FILE_HELP));
+    }
+
+    /**
+     * Getter of the help row for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerHelpRow(): array
+    {
+        return $this->markerHelpRow;
+    }
+
+    /**
+     * Getter of the help for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return array
+     *   The marker array.
+     */
+    public function getMarkerHelp(): array
+    {
+        return [$this->markerHelp];
     }
 }

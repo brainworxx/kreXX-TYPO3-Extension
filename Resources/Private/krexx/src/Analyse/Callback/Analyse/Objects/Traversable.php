@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,6 +33,8 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use ArrayAccess;
@@ -39,7 +42,6 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
-use Exception;
 use SplObjectStorage;
 use Throwable;
 
@@ -63,13 +65,14 @@ class Traversable extends AbstractObjectAnalysis
      * @return string
      *   The generated markup.
      */
-    public function callMe()
+    public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
 
         // Check nesting level, memory and runtime.
         $this->pool->emergencyHandler->upOneNestingLevel();
-        if ($this->pool->emergencyHandler->checkNesting() === true ||
+        if (
+            $this->pool->emergencyHandler->checkNesting() === true ||
             $this->pool->emergencyHandler->checkEmergencyBreak() === true
         ) {
             // We will not be doing this one, but we need to get down with our
@@ -85,26 +88,10 @@ class Traversable extends AbstractObjectAnalysis
     /**
      * Analyses the traversable data.
      *
-     * @deprecated
-     *   Since 3.2.0 dev. Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
      * @return string
      *   The generated markup.
      */
-    protected function getTaversableData()
-    {
-        return $this->retrieveTraversableData();
-    }
-
-    /**
-     * Analyses the traversable data.
-     *
-     * @return string
-     *   The generated markup.
-     */
-    protected function retrieveTraversableData()
+    protected function retrieveTraversableData(): string
     {
         $data = $this->parameters[static::PARAM_DATA];
 
@@ -120,11 +107,6 @@ class Traversable extends AbstractObjectAnalysis
             );
             $parameter = iterator_to_array($data);
         } catch (Throwable $e) {
-            //Restore the previous error handler, and return an empty string.
-            restore_error_handler();
-            $this->pool->emergencyHandler->downOneNestingLevel();
-            return '';
-        } catch (Exception $e) {
             //Restore the previous error handler, and return an empty string.
             restore_error_handler();
             $this->pool->emergencyHandler->downOneNestingLevel();
@@ -146,7 +128,7 @@ class Traversable extends AbstractObjectAnalysis
     /**
      * Analyse the traversable retrieval result.
      *
-     * @param $originalClass
+     * @param object $originalClass
      *   The class that we are analysing.
      * @param array $result
      *   The retrieved traversable result.
@@ -154,7 +136,7 @@ class Traversable extends AbstractObjectAnalysis
      * @return string
      *   The rendered HTML.
      */
-    protected function analyseTraversableResult($originalClass, array $result)
+    protected function analyseTraversableResult($originalClass, array $result): string
     {
         // Special Array Access here, resulting in more complicated source
         // generation. So we tell the callback to to that.
@@ -164,7 +146,8 @@ class Traversable extends AbstractObjectAnalysis
         // SplObject pool use the object as keys, so we need some
         // multiline stuff!
         // A SplObject is also an ArrayAccess btw.
-        if (($originalClass instanceof ArrayAccess) &&
+        if (
+            ($originalClass instanceof ArrayAccess) &&
             ($originalClass instanceof SplObjectStorage) === false
         ) {
             $multiline = false;
@@ -186,8 +169,7 @@ class Traversable extends AbstractObjectAnalysis
                 ->setNormal('Simplified Traversable Info')
                 ->setHelpid('simpleArray');
         } else {
-            $model->injectCallback($this->pool->createClass(ThroughArray::class))
-                ->setNormal('Traversable Info');
+            $model->injectCallback($this->pool->createClass(ThroughArray::class))->setNormal('Traversable Info');
         }
 
         $analysisResult = $this->pool->render->renderExpandableChild(

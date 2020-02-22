@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -33,7 +34,6 @@
  */
 
 namespace Brainworxx\Krexx\Tests\Unit\Service\Factory;
-
 
 use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Scope;
@@ -60,6 +60,8 @@ use stdClass;
 
 class PoolTest extends AbstractTest
 {
+    const MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
+
     /**
      * Testing the creation of all neccessary classes.
      *
@@ -108,7 +110,7 @@ class PoolTest extends AbstractTest
         $filename = 'test';
         // Chunks folder is writable
         // Log folder is writable
-        $filePutContents = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'file_put_contents');
+        $filePutContents = $this->getFunctionMock(static::MISC_NAMESPACE, 'file_put_contents');
         $filePutContents->expects($this->exactly(2))
             ->will(
                 $this->returnValueMap([
@@ -116,7 +118,7 @@ class PoolTest extends AbstractTest
                     [Krexx::$pool->config->getLogDir() . $filename, 'x', true]
                 ])
             );
-        $unlink = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'unlink');
+        $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, 'unlink');
         $unlink->expects($this->exactly(2))
             ->will(
                 $this->returnValueMap([
@@ -143,7 +145,7 @@ class PoolTest extends AbstractTest
         $filename = 'test';
         // Chunks folder is not writable
         // Log folder is not writable
-        $filePutContents = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'file_put_contents');
+        $filePutContents = $this->getFunctionMock(static::MISC_NAMESPACE, 'file_put_contents');
         $filePutContents->expects($this->exactly(2))
             ->will(
                 $this->returnValueMap([
@@ -151,8 +153,8 @@ class PoolTest extends AbstractTest
                     [Krexx::$pool->config->getLogDir() . $filename, 'x', false]
                 ])
             );
-        $unlink = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'unlink');
-        // There was no file "created", hence there is no unlink'ing done.
+        $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, 'unlink');
+        // Ther was no file "created", hence there is no unlink'ing done.
         $unlink->expects($this->never());
 
         Krexx::$pool = null;

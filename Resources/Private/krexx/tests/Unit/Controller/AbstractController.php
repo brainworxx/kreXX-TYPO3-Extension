@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,19 +36,17 @@
 namespace Brainworxx\Krexx\Tests\Unit\Controller;
 
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
-use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\View\Messages;
-use Brainworxx\Krexx\View\Output\Browser;
 use Brainworxx\Krexx\View\Output\Chunks;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class AbstractController extends AbstractTest
 {
@@ -75,7 +74,6 @@ class AbstractController extends AbstractTest
      *
      * @param \Brainworxx\Krexx\Controller\AbstractController $controller
      * @return \PHPUnit\Framework\MockObject\MockObject
-     * @throws \ReflectionException
      */
     protected function mockMainOutput(\Brainworxx\Krexx\Controller\AbstractController $controller)
     {
@@ -116,8 +114,10 @@ class AbstractController extends AbstractTest
 
     /**
      * Creating all the mocks for the footer output.
+     *
+     * @param \PHPUnit\Framework\MockObject\MockObject $poolMock
      */
-    protected function mockFooterHeaderOutput($poolMock)
+    protected function mockFooterHeaderOutput(MockObject $poolMock)
     {
         $pathToIni = 'some path';
         $pathToSkin = 'skin directory';
@@ -172,6 +172,9 @@ class AbstractController extends AbstractTest
             ->method('getHelp')
             ->with('currentConfig')
             ->will($this->returnValue('some helpful description'));
+        $messageMock->expects($this->any())
+            ->method('outputMessages')
+            ->will($this->returnValue(''));
         $poolMock->messages = $messageMock;
     }
 }

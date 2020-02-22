@@ -16,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,7 +43,7 @@ class Kdt
      *
      * @param {Function} jumpTo
      */
-    public setJumpTo = (jumpTo:Function) : void =>
+    public setJumpTo = (jumpTo:Function): void =>
     {
         this.jumpTo = jumpTo;
     };
@@ -54,7 +54,7 @@ class Kdt
      * @param {Node} el
      * @param {string} selector
      */
-    public getParents(el:Node, selector:string) : Node[]
+    public getParents(el:Node, selector:string): Node[]
     {
         let result:Node[] = [];
         let parent:Node = el.parentNode;
@@ -83,7 +83,7 @@ class Kdt
      * @param {Element} el
      * @param {string} className
      */
-    public hasClass(el:Element, className:string) : boolean
+    public hasClass(el:Element, className:string): boolean
     {
         if (el.classList) {
             return el.classList.contains(className);
@@ -100,7 +100,7 @@ class Kdt
      *
      * @returns {Element|null} the element
      */
-    public findInDomlistByClass(elements:NodeList|HTMLCollection, className:string) : Node | null
+    public findInDomlistByClass(elements:NodeList|HTMLCollection, className:string): Node | null
     {
         className = " " + className + " ";
         for (let i = 0; i < elements.length; i++) {
@@ -117,7 +117,7 @@ class Kdt
      * @param {NodeList|string|Array} selector
      * @param {string} className
      */
-    public addClass(selector:NodeList|string|Node[], className:string) : void
+    public addClass(selector:NodeList|string|Node[], className:string): void
     {
         /** @type {NodeList|null|Array} */
         let elements:NodeList|null|Node[];
@@ -141,7 +141,7 @@ class Kdt
      * @param {NodeList|string} selector
      * @param {string} className
      */
-    public removeClass(selector:NodeList|string|Node[], className:string) : void
+    public removeClass(selector:NodeList|string|Node[], className:string): void
     {
         let elements:any;
 
@@ -166,7 +166,7 @@ class Kdt
      * @param {Element} el
      * @param {string} className
      */
-    public toggleClass(el:Element, className:string) : void
+    public toggleClass(el:Element, className:string): void
     {
         if (el.classList) {
             // Just toggle it.
@@ -197,7 +197,7 @@ class Kdt
      *
      * @returns {string}
      */
-    public getDataset(el:Element, what:string, mustEscape:boolean = false) : string
+    public getDataset(el:Element, what:string, mustEscape:boolean = false): string
     {
         let result:string|null;
 
@@ -235,7 +235,7 @@ class Kdt
      * @param {string} what
      * @param {string} value
      */
-    public setDataset(el:Element, what:string, value:string) : void
+    public setDataset(el:Element, what:string, value:string): void
     {
         if (typeof el !== 'undefined') {
             el.setAttribute('data-' + what, value);
@@ -247,7 +247,7 @@ class Kdt
      *
      * @param {Element} el
      */
-    public selectText(el:Element) : void
+    public selectText(el:Element): void
     {
         let range:Range = document.createRange();
         let selection:Selection = window.getSelection();
@@ -266,33 +266,28 @@ class Kdt
      * @return {object}
      *   The value, set in the cookie.
      */
-    public readSettings(cookieName:string) : string|object
+    public readSettings(cookieName:string): string|object
     {
         /** @type {string} */
         cookieName = cookieName + "=";
         let cookieArray:string[] = document.cookie.split(';');
-        let result:object = JSON.parse('{}');
-        let c:string;
+        let result:object = {};
+        let cookieString:string;
 
         for (let i = 0; i < cookieArray.length; i++) {
-            c = cookieArray[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1, c.length);
+            cookieString = cookieArray[i];
+            while (cookieString.charAt(0) === ' ') {
+                cookieString = cookieString.substring(1, cookieString.length);
             }
-            if (c.indexOf(cookieName) === 0) {
+            if (cookieString.indexOf(cookieName) === 0) {
                 try {
                     // Return json, if possible.
-                    result = JSON.parse(c.substring(cookieName.length, c.length));
+                    result = JSON.parse(cookieString.substring(cookieName.length, cookieString.length));
                 }
                 catch (error) {
                     // Do nothing, we already have a fallback.
                 }
             }
-        }
-
-        // A last test, if we have an actual object to send.
-        if (typeof result !== 'object') {
-            result = JSON.parse('{}');
         }
 
         return result;
@@ -304,7 +299,7 @@ class Kdt
      * @event change
      * @param {Event} event
      */
-    public setSetting = (event:Event) : void =>
+    public setSetting = (event:Event): void =>
     {
         // Prevents the default event behavior (ie: click).
         event.preventDefault();
@@ -327,6 +322,7 @@ class Kdt
         // Remove a possible old value from a previous version.
         document.cookie = 'KrexxDebugSettings=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         // Set the new one.
+
         document.cookie = 'KrexxDebugSettings=' + JSON.stringify(settings) + '; ' + expires + '; path=/';
         // Feedback about update.
         alert(valueName + ' --> ' + newValue + '\n\nPlease reload the page to use the new local settings.');
@@ -340,7 +336,7 @@ class Kdt
      * @param {Node} element
      *   The element that was clicked.
      */
-    public resetSetting(event:Event, element:Node) : void
+    public resetSetting(event:Event, element:Node): void
     {
         // We do not delete the cookie, we simply remove all settings in it.
         let date:Date = new Date();
@@ -357,7 +353,7 @@ class Kdt
      * @param {string} string
      * @returns {Object|boolean}
      */
-    public parseJson(string:string) : Object|boolean
+    public parseJson(string:string): Object|boolean
     {
         try {
             return JSON.parse(string);
@@ -374,7 +370,7 @@ class Kdt
      *
      * @param {string} selector
      */
-    public moveToBottom(selector:string) : void
+    public moveToBottom(selector:string): void
     {
         // Get all elements.
         let elements:NodeList = document.querySelectorAll(selector);
@@ -402,7 +398,7 @@ class Kdt
      * @param {Element} element
      *   The element that was clicked.
      */
-    public collapse = (event:Event, element:Element) : void =>
+    public collapse = (event:Event, element:Element): void =>
     {
         event.stop = true;
 
@@ -438,5 +434,79 @@ class Kdt
                 jumpTo(element, true);
             }, 100
         );
-    }
+    };
+
+    /**
+     * When clicked on s recursion, this function will
+     * copy the original analysis result there and delete
+     * the recursion.
+     *
+     * @event click
+     * @param {Event} event
+     *   The click event.
+     * @param {HTMLElement} element
+     *   The element that was clicked.
+     */
+    public copyFrom = (event:Event, element:HTMLElement): void =>
+    {
+        let i:number;
+
+        // Get the DOM id of the original analysis.
+        let domid:string = this.getDataset((element as Element), 'domid');
+        if (domid === '') {
+            // Do nothing.
+            return;
+        }
+        // Get the analysis data.
+        let orgNest:Node = document.querySelector('#' + domid);
+
+        // Does the element exist?
+        if (orgNest) {
+            // Get the EL of the data (element with the arrow).
+            let orgEl:Node = (orgNest as HTMLElement).previousElementSibling;
+            // Clone the analysis data and insert it after the recursion EL.
+            element.parentNode.insertBefore(orgNest.cloneNode(true), element.nextSibling);
+            // Clone the EL of the analysis data and insert it after the recursion EL.
+            let newEl:Element = (orgEl.cloneNode(true) as Element);
+            element.parentNode.insertBefore(newEl, element.nextSibling);
+
+            // Change the key of the just cloned EL to the one from the recursion.
+            (this.findInDomlistByClass(newEl.children, 'kname') as HTMLElement).innerHTML = (this.findInDomlistByClass(element.children, 'kname') as HTMLElement).innerHTML;
+            // We  need to remove the ids from the copy to avoid double ids.
+            let allChildren = newEl.nextElementSibling.getElementsByTagName("*");
+            for (i = 0; i < allChildren.length; i++) {
+                allChildren[i].removeAttribute('id');
+            }
+            newEl.nextElementSibling.removeAttribute('id');
+
+            // Now we add the dom-id to the clone, as a data-field. this way we can
+            // make sure to always produce the right path to this value during source
+            // generation.
+            this.setDataset((newEl.parentNode as Element), 'domid', domid);
+
+            // Remove the infobox from the copy, if available and add the one from the
+            // recursion.
+            let newInfobox = newEl.querySelector('.khelp');
+            let newButton = newEl.querySelector('.kinfobutton');
+            let realInfobox = element.querySelector('.khelp');
+            let realButton = element.querySelector('.kinfobutton');
+
+            // We don't need the infobox on newEl, so we will remove it.
+            if (newInfobox !== null) {
+                newInfobox.parentNode.removeChild(newInfobox);
+            }
+            if (newButton !== null) {
+                newButton.parentNode.removeChild(newButton);
+            }
+
+            // We copy the Infobox from the recursion to the newEl, if it exists.
+            if (realInfobox !== null) {
+                newEl.appendChild(realButton);
+                newEl.appendChild(realInfobox);
+            }
+
+            // Remove the recursion EL.
+            element.parentNode.removeChild(element);
+        }
+    };
 }

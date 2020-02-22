@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,9 +33,12 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
+declare(strict_types=1);
+
 namespace Brainworxx\Krexx\Controller;
 
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
+use Throwable;
 
 /**
  * Handling exceptions.
@@ -53,13 +57,11 @@ class ExceptionController extends AbstractController
     /**
      * Analysing the error object and generating the output.
      *
-     * @param \Throwable|\Exception $exception
+     * @param \Throwable $exception
      */
-    public function exceptionAction($exception)
+    public function exceptionAction(Throwable $exception)
     {
         $this->pool->reset();
-
-        $type = get_class($exception);
 
         // Get the main part.
         $main = $this->pool->render->renderFatalMain(
@@ -70,9 +72,7 @@ class ExceptionController extends AbstractController
 
         // Get the backtrace.
         $trace = $exception->getTrace();
-        $backtrace = $this->pool
-            ->createClass(ProcessBacktrace::class)
-            ->process($trace);
+        $backtrace = $this->pool->createClass(ProcessBacktrace::class)->process($trace);
 
         if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
             return;
@@ -83,6 +83,7 @@ class ExceptionController extends AbstractController
         $this->pool->chunks->detectEncoding($main . $backtrace);
 
         // Get the header, footer and messages
+        $type = get_class($exception);
         $footer = $this->outputFooter([]);
         $header = $this->pool->render->renderFatalHeader($this->outputCssAndJs(), $type);
         $messages = $this->pool->messages->outputMessages();
@@ -97,8 +98,7 @@ class ExceptionController extends AbstractController
             ]
         );
 
-        $this->outputService->addChunkString($header)
-            ->addChunkString($messages)
+        $this->outputService->addChunkString($header)->addChunkString($messages)
             ->addChunkString($main)
             ->addChunkString($backtrace)
             ->addChunkString($footer)
@@ -112,7 +112,7 @@ class ExceptionController extends AbstractController
      * @return $this
      *   Return $this, for chaining.
      */
-    public function registerAction()
+    public function registerAction(): ExceptionController
     {
         if (empty(static::$exceptionController)) {
             static::$exceptionController = $this;

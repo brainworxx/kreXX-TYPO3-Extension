@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Comment;
 
@@ -55,7 +58,7 @@ class Functions extends AbstractComment
      * @return string
      *   The prettified comment.
      */
-    public function getComment(Reflector $reflectionFunction, ReflectionClass $reflectionClass = null)
+    public function getComment(Reflector $reflectionFunction, ReflectionClass $reflectionClass = null): string
     {
         // Do some static caching. The comment will not change during a run.
         static $cache = [];

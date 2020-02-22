@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -17,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Config\From;
 
@@ -78,7 +81,7 @@ class Ini extends Fallback
      * @return $this
      *   Return $this, for chaining.
      */
-    public function loadIniFile($path)
+    public function loadIniFile(string $path): Ini
     {
         $this->iniSettings = (array)parse_ini_string(
             $this->pool->fileService->getFileContents($path, false),
@@ -92,50 +95,11 @@ class Ini extends Fallback
      * Get the configuration of the frontend config form.
      *
      * @param string $name
-     *   The parameter name you want to render.
-     *
-     * @deprecated
-     *   Since 3.1.0. Will be removed.
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return array
-     *   The configuration (is it editable, a dropdown, a textfield, ...)
-     */
-    public function getFeConfig($name)
-    {
-        // Load it from the file.
-        $filevalue = $this->getFeConfigFromFile($name);
-
-        // Do we have a value?
-        if (empty($filevalue) === true) {
-            // Fallback to factory settings.
-            if (isset($this->feConfigFallback[$name]) === true) {
-                return [
-                    ($this->feConfigFallback[$name][static::RENDER][static::RENDER_EDITABLE] === static::VALUE_TRUE),
-                    $this->feConfigFallback[$name][static::RENDER][static::RENDER_TYPE]
-                ];
-            }
-            // Unknown parameter and nothing in the fallback!
-            // This should never happen, btw.
-            return [false, static::RENDER_TYPE_NONE];
-        }
-
-        return [
-            ($filevalue[static::RENDER_EDITABLE] === static::VALUE_TRUE),
-            $filevalue[static::RENDER_TYPE]
-        ];
-    }
-
-    /**
-     * Get the configuration of the frontend config form.
-     *
-     * @param string $name
      *
      * @return bool
      *   Well? is it editable?
      */
-    public function getFeIsEditable($name)
+    public function getFeIsEditable(string $name): bool
     {
         // Load it from the file.
         $filevalue = $this->getFeConfigFromFile($name);
@@ -158,7 +122,7 @@ class Ini extends Fallback
      * @return array|null
      *   The configuration (is it editable, a dropdown, a textfield, ...)
      */
-    public function getFeConfigFromFile($parameterName)
+    public function getFeConfigFromFile(string $parameterName)
     {
         // Get the human readable stuff from the ini file.
         $value = $this->getConfigFromFile(static::SECTION_FE_EDITING, $parameterName);
@@ -206,11 +170,12 @@ class Ini extends Fallback
      * @return string|null
      *   The value from the file. Null, when not available or not validated.
      */
-    public function getConfigFromFile($group, $name)
+    public function getConfigFromFile(string $group, string $name)
     {
         // Do we have a value in the ini?
         // Does it validate?
-        if (isset($this->iniSettings[$group][$name]) === true &&
+        if (
+            isset($this->iniSettings[$group][$name]) === true &&
             $this->validation->evaluateSetting($group, $name, $this->iniSettings[$group][$name]) === true
         ) {
             return $this->iniSettings[$group][$name];

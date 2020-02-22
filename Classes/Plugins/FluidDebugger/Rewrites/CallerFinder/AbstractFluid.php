@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -31,6 +32,8 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
+
+declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
@@ -108,7 +111,7 @@ abstract class AbstractFluid extends AbstractCaller
      */
      // \s*<krexx:debug value="{(.*)}"\/>\s*/u
     /**
-     * Meh, the regex uncomments the doccomment.
+     * Meh, the regex un-comments the doc-comment.
      *
      * {@inheritdoc}
      */
@@ -155,8 +158,9 @@ abstract class AbstractFluid extends AbstractCaller
                 return;
             }
 
-            $pos = count($renderingStack) -1;
-            if (isset($renderingStack[$pos]) &&
+            $pos = count($renderingStack) - 1;
+            if (
+                isset($renderingStack[$pos]) &&
                 isset($renderingStack[$pos]['parsedTemplate']) &&
                 isset($renderingStack[$pos]['type'])
             ) {
@@ -173,7 +177,7 @@ abstract class AbstractFluid extends AbstractCaller
     /**
      * {@inheritdoc}
      */
-    public function findCaller($headline, $data)
+    public function findCaller($headline, $data): array
     {
         // Did we get our stuff together so far?
         if ($this->error) {
@@ -231,7 +235,7 @@ abstract class AbstractFluid extends AbstractCaller
      * @return string
      *   The analysis type.
      */
-    protected function getType($headline, $varname, $data)
+    protected function getType($headline, $varname, $data): string
     {
         if (is_object($data) === true) {
             $type = get_class($data);
@@ -248,7 +252,7 @@ abstract class AbstractFluid extends AbstractCaller
      * @param string $filePath
      *   The path to the template file we need to parse.
      */
-    protected function resolveVarname($filePath)
+    protected function resolveVarname(string $filePath)
     {
         // Retrieve the call from the sourcecode file.
         if ($this->pool->fileService->fileIsReadable($filePath) === false) {
@@ -303,7 +307,7 @@ abstract class AbstractFluid extends AbstractCaller
      * @return string
      *   The variable name, which may or may not have changed.
      */
-    protected function checkForComplicatedStuff($varname)
+    protected function checkForComplicatedStuff(string $varname): string
     {
         // We check for : and -> to see if we are facing some inline stuff
         if (strpos($varname, ':') !== false || strpos($varname, '->') !== false) {
@@ -327,7 +331,7 @@ abstract class AbstractFluid extends AbstractCaller
      * @return string
      *   The template filename and it's path.
      */
-    abstract protected function getTemplatePath();
+    abstract protected function getTemplatePath(): string;
 
     /**
      * Get the current used layout file from the fluid framework.
@@ -335,7 +339,7 @@ abstract class AbstractFluid extends AbstractCaller
      * @return string
      *   The layout filename and it's path.
      */
-    abstract protected function getLayoutPath();
+    abstract protected function getLayoutPath(): string;
 
     /**
      * Try to figure out the currently rendered partial file from somewhere deep
@@ -344,5 +348,5 @@ abstract class AbstractFluid extends AbstractCaller
      * @return string
      *   The partial filename and it's path.
      */
-    abstract protected function getPartialPath();
+    abstract protected function getPartialPath(): string;
 }
