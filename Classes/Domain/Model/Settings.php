@@ -52,212 +52,212 @@ class Settings
     /**
      * @var string
      */
-    protected $disabled = '';
+    protected $disabled;
 
     /**
      * @var string
      */
-    protected $iprange = '';
+    protected $iprange;
 
     /**
      * @var string
      */
-    protected $detectAjax = '';
+    protected $detectAjax;
 
     /**
      * @var string
      */
-    protected $skin = '';
+    protected $skin;
 
     /**
      * @var string
      */
-    protected $destination = '';
+    protected $destination;
 
     /**
      * @var string
      */
-    protected $maxfiles = '';
+    protected $maxfiles;
 
     /**
      * @var string
      */
-    protected $useScopeAnalysis = '';
+    protected $useScopeAnalysis;
 
     /**
      * @var string
      */
-    protected $maxStepNumber = '';
+    protected $maxStepNumber;
 
     /**
      * @var string
      */
-    protected $arrayCountLimit = '';
+    protected $arrayCountLimit;
 
     /**
      * @var string
      */
-    protected $level = '';
+    protected $level;
 
     /**
      * @var string
      */
-    protected $analyseProtected = '';
+    protected $analyseProtected;
 
     /**
      * @var string
      */
-    protected $analysePrivate = '';
+    protected $analysePrivate;
 
     /**
      * @var string
      */
-    protected $analyseTraversable = '';
+    protected $analyseTraversable;
 
     /**
      * @var string
      */
-    protected $analyseProtectedMethods = '';
+    protected $analyseProtectedMethods;
 
     /**
      * @var string
      */
-    protected $analysePrivateMethods = '';
+    protected $analysePrivateMethods;
 
     /**
      * @var string
      */
-    protected $analyseGetter = '';
+    protected $analyseGetter;
 
     /**
      * @var string
      */
-    protected $debugMethods = '';
+    protected $debugMethods;
 
     /**
      * @var string
      */
-    protected $maxCall = '';
+    protected $maxCall;
 
     /**
      * @var string
      */
-    protected $maxRuntime = '';
+    protected $maxRuntime;
 
     /**
      * @var string
      */
-    protected $memoryLeft = '';
+    protected $memoryLeft;
 
     /**
      * @var string
      */
-    protected $formdisabled = '';
+    protected $formdisabled;
 
     /**
      * @var string
      */
-    protected $formiprange = '';
+    protected $formiprange;
 
     /**
      * @var string
      */
-    protected $formdetectAjax = '';
+    protected $formdetectAjax;
 
     /**
      * @var string
      */
-    protected $formskin = '';
+    protected $formskin;
 
     /**
      * @var string
      */
-    protected $formdestination = '';
+    protected $formdestination;
 
     /**
      * @var string
      */
-    protected $formmaxfiles = '';
+    protected $formmaxfiles;
 
     /**
      * @var string
      */
-    protected $formuseScopeAnalysis = '';
+    protected $formuseScopeAnalysis;
 
     /**
      * @var string
      */
-    protected $formmaxStepNumber = '';
+    protected $formmaxStepNumber;
 
     /**
      * @var string
      */
-    protected $formarrayCountLimit = '';
+    protected $formarrayCountLimit;
 
     /**
      * @var string
      */
-    protected $formlevel = '';
+    protected $formlevel;
 
     /**
      * @var string
      */
-    protected $formanalyseProtected = '';
+    protected $formanalyseProtected;
 
     /**
      * @var string
      */
-    protected $formanalysePrivate = '';
+    protected $formanalysePrivate;
 
     /**
      * @var string
      */
-    protected $formanalyseTraversable = '';
+    protected $formanalyseTraversable;
 
     /**
      * @var string
      */
-    protected $formanalyseProtectedMethods = '';
+    protected $formanalyseProtectedMethods;
 
     /**
      * @var string
      */
-    protected $formanalysePrivateMethods = '';
+    protected $formanalysePrivateMethods;
 
     /**
      * @var string
      */
-    protected $formanalyseGetter = '';
+    protected $formanalyseGetter;
 
     /**
      * @var string
      */
-    protected $formdebugMethods = '';
+    protected $formdebugMethods;
 
     /**
      * @var string
      */
-    protected $formmaxCall = '';
+    protected $formmaxCall;
 
     /**
      * @var string
      */
-    protected $formmaxRuntime = '';
+    protected $formmaxRuntime;
 
     /**
      * @var string
      */
-    protected $formmemoryLeft = '';
+    protected $formmemoryLeft;
 
     /**
      * @var string
      */
-    protected $factory = '';
+    protected $factory;
 
     /**
      * @var string
      */
-    protected $formdevHandle = '';
+    protected $formdevHandle;
 
     /**
      * @param string $analysePrivate
