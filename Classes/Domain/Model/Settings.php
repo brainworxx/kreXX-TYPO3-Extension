@@ -39,215 +39,56 @@ namespace Brainworxx\Includekrexx\Domain\Model;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Controller\IndexController;
+use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseGetter;
+use Brainworxx\Includekrexx\Domain\Model\Settings\AnalysePrivate;
+use Brainworxx\Includekrexx\Domain\Model\Settings\AnalysePrivateMethods;
+use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseProtected;
+use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseProtectedMethods;
+use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseTraversable;
+use Brainworxx\Includekrexx\Domain\Model\Settings\ArrayCountLimit;
+use Brainworxx\Includekrexx\Domain\Model\Settings\DebugMethods;
+use Brainworxx\Includekrexx\Domain\Model\Settings\Destination;
+use Brainworxx\Includekrexx\Domain\Model\Settings\DetectAjax;
+use Brainworxx\Includekrexx\Domain\Model\Settings\Disabled;
+use Brainworxx\Includekrexx\Domain\Model\Settings\Iprange;
+use Brainworxx\Includekrexx\Domain\Model\Settings\Level;
+use Brainworxx\Includekrexx\Domain\Model\Settings\MaxCall;
+use Brainworxx\Includekrexx\Domain\Model\Settings\Maxfiles;
+use Brainworxx\Includekrexx\Domain\Model\Settings\MaxRuntime;
+use Brainworxx\Includekrexx\Domain\Model\Settings\MaxStepNumber;
+use Brainworxx\Includekrexx\Domain\Model\Settings\MemoryLeft;
+use Brainworxx\Includekrexx\Domain\Model\Settings\Skin;
+use Brainworxx\Includekrexx\Domain\Model\Settings\UseScopeAnalysis;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
- * This is one BBW model ;-)
+ * Abusing the TYPO3 attribute mapper, to save our settings.
  *
  * @package Brainworxx\Includekrexx\Domain\Model
  */
 class Settings
 {
-    /**
-     * @var string
-     */
-    protected $disabled;
-
-    /**
-     * @var string
-     */
-    protected $iprange;
-
-    /**
-     * @var string
-     */
-    protected $detectAjax;
-
-    /**
-     * @var string
-     */
-    protected $skin;
-
-    /**
-     * @var string
-     */
-    protected $destination;
-
-    /**
-     * @var string
-     */
-    protected $maxfiles;
-
-    /**
-     * @var string
-     */
-    protected $useScopeAnalysis;
-
-    /**
-     * @var string
-     */
-    protected $maxStepNumber;
-
-    /**
-     * @var string
-     */
-    protected $arrayCountLimit;
-
-    /**
-     * @var string
-     */
-    protected $level;
-
-    /**
-     * @var string
-     */
-    protected $analyseProtected;
-
-    /**
-     * @var string
-     */
-    protected $analysePrivate;
-
-    /**
-     * @var string
-     */
-    protected $analyseTraversable;
-
-    /**
-     * @var string
-     */
-    protected $analyseProtectedMethods;
-
-    /**
-     * @var string
-     */
-    protected $analysePrivateMethods;
-
-    /**
-     * @var string
-     */
-    protected $analyseGetter;
-
-    /**
-     * @var string
-     */
-    protected $debugMethods;
-
-    /**
-     * @var string
-     */
-    protected $maxCall;
-
-    /**
-     * @var string
-     */
-    protected $maxRuntime;
-
-    /**
-     * @var string
-     */
-    protected $memoryLeft;
-
-    /**
-     * @var string
-     */
-    protected $formdisabled;
-
-    /**
-     * @var string
-     */
-    protected $formiprange;
-
-    /**
-     * @var string
-     */
-    protected $formdetectAjax;
-
-    /**
-     * @var string
-     */
-    protected $formskin;
-
-    /**
-     * @var string
-     */
-    protected $formdestination;
-
-    /**
-     * @var string
-     */
-    protected $formmaxfiles;
-
-    /**
-     * @var string
-     */
-    protected $formuseScopeAnalysis;
-
-    /**
-     * @var string
-     */
-    protected $formmaxStepNumber;
-
-    /**
-     * @var string
-     */
-    protected $formarrayCountLimit;
-
-    /**
-     * @var string
-     */
-    protected $formlevel;
-
-    /**
-     * @var string
-     */
-    protected $formanalyseProtected;
-
-    /**
-     * @var string
-     */
-    protected $formanalysePrivate;
-
-    /**
-     * @var string
-     */
-    protected $formanalyseTraversable;
-
-    /**
-     * @var string
-     */
-    protected $formanalyseProtectedMethods;
-
-    /**
-     * @var string
-     */
-    protected $formanalysePrivateMethods;
-
-    /**
-     * @var string
-     */
-    protected $formanalyseGetter;
-
-    /**
-     * @var string
-     */
-    protected $formdebugMethods;
-
-    /**
-     * @var string
-     */
-    protected $formmaxCall;
-
-    /**
-     * @var string
-     */
-    protected $formmaxRuntime;
-
-    /**
-     * @var string
-     */
-    protected $formmemoryLeft;
+    use Disabled;
+    use Iprange;
+    use DetectAjax;
+    use Skin;
+    use Destination;
+    use Maxfiles;
+    use UseScopeAnalysis;
+    use MaxStepNumber;
+    use ArrayCountLimit;
+    use Level;
+    use AnalyseProtected;
+    use AnalysePrivate;
+    use AnalyseTraversable;
+    use AnalyseProtectedMethods;
+    use AnalysePrivateMethods;
+    use AnalyseGetter;
+    use DebugMethods;
+    use MaxCall;
+    use MaxRuntime;
+    use MemoryLeft;
 
     /**
      * @var string
@@ -260,331 +101,11 @@ class Settings
     protected $formdevHandle;
 
     /**
-     * @param string $analysePrivate
-     */
-    public function setAnalysePrivate(string $analysePrivate)
-    {
-        $this->analysePrivate = $analysePrivate;
-    }
-
-    /**
-     * @param string $analyseGetter
-     */
-    public function setAnalyseGetter(string $analyseGetter)
-    {
-        $this->analyseGetter = $analyseGetter;
-    }
-
-    /**
-     * @param string $analysePrivateMethods
-     */
-    public function setAnalysePrivateMethods(string $analysePrivateMethods)
-    {
-        $this->analysePrivateMethods = $analysePrivateMethods;
-    }
-
-    /**
-     * @param string $analyseProtected
-     */
-    public function setAnalyseProtected(string $analyseProtected)
-    {
-        $this->analyseProtected = $analyseProtected;
-    }
-
-    /**
-     * @param string $analyseProtectedMethods
-     */
-    public function setAnalyseProtectedMethods(string $analyseProtectedMethods)
-    {
-        $this->analyseProtectedMethods = $analyseProtectedMethods;
-    }
-
-    /**
-     * @param string $analyseTraversable
-     */
-    public function setAnalyseTraversable(string $analyseTraversable)
-    {
-        $this->analyseTraversable = $analyseTraversable;
-    }
-
-    /**
-     * @param string $arrayCountLimit
-     */
-    public function setArrayCountLimit(string $arrayCountLimit)
-    {
-        $this->arrayCountLimit = $arrayCountLimit;
-    }
-
-    /**
-     * @param string $debugMethods
-     */
-    public function setDebugMethods(string $debugMethods)
-    {
-        $this->debugMethods = $debugMethods;
-    }
-
-    /**
-     * @param string $destination
-     */
-    public function setDestination(string $destination)
-    {
-        $this->destination = $destination;
-    }
-
-    /**
-     * @param string $detectAjax
-     */
-    public function setDetectAjax(string $detectAjax)
-    {
-        $this->detectAjax = $detectAjax;
-    }
-
-    /**
-     * @param string $disabled
-     */
-    public function setDisabled(string $disabled)
-    {
-        $this->disabled = $disabled;
-    }
-
-    /**
      * @param string $factory
      */
     public function setFactory(string $factory)
     {
         $this->factory = $factory;
-    }
-
-    /**
-     * @param string $formanalyseGetter
-     */
-    public function setFormanalyseGetter(string $formanalyseGetter)
-    {
-        $this->formanalyseGetter = $formanalyseGetter;
-    }
-
-    /**
-     * @param string $formanalysePrivate
-     */
-    public function setFormanalysePrivate(string $formanalysePrivate)
-    {
-        $this->formanalysePrivate = $formanalysePrivate;
-    }
-
-    /**
-     * @param string $formanalysePrivateMethods
-     */
-    public function setFormanalysePrivateMethods(string $formanalysePrivateMethods)
-    {
-        $this->formanalysePrivateMethods = $formanalysePrivateMethods;
-    }
-
-    /**
-     * @param string $formanalyseProtected
-     */
-    public function setFormanalyseProtected(string $formanalyseProtected)
-    {
-        $this->formanalyseProtected = $formanalyseProtected;
-    }
-
-    /**
-     * @param string $formanalyseProtectedMethods
-     */
-    public function setFormanalyseProtectedMethods(string $formanalyseProtectedMethods)
-    {
-        $this->formanalyseProtectedMethods = $formanalyseProtectedMethods;
-    }
-
-    /**
-     * @param string $formanalyseTraversable
-     */
-    public function setFormanalyseTraversable(string $formanalyseTraversable)
-    {
-        $this->formanalyseTraversable = $formanalyseTraversable;
-    }
-
-    /**
-     * @param string $formarrayCountLimit
-     */
-    public function setFormarrayCountLimit(string $formarrayCountLimit)
-    {
-        $this->formarrayCountLimit = $formarrayCountLimit;
-    }
-
-    /**
-     * @param string $formdebugMethods
-     */
-    public function setFormdebugMethods(string $formdebugMethods)
-    {
-        $this->formdebugMethods = $formdebugMethods;
-    }
-
-    /**
-     * @param string $formdestination
-     */
-    public function setFormdestination(string $formdestination)
-    {
-        $this->formdestination = $formdestination;
-    }
-
-    /**
-     * @param string $formdetectAjax
-     */
-    public function setFormdetectAjax(string $formdetectAjax)
-    {
-        $this->formdetectAjax = $formdetectAjax;
-    }
-
-    /**
-     * @param string $formdisabled
-     */
-    public function setFormdisabled(string $formdisabled)
-    {
-        $this->formdisabled = $formdisabled;
-    }
-
-    /**
-     * @param string $formiprange
-     */
-    public function setFormiprange(string $formiprange)
-    {
-        $this->formiprange = $formiprange;
-    }
-
-    /**
-     * @param string $formlevel
-     */
-    public function setFormlevel(string $formlevel)
-    {
-        $this->formlevel = $formlevel;
-    }
-
-    /**
-     * @param string $formmaxCall
-     */
-    public function setFormmaxCall(string $formmaxCall)
-    {
-        $this->formmaxCall = $formmaxCall;
-    }
-
-    /**
-     * @param string $formmaxfiles
-     */
-    public function setFormmaxfiles(string $formmaxfiles)
-    {
-        $this->formmaxfiles = $formmaxfiles;
-    }
-
-    /**
-     * @param string $formmaxRuntime
-     */
-    public function setFormmaxRuntime(string $formmaxRuntime)
-    {
-        $this->formmaxRuntime = $formmaxRuntime;
-    }
-
-    /**
-     * @param string $formmaxStepNumber
-     */
-    public function setFormmaxStepNumber(string $formmaxStepNumber)
-    {
-        $this->formmaxStepNumber = $formmaxStepNumber;
-    }
-
-    /**
-     * @param string $formmemoryLeft
-     */
-    public function setFormmemoryLeft(string $formmemoryLeft)
-    {
-        $this->formmemoryLeft = $formmemoryLeft;
-    }
-
-    /**
-     * @param string $formskin
-     */
-    public function setFormskin(string $formskin)
-    {
-        $this->formskin = $formskin;
-    }
-
-    /**
-     * @param string $formuseScopeAnalysis
-     */
-    public function setFormuseScopeAnalysis(string $formuseScopeAnalysis)
-    {
-        $this->formuseScopeAnalysis = $formuseScopeAnalysis;
-    }
-
-    /**
-     * @param string $iprange
-     */
-    public function setIprange(string $iprange)
-    {
-        $this->iprange = $iprange;
-    }
-
-    /**
-     * @param string $level
-     */
-    public function setLevel(string $level)
-    {
-        $this->level = $level;
-    }
-
-    /**
-     * @param string $maxCall
-     */
-    public function setMaxCall(string $maxCall)
-    {
-        $this->maxCall = $maxCall;
-    }
-
-    /**
-     * @param string $maxfiles
-     */
-    public function setMaxfiles(string $maxfiles)
-    {
-        $this->maxfiles = $maxfiles;
-    }
-
-    /**
-     * @param string $maxRuntime
-     */
-    public function setMaxRuntime(string $maxRuntime)
-    {
-        $this->maxRuntime = $maxRuntime;
-    }
-
-    /**
-     * @param string $maxStepNumber
-     */
-    public function setMaxStepNumber(string $maxStepNumber)
-    {
-        $this->maxStepNumber = $maxStepNumber;
-    }
-
-    /**
-     * @param string $memoryLeft
-     */
-    public function setMemoryLeft(string $memoryLeft)
-    {
-        $this->memoryLeft = $memoryLeft;
-    }
-
-    /**
-     * @param string $skin
-     */
-    public function setSkin(string $skin)
-    {
-        $this->skin = $skin;
-    }
-
-    /**
-     * @param string $useScopeAnalysis
-     */
-    public function setUseScopeAnalysis(string $useScopeAnalysis)
-    {
-        $this->useScopeAnalysis = $useScopeAnalysis;
     }
 
     /**
