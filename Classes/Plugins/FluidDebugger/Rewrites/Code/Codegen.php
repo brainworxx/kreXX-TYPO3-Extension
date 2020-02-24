@@ -90,7 +90,7 @@ class Codegen extends OrgCodegen implements ConstInterface
         $name = $model->getName();
 
         if (
-            (strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
+            (is_string($name) === true &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
             $model->getType() === static::TYPE_DEBUG_METHOD ||
             $model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY
         ) {
