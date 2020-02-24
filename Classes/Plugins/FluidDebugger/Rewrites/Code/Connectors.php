@@ -46,18 +46,22 @@ use Brainworxx\Krexx\Analyse\Code\Connectors as OrgConnectors;
  */
 class Connectors extends OrgConnectors
 {
-
-    protected $connectorArray = [
-        Connectors::NOTHING => ['', ''],
-        Connectors::METHOD => ['.', '(@param@)'],
-        Connectors::STATIC_METHOD => ['.', '(@param@)'],
-        Connectors::NORMAL_ARRAY => ['.', ''],
-        Connectors::ASSOCIATIVE_ARRAY => ['.', ''],
-        Connectors::CONSTANT => ['.', ''],
-        Connectors::NORMAL_PROPERTY => ['.', ''],
-        Connectors::STATIC_PROPERTY => ['.', ''],
-        Connectors::SPECIAL_CHARS_PROP => ['.', ''],
-    ];
+    /**
+     * Update the connectors array.
+     */
+    public function __construct()
+    {
+        $fluid = ['.', ''];
+        $fluidParameters = ['.', '(@param@)'];
+        $this->connectorArray[Connectors::METHOD] = $fluidParameters;
+        $this->connectorArray[Connectors::STATIC_METHOD] = $fluidParameters;
+        $this->connectorArray[Connectors::NORMAL_ARRAY] = $fluid;
+        $this->connectorArray[Connectors::ASSOCIATIVE_ARRAY] = $fluid;
+        $this->connectorArray[Connectors::CONSTANT] = $fluid;
+        $this->connectorArray[Connectors::NORMAL_PROPERTY] = $fluid;
+        $this->connectorArray[Connectors::STATIC_PROPERTY] = $fluid;
+        $this->connectorArray[Connectors::SPECIAL_CHARS_PROP] = $fluid;
+    }
 
     /**
      * {@inheritdoc}

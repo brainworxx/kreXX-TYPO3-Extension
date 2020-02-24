@@ -39,6 +39,30 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 
 class ConnectorsTest extends AbstractTest
 {
+
+    /**
+     * Test the update of the connectors array.
+     *
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors::__construct
+     */
+    public function testConstruct()
+    {
+        $expected = [
+            Connectors::NOTHING => ['', ''],
+            Connectors::METHOD => ['.', '(@param@)'],
+            Connectors::STATIC_METHOD => ['.', '(@param@)'],
+            Connectors::NORMAL_ARRAY => ['.', ''],
+            Connectors::ASSOCIATIVE_ARRAY => ['.', ''],
+            Connectors::CONSTANT => ['.', ''],
+            Connectors::NORMAL_PROPERTY => ['.', ''],
+            Connectors::STATIC_PROPERTY => ['.', ''],
+            Connectors::SPECIAL_CHARS_PROP => ['.', ''],
+        ];
+        $connector = new Connectors();
+
+        $this->assertEquals($expected, $this->retrieveValueByReflection('connectorArray', $connector));
+    }
+
     /**
      * Test the handling of the do-nothing approach.
      *
