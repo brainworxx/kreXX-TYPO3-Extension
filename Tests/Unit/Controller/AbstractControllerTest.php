@@ -84,7 +84,7 @@ class AbstractControllerTest extends AbstractTest
     /**
      * Test  the injection of the settings model.
      *
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::injectSettings
+     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::injectSettingsModel
      */
     public function testInjectSettings()
     {
