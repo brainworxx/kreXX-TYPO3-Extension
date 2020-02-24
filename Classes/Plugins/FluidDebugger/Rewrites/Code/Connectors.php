@@ -48,6 +48,7 @@ class Connectors extends OrgConnectors
 {
 
     protected $connectorArray = [
+        Connectors::NOTHING => ['', ''],
         Connectors::METHOD => ['.', '(@param@)'],
         Connectors::STATIC_METHOD => ['.', '(@param@)'],
         Connectors::NORMAL_ARRAY => ['.', ''],
