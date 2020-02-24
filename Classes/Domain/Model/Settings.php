@@ -118,12 +118,40 @@ class Settings
     public function generateIniContent(): string
     {
         Pool::createPool();
+
+        $moduleSettings = [];
+        // Process the settings.
+        $result = $this->processGroups($moduleSettings) . $this->processFeEditing($moduleSettings);
+
+        /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $user */
+        $user = $GLOBALS['BE_USER'];
+        // Save the last settings to the backend user, so we can retrieve it later.
+        if (!isset($user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY])) {
+            $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY] = [];
+        }
+        $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY] = array_merge(
+            $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY],
+            $moduleSettings
+        );
+        $user->writeUC();
+
+        return $result;
+    }
+
+    /**
+     * Process thge normal groups of the ini.
+     *
+     * @param array $moduleSettings
+     *   The module settings. We store these in the user data.
+     *
+     * @return string
+     *   The generated ini content.
+     */
+    protected function processGroups(array &$moduleSettings)
+    {
+        $result = '';
         $validation = Krexx::$pool->config->validation;
 
-        $result = '';
-        $moduleSettings = [];
-
-        // Process the normal settings.
         foreach (Krexx::$pool->config->configFallback as $group => $settings) {
             $result .= '[' . $group . ']' . "\n";
             foreach ($settings as $settingName) {
@@ -137,8 +165,21 @@ class Settings
             }
         }
 
-        // Process the configuration for the settings editing.
-        $result .= '[feEditing]' . "\n";
+        return $result;
+    }
+
+    /**
+     * Generate the frontend editing part.
+     *
+     * @param array $moduleSettings
+     *   The module settings. We store these in the user data.
+     *
+     * @return string
+     *   The generated ini content.
+     */
+    protected function processFeEditing(array &$moduleSettings)
+    {
+        $result = '[feEditing]' . "\n";
         $allowedValues = ['full', 'display', 'none'];
         foreach (Krexx::$pool->config->feConfigFallback as $settingName => $settings) {
             $settingNameInModel = 'form' . $settingName;
@@ -150,18 +191,6 @@ class Settings
                 $moduleSettings[$settingNameInModel] = $this->$settingNameInModel;
             }
         }
-
-        /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $user */
-        $user = $GLOBALS['BE_USER'];
-        // Save the last settings to the backend user, so we can retrieve it later.
-        if (!isset($user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY])) {
-            $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY] = [];
-        }
-        $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY] = array_merge(
-            $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY],
-            $moduleSettings
-        );
-        $user->writeUC();
 
         return $result;
     }

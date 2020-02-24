@@ -48,6 +48,8 @@ class SettingsTest extends AbstractTest
      * and then test the ini.
      *
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::generateIniContent
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::processGroups
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::processFeEditing
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseGetter
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalysePrivate
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalysePrivateMethods
