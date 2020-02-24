@@ -132,7 +132,7 @@ class IndexControllerTest extends AbstractTest
         // Inject it, like there is no tomorrow.
         $indexController = new IndexController();
         $indexController->injectLivePreset($presetMock);
-        $indexController->injectSettings($settingsModel);
+        $indexController->injectSettingsModel($settingsModel);
         $indexController->injectConfiguration($configurationMock);
         $indexController->injectFormConfiguration($configFeMock);
         $this->initFlashMessages($indexController);

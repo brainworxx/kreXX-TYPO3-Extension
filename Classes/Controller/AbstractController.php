@@ -163,7 +163,7 @@ abstract class AbstractController extends ActionController
      *
      * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
      */
-    public function injectSettings(Settings $settings)
+    public function injectSettingsModel(Settings $settings)
     {
         $this->settingsModel = $settings;
     }

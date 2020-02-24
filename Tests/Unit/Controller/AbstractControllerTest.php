@@ -90,7 +90,7 @@ class AbstractControllerTest extends AbstractTest
     {
         $settings = $this->createMock(Settings::class);
         $indexController = new IndexController();
-        $indexController->injectSettings($settings);
+        $indexController->injectSettingsModel($settings);
         $this->assertSame($settings, $this->retrieveValueByReflection('settingsModel', $indexController));
     }
 
