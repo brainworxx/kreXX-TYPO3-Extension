@@ -307,10 +307,10 @@ class Codegen implements ConstInterface
      *
      * @param mixed $default
      *
-     * @return string
+     * @return mixed
      *   The type in a human readable form.
      */
-    protected function translateDefaultValue($default): string
+    protected function translateDefaultValue($default)
     {
         if (is_string($default)) {
             $default = '\'' . $default . '\'';
