@@ -220,11 +220,7 @@
      */
     ajaxRefresh.call = function () {
         var request = new XMLHttpRequest();
-        request.open(
-            "GET",
-            TYPO3.settings.ajaxUrls['includekrexx_refresh'],
-            true
-        );
+        request.open("GET", TYPO3.settings.ajaxUrls['includekrexx_refresh'], true);
 
         var table = document.querySelector('table.krexx-logs tbody');
         request.onload = function (event) {
@@ -281,7 +277,7 @@
             for (var i = 0; i < file.meta.length; i++) {
                 html += '<b>' + file.meta[i].type + '</b><br />';
                 html += 'in ' + file.meta[i].filename + ', line ' + file.meta[i].line;
-                if (i < file.meta.length -1) {
+                if (i < file.meta.length - 1) {
                     html += '<div class="spacer"></div>';
                 }
             }
@@ -290,10 +286,8 @@
             }
             html += '</td>';
 
-            html += '<td class="time">' + file.time + '</td>';
-            html += '<td class="size">' + file.size + '</td>';
-            html += '<td>' + '<div class="button delete" data-id="' + file.id + '"></div>' + '</td>';
-            html += '</tr>';
+            html += '<td class="time">' + file.time + '</td><td class="size">' + file.size + '</td>';
+            html += '<td><div class="button delete" data-id="' + file.id + '"></div></td></tr>';
         }
 
         return html;
@@ -334,11 +328,10 @@
         // Retrieve the id.
         if (target.hasAttribute('data-id')) {
             id = target.getAttribute('data-id')
-        } else {
-            if (target.parentElement.hasAttribute('data-id')) {
-                id = target.parentElement.getAttribute('data-id')
-            }
+        } else if (target.parentElement.hasAttribute('data-id')) {
+            id = target.parentElement.getAttribute('data-id')
         }
+
         // Found anything?
         if (typeof id === 'undefined' || id === null) {
             // No id found. Early return.
@@ -352,11 +345,7 @@
         }
 
         var request = new XMLHttpRequest();
-        request.open(
-            "GET",
-            TYPO3.settings.ajaxUrls['includekrexx_delete'] + '&fileid=' + id,
-            true
-        );
+        request.open("GET", TYPO3.settings.ajaxUrls['includekrexx_delete'] + '&fileid=' + id, true);
 
         request.onload = function (event) {
             try {
@@ -364,17 +353,13 @@
             } catch (e) {
                 // We are not going to output the answer from the server, although
                 // it is visible in the browser inspector.
-                ajaxRefresh.message({
-                    class: 'error',
-                    text: 'Error while parsing the server answer.'
-                });
+                ajaxRefresh.message({class: 'error', text: 'Error while parsing the server answer.'});
             }
 
             ajaxRefresh.call();
         };
 
         request.send();
-
     };
 
     /**
