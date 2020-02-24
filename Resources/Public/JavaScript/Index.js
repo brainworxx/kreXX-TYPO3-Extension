@@ -152,8 +152,8 @@
                 element.parentNode.classList.remove('active');
                 fallback.classList.remove('disabled');
             } else {
-                element.disabled = false;
                 element.parentNode.classList.add('active');
+                element.disabled = false;
                 fallback.classList.add('disabled');
             }
         }
