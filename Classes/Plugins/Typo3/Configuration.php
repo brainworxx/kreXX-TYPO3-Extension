@@ -95,10 +95,7 @@ class Configuration implements PluginConfigInterface
         Registration::addRewrite(CheckOutput::class, T3CheckOutput::class);
 
         // Registering some special stuff for the model analysis.
-        Registration::registerEvent(
-            ProcessObject::class . static::START_PROCESS,
-            DirtyModels::class
-        );
+        Registration::registerEvent(ProcessObject::class . static::START_PROCESS, DirtyModels::class);
 
         // The QueryBuilder special analysis.
         // Only for Doctrine stuff.
@@ -108,11 +105,7 @@ class Configuration implements PluginConfigInterface
 
         // Get the absolute site path. The constant PATH_site is deprecated
         // since 9.2.
-        if (class_exists(Environment::class)) {
-            $pathSite = Environment::getPublicPath() . '/';
-        } else {
-            $pathSite = PATH_site;
-        }
+        $pathSite = class_exists(Environment::class) ?  Environment::getPublicPath() . '/' : $pathSite = PATH_site;
 
         // See if we must create a temp directory for kreXX.
         $tempPaths = [
@@ -122,14 +115,56 @@ class Configuration implements PluginConfigInterface
             'config' => $pathSite . 'typo3temp/tx_includekrexx/config',
         ];
 
-        // htAccess to prevent a listing
-        $htAccess = 'order deny,allow' . chr(10);
-        $htAccess .= 'deny from all' . chr(10);
-        $htAccess .= 'RewriteEngine On' . chr(10);
-        $htAccess .= '<RequireAll>' . chr(10);
-        $htAccess .= '   Require all denied' . chr(10);
-        $htAccess .= '</RequireAll>' . chr(10);
+        // Register it!
+        Registration::setConfigFile($tempPaths['config'] . '/Krexx.ini');
+        Registration::setChunksFolder($tempPaths['chunks'] . '/');
+        Registration::setLogFolder($tempPaths['log'] . '/');
+        $this->createWorkingDirectories($tempPaths);
 
+        // Adding our debugging blacklist.
+        // TYPO3 viewhelpers dislike this function.
+        // In the TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper the private
+        // $viewHelperNode might not be an object, and trying to render it might
+        // cause a fatal error!
+        $toString = '__toString';
+        $removeAll = 'removeAll';
+        Registration::addMethodToDebugBlacklist(AbstractViewHelper::class, $toString);
+        Registration::addMethodToDebugBlacklist(NewAbstractViewHelper::class, $toString);
+
+        // Deleting all rows from the DB via typo3 repository is NOT a good
+        // debug method!
+        Registration::addMethodToDebugBlacklist(RepositoryInterface::class, $removeAll);
+
+        // The lazy loading proxy may not have loaded the object at this time.
+        Registration::addMethodToDebugBlacklist(LazyLoadingProxy::class, $toString);
+
+        // We now have a better variant for the QueryBuilder analysis.
+        Registration::addMethodToDebugBlacklist(DbQueryBuilder::class, $toString);
+
+        // Add additional texts to the help.
+        $extPath = ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
+        Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/t3.kreXX.ini');
+    }
+
+    /**
+     * Create and protect the working directories.
+     *
+     * @param array $tempPaths
+     */
+    protected function createWorkingDirectories(array $tempPaths)
+    {
+        // htAccess to prevent a listing
+        $htAccess = '# Apache 2.2' . chr(10);
+        $htAccess .= '<IfModule !authz_core_module>' . chr(10);
+        $htAccess .= '	Order Deny,Allow' . chr(10);
+        $htAccess .= '	Deny from all' . chr(10);
+        $htAccess .= '</IfModule>' . chr(10);
+        $htAccess .= '# Apache 2.4+' . chr(10);
+        $htAccess .= '<IfModule authz_core_module>' . chr(10);
+        $htAccess .= '	<RequireAll>' . chr(10);
+        $htAccess .= '		Require all denied' . chr(10);
+        $htAccess .= '	</RequireAll>' . chr(10);
+        $htAccess .= '</IfModule>' . chr(10);
 
         // Empty index.html in case the htaccess is not enough.
         $indexHtml = '';
@@ -143,49 +178,5 @@ class Configuration implements PluginConfigInterface
                 GeneralUtility::writeFileToTypo3tempDir($tempPath . '/' . 'index.html', $indexHtml);
             }
         }
-
-        // Register it!
-        Registration::setConfigFile($tempPaths['config'] . '/Krexx.ini');
-        Registration::setChunksFolder($tempPaths['chunks'] . '/');
-        Registration::setLogFolder($tempPaths['log'] . '/');
-
-        // Adding our debugging blacklist.
-        // TYPO3 viewhelpers dislike this function.
-        // In the TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper the private
-        // $viewHelperNode might not be an object, and trying to render it might
-        // cause a fatal error!
-        $toString = '__toString';
-        $removeAll = 'removeAll';
-        Registration::addMethodToDebugBlacklist(
-            AbstractViewHelper::class,
-            $toString
-        );
-        Registration::addMethodToDebugBlacklist(
-            NewAbstractViewHelper::class,
-            $toString
-        );
-
-        // Deleting all rows from the DB via typo3 repository is NOT a good
-        // debug method!
-        Registration::addMethodToDebugBlacklist(
-            RepositoryInterface::class,
-            $removeAll
-        );
-
-        // The lazy loading proxy may not have loaded the object at this time.
-        Registration::addMethodToDebugBlacklist(
-            LazyLoadingProxy::class,
-            $toString
-        );
-
-        // We now have a better variant for the QueryBuilder analysis.
-        Registration::addMethodToDebugBlacklist(
-            DbQueryBuilder::class,
-            $toString
-        );
-
-        // Add additional texts to the help.
-        $extPath = ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
-        Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/t3.kreXX.ini');
     }
 }
