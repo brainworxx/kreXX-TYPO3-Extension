@@ -47,6 +47,7 @@ class CodegenTest extends AbstractTest
      * Testing the source code generation for fluid.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateSource
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateAll
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateVhsCall
      */
     public function testGenerateSource()

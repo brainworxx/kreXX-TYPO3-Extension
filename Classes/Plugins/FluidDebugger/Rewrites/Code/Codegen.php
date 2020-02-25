@@ -111,9 +111,23 @@ class Codegen extends OrgCodegen implements ConstInterface
             return $this->generateVhsCall($model);
         }
 
+        return $this->generateAll($model);
+    }
+
+    /**
+     * Generate the code for the dreaded {_all} variable.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model, so far.
+     *
+     * @return string
+     *   The generated source code.
+     */
+    protected function generateAll(Model $model): string
+    {
         // Check for the {_all} varname, which is not a real varname.
         // We can not use this one for code generation.
-        if ($name === '_all') {
+        if ($model->getName() === '_all') {
             $this->isAll = true;
             return '';
         }
@@ -136,6 +150,7 @@ class Codegen extends OrgCodegen implements ConstInterface
             }
         }
 
+        // Fallback to the parent, for normal code generation.
         return parent::generateSource($model);
     }
 
