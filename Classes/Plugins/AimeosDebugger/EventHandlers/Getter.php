@@ -136,22 +136,44 @@ class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterf
         // 'getCustomerId' should be 'some.key.customerid'
         /** @var \ReflectionMethod $reflectionMethod */
         $reflectionMethod = $params[static::PARAM_ADDITIONAL][static::PARAM_REFLECTION_METHOD];
-        $possibleKey = $this->retrievePossibleKey($reflectionMethod->name);
-
         $values = $this->retrieveValueArray($params, $reflectionMethod);
-
         if (empty($values) === true) {
             // There is nothing to retrieve here.
             // Not-so-Early return.
             return '';
         }
 
-        // Going through the values and try to get something out of it.
+        $this->assignResultsToModel($values, $model, $callback);
+
+        // This will not get used by the event itself here.
+        // Return an empty string.
+        return '';
+    }
+
+    /**
+     * Assign a possible value to the model and update the parameters in the callback.
+     *
+     * @param array $values
+     *   Array of possible values.
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model so far.
+     * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback $callback
+     *   Our original callback.
+     */
+    protected function assignResultsToModel(array $values, Model $model, AbstractCallback $callback)
+    {
+        $params = $callback->getParameters();
+        /** @var \ReflectionMethod $reflectionMethod */
+        $reflectionMethod = $params[static::PARAM_ADDITIONAL][static::PARAM_REFLECTION_METHOD];
+        $possibleKey = $this->retrievePossibleKey($reflectionMethod->name);
+
         foreach ($values as $key => $possibleResult) {
             $keyParts = explode('.', $key);
             if ($keyParts[count($keyParts) - 1] === $possibleKey) {
                 // We've got ourselves a result.
                 $params[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND] = false;
+                // Update the parameters in the callback . . .
+                $callback->setParameters($params);
 
                 // Update the model.
                 $model->setData($possibleResult);
@@ -164,13 +186,6 @@ class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterf
                 break;
             }
         }
-
-        // Update the parameters in the callback . . .
-        $callback->setParameters($params);
-
-        // This will not get used by the event itself here.
-        // Return an empty string.
-        return '';
     }
 
     /**
