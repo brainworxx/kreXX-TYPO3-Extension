@@ -374,6 +374,11 @@ class ThroughGetter extends AbstractCallback
      */
     protected function getReflectionPropertyDeep(ReflectionClass $classReflection, ReflectionMethod $reflectionMethod)
     {
+        if ($reflectionMethod->isInternal() === true) {
+            // Early return for internal stuff.
+            return null;
+        }
+
         // Read the sourcecode into a string.
         $sourcecode = $this->pool->fileService->readFile(
             $reflectionMethod->getFileName(),
