@@ -148,29 +148,33 @@ abstract class AbstractFluid extends AbstractCaller
      */
     protected function assignParsedTemplateRenderType()
     {
-        if ($this->viewReflection->hasProperty('renderingStack')) {
-            try {
-                $renderingStackReflection = $this->viewReflection->getProperty('renderingStack');
-                $renderingStackReflection->setAccessible(true);
-                $renderingStack = $renderingStackReflection->getValue($this->view);
-            } catch (ReflectionException $e) {
-                $this->error = true;
-                return;
-            }
-
-            $pos = count($renderingStack) - 1;
-            if (
-                isset($renderingStack[$pos]) &&
-                isset($renderingStack[$pos]['parsedTemplate']) &&
-                isset($renderingStack[$pos]['type'])
-            ) {
-                $this->parsedTemplate = $renderingStack[$pos]['parsedTemplate'];
-                $this->renderingType = $renderingStack[$pos]['type'];
-                return;
-            }
+        if ($this->viewReflection->hasProperty('renderingStack') === false) {
+            // No rendering stack, no template file  :-(
+            $this->error = true;
+            return;
         }
 
-        // No rendering stack, no template file  :-(
+        try {
+            $renderingStackReflection = $this->viewReflection->getProperty('renderingStack');
+            $renderingStackReflection->setAccessible(true);
+            $renderingStack = $renderingStackReflection->getValue($this->view);
+        } catch (ReflectionException $e) {
+            $this->error = true;
+            return;
+        }
+
+        $pos = count($renderingStack) - 1;
+        if (
+            isset($renderingStack[$pos]) &&
+            isset($renderingStack[$pos]['parsedTemplate']) &&
+            isset($renderingStack[$pos]['type'])
+        ) {
+            $this->parsedTemplate = $renderingStack[$pos]['parsedTemplate'];
+            $this->renderingType = $renderingStack[$pos]['type'];
+            return;
+        }
+
+        // There was a rendering stack, but we were unable to get anything out of it.
         $this->error = true;
     }
 
@@ -180,7 +184,7 @@ abstract class AbstractFluid extends AbstractCaller
     public function findCaller($headline, $data): array
     {
         // Did we get our stuff together so far?
-        if ($this->error) {
+        if ($this->error === true) {
             // Something went wrong!
             return [
                 static::TRACE_FILE => 'n/a',
@@ -192,21 +196,38 @@ abstract class AbstractFluid extends AbstractCaller
             ];
         }
 
-        $path = 'n/a';
+        return $this->resolveCallerArrayByRenderType($data);
+    }
 
-        // RENDERING_TEMPLATE = 1
-        if ($this->renderingType === 1) {
-            $path = $this->getTemplatePath();
-        }
-
-        // RENDERING_PARTIAL = 2
-        if ($this->renderingType === 2) {
-            $path = $this->getPartialPath();
-        }
-
-        // RENDERING_LAYOUT = 3
-        if ($this->renderingType === 3) {
-            $path = $this->getLayoutPath();
+    /**
+     * Resolving the caller array, depending on the render type:
+     *   - template
+     *   - partial
+     *   - layout
+     *
+     * @param mixed $data
+     *   The variable that was passes to the viewHelper.
+     *
+     * @return array
+     *   The caller array.
+     */
+    protected function resolveCallerArrayByRenderType($data)
+    {
+        switch ($this->renderingType) {
+            case 1:
+                // RENDERING_TEMPLATE = 1
+                $path = $this->getTemplatePath();
+                break;
+            case 2:
+                // RENDERING_PARTIAL = 2
+                $path = $this->getPartialPath();
+                break;
+            case 3:
+                // RENDERING_LAYOUT = 3
+                $path = $this->getLayoutPath();
+                break;
+            default:
+                $path = 'n/a';
         }
 
         // Trying to resolve the line as well as the variable name, if possible.
