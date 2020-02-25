@@ -265,10 +265,10 @@ class ThroughGetter extends AbstractCallback
         // try to resolve it,  if nothing was found.
         // We also add the stuff, that we were able to do so far.
         $this->parameters[static::PARAM_ADDITIONAL] = [
-            'nothingFound' => $nothingFound,
-            'value' => $value,
-            'refProperty' => $refProp,
-            'refMethod' => $reflectionMethod
+            static::PARAM_NOTHING_FOUND => $nothingFound,
+            static::PARAM_VALUE => $value,
+            static::PARAM_REFLECTION_PROPERTY => $refProp,
+            static::PARAM_REFLECTION_METHOD => $reflectionMethod
         ];
     }
 

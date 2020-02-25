@@ -123,7 +123,7 @@ class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterf
         $data = $params[static::PARAM_REF]->getData();
 
         if (
-            $params[static::PARAM_ADDITIONAL]['nothingFound'] === false ||
+            $params[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND] === false ||
             $params[ThroughGetter::CURRENT_PREFIX] !== 'get' ||
             is_a($data, Iface::class) === false
         ) {
@@ -135,7 +135,7 @@ class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterf
         // without the get, plus some prefix, separated with a dot.
         // 'getCustomerId' should be 'some.key.customerid'
         /** @var \ReflectionMethod $reflectionMethod */
-        $reflectionMethod = $params[static::PARAM_ADDITIONAL]['refMethod'];
+        $reflectionMethod = $params[static::PARAM_ADDITIONAL][static::PARAM_REFLECTION_METHOD];
         $possibleKey = $this->retrievePossibleKey($reflectionMethod->name);
 
         $values = $this->retrieveValueArray($params, $reflectionMethod);
@@ -151,7 +151,7 @@ class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterf
             $keyParts = explode('.', $key);
             if ($keyParts[count($keyParts) - 1] === $possibleKey) {
                 // We've got ourselves a result.
-                $params[static::PARAM_ADDITIONAL]['nothingFound'] = false;
+                $params[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND] = false;
 
                 // Update the model.
                 $model->setData($possibleResult);

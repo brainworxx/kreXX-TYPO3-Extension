@@ -71,6 +71,7 @@ interface ConstInterface
     const PARAM_DATA = 'data';
     const PARAM_REF = 'ref';
     const PARAM_NAME = 'name';
+    const PARAM_VALUE = 'value';
     const PARAM_META_NAME = 'metaname';
     const PARAM_MULTILINE = 'multiline';
     const PARAM_CLASSNAME = 'classname';
@@ -79,6 +80,9 @@ interface ConstInterface
     const PARAM_HAS_GETTER = 'hasGetter';
     const PARAM_REF_METHOD = 'reflectionMethod';
     const PARAM_ADDITIONAL = 'additional';
+    const PARAM_NOTHING_FOUND = 'nothingFound';
+    const PARAM_REFLECTION_METHOD = 'refMethod';
+    const PARAM_REFLECTION_PROPERTY = 'refProperty';
 
     const UNKNOWN_VALUE = '. . .';
     const UNKNOWN_DECLARATION = 'unknownDeclaration';

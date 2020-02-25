@@ -48,7 +48,7 @@ interface ConstInterface
     const PARAM_IS_FACTORY_METHOD = 'isFactoryMethod';
     const PARAM_FACTORY_NAME = 'factoryName';
 
-    // internal variable names, where Aimeos stores data.
+    // Internal variable names, where Aimeos stores data.
     const AIMEOS_B_DATA = 'bdata';
     const AIMEOS_VALUES = 'values';
     const AIMEOS_DATA = 'data';
