@@ -82,6 +82,13 @@ class DebugViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
 
     /**
+     * The name of the analysis methos in the kreXX class.
+     *
+     * @var string
+     */
+    protected $analysisType = 'open';
+
+    /**
      * {@inheritdoc}
      *
      * @throws \TYPO3\CMS\Fluid\Core\ViewHelper\Exception
@@ -127,21 +134,22 @@ class DebugViewHelper extends AbstractViewHelper
      */
     protected function analysis()
     {
+        $type = $this->analysisType;
         $found  = false;
         if (!is_null($this->arguments[static::ARGUMENT_VALUE])) {
-            Krexx::open($this->arguments[static::ARGUMENT_VALUE]);
+            Krexx::$type($this->arguments[static::ARGUMENT_VALUE]);
             $found = true;
         }
 
         $children = $this->renderChildren();
         if (!is_null($children)) {
-            Krexx::open($children);
+            Krexx::$type($children);
             $found = true;
         }
 
         if (!$found) {
             // Both are NULL, we must tell the dev!
-            Krexx::open(null);
+            Krexx::$type(null);
         }
     }
 }

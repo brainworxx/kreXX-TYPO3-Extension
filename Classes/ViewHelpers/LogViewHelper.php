@@ -42,25 +42,9 @@ use Brainworxx\Krexx\Krexx;
 class LogViewHelper extends DebugViewHelper
 {
     /**
-     * Analyse the stuff from the template, but with logging.
+     * The name of the analysis methos in the kreXX class.
+     *
+     * @var string
      */
-    protected function analysis()
-    {
-        $found  = false;
-        if (!is_null($this->arguments[static::ARGUMENT_VALUE])) {
-            Krexx::log($this->arguments[static::ARGUMENT_VALUE]);
-            $found = true;
-        }
-
-        $children = $this->renderChildren();
-        if (!is_null($children)) {
-            Krexx::log($children);
-            $found = true;
-        }
-
-        if (!$found) {
-            // Both are NULL, we must tell the dev!
-            Krexx::log(null);
-        }
-    }
+    protected $analysisType = 'log';
 }
