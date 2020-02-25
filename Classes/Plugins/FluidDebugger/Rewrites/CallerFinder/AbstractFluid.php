@@ -282,35 +282,23 @@ abstract class AbstractFluid extends AbstractCaller
             return ;
         }
 
+        // Define the fallback.
+        $this->varname = static::FLUID_VARIABLE;
+
         $fileContent = $this->pool->fileService->getFileContents($filePath, false);
-
-        $result = static::FLUID_VARIABLE;
-        $alreadyFound = false;
-
         foreach ($this->callPattern as $funcname) {
             // This little baby tries to resolve everything inside the
             // brackets of the kreXX call.
             preg_match_all('/\s*' . $funcname[0] . '(.*)' . $funcname[1] . '\s*/u', $fileContent, $name);
 
-            if (isset($name[1]) === true && isset($name[1][0])) {
-                // Found something!
-                // Check if we already have one, or more than one.
-                if ($alreadyFound === true || count($name[1]) > 1) {
-                    // There is more than one call in this template file.
-                    // Unable to determine, which call was the right one.
-                    return;
-                }
-
-                $result =  $this->checkForComplicatedStuff(
+            // Found something!
+            // Check if we already have more than one.
+            if (isset($name[1][0]) === true && count($name[1]) === 1) {
+                $this->varname =  $this->checkForComplicatedStuff(
                     $this->pool->encodingService->encodeString(trim($name[1][0], " \t\n\r\0\x0B"))
                 );
-                $alreadyFound = true;
+                return;
             }
-        }
-
-        // Still here? Set our variable name.
-        if ($alreadyFound) {
-            $this->varname = $result;
         }
     }
 
