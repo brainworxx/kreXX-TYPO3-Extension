@@ -46,6 +46,7 @@ class ConfigurationTest extends AbstractTest
      *
      * @covers \Brainworxx\Includekrexx\Collectors\Configuration::assignData
      * @covers \Brainworxx\Includekrexx\Collectors\Configuration::retrieveConfiguration
+     * @covers \Brainworxx\Includekrexx\Collectors\Configuration::applyFallbackToConfig
      * @covers \Brainworxx\Includekrexx\Collectors\Configuration::retrieveDropDowns
      */
     public function testAssignData()

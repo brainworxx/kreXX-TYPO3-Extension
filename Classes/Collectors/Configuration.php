@@ -111,31 +111,48 @@ class Configuration extends AbstractCollector
             $config[$settingsName][static::SETTINGS_VALUE] = $iniReader->getConfigFromFile($group, $settingsName);
             $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = false;
             $config[$settingsName][static::SETTINGS_FALLBACK] = $fallback[static::SETTINGS_VALUE];
-
-            // Check if we have a value. If not, we need to load the factory
-            // settings. We also need to set the info, if we are using the
-            // factory settings, at all.
-            if (is_null($config[$settingsName][static::SETTINGS_VALUE])) {
-                // Check if we have a value from the last time a user has saved
-                // the settings.
-                if (isset($this->userUc[$settingsName])) {
-                    $config[$settingsName][static::SETTINGS_VALUE] = $this->userUc[$settingsName];
-                } else {
-                    // Fallback to the fallback for a possible value.
-                    $config[$settingsName][static::SETTINGS_VALUE] = $fallback[static::SETTINGS_VALUE];
-                }
-                $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
-            }
-
-            // Assign the mode-class.
-            if (
-                in_array($settingsName, $this->expertOnly) &&
-                $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS]
-            ) {
-                $config[$settingsName][static::SETTINGS_MODE] = 'expert';
-            }
+            $this->applyFallbackToConfig($config, $settingsName, $fallback);
         }
 
         return $config;
+    }
+
+    /**
+     * Check if we have a value.
+     *
+     * If not, we need to load the factory settings. We also need to set the
+     * info, if we are using the factory settings, at all.
+     *
+     * @param array $config
+     *   The configuration array, so far.
+     * @param string $settingsName
+     *   The name of the setting we are proseesing right now.
+     * @param array $fallback
+     *   The fallback value.
+     */
+    protected function applyFallbackToConfig(array &$config, string $settingsName, array $fallback)
+    {
+        // Check if we have a value. If not, we need to load the factory
+        // settings. We also need to set the info, if we are using the
+        // factory settings, at all.
+        if (is_null($config[$settingsName][static::SETTINGS_VALUE])) {
+            // Check if we have a value from the last time a user has saved
+            // the settings.
+            if (isset($this->userUc[$settingsName])) {
+                $config[$settingsName][static::SETTINGS_VALUE] = $this->userUc[$settingsName];
+            } else {
+                // Fallback to the fallback for a possible value.
+                $config[$settingsName][static::SETTINGS_VALUE] = $fallback[static::SETTINGS_VALUE];
+            }
+            $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
+        }
+
+        // Assign the mode-class.
+        if (
+            in_array($settingsName, $this->expertOnly) &&
+            $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS]
+        ) {
+            $config[$settingsName][static::SETTINGS_MODE] = 'expert';
+        }
     }
 }
