@@ -96,6 +96,7 @@ class ConfigurationTest extends AbstractTest
      * Test the adjustments done by the TYPO3 plugin.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::exec
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::createWorkingDirectories
      */
     public function testExec()
     {
