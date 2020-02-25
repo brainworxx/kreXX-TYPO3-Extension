@@ -79,11 +79,11 @@ class LogfileList extends AbstractCollector
         }
 
         // Get the log files anf sort them.
-
         $files = glob($this->pool->config->getLogDir() . '*.Krexx.html');
         if (!is_array($files)) {
             $files = [];
         }
+
         // The function filemtime gets cached by php btw.
         usort($files, function ($a, $b) {
             return filemtime($b) - filemtime($a);
@@ -120,23 +120,42 @@ class LogfileList extends AbstractCollector
             $fileinfo['time'] = date("d.m.y H:i:s", filemtime($file));
             $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
             $fileinfo['dispatcher'] = $this->getRoute($fileinfo['id'], $uriBuilder);
-
-            // Parsing a potentially 80MB file for it's content is not a good idea.
-            // That is why the kreXX lib provides some meta data. We will open
-            // this file and add it's content to the template.
-            if (is_readable($file . '.json')) {
-                $fileinfo['meta'] = (array)json_decode(file_get_contents($file . '.json'), true);
-                foreach ($fileinfo['meta'] as &$meta) {
-                    $meta['filename'] = basename($meta['file']);
-                    // Unescape the stuff from the json, to prevent double escaping.
-                    $meta['varname'] = htmlspecialchars_decode($meta['varname']);
-                }
-            }
-
+            $fileinfo['meta'] = $this->addMetaToFileInfo($file);
             $fileList[] = $fileinfo;
         }
 
         return $fileList;
+    }
+
+    /**
+     * Parsing a potentially 80MB file for it's content is not a good idea. That
+     * is why the kreXX lib provides some meta data. We will open this file and
+     * add it's content to the template.
+     *
+     * @param string $file
+     *   The file name for which we are retrieving the meta data.
+     *
+     * @return array
+     *   The meta stuff we were able to retrieve.
+     */
+    protected function addMetaToFileInfo(string $file): array
+    {
+        if (is_readable($file . '.json')) {
+            $metaArray = (array)json_decode(file_get_contents($file . '.json'), true);
+            if (empty($metaArray)) {
+                return [];
+            }
+
+            foreach ($metaArray as &$meta) {
+                $meta['filename'] = basename($meta['file']);
+                // Unescape the stuff from the json, to prevent double escaping.
+                $meta['varname'] = htmlspecialchars_decode($meta['varname']);
+            }
+
+            return $metaArray;
+        }
+
+        return [];
     }
 
     /**
@@ -157,26 +176,11 @@ class LogfileList extends AbstractCollector
         $value = 'VALUE';
 
         $arBytes = [
-            0 => [
-                $unit => 'TB',
-                $value => pow(1024, 4),
-            ],
-            1 => [
-                $unit => 'GB',
-                $value => pow(1024, 3),
-            ],
-            2 => [
-                $unit => 'MB',
-                $value => pow(1024, 2),
-            ],
-            3 => [
-                $unit => 'KB',
-                $value => 1024,
-            ],
-            4 => [
-                $unit => 'B',
-                $value => 1,
-            ],
+            [$unit => 'TB', $value => pow(1024, 4)],
+            [$unit => 'GB', $value => pow(1024, 3)],
+            [$unit => 'MB', $value => pow(1024, 2)],
+            [$unit => 'KB', $value => 1024],
+            [$unit => 'B', $value => 1],
         ];
 
         $result = '';
@@ -187,6 +191,7 @@ class LogfileList extends AbstractCollector
                 break;
             }
         }
+
         return $result;
     }
 

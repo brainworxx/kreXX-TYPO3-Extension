@@ -48,6 +48,7 @@ class LogfileListTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::assignData
      * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::retrieveFileList
      * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::retrieveFileInfo
+     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::addMetaToFileInfo
      * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::fileSizeConvert
      * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::getRoute
      */
@@ -157,7 +158,8 @@ class LogfileListTest extends AbstractTest
                 'size' => '205 B',
                 'time' => date($dateFormat, 106),
                 'id' => '123458',
-                $dispatcher => $anotherBeUrl
+                $dispatcher => $anotherBeUrl,
+                'meta' => []
             ]
         ];
         $viewMock = $this->createMock(ViewInterface::class);
