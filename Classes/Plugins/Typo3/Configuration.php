@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\Typo3;
 
+use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
@@ -62,7 +63,7 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder as DbQueryBuilder;
  *
  * @package Brainworxx\Includekrexx\Plugins\Typo3
  */
-class Configuration implements PluginConfigInterface
+class Configuration implements PluginConfigInterface, ConstInterface
 {
     /**
      * {@inheritdoc}
@@ -96,12 +97,6 @@ class Configuration implements PluginConfigInterface
 
         // Registering some special stuff for the model analysis.
         Registration::registerEvent(ProcessObject::class . static::START_PROCESS, DirtyModels::class);
-
-        // The QueryBuilder special analysis.
-        // Only for Doctrine stuff.
-        if (version_compare(TYPO3_version, '8.3', '>')) {
-            Registration::registerEvent(Objects::class . static::START_EVENT, QueryDebugger::class);
-        }
 
         // Get the absolute site path. The constant PATH_site is deprecated
         // since 9.2.
@@ -144,6 +139,34 @@ class Configuration implements PluginConfigInterface
         // Add additional texts to the help.
         $extPath = ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
         Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/t3.kreXX.ini');
+
+        $this->registerVersionDependantStuff();
+    }
+
+    /**
+     * Register the admin panel integration and the query debugger.
+     */
+    protected function registerVersionDependantStuff()
+    {
+        // The QueryBuilder special analysis.
+        // Only for Doctrine stuff.
+        if (version_compare(TYPO3_version, '8.3', '>')) {
+            Registration::registerEvent(Objects::class . static::START_EVENT, QueryDebugger::class);
+        }
+
+        // Register our modules for the admin panel.
+        if (
+            version_compare(TYPO3_version, '9.5', '>=') &&
+            isset($GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
+                [static::MODULES][static::DEBUG])
+        ) {
+            $GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
+            [static::MODULES][static::DEBUG][static::SUBMODULES] = array_replace_recursive(
+                $GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
+                [static::MODULES][static::DEBUG][static::SUBMODULES],
+                [static::KREXX => ['module' => Log::class, 'before' => ['log']]]
+            );
+        }
     }
 
     /**

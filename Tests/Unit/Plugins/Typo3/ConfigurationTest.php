@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
@@ -97,6 +98,7 @@ class ConfigurationTest extends AbstractTest
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::exec
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::createWorkingDirectories
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerVersionDependantStuff
      */
     public function testExec()
     {
@@ -105,9 +107,11 @@ class ConfigurationTest extends AbstractTest
         $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
 
         $versionMock = $this->getFunctionMock($typo3Namespace, 'version_compare');
-        $versionMock->expects($this->once())
-            ->with(AbstractTest::TYPO3_VERSION, '8.3', '>')
-            ->will($this->returnValue(true));
+        $versionMock->expects($this->exactly(2))
+            ->withConsecutive(
+                [AbstractTest::TYPO3_VERSION, '8.3', '>'],
+                [AbstractTest::TYPO3_VERSION, '9.5', '>=']
+            )->will($this->returnValue(true));
 
         $classExistsMock = $this->getFunctionMock($typo3Namespace, 'class_exists');
         $classExistsMock->expects($this->once())
@@ -127,6 +131,17 @@ class ConfigurationTest extends AbstractTest
 
         // Simulationg the package
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/');
+
+        $arrayReplaceRecursiveMock = $this->getFunctionMock(
+            $typo3Namespace,
+            'array_replace_recursive'
+        );
+        $arrayReplaceRecursiveMock->expects($this->once())
+            ->with($this->anything(), [Configuration::KREXX => ['module' => Log::class, 'before' => ['log']]]);
+        // You just have to love these large arrays inside the globals.
+        $GLOBALS[Configuration::TYPO3_CONF_VARS][Configuration::EXTCONF]
+            [Configuration::ADMIN_PANEL][Configuration::MODULES][Configuration::DEBUG]
+            [Configuration::SUBMODULES] = ['module' => Log::class, 'after' => ['log']];
 
         $this->configuration->exec();
 

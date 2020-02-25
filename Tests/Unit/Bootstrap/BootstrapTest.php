@@ -35,7 +35,6 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Bootstrap;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
-use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Cache\CacheManager;
@@ -126,7 +125,7 @@ class BootstrapTest extends AbstractTest
             ->will($this->returnValue(true));
 
         $versionCompMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'version_compare');
-        $versionCompMock->expects($this->exactly(2))
+        $versionCompMock->expects($this->exactly(1))
             ->will($this->returnValue(false));
 
         $t3ConfigMock = $this->createMock(T3configuration::class);
@@ -156,7 +155,7 @@ class BootstrapTest extends AbstractTest
             ->will($this->returnValue(true));
 
         $versionCompMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'version_compare');
-        $versionCompMock->expects($this->exactly(2))
+        $versionCompMock->expects($this->exactly(1))
             ->will($this->returnValue(true));
 
         $t3ConfigMock = $this->createMock(T3configuration::class);
@@ -165,18 +164,6 @@ class BootstrapTest extends AbstractTest
         $this->injectIntoGeneralUtility(T3configuration::class, $t3ConfigMock);
         $this->injectIntoGeneralUtility(FluidConfiguration::class, $fluidConfigMock);
         $this->injectIntoGeneralUtility(AimeosConfiguration::class, $aimeosConfigMock);
-
-        // You just have to love these large arrays inside the globals.
-        $GLOBALS[$this->bootstrap::TYPO3_CONF_VARS][$this->bootstrap::EXTCONF]
-            [$this->bootstrap::ADMIN_PANEL][$this->bootstrap::MODULES][$this->bootstrap::DEBUG]
-            [$this->bootstrap::SUBMODULES] = ['module' => Log::class, 'after' => ['log']];
-
-        $arrayReplaceRecursiveMock = $this->getFunctionMock(
-            static::BOOTSTRAP_NAMESPACE,
-            'array_replace_recursive'
-        );
-        $arrayReplaceRecursiveMock->expects($this->once())
-            ->with($this->anything(), [$this->bootstrap::KREXX => ['module' => Log::class, 'after' => ['log']]]);
 
         $this->bootstrap->run();
 

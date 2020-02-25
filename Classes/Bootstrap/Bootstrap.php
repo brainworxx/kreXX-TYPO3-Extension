@@ -37,7 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Bootstrap;
 
-use Brainworxx\Includekrexx\Modules\Log;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -60,27 +60,8 @@ use Krexx;
  *
  * @package Brainworxx\Includekrexx\Bootstrap
  */
-class Bootstrap
+class Bootstrap implements ConstInterface
 {
-    /**
-     * Our extension key.
-     */
-    const EXT_KEY = 'includekrexx';
-
-    /**
-     * TYPO3 configuration keys.
-     */
-    const TYPO3_CONF_VARS = 'TYPO3_CONF_VARS';
-    const EXTCONF = 'EXTCONF';
-    const ADMIN_PANEL = 'adminpanel';
-    const MODULES = 'modules';
-    const DEBUG = 'debug';
-    const SUBMODULES = 'submodules';
-    const SYS = 'SYS';
-    const FLUID = 'fluid';
-    const FLUID_NAMESPACE = 'namespaces';
-    const KREXX = 'krexx';
-
     /**
      * Batch for the bootstrapping.
      */
@@ -97,19 +78,6 @@ class Bootstrap
             $t3configuration = GeneralUtility::makeInstance(T3configuration::class);
             Registration::register($t3configuration);
             Registration::activatePlugin(get_class($t3configuration));
-            // Register our modules for the admin panel.
-            if (
-                version_compare(TYPO3_version, '9.5', '>=') &&
-                isset($GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
-                    [static::MODULES][static::DEBUG])
-            ) {
-                $GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
-                [static::MODULES][static::DEBUG][static::SUBMODULES] = array_replace_recursive(
-                    $GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
-                    [static::MODULES][static::DEBUG][static::SUBMODULES],
-                    [static::KREXX => ['module' => Log::class, 'after' => ['log']]]
-                );
-            }
 
             // Register the fluid plugins.
             // We activate them later in the viewhelper.
