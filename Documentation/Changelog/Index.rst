@@ -24,6 +24,7 @@ Changelog
     - [Change] Introduced scalar type hints.
     - [Change] Introduced method return types.
     - [Change] Simplified the Model.
+    - [Bugfix] The Aimeos decorator analysis works now as it should.
 
 3.3.1
     - [Feature] Updated to PHP 7.4

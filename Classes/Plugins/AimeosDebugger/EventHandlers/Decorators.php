@@ -45,16 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionClass;
-use Throwable;
 use ReflectionMethod;
-use Aimeos\Admin\JQAdm\Common\Decorator\Iface as JQAdmDecoratorInterface;
-use Aimeos\Admin\JsonAdm\Common\Decorator\Iface as JsonAdmDecoratorInterface;
-use Aimeos\Client\Html\Common\Decorator\Iface as HtmlDecoratorInterface;
-use Aimeos\Client\JsonApi\Common\Decorator\Iface as JsonApiDecoratorInterface;
-use Aimeos\Controller\Frontend\Common\Decorator\Iface as FrontendDecoratorInterface;
-use Aimeos\Controller\Jobs\Common\Decorator\Iface as JobsDecoratorInterface;
-use Aimeos\MShop\Common\Manager\Decorator\Iface as ManagerDecoratorInterface;
-use Aimeos\MShop\Service\Provider\Decorator\Base as ServiceProviderDecoratorBase;
 use ReflectionException;
 
 /**
@@ -64,21 +55,7 @@ use ReflectionException;
  */
 class Decorators implements EventHandlerInterface, ConstInterface
 {
-    /**
-     * List of classes that have potentially implemented this.
-     *
-     * @var array
-     */
-    protected $classList = [
-        JQAdmDecoratorInterface::class,
-        JsonAdmDecoratorInterface::class,
-        HtmlDecoratorInterface::class,
-        JsonApiDecoratorInterface::class,
-        FrontendDecoratorInterface::class,
-        JobsDecoratorInterface::class,
-        ManagerDecoratorInterface::class,
-        ServiceProviderDecoratorBase::class
-    ];
+
 
     /**
      * List of possible internal names of the recipient class.
@@ -126,8 +103,7 @@ class Decorators implements EventHandlerInterface, ConstInterface
         $params = $callback->getParameters();
 
         // Get a first impression.
-        $data = $params[static::PARAM_DATA];
-        if ($this->checkClassName($data) === false) {
+        if ($this->checkClassName($params[static::PARAM_REF]) === false) {
             // Early return, we skip this one.
             return $result;
         }
@@ -139,26 +115,22 @@ class Decorators implements EventHandlerInterface, ConstInterface
 
         if (empty($methods) === false) {
             // Got to dump them all!
-            $result .= $this->pool->render->renderExpandableChild(
-                $this->pool->createClass(Model::class)
-                    ->setName('Decorator Methods')
-                    ->setType('class internals decorator')
-                    ->addParameter(static::PARAM_DATA, $methods)
-                    ->setHelpid('aimeosDecoratorsInfo')
-                    ->injectCallback($this->pool->createClass(ThroughMethods::class))
-            );
+            $result .= $this->pool->render->renderExpandableChild($this->pool->createClass(Model::class)
+                ->setName('Undecorated Methods')
+                ->setType('class internals decorator')
+                ->addParameter(static::PARAM_DATA, $methods)
+                ->setHelpid('aimeosDecoratorsInfo')
+                ->injectCallback($this->pool->createClass(ThroughMethods::class)));
         }
 
         // Do a normal analysis of all receiver objects.
         if (empty($allReceivers) === false) {
             $this->pool->codegenHandler->setAllowCodegen(false);
-            $result .= $this->pool->render->renderExpandableChild(
-                $this->pool->createClass(Model::class)
-                    ->setName('Decorator Objects')
-                    ->setType('class internals decorator')
-                    ->addParameter(static::PARAM_DATA, $allReceivers)
-                    ->injectCallback($this->pool->createClass(ThroughClassList::class))
-            );
+            $result .= $this->pool->render->renderExpandableChild($this->pool->createClass(Model::class)
+                ->setName('Decorated Object')
+                ->setType('class internals decorator')
+                ->addParameter(static::PARAM_DATA, $allReceivers)
+                ->injectCallback($this->pool->createClass(ThroughClassList::class)));
             $this->pool->codegenHandler->setAllowCodegen(true);
         }
 
@@ -182,19 +154,24 @@ class Decorators implements EventHandlerInterface, ConstInterface
         $receiver = $this->retrieveReceiverObject($params[static::PARAM_DATA], $params[static::PARAM_REF]);
         $methods = [];
         while ($receiver !== false) {
+            $methods = $this->retrievePublicMethods($params[static::PARAM_REF]);
             $allReceivers[] = $receiver;
+
             try {
                 $ref = new ReflectionClass($receiver);
             } catch (ReflectionException $e) {
                 // We skip this one.
-                continue;
+                return  $methods;
             }
 
+            // Get the not-decorated methods on the way.
+            $methods = array_diff_key(
+                $this->retrievePublicMethods($ref),
+                $methods
+            );
+
+            // Going deeper.
             $receiver = $this->retrieveReceiverObject($receiver, $ref);
-            // Get all reflection methods together, from all the receivers.
-            // The receivers in front overwrite the methods from the receivers
-            // in the back.
-            $methods = array_merge($this->retrievePublicMethods($ref), $methods);
         }
 
         return $methods;
@@ -203,24 +180,21 @@ class Decorators implements EventHandlerInterface, ConstInterface
     /**
      * Only some classes have this implemented. We check only these.
      *
-     * Checking every other class if they have implemented __call, and then
-     * parsing the source code, if the implementation fits the bill is not
-     * something we will do at this early stage.
-     *
-     * @param mixed $data
+     * @param ReflectionClass $reflectionClass
      *   The class we are currently analysing.
      *
      * @return boolean
      *   Whether we have found a potential class.
      */
-    protected function checkClassName($data): bool
+    protected function checkClassName(ReflectionClass $reflectionClass): bool
     {
-        foreach ($this->classList as $className) {
-            if (is_a($data, $className) && method_exists($data, '__call')) {
+        // We only check Aimeos classes.
+        do {
+            if (strpos($reflectionClass->getNamespaceName(), 'Aimeos') === 0) {
                 return true;
             }
-        }
-
+            $reflectionClass = $reflectionClass->getParentClass();
+        } while ($reflectionClass !== false);
         // Nothing found. We will skip this one.
         return false;
     }
@@ -256,15 +230,13 @@ class Decorators implements EventHandlerInterface, ConstInterface
         }
 
         // Still here? Now for the serious stuff.
-        $objectName = '';
         foreach ($this->internalObjectNames as $name => $needle) {
             if (strpos($source, $needle) !== false) {
-                $objectName = $name;
-                break;
+                return $name;
             }
         }
 
-        return $objectName;
+        return '';
     }
 
     /**
@@ -287,28 +259,50 @@ class Decorators implements EventHandlerInterface, ConstInterface
         }
 
         // Now to get the object.
-        try {
-            // The property is a private property somewhere deep withing the
-            // object inheritance. We might need to go deep into the rabbit hole
-            // to actually get it.
-            $parentReflection = $ref;
-            while (!empty($parentReflection)) {
-                if ($parentReflection->hasProperty($objectName)) {
-                    $propertyRef = $parentReflection->getProperty($objectName);
-                    $propertyRef->setAccessible(true);
-                    $receiver = $propertyRef->getValue($data);
-                    if (is_object($receiver)) {
-                        return $receiver;
-                    }
-                }
-                // Going deeper!
-                $parentReflection = $parentReflection->getParentClass();
+        // The property is a private property somewhere deep withing the
+        // object inheritance. We might need to go deep into the rabbit hole
+        // to actually get it.
+        $parentReflection = $ref;
+        while (!empty($parentReflection)) {
+            $receiver = $this->retrieveProperty($parentReflection, $objectName, $data);
+            if (is_object($receiver)) {
+                return $receiver;
             }
-        } catch (Throwable $e) {
-            // Do nothing.
+
+            // Going deeper!
+            $parentReflection = $parentReflection->getParentClass();
         }
 
         // Still here?
+        return false;
+    }
+
+    /**
+     * Retrieve a private or protected property byx using a reflection.
+     *
+     * @param \ReflectionClass $reflectionClass
+     *   Reflection of the class with the property.
+     * @param string $objectName
+     *   Name of the property.
+     * @param object $object
+     *   The actual object with the property.
+     *
+     * @return mixed
+     *   The property, if successful, or false if not successful.
+     *   We actually only care about objects btw.
+     */
+    protected function retrieveProperty(ReflectionClass $reflectionClass, string $objectName, $object)
+    {
+        try {
+            if ($reflectionClass->hasProperty($objectName)) {
+                $propertyRef = $reflectionClass->getProperty($objectName);
+                $propertyRef->setAccessible(true);
+                return $propertyRef->getValue($object);
+            }
+        } catch (ReflectionException $e) {
+            // Do nothing.
+        }
+
         return false;
     }
 
