@@ -105,13 +105,10 @@ class DecoratorsTest extends AbstractTest
         /** @var \Brainworxx\Krexx\Analyse\Model $objectsModel */
         $objectsModel = Krexx::$pool->render->model['renderExpandableChild'][1];
 
-        $this->assertEquals('Decorator Methods', $methodsModel->getName());
-        // List of all methods, from both classes.
+        $this->assertEquals('Undecorated Methods', $methodsModel->getName());
+        // List of the methods of the decorated class, that are not implemented of
+        // the surrounding class.
         $expectations = [
-            'getName',
-            'getDescription',
-            'run',
-            'decoratedMethod',
             'originalMethod'
         ];
         /** @var \ReflectionMethod $reflectionMethod */
@@ -121,12 +118,13 @@ class DecoratorsTest extends AbstractTest
             $this->assertEquals($expectations[$index], $key);
             ++$index;
         }
+        $this->assertEquals(1, $index, 'There should only be one method undecorated.');
 
-        $this->assertEquals('Decorator Objects', $objectsModel->getName());
+        $this->assertEquals('Decorated Object', $objectsModel->getName());
         $this->assertSame(
             $testJob,
             $objectsModel->getParameters()[$objectsModel::PARAM_DATA][0],
-            'The same and only decorator reciever (or listener)'
+            'The object that got itself decorated.'
         );
     }
 }
