@@ -97,8 +97,6 @@ class FluidOld extends AbstractFluid
      */
     protected function getPartialPath(): string
     {
-        $result = 'n/a';
-
         // Getting the hash of a partial file from the classname of the compiled
         // render class. Oh boy, this must be the most hacky thing I have ever
         // written.
@@ -117,7 +115,7 @@ class FluidOld extends AbstractFluid
                         $getPartialPathAndFilenameReflection = $this->viewReflection
                             ->getMethod('getPartialPathAndFilename');
                         $getPartialPathAndFilenameReflection->setAccessible(true);
-                        $result = $getPartialPathAndFilenameReflection->invoke($this->view, $fileName);
+                        return $getPartialPathAndFilenameReflection->invoke($this->view, $fileName);
                         break;
                     }
                 }
@@ -126,6 +124,6 @@ class FluidOld extends AbstractFluid
             // Do nothing. We return an empty result later.
         }
 
-        return $result;
+        return 'n/a';
     }
 }

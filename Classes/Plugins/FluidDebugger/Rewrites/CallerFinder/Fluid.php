@@ -39,6 +39,7 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 use ReflectionClass;
 use ReflectionException;
+use TYPO3Fluid\Fluid\View\TemplatePaths;
 
 /**
  * Trying to coax the current template/layout/partial file out of the fluid framework.
@@ -98,21 +99,38 @@ class Fluid extends AbstractFluid
                 $resolvedIdentifiersReflection = $templatePathReflection->getProperty('resolvedIdentifiers');
                 $resolvedIdentifiersReflection->setAccessible(true);
                 $resolvedIdentifiers = $resolvedIdentifiersReflection->getValue($templatePath);
-
-                if (isset($resolvedIdentifiers['partials'])) {
-                    foreach ($resolvedIdentifiers['partials'] as $fileName => $realIdentifier) {
-                        if (strpos($realIdentifier, $hash) !== false) {
-                            // We've got our filename!
-                            $result = $templatePath->getPartialPathAndFilename($fileName);
-                            break;
-                        }
-                    }
-                }
+                $result = $this->resolveTemplateName($resolvedIdentifiers, $hash, $templatePath);
             }
         } catch (ReflectionException $e) {
             // Do nothing. We return the already existing empty result.
         }
 
         return $result;
+    }
+
+    /**
+     * @param $resolvedIdentifiers
+     *   This should be an array, depending on how successful the script so far was.
+     * @param string $hash
+     *   The hash form the temp template path.
+     * @param TemplatePaths $templatePath
+     *   The class that does the resolving of the internal stuff.
+     *
+     * @return string
+     *   The actual template name.
+     */
+    protected function resolveTemplateName($resolvedIdentifiers, string $hash, TemplatePaths $templatePath): string
+    {
+        if (isset($resolvedIdentifiers['partials'])) {
+            foreach ($resolvedIdentifiers['partials'] as $fileName => $realIdentifier) {
+                if (strpos($realIdentifier, $hash) !== false) {
+                    // We've got our filename!
+                    return $templatePath->getPartialPathAndFilename($fileName);
+                    break;
+                }
+            }
+        }
+
+        return 'n/a';
     }
 }
