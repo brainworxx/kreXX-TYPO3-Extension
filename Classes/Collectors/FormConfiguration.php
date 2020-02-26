@@ -59,21 +59,18 @@ class FormConfiguration extends AbstractCollector
         $dropdown = $this->generateDropdown();
 
         /** @var Ini $iniReader */
-        $iniReader = $this->pool->createClass(Ini::class)
-            ->loadIniFile($this->pool->config->getPathToIniFile());
+        $iniReader = $this->pool->createClass(Ini::class)->loadIniFile($this->pool->config->getPathToIniFile());
         $config = [];
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
             $config[$settingsName] = [];
             $config[$settingsName][static::SETTINGS_NAME] = $settingsName;
             $config[$settingsName][static::SETTINGS_OPTIONS] = $dropdown;
             $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = false;
-            $config[$settingsName][static::SETTINGS_VALUE] =  $this->convertKrexxFeSetting(
+            $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
                 $iniReader->getFeConfigFromFile($settingsName)
             );
             $config[$settingsName][static::SETTINGS_FALLBACK] = $dropdown[
-                $this->convertKrexxFeSetting(
-                    $iniReader->feConfigFallback[$settingsName][$iniReader::RENDER]
-                )
+                $this->convertKrexxFeSetting($iniReader->feConfigFallback[$settingsName][$iniReader::RENDER])
             ];
 
             // Check if we have a value. If not, we need to load the
@@ -129,7 +126,6 @@ class FormConfiguration extends AbstractCollector
      */
     protected function convertKrexxFeSetting($values)
     {
-        $result = null;
         if (is_array($values)) {
             // Explanation:
             // full -> is editable and values will be accepted
@@ -138,26 +134,20 @@ class FormConfiguration extends AbstractCollector
             // with the form element.
             if ($values[Fallback::RENDER_TYPE] === Fallback::RENDER_TYPE_NONE) {
                 // It's not visible, thus we do not accept any values from it.
-                $result = Fallback::RENDER_TYPE_INI_NONE;
+                return Fallback::RENDER_TYPE_INI_NONE;
             }
 
-            if (
-                $values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_TRUE &&
-                $values[Fallback::RENDER_TYPE] !== Fallback::RENDER_TYPE_NONE
-            ) {
+            if ($values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_TRUE) {
                 // It's editable and visible.
-                $result = Fallback::RENDER_TYPE_INI_FULL;
+                return Fallback::RENDER_TYPE_INI_FULL;
             }
 
-            if (
-                $values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_FALSE &&
-                $values[Fallback::RENDER_TYPE] !== Fallback::RENDER_TYPE_NONE
-            ) {
+            if ($values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_FALSE) {
                 // It's only visible.
-                $result = Fallback::RENDER_TYPE_INI_DISPLAY;
+                return Fallback::RENDER_TYPE_INI_DISPLAY;
             }
         }
 
-        return $result;
+        return null;
     }
 }
