@@ -110,9 +110,8 @@ class DebugMethods extends AbstractEventHandler
     public function handle(AbstractCallback $callback, Model $model = null): string
     {
         $output = '';
-        $params = $callback->getParameters();
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflection */
-        $reflection = $params[static::PARAM_REF];
+        $reflection = $callback->getParameters()[static::PARAM_REF];
         $data = $reflection->getData();
 
         foreach ($this->methods as $method => $classNames) {
