@@ -37,56 +37,39 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
-use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
+use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
+use ReflectionException;
 
-/**
- * In case we are using the factory method, we we use this one as a method name.
- *
- * @uses string $factoryName
- *   If present, we will use this as a function name.
- *
- * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
- */
-class ThroughMethods extends AbstractEventHandler
+abstract class AbstractEventHandler implements EventHandlerInterface, ConstInterface, AimeosConstInterface
 {
     /**
-     * Our pool.
+     * Retrieve a private or protected property byx using a reflection.
      *
-     * @var \Brainworxx\Krexx\Service\Factory\Pool
-     */
-    protected $pool;
-
-    /**
-     * Inject the pool.
+     * @param \ReflectionClass $reflectionClass
+     *   Reflection of the class with the property.
+     * @param string $objectName
+     *   Name of the property.
+     * @param object $object
+     *   The actual object with the property.
      *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     * @return mixed
+     *   The property, if successful, or NULL if not successful.
      */
-    public function __construct(Pool $pool)
+    protected function retrieveProperty(\ReflectionClass $reflectionClass, string $objectName, $object)
     {
-        $this->pool = $pool;
-    }
-
-    /**
-     * Replace the method name when we have a factory name set.
-     *
-     * @param AbstractCallback $callback
-     *   The calling class.
-     * @param \Brainworxx\Krexx\Analyse\Model|null $model
-     *   The model, if available, so far.
-     *
-     * @return string
-     *   The generated markup.
-     */
-    public function handle(AbstractCallback $callback, Model $model = null): string
-    {
-        $params = $callback->getParameters();
-
-        if (isset($params[static::PARAM_FACTORY_NAME])) {
-            $model->setName($params[static::PARAM_FACTORY_NAME]);
+        try {
+            if ($reflectionClass->hasProperty($objectName)) {
+                $propertyRef = $reflectionClass->getProperty($objectName);
+                $propertyRef->setAccessible(true);
+                return $propertyRef->getValue($object);
+            }
+        } catch (ReflectionException $e) {
+            // Do nothing.
         }
 
-        return '';
+        // Unable to retrieve the value.
+        return null;
     }
 }

@@ -40,9 +40,7 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionClass;
 use ReflectionMethod;
@@ -53,10 +51,8 @@ use ReflectionException;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class Decorators implements EventHandlerInterface, ConstInterface
+class Decorators  extends AbstractEventHandler
 {
-
-
     /**
      * List of possible internal names of the recipient class.
      *
@@ -274,35 +270,6 @@ class Decorators implements EventHandlerInterface, ConstInterface
         }
 
         // Still here?
-        return false;
-    }
-
-    /**
-     * Retrieve a private or protected property byx using a reflection.
-     *
-     * @param \ReflectionClass $reflectionClass
-     *   Reflection of the class with the property.
-     * @param string $objectName
-     *   Name of the property.
-     * @param object $object
-     *   The actual object with the property.
-     *
-     * @return mixed
-     *   The property, if successful, or false if not successful.
-     *   We actually only care about objects btw.
-     */
-    protected function retrieveProperty(ReflectionClass $reflectionClass, string $objectName, $object)
-    {
-        try {
-            if ($reflectionClass->hasProperty($objectName)) {
-                $propertyRef = $reflectionClass->getProperty($objectName);
-                $propertyRef->setAccessible(true);
-                return $propertyRef->getValue($object);
-            }
-        } catch (ReflectionException $e) {
-            // Do nothing.
-        }
-
         return false;
     }
 

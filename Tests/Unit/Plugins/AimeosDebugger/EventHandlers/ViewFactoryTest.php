@@ -66,6 +66,7 @@ class ViewFactoryTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::handle
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::retrieveHelperList
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::retrieveHelpers
+     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler::retrieveProperty
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory::retrievePossibleOtherHelpers
      */
     public function testHandle()

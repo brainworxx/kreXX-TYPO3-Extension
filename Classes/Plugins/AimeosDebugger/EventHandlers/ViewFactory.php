@@ -39,11 +39,8 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods;
-use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionClass;
 use ReflectionException;
@@ -69,7 +66,7 @@ use Aimeos\MW\View\Iface as ViewInterface;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstInterface
+class ViewFactory extends AbstractEventHandler
 {
     /**
      * The namespace of the view helpers.
@@ -149,8 +146,6 @@ class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstI
      * @param \ReflectionClass $ref
      *   The reflection of the class we are analysing.
      *
-     * @throws \ReflectionException
-     *
      * @return string
      *   The generated html.
      */
@@ -161,13 +156,11 @@ class ViewFactory implements EventHandlerInterface, ConstInterface, AimeosConstI
         if ($ref->hasProperty('helper')) {
             // Got our helpers right here.
             // Lets hope that other implementations use the same variable name.
-            $propertyReflection = $ref->getProperty('helper');
-            $propertyReflection->setAccessible(true);
             // We store the helpers here, because we need them later for the
             // actual method analysis. It is possible to inject helpers.
             // This means that the helper may be someone else as it should be,
             // according to the key.
-            $this->helpers = $propertyReflection->getValue($data);
+            $this->helpers = $this->retrieveProperty($ref, 'helper', $data);
             if (is_array($this->helpers) && empty($this->helpers) === false) {
                 // We got ourselves some classes to analyse.
                 $this->pool->codegenHandler->setAllowCodegen(false);

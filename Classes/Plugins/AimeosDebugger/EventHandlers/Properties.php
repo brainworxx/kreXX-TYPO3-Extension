@@ -37,12 +37,9 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
-use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Throwable;
 use Aimeos\MShop\Common\Item\Iface as ItemIface;
@@ -61,7 +58,7 @@ use Aimeos\MW\View\Iface as ViewIface;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class Properties implements EventHandlerInterface, ConstInterface, AimeosConstInterface
+class Properties extends AbstractEventHandler
 {
     /**
      * Our pool.
@@ -126,23 +123,17 @@ class Properties implements EventHandlerInterface, ConstInterface, AimeosConstIn
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $params[static::PARAM_REF];
 
-        try {
-            // The property is a private property somewhere deep withing the
-            // object inheritance. We might need to go deep into the rabbit hole
-            // to actually get it.
-            $parentReflection = $ref;
-            while (!empty($parentReflection)) {
-                if ($parentReflection->hasProperty($name)) {
-                    $propertyRef = $parentReflection->getProperty($name);
-                    $propertyRef->setAccessible(true);
-                    $result = $propertyRef->getValue($data);
-                    break;
-                }
-                // Going deeper!
-                $parentReflection = $parentReflection->getParentClass();
+        // The property is a private property somewhere deep withing the
+        // object inheritance. We might need to go deep into the rabbit hole
+        // to actually get it.
+        $parentReflection = $ref;
+        while (!empty($parentReflection)) {
+            $result = $this->retrieveProperty($parentReflection, $name, $data);
+            if ($result !== null) {
+                break;
             }
-        } catch (Throwable $e) {
-            // Do nothing.
+            // Going deeper!
+            $parentReflection = $parentReflection->getParentClass();
         }
 
         // Huh, something went wrong here!

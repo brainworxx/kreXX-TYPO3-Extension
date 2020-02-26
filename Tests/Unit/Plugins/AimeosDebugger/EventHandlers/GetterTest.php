@@ -79,6 +79,7 @@ class GetterTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::handle
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::assignResultsToModel
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::retrieveValueArray
+     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler::retrieveProperty
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter::retrievePossibleKey
      */
     public function testHandle()

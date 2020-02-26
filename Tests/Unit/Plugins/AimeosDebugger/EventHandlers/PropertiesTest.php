@@ -62,6 +62,7 @@ class PropertiesTest extends AbstractTest
      *
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties::handle
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties::extractValues
+     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\AbstractEventHandler::retrieveProperty
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties::dumpTheMagic
      */
     public function testHandle()

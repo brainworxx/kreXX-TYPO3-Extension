@@ -40,9 +40,7 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -50,7 +48,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class DebugMethods implements EventHandlerInterface, ConstInterface
+class DebugMethods extends AbstractEventHandler
 {
     /**
      * The 2019 version simplified much of the code, hence the configuration

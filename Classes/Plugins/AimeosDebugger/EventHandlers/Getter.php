@@ -40,8 +40,6 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
-use Brainworxx\Krexx\Analyse\ConstInterface;
-use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionMethod;
@@ -74,7 +72,7 @@ use ReflectionException;
  * @uses array $additional
  *   Additional data from the event call.
  */
-class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterface
+class Getter extends AbstractEventHandler
 {
     /**
      * Our pool.
@@ -233,18 +231,9 @@ class Getter implements EventHandlerInterface, ConstInterface, AimeosConstInterf
         $data = $params[static::PARAM_REF]->getData();
 
         foreach ($this->aimeosDataStorages as $propertyName) {
-            if ($reflectionClass->hasProperty($propertyName)) {
-                try {
-                    $reflectionProperty = $reflectionClass->getProperty($propertyName);
-                    $reflectionProperty->setAccessible(true);
-                    $value = $reflectionProperty->getValue($data);
-                    if (is_array($value)) {
-                        $result = array_merge($result, $value);
-                    }
-                } catch (ReflectionException $e) {
-                    // We ignore this one.
-                    // Do nothing.
-                }
+            $value = $this->retrieveProperty($reflectionClass, $propertyName, $data);
+            if (is_array($value)) {
+                $result = array_merge($result, $value);
             }
         }
 
