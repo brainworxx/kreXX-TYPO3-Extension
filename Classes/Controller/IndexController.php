@@ -140,7 +140,7 @@ class IndexController extends AbstractController
         $id = preg_replace('/[^0-9]/', '', $rawId);
         // Get the filepath.
         $file = $this->pool->config->getLogDir() . $id . '.Krexx.html';
-        if (is_readable($file) && $this->hasAccess()) {
+        if ($this->hasAccess()) {
             // We open and then send the file.
             $this->dispatchFile($file);
         }

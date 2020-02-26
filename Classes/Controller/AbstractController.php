@@ -194,17 +194,19 @@ abstract class AbstractController extends ActionController
      */
     protected function dispatchFile(string $path)
     {
-        header('Content-Type: text/html; charset=utf-8');
-        header('Content-length: ' . filesize($path));
+        if (is_readable($path)) {
+            header('Content-Type: text/html; charset=utf-8');
+            header('Content-length: ' . filesize($path));
 
-        $size = 1024 * 1024;
-        $res = fopen($path, "rb");
-        while (!feof($res)) {
-            echo fread($res, $size);
-            ob_flush();
-            flush();
+            $size = 1024 * 1024;
+            $res = fopen($path, "rb");
+            while (!feof($res)) {
+                echo fread($res, $size);
+                ob_flush();
+                flush();
+            }
+            fclose($res);
         }
-        fclose($res);
     }
 
     /**
