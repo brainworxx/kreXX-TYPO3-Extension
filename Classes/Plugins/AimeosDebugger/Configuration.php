@@ -80,47 +80,26 @@ class Configuration implements PluginConfigInterface
     public function exec()
     {
         // Resolving the __get().
-        Registration::registerEvent(
-            PublicProperties::class . static::START_EVENT,
-            Properties::class
-        );
+        Registration::registerEvent(PublicProperties::class . static::START_EVENT, Properties::class);
 
         // Resolving the getter that get their values from an private array.
-        Registration::registerEvent(
-            ThroughGetter::class . '::retrievePropertyValue::resolving',
-            Getter::class
-        );
+        Registration::registerEvent(ThroughGetter::class . '::retrievePropertyValue::resolving', Getter::class);
 
         // Resolving the magical class methods of the decorator pattern.
-        Registration::registerEvent(
-            AnalyseMethods::class . static::START_EVENT,
-            Decorators::class
-        );
+        Registration::registerEvent(AnalyseMethods::class . static::START_EVENT, Decorators::class);
 
         // Resolving the magical factory for the view helpers (not to be confused
         // with fluid viewhelpers).
-        Registration::registerEvent(
-            AnalyseMethods::class . static::START_EVENT,
-            ViewFactory::class
-        );
+        Registration::registerEvent(AnalyseMethods::class . static::START_EVENT, ViewFactory::class);
 
         // Replacing the magical factory name in the method analysis.
-        Registration::registerEvent(
-            IterateThroughMethods::class . static::END_EVENT,
-            ThroughMethods::class
-        );
+        Registration::registerEvent(IterateThroughMethods::class . static::END_EVENT, ThroughMethods::class);
 
         // Adding additional debug methods.
-        Registration::registerEvent(
-            AnalyseDebugMethods::class . static::START_EVENT,
-            DebugMethods::class
-        );
+        Registration::registerEvent(AnalyseDebugMethods::class . static::START_EVENT, DebugMethods::class);
 
         // No __toString for the db statement class.
-        Registration::addMethodToDebugBlacklist(
-            StatementBase::class,
-            '__toString'
-        );
+        Registration::addMethodToDebugBlacklist(StatementBase::class, '__toString');
 
         // Adding additional texts.
         $extPath = ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
