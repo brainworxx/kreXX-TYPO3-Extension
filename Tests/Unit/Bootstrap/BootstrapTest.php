@@ -104,10 +104,9 @@ class BootstrapTest extends AbstractTest
 
         // We simulate a failed autoloading.
         // This normally happens during the update of the extension.
-        $classExistsMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'class_exists');
-        $classExistsMock->expects($this->once())
-            ->with(Registration::class)
-            ->will($this->returnValue(false));
+        $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'defined');
+        $definedMock->expects($this->once())
+            ->will($this->throwException(new \Exception()));
 
         $this->bootstrap->run();
     }

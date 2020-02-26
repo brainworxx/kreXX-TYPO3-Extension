@@ -68,7 +68,7 @@ class Bootstrap implements ConstInterface
     public function run()
     {
         try {
-            if ($this->loadKrexx() === false || class_exists(Registration::class) === false) {
+            if ($this->loadKrexx() === false) {
                 // "Autoloading" failed.
                 // There is no point in continuing here.
                 return;
