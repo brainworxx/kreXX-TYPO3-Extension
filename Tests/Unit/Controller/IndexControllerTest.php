@@ -111,12 +111,13 @@ class IndexControllerTest extends AbstractTest
 
         // Mock the view.
         $viewMock = $this->createMock(ViewInterface::class);
-        $viewMock->expects($this->exactly(3))
+        $viewMock->expects($this->exactly(4))
             ->method('assign')
             ->withConsecutive(
                 ['settings', $settingsModel],
                 ['js', $jsCssFileContent],
-                ['css', $jsCssFileContent]
+                ['css', $jsCssFileContent],
+                ['cssTenThree', '']
             );
 
         // Prepare the collectors
