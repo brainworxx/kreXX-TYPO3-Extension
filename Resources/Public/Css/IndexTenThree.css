@@ -1,0 +1,11 @@
+.t3js-module-docheader {
+    display: none;
+}
+
+.krexx-backend div#typo3-inner-docbody {
+    padding: 0;
+}
+
+.module .module-body.t3js-module-body {
+    padding-top: 64px!important;
+}
