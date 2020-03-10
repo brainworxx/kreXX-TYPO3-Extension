@@ -41,7 +41,10 @@
     "psr-4": {
       "Brainworxx\\Krexx\\Tests\\": "Resources/Private/krexx/tests/",
       "Brainworxx\\Includekrexx\\Tests\\": "Tests/"
-    }
+    },
+    "files": [
+      "Resources/Private/krexx/tests/Fixtures/Callback.php"
+    ]
   },
   "replace": {
     "typo3-ter/includekrexx": "self.version"
