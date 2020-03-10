@@ -363,8 +363,8 @@ class RoutingTest extends AbstractTest
             ->method(static::ADD_TO_HIVE);
         Krexx::$pool->recursionHandler = $recursionMock;
 
-        $this->assertRender($model, 'renderSingleChild');
-        $this->assertEquals('renderSingleChild called', $this->mockRouting(static::NO_ROUTE, $model));
+        $this->assertRender($model, 'renderExpandableChild');
+        $this->assertEquals('renderExpandableChild called', $this->mockRouting(static::NO_ROUTE, $model));
     }
 
     /**
@@ -481,8 +481,8 @@ class RoutingTest extends AbstractTest
         $model->setData($parameter);
 
         $this->assertEmergencyHandler(false, true);
-        $this->assertRender($model, 'renderSingleChild');
-        $this->assertEquals('renderSingleChild called', $this->mockRouting(static::NO_ROUTE, $model));
+        $this->assertRender($model, 'renderExpandableChild');
+        $this->assertEquals('renderExpandableChild called', $this->mockRouting(static::NO_ROUTE, $model));
     }
 
     /**

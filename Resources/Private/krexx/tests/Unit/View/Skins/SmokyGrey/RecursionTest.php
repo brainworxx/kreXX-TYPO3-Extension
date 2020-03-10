@@ -43,6 +43,7 @@ class RecursionTest extends AbstractRenderSmokyGrey
      * Test the additional stuff of the recursion rendering.
      *
      * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Recursion::renderRecursion
+     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderRecursion()
     {

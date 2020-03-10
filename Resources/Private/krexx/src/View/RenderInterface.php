@@ -64,6 +64,12 @@ interface RenderInterface
      * @param Model $model
      *   The model, which hosts all the data we need.
      *
+     * @deprecated
+     *   Since 4.0.0. Use renderExpandableChild instead.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
      * @return string
      *   The generated markup from the template files.
      */

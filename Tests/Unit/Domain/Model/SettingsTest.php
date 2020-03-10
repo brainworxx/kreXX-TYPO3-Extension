@@ -99,7 +99,7 @@ class SettingsTest extends AbstractTest
     {
         $settingsModel = new Settings();
         $validationMock = $this->createMock(Validation::class);
-        $validationMock->expects($this->exactly(20))
+        $validationMock->expects($this->exactly(21))
             ->method('evaluateSetting')
             ->will($this->returnValue(true));
         Krexx::$pool->config->validation = $validationMock;
@@ -145,6 +145,7 @@ class SettingsTest extends AbstractTest
             Fallback::SECTION_PROPERTIES => [
                 Fallback::SETTING_ANALYSE_PROTECTED => Fallback::SETTING_ANALYSE_PROTECTED,
                 Fallback::SETTING_ANALYSE_PRIVATE => Fallback::SETTING_ANALYSE_PRIVATE,
+                Fallback::SETTING_ANALYSE_SCALAR => Fallback::SETTING_ANALYSE_SCALAR,
                 Fallback::SETTING_ANALYSE_TRAVERSABLE => Fallback::SETTING_ANALYSE_TRAVERSABLE,
             ],
             Fallback::SECTION_METHODS => [
@@ -164,6 +165,7 @@ class SettingsTest extends AbstractTest
                 Fallback::SETTING_ANALYSE_PRIVATE_METHODS => Fallback::RENDER_TYPE_INI_FULL,
                 Fallback::SETTING_ANALYSE_PROTECTED => Fallback::RENDER_TYPE_INI_FULL,
                 Fallback::SETTING_ANALYSE_PRIVATE => Fallback::RENDER_TYPE_INI_FULL,
+                Fallback::SETTING_ANALYSE_SCALAR => Fallback::RENDER_TYPE_INI_FULL,
                 Fallback::SETTING_ANALYSE_TRAVERSABLE => Fallback::RENDER_TYPE_INI_FULL,
                 Fallback::SETTING_NESTING_LEVEL => Fallback::RENDER_TYPE_INI_FULL,
                 Fallback::SETTING_MAX_CALL => Fallback::RENDER_TYPE_INI_FULL,

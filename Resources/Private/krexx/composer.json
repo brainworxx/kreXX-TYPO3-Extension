@@ -36,7 +36,10 @@
   "autoload-dev": {
     "psr-4": {
       "Brainworxx\\Krexx\\Tests\\": "tests/"
-    }
+    },
+    "files": [
+      "tests/Fixtures/Callback.php"
+    ]
   },
   "scripts": {
     "test": "./vendor/bin/phpunit --color -d memory_limit=-1 -c phpunit.xml"

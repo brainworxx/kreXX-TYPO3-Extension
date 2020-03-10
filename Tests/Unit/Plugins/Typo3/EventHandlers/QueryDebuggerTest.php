@@ -147,7 +147,7 @@ class QueryDebuggerTest extends AbstractTest implements ConstInterface
         $objectAnalyser->setParameters($fixture)->callMe();
 
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
-        $model = $renderNothing->model['renderSingleChild'][0];
+        $model = $renderNothing->model['renderExpandableChild'][0];
         $this->assertEquals($this->expectation, $model->getData());
     }
 
@@ -190,7 +190,7 @@ class QueryDebuggerTest extends AbstractTest implements ConstInterface
         $objectAnalyser->setParameters($fixture)->callMe();
 
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
-        $model = $renderNothing->model['renderSingleChild'][0];
+        $model = $renderNothing->model['renderExpandableChild'][0];
         $this->assertEquals($this->expectation, $model->getData());
     }
 

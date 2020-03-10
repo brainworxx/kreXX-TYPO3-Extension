@@ -193,6 +193,15 @@ class RegistrationTest extends AbstractRegistration
     }
 
     /**
+     * Test the registration of additional string processors.
+     */
+    public function testRegisterAdditionalScalarString()
+    {
+        Registration::addScalarStringAnalyser(static::class);
+        $this->assertEquals([static::class], SettingsGetter::getAdditionalScalarString());
+    }
+
+    /**
      * Create a plugin mock.
      *
      * @return PluginConfigInterface
@@ -273,6 +282,7 @@ class RegistrationTest extends AbstractRegistration
         $this->setValueByReflection(static::REWRITE_LIST, [900], $this->registration);
         $this->setValueByReflection(static::EVENT_LIST, [987], $this->registration);
         $this->setValueByReflection(static::ADD_SKIN_LIST, [654], $this->registration);
+        $this->setValueByReflection(static::ADD_SCALAR_STRING, [654], $this->registration);
 
         // Make sure we can test the changes to the pool.
         $oldConfig = Krexx::$pool->config;
@@ -296,6 +306,7 @@ class RegistrationTest extends AbstractRegistration
         $this->assertEmpty(SettingsGetter::getRewriteList());
         $this->assertEmpty(SettingsGetter::getEventList());
         $this->assertEmpty(SettingsGetter::getAdditionalSkinList());
+        $this->assertEmpty(SettingsGetter::getAdditionalScalarString());
 
         // 3. Test the changes made to the pool
         $this->assertEmpty(Krexx::$pool->rewrite);

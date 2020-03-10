@@ -188,6 +188,11 @@ class SettingsGetter extends Registration
      */
     public static function getAdditionalSkinList(): array
     {
-        return self::$additionalSkinList;
+        return static::$additionalSkinList;
+    }
+
+    public static function getAdditionalScalarString(): array
+    {
+        return static::$additionalScalarString;
     }
 }

@@ -38,6 +38,8 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -51,6 +53,18 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class ThroughMeta extends AbstractCallback
 {
+    /**
+     * These keys are rendered with an extra.
+     *
+     * @var array
+     */
+    protected $keysWithExtra = [
+        ConstInterface::META_COMMENT,
+        ConstInterface::META_DECLARED_IN,
+        ConstInterface::META_SOURCE,
+        ConstInterface::META_PRETTY_PRINT,
+        ConstInterface::META_CONTENT
+    ];
 
     /**
      * Renders the meta data of a class, which is actually the same as the
@@ -91,37 +105,48 @@ class ThroughMeta extends AbstractCallback
      *
      * @param string $key
      *   The key in the output list.
-     * @param string $meta
+     * @param mixed $meta
      *   The text to display.
      *
      * @return string
      *   The rendered html.
      */
-    protected function handleNoneReflections(string $key, string $meta): string
+    protected function handleNoneReflections(string $key, $meta): string
     {
         /** @var Model $model */
         $model = $this->pool->createClass(Model::class)
             ->setData($meta)
             ->setName($key)
-            ->setType(static::TYPE_REFLECTION);
+            ->setType($key === static::META_PRETTY_PRINT ? $key : static::TYPE_REFLECTION);
 
-        if (
-            $key === static::META_COMMENT ||
-            $key === static::META_DECLARED_IN ||
-            $key === static::META_SOURCE
-        ) {
+        if (in_array($key, $this->keysWithExtra)) {
             $model->setNormal(static::UNKNOWN_VALUE);
             $model->setHasExtra(true);
         } else {
             $model->setNormal($meta);
         }
 
-        // Render a single data point.
-        return $this->pool->render->renderSingleChild(
-            $this->dispatchEventWithModel(
-                __FUNCTION__ . $key . static::EVENT_MARKER_END,
-                $model
-            )
-        );
+        if ($key === static::META_DECODED_JSON) {
+            // Prepare the json code generation.
+            return $this->pool->routing->analysisHub($model->setMultiLineCodeGen(Codegen::JSON_DECODE));
+        }
+
+        // Sorry, no code generation for you guys.
+        $this->pool->codegenHandler->setAllowCodegen(false);
+        if (is_string($meta)) {
+            // Render a single data point.
+            $result = $this->pool->render->renderExpandableChild(
+                $this->dispatchEventWithModel(
+                    __FUNCTION__ . $key . static::EVENT_MARKER_END,
+                    $model
+                )
+            );
+        } else {
+            // Fallback to whatever-rendering.
+            $result = $this->pool->routing->analysisHub($model);
+        }
+
+        $this->pool->codegenHandler->setAllowCodegen(true);
+        return $result;
     }
 }

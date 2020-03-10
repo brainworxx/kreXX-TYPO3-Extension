@@ -520,7 +520,11 @@ var Hans = (function () {
         var _this = this;
         this.toggle = function (event, element) {
             _this.kdt.toggleClass(element, 'kopened');
-            _this.kdt.toggleClass(element.nextElementSibling, 'khidden');
+            var sibling = element.nextElementSibling;
+            do {
+                _this.kdt.toggleClass(sibling, 'khidden');
+                sibling = sibling.nextElementSibling;
+            } while (sibling);
         };
         this.jumpTo = function (el, noHighlight) {
             _this.setHighlighting(el, noHighlight);

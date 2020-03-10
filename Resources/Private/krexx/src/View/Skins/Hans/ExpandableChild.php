@@ -67,6 +67,7 @@ trait ExpandableChild
         '{style}',
         '{mainfunction}',
         '{domId}',
+        '{extra}',
     ];
 
     /**
@@ -178,6 +179,7 @@ trait ExpandableChild
                 $style,
                 $model->renderMe(),
                 $domid,
+                $this->renderExtra($model),
             ],
             $this->getTemplateFileContent(static::FILE_NEST)
         );

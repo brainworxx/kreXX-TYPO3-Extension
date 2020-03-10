@@ -58,7 +58,7 @@ class ProcessFloat extends AbstractRouting implements ProcessInterface
      */
     public function process(Model $model): string
     {
-        return $this->pool->render->renderSingleChild(
+        return $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
                 $model->setNormal($model->getData())->setType(static::TYPE_FLOAT)
             )

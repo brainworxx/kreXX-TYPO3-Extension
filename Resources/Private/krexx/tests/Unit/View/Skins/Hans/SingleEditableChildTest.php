@@ -47,6 +47,7 @@ class SingleEditableChildTest extends AbstractRenderHans
      *
      * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSingleEditableChild
      * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSpecificEditableElement
+     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderSingleEditableChildInput()
     {
@@ -79,6 +80,7 @@ class SingleEditableChildTest extends AbstractRenderHans
      * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSingleEditableChild
      * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSpecificEditableElement
      * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSelectOptions
+     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderSingleEditableChildSelect()
     {

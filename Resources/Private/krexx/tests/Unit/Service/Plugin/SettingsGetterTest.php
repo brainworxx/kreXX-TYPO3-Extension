@@ -186,4 +186,15 @@ class SettingsGetterTest extends AbstractRegistration
         $this->setValueByReflection(static::ADD_SKIN_LIST, [1, 2, 3], $this->registration);
         $this->assertEquals([1, 2, 3], SettingsGetter::getAdditionalSkinList());
     }
+
+    /**
+     * Testing the getting of the scalar string analysis classes.
+     *
+     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getAdditionalScalarString
+     */
+    public function testGetAdditionalScalarString()
+    {
+         $this->setValueByReflection(static::ADD_SCALAR_STRING, [static::class], $this->registration);
+         $this->assertEquals([static::class], SettingsGetter::getAdditionalScalarString());
+    }
 }

@@ -84,7 +84,7 @@ class ConfigSection extends AbstractCallback
                         ->setType($setting->getType())->setDomid($id)
                 );
             } else {
-                $sectionOutput .= $this->pool->render->renderSingleChild(
+                $sectionOutput .= $this->pool->render->renderExpandableChild(
                     $model->setData($value)->setName($name)->setNormal($value)->setType($setting->getSource())
                 );
             }

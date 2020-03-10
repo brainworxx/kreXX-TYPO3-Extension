@@ -58,6 +58,11 @@ class Codegen implements ConstInterface
     const ITERATOR_TO_ARRAY = 'iteratorToArray';
 
     /**
+     * Constant identifier for the json multiline code generation.
+     */
+    const JSON_DECODE = 'jsonDecode';
+
+    /**
      * Identifier for inaccessible array multiline code generation.
      */
     const ARRAY_VALUES_ACCESS = 'arrayValuesAccess';
@@ -142,9 +147,15 @@ class Codegen implements ConstInterface
             // although this is meta stuff, we need to add the stop info here.
             $result = ';stop;';
         } elseif (empty($model->getConnectorLeft() . $model->getConnectorRight()) === true) {
-            // No connectors, no nothing. We must be dealing with meta stuff.
-            // We will ignore this one.
-            $result = '';
+            if ($model->getMultiLineCodeGen() === static::JSON_DECODE) {
+                // Meta json decoding.
+                $result = 'json_decode(;firstMarker;)';
+            } else {
+                // No connectors, no nothing.
+                // Normal meta stuff.
+                // We will ignore this one.
+                $result = '';
+            }
         } elseif ($model->getType() === static::TYPE_DEBUG_METHOD) {
             // Debug methods are always public.
             $result = $this->concatenation($model);

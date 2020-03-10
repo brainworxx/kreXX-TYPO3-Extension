@@ -43,6 +43,7 @@ class ButtonTest extends AbstractRenderHans
      * Test the rendering of a button.
      *
      * @covers \Brainworxx\Krexx\View\Skins\Hans\Button::renderButton
+     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderButton()
     {

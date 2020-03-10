@@ -44,6 +44,7 @@ use Brainworxx\Includekrexx\Domain\Model\Settings\AnalysePrivate;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalysePrivateMethods;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseProtected;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseProtectedMethods;
+use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseScalar;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseTraversable;
 use Brainworxx\Includekrexx\Domain\Model\Settings\ArrayCountLimit;
 use Brainworxx\Includekrexx\Domain\Model\Settings\DebugMethods;
@@ -81,6 +82,7 @@ class Settings
     use Level;
     use AnalyseProtected;
     use AnalysePrivate;
+    use AnalyseScalar;
     use AnalyseTraversable;
     use AnalyseProtectedMethods;
     use AnalysePrivateMethods;

@@ -215,7 +215,7 @@ class ThroughGetter extends AbstractCallback
             // Found nothing  :-(
             // We literally have no info. We need to tell the user.
             // We render this right away, without any routing.
-            return $this->pool->render->renderSingleChild(
+            return $this->pool->render->renderExpandableChild(
                 $model->setType(static::TYPE_UNKNOWN)->setNormal(static::TYPE_UNKNOWN)
             );
         }

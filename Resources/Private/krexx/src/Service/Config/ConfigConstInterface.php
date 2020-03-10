@@ -85,6 +85,7 @@ interface ConfigConstInterface
     const SETTING_USE_SCOPE_ANALYSIS = 'useScopeAnalysis';
     const SETTING_ANALYSE_PROTECTED = 'analyseProtected';
     const SETTING_ANALYSE_PRIVATE = 'analysePrivate';
+    const SETTING_ANALYSE_SCALAR = 'analyseScalar';
     const SETTING_ANALYSE_TRAVERSABLE = 'analyseTraversable';
     const SETTING_ANALYSE_PROTECTED_METHODS = 'analyseProtectedMethods';
     const SETTING_ANALYSE_PRIVATE_METHODS = 'analysePrivateMethods';

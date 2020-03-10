@@ -171,7 +171,8 @@ abstract class AbstractRender implements ConstInterface
      */
     protected function retrieveTypeClasses(Model $model): string
     {
-        $typeClasses = '';
+        $typeClasses = $model->isExpandable() === true ?  'kexpand ' :  ' ';
+
         foreach (explode(' ', $model->getType()) as $typeClass) {
             $typeClasses .= 'k' . $typeClass . ' ';
         }

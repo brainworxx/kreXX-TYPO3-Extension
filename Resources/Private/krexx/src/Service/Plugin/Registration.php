@@ -126,6 +126,13 @@ class Registration implements ConstInterface
     protected static $additionalSkinList = [];
 
     /**
+     * List of all additinally registered classes, that can do a string analysis.
+     *
+     * @var array
+     */
+    protected static $additionalScalarString = [];
+
+    /**
      * Setter for the path to the configuration file.
      *
      * @api
@@ -162,6 +169,18 @@ class Registration implements ConstInterface
     public static function setLogFolder(string $path)
     {
         static::$logFolder = $path;
+    }
+
+    /**
+     * Add a scalar string analyser.
+     *
+     * @param string $class
+     */
+    public static function addScalarStringAnalyser(string $class)
+    {
+        if (in_array($class, static::$additionalScalarString) === false) {
+            static::$additionalScalarString[] = $class;
+        }
     }
 
     /**
@@ -333,6 +352,7 @@ class Registration implements ConstInterface
         static::$eventList = [];
         static::$rewriteList = [];
         static::$additionalSkinList = [];
+        static::$additionalScalarString = [];
 
         // Go through the remaining plugins.
         static::$plugins[$configClass][static::IS_ACTIVE] = false;

@@ -471,32 +471,6 @@ class ModelTest extends AbstractTest
     }
 
     /**
-     * Testing the getter of the isCallback.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::isCallback
-     */
-    public function testGetIsCallback()
-    {
-        $data = true;
-
-        $this->setValueByReflection('isCallback', $data, $this->model);
-        $this->assertEquals($data, $this->model->isCallback());
-    }
-
-    /**
-     * Testing tje setter of the isCallback.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setIsCallback
-     */
-    public function testSetIsCallback()
-    {
-        $data = true;
-
-        $this->assertEquals($this->model, $this->model->setIsCallback($data));
-        $this->assertEquals($data, $this->model->isCallback());
-    }
-
-    /**
      * Testing the setter for the connector parameters.
      *
      * @covers \Brainworxx\Krexx\Analyse\Model::setConnectorParameters

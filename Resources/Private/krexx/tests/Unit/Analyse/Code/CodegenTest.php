@@ -149,7 +149,7 @@ class CodegenTest extends AbstractTest
     }
 
     /**
-     * Test the stop return, oin case of constants.
+     * Test the stop return, in case of constants.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
      */
@@ -212,6 +212,21 @@ class CodegenTest extends AbstractTest
         $this->assertEquals(
             'iterator_to_array(;firstMarker;)getConnectorLeftnamegetConnectorRight',
             $this->codegenHandler->generateSource($this->fixture)
+        );
+    }
+
+    /**
+     * Test the meta json code generation.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     */
+    public function testGenerateSourceMetaDecodedJson()
+    {
+        $this->fixture->setMultiLineCodeGen($this->codegenHandler::JSON_DECODE);
+        $this->assertEquals(
+            'json_decode(;firstMarker;)',
+            $this->codegenHandler->generateSource($this->fixture),
+            'There should not be any connectors, so we just expect the wrapper string.'
         );
     }
 

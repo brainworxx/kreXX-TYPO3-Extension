@@ -88,7 +88,7 @@ class BacktraceStep extends AbstractCallback
             ->setHasExtra(true)
             ->setType(static::TYPE_PHP);
 
-        return $this->retrieveSource($model) . $this->pool->render->renderSingleChild(
+        return $this->retrieveSource($model) . $this->pool->render->renderExpandableChild(
             $this->dispatchEventWithModel(
                 __FUNCTION__ . static::EVENT_MARKER_END,
                 $model
@@ -112,7 +112,7 @@ class BacktraceStep extends AbstractCallback
 
         if (isset($stepData[static::TRACE_LINE]) === true) {
             // Adding the line info to the output
-            $output = $this->pool->render->renderSingleChild(
+            $output = $this->pool->render->renderExpandableChild(
                 $this->pool->createClass(Model::class)
                     ->setData($stepData[static::TRACE_LINE])
                     ->setName('Line no.')
@@ -192,7 +192,7 @@ class BacktraceStep extends AbstractCallback
     {
         $stepData = $this->parameters[static::PARAM_DATA];
         if (isset($stepData[$type]) === true) {
-            return $this->pool->render->renderSingleChild(
+            return $this->pool->render->renderExpandableChild(
                 $this->dispatchEventWithModel(
                     $eventName . static::EVENT_MARKER_END,
                     $this->pool->createClass(Model::class)

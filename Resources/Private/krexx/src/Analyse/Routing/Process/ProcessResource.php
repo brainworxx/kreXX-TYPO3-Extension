@@ -75,6 +75,10 @@ class ProcessResource extends AbstractRouting implements ProcessInterface
                 $meta = curl_getinfo($resource);
                 break;
 
+            case 'process':
+                $meta = proc_get_status($resource);
+                break;
+
             default:
                 return $this->renderUnknownOrClosed($model, $resource, $typeString);
         }
@@ -111,7 +115,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface
             $typeString = gettype($resource);
         }
 
-        return $this->pool->render->renderSingleChild(
+        return $this->pool->render->renderExpandableChild(
             $this->dispatchNamedEvent(
                 __FUNCTION__,
                 $model->setNormal($typeString)

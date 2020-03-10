@@ -117,7 +117,7 @@ class ConfigSectionTest extends AbstractTest
             ->with($this->anything())
             ->will($this->returnValue('some string'));
         $renderMock->expects($this->once())
-            ->method('renderSingleChild')
+            ->method('renderExpandableChild')
             ->with($this->anything())
             ->will($this->returnValue('some string'));
         Krexx::$pool->render = $renderMock;

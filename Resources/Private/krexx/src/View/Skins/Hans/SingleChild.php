@@ -48,7 +48,6 @@ trait SingleChild
         '{gensource}',
         '{sourcebutton}',
         '{expand}',
-        '{callable}',
         '{extra}',
         '{name}',
         '{type}',
@@ -79,6 +78,12 @@ trait SingleChild
      * @param Model $model
      *   The model, which hosts all the data we need.
      *
+     * @deprecated
+     *   Since 4.0.0. Use renderExpandableChild instead.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
      * @return string
      *   The generated markup from the template files.
      */
@@ -94,7 +99,6 @@ trait SingleChild
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $generateSource),
                 $this->renderSourceButton($generateSource),
                 $model->hasExtra() === true ?  'kexpand' :  '',
-                $this->renderCallable($model),
                 $this->renderExtra($model),
                 $model->getName(),
                 $model->getType(),
@@ -116,6 +120,12 @@ trait SingleChild
      * @param string $gensource
      *   The source we want to display.
      *
+     * @deprecated
+     *   Since 4.0.0. Use renderExpandableChild instead.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
      * @return string
      *   The rendered HTML output.
      */
@@ -134,6 +144,7 @@ trait SingleChild
      *
      * @param \Brainworxx\Krexx\Analyse\Model $model
      *   The model.
+     *
      *
      * @return string
      *   The rendered HTML output.
@@ -156,6 +167,12 @@ trait SingleChild
      *
      * @param \Brainworxx\Krexx\Analyse\Model $model
      *   The model.
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @return string
      *   The rendered HTML

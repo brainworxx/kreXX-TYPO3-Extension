@@ -44,6 +44,7 @@ class FooterTest extends AbstractRenderSmokyGrey
      * Test the removal of the debug tab, when we are in config mode.
      *
      * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Footer::renderFooter
+     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
      */
     public function testRenderFooter()
     {

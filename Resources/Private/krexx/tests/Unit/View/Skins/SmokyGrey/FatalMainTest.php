@@ -43,6 +43,7 @@ class FatalMainTest extends AbstractRenderSmokyGrey
      * Test the additional stuff in the render fatal main.
      *
      * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\FatalMain::renderFatalMain
+     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
      */
     public function testRenderFatalMain()
     {

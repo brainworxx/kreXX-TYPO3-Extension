@@ -47,7 +47,8 @@ use stdClass;
 
 class ThroughLargeArrayTest extends AbstractTest
 {
-    const RENDER_SINGLE_CHILD = 'renderSingleChild';
+    const RENDER_EXPANDABLE_CHILD = 'renderExpandableChild';
+
     /**
      * @var ThroughLargeArray
      */
@@ -90,18 +91,18 @@ class ThroughLargeArrayTest extends AbstractTest
     protected function alwaysRun($fixture)
     {
         // Test if all models got set
-        $this->assertTrue(count($this->renderMock->model[static::RENDER_SINGLE_CHILD]) === 2);
+        $this->assertTrue(count($this->renderMock->model[static::RENDER_EXPANDABLE_CHILD]) === 2);
         $this->assertTrue(count($this->routingMock->model) === 1);
 
         // Test the types of the model
         $this->assertEquals('', $this->routingMock->model[0]->getType());
         $this->assertEquals(
             ConstInterface::TYPE_SIMPLE_ARRAY,
-            $this->renderMock->model[static::RENDER_SINGLE_CHILD][0]->getType()
+            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][0]->getType()
         );
         $this->assertEquals(
             ConstInterface::TYPE_SIMPLE_CLASS,
-            $this->renderMock->model[static::RENDER_SINGLE_CHILD][1]->getType()
+            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getType()
         );
 
         // Test of the simple type got the right value
@@ -134,8 +135,8 @@ class ThroughLargeArrayTest extends AbstractTest
 
         // Test multiline generation
         $this->assertEquals('', $this->routingMock->model[0]->getMultiLineCodeGen());
-        $this->assertEquals('', $this->renderMock->model[static::RENDER_SINGLE_CHILD][0]->getMultiLineCodeGen());
-        $this->assertEquals('', $this->renderMock->model[static::RENDER_SINGLE_CHILD][1]->getMultiLineCodeGen());
+        $this->assertEquals('', $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][0]->getMultiLineCodeGen());
+        $this->assertEquals('', $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getMultiLineCodeGen());
 
         $this->alwaysRun($fixture);
     }
@@ -170,11 +171,11 @@ class ThroughLargeArrayTest extends AbstractTest
         );
         $this->assertEquals(
             Codegen::ITERATOR_TO_ARRAY,
-            $this->renderMock->model[static::RENDER_SINGLE_CHILD][0]->getMultiLineCodeGen()
+            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][0]->getMultiLineCodeGen()
         );
         $this->assertEquals(
             Codegen::ITERATOR_TO_ARRAY,
-            $this->renderMock->model[static::RENDER_SINGLE_CHILD][1]->getMultiLineCodeGen()
+            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getMultiLineCodeGen()
         );
 
         $this->alwaysRun($fixture);

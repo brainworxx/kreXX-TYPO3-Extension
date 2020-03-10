@@ -97,6 +97,10 @@ trait Callback
      */
     public function renderMe(): string
     {
+        if ($this->callback === null) {
+            return '';
+        }
+
         return $this->callback
             ->setParameters($this->parameters)
             ->callMe();
@@ -110,5 +114,15 @@ trait Callback
     public function getParameters(): array
     {
         return $this->parameters;
+    }
+
+    /**
+     * Is a callback set, or doe we have extra data?
+     *
+     * @return bool
+     */
+    public function isExpandable(): bool
+    {
+        return $this->callback !== null || $this->hasExtra;
     }
 }

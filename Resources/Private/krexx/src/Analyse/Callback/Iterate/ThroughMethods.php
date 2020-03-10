@@ -188,13 +188,13 @@ class ThroughMethods extends AbstractCallback
             }
 
             return $filename . "\n" .
-                'in trait: ' . $traitName . "\n" .
-                'in line: ' . $reflectionMethod->getStartLine();
+                static::META_IN_TRAIT . $traitName . "\n" .
+                static::META_IN_LINE . $reflectionMethod->getStartLine();
         }
 
         return $filename . "\n" .
-            'in class: ' . $reflectionMethod->class . "\n" .
-            'in line: ' . $reflectionMethod->getStartLine();
+            static::META_IN_CLASS . $reflectionMethod->class . "\n" .
+            static::META_IN_LINE . $reflectionMethod->getStartLine();
     }
 
     /**

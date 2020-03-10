@@ -43,6 +43,8 @@ class ButtonTest extends AbstractRenderSmokyGrey
      * Test the rendering of a button. Again we test only the additional stuff.
      *
      * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Button::renderButton
+     * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
+     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderButton()
     {

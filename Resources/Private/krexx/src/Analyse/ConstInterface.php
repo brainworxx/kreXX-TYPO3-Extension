@@ -119,6 +119,13 @@ interface ConstInterface
     const META_TRAITS = 'Traits';
     const META_INHERITED_CLASS = 'Inherited class';
     const META_PREDECLARED = 'n/a, is predeclared';
+    const META_IN_TRAIT =  'in trait: ';
+    const META_IN_LINE = 'in line: ';
+    const META_IN_CLASS = 'in class: ';
+    const META_PRETTY_PRINT = 'Pretty print';
+    const META_DECODED_JSON = 'Decoded json';
+    const META_DECODED_XML = 'Decoded xml';
+    const META_CONTENT = 'Content';
 
     // Stuff for the skin registration.
     const SKIN_CLASS = 'class';

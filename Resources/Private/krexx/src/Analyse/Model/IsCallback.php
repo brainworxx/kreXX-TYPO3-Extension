@@ -51,6 +51,12 @@ trait IsCallback
     /**
      * Getter for the $isCallback.
      *
+     * @deprecated
+     *   Since 4.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
      * @return bool
      */
     public function isCallback(): bool
@@ -62,7 +68,7 @@ trait IsCallback
      * Getter for the $isCallback.
      *
      * @deprecated
-     *   Since 4.0.0. Use $this->isCallback()
+     *   Since 4.0.0. Will be removed.
      *
      * @codeCoverageIgnore
      *   We will not test deprecated methods.
@@ -71,7 +77,7 @@ trait IsCallback
      */
     public function getIsCallback(): bool
     {
-        return $this->isCallback();
+        return $this->isCallback;
     }
 
     /**
@@ -79,6 +85,12 @@ trait IsCallback
      *
      * @param bool $isCallback
      *   The value we want to set.
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @return $this
      *   $this for chaining.

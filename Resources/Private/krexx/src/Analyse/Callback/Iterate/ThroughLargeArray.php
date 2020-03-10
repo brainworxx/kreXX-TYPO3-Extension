@@ -138,7 +138,7 @@ class ThroughLargeArray extends AbstractCallback
             $model->setType(static::TYPE_SIMPLE_CLASS)
                 ->setNormal(get_class($value));
 
-            return $this->pool->render->renderSingleChild($model);
+            return $this->pool->render->renderExpandableChild($model);
         }
 
         if (is_array($value) === true) {
@@ -147,7 +147,7 @@ class ThroughLargeArray extends AbstractCallback
             $model->setType(static::TYPE_SIMPLE_ARRAY)
                 ->setNormal('count: ' . count($value));
 
-                return $this->pool->render->renderSingleChild($model);
+                return $this->pool->render->renderExpandableChild($model);
         }
 
         // We handle the simple type normally with the analysis hub.

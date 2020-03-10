@@ -49,6 +49,8 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
      * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild::renderSourceButtonSg
      * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight::renderConnectorRight
      * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
+     * @covers \Brainworxx\Krexx\View\AbstractRender::retrieveTypeClasses
+     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderExpandableChild()
     {

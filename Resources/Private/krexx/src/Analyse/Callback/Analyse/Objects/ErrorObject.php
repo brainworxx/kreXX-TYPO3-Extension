@@ -74,7 +74,7 @@ class ErrorObject extends AbstractObjectAnalysis
             $source = $this->pool->messages->getHelp('noSourceAvailable');
         }
 
-        return $output . $this->pool->render->renderSingleChild(
+        return $output . $this->pool->render->renderExpandableChild(
             $this->dispatchEventWithModel(
                 'source',
                 $this->pool->createClass(Model::class)

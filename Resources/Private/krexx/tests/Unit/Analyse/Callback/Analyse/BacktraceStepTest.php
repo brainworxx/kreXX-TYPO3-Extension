@@ -50,13 +50,14 @@ class BacktraceStepTest extends AbstractTest
      */
     public function setUp()
     {
-
         // We overwrite all processing classes with the processNothing class.
         // This way we can prevent going too deep inside the rabbit hole.
         Registration::addRewrite(ProcessArray::class, ProcessNothing::class);
         Registration::addRewrite(ProcessObject::class, ProcessNothing::class);
 
         parent::setUp();
+
+        $this->mockEmergencyHandler();
     }
 
     /**

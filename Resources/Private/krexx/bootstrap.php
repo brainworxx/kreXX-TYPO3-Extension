@@ -115,7 +115,15 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessResource.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessString.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessOther.php';
-        
+
+        include_once KREXX_DIR . 'src/Analyse/Scalar/AbstractScalar.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/ScalarString.php';
+        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/AbstractScalarAnalysis.php';
+        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Callback.php';
+        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/FilePath.php';
+        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Json.php';
+        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Xml.php';
+
         include_once KREXX_DIR . 'src/Analyse/Model/ConnectorService.php';
         include_once KREXX_DIR . 'src/Analyse/Model/Callback.php';
         include_once KREXX_DIR . 'src/Analyse/Model/Data.php';

@@ -48,6 +48,12 @@ trait SingleChild
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated
+     *   Since 4.0.0. Use renderExpandableChild instead.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      */
     public function renderSingleChild(Model $model): string
     {

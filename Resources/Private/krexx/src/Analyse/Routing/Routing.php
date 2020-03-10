@@ -277,7 +277,7 @@ class Routing extends AbstractRouting
             ->setHasExtra(true);
 
         // Render it directly.
-        return $this->pool->render->renderSingleChild($model);
+        return $this->pool->render->renderExpandableChild($model);
     }
 
     /**

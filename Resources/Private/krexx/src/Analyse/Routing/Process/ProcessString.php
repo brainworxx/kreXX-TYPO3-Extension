@@ -39,6 +39,8 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\Analyse\Scalar\ScalarString;
+use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\FileinfoDummy;
 use finfo;
@@ -57,6 +59,25 @@ class ProcessString extends AbstractRouting implements ProcessInterface
      */
     protected $bufferInfo;
 
+    /**
+     * The deeper string analysis.
+     *
+     * @var \Brainworxx\Krexx\Analyse\Scalar\AbstractScalar;
+     */
+    protected $scalarString;
+
+    /**
+     * Length threshold, where we do a buffer-info analysis.
+     *
+     * @var int
+     */
+    protected $bufferInfoThreshold = 20;
+
+    /**
+     * Inject the pool and initialize the buffer-info class.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
     public function __construct(Pool $pool)
     {
         parent::__construct($pool);
@@ -69,6 +90,8 @@ class ProcessString extends AbstractRouting implements ProcessInterface
             $this->bufferInfo = $pool->createClass(FileinfoDummy::class);
             $pool->messages->addMessage('fileinfoNotInstalled');
         }
+
+        $this->scalarString = $pool->createClass(ScalarString::class);
     }
 
     /**
@@ -82,27 +105,13 @@ class ProcessString extends AbstractRouting implements ProcessInterface
      */
     public function process(Model $model): string
     {
-        $data = $model->getData();
-
-        // Check if this is a possible callback.
-        // We are not going to analyse this further, because modern systems
-        // do not use these anymore.
-        if (function_exists($data) === true) {
-            $model->setIsCallback(true);
-        }
-
-        $length = $this->retrieveLengthAndEncoding($data, $model);
-        if ($length > 20) {
-            // Getting mime type from the string.
-            // With larger strings, there is a good chance that there is
-            // something interesting in there.
-            $model->addToJson(static::META_MIME_TYPE, $this->bufferInfo->buffer($data));
-        }
+        $originalData = $data = $model->getData();
 
         // Check, if we are handling large string, and if we need to use a
         // preview (which we call "extra").
         // We also need to check for linebreaks, because the preview can not
         // display those.
+        $length = $this->retrieveLengthAndEncoding($data, $model);
         if ($length > 50 || strstr($data, PHP_EOL) !== false) {
             $cut = $this->pool->encodingService->encodeString(
                 $this->pool->encodingService->mbSubStr($data, 0, 50)
@@ -117,11 +126,32 @@ class ProcessString extends AbstractRouting implements ProcessInterface
             $model->setNormal($this->pool->encodingService->encodeString($data));
         }
 
-        return $this->pool->render->renderSingleChild(
-            $this->dispatchProcessEvent(
-                $model->addToJson(static::META_LENGTH, $length)
-            )
-        );
+        if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_SCALAR) === true) {
+            return $this->handleStringScalar($model, $originalData);
+        }
+
+        return $this->pool->render->renderExpandableChild($this->dispatchProcessEvent($model));
+    }
+
+    /**
+     * Inject the scalar analysis callback and handle possible recursions.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model, so far.
+     *
+     * @return string
+     *   The generated DOM.
+     */
+    protected function handleStringScalar(Model $model, string $originalData): string
+    {
+        $this->scalarString->handle($model, $originalData);
+        $domId = $model->getDomid();
+        if ($domId !== '' && $this->pool->recursionHandler->isInMetaHive($domId) === true) {
+            return $this->pool->render->renderRecursion($model);
+        }
+
+        $this->pool->recursionHandler->addToMetaHive($domId);
+        return $this->pool->render->renderExpandableChild($this->dispatchProcessEvent($model));
     }
 
     /**
@@ -140,15 +170,25 @@ class ProcessString extends AbstractRouting implements ProcessInterface
         $encoding = $this->pool->encodingService->mbDetectEncoding($data);
         if ($encoding === false) {
             // Looks like we have a mixed encoded string.
-            // We need to tell the dev!
             $length = $this->pool->encodingService->mbStrLen($data);
-            $strlen = 'broken encoding ' . $length;
-            $model->addToJson(static::META_ENCODING, 'broken');
         } else {
             // Normal encoding, nothing special here.
-            $length = $strlen = $this->pool->encodingService->mbStrLen($data, $encoding);
+            $length = $this->pool->encodingService->mbStrLen($data, $encoding);
         }
-        $model->setType(static::TYPE_STRING . $strlen);
+
+        // Long string or with broken encoding.
+        if ($length > $this->bufferInfoThreshold) {
+            // Let's see, what the buffer-info can do with it.
+            $model->addToJson(static::META_MIME_TYPE, $this->bufferInfo->buffer($data));
+        } elseif ($encoding === false) {
+            // Short string with broken encoding.
+            $model->addToJson(static::META_ENCODING, 'broken');
+        } else {
+            // Short string with normal encoding.
+            $model->addToJson(static::META_ENCODING, $encoding);
+        }
+
+        $model->setType(static::TYPE_STRING . $length)->addToJson(static::META_LENGTH, $length);
 
         return $length;
     }

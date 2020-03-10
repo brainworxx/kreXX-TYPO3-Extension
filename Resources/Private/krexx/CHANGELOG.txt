@@ -1,4 +1,7 @@
 4.0.0 dev
+- Added process resource analysis.
+- Added better callback analysis.
+- Added better string analysis (json, file path, callback, xml)
 - Change: Removed all deprecations.
 - Change: Removed the PHP 5.x fatal error handler.
 - Change: Dropped PHP 5.x support.
@@ -10,6 +13,12 @@
 - Change: Introduced scalar type hints.
 - Change: Introduced method return types.
 - Change: Simplified the Model.
+- Change: Do not display the encoding info, if we have a buffer
+  info available.
+
+3.2.3 dev
+- Bugfix: Added missing closing li tag to the expandableChild
+  template.
 
 3.2.2
 - Updated to PHP 7.4

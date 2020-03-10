@@ -53,7 +53,6 @@ abstract class AbstractRenderHans extends AbstractTest
     const GET_JSON = 'getJson';
     const GET_HAS_EXTRAS = 'hasExtra';
     const GET_DATA = 'getData';
-    const GET_IS_CALLBACK = 'isCallback';
     const GET_TYPE = 'getType';
     const RENDER_ME = 'renderMe';
 

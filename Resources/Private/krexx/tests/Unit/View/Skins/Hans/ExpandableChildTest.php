@@ -53,6 +53,9 @@ class ExpandableChildTest extends AbstractRenderHans
      * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::retrieveOpenedClass
      * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderSourceButtonWithStop
      * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderNest
+     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleChild::renderExtra
+     * @covers \Brainworxx\Krexx\View\AbstractRender::retrieveTypeClasses
+     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderExpandableChild()
     {
@@ -68,6 +71,7 @@ class ExpandableChildTest extends AbstractRenderHans
         $this->mockModel(static::GET_CONNECTOR_RIGHT, 'any conn');
         $this->mockModel(static::RENDER_ME, 'model html');
         $this->mockModel(static::GET_DOMID, 'x12345');
+        $this->mockModel(static::GET_HAS_EXTRAS, true);
 
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)

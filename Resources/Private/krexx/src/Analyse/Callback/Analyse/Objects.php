@@ -105,6 +105,11 @@ class Objects extends AbstractCallback
 
         $stuffToDump = [PublicProperties::class];
 
+        if ($ref->getName() === \stdClass::class) {
+            // We ignore everything else for the stdClass..
+            return $stuffToDump;
+        }
+
         // Dumping getter methods.
         // We will not dump the getters for internal classes, though.
         if ($config->getSetting(Fallback::SETTING_ANALYSE_GETTER) === true && $ref->isUserDefined() === true) {

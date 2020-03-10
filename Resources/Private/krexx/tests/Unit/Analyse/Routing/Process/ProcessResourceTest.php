@@ -141,6 +141,30 @@ class ProcessResourceTest extends AbstractTest
     }
 
     /**
+     * Test the processing of a shell resource.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
+     */
+    public function testProcessShell()
+    {
+        $this->mockEmergencyHandler();
+
+        $resource = 'I\'m going to an adventure';
+        $metaResults = [
+            'rocks', 'fall', 'everybody', 'dies'
+        ];
+        $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
+        $getResourceType->expects($this->once())
+            ->will($this->returnValue('process'));
+        $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'proc_get_status');
+        $getResourceType->expects($this->once())
+            ->will($this->returnValue($metaResults));
+
+        $this->runTheTest($resource, 1, 'resource (process)', null, $metaResults);
+    }
+
+    /**
      * Running the test is pretty much the same every way here.
      *
      * @param $resource

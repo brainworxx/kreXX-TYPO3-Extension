@@ -423,8 +423,7 @@ class ChunksTest extends AbstractTest
         $this->setValueByReflection(static::FILE_STAMP, $fileStamp, $chunks);
 
         $globMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View\\Output\\', 'glob');
-        $globMock->expects($this->once())
-            ->with($chunkDir . $fileStamp . '_*')
+        $globMock->expects($this->any())
             ->will($this->returnValue($fileList));
 
         $fileServiceMock = $this->createMock(File::class);

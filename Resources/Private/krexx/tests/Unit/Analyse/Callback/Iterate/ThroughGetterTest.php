@@ -104,7 +104,7 @@ class ThroughGetterTest extends AbstractTest
         // Mock the render object.
         $renderMock = $this->createMock(RenderHans::class);
         $renderMock->expects($this->once())
-            ->method('renderSingleChild')
+            ->method('renderExpandableChild')
             ->will($this->returnValue(''));
         Krexx::$pool->render = $renderMock;
 

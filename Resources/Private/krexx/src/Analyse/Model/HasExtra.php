@@ -44,7 +44,7 @@ trait HasExtra
     /**
      * Info, if we have "extra" data to render.
      *
-     * @see \Brainworxx\Krexx\View\Render::renderSingleChild
+     * @see \Brainworxx\Krexx\View\Render::renderExpandableChild
      *
      * @var bool
      */

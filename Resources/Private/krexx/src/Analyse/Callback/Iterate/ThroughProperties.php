@@ -206,14 +206,14 @@ class ThroughProperties extends AbstractCallback
         }
 
         $traits = $refProperty->getDeclaringClass()->getTraits();
-        $type = $this->pool->render->renderLinebreak() . 'in class: ';
+        $type = $this->pool->render->renderLinebreak() . static::META_IN_CLASS;
         if (empty($traits) === false) {
             $declaringClass = $this->retrieveFilenameFromTraits($traits, $refProperty, $declaringClass);
             // Not found.
             if ($declaringClass === null) {
                 return $declarationCache[$key] = '';
             } elseif ($declaringClass->isTrait() === true) {
-                $type = $this->pool->render->renderLinebreak() . 'in trait: ';
+                $type = $this->pool->render->renderLinebreak() . static::META_IN_TRAIT;
             }
         }
 

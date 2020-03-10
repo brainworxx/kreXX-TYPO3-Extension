@@ -246,7 +246,13 @@ class Hans
     protected toggle = (event:Event, element:Element): void =>
     {
         this.kdt.toggleClass(element, 'kopened');
-        this.kdt.toggleClass(element.nextElementSibling, 'khidden');
+
+        // Toggle all siblings.
+        let sibling:Element = element.nextElementSibling;
+        do {
+           this.kdt.toggleClass(sibling, 'khidden');
+           sibling = sibling.nextElementSibling;
+        } while (sibling);
     };
 
     /**

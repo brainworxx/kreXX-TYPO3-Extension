@@ -42,7 +42,8 @@ $analyseRoutingProcess = '\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\';
 $serviceFlow = '\\Brainworxx\\Krexx\\Service\\Flow\\';
 $serviceMisc = '\\Brainworxx\\Krexx\\Service\\Misc\\';
 $viewOutput = '\\Brainworxx\\Krexx\\View\\Output\\';
-$view = '\\Brainworxx\\Krexx\\View';
+$view = '\\Brainworxx\\Krexx\\View\\';
+$callbackScalar = '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar\\';
 
 PHPMock::defineFunctionMock($analyseRoutingProcess, 'class_exists');
 PHPMock::defineFunctionMock($serviceFlow, 'ini_get');
@@ -56,7 +57,9 @@ PHPMock::defineFunctionMock($serviceMisc, 'filemtime');
 PHPMock::defineFunctionMock($serviceMisc, 'mb_strlen');
 PHPMock::defineFunctionMock($serviceMisc, 'glob');
 PHPMock::defineFunctionMock($serviceMisc, 'time');
-
+PHPMock::defineFunctionMock($callbackScalar, 'class_exists');
+PHPMock::defineFunctionMock($callbackScalar, 'is_file');
+PHPMock::defineFunctionMock($callbackScalar, 'function_exists');
 PHPMock::defineFunctionMock($viewOutput, 'register_shutdown_function');
 PHPMock::defineFunctionMock($viewOutput, 'microtime');
 PHPMock::defineFunctionMock($viewOutput, 'glob');

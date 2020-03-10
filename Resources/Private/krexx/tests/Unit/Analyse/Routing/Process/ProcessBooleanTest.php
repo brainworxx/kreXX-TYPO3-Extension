@@ -69,7 +69,7 @@ class ProcessBooleanTest extends AbstractTest
         );
         $processor->process($model);
 
-        $models = $renderNothing->model['renderSingleChild'];
+        $models = $renderNothing->model['renderExpandableChild'];
 
         $this->assertEquals('TRUE', $models[0]->getData());
         $this->assertEquals('TRUE', $models[0]->getNormal());
