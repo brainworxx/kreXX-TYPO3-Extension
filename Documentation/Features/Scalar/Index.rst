@@ -49,7 +49,7 @@ When kreXX encounters a xml, it does the following:
 
 |
 
-.. figure:: ../../Images/Features/sample_data_json.png
+.. figure:: ../../Images/Features/sample_data_xml.png
 	:width: 648px
 	:alt: Pretty print for a lorem ipsum sample data xml
 
