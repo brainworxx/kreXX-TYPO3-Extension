@@ -23,15 +23,17 @@ That is why this feature is deactivated by default.
 JSON
 ----
 
- - Decode it and analyse it's content.
- - Offer source generation to reach the decoded values.
- - Output a pretty print for better readability
- - Output the original string
+When kreXX encounters a json, it does the following:
+
+- Decode it and analyse it's content.
+- Offer source generation to reach the decoded values.
+- Output a pretty print for better readability
+- Output the original string
 
 |
 
 .. figure:: ../../Images/Features/sample_data_json.png
-	:width: 833
+	:width: 833px
 	:alt: Code generation for a lorem ipsum sample data json.
 
     Code generation for a lorem ipsum sample data json.
@@ -39,14 +41,16 @@ JSON
 XML
 ---
 
- - Parse it into an array and analyse it's content
- - Output a pretty print for better readability
- - Output the original string
+When kreXX encounters a xml, it does the following:
+
+- Parse it into an array and analyse it's content
+- Output a pretty print for better readability
+- Output the original string
 
 |
 
 .. figure:: ../../Images/Features/sample_data_json.png
-	:width: 648
+	:width: 648px
 	:alt: Pretty print for a lorem ipsum sample data xml.
 
     Pretty print for a lorem ipsum sample data xml.
@@ -54,20 +58,24 @@ XML
 Filepath
 --------
 
- - Retrieve the realpath() and output it
- - Analyse the mime type of the file
+When kreXX encounters a file path, it does the following:
+
+- Retrieve the realpath() and output it
+- Analyse the mime type of the file
 
 Callback
 --------
 
- - Output the comment for the method.
- - Output the file and line of the declaration
- - Analyse the parameters
+When kreXX encounters a callback, it does the following:
+
+- Output the comment for the method.
+- Output the file and line of the declaration
+- Analyse the parameters
 
 |
 
 .. figure:: ../../Images/Features/callback_analysis.png
-	:width: 620
+	:width: 620px
 	:alt: Callback analysis with comments and parameters.
 
     Callback analysis with comments and parameters.
