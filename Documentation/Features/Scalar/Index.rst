@@ -32,7 +32,7 @@ When kreXX encounters a json, it does the following:
 
 |
 
-.. figure::  ../../Images/Skins/smoky-grey.png
+.. figure:: ../../Images/Features/sample_data_json.png
 	:width: 833px
 	:alt: Code generation for a lorem ipsum sample data json
 
