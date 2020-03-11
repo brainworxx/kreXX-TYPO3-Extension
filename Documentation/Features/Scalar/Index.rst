@@ -32,11 +32,11 @@ When kreXX encounters a json, it does the following:
 
 |
 
-.. figure:: ../../Images/Features/sample_data_json.png
+.. figure::  ../../Images/Skins/smoky-grey.png
 	:width: 833px
-	:alt: Code generation for a lorem ipsum sample data json.
+	:alt: Code generation for a lorem ipsum sample data json
 
-    Code generation for a lorem ipsum sample data json.
+	Code generation for a lorem ipsum sample data json.
 
 XML
 ---
@@ -51,9 +51,9 @@ When kreXX encounters a xml, it does the following:
 
 .. figure:: ../../Images/Features/sample_data_json.png
 	:width: 648px
-	:alt: Pretty print for a lorem ipsum sample data xml.
+	:alt: Pretty print for a lorem ipsum sample data xml
 
-    Pretty print for a lorem ipsum sample data xml.
+	Pretty print for a lorem ipsum sample data xml.
 
 Filepath
 --------
@@ -76,6 +76,6 @@ When kreXX encounters a callback, it does the following:
 
 .. figure:: ../../Images/Features/callback_analysis.png
 	:width: 620px
-	:alt: Callback analysis with comments and parameters.
+	:alt: Callback analysis with comments and parameters
 
-    Callback analysis with comments and parameters.
+	Callback analysis with comments and parameters.
