@@ -23,10 +23,12 @@ That is why this feature is deactivated by default.
 JSON
 ----
 
-    - Decode it and analyse it's content.
-    - Offer source generation to reach the decoded values.
-    - Output a pretty print for better readability
-    - Output the original string
+ - Decode it and analyse it's content.
+ - Offer source generation to reach the decoded values.
+ - Output a pretty print for better readability
+ - Output the original string
+
+|
 
 .. figure:: ../../Images/Features/sample_data_json.png
 	:width: 833
@@ -37,9 +39,11 @@ JSON
 XML
 ---
 
-    - Parse it into an array and analyse it's content
-    - Output a pretty print for better readability
-    - Output the original string
+ - Parse it into an array and analyse it's content
+ - Output a pretty print for better readability
+ - Output the original string
+
+|
 
 .. figure:: ../../Images/Features/sample_data_json.png
 	:width: 648
@@ -50,15 +54,17 @@ XML
 Filepath
 --------
 
-    - Retrieve the realpath() and output it
-    - Analyse the mime type of the file
+ - Retrieve the realpath() and output it
+ - Analyse the mime type of the file
 
 Callback
 --------
 
-    - Output the comment for the method.
-    - Output the file and line of the declaration
-    - Analyse the parameters
+ - Output the comment for the method.
+ - Output the file and line of the declaration
+ - Analyse the parameters
+
+|
 
 .. figure:: ../../Images/Features/callback_analysis.png
 	:width: 620
