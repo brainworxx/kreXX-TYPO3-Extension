@@ -14,7 +14,7 @@ Scalar analysis
 A string value can host a lot of information. When dealing with a webservice, there is a good chance that you will get a json or xml as an answer.
 Taking a closer look at these may reveal a lot of information.
 |
-There is a downside, though. Facing a class structure with more than 20 `XML` or `JSON` strings will result in a lot of output, which may cause problems.
+There is a downside, though. Facing a class structure with more than 20 :literal:`XML` or :literal:`JSON` strings will result in a lot of output, which may cause problems.
 That is why this feature is deactivated by default.
 
 .. important::
@@ -23,7 +23,7 @@ That is why this feature is deactivated by default.
 JSON
 ----
 
-When kreXX encounters a `JSON`, it does the following:
+When kreXX encounters a :literal:`JSON`, it does the following:
 
 - Decode it and analyse it's content.
 - Offer source generation to reach the decoded values.
@@ -41,7 +41,7 @@ When kreXX encounters a `JSON`, it does the following:
 XML
 ---
 
-When kreXX encounters a `XML`, it does the following:
+When kreXX encounters a :literal:`XML`, it does the following:
 
 - Parse it into an array and analyse it's content
 - Output a pretty print for better readability

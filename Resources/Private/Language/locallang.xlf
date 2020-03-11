@@ -62,7 +62,7 @@
                 <source>Shall kreXX try to analyse the private properties of a class? This may result in a lot of output.</source>
 			</trans-unit>
             <trans-unit id="analyseScalar">
-                <source>Shall kreXX do a deep analysis for scalar tapes? We are handling XML, JSON, callbacks and filepath.</source>
+                <source>Shall kreXX do a deep analysis for scalar types? We are handling XML, JSON, callbacks and filepath.</source>
 			</trans-unit>
             <trans-unit id="analyseTraversable">
                 <source>Shall kreXX try to analyse possible traversable data? Depending on the underlying framework this info might be covered by the debug callback functions.</source>

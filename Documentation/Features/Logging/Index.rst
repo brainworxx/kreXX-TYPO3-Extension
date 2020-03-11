@@ -35,8 +35,8 @@ Alternatively, you can use the forced-logging methods:
 
 Wen using the forced logging, the following things will happen:
 
- - Output destination is set to file by force.
- - Ajax requests will get logged by force.
+- Output destination is set to file by force.
+- Ajax requests will get logged by force.
 
 kreXX will store all logfiles inside the directory
 
