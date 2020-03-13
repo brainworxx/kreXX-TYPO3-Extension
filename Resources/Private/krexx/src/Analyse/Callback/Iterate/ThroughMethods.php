@@ -40,6 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
+use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Analyse\Model;
 use ReflectionClass;
 use ReflectionMethod;
@@ -85,6 +86,10 @@ class ThroughMethods extends AbstractCallback
             $declaringClass = $refMethod->getDeclaringClass();
             $methodData[static::META_DECLARED_IN] = $this->getDeclarationPlace($refMethod, $declaringClass);
 
+            // Get the return type.
+            $methodData[static::META_RETURN_TYPE] = $this->pool->createClass(ReturnType::class)
+                ->getComment($refMethod, $refClass);
+
             // Update the reflection method, so an event subscriber can do
             // something with it.
             $this->parameters[static::PARAM_REF_METHOD] = $refMethod;
@@ -101,6 +106,7 @@ class ThroughMethods extends AbstractCallback
                     )->setConnectorType($this->retrieveConnectorType($refMethod))
                     ->addParameter(static::PARAM_DATA, $methodData)
                     ->setIsPublic($refMethod->isPublic())
+                    ->setReturnType($methodData[static::META_RETURN_TYPE])
                     ->injectCallback($this->pool->createClass(ThroughMeta::class))
             ));
         }

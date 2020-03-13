@@ -117,11 +117,10 @@ class ProcessBacktraceTest extends AbstractTest
         $processBacktrace = new ProcessBacktrace(Krexx::$pool);
         $processBacktrace->process($fixture);
 
-        $this->assertEquals(
-            ['omittedBacktrace' => ['key' => "omittedBacktrace", 'params' => [0 => 11, 1 => 12]]],
-            Krexx::$pool->messages->getKeys(),
-            'Check messages for omitted messages'
-        );
+        /** @var \Brainworxx\Krexx\View\Message $message */
+        $message = Krexx::$pool->messages->getMessages()['omittedBacktrace'];
+        $this->assertEquals('omittedBacktrace', $message->getKey(), 'Check messages for omitted steps');
+        $this->assertEquals([0 => 11, 1 => 12], $message->getArguments(), 'Check messages for omitted steps');
 
         // Check the parameters
         // The standatd value is 10.
@@ -166,7 +165,7 @@ class ProcessBacktraceTest extends AbstractTest
 
         $this->assertEquals(
             [],
-            Krexx::$pool->messages->getKeys(),
+            Krexx::$pool->messages->getMessages(),
             'Messages should be empty, because we have not enough steps.'
         );
 

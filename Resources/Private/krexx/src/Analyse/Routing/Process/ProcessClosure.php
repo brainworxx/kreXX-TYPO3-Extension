@@ -40,6 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Comment\Functions;
+use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use ReflectionException;
@@ -87,6 +88,10 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
         if (empty($namespace) === false) {
             $result[static::META_NAMESPACE] = $namespace;
         }
+
+        // Adding the return type.
+        $result[static::META_RETURN_TYPE] = $this->pool->createClass(ReturnType::class)
+            ->getComment($ref);
 
         return $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(

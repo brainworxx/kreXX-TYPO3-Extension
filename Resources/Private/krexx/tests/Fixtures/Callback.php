@@ -46,3 +46,17 @@ function myLittleCallback(string $justAString)
 {
     return $justAString;
 }
+
+/**
+ * @return $this
+ */
+function justAnotherFunction()
+{
+    return '$this';
+}
+
+
+function returnString(): bool
+{
+    return true;
+}

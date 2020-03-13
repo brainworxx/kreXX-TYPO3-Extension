@@ -244,10 +244,8 @@ class EmergencyTest extends AbstractTest
             ->will($this->returnValue(500));
         $this->assertEquals(true, $this->emergency->checkEmergencyBreak());
         $this->assertEquals(false, $this->retrieveValueByReflection(static::ALL_IS_OK, $this->emergency));
-        $this->assertEquals(
-            ['emergencyMemory' => ['key' => 'emergencyMemory', static::MESSAGE_PARAMETERS => []]],
-            Krexx::$pool->messages->getKeys()
-        );
+        $this->assertNotEmpty(Krexx::$pool->messages->getMessages()['emergencyMemory']);
+        $this->assertCount(1, Krexx::$pool->messages->getMessages());
     }
 
     /**
@@ -280,10 +278,8 @@ class EmergencyTest extends AbstractTest
 
         $this->assertEquals(true, $this->emergency->checkEmergencyBreak());
         $this->assertEquals(false, $this->retrieveValueByReflection(static::ALL_IS_OK, $this->emergency));
-        $this->assertEquals(
-            ['emergencyTimer' => ['key' => 'emergencyTimer', static::MESSAGE_PARAMETERS => []]],
-            Krexx::$pool->messages->getKeys()
-        );
+        $this->assertNotEmpty(Krexx::$pool->messages->getMessages()['emergencyTimer']);
+        $this->assertCount(1, Krexx::$pool->messages->getMessages());
     }
 
     /**
@@ -309,7 +305,7 @@ class EmergencyTest extends AbstractTest
 
         $this->assertEquals(false, $this->emergency->checkEmergencyBreak());
         $this->assertEquals(true, $this->retrieveValueByReflection(static::ALL_IS_OK, $this->emergency));
-        $this->assertEquals([], Krexx::$pool->messages->getKeys());
+        $this->assertEquals([], Krexx::$pool->messages->getMessages());
     }
 
     /**
@@ -423,15 +419,13 @@ class EmergencyTest extends AbstractTest
         // Called normally
         $this->setValueByReflection(static::KREXX_COUNT, 0, $this->emergency);
         $this->assertFalse($this->emergency->checkMaxCall());
-        $this->assertEquals([], Krexx::$pool->messages->getKeys());
+        $this->assertEquals([], Krexx::$pool->messages->getMessages());
 
         // Called the last time, with stored feedback Message.
         $this->setValueByReflection(static::KREXX_COUNT, 997, $this->emergency);
         $this->assertFalse($this->emergency->checkMaxCall());
-        $this->assertEquals(
-            ['maxCallReached' => ['key' => 'maxCallReached', static::MESSAGE_PARAMETERS => []]],
-            Krexx::$pool->messages->getKeys()
-        );
+        $this->assertCount(1, Krexx::$pool->messages->getMessages());
+        $this->assertEquals('maxCallReached', Krexx::$pool->messages->getMessages()['maxCallReached']->getKey());
     }
 
     /**

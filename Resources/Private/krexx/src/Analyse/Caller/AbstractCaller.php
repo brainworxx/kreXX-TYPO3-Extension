@@ -143,7 +143,10 @@ abstract class AbstractCaller implements ConstInterface
     protected function getType($headline, $varname, $data): string
     {
         if (empty($headline) === true) {
-            is_object($data) === true ? $type = get_class($data) : $type = gettype($data);
+            $type = is_object($data) === true ? get_class($data) : gettype($data);
+            if ($type === 'double') {
+                $type = 'float';
+            }
 
             return 'Analysis of ' . $varname . ', ' . $type;
         }

@@ -58,6 +58,19 @@ class ProcessInteger extends AbstractRouting implements ProcessInterface
      */
     public function process(Model $model): string
     {
+        // Detect a timestamp. Everything bigger than 946681200
+        // is assumed to be a timestamp.
+        try {
+            $int = $model->getData();
+            if ($int > 946681200) {
+                $date = new \DateTime('@' . $int);
+                $model->addToJson(static::META_TIMESTAMP, $date->format('d.M Y H:i:s'));
+            }
+        } catch (\Exception $e) {
+            // Do nothing.
+            // Not sure how this can happen.
+        }
+
         return $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
                 $model->setNormal($model->getData())->setType(static::TYPE_INTEGER)

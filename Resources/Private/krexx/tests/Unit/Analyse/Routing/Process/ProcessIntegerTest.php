@@ -50,7 +50,7 @@ class ProcessIntegerTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::process
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
-    public function testProcess()
+    public function testProcessNormal()
     {
         Krexx::$pool->render = new RenderNothing(Krexx::$pool);
         $fixture = 42;
@@ -64,5 +64,28 @@ class ProcessIntegerTest extends AbstractTest
 
         $this->assertEquals($fixture, $model->getData());
         $this->assertEquals($fixture, $model->getNormal());
+        $this->assertCount(0, $model->getJson(), 'No other info in this one.');
+    }
+
+    /**
+     * Testing the integer value with timestamp processing.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
+     */
+    public function testProcessWithTimestamp()
+    {
+        Krexx::$pool->render = new RenderNothing(Krexx::$pool);
+        $fixture = 1583926619;
+        $model = new Model(Krexx::$pool);
+        $model->setData($fixture);
+        $processor = new ProcessInteger(Krexx::$pool);
+        $processor->process($model);
+
+        $this->assertStringStartsWith(
+            '11.Mar 2020',
+            $model->getJson()[ProcessInteger::META_TIMESTAMP],
+            'Looking for the timestamp.'
+        );
     }
 }

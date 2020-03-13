@@ -655,6 +655,9 @@ $fontLight: lighter 10px tahoma, verdana;
       }
       em {
         color: $object;
+        &.kreturntype {
+          color: $greyDark;
+        }
       }
     }
     .kclosure {

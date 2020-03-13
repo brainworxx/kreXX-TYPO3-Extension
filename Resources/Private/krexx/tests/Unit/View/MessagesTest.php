@@ -38,6 +38,7 @@ namespace Brainworxx\Krexx\Tests\Unit\View;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\View\Message;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 
@@ -74,57 +75,17 @@ class MessagesTest extends AbstractTest
     }
 
     /**
-     * Test the adding of a message.
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::addMessage
-     */
-    public function testAddMessage()
-    {
-        $messageKey = 'key 1';
-
-        $this->messagesClass->addMessage($messageKey, []);
-        $this->assertEquals(
-            [$messageKey => ['key' => $messageKey, static::PARAMS => []]],
-            $this->messagesClass->getKeys()
-        );
-        $this->assertEquals([''], $this->retrieveValueByReflection('messages', $this->messagesClass));
-    }
-
-    /**
      * Test the removing od message keys.
      *
      * @covers \Brainworxx\Krexx\View\Messages::removeKey
      */
-    public function testRemoveKex()
+    public function testRemoveKey()
     {
         $messageKey = 'key 2';
         $this->setValueByReflection(static::KEY_VARIABLE_NAME, [$messageKey => 'whatever'], $this->messagesClass);
 
         $this->messagesClass->removeKey($messageKey);
-        $this->assertEquals([], $this->messagesClass->getKeys());
-    }
-
-    /**
-     * Test the getter for the keys.
-     *
-     * @covers \Brainworxx\Krexx\View\Messages::getKeys
-     */
-    public function testGetKeys()
-    {
-        $keys = [
-            'California' => [
-                'key' => 'California', static::PARAMS => []
-            ],
-            'House' => [
-                'key' => 'House', static::PARAMS => []
-            ],
-            'Keeper of the seven' => [
-                'key' => 'Keeper of the seven', static::PARAMS => []
-            ]
-        ];
-        $this->setValueByReflection(static::KEY_VARIABLE_NAME, $keys, $this->messagesClass);
-
-        $this->assertEquals($keys, $this->messagesClass->getKeys());
+        $this->assertEquals([], $this->messagesClass->getMessages());
     }
 
     /**
@@ -143,7 +104,17 @@ class MessagesTest extends AbstractTest
         $definedMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\View', 'defined');
         $definedMock->expects($this->once())->will($this->returnValue(false));
 
-        $messages = ['qwer', 'asdf', 'yxcv'];
+        $messages = [];
+        $message = new Message(\Krexx::$pool);
+        $message->setText('qwer');
+        $messages[] = $message;
+        $message = new Message(\Krexx::$pool);
+        $message->setText('asdf');
+        $messages[] = $message;
+        $message = new Message(\Krexx::$pool);
+        $message->setText('yxcv');
+        $messages[] = $message;
+
         $rendermock = $this->createMock(RenderHans::class);
         $rendermock->expects($this->once())
             ->method('renderMessages')
@@ -178,6 +149,33 @@ class MessagesTest extends AbstractTest
 
         $this->assertEquals('', $this->messagesClass->getHelp('unknown key'));
         $this->assertEquals('Some stupid string.', $this->messagesClass->getHelp('doctor', ['stupid']));
+    }
+
+    /**
+     * Test a simple getter.
+     *
+     * @covers \Brainworxx\Krexx\View\Messages::getMessages
+     * @covers \Brainworxx\Krexx\View\Messages::addMessage
+     */
+    public function testGetMessages()
+    {
+        $fixture = [
+            ['california' => []],
+            ['house' => ['keeper']],
+            ['of the' => ['seven', 'keys']]
+        ];
+        foreach ($fixture as $arguments) {
+            $key = array_keys($arguments)[0];
+            $this->messagesClass->addMessage($key, $arguments[$key]);
+        }
+
+        $count = 0;
+        foreach ($this->messagesClass->getMessages() as $key => $message) {
+            $this->assertEquals(array_keys($fixture[$count])[0], $key);
+            $this->assertEquals($key, $message->getKey());
+            $this->assertEquals($fixture[$count][$key], $message->getArguments());
+            ++$count;
+        }
     }
 
     /**

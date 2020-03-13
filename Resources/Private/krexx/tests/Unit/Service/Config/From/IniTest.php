@@ -137,28 +137,6 @@ class IniTest extends AbstractTest
     }
 
     /**
-     * Test the filtering of the configuration, if a value is editable.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\From\Ini::getFeIsEditable
-     */
-    public function testGetFeIsEditable()
-    {
-        // Test with the normal fallback values, 'skin' vs. 'debugMethods'.
-        $ini = new Ini(Krexx::$pool);
-        $this->assertTrue($ini->getFeIsEditable($ini::SETTING_SKIN));
-        $this->assertFalse($ini->getFeIsEditable($ini::SETTING_DEBUG_METHODS));
-
-        // Test with some prepared settings.
-        $this->setValueByReflection(static::INI_SETTINGS, $this->fixture, $ini);
-
-        $this->assertFalse($ini->getFeIsEditable($ini::SETTING_SKIN));
-        $this->assertFalse($ini->getFeIsEditable($ini::SETTING_DETECT_AJAX));
-        $this->assertTrue($ini->getFeIsEditable($ini::SETTING_NESTING_LEVEL));
-        $this->assertFalse($ini->getFeIsEditable($ini::SETTING_DEBUG_METHODS), 'Never!');
-        $this->assertFalse($ini->getFeIsEditable($ini::SETTING_ANALYSE_PRIVATE), 'Fallback to do-not-edit');
-    }
-
-    /**
      * Test the translating from the more human readable into the stuff for
      * the skin "engine".
      *

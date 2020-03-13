@@ -42,12 +42,12 @@ trait ConnectorRight
     /**
      * {@inheritDoc}
      */
-    protected function renderConnectorRight(string $connector): string
+    protected function renderConnectorRight(string $connector, string $returnType = ''): string
     {
-        if (strlen($connector) > 2) {
+        if (strlen($connector) > 2 || $returnType !== '') {
             // Something big, we should display it.
             // Most likely the parameters of a method.
-            return parent::renderConnectorRight($connector);
+            return parent::renderConnectorRight($connector, $returnType);
         }
 
         return '';

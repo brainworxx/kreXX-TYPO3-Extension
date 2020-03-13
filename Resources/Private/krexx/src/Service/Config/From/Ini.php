@@ -96,6 +96,12 @@ class Ini extends Fallback
      *
      * @param string $name
      *
+     * @deprecated
+     *   Since 4.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @return bool
      *   Well? is it editable?
      */

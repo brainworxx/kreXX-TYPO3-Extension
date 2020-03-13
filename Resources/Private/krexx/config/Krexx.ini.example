@@ -77,6 +77,10 @@ analyseProtected = "false"
 ; analysePrivate = "true"
 analysePrivate = "false"
 
+; Shall kreXX do a deep analysis of scalar variables?
+;analyseScalar = "true"
+analyseScalar = "false"
+
 ; Shall kreXX try to traverse through the object?
 analyseTraversable = "true"
 ; analyseTraversable = "false"

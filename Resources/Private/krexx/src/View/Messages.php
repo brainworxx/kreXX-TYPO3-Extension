@@ -47,16 +47,18 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
  */
 class Messages
 {
-
     /**
      * Here we store all messages, which gets send to the output.
      *
-     * @var array
+     * @var Message[]
      */
     protected $messages = [];
 
     /**
      * The translatable keys for backend integration.
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed.
      *
      * @var array
      */
@@ -96,14 +98,20 @@ class Messages
      *   The message itself.
      * @param array $args
      *   The parameters for vsprintf().
+     * @param bool $isThrowAway
+     *   will this message remove itself after display?
      */
-    public function addMessage($key, array $args = [])
+    public function addMessage($key, array $args = [], bool $isThrowAway = false)
     {
         // We will only display these messages once.
-        if (isset($this->keys[$key]) === false) {
+        if (isset($this->messages[$key]) === false) {
             // Add it to the keys, so the CMS can display it.
             $this->keys[$key] = ['key' => $key, 'params' => $args];
-            $this->messages[] = $this->getHelp($key, $args);
+            $this->messages[$key] = $this->pool->createClass(Message::class)
+                ->setKey($key)
+                ->setArguments($args)
+                ->setText($this->getHelp($key, $args))
+                ->setIsThrowAway($isThrowAway);
         }
     }
 
@@ -116,10 +124,17 @@ class Messages
     public function removeKey($key)
     {
         unset($this->keys[$key]);
+        unset($this->messages[$key]);
     }
 
     /**
      * Getter for the language key array.
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed. Use $this->>getMessages() instead.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @return array
      *   The language keys we added beforehand.
@@ -127,6 +142,17 @@ class Messages
     public function getKeys(): array
     {
         return $this->keys;
+    }
+
+    /**
+     * Getter for the messages.
+     *
+     * @return Message[]
+     *   The current list of message classes.
+     */
+    public function getMessages(): array
+    {
+        return $this->messages;
     }
 
     /**
@@ -146,8 +172,9 @@ class Messages
             // Output the messages on the shell.
             $result = "\n\nkreXX messages\n";
             $result .= "==============\n";
+            /** @var Message $message */
             foreach ($this->messages as $message) {
-                $result .= "$message\n";
+                $result .= $message->getText() . "\n";
             }
 
             echo $result . "\n\n";

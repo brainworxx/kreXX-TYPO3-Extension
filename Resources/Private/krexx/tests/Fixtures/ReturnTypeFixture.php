@@ -33,56 +33,57 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-declare(strict_types=1);
+namespace Brainworxx\Krexx\Tests\Fixtures;
 
-namespace Brainworxx\Krexx\View\Skins\Hans;
-
-trait ConnectorRight
+class ReturnTypeFixture
 {
-    /**
-     * @var array
-     */
-    private $markerConnectorRight = [
-        '{connector}',
-        '{returnType}',
-    ];
-
-    /**
-     * Renders the right connector.
-     *
-     * @param string $connector
-     *   The data to be displayed.
-     * @param string $returnType
-     *   The return type of the method.
-     *
-     * @return string
-     *   The rendered connector.
-     */
-    protected function renderConnectorRight(string $connector, string $returnType = ''): string
+    public function returnSelf(): ReturnTypeFixture
     {
-        if ($connector === '' && $returnType === '') {
-            // No connector, no display.
-            return '';
-        }
+        return $this;
+    }
 
-        return str_replace(
-            $this->markerConnectorRight,
-            [$connector, $returnType === '' ? '' : ': ' . $returnType],
-            $this->getTemplateFileContent(static::FILE_CONNECTOR_RIGHT)
-        );
+    public function returnBool(): bool
+    {
+        return true;
     }
 
     /**
-     * Getter of the connector left for unit tests.
-     *
-     * @codeCoverageIgnore
-     *   We are not testing the unit tests.
-     *
-     * @return array
-     *   The marker array.
+     * @return $this
      */
-    public function getMarkerConnectorRight(): array
+    public function returnThis()
     {
-        return $this->markerConnectorRight;
+        return $this;
+    }
+
+    /**
+     * Just another comment.
+     */
+    public function returnNothing()
+    {
+        echo 'nothing.';
+    }
+
+    /**
+     * @return \<h1>Headline!</h1>
+     */
+    public function injectionAttempt()
+    {
+        return 'something';
+    }
+
+    /**
+     * @return very important stuff
+     */
+    public function trashComment()
+    {
+        return 'whatever';
+    }
+
+    /**
+     * @return bool|null
+     */
+    public function multipleTypes()
+    {
+        return false;
     }
 }

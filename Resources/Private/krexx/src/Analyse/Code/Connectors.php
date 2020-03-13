@@ -154,6 +154,13 @@ class Connectors
     protected $customConnectorLeft;
 
     /**
+     * The return type of a method. Not used for code generation.
+     *
+     * @var string
+     */
+    protected $returnType = '';
+
+    /**
      * Setter for the $params. It is used in case we are connection a method or
      * closure.
      *
@@ -250,5 +257,25 @@ class Connectors
     public function getLanguage(): string
     {
         return $this->language;
+    }
+
+    /**
+     * Setter for the return type.
+     *
+     * @param string $returnType
+     */
+    public function setReturnType(string $returnType)
+    {
+        $this->returnType = $returnType;
+    }
+
+    /**
+     * Getter for the return type.
+     *
+     * @return string
+     */
+    public function getReturnType(): string
+    {
+        return $this->returnType;
     }
 }

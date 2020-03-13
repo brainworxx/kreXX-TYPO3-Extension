@@ -100,38 +100,25 @@ class Objects extends AbstractCallback
     protected function generateDumperList()
     {
         $ref = $this->parameters[static::PARAM_REF] = new ReflectionClass($this->parameters[static::PARAM_DATA]);
-        $isInScope = $this->pool->scope->isInScope();
         $config = $this->pool->config;
-
         $stuffToDump = [PublicProperties::class];
 
         if ($ref->getName() === \stdClass::class) {
-            // We ignore everything else for the stdClass..
+            // We ignore everything else for the stdClass.
             return $stuffToDump;
         }
 
-        // Dumping getter methods.
-        // We will not dump the getters for internal classes, though.
-        if ($config->getSetting(Fallback::SETTING_ANALYSE_GETTER) === true && $ref->isUserDefined() === true) {
-            $stuffToDump[] = Getter::class;
+        if ($ref->isUserDefined() === true) {
+            $this->addPropertyDumper($stuffToDump);
         }
-
-        $stuffToDump[] = Meta::class;
 
         // Analysing error objects.
         if (is_a($this->parameters[static::PARAM_DATA], Throwable::class)) {
             $stuffToDump[] = ErrorObject::class;
         }
 
-        // Dumping protected properties.
-        if ($isInScope === true || $config->getSetting(Fallback::SETTING_ANALYSE_PROTECTED) === true) {
-            $stuffToDump[] = ProtectedProperties::class;
-        }
-
-        // Dumping private properties.
-        if ($isInScope === true || $config->getSetting(Fallback::SETTING_ANALYSE_PRIVATE) === true) {
-            $stuffToDump[] = PrivateProperties::class;
-        }
+        // Dumping class meta information.
+        $stuffToDump[] = Meta::class;
 
         // Dumping class constants.
         $stuffToDump[] = Constants::class;
@@ -151,6 +138,40 @@ class Objects extends AbstractCallback
         $stuffToDump[] = DebugMethods::class;
 
         return $stuffToDump;
+    }
+
+    /**
+     * Adding property and the getter-analysis to the list.
+     *
+     * @param array $stuffToDump
+     *   The stuff to dump, so far.
+     */
+    protected function addPropertyDumper(array &$stuffToDump)
+    {
+        $isInScope = $this->pool->scope->isInScope();
+        $config = $this->pool->config;
+
+        // Dumping getter methods before the protected and private,
+        // in case we are not in scope.
+        if ($isInScope === false && $config->getSetting(Fallback::SETTING_ANALYSE_GETTER) === true) {
+            $stuffToDump[] = Getter::class;
+        }
+
+        // Dumping protected properties.
+        if ($isInScope === true || $config->getSetting(Fallback::SETTING_ANALYSE_PROTECTED) === true) {
+            $stuffToDump[] = ProtectedProperties::class;
+        }
+
+        // Dumping private properties.
+        if ($isInScope === true || $config->getSetting(Fallback::SETTING_ANALYSE_PRIVATE) === true) {
+            $stuffToDump[] = PrivateProperties::class;
+        }
+
+        // Dumping getter methods before the protected and private,
+        // in case we are in scope.
+        if ($isInScope === true && $config->getSetting(Fallback::SETTING_ANALYSE_GETTER) === true) {
+            $stuffToDump[] = Getter::class;
+        }
     }
 
     /**

@@ -36,6 +36,7 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
+use Brainworxx\Krexx\View\Message;
 
 class MessagesTest extends AbstractRenderHans
 {
@@ -53,9 +54,16 @@ class MessagesTest extends AbstractRenderHans
             'Why am I writing this?'
         ];
 
-        $result = $this->renderHans->renderMessages($fixture);
-        foreach ($fixture as $message) {
-            $this->assertContains($message, $result);
+        $messages = [];
+        foreach ($fixture as $text) {
+            $message = new Message(\Krexx::$pool);
+            $message->setText($text);
+            $messages[] = $message;
+        }
+
+        $result = $this->renderHans->renderMessages($messages);
+        foreach ($fixture as $text) {
+            $this->assertContains($text, $result);
         }
     }
 }

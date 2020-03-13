@@ -131,7 +131,7 @@ class PoolTest extends AbstractTest
         Pool::createPool();
         $this->assertEquals(true, Krexx::$pool->chunks->getChunksAreAllowed());
         $this->assertEquals(true, Krexx::$pool->chunks->getLoggingIsAllowed());
-        $this->assertEmpty(Krexx::$pool->messages->getKeys());
+        $this->assertEmpty(Krexx::$pool->messages->getMessages());
     }
 
     /**
@@ -161,7 +161,7 @@ class PoolTest extends AbstractTest
         Pool::createPool();
         $this->assertEquals(false, Krexx::$pool->chunks->getChunksAreAllowed());
         $this->assertEquals(false, Krexx::$pool->chunks->getLoggingIsAllowed());
-        $this->assertCount(2, Krexx::$pool->messages->getKeys());
+        $this->assertCount(2, Krexx::$pool->messages->getMessages());
     }
 
     /**

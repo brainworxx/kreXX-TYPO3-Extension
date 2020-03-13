@@ -53,7 +53,6 @@ class ConfigTest extends AbstractTest
     const INI_CONFIG = 'iniConfig';
     const COOKIE_CONFIG = 'cookieConfig';
     const GET_CONFIG_FROM_COOKIES = 'getConfigFromCookies';
-    const GET_FE_IS_EDITABLE = 'getFeIsEditable';
     const GET_CONFIG_FROM_FILE = 'getConfigFromFile';
     const KREXX_INI_SETTINGS = 'Krexx.ini settings';
 
@@ -283,116 +282,113 @@ class ConfigTest extends AbstractTest
      * Test the loading of a config value from fallback.
      *
      * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
+     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
      */
     public function testLoadConfigValueFromFallback()
     {
         $config = new Config(Krexx::$pool);
         $iniMock = $this->createMock(Ini::class);
         $iniMock->expects($this->once())
-            ->method(static::GET_FE_IS_EDITABLE)
-            ->with($config::SETTING_DEBUG_METHODS)
-            ->will($this->returnValue(true));
-        $iniMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_FILE)
-            ->with($config::SECTION_METHODS, $config::SETTING_DEBUG_METHODS)
+            ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
+            ->will($this->returnValue(null));
+        // No values from the ini file.
+        $iniMock->expects($this->once())
+            ->method('getFeConfigFromFile')
+            ->with($config::SETTING_ANALYSE_GETTER)
             ->will($this->returnValue(null));
 
         $cookieMock = $this->createMock(Cookie::class);
         $cookieMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_COOKIES)
-            ->with($config::SECTION_METHODS, $config::SETTING_DEBUG_METHODS)
+            ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
             ->will($this->returnValue(null));
 
         // Inject them.
         $this->setValueByReflection(static::INI_CONFIG, $iniMock, $config);
         $this->setValueByReflection(static::COOKIE_CONFIG, $cookieMock, $config);
 
-        $this->assertSame($config, $config->loadConfigValue($config::SETTING_DEBUG_METHODS));
-        $model = $config->settings[$config::SETTING_DEBUG_METHODS];
+        $this->assertSame($config, $config->loadConfigValue($config::SETTING_ANALYSE_GETTER));
+        $model = $config->settings[$config::SETTING_ANALYSE_GETTER];
         $this->assertEquals('Factory settings', $model->getSource());
-        $this->assertEquals($config::VALUE_DEBUG_METHODS, $model->getValue());
+        $this->assertEquals(true, $model->getValue());
         $this->assertEquals($config::SECTION_METHODS, $model->getSection());
-        $this->assertEquals($config::RENDER_TYPE_INPUT, $model->getType());
+        $this->assertEquals($config::RENDER_TYPE_SELECT, $model->getType());
     }
 
     /**
      * Test the loading of a config value from ini.
      *
      * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
+     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
      */
     public function testLoadConfigValueFromIni()
     {
         $config = new Config(Krexx::$pool);
-        $someMethods = 'some methods';
+        $someMethods = 'false';
 
         $iniMock = $this->createMock(Ini::class);
         $iniMock->expects($this->once())
-            ->method(static::GET_FE_IS_EDITABLE)
-            ->with($config::SETTING_DEBUG_METHODS)
-            ->will($this->returnValue(true));
-        $iniMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_FILE)
-            ->with($config::SECTION_METHODS, $config::SETTING_DEBUG_METHODS)
+            ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
             ->will($this->returnValue($someMethods));
 
         $cookieMock = $this->createMock(Cookie::class);
         $cookieMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_COOKIES)
-            ->with($config::SECTION_METHODS, $config::SETTING_DEBUG_METHODS)
+            ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
             ->will($this->returnValue(null));
 
         // Inject them.
         $this->setValueByReflection(static::INI_CONFIG, $iniMock, $config);
         $this->setValueByReflection(static::COOKIE_CONFIG, $cookieMock, $config);
 
-        $this->assertSame($config, $config->loadConfigValue($config::SETTING_DEBUG_METHODS));
-        $model = $config->settings[$config::SETTING_DEBUG_METHODS];
+        $this->assertSame($config, $config->loadConfigValue($config::SETTING_ANALYSE_GETTER));
+        $model = $config->settings[$config::SETTING_ANALYSE_GETTER];
         $this->assertEquals(static::KREXX_INI_SETTINGS, $model->getSource());
-        $this->assertEquals($someMethods, $model->getValue());
+        $this->assertEquals(false, $model->getValue());
         $this->assertEquals($config::SECTION_METHODS, $model->getSection());
-        $this->assertEquals($config::RENDER_TYPE_INPUT, $model->getType());
+        $this->assertEquals($config::RENDER_TYPE_SELECT, $model->getType());
     }
 
     /**
      * Test the loading of a config value from cookies.
      *
      * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
+     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
      */
     public function testLoadConfigValueFromCookies()
     {
         $config = new Config(Krexx::$pool);
 
         $iniMock = $this->createMock(Ini::class);
-        $iniMock->expects($this->once())
-            ->method(static::GET_FE_IS_EDITABLE)
-            ->with($config::SETTING_DEBUG_METHODS)
-            ->will($this->returnValue(true));
         $iniMock->expects($this->never())
             ->method(static::GET_CONFIG_FROM_FILE)
-            ->with($config::SECTION_METHODS, $config::SETTING_DEBUG_METHODS);
+            ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER);
 
         $cookieMock = $this->createMock(Cookie::class);
         $cookieMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_COOKIES)
-            ->with($config::SECTION_METHODS, $config::SETTING_DEBUG_METHODS)
-            ->will($this->returnValue('cookie methods'));
+            ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
+            ->will($this->returnValue('false'));
 
         // Inject them.
         $this->setValueByReflection(static::INI_CONFIG, $iniMock, $config);
         $this->setValueByReflection(static::COOKIE_CONFIG, $cookieMock, $config);
 
-        $this->assertSame($config, $config->loadConfigValue($config::SETTING_DEBUG_METHODS));
-        $model = $config->settings[$config::SETTING_DEBUG_METHODS];
+        $this->assertSame($config, $config->loadConfigValue($config::SETTING_ANALYSE_GETTER));
+        $model = $config->settings[$config::SETTING_ANALYSE_GETTER];
         $this->assertEquals('Local cookie settings', $model->getSource());
-        $this->assertEquals('cookie methods', $model->getValue());
+        $this->assertEquals(false, $model->getValue());
         $this->assertEquals($config::SECTION_METHODS, $model->getSection());
-        $this->assertEquals($config::RENDER_TYPE_INPUT, $model->getType());
+        $this->assertEquals($config::RENDER_TYPE_SELECT, $model->getType());
     }
 
     /**
      * Ignoring the cookie config, because the demanded value is uneditable.
      *
      * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
+     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
      */
     public function testLoadConfigValueUneditable()
     {
@@ -400,10 +396,6 @@ class ConfigTest extends AbstractTest
         $someMethods = 'some methods';
 
         $iniMock = $this->createMock(Ini::class);
-        $iniMock->expects($this->once())
-            ->method(static::GET_FE_IS_EDITABLE)
-            ->with($config::SETTING_DEBUG_METHODS)
-            ->will($this->returnValue(false));
         $iniMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_FILE)
             ->with($config::SECTION_METHODS, $config::SETTING_DEBUG_METHODS)
@@ -426,19 +418,16 @@ class ConfigTest extends AbstractTest
     }
 
     /**
-     * Testing that reenabling kreXX with cookies does not work.
+     * Testing that re-enabling kreXX with cookies does not work.
      *
      * @covers \Brainworxx\Krexx\Service\Config\Config::loadConfigValue
+     * @covers \Brainworxx\Krexx\Service\Config\Config::prepareModelWithFeSettings
      */
-    public function testLoadConfigValueReenableWithCoookies()
+    public function testLoadConfigValueReEnableWithCookies()
     {
         $config = new Config(Krexx::$pool);
 
         $iniMock = $this->createMock(Ini::class);
-        $iniMock->expects($this->once())
-            ->method(static::GET_FE_IS_EDITABLE)
-            ->with($config::SETTING_DISABLED)
-            ->will($this->returnValue(true));
         $iniMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_FILE)
             ->with($config::SECTION_OUTPUT, $config::SETTING_DISABLED)

@@ -394,6 +394,7 @@ class ThroughGetter extends AbstractCallback
             if (($result = $this->retrievePropertyByName($propertyName, $classReflection)) !== null) {
                 return $result;
             }
+
             // Check if this is a method and go deeper!
             $methodName = rtrim($propertyName, '()');
             if (

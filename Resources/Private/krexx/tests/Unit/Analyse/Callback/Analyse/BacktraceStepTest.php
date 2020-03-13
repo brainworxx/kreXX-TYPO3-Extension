@@ -78,9 +78,9 @@ class BacktraceStepTest extends AbstractTest
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::callMe::start', $backtraceStep],
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::fileToOutput::end', $backtraceStep],
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::lineToOutput::end', $backtraceStep],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::functionToOutput::end', $backtraceStep],
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::objectToOutput::end', $backtraceStep],
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::typeToOutput::end', $backtraceStep],
+            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::functionToOutput::end', $backtraceStep],
             ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\BacktraceStep::argsToOutput::end', $backtraceStep]
         );
 

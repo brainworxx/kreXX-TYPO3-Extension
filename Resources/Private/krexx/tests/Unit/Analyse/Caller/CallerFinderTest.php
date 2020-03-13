@@ -195,6 +195,7 @@ class CallerFinderTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::cleanupVarName
+     *  @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::getType
      *
      * @throws \ReflectionException
      */
@@ -205,10 +206,11 @@ class CallerFinderTest extends AbstractTest
             ->willReturn($this->createFixture(85));
 
         // Run the test
-        $result = $this->callerFinder->findCaller('', $this->subjectVar);
+        $result = $this->callerFinder->findCaller('', 1.2345);
 
         // We only need to check the var name.
         $this->assertEquals('$this-&gt;parameterizedMethod(\'()&quot;2\')', $result[ConstInterface::TRACE_VARNAME]);
+        $this->assertEquals('Analysis of $this-&gt;parameterizedMethod(\'()&quot;2\'), float', $result[ConstInterface::TRACE_TYPE]);
     }
 
     /**

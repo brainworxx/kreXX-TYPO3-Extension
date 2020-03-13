@@ -68,9 +68,9 @@ class BacktraceStep extends AbstractCallback
         return $this->dispatchStartEvent() .
             $this->outputSingleChild('File', static::TRACE_FILE, 'fileToOutput') .
             $this->lineToOutput() .
-            $this->outputSingleChild('Last called function', static::TRACE_FUNCTION, 'functionToOutput') .
             $this->outputProcessor('Calling object', static::TRACE_OBJECT, 'objectToOutput', ProcessObject::class) .
             $this->outputSingleChild('Call type', static::TRACE_TYPE, 'typeToOutput') .
+            $this->outputSingleChild('Last called function', static::TRACE_FUNCTION, 'functionToOutput') .
             $this->outputProcessor('Arguments from the call', static::TRACE_ARGS, 'argsToOutput', ProcessArray::class);
     }
 

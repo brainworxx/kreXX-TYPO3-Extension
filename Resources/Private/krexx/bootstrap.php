@@ -99,6 +99,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Comment/Methods.php';
         include_once KREXX_DIR . 'src/Analyse/Comment/Properties.php';
         include_once KREXX_DIR . 'src/Analyse/Comment/Classes.php';
+        include_once KREXX_DIR . 'src/Analyse/Comment/ReturnType.php';
 
         include_once KREXX_DIR . 'src/Analyse/Routing/AbstractRouting.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Routing.php';
@@ -188,6 +189,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/View/RenderInterface.php';
         include_once KREXX_DIR . 'src/View/AbstractRender.php';
         include_once KREXX_DIR . 'src/View/Messages.php';
+        include_once KREXX_DIR . 'src/View/Message.php';
 
         include_once KREXX_DIR . 'src/View/Skins/Hans/SingleEditableChild.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/ExpandableChild.php';

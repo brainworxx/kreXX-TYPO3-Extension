@@ -160,4 +160,29 @@ trait ConnectorService
     {
         return $this->connectorService->getLanguage();
     }
+
+    /**
+     * Getter of the return type of a methos analysis.
+     *
+     * @return string
+     */
+    public function getReturnType(): string
+    {
+        return $this->connectorService->getReturnType();
+    }
+
+    /**
+     * Setter for the return type.
+     *
+     * @param string $returnType
+     *   The return type.
+     *
+     * @return $this
+     *   Return $this for chaining.
+     */
+    public function setReturnType(string $returnType): Model
+    {
+        $this->connectorService->setReturnType($returnType);
+        return $this;
+    }
 }

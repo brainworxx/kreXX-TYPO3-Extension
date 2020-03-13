@@ -218,10 +218,8 @@ class FileTest extends AbstractTest
     public function testGetFileContents()
     {
         $this->assertEmpty($this->file->getFileContents('whatever'), 'File does not exist');
-        $this->assertEquals(
-            ['fileserviceAccess' => ['key' => 'fileserviceAccess', 'params' => ['whatever']]],
-            Krexx::$pool->messages->getKeys()
-        );
+        $this->assertCount(1, Krexx::$pool->messages->getMessages());
+        $this->assertEquals('fileserviceAccess', Krexx::$pool->messages->getMessages()['fileserviceAccess']->getKey());
     }
 
     /**
@@ -264,7 +262,7 @@ class FileTest extends AbstractTest
         $fileService->deleteFile($payload);
 
         // Check the results.
-        $this->assertEquals([], Krexx::$pool->messages->getKeys());
+        $this->assertEquals([], Krexx::$pool->messages->getMessages());
     }
 
     /**
@@ -289,7 +287,7 @@ class FileTest extends AbstractTest
 
         $this->assertEquals(
             [],
-            Krexx::$pool->messages->getKeys(),
+            Krexx::$pool->messages->getMessages(),
             'We do not give feedback when trying to delete a none existing file.'
         );
     }
@@ -320,7 +318,7 @@ class FileTest extends AbstractTest
         $fileService->deleteFile($payload);
 
         // Check the results.
-        $this->assertEquals([], Krexx::$pool->messages->getKeys());
+        $this->assertEquals([], Krexx::$pool->messages->getMessages());
     }
 
     /**
@@ -345,11 +343,14 @@ class FileTest extends AbstractTest
         $fileService->deleteFile($payload);
 
         // Check the results.
-        $this->assertEquals(
-            ['fileserviceDelete' => ['key' => 'fileserviceDelete', 'params' => [$payload]]],
-            Krexx::$pool->messages->getKeys(),
+        $this->assertCount(
+            1,
+            Krexx::$pool->messages->getMessages(),
             'Feedback, that we were unable to delete the file.'
         );
+        $message = Krexx::$pool->messages->getMessages()['fileserviceDelete'];
+        $this->assertEquals('fileserviceDelete', $message->getKey());
+        $this->assertEquals([$payload], $message->getArguments());
     }
 
     /**

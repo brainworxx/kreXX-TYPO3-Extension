@@ -83,7 +83,7 @@ trait ExpandableChild
                 $model->getType(),
                 $this->retrieveTypeClasses($model),
                 $model->getNormal(),
-                $this->renderConnectorRight($model->getConnectorRight(128)),
+                $this->renderConnectorRight($model->getConnectorRight(128), $model->getReturnType()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $generateSource),
                 $this->pool->chunks->chunkMe($this->renderNest($model, false)),
                 $this->renderSourceButtonSg($generateSource, $model),

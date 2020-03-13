@@ -223,16 +223,12 @@ class Config extends Fallback
      */
     public function loadConfigValue(string $name): Config
     {
-        $isEditable = $this->iniConfig->getFeIsEditable($name);
-        $section = $this->feConfigFallback[$name][static::SECTION];
-
         /** @var Model $model */
-        $model = $this->pool->createClass(Model::class)->setSection($section)
-            ->setEditable($isEditable)
-            ->setType($this->feConfigFallback[$name][static::RENDER][static::RENDER_TYPE]);
+        $model = $this->prepareModelWithFeSettings($name);
+        $section = $model->getSection();
 
         // Do we accept cookie settings here?
-        if ($isEditable === true) {
+        if ($model->getEditable() === true) {
             $cookieSetting = $this->cookieConfig->getConfigFromCookies($section, $name);
             // Do we have a value in the cookies?
             if (
@@ -324,5 +320,33 @@ class Config extends Fallback
     public function getSkinList(): array
     {
         return array_keys($this->skinConfiguration);
+    }
+
+    /**
+     * Create the model with the fe editing settings.
+     *
+     * @param string $name
+     *   Name of the setting.
+     *
+     * @return \Brainworxx\Krexx\Service\Config\Model
+     *   The prepared model.
+     */
+    protected function prepareModelWithFeSettings(string $name): Model
+    {
+        $iniFeSettings = $this->iniConfig->getFeConfigFromFile($name);
+
+        if ($iniFeSettings === null) {
+            // Use the fallback values.
+            $iniFeSettings = $this->feConfigFallback[$name][static::RENDER];
+        }
+        $section = $this->feConfigFallback[$name][static::SECTION];
+
+        /** @var Model $model */
+        $model = $this->pool->createClass(Model::class)
+            ->setSection($section)
+            ->setEditable($iniFeSettings[static::RENDER_EDITABLE] === static::VALUE_TRUE)
+            ->setType($iniFeSettings[static::RENDER_TYPE]);
+
+        return $model;
     }
 }

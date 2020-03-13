@@ -115,6 +115,7 @@ class ObjectsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
      * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
      *
      * @throws \ReflectionException
@@ -135,6 +136,7 @@ class ObjectsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
      *
      * @throws \ReflectionException
      */
@@ -157,6 +159,7 @@ class ObjectsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
      *
      * @throws \ReflectionException
      */
@@ -203,6 +206,7 @@ class ObjectsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
      *
      * @throws \ReflectionException
      */
@@ -234,6 +238,7 @@ class ObjectsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
      *
      * @throws \ReflectionException
      */
@@ -267,6 +272,7 @@ class ObjectsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
      *
      * @throws \ReflectionException
      */
@@ -287,6 +293,7 @@ class ObjectsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
      *
      * @throws \ReflectionException
      */
@@ -307,6 +314,7 @@ class ObjectsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
      *
      * @throws \ReflectionException
      */
@@ -324,6 +332,7 @@ class ObjectsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
      *
      * @throws \ReflectionException
      */
@@ -340,6 +349,7 @@ class ObjectsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
      *
      * @throws \ReflectionException
      */
@@ -356,6 +366,7 @@ class ObjectsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
      *
      * @throws \ReflectionException
      */
@@ -376,6 +387,7 @@ class ObjectsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
      *
      * @throws \ReflectionException
      */
@@ -393,6 +405,7 @@ class ObjectsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
      *
      * @throws \ReflectionException
      */

@@ -229,7 +229,7 @@ class File
         if ($this->fileIsReadable($filePath) === false) {
             if ($showError === true) {
                 // This file was not readable! We need to tell the user!
-                $this->pool->messages->addMessage('fileserviceAccess', [$this->filterFilePath($filePath)]);
+                $this->pool->messages->addMessage('fileserviceAccess', [$this->filterFilePath($filePath)], true);
             }
             // Return empty string.
             return '';

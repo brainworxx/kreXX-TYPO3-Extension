@@ -91,7 +91,7 @@ trait ExpandableChild
                 $this->retrieveTypeClasses($model),
                 $model->getNormal(),
                 $this->renderConnectorLeft($model->getConnectorLeft()),
-                $this->renderConnectorRight($model->getConnectorRight(128)),
+                $this->renderConnectorRight($model->getConnectorRight(128), $model->getReturnType()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $generateSource),
                 $this->renderSourceButtonWithStop($generateSource),
                 $this->retrieveOpenedClass($isExpanded),

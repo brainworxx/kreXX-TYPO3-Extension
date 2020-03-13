@@ -2,6 +2,9 @@
 - Added process resource analysis.
 - Added better callback analysis.
 - Added better string analysis (json, file path, callback, xml)
+- Added timestamp analysis for large integers.
+- Added throw away messages.
+- Added return type to the method and function analysis.
 - Change: Removed all deprecations.
 - Change: Removed the PHP 5.x fatal error handler.
 - Change: Dropped PHP 5.x support.
@@ -15,10 +18,16 @@
 - Change: Simplified the Model.
 - Change: Do not display the encoding info, if we have a buffer
   info available.
+- Change: Different analysis order, when comming from the $this
+  scope, for better source generation.
+- Change: Different order in the backtrace analysis, for better
+  readability.
+- Change: Use compressed css for the SmokyGrey skin.
 
 3.2.3 dev
 - Bugfix: Added missing closing li tag to the expandableChild
   template.
+- Bugfix: The fe configuration does not update the render type.
 
 3.2.2
 - Updated to PHP 7.4
