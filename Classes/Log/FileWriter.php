@@ -105,7 +105,7 @@ class FileWriter implements WriterInterface
             ->dumpAction(
                 $data,
                 $record->getComponent() . ': ' . $record->getMessage(),
-                strtolower(LogLevel::getName($record->getLevel()))
+                $this->retrieveLogLevel($record)
             );
 
         AbstractController::$analysisInProgress = false;
@@ -113,6 +113,26 @@ class FileWriter implements WriterInterface
         static::endForcedLog();
 
         return $this;
+    }
+
+    /**
+     * Depending on the TYPO3 version, the log level is either a string or
+     * an integer
+     *
+     * @param \TYPO3\CMS\Core\Log\LogRecord $record
+     *   The log record.
+     *
+     * @return string
+     *   The readable string.
+     */
+    protected function retrieveLogLevel(LogRecord $record): string
+    {
+        $level = $record->getLevel();
+        if (is_integer($level)) {
+            $level = LogLevel::getName($level);
+        }
+
+        return strtolower($level);
     }
 
     /**
