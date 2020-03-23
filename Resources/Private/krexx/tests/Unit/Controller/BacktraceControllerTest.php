@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Controller;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
+use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
@@ -90,11 +91,10 @@ class BacktraceControllerTest extends AbstractController
             ->with(null)
             ->will($this->returnValue('generated HTML code'));
 
-        $scopeMock = $this->createMock(Scope::class);
-        $scopeMock->expects($this->once())
-            ->method('setScope')
-            ->with($this->callerFinderResult[ConstInterface::TRACE_VARNAME]);
-        $poolMock->scope = $scopeMock;
+        $poolMock->codegenHandler = $this->createMock(Codegen::class);
+        $poolMock->codegenHandler->expects($this->once())
+            ->method('setAllowCodegen')
+            ->with(false);
 
         $poolMock->emergencyHandler->expects($this->once())
             ->method('checkEmergencyBreak')

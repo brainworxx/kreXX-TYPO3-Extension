@@ -54,13 +54,15 @@ class DumpController extends AbstractController
      *
      * @param mixed $data
      *   The variable we want to analyse.
-     * @param string $headline
-     *   The headline of the markup we want to produce. Only used by the timer.
+     * @param string $message
+     *   If set, we are in logging mode. We use this as a variable name then.
+     * @param string $level
+     *   The log level, if available.
      *
      * @return $this;
      *   Return $this for chaining.
      */
-    public function dumpAction(&$data, string $headline = ''): DumpController
+    public function dumpAction(&$data, string $message = '', string $level = 'debug'): DumpController
     {
         if ($this->pool->emergencyHandler->checkMaxCall() === true) {
             // Called too often, we might get into trouble here!
@@ -70,10 +72,19 @@ class DumpController extends AbstractController
         $this->pool->reset();
 
         // Find caller.
-        $caller = $this->callerFinder->findCaller($headline, $data);
+        $caller = $this->callerFinder->findCaller($message, $data);
+        $caller[static::TRACE_LEVEL] = $level;
 
-        // We will only allow code generation, if we were able to determine the varname.
-        $this->pool->scope->setScope($caller[static::TRACE_VARNAME]);
+        // We will only allow code generation, if we were able to determine the
+        // variable name or if we are not in logging mode.
+        if ($message === '') {
+            // Normal analysis mode.
+            $this->pool->scope->setScope($caller[static::TRACE_VARNAME]);
+        } else {
+            // Logging mode.
+            $this->pool->codegenHandler->setAllowCodegen(false);
+        }
+
 
         // Start the magic.
         $analysis = $this->pool->routing->analysisHub(

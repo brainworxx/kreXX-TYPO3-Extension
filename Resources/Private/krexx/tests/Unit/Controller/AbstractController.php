@@ -66,6 +66,7 @@ class AbstractController extends AbstractTest
             ConstInterface::TRACE_LINE => 41,
             ConstInterface::TRACE_VARNAME => '$varWithAName',
             ConstInterface::TRACE_TYPE => 'Backtrace',
+            ConstInterface::TRACE_LEVEL => 'debug'
         ];
     }
 

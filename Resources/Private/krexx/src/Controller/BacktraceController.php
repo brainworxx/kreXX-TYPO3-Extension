@@ -67,7 +67,7 @@ class BacktraceController extends AbstractController
 
         // Find caller.
         $caller = $this->callerFinder->findCaller(static::TRACE_BACKTRACE, []);
-        $this->pool->scope->setScope($caller[static::TRACE_VARNAME]);
+        $this->pool->codegenHandler->setAllowCodegen(false);
 
         $analysis = $this->pool
             ->createClass(ProcessBacktrace::class)

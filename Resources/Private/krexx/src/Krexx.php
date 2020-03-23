@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Controller\EditSettingsController;
 use Brainworxx\Krexx\Controller\ExceptionController;
 use Brainworxx\Krexx\Controller\TimerController;
+use Brainworxx\Krexx\Logging\LoggingTrait;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -50,10 +51,11 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Public functions, allowing access to the kreXX debug features.
  *
- * @package Krexx
+ * @package Brainworxx\Krexx
  */
 class Krexx
 {
+    use LoggingTrait;
 
     /**
      * Our pool where we keep all relevant classes.
@@ -347,39 +349,5 @@ class Krexx
         static::startForcedLog();
         static::timerEnd();
         static::endForcedLog();
-    }
-
-    /**
-     * Configure everything to start the forced logging.
-     */
-    protected static function startForcedLog()
-    {
-        Pool::createPool();
-
-        // Output destination: file
-        static::$pool->config
-            ->settings[Fallback::SETTING_DESTINATION]
-            ->setSource('forced logging')
-            ->setValue(Fallback::VALUE_FILE);
-
-        // Do not care about ajax requests.
-        static::$pool->config
-            ->settings[Fallback::SETTING_DETECT_AJAX]
-            ->setSource('forced logging')
-            ->setValue(false);
-
-        // Reload the disabled settings with the new ajax setting.
-         static::$pool->config
-            ->loadConfigValue(Fallback::SETTING_DISABLED);
-    }
-
-    /**
-     * Reset everything after the forced logging.
-     */
-    protected static function endForcedLog()
-    {
-        // Reset everything afterwards.
-        static::$pool->config = static::$pool
-            ->createClass(Config::class);
     }
 }

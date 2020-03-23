@@ -237,7 +237,7 @@ class CallerFinderTest extends AbstractTest
         // Check the result
         $this->assertStringEndsWith($this->pathToFixture, $result[ConstInterface::TRACE_FILE]);
         $this->assertEquals(75, $result[ConstInterface::TRACE_LINE]);
-        $this->assertEquals('$parameter', $result[ConstInterface::TRACE_VARNAME]);
+        $this->assertEquals(static::HEADLINE_STRING, $result[ConstInterface::TRACE_VARNAME]);
         $this->assertEquals(static::HEADLINE_STRING, $result[ConstInterface::TRACE_TYPE]);
         $this->assertArrayHasKey(ConstInterface::TRACE_DATE, $result);
     }
@@ -264,13 +264,13 @@ class CallerFinderTest extends AbstractTest
             ->willReturn($fixture);
 
         // Run the test
-        $result = $this->callerFinder->findCaller(static::HEADLINE_STRING, $this->subjectVar);
+        $result = $this->callerFinder->findCaller('', $this->subjectVar);
 
         // Check the result
         $this->assertStringEndsWith($this->pathToFixture . ' file not there', $result[ConstInterface::TRACE_FILE]);
         $this->assertEquals(74, $result[ConstInterface::TRACE_LINE]);
         $this->assertEquals('. . .', $result[ConstInterface::TRACE_VARNAME]);
-        $this->assertEquals(static::HEADLINE_STRING, $result[ConstInterface::TRACE_TYPE]);
+        $this->assertEquals('Analysis of . . ., string', $result[ConstInterface::TRACE_TYPE]);
         $this->assertArrayHasKey(ConstInterface::TRACE_DATE, $result);
     }
 }

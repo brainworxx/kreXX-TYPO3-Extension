@@ -99,6 +99,7 @@ interface ConstInterface
     const TRACE_BACKTRACE = 'backtrace';
     const TRACE_DATE = 'date';
     const TRACE_URL = 'url';
+    const TRACE_LEVEL = 'level';
 
     // Stuff directly displayed in the FE, not just array keys.
     const META_DECLARED_IN = 'Declared in';
