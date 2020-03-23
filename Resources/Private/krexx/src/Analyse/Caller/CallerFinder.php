@@ -88,7 +88,12 @@ class CallerFinder extends AbstractCaller
                 break;
             }
         }
-        $varname = $this->getVarName($caller[static::TRACE_FILE], $caller[static::TRACE_LINE]);
+        if (empty($headline)) {
+            $varname = $this->getVarName($caller[static::TRACE_FILE], $caller[static::TRACE_LINE]);
+        } else {
+            $varname = $headline;
+        }
+
 
         // We will not keep the whole backtrace im memory. We only return what we
         // actually need.

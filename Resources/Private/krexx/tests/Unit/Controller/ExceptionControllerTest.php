@@ -51,13 +51,14 @@ use Exception;
 class ExceptionControllerTest extends AbstractController
 {
     /**
-     * Teting the exception action, like the method name says.
+     * Testing the exception action, like the method name says.
      *
      * @covers \Brainworxx\Krexx\Controller\ExceptionController::exceptionAction
      */
     public function testExceptionAction()
     {
         $this->callerFinderResult[ConstInterface::TRACE_VARNAME] = ' Exception';
+        $this->callerFinderResult[ConstInterface::TRACE_LEVEL] = 'error';
         unset($this->callerFinderResult[ConstInterface::TRACE_TYPE]);
 
         // One can not simply mock an exception.

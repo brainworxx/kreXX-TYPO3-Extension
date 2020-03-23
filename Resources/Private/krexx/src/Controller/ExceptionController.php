@@ -95,6 +95,7 @@ class ExceptionController extends AbstractController
                 static::TRACE_FILE => $exception->getFile(),
                 static::TRACE_LINE => $exception->getLine() + 1,
                 static::TRACE_VARNAME => ' ' . $type,
+                static::TRACE_LEVEL => 'error'
             ]
         );
 

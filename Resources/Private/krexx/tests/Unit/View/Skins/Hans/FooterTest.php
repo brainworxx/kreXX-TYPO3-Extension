@@ -45,7 +45,7 @@ class FooterTest extends AbstractRenderHans
     /**
      * Test the rendering of the footer.
      *
-     * We test the renderExpandableChild separately to keep this one al least
+     * We test the renderExpandableChild separately to keep this one at least
      * a little bit sane.
      *
      * @covers \Brainworxx\Krexx\View\Skins\Hans\Footer::renderFooter
@@ -62,13 +62,10 @@ class FooterTest extends AbstractRenderHans
             $this->renderHans::TRACE_DATE => 'yesteryear',
             $this->renderHans::TRACE_URL => 'https://www.google.biz',
         ];
-        Krexx::$pool->fileService->expects($this->once())
-            ->method('readFile')
-            ->will($this->returnValue(''));
         Krexx::$pool->fileService->expects($this->any())
             ->method('filterFilePath')
             ->will($this->returnValue(''));
-        Krexx::$pool->fileService->expects($this->exactly(2))
+        Krexx::$pool->fileService->expects($this->exactly(1))
             ->method('fileIsReadable')
             ->will($this->returnValue(true));
 
