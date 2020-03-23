@@ -17,6 +17,7 @@ Changelog
     - [Feature] Added better callback analysis.
     - [Feature] Added better string analysis (json, file path, callback, xml)
     - [Feature] Added timestamp analysis for large integers.
+    - [Feature] Added TYPO3 logger.
     - [Change] Removed all deprecations.
     - [Change] Removed the PHP 5.x fatal error handler.
     - [Change] Dropped PHP 5.x support.
@@ -30,7 +31,7 @@ Changelog
     - [Change] Simplified the Model.
     - [Change] Do not display the encoding info, if we have a buffer info available.
     - [Bugfix] The Aimeos decorator analysis works now as it should.
-    
+
 3.2.3 dev
     - [Bugfix] Added missing closing li tag to the expandableChild template.
     - [Bugfix] The fe configuration does not update the render type.
