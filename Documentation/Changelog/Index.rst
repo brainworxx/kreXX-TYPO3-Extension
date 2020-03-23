@@ -17,7 +17,7 @@ Changelog
     - [Feature] Added better callback analysis.
     - [Feature] Added better string analysis (json, file path, callback, xml)
     - [Feature] Added timestamp analysis for large integers.
-    - [Feature] Added TYPO3 logger.
+    - [Feature] Make code generation possible for the getProperties debug method in Fluid.
     - [Change] Removed all deprecations.
     - [Change] Removed the PHP 5.x fatal error handler.
     - [Change] Dropped PHP 5.x support.

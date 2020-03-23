@@ -74,6 +74,14 @@ class CodegenTest extends AbstractTest
         $model->setType($codeGen::TYPE_DEBUG_METHOD);
         $this->assertEquals($codeGen::UNKNOWN_VALUE, $codeGen->generateSource($model));
 
+        // The special debug method getProperties
+        $codeGen = new Codegen(Krexx::$pool);
+        $codeGen->setAllowCodegen(true);
+        $model = new Model(Krexx::$pool);
+        $model->setName('getProperties');
+        $model->setType($codeGen::TYPE_DEBUG_METHOD);
+        $this->assertEquals('properties', $codeGen->generateSource($model));
+
         // The VHS version.
         $codeGen = new Codegen(Krexx::$pool);
         $codeGen->setAllowCodegen(true);

@@ -82,14 +82,20 @@ class Codegen extends OrgCodegen implements ConstInterface
      */
     public function generateSource(Model $model): string
     {
+        $result = '';
+
         // Get out of here as soon as possible.
         if ($this->allowCodegen === false) {
-            return '';
+            return $result;
         }
 
         $name = $model->getName();
 
-        if (
+        if ($model->getType() === static::TYPE_DEBUG_METHOD && $name === 'getProperties') {
+            // Doing special treatment for the getProperties debug method.
+            // This one is directly callable in fluid.
+            $result =  $this->generateAll($model->setName('properties'));
+        } elseif (
             (is_string($name) === true &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
             $model->getType() === static::TYPE_DEBUG_METHOD ||
             $model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY
@@ -103,15 +109,15 @@ class Codegen extends OrgCodegen implements ConstInterface
             // variable.set inside that scope would make the code generation
             // really complicated.
             // Meh, we simply stop the generation in it's track.
-            return static::UNKNOWN_VALUE;
+            $result = static::UNKNOWN_VALUE;
+        } elseif ($model->getMultiLineCodeGen() === static::VHS_CALL_VIEWHELPER) {
+            // Check for VHS values.
+            $result = $this->generateVhsCall($model);
+        } else {
+            $result = $this->generateAll($model);
         }
 
-        // Check for VHS values.
-        if ($model->getMultiLineCodeGen() === static::VHS_CALL_VIEWHELPER) {
-            return $this->generateVhsCall($model);
-        }
-
-        return $this->generateAll($model);
+        return $result;
     }
 
     /**
