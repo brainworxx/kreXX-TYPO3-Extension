@@ -60,13 +60,13 @@ You can also use kreXX as a TYPO3 standard logger. Simply register it in your si
 
 	// Register kreXX as a new log writer
 	$GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'] = [
-		// Using the error level, and above.
-        \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
-            \Brainworxx\Includekrexx\Log\FileWriter::class => [
-				// Overwriting an existing configuration, allowing the scalar analysis.
-                \Brainworxx\Krexx\Service\Config\ConfigConstInterface::SETTING_ANALYSE_SCALAR => 'true'
-            ]
-        ]
-    ];
+	    // Using the error level, and above.
+	    \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
+	        \Brainworxx\Includekrexx\Log\FileWriter::class => [
+	            // Overwriting an existing configuration, allowing the scalar analysis.
+	            \Brainworxx\Krexx\Service\Config\ConfigConstInterface::SETTING_ANALYSE_SCALAR => 'true'
+	        ]
+	    ]
+	];
 
 `Here <https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ApiOverview/Logging/Configuration/Index.html#configuration-of-the-logging-system />`_ you can find additional documentation about the TYPO3 logging system.
