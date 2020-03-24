@@ -120,8 +120,7 @@ class ThroughMeta extends AbstractCallback
             ->setType($key === static::META_PRETTY_PRINT ? $key : static::TYPE_REFLECTION);
 
         if (in_array($key, $this->keysWithExtra)) {
-            $model->setNormal(static::UNKNOWN_VALUE);
-            $model->setHasExtra(true);
+            $model->setNormal(static::UNKNOWN_VALUE)->setHasExtra(true);
         } else {
             $model->setNormal($meta);
         }
