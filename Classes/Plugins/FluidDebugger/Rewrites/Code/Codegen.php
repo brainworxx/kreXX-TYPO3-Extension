@@ -89,26 +89,11 @@ class Codegen extends OrgCodegen implements ConstInterface
             return $result;
         }
 
-        $name = $model->getName();
-
-        if ($model->getType() === static::TYPE_DEBUG_METHOD && $name === 'getProperties') {
+        if ($model->getType() === static::TYPE_DEBUG_METHOD && $model->getName() === 'getProperties') {
             // Doing special treatment for the getProperties debug method.
             // This one is directly callable in fluid.
             $result =  $this->generateAll($model->setName('properties'));
-        } elseif (
-            (is_string($name) === true &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
-            $model->getType() === static::TYPE_DEBUG_METHOD ||
-            $model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY
-        ) {
-            // Test for a point in a variable name.
-            // Stuff like this is not reachable by normal means.
-            // Disallowing code generation for configured debug methods.
-            // There is no real iterator_to_array method in vanilla fluid or vhs.
-            // The groupedFor viewhelper can be abused, but the new variable would
-            // only be visible inside the viewhelper scope. And adding a
-            // variable.set inside that scope would make the code generation
-            // really complicated.
-            // Meh, we simply stop the generation in it's track.
+        } elseif ($this->isUnknownType($model)) {
             $result = static::UNKNOWN_VALUE;
         } elseif ($model->getMultiLineCodeGen() === static::VHS_CALL_VIEWHELPER) {
             // Check for VHS values.
@@ -118,6 +103,30 @@ class Codegen extends OrgCodegen implements ConstInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Test if we need to stop the code generation in it's tracks.
+     *
+     * - Test for a point in a variable name.
+     *   Stuff like this is not reachable by normal means.
+     * - Disallowing code generation for configured debug methods.
+     *   There is no real iterator_to_array method in vanilla fluid or vhs.
+     *   The groupedFor viewhelper can be abused, but the new variable would
+     *   only be visible inside the viewhelper scope. And adding a
+     *   variable.set inside that scope would make the code generation
+     *   really complicated.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @return bool
+     */
+    protected function isUnknownType(Model $model): bool
+    {
+        $name = $model->getName();
+        return
+            (is_string($name) === true &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
+            $model->getType() === static::TYPE_DEBUG_METHOD ||
+            $model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY;
     }
 
     /**

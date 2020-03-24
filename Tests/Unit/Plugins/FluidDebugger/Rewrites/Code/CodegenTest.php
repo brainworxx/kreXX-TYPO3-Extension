@@ -49,6 +49,7 @@ class CodegenTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateSource
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateAll
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateVhsCall
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::isUnknownType
      */
     public function testGenerateSource()
     {
