@@ -77,7 +77,7 @@ class Fluid extends AbstractFluid
      */
     protected function getPartialPath(): string
     {
-        $result = 'n/a';
+        $result = static::FLUID_NOT_AVAILABLE;
         $identifier = explode('_', $this->parsedTemplate->getIdentifier());
         // The thing here is, that this identifier is actually not the real
         // identifier. The one used to get the 'filename' looks like:
@@ -121,16 +121,19 @@ class Fluid extends AbstractFluid
      */
     protected function resolveTemplateName($resolvedIdentifiers, string $hash, TemplatePaths $templatePath): string
     {
-        if (isset($resolvedIdentifiers['partials'])) {
-            foreach ($resolvedIdentifiers['partials'] as $fileName => $realIdentifier) {
-                if (strpos($realIdentifier, $hash) !== false) {
-                    // We've got our filename!
-                    return $templatePath->getPartialPathAndFilename($fileName);
-                    break;
-                }
+        if (isset($resolvedIdentifiers['partials']) === false) {
+            // Unable to identify the partial.
+            return static::FLUID_NOT_AVAILABLE;
+        }
+
+        foreach ($resolvedIdentifiers['partials'] as $fileName => $realIdentifier) {
+            if (strpos($realIdentifier, $hash) !== false) {
+                // We've got our filename!
+                return $templatePath->getPartialPathAndFilename($fileName);
             }
         }
 
-        return 'n/a';
+        // Nothing found.
+        return static::FLUID_NOT_AVAILABLE;
     }
 }

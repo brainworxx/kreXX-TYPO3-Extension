@@ -49,6 +49,7 @@ use ReflectionException;
 abstract class AbstractFluid extends AbstractCaller
 {
     const FLUID_VARIABLE = 'fluidvar';
+    const FLUID_NOT_AVAILABLE = 'n/a';
 
     /**
      * @var \TYPO3\CMS\Fluid\View\AbstractTemplateView|\TYPO3Fluid\Fluid\View\ViewInterface
@@ -97,7 +98,7 @@ abstract class AbstractFluid extends AbstractCaller
      *
      * @var string
      */
-    protected $line = 'n/a';
+    protected $line = self::FLUID_NOT_AVAILABLE;
 
     /**
      * The variable name, that we were able to resolve.
@@ -187,8 +188,8 @@ abstract class AbstractFluid extends AbstractCaller
         if ($this->error === true) {
             // Something went wrong!
             return [
-                static::TRACE_FILE => 'n/a',
-                static::TRACE_LINE => 'n/a',
+                static::TRACE_FILE => static::FLUID_NOT_AVAILABLE,
+                static::TRACE_LINE => static::FLUID_NOT_AVAILABLE,
                 static::TRACE_VARNAME => static::FLUID_VARIABLE,
                 static::TRACE_TYPE => $this->getType('Fluid analysis', static::FLUID_VARIABLE, $data),
                 static::TRACE_DATE => date('d-m-Y H:i:s', time()),
@@ -227,7 +228,7 @@ abstract class AbstractFluid extends AbstractCaller
                 $path = $this->getLayoutPath();
                 break;
             default:
-                $path = 'n/a';
+                $path = static::FLUID_NOT_AVAILABLE;
         }
 
         // Trying to resolve the line as well as the variable name, if possible.

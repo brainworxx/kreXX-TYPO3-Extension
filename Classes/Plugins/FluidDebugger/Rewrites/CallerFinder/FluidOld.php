@@ -52,7 +52,7 @@ class FluidOld extends AbstractFluid
      */
     protected function getTemplatePath(): string
     {
-        $result = 'n/a';
+        $result = static::FLUID_NOT_AVAILABLE;
 
         if ($this->viewReflection->hasMethod('getTemplatePathAndFilename')) {
             try {
@@ -72,7 +72,7 @@ class FluidOld extends AbstractFluid
      */
     protected function getLayoutPath(): string
     {
-        $result = 'n/a';
+        $result = static::FLUID_NOT_AVAILABLE;
 
         if ($this->viewReflection->hasMethod('getLayoutPathAndFilename')) {
             $fileName = $this->parsedTemplate->getLayoutName($this->renderingContext);
@@ -124,6 +124,6 @@ class FluidOld extends AbstractFluid
             // Do nothing. We return an empty result later.
         }
 
-        return 'n/a';
+        return static::FLUID_NOT_AVAILABLE;
     }
 }
