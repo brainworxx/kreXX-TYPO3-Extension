@@ -33,48 +33,12 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-declare(strict_types=1);
+namespace Brainworxx\Krexx\Tests\Fixtures;
 
-namespace Brainworxx\Krexx\Analyse\Comment;
-
-use ReflectionClass;
-use Reflector;
-
-/**
- * Retrieving the comment of a property.
- *
- * @package Brainworxx\Krexx\Analyse\Comment
- */
-class Properties extends AbstractComment
+class ConstantsFixture
 {
-    /**
-     * Get the comment from a property.
-     *
-     * @param \Reflector $reflectionProperty
-     * @param \ReflectionClass|null $reflectionClass
-     * @return mixed
-     */
-    public function getComment(Reflector $reflectionProperty, ReflectionClass $reflectionClass = null): string
-    {
-        if (isset($reflectionProperty->isUndeclared) === true) {
-            return '';
-        }
-
-        // Do some static caching. The comment will not change during a run.
-        static $cache = [];
-        /** @var \ReflectionProperty $reflectionProperty */
-        $cachingKey = $reflectionProperty->getDeclaringClass()->getName() . '::' . $reflectionProperty->getName();
-        if (isset($cache[$cachingKey]) === true) {
-            return $cache[$cachingKey];
-        }
-
-        // Cache not found. We need to generate this one.
-        $cache[$cachingKey] = nl2br(
-            $this->pool->encodingService->encodeString(
-                $this->prettifyComment($reflectionProperty->getDocComment())
-            )
-        );
-
-        return $cache[$cachingKey];
-    }
+    const CONST_1 = 'some value';
+    const CONST_2 = 'more values';
+    const CONST_3 = 'string';
+    const CONST_4 = 21;
 }

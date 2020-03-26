@@ -5,6 +5,8 @@
 - Added timestamp analysis for large integers.
 - Added throw away messages.
 - Added return type to the method and function analysis.
+- Added additional data to the constants analysis for PHP 7.1
+  and higher. The scope analysis now respects their visibility.
 - Change: Removed all deprecations.
 - Change: Removed the PHP 5.x fatal error handler.
 - Change: Dropped PHP 5.x support.
@@ -28,6 +30,8 @@
 - Bugfix: Added missing closing li tag to the expandableChild
   template.
 - Bugfix: The fe configuration does not update the render type.
+- Bugfix: Do not mixup and/or combine escaping for keys and/or
+  code generation.
 
 3.2.2
 - Updated to PHP 7.4

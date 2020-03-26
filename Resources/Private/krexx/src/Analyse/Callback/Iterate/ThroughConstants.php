@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
+use ReflectionClassConstant;
 
 /**
  * Constant analysis methods.
@@ -46,12 +47,23 @@ use Brainworxx\Krexx\Analyse\Model;
  * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  *
  * @uses array data
- *   Array of constants from the class we are analysing.
+ *   Array of constants values from the class we are analysing.
+ * @uses \ReflectionClass ref
+ *   Reflection of the class we are analysing.
+ *
+ * Deprecated:
  * @uses string classname
  *   The classname we are analysing, for code generation purpose.
+ *   Deprecated since 4.0.0. Will be removed. Ask the class reflection instead.
  */
 class ThroughConstants extends AbstractCallback
 {
+    /**
+     * Are we coming from a $this scope?
+     *
+     * @var bool
+     */
+    protected $isInScope = false;
 
     /**
      * Simply iterate though object constants.
@@ -62,19 +74,103 @@ class ThroughConstants extends AbstractCallback
     public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
+        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
+        $ref = $this->parameters[static::PARAM_REF];
 
-        // We do not need to check the recursionHandler, this is class
-        // internal stuff. Is it even possible to create a recursion here?
-        // Iterate through.
-        foreach ($this->parameters[static::PARAM_DATA] as $k => &$v) {
+        // Setting the prefix, depending on the scope.
+        $this->isInScope = $this->pool->scope->isInScope();
+        $prefix = $this->isInScope === true ? 'static' : '\\' . $ref->getName();
+
+        // Dump the constants 7.0 style.
+        if (version_compare(phpversion(), '7.1.0', '<') === true) {
+            return $this->dumpPhpSevenZero($output, $prefix);
+        }
+
+        // Dump them with visibility infos.
+        foreach ($this->parameters[static::PARAM_DATA] as $constantName => $constantValue) {
+            /** @var ReflectionClassConstant $reflectionConstant */
+            $reflectionConstant = $this->parameters[static::PARAM_REF]->getReflectionConstant($constantName);
+            if ($this->canDump($reflectionConstant) === true) {
+                $output .= $this->pool->routing->analysisHub(
+                    $this->pool->createClass(Model::class)
+                        ->setData($constantValue)
+                        ->setAdditional($this->retrieveAdditionalData($reflectionConstant))
+                        ->setName($constantName)
+                        ->setCustomConnectorLeft($prefix . '::')
+                );
+            }
+        }
+
+        return $output;
+    }
+
+    /**
+     * Dump the constants PHP 7.0 style.
+     *
+     * @param string $output
+     *   The output so far.
+     * @param string $prefix
+     *   The constants prefix we are using.
+     *
+     * @return string
+     *   The generated DOM.
+     */
+    protected function dumpPhpSevenZero(string $output, string $prefix)
+    {
+        foreach ($this->parameters[static::PARAM_DATA] as $constantName => $constantValue) {
             $output .= $this->pool->routing->analysisHub(
                 $this->pool->createClass(Model::class)
-                    ->setData($v)
-                    ->setName($k)
-                    ->setCustomConnectorLeft($this->parameters[static::PARAM_CLASSNAME] . '::')
+                    ->setData($constantValue)
+                    ->setName($constantName)
+                    ->setCustomConnectorLeft($prefix . '::')
             );
         }
 
         return $output;
+    }
+
+    /**
+     * Adding visibility infos about hte constant we are analysing.
+     *
+     * @param \ReflectionClassConstant $reflectionConstant
+     *   The reflection of the constat we are analsying.
+     *
+     * @return string
+     *   The visibility info.
+     */
+    protected function retrieveAdditionalData(ReflectionClassConstant $reflectionConstant): string
+    {
+        if ($reflectionConstant->isPublic() === true) {
+            return 'public constant ';
+        }
+
+        if ($reflectionConstant->isProtected() === true) {
+            return 'protected constant ';
+        }
+
+        // It either is public, protected or private, and nothing else.
+        return 'private constant ';
+    }
+
+    /**
+     * Decide, if we can actually dump this one.
+     *
+     * @param ReflectionClassConstant $reflectionConstant
+     *   The name of the constant we want to dump.
+     *
+     * @return bool
+     *   Well? Will we dump it?
+     */
+    protected function canDump(ReflectionClassConstant $reflectionConstant): bool
+    {
+        if ($reflectionConstant->isPublic() === true || $this->isInScope === true) {
+            // It'e either public or inside the scope.
+            // This includes also some private classes from the highest levels of
+            // the class.
+            return true;
+        }
+
+        // Either a deep private or out of scope.
+        return false;
     }
 }

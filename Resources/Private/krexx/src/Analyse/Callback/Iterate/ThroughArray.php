@@ -92,7 +92,7 @@ class ThroughArray extends AbstractCallback
             }
 
             if (is_string($key) === true) {
-                $model->setName($encodingService->encodeStringForCodeGeneration($encodingService->encodeString($key)))
+                $model->setName($encodingService->encodeString($key))
                     ->setConnectorType(Connectors::ASSOCIATIVE_ARRAY);
             } else {
                 $model->setName($key)->setConnectorType(Connectors::NORMAL_ARRAY);
