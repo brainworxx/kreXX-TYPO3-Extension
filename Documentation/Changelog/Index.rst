@@ -17,7 +17,10 @@ Changelog
     - [Feature] Added better callback analysis.
     - [Feature] Added better string analysis (json, file path, callback, xml)
     - [Feature] Added timestamp analysis for large integers.
+    - [Feature] Added throw away messages.
+    - [Feature] Added return type to the method and function analysis.
     - [Feature] Make code generation possible for the getProperties debug method in Fluid.
+    - [Feature] TYPO3 10.3 support.
     - [Change] Removed all deprecations.
     - [Change] Removed the PHP 5.x fatal error handler.
     - [Change] Dropped PHP 5.x support.
@@ -30,6 +33,9 @@ Changelog
     - [Change] Introduced method return types.
     - [Change] Simplified the Model.
     - [Change] Do not display the encoding info, if we have a buffer info available.
+    - [Change] Different analysis order, when coming from the $this scope, for better source generation.
+    - [Change] Different order in the backtrace analysis, for better readability.
+    - [Change] Use compressed css for the SmokyGrey skin.
     - [Bugfix] The Aimeos decorator analysis works now as it should.
 
 3.2.3 dev
