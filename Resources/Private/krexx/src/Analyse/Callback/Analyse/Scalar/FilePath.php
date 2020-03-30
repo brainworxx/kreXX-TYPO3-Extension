@@ -64,7 +64,7 @@ class FilePath extends AbstractScalarAnalysis
     protected $path = '';
 
     /**
-     * No file path anyalysis without the finfo class.
+     * No file path analysis without the finfo class.
      *
      * @return bool
      *   Is the finfo class available?

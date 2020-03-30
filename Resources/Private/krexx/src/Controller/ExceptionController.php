@@ -83,21 +83,13 @@ class ExceptionController extends AbstractController
         $this->pool->chunks->detectEncoding($main . $backtrace);
 
         // Get the header, footer and messages
-        $type = get_class($exception);
         $footer = $this->outputFooter([]);
-        $header = $this->pool->render->renderFatalHeader($this->outputCssAndJs(), $type);
+        $header = $this->pool->render->renderFatalHeader($this->outputCssAndJs(), get_class($exception));
         $messages = $this->pool->messages->outputMessages();
 
          // Add the caller as metadata to the chunks class. It will be saved as
         // additional info, in case we are logging to a file.
-        $this->pool->chunks->addMetadata(
-            [
-                static::TRACE_FILE => $exception->getFile(),
-                static::TRACE_LINE => $exception->getLine() + 1,
-                static::TRACE_VARNAME => ' ' . $type,
-                static::TRACE_LEVEL => 'error'
-            ]
-        );
+        $this->pool->chunks->addMetadata($this->generateMetaArray($exception));
 
         $this->outputService->addChunkString($header)->addChunkString($messages)
             ->addChunkString($main)
@@ -135,5 +127,24 @@ class ExceptionController extends AbstractController
         restore_exception_handler();
 
         return $this;
+    }
+
+    /**
+     * Generate the meta data for the exception analysis.
+     *
+     * @param \Throwable $exception
+     *   The exception we are analysing.
+     *
+     * @return array
+     *   The meta array.
+     */
+    protected function generateMetaArray(Throwable $exception): array
+    {
+        return [
+            static::TRACE_FILE => $exception->getFile(),
+            static::TRACE_LINE => $exception->getLine() + 1,
+            static::TRACE_VARNAME => ' ' . get_class($exception),
+            static::TRACE_LEVEL => 'error'
+        ];
     }
 }

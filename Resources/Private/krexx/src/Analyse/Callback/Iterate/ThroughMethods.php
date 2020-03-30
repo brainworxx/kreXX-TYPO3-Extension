@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
@@ -46,7 +47,7 @@ use ReflectionClass;
 use ReflectionMethod;
 
 /**
- * Methods analysis methods. :rolleyes:
+ * Methods analysis methods. Pun not intended.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  *
@@ -105,7 +106,7 @@ class ThroughMethods extends AbstractCallback
                         $this->getDeclarationKeywords($refMethod, $declaringClass, $refClass) . static::TYPE_METHOD
                     )->setConnectorType($this->retrieveConnectorType($refMethod))
                     ->addParameter(static::PARAM_DATA, $methodData)
-                    ->setIsPublic($refMethod->isPublic())
+                    ->setCodeGenType($refMethod->isPublic() ? Codegen::CODEGEN_TYPE_PUBLIC : '')
                     ->setReturnType($methodData[static::META_RETURN_TYPE])
                     ->injectCallback($this->pool->createClass(ThroughMeta::class))
             ));

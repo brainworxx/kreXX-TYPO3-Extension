@@ -92,7 +92,7 @@ class VhsMethods implements EventHandlerInterface, ConstInterface, FluidConstInt
         }
 
         // Switch to VHS Viewhelper
-        $model->setMultiLineCodeGen(Codegen::VHS_CALL_VIEWHELPER)
+        $model->setCodeGenType(Codegen::VHS_CALL_VIEWHELPER)
             ->addParameter(static::PARAM_ARRAY, $paramArray);
 
         return '';

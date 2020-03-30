@@ -137,16 +137,14 @@ class ReturnType extends AbstractComment implements ConstInterface
             return $result;
         }
 
-        $nullable = '';
         if (method_exists($returnType, 'getName') === true) {
             // 7.1 or later. We alo need to check for nullable types.
-            if ($returnType->allowsNull() === true) {
-                $nullable = '?';
-            }
+            $nullable = $returnType->allowsNull() === true ? '?' : '';
             $result = $returnType->getName();
         } else {
             // Must be 7.0.
             $result = $returnType->__toString();
+            $nullable = '';
         }
 
         if (in_array($result, $this->allowedTypes) === false && strpos($result, '\\') !== 0) {

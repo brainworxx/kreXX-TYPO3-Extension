@@ -51,7 +51,7 @@ use ReflectionException;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class Decorators  extends AbstractEventHandler
+class Decorators extends AbstractEventHandler
 {
     /**
      * List of possible internal names of the recipient class.

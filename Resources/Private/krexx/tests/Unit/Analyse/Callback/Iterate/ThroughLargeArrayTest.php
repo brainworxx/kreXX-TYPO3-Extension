@@ -134,9 +134,18 @@ class ThroughLargeArrayTest extends AbstractTest
             ->callMe();
 
         // Test multiline generation
-        $this->assertEquals('', $this->routingMock->model[0]->getMultiLineCodeGen());
-        $this->assertEquals('', $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][0]->getMultiLineCodeGen());
-        $this->assertEquals('', $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getMultiLineCodeGen());
+        $this->assertEquals(
+            Codegen::CODEGEN_TYPE_PUBLIC,
+            $this->routingMock->model[0]->getCodeGenType()
+        );
+        $this->assertEquals(
+            Codegen::CODEGEN_TYPE_PUBLIC,
+            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][0]->getCodeGenType()
+        );
+        $this->assertEquals(
+            Codegen::CODEGEN_TYPE_PUBLIC,
+            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getCodeGenType()
+        );
 
         $this->alwaysRun($fixture);
     }
@@ -166,16 +175,16 @@ class ThroughLargeArrayTest extends AbstractTest
 
         // Test multiline generation
         $this->assertEquals(
-            Codegen::ITERATOR_TO_ARRAY,
-            $this->routingMock->model[0]->getMultiLineCodeGen()
+            Codegen::CODEGEN_TYPE_ITERATOR_TO_ARRAY,
+            $this->routingMock->model[0]->getCodeGenType()
         );
         $this->assertEquals(
-            Codegen::ITERATOR_TO_ARRAY,
-            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][0]->getMultiLineCodeGen()
+            Codegen::CODEGEN_TYPE_ITERATOR_TO_ARRAY,
+            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][0]->getCodeGenType()
         );
         $this->assertEquals(
-            Codegen::ITERATOR_TO_ARRAY,
-            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getMultiLineCodeGen()
+            Codegen::CODEGEN_TYPE_ITERATOR_TO_ARRAY,
+            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getCodeGenType()
         );
 
         $this->alwaysRun($fixture);

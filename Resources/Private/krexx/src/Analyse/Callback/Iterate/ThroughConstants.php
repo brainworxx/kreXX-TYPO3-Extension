@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Model;
 use ReflectionClassConstant;
 
@@ -96,6 +97,7 @@ class ThroughConstants extends AbstractCallback
                         ->setData($constantValue)
                         ->setAdditional($this->retrieveAdditionalData($reflectionConstant))
                         ->setName($constantName)
+                        ->setCodeGenType(Codegen::CODEGEN_TYPE_PUBLIC)
                         ->setCustomConnectorLeft($prefix . '::')
                 );
             }
@@ -122,6 +124,7 @@ class ThroughConstants extends AbstractCallback
                 $this->pool->createClass(Model::class)
                     ->setData($constantValue)
                     ->setName($constantName)
+                    ->setCodeGenType(Codegen::CODEGEN_TYPE_PUBLIC)
                     ->setCustomConnectorLeft($prefix . '::')
             );
         }
@@ -133,7 +136,7 @@ class ThroughConstants extends AbstractCallback
      * Adding visibility infos about hte constant we are analysing.
      *
      * @param \ReflectionClassConstant $reflectionConstant
-     *   The reflection of the constat we are analsying.
+     *   The reflection of the constant we are analysing.
      *
      * @return string
      *   The visibility info.

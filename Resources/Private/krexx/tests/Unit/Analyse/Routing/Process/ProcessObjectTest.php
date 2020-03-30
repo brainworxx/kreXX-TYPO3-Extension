@@ -38,6 +38,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
@@ -48,21 +49,31 @@ class ProcessObjectTest extends AbstractTest
     /**
      * Testing the initial object processing.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject::handleNoneScalar
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::generateDomIdFromObject
      */
     public function testProcess()
     {
         Krexx::$pool->render = new RenderNothing(Krexx::$pool);
+        $emergencyMock = $this->createMock(Emergency::class);
+        $emergencyMock->expects($this->once())
+            ->method('upOneNestingLevel');
+        $emergencyMock->expects($this->once())
+            ->method('downOneNestingLevel');
+        Krexx::$pool->emergencyHandler = $emergencyMock;
+
         $fixture = new SimpleFixture();
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
         $model->setName('$myObject');
+
         $processor = new ProcessObject(Krexx::$pool);
         $this->mockEventService(
             [ProcessObject::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->process($model);
+        $processor->handle($model);
 
         $this->assertEquals(ProcessObject::TYPE_CLASS, $model->getType());
         $this->assertEquals('\\' . SimpleFixture::class, $model->getNormal());
@@ -70,5 +81,21 @@ class ProcessObjectTest extends AbstractTest
         $parameters = $model->getParameters();
         $this->assertEquals($parameters[ProcessObject::PARAM_DATA], $fixture);
         $this->assertEquals($parameters[ProcessObject::PARAM_NAME], '$myObject');
+    }
+
+    /**
+     * Test the check if we can handle the array processing.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject::canHandle
+     */
+    public function testCanHandle()
+    {
+        $processor = new ProcessObject(Krexx::$pool);
+        $model = new Model(Krexx::$pool);
+        $fixture = new \stdClass();
+
+        $this->assertTrue($processor->canHandle($model->setData($fixture)));
+        $fixture = 'abc';
+        $this->assertFalse($processor->canHandle($model->setData($fixture)));
     }
 }

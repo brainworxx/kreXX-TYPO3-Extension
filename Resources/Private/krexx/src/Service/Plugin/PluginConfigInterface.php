@@ -59,8 +59,6 @@ interface PluginConfigInterface
     /**
      * Get the version of the plugin.
      *
-     * @throws \TYPO3\CMS\Core\Package\Exception
-     *
      * @return string
      */
     public function getVersion(): string;

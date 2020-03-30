@@ -66,7 +66,8 @@ class ThroughArray extends AbstractCallback
         $output = $this->pool->render->renderSingeChildHr() . $this->dispatchStartEvent();
 
         // Are we dealing with multiline code generation?
-        $multilineCodeGen = ($this->parameters[static::PARAM_MULTILINE] === true ? Codegen::ITERATOR_TO_ARRAY : '');
+        $multilineCodeGen = $this->parameters[static::PARAM_MULTILINE] === true ?
+            Codegen::CODEGEN_TYPE_ITERATOR_TO_ARRAY : Codegen::CODEGEN_TYPE_PUBLIC;
 
         $recursionMarker = $this->pool->recursionHandler->getMarker();
         $encodingService = $this->pool->encodingService;
@@ -83,11 +84,11 @@ class ThroughArray extends AbstractCallback
             }
 
             /** @var Model $model */
-            $model = $this->pool->createClass(Model::class)->setData($value)->setMultiLineCodeGen($multilineCodeGen);
+            $model = $this->pool->createClass(Model::class)->setData($value)->setCodeGenType($multilineCodeGen);
 
             if (array_key_exists($key, $array) === false) {
                 // Looks like we have an inaccessible array value here.
-                $model->setMultiLineCodeGen(Codegen::ARRAY_VALUES_ACCESS)
+                $model->setCodeGenType(Codegen::CODEGEN_TYPE_ARRAY_VALUES_ACCESS)
                     ->setConnectorParameters(array_search($key, array_keys($array)));
             }
 

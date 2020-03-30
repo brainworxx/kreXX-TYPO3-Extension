@@ -80,8 +80,7 @@ class CodegenTest extends AbstractTest
         $this->setValueByReflection(static::FIRST_RUN, false, $this->codegenHandler);
 
         $this->fixture = new Model(Krexx::$pool);
-        $this->fixture->setName('name')
-            ->setIsPublic(false);
+        $this->fixture->setName('name');
 
         // Mock the connector service and inject it into the model.
         $this->connectorMock = $this->createMock(Connectors::class);
@@ -119,6 +118,7 @@ class CodegenTest extends AbstractTest
      * Test the forbidden code generation.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceNoGen()
     {
@@ -132,12 +132,13 @@ class CodegenTest extends AbstractTest
      * Test the concatenation of the first run.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceFirstRun()
     {
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
-        $this->expectConnectorCalls(1, 1);
+        $this->expectConnectorCalls(2, 1);
 
         $this->assertEquals(
             static::CONCATENATED_CONNECTORS,
@@ -152,11 +153,12 @@ class CodegenTest extends AbstractTest
      * Test the stop return, in case of constants.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceMetaConstants()
     {
         $this->expectConnectorCalls(0, 0);
-        $this->fixture->setIsMetaConstants(true);
+        $this->fixture->setCodeGenType(Codegen::CODEGEN_TYPE_META_CONSTANTS);
         $this->assertEquals(
             ';stop;',
             $this->codegenHandler->generateSource($this->fixture)
@@ -167,6 +169,7 @@ class CodegenTest extends AbstractTest
      * Test an empty return value, in case of empty connectors.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceEmpty()
     {
@@ -187,12 +190,15 @@ class CodegenTest extends AbstractTest
      * Test the concatenation in case of debug methods.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceIsDebug()
     {
-        $this->expectConnectorCalls(2, 2);
-        $this->fixture->setType($this->codegenHandler::TYPE_DEBUG_METHOD);
+        $this->expectConnectorCalls(1, 1);
+        $this->fixture
+            ->setType($this->codegenHandler::TYPE_DEBUG_METHOD)
+            ->setCodeGenType(Codegen::CODEGEN_TYPE_PUBLIC);
         $this->assertEquals(
             static::CONCATENATED_CONNECTORS,
             $this->codegenHandler->generateSource($this->fixture)
@@ -203,12 +209,13 @@ class CodegenTest extends AbstractTest
      * Test the concatenation in case of debug methods.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceIteratorToArray()
     {
-        $this->expectConnectorCalls(2, 2);
-        $this->fixture->setMultiLineCodeGen($this->codegenHandler::ITERATOR_TO_ARRAY);
+        $this->expectConnectorCalls(1, 1);
+        $this->fixture->setCodeGenType($this->codegenHandler::CODEGEN_TYPE_ITERATOR_TO_ARRAY);
         $this->assertEquals(
             'iterator_to_array(;firstMarker;)getConnectorLeftnamegetConnectorRight',
             $this->codegenHandler->generateSource($this->fixture)
@@ -219,10 +226,11 @@ class CodegenTest extends AbstractTest
      * Test the meta json code generation.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceMetaDecodedJson()
     {
-        $this->fixture->setMultiLineCodeGen($this->codegenHandler::JSON_DECODE);
+        $this->fixture->setCodeGenType($this->codegenHandler::CODEGEN_TYPE_JSON_DECODE);
         $this->assertEquals(
             'json_decode(;firstMarker;)',
             $this->codegenHandler->generateSource($this->fixture),
@@ -234,10 +242,11 @@ class CodegenTest extends AbstractTest
      * Test the coegeneration for unaccessible array values.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceArrayValueAccess()
     {
-        $this->expectConnectorCalls(1, 1);
+        $this->expectConnectorCalls(0, 0);
         $this->connectorMock->expects($this->once())
             ->method('setParameters')
             ->with('0');
@@ -246,7 +255,7 @@ class CodegenTest extends AbstractTest
             ->will($this->returnValue('0'));
 
         $this->fixture
-            ->setMultiLineCodeGen($this->codegenHandler::ARRAY_VALUES_ACCESS)
+            ->setCodeGenType($this->codegenHandler::CODEGEN_TYPE_ARRAY_VALUES_ACCESS)
             ->setConnectorParameters('0');
         $this->assertEquals(
             'array_values(;firstMarker;)[0]',
@@ -258,12 +267,13 @@ class CodegenTest extends AbstractTest
      * Test the concatenation in case of public access.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceIsPublic()
     {
-        $this->expectConnectorCalls(2, 2);
-        $this->fixture->setIsPublic(true);
+        $this->expectConnectorCalls(1, 1);
+        $this->fixture->setCodeGenType(Codegen::CODEGEN_TYPE_PUBLIC);
         $this->assertEquals(
             static::CONCATENATED_CONNECTORS,
             $this->codegenHandler->generateSource($this->fixture)
@@ -274,11 +284,12 @@ class CodegenTest extends AbstractTest
      * Test the concatenation in case that the model is in the scope.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
      */
     public function testGenerateSourceInScope()
     {
-        $this->expectConnectorCalls(2, 2);
+        $this->expectConnectorCalls(3, 1);
 
         // Create the scope mock and inject it.
         $scopeMock = $this->createMock(Scope::class);
@@ -298,10 +309,11 @@ class CodegenTest extends AbstractTest
      * Test the '. . .' when out of scope.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      */
     public function testGenerateSourceNotInScope()
     {
-        $this->expectConnectorCalls(1, 1);
+        $this->expectConnectorCalls(2, 0);
 
         // Create the scope mock and inject it.
         $scopeMock = $this->createMock(Scope::class);

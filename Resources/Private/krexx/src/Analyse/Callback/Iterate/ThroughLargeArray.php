@@ -87,8 +87,9 @@ class ThroughLargeArray extends AbstractCallback
             }
 
             /** @var Model $model */
-            $model = $this->pool->createClass(Model::class)->setMultiLineCodeGen(
-                $this->parameters[static::PARAM_MULTILINE] === true ?  Codegen::ITERATOR_TO_ARRAY : ''
+            $model = $this->pool->createClass(Model::class)->setCodeGenType(
+                $this->parameters[static::PARAM_MULTILINE] === true ?
+                    Codegen::CODEGEN_TYPE_ITERATOR_TO_ARRAY : Codegen::CODEGEN_TYPE_PUBLIC
             );
 
             // Handling string keys of the array.

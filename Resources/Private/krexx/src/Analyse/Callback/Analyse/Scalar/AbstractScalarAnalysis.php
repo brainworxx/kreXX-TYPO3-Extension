@@ -49,6 +49,12 @@ use Brainworxx\Krexx\Analyse\Model;
 abstract class AbstractScalarAnalysis extends AbstractCallback
 {
     /**
+     * The code generation type constant assigned to the model.
+     *
+     * @var string
+     */
+    protected $codeGenType = '';
+    /**
      * Is this scalar deep analysis class able to do something here?
      *
      * @param string|int|bool $string
@@ -90,6 +96,7 @@ abstract class AbstractScalarAnalysis extends AbstractCallback
         /** @var Model $model */
         $model = $this->pool->createClass(Model::class)
             ->addParameter(static::PARAM_DATA, $meta)
+            ->addParameter(static::PARAM_CODE_GEN_TYPE, $this->codeGenType)
             ->injectCallback($this->pool->createClass(ThroughMeta::class));
 
         // We render the model directly. This class acts only as a proxy.

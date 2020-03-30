@@ -42,17 +42,31 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Comment\Functions;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use ReflectionException;
 use ReflectionFunction;
+use Closure;
 
 /**
  * Processing of closures.
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessClosure extends AbstractRouting implements ProcessInterface
+class ProcessClosure extends AbstractProcessNoneScalar
 {
+    /**
+     * Is this one a boolean?
+     *
+     * @param Model $model
+     *   The value we are analysing.
+     *
+     * @return bool
+     *   Well, is this a boolean?
+     */
+    public function canHandle(Model $model): bool
+    {
+        return $model->getData() instanceof Closure;
+    }
+
     /**
      * Analyses a closure.
      *
@@ -62,8 +76,11 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
      * @return string
      *   The generated markup.
      */
-    public function process(Model $model): string
+    protected function handleNoneScalar(Model $model): string
     {
+        // Remember that we've been here before.
+        $this->pool->recursionHandler->addToHive($model->getData());
+
         try {
             $ref = new ReflectionFunction($model->getData());
         } catch (ReflectionException $e) {
@@ -90,21 +107,17 @@ class ProcessClosure extends AbstractRouting implements ProcessInterface
         }
 
         // Adding the return type.
-        $result[static::META_RETURN_TYPE] = $this->pool->createClass(ReturnType::class)
-            ->getComment($ref);
+        $result[static::META_RETURN_TYPE] = $this->pool->createClass(ReturnType::class)->getComment($ref);
 
-        return $this->pool->render->renderExpandableChild(
-            $this->dispatchProcessEvent(
-                $model->setType(static::TYPE_CLOSURE)
-                    ->setNormal(static::UNKNOWN_VALUE)
-                    // Remove the ',' after the last char.
-                    ->setConnectorParameters($this->retrieveParameterList($ref, $result))
-                    ->setDomid($this->generateDomIdFromObject($model->getData()))
-                    ->setConnectorType(Connectors::METHOD)
-                    ->addParameter(static::PARAM_DATA, $result)
-                    ->injectCallback($this->pool->createClass(ThroughMeta::class))
-            )
-        );
+        return $this->pool->render->renderExpandableChild($this->dispatchProcessEvent(
+            $model->setType(static::TYPE_CLOSURE)
+                ->setNormal(static::UNKNOWN_VALUE)
+                ->setConnectorParameters($this->retrieveParameterList($ref, $result))
+                ->setDomid($this->generateDomIdFromObject($model->getData()))
+                ->setConnectorType(Connectors::METHOD)
+                ->addParameter(static::PARAM_DATA, $result)
+                ->injectCallback($this->pool->createClass(ThroughMeta::class))
+        ));
     }
 
     /**

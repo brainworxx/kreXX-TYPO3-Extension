@@ -44,7 +44,7 @@ use ReflectionException;
 
 /**
  * The stuff we are doing here is very similar to the method analysis. The
- * main difference here is, that we do not have a hosting vlass and no
+ * main difference here is, that we do not have a hosting class and no
  * inheritance. We can extract the needed data directly out of the
  * reflection and dump it via ThroughMeta.
  *

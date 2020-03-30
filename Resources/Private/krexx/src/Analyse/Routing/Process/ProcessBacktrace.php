@@ -58,7 +58,25 @@ class ProcessBacktrace extends AbstractCallback
      */
     public function callMe(): string
     {
-        return $this->process($this->parameters[static::PARAM_DATA]);
+        return $this->handle($this->parameters[static::PARAM_DATA]);
+    }
+
+    /**
+     * Processes the model according to the type of the variable.
+     *
+     * @param array $backtrace
+     *
+     * @deprecated
+     *   Will be removed. Use $this->handle;
+     *
+     * @codeCoverageIgnore
+     *   We will not test methods that are deprecated.
+     *
+     * @return string
+     */
+    public function process(&$backtrace = []): string
+    {
+        return $this->handle($backtrace);
     }
 
     /**
@@ -71,7 +89,7 @@ class ProcessBacktrace extends AbstractCallback
      * @return string
      *   The rendered backtrace.
      */
-    public function process(&$backtrace = []): string
+    public function handle(&$backtrace = []): string
     {
         if (empty($backtrace) === true) {
             $backtrace = $this->getBacktrace();

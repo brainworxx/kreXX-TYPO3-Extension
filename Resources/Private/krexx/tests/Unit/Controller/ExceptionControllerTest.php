@@ -54,6 +54,7 @@ class ExceptionControllerTest extends AbstractController
      * Testing the exception action, like the method name says.
      *
      * @covers \Brainworxx\Krexx\Controller\ExceptionController::exceptionAction
+     * @covers \Brainworxx\Krexx\Controller\ExceptionController::generateMetaArray
      */
     public function testExceptionAction()
     {

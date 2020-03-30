@@ -51,6 +51,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Throwable;
+use stdClass;
 
 /**
  * Object analysis methods.
@@ -103,7 +104,7 @@ class Objects extends AbstractCallback
         $config = $this->pool->config;
         $stuffToDump = [PublicProperties::class];
 
-        if ($ref->getName() === \stdClass::class) {
+        if ($ref->getName() === stdClass::class) {
             // We ignore everything else for the stdClass.
             return $stuffToDump;
         }

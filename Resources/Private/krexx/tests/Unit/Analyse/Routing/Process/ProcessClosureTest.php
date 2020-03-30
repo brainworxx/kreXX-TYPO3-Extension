@@ -50,10 +50,12 @@ class ProcessClosureTest extends AbstractTest
     /**
      * Test the processing of a closure.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::handleNoneScalar
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveParameterList
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveSourceCode
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::generateDomIdFromObject
      */
     public function testProcess()
     {
@@ -92,7 +94,7 @@ class ProcessClosureTest extends AbstractTest
         $this->mockEventService(
             [ProcessClosure::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processClosure->process($model);
+        $processClosure->handle($model);
 
         // Run the tests, model.
         $this->assertEquals(ProcessClosure::TYPE_CLOSURE, $model->getType());
@@ -116,5 +118,23 @@ class ProcessClosureTest extends AbstractTest
         $this->assertContains($filePath, $parameters[ProcessClosure::META_DECLARED_IN]);
         $this->assertEquals(__NAMESPACE__, $parameters[ProcessClosure::META_NAMESPACE]);
         $this->assertEquals($parameter, $parameters[ProcessClosure::META_PARAM_NO . '1']);
+    }
+
+    /**
+     * Test the check if we can handle the array processing.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::canHandle
+     */
+    public function testCanHandle()
+    {
+        $processor = new ProcessClosure(Krexx::$pool);
+        $model = new Model(Krexx::$pool);
+        $fixture = function () {
+            echo 'huhu';
+        };
+
+        $this->assertTrue($processor->canHandle($model->setData($fixture)));
+        $fixture = 'abc';
+        $this->assertFalse($processor->canHandle($model->setData($fixture)));
     }
 }

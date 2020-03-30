@@ -100,7 +100,7 @@ class Xml extends AbstractScalarAnalysis
      */
     public function canHandle($string, Model $model): bool
     {
-        // Get a first impression, we check the midetype of the model.
+        // Get a first impression, we check the mime type of the model.
         $metaStuff = $model->getJson();
 
         if (
@@ -135,7 +135,7 @@ class Xml extends AbstractScalarAnalysis
         $meta = [];
         $meta[static::META_DECODED_XML] = $this->decodedXml;
 
-        // The pretty print done by a domparser..
+        // The pretty print done by a dom parser.
         $dom = new DOMDocument("1.0");
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;

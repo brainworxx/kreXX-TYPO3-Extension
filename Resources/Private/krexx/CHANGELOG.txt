@@ -20,11 +20,13 @@
 - Change: Simplified the Model.
 - Change: Do not display the encoding info, if we have a buffer
   info available.
-- Change: Different analysis order, when comming from the $this
+- Change: Different analysis order, when coming from the $this
   scope, for better source generation.
 - Change: Different order in the backtrace analysis, for better
   readability.
 - Change: Use compressed css for the SmokyGrey skin.
+- Change: Refactored the code generation.
+- Change: Refactored the routing.
 
 3.2.3 dev
 - Bugfix: Added missing closing li tag to the expandableChild

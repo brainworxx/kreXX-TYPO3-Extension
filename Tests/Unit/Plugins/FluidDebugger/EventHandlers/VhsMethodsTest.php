@@ -97,7 +97,7 @@ class VhsMethodsTest extends AbstractTest implements ConstInterface
         /** @var \Brainworxx\Krexx\Analyse\Model[] $models */
         $models = $render->model['renderExpandableChild'];
         foreach ($models as $model) {
-            $this->assertEquals(Codegen::VHS_CALL_VIEWHELPER, $model->getMultiLineCodeGen());
+            $this->assertEquals(Codegen::VHS_CALL_VIEWHELPER, $model->getCodeGenType());
             if ($model->getName() !== 'parameterizedMethod') {
                 $this->assertEquals([], $model->getParameters()[Codegen::PARAM_ARRAY]);
             } else {

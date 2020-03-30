@@ -48,7 +48,7 @@ namespace Brainworxx\Krexx\Service\Misc;
 class FileinfoDummy
 {
     /**
-     * Do nothing. Without the fileinfo modul we can not provide any info, at
+     * Do nothing. Without the fileinfo module we can not provide any info, at
      * least for now.
      *
      * @param string $file

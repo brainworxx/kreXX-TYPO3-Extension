@@ -110,7 +110,8 @@ class ThroughMetaTest extends AbstractTest
         $fixture = [
             $this->throughMeta::PARAM_DATA => [
                 $this->throughMeta::META_DECODED_JSON => json_decode('{"Friday": "the 13\'th"}')
-            ]
+            ],
+            $this->throughMeta::PARAM_CODE_GEN_TYPE => Codegen::CODEGEN_TYPE_JSON_DECODE
         ];
 
         $routeNothing = new RoutingNothing(\Krexx::$pool);
@@ -118,7 +119,7 @@ class ThroughMetaTest extends AbstractTest
         $this->throughMeta->setParameters($fixture)->callMe();
         $model = $routeNothing->model[0];
         $this->assertCount(1, $routeNothing->model);
-        $this->assertEquals(Codegen::JSON_DECODE, $model->getMultiLineCodeGen());
+        $this->assertEquals(Codegen::CODEGEN_TYPE_JSON_DECODE, $model->getCodeGenType());
     }
 
     /**

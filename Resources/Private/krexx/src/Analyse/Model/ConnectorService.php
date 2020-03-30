@@ -162,7 +162,7 @@ trait ConnectorService
     }
 
     /**
-     * Getter of the return type of a methos analysis.
+     * Getter of the return type of a method analysis.
      *
      * @return string
      */

@@ -136,17 +136,17 @@ class Meta extends AbstractObjectAnalysis
         // Now to collect the inheritance stuff.
         // Each of them will get analysed by the ThroughMeta callback.
         $interfaces = $ref->getInterfaces();
-        if (!empty($interfaces)) {
+        if (empty($interfaces) === false) {
             $data[static::META_INTERFACES] = $interfaces;
         }
         $traitList = $ref->getTraits();
-        if (!empty($traitList)) {
+        if (empty($traitList) === false) {
             $data[static::META_TRAITS] = $traitList;
         }
 
         /** @var ReflectionClass $previousClass */
         $previousClass = $ref->getParentClass();
-        if (!empty($previousClass)) {
+        if (empty($previousClass) === false) {
             // We add it via array, because the other inheritance getters
             // are also supplying one.
             $data[static::META_INHERITED_CLASS] = [$previousClass->getName() => $previousClass];

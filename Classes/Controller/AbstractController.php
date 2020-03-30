@@ -174,12 +174,13 @@ abstract class AbstractController extends ActionController
     protected function retrieveKrexxMessages()
     {
         // Get the keys and the args.
-        $keys = $this->pool->messages->getKeys();
+        $messages = $this->pool->messages->getMessages();
 
-        foreach ($keys as $message) {
+        /** @var \Brainworxx\Krexx\View\Message $message */
+        foreach ($messages as $message) {
             // And translate them.
             $this->addFlashMessage(
-                static::translate($message['key'], Bootstrap::EXT_KEY, $message['params']),
+                static::translate($message->getKey(), Bootstrap::EXT_KEY, $message->getArguments()),
                 static::translate('general.error.title', Bootstrap::EXT_KEY),
                 FlashMessage::ERROR
             );

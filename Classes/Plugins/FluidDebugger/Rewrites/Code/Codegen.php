@@ -95,7 +95,7 @@ class Codegen extends OrgCodegen implements ConstInterface
             $result =  $this->generateAll($model->setName('properties'));
         } elseif ($this->isUnknownType($model)) {
             $result = static::UNKNOWN_VALUE;
-        } elseif ($model->getMultiLineCodeGen() === static::VHS_CALL_VIEWHELPER) {
+        } elseif ($model->getCodeGenType() === static::VHS_CALL_VIEWHELPER) {
             // Check for VHS values.
             $result = $this->generateVhsCall($model);
         } else {
@@ -126,7 +126,7 @@ class Codegen extends OrgCodegen implements ConstInterface
         return
             (is_string($name) === true &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
             $model->getType() === static::TYPE_DEBUG_METHOD ||
-            $model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY;
+            $model->getCodeGenType() === static::CODEGEN_TYPE_ITERATOR_TO_ARRAY;
     }
 
     /**

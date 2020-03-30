@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Analyse;
 
 use Brainworxx\Krexx\Analyse\Model\AdditionalType;
 use Brainworxx\Krexx\Analyse\Model\Callback;
+use Brainworxx\Krexx\Analyse\Model\CodeGenType;
 use Brainworxx\Krexx\Analyse\Model\ConnectorService;
 use Brainworxx\Krexx\Analyse\Model\Data;
 use Brainworxx\Krexx\Analyse\Model\DomId;
@@ -67,8 +68,10 @@ class Model implements ConstInterface
     use AdditionalType;
     use DomId;
     use HasExtra;
+    use CodeGenType;
+
     use MultiLineCodeGen;
     use IsPublic;
-    use IsCallback;
     use IsMetaConstants;
+    use IsCallback;
 }

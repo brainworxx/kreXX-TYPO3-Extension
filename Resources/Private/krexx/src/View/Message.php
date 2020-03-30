@@ -100,7 +100,7 @@ class Message
     /**
      * setter fore the throwaway.
      *
-     * @param bool $isThrowaway
+     * @param bool $isThrowAway
      *   Will remove itself after display.
      *
      * @return $this
@@ -179,7 +179,7 @@ class Message
     }
 
     /**
-     * Wrapper around the getText, for compartibility reasons.
+     * Wrapper around the getText, for compatibility reasons.
      *
      * @deprecated since 4.0.0
      *   Will be removed. Use $this->getText().

@@ -40,7 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Abstract class for (nearly) all processing classes.
+ * Processing interface for the routing.
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
@@ -48,11 +48,24 @@ interface ProcessInterface
 {
 
     /**
+     * Decide, if the processor class is able to handle this value.
+     *
+     * @param Model $model
+     *   The value we are analysing.
+     *
+     * @return bool
+     *   Can this class handle it?
+     */
+    public function canHandle(Model $model): bool;
+
+    /**
      * Processes the model according to the type of the variable.
      *
      * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model, so far.
      *
      * @return string
+     *   The renders DOM.
      */
-    public function process(Model $model): string;
+    public function handle(Model $model): string;
 }

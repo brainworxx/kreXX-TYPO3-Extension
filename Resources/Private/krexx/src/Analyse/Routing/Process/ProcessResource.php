@@ -48,6 +48,28 @@ use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
  */
 class ProcessResource extends AbstractRouting implements ProcessInterface
 {
+    /**
+     * Is this one a resource?
+     *
+     * @param Model $model
+     *   The value we are analysing.
+     *
+     * @return bool
+     *   Well, is this a resource?
+     */
+    public function canHandle(Model $model): bool
+    {
+        // Resource?
+        // The is_resource can not identify closed stream resource types.
+        // And the get_resource_type() throws a warning, in case this is not a
+        // resource.
+        set_error_handler(function () {
+            // Do nothing. We need to catch a possible warning.
+        });
+        $result = get_resource_type($model->getData()) !== null;
+        restore_error_handler();
+        return $result;
+    }
 
     /**
      * Analyses a resource.
@@ -58,7 +80,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface
      * @return string
      *   The rendered markup.
      */
-    public function process(Model $model): string
+    public function handle(Model $model): string
     {
         $resource = $model->getData();
         $type = get_resource_type($resource);

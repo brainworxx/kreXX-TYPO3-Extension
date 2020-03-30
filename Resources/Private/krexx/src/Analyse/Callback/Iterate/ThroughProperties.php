@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Comment\Properties;
 use Brainworxx\Krexx\Analyse\Model;
@@ -93,7 +94,7 @@ class ThroughProperties extends AbstractCallback
                         ->addToJson(static::META_DECLARED_IN, $this->retrieveDeclarationPlace($refProperty))
                         ->setAdditional($this->getAdditionalData($refProperty, $ref))
                         ->setConnectorType($this->retrieveConnector($refProperty))
-                        ->setIsPublic($refProperty->isPublic())
+                        ->setCodeGenType($refProperty->isPublic() ? Codegen::CODEGEN_TYPE_PUBLIC : '')
                 )
             );
         }

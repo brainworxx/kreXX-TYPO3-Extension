@@ -37,8 +37,20 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Model;
 
+use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Trait IsMetaConstants
+ *
+ * @deprecated
+ *   Since 4.0.0. Will be removed.
+ *
+ * @codeCoverageIgnore
+ *   We will not test deprecated methods.
+ *
+ * @package Brainworxx\Krexx\Analyse\Model
+ */
 trait IsMetaConstants
 {
     /**
@@ -51,6 +63,12 @@ trait IsMetaConstants
 
     /**
      * Getter for the isMetaConstants.
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @return bool
      *   True means that we are currently rendering the expandable child for
@@ -65,7 +83,7 @@ trait IsMetaConstants
      * Getter for the isMetaConstants.
      *
      * @deprecated
-     *   Since 4.0.0. Use $this->isMetaConstants()
+     *   Since 4.0.0. Will be removed.
      *
      * @codeCoverageIgnore
      *   We will not test deprecated methods.
@@ -82,14 +100,25 @@ trait IsMetaConstants
     /**
      * Setter for the isMetaConstants.
      *
+     * @deprecated
+     *   Since 4.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
      * @param bool $bool
      *   The value we want to set.
+     *
      * @return $this
      *   Return $this for chaining.
      */
     public function setIsMetaConstants(bool $bool): Model
     {
         $this->isMetaConstants = $bool;
+        if ($bool === true) {
+            $this->codeGenType = Codegen::CODEGEN_TYPE_META_CONSTANTS;
+        }
+
         return $this;
     }
 }

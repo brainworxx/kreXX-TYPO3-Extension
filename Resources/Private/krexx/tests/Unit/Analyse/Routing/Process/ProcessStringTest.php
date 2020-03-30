@@ -37,7 +37,6 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessString;
-use Brainworxx\Krexx\Analyse\Scalar\ScalarString;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
@@ -109,7 +108,7 @@ class ProcessStringTest extends AbstractTest
     /**
      * Testing with a normal short string.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
@@ -135,7 +134,7 @@ class ProcessStringTest extends AbstractTest
     /**
      * Testing with broken encoding.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
@@ -162,7 +161,7 @@ class ProcessStringTest extends AbstractTest
     /**
      * Testing with a large string.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
@@ -191,7 +190,7 @@ class ProcessStringTest extends AbstractTest
     /**
      * Testing with a string larger than 50 characters.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
@@ -224,7 +223,7 @@ class ProcessStringTest extends AbstractTest
     /**
      * Testing with linebreaks in the fixture.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::retrieveLengthAndEncoding
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
@@ -250,7 +249,7 @@ class ProcessStringTest extends AbstractTest
     /**
      * Testing the triggering of the scalar analysis and its recursion handling.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::handleStringScalar
      */
     public function testProcessWithScalar()
@@ -267,12 +266,12 @@ class ProcessStringTest extends AbstractTest
         // Normal.
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
-        $this->processString->process($model);
+        $this->processString->handle($model);
 
         // And with a recursion.
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
-        $this->processString->process($model);
+        $this->processString->handle($model);
 
         $this->assertCount(
             1,
@@ -354,8 +353,24 @@ class ProcessStringTest extends AbstractTest
         $this->mockEventService(
             [ProcessString::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $this->processString->process($model);
+        $this->processString->handle($model);
 
         return $model;
+    }
+
+    /**
+     * Test the check if we can handle the array processing.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString::canHandle
+     */
+    public function testCanHandle()
+    {
+        $processor = new ProcessString(Krexx::$pool);
+        $model = new Model(Krexx::$pool);
+        $fixture = 'abc';
+
+        $this->assertTrue($processor->canHandle($model->setData($fixture)));
+        $fixture = 50;
+        $this->assertFalse($processor->canHandle($model->setData($fixture)));
     }
 }

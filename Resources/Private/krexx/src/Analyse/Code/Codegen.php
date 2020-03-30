@@ -54,18 +54,34 @@ class Codegen implements ConstInterface
 {
     /**
      * Constant identifier for the array multiline code generation.
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed. Use CODEGEN_TYPE_ITERATOR_TO_ARRAY.
      */
     const ITERATOR_TO_ARRAY = 'iteratorToArray';
 
     /**
      * Constant identifier for the json multiline code generation.
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed. Use CODEGEN_TYPE_JSON_DECODE.
      */
     const JSON_DECODE = 'jsonDecode';
 
     /**
      * Identifier for inaccessible array multiline code generation.
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed. Use CODEGEN_TYPE_ARRAY_VALUES_ACCESS.
      */
     const ARRAY_VALUES_ACCESS = 'arrayValuesAccess';
+
+    const CODEGEN_TYPE_META_CONSTANTS = 'metaConstants';
+    const CODEGEN_TYPE_PUBLIC = 'public';
+    const CODEGEN_TYPE_ITERATOR_TO_ARRAY = 'iteratorToArray';
+    const CODEGEN_TYPE_JSON_DECODE = 'jsonDecode';
+    const CODEGEN_TYPE_ARRAY_VALUES_ACCESS = 'arrayValuesAccess';
+    const CODEGEN_TYPE_EMPTY = 'empty';
 
     /**
      * Here we store all relevant data.
@@ -131,46 +147,72 @@ class Codegen implements ConstInterface
      */
     public function generateSource(Model $model): string
     {
-        $result = static::UNKNOWN_VALUE;
-
+        // Do some early return stuff.
         if ($this->allowCodegen === false) {
-            // Nothing to do here, early return
-            return $result;
-        } elseif ($this->firstRun === true) {
+            return static::UNKNOWN_VALUE;
+        }
+
+        // Handle the first run.
+        $type = $model->getCodeGenType();
+        if ($type === static::CODEGEN_TYPE_PUBLIC || $this->firstRun === true) {
             // We handle the first one special, because we need to add the original
             // variable name to the source generation.
             $this->firstRun = false;
-            $result = $this->concatenation($model);
-        } elseif ($model->isMetaConstants() === true) {
-            // Test for constants.
-            // They have no connectors, but are marked as such.
-            // although this is meta stuff, we need to add the stop info here.
-            $result = ';stop;';
-        } elseif (empty($model->getConnectorLeft() . $model->getConnectorRight()) === true) {
-            if ($model->getMultiLineCodeGen() === static::JSON_DECODE) {
+
+            // Public methods, debug methods.
+            return $this->concatenation($model);
+        }
+
+        if ($type === static::CODEGEN_TYPE_EMPTY) {
+            return '';
+        }
+
+        // Still here?
+        // We go for the more complicated stuff.
+        return $this->generateComplicatedStuff($model);
+    }
+
+    /**
+     * The more obscure stuff for the code generation.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model, which hosts all the data we need.
+     *
+     * @return string
+     *   The generated PHP source.
+     */
+    protected function generateComplicatedStuff(Model $model)
+    {
+        // Define a fallback value.
+        $result = static::UNKNOWN_VALUE;
+
+        // And now for the more serious stuff.
+        switch ($model->getCodeGenType()) {
+            case static::CODEGEN_TYPE_META_CONSTANTS:
+                // Test for constants.
+                // They have no connectors, but are marked as such.
+                // although this is meta stuff, we need to add the stop info here.
+                $result = ';stop;';
+                break;
+
+            case static::CODEGEN_TYPE_ITERATOR_TO_ARRAY:
+                $result = 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
+                break;
+
+            case static::CODEGEN_TYPE_ARRAY_VALUES_ACCESS:
+                $result = 'array_values(;firstMarker;)[' . $model->getConnectorParameters() . ']';
+                break;
+
+            case static::CODEGEN_TYPE_JSON_DECODE:
                 // Meta json decoding.
                 $result = 'json_decode(;firstMarker;)';
-            } else {
-                // No connectors, no nothing.
-                // Normal meta stuff.
-                // We will ignore this one.
-                $result = '';
-            }
-        } elseif ($model->getType() === static::TYPE_DEBUG_METHOD) {
-            // Debug methods are always public.
-            $result = $this->concatenation($model);
-        } elseif ($model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY) {
-            // Multi line code generation starts here.
-            $result = 'iterator_to_array(;firstMarker;)' . $this->concatenation($model);
-        } elseif ($model->getMultiLineCodeGen() === static::ARRAY_VALUES_ACCESS) {
-            $result = 'array_values(;firstMarker;)[' . $model->getConnectorParameters() . ']';
-        } elseif (
-            $model->isPublic() === true ||
-            $this->pool->scope->testModelForCodegen($model) === true
-        ) {
-            // Test for private or protected access.
-            // Test if we are inside the scope. Everything within our scope is reachable.
-            $result = $this->concatenation($model);
+                break;
+
+            default:
+                if ($this->pool->scope->testModelForCodegen($model) === true) {
+                    // Test if we are inside the scope. Everything within our scope is reachable.
+                    $result = $this->concatenation($model);
+                }
         }
 
         return $result;
@@ -250,7 +292,7 @@ class Codegen implements ConstInterface
     }
 
     /**
-     * Transorm a reflection parameter into a human readable form.
+     * Transform a reflection parameter into a human readable form.
      *
      * @param \ReflectionParameter $reflectionParameter
      *   The reflection parameter we want to wrap.

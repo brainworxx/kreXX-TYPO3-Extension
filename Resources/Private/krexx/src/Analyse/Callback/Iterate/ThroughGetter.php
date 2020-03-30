@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Model;
@@ -164,6 +165,7 @@ class ThroughGetter extends AbstractCallback
             /** @var Model $model */
             $model = $this->pool->createClass(Model::class)
                 ->setName($reflectionMethod->getName())
+                ->setCodeGenType(Codegen::CODEGEN_TYPE_PUBLIC)
                 ->addToJson(static::META_METHOD_COMMENT, $comments);
 
             // We need to decide if we are handling static getters.

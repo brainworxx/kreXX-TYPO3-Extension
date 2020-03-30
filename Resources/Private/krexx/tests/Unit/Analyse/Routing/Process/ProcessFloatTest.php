@@ -47,7 +47,7 @@ class ProcessFloatTest extends AbstractTest
     /**
      * Testing the float value processing.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
@@ -60,9 +60,25 @@ class ProcessFloatTest extends AbstractTest
         $this->mockEventService(
             [ProcessFloat::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->process($model);
+        $processor->handle($model);
 
         $this->assertEquals($fixture, $model->getData());
         $this->assertEquals($fixture, $model->getNormal());
+    }
+
+    /**
+     * Test the check if we can handle the array processing.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::canHandle
+     */
+    public function testCanHandle()
+    {
+        $processor = new ProcessFloat(Krexx::$pool);
+        $model = new Model(Krexx::$pool);
+        $fixture = 1.234;
+
+        $this->assertTrue($processor->canHandle($model->setData($fixture)));
+        $fixture = 'abc';
+        $this->assertFalse($processor->canHandle($model->setData($fixture)));
     }
 }

@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
+use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
@@ -85,17 +86,15 @@ class DebugMethods extends AbstractObjectAnalysis
                 ($result = $this->retrieveValue($data, $funcName)) !== null
             ) {
                 $output .= $this->pool->render->renderExpandableChild(
-                    $this->dispatchEventWithModel(
-                        $funcName,
-                        $this->pool->createClass(Model::class)
-                            ->setName($funcName)
-                            ->setType(static::TYPE_DEBUG_METHOD)
-                            ->setNormal(static::UNKNOWN_VALUE)
-                            ->setHelpid($funcName)
-                            ->setConnectorType(Connectors::METHOD)
-                            ->addParameter(static::PARAM_DATA, $result)
-                            ->injectCallback($this->pool->createClass(Debug::class))
-                    )
+                    $this->dispatchEventWithModel($funcName, $this->pool->createClass(Model::class)
+                        ->setName($funcName)
+                        ->setType(static::TYPE_DEBUG_METHOD)
+                        ->setCodeGenType(Codegen::CODEGEN_TYPE_PUBLIC)
+                        ->setNormal(static::UNKNOWN_VALUE)
+                        ->setHelpid($funcName)
+                        ->setConnectorType(Connectors::METHOD)
+                        ->addParameter(static::PARAM_DATA, $result)
+                        ->injectCallback($this->pool->createClass(Debug::class)))
                 );
                 unset($result);
             }

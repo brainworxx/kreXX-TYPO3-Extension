@@ -126,7 +126,7 @@ class Registration implements ConstInterface
     protected static $additionalSkinList = [];
 
     /**
-     * List of all additinally registered classes, that can do a string analysis.
+     * List of all additionally registered classes, that can do a string analysis.
      *
      * @var array
      */

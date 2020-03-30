@@ -51,7 +51,7 @@ class ProcessResourceTest extends AbstractTest
     /**
      * Testing the processing of a stream resource.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessStream()
@@ -75,7 +75,7 @@ class ProcessResourceTest extends AbstractTest
     /**
      * Testing the processing of a curl resource.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessCurl()
@@ -99,7 +99,7 @@ class ProcessResourceTest extends AbstractTest
     /**
      * Testing the processing of a not yet implemented resource type analysis.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::renderUnknownOrClosed
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchNamedEvent
      */
@@ -121,7 +121,7 @@ class ProcessResourceTest extends AbstractTest
     /**
      * Testing the processing of a not yet implemented resource type analysis.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::renderUnknownOrClosed
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchNamedEvent
      */
@@ -143,7 +143,7 @@ class ProcessResourceTest extends AbstractTest
     /**
      * Test the processing of a shell resource.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessShell()
@@ -195,7 +195,7 @@ class ProcessResourceTest extends AbstractTest
             );
         }
 
-        $processor->process($model);
+        $processor->handle($model);
 
         $this->assertEquals($model::TYPE_RESOURCE, $model->getType());
         $this->assertEquals($normalExpectation, $model->getNormal());
@@ -208,5 +208,22 @@ class ProcessResourceTest extends AbstractTest
             $this->assertEmpty($model->getParameters());
         }
         $this->assertEquals($counter, CallbackCounter::$counter);
+    }
+
+    /**
+     * Test the check if we can handle the array processing.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::canHandle
+     */
+    public function testCanHandle()
+    {
+        $processor = new ProcessResource(Krexx::$pool);
+        $model = new Model(Krexx::$pool);
+        $fixture = new \stdClass();
+        $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
+        $getResourceType->expects($this->once())
+            ->will($this->returnValue('whatever'));
+
+        $this->assertTrue($processor->canHandle($model->setData($fixture)));
     }
 }

@@ -44,7 +44,6 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionMethod;
 use Aimeos\MShop\Common\Item\Iface;
-use ReflectionException;
 
 /**
  * Resolving the Aimeos getter:

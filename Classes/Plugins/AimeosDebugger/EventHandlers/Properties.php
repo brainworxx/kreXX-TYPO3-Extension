@@ -41,7 +41,6 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Throwable;
 use Aimeos\MShop\Common\Item\Iface as ItemIface;
 use Aimeos\MW\Tree\Node\Iface as NodeIface;
 use Aimeos\MW\View\Iface as ViewIface;

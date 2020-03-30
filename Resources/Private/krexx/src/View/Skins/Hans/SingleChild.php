@@ -90,6 +90,7 @@ trait SingleChild
     public function renderSingleChild(Model $model): string
     {
         // Generating our code.
+        /** @var \Brainworxx\Krexx\Analyse\Code\Codegen $codegenHandler */
         $codegenHandler = $this->pool->codegenHandler;
         $generateSource = $codegenHandler->generateSource($model);
         // Stitching it together.

@@ -47,7 +47,7 @@ class ProcessNullTest extends AbstractTest
     /**
      * Testing the float value processing.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessNull::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessNull::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
@@ -60,9 +60,25 @@ class ProcessNullTest extends AbstractTest
         $this->mockEventService(
             [ProcessNull::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->process($model);
+        $processor->handle($model);
 
         $this->assertEquals('NULL', $model->getData());
         $this->assertEquals('NULL', $model->getNormal());
+    }
+
+    /**
+     * Test the check if we can handle the array processing.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessNull::canHandle
+     */
+    public function testCanHandle()
+    {
+        $processor = new ProcessNull(Krexx::$pool);
+        $model = new Model(Krexx::$pool);
+        $fixture = null;
+
+        $this->assertTrue($processor->canHandle($model->setData($fixture)));
+        $fixture = 'abc';
+        $this->assertFalse($processor->canHandle($model->setData($fixture)));
     }
 }

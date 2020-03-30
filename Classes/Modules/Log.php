@@ -225,12 +225,13 @@ class Log extends AbstractSubModule implements
         Pool::createPool();
         $renderedMessages = '';
 
-        foreach (Krexx::$pool->messages->getKeys() as $message) {
+        /** @var \Brainworxx\Krexx\View\Message $message */
+        foreach (Krexx::$pool->messages->getMessages() as $message) {
             $renderedMessages .= $this->renderMessage(
                 static::translate(
-                    static::TRANSLATION_PREFIX . $message['key'],
+                    static::TRANSLATION_PREFIX . $message->getKey(),
                     Bootstrap::EXT_KEY,
-                    $message['params']
+                    $message->getArguments()
                 ),
                 static::MESSAGE_SEVERITY_ERROR
             );

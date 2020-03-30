@@ -39,15 +39,28 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 
 /**
  * Processing of objects.
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessObject extends AbstractRouting implements ProcessInterface
+class ProcessObject extends AbstractProcessNoneScalar
 {
+    /**
+     * Is this one an object?
+     *
+     * @param Model $model
+     *   The value we are analysing.
+     *
+     * @return bool
+     *   Well, is this an object?
+     */
+    public function canHandle(Model $model): bool
+    {
+        return is_object($model->getData());
+    }
+
     /**
      * Render a dump for an object.
      *
@@ -57,21 +70,27 @@ class ProcessObject extends AbstractRouting implements ProcessInterface
      * @return string
      *   The generated markup.
      */
-    public function process(Model $model): string
+    protected function handleNoneScalar(Model $model): string
     {
+        $this->pool->emergencyHandler->upOneNestingLevel();
+
+        // Remember that we've been here before.
+        $this->pool->recursionHandler->addToHive($model->getData());
+
         $object = $model->getData();
         // Output data from the class.
-        return $this->pool->render->renderExpandableChild(
+        $result = $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
                 $model->setType(static::TYPE_CLASS)
                     ->addParameter(static::PARAM_DATA, $object)
                     ->addParameter(static::PARAM_NAME, $model->getName())
                     ->setNormal('\\' . get_class($object))
                     ->setDomid($this->generateDomIdFromObject($object))
-                    ->injectCallback(
-                        $this->pool->createClass(Objects::class)
-                    )
+                    ->injectCallback($this->pool->createClass(Objects::class))
             )
         );
+
+        $this->pool->emergencyHandler->downOneNestingLevel();
+        return $result;
     }
 }

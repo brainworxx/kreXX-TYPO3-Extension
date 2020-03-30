@@ -95,6 +95,20 @@ class ProcessString extends AbstractRouting implements ProcessInterface
     }
 
     /**
+     * Is this one a string?
+     *
+     * @param Model $model
+     *   The value we are analysing.
+     *
+     * @return bool
+     *   Well, is this a string?
+     */
+    public function canHandle(Model $model): bool
+    {
+        return is_string($model->getData());
+    }
+
+    /**
      * Render a dump for a string value.
      *
      * @param Model $model
@@ -103,7 +117,7 @@ class ProcessString extends AbstractRouting implements ProcessInterface
      * @return string
      *   The rendered markup.
      */
-    public function process(Model $model): string
+    public function handle(Model $model): string
     {
         $originalData = $data = $model->getData();
 
@@ -138,6 +152,8 @@ class ProcessString extends AbstractRouting implements ProcessInterface
      *
      * @param \Brainworxx\Krexx\Analyse\Model $model
      *   The model, so far.
+     * @param string $originalData
+     *   The original, unprocessed and unescape string.
      *
      * @return string
      *   The generated DOM.

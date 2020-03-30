@@ -33,27 +33,59 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Tests\Helpers;
+declare(strict_types=1);
 
+namespace Brainworxx\Krexx\Analyse\Model;
+
+use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInterface;
 
-/**
- * Stops the processing of stuff, right in it's track.
- *
- * @package Brainworxx\Krexx\Tests\Helpers
- */
-class ProcessNothing extends AbstractRouting implements ProcessInterface
+trait CodeGenType
 {
-    public function canHandle(Model $data): bool
+    /**
+     * The code generation type.
+     *
+     * @var string
+     */
+    protected $codeGenType = '';
+
+    /**
+     * Getter for the code generation type.
+     *
+     * @return string
+     *   The string, representing the type.
+     */
+    public function getCodeGenType(): string
     {
-        return true;
+        if (
+            $this->codeGenType === '' &&
+            $this->getConnectorLeft() === '' &&
+            $this->getConnectorRight() === ''
+        ) {
+            // No connectors, no nothing.
+            // Normal meta stuff.
+            // We will ignore this one.
+            return Codegen::CODEGEN_TYPE_EMPTY;
+        }
+
+        return $this->codeGenType;
     }
 
-    public function handle(Model $model): string
+    /**
+     * Setter for the code generation type
+     *
+     * @param string $codeGenType
+     *   The string, representing the type.
+     *
+     * @return $this
+     *   For chaining.
+     */
+    public function setCodeGenType(string $codeGenType): Model
     {
-        // Do nothing.
-        return '';
+        if ($codeGenType !== '') {
+            $this->codeGenType = $codeGenType;
+        }
+
+        return $this;
     }
 }
