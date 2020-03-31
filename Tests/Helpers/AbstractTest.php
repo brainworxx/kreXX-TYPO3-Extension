@@ -211,9 +211,9 @@ abstract class AbstractTest extends UnitTestCase
     /**
      * Short circuiting the flash messages.
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\Controller\AbstractController $controller
+     * @param $controller
      */
-    protected function initFlashMessages(AbstractController $controller)
+    protected function initFlashMessages($controller)
     {
         $this->flashMessageQueue = new FlashMessageQueue();
 
@@ -242,9 +242,9 @@ abstract class AbstractTest extends UnitTestCase
     /**
      * The tings you do, to have a simple redirect . . .
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\Controller\AbstractController $controller
+     * @param $controller
      */
-    protected function prepareRedirect(AbstractController $controller)
+    protected function prepareRedirect($controller)
     {
         $request = new StdClass();
         $this->setValueByReflection('request', $request, $controller);
