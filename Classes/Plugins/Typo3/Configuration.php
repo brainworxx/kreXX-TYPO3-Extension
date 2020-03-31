@@ -150,13 +150,13 @@ class Configuration implements PluginConfigInterface, ConstInterface
     {
         // The QueryBuilder special analysis.
         // Only for Doctrine stuff.
-        if (version_compare(TYPO3_version, '8.3', '>')) {
+        if (version_compare(Bootstrap::getTypo3Version(), '8.3', '>')) {
             Registration::registerEvent(Objects::class . static::START_EVENT, QueryDebugger::class);
         }
 
         // Register our modules for the admin panel.
         if (
-            version_compare(TYPO3_version, '9.5', '>=') &&
+            version_compare(Bootstrap::getTypo3Version(), '9.5', '>=') &&
             isset($GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
                 [static::MODULES][static::DEBUG])
         ) {

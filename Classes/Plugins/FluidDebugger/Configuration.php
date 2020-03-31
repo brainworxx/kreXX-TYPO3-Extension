@@ -92,7 +92,7 @@ class Configuration implements PluginConfigInterface
         Registration::addRewrite(Codegen::class, FluidCodegen::class);
 
         // Depending on the TYPO3 version, we need another fluid caller finder.
-        if (version_compare(TYPO3_version, '8.4', '>')) {
+        if (version_compare(Bootstrap::getTypo3Version(), '8.4', '>')) {
             // Fluid 2.2 or higher
             Registration::addRewrite(CallerFinder::class, CallerFinderFluid::class);
         } else {

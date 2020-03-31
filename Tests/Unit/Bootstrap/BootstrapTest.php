@@ -36,12 +36,13 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Bootstrap;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Krexx\Service\Plugin\Registration;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Package\MetaData;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class BootstrapTest extends AbstractTest
 {
@@ -223,5 +224,22 @@ class BootstrapTest extends AbstractTest
         $this->injectIntoGeneralUtility(CacheManager::class, $cacheManagerMock);
 
         $this->bootstrap->checkVersionNumber(static::TYPO3_VERSION);
+    }
+
+    /**
+     * Covers the retrieval of the TYPO3 version number.
+     *
+     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::getTypo3Version
+     */
+    public function testRetrieveVersionNumber()
+    {
+        if (class_exists(Typo3Version::class)) {
+            $version = GeneralUtility::makeInstance(Typo3Version::class)
+                ->getVersion();
+        } else {
+            $version = TYPO3_version;
+        }
+
+        $this->assertEquals($version, Bootstrap::getTypo3Version());
     }
 }

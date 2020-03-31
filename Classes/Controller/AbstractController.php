@@ -104,7 +104,7 @@ abstract class AbstractController extends ActionController
      */
     public function __construct()
     {
-        if (version_compare(TYPO3_version, '10.0.0', '<')) {
+        if (version_compare(Bootstrap::getTypo3Version(), '10.0.0', '<')) {
             // The constructor was removed with 10.0.0.
             parent::__construct();
         }
@@ -263,7 +263,7 @@ abstract class AbstractController extends ActionController
         $this->view->assign('js', file_get_contents($jsPath));
         $this->view->assign('css', file_get_contents($cssPath));
 
-        if (version_compare(TYPO3_version, '10.3', '>=')) {
+        if (version_compare(Bootstrap::getTypo3Version(), '10.3', '>=')) {
             $cssTenThree = GeneralUtility::getFileAbsFileName(
                 'EXT:includekrexx/Resources/Public/Css/IndexTenThree.css'
             );

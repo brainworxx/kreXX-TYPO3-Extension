@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
@@ -321,7 +322,7 @@ abstract class AbstractFluid extends AbstractCaller
     {
         // We check for : and -> to see if we are facing some inline stuff
         if (strpos($varname, ':') !== false || strpos($varname, '->') !== false) {
-            if (version_compare(TYPO3_version, '8.6', '>=')) {
+            if (version_compare(Bootstrap::getTypo3Version(), '8.6', '>=')) {
                 // Variable set is native to 8.6 and beyond.
                 $code = '<f:variable value="{' . $varname . '}" name="fluidvar" /> {';
             } else {
