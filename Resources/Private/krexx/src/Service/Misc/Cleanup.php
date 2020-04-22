@@ -87,11 +87,8 @@ class Cleanup
             return $this;
         }
 
-        array_multisort(
-            array_map([$this->pool->fileService, 'filetime'], $logList),
-            SORT_DESC,
-            $logList
-        );
+        $mapped = array_map([$this->pool->fileService, 'filetime'], $logList);
+        array_multisort($mapped, SORT_DESC, $logList);
 
         $maxFileCount = (int)$this->pool->config->getSetting(Fallback::SETTING_MAX_FILES);
         $count = 1;

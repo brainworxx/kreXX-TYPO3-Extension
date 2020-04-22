@@ -312,7 +312,6 @@ class Encoding
 
         $result = str_replace(
             [
-                '"',
                 '\'',
                 "\0",
                 // BOM stuff
@@ -321,8 +320,7 @@ class Encoding
                 "\xBF"
             ],
             [
-                '&#034;',
-                '&#039;',
+                "\&#039;",
                 '\' . "\0" . \'',
                 // BOM stuff
                 '\' . "\xEF" . \'',
@@ -333,7 +331,7 @@ class Encoding
         );
 
         // Clean it up a bit
-        return $cache[$name] = str_replace('" . \'\' . "', '', $result);
+        return $cache[$name] = $this->encodeString(str_replace('" . \'\' . "', '', $result));
     }
 
     /**

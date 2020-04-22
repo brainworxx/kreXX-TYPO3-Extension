@@ -12,6 +12,13 @@
 Changelog
 =============================================================
 
+3.3.2 dev
+    - [Feature] TYPO3 10.4 support.
+    - [Bugfix] Added missing closing li tag to the expandableChild template.
+    - [Bugfix] The fe configuration does not update the render type.
+    - [Bugfix] Do not mixup and/or combine escaping for keys and/or code generation.
+    - [Bugfix] Remove a possible warning when cleaning up old log files.
+
 3.3.1
     - [Feature] Updated to PHP 7.4
     - [Bugfix] The process other routing is never called.

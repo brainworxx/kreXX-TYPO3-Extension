@@ -119,12 +119,12 @@ class EncodingTest extends AbstractTest
         $fixture = 'value';
 
         $specialChars = [
-            '"' => '&#034;',
-            '\'' => '&#039;',
-            "\0" => '\' . "\0" . \'',
-            "\xEF" => '\' . "\xEF" . \'',
-            "\xBB" => '\' . "\xBB" . \'',
-            "\xBF" => '\' . "\xBF" . \''
+            '"' => '&quot;',
+            '\'' => '\&amp;#039;',
+            "\0" => '\' . &quot;\0&quot; . \'',
+            "\xEF" => '\' . &quot;\xEF&quot; . \'',
+            "\xBB" => '\' . &quot;\xBB&quot; . \'',
+            "\xBF" => '\' . &quot;\xBF&quot; . \''
         ];
 
         foreach ($specialChars as $original => $expeced) {
