@@ -116,7 +116,7 @@ trait IsMetaConstants
     {
         $this->isMetaConstants = $bool;
         if ($bool === true) {
-            $this->codeGenType = Codegen::CODEGEN_TYPE_META_CONSTANTS;
+            $this->codeGenType = static::CODEGEN_TYPE_META_CONSTANTS;
         }
 
         return $this;

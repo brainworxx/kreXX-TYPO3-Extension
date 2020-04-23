@@ -38,8 +38,11 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 
 /**
@@ -52,7 +55,10 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
  * @uses array data
  *   The singe step from a backtrace.
  */
-class BacktraceStep extends AbstractCallback
+class BacktraceStep extends AbstractCallback implements
+    BacktraceConstInterface,
+    CallbackConstInterface,
+    ProcessConstInterface
 {
 
     /**

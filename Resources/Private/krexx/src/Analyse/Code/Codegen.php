@@ -37,7 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Code;
 
-use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
@@ -50,38 +50,8 @@ use ReflectionType;
  *
  * @package Brainworxx\Krexx\Analyse\Code
  */
-class Codegen implements ConstInterface
+class Codegen implements CallbackConstInterface, CodegenConstInterface
 {
-    /**
-     * Constant identifier for the array multiline code generation.
-     *
-     * @deprecated
-     *   Since 4.0.0. Will be removed. Use CODEGEN_TYPE_ITERATOR_TO_ARRAY.
-     */
-    const ITERATOR_TO_ARRAY = 'iteratorToArray';
-
-    /**
-     * Constant identifier for the json multiline code generation.
-     *
-     * @deprecated
-     *   Since 4.0.0. Will be removed. Use CODEGEN_TYPE_JSON_DECODE.
-     */
-    const JSON_DECODE = 'jsonDecode';
-
-    /**
-     * Identifier for inaccessible array multiline code generation.
-     *
-     * @deprecated
-     *   Since 4.0.0. Will be removed. Use CODEGEN_TYPE_ARRAY_VALUES_ACCESS.
-     */
-    const ARRAY_VALUES_ACCESS = 'arrayValuesAccess';
-
-    const CODEGEN_TYPE_META_CONSTANTS = 'metaConstants';
-    const CODEGEN_TYPE_PUBLIC = 'public';
-    const CODEGEN_TYPE_ITERATOR_TO_ARRAY = 'iteratorToArray';
-    const CODEGEN_TYPE_JSON_DECODE = 'jsonDecode';
-    const CODEGEN_TYPE_ARRAY_VALUES_ACCESS = 'arrayValuesAccess';
-    const CODEGEN_TYPE_EMPTY = 'empty';
 
     /**
      * Here we store all relevant data.

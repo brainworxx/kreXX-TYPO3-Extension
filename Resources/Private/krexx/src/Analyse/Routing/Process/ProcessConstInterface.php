@@ -35,37 +35,24 @@
 
 declare(strict_types=1);
 
-namespace Brainworxx\Krexx\View\Skins;
-
-use Brainworxx\Krexx\Controller\ControllerConstInterface;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Button;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\FatalMain;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Footer;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Header;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Recursion;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleChild;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
+namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 /**
- * Individual render class for the smokey-grey skin.
+ * Constants used in the routing/processing.
  *
- * @package Brainworxx\Krexx\View\Smokygrey
+ * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
+interface ProcessConstInterface
 {
-    use SingleChild;
-    use ExpandableChild;
-    use Recursion;
-    use SingleEditableChild;
-    use Button;
-    use Header;
-    use Footer;
-    use FatalMain;
-    use ConnectorRight;
-    use Help;
-
-    const DATA_ATTRIBUTE_JSON = 'addjson';
+    const TYPE_STRING = 'string ';
+    const TYPE_INTEGER = 'integer';
+    const TYPE_ARRAY = 'array';
+    const TYPE_OBJECT = 'object';
+    const TYPE_STACK_FRAME = 'stack frame';
+    const TYPE_BOOL = 'boolean';
+    const TYPE_CLOSURE = 'closure';
+    const TYPE_FLOAT = 'float';
+    const TYPE_NULL = 'null';
+    const TYPE_CLASS = 'class';
+    const TYPE_RESOURCE = 'resource';
 }

@@ -37,12 +37,15 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Scalar\ScalarString;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\FileinfoDummy;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use finfo;
 
 /**
@@ -50,7 +53,12 @@ use finfo;
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessString extends AbstractRouting implements ProcessInterface
+class ProcessString extends AbstractRouting implements
+    ProcessInterface,
+    ViewConstInterface,
+    ProcessConstInterface,
+    CallbackConstInterface,
+    ConfigConstInterface
 {
     /**
      * The buffer info class. We use it to get the mimetype from a string.
@@ -140,7 +148,7 @@ class ProcessString extends AbstractRouting implements ProcessInterface
             $model->setNormal($this->pool->encodingService->encodeString($data));
         }
 
-        if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_SCALAR) === true) {
+        if ($this->pool->config->getSetting(static::SETTING_ANALYSE_SCALAR) === true) {
             return $this->handleStringScalar($model, $originalData);
         }
 

@@ -37,10 +37,12 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Comment\Classes;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Class Meta
@@ -53,7 +55,7 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  */
-class Meta extends AbstractObjectAnalysis
+class Meta extends AbstractObjectAnalysis implements CallbackConstInterface, ViewConstInterface
 {
 
     /**

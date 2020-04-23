@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Misc;
 
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
@@ -45,7 +46,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Service\Misc
  */
-class Cleanup
+class Cleanup implements ConfigConstInterface
 {
     /**
      * The pool.
@@ -90,13 +91,14 @@ class Cleanup
             return $this;
         }
 
+        $mapped = array_map([$this->pool->fileService, 'filetime'], $logList);
         array_multisort(
-            array_map([$this->pool->fileService, 'filetime'], $logList),
+            $mapped,
             SORT_DESC,
             $logList
         );
 
-        $maxFileCount = (int)$this->pool->config->getSetting(Fallback::SETTING_MAX_FILES);
+        $maxFileCount = (int)$this->pool->config->getSetting(static::SETTING_MAX_FILES);
         $count = 1;
         // Cleanup logfiles.
         foreach ($logList as $file) {

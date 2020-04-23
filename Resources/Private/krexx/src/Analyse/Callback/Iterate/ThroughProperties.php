@@ -38,10 +38,13 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Properties;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -55,7 +58,11 @@ use ReflectionProperty;
  * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class ThroughProperties extends AbstractCallback
+class ThroughProperties extends AbstractCallback implements
+    CallbackConstInterface,
+    ViewConstInterface,
+    CodegenConstInterface,
+    ConnectorsConstInterface
 {
 
     /**
@@ -94,7 +101,7 @@ class ThroughProperties extends AbstractCallback
                         ->addToJson(static::META_DECLARED_IN, $this->retrieveDeclarationPlace($refProperty))
                         ->setAdditional($this->getAdditionalData($refProperty, $ref))
                         ->setConnectorType($this->retrieveConnector($refProperty))
-                        ->setCodeGenType($refProperty->isPublic() ? Codegen::CODEGEN_TYPE_PUBLIC : '')
+                        ->setCodeGenType($refProperty->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '')
                 )
             );
         }
@@ -113,17 +120,17 @@ class ThroughProperties extends AbstractCallback
      */
     protected function retrieveConnector(ReflectionProperty $refProperty): int
     {
-        $connectorType = Connectors::NORMAL_PROPERTY;
+        $connectorType = static::CONNECTOR_NORMAL_PROPERTY;
 
         if ($refProperty->isStatic() === true) {
-            $connectorType = Connectors::STATIC_PROPERTY;
+            $connectorType = static::CONNECTOR_STATIC_PROPERTY;
         } elseif (
             isset($refProperty->isUndeclared) === true &&
             $this->pool->encodingService->isPropertyNameNormal($refProperty->getName()) === false
         ) {
             // This one was undeclared and does not follow the standard naming
             // conventions of PHP. Maybe something for a rest service?
-            $connectorType = Connectors::SPECIAL_CHARS_PROP;
+            $connectorType = static::CONNECTOR_SPECIAL_CHARS_PROP;
         }
 
         return $connectorType;

@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
 
@@ -46,7 +47,7 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
-abstract class AbstractScalarAnalysis extends AbstractCallback
+abstract class AbstractScalarAnalysis extends AbstractCallback implements CallbackConstInterface
 {
     /**
      * The code generation type constant assigned to the model.

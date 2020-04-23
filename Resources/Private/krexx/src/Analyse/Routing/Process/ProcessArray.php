@@ -37,9 +37,11 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 
 /**
@@ -47,7 +49,7 @@ use Brainworxx\Krexx\Service\Config\Fallback;
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessArray extends AbstractProcessNoneScalar
+class ProcessArray extends AbstractProcessNoneScalar implements ProcessConstInterface, CallbackConstInterface, ConfigConstInterface
 {
 
     /**
@@ -79,7 +81,7 @@ class ProcessArray extends AbstractProcessNoneScalar
         $multiline = false;
         $count = count($model->getData());
 
-        if ($count > (int) $this->pool->config->getSetting(Fallback::SETTING_ARRAY_COUNT_LIMIT)) {
+        if ($count > (int) $this->pool->config->getSetting(static::SETTING_ARRAY_COUNT_LIMIT)) {
             // Budget array analysis.
             $model->injectCallback($this->pool->createClass(ThroughLargeArray::class))
                 ->setHelpid('simpleArray');

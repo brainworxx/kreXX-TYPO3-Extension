@@ -45,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessFloat extends AbstractRouting implements ProcessInterface
+class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
     /**
      * Is this one a float?

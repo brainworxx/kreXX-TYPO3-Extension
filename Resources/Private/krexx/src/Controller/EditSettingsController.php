@@ -42,7 +42,7 @@ namespace Brainworxx\Krexx\Controller;
  *
  * @package Brainworxx\Krexx\Controller
  */
-class EditSettingsController extends AbstractController
+class EditSettingsController extends AbstractController implements ControllerConstInterface
 {
     /**
      * Outputs the edit settings dialog, without any analysis.

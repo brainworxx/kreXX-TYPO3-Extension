@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -49,7 +50,7 @@ use Reflector;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  */
-abstract class AbstractObjectAnalysis extends AbstractCallback
+abstract class AbstractObjectAnalysis extends AbstractCallback implements CallbackConstInterface
 {
 
     /**

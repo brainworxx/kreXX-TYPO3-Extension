@@ -44,7 +44,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Controller
  */
-class TimerController extends AbstractController
+class TimerController extends AbstractController implements ControllerConstInterface
 {
     /**
      * Here we save all timekeeping stuff.
@@ -108,7 +108,7 @@ class TimerController extends AbstractController
         // And we are done. Feedback to the user.
         $miniBench = $this->miniBenchTo(static::$timekeeping);
         $this->pool->createClass(DumpController::class)
-            ->dumpAction($miniBench, 'kreXX timer');
+            ->dumpAction($miniBench, static::HEADLINE_TIMER);
         // Reset the timer vars.
         static::$timekeeping = [];
         static::$counterCache = [];

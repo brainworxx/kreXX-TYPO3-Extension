@@ -41,7 +41,6 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Json;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
@@ -57,7 +56,7 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
  *
  * @package Brainworxx\Krexx\Analyse\Callback
  */
-class ScalarString extends AbstractScalar implements ConstInterface
+class ScalarString extends AbstractScalar
 {
 
     /**

@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Controller\ExceptionController;
 use Brainworxx\Krexx\Controller\TimerController;
 use Brainworxx\Krexx\Logging\LoggingTrait;
 use Brainworxx\Krexx\Service\Config\Config;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
@@ -53,7 +54,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx
  */
-class Krexx
+class Krexx implements ConfigConstInterface
 {
     use LoggingTrait;
 
@@ -139,7 +140,7 @@ class Krexx
 
         // Disabled ?
         if (
-            static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -171,7 +172,7 @@ class Krexx
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -205,7 +206,7 @@ class Krexx
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -249,7 +250,7 @@ class Krexx
         // Disabled?
         // We are ignoring local settings here.
         if (
-            static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
@@ -270,7 +271,7 @@ class Krexx
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
@@ -291,7 +292,7 @@ class Krexx
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;

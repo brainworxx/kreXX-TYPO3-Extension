@@ -56,10 +56,10 @@ class Validation extends Fallback
     const KEY_CONFIG_ERROR_INT = 'configErrorInt';
     const KEY_CONFIG_ERROR_DEBUG_INVALID = 'configErrorDebugInvalid';
     const FE_DO_NOT_EDIT = [
-        Fallback::SETTING_DESTINATION,
-        Fallback::SETTING_MAX_FILES,
-        Fallback::SETTING_DEBUG_METHODS,
-        Fallback::SETTING_IP_RANGE,
+        self::SETTING_DESTINATION,
+        self::SETTING_MAX_FILES,
+        self::SETTING_DEBUG_METHODS,
+        self::SETTING_IP_RANGE,
     ];
 
     /**
@@ -97,10 +97,10 @@ class Validation extends Fallback
      * @var array
      */
     protected $feConfigNoEdit = [
-        Fallback::SETTING_DESTINATION,
-        Fallback::SETTING_MAX_FILES,
-        Fallback::SETTING_DEBUG_METHODS,
-        Fallback::SETTING_IP_RANGE,
+        self::SETTING_DESTINATION,
+        self::SETTING_MAX_FILES,
+        self::SETTING_DEBUG_METHODS,
+        self::SETTING_IP_RANGE,
     ];
 
     /**

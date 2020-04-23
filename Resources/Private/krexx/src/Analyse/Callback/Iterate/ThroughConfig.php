@@ -39,7 +39,9 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 
 /**
@@ -50,7 +52,7 @@ use Brainworxx\Krexx\Service\Config\Fallback;
  * @uses null
  *   There are no parameters available here.
  */
-class ThroughConfig extends AbstractCallback
+class ThroughConfig extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
 {
 
     /**
@@ -64,14 +66,14 @@ class ThroughConfig extends AbstractCallback
         $configOutput = $this->dispatchStartEvent() . $this->renderAllSections();
 
         // Render the dev-handle field.
-        $devHandleLabel = $this->pool->messages->getHelp(Fallback::SETTING_DEV_HANDLE);
+        $devHandleLabel = $this->pool->messages->getHelp(static::SETTING_DEV_HANDLE);
         $configOutput .= $this->pool->render->renderSingleEditableChild(
             $this->pool->createClass(Model::class)
                 ->setData($devHandleLabel)
-                ->setDomId(Fallback::SETTING_DEV_HANDLE)
+                ->setDomId(static::SETTING_DEV_HANDLE)
                 ->setName($this->pool->config->getDevHandler())
                 ->setNormal('\krexx::')
-                ->setType(Fallback::RENDER_TYPE_INPUT)
+                ->setType(static::RENDER_TYPE_INPUT)
                 ->setHelpid('localFunction')
         );
 

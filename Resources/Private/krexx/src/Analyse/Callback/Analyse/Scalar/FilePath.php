@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use finfo;
 use TypeError;
 
@@ -49,7 +50,7 @@ use TypeError;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
-class FilePath extends AbstractScalarAnalysis
+class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
 {
     /**
      * @var \finfo

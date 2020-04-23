@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use DOMDocument;
 use finfo;
 
@@ -46,7 +47,7 @@ use finfo;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
-class Xml extends AbstractScalarAnalysis
+class Xml extends AbstractScalarAnalysis implements ViewConstInterface
 {
 
     const XML_CHILDREN = 'children';

@@ -37,6 +37,9 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Skins;
 
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
+use Brainworxx\Krexx\Service\Plugin\PluginConstInterface;
 use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\RenderInterface;
 use Brainworxx\Krexx\View\Skins\Hans\BacktraceSourceLine;
@@ -58,13 +61,19 @@ use Brainworxx\Krexx\View\Skins\Hans\Search;
 use Brainworxx\Krexx\View\Skins\Hans\SingeChildHr;
 use Brainworxx\Krexx\View\Skins\Hans\SingleChild;
 use Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild;
+use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Individual render class for the Hans skin.
  *
  * @package Brainworxx\Krexx\View\Hans
  */
-class RenderHans extends AbstractRender implements RenderInterface
+class RenderHans extends AbstractRender implements
+    RenderInterface,
+    ViewConstInterface,
+    BacktraceConstInterface,
+    PluginConstInterface,
+    ConfigConstInterface
 {
     use BacktraceSourceLine;
     use Button;

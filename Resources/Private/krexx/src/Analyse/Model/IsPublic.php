@@ -78,7 +78,7 @@ trait IsPublic
     {
         $this->isPublic = $bool;
         if ($bool === true) {
-            $this->codeGenType = Codegen::CODEGEN_TYPE_PUBLIC;
+            $this->codeGenType = static::CODEGEN_TYPE_PUBLIC;
         }
 
         return $this;

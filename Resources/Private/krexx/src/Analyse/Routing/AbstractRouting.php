@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Routing;
 
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -47,7 +46,7 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
  *
  * @package Brainworxx\Krexx\Analyse\Routing
  */
-abstract class AbstractRouting implements ConstInterface
+abstract class AbstractRouting
 {
     /**
      * Here we store all relevant data.

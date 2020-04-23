@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -45,7 +46,7 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessObject extends AbstractProcessNoneScalar
+class ProcessObject extends AbstractProcessNoneScalar implements CallbackConstInterface, ProcessConstInterface
 {
     /**
      * Is this one an object?

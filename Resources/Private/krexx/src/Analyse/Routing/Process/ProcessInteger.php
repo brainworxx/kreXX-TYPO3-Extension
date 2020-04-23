@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use DateTime;
 use Exception;
 
@@ -47,7 +48,7 @@ use Exception;
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessInteger extends AbstractRouting implements ProcessInterface
+class ProcessInteger extends AbstractRouting implements ProcessInterface, ViewConstInterface, ProcessConstInterface
 {
 
     /**

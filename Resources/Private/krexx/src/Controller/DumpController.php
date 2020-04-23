@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Controller;
 
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -44,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @package Brainworxx\Krexx\Controller
  */
-class DumpController extends AbstractController
+class DumpController extends AbstractController implements BacktraceConstInterface
 {
     /**
      * Dump information about a variable.

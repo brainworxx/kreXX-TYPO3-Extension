@@ -37,11 +37,13 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
-use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Functions;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionException;
 use ReflectionFunction;
 use Closure;
@@ -51,7 +53,11 @@ use Closure;
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessClosure extends AbstractProcessNoneScalar
+class ProcessClosure extends AbstractProcessNoneScalar implements
+    ViewConstInterface,
+    ProcessConstInterface,
+    CallbackConstInterface,
+    ConnectorsConstInterface
 {
     /**
      * Is this one a boolean?
@@ -114,7 +120,7 @@ class ProcessClosure extends AbstractProcessNoneScalar
                 ->setNormal(static::UNKNOWN_VALUE)
                 ->setConnectorParameters($this->retrieveParameterList($ref, $result))
                 ->setDomid($this->generateDomIdFromObject($model->getData()))
-                ->setConnectorType(Connectors::METHOD)
+                ->setConnectorType(static::CONNECTOR_METHOD)
                 ->addParameter(static::PARAM_DATA, $result)
                 ->injectCallback($this->pool->createClass(ThroughMeta::class))
         ));

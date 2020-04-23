@@ -65,7 +65,7 @@ trait CodeGenType
             // No connectors, no nothing.
             // Normal meta stuff.
             // We will ignore this one.
-            return Codegen::CODEGEN_TYPE_EMPTY;
+            return static::CODEGEN_TYPE_EMPTY;
         }
 
         return $this->codeGenType;

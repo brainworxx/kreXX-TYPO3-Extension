@@ -35,7 +35,6 @@
 
 namespace Brainworxx\Krexx\Analyse\Comment;
 
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use ReflectionClass;
 use Reflector;
 
@@ -44,7 +43,7 @@ use Reflector;
  *
  * @package Brainworxx\Krexx\Analyse\Comment
  */
-class ReturnType extends AbstractComment implements ConstInterface
+class ReturnType extends AbstractComment
 {
     /**
      * The allowed types from the comment.

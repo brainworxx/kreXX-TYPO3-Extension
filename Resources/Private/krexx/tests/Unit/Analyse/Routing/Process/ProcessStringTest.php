@@ -35,7 +35,9 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessString;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
@@ -124,7 +126,7 @@ class ProcessStringTest extends AbstractTest
             $length
         );
 
-        $this->assertEquals($model::TYPE_STRING . $length, $model->getType());
+        $this->assertEquals(ProcessConstInterface::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
         $this->assertEquals(false, $model->hasExtra());
@@ -150,7 +152,7 @@ class ProcessStringTest extends AbstractTest
             $length
         );
 
-        $this->assertEquals($model::TYPE_STRING .  $length, $model->getType());
+        $this->assertEquals(ProcessConstInterface::TYPE_STRING .  $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
         $this->assertEquals('broken', $model->getJson()[$model::META_ENCODING]);
@@ -179,7 +181,7 @@ class ProcessStringTest extends AbstractTest
             $fileInfo
         );
 
-        $this->assertEquals($model::TYPE_STRING . $length, $model->getType());
+        $this->assertEquals(ProcessConstInterface::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
         $this->assertEquals($fileInfo, $model->getJson()[$model::META_MIME_TYPE]);
@@ -208,10 +210,10 @@ class ProcessStringTest extends AbstractTest
             $fileInfo
         );
 
-        $this->assertEquals($model::TYPE_STRING . $length, $model->getType());
+        $this->assertEquals(ProcessConstInterface::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
         $this->assertEquals(
-            static::ENCODING_PREFIX . substr($fixture, 0, 50) .  $model::UNKNOWN_VALUE,
+            static::ENCODING_PREFIX . substr($fixture, 0, 50) .  CallbackConstInterface::UNKNOWN_VALUE,
             $model->getNormal()
         );
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getData());
@@ -239,9 +241,9 @@ class ProcessStringTest extends AbstractTest
             $length
         );
 
-        $this->assertEquals($model::TYPE_STRING . $length, $model->getType());
+        $this->assertEquals(ProcessConstInterface::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
-        $this->assertEquals(static::ENCODING_PREFIX . $fixture . $model::UNKNOWN_VALUE, $model->getNormal());
+        $this->assertEquals(static::ENCODING_PREFIX . $fixture . CallbackConstInterface::UNKNOWN_VALUE, $model->getNormal());
         $this->assertEquals(true, $model->hasExtra());
         $this->assertArrayNotHasKey($model::META_MIME_TYPE, $model->getJson());
     }

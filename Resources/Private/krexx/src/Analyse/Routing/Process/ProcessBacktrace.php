@@ -39,7 +39,10 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\BacktraceStep;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 
 /**
@@ -48,7 +51,11 @@ use Brainworxx\Krexx\Service\Config\Fallback;
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessBacktrace extends AbstractCallback
+class ProcessBacktrace extends AbstractCallback implements
+    ProcessConstInterface,
+    CallbackConstInterface,
+    BacktraceConstInterface,
+    ConfigConstInterface
 {
     /**
      * Wrapper around the process method, so we can use this one as a callback.
@@ -96,7 +103,7 @@ class ProcessBacktrace extends AbstractCallback
         }
 
         $output = '';
-        $maxStep = (int) $this->pool->config->getSetting(Fallback::SETTING_MAX_STEP_NUMBER);
+        $maxStep = (int) $this->pool->config->getSetting(static::SETTING_MAX_STEP_NUMBER);
         $stepCount = count($backtrace);
 
         // Remove steps according to the configuration.

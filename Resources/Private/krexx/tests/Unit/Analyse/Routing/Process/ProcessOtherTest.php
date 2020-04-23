@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use Brainworxx\Krexx\View\ViewConstInterface;
 
 class ProcessOtherTest extends AbstractTest
 {
@@ -66,7 +67,7 @@ class ProcessOtherTest extends AbstractTest
 
         $this->assertEquals('string', $model->getType());
         $this->assertEquals('Unhandled type: string', $model->getNormal());
-        $this->assertArrayHasKey(ProcessOther::META_HELP, $model->getJson());
+        $this->assertArrayHasKey(ViewConstInterface::META_HELP, $model->getJson());
     }
 
     /**

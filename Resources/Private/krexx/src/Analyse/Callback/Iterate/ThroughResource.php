@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -48,7 +49,7 @@ use Brainworxx\Krexx\Analyse\Model;
  * @uses array data
  *   The meta data from the stream.
  */
-class ThroughResource extends AbstractCallback
+class ThroughResource extends AbstractCallback implements CallbackConstInterface
 {
 
     /**

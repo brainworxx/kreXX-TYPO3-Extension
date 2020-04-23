@@ -38,10 +38,13 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use ArrayAccess;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use SplObjectStorage;
 use Throwable;
 
@@ -56,7 +59,7 @@ use Throwable;
  *   The variable name or key in the parent object / array where the current
  *   class is stored.
  */
-class Traversable extends AbstractObjectAnalysis
+class Traversable extends AbstractObjectAnalysis implements CallbackConstInterface, ViewConstInterface, ConfigConstInterface
 {
 
     /**
@@ -164,7 +167,7 @@ class Traversable extends AbstractObjectAnalysis
         // Check, if we are handling a huge array. Huge arrays tend to result in a huge
         // output, maybe even triggering a emergency break. to avoid this, we give them
         // a special callback.
-        if (count($result) > (int) $this->pool->config->getSetting(Fallback::SETTING_ARRAY_COUNT_LIMIT)) {
+        if (count($result) > (int) $this->pool->config->getSetting(static::SETTING_ARRAY_COUNT_LIMIT)) {
             $model->injectCallback($this->pool->createClass(ThroughLargeArray::class))
                 ->setNormal('Simplified Traversable Info')
                 ->setHelpid('simpleArray');

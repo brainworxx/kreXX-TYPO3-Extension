@@ -35,8 +35,10 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -197,13 +199,13 @@ class ProcessResourceTest extends AbstractTest
 
         $processor->handle($model);
 
-        $this->assertEquals($model::TYPE_RESOURCE, $model->getType());
+        $this->assertEquals(ProcessConstInterface::TYPE_RESOURCE, $model->getType());
         $this->assertEquals($normalExpectation, $model->getNormal());
         if (isset($dataExpectation)) {
             $this->assertEquals($dataExpectation, $model->getData());
         }
         if (isset($metaResults)) {
-            $this->assertEquals($metaResults, $model->getParameters()[$model::PARAM_DATA]);
+            $this->assertEquals($metaResults, $model->getParameters()[CallbackConstInterface::PARAM_DATA]);
         } else {
             $this->assertEmpty($model->getParameters());
         }

@@ -35,37 +35,43 @@
 
 declare(strict_types=1);
 
-namespace Brainworxx\Krexx\View\Skins;
-
-use Brainworxx\Krexx\Controller\ControllerConstInterface;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Button;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\FatalMain;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Footer;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Header;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Recursion;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleChild;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
+namespace Brainworxx\Krexx\Analyse\Code;
 
 /**
- * Individual render class for the smokey-grey skin.
+ * Constants for the code generation.
  *
- * @package Brainworxx\Krexx\View\Smokygrey
+ * @package Brainworxx\Krexx\Analyse\Code
  */
-class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
+interface CodegenConstInterface
 {
-    use SingleChild;
-    use ExpandableChild;
-    use Recursion;
-    use SingleEditableChild;
-    use Button;
-    use Header;
-    use Footer;
-    use FatalMain;
-    use ConnectorRight;
-    use Help;
+    /**
+     * Constant identifier for the array multiline code generation.
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed. Use CODEGEN_TYPE_ITERATOR_TO_ARRAY.
+     */
+    const ITERATOR_TO_ARRAY = 'iteratorToArray';
 
-    const DATA_ATTRIBUTE_JSON = 'addjson';
+    /**
+     * Constant identifier for the json multiline code generation.
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed. Use CODEGEN_TYPE_JSON_DECODE.
+     */
+    const JSON_DECODE = 'jsonDecode';
+
+    /**
+     * Identifier for inaccessible array multiline code generation.
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed. Use CODEGEN_TYPE_ARRAY_VALUES_ACCESS.
+     */
+    const ARRAY_VALUES_ACCESS = 'arrayValuesAccess';
+
+    const CODEGEN_TYPE_META_CONSTANTS = 'metaConstants';
+    const CODEGEN_TYPE_PUBLIC = 'public';
+    const CODEGEN_TYPE_ITERATOR_TO_ARRAY = 'iteratorToArray';
+    const CODEGEN_TYPE_JSON_DECODE = 'jsonDecode';
+    const CODEGEN_TYPE_ARRAY_VALUES_ACCESS = 'arrayValuesAccess';
+    const CODEGEN_TYPE_EMPTY = 'empty';
 }

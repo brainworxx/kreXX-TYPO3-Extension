@@ -38,7 +38,8 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use ReflectionClassConstant;
 
@@ -57,7 +58,7 @@ use ReflectionClassConstant;
  *   The classname we are analysing, for code generation purpose.
  *   Deprecated since 4.0.0. Will be removed. Ask the class reflection instead.
  */
-class ThroughConstants extends AbstractCallback
+class ThroughConstants extends AbstractCallback implements CallbackConstInterface, CodegenConstInterface
 {
     /**
      * Are we coming from a $this scope?
@@ -97,7 +98,7 @@ class ThroughConstants extends AbstractCallback
                         ->setData($constantValue)
                         ->setAdditional($this->retrieveAdditionalData($reflectionConstant))
                         ->setName($constantName)
-                        ->setCodeGenType(Codegen::CODEGEN_TYPE_PUBLIC)
+                        ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
                         ->setCustomConnectorLeft($prefix . '::')
                 );
             }
@@ -124,7 +125,7 @@ class ThroughConstants extends AbstractCallback
                 $this->pool->createClass(Model::class)
                     ->setData($constantValue)
                     ->setName($constantName)
-                    ->setCodeGenType(Codegen::CODEGEN_TYPE_PUBLIC)
+                    ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
                     ->setCustomConnectorLeft($prefix . '::')
             );
         }

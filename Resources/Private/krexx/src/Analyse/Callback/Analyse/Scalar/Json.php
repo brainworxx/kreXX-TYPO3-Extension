@@ -38,21 +38,23 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Deep analysis for json strings.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
-class Json extends AbstractScalarAnalysis
+class Json extends AbstractScalarAnalysis implements ViewConstInterface
 {
     /**
      * Code generation for this one is the json encoder.
      *
      * @var string
      */
-    protected $codeGenType = Codegen::CODEGEN_TYPE_JSON_DECODE;
+    protected $codeGenType = CodegenConstInterface::CODEGEN_TYPE_JSON_DECODE;
 
     /**
      * What the variable name says.

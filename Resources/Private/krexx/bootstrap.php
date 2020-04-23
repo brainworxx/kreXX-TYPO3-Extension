@@ -56,8 +56,23 @@ call_user_func(function () {
 
     // Defining our "autoloader". We may, or may not need this one.
     $krexxLoader = function () {
+        include_once KREXX_DIR . 'src/Analyse/Callback/CallbackConstInterface.php';
+        include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessConstInterface.php';
+        include_once KREXX_DIR . 'src/Analyse/Caller/BacktraceConstInterface.php';
+        include_once KREXX_DIR . 'src/View/ViewConstInterface.php';
+        include_once KREXX_DIR . 'src/Controller/ControllerConstInterface.php';
+        include_once KREXX_DIR . 'src/Service/Config/ConfigConstInterface.php';
+        include_once KREXX_DIR . 'src/Analyse/Code/CodegenConstInterface.php';
+        include_once KREXX_DIR . 'src/Analyse/Code/ConnectorsConstInterface.php';
+        include_once KREXX_DIR . 'src/Service/Plugin/PluginConstInterface.php';
+        // Deprecated
         include_once KREXX_DIR . 'src/Analyse/ConstInterface.php';
+        // Deprecated
         include_once KREXX_DIR . 'src/Analyse/Callback/AbstractCallback.php';
+
+        include_once KREXX_DIR . 'src/Analyse/Code/Codegen.php';
+        include_once KREXX_DIR . 'src/Analyse/Code/Connectors.php';
+        include_once KREXX_DIR . 'src/Analyse/Code/Scope.php';
 
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/AbstractObjectAnalysis.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/Constants.php';
@@ -89,10 +104,6 @@ call_user_func(function () {
 
         include_once KREXX_DIR . 'src/Analyse/Caller/AbstractCaller.php';
         include_once KREXX_DIR . 'src/Analyse/Caller/CallerFinder.php';
-
-        include_once KREXX_DIR . 'src/Analyse/Code/Codegen.php';
-        include_once KREXX_DIR . 'src/Analyse/Code/Connectors.php';
-        include_once KREXX_DIR . 'src/Analyse/Code/Scope.php';
 
         include_once KREXX_DIR . 'src/Analyse/Comment/AbstractComment.php';
         include_once KREXX_DIR . 'src/Analyse/Comment/Functions.php';
@@ -152,7 +163,6 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Controller/EditSettingsController.php';
         include_once KREXX_DIR . 'src/Controller/ExceptionController.php';
 
-        include_once KREXX_DIR . 'src/Service/Config/ConfigConstInterface.php';
         include_once KREXX_DIR . 'src/Service/Config/Fallback.php';
         include_once KREXX_DIR . 'src/Service/Config/Config.php';
         include_once KREXX_DIR . 'src/Service/Config/Model.php';
@@ -178,9 +188,9 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Service/Reflection/UndeclaredProperty.php';
         include_once KREXX_DIR . 'src/Service/Reflection/ReflectionClass.php';
 
+        include_once KREXX_DIR . 'src/Service/Plugin/PluginConfigInterface.php';
         include_once KREXX_DIR . 'src/Service/Plugin/Registration.php';
         include_once KREXX_DIR . 'src/Service/Plugin/SettingsGetter.php';
-        include_once KREXX_DIR . 'src/Service/Plugin/PluginConfigInterface.php';
 
         include_once KREXX_DIR . 'src/View/Output/AbstractOutput.php';
         include_once KREXX_DIR . 'src/View/Output/Chunks.php';
@@ -212,7 +222,9 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/View/Skins/Hans/ConnectorLeft.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/ConnectorRight.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/Search.php';
+        // Deprecated
         include_once KREXX_DIR . 'src/View/Skins/Hans/ConstInterface.php';
+        // Deprecated
         include_once KREXX_DIR . 'src/View/Skins/RenderHans.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Button.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/ExpandableChild.php';
@@ -234,7 +246,7 @@ call_user_func(function () {
     // When it does something stupid, krexxLoader will handle the rest.
     set_error_handler($krexxLoader);
     try {
-        if (interface_exists(\Brainworxx\Krexx\Analyse\ConstInterface::class) === false) {
+        if (class_exists(\Brainworxx\Krexx\Krexx::class) === false) {
             $krexxLoader();
         }
     } catch (\Throwable $e) {

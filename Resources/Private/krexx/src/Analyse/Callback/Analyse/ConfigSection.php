@@ -38,9 +38,12 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Model as SettingModel;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Configuration "analysis" methods. Meh, naming conventions suck sometimes.
@@ -50,7 +53,7 @@ use Brainworxx\Krexx\Service\Config\Fallback;
  * @uses array data
  *   The configuration section we are rendering
  */
-class ConfigSection extends AbstractCallback
+class ConfigSection extends AbstractCallback implements CallbackConstInterface, ViewConstInterface, ConfigConstInterface
 {
 
     /**
@@ -67,7 +70,7 @@ class ConfigSection extends AbstractCallback
             // Render the single value.
             // We need to find out where the value comes from.
             /** @var SettingModel $setting */
-            if ($setting->getType() === Fallback::RENDER_TYPE_NONE) {
+            if ($setting->getType() === static::RENDER_TYPE_NONE) {
                 // We do not render these.
                 continue;
             }

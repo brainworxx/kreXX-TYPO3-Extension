@@ -108,4 +108,6 @@ interface ConfigConstInterface
 
     const SKIN_SMOKY_GREY = 'smokygrey';
     const SKIN_HANS = 'hans';
+    const SKIN_CLASS = 'class';
+    const SKIN_DIRECTORY = 'dir';
 }

@@ -107,7 +107,7 @@ class ProcessClosureTest extends AbstractTest
         $this->assertNotEmpty($model->getDomid());
         /** @var \Brainworxx\Krexx\Analyse\Code\Connectors $connectorService */
         $connectorService = $this->retrieveValueByReflection('connectorService', $model);
-        $this->assertEquals(Connectors::METHOD, $this->retrieveValueByReflection('type', $connectorService));
+        $this->assertEquals(Connectors::CONNECTOR_METHOD, $this->retrieveValueByReflection('type', $connectorService));
 
         // Run the tests, parameters.
         $parameters = $model->getParameters()[ProcessClosure::PARAM_DATA];

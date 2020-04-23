@@ -65,7 +65,7 @@ abstract class AbstractFactory
      *
      * @param string $classname
      *
-     * @return object
+     * @return object::$classname
      *   The requested object.
      */
     public function createClass(string $classname)

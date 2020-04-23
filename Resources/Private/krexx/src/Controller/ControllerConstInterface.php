@@ -35,37 +35,11 @@
 
 declare(strict_types=1);
 
-namespace Brainworxx\Krexx\View\Skins;
+namespace Brainworxx\Krexx\Controller;
 
-use Brainworxx\Krexx\Controller\ControllerConstInterface;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Button;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\FatalMain;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Footer;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Header;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Recursion;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleChild;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
-
-/**
- * Individual render class for the smokey-grey skin.
- *
- * @package Brainworxx\Krexx\View\Smokygrey
- */
-class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
+interface ControllerConstInterface
 {
-    use SingleChild;
-    use ExpandableChild;
-    use Recursion;
-    use SingleEditableChild;
-    use Button;
-    use Header;
-    use Footer;
-    use FatalMain;
-    use ConnectorRight;
-    use Help;
-
-    const DATA_ATTRIBUTE_JSON = 'addjson';
+    const HEADLINE_EDIT_SETTINGS = 'Edit local settings';
+    const HEADLINE_COOKIE_CONF = 'Cookie Configuration';
+    const HEADLINE_TIMER = 'kreXX timer';
 }

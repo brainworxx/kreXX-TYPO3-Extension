@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Config;
 
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use Brainworxx\Krexx\View\Skins\RenderHans;
@@ -50,47 +49,46 @@ use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
  *
  * @package Brainworxx\Krexx\Service\Config
  */
-abstract class Fallback implements ConstInterface, ConfigConstInterface
+abstract class Fallback implements ConfigConstInterface
 {
-
     /**
      * The fallback configuration.
      *
      * @internal
      */
     const CONFIG_FALLBACK = [
-        Fallback::SECTION_OUTPUT => [
-            Fallback::SETTING_DISABLED,
-            Fallback::SETTING_IP_RANGE,
-            Fallback::SETTING_DETECT_AJAX,
+        self::SECTION_OUTPUT => [
+            self::SETTING_DISABLED,
+            self::SETTING_IP_RANGE,
+            self::SETTING_DETECT_AJAX,
         ],
-        Fallback::SECTION_BEHAVIOR => [
-            Fallback::SETTING_SKIN,
-            Fallback::SETTING_DESTINATION,
-            Fallback::SETTING_MAX_FILES,
-            Fallback::SETTING_USE_SCOPE_ANALYSIS,
+        self::SECTION_BEHAVIOR => [
+            self::SETTING_SKIN,
+            self::SETTING_DESTINATION,
+            self::SETTING_MAX_FILES,
+            self::SETTING_USE_SCOPE_ANALYSIS,
         ],
-        Fallback::SECTION_PRUNE => [
-            Fallback::SETTING_MAX_STEP_NUMBER,
-            Fallback::SETTING_ARRAY_COUNT_LIMIT,
-            Fallback::SETTING_NESTING_LEVEL,
+        self::SECTION_PRUNE => [
+            self::SETTING_MAX_STEP_NUMBER,
+            self::SETTING_ARRAY_COUNT_LIMIT,
+            self::SETTING_NESTING_LEVEL,
         ],
-        Fallback::SECTION_PROPERTIES => [
-            Fallback::SETTING_ANALYSE_PROTECTED,
-            Fallback::SETTING_ANALYSE_PRIVATE,
-            Fallback::SETTING_ANALYSE_TRAVERSABLE,
-            Fallback::SETTING_ANALYSE_SCALAR,
+        self::SECTION_PROPERTIES => [
+            self::SETTING_ANALYSE_PROTECTED,
+            self::SETTING_ANALYSE_PRIVATE,
+            self::SETTING_ANALYSE_TRAVERSABLE,
+            self::SETTING_ANALYSE_SCALAR,
         ],
-        Fallback::SECTION_METHODS => [
-            Fallback::SETTING_ANALYSE_PROTECTED_METHODS,
-            Fallback::SETTING_ANALYSE_PRIVATE_METHODS,
-            Fallback::SETTING_ANALYSE_GETTER,
-            Fallback::SETTING_DEBUG_METHODS,
+        self::SECTION_METHODS => [
+            self::SETTING_ANALYSE_PROTECTED_METHODS,
+            self::SETTING_ANALYSE_PRIVATE_METHODS,
+            self::SETTING_ANALYSE_GETTER,
+            self::SETTING_DEBUG_METHODS,
         ],
-        Fallback::SECTION_EMERGENCY => [
-            Fallback::SETTING_MAX_CALL,
-            Fallback::SETTING_MAX_RUNTIME,
-            Fallback::SETTING_MEMORY_LEFT,
+        self::SECTION_EMERGENCY => [
+            self::SETTING_MAX_CALL,
+            self::SETTING_MAX_RUNTIME,
+            self::SETTING_MEMORY_LEFT,
         ],
     ];
 
@@ -100,8 +98,8 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      * @internal
      */
     const EDITABLE_SELECT = [
-        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_SELECT,
-        Fallback::RENDER_EDITABLE => Fallback::VALUE_TRUE,
+        self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
+        self::RENDER_EDITABLE => self::VALUE_TRUE,
     ];
 
     /**
@@ -110,8 +108,8 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      * @internal
      */
     const DISPLAY_ONLY_INPUT = [
-        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_INPUT,
-        Fallback::RENDER_EDITABLE => Fallback::VALUE_FALSE,
+        self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
+        self::RENDER_EDITABLE => self::VALUE_FALSE,
     ];
 
     /**
@@ -120,8 +118,8 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      * @internal
      */
     const EDITABLE_INPUT = [
-        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_INPUT,
-        Fallback::RENDER_EDITABLE => Fallback::VALUE_TRUE,
+        self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
+        self::RENDER_EDITABLE => self::VALUE_TRUE,
     ];
 
     /**
@@ -130,8 +128,8 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      * @internal
      */
     const DISPLAY_ONLY_SELECT = [
-        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_SELECT,
-        Fallback::RENDER_EDITABLE => Fallback::VALUE_FALSE,
+        self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
+        self::RENDER_EDITABLE => self::VALUE_FALSE,
     ];
 
     /**
@@ -140,8 +138,8 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      * @internal
      */
     const DISPLAY_NOTHING = [
-        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_NONE,
-        Fallback::RENDER_EDITABLE => Fallback::VALUE_FALSE,
+        self::RENDER_TYPE => self::RENDER_TYPE_NONE,
+        self::RENDER_EDITABLE => self::VALUE_FALSE,
     ];
 
     /**
@@ -160,8 +158,8 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      * @var array
      */
     protected $editableSelect = [
-        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_SELECT,
-        Fallback::RENDER_EDITABLE => Fallback::VALUE_TRUE,
+        self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
+        self::RENDER_EDITABLE => self::VALUE_TRUE,
     ];
 
     /**
@@ -173,8 +171,8 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      * @var array
      */
     protected $editableInput = [
-        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_INPUT,
-        Fallback::RENDER_EDITABLE => Fallback::VALUE_TRUE,
+        self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
+        self::RENDER_EDITABLE => self::VALUE_TRUE,
     ];
 
     /**
@@ -186,8 +184,8 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      * @var array
      */
     protected $displayOnlyInput = [
-        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_INPUT,
-        Fallback::RENDER_EDITABLE => Fallback::VALUE_FALSE,
+        self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
+        self::RENDER_EDITABLE => self::VALUE_FALSE,
     ];
 
     /**
@@ -198,8 +196,8 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      * @var array
      */
     protected $displayOnlySelect = [
-        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_SELECT,
-        Fallback::RENDER_EDITABLE => Fallback::VALUE_FALSE,
+        self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
+        self::RENDER_EDITABLE => self::VALUE_FALSE,
     ];
 
     /**
@@ -211,8 +209,8 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
      * @var array
      */
     protected $displayNothing = [
-        Fallback::RENDER_TYPE => Fallback::RENDER_TYPE_NONE,
-        Fallback::RENDER_EDITABLE => Fallback::VALUE_FALSE,
+        self::RENDER_TYPE => self::RENDER_TYPE_NONE,
+        self::RENDER_EDITABLE => self::VALUE_FALSE,
     ];
 
     /**
@@ -268,28 +266,28 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     protected function generateFeConfigFallback()
     {
         $this->feConfigFallback = [
-            Fallback::SETTING_ANALYSE_PROTECTED_METHODS => $this->returnBoolSelectFalse(Fallback::SECTION_METHODS),
-            Fallback::SETTING_ANALYSE_PRIVATE_METHODS => $this->returnBoolSelectFalse(Fallback::SECTION_METHODS),
-            Fallback::SETTING_ANALYSE_PROTECTED => $this->returnBoolSelectFalse(Fallback::SECTION_PROPERTIES),
-            Fallback::SETTING_ANALYSE_PRIVATE => $this->returnBoolSelectFalse(Fallback::SECTION_PROPERTIES),
-            Fallback::SETTING_ANALYSE_SCALAR => $this->returnBoolSelectFalse(Fallback::SECTION_PROPERTIES),
-            Fallback::SETTING_ANALYSE_TRAVERSABLE => $this->returnBoolSelectTrue(Fallback::SECTION_PROPERTIES),
-            Fallback::SETTING_DEBUG_METHODS => $this->returnDebugMethods(),
-            Fallback::SETTING_NESTING_LEVEL => $this->returnInput(Fallback::SECTION_PRUNE, 5),
-            Fallback::SETTING_MAX_CALL => $this->returnInput(Fallback::SECTION_EMERGENCY, 10),
-            Fallback::SETTING_DISABLED => $this->returnBoolSelectFalse(Fallback::SECTION_OUTPUT),
-            Fallback::SETTING_DESTINATION => $this->returnDestination(),
-            Fallback::SETTING_MAX_FILES => $this->returnMaxFiles(),
-            Fallback::SETTING_SKIN => $this->returnSkin(),
-            Fallback::SETTING_DETECT_AJAX => $this->returnBoolSelectTrue(Fallback::SECTION_OUTPUT),
-            Fallback::SETTING_IP_RANGE => $this->returnIpRange(),
-            Fallback::SETTING_DEV_HANDLE => $this->returnDevHandle(),
-            Fallback::SETTING_ANALYSE_GETTER => $this->returnBoolSelectTrue(Fallback::SECTION_METHODS),
-            Fallback::SETTING_MEMORY_LEFT => $this->returnInput(Fallback::SECTION_EMERGENCY, 64),
-            Fallback::SETTING_MAX_RUNTIME => $this->returnMaxRuntime(),
-            Fallback::SETTING_USE_SCOPE_ANALYSIS => $this->returnBoolSelectTrue(Fallback::SECTION_BEHAVIOR),
-            Fallback::SETTING_MAX_STEP_NUMBER => $this->returnInput(Fallback::SECTION_PRUNE, 10),
-            Fallback::SETTING_ARRAY_COUNT_LIMIT => $this->returnInput(Fallback::SECTION_PRUNE, 300),
+            static::SETTING_ANALYSE_PROTECTED_METHODS => $this->returnBoolSelectFalse(static::SECTION_METHODS),
+            static::SETTING_ANALYSE_PRIVATE_METHODS => $this->returnBoolSelectFalse(static::SECTION_METHODS),
+            static::SETTING_ANALYSE_PROTECTED => $this->returnBoolSelectFalse(static::SECTION_PROPERTIES),
+            static::SETTING_ANALYSE_PRIVATE => $this->returnBoolSelectFalse(static::SECTION_PROPERTIES),
+            static::SETTING_ANALYSE_SCALAR => $this->returnBoolSelectFalse(static::SECTION_PROPERTIES),
+            static::SETTING_ANALYSE_TRAVERSABLE => $this->returnBoolSelectTrue(static::SECTION_PROPERTIES),
+            static::SETTING_DEBUG_METHODS => $this->returnDebugMethods(),
+            static::SETTING_NESTING_LEVEL => $this->returnInput(static::SECTION_PRUNE, 5),
+            static::SETTING_MAX_CALL => $this->returnInput(static::SECTION_EMERGENCY, 10),
+            static::SETTING_DISABLED => $this->returnBoolSelectFalse(static::SECTION_OUTPUT),
+            static::SETTING_DESTINATION => $this->returnDestination(),
+            static::SETTING_MAX_FILES => $this->returnMaxFiles(),
+            static::SETTING_SKIN => $this->returnSkin(),
+            static::SETTING_DETECT_AJAX => $this->returnBoolSelectTrue(static::SECTION_OUTPUT),
+            static::SETTING_IP_RANGE => $this->returnIpRange(),
+            static::SETTING_DEV_HANDLE => $this->returnDevHandle(),
+            static::SETTING_ANALYSE_GETTER => $this->returnBoolSelectTrue(static::SECTION_METHODS),
+            static::SETTING_MEMORY_LEFT => $this->returnInput(static::SECTION_EMERGENCY, 64),
+            static::SETTING_MAX_RUNTIME => $this->returnMaxRuntime(),
+            static::SETTING_USE_SCOPE_ANALYSIS => $this->returnBoolSelectTrue(static::SECTION_BEHAVIOR),
+            static::SETTING_MAX_STEP_NUMBER => $this->returnInput(static::SECTION_PRUNE, 10),
+            static::SETTING_ARRAY_COUNT_LIMIT => $this->returnInput(static::SECTION_PRUNE, 300),
         ];
     }
 
@@ -300,13 +298,13 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     {
         $this->skinConfiguration = array_merge(
             [
-                Fallback::SKIN_SMOKY_GREY => [
-                    Fallback::SKIN_CLASS => RenderSmokyGrey::class,
-                    Fallback::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/smokygrey/'
+                static::SKIN_SMOKY_GREY => [
+                    static::SKIN_CLASS => RenderSmokyGrey::class,
+                    static::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/smokygrey/'
                 ],
-                Fallback::SKIN_HANS => [
-                    Fallback::SKIN_CLASS => RenderHans::class,
-                    Fallback::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/hans/'
+                static::SKIN_HANS => [
+                    static::SKIN_CLASS => RenderHans::class,
+                    static::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/hans/'
                 ]
             ],
             SettingsGetter::getAdditionalSkinList()
@@ -325,10 +323,10 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     protected function returnBoolSelectFalse(string $section): array
     {
         return [
-            Fallback::VALUE => Fallback::VALUE_FALSE,
-            Fallback::RENDER => Fallback::EDITABLE_SELECT,
-            Fallback::EVALUATE => Fallback::EVAL_BOOL,
-            Fallback::SECTION => $section,
+            static::VALUE => static::VALUE_FALSE,
+            static::RENDER => static::EDITABLE_SELECT,
+            static::EVALUATE => static::EVAL_BOOL,
+            static::SECTION => $section,
         ];
     }
 
@@ -344,10 +342,10 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     protected function returnBoolSelectTrue(string $section): array
     {
         return [
-            Fallback::VALUE => Fallback::VALUE_TRUE,
-            Fallback::RENDER => Fallback::EDITABLE_SELECT,
-            Fallback::EVALUATE => Fallback::EVAL_BOOL,
-            Fallback::SECTION => $section,
+            static::VALUE => static::VALUE_TRUE,
+            static::RENDER => static::EDITABLE_SELECT,
+            static::EVALUATE => static::EVAL_BOOL,
+            static::SECTION => $section,
         ];
     }
 
@@ -365,10 +363,10 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     protected function returnInput(string $section, int $value): array
     {
         return [
-            Fallback::VALUE => $value,
-            Fallback::RENDER => Fallback::EDITABLE_INPUT,
-            Fallback::EVALUATE => Fallback::EVAL_INT,
-            Fallback::SECTION => $section,
+            static::VALUE => $value,
+            static::RENDER => static::EDITABLE_INPUT,
+            static::EVALUATE => static::EVAL_INT,
+            static::SECTION => $section,
         ];
     }
 
@@ -383,10 +381,10 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
             // Debug methods that get called.
             // A debug method must be public and have no parameters.
             // Change these only if you know what you are doing.
-            Fallback::VALUE => Fallback::VALUE_DEBUG_METHODS,
-            Fallback::RENDER => Fallback::DISPLAY_ONLY_INPUT,
-            Fallback::EVALUATE => Fallback::EVAL_DEBUG_METHODS,
-            Fallback::SECTION =>  Fallback::SECTION_METHODS,
+            static::VALUE => static::VALUE_DEBUG_METHODS,
+            static::RENDER => static::DISPLAY_ONLY_INPUT,
+            static::EVALUATE => static::EVAL_DEBUG_METHODS,
+            static::SECTION =>  static::SECTION_METHODS,
         ];
     }
 
@@ -399,10 +397,10 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     {
         return [
                 // Either 'file' or 'browser'.
-                Fallback::VALUE => Fallback::VALUE_BROWSER,
-                Fallback::RENDER => FALLBACK::DISPLAY_ONLY_SELECT,
-                Fallback::EVALUATE => Fallback::EVAL_DESTINATION,
-                Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
+                static::VALUE => static::VALUE_BROWSER,
+                static::RENDER => static::DISPLAY_ONLY_SELECT,
+                static::EVALUATE => static::EVAL_DESTINATION,
+                static::SECTION => static::SECTION_BEHAVIOR,
             ];
     }
 
@@ -415,10 +413,10 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     {
         return [
             // Maximum files that are kept inside the logfolder.
-            Fallback::VALUE => 10,
-            Fallback::RENDER => Fallback::DISPLAY_ONLY_INPUT,
-            Fallback::EVALUATE => Fallback::EVAL_INT,
-            Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
+            static::VALUE => 10,
+            static::RENDER => static::DISPLAY_ONLY_INPUT,
+            static::EVALUATE => static::EVAL_INT,
+            static::SECTION => static::SECTION_BEHAVIOR,
         ];
     }
 
@@ -430,10 +428,10 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     protected function returnSkin(): array
     {
         return [
-            Fallback::VALUE => Fallback::SKIN_SMOKY_GREY,
-            Fallback::RENDER => Fallback::EDITABLE_SELECT,
-            Fallback::EVALUATE => Fallback::EVAL_SKIN,
-            Fallback::SECTION => Fallback::SECTION_BEHAVIOR,
+            static::VALUE => static::SKIN_SMOKY_GREY,
+            static::RENDER => static::EDITABLE_SELECT,
+            static::EVALUATE => static::EVAL_SKIN,
+            static::SECTION => static::SECTION_BEHAVIOR,
         ];
     }
 
@@ -447,10 +445,10 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
         return [
             // IP range for calling kreXX.
             // kreXX is disabled for everyone who dies not fit into this range.
-            Fallback::VALUE => '*',
-            Fallback::RENDER => Fallback::DISPLAY_NOTHING,
-            Fallback::EVALUATE => Fallback::EVAL_IP_RANGE,
-            Fallback::SECTION => Fallback::SECTION_OUTPUT,
+            static::VALUE => '*',
+            static::RENDER => static::DISPLAY_NOTHING,
+            static::EVALUATE => static::EVAL_IP_RANGE,
+            static::SECTION => static::SECTION_OUTPUT,
         ];
     }
 
@@ -462,10 +460,10 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     protected function returnDevHandle(): array
     {
         return [
-            Fallback::VALUE => '',
-            Fallback::RENDER => Fallback::EDITABLE_INPUT,
-            Fallback::EVALUATE => Fallback::EVAL_DEV_HANDLE,
-            Fallback::SECTION => ''
+            static::VALUE => '',
+            static::RENDER => static::EDITABLE_INPUT,
+            static::EVALUATE => static::EVAL_DEV_HANDLE,
+            static::SECTION => ''
         ];
     }
 
@@ -478,10 +476,10 @@ abstract class Fallback implements ConstInterface, ConfigConstInterface
     {
         return [
             // Maximum runtime in seconds, before triggering an emergency break.
-            Fallback::VALUE => 60,
-            Fallback::RENDER => Fallback::EDITABLE_INPUT,
-            Fallback::EVALUATE => Fallback::EVAL_MAX_RUNTIME,
-            Fallback::SECTION => Fallback::SECTION_EMERGENCY,
+            static::VALUE => 60,
+            static::RENDER => static::EDITABLE_INPUT,
+            static::EVALUATE => static::EVAL_MAX_RUNTIME,
+            static::SECTION => static::SECTION_EMERGENCY,
         ];
     }
 

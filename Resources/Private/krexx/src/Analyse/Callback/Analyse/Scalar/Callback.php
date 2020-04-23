@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Comment\Functions;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionFunction;
 use ReflectionException;
 
@@ -50,7 +51,7 @@ use ReflectionException;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
-class Callback extends AbstractScalarAnalysis
+class Callback extends AbstractScalarAnalysis implements ViewConstInterface
 {
     /**
      * The callback we are analysing.

@@ -38,8 +38,9 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Displaying the meta stuff from the class analysis.
@@ -52,7 +53,7 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  */
-class ThroughMeta extends AbstractCallback
+class ThroughMeta extends AbstractCallback implements ViewConstInterface, CallbackConstInterface
 {
     /**
      * These keys are rendered with an extra.
@@ -60,11 +61,11 @@ class ThroughMeta extends AbstractCallback
      * @var array
      */
     protected $keysWithExtra = [
-        ConstInterface::META_COMMENT,
-        ConstInterface::META_DECLARED_IN,
-        ConstInterface::META_SOURCE,
-        ConstInterface::META_PRETTY_PRINT,
-        ConstInterface::META_CONTENT
+        ViewConstInterface::META_COMMENT,
+        ViewConstInterface::META_DECLARED_IN,
+        ViewConstInterface::META_SOURCE,
+        ViewConstInterface::META_PRETTY_PRINT,
+        ViewConstInterface::META_CONTENT
     ];
 
     /**

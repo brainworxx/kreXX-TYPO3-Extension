@@ -42,7 +42,7 @@ namespace Brainworxx\Krexx\Service\Config;
  *
  * @package Brainworxx\Krexx\Service\Config
  */
-class Model
+class Model implements ConfigConstInterface
 {
     /**
      * The value of this setting.
@@ -117,9 +117,9 @@ class Model
      */
     public function setValue($value): Model
     {
-        if ($value === Fallback::VALUE_TRUE) {
+        if ($value === static::VALUE_TRUE) {
             $value = true;
-        } elseif ($value === Fallback::VALUE_FALSE) {
+        } elseif ($value === static::VALUE_FALSE) {
             $value = false;
         }
 

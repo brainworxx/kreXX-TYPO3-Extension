@@ -38,7 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants;
-use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -49,7 +49,7 @@ use Brainworxx\Krexx\Analyse\Model;
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class Constants extends AbstractObjectAnalysis
+class Constants extends AbstractObjectAnalysis implements CodegenConstInterface
 {
 
     /**
@@ -83,7 +83,7 @@ class Constants extends AbstractObjectAnalysis
                 $this->pool->createClass(Model::class)
                     ->setName('Constants')
                     ->setType(static::TYPE_INTERNALS)
-                    ->setCodeGenType(Codegen::CODEGEN_TYPE_META_CONSTANTS)
+                    ->setCodeGenType(static::CODEGEN_TYPE_META_CONSTANTS)
                     ->addParameter(static::PARAM_DATA, $listOfConstants)
                     // Deprecated since 4.0.0
                     ->addParameter(static::PARAM_CLASSNAME, $classname)

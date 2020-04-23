@@ -35,37 +35,25 @@
 
 declare(strict_types=1);
 
-namespace Brainworxx\Krexx\View\Skins;
-
-use Brainworxx\Krexx\Controller\ControllerConstInterface;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Button;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\FatalMain;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Footer;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Header;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\Recursion;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleChild;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
+namespace Brainworxx\Krexx\Analyse\Caller;
 
 /**
- * Individual render class for the smokey-grey skin.
+ * Array keys for the backtrace.
  *
- * @package Brainworxx\Krexx\View\Smokygrey
+ * @package Brainworxx\Krexx\Analyse\Caller
  */
-class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
+interface BacktraceConstInterface
 {
-    use SingleChild;
-    use ExpandableChild;
-    use Recursion;
-    use SingleEditableChild;
-    use Button;
-    use Header;
-    use Footer;
-    use FatalMain;
-    use ConnectorRight;
-    use Help;
-
-    const DATA_ATTRIBUTE_JSON = 'addjson';
+    const TRACE_FILE = 'file';
+    const TRACE_LINE = 'line';
+    const TRACE_VARNAME = 'varname';
+    const TRACE_TYPE = 'type';
+    const TRACE_FUNCTION = 'function';
+    const TRACE_CLASS = 'class';
+    const TRACE_OBJECT = 'object';
+    const TRACE_ARGS = 'args';
+    const TRACE_BACKTRACE = 'backtrace';
+    const TRACE_DATE = 'date';
+    const TRACE_URL = 'url';
+    const TRACE_LEVEL = 'level';
 }

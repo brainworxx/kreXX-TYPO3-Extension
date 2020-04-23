@@ -53,7 +53,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * @deprecated
  *   Since 4.0.0. We moved everything into traits. Use them instead.
  */
-abstract class AbstractModel implements ConstInterface
+abstract class AbstractModel
 {
     use Json;
     use Callback;

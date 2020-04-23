@@ -38,11 +38,14 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -56,7 +59,11 @@ use ReflectionMethod;
  * @uses \reflectionClass ref
  *   Reflection of the class we are analysing.
  */
-class ThroughMethods extends AbstractCallback
+class ThroughMethods extends AbstractCallback implements
+    CallbackConstInterface,
+    ViewConstInterface,
+    CodegenConstInterface,
+    ConnectorsConstInterface
 {
 
     /**
@@ -106,7 +113,7 @@ class ThroughMethods extends AbstractCallback
                         $this->getDeclarationKeywords($refMethod, $declaringClass, $refClass) . static::TYPE_METHOD
                     )->setConnectorType($this->retrieveConnectorType($refMethod))
                     ->addParameter(static::PARAM_DATA, $methodData)
-                    ->setCodeGenType($refMethod->isPublic() ? Codegen::CODEGEN_TYPE_PUBLIC : '')
+                    ->setCodeGenType($refMethod->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '')
                     ->setReturnType($methodData[static::META_RETURN_TYPE])
                     ->injectCallback($this->pool->createClass(ThroughMeta::class))
             ));
@@ -127,10 +134,10 @@ class ThroughMethods extends AbstractCallback
     protected function retrieveConnectorType(ReflectionMethod $reflectionMethod): int
     {
         if ($reflectionMethod->isStatic() === true) {
-            return Connectors::STATIC_METHOD;
+            return static::CONNECTOR_STATIC_METHOD;
         }
 
-        return Connectors::METHOD;
+        return static::CONNECTOR_METHOD;
     }
 
     /**

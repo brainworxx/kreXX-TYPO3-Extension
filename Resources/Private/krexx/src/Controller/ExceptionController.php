@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Controller;
 
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 use Throwable;
 
@@ -45,7 +46,7 @@ use Throwable;
  *
  * @package Brainworxx\Krexx\Errorhandler
  */
-class ExceptionController extends AbstractController
+class ExceptionController extends AbstractController implements BacktraceConstInterface
 {
     /**
      * Storing our singleton exception handler.

@@ -58,19 +58,19 @@ trait LoggingTrait
 
         // Output destination: file
         Krexx::$pool->config
-            ->settings[Fallback::SETTING_DESTINATION]
+            ->settings[static::SETTING_DESTINATION]
             ->setSource('forced logging')
-            ->setValue(Fallback::VALUE_FILE);
+            ->setValue(static::VALUE_FILE);
 
         // Do not care about ajax requests.
         Krexx::$pool->config
-            ->settings[Fallback::SETTING_DETECT_AJAX]
+            ->settings[static::SETTING_DETECT_AJAX]
             ->setSource('forced logging')
             ->setValue(false);
 
         // Reload the disabled settings with the new ajax setting.
          Krexx::$pool->config
-            ->loadConfigValue(Fallback::SETTING_DISABLED);
+            ->loadConfigValue(static::SETTING_DISABLED);
     }
 
     /**

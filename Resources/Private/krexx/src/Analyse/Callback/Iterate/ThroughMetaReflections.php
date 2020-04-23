@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 
 /**
  * Simple iterating through meta reflections.
@@ -48,7 +49,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  */
-class ThroughMetaReflections extends AbstractCallback
+class ThroughMetaReflections extends AbstractCallback implements CallbackConstInterface
 {
 
     /**
