@@ -12,7 +12,7 @@
 Changelog
 =============================================================
 
-3.3.2 dev
+3.3.2
     - [Feature] TYPO3 10.4 support.
     - [Bugfix] Added missing closing li tag to the expandableChild template.
     - [Bugfix] The fe configuration does not update the render type.
