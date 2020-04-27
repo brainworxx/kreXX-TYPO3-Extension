@@ -173,6 +173,8 @@ $fontLight: lighter 10px tahoma, verdana;
   * {
     box-sizing: content-box;
     font-family: Tahoma, Verdana;
+    opacity: 1;
+    position: initial;
   }
 
   .krela-wrapper {
@@ -1008,6 +1010,4 @@ $fontLight: lighter 10px tahoma, verdana;
   }
 
 }
-
-
 

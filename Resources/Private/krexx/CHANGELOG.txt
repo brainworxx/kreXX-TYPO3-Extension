@@ -5,6 +5,7 @@
 - Bugfix: Do not mixup and/or combine escaping for keys and/or
   code generation.
 - Bugfix: Remove a possible warning when cleaning up old log files.
+- Bugfix: Minimise interference with strange CSS styles.
 
 3.2.2
 - Updated to PHP 7.4
