@@ -18,6 +18,7 @@ Changelog
     - [Bugfix] The fe configuration does not update the render type.
     - [Bugfix] Do not mixup and/or combine escaping for keys and/or code generation.
     - [Bugfix] Remove a possible warning when cleaning up old log files.
+    - [Bugfix] Minimise interference with strange CSS styles.
 
 3.3.1
     - [Feature] Updated to PHP 7.4
