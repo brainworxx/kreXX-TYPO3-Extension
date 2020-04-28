@@ -44,7 +44,7 @@ Install Tool
 
 The install tool does have 2 configuration presets for debugging:
 
-- Live
-- Debug
+	- Live
+	- Debug
 
 What these presets do and where you can find them is documented `here <https://docs.typo3.org/typo3cms/InstallationGuide/master/In-depth/TheInstallTool/#settings />`_.

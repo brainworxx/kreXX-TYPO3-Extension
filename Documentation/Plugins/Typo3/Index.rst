@@ -16,12 +16,11 @@ Configuration
 ^^^^^^^^^^^^^
 
 The TYPO3 plugin applies the following changes to the kreXX standard behavior:
-
-- The log folder is set to :literal:`typo3temp/tx_includekrexx/log`.
-- The chunks folder is set to :literal:`typo3temp/tx_includekrexx/chunks`.
-- The configuration folder is set to :literal:`typo3temp/tx_includekrexx/config`.
-- Blacklisting of several debug methods, to prevent errors.
-- Make use of the TYPO3 implementation for the IP filter, because it is more versatile than the kreXX version.
+    - The log folder is set to :literal:`typo3temp/tx_includekrexx/log`.
+    - The chunks folder is set to :literal:`typo3temp/tx_includekrexx/chunks`.
+    - The configuration folder is set to :literal:`typo3temp/tx_includekrexx/config`.
+    - Blacklisting of several debug methods, to prevent errors.
+    - Make use of the TYPO3 implementation for the IP filter, because it is more versatile than the kreXX version.
 
 SQL Debugger
 ^^^^^^^^^^^^

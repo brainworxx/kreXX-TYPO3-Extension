@@ -12,29 +12,13 @@
 Changelog
 =============================================================
 
-4.0.0 dev
-    - [Feature] Added process resource analysis.
-    - [Feature] Added better callback analysis.
-    - [Feature] Added better string analysis (json, file path, callback, xml)
-    - [Feature] Added timestamp analysis for large integers.
-    - [Feature] Added TYPO3 logger.
-    - [Change] Removed all deprecations.
-    - [Change] Removed the PHP 5.x fatal error handler.
-    - [Change] Dropped PHP 5.x support.
-    - [Change] Remove all double Exception / Throwable catching
-    - [Change] Introduced PSR-12 coding style
-    - [Change] Simplified the skin rendering.
-    - [Change] Deprecations for the fallback settings class.
-    - [Change] Introduced strict mode.
-    - [Change] Introduced scalar type hints.
-    - [Change] Introduced method return types.
-    - [Change] Simplified the Model.
-    - [Change] Do not display the encoding info, if we have a buffer info available.
-    - [Bugfix] The Aimeos decorator analysis works now as it should.
-
-3.2.3 dev
+3.3.2
+    - [Feature] TYPO3 10.4 support.
     - [Bugfix] Added missing closing li tag to the expandableChild template.
     - [Bugfix] The fe configuration does not update the render type.
+    - [Bugfix] Do not mixup and/or combine escaping for keys and/or code generation.
+    - [Bugfix] Remove a possible warning when cleaning up old log files.
+    - [Bugfix] Minimise interference with strange CSS styles.
 
 3.3.1
     - [Feature] Updated to PHP 7.4
