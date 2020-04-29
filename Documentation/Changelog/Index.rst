@@ -12,6 +12,9 @@
 Changelog
 =============================================================
 
+3.3.3
+    - [Bugfix] Fixed the composer dependencies.
+
 3.3.2
     - [Feature] TYPO3 10.4 support.
     - [Bugfix] Added missing closing li tag to the expandableChild template.
