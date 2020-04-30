@@ -129,7 +129,7 @@ class ConfigurationTest extends AbstractTest
             )
             ->will($this->returnValue(true));
 
-        // Simulationg the package
+        // Simulating the package
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/');
 
         $arrayReplaceRecursiveMock = $this->getFunctionMock(

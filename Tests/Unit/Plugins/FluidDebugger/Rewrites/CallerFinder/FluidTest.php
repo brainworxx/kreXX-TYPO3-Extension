@@ -187,7 +187,7 @@ class FluidTest extends AbstractTest
         $this->assertNotEmpty($result['date']);
 
         $this->assertEquals(
-            '<v:variable.set value="{some: \'array\'}" name="fluidvar" /> {fluidvar}',
+            '<f:variable value="{some: \'array\'}" name="fluidvar" /> {fluidvar}',
             Krexx::$pool->codegenHandler->generateWrapperLeft() . $result[static::VARMANE] .
             Krexx::$pool->codegenHandler->generateWrapperRight(),
             'Testing the complicated code generation stuff.'

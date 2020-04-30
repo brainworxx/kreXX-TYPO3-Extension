@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\Code
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
@@ -111,7 +112,7 @@ class CodegenTest extends AbstractTest
         // A child of _all. Sounds like a black metal song.
         $model = new Model(Krexx::$pool);
         $model->setName('child');
-        $model->setType(Codegen::TYPE_ARRAY);
+        $model->setType(ProcessConstInterface::TYPE_ARRAY);
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('getNestingLevel')

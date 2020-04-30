@@ -40,13 +40,14 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\ConstInterface;
 use Brainworxx\Krexx\Analyse\Code\Codegen as OrgCodegen;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 
 /**
  * Special code generation for fluid.
  *
  * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code
  */
-class Codegen extends OrgCodegen implements ConstInterface
+class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterface
 {
     /**
      * Constant identifier for the multiline code generation for fluid

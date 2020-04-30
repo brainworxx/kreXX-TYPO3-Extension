@@ -39,6 +39,7 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
 
@@ -47,7 +48,7 @@ use ReflectionException;
  *
  * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder
  */
-abstract class AbstractFluid extends AbstractCaller
+abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInterface
 {
     const FLUID_VARIABLE = 'fluidvar';
     const FLUID_NOT_AVAILABLE = 'n/a';
