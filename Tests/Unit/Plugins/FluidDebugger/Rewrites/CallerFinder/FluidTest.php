@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Krexx\Krexx;
@@ -186,8 +187,14 @@ class FluidTest extends AbstractTest
         $this->assertEquals($result['type'], 'Fluid analysis of fluidvar, array');
         $this->assertNotEmpty($result['date']);
 
+        if (version_compare(Bootstrap::getTypo3Version(), '8.6', '>=')) {
+            $expected = '<f:variable value="{some: \'array\'}" name="fluidvar" /> {fluidvar}';
+        } else {
+            $expected = '<v:variable.set value="{some: \'array\'}" name="fluidvar" /> {fluidvar}';
+        }
+
         $this->assertEquals(
-            '<f:variable value="{some: \'array\'}" name="fluidvar" /> {fluidvar}',
+            $expected,
             Krexx::$pool->codegenHandler->generateWrapperLeft() . $result[static::VARMANE] .
             Krexx::$pool->codegenHandler->generateWrapperRight(),
             'Testing the complicated code generation stuff.'
