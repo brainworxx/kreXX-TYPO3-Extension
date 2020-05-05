@@ -1,4 +1,4 @@
-4.0.0 dev
+4.0.0
 - Added process resource analysis.
 - Added better callback analysis.
 - Added better string analysis (json, file path, callback, xml)
@@ -28,13 +28,14 @@
 - Change: Refactored the code generation.
 - Change: Refactored the routing.
 
-3.2.3 dev
+3.2.3
 - Bugfix: Added missing closing li tag to the expandableChild
   template.
 - Bugfix: The fe configuration does not update the render type.
 - Bugfix: Do not mixup and/or combine escaping for keys and/or
   code generation.
 - Bugfix: Remove a possible warning when cleaning up old log files.
+- Bugfix: Minimise interference with strange CSS styles.
 
 3.2.2
 - Updated to PHP 7.4

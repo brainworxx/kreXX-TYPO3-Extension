@@ -36,7 +36,8 @@ html {
 
 .kwrapper * {
     box-sizing: content-box;
-
+    opacity: 1;
+    position: initial;
 }
 
 div.kwrapper {
