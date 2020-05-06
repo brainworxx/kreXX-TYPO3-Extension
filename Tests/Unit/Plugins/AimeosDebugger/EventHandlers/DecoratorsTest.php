@@ -34,10 +34,12 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
+use Aimeos\Map;
 use Aimeos\MShop\Context\Item\Standard as MShopContext;
 use Aimeos\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators;
 use Brainworxx\Includekrexx\Tests\Fixtures\AimeosJobsDecorator;
+use Brainworxx\Includekrexx\Tests\Fixtures\Fixture20Job;
 use Brainworxx\Includekrexx\Tests\Fixtures\FixtureJob;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
@@ -79,7 +81,12 @@ class DecoratorsTest extends AbstractTest
         // Create a fixture with a decorator.
         $context = new MShopContext();
         $aimeos = new Bootstrap();
-        $testJob = new FixtureJob();
+        if (class_exists(Map::class)) {
+            $testJob = new Fixture20Job();
+        } else {
+            $testJob = new FixtureJob();
+        }
+
         $decorator = new AimeosJobsDecorator($testJob, $context, $aimeos);
         $fixture = [
             Methods::PARAM_DATA => $decorator,
