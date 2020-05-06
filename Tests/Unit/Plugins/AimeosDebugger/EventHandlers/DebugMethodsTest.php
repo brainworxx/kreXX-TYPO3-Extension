@@ -127,7 +127,7 @@ class DebugMethodsTest extends AbstractTest implements ConstInterface
         } else {
             $object = new AimeosItem();
         }
-        
+
         $fixture = [
             static::PARAM_DATA => new DebugMethodFixture(),
             static::PARAM_NAME => 'noOutputHere',
@@ -141,7 +141,14 @@ class DebugMethodsTest extends AbstractTest implements ConstInterface
         // Get the results.
         $models = Krexx::$pool->render->model['renderExpandableChild'];
 
-        $mapping = ['getRefItems', 'getPropertyItems', 'getListItems'];
+        if (class_exists(Map::class)) {
+            // Aimeos 2020+
+            $mapping = ['getRefItems', 'getPropertyItems', 'getListItems'];
+        } else {
+            // Aimeos 2019 and below
+            $mapping = ['getRefItems', 'getListItems'];
+        }
+
         // Testing the standard values.
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
         foreach ($models as $key => $model) {
@@ -150,7 +157,7 @@ class DebugMethodsTest extends AbstractTest implements ConstInterface
             $this->assertEquals('->', $model->getConnectorLeft());
             $this->assertEquals('()', $model->getConnectorRight());
             $this->assertEquals($mapping[$key], $model->getName(), 'Key is: ' . $key);
-            if ($key === 1) {
+            if ($mapping[$key] === 'getPropertyItems') {
                 $this->assertNull($model->getParameters()[static::PARAM_DATA][0], 'This data does not exist in the fixture.');
                 $this->assertNull($model->getParameters()[static::PARAM_DATA][1], 'This data does not exist in the fixture.');
             } else {
