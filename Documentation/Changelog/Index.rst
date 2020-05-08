@@ -12,6 +12,8 @@
 Changelog
 =============================================================
 
+3.3.4 dev
+
 3.3.3
     - [Bugfix] Fixed the composer dependencies.
 
