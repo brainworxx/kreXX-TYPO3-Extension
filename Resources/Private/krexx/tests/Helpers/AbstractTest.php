@@ -82,11 +82,13 @@ abstract class AbstractTest extends TestCase
         $keysRef->setValue(Krexx::$pool->messages, []);
 
         // Remove possible logfiles.
-        $logList = glob(Krexx::$pool->config->getLogDir() . '*.Krexx.html');
-        if (!empty($logList)) {
-            foreach ($logList as $file) {
-                unlink($file);
-                unlink($file . '.json');
+        if (strpos(Krexx::$pool->config->getLogDir(), 'Fixtures') === false) {
+            $logList = glob(Krexx::$pool->config->getLogDir() . '*.Krexx.html');
+            if (!empty($logList)) {
+                foreach ($logList as $file) {
+                    unlink($file);
+                    unlink($file . '.json');
+                }
             }
         }
 
