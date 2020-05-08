@@ -52,7 +52,7 @@ class ConfigurationTest extends AbstractTest
     public function testConfiguration()
     {
         $dir = realpath(dirname(__FILE__) . '..' . DIRECTORY_SEPARATOR .
-                '..') . DIRECTORY_SEPARATOR;
+                '..' . DIRECTORY_SEPARATOR . '..') . DIRECTORY_SEPARATOR;
         $composerJsonPath = $dir . 'composer.json';
         $extEmConfPath = $dir . 'ext_emconf.php';
         $changelogPath = $dir . 'Documentation/Changelog/Index.rst';
