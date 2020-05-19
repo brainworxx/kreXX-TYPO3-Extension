@@ -74,11 +74,16 @@ class Objects extends AbstractCallback
     public function callMe()
     {
         $output = $this->pool->render->renderSingeChildHr() . $this->dispatchStartEvent();
-
-        $ref = $this->parameters[static::PARAM_REF] = new ReflectionClass($this->parameters[static::PARAM_DATA]);
+        $data = $this->parameters[static::PARAM_DATA];
+        $ref = $this->parameters[static::PARAM_REF] = new ReflectionClass($data);
 
         // Dumping public properties.
         $output .= $this->dumpStuff(PublicProperties::class);
+
+        if ($ref->getName() === \__PHP_Incomplete_Class::class) {
+            // Early return for broken objects.
+            return $output . $this->pool->render->renderSingeChildHr();
+        }
 
         // Dumping getter methods.
         // We will not dump the getters for internal classes, though.
@@ -90,9 +95,9 @@ class Objects extends AbstractCallback
 
         $output .= $this->dumpStuff(Meta::class);
 
-        // Anaylsing error objects.
-        if (is_a($this->parameters[static::PARAM_DATA], Throwable::class) ||
-            is_a($this->parameters[static::PARAM_DATA], Exception::class)
+        // Analysing error objects.
+        if (is_a($data, Throwable::class) ||
+            is_a($data, Exception::class)
         ) {
             $output .= $this->dumpStuff(ErrorObject::class);
         }
@@ -119,16 +124,17 @@ class Objects extends AbstractCallback
 
         // Dumping traversable data.
         if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_TRAVERSABLE) === true &&
-            $this->parameters[static::PARAM_DATA] instanceof \Traversable
+            $data instanceof \Traversable
         ) {
             $output .= $this->dumpStuff(Traversable::class);
         }
 
         // Dumping all configured debug functions.
+        $output .=  $this->dumpStuff(DebugMethods::class);
+
+
         // Adding a HR for a better readability.
-        return $output .
-            $this->dumpStuff(DebugMethods::class) .
-            $this->pool->render->renderSingeChildHr();
+        return $output . $this->pool->render->renderSingeChildHr();
     }
 
     /**

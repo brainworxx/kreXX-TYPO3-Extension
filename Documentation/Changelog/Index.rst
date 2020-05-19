@@ -13,6 +13,7 @@ Changelog
 =============================================================
 
 3.3.4 dev
+    - [Bugfix] Analysing of __PHP_Incomplete_Class does not throw errors anymore.
 
 3.3.3
     - [Bugfix] Fixed the composer dependencies.

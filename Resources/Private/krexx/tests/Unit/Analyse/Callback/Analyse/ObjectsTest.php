@@ -359,4 +359,28 @@ class ObjectsTest extends AbstractTest
         $this->assertEquals(1, CallbackCounter::$counter);
         $this->parametersTest(CallbackCounter::$staticParameters[0]);
     }
+
+    /**
+     * Test the handling of incomplete objects.
+     *
+     * Wasn't there a Swing Out Sister song about this?
+     *
+     * @throws \ReflectionException
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::dumpStuff
+     */
+    public function testCallMeIncomplete()
+    {
+        Krexx::$pool->rewrite[PublicProperties::class] = CallbackCounter::class;
+        $this->fixture['data'] = unserialize('O:8:"Phxbject":1:{s:3:"wat";s:3:"qqq";}');
+
+        $this->objects->setParameters($this->fixture)
+            ->callMe();
+
+        // Was it called?
+        $this->assertEquals(1, CallbackCounter::$counter);
+        // All parameters set?
+        $this->parametersTest(CallbackCounter::$staticParameters[0]);
+    }
 }

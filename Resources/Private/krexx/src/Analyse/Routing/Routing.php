@@ -47,6 +47,7 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessString;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Closure;
+use __PHP_Incomplete_Class;
 
 /**
  * "Routing" for kreXX
@@ -160,7 +161,10 @@ class Routing extends AbstractRouting
         } elseif ($data === null) {
             // Null?
             $result =  $this->processNull->process($model);
-        } elseif (is_array($data) === true || is_object($data) === true) {
+        } elseif (is_array($data) === true ||
+            is_object($data) === true ||
+            $data instanceof __PHP_Incomplete_Class
+        ) {
             // Handle the complex types.
             $this->pool->emergencyHandler->upOneNestingLevel();
             $result = $this->handleNoneSimpleTypes($data, $model);
@@ -290,7 +294,7 @@ class Routing extends AbstractRouting
      */
     protected function preprocessNoneSimpleTypes($data, Model $model)
     {
-        if (is_object($data) === true) {
+        if (is_object($data) === true || $data instanceof __PHP_Incomplete_Class) {
             // Object?
             // Remember that we've been here before.
             $this->pool->recursionHandler->addToHive($data);
