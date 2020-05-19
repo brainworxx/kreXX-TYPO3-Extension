@@ -38,6 +38,9 @@ Changelog
     - [Change] Use compressed css for the SmokyGrey skin.
     - [Bugfix] The Aimeos decorator analysis works now as it should.
 
+3.3.4 dev
+    - [Bugfix] Analysing of __PHP_Incomplete_Class does not throw errors anymore.
+
 3.3.3
     - [Bugfix] Fixed the composer dependencies.
 

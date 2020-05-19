@@ -40,7 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 
-abstract class AbstractProcessNoneScalar extends AbstractRouting implements ProcessInterface
+abstract class AbstractProcessNoneScalar extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
 
     public function handle(Model $model): string

@@ -38,7 +38,6 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\View\Output;
 
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**

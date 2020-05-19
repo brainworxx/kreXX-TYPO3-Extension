@@ -42,7 +42,6 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Model as SettingModel;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**

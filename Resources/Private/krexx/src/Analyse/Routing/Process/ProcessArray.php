@@ -42,14 +42,16 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Service\Config\Fallback;
 
 /**
  * Processing of arrays.
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessArray extends AbstractProcessNoneScalar implements ProcessConstInterface, CallbackConstInterface, ConfigConstInterface
+class ProcessArray extends AbstractProcessNoneScalar implements
+    ProcessConstInterface,
+    CallbackConstInterface,
+    ConfigConstInterface
 {
 
     /**

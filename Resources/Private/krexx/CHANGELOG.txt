@@ -28,6 +28,10 @@
 - Change: Refactored the code generation.
 - Change: Refactored the routing.
 
+3.2.4
+- Bugfix: Analysing of __PHP_Incomplete_Class does not throw
+  errors anymore.
+
 3.2.3
 - Bugfix: Added missing closing li tag to the expandableChild
   template.

@@ -43,7 +43,6 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\View\ViewConstInterface;
 use SplObjectStorage;
 use Throwable;
@@ -59,7 +58,10 @@ use Throwable;
  *   The variable name or key in the parent object / array where the current
  *   class is stored.
  */
-class Traversable extends AbstractObjectAnalysis implements CallbackConstInterface, ViewConstInterface, ConfigConstInterface
+class Traversable extends AbstractObjectAnalysis implements
+    CallbackConstInterface,
+    ViewConstInterface,
+    ConfigConstInterface
 {
 
     /**

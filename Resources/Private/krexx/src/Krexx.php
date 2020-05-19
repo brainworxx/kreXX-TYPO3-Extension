@@ -46,7 +46,6 @@ use Brainworxx\Krexx\Controller\TimerController;
 use Brainworxx\Krexx\Logging\LoggingTrait;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**

@@ -40,6 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use __PHP_Incomplete_Class;
 
 /**
  * Processing of objects.
@@ -59,7 +60,10 @@ class ProcessObject extends AbstractProcessNoneScalar implements CallbackConstIn
      */
     public function canHandle(Model $model): bool
     {
-        return is_object($model->getData());
+        // PHP 7.1 and lower does not recognise an object via is_object().
+        // Hence, we must test it by instanceof.
+        $data = $model->getData();
+        return is_object($model->getData()) || $data instanceof __PHP_Incomplete_Class;
     }
 
     /**

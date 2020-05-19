@@ -223,7 +223,6 @@ class Config extends Fallback
      */
     public function loadConfigValue(string $name): Config
     {
-        /** @var Model $model */
         $model = $this->prepareModelWithFeSettings($name);
         $section = $model->getSection();
 

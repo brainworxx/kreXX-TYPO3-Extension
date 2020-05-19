@@ -50,10 +50,10 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Throwable;
 use stdClass;
+use __PHP_Incomplete_Class;
 
 /**
  * Object analysis methods.
@@ -106,8 +106,8 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
         $config = $this->pool->config;
         $stuffToDump = [PublicProperties::class];
 
-        if ($ref->getName() === stdClass::class) {
-            // We ignore everything else for the stdClass.
+        if ($ref->getName() === stdClass::class || $ref->getName() === __PHP_Incomplete_Class::class) {
+            // We ignore everything else for these two types.
             return $stuffToDump;
         }
 

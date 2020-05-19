@@ -46,6 +46,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
@@ -54,6 +55,7 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Tests\Fixtures\TraversableFixture;
 use Brainworxx\Krexx\Krexx;
+use Exception;
 
 class ObjectsTest extends AbstractTest
 {
@@ -71,8 +73,8 @@ class ObjectsTest extends AbstractTest
 
     protected function setUp()
     {
-        $this->fixture['data'] = new SimpleFixture();
-        $this->fixture['name'] = 'some string';
+        $this->fixture[CallbackConstInterface::PARAM_DATA] = new SimpleFixture();
+        $this->fixture[CallbackConstInterface::PARAM_NAME] = 'some string';
 
         parent::setUp();
 
@@ -100,12 +102,18 @@ class ObjectsTest extends AbstractTest
      */
     protected function parametersTest(array $parameters)
     {
-        $this->assertEquals(3, count($parameters));
-        $this->assertTrue(isset($parameters['data']));
+        $this->assertCount(3, $parameters);
+        $this->assertTrue(isset($parameters[CallbackConstInterface::PARAM_DATA]));
         $this->assertTrue(isset($parameters['ref']));
-        $this->assertTrue(isset($parameters['name']));
-        $this->assertEquals($this->fixture['data'], $parameters['data']);
-        $this->assertEquals($this->fixture['name'], $parameters['name']);
+        $this->assertTrue(isset($parameters[CallbackConstInterface::PARAM_NAME]));
+        $this->assertEquals(
+            $this->fixture[CallbackConstInterface::PARAM_DATA],
+            $parameters[CallbackConstInterface::PARAM_DATA]
+        );
+        $this->assertEquals(
+            $this->fixture[CallbackConstInterface::PARAM_NAME],
+            $parameters[CallbackConstInterface::PARAM_NAME]
+        );
         $this->assertTrue(is_a($parameters['ref'], ReflectionClass::class));
     }
 
@@ -322,7 +330,7 @@ class ObjectsTest extends AbstractTest
     {
         $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, false);
         Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
-        $this->fixture['data'] = new TraversableFixture();
+        $this->fixture[CallbackConstInterface::PARAM_DATA] = new TraversableFixture();
         $this->objects->setParameters($this->fixture)->callMe();
         $this->assertEquals(0, CallbackCounter::$counter);
     }
@@ -375,7 +383,7 @@ class ObjectsTest extends AbstractTest
         // Test with traversable activated and with a traversable class
         $this->setConfigValue(Fallback::SETTING_ANALYSE_TRAVERSABLE, true);
         Krexx::$pool->rewrite[Traversable::class] = CallbackCounter::class;
-        $this->fixture['data'] = new TraversableFixture();
+        $this->fixture[CallbackConstInterface::PARAM_DATA] = new TraversableFixture();
         $this->objects->setParameters($this->fixture)
             ->callMe();
         $this->assertEquals(1, CallbackCounter::$counter);
@@ -412,10 +420,34 @@ class ObjectsTest extends AbstractTest
     public function testCallMeException()
     {
         Krexx::$pool->rewrite[ErrorObject::class] = CallbackCounter::class;
-        $this->fixture['data'] = new \Exception('message', 123);
+        $this->fixture[CallbackConstInterface::PARAM_DATA] = new Exception('message', 123);
         $this->objects->setParameters($this->fixture)
             ->callMe();
         $this->assertEquals(1, CallbackCounter::$counter);
+        $this->parametersTest(CallbackCounter::$staticParameters[0]);
+    }
+
+    /**
+     * Test the handling of incomplete objects.
+     *
+     * Wasn't there a Swing Out Sister song about this?
+     *
+     * @throws \ReflectionException
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     */
+    public function testCallMeIncomplete()
+    {
+        Krexx::$pool->rewrite[PublicProperties::class] = CallbackCounter::class;
+        $this->fixture[CallbackConstInterface::PARAM_DATA] = unserialize('O:8:"Phxbject":1:{s:3:"wat";s:3:"qqq";}');
+
+        $this->objects->setParameters($this->fixture)
+            ->callMe();
+
+        // Was it called?
+        $this->assertEquals(1, CallbackCounter::$counter);
+        // All parameters set?
         $this->parametersTest(CallbackCounter::$staticParameters[0]);
     }
 }

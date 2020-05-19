@@ -42,7 +42,6 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Service\Config\Fallback;
 
 /**
  * Configuration output methods.

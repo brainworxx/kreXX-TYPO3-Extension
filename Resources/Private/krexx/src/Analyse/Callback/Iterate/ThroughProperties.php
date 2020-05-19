@@ -40,7 +40,6 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
-use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Properties;
 use Brainworxx\Krexx\Analyse\Model;

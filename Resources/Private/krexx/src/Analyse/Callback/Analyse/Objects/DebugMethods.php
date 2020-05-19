@@ -38,15 +38,11 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
-use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
-use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use phpDocumentor\Reflection\Types\Static_;
 use ReflectionException;
 use Throwable;
 
@@ -62,7 +58,10 @@ use Throwable;
  * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class DebugMethods extends AbstractObjectAnalysis implements CodegenConstInterface, ConnectorsConstInterface, ConfigConstInterface
+class DebugMethods extends AbstractObjectAnalysis implements
+    CodegenConstInterface,
+    ConnectorsConstInterface,
+    ConfigConstInterface
 {
 
     /**
@@ -171,8 +170,6 @@ class DebugMethods extends AbstractObjectAnalysis implements CodegenConstInterfa
                 return false;
             }
 
-
-            /** @var \ReflectionParameter $param */
             foreach ($ref->getParameters() as $param) {
                 if ($param->isOptional() === false) {
                     // We've got a required parameter!

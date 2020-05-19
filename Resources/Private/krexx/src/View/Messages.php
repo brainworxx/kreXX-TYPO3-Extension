@@ -172,7 +172,6 @@ class Messages
             // Output the messages on the shell.
             $result = "\n\nkreXX messages\n";
             $result .= "==============\n";
-            /** @var Message $message */
             foreach ($this->messages as $message) {
                 $result .= $message->getText() . "\n";
             }

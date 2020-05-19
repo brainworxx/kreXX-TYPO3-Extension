@@ -67,7 +67,13 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
         set_error_handler(function () {
             // Do nothing. We need to catch a possible warning.
         });
-        $result = get_resource_type($model->getData()) !== null;
+
+        try {
+            $result = get_resource_type($model->getData()) !== null;
+        } catch (\Throwable $exception) {
+            $result = false;
+        }
+
         restore_error_handler();
         return $result;
     }

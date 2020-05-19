@@ -69,7 +69,8 @@ abstract class AbstractRender
     protected static $fileCache = [];
 
     /**
-     * {@inheritdoc}
+     * Inject the pool and inject $this into the concrete render object of the
+     * pool.
      */
     public function __construct(Pool $pool)
     {

@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Service\Flow;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
 use SplObjectStorage;
+use __PHP_Incomplete_Class;
 
 /**
  * Recursion handler, formerly known as Hive.
@@ -139,7 +140,9 @@ class Recursion
     public function isInHive($bee): bool
     {
         // Check objects.
-        if (is_object($bee) === true) {
+        // As of PHP 7.1 and lower, PHP does not recognise an __PHP_Incomplete_Class
+        // as an object via is_object. Hence, we must test the class itself.
+        if (is_object($bee) === true || $bee instanceof __PHP_Incomplete_Class) {
             return $this->recursionHive->contains($bee);
         }
 
