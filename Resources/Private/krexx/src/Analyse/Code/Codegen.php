@@ -129,8 +129,11 @@ class Codegen implements ConstInterface
         } elseif ($this->firstRun === true) {
             // We handle the first one special, because we need to add the original
             // variable name to the source generation.
+            // Also, the string is already prepared for code generation, because
+            // it comes directly from the source code itself.
+            // And of cause, there are no connectors.
             $this->firstRun = false;
-            $result = $this->concatenation($model);
+            $result = $this->pool->encodingService->encodeString($model->getName());
         } elseif ($model->getIsMetaConstants() === true) {
             // Test for constants.
             // They have no connectors, but are marked as such.
