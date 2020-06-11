@@ -138,10 +138,10 @@ class CodegenTest extends AbstractTest
     public function testGenerateSourceFirstRun()
     {
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
-        $this->expectConnectorCalls(2, 1);
+        $this->expectConnectorCalls(1, 0);
 
         $this->assertEquals(
-            static::CONCATENATED_CONNECTORS,
+            'name',
             $this->codegenHandler->generateSource($this->fixture)
         );
 

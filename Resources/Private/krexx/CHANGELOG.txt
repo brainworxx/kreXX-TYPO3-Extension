@@ -31,6 +31,8 @@
 3.2.4
 - Bugfix: Analysing of __PHP_Incomplete_Class does not throw
   errors anymore.
+- Bugfix: Regression with the mixup of the two methods of code
+  escaping.
 
 3.2.3
 - Bugfix: Added missing closing li tag to the expandableChild

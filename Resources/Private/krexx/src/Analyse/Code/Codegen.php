@@ -124,11 +124,16 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface
 
         // Handle the first run.
         $type = $model->getCodeGenType();
-        if ($type === static::CODEGEN_TYPE_PUBLIC || $this->firstRun === true) {
+        if ($this->firstRun === true) {
             // We handle the first one special, because we need to add the original
             // variable name to the source generation.
+            // Also, the string is already prepared for code generation, because
+            // it comes directly from the source code itself.
+            // And of cause, there are no connectors.
             $this->firstRun = false;
-
+            return $this->pool->encodingService->encodeString($model->getName());
+        }
+        if ($type === static::CODEGEN_TYPE_PUBLIC) {
             // Public methods, debug methods.
             return $this->concatenation($model);
         }
