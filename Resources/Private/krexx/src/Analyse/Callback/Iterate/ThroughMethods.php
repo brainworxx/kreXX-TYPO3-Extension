@@ -44,6 +44,7 @@ use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionClass;
 use ReflectionMethod;
@@ -66,6 +67,25 @@ class ThroughMethods extends AbstractCallback implements
 {
 
     /**
+     * Analysis class for method comments.
+     *
+     * @var \Brainworxx\Krexx\Analyse\Comment\Methods
+     */
+    protected $commentAnalysis;
+
+    /**
+     * Inject the pool and get the comment analysis online.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(Pool $pool)
+    {
+        parent::__construct($pool);
+
+        $this->commentAnalysis = $this->pool->createClass(Methods::class);
+    }
+
+    /**
      * Simply start to iterate through the methods.
      *
      * @return string
@@ -76,26 +96,12 @@ class ThroughMethods extends AbstractCallback implements
         $result = $this->dispatchStartEvent();
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $refClass */
         $refClass = $this->parameters[static::PARAM_REF];
-        /** @var Methods $commentAnalysis */
-        $commentAnalysis = $this->pool->createClass(Methods::class);
 
         // Deep analysis of the methods.
         /** @var \ReflectionMethod $refMethod */
         foreach ($this->parameters[static::PARAM_DATA] as $refMethod) {
-            $methodData = [];
-
-            // Get the comment from the class, it's parents, interfaces or traits.
-            if (empty($methodComment = $commentAnalysis->getComment($refMethod, $refClass)) === false) {
-                $methodData[static::META_COMMENT] = $methodComment;
-            }
-
-            // Get declaration place.
             $declaringClass = $refMethod->getDeclaringClass();
-            $methodData[static::META_DECLARED_IN] = $this->getDeclarationPlace($refMethod, $declaringClass);
-
-            // Get the return type.
-            $methodData[static::META_RETURN_TYPE] = $this->pool->createClass(ReturnType::class)
-                ->getComment($refMethod, $refClass);
+            $methodData = $this->retrieveMethodData($refMethod, $refClass, $declaringClass);
 
             // Update the reflection method, so an event subscriber can do
             // something with it.
@@ -119,6 +125,42 @@ class ThroughMethods extends AbstractCallback implements
         }
 
         return $result;
+    }
+
+    /**
+     * Retrieve the method analysis data.
+     *
+     * @param \ReflectionMethod $refMethod
+     *   Reflection of the method that we are analysing.
+     * @param \ReflectionClass $refClass
+     *   Reflection of the class that we analysing right now.
+     * @param \ReflectionClass $declaringClass
+     *   Reflection of the class, where the method is hosted.
+     *   This may or may not be the same class as the one that we are analysing.
+     *
+     * @return array
+     *   The collected method data.
+     */
+    protected function retrieveMethodData(
+        ReflectionMethod $refMethod,
+        ReflectionClass $refClass,
+        ReflectionClass $declaringClass
+    ): array {
+        $methodData = [];
+        // Get the comment from the class, it's parents, interfaces or traits.
+        $methodComment = $this->commentAnalysis->getComment($refMethod, $refClass);
+        if (empty($methodComment) === false) {
+            $methodData[static::META_COMMENT] = $methodComment;
+        }
+
+        // Get declaration place.
+        $methodData[static::META_DECLARED_IN] = $this->getDeclarationPlace($refMethod, $declaringClass);
+
+        // Get the return type.
+        $methodData[static::META_RETURN_TYPE] = $this->pool->createClass(ReturnType::class)
+            ->getComment($refMethod, $refClass);
+
+        return $methodData;
     }
 
     /**

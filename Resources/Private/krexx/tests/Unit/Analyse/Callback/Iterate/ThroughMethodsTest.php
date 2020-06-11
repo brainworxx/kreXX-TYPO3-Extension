@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
+use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
@@ -78,6 +79,19 @@ class ThroughMethodsTest extends AbstractTest
     }
 
     /**
+     * Testing the creation of the comment analysis.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::__construct
+     */
+    public function testConstruct()
+    {
+        $this->assertInstanceOf(
+            Methods::class,
+            $this->retrieveValueByReflection('commentAnalysis', $this->throughMethods)
+        );
+    }
+
+    /**
      * Testing an analysis without any methods to look at.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe
@@ -110,6 +124,7 @@ class ThroughMethodsTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::getDeclarationPlace
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::getDeclarationKeywords
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveDeclaringReflection
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveMethodData
      */
     public function testCallMeNormal()
     {
