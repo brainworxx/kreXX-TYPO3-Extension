@@ -37,7 +37,7 @@ $result = [
     'Tx_Includekrexx_ViewHelpers_DebugViewHelper' => 'Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper',
 ];
 
-if (version_compare(TYPO3_version, '10.0', '>=')) {
+if (class_exists(\TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper::class) === false) {
     // Registering this class mapping in a system, where it is *not* deprecated
     // results in really strange fluid errors.
     $result[\TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper::class] =
