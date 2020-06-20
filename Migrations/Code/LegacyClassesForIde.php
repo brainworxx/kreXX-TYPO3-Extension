@@ -39,10 +39,6 @@ namespace {
     die('Access denied');
 }
 
-namespace {
-    class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper {}
-}
-
 namespace TYPO3\CMS\Fluid\Core\ViewHelper {
     class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper {}
 }
