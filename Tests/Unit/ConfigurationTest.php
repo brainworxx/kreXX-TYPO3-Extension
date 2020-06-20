@@ -74,7 +74,7 @@ class ConfigurationTest extends AbstractTest
         $extLocalConf = file_get_contents($extLocalConfPath);
 
         // Our expectations.
-        $versionNumber = '3.3.4';
+        $versionNumber = '3.3.5 dev';
         $t3EmConstraint = '7.6.0-10.4.99';
         $phpEmConstraint = '5.5.0-7.4.99';
         $t3ComposerConstraint = '^7.6 || ^8 || ^9 || ^10';

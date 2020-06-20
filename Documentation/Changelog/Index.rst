@@ -12,6 +12,8 @@
 Changelog
 =============================================================
 
+3.3.5 dev
+
 3.3.4
     - [Bugfix] Analysing of __PHP_Incomplete_Class does not throw errors anymore.
     - [Bugfix] Regression with the mixup of the two methods of code escaping.
