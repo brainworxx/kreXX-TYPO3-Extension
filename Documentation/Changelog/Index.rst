@@ -13,6 +13,7 @@ Changelog
 =============================================================
 
 3.3.5 dev
+    - [Bugfix] Added missing composer definition for the class alias loader.
 
 3.3.4
     - [Bugfix] Analysing of __PHP_Incomplete_Class does not throw errors anymore.
