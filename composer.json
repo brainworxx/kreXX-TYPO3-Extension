@@ -49,6 +49,9 @@
   "extra": {
     "typo3/cms": {
       "extension-key": "includekrexx"
+    },
+    "typo3/class-alias-loader": {
+      "class-alias-maps": ["Migrations/Code/ClassAliasMap.php"]
     }
   },
   "support": {
