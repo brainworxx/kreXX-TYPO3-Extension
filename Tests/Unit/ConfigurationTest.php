@@ -100,6 +100,6 @@ class ConfigurationTest extends AbstractTest
         $this->assertContains($versionNumber, $changelogContent);
 
         // Test the version check in the autoExecLocalBat.php
-        $this->assertContains($versionNumber, $extLocalConf);
+        $this->assertContains('\'' . $versionNumber . '\'', $extLocalConf);
     }
 }
