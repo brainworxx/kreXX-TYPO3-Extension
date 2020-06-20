@@ -93,6 +93,9 @@ class Bootstrap
                 return;
             }
 
+            // Use our own compatibility layer.
+            include_once __DIR__ . '/../../Migrations/ClassMapper.php';
+
             // Register and activate the TYPO3 plugin.
             $t3configuration = GeneralUtility::makeInstance(T3configuration::class);
             Registration::register($t3configuration);
