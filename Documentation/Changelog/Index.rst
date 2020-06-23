@@ -12,7 +12,9 @@
 Changelog
 =============================================================
 
-3.3.5 dev
+3.3.6
+
+3.3.5
     - [Bugfix] Added missing composer definition for the class alias loader.
 
 3.3.4
