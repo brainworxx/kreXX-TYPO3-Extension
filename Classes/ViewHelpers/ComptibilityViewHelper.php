@@ -31,13 +31,33 @@
  *   along with this library; if not, write to the Free Software Foundation,
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-namespace {
-    die('Access denied');
-}
 
-namespace {
-    class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper {}
-}
-namespace TYPO3\CMS\Fluid\Core\ViewHelper {
-    class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper {}
+namespace Brainworxx\Includekrexx\ViewHelpers;
+
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper as AbstractViewHelperCms;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper as AbstractViewHelperFluid;
+
+/**
+ * Thanks to Helmut Hummel for this solution.
+ *
+ * The class alias map works well in TYPO3 old school installations.
+ * When using it in Composer Mode, things are a little bit different.
+ * Some copy pasta from Slack:
+ * > The class alias maps in Composer mode are read before dumping the
+ * > autoloader. This means that the class exists call will be non functional,
+ * > as the class will never exist at this point.
+ *
+ * @deprecated
+ *   Will be removed as soon as we drop 8.7 Support.
+ */
+if (class_exists(AbstractViewHelperCms::class) === true) {
+    class ComptibilityViewHelper extends AbstractViewHelperCms
+    {
+
+    }
+} else {
+    class ComptibilityViewHelper extends AbstractViewHelperFluid
+    {
+
+    }
 }
