@@ -38,7 +38,10 @@ Changelog
     - [Change] Use compressed css for the SmokyGrey skin.
     - [Bugfix] The Aimeos decorator analysis works now as it should.
 
-3.3.5 dev
+3.3.6
+    - [Bugfix] Removed the composer definition for the class alias loader and use an alternative implementation.
+
+3.3.5
     - [Bugfix] Added missing composer definition for the class alias loader.
 
 3.3.4 dev

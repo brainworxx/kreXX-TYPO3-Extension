@@ -63,7 +63,7 @@ use ReflectionClass;
  *   Use this part if you don't want fluid to escape your string or if you are
  *   stitching together an array.
  */
-class DebugViewHelper extends AbstractViewHelper
+class DebugViewHelper extends ComptibilityViewHelper
 {
     const ARGUMENT_VALUE = 'value';
 

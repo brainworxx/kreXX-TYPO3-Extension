@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,13 +35,32 @@
 
 declare(strict_types=1);
 
-$result = [];
+namespace Brainworxx\Includekrexx\ViewHelpers;
 
-if (class_exists(\TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper::class) === false) {
-    // Registering this class mapping in a system, where it is *not* deprecated
-    // results in really strange fluid errors.
-    $result[\TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper::class] =
-        \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper::class;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper as AbstractViewHelperCms;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper as AbstractViewHelperFluid;
+
+/**
+ * Thanks to Helmut Hummel for this solution.
+ *
+ * The class alias map works well in TYPO3 old school installations.
+ * When using it in Composer Mode, things are a little bit different.
+ * Some copy pasta from Slack:
+ * > The class alias maps in Composer mode are read before dumping the
+ * > autoloader. This means that the class exists call will be non functional,
+ * > as the class will never exist at this point.
+ *
+ * @deprecated
+ *   Will be removed as soon as we drop 8.7 Support.
+ */
+if (class_exists(AbstractViewHelperCms::class) === true) {
+    class ComptibilityViewHelper extends AbstractViewHelperCms
+    {
+
+    }
+} else {
+    class ComptibilityViewHelper extends AbstractViewHelperFluid
+    {
+
+    }
 }
-
-return $result;
