@@ -20,7 +20,6 @@ Changelog
     - [Feature] Added throw away messages.
     - [Feature] Added return type to the method and function analysis.
     - [Feature] Make code generation possible for the getProperties debug method in Fluid.
-    - [Feature] TYPO3 10.3 support.
     - [Change] Removed all deprecations.
     - [Change] Removed the PHP 5.x fatal error handler.
     - [Change] Dropped PHP 5.x support.
