@@ -41,6 +41,7 @@ use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
+use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -139,6 +140,9 @@ class Configuration implements PluginConfigInterface, ConstInterface
         // Add additional texts to the help.
         $extPath = ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
         Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/t3.kreXX.ini');
+
+        // Register the scalar analysis classes.
+        Registration::addScalarStringAnalyser(ExtFilePath::class);
 
         $this->registerVersionDependantStuff();
     }
