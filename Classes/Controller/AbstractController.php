@@ -262,14 +262,5 @@ abstract class AbstractController extends ActionController
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/Index.css');
         $this->view->assign('js', file_get_contents($jsPath));
         $this->view->assign('css', file_get_contents($cssPath));
-
-        if (version_compare(Bootstrap::getTypo3Version(), '10.3', '>=')) {
-            $cssTenThree = GeneralUtility::getFileAbsFileName(
-                'EXT:includekrexx/Resources/Public/Css/IndexTenThree.css'
-            );
-            $this->view->assign('cssTenThree', file_get_contents($cssTenThree));
-        } else {
-            $this->view->assign('cssTenThree', '');
-        }
     }
 }
