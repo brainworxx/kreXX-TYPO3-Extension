@@ -87,7 +87,7 @@ class BootstrapTest extends AbstractTest
 
         // Since we as retrieving the extension path, we need to simulate the
         // existing of the includekrexx package.
-        $this->simulatePackage(Bootstrap::EXT_KEY, 'some path');
+        $this->simulatePackage(Bootstrap::EXT_KEY, Bootstrap::EXT_KEY . '/');
 
         $this->bootstrap->run();
     }
