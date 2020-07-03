@@ -52,7 +52,7 @@ class ExtFilePath extends FilePath
      */
     public function canHandle($string, Model $model): bool
     {
-        if (strpos($string, 'EXT:') === 0) {
+        if (strpos($string, 'EXT:') !== 0) {
             // Does not start with EXT:
             // Nothing to do here.
             return false;
