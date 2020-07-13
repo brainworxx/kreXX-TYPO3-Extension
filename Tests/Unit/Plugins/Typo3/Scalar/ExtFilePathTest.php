@@ -35,11 +35,9 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Scalar;
 
-
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Model;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class ExtFilePathTest extends AbstractTest
 {
