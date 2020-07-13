@@ -23,7 +23,7 @@ class LllString extends AbstractScalarAnalysis implements ViewConstInterface
     public static function isActive(): bool
     {
         // Test if language service is available.
-        return class_exists(LocalizationUtility::class);
+        return is_callable([LocalizationUtility::class, 'translate']);
     }
 
     /**
@@ -33,18 +33,31 @@ class LllString extends AbstractScalarAnalysis implements ViewConstInterface
      *   The model, so far.
      *
      * @return bool
-     *   Can we translate it? Well, actually, we dont' handle it in here.
-     *   We directly add a string to the model.
+     *   Can we translate it? Well, actually, we don't handle it in here.
+     *   We directly add the translation to the model.
      */
     public function canHandle($string, Model $model): bool
     {
-        // Add the string directly to the model
-        if (strpos($string, 'LLL:') !== 0) {
-            $trans = LocalizationUtility::translate($string);
-            if (empty($trans) === false) {
-                $model->addToJson('Translation', $trans);
+        // Retrieve the EXT path from the framework.
+        set_error_handler(function () {
+            // Do nothing.
+        });
+
+        try {
+            // Add the string directly to the model
+            if (strpos($string, 'LLL:') !== 0) {
+                $trans = LocalizationUtility::translate($string);
+                if (empty($trans) === false) {
+                    $model->addToJson('Translation', $trans);
+                }
             }
+        } catch (\Throwable $e) {
+            // Huh, someone messed with the GeneralUtility.
+            restore_error_handler();
+            return false;
         }
+
+        restore_error_handler();
 
         // Always false.
         return false;
