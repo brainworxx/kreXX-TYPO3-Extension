@@ -45,14 +45,14 @@ class LllString extends AbstractScalarAnalysis implements ViewConstInterface
 
         try {
             // Add the string directly to the model
-            if (strpos($string, 'LLL:') !== 0) {
+            if (strpos($string, 'LLL:') === 0) {
                 $trans = LocalizationUtility::translate($string);
                 if (empty($trans) === false) {
                     $model->addToJson('Translation', $trans);
                 }
             }
         } catch (\Throwable $e) {
-            // Huh, someone messed with the GeneralUtility.
+            // Huh, someone messed with the translations.
             restore_error_handler();
             return false;
         }
