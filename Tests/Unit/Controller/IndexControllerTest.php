@@ -139,7 +139,7 @@ class IndexControllerTest extends AbstractTest
         $this->setValueByReflection('view', $viewMock, $indexController);
 
         // Run it through like a tunnel on a marathon route.
-        $this->simulatePackage('includekrexx', 'some path');
+        $this->simulatePackage('includekrexx', 'includekrexx/');
         $indexController->indexAction();
 
         // Test for the kreXX messages.
