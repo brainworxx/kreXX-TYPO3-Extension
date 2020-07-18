@@ -248,7 +248,10 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * The tings you do, to have a simple redirect . . .
+     * The things you do, to have a simple redirect . . .
+     *
+     * I once read that mocking is a code smell. If this is true, than this
+     * method is a cesspool.
      *
      * @param $controller
      */
@@ -297,12 +300,13 @@ abstract class AbstractTest extends TestCase
         $this->setValueByReflection('uriBuilder', $uriBuilder, $controller);
 
         $response = $this->createMock(Response::class);
-        $response->expects($this->any())
-            ->method('setContent');
-        $response->expects($this->any())
-            ->method('setStatus');
-        $response->expects($this->any())
-            ->method('setHeader');
+        $response->expects($this->any())->method('setContent');
+        if (method_exists(Response::class, 'setStatus')) {
+            $response->expects($this->any())->method('setStatus');
+        }
+        if (method_exists(Response::class, 'setHeader')) {
+            $response->expects($this->any())->method('setHeader');
+        }
         $this->setValueByReflection('response', $response, $controller);
 
         $contentObject = $this->createMock(ContentObjectRenderer::class);
