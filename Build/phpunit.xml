@@ -9,7 +9,6 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory>../Resources/Private/krexx/src</directory>
             <directory>../Classes</directory>
         </whitelist>
     </filter>

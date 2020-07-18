@@ -96,6 +96,8 @@ class LllStringTest extends AbstractTest
 
         // I'm abusing existence the EnvironmentService to identify a 8.7 TYPO3 version.
         if (class_exists(ModuleData::class)) {
+            var_dump('wrong if part');
+
             // Mocking LocalizationFactory with parsed data.
             // 9.5'er style.
             $parsedData = [
