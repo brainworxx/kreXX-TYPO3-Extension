@@ -44,14 +44,16 @@ use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 
 class LllStringTest extends AbstractTest
 {
+    const TSFE = 'TSFE';
+
     protected $originalLang;
 
     public function setUp()
     {
         parent::setUp();
         // We need to replace this one, because we mock the living hell out of it.
-        if (isset($GLOBALS['LANG'])) {
-            $this->originalLang = $GLOBALS['LANG'];
+        if (isset($GLOBALS[static::TSFE])) {
+            $this->originalLang = $GLOBALS[static::TSFE];
         }
     }
 
@@ -60,7 +62,7 @@ class LllStringTest extends AbstractTest
         parent::tearDown();
         // Restore the language service to it's former "glory".
         if (isset($this->originalLang)) {
-           $GLOBALS['LANG'] = $this->originalLang;
+           $GLOBALS[static::TSFE] = $this->originalLang;
         }
     }
 
@@ -96,8 +98,6 @@ class LllStringTest extends AbstractTest
 
         // I'm abusing existence the EnvironmentService to identify a 8.7 TYPO3 version.
         if (class_exists(ModuleData::class)) {
-            var_dump('wrong if part');
-
             // Mocking LocalizationFactory with parsed data.
             // 9.5'er style.
             $parsedData = [
@@ -119,7 +119,7 @@ class LllStringTest extends AbstractTest
             $globalLangMock->expects($this->once())
                 ->method('sL')
                 ->will($this->returnValue('kreXX Debugger'));
-            $GLOBALS['LANG'] = $globalLangMock;
+            $GLOBALS[static::TSFE] = $globalLangMock;
         }
 
         $payload = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab';
