@@ -39,6 +39,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Model;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
+use TYPO3\CMS\Extbase\Service\EnvironmentService;
 use TYPO3\CMS\Lang\LanguageService;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 
@@ -94,9 +95,8 @@ class LllStringTest extends AbstractTest
     {
         $this->simulatePackage('includekrexx', 'includekrexx/');
 
-        // I'm abusing parts of the admin panel to identify a 8.7 TYPO3 version.
-        // Oh boy.
-        if (class_exists(ModuleData::class)) {
+        // I'm abusing existence the EnvironmentService to identify a 8.7 TYPO3 version.
+        if (class_exists(EnvironmentService::class)) {
             // Mocking LocalizationFactory with parsed data.
             // 9.5'er style.
             $parsedData = [

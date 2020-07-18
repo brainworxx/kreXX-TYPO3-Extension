@@ -49,7 +49,10 @@ $EM_CONF[$_EXTKEY] = [
             'php' => '7.0.0-7.4.99',
         ],
         'conflicts' => [],
-        'suggests' => [],
+        'suggests' => [
+            'adminpanel' => '9.5.0-10.4.99',
+            'aimeos' => '18.4.0-20.99.99'
+        ],
     ],
 ];
 

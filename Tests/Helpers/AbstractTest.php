@@ -39,18 +39,24 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use phpmock\phpunit\PHPMock;
+use PHPUnit\Framework\TestCase;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Controller\AbstractController;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext;
-use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
-use StdClass;
+use TYPO3\CMS\Extbase\Mvc\Request;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
+use TYPO3\CMS\Extbase\Mvc\Response;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Service\CacheService;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
-abstract class AbstractTest extends UnitTestCase
+abstract class AbstractTest extends TestCase
 {
     use PHPMock;
 
@@ -75,8 +81,6 @@ abstract class AbstractTest extends UnitTestCase
      */
     public function tearDown()
     {
-        parent::tearDown();
-
         $this->setValueByReflection('packageManager', null, ExtensionManagementUtility::class);
         // Reset the possible mocks in the general utility.
         $this->setValueByReflection(static::FINAL_CLASS_NAME_CACHE, [], GeneralUtility::class);
@@ -97,6 +101,10 @@ abstract class AbstractTest extends UnitTestCase
         $this->setValueByReflection('rewriteList', [], Registration::class);
         $this->setValueByReflection('additionalSkinList', [], Registration::class);
         $this->setValueByReflection('plugins', [], Registration::class);
+
+        unset($GLOBALS['BE_USER']);
+        GeneralUtility::flushInternalRuntimeCaches();
+        GeneralUtility::resetSingletonInstances([]);
     }
 
     /**
@@ -246,7 +254,65 @@ abstract class AbstractTest extends UnitTestCase
      */
     protected function prepareRedirect($controller)
     {
-        $request = new StdClass();
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock->expects($this->any())
+            ->method('flushCachesInGroup')
+            ->with('system');
+
+        $cacheServiceMock = $this->createMock(CacheService::class);
+        $cacheServiceMock->expects($this->any())
+            ->method('clearCachesOfRegisteredPageIds');
+
+        $objectManagerMock = $this->createMock(ObjectManager::class);
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->willReturnMap([
+                [CacheManager::class, $cacheManagerMock],
+                [CacheService::class, $cacheServiceMock]
+            ]);
+        $this->setValueByReflection('objectManager', $objectManagerMock, $controller);
+
+        $request = $this->createMock(Request::class);
+        $request->expects($this->any())
+            ->method('getControllerName')
+            ->will($this->returnValue('meier'));
         $this->setValueByReflection('request', $request, $controller);
+
+        $uriBuilder = $this->createMock(UriBuilder::class);
+        $uriBuilder->expects($this->any())
+            ->method('reset')
+            ->will($this->returnValue($uriBuilder));
+        $uriBuilder->expects($this->any())
+            ->method('setCreateAbsoluteUri')
+            ->will($this->returnValue($uriBuilder));
+        $uriBuilder->expects($this->any())
+            ->method('setTargetPageUid')
+            ->will($this->returnValue($uriBuilder));
+        $uriBuilder->expects($this->any())
+            ->method('setAbsoluteUriScheme')
+            ->will($this->returnValue($uriBuilder));
+        $uriBuilder->expects($this->any())
+            ->method('uriFor')
+            ->will($this->returnValue('https:\\\\google.de'));
+        $this->setValueByReflection('uriBuilder', $uriBuilder, $controller);
+
+        $response = $this->createMock(Response::class);
+        $response->expects($this->any())
+            ->method('setContent');
+        $response->expects($this->any())
+            ->method('setStatus');
+        $response->expects($this->any())
+            ->method('setHeader');
+        $this->setValueByReflection('response', $response, $controller);
+
+        $contentObject = $this->createMock(ContentObjectRenderer::class);
+        $contentObject->expects($this->any())
+            ->method('getUserObjectType')
+            ->will($this->returnValue(''));
+        $configurationManager = $this->createMock(ConfigurationManager::class);
+        $configurationManager->expects($this->any())
+            ->method('getContentObject')
+            ->will($this->returnValue($contentObject));
+        $this->setValueByReflection('configurationManager', $configurationManager, $controller);
     }
 }
