@@ -39,9 +39,30 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Model;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
+use TYPO3\CMS\Lang\LanguageService;
 
 class LllStringTest extends AbstractTest
 {
+    protected $originalLang;
+
+    public function setUp()
+    {
+        parent::setUp();
+        // We need to replace this one, because we mock the living hell out of it.
+        if (isset($GLOBALS['LANG'])) {
+            $this->originalLang = $GLOBALS['LANG'];
+        }
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+        // Restore the language service to it's former "glory".
+        if (isset($this->originalLang)) {
+           $GLOBALS['LANG'] = $this->originalLang;
+        }
+    }
+
     /**
      * We test if the LocalizationUtility::translate still exists.
      *
@@ -72,19 +93,31 @@ class LllStringTest extends AbstractTest
     {
         $this->simulatePackage('includekrexx', 'includekrexx/');
 
-        // LocalizationFactory mit getParsedData mocken
-        $parsedData = [
-            'default' => [
-                'mlang_tabs_tab' => [
-                    ['target' => 'kreXX Debugger']
+
+        if (class_exists(LanguageService::class)) {
+            // Mocking the global language service.
+            // Just for you 8.7
+            $globalLangMock = $this->createMock(LanguageService::class);
+            $globalLangMock->expects($this->once())
+                ->method('sL')
+                ->will($this->returnValue('kreXX Debugger'));
+            $GLOBALS['LANG'] = $globalLangMock;
+        } else {
+            // Mocking LocalizationFactory with parsed data.
+            // 9.5'er style.
+            $parsedData = [
+                'default' => [
+                    'mlang_tabs_tab' => [
+                        ['target' => 'kreXX Debugger']
+                    ]
                 ]
-            ]
-        ];
-        $locFacMock = $this->createMock(LocalizationFactory::class);
-        $locFacMock->expects($this->once())
-            ->method('getParsedData')
-            ->will($this->returnValue($parsedData));
-        $this->injectIntoGeneralUtility(LocalizationFactory::class, $locFacMock);
+            ];
+            $locFacMock = $this->createMock(LocalizationFactory::class);
+            $locFacMock->expects($this->once())
+                ->method('getParsedData')
+                ->will($this->returnValue($parsedData));
+            $this->injectIntoGeneralUtility(LocalizationFactory::class, $locFacMock);
+        }
 
         $payload = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab';
         $model = new Model(\Krexx::$pool);
