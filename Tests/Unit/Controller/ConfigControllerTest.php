@@ -37,8 +37,10 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Controller;
 use Brainworxx\Includekrexx\Controller\ConfigController;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Service\CacheService;
 
 class ConfigControllerTest extends AbstractTest
 {
@@ -50,21 +52,13 @@ class ConfigControllerTest extends AbstractTest
     public function testEditAction()
     {
         $configController = new ConfigController();
-        $cacheManagerMock = $this->createMock(CacheManager::class);
-        $cacheManagerMock->expects($this->once())
-            ->method('flushCachesInGroup')
-            ->with('system');
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($cacheManagerMock));
-        $this->setValueByReflection('objectManager', $objectManagerMock, $configController);
-
         $this->prepareRedirect($configController);
 
         try {
             $configController->editAction();
         } catch (UnsupportedRequestTypeException $e) {
+            $redirectHappened = true;
+        } catch (StopActionException $e) {
             $redirectHappened = true;
         }
         $this->assertTrue($redirectHappened, 'The redirect was triggered.');

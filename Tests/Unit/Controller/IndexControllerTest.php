@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use StdClass;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
@@ -174,6 +175,9 @@ class IndexControllerTest extends AbstractTest
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
+        } catch (StopActionException $e) {
+            // We expect this one.
+            $exceptionWasThrown = true;
         }
         $this->assertTrue($exceptionWasThrown, static::REDIRECT_MESSAGE);
 
@@ -214,6 +218,9 @@ class IndexControllerTest extends AbstractTest
         try {
             $indexController->saveAction($settingsMock);
         } catch (UnsupportedRequestTypeException $e) {
+            // We expect this one.
+            $exceptionWasThrown = true;
+        } catch (StopActionException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
         }
@@ -258,7 +265,11 @@ class IndexControllerTest extends AbstractTest
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
+        } catch (StopActionException $e) {
+            // We expect this one.
+            $exceptionWasThrown = true;
         }
+
         $this->assertTrue($exceptionWasThrown, static::REDIRECT_MESSAGE);
 
         $this->assertEquals(
