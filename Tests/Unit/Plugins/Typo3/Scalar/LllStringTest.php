@@ -40,6 +40,7 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Model;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Lang\LanguageService;
+use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 
 class LllStringTest extends AbstractTest
 {
@@ -93,16 +94,9 @@ class LllStringTest extends AbstractTest
     {
         $this->simulatePackage('includekrexx', 'includekrexx/');
 
-
-        if (class_exists(LanguageService::class)) {
-            // Mocking the global language service.
-            // Just for you 8.7
-            $globalLangMock = $this->createMock(LanguageService::class);
-            $globalLangMock->expects($this->once())
-                ->method('sL')
-                ->will($this->returnValue('kreXX Debugger'));
-            $GLOBALS['LANG'] = $globalLangMock;
-        } else {
+        // I'm abusing parts of the admin panel to identify a 8.7 TYPO3 version.
+        // Oh boy.
+        if (class_exists(ModuleData::class)) {
             // Mocking LocalizationFactory with parsed data.
             // 9.5'er style.
             $parsedData = [
@@ -117,6 +111,14 @@ class LllStringTest extends AbstractTest
                 ->method('getParsedData')
                 ->will($this->returnValue($parsedData));
             $this->injectIntoGeneralUtility(LocalizationFactory::class, $locFacMock);
+        } else {
+            // Mocking the global language service.
+            // Just for you 8.7
+            $globalLangMock = $this->createMock(LanguageService::class);
+            $globalLangMock->expects($this->once())
+                ->method('sL')
+                ->will($this->returnValue('kreXX Debugger'));
+            $GLOBALS['LANG'] = $globalLangMock;
         }
 
         $payload = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab';
