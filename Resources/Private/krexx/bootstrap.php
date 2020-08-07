@@ -252,9 +252,6 @@ call_user_func(function () {
     } catch (\Throwable $e) {
         // Meh. The autoloader did throw an error.
         $krexxLoader();
-    } catch (\Exception $e) {
-        // Meh. The autoloader did throw an error.
-        $krexxLoader();
     }
     restore_error_handler();
 

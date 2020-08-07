@@ -131,7 +131,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface
             // it comes directly from the source code itself.
             // And of cause, there are no connectors.
             $this->firstRun = false;
-            return $this->pool->encodingService->encodeString($model->getName());
+            return $this->pool->encodingService->encodeString((string)$model->getName());
         }
         if ($type === static::CODEGEN_TYPE_PUBLIC) {
             // Public methods, debug methods.
