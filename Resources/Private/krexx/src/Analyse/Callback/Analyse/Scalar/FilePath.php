@@ -58,13 +58,6 @@ class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
     protected $bufferInfo;
 
     /**
-     * The path we are analysing.
-     *
-     * @var string
-     */
-    protected $path = '';
-
-    /**
      * No file path analysis without the finfo class.
      *
      * @return bool
@@ -102,7 +95,7 @@ class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
      */
     public function canHandle($string, Model $model): bool
     {
-        if (empty($string) || $this->bufferInfo === null) {
+        if (empty($string) === true) {
             // Early return for the most values.
             return false;
         }
@@ -114,14 +107,23 @@ class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
 
         try {
             $isFile = is_file($string);
+
         } catch (TypeError $exception) {
             $isFile = false;
         }
 
+        if ($isFile === true) {
+            $realPath = realpath($string);
+            if ($string !== $realPath) {
+                // We only add the realpath, if it differs from the string
+                $model->addToJson('Real path', is_string($realPath) === true ? $realPath : 'n/a');
+            }
+            $model->addToJson(static::META_MIME_TYPE, $this->bufferInfo->file($string));
+        }
+
         restore_error_handler();
 
-        $this->path = $string;
-        return $isFile;
+        return false;
     }
 
     /**
@@ -129,12 +131,6 @@ class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
      */
     protected function handle(): array
     {
-        $realPath = realpath($this->path);
-
-        $meta = [];
-        $meta['Real path'] = is_string($realPath) === true ? $realPath : 'n/a';
-        $meta[static::META_MIME_TYPE] = $this->bufferInfo->file($this->path);
-
-        return $meta;
+        return [];
     }
 }
