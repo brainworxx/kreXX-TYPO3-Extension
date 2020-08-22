@@ -45,7 +45,6 @@ class ExtFilePathTest extends AbstractTest
      * Test the resolving of EXT: strings for their actual files.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath::canHandle
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath::retrieveRealPath
      */
     public function testCanHandle()
     {
