@@ -45,6 +45,7 @@ class ExtFilePathTest extends AbstractTest
      * Test the resolving of EXT: strings for their actual files.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath::canHandle
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath::retrieveRealPath
      */
     public function testCanHandle()
     {
@@ -70,7 +71,17 @@ class ExtFilePathTest extends AbstractTest
             ->will($this->returnValue('just a file'));
         $this->setValueByReflection('bufferInfo', $finfoMock, $extFilePath);
 
-        $this->assertTrue($extFilePath->canHandle($fixture, $model));
+        $this->assertFalse($extFilePath->canHandle($fixture, $model), 'Always false. We add the stuff to the model.');
         $extFilePath->callMe();
+
+        // Look at the model.
+        $jsonData = $model->getJson();
+        $expectations = [
+            "Resolved EXT path" => "includekrexx/Tests/Fixtures/123458.Krexx.html",
+            "Real path" => "n/a",
+            "Mimetype" => "just a file"
+        ];
+        $this->assertEquals($expectations, $jsonData);
+
     }
 }
