@@ -104,7 +104,7 @@ abstract class AbstractTest extends TestCase
 
         unset($GLOBALS['BE_USER']);
         GeneralUtility::flushInternalRuntimeCaches();
-        GeneralUtility::resetSingletonInstances([]);
+        GeneralUtility::purgeInstances();
     }
 
     /**
