@@ -7,23 +7,23 @@ language: php
 matrix:
   include:
     - php: "7.0"
-      env: TYPO3_VERSION="^8.7" AIMEOS_VERSION="^18" ADMIN_PANEL="typo3/cms-core:^8.7" COVERAGE="NO"
+      env: TYPO3_VERSION="^8.7" AIMEOS_VERSION="^18" ADMIN_PANEL="typo3/cms-core:^8.7" COVERAGE="false"
     - php: "7.1"
-      env: TYPO3_VERSION="^8.7" AIMEOS_VERSION="^18" ADMIN_PANEL="typo3/cms-core:^8.7" COVERAGE="NO"
+      env: TYPO3_VERSION="^8.7" AIMEOS_VERSION="^18" ADMIN_PANEL="typo3/cms-core:^8.7" COVERAGE="false"
     - php: "7.2"
-      env: TYPO3_VERSION="^8.7" AIMEOS_VERSION="^19" ADMIN_PANEL="typo3/cms-core:^8.7" COVERAGE="NO"
+      env: TYPO3_VERSION="^8.7" AIMEOS_VERSION="^19" ADMIN_PANEL="typo3/cms-core:^8.7" COVERAGE="false"
     - php: "7.2"
-      env: TYPO3_VERSION="^9.5" AIMEOS_VERSION="^18" ADMIN_PANEL="typo3/cms-adminpanel:^9.5" COVERAGE="NO"
+      env: TYPO3_VERSION="^9.5" AIMEOS_VERSION="^18" ADMIN_PANEL="typo3/cms-adminpanel:^9.5" COVERAGE="false"
     - php: "7.3"
-      env: TYPO3_VERSION="^9.5" AIMEOS_VERSION="^19" ADMIN_PANEL="typo3/cms-adminpanel:^9.5" COVERAGE="NO"
+      env: TYPO3_VERSION="^9.5" AIMEOS_VERSION="^19" ADMIN_PANEL="typo3/cms-adminpanel:^9.5" COVERAGE="false"
     - php: "7.4"
-      env: TYPO3_VERSION="^9.5" AIMEOS_VERSION="^20" ADMIN_PANEL="typo3/cms-adminpanel:^9.5" COVERAGE="NO"
+      env: TYPO3_VERSION="^9.5" AIMEOS_VERSION="^20" ADMIN_PANEL="typo3/cms-adminpanel:^9.5" COVERAGE="false"
     - php: "7.2"
-      env: TYPO3_VERSION="^10.4" AIMEOS_VERSION="^19" ADMIN_PANEL="typo3/cms-adminpanel:^10.4" COVERAGE="NO"
+      env: TYPO3_VERSION="^10.4" AIMEOS_VERSION="^19" ADMIN_PANEL="typo3/cms-adminpanel:^10.4" COVERAGE="false"
     - php: "7.3"
-      env: TYPO3_VERSION="^10.4" AIMEOS_VERSION="^20" ADMIN_PANEL="typo3/cms-adminpanel:^10.4" COVERAGE="NO"
+      env: TYPO3_VERSION="^10.4" AIMEOS_VERSION="^20" ADMIN_PANEL="typo3/cms-adminpanel:^10.4" COVERAGE="false"
     - php: "7.4"
-      env: TYPO3_VERSION="^10.4" AIMEOS_VERSION="^20" ADMIN_PANEL="typo3/cms-adminpanel:^10.4" COVERAGE="YES"
+      env: TYPO3_VERSION="^10.4" AIMEOS_VERSION="^20" ADMIN_PANEL="typo3/cms-adminpanel:^10.4" COVERAGE="true"
 
 install:
   - composer require --no-update "typo3/cms-core:$TYPO3_VERSION"
@@ -37,5 +37,5 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - if [[ "$COVERAGE" != "NO" ]]; then "./vendor/bin/phpunit -c Build/phpunit.xml --coverage-text --coverage-clover build/logs/clover.xml"
+  - if [ "$COVERAGE" == "true" ]; then ./vendor/bin/phpunit -c Build/phpunit.xml --coverage-text --coverage-clover build/logs/clover.xml
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
