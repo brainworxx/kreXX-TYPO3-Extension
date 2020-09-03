@@ -37,4 +37,4 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - if [[ "$COVERAGE" != "NO" ]]; then ./vendor/bin/phpunit -c Build/phpunit.xml --coverage-text --coverage-clover build/logs/clover.xml
+  - if [[ "$COVERAGE" != "NO" ]]; then ./vendor/bin/phpunit -c Build/phpunit.xml --coverage-text --coverage-clover build/logs/clover.xml; fi
