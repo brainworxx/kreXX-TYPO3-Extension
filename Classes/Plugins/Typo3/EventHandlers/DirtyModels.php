@@ -38,7 +38,6 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -57,7 +56,7 @@ use Throwable;
  *
  * @package Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers
  */
-class DirtyModels implements EventHandlerInterface, ConstInterface
+class DirtyModels implements EventHandlerInterface
 {
     /**
      * The resource pool

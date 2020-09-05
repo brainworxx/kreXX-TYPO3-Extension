@@ -38,12 +38,14 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Aimeos\MShop\Common\Item\Iface as ItemIface;
 use Aimeos\MW\Tree\Node\Iface as NodeIface;
 use Aimeos\MW\View\Iface as ViewIface;
+use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Analysing the __get() implementation in aimeos items.
@@ -57,7 +59,7 @@ use Aimeos\MW\View\Iface as ViewIface;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class Properties extends AbstractEventHandler
+class Properties extends AbstractEventHandler implements CallbackConstInterface, ViewConstInterface
 {
     /**
      * Our pool.
@@ -160,9 +162,9 @@ class Properties extends AbstractEventHandler
             // Could be anything.
             // We need to route it though the analysis hub.
             if ($this->pool->encodingService->isPropertyNameNormal($key) === true) {
-                $connectorType = Connectors::NORMAL_PROPERTY;
+                $connectorType = Connectors::CONNECTOR_NORMAL_PROPERTY;
             } else {
-                $connectorType = Connectors::SPECIAL_CHARS_PROP;
+                $connectorType = Connectors::CONNECTOR_SPECIAL_CHARS_PROP;
             }
 
             $result .= $this->pool->routing->analysisHub(

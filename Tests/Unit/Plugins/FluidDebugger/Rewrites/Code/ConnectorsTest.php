@@ -48,15 +48,15 @@ class ConnectorsTest extends AbstractTest
     public function testConstruct()
     {
         $expected = [
-            Connectors::NOTHING => ['', ''],
-            Connectors::METHOD => ['.', '(@param@)'],
-            Connectors::STATIC_METHOD => ['.', '(@param@)'],
-            Connectors::NORMAL_ARRAY => ['.', ''],
-            Connectors::ASSOCIATIVE_ARRAY => ['.', ''],
-            Connectors::CONSTANT => ['.', ''],
-            Connectors::NORMAL_PROPERTY => ['.', ''],
-            Connectors::STATIC_PROPERTY => ['.', ''],
-            Connectors::SPECIAL_CHARS_PROP => ['.', ''],
+            Connectors::CONNECTOR_NOTHING => ['', ''],
+            Connectors::CONNECTOR_METHOD => ['.', '(@param@)'],
+            Connectors::CONNECTOR_STATIC_METHOD => ['.', '(@param@)'],
+            Connectors::CONNECTOR_NORMAL_ARRAY => ['.', ''],
+            Connectors::CONNECTOR_ASSOCIATIVE_ARRAY => ['.', ''],
+            Connectors::CONNECTOR_CONSTANT => ['.', ''],
+            Connectors::CONNECTOR_NORMAL_PROPERTY => ['.', ''],
+            Connectors::CONNECTOR_STATIC_PROPERTY => ['.', ''],
+            Connectors::CONNECTOR_SPECIAL_CHARS_PROP => ['.', ''],
         ];
         $connector = new Connectors();
 
@@ -75,7 +75,7 @@ class ConnectorsTest extends AbstractTest
 
         // And now with some parameters.
         $connector->setParameters('whatever');
-        $connector->setType(Connectors::METHOD);
+        $connector->setType(Connectors::CONNECTOR_METHOD);
         $this->assertEquals('(whatever)', $connector->getConnectorRight(42));
     }
 }

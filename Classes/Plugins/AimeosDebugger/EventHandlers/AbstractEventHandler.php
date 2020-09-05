@@ -38,12 +38,11 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
 use ReflectionException;
 use ReflectionClass;
 
-abstract class AbstractEventHandler implements EventHandlerInterface, ConstInterface, AimeosConstInterface
+abstract class AbstractEventHandler implements EventHandlerInterface, AimeosConstInterface
 {
     /**
      * Retrieve a private or protected property byx using a reflection.

@@ -53,14 +53,14 @@ class Connectors extends OrgConnectors
     {
         $fluid = ['.', ''];
         $fluidParameters = ['.', '(@param@)'];
-        $this->connectorArray[Connectors::METHOD] = $fluidParameters;
-        $this->connectorArray[Connectors::STATIC_METHOD] = $fluidParameters;
-        $this->connectorArray[Connectors::NORMAL_ARRAY] = $fluid;
-        $this->connectorArray[Connectors::ASSOCIATIVE_ARRAY] = $fluid;
-        $this->connectorArray[Connectors::CONSTANT] = $fluid;
-        $this->connectorArray[Connectors::NORMAL_PROPERTY] = $fluid;
-        $this->connectorArray[Connectors::STATIC_PROPERTY] = $fluid;
-        $this->connectorArray[Connectors::SPECIAL_CHARS_PROP] = $fluid;
+        $this->connectorArray[Connectors::CONNECTOR_METHOD] = $fluidParameters;
+        $this->connectorArray[Connectors::CONNECTOR_STATIC_METHOD] = $fluidParameters;
+        $this->connectorArray[Connectors::CONNECTOR_NORMAL_ARRAY] = $fluid;
+        $this->connectorArray[Connectors::CONNECTOR_ASSOCIATIVE_ARRAY] = $fluid;
+        $this->connectorArray[Connectors::CONNECTOR_CONSTANT] = $fluid;
+        $this->connectorArray[Connectors::CONNECTOR_NORMAL_PROPERTY] = $fluid;
+        $this->connectorArray[Connectors::CONNECTOR_STATIC_PROPERTY] = $fluid;
+        $this->connectorArray[Connectors::CONNECTOR_SPECIAL_CHARS_PROP] = $fluid;
     }
 
     /**
@@ -71,13 +71,13 @@ class Connectors extends OrgConnectors
     /**
      * Do nothing. There is no second connector in fluid.
      *
-     * @param integer $cap
+     * @param int $cap
      *   Maximum length of all parameters. 0 means no cap.
      *
      * @return string
      *   Return an empty string.
      */
-    public function getConnectorRight($cap): string
+    public function getConnectorRight(int $cap): string
     {
         // No params, no cookies!
         if (empty($this->params)) {

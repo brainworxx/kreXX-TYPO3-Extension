@@ -39,9 +39,11 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionMethod;
 use Aimeos\MShop\Common\Item\Iface;
 
@@ -71,7 +73,7 @@ use Aimeos\MShop\Common\Item\Iface;
  * @uses array $additional
  *   Additional data from the event call.
  */
-class Getter extends AbstractEventHandler
+class Getter extends AbstractEventHandler implements CallbackConstInterface, ViewConstInterface
 {
     /**
      * Our pool.
