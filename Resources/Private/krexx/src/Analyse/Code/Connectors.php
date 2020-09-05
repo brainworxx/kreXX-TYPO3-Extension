@@ -72,7 +72,7 @@ class Connectors implements ConnectorsConstInterface
     /**
      * Parameters, in case we are connecting a method or closure.
      *
-     * @var string
+     * @var string|int
      */
     protected $params;
 
@@ -83,7 +83,7 @@ class Connectors implements ConnectorsConstInterface
      *
      * @var int
      */
-    protected $type = 0;
+    protected $type = self::CONNECTOR_NOTHING;
 
     /**
      * Special snowflake connectorLeft. will be uses in case it is set.
@@ -103,7 +103,7 @@ class Connectors implements ConnectorsConstInterface
      * Setter for the $params. It is used in case we are connection a method or
      * closure.
      *
-     * @param string $params
+     * @param string|int $params
      *   The parameters as a sting.
      */
     public function setParameters($params)
@@ -114,10 +114,10 @@ class Connectors implements ConnectorsConstInterface
     /**
      * Getter for the connection parameters.
      *
-     * @return string
+     * @return string|int
      *   The connection parameters.
      */
-    public function getParameters(): string
+    public function getParameters()
     {
         return $this->params;
     }
@@ -125,10 +125,10 @@ class Connectors implements ConnectorsConstInterface
     /**
      * Setter for the type we are rendering, using the class constants.
      *
-     * @param string $type
+     * @param int $type
      *   The type, @see constants above
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
     }
@@ -157,7 +157,7 @@ class Connectors implements ConnectorsConstInterface
      * @return string
      *   The PHP connector, what else?
      */
-    public function getConnectorRight($cap): string
+    public function getConnectorRight(int $cap): string
     {
         if (
             empty($this->params) === true ||
@@ -183,7 +183,7 @@ class Connectors implements ConnectorsConstInterface
      * @param string $customConnectorLeft
      *   The string we want to set.
      */
-    public function setCustomConnectorLeft($customConnectorLeft)
+    public function setCustomConnectorLeft(string $customConnectorLeft)
     {
         $this->customConnectorLeft = $customConnectorLeft;
     }

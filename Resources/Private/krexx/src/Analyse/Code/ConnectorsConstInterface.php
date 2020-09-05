@@ -132,7 +132,7 @@ interface ConnectorsConstInterface
      * or
      * connectorRight = $params
      */
-    const CONNECTOR_NOTHING = 0;
+    const CONNECTOR_NOTHING = 'NOTHING';
 
     /**
      * connectorLeft = '->'
@@ -140,7 +140,7 @@ interface ConnectorsConstInterface
      * or
      * connectorRight = '(' . $params . ')'
      */
-    const CONNECTOR_METHOD = 1;
+    const CONNECTOR_METHOD = 'METHOD';
 
     /**
      * connectorLeft = '::'
@@ -148,41 +148,41 @@ interface ConnectorsConstInterface
      * or
      * connectorRight = '(' . $params . ')'
      */
-    const CONNECTOR_STATIC_METHOD = 2;
+    const CONNECTOR_STATIC_METHOD = 'STATIC_METHOD';
 
     /**
      * connectorLeft = '['
      * connectorRight = ']'
      */
-    const CONNECTOR_NORMAL_ARRAY = 3;
+    const CONNECTOR_NORMAL_ARRAY = 'NORMAL_ARRAY';
 
     /**
      * connectorLeft = '[\''
      * connectorRight = '\']'
      */
-    const CONNECTOR_ASSOCIATIVE_ARRAY = 4;
+    const CONNECTOR_ASSOCIATIVE_ARRAY = 'ASSOCIATIVE_ARRAY';
 
     /**
      * connectorLeft = '::'
      * connectorRight = ''
      */
-    const CONNECTOR_CONSTANT = 5;
+    const CONNECTOR_CONSTANT = 'CONSTANT';
 
     /**
      * connectorLeft = '->'
      * connectorRight = ''
      */
-    const CONNECTOR_NORMAL_PROPERTY = 6;
+    const CONNECTOR_NORMAL_PROPERTY = 'NORMAL_PROPERTY';
 
     /**
      * connectorLeft = '::'
      * connectorRight = ''
      */
-    const CONNECTOR_STATIC_PROPERTY = 7;
+    const CONNECTOR_STATIC_PROPERTY = 'STATIC_PROPERTY';
 
     /**
      * connectorLeft = '->{\''
      * connectorRight = '\'}'
      */
-    const CONNECTOR_SPECIAL_CHARS_PROP = 8;
+    const CONNECTOR_SPECIAL_CHARS_PROP = 'SPECIAL_CHARS_PROP';
 }

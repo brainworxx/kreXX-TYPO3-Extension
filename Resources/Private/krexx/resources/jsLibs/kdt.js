@@ -415,8 +415,7 @@ var Search = (function () {
             }
             if (config.searchtext.length > 2 || config.searchWhole) {
                 config.instance = _this.kdt.getDataset(element, 'instance');
-                var direction = _this.kdt.getDataset(element, 'direction');
-                config.payload = document.querySelector('#' + config.instance + ' .kbg-wrapper');
+                _this.retrievePayload(config);
                 var collapsed = config.payload.querySelectorAll('.kcollapsed');
                 for (var i = 0; i < collapsed.length; i++) {
                     _this.eventHandler.triggerEvent(collapsed[i], 'click');
@@ -430,6 +429,7 @@ var Search = (function () {
                     _this.refreshResultlist(config);
                 }
                 var pointer = _this.results[config.instance][config.searchtext]['pointer'];
+                var direction = _this.kdt.getDataset(element, 'direction');
                 if (direction === 'forward') {
                     pointer++;
                 }
@@ -454,6 +454,14 @@ var Search = (function () {
             else {
                 element.parentNode.querySelector('.ksearch-state').textContent = '<- must be bigger than 3 characters';
             }
+        };
+        this.retrievePayload = function (config) {
+            var tab = document.querySelector('#' + config.instance + ' .ktab.kactive');
+            var additionalClasses = '';
+            if (tab !== null) {
+                additionalClasses = ' .' + _this.kdt.getDataset(tab, 'what');
+            }
+            config.payload = document.querySelector('#' + config.instance + ' .kbg-wrapper' + additionalClasses);
         };
         this.refreshResultlist = function (config) {
             _this.kdt.removeClass('.ksearch-found-highlight', 'ksearch-found-highlight');
@@ -500,12 +508,13 @@ var Search = (function () {
         this.kdt = new Kdt();
         this.eventHandler = eventHandler;
         this.jumpTo = jumpTo;
-        this.eventHandler.addEvent('.ksearchcase', 'change', this.clearSearch);
-        this.eventHandler.addEvent('.ksearchkeys', 'change', this.clearSearch);
-        this.eventHandler.addEvent('.ksearchshort', 'change', this.clearSearch);
-        this.eventHandler.addEvent('.ksearchlong', 'change', this.clearSearch);
-        this.eventHandler.addEvent('.ksearchwhole', 'change', this.clearSearch);
-        this.eventHandler.addEvent('.koptions', 'click', this.displaySearchOptions);
+        this.eventHandler.addEvent('.kwrapper .ksearchcase', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ksearchkeys', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ksearchshort', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ksearchlong', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ksearchwhole', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ktab', 'click', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .koptions', 'click', this.displaySearchOptions);
         this.eventHandler.addEvent('.kwrapper .ksearchfield', 'keyup', this.searchfieldReturn);
     }
     return Search;

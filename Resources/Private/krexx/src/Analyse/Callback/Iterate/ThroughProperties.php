@@ -117,7 +117,7 @@ class ThroughProperties extends AbstractCallback implements
      * @return int
      *   The connector type.
      */
-    protected function retrieveConnector(ReflectionProperty $refProperty): int
+    protected function retrieveConnector(ReflectionProperty $refProperty): string
     {
         $connectorType = static::CONNECTOR_NORMAL_PROPERTY;
 

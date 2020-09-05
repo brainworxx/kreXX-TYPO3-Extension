@@ -130,7 +130,7 @@ trait ConnectorService
      * @return $this
      *   Return $this, for chaining.
      */
-    public function setConnectorType(int $type): Model
+    public function setConnectorType(string $type): Model
     {
         $this->connectorService->setType($type);
         return $this;

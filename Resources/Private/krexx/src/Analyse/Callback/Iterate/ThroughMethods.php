@@ -172,7 +172,7 @@ class ThroughMethods extends AbstractCallback implements
      * @return int
      *   The connector type,
      */
-    protected function retrieveConnectorType(ReflectionMethod $reflectionMethod): int
+    protected function retrieveConnectorType(ReflectionMethod $reflectionMethod): string
     {
         if ($reflectionMethod->isStatic() === true) {
             return static::CONNECTOR_STATIC_METHOD;

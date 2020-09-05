@@ -584,7 +584,7 @@ class ModelTest extends AbstractTest
             'Nothing was set so far. Fallback to empty.'
         );
 
-        $this->model->setConnectorType(1);
+        $this->model->setConnectorType(Connectors::CONNECTOR_METHOD);
         $this->assertEquals(
             '',
             $this->model->getCodeGenType(),
@@ -621,6 +621,8 @@ class ModelTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Model::setReturnType
      * @covers \Brainworxx\Krexx\Analyse\Model::getReturnType
+     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::getReturnType
+     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::setReturnType
      */
     public function testSetGetReturnType()
     {

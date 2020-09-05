@@ -77,17 +77,19 @@ class Search
         this.jumpTo = jumpTo;
 
         // Clear our search results, because we now have new options.
-        this.eventHandler.addEvent('.ksearchcase', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ksearchcase', 'change', this.clearSearch);
         // Clear our search results, because we now have new options.
-        this.eventHandler.addEvent('.ksearchkeys', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ksearchkeys', 'change', this.clearSearch);
         // Clear our search results, because we now have new options.
-        this.eventHandler.addEvent('.ksearchshort', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ksearchshort', 'change', this.clearSearch);
         // Clear our search results, because we now have new options.
-        this.eventHandler.addEvent('.ksearchlong', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ksearchlong', 'change', this.clearSearch);
         // Clear our search results, because we now have new options.
-        this.eventHandler.addEvent('.ksearchwhole', 'change', this.clearSearch);
+        this.eventHandler.addEvent('.kwrapper .ksearchwhole', 'change', this.clearSearch);
+        // Clear the search results, because we now have a new tab selected.
+        this.eventHandler.addEvent('.kwrapper .ktab', 'click', this.clearSearch);
         // Display our search options.
-        this.eventHandler.addEvent('.koptions', 'click', this.displaySearchOptions);
+        this.eventHandler.addEvent('.kwrapper .koptions', 'click', this.displaySearchOptions);
         // Listen for a return key in the seach field.
         this.eventHandler.addEvent('.kwrapper .ksearchfield', 'keyup', this.searchfieldReturn);
     }
@@ -155,8 +157,8 @@ class Search
         // We only search for more than 3 chars.
         if (config.searchtext.length > 2 || config.searchWhole) {
             config.instance = this.kdt.getDataset(element, 'instance');
-            let direction:string = this.kdt.getDataset(element, 'direction');
-            config.payload = document.querySelector('#' + config.instance + ' .kbg-wrapper');
+
+            this.retrievePayload(config);
 
             // We need to un-collapse everything, in case it it collapsed.
             let collapsed:NodeList = config.payload.querySelectorAll('.kcollapsed');
@@ -176,6 +178,7 @@ class Search
             let pointer:number = this.results[config.instance][config.searchtext]['pointer'];
 
             // Set the pointer to the next or previous element
+            let direction:string = this.kdt.getDataset(element, 'direction');
             if (direction === 'forward') {
                 pointer++;
             } else {
@@ -208,6 +211,24 @@ class Search
             element.parentNode.querySelector('.ksearch-state').textContent = '<- must be bigger than 3 characters';
         }
     };
+
+    /**
+     * Retrieve the payload for the search.
+     *
+     * @param {SearchConfig} config
+     */
+    protected retrievePayload = (config:SearchConfig): void =>
+    {
+        // We may need to search in a specific part of the payload.
+        let tab:Element = document.querySelector('#' + config.instance + ' .ktab.kactive');
+        let additionalClasses:string = '';
+
+        if (tab !== null) {
+            additionalClasses = ' .' + this.kdt.getDataset(tab, 'what');
+        }
+
+        config.payload = document.querySelector('#' + config.instance + ' .kbg-wrapper' + additionalClasses);
+    }
 
     /**
      * Resets our searchlist and fills it with results.
