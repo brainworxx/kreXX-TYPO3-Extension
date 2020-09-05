@@ -38,7 +38,6 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Log;
 use Brainworxx\Includekrexx\Log\FileWriter;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Includekrexx\Tests\Helpers\ControllerNothing;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Fallback;

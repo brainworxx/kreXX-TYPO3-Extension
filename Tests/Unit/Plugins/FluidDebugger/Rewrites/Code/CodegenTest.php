@@ -89,7 +89,7 @@ class CodegenTest extends AbstractTest
         $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
         $model->setName('bluRay');
-        $model->setMultiLineCodeGen($codeGen::VHS_CALL_VIEWHELPER);
+        $model->setCodeGenType($codeGen::VHS_CALL_VIEWHELPER);
         $fixture =  [
             'play' => 'dvd',
             'stop' => 'HD',

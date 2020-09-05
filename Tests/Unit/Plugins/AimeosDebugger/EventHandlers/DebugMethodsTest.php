@@ -38,7 +38,7 @@ use Aimeos\Map;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods;
 use Brainworxx\Includekrexx\Tests\Fixtures\Aimeos20Item;
 use Brainworxx\Includekrexx\Tests\Fixtures\AimeosItem;
-use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -49,7 +49,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods as AnalyseDebugMethods;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 
-class DebugMethodsTest extends AbstractTest implements ConstInterface
+class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
 {
 
     /**

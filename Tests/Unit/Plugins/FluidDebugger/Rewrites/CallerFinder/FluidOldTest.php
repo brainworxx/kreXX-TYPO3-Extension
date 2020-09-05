@@ -183,8 +183,8 @@ class FluidOldTest extends AbstractTest
         $result = $fluid->findCaller($headline, $data);
 
         $this->assertContains('FluidTemplate2.html', $result['file']);
-        $this->assertEquals($result['varname'], 'text');
-        $this->assertEquals($result['type'], 'Fluid analysis of text, string');
+        $this->assertEquals('text', $result['varname']);
+        $this->assertEquals('Fluid analysis of text, string', $result['type']);
         $this->assertNotEmpty($result['date']);
     }
 

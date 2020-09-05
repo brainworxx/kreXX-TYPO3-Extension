@@ -96,9 +96,9 @@ class Fluid extends AbstractFluid
         try {
             $templatePathRef = new ReflectionClass($templatePath);
             if ($templatePathRef->hasProperty('resolvedIdentifiers')) {
-                $resolvedIdentifiersReflection = $templatePathRef->getProperty('resolvedIdentifiers');
-                $resolvedIdentifiersReflection->setAccessible(true);
-                $resolvedIdentifiers = $resolvedIdentifiersReflection->getValue($templatePath);
+                $resolvedIdentifiersRef = $templatePathRef->getProperty('resolvedIdentifiers');
+                $resolvedIdentifiersRef->setAccessible(true);
+                $resolvedIdentifiers = $resolvedIdentifiersRef->getValue($templatePath);
                 $result = $this->resolveTemplateName($resolvedIdentifiers, $hash, $templatePath);
             }
         } catch (ReflectionException $e) {

@@ -192,6 +192,6 @@ class SettingsTest extends AbstractTest
         $settingsModel = new Settings();
         $settingsModel->setFactory('faqTory');
 
-        $this->assertEquals($this->retrieveValueByReflection('factory', $settingsModel), 'faqTory');
+        $this->assertEquals('faqTory', $this->retrieveValueByReflection('factory', $settingsModel));
     }
 }

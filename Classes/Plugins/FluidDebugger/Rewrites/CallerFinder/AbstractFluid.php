@@ -259,7 +259,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      * @return string
      *   The analysis type.
      */
-    protected function getType($headline, $varname, $data): string
+    protected function getType(string $headline, string $varname, $data): string
     {
         if (is_object($data) === true) {
             $type = get_class($data);

@@ -206,19 +206,6 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
     }
 
     /**
-     * Generate the json decoder stuff from vhs.
-     *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
-     *   The model, duh!
-     * @return string
-     *   The generated code.
-     */
-    protected function generateVhsJson(Model $model): string
-    {
-        return ' -> v:format.json.decode()';
-    }
-
-    /**
      * Set a individual wrapper for source generation.
      *
      * @param string $wrapper

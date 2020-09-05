@@ -32,10 +32,9 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Includekrexx\Unit\Plugins\Typo3\EventHandlers;
+namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Krexx;
@@ -45,8 +44,9 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception\TooDirtyException;
+use StdClass;
 
-class DirtyModelsTest extends AbstractTest implements ConstInterface
+class DirtyModelsTest extends AbstractTest
 {
     /**
      * Subscribing our class to test to the right event.
@@ -109,7 +109,7 @@ class DirtyModelsTest extends AbstractTest implements ConstInterface
             $model->getJson()
         );
 
-        $fixture = new \StdClass();
+        $fixture = new StdClass();
 
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);

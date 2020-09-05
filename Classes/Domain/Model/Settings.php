@@ -98,6 +98,8 @@ class Settings
     protected $factory;
 
     /**
+     * The developer handle field.
+     *
      * @var string
      */
     protected $formdevHandle;
@@ -141,7 +143,7 @@ class Settings
     }
 
     /**
-     * Process thge normal groups of the ini.
+     * Process the normal groups of the ini.
      *
      * @param array $moduleSettings
      *   The module settings. We store these in the user data.
