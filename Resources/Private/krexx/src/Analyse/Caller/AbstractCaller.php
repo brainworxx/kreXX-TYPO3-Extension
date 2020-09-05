@@ -139,7 +139,7 @@ abstract class AbstractCaller
      * @return string
      *   The analysis type.
      */
-    protected function getType($headline, $varname, $data): string
+    protected function getType(string $headline, string $varname, $data): string
     {
         if (empty($headline) === true) {
             $type = is_object($data) === true ? get_class($data) : gettype($data);

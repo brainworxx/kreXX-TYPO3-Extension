@@ -71,6 +71,9 @@ abstract class AbstractRender
     /**
      * Inject the pool and inject $this into the concrete render object of the
      * pool.
+     *
+     * @param Pool $pool
+     *   The pool.
      */
     public function __construct(Pool $pool)
     {

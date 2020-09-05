@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Throwable;
 
 /**
  * Processing of resources.
@@ -70,7 +71,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
 
         try {
             $result = get_resource_type($model->getData()) !== null;
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $result = false;
         }
 

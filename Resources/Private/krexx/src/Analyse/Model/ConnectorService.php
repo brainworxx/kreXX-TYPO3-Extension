@@ -125,7 +125,7 @@ trait ConnectorService
     /**
      * Setter for the type we are rendering, using the class constants.
      *
-     * @param int $type
+     * @param string $type
      *
      * @return $this
      *   Return $this, for chaining.

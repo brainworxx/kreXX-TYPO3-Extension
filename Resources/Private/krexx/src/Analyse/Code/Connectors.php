@@ -125,7 +125,7 @@ class Connectors implements ConnectorsConstInterface
     /**
      * Setter for the type we are rendering, using the class constants.
      *
-     * @param int $type
+     * @param string $type
      *   The type, @see constants above
      */
     public function setType(string $type)

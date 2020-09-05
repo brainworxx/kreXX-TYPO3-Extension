@@ -169,7 +169,7 @@ class ThroughMethods extends AbstractCallback implements
      * @param \ReflectionMethod $reflectionMethod
      *   The reflection method.
      *
-     * @return int
+     * @return string
      *   The connector type,
      */
     protected function retrieveConnectorType(ReflectionMethod $reflectionMethod): string

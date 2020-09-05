@@ -114,7 +114,7 @@ class ThroughProperties extends AbstractCallback implements
      * @param \ReflectionProperty $refProperty
      *   Reflection of the property we are analysing.
      *
-     * @return int
+     * @return string
      *   The connector type.
      */
     protected function retrieveConnector(ReflectionProperty $refProperty): string
