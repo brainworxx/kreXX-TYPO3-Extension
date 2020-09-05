@@ -101,7 +101,7 @@ class CodegenTest extends AbstractTest
             $codeGen->generateSource($model)
         );
 
-        // The dreadded _all variable name, the _all itself.
+        // The dreaded _all variable name, the _all itself.
         $codeGen = new Codegen(Krexx::$pool);
         $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
@@ -125,7 +125,15 @@ class CodegenTest extends AbstractTest
         $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
         $model->setName('somIteratorClass');
-        $model->setMultiLineCodeGen(Codegen::ITERATOR_TO_ARRAY);
+        $model->setCodeGenType(Codegen::CODEGEN_TYPE_ITERATOR_TO_ARRAY);
+        $this->assertEquals($codeGen::UNKNOWN_VALUE, $codeGen->generateSource($model));
+
+        // Json deconding, which also does not exist.
+        $codeGen = new Codegen(Krexx::$pool);
+        $codeGen->setAllowCodegen(true);
+        $model = new Model(Krexx::$pool);
+        $model->setName('somIteratorClass');
+        $model->setCodeGenType(Codegen::CODEGEN_TYPE_JSON_DECODE);
         $this->assertEquals($codeGen::UNKNOWN_VALUE, $codeGen->generateSource($model));
 
         // And finally, some normal generation.

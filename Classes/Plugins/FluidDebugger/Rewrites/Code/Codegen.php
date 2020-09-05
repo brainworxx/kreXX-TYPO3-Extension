@@ -127,7 +127,8 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
         return
             (is_string($name) === true &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
             $model->getType() === static::TYPE_DEBUG_METHOD ||
-            $model->getCodeGenType() === static::CODEGEN_TYPE_ITERATOR_TO_ARRAY;
+            $model->getCodeGenType() === static::CODEGEN_TYPE_ITERATOR_TO_ARRAY ||
+            $model->getCodeGenType() === static::CODEGEN_TYPE_JSON_DECODE;
     }
 
     /**
@@ -202,6 +203,19 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
         }
 
         return $firstPart . $model->getName() . '\')';
+    }
+
+    /**
+     * Generate the json decoder stuff from vhs.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model, duh!
+     * @return string
+     *   The generated code.
+     */
+    protected function generateVhsJson(Model $model): string
+    {
+        return ' -> v:format.json.decode()';
     }
 
     /**
