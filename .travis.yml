@@ -37,4 +37,5 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
-  - if [[ "$COVERAGE" != "NO" ]]; then ./vendor/bin/phpunit -c Build/phpunit.xml --coverage-text --coverage-clover build/logs/clover.xml; fi
+  - "./vendor/bin/phpunit -c Build/phpunit.xml --coverage-text --coverage-clover build/logs/clover.xml"
+  - if [ "$COVERAGE" == "YES" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
