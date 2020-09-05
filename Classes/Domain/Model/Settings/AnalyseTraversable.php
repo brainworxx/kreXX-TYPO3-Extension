@@ -50,18 +50,18 @@ trait AnalyseTraversable
     protected $formanalyseTraversable;
 
     /**
-     * @param string $analyseTraversable
+     * @param string $value
      */
-    public function setAnalyseTraversable(string $analyseTraversable)
+    public function setAnalyseTraversable(string $value)
     {
-        $this->analyseTraversable = $analyseTraversable;
+        $this->analyseTraversable = $value;
     }
 
     /**
-     * @param string $formanalyseTraversable
+     * @param string $value
      */
-    public function setFormanalyseTraversable(string $formanalyseTraversable)
+    public function setFormanalyseTraversable(string $value)
     {
-        $this->formanalyseTraversable = $formanalyseTraversable;
+        $this->formanalyseTraversable = $value;
     }
 }

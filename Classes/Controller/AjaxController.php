@@ -139,7 +139,7 @@ class AjaxController
      * @return bool
      *   The success status of the deleting.
      */
-    protected function delete($file): bool
+    protected function delete(string $file): bool
     {
         if (is_writable(dirname(($file))) && file_exists($file)) {
             // Away with you!

@@ -94,9 +94,9 @@ class Fluid extends AbstractFluid
         $templatePath = $this->renderingContext->getTemplatePaths();
 
         try {
-            $templatePathReflection = new ReflectionClass($templatePath);
-            if ($templatePathReflection->hasProperty('resolvedIdentifiers')) {
-                $resolvedIdentifiersReflection = $templatePathReflection->getProperty('resolvedIdentifiers');
+            $templatePathRef = new ReflectionClass($templatePath);
+            if ($templatePathRef->hasProperty('resolvedIdentifiers')) {
+                $resolvedIdentifiersReflection = $templatePathRef->getProperty('resolvedIdentifiers');
                 $resolvedIdentifiersReflection->setAccessible(true);
                 $resolvedIdentifiers = $resolvedIdentifiersReflection->getValue($templatePath);
                 $result = $this->resolveTemplateName($resolvedIdentifiers, $hash, $templatePath);

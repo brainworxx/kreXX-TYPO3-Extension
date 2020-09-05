@@ -213,7 +213,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
      * @return $this
      *   Return this, for chaining.
      */
-    public function setComplicatedWrapperLeft($wrapper): Codegen
+    public function setComplicatedWrapperLeft(string $wrapper): Codegen
     {
         $this->wrapperLeft = $wrapper;
         return $this;
@@ -228,7 +228,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
      * @return $this
      *   Return this, for chaining.
      */
-    public function setComplicatedWrapperRight($wrapper): Codegen
+    public function setComplicatedWrapperRight(string $wrapper): Codegen
     {
         $this->wrapperRight = $wrapper;
         return $this;

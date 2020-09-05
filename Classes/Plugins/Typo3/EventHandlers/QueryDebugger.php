@@ -57,7 +57,7 @@ use Throwable;
  *
  * @package Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers
  */
-class QueryDebugger implements EventHandlerInterface, CallbackConstInterface,  ProcessConstInterface
+class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, ProcessConstInterface
 {
     /**
      * The resource pool

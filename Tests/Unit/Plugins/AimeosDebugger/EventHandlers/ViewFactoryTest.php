@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -88,9 +89,9 @@ class ViewFactoryTest extends AbstractTest
         $aimeosView->addHelper('Csrf', $csrfHelper);
 
         $fixture = [
-            ViewFactory::PARAM_DATA => $aimeosView,
-            ViewFactory::PARAM_NAME => 'viewFactory',
-            ViewFactory::PARAM_REF => new ReflectionClass($aimeosView)
+            CallbackConstInterface::PARAM_DATA => $aimeosView,
+            CallbackConstInterface::PARAM_NAME => 'viewFactory',
+            CallbackConstInterface::PARAM_REF => new ReflectionClass($aimeosView)
         ];
 
         $analyseMethods = new AnalyseMethods(Krexx::$pool);
@@ -99,13 +100,13 @@ class ViewFactoryTest extends AbstractTest
         // Assert the result.
         /** @var \Brainworxx\Krexx\Analyse\Model $instantiatedViewHelpers */
         $instantiatedViewHelpers = $renderNothing->model['renderExpandableChild'][0];
-        $this->assertSame($csrfHelper, $instantiatedViewHelpers->getParameters()[ViewFactory::PARAM_DATA]['Csrf']);
+        $this->assertSame($csrfHelper, $instantiatedViewHelpers->getParameters()[CallbackConstInterface::PARAM_DATA]['Csrf']);
 
         /** @var \Brainworxx\Krexx\Analyse\Model $viewFactory */
         $viewFactory = $renderNothing->model['renderExpandableChild'][1];
-        $this->assertGreaterThan(10, count($viewFactory->getParameters()[ViewFactory::PARAM_DATA]));
+        $this->assertGreaterThan(10, count($viewFactory->getParameters()[CallbackConstInterface::PARAM_DATA]));
         /** @var \ReflectionMethod $reflectionMethod */
-        foreach ($viewFactory->getParameters()[ViewFactory::PARAM_DATA] as $reflectionMethod) {
+        foreach ($viewFactory->getParameters()[CallbackConstInterface::PARAM_DATA] as $reflectionMethod) {
             $this->assertInstanceOf(\ReflectionMethod::class, $reflectionMethod);
         }
         $this->assertTrue($viewFactory->getParameters()[ViewFactory::PARAM_IS_FACTORY_METHOD]);

@@ -227,7 +227,6 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface, Vie
         // Retrieve the value array from the class.
         // Everything sits in a private array, so we do not need to walk
         // through the whole class structure.
-        /** @var \ReflectionClass $reflectionClass */
         $reflectionClass = $reflectionMethod->getDeclaringClass();
         $data = $params[static::PARAM_REF]->getData();
 

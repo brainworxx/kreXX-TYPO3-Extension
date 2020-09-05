@@ -55,7 +55,6 @@ class ConfigController extends ActionController
      * module. When this one gets called, we clear the cache and redirect to
      * the new controller
      *
-     * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheGroupException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */

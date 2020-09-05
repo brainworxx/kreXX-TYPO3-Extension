@@ -176,7 +176,6 @@ abstract class AbstractController extends ActionController
         // Get the keys and the args.
         $messages = $this->pool->messages->getMessages();
 
-        /** @var \Brainworxx\Krexx\View\Message $message */
         foreach ($messages as $message) {
             // And translate them.
             $this->addFlashMessage(

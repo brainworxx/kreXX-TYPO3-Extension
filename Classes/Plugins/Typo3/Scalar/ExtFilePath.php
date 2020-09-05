@@ -40,6 +40,7 @@ namespace Brainworxx\Includekrexx\Plugins\Typo3\Scalar;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath;
 use Brainworxx\Krexx\Analyse\Model;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Throwable;
 
 class ExtFilePath extends FilePath
 {
@@ -64,7 +65,7 @@ class ExtFilePath extends FilePath
         });
         try {
             $string = GeneralUtility::getFileAbsFileName($string);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             // Huh, someone messed with the GeneralUtility.
             restore_error_handler();
             return false;

@@ -154,7 +154,10 @@ class Log extends AbstractSubModule implements
     }
 
     /**
-     * {@inheritDoc}
+     * Whet the method name says
+     *
+     * @return array
+     *   The css file list.
      */
     public function getCssFiles(): array
     {
@@ -225,7 +228,6 @@ class Log extends AbstractSubModule implements
         Pool::createPool();
         $renderedMessages = '';
 
-        /** @var \Brainworxx\Krexx\View\Message $message */
         foreach (Krexx::$pool->messages->getMessages() as $message) {
             $renderedMessages .= $this->renderMessage(
                 static::translate(
