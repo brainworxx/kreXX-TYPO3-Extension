@@ -39,8 +39,9 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
+use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Aimeos\MShop\Common\Item\Iface as ItemIface;
 use Aimeos\MW\Tree\Node\Iface as NodeIface;
@@ -59,7 +60,11 @@ use Brainworxx\Krexx\View\ViewConstInterface;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class Properties extends AbstractEventHandler implements CallbackConstInterface, ViewConstInterface
+class Properties extends AbstractEventHandler implements
+    CallbackConstInterface,
+    ViewConstInterface,
+    ConnectorsConstInterface,
+    CodegenConstInterface
 {
     /**
      * Our pool.
@@ -162,9 +167,9 @@ class Properties extends AbstractEventHandler implements CallbackConstInterface,
             // Could be anything.
             // We need to route it though the analysis hub.
             if ($this->pool->encodingService->isPropertyNameNormal($key) === true) {
-                $connectorType = Connectors::CONNECTOR_NORMAL_PROPERTY;
+                $connectorType = static::CONNECTOR_NORMAL_PROPERTY;
             } else {
-                $connectorType = Connectors::CONNECTOR_SPECIAL_CHARS_PROP;
+                $connectorType = static::CONNECTOR_SPECIAL_CHARS_PROP;
             }
 
             $result .= $this->pool->routing->analysisHub(
@@ -172,6 +177,7 @@ class Properties extends AbstractEventHandler implements CallbackConstInterface,
                     ->setData($value)
                     ->setName($key)
                     ->setConnectorType($connectorType)
+                    ->setCodegenType(static::CODEGEN_TYPE_PUBLIC)
                     ->addToJson(static::META_HINT, 'Aimeos magical property')
             );
         }
