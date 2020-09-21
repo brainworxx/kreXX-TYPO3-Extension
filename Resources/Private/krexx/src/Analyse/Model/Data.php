@@ -57,7 +57,7 @@ trait Data
      * @return $this
      *   $this, for chaining.
      */
-    public function setData(&$data): Model
+    public function setData($data): Model
     {
         $this->data = $data;
         return $this;

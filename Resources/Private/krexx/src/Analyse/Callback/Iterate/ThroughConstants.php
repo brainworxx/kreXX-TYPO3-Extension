@@ -168,7 +168,7 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
     protected function canDump(ReflectionClassConstant $reflectionConstant): bool
     {
         if ($reflectionConstant->isPublic() === true || $this->isInScope === true) {
-            // It'e either public or inside the scope.
+            // It's either public or inside the scope.
             // This includes also some private classes from the highest levels of
             // the class.
             return true;

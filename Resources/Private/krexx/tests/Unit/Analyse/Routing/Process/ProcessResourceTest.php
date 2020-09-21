@@ -44,6 +44,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use stdClass;
 
 class ProcessResourceTest extends AbstractTest
 {
@@ -221,7 +222,7 @@ class ProcessResourceTest extends AbstractTest
     {
         $processor = new ProcessResource(Krexx::$pool);
         $model = new Model(Krexx::$pool);
-        $fixture = new \stdClass();
+        $fixture = new stdClass();
         $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
         $getResourceType->expects($this->once())
             ->will($this->returnValue('whatever'));

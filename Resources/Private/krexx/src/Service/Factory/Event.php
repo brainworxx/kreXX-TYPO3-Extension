@@ -99,7 +99,7 @@ class Event
 
         $output = '';
 
-        // Got to handel them all.
+        // Got to handle them all.
         foreach ($this->register[$name] as $classname) {
             $output .= $this->pool->createClass($classname)->handle($callback, $model);
         }

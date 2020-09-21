@@ -38,8 +38,6 @@ namespace Brainworxx\Krexx\Tests\Unit\Controller;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
-use Brainworxx\Krexx\Analyse\Code\Scope;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 use Brainworxx\Krexx\Controller\BacktraceController;

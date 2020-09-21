@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use Krexx;
 use stdClass;
 
 class JsonTest extends AbstractTest
@@ -77,16 +78,16 @@ class JsonTest extends AbstractTest
      */
     public function testCanHandle()
     {
-        $json = new Json(\Krexx::$pool);
+        $json = new Json(Krexx::$pool);
 
         $fixture = 'some string';
-        $this->assertFalse($json->canHandle($fixture, new Model(\Krexx::$pool)), 'Plain string.');
+        $this->assertFalse($json->canHandle($fixture, new Model(Krexx::$pool)), 'Plain string.');
 
         $fixture = '{anotehr string';
-        $this->assertFalse($json->canHandle($fixture, new Model(\Krexx::$pool)), 'Pass first impression.');
+        $this->assertFalse($json->canHandle($fixture, new Model(Krexx::$pool)), 'Pass first impression.');
 
         $fixture = '{"qwer": "asdf"}';
-        $this->assertTrue($json->canHandle($fixture, new Model(\Krexx::$pool)), 'A real json.');
+        $this->assertTrue($json->canHandle($fixture, new Model(Krexx::$pool)), 'A real json.');
     }
 
     /**
@@ -96,7 +97,7 @@ class JsonTest extends AbstractTest
      */
     public function testHandle()
     {
-        $json = new Json(\Krexx::$pool);
+        $json = new Json(Krexx::$pool);
 
         $this->mockEmergencyHandler();
         $this->mockEventService(
@@ -104,13 +105,13 @@ class JsonTest extends AbstractTest
             [Json::class . '::callMe' . Json::EVENT_MARKER_END, $json]
         );
 
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             ThroughMeta::class => CallbackCounter::class
         ];
 
         $string = '{"asdf": "yxcv"}';
         $encodedString = 'meh';
-        $model = new Model(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
         $model->setHasExtra(true)
             ->setData($encodedString);
 

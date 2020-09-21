@@ -238,7 +238,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface
      *
      * @param bool $bool
      */
-    public function setAllowCodegen($bool)
+    public function setAllowCodegen(bool $bool)
     {
         if ($bool === false) {
             $this->allowCodegen = false;

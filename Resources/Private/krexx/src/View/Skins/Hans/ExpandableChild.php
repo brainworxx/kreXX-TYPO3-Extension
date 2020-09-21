@@ -187,6 +187,28 @@ trait ExpandableChild
     }
 
     /**
+     * Render the 'extra' part of the singe child output.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model.
+     *
+     * @return string
+     *   The rendered HTML output.
+     */
+    protected function renderExtra(Model $model): string
+    {
+        if ($model->hasExtra() === true) {
+            return str_replace(
+                $this->markerSingleChildExtra,
+                $model->getData(),
+                $this->getTemplateFileContent(static::FILE_SI_CHILD_EX)
+            );
+        }
+
+        return '';
+    }
+
+    /**
      * Getter of the expandable child for unit tests.
      *
      * @codeCoverageIgnore

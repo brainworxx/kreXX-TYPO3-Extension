@@ -38,6 +38,7 @@ namespace Brainworxx\Krexx\Tests\Unit\View;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\View\Message;
 use Brainworxx\Krexx\View\Messages;
+use Krexx;
 
 class MessageTest extends AbstractTest
 {
@@ -48,8 +49,8 @@ class MessageTest extends AbstractTest
      */
     public function testConstruct()
     {
-        $message = new Message(\Krexx::$pool);
-        $this->assertSame(\Krexx::$pool, $this->retrieveValueByReflection('pool', $message));
+        $message = new Message(Krexx::$pool);
+        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $message));
     }
 
     /**
@@ -60,7 +61,7 @@ class MessageTest extends AbstractTest
      */
     public function testSetGetKey()
     {
-        $message = new Message(\Krexx::$pool);
+        $message = new Message(Krexx::$pool);
         $message->setKey('house key');
         $this->assertEquals('house key', $message->getKey());
     }
@@ -72,7 +73,7 @@ class MessageTest extends AbstractTest
      */
     public function testSetIsThrowAway()
     {
-        $message = new Message(\Krexx::$pool);
+        $message = new Message(Krexx::$pool);
         $message->setIsThrowAway(true);
         $this->assertTrue($this->retrieveValueByReflection('isThrowAway', $message));
     }
@@ -86,7 +87,7 @@ class MessageTest extends AbstractTest
     public function testSetGetArguments()
     {
         $fixture = ['my', 'little', 'fixture'];
-        $message = new Message(\Krexx::$pool);
+        $message = new Message(Krexx::$pool);
         $message->setArguments($fixture);
         $this->assertEquals($fixture, $message->getArguments());
     }
@@ -102,18 +103,18 @@ class MessageTest extends AbstractTest
     {
         $text = 'You can lorem my ipsum';
         $key = 'car keys.';
-        $message = new Message(\Krexx::$pool);
+        $message = new Message(Krexx::$pool);
         $message->setText($text)->setKey($key);
         $this->assertEquals($text, $message->getText(), 'Normal getter setter test');
 
         // And now for the throw away messages . . .
-        $message = new Message(\Krexx::$pool);
+        $message = new Message(Krexx::$pool);
         $message->setText($text)->setKey($key)->setIsThrowAway(true);
         $messagesMock = $this->createMock(Messages::class);
         $messagesMock->expects($this->once())
             ->method('removeKey')
             ->with($key);
-        \Krexx::$pool->messages = $messagesMock;
+        Krexx::$pool->messages = $messagesMock;
 
         $message->getText();
     }

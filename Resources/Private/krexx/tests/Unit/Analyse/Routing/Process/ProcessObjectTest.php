@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use stdClass;
 
 class ProcessObjectTest extends AbstractTest
 {
@@ -80,7 +81,7 @@ class ProcessObjectTest extends AbstractTest
         $this->assertNotEmpty($model->getDomid());
         $parameters = $model->getParameters();
         $this->assertEquals($parameters[ProcessObject::PARAM_DATA], $fixture);
-        $this->assertEquals($parameters[ProcessObject::PARAM_NAME], '$myObject');
+        $this->assertEquals('$myObject', $parameters[ProcessObject::PARAM_NAME]);
     }
 
     /**
@@ -92,7 +93,7 @@ class ProcessObjectTest extends AbstractTest
     {
         $processor = new ProcessObject(Krexx::$pool);
         $model = new Model(Krexx::$pool);
-        $fixture = new \stdClass();
+        $fixture = new stdClass();
 
         $this->assertTrue($processor->canHandle($model->setData($fixture)));
         $fixture = 'abc';

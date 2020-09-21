@@ -68,8 +68,13 @@ class EventTest extends AbstractTest
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $event));
         $this->assertEquals(
             [
-                static::EVENT_ONE => [CallbackCounter::class => CallbackCounter::class, $customEventHandler => $customEventHandler],
-                static::EVENT_TWO => [CallbackNothing::class => CallbackNothing::class]
+                static::EVENT_ONE => [
+                    CallbackCounter::class => CallbackCounter::class,
+                    $customEventHandler => $customEventHandler
+                ],
+                static::EVENT_TWO => [
+                    CallbackNothing::class => CallbackNothing::class
+                ]
             ],
             $event->register
         );

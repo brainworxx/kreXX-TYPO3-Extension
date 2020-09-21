@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\View\ViewConstInterface;
+use stdClass;
 
 class ProcessOtherTest extends AbstractTest
 {
@@ -79,7 +80,7 @@ class ProcessOtherTest extends AbstractTest
     {
         $processor = new ProcessOther(Krexx::$pool);
         $model = new Model(Krexx::$pool);
-        $fixture = new \stdClass();
+        $fixture = new stdClass();
 
         // Best. Test. Ever.
         $this->assertTrue($processor->canHandle($model->setData($fixture)));

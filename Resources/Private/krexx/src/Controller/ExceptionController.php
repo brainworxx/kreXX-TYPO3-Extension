@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Controller;
 
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
+use Brainworxx\Krexx\Analyse\Caller\ExceptionCallerFinder;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 use Throwable;
 
@@ -84,13 +85,16 @@ class ExceptionController extends AbstractController implements BacktraceConstIn
         $this->pool->chunks->detectEncoding($main . $backtrace);
 
         // Get the header, footer and messages
-        $footer = $this->outputFooter([]);
+        $caller = $this->pool
+            ->createClass(ExceptionCallerFinder::class)
+            ->findCaller('', $exception);
+        $footer = $this->outputFooter($caller);
         $header = $this->pool->render->renderFatalHeader($this->outputCssAndJs(), get_class($exception));
         $messages = $this->pool->messages->outputMessages();
 
          // Add the caller as metadata to the chunks class. It will be saved as
         // additional info, in case we are logging to a file.
-        $this->pool->chunks->addMetadata($this->generateMetaArray($exception));
+        $this->pool->chunks->addMetadata($caller);
 
         $this->outputService->addChunkString($header)->addChunkString($messages)
             ->addChunkString($main)
@@ -135,6 +139,12 @@ class ExceptionController extends AbstractController implements BacktraceConstIn
      *
      * @param \Throwable $exception
      *   The exception we are analysing.
+     *
+     * @deprecated
+     *   Since 4.0.0. Use the ExceptionCallerFinder instead.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @return array
      *   The meta array.

@@ -35,7 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
-use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
@@ -56,19 +56,19 @@ class ProcessBacktraceTest extends AbstractTest
             ->will($this->returnValue(
                 [
                     [
-                        ConstInterface::TRACE_FILE => KREXX_DIR . 'src' . DIRECTORY_SEPARATOR . 'blargh',
+                        BacktraceConstInterface::TRACE_FILE => KREXX_DIR . 'src' . DIRECTORY_SEPARATOR . 'blargh',
                         $data => 'Step 1',
                     ],
                     [
-                        ConstInterface::TRACE_FILE => $someFile,
+                        BacktraceConstInterface::TRACE_FILE => $someFile,
                         $data => 'Step 2',
                     ],
                     [
-                        ConstInterface::TRACE_FILE => $someFile,
+                        BacktraceConstInterface::TRACE_FILE => $someFile,
                         $data => 'Step 3',
                     ],
                     [
-                        ConstInterface::TRACE_FILE => KREXX_DIR . 'src' . DIRECTORY_SEPARATOR . 'whatever',
+                        BacktraceConstInterface::TRACE_FILE => KREXX_DIR . 'src' . DIRECTORY_SEPARATOR . 'whatever',
                         $data => 'Step 4',
                     ],
                 ]
@@ -117,7 +117,6 @@ class ProcessBacktraceTest extends AbstractTest
         $processBacktrace = new ProcessBacktrace(Krexx::$pool);
         $processBacktrace->handle($fixture);
 
-        /** @var \Brainworxx\Krexx\View\Message $message */
         $message = Krexx::$pool->messages->getMessages()['omittedBacktrace'];
         $this->assertEquals('omittedBacktrace', $message->getKey(), 'Check messages for omitted steps');
         $this->assertEquals([0 => 11, 1 => 12], $message->getArguments(), 'Check messages for omitted steps');
@@ -182,7 +181,7 @@ class ProcessBacktraceTest extends AbstractTest
 
             $this->assertEquals(
                 [
-                    ConstInterface::TRACE_FILE => $someFile,
+                    BacktraceConstInterface::TRACE_FILE => $someFile,
                     $data => 'Step ' . ($i + 2),
                 ],
                 $model->getParameters()[CallbackCounter::PARAM_DATA],

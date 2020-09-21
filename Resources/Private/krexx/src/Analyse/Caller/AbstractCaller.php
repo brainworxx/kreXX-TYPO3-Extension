@@ -91,7 +91,7 @@ abstract class AbstractCaller
      * @return $this
      *   Return this for chaining.
      */
-    public function setPattern($pattern): AbstractCaller
+    public function setPattern(string $pattern): AbstractCaller
     {
         $this->pattern = strtolower($pattern);
         return $this;
@@ -121,10 +121,12 @@ abstract class AbstractCaller
      *     'file' => 'someFile.php',
      *     'line' => 123,
      *     'varname' => '$myVar',
-     *     'type' => 'Analysis of $myString, string'
+     *     'type' => 'Analysis of $myString, string',
+     *     'date' => '19-09-2020 10:37:04'
+     *     'url' => 'http://some.server.xx/path/'
      *   );
      */
-    abstract public function findCaller($headline, $data): array;
+    abstract public function findCaller(string $headline, $data): array;
 
     /**
      * Get the analysis type for the metadata and the page title.

@@ -137,7 +137,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
      * @return string
      *   The rendered HTML.
      */
-    protected function renderUnknownOrClosed(Model $model, $resource, $typeString): string
+    protected function renderUnknownOrClosed(Model $model, $resource, string $typeString): string
     {
         // If we are facing a closed resource, 'Unknown' is a little bit sparse.
         // PHP 7.2 can provide more info by calling gettype().

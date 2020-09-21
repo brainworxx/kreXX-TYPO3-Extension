@@ -136,7 +136,7 @@ class ThroughLargeArray extends AbstractCallback implements
      * @return string
      *   The generated markup
      */
-    protected function handleValue($value, Model $model): string
+    protected function handleValue(&$value, Model $model): string
     {
         if (is_object($value) === true) {
             // We will not go too deep here, and say only what it is.

@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use finfo;
 use TypeError;
+use Krexx;
 
 class FilePathTest extends AbstractTest
 {
@@ -53,7 +54,7 @@ class FilePathTest extends AbstractTest
      */
     public function testConstruct()
     {
-        $filePath = new FilePath(\Krexx::$pool);
+        $filePath = new FilePath(Krexx::$pool);
         $this->assertInstanceOf(finfo::class, $this->retrieveValueByReflection('bufferInfo', $filePath));
     }
 
@@ -91,20 +92,24 @@ class FilePathTest extends AbstractTest
      */
     public function testCanHandle()
     {
-        $filePath = new FilePath(\Krexx::$pool);
-        $this->assertFalse($filePath->canHandle('just another string', new Model(\Krexx::$pool)), 'This file does not exist.');
-        $this->assertFalse($filePath->canHandle('0', new Model(\Krexx::$pool)), 'Nothing in here.');
+        $filePath = new FilePath(Krexx::$pool);
+        $this->assertFalse($filePath->canHandle(
+            'just another string',
+            new Model(Krexx::$pool)),
+            'This file does not exist.'
+        );
+        $this->assertFalse($filePath->canHandle('0', new Model(Krexx::$pool)), 'Nothing in here.');
 
         $mimeInfo = 'some mime info';
         $finfoMock = $this->createMock(finfo::class);
         $finfoMock->expects($this->once())
             ->method('file')
             ->will($this->returnValue($mimeInfo));
-        $filePath = new FilePath(\Krexx::$pool);
+        $filePath = new FilePath(Krexx::$pool);
         $this->setValueByReflection('bufferInfo', $finfoMock, $filePath);
 
         $this->mockEmergencyHandler();
-        $model = new Model(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
         $this->assertFalse(
             $filePath->canHandle(__FILE__, $model),
             'Always false. We add the stuff directly to the model.'
@@ -134,8 +139,8 @@ class FilePathTest extends AbstractTest
             });
 
         $fixture = 'whatever';
-        $filePath = new FilePath(\Krexx::$pool);
-        $this->assertFalse($filePath->canHandle($fixture, new Model(\Krexx::$pool)), 'Catching an error.');
+        $filePath = new FilePath(Krexx::$pool);
+        $this->assertFalse($filePath->canHandle($fixture, new Model(Krexx::$pool)), 'Catching an error.');
     }
 
     /**
@@ -146,11 +151,11 @@ class FilePathTest extends AbstractTest
      */
     public function testCallMe()
     {
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             ThroughMeta::class => CallbackCounter::class
         ];
 
-        $filePath = new FilePath(\Krexx::$pool);
+        $filePath = new FilePath(Krexx::$pool);
         $filePath->callMe();
 
         $this->assertArrayNotHasKey(0, CallbackCounter::$staticParameters);

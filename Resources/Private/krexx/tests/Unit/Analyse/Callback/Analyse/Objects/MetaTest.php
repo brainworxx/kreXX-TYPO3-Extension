@@ -183,7 +183,8 @@ class MetaTest extends AbstractTest
         );
         $this->assertContains('Just another meaningless class comment.', $data[$meta::META_COMMENT]);
         $this->assertStringEndsWith(
-            DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'ComplexMethodFixture.php, line 41',
+            DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Fixtures' .
+            DIRECTORY_SEPARATOR . 'ComplexMethodFixture.php, line 41',
             $data[$meta::META_DECLARED_IN]
         );
         $this->assertArrayHasKey(InterfaceFixture::class, $data[$meta::META_INTERFACES]);

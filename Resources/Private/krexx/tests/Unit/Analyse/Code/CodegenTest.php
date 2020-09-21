@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
 use ReflectionParameter;
+use ReflectionType;
 
 class CodegenTest extends AbstractTest
 {
@@ -385,7 +386,7 @@ class CodegenTest extends AbstractTest
     public function testParameterToStringWithDefaultPhpFive()
     {
         // Create a mock with some supply data.
-        $refTypeMock = $this->createMock(\ReflectionType::class);
+        $refTypeMock = $this->createMock(ReflectionType::class);
         $refTypeMock->expects($this->once())
             ->method('__toString')
             ->will($this->returnValue('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\ConfigSection'));
@@ -426,7 +427,7 @@ class CodegenTest extends AbstractTest
     public function testParameterToStringWithRequiredPhpSeven()
     {
         // Create a mock with some supply data.
-        $refTypeMock = $this->createMock(\ReflectionType::class);
+        $refTypeMock = $this->createMock(ReflectionType::class);
         $refTypeMock->expects($this->once())
             ->method('__toString')
             ->will($this->returnValue('DateTimeZone'));

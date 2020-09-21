@@ -30,6 +30,8 @@
 - Change: "Called from" is always expanded in the smokygrey skin.
 - Change: The connector constants are now strings.
 - Bugfix: The search does now respects the selected tab.
+- Bugfix: Added missing meta data to a handled exception.
+- Bugfix: Prevent an open <pre> from messing with the output.
 
 3.2.4
 - Bugfix: Analysing of __PHP_Incomplete_Class does not throw

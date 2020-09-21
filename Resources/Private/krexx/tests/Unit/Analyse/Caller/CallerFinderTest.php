@@ -35,8 +35,8 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Caller;
 
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
@@ -113,8 +113,6 @@ class CallerFinderTest extends AbstractTest
      *
      * @param int $line
      *
-     * @throws \ReflectionException
-     *
      * @return array
      */
     protected function createFixture($line)
@@ -126,10 +124,10 @@ class CallerFinderTest extends AbstractTest
             2 => [],
             3 => [],
             4 => [
-                ConstInterface::TRACE_FUNCTION => static::FUNCTION_TO_TRACE,
-                ConstInterface::TRACE_CLASS => ComplexMethodFixture::class,
-                ConstInterface::TRACE_FILE => $classRef->getFileName(),
-                ConstInterface::TRACE_LINE => $line
+                BacktraceConstInterface::TRACE_FUNCTION => static::FUNCTION_TO_TRACE,
+                BacktraceConstInterface::TRACE_CLASS => ComplexMethodFixture::class,
+                BacktraceConstInterface::TRACE_FILE => $classRef->getFileName(),
+                BacktraceConstInterface::TRACE_LINE => $line
             ]
         ];
     }
@@ -182,12 +180,12 @@ class CallerFinderTest extends AbstractTest
         $result = $this->callerFinder->findCaller('', $this->subjectVar);
 
         // Check the result
-        $this->assertStringEndsWith($this->pathToFixture, $result[ConstInterface::TRACE_FILE]);
-        $this->assertEquals(75, $result[ConstInterface::TRACE_LINE]);
-        $this->assertEquals('$parameter', $result[ConstInterface::TRACE_VARNAME]);
-        $this->assertEquals('Analysis of $parameter, string', $result[ConstInterface::TRACE_TYPE]);
-        $this->assertArrayHasKey(ConstInterface::TRACE_DATE, $result);
-        $this->assertEquals('abcds://localhorst:123some/uri', $result[ConstInterface::TRACE_URL]);
+        $this->assertStringEndsWith($this->pathToFixture, $result[BacktraceConstInterface::TRACE_FILE]);
+        $this->assertEquals(75, $result[BacktraceConstInterface::TRACE_LINE]);
+        $this->assertEquals('$parameter', $result[BacktraceConstInterface::TRACE_VARNAME]);
+        $this->assertEquals('Analysis of $parameter, string', $result[BacktraceConstInterface::TRACE_TYPE]);
+        $this->assertArrayHasKey(BacktraceConstInterface::TRACE_DATE, $result);
+        $this->assertEquals('abcds://localhorst:123some/uri', $result[BacktraceConstInterface::TRACE_URL]);
     }
 
     /**
@@ -209,8 +207,14 @@ class CallerFinderTest extends AbstractTest
         $result = $this->callerFinder->findCaller('', 1.2345);
 
         // We only need to check the var name.
-        $this->assertEquals('$this-&gt;parameterizedMethod(\'()&quot;2\')', $result[ConstInterface::TRACE_VARNAME]);
-        $this->assertEquals('Analysis of $this-&gt;parameterizedMethod(\'()&quot;2\'), float', $result[ConstInterface::TRACE_TYPE]);
+        $this->assertEquals(
+            '$this-&gt;parameterizedMethod(\'()&quot;2\')',
+            $result[BacktraceConstInterface::TRACE_VARNAME]
+        );
+        $this->assertEquals(
+            'Analysis of $this-&gt;parameterizedMethod(\'()&quot;2\'), float',
+            $result[BacktraceConstInterface::TRACE_TYPE]
+        );
     }
 
     /**
@@ -235,11 +239,11 @@ class CallerFinderTest extends AbstractTest
         $result = $this->callerFinder->findCaller(static::HEADLINE_STRING, $this->subjectVar);
 
         // Check the result
-        $this->assertStringEndsWith($this->pathToFixture, $result[ConstInterface::TRACE_FILE]);
-        $this->assertEquals(75, $result[ConstInterface::TRACE_LINE]);
-        $this->assertEquals(static::HEADLINE_STRING, $result[ConstInterface::TRACE_VARNAME]);
-        $this->assertEquals(static::HEADLINE_STRING, $result[ConstInterface::TRACE_TYPE]);
-        $this->assertArrayHasKey(ConstInterface::TRACE_DATE, $result);
+        $this->assertStringEndsWith($this->pathToFixture, $result[BacktraceConstInterface::TRACE_FILE]);
+        $this->assertEquals(75, $result[BacktraceConstInterface::TRACE_LINE]);
+        $this->assertEquals(static::HEADLINE_STRING, $result[BacktraceConstInterface::TRACE_VARNAME]);
+        $this->assertEquals(static::HEADLINE_STRING, $result[BacktraceConstInterface::TRACE_TYPE]);
+        $this->assertArrayHasKey(BacktraceConstInterface::TRACE_DATE, $result);
     }
 
     /**
@@ -257,7 +261,7 @@ class CallerFinderTest extends AbstractTest
     {
         // Create a fixture.
         $fixture = $this->createFixture(74);
-        $fixture[4][ConstInterface::TRACE_FILE] .= ' file not there';
+        $fixture[4][BacktraceConstInterface::TRACE_FILE] .= ' file not there';
 
         $debugBacktrace = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Caller\\', 'debug_backtrace');
         $debugBacktrace->expects($this->once())
@@ -267,10 +271,10 @@ class CallerFinderTest extends AbstractTest
         $result = $this->callerFinder->findCaller('', $this->subjectVar);
 
         // Check the result
-        $this->assertStringEndsWith($this->pathToFixture . ' file not there', $result[ConstInterface::TRACE_FILE]);
-        $this->assertEquals(74, $result[ConstInterface::TRACE_LINE]);
-        $this->assertEquals('. . .', $result[ConstInterface::TRACE_VARNAME]);
-        $this->assertEquals('Analysis of . . ., string', $result[ConstInterface::TRACE_TYPE]);
-        $this->assertArrayHasKey(ConstInterface::TRACE_DATE, $result);
+        $this->assertStringEndsWith($this->pathToFixture . ' file not there', $result[BacktraceConstInterface::TRACE_FILE]);
+        $this->assertEquals(74, $result[BacktraceConstInterface::TRACE_LINE]);
+        $this->assertEquals('. . .', $result[BacktraceConstInterface::TRACE_VARNAME]);
+        $this->assertEquals('Analysis of . . ., string', $result[BacktraceConstInterface::TRACE_TYPE]);
+        $this->assertArrayHasKey(BacktraceConstInterface::TRACE_DATE, $result);
     }
 }

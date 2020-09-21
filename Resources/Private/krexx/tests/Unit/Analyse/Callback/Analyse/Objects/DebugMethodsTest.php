@@ -138,9 +138,18 @@ class DebugMethodsTest extends AbstractTest
     {
         // Setup the start events
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\DebugMethods::callMe::start', $this->debugMethods],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\DebugMethods::goodDebugMethod', $this->debugMethods],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\DebugMethods::uglyDebugMethod', $this->debugMethods]
+            [
+                'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\DebugMethods::callMe::start',
+                $this->debugMethods
+            ],
+            [
+                'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\DebugMethods::goodDebugMethod',
+                $this->debugMethods
+            ],
+            [
+                'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\DebugMethods::uglyDebugMethod',
+                $this->debugMethods
+            ]
         );
 
         // Configure the debug method we want to run.

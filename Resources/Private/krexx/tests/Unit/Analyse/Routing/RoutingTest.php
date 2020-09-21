@@ -135,8 +135,6 @@ class RoutingTest extends AbstractTest
      * Simply test, if an emergency break gets respected.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
-     *
-     * @throws \ReflectionException
      */
     public function testAnalysisHubEmergencyBreak()
     {
@@ -159,8 +157,6 @@ class RoutingTest extends AbstractTest
      * Simple routing of a string.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Routing::analysisHub
-     *
-     * @throws \ReflectionException
      */
     public function testAnalysisHubString()
     {

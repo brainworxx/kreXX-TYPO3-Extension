@@ -177,7 +177,7 @@ class ReflectionClass extends \ReflectionClass
         foreach ($interfaceNames as $interfaceName) {
             try {
                 $result[$interfaceName] = new ReflectionClass($interfaceName);
-            } catch (ReflectionException $e) {
+            } catch (ReflectionException $exception) {
                 // Do nothing. We skip this one.
                 // Not sure how this could happen.
             }
@@ -202,7 +202,7 @@ class ReflectionClass extends \ReflectionClass
         foreach ($traits as $trait) {
             try {
                 $result[$trait] = new ReflectionClass($trait);
-            } catch (ReflectionException $e) {
+            } catch (ReflectionException $exception) {
                 // We skip this one.
             }
         }

@@ -107,7 +107,6 @@ class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
 
         try {
             $isFile = is_file($string);
-
         } catch (TypeError $exception) {
             $isFile = false;
         }

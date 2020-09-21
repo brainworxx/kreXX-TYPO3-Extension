@@ -92,7 +92,7 @@ abstract class AbstractCallback
      */
     public function setParameters(array &$parameters): AbstractCallback
     {
-        $this->parameters = $parameters;
+        $this->parameters = &$parameters;
         return $this;
     }
 

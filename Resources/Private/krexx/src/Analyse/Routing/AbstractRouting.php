@@ -133,7 +133,7 @@ abstract class AbstractRouting
      * @return \Brainworxx\Krexx\Analyse\Model
      *   The changed model.
      */
-    protected function dispatchNamedEvent($name, Model $model): Model
+    protected function dispatchNamedEvent(string $name, Model $model): Model
     {
         $this->pool->eventService->dispatch(
             static::class . '::' . $name,

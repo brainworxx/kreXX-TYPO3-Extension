@@ -91,7 +91,7 @@ abstract class AbstractRender
      * @return string
      *   The template file, without whitespaces.
      */
-    protected function getTemplateFileContent($what): string
+    protected function getTemplateFileContent(string $what): string
     {
         if (isset(static::$fileCache[$what]) === true) {
             return static::$fileCache[$what];
@@ -154,7 +154,7 @@ abstract class AbstractRender
      * @return string
      *   The generated data attribute.
      */
-    protected function generateDataAttribute($name, $data): string
+    protected function generateDataAttribute(string $name, string $data): string
     {
         if (empty($data) === true) {
             return '';

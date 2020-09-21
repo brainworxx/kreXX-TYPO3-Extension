@@ -42,6 +42,8 @@ use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use Krexx;
+use stdClass;
 
 /**
  * This is one huge class name.
@@ -63,22 +65,28 @@ class AbstractProcessNoneScalarTest extends AbstractTest
         $emergencyHandlerMock->expects($this->once())
             ->method('checkNesting')
             ->will($this->returnValue(true));
-        \Krexx::$pool->emergencyHandler = $emergencyHandlerMock;
-        $renderNothing = new RenderNothing(\Krexx::$pool);
-        \Krexx::$pool->render = $renderNothing;
+        Krexx::$pool->emergencyHandler = $emergencyHandlerMock;
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
 
         // Prepare the fixture
-        $fixture = new \stdClass();
-        $model = new Model(\Krexx::$pool);
+        $fixture = new stdClass();
+        $model = new Model(Krexx::$pool);
         $model->setData($fixture);
 
         // Run the test.
-        $objectProcessor = new ProcessObject(\Krexx::$pool);
+        $objectProcessor = new ProcessObject(Krexx::$pool);
         $objectProcessor->handle($model);
 
         // Check the model.
-        $this->assertEquals('To increase this value, change the runtime => level setting.', $model->getData());
-        $this->assertEquals('Maximum nesting level for the analysis was reached. I will not go any further.', $model->getNormal());
+        $this->assertEquals(
+            'To increase this value, change the runtime => level setting.',
+            $model->getData()
+        );
+        $this->assertEquals(
+            'Maximum nesting level for the analysis was reached. I will not go any further.',
+            $model->getNormal()
+        );
         $this->assertEquals(ProcessObject::TYPE_OBJECT, $model->getType());
         $this->assertTrue($model->hasExtra());
     }
@@ -96,22 +104,22 @@ class AbstractProcessNoneScalarTest extends AbstractTest
         $recursionMock->expects($this->once())
             ->method('isInHive')
             ->will($this->returnValue(true));
-        \Krexx::$pool->recursionHandler = $recursionMock;
-        $renderNothing = new RenderNothing(\Krexx::$pool);
-        \Krexx::$pool->render = $renderNothing;
+        Krexx::$pool->recursionHandler = $recursionMock;
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
 
         // Prepare the fixture
-        $fixture = new \stdClass();
-        $model = new Model(\Krexx::$pool);
+        $fixture = new stdClass();
+        $model = new Model(Krexx::$pool);
         $model->setData($fixture);
 
         // Run the test.
-        $objectProcessor = new ProcessObject(\Krexx::$pool);
+        $objectProcessor = new ProcessObject(Krexx::$pool);
         $objectProcessor->handle($model);
 
-        $this->assertEquals('\\' . \stdClass::class, $model->getNormal());
+        $this->assertEquals('\\' . stdClass::class, $model->getNormal());
         $this->assertEquals(
-            'k' . \Krexx::$pool->emergencyHandler->getKrexxCount() . '_' . spl_object_hash($fixture),
+            'k' . Krexx::$pool->emergencyHandler->getKrexxCount() . '_' . spl_object_hash($fixture),
             $model->getDomid()
         );
     }
@@ -128,17 +136,17 @@ class AbstractProcessNoneScalarTest extends AbstractTest
         $recursionMock->expects($this->once())
             ->method('isInHive')
             ->will($this->returnValue(true));
-        \Krexx::$pool->recursionHandler = $recursionMock;
-        $renderNothing = new RenderNothing(\Krexx::$pool);
-        \Krexx::$pool->render = $renderNothing;
+        Krexx::$pool->recursionHandler = $recursionMock;
+        $renderNothing = new RenderNothing(Krexx::$pool);
+        Krexx::$pool->render = $renderNothing;
 
         // Prepare the fixture
         $fixture = ['blargh!'];
-        $model = new Model(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
         $model->setData($fixture);
 
         // Run the test.
-        $arrayProcessor = new ProcessArray(\Krexx::$pool);
+        $arrayProcessor = new ProcessArray(Krexx::$pool);
         $arrayProcessor->handle($model);
 
         $this->assertEquals('$GLOBALS', $model->getNormal());

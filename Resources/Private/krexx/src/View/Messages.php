@@ -101,7 +101,7 @@ class Messages
      * @param bool $isThrowAway
      *   will this message remove itself after display?
      */
-    public function addMessage($key, array $args = [], bool $isThrowAway = false)
+    public function addMessage(string $key, array $args = [], bool $isThrowAway = false)
     {
         // We will only display these messages once.
         if (isset($this->messages[$key]) === false) {
@@ -121,7 +121,7 @@ class Messages
      * @param string $key
      *   The key we want to remove
      */
-    public function removeKey($key)
+    public function removeKey(string $key)
     {
         unset($this->keys[$key]);
         unset($this->messages[$key]);
@@ -194,7 +194,7 @@ class Messages
      * @return string
      *   The help text.
      */
-    public function getHelp($key, array $args = []): string
+    public function getHelp(string $key, array $args = []): string
     {
         // Check if we can get a value, at all.
         if (empty($this->helpArray[$key]) === true) {

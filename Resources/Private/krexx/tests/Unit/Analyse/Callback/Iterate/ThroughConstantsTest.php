@@ -83,6 +83,7 @@ class ThroughConstantsTest extends AbstractTest
      * Testing the constants iterator.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
+     * @throws \ReflectionException
      */
     public function testCallMePhp70()
     {
@@ -100,7 +101,10 @@ class ThroughConstantsTest extends AbstractTest
         foreach ($fixture['data'] as $name => $value) {
             $this->assertEquals($name, $models[$count]->getName());
             $this->assertEquals($value, $models[$count]->getData());
-            $this->assertEquals('\\' . $fixture[ThroughConstants::PARAM_CLASSNAME] . '::', $models[$count]->getConnectorLeft());
+            $this->assertEquals(
+                '\\' . $fixture[ThroughConstants::PARAM_CLASSNAME] . '::',
+                $models[$count]->getConnectorLeft()
+            );
             ++$count;
         }
     }

@@ -38,7 +38,6 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
@@ -46,6 +45,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionMethod;
 use ReflectionClass;
 
@@ -311,15 +311,15 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertEquals($connectorParameter, $model->getConnectorParameters());
         $this->assertContains(
             $comment,
-            $model->getParameters()[$this->throughMethods::PARAM_DATA][ConstInterface::META_COMMENT]
+            $model->getParameters()[$this->throughMethods::PARAM_DATA][ViewConstInterface::META_COMMENT]
         );
         $this->assertContains(
             $declaredInFile,
-            $model->getParameters()[$this->throughMethods::PARAM_DATA][ConstInterface::META_DECLARED_IN]
+            $model->getParameters()[$this->throughMethods::PARAM_DATA][ViewConstInterface::META_DECLARED_IN]
         );
         $this->assertContains(
             $declaredInClass,
-            $model->getParameters()[$this->throughMethods::PARAM_DATA][ConstInterface::META_DECLARED_IN]
+            $model->getParameters()[$this->throughMethods::PARAM_DATA][ViewConstInterface::META_DECLARED_IN]
         );
         $this->assertTrue(
             $this->throughMethods->getParameters()[$this->throughMethods::PARAM_REF_METHOD] instanceof ReflectionMethod

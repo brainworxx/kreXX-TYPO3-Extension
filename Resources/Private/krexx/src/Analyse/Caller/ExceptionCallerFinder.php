@@ -33,38 +33,38 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
+declare(strict_types=1);
 
-use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
-use Brainworxx\Krexx\View\Message;
-use Krexx;
+namespace Brainworxx\Krexx\Analyse\Caller;
 
-class MessagesTest extends AbstractRenderHans
+/**
+ * The caller finder for exceptions
+ *
+ * @package Brainworxx\Krexx\Analyse\Caller
+ */
+class ExceptionCallerFinder extends AbstractCaller implements BacktraceConstInterface
 {
     /**
-     * Test the message rendering.
+     * It simply deducts everything from the exception.
      *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\Messages::renderMessages
+     * @param string $headline
+     *   An empty string. Not used here.
+     * @param \Throwable $exception
+     *   The exception that was thrown
+     *
+     * @return array
+     *   The exception, that was thrown.
      */
-    public function testRenderMessages()
+    public function findCaller(string $headline, $exception): array
     {
-        $fixture = [
-            'How do I activate SMS?',
-            'How can I readSMS?',
-            'What is a messager?',
-            'Why am I writing this?'
+        return [
+            static::TRACE_FILE => $exception->getFile(),
+            static::TRACE_LINE => $exception->getLine() + 1,
+            static::TRACE_VARNAME => ' ' . get_class($exception),
+            static::TRACE_LEVEL => 'error',
+            static::TRACE_TYPE => get_class($exception),
+            static::TRACE_DATE => date('d-m-Y H:i:s', time()),
+            static::TRACE_URL => $this->getCurrentUrl(),
         ];
-
-        $messages = [];
-        foreach ($fixture as $text) {
-            $message = new Message(Krexx::$pool);
-            $message->setText($text);
-            $messages[] = $message;
-        }
-
-        $result = $this->renderHans->renderMessages($messages);
-        foreach ($fixture as $text) {
-            $this->assertContains($text, $result);
-        }
     }
 }

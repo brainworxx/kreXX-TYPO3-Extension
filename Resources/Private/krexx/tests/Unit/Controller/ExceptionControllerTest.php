@@ -36,7 +36,8 @@
 namespace Brainworxx\Krexx\Tests\Unit\Controller;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig;
-use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
+use Brainworxx\Krexx\Analyse\Caller\ExceptionCallerFinder;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 use Brainworxx\Krexx\Controller\ExceptionController;
@@ -54,13 +55,18 @@ class ExceptionControllerTest extends AbstractController
      * Testing the exception action, like the method name says.
      *
      * @covers \Brainworxx\Krexx\Controller\ExceptionController::exceptionAction
-     * @covers \Brainworxx\Krexx\Controller\ExceptionController::generateMetaArray
+     * @covers \Brainworxx\Krexx\Analyse\Caller\ExceptionCallerFinder::findCaller
      */
     public function testExceptionAction()
     {
-        $this->callerFinderResult[ConstInterface::TRACE_VARNAME] = ' Exception';
-        $this->callerFinderResult[ConstInterface::TRACE_LEVEL] = 'error';
-        unset($this->callerFinderResult[ConstInterface::TRACE_TYPE]);
+        $this->callerFinderResult[BacktraceConstInterface::TRACE_VARNAME] = ' Exception';
+        $this->callerFinderResult[BacktraceConstInterface::TRACE_LEVEL] = 'error';
+        $this->callerFinderResult[BacktraceConstInterface::TRACE_TYPE] = 'Exception';
+        $this->callerFinderResult[BacktraceConstInterface::TRACE_DATE] = date('d-m-Y H:i:s', 1111);
+        $this->callerFinderResult[BacktraceConstInterface::TRACE_URL] = 'n/a';
+        $timeMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Caller', 'time');
+        $timeMock->expects($this->once())
+            ->will($this->returnValue(1111));
 
         // One can not simply mock an exception.
         // But we can adjust its values.
@@ -80,15 +86,17 @@ class ExceptionControllerTest extends AbstractController
             ->with(['some backtrace'])
             ->will($this->returnValue('HTML code'));
 
-        $poolMock->expects($this->exactly(3))
+        $poolMock->expects($this->exactly(4))
             ->method('createClass')
             ->withConsecutive(
                 [ProcessBacktrace::class],
+                [ExceptionCallerFinder::class],
                 [Model::class],
                 [ThroughConfig::class]
             )->will($this->returnValueMap(
                 [
                     [ProcessBacktrace::class, $backtraceMock],
+                    [ExceptionCallerFinder::class, new ExceptionCallerFinder(Krexx::$pool)],
                     [ThroughConfig::class, new CallbackNothing(Krexx::$pool)],
                     [Model::class, new Model(Krexx::$pool)]
                 ]

@@ -243,7 +243,10 @@ class ProcessStringTest extends AbstractTest
 
         $this->assertEquals(ProcessConstInterface::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
-        $this->assertEquals(static::ENCODING_PREFIX . $fixture . CallbackConstInterface::UNKNOWN_VALUE, $model->getNormal());
+        $this->assertEquals(
+            static::ENCODING_PREFIX . $fixture . CallbackConstInterface::UNKNOWN_VALUE,
+            $model->getNormal()
+        );
         $this->assertEquals(true, $model->hasExtra());
         $this->assertArrayNotHasKey($model::META_MIME_TYPE, $model->getJson());
     }

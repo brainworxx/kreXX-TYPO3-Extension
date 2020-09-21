@@ -53,7 +53,7 @@ class ExpandableChildTest extends AbstractRenderHans
      * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::retrieveOpenedClass
      * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderSourceButtonWithStop
      * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderNest
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleChild::renderExtra
+     * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderExtra
      * @covers \Brainworxx\Krexx\View\AbstractRender::retrieveTypeClasses
      * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */

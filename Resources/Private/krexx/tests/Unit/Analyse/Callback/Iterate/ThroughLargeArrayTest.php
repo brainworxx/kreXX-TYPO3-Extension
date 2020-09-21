@@ -35,9 +35,9 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
@@ -74,7 +74,10 @@ class ThroughLargeArrayTest extends AbstractTest
         $eventServiceMock->expects($this->exactly(1))
             ->method('dispatch')
             ->withConsecutive(
-                ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray::callMe::start', $this->throughLargeArray]
+                [
+                    'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray::callMe::start',
+                    $this->throughLargeArray
+                ]
             )
             ->will($this->returnValue(''));
         Krexx::$pool->eventService = $eventServiceMock;
@@ -97,11 +100,11 @@ class ThroughLargeArrayTest extends AbstractTest
         // Test the types of the model
         $this->assertEquals('', $this->routingMock->model[0]->getType());
         $this->assertEquals(
-            ConstInterface::TYPE_SIMPLE_ARRAY,
+            CallbackConstInterface::TYPE_SIMPLE_ARRAY,
             $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][0]->getType()
         );
         $this->assertEquals(
-            ConstInterface::TYPE_SIMPLE_CLASS,
+            CallbackConstInterface::TYPE_SIMPLE_CLASS,
             $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getType()
         );
 

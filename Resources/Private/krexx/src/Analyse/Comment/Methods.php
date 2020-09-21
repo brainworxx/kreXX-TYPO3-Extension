@@ -152,7 +152,7 @@ class Methods extends AbstractComment
      * @return string
      *   The comment from one of the trait.
      */
-    protected function getTraitComment($originalComment, ReflectionClass $reflection): string
+    protected function getTraitComment(string $originalComment, ReflectionClass $reflection): string
     {
         // Get the traits from this class.
         // Now we should have an array with reflections of all
@@ -183,7 +183,7 @@ class Methods extends AbstractComment
      * @return string
      *   The comment from one of the interfaces.
      */
-    protected function getInterfaceComment($originalComment, ReflectionClass $reflectionClass): string
+    protected function getInterfaceComment(string $originalComment, ReflectionClass $reflectionClass): string
     {
         foreach ($reflectionClass->getInterfaces() as $interface) {
             $originalComment = $this->retrieveComment($originalComment, $interface);
@@ -206,7 +206,7 @@ class Methods extends AbstractComment
      * @return string
      *   The string with the comment.
      */
-    protected function retrieveComment($originalComment, ReflectionClass $reflection): string
+    protected function retrieveComment(string $originalComment, ReflectionClass $reflection): string
     {
         if ($reflection->hasMethod($this->methodName) === true) {
             try {

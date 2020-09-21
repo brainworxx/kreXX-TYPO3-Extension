@@ -85,7 +85,8 @@ class Xml extends AbstractScalarAnalysis implements ViewConstInterface
     {
         return function_exists('xml_parser_create') &&
             class_exists(DOMDocument::class) &&
-            class_exists(finfo::class);
+            class_exists(finfo::class) &&
+            function_exists('xml_parser_create');
     }
 
     /**

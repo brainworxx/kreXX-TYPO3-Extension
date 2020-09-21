@@ -92,7 +92,7 @@ abstract class AbstractComment
     /**
      * Removes the comment-chars from the comment string.
      *
-     * @param string $comment
+     * @param string|bool $comment
      *   The original comment from code.
      *
      * @return string
@@ -100,7 +100,7 @@ abstract class AbstractComment
      */
     protected function prettifyComment($comment): string
     {
-        if (empty($comment) === true) {
+        if ($comment === false) {
             return '';
         }
 
@@ -137,7 +137,7 @@ abstract class AbstractComment
      * @return string
      *   The comment, where the inheritdoc doc comment was replaced.
      */
-    protected function replaceInheritComment($originalComment, $comment): string
+    protected function replaceInheritComment(string $originalComment, string $comment): string
     {
         foreach ($this->inheritdocPattern as $pattern) {
             // Replace the first we find. There may be others in there,
@@ -163,7 +163,7 @@ abstract class AbstractComment
      *   true = found them all
      *   false = we need to look further
      */
-    protected function checkComment($comment): bool
+    protected function checkComment(string $comment): bool
     {
         return (strpos($comment, 'inheritdoc') === false);
     }
