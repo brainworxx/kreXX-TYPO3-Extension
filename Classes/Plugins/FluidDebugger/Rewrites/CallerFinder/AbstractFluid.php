@@ -184,7 +184,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     /**
      * {@inheritdoc}
      */
-    public function findCaller($headline, $data): array
+    public function findCaller(string $headline, $data): array
     {
         // Did we get our stuff together so far?
         if ($this->error === true) {
