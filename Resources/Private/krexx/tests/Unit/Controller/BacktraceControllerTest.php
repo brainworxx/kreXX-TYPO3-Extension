@@ -36,7 +36,6 @@
 namespace Brainworxx\Krexx\Tests\Unit\Controller;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig;
-use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Model;
@@ -81,8 +80,6 @@ class BacktraceControllerTest extends AbstractController
      */
     public function testBacktraceAction()
     {
-        $this->callerFinderResult = [BacktraceConstInterface::TRACE_LEVEL => 'backtrace'];
-
         $backtraceController = new BacktraceController(Krexx::$pool);
         $poolMock = $this->mockMainOutput($backtraceController);
 
