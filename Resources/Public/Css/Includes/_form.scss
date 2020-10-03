@@ -1,0 +1,66 @@
+.krexx-backend {
+  label {
+    line-height: 30px;
+  }
+
+  input:disabled {
+    color: $grey-10;
+    border: $grey-10 1px solid;
+    background-color: $white;
+  }
+
+  select, input[type=text] {
+    vertical-align: top;
+    line-height: 16px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 26px;
+    display: inline-block;
+    padding: 4px;
+    font-size: 11px;
+    border-radius: 2px;
+    min-width: 120px;
+    color: $black;
+    background-color: $white;
+    border: 1px solid $grey-25;
+    box-shadow: $box-shadow;
+    -webkit-transition: all ease-in-out .15s;
+    transition: all ease-in-out .15s;
+    padding-left: 8px;
+    padding-right: 8px;
+
+    &:disabled {
+      display: none;
+    }
+
+    &::placeholder {
+      color: $grey-10;
+      opacity: 1;
+    }
+  }
+
+  input[type=checkbox] {
+    display: none;
+  }
+
+  .fallback {
+    border: 1px solid $grey-15;
+    color: $grey-15;
+    padding-top: 6px;
+    box-shadow: $box-shadow;
+    border-radius: 2px;
+    padding-left: 8px;
+    padding-bottom: 5px;
+    background-color: $grey-05;
+    min-width: 120px;
+    max-width: 259px;
+    overflow: hidden;
+    line-height: 13px;
+
+    &.disabled {
+      display: none;
+    }
+  }
+}

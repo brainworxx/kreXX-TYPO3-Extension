@@ -1,0 +1,52 @@
+body {
+  color: $black;
+}
+
+.module-loading-indicator {
+  position: fixed;
+  min-height: 5px;
+  width: 100%;
+  z-index: 999999;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.krexx-backend {
+  /**
+   * General stuff
+   */
+  .display-none {
+    display: none;
+  }
+
+  .expert {
+    display: none;
+  }
+
+  .expert-mode {
+    .expert {
+      display: table-row;
+    }
+  }
+
+  .spacer {
+    background: none;
+    border: none;
+    height: 10px;
+    display: block;
+  }
+
+  .codeblock pre {
+    border: 1px solid $grey-15;
+    padding: 10px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background-color: $grey-05;
+    color: $black;
+    margin: 0;
+    max-width: 525px;
+  }
+}
