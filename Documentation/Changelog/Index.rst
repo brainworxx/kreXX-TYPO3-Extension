@@ -20,6 +20,8 @@ Changelog
     - [Feature] Added throw away messages.
     - [Feature] Added return type to the method and function analysis.
     - [Feature] Make code generation possible for the getProperties debug method in Fluid.
+    - [Feature] Added EXT: file path analysis
+    - [Feature] Added Lll string analysis
     - [Change] Removed all deprecations.
     - [Change] Removed the PHP 5.x fatal error handler.
     - [Change] Dropped PHP 5.x support.
@@ -35,6 +37,13 @@ Changelog
     - [Change] Different analysis order, when coming from the $this scope, for better source generation.
     - [Change] Different order in the backtrace analysis, for better readability.
     - [Change] Use compressed css for the SmokyGrey skin.
+    - [Change] Refactored the code generation.
+    - [Change] Refactored the routing.
+    - [Change] "Called from" is always expanded in the smokygrey skin.
+    - [Change] The connector constants are now strings.
+    - [Bugfix] The search does now respects the selected tab.
+    - [Bugfix] Added missing meta data to a handled exception.
+    - [Bugfix] Prevent an open <pre> from messing with the output
     - [Bugfix] The Aimeos decorator analysis works now as it should.
 
 3.3.6
