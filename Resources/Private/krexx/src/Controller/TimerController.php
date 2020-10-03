@@ -108,7 +108,7 @@ class TimerController extends AbstractController implements ControllerConstInter
         // And we are done. Feedback to the user.
         $miniBench = $this->miniBenchTo(static::$timekeeping);
         $this->pool->createClass(DumpController::class)
-            ->dumpAction($miniBench, static::HEADLINE_TIMER);
+            ->dumpAction($miniBench, static::HEADLINE_TIMER, 'timer');
         // Reset the timer vars.
         static::$timekeeping = [];
         static::$counterCache = [];

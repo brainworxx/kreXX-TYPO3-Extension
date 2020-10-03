@@ -68,6 +68,7 @@ class BacktraceController extends AbstractController implements BacktraceConstIn
 
         // Find caller.
         $caller = $this->callerFinder->findCaller(static::TRACE_BACKTRACE, []);
+        $caller[static::TRACE_LEVEL] = 'backtrace';
         $this->pool->codegenHandler->setAllowCodegen(false);
 
         $analysis = $this->pool
