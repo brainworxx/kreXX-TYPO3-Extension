@@ -84,7 +84,7 @@ class VhsMethods implements EventHandlerInterface, CallbackConstInterface, Fluid
     {
         $params = $callback->getParameters();
         /** @var \ReflectionMethod $reflectionMethod */
-        $reflectionMethod = $params[static::PARAM_REF_METHOD];
+        $reflectionMethod = $params[static::PARAM_REFLECTION_METHOD];
 
         $paramArray = [];
         foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
