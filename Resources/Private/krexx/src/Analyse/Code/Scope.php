@@ -55,6 +55,8 @@ class Scope implements CallbackConstInterface, ConfigConstInterface
      *
      * This determines, that all private and protected variables will be
      * analysed when using the scope analysis.
+     *
+     * @var string
      */
     const THIS_SCOPE = '$this';
 

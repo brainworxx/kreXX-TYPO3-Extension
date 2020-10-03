@@ -55,6 +55,8 @@ abstract class Fallback implements ConfigConstInterface
      * The fallback configuration.
      *
      * @internal
+     *
+     * @var array
      */
     const CONFIG_FALLBACK = [
         self::SECTION_OUTPUT => [
@@ -96,6 +98,8 @@ abstract class Fallback implements ConfigConstInterface
      * Render settings for a editable select field.
      *
      * @internal
+     *
+     * @var array
      */
     const EDITABLE_SELECT = [
         self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
@@ -106,6 +110,8 @@ abstract class Fallback implements ConfigConstInterface
      * Render settings for a display only input field.
      *
      * @internal
+     *
+     * @var array
      */
     const DISPLAY_ONLY_INPUT = [
         self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
@@ -116,6 +122,8 @@ abstract class Fallback implements ConfigConstInterface
      * Render settings for a editable input field.
      *
      * @internal
+     *
+     * @var array
      */
     const EDITABLE_INPUT = [
         self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
@@ -126,6 +134,8 @@ abstract class Fallback implements ConfigConstInterface
      * Render settings for a display only select field.
      *
      * @internal
+     *
+     * @var array
      */
     const DISPLAY_ONLY_SELECT = [
         self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
@@ -136,6 +146,8 @@ abstract class Fallback implements ConfigConstInterface
      * Render settings for a field which will not be displayed, or accept values.
      *
      * @internal
+     *
+     * @var array
      */
     const DISPLAY_NOTHING = [
         self::RENDER_TYPE => self::RENDER_TYPE_NONE,

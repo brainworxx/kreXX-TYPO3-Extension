@@ -67,5 +67,10 @@ class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
     use ConnectorRight;
     use Help;
 
+    /**
+     * Data attribute for the help display..
+     *
+     * @var string
+     */
     const DATA_ATTRIBUTE_JSON = 'addjson';
 }

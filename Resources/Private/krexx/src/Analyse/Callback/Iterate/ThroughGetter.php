@@ -70,6 +70,9 @@ use ReflectionMethod;
  * @uses string currentPrefix
  *   The current prefix we are analysing (get, is, has).
  *   Does not get set from the outside.
+ * @uses mixed value
+ *   Store the retrieved value from the getter analysis here and give
+ *   event subscribers the opportunity to do something with it.
  */
 class ThroughGetter extends AbstractCallback implements
     CallbackConstInterface,
@@ -79,6 +82,8 @@ class ThroughGetter extends AbstractCallback implements
 {
     /**
      * The parameter name of the prefix we ara analysing.
+     *
+     * @var string
      */
     const CURRENT_PREFIX = 'currentPrefix';
 

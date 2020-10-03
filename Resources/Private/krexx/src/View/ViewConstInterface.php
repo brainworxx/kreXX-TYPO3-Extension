@@ -44,35 +44,152 @@ namespace Brainworxx\Krexx\View;
  */
 interface ViewConstInterface
 {
-    // Stuff directly displayed in the FE, not just array keys.
+    /**
+     * @var string
+     */
     const META_DECLARED_IN = 'Declared in';
+
+    /**
+     * @var string
+     */
     const META_COMMENT = 'Comment';
+
+    /**
+     * @var string
+     */
     const META_SOURCE = 'Source';
+
+    /**
+     * @var string
+     */
     const META_NAMESPACE = 'Namespace';
+
+    /**
+     * @var string
+     */
     const META_PARAM_NO = 'Parameter #';
+
+    /**
+     * @var string
+     */
     const META_HELP = 'Help';
+
+    /**
+     * @var string
+     */
     const META_LENGTH = 'Length';
+
+    /**
+     * @var string
+     */
     const META_METHOD_COMMENT = 'Method comment';
+
+    /**
+     * @var string
+     */
     const META_HINT = 'Hint';
+
+    /**
+     * @var string
+     */
     const META_ENCODING = 'Encoding';
+
+    /**
+     * @var string
+     */
     const META_MIME_TYPE = 'Mimetype';
+
+    /**
+     * @var string
+     */
     const META_METHODS = 'Methods';
+
+    /**
+     * @var string
+     */
     const META_CLASS_DATA = 'Meta class data';
+
+    /**
+     * @var string
+     */
     const META_CLASS_NAME = 'Classname';
+
+    /**
+     * @var string
+     */
     const META_INTERFACES = 'Interfaces';
+
+    /**
+     * @var string
+     */
     const META_TRAITS = 'Traits';
+
+    /**
+     * @var string
+     */
     const META_INHERITED_CLASS = 'Inherited class';
+
+    /**
+     * @var string
+     */
     const META_PREDECLARED = 'n/a, is predeclared';
+
+    /**
+     * @var string
+     */
     const META_IN_TRAIT =  'in trait: ';
+
+    /**
+     * @var string
+     */
     const META_IN_LINE = 'in line: ';
+
+    /**
+     * @var string
+     */
     const META_IN_CLASS = 'in class: ';
+
+    /**
+     * @var string
+     */
     const META_PRETTY_PRINT = 'Pretty print';
+
+    /**
+     * @var string
+     */
     const META_DECODED_JSON = 'Decoded json';
+
+    /**
+     * @var string
+     */
     const META_DECODED_XML = 'Decoded xml';
+
+    /**
+     * @var string
+     */
     const META_CONTENT = 'Content';
+
+    /**
+     * @var string
+     */
     const META_TIMESTAMP = 'Timestamp';
+
+    /**
+     * @var string
+     */
     const META_RETURN_TYPE = 'Return type';
 
+    /**
+     * Css class name.
+     *
+     * @var string
+     */
     const STYLE_HIDDEN = 'khidden';
+
+    /**
+     * Css class name.
+     *
+     * @var string
+     */
     const STYLE_ACTIVE = 'kactive';
 }

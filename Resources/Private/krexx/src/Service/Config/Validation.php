@@ -50,11 +50,39 @@ use Reflector;
  */
 class Validation extends Fallback
 {
-
+    /**
+     * Part of a key for the messaging system.
+     *
+     * @var string
+     */
     const KEY_CONFIG_ERROR = 'configError';
+
+    /**
+     * Part of a key for the messaging system.
+     *
+     * @var string
+     */
     const KEY_CONFIG_ERROR_BOOL = 'configErrorBool';
+
+    /**
+     * Part of a key for the messaging system.
+     *
+     * @var string
+     */
     const KEY_CONFIG_ERROR_INT = 'configErrorInt';
+
+    /**
+     * Part of a key for the messaging system.
+     *
+     * @var string
+     */
     const KEY_CONFIG_ERROR_DEBUG_INVALID = 'configErrorDebugInvalid';
+
+    /**
+     * Preconfiguration for the logging options.
+     *
+     * @var array
+     */
     const FE_DO_NOT_EDIT = [
         self::SETTING_DESTINATION,
         self::SETTING_MAX_FILES,

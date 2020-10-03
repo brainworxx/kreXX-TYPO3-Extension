@@ -49,7 +49,9 @@ use finfo;
  */
 class Xml extends AbstractScalarAnalysis implements ViewConstInterface
 {
-
+    /**
+     * @var string
+     */
     const XML_CHILDREN = 'children';
 
     /**

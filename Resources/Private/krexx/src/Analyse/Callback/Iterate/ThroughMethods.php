@@ -105,7 +105,7 @@ class ThroughMethods extends AbstractCallback implements
 
             // Update the reflection method, so an event subscriber can do
             // something with it.
-            $this->parameters[static::PARAM_REF_METHOD] = $refMethod;
+            $this->parameters[static::PARAM_REFLECTION_METHOD] = $this->parameters[static::PARAM_REF_METHOD] = $refMethod;
 
             // Render it!
             $result .= $this->pool->render->renderExpandableChild($this->dispatchEventWithModel(

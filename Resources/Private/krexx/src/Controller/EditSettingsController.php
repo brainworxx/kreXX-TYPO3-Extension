@@ -72,7 +72,7 @@ class EditSettingsController extends AbstractController implements ControllerCon
         $this->pool->chunks->detectEncoding($footer);
 
         $this->outputService
-            ->addChunkString($this->pool->render->renderHeader(static::HEADLINE_EDIT_SETTINGS, $this->outputCssAndJs()))
+            ->addChunkString($this->pool->render->renderHeader(static::HEADLINE_COOKIE_CONF, $this->outputCssAndJs()))
             ->addChunkString($footer);
         $this->pool->emergencyHandler->setDisable(false);
         $this->outputService->finalize();

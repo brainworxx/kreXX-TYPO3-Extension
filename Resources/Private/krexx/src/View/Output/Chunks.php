@@ -60,7 +60,11 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class Chunks implements ConfigConstInterface
 {
-
+    /**
+     * Marker of an address string inside the chunks.
+     *
+     * @var string
+     */
     const STRING_DELIMITER = '@@@';
 
     /**

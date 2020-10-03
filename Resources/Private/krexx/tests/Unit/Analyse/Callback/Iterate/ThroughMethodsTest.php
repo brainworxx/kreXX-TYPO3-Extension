@@ -322,7 +322,7 @@ class ThroughMethodsTest extends AbstractTest
             $model->getParameters()[$this->throughMethods::PARAM_DATA][ViewConstInterface::META_DECLARED_IN]
         );
         $this->assertTrue(
-            $this->throughMethods->getParameters()[$this->throughMethods::PARAM_REF_METHOD] instanceof ReflectionMethod
+            $this->throughMethods->getParameters()[$this->throughMethods::PARAM_REFLECTION_METHOD] instanceof ReflectionMethod
         );
     }
 }

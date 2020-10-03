@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Caller;
 
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -48,7 +49,22 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class CallerFinder extends AbstractCaller implements BacktraceConstInterface, CallbackConstInterface
 {
-    const CLASS_PATTERN = 'brainworxx\\krexx\\krexx';
+    /**
+     * Pattern used to find the krexx call in the backtrace.
+     *
+     * Can be overwritten by extending classes.
+     *
+     * @var string
+     */
+    const CLASS_PATTERN = Krexx::class;
+
+    /**
+     * Pattern used to find the krexx call in the backtrace.
+     *
+     * Can be overwritten by extending classes.
+     *
+     * @var string
+     */
     const FUNCTION_PATTERN = 'krexx';
 
 

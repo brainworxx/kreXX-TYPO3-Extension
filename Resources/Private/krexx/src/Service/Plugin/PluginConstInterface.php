@@ -44,8 +44,31 @@ namespace Brainworxx\Krexx\Service\Plugin;
  */
 interface PluginConstInterface
 {
+    /**
+     * Boolean. What the name says.
+     *
+     * @var string
+     */
     const IS_ACTIVE = 'isActive';
+
+    /**
+     * Name of the configuration class of the plugin.
+     *
+     * @var string
+     */
     const CONFIG_CLASS = 'configClass';
+
+    /**
+     * Name of the plugin.
+     *
+     * @var string
+     */
     const PLUGIN_NAME = 'name';
+
+    /**
+     * Version of the plugin.
+     *
+     * @var string
+     */
     const PLUGIN_VERSION = 'ver';
 }

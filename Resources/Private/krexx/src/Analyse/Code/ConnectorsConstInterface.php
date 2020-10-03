@@ -45,6 +45,8 @@ interface ConnectorsConstInterface
      * or
      * connectorRight = $params
      *
+     * @var int
+     *
      * @deprecated
      *   Since 4.0.0. Use the prefixed constants.
      */
@@ -55,6 +57,8 @@ interface ConnectorsConstInterface
      * connectorRight = '()'
      * or
      * connectorRight = '(' . $params . ')'
+     *
+     * @var int
      *
      * @deprecated
      *   Since 4.0.0. Use the prefixed constants.
@@ -67,6 +71,8 @@ interface ConnectorsConstInterface
      * or
      * connectorRight = '(' . $params . ')'
      *
+     * @var int
+     *
      * @deprecated
      *   Since 4.0.0. Use the prefixed constants.
      */
@@ -75,6 +81,8 @@ interface ConnectorsConstInterface
     /**
      * connectorLeft = '['
      * connectorRight = ']'
+     *
+     * @var int
      *
      * @deprecated
      *   Since 4.0.0. Use the prefixed constants.
@@ -85,6 +93,8 @@ interface ConnectorsConstInterface
      * connectorLeft = '[\''
      * connectorRight = '\']'
      *
+     * @var int
+     *
      * @deprecated
      *   Since 4.0.0. Use the prefixed constants.
      */
@@ -93,6 +103,8 @@ interface ConnectorsConstInterface
     /**
      * connectorLeft = '::'
      * connectorRight = ''
+     *
+     * @var int
      *
      * @deprecated
      *   Since 4.0.0. Use the prefixed constants.
@@ -103,6 +115,8 @@ interface ConnectorsConstInterface
      * connectorLeft = '->'
      * connectorRight = ''
      *
+     * @var int
+     *
      * @deprecated
      *   Since 4.0.0. Use the prefixed constants.
      */
@@ -112,6 +126,8 @@ interface ConnectorsConstInterface
      * connectorLeft = '::'
      * connectorRight = ''
      *
+     * @var int
+     *
      * @deprecated
      *   Since 4.0.0. Use the prefixed constants.
      */
@@ -120,6 +136,8 @@ interface ConnectorsConstInterface
     /**
      * connectorLeft = '->{\''
      * connectorRight = '\'}'
+     *
+     * @var int
      *
      * @deprecated
      *   Since 4.0.0. Use the prefixed constants.
@@ -131,6 +149,8 @@ interface ConnectorsConstInterface
      * connectorRight = ''
      * or
      * connectorRight = $params
+     *
+     * @var string
      */
     const CONNECTOR_NOTHING = 'NOTHING';
 
@@ -139,6 +159,8 @@ interface ConnectorsConstInterface
      * connectorRight = '()'
      * or
      * connectorRight = '(' . $params . ')'
+     *
+     * @var string
      */
     const CONNECTOR_METHOD = 'METHOD';
 
@@ -147,42 +169,56 @@ interface ConnectorsConstInterface
      * connectorRight = '()'
      * or
      * connectorRight = '(' . $params . ')'
+     *
+     * @var string
      */
     const CONNECTOR_STATIC_METHOD = 'STATIC_METHOD';
 
     /**
      * connectorLeft = '['
      * connectorRight = ']'
+     *
+     * @var string
      */
     const CONNECTOR_NORMAL_ARRAY = 'NORMAL_ARRAY';
 
     /**
      * connectorLeft = '[\''
      * connectorRight = '\']'
+     *
+     * @var string
      */
     const CONNECTOR_ASSOCIATIVE_ARRAY = 'ASSOCIATIVE_ARRAY';
 
     /**
      * connectorLeft = '::'
      * connectorRight = ''
+     *
+     * @var string
      */
     const CONNECTOR_CONSTANT = 'CONSTANT';
 
     /**
      * connectorLeft = '->'
      * connectorRight = ''
+     *
+     * @var string
      */
     const CONNECTOR_NORMAL_PROPERTY = 'NORMAL_PROPERTY';
 
     /**
      * connectorLeft = '::'
      * connectorRight = ''
+     *
+     * @var string
      */
     const CONNECTOR_STATIC_PROPERTY = 'STATIC_PROPERTY';
 
     /**
      * connectorLeft = '->{\''
      * connectorRight = '\'}'
+     *
+     * @var string
      */
     const CONNECTOR_SPECIAL_CHARS_PROP = 'SPECIAL_CHARS_PROP';
 }
