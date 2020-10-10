@@ -54,13 +54,6 @@ The :literal:`\Throwable $e` will catch everything bigger than warnings. During 
 But when everything works as it should, you should narrow this down, so you can handle each exception type specifically.
 
 
-Catching PHP5 fatal errors
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-When a fatal error occurs, the only way to actually do something is the shutdown function. The main problem here is, that the backtrace will not contain anything useful, you can not rely on php to provide these values.
-Since php won't do this, kreXX will have to keep track of the backtrace. But by doing this, it will slow down your system to the extreme. This is why you will have to activate the handler.
-
-
 .. code-block:: php
 
 	// register the fatal error handler

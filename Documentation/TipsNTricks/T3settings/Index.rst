@@ -13,7 +13,7 @@ TYPO3 Development Settings
 ==========================
 
 .. warning::
-	**Do not use these settings on a productive site!** Never debug a productive system.
+	**Do not use these settings on a productive site!**
 
 .. tip::
 	| These are TYPO3 standard settings, that have nothing to do with kreXX.
