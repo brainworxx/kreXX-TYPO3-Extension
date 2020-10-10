@@ -105,12 +105,12 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
                 break;
             }
         }
+
         if (empty($headline)) {
             $varname = $this->getVarName($caller[static::TRACE_FILE], $caller[static::TRACE_LINE]);
         } else {
             $varname = $headline;
         }
-
 
         // We will not keep the whole backtrace im memory. We only return what we
         // actually need.
@@ -143,7 +143,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
             (
                 // Check for a class trace.
                 isset($caller[static::TRACE_CLASS]) &&
-                strtolower($caller[static::TRACE_CLASS]) === static::CLASS_PATTERN
+                $caller[static::TRACE_CLASS] === static::CLASS_PATTERN
             );
     }
 

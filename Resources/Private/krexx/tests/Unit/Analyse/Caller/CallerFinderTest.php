@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
+use Brainworxx\Krexx\Tests\Fixtures\LoggerCallerFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
 use ReflectionClass;
@@ -276,5 +277,40 @@ class CallerFinderTest extends AbstractTest
         $this->assertEquals('. . .', $result[BacktraceConstInterface::TRACE_VARNAME]);
         $this->assertEquals('Analysis of . . ., string', $result[BacktraceConstInterface::TRACE_TYPE]);
         $this->assertArrayHasKey(BacktraceConstInterface::TRACE_DATE, $result);
+    }
+
+    /**
+     * Test the caller finder with the forced logger.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
+     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getVarName
+     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::getType
+     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
+     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
+     */
+    public function testFindCallerLogging()
+    {
+        $classRef = new ReflectionClass(LoggerCallerFixture::class);
+        $fixture = [
+            0 => [],
+            1 => [],
+            2 => [],
+            3 => [],
+            4 => [
+                BacktraceConstInterface::TRACE_FUNCTION => static::FUNCTION_TO_TRACE,
+                BacktraceConstInterface::TRACE_CLASS => ComplexMethodFixture::class,
+                BacktraceConstInterface::TRACE_FILE => $classRef->getFileName(),
+                BacktraceConstInterface::TRACE_LINE => 47
+            ]
+        ];
+
+        $this->mockDebugBacktrace()
+            ->expects($this->once())
+            ->willReturn($fixture);
+
+        // Run the test
+        $result = $this->callerFinder->findCaller('', $this->subjectVar);
+        $this->assertEquals(47, $result[BacktraceConstInterface::TRACE_LINE]);
+        $this->assertEquals('some value', $result[BacktraceConstInterface::TRACE_VARNAME]);
     }
 }
