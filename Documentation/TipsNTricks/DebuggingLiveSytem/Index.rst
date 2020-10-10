@@ -6,23 +6,41 @@
 .. include:: ../../Includes.txt
 
 
-.. _ajax_cli:
+.. _debugging_live:
 
-Ajax and CLI
-============
+Debugging in a live environment
+===============================
 
-Ajax
-^^^^
-kreXX tries to detect Ajax calls. When using the standard settings, kreXX will be disabled. The reason for this is simple: The output of the analysis will most certainly destroy the JSON or XML that should be send to the browser, causing a JS error.
 
-But there are cases when you send already generated HTML code, instead. kreXX will (most likely) not destroy this one. To disable AJAX detection, set output -> detectAjax to false.
+.. warning::
+	**Never debug a productive system.**
 
-CLI
-^^^
-CLI detection is somewhat similar. When using a shell, a kreXX output will be most useless, you do not want to use HTML code in your shell window. Unless you specify the output destination to a file, kreXX will be disabled for CLI calls. The only thing that might be actually be displayed during CLI calls are the messages from the kreXX-bootstrap phase, telling the user about install problems.
+Why this is bad
+^^^^^^^^^^^^^^^
 
-Debugging Both
-^^^^^^^^^^^^^^
-If you want to debug Ajax or CLI requests, simply switch to logging: :ref:`logging`
+The main problem with this is security. Having a debug output in the frontend can give a possible attacker all kind of
+information about your system. A hacker **will** use it against you. And having Goolge index a debug output will make this even worse.
 
-The log files can be accessd here: :ref:`accesslogfiles`
+| So, is kreXX a security risk?
+| No. But a debug output on the frontend surely is.
+
+Also, showing a cryptic infobox on your website will damage the trust the visitor have in your site.
+
+And lastly: There is always a good chance that things will become even worse.
+
+Settings
+^^^^^^^^
+
+kreXX was not coded for the usage in a live environment. But, we are well aware that there are moments when there is no other option available.
+
+- Talk to your customer and/or boss and tell them what you are about to do and that this is dangerous.
+- Go to the backend and switch to :literal:`Destination` :literal:`File`
+- Switch to :literal:`Expert Mode`, go to  :literal:`Edit FE configuration` and switch everything to :literal:`Do not display`.
+- Do **NOT** use the TYPO3 Development Settings. I mean it! Don't!
+- Be extremely careful when editing files.
+
+And when you are done:
+
+- Remove all debug statements from the code.
+- Uninstall includekrexx and delete it from the server.
+- Never do this again.

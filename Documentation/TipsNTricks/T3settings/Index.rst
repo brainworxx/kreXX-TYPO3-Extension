@@ -12,7 +12,7 @@
 TYPO3 Development Settings
 ==========================
 
-.. important::
+.. warning::
 	**Do not use these settings on a productive site!** Never debug a productive system.
 
 .. tip::

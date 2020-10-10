@@ -17,7 +17,7 @@ Taking a closer look at these may reveal a lot of information.
 There is a downside, though. Facing a class structure with more than 20 :literal:`XML` or :literal:`JSON` strings will result in a lot of output, which may cause problems.
 That is why this feature is deactivated by default.
 
-.. important::
+.. warning::
 	This feature is deactivated by default.
 
 JSON

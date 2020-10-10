@@ -19,7 +19,6 @@ Main analytic function
     krexx($myObject);
     // Or inline.
     json_encode(krexx($myObject));
-    json_encode(\Krexx::open($myObject));
 
 |
 
