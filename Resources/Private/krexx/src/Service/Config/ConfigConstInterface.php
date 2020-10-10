@@ -58,7 +58,7 @@ interface ConfigConstInterface
     const RENDER = 'render';
 
     /**
-     * Array kay. Containing the name of the evaluation method inside the
+     * Array key. Containing the name of the evaluation method inside the
      * Validation class.
      *
      * @see
@@ -68,7 +68,6 @@ interface ConfigConstInterface
      *   EVAL_DESTINATION
      *   EVAL_SKIN
      *   EVAL_IP_RANGE
-     *   EVAL_DEV_HANDLE
      *
      * @var string
      */
@@ -141,15 +140,6 @@ interface ConfigConstInterface
      * @var string
      */
     const EVAL_IP_RANGE = 'evalIpRange';
-
-    /**
-     * Method name used to evaluate the developer handle.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    const EVAL_DEV_HANDLE = 'evalDevHandle';
 
     /**
      * Method name used to evaluate the debug methods.
@@ -391,13 +381,6 @@ interface ConfigConstInterface
      * @var string
      */
     const SETTING_ARRAY_COUNT_LIMIT = 'arrayCountLimit';
-
-    /**
-     * Array key. Holds the value of devHandle.
-     *
-     * @var string
-     */
-    const SETTING_DEV_HANDLE = 'devHandle';
 
 
 

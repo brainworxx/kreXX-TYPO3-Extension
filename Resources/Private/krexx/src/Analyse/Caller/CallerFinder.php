@@ -81,10 +81,8 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
         $this->callPattern = [
             'krexx',
             'krexx::open',
-            'krexx::' . $this->pool->config->getDevHandler(),
             'Krexx',
             'Krexx::open',
-            'Krexx::' . $this->pool->config->getDevHandler(),
             'Krexx::log',
             'krexx::log',
         ];

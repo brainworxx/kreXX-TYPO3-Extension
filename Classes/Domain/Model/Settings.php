@@ -98,13 +98,6 @@ class Settings
     protected $factory;
 
     /**
-     * The developer handle field.
-     *
-     * @var string
-     */
-    protected $formdevHandle;
-
-    /**
      * @param string $factory
      */
     public function setFactory(string $factory)

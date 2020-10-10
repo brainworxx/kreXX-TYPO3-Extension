@@ -293,7 +293,6 @@ abstract class Fallback implements ConfigConstInterface
             static::SETTING_SKIN => $this->returnSkin(),
             static::SETTING_DETECT_AJAX => $this->returnBoolSelectTrue(static::SECTION_OUTPUT),
             static::SETTING_IP_RANGE => $this->returnIpRange(),
-            static::SETTING_DEV_HANDLE => $this->returnDevHandle(),
             static::SETTING_ANALYSE_GETTER => $this->returnBoolSelectTrue(static::SECTION_METHODS),
             static::SETTING_MEMORY_LEFT => $this->returnInput(static::SECTION_EMERGENCY, 64),
             static::SETTING_MAX_RUNTIME => $this->returnMaxRuntime(),
@@ -461,21 +460,6 @@ abstract class Fallback implements ConfigConstInterface
             static::RENDER => static::DISPLAY_NOTHING,
             static::EVALUATE => static::EVAL_IP_RANGE,
             static::SECTION => static::SECTION_OUTPUT,
-        ];
-    }
-
-    /**
-     * The render settings for the dev handle.
-     *
-     * @return array
-     */
-    protected function returnDevHandle(): array
-    {
-        return [
-            static::VALUE => '',
-            static::RENDER => static::EDITABLE_INPUT,
-            static::EVALUATE => static::EVAL_DEV_HANDLE,
-            static::SECTION => ''
         ];
     }
 

@@ -62,27 +62,13 @@ class ThroughConfig extends AbstractCallback implements CallbackConstInterface, 
      */
     public function callMe(): string
     {
-        $configOutput = $this->dispatchStartEvent() . $this->renderAllSections();
-
-        // Render the dev-handle field.
-        $devHandleLabel = $this->pool->messages->getHelp(static::SETTING_DEV_HANDLE);
-        $configOutput .= $this->pool->render->renderSingleEditableChild(
-            $this->pool->createClass(Model::class)
-                ->setData($devHandleLabel)
-                ->setDomId(static::SETTING_DEV_HANDLE)
-                ->setName($this->pool->config->getDevHandler())
-                ->setNormal('\krexx::')
-                ->setType(static::RENDER_TYPE_INPUT)
-                ->setHelpid('localFunction')
-        );
-
-        // Render the reset-button which will delete the debug-cookie.
-        return $configOutput . $this->pool->render->renderButton(
-            $this->pool->createClass(Model::class)
-                ->setName('kresetbutton')
-                ->setNormal('Reset local settings')
-                ->setHelpid('kresetbutton')
-        );
+        return $this->dispatchStartEvent() . $this->renderAllSections() .
+            $this->pool->render->renderButton(
+                $this->pool->createClass(Model::class)
+                    ->setName('kresetbutton')
+                    ->setNormal('Reset local settings')
+                    ->setHelpid('kresetbutton')
+            );
     }
 
     /**

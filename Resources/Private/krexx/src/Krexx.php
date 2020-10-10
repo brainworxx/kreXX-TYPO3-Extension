@@ -67,36 +67,6 @@ class Krexx implements ConfigConstInterface
     public static $pool;
 
     /**
-     * Handles the developer handle.
-     *
-     * @api
-     *
-     * @param string $name
-     *   The name of the static function which was called.
-     * @param array $arguments
-     *   The arguments of said function.
-     *
-     * @return mixed|null
-     *   Return the original analysis value.
-     */
-    public static function __callStatic(string $name, array $arguments)
-    {
-        Pool::createPool();
-
-        // Do we have a handle?
-        if ($name === static::$pool->config->getDevHandler()) {
-            // We do a standard-open.
-            if (isset($arguments[0])) {
-                return static::open($arguments[0]);
-            }
-
-            static::open();
-        }
-
-        return isset($arguments[0]) ? $arguments[0] : null;
-    }
-
-    /**
      * Takes a "moment".
      *
      * @api

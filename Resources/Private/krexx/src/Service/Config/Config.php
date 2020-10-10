@@ -199,23 +199,6 @@ class Config extends Fallback
     }
 
     /**
-     * Returns the developer handle from the cookies.
-     *
-     * @return string|null
-     *   The Developer handle. Null when nothing was set.
-     */
-    public function getDevHandler()
-    {
-        static $handle;
-
-        if ($handle === null) {
-            $handle = $this->cookieConfig->getConfigFromCookies('deep', static::SETTING_DEV_HANDLE);
-        }
-
-        return $handle;
-    }
-
-    /**
      * Wrapper around the stored settings array, to intercept settings calls.
      *
      * @param string $name

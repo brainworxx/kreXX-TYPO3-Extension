@@ -180,9 +180,6 @@
             <trans-unit id="configErrorSkin">
                 <source>Wrong configuration for: 'output => skin'! Skin not found. The configured setting was not applied!</source>
 			</trans-unit>
-            <trans-unit id="configErrorDevHandle">
-                <source>You have entered a wrong developer handle. Please use only letters between a-z and A-Z.</source>
-			</trans-unit>
             <trans-unit id="configErrorLocal">
                 <source>Could not read the Local Cookie configuration. Sorry :-/</source>
 			</trans-unit>
