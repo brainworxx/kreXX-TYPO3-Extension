@@ -167,9 +167,6 @@ body {
 .krexx-backend .table-wrapper table tr:hover td {
   background-color: rgba(255, 255, 255, 0.2);
 }
-.krexx-backend .table-wrapper table tr:hover a {
-  text-decoration: underline;
-}
 .krexx-backend .table-wrapper table.krexx-logs tr {
   border-bottom: 1px solid #a6a6a6;
 }
@@ -448,17 +445,15 @@ body {
 }
 .krexx-backend .krexx-icon {
   background-repeat: no-repeat;
-  margin: 2px 0 0 5px;
+  margin: 2px 0 14px 5px;
   position: relative;
-  border: 1px solid #c4c4c4;
   border-radius: 2px;
   width: 30px;
-  height: 32px;
-  background-color: #ededed;
+  height: 30px;
 }
 .krexx-backend .krexx-icon::after {
   top: -4px;
-  left: 4px;
+  left: 5px;
   position: absolute;
   height: 15px;
   width: 15px;
@@ -515,7 +510,7 @@ body {
   height: 20px;
   width: 20px;
   content: "";
-  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAG2SURBVDhPrVS7SgNBFJ3ZPMlLBLNsHiQ2ATsLqy1FkYB/YBALLbS00kIbm1iIpZWlv2Blmy4qJBqQNJoiKQwWZskSsrvGM+MEjLib54HZuefOzNl7584MDQQCPcMwyLTweDxE13XKjB741E3oEIl9ZgmaTqcXO52OoJPD7/eTWq32RoPB4JZlWcI9HiRJ+sS+3Qr6g2n20O12V9APgMbjcdU0TUHHA4LR6/V6SVAO6vP5VkcVxNYUcMwWkOYS44hQw9p7PtjHmClHIbjb5xB8QD8A6vV6N7vdrqBDcQfBbUR4zQgEHxHhCh8RoJlMZnnUm4IjVikWiztOgrNPGRP2Ro0Q824wP+eYsqqqcrvdFnQQ5XL5PZvN+qrV6pxwkWazmdM07ZLZ2P+nZDK5zgcAXBLDKWV+H0Oh0MEvn2NjP6BYcGpTZRP+PDPC4XAeUR1zrw2Q/kssFlsTdDggeobu38gg9owToMDmr8SXy+WyaxYy2OcTgUgkcoLur1hJUZQobA6KP1/ZVRmvCaGU9hKJxAUK88p8ED1qtVrnzGZVlmV5o9FofDA+MRDEIQpQSKVS88IlQMg3Lkz0zXMVv64AAAAASUVORK5CYII=") no-repeat;
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAE4SURBVDhPY+Ti4vr/+/dvBkoBKysrw7dv3xhBjP9APsUYag4DE4igJmDk4OCYBmVTDL5//57F+P8/2KXUA5SEIQsLy1UgjQIo9jLImyCakZERzKeKl2GGgQGJXhYFpttkGB/o5bNAGgWQ5GWQ97i5uZOBCXgOiA808NyfP3+MwZIwAPIysdje3p6FkAsHv5dJjmU+Pr7Cz58/94HYbGxsl2VkZFzAEkAAtOw3Pi//AGIGHh6eTCQxvBhkAV4vwxIt0FXtQFdVgAVxAKD3b0hKSjpjjU1smJeXtwmoD6vLgIZdkZeXlwCyGRiALvzHzMyMC/+FGQgCQJfWACl0wy5KSEiIAtlgQDCW0fMq0NDyT58+dYDYoFgWExNze/bs2VuwJAgge4tYDPR+ITACjsjJyQlCjYECBgYAE/0m9rR3t5YAAAAASUVORK5CYII=") no-repeat;
 }
 .krexx-backend .krexx-icon.timer::after {
   top: 5px;
