@@ -89,10 +89,22 @@ class ThroughGetterTest extends AbstractTest
         $eventServiceMock->expects($this->exactly(30))
             ->method('dispatch')
             ->withConsecutive(
-                ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::callMe::start', $throughGetter],
-                ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::goThroughMethodList::end', $throughGetter],
-                ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::retrievePropertyValue::resolving', $throughGetter],
-                ['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::retrievePropertyValue::end', $throughGetter]
+                [
+                    'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::callMe::start',
+                    $throughGetter
+                ],
+                [
+                    'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::goThroughMethodList::end',
+                    $throughGetter
+                ],
+                [
+                    'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::retrievePropertyValue::resolving',
+                    $throughGetter
+                ],
+                [
+                    'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughGetter::retrievePropertyValue::end',
+                    $throughGetter
+                ]
             )
             ->will($this->returnValue(''));
         Krexx::$pool->eventService = $eventServiceMock;

@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Krexx\Krexx;
@@ -133,8 +134,8 @@ class FluidTest extends AbstractTest
         $result = $fluid->findCaller($headline, $data);
 
         $this->assertContains('FluidTemplate2.html', $result['file']);
-        $this->assertEquals($result[static::VARMANE], 'text');
-        $this->assertEquals($result['type'], 'Fluid analysis of text, string');
+        $this->assertEquals('text', $result[static::VARMANE]);
+        $this->assertEquals('Fluid analysis of text, string', $result['type']);
         $this->assertNotEmpty($result['date']);
     }
 
@@ -182,12 +183,18 @@ class FluidTest extends AbstractTest
         $result = $fluid->findCaller($headline, $data);
 
         $this->assertContains('FluidTemplate3.html', $result['file']);
-        $this->assertEquals($result[static::VARMANE], 'fluidvar');
-        $this->assertEquals($result['type'], 'Fluid analysis of fluidvar, array');
+        $this->assertEquals('fluidvar', $result[static::VARMANE]);
+        $this->assertEquals('Fluid analysis of fluidvar, array', $result['type']);
         $this->assertNotEmpty($result['date']);
 
+        if (version_compare(Bootstrap::getTypo3Version(), '8.6', '>=')) {
+            $expected = '<f:variable value="{some: \'array\'}" name="fluidvar" /> {fluidvar}';
+        } else {
+            $expected = '<v:variable.set value="{some: \'array\'}" name="fluidvar" /> {fluidvar}';
+        }
+
         $this->assertEquals(
-            '<v:variable.set value="{some: \'array\'}" name="fluidvar" /> {fluidvar}',
+            $expected,
             Krexx::$pool->codegenHandler->generateWrapperLeft() . $result[static::VARMANE] .
             Krexx::$pool->codegenHandler->generateWrapperRight(),
             'Testing the complicated code generation stuff.'
@@ -206,8 +213,8 @@ class FluidTest extends AbstractTest
 
         $result = $fluid->findCaller('bla', 'blub');
         $this->assertEquals('n/a', $result['file']);
-        $this->assertEquals($result[static::VARMANE], 'fluidvar');
-        $this->assertEquals($result['type'], 'Fluid analysis of fluidvar, string');
+        $this->assertEquals('fluidvar', $result[static::VARMANE]);
+        $this->assertEquals('Fluid analysis of fluidvar, string', $result['type']);
         $this->assertNotEmpty($result['date']);
     }
 }

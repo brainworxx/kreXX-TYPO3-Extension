@@ -38,11 +38,14 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
+use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionException;
 use ReflectionMethod;
 
@@ -67,11 +70,20 @@ use ReflectionMethod;
  * @uses string currentPrefix
  *   The current prefix we are analysing (get, is, has).
  *   Does not get set from the outside.
+ * @uses mixed value
+ *   Store the retrieved value from the getter analysis here and give
+ *   event subscribers the opportunity to do something with it.
  */
-class ThroughGetter extends AbstractCallback
+class ThroughGetter extends AbstractCallback implements
+    CallbackConstInterface,
+    ViewConstInterface,
+    CodegenConstInterface,
+    ConnectorsConstInterface
 {
     /**
      * The parameter name of the prefix we ara analysing.
+     *
+     * @var string
      */
     const CURRENT_PREFIX = 'currentPrefix';
 
@@ -164,13 +176,14 @@ class ThroughGetter extends AbstractCallback
             /** @var Model $model */
             $model = $this->pool->createClass(Model::class)
                 ->setName($reflectionMethod->getName())
+                ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
                 ->addToJson(static::META_METHOD_COMMENT, $comments);
 
             // We need to decide if we are handling static getters.
             if ($reflectionMethod->isStatic() === true) {
-                $model->setConnectorType(Connectors::STATIC_METHOD);
+                $model->setConnectorType(static::CONNECTOR_STATIC_METHOD);
             } else {
-                $model->setConnectorType(Connectors::METHOD);
+                $model->setConnectorType(static::CONNECTOR_METHOD);
             }
 
             // Get ourselves a possible return value

@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use Krexx;
 
 class CallbackTest extends AbstractTest
 {
@@ -51,8 +52,8 @@ class CallbackTest extends AbstractTest
      */
     public function testCanHandle()
     {
-        $stringCallback = new Callback(\Krexx::$pool);
-        $model = new Model(\Krexx::$pool);
+        $stringCallback = new Callback(Krexx::$pool);
+        $model = new Model(Krexx::$pool);
         $this->assertTrue($stringCallback->canHandle('strpos', $model), 'This ia a predefinedphp function.');
         $this->assertFalse($stringCallback->canHandle('sdfsd dsf sdf ', $model), 'Just a random string.');
     }
@@ -70,8 +71,8 @@ class CallbackTest extends AbstractTest
         $this->mockEmergencyHandler();
 
         // Prepare the guinea pig.
-        $stringCallback = new Callback(\Krexx::$pool);
-        $stringCallback->canHandle('myLittleCallback', new Model(\Krexx::$pool));
+        $stringCallback = new Callback(Krexx::$pool);
+        $stringCallback->canHandle('myLittleCallback', new Model(Krexx::$pool));
 
         // Test the calling of the events.
         $this->mockEventService(
@@ -79,7 +80,7 @@ class CallbackTest extends AbstractTest
             [Callback::class . '::callMe' . Callback::EVENT_MARKER_END, $stringCallback]
         );
 
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             ThroughMeta::class => CallbackCounter::class
         ];
 
@@ -88,7 +89,10 @@ class CallbackTest extends AbstractTest
         $this->assertEquals(1, CallbackCounter::$counter);
 
         $this->assertStringStartsWith('Fixture for the callback analysis.', $result['Comment']);
-        $this->assertContains('tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'Callback.php', $result['Declared in']);
+        $this->assertContains(
+            'tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'Callback.php',
+            $result['Declared in']
+        );
         $this->assertContains('in line: 45', $result['Declared in']);
         $this->assertEquals('string $justAString', $result['Parameter #1']);
     }
@@ -102,7 +106,7 @@ class CallbackTest extends AbstractTest
     public function testCallMeError()
     {
         // Create a fixture that is supposed to trigger a ReflectionException.
-        $stringCallback = new Callback(\Krexx::$pool);
+        $stringCallback = new Callback(Krexx::$pool);
         $fixture = [Callback::PARAM_DATA => 'dgdg dsf '];
         $stringCallback->setParameters($fixture);
 

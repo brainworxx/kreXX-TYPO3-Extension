@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\Code
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
@@ -49,6 +50,7 @@ class CodegenTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateSource
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateAll
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::generateVhsCall
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen::isUnknownType
      */
     public function testGenerateSource()
     {
@@ -74,12 +76,20 @@ class CodegenTest extends AbstractTest
         $model->setType($codeGen::TYPE_DEBUG_METHOD);
         $this->assertEquals($codeGen::UNKNOWN_VALUE, $codeGen->generateSource($model));
 
+        // The special debug method getProperties
+        $codeGen = new Codegen(Krexx::$pool);
+        $codeGen->setAllowCodegen(true);
+        $model = new Model(Krexx::$pool);
+        $model->setName('getProperties');
+        $model->setType($codeGen::TYPE_DEBUG_METHOD);
+        $this->assertEquals('properties', $codeGen->generateSource($model));
+
         // The VHS version.
         $codeGen = new Codegen(Krexx::$pool);
         $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
         $model->setName('bluRay');
-        $model->setMultiLineCodeGen($codeGen::VHS_CALL_VIEWHELPER);
+        $model->setCodeGenType($codeGen::VHS_CALL_VIEWHELPER);
         $fixture =  [
             'play' => 'dvd',
             'stop' => 'HD',
@@ -91,7 +101,7 @@ class CodegenTest extends AbstractTest
             $codeGen->generateSource($model)
         );
 
-        // The dreadded _all variable name, the _all itself.
+        // The dreaded _all variable name, the _all itself.
         $codeGen = new Codegen(Krexx::$pool);
         $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
@@ -102,7 +112,7 @@ class CodegenTest extends AbstractTest
         // A child of _all. Sounds like a black metal song.
         $model = new Model(Krexx::$pool);
         $model->setName('child');
-        $model->setType(Codegen::TYPE_ARRAY);
+        $model->setType(ProcessConstInterface::TYPE_ARRAY);
         $emergencyMock = $this->createMock(Emergency::class);
         $emergencyMock->expects($this->once())
             ->method('getNestingLevel')
@@ -115,7 +125,15 @@ class CodegenTest extends AbstractTest
         $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
         $model->setName('somIteratorClass');
-        $model->setMultiLineCodeGen(Codegen::ITERATOR_TO_ARRAY);
+        $model->setCodeGenType(Codegen::CODEGEN_TYPE_ITERATOR_TO_ARRAY);
+        $this->assertEquals($codeGen::UNKNOWN_VALUE, $codeGen->generateSource($model));
+
+        // Json deconding, which also does not exist.
+        $codeGen = new Codegen(Krexx::$pool);
+        $codeGen->setAllowCodegen(true);
+        $model = new Model(Krexx::$pool);
+        $model->setName('somIteratorClass');
+        $model->setCodeGenType(Codegen::CODEGEN_TYPE_JSON_DECODE);
         $this->assertEquals($codeGen::UNKNOWN_VALUE, $codeGen->generateSource($model));
 
         // And finally, some normal generation.

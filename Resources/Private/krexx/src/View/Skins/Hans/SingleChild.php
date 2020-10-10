@@ -39,6 +39,17 @@ namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Trait SingleChild
+ *
+ * @deprecated
+ *   Since 4.0.0. Use ExpandableChild in stead.
+ *
+ * @codeCoverageIgnore
+ *   We will not test deprecated code.
+ *
+ * @package Brainworxx\Krexx\View\Skins\Hans
+ */
 trait SingleChild
 {
     /**
@@ -90,6 +101,7 @@ trait SingleChild
     public function renderSingleChild(Model $model): string
     {
         // Generating our code.
+        /** @var \Brainworxx\Krexx\Analyse\Code\Codegen $codegenHandler */
         $codegenHandler = $this->pool->codegenHandler;
         $generateSource = $codegenHandler->generateSource($model);
         // Stitching it together.
@@ -137,29 +149,6 @@ trait SingleChild
         }
 
         return $this->getTemplateFileContent(static::FILE_SOURCE_BUTTON);
-    }
-
-    /**
-     * Render the 'extra' part of the singe child output.
-     *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
-     *   The model.
-     *
-     *
-     * @return string
-     *   The rendered HTML output.
-     */
-    protected function renderExtra(Model $model): string
-    {
-        if ($model->hasExtra() === true) {
-            return str_replace(
-                $this->markerSingleChildExtra,
-                $model->getData(),
-                $this->getTemplateFileContent(static::FILE_SI_CHILD_EX)
-            );
-        }
-
-        return '';
     }
 
     /**

@@ -41,6 +41,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
@@ -63,6 +64,13 @@ use Krexx;
 class Bootstrap implements ConstInterface
 {
     /**
+     * The TYPO3 version.
+     *
+     * @var string
+     */
+    protected static $typo3Version;
+
+    /**
      * Batch for the bootstrapping.
      */
     public function run()
@@ -73,6 +81,8 @@ class Bootstrap implements ConstInterface
                 // There is no point in continuing here.
                 return;
             }
+
+            $this->retrieveTypo3Version();
 
             // Register and activate the TYPO3 plugin.
             $t3configuration = GeneralUtility::makeInstance(T3configuration::class);
@@ -87,7 +97,7 @@ class Bootstrap implements ConstInterface
             // Theoretically, this should be part of the fluid debugger plugin, but
             // activating it in the viewhelper is too late, for obvious reason.
             if (
-                version_compare(TYPO3_version, '8.5', '>=') &&
+                version_compare(static::getTypo3Version(), '8.5', '>=') &&
                 empty($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
                 [static::FLUID_NAMESPACE][static::KREXX])
             ) {
@@ -135,7 +145,6 @@ class Bootstrap implements ConstInterface
             // here. The only thing to do now is trying not to brick the system.
         }
 
-
         return $this;
     }
 
@@ -166,5 +175,33 @@ class Bootstrap implements ConstInterface
         // More likely, the "autoloading" managed to bite us in the rear end.
         // No need to continue at this point.
         return false;
+    }
+
+    /**
+     * Since the global constants TYPO3_version got himself deprecated, we must
+     * use other means to get it.
+     *
+     * Wrapper around either
+     *   - TYPO3_version
+     *   - TYPO3\CMS\Core\Information\Typo3Version
+     */
+    protected function retrieveTypo3Version()
+    {
+        if (class_exists(Typo3Version::class)) {
+            static::$typo3Version = GeneralUtility::makeInstance(Typo3Version::class)
+                ->getVersion();
+        } else {
+            static::$typo3Version = TYPO3_version;
+        }
+    }
+
+    /**
+     * Getter for the TYPO3 version.
+     *
+     * @return string
+     */
+    public static function getTypo3Version(): string
+    {
+        return static::$typo3Version;
     }
 }

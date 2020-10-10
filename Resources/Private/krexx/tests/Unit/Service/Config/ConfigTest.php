@@ -250,23 +250,6 @@ class ConfigTest extends AbstractTest
     }
 
     /**
-     * Test the retrieval of the dev handler fro mthe cooie configuration.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getDevHandler
-     */
-    public function testGetDevHandler()
-    {
-        $cookieMock = $this->createMock(Cookie::class);
-        $cookieMock->expects($this->once())
-            ->method(static::GET_CONFIG_FROM_COOKIES)
-            ->will($this->returnValue('whatever'));
-        $config = new Config(Krexx::$pool);
-        $this->setValueByReflection(static::COOKIE_CONFIG, $cookieMock, $config);
-
-        $this->assertEquals('whatever', $config->getDevHandler());
-    }
-
-    /**
      * Test setting getter.
      *
      * @covers \Brainworxx\Krexx\Service\Config\Config::getSetting

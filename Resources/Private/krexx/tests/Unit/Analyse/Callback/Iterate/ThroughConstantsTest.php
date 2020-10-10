@@ -36,6 +36,9 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use Brainworxx\Krexx\Tests\Fixtures\ConstantsFixture;
+use Brainworxx\Krexx\Tests\Fixtures\ConstantsFixture71;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
@@ -43,11 +46,13 @@ use Brainworxx\Krexx\Krexx;
 class ThroughConstantsTest extends AbstractTest
 {
     /**
-     * Testing the constants iterator.
+     * Run the test with the provided class name.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
+     * @param $className
+     * @return array
+     * @throws \ReflectionException
      */
-    public function testCallMe()
+    protected function runTheTest($className)
     {
         $this->mockEmergencyHandler();
 
@@ -55,14 +60,11 @@ class ThroughConstantsTest extends AbstractTest
         Krexx::$pool->routing = new RoutingNothing(Krexx::$pool);
 
         // Create a fixture
+        $ref = new ReflectionClass($className);
         $fixture = [
-            'data' => [
-                'CONST_1' => 'some value',
-                'CONST_2' => 'more values',
-                'CONST_3' => 'string',
-                'CONST_4' => 21
-            ],
-            'classname' => 'first class'
+            ThroughConstants::PARAM_DATA => $ref->getConstants(),
+            ThroughConstants::PARAM_CLASSNAME => $className,
+            ThroughConstants::PARAM_REF => $ref,
         ];
 
         // Listen for the start event.
@@ -74,6 +76,24 @@ class ThroughConstantsTest extends AbstractTest
         // Run the tests
         $throughConstants->setParameters($fixture)->callMe();
 
+        return $fixture;
+    }
+
+    /**
+     * Testing the constants iterator.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
+     * @throws \ReflectionException
+     */
+    public function testCallMePhp70()
+    {
+        // Test for the right PHP version.
+        if (version_compare(phpversion(), '7.1.0', '>=')) {
+            $this->markTestSkipped('Skipped due to wrong PHP version.');
+        }
+
+        $fixture = $this->runTheTest(ConstantsFixture::class);
+
         // Check the models from the route nothing
         $count = 0;
         $models = Krexx::$pool->routing->model;
@@ -81,8 +101,86 @@ class ThroughConstantsTest extends AbstractTest
         foreach ($fixture['data'] as $name => $value) {
             $this->assertEquals($name, $models[$count]->getName());
             $this->assertEquals($value, $models[$count]->getData());
-            $this->assertEquals($fixture['classname'] . '::', $models[$count]->getConnectorLeft());
+            $this->assertEquals(
+                '\\' . $fixture[ThroughConstants::PARAM_CLASSNAME] . '::',
+                $models[$count]->getConnectorLeft()
+            );
             ++$count;
         }
+    }
+
+    /**
+     * Testing the PHP 7.1 plus constants handling.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::canDump
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::dumpPhpSevenZero
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::retrieveAdditionalData
+     */
+    public function testCallMe71()
+    {
+        // Test for the right PHP version.
+        if (version_compare(phpversion(), '7.1.0', '<')) {
+            $this->markTestSkipped('Skipped due to wrong PHP version.');
+        }
+
+        \Krexx::$pool->scope->setScope('$somethingElse');
+        $this->runTheTest(ConstantsFixture71::class);
+
+        // And check the output.
+        // We are expecting an analysis of the two public ones, since we are not
+        // in scope.
+        /** @var \Brainworxx\Krexx\Analyse\Model[] $models */
+        $models = Krexx::$pool->routing->model;
+        $this->assertCount(2, $models);
+        $this->assertEquals(ConstantsFixture71::CONST_1, $models[0]->getData());
+        $this->assertEquals(ConstantsFixture71::CONST_2, $models[1]->getData());
+        $this->assertEquals('public constant ', $models[0]->getAdditional());
+        $this->assertEquals('public constant ', $models[1]->getAdditional());
+        $this->assertEquals('CONST_1', $models[0]->getName());
+        $this->assertEquals('CONST_2', $models[1]->getName());
+        $this->assertEquals('\\' . ConstantsFixture71::class . '::', $models[0]->getConnectorLeft());
+        $this->assertEquals('\\' . ConstantsFixture71::class . '::', $models[1]->getConnectorLeft());
+    }
+
+    /**
+     * And now the same thing while coming from the inside.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::canDump
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::dumpPhpSevenZero
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::retrieveAdditionalData
+     */
+    public function testCallMe71InScope()
+    {
+        // Test for the right PHP version.
+        if (version_compare(phpversion(), '7.1.0', '<')) {
+            $this->markTestSkipped('Skipped due to wrong PHP version.');
+        }
+
+        \Krexx::$pool->scope->setScope('$this');
+        $this->runTheTest(ConstantsFixture71::class);
+
+        // And check the output.
+        // We are expecting an analysis of all of them because they are in scope.
+        /** @var \Brainworxx\Krexx\Analyse\Model[] $models */
+        $models = Krexx::$pool->routing->model;
+        $this->assertCount(4, $models);
+        $this->assertEquals(ConstantsFixture71::CONST_1, $models[0]->getData());
+        $this->assertEquals(ConstantsFixture71::CONST_2, $models[1]->getData());
+        $this->assertEquals('string', $models[2]->getData());
+        $this->assertEquals(21, $models[3]->getData());
+        $this->assertEquals('public constant ', $models[0]->getAdditional());
+        $this->assertEquals('public constant ', $models[1]->getAdditional());
+        $this->assertEquals('protected constant ', $models[2]->getAdditional());
+        $this->assertEquals('private constant ', $models[3]->getAdditional());
+        $this->assertEquals('CONST_1', $models[0]->getName());
+        $this->assertEquals('CONST_2', $models[1]->getName());
+        $this->assertEquals('CONST_3', $models[2]->getName());
+        $this->assertEquals('CONST_4', $models[3]->getName());
+        $this->assertEquals('static::', $models[0]->getConnectorLeft());
+        $this->assertEquals('static::', $models[1]->getConnectorLeft());
+        $this->assertEquals('static::', $models[2]->getConnectorLeft());
+        $this->assertEquals('static::', $models[3]->getConnectorLeft());
     }
 }

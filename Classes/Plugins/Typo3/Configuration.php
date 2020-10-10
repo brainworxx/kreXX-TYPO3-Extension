@@ -41,6 +41,7 @@ use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
+use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -140,6 +141,9 @@ class Configuration implements PluginConfigInterface, ConstInterface
         $extPath = ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
         Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/t3.kreXX.ini');
 
+        // Register the scalar analysis classes.
+        Registration::addScalarStringAnalyser(ExtFilePath::class);
+
         $this->registerVersionDependantStuff();
     }
 
@@ -150,13 +154,13 @@ class Configuration implements PluginConfigInterface, ConstInterface
     {
         // The QueryBuilder special analysis.
         // Only for Doctrine stuff.
-        if (version_compare(TYPO3_version, '8.3', '>')) {
+        if (version_compare(Bootstrap::getTypo3Version(), '8.3', '>')) {
             Registration::registerEvent(Objects::class . static::START_EVENT, QueryDebugger::class);
         }
 
         // Register our modules for the admin panel.
         if (
-            version_compare(TYPO3_version, '9.5', '>=') &&
+            version_compare(Bootstrap::getTypo3Version(), '9.5', '>=') &&
             isset($GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
                 [static::MODULES][static::DEBUG])
         ) {

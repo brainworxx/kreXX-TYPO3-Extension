@@ -38,7 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Service\Flow;
 
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -46,7 +46,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Service\Flow
  */
-class Emergency
+class Emergency implements ConfigConstInterface
 {
     /**
      * Counts how often kreXX was called.
@@ -147,10 +147,10 @@ class Emergency
         }
 
         // Cache some settings.
-        $this->maxRuntime = (int) $pool->config->getSetting(Fallback::SETTING_MAX_RUNTIME);
-        $this->minMemoryLeft = ((int) $pool->config->getSetting(Fallback::SETTING_MEMORY_LEFT))  * 1024 * 1024;
-        $this->maxCall = (int) $this->pool->config->getSetting(Fallback::SETTING_MAX_CALL);
-        $this->maxNestingLevel = (int) $this->pool->config->getSetting(Fallback::SETTING_NESTING_LEVEL);
+        $this->maxRuntime = (int) $pool->config->getSetting(static::SETTING_MAX_RUNTIME);
+        $this->minMemoryLeft = ((int) $pool->config->getSetting(static::SETTING_MEMORY_LEFT))  * 1024 * 1024;
+        $this->maxCall = (int) $this->pool->config->getSetting(static::SETTING_MAX_CALL);
+        $this->maxNestingLevel = (int) $this->pool->config->getSetting(static::SETTING_NESTING_LEVEL);
 
         $pool->emergencyHandler = $this;
     }

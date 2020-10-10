@@ -105,7 +105,7 @@ class LogfileList extends AbstractCollector
      */
     protected function retrieveFileInfo(array $files): array
     {
-        if (version_compare(TYPO3_version, '9.0', '>=')) {
+        if (version_compare(Bootstrap::getTypo3Version(), '9.0', '>=')) {
             $uriBuilder = $this->objectManager->get(UriBuilder::class);
         } else {
             $uriBuilder = $this->objectManager->get(BeUriBuilder::class);

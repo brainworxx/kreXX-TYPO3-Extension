@@ -36,6 +36,8 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandler
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -82,8 +84,8 @@ class PropertiesTest extends AbstractTest
         // Create a simple log item.
         $item = new \Aimeos\MAdmin\Log\Item\Standard($values);
         $fixture = [
-            Properties::PARAM_DATA => $item,
-            Properties::PARAM_REF => new ReflectionClass($item)
+            CallbackConstInterface::PARAM_DATA => $item,
+            CallbackConstInterface::PARAM_REF => new ReflectionClass($item)
         ];
 
         // Prevent the further routing.
@@ -110,6 +112,7 @@ class PropertiesTest extends AbstractTest
             $this->assertEquals($data, $models[$count]->getData());
             $this->assertEquals('->{\'', $models[$count]->getConnectorLeft());
             $this->assertEquals('\'}', $models[$count]->getConnectorRight());
+            $this->assertEquals(CodegenConstInterface::CODEGEN_TYPE_PUBLIC, $models[$count]->getCodeGenType());
             ++$count;
         }
     }

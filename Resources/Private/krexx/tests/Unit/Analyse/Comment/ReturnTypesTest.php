@@ -38,6 +38,9 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Tests\Fixtures\ReturnTypeFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Krexx;
+use ReflectionClass;
+use ReflectionFunction;
 
 class ReturnTypesTest extends AbstractTest
 {
@@ -47,12 +50,13 @@ class ReturnTypesTest extends AbstractTest
      * @see \Brainworxx\Krexx\Tests\Fixtures\ReturnTypeFixture
      * @covers \Brainworxx\Krexx\Analyse\Comment\ReturnType::getComment
      * @covers \Brainworxx\Krexx\Analyse\Comment\ReturnType::retrieveTypeByReflection
+     * @throws \ReflectionException
      */
     public function testGetComment()
     {
         $fixture = new ReturnTypeFixture();
-        $returnType = new ReturnType(\Krexx::$pool);
-        $refClass = new \ReflectionClass($fixture);
+        $returnType = new ReturnType(Krexx::$pool);
+        $refClass = new ReflectionClass($fixture);
 
         $refMethod = $refClass->getMethod('returnSelf');
         $this->assertEquals('\\' . ReturnTypeFixture::class, $returnType->getComment($refMethod, $refClass));
@@ -75,13 +79,13 @@ class ReturnTypesTest extends AbstractTest
         $refMethod = $refClass->getMethod('multipleTypes');
         $this->assertEquals('bool|null', $returnType->getComment($refMethod, $refClass));
 
-        $refFunction = new \ReflectionFunction('myLittleCallback');
+        $refFunction = new ReflectionFunction('myLittleCallback');
         $this->assertEquals('string', $returnType->getComment($refFunction));
 
-        $refFunction = new \ReflectionFunction('justAnotherFunction');
+        $refFunction = new ReflectionFunction('justAnotherFunction');
         $this->assertEquals('', $returnType->getComment($refFunction));
 
-        $refFunction = new \ReflectionFunction('returnString');
+        $refFunction = new ReflectionFunction('returnString');
         $this->assertEquals('bool', $returnType->getComment($refFunction));
     }
 }

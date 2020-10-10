@@ -37,9 +37,9 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Code;
 
-use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -48,13 +48,15 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Analyse\Code
  */
-class Scope implements ConstInterface
+class Scope implements CallbackConstInterface, ConfigConstInterface
 {
     /**
      * We use this scope, when kreXX was called like kreXX($this);
      *
      * This determines, that all private and protected variables will be
      * analysed when using the scope analysis.
+     *
+     * @var string
      */
     const THIS_SCOPE = '$this';
 
@@ -93,7 +95,7 @@ class Scope implements ConstInterface
      * @param string $scope
      *   The scope ('$this' or something else) .
      */
-    public function setScope($scope)
+    public function setScope(string $scope)
     {
         if ($scope !== static::UNKNOWN_VALUE) {
             $this->scope = $scope;
@@ -123,7 +125,7 @@ class Scope implements ConstInterface
     {
         return  $this->pool->emergencyHandler->getNestingLevel() <= 1 &&
             $this->scope === static::THIS_SCOPE &&
-            $this->pool->config->getSetting(Fallback::SETTING_USE_SCOPE_ANALYSIS);
+            $this->pool->config->getSetting(static::SETTING_USE_SCOPE_ANALYSIS);
     }
 
     /**

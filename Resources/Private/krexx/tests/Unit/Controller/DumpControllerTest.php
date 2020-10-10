@@ -36,9 +36,9 @@
 namespace Brainworxx\Krexx\Tests\Unit\Controller;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig;
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Analyse\Code\Scope;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Routing;
 use Brainworxx\Krexx\Controller\DumpController;
@@ -96,7 +96,7 @@ class DumpControllerTest extends AbstractController
         $scopeMock = $this->createMock(Scope::class);
         $scopeMock->expects($this->once())
             ->method('setScope')
-            ->with($this->callerFinderResult[ConstInterface::TRACE_VARNAME]);
+            ->with($this->callerFinderResult[BacktraceConstInterface::TRACE_VARNAME]);
         $poolMock->scope = $scopeMock;
 
         $poolMock->emergencyHandler->expects($this->once())

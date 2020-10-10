@@ -37,9 +37,9 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Plugin;
 
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 
 /**
  * Allow plugins to alter the configuration
@@ -48,13 +48,8 @@ use Brainworxx\Krexx\Service\Config\Config;
  *
  * @package Brainworxx\Krexx\Service
  */
-class Registration implements ConstInterface
+class Registration implements ConfigConstInterface, PluginConstInterface
 {
-    const IS_ACTIVE = 'isActive';
-    const CONFIG_CLASS = 'configClass';
-    const PLUGIN_NAME = 'name';
-    const PLUGIN_VERSION = 'ver';
-
     /**
      * The registered plugin configuration files as class names.
      *
@@ -126,7 +121,7 @@ class Registration implements ConstInterface
     protected static $additionalSkinList = [];
 
     /**
-     * List of all additinally registered classes, that can do a string analysis.
+     * List of all additionally registered classes, that can do a string analysis.
      *
      * @var array
      */

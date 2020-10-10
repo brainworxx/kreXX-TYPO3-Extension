@@ -39,6 +39,17 @@ namespace Brainworxx\Krexx\Analyse\Model;
 
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Trait MultiLineCodeGen
+ *
+ * @deprecated
+ *   Since 4.0.0. Will be removed.
+ *
+ * @codeCoverageIgnore
+ *   We will not test deprecated methods.
+ *
+ * @package Brainworxx\Krexx\Analyse\Model
+ */
 trait MultiLineCodeGen
 {
     /**
@@ -51,6 +62,12 @@ trait MultiLineCodeGen
     /**
      * Getter for the multiline code generation.
      *
+     * @deprecated
+     *   Since 4.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
      * @return string
      */
     public function getMultiLineCodeGen(): string
@@ -61,15 +78,23 @@ trait MultiLineCodeGen
     /**
      * Setter for the multiline code generation.
      *
+     * @deprecated
+     *   Since 4.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
      * @param string $multiLineCodeGen
      *   The constant from the Codegen class.
      *
-     * @return Model
+     * @return $this
      *   $this, for chaining.
      */
     public function setMultiLineCodeGen(string $multiLineCodeGen): Model
     {
         $this->multiLineCodeGen = $multiLineCodeGen;
+        $this->codeGenType = $multiLineCodeGen;
+
         return $this;
     }
 }

@@ -47,7 +47,7 @@ class ProcessIntegerTest extends AbstractTest
     /**
      * Testing the integer value processing.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessNormal()
@@ -60,7 +60,7 @@ class ProcessIntegerTest extends AbstractTest
         $this->mockEventService(
             [ProcessInteger::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->process($model);
+        $processor->handle($model);
 
         $this->assertEquals($fixture, $model->getData());
         $this->assertEquals($fixture, $model->getNormal());
@@ -70,7 +70,7 @@ class ProcessIntegerTest extends AbstractTest
     /**
      * Testing the integer value with timestamp processing.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessWithTimestamp()
@@ -80,12 +80,28 @@ class ProcessIntegerTest extends AbstractTest
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
         $processor = new ProcessInteger(Krexx::$pool);
-        $processor->process($model);
+        $processor->handle($model);
 
         $this->assertStringStartsWith(
             '11.Mar 2020',
             $model->getJson()[ProcessInteger::META_TIMESTAMP],
             'Looking for the timestamp.'
         );
+    }
+
+    /**
+     * Test the check if we can handle the array processing.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger::canHandle
+     */
+    public function testCanHandle()
+    {
+        $processor = new ProcessInteger(Krexx::$pool);
+        $model = new Model(Krexx::$pool);
+        $fixture = 1234;
+
+        $this->assertTrue($processor->canHandle($model->setData($fixture)));
+        $fixture = 'abc';
+        $this->assertFalse($processor->canHandle($model->setData($fixture)));
     }
 }

@@ -87,7 +87,10 @@ class PrivatePropertiesTest extends AbstractTest
         // Test start event
         // Set up the events
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PrivateProperties::callMe::start', $this->privateProperties]
+            [
+                'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PrivateProperties::callMe::start',
+                $this->privateProperties
+            ]
         );
 
         // Fixture without any private properties.
@@ -121,8 +124,14 @@ class PrivatePropertiesTest extends AbstractTest
     {
         // Set up the events
         $this->mockEventService(
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PrivateProperties::callMe::start', $this->privateProperties],
-            ['Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PrivateProperties::analysisEnd', $this->privateProperties]
+            [
+                'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PrivateProperties::callMe::start',
+                $this->privateProperties
+            ],
+            [
+                'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PrivateProperties::analysisEnd',
+                $this->privateProperties
+            ]
         );
 
         // Create a fixture with several private properties with inheritance.

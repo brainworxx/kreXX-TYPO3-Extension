@@ -35,8 +35,8 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Controller;
 
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -62,11 +62,11 @@ class AbstractController extends AbstractTest
         parent::setUp();
 
         $this->callerFinderResult = [
-            ConstInterface::TRACE_FILE => 'just another path',
-            ConstInterface::TRACE_LINE => 41,
-            ConstInterface::TRACE_VARNAME => '$varWithAName',
-            ConstInterface::TRACE_TYPE => 'Backtrace',
-            ConstInterface::TRACE_LEVEL => 'debug'
+            BacktraceConstInterface::TRACE_FILE => 'just another path',
+            BacktraceConstInterface::TRACE_LINE => 41,
+            BacktraceConstInterface::TRACE_VARNAME => '$varWithAName',
+            BacktraceConstInterface::TRACE_TYPE => 'Backtrace',
+            BacktraceConstInterface::TRACE_LEVEL => 'debug'
         ];
     }
 

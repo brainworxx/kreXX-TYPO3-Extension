@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 
-
 trait MaxStepNumber
 {
     /**

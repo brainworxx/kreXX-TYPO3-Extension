@@ -32,34 +32,32 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Cache\CacheManager;
+namespace Brainworxx\Includekrexx\Tests\Fixtures;
 
-/**
- * TYPO3 installation class for kreXX
- */
-class ext_update
+use Aimeos\Map;
+use Aimeos\MShop\Product\Item\Standard as StandardProduct;
+
+class Aimeos20Item extends StandardProduct
 {
 
     /**
-     * Returns whether this script is available in the backend.
+     * Short circuiting the original method, because I'm to lazy to really fill
+     * it the fixture with "meaningfull" stuff for the tests.
      *
-     * @return bool
-     *   Always TRUE.
+     * {@inheritDoc}
      */
-    public function access()
+    public function getListItems($domain = null, $listtype = null, $type = null, bool $active = true): \Aimeos\Map
     {
-        return false;
+        return new Map([new \StdClass(), new \DateTime()]);
     }
 
     /**
-     * Main Function.
+     * More short circuiting.
+     *
+     * {@inheritDoc}
      */
-    public function main()
+    public function getRefItems($domain = null, $listtype = null, $type = null, bool $active = true): \Aimeos\Map
     {
-        // We flush the caches, just in case. The extension manager does not flush
-        // the ext_localconf cache.
-        GeneralUtility::makeInstance(CacheManager::class)
-            ->flushCachesInGroup('system');
+        return new Map([new \StdClass(), new \DateTime()]);
     }
 }

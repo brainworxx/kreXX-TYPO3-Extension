@@ -37,6 +37,8 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Caller;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -45,9 +47,24 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Analyse\Caller
  */
-class CallerFinder extends AbstractCaller
+class CallerFinder extends AbstractCaller implements BacktraceConstInterface, CallbackConstInterface
 {
-    const CLASS_PATTERN = 'brainworxx\\krexx\\krexx';
+    /**
+     * Pattern used to find the krexx call in the backtrace.
+     *
+     * Can be overwritten by extending classes.
+     *
+     * @var string
+     */
+    const CLASS_PATTERN = Krexx::class;
+
+    /**
+     * Pattern used to find the krexx call in the backtrace.
+     *
+     * Can be overwritten by extending classes.
+     *
+     * @var string
+     */
     const FUNCTION_PATTERN = 'krexx';
 
 
@@ -64,10 +81,8 @@ class CallerFinder extends AbstractCaller
         $this->callPattern = [
             'krexx',
             'krexx::open',
-            'krexx::' . $this->pool->config->getDevHandler(),
             'Krexx',
             'Krexx::open',
-            'Krexx::' . $this->pool->config->getDevHandler(),
             'Krexx::log',
             'krexx::log',
         ];
@@ -77,7 +92,7 @@ class CallerFinder extends AbstractCaller
     /**
      * {@inheritdoc}
      */
-    public function findCaller($headline, $data): array
+    public function findCaller(string $headline, $data): array
     {
         $backtrace = array_reverse(debug_backtrace(0, 5));
 
@@ -88,12 +103,12 @@ class CallerFinder extends AbstractCaller
                 break;
             }
         }
+
         if (empty($headline)) {
             $varname = $this->getVarName($caller[static::TRACE_FILE], $caller[static::TRACE_LINE]);
         } else {
             $varname = $headline;
         }
-
 
         // We will not keep the whole backtrace im memory. We only return what we
         // actually need.
@@ -126,7 +141,7 @@ class CallerFinder extends AbstractCaller
             (
                 // Check for a class trace.
                 isset($caller[static::TRACE_CLASS]) &&
-                strtolower($caller[static::TRACE_CLASS]) === static::CLASS_PATTERN
+                $caller[static::TRACE_CLASS] === static::CLASS_PATTERN
             );
     }
 
@@ -141,7 +156,7 @@ class CallerFinder extends AbstractCaller
      * @return string
      *   The name of the variable.
      */
-    protected function getVarName($file, $line)
+    protected function getVarName(string $file, int $line)
     {
         // Set a fallback value.
         $varname = static::UNKNOWN_VALUE;
@@ -183,7 +198,7 @@ class CallerFinder extends AbstractCaller
      * @return string
      *   The variable, or fallback to '. . .'
      */
-    protected function removeKrexxPartFromCommand($command)
+    protected function removeKrexxPartFromCommand(string $command)
     {
         foreach ($this->callPattern as $funcname) {
             // This little baby tries to resolve everything inside the
@@ -213,7 +228,7 @@ class CallerFinder extends AbstractCaller
      * @return string
      *   The variable name, after the cleanup.
      */
-    protected function cleanupVarName($name)
+    protected function cleanupVarName(string $name)
     {
         // We start with a -1, because we need to stop right before. every opening
         // bracket has a closing one.

@@ -37,8 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\ViewHelpers;
 
-use Brainworxx\Krexx\Krexx;
-
 class LogViewHelper extends DebugViewHelper
 {
     /**

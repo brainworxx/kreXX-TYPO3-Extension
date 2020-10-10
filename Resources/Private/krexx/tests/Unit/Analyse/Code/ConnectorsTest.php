@@ -85,7 +85,7 @@ class ConnectorsTest extends AbstractTest
     public function testGetConnectorLeft()
     {
         // Without custom connector.
-        $this->connectors->setType($this->connectors::ASSOCIATIVE_ARRAY);
+        $this->connectors->setType($this->connectors::CONNECTOR_ASSOCIATIVE_ARRAY);
         $this->assertEquals('[\'', $this->connectors->getConnectorLeft());
 
         // With custom connectors.
@@ -101,21 +101,21 @@ class ConnectorsTest extends AbstractTest
     public function testGetConnectorRight()
     {
         // Test with methods and without parameters
-        $this->connectors->setType($this->connectors::STATIC_METHOD);
+        $this->connectors->setType($this->connectors::CONNECTOR_STATIC_METHOD);
         $this->assertEquals('()', $this->connectors->getConnectorRight(0));
-        $this->connectors->setType($this->connectors::METHOD);
+        $this->connectors->setType($this->connectors::CONNECTOR_METHOD);
         $this->assertEquals('()', $this->connectors->getConnectorRight(0));
 
         // Test with methods and parameters.
         $this->connectors->setParameters('some parameter');
-        $this->connectors->setType($this->connectors::STATIC_METHOD);
+        $this->connectors->setType($this->connectors::CONNECTOR_STATIC_METHOD);
         $this->assertEquals('(some parameter)', $this->connectors->getConnectorRight(0));
-        $this->connectors->setType($this->connectors::METHOD);
+        $this->connectors->setType($this->connectors::CONNECTOR_METHOD);
         $this->assertEquals('(some parameter)', $this->connectors->getConnectorRight(0));
         $this->assertEquals('(some  . . . )', $this->connectors->getConnectorRight(5));
 
         // Test with some other type
-        $this->connectors->setType($this->connectors::CONSTANT);
+        $this->connectors->setType($this->connectors::CONNECTOR_CONSTANT);
         $this->assertEmpty($this->connectors->getConnectorRight(0));
     }
 

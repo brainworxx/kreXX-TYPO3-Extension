@@ -111,7 +111,6 @@ class ValidationTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Service\Config\Validation::evalBool
      * @covers \Brainworxx\Krexx\Service\Config\Validation::evalDebugMethods
      * @covers \Brainworxx\Krexx\Service\Config\Validation::evalDestination
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalDevHandle
      * @covers \Brainworxx\Krexx\Service\Config\Validation::evalInt
      * @covers \Brainworxx\Krexx\Service\Config\Validation::evalIpRange
      * @covers \Brainworxx\Krexx\Service\Config\Validation::evalMaxRuntime
@@ -162,10 +161,6 @@ class ValidationTest extends AbstractTest
             Fallback::EVAL_IP_RANGE => [
                 'some values' => true,
                 '' => false
-            ],
-            Fallback::EVAL_DEV_HANDLE => [
-                'gue' => true,
-                'gü' => false
             ],
             Fallback::EVAL_MAX_RUNTIME => [
                 'seven' => false,

@@ -39,12 +39,13 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionMethod;
 use Aimeos\MShop\Common\Item\Iface;
-use ReflectionException;
 
 /**
  * Resolving the Aimeos getter:
@@ -72,7 +73,7 @@ use ReflectionException;
  * @uses array $additional
  *   Additional data from the event call.
  */
-class Getter extends AbstractEventHandler
+class Getter extends AbstractEventHandler implements CallbackConstInterface, ViewConstInterface
 {
     /**
      * Our pool.
@@ -226,7 +227,6 @@ class Getter extends AbstractEventHandler
         // Retrieve the value array from the class.
         // Everything sits in a private array, so we do not need to walk
         // through the whole class structure.
-        /** @var \ReflectionClass $reflectionClass */
         $reflectionClass = $reflectionMethod->getDeclaringClass();
         $data = $params[static::PARAM_REF]->getData();
 

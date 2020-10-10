@@ -37,17 +37,47 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Throwable;
 
 /**
  * Processing of resources.
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessResource extends AbstractRouting implements ProcessInterface
+class ProcessResource extends AbstractRouting implements ProcessInterface, CallbackConstInterface, ProcessConstInterface
 {
+    /**
+     * Is this one a resource?
+     *
+     * @param Model $model
+     *   The value we are analysing.
+     *
+     * @return bool
+     *   Well, is this a resource?
+     */
+    public function canHandle(Model $model): bool
+    {
+        // Resource?
+        // The is_resource can not identify closed stream resource types.
+        // And the get_resource_type() throws a warning, in case this is not a
+        // resource.
+        set_error_handler(function () {
+            // Do nothing. We need to catch a possible warning.
+        });
+
+        try {
+            $result = get_resource_type($model->getData()) !== null;
+        } catch (Throwable $exception) {
+            $result = false;
+        }
+
+        restore_error_handler();
+        return $result;
+    }
 
     /**
      * Analyses a resource.
@@ -58,7 +88,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface
      * @return string
      *   The rendered markup.
      */
-    public function process(Model $model): string
+    public function handle(Model $model): string
     {
         $resource = $model->getData();
         $type = get_resource_type($resource);
@@ -107,7 +137,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface
      * @return string
      *   The rendered HTML.
      */
-    protected function renderUnknownOrClosed(Model $model, $resource, $typeString): string
+    protected function renderUnknownOrClosed(Model $model, $resource, string $typeString): string
     {
         // If we are facing a closed resource, 'Unknown' is a little bit sparse.
         // PHP 7.2 can provide more info by calling gettype().

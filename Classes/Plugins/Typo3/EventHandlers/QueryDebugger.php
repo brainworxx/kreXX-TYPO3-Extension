@@ -38,8 +38,9 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
@@ -56,7 +57,7 @@ use Throwable;
  *
  * @package Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers
  */
-class QueryDebugger implements EventHandlerInterface, ConstInterface
+class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, ProcessConstInterface
 {
     /**
      * The resource pool

@@ -49,7 +49,7 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessString;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Closure;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInterface;
 
 /**
  * "Routing" for kreXX
@@ -61,54 +61,9 @@ use Closure;
 class Routing extends AbstractRouting
 {
     /**
-     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray
+     * @var ProcessInterface[]
      */
-    protected $processArray;
-
-    /**
-     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean
-     */
-    protected $processBoolean;
-
-    /**
-     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure
-     */
-    protected $processClosure;
-
-    /**
-     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat
-     */
-    protected $processFloat;
-
-    /**
-     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger
-     */
-    protected $processInteger;
-
-    /**
-     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessNull
-     */
-    protected $processNull;
-
-    /**
-     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject
-     */
-    protected $processObject;
-
-    /**
-     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource
-     */
-    protected $processResource;
-
-    /**
-     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessString
-     */
-    protected $processString;
-
-    /**
-     * @var \Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther
-     */
-    protected $processOther;
+    protected $processors = [];
 
     /**
      * Inject the pool and create all the routing classes.
@@ -118,16 +73,17 @@ class Routing extends AbstractRouting
     public function __construct(Pool $pool)
     {
         parent::__construct($pool);
-        $this->processArray = $pool->createClass(ProcessArray::class);
-        $this->processBoolean = $pool->createClass(ProcessBoolean::class);
-        $this->processClosure = $pool->createClass(ProcessClosure::class);
-        $this->processFloat = $pool->createClass(ProcessFloat::class);
-        $this->processInteger = $pool->createClass(ProcessInteger::class);
-        $this->processNull = $pool->createClass(ProcessNull::class);
-        $this->processObject = $pool->createClass(ProcessObject::class);
-        $this->processResource = $pool->createClass(ProcessResource::class);
-        $this->processString = $pool->createClass(ProcessString::class);
-        $this->processOther = $pool->createClass(ProcessOther::class);
+
+        $this->processors[ProcessString::class] = $pool->createClass(ProcessString::class);
+        $this->processors[ProcessInteger::class] = $pool->createClass(ProcessInteger::class);
+        $this->processors[ProcessNull::class] = $pool->createClass(ProcessNull::class);
+        $this->processors[ProcessArray::class] = $pool->createClass(ProcessArray::class);
+        $this->processors[ProcessClosure::class] = $pool->createClass(ProcessClosure::class);
+        $this->processors[ProcessObject::class] = $pool->createClass(ProcessObject::class);
+        $this->processors[ProcessBoolean::class] = $pool->createClass(ProcessBoolean::class);
+        $this->processors[ProcessFloat::class] = $pool->createClass(ProcessFloat::class);
+        $this->processors[ProcessResource::class] = $pool->createClass(ProcessResource::class);
+        $this->processors[ProcessOther::class] = $pool->createClass(ProcessOther::class);
 
         $pool->routing = $this;
     }
@@ -151,166 +107,13 @@ class Routing extends AbstractRouting
             return '';
         }
 
-        $data = $model->getData();
-        $result = '';
-
-        if (is_string($data) === true) {
-            // String?
-            $result =  $this->processString->process($model);
-        } elseif (is_int($data) === true) {
-            // Integer?
-            $result =  $this->processInteger->process($model);
-        } elseif ($data === null) {
-            // Null?
-            $result =  $this->processNull->process($model);
-        } elseif (is_array($data) === true || is_object($data) === true) {
-            // Handle the complex types.
-            $this->pool->emergencyHandler->upOneNestingLevel();
-            $result = $this->handleNoneSimpleTypes($data, $model);
-            $this->pool->emergencyHandler->downOneNestingLevel();
-        } elseif (is_bool($data) === true) {
-            // Boolean?
-            $result =  $this->processBoolean->process($model);
-        } elseif (is_float($data) === true) {
-            // Float?
-            $result =  $this->processFloat->process($model);
-        } else {
-            // Resource?
-            // The is_resource can not identify closed stream resource types.
-            // And the get_resource_type() throws a warning, in case this is not a
-            // resource.
-            set_error_handler(function () {
-                // Do nothing. We need to catch a possible warning.
-            });
-            if (get_resource_type($data) !== null) {
-                $result =  $this->processResource->process($model);
+        foreach ($this->processors as $processor) {
+            if ($processor->canHandle($model)) {
+                return $processor->handle($model);
             }
-            restore_error_handler();
         }
 
-        if (empty($result) === true) {
-            // Tell the dev that we can not analyse this one.
-            $result = $this->processOther->process($model);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Routing of objects and arrays.
-     *
-     * @param object|array $data
-     *   The object / array we are analysing.
-     * @param \Brainworxx\Krexx\Analyse\Model $model
-     *   The already prepared model.
-     *
-     * @return string
-     *   The rendered HTML code.
-     */
-    protected function handleNoneSimpleTypes($data, Model $model): string
-    {
-        // Check the nesting level.
-        if ($this->pool->emergencyHandler->checkNesting() === true) {
-            return $this->handleNestedTooDeep($data, $model);
-        }
-
-        // Render recursion.
-        if ($this->pool->recursionHandler->isInHive($data) === true) {
-            return $this->handleRecursion($data, $model);
-        }
-
-        // Looks like we are good.
-        return $this->preprocessNoneSimpleTypes($data, $model);
-    }
-
-    /**
-     * This none simple type was analysed before.
-     *
-     * @param $data
-     *   The object / array we are analysing.
-     * @param \Brainworxx\Krexx\Analyse\Model $model
-     *   The already prepared model.
-     *
-     * @return string
-     *   The rendered HTML.
-     */
-    protected function handleRecursion($data, Model $model): string
-    {
-        if (is_object($data) === true) {
-            $normal = '\\' . get_class($data);
-            $domId = $this->generateDomIdFromObject($data);
-        } else {
-            // Must be the globals array.
-            $normal = '$GLOBALS';
-            $domId = '';
-        }
-
-        return $this->pool->render->renderRecursion(
-            $model->setDomid($domId)->setNormal($normal)
-        );
-    }
-
-    /**
-     * This none simple type was nested too deep.
-     *
-     * @param $data
-     *   The object / array we are analysing.
-     * @param \Brainworxx\Krexx\Analyse\Model $model
-     *   The already prepared model.
-     *
-     * @return string
-     *   The rendered HTML.
-     */
-    protected function handleNestedTooDeep($data, Model $model): string
-    {
-        $text = $this->pool->messages->getHelp('maximumLevelReached2');
-
-        if (is_array($data) === true) {
-            $type = static::TYPE_ARRAY;
-        } else {
-            $type = static::TYPE_OBJECT;
-        }
-
-        $model->setData($text)
-            ->setNormal($this->pool->messages->getHelp('maximumLevelReached1'))
-            ->setType($type)
-            ->setHasExtra(true);
-
-        // Render it directly.
-        return $this->pool->render->renderExpandableChild($model);
-    }
-
-    /**
-     * Do some pre processing, before the routing.
-     *
-     * @param object|array $data
-     *   The object / array we are analysing.
-     * @param \Brainworxx\Krexx\Analyse\Model $model
-     *   The already prepared model.
-     *
-     * @return string
-     *   The rendered HTML code.
-     */
-    protected function preprocessNoneSimpleTypes($data, Model $model): string
-    {
-        if (is_object($data) === true) {
-            // Object?
-            // Remember that we've been here before.
-            $this->pool->recursionHandler->addToHive($data);
-
-            // We need to check if this is an object first.
-            // When calling is_a('myClass', 'anotherClass') the autoloader is
-            // triggered, trying to load 'myClass', although it is just a string.
-            if ($data instanceof Closure) {
-                // Closures are handled differently than normal objects
-                return $this->processClosure->process($model);
-            }
-
-            // Normal object.
-            return $this->processObject->process($model);
-        }
-
-        // Must be an array.
-        return $this->processArray->process($model);
+        // The ProcessOther should prevent this.
+        return '';
     }
 }

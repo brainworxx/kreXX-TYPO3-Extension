@@ -44,9 +44,25 @@ namespace Brainworxx\Krexx\Service\Plugin;
  */
 interface PluginConfigInterface
 {
-
+    /**
+     * Event marker. Start marker of the callback.
+     *
+     * @var string
+     */
     const START_EVENT = '::callMe::start';
+
+    /**
+     * Event marker. End marker of the callback.
+     *
+     * @var string
+     */
     const END_EVENT = '::callMe::end';
+
+    /**
+     * Event marker. Somewhere-in-the-middle marker of the callback.
+     *
+     * @var string
+     */
     const START_PROCESS = '::process';
 
     /**
@@ -58,8 +74,6 @@ interface PluginConfigInterface
 
     /**
      * Get the version of the plugin.
-     *
-     * @throws \TYPO3\CMS\Core\Package\Exception
      *
      * @return string
      */

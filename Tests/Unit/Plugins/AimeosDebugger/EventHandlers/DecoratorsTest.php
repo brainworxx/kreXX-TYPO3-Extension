@@ -34,12 +34,15 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
+use Aimeos\Map;
 use Aimeos\MShop\Context\Item\Standard as MShopContext;
 use Aimeos\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators;
 use Brainworxx\Includekrexx\Tests\Fixtures\AimeosJobsDecorator;
+use Brainworxx\Includekrexx\Tests\Fixtures\Fixture20Job;
 use Brainworxx\Includekrexx\Tests\Fixtures\FixtureJob;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -78,7 +81,12 @@ class DecoratorsTest extends AbstractTest
         // Create a fixture with a decorator.
         $context = new MShopContext();
         $aimeos = new Bootstrap();
-        $testJob = new FixtureJob();
+        if (class_exists(Map::class)) {
+            $testJob = new Fixture20Job();
+        } else {
+            $testJob = new FixtureJob();
+        }
+
         $decorator = new AimeosJobsDecorator($testJob, $context, $aimeos);
         $fixture = [
             Methods::PARAM_DATA => $decorator,
@@ -114,7 +122,7 @@ class DecoratorsTest extends AbstractTest
         ];
         /** @var \ReflectionMethod $reflectionMethod */
         $index = 0;
-        foreach ($methodsModel->getParameters()[$methodsModel::PARAM_DATA] as $key => $reflectionMethod) {
+        foreach ($methodsModel->getParameters()[CallbackConstInterface::PARAM_DATA] as $key => $reflectionMethod) {
             $this->assertEquals($key, $reflectionMethod->name);
             $this->assertEquals($expectations[$index], $key);
             ++$index;
@@ -124,7 +132,7 @@ class DecoratorsTest extends AbstractTest
         $this->assertEquals('Decorated Object', $objectsModel->getName());
         $this->assertSame(
             $testJob,
-            $objectsModel->getParameters()[$objectsModel::PARAM_DATA][0],
+            $objectsModel->getParameters()[CallbackConstInterface::PARAM_DATA][0],
             'The object that got itself decorated.'
         );
     }

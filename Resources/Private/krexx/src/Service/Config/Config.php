@@ -50,8 +50,25 @@ use Brainworxx\Krexx\View\Output\CheckOutput;
  */
 class Config extends Fallback
 {
+    /**
+     * Name of the chunks folder.
+     *
+     * @var string
+     */
     const CHUNKS_FOLDER = 'chunks';
+
+    /**
+     * Name of the log folder.
+     *
+     * @var string
+     */
     const LOG_FOLDER = 'log';
+
+    /**
+     * Name of the config folder.
+     *
+     * @var string
+     */
     const CONFIG_FOLDER = 'config';
 
     /**
@@ -182,23 +199,6 @@ class Config extends Fallback
     }
 
     /**
-     * Returns the developer handle from the cookies.
-     *
-     * @return string|null
-     *   The Developer handle. Null when nothing was set.
-     */
-    public function getDevHandler()
-    {
-        static $handle;
-
-        if ($handle === null) {
-            $handle = $this->cookieConfig->getConfigFromCookies('deep', static::SETTING_DEV_HANDLE);
-        }
-
-        return $handle;
-    }
-
-    /**
      * Wrapper around the stored settings array, to intercept settings calls.
      *
      * @param string $name
@@ -223,7 +223,6 @@ class Config extends Fallback
      */
     public function loadConfigValue(string $name): Config
     {
-        /** @var Model $model */
         $model = $this->prepareModelWithFeSettings($name);
         $section = $model->getSection();
 

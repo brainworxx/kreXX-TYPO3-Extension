@@ -38,9 +38,12 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
+use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Properties;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -54,7 +57,11 @@ use ReflectionProperty;
  * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class ThroughProperties extends AbstractCallback
+class ThroughProperties extends AbstractCallback implements
+    CallbackConstInterface,
+    ViewConstInterface,
+    CodegenConstInterface,
+    ConnectorsConstInterface
 {
 
     /**
@@ -78,67 +85,83 @@ class ThroughProperties extends AbstractCallback
                 return '';
             }
 
-            // Every other additional string requires a special connector,
-            // so we do this here.
-            $connectorType = Connectors::NORMAL_PROPERTY;
-            /** @var \ReflectionProperty $refProperty */
-            $propName = $refProperty->getName();
-            // Static properties are very special.
-            if ($refProperty->isStatic() === true) {
-                $connectorType = Connectors::STATIC_PROPERTY;
-                // There is always a $ in front of a static property.
-                $propName = '$' . $propName;
-            }
-
-            // Stitch together our additional info about the data:
-            // public access, protected access, private access and info if it was
-            // inherited from somewhere.
-            $additional = $this->getAdditionalData($refProperty, $ref);
+            // Stitch together our model.
             $value = $ref->retrieveValue($refProperty);
-            if (isset($refProperty->isUnset) === true) {
-                $additional .= 'unset ';
-            }
-
-            if (isset($refProperty->isUndeclared) === true) {
-                // The property 'isUndeclared' is not a part of the reflectionProperty.
-                // @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
-                $additional .= 'dynamic property ';
-
-                // Check for very special chars in there.
-                // AFAIK this is only possible for dynamically declared properties
-                // which can never be static.
-                if ($this->pool->encodingService->isPropertyNameNormal($propName) === false) {
-                    $propName = $this->pool->encodingService->encodeStringForCodeGeneration($propName);
-                    $connectorType = Connectors::SPECIAL_CHARS_PROP;
-                }
-
-                // There is no comment ora declaration place for a dynamic property.
-                $comment = '';
-                $declarationPlace = 'undeclared';
-            } else {
-                // Since we are dealing with a declared Property here, we can
-                // get the comment and the declaration place.
-                $comment = $this->pool->createClass(Properties::class)->getComment($refProperty);
-                $declarationPlace = $this->retrieveDeclarationPlace($refProperty);
-            }
-
-            // Stitch together our model
             $output .= $this->pool->routing->analysisHub(
                 $this->dispatchEventWithModel(
                     __FUNCTION__ . static::EVENT_MARKER_END,
                     $this->pool->createClass(Model::class)
                         ->setData($value)
-                        ->setName($this->pool->encodingService->encodeString($propName))
-                        ->addToJson(static::META_COMMENT, $comment)
-                        ->addToJson(static::META_DECLARED_IN, $declarationPlace)
-                        ->setAdditional($additional)
-                        ->setConnectorType($connectorType)
-                        ->setIsPublic($refProperty->isPublic())
+                        ->setName($this->retrievePropertyName($refProperty))
+                        ->addToJson(
+                            static::META_COMMENT,
+                            $this->pool->createClass(Properties::class)->getComment($refProperty)
+                        )
+                        ->addToJson(static::META_DECLARED_IN, $this->retrieveDeclarationPlace($refProperty))
+                        ->setAdditional($this->getAdditionalData($refProperty, $ref))
+                        ->setConnectorType($this->retrieveConnector($refProperty))
+                        ->setCodeGenType($refProperty->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '')
                 )
             );
         }
 
         return $output;
+    }
+
+    /**
+     * Retrieve the connector type, depending on the property properties
+     *
+     * @param \ReflectionProperty $refProperty
+     *   Reflection of the property we are analysing.
+     *
+     * @return string
+     *   The connector type.
+     */
+    protected function retrieveConnector(ReflectionProperty $refProperty): string
+    {
+        $connectorType = static::CONNECTOR_NORMAL_PROPERTY;
+
+        if ($refProperty->isStatic() === true) {
+            $connectorType = static::CONNECTOR_STATIC_PROPERTY;
+        } elseif (
+            isset($refProperty->isUndeclared) === true &&
+            $this->pool->encodingService->isPropertyNameNormal($refProperty->getName()) === false
+        ) {
+            // This one was undeclared and does not follow the standard naming
+            // conventions of PHP. Maybe something for a rest service?
+            $connectorType = static::CONNECTOR_SPECIAL_CHARS_PROP;
+        }
+
+        return $connectorType;
+    }
+
+    /**
+     * Retrieval of the property name, and processing it.
+     *
+     * @param \ReflectionProperty $refProperty
+     *   Reflection of the property we are analysing.
+     *
+     * @return string
+     *   The processed property name.
+     */
+    protected function retrievePropertyName(ReflectionProperty $refProperty): string
+    {
+        $propName = $refProperty->getName();
+        // Static properties are very special.
+        if ($refProperty->isStatic() === true) {
+            // There is always a $ in front of a static property.
+            $propName = '$' . $propName;
+        } elseif (
+            isset($refProperty->isUndeclared) === true &&
+            $this->pool->encodingService->isPropertyNameNormal($refProperty->getName()) === false
+        ) {
+            // There can be anything in there. We must take special preparations
+            // for the code generation.
+            $propName = $this->pool->encodingService->encodeString($propName);
+        }
+
+        // And  encode it, just in case.
+        return $propName;
     }
 
     /**
@@ -157,12 +180,20 @@ class ThroughProperties extends AbstractCallback
         // Stitch together our additional info about the data:
         // public access, protected access, private access, static declaration.
         $additional = '';
+
         if ($refProperty->isProtected() === true) {
             $additional .= 'protected ';
         } elseif ($refProperty->isPublic() === true) {
             $additional .= 'public ';
         } elseif ($refProperty->isPrivate() === true) {
             $additional .= 'private ';
+        }
+
+        if (isset($refProperty->isUnset) === true) {
+            // This one was unset during runtime.
+            // We need to tell the dev. Accessing an unset property may trigger
+            // a warning.
+            $additional .= 'unset ';
         }
 
         // Test if the property is inherited or not by testing the
@@ -175,6 +206,12 @@ class ThroughProperties extends AbstractCallback
         // Add the info, if this is static.
         if ($refProperty->isStatic() === true) {
             $additional .= 'static ';
+        }
+
+        if (isset($refProperty->isUndeclared) === true) {
+            // The property 'isUndeclared' is not a part of the reflectionProperty.
+            // @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
+            $additional .= 'dynamic property ';
         }
 
         return $additional;
@@ -192,6 +229,10 @@ class ThroughProperties extends AbstractCallback
     protected function retrieveDeclarationPlace(ReflectionProperty $refProperty): string
     {
         static $declarationCache = [];
+
+        if (isset($refProperty->isUndeclared) === true) {
+            return 'undeclared';
+        }
 
         // Early return from the cache.
         $declaringClass = $refProperty->getDeclaringClass();

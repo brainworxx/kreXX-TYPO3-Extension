@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use StdClass;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
@@ -111,13 +112,12 @@ class IndexControllerTest extends AbstractTest
 
         // Mock the view.
         $viewMock = $this->createMock(ViewInterface::class);
-        $viewMock->expects($this->exactly(4))
+        $viewMock->expects($this->exactly(3))
             ->method('assign')
             ->withConsecutive(
                 ['settings', $settingsModel],
                 ['js', $jsCssFileContent],
-                ['css', $jsCssFileContent],
-                ['cssTenThree', '']
+                ['css', $jsCssFileContent]
             );
 
         // Prepare the collectors
@@ -140,7 +140,7 @@ class IndexControllerTest extends AbstractTest
         $this->setValueByReflection('view', $viewMock, $indexController);
 
         // Run it through like a tunnel on a marathon route.
-        $this->simulatePackage('includekrexx', 'some path');
+        $this->simulatePackage('includekrexx', 'includekrexx/');
         $indexController->indexAction();
 
         // Test for the kreXX messages.
@@ -173,6 +173,9 @@ class IndexControllerTest extends AbstractTest
         try {
             $indexController->saveAction($settingsModel);
         } catch (UnsupportedRequestTypeException $e) {
+            // We expect this one.
+            $exceptionWasThrown = true;
+        } catch (StopActionException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
         }
@@ -217,6 +220,9 @@ class IndexControllerTest extends AbstractTest
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
+        } catch (StopActionException $e) {
+            // We expect this one.
+            $exceptionWasThrown = true;
         }
         $this->assertTrue($exceptionWasThrown, static::REDIRECT_MESSAGE);
 
@@ -259,7 +265,11 @@ class IndexControllerTest extends AbstractTest
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
+        } catch (StopActionException $e) {
+            // We expect this one.
+            $exceptionWasThrown = true;
         }
+
         $this->assertTrue($exceptionWasThrown, static::REDIRECT_MESSAGE);
 
         $this->assertEquals(

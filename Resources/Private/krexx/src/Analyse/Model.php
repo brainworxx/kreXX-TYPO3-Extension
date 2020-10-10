@@ -37,8 +37,10 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse;
 
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model\AdditionalType;
 use Brainworxx\Krexx\Analyse\Model\Callback;
+use Brainworxx\Krexx\Analyse\Model\CodeGenType;
 use Brainworxx\Krexx\Analyse\Model\ConnectorService;
 use Brainworxx\Krexx\Analyse\Model\Data;
 use Brainworxx\Krexx\Analyse\Model\DomId;
@@ -50,13 +52,14 @@ use Brainworxx\Krexx\Analyse\Model\Json;
 use Brainworxx\Krexx\Analyse\Model\MultiLineCodeGen;
 use Brainworxx\Krexx\Analyse\Model\Name;
 use Brainworxx\Krexx\Analyse\Model\Normal;
+use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Model for the view rendering
  *
  * @package Brainworxx\Krexx\Analyse
  */
-class Model implements ConstInterface
+class Model implements ViewConstInterface, CodegenConstInterface
 {
     use ConnectorService;
     use Callback;
@@ -67,8 +70,10 @@ class Model implements ConstInterface
     use AdditionalType;
     use DomId;
     use HasExtra;
+    use CodeGenType;
+
     use MultiLineCodeGen;
     use IsPublic;
-    use IsCallback;
     use IsMetaConstants;
+    use IsCallback;
 }

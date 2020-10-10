@@ -37,17 +37,28 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Deep analysis for json strings.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
-class Json extends AbstractScalarAnalysis
+class Json extends AbstractScalarAnalysis implements ViewConstInterface
 {
     /**
-     * @var \stdClass
+     * Code generation for this one is the json encoder.
+     *
+     * @var string
+     */
+    protected $codeGenType = CodegenConstInterface::CODEGEN_TYPE_JSON_DECODE;
+
+    /**
+     * What the variable name says.
+     *
+     * @var \stdClass|array
      */
     protected $decodedJson;
 
@@ -69,8 +80,10 @@ class Json extends AbstractScalarAnalysis
     /**
      * Test, if this is a json, and if we can decode it.
      *
-     * @param bool|int|string $string
-     *   The possible json.
+     * @param string $string
+     *   The string we want to take a look at.
+     * @param Model $model
+     *   The model, so far.
      *
      * @return bool
      *   Well? Can we handle it?

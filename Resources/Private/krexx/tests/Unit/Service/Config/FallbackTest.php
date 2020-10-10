@@ -52,7 +52,6 @@ class FallbackTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnBoolSelectTrue
      * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnDebugMethods
      * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnDestination
-     * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnDevHandle
      * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnInput
      * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnIpRange
      * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnMaxFiles

@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
 
@@ -46,8 +47,14 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
-abstract class AbstractScalarAnalysis extends AbstractCallback
+abstract class AbstractScalarAnalysis extends AbstractCallback implements CallbackConstInterface
 {
+    /**
+     * The code generation type constant assigned to the model.
+     *
+     * @var string
+     */
+    protected $codeGenType = '';
     /**
      * Is this scalar deep analysis class able to do something here?
      *
@@ -90,6 +97,7 @@ abstract class AbstractScalarAnalysis extends AbstractCallback
         /** @var Model $model */
         $model = $this->pool->createClass(Model::class)
             ->addParameter(static::PARAM_DATA, $meta)
+            ->addParameter(static::PARAM_CODE_GEN_TYPE, $this->codeGenType)
             ->injectCallback($this->pool->createClass(ThroughMeta::class));
 
         // We render the model directly. This class acts only as a proxy.

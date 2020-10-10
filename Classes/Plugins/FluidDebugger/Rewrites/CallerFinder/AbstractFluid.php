@@ -37,7 +37,9 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
 
@@ -46,9 +48,10 @@ use ReflectionException;
  *
  * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder
  */
-abstract class AbstractFluid extends AbstractCaller
+abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInterface
 {
     const FLUID_VARIABLE = 'fluidvar';
+    const FLUID_NOT_AVAILABLE = 'n/a';
 
     /**
      * @var \TYPO3\CMS\Fluid\View\AbstractTemplateView|\TYPO3Fluid\Fluid\View\ViewInterface
@@ -97,7 +100,7 @@ abstract class AbstractFluid extends AbstractCaller
      *
      * @var string
      */
-    protected $line = 'n/a';
+    protected $line = self::FLUID_NOT_AVAILABLE;
 
     /**
      * The variable name, that we were able to resolve.
@@ -155,9 +158,9 @@ abstract class AbstractFluid extends AbstractCaller
         }
 
         try {
-            $renderingStackReflection = $this->viewReflection->getProperty('renderingStack');
-            $renderingStackReflection->setAccessible(true);
-            $renderingStack = $renderingStackReflection->getValue($this->view);
+            $renderingStackRef = $this->viewReflection->getProperty('renderingStack');
+            $renderingStackRef->setAccessible(true);
+            $renderingStack = $renderingStackRef->getValue($this->view);
         } catch (ReflectionException $e) {
             $this->error = true;
             return;
@@ -181,14 +184,14 @@ abstract class AbstractFluid extends AbstractCaller
     /**
      * {@inheritdoc}
      */
-    public function findCaller($headline, $data): array
+    public function findCaller(string $headline, $data): array
     {
         // Did we get our stuff together so far?
         if ($this->error === true) {
             // Something went wrong!
             return [
-                static::TRACE_FILE => 'n/a',
-                static::TRACE_LINE => 'n/a',
+                static::TRACE_FILE => static::FLUID_NOT_AVAILABLE,
+                static::TRACE_LINE => static::FLUID_NOT_AVAILABLE,
                 static::TRACE_VARNAME => static::FLUID_VARIABLE,
                 static::TRACE_TYPE => $this->getType('Fluid analysis', static::FLUID_VARIABLE, $data),
                 static::TRACE_DATE => date('d-m-Y H:i:s', time()),
@@ -227,7 +230,7 @@ abstract class AbstractFluid extends AbstractCaller
                 $path = $this->getLayoutPath();
                 break;
             default:
-                $path = 'n/a';
+                $path = static::FLUID_NOT_AVAILABLE;
         }
 
         // Trying to resolve the line as well as the variable name, if possible.
@@ -256,7 +259,7 @@ abstract class AbstractFluid extends AbstractCaller
      * @return string
      *   The analysis type.
      */
-    protected function getType($headline, $varname, $data): string
+    protected function getType(string $headline, string $varname, $data): string
     {
         if (is_object($data) === true) {
             $type = get_class($data);
@@ -320,7 +323,7 @@ abstract class AbstractFluid extends AbstractCaller
     {
         // We check for : and -> to see if we are facing some inline stuff
         if (strpos($varname, ':') !== false || strpos($varname, '->') !== false) {
-            if (version_compare(TYPO3_version, '8.6', '>=')) {
+            if (version_compare(Bootstrap::getTypo3Version(), '8.6', '>=')) {
                 // Variable set is native to 8.6 and beyond.
                 $code = '<f:variable value="{' . $varname . '}" name="fluidvar" /> {';
             } else {

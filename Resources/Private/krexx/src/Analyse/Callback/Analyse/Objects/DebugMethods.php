@@ -38,9 +38,10 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
-use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
+use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionException;
 use Throwable;
@@ -57,7 +58,10 @@ use Throwable;
  * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class DebugMethods extends AbstractObjectAnalysis
+class DebugMethods extends AbstractObjectAnalysis implements
+    CodegenConstInterface,
+    ConnectorsConstInterface,
+    ConfigConstInterface
 {
 
     /**
@@ -78,24 +82,22 @@ class DebugMethods extends AbstractObjectAnalysis
         $data = $reflectionClass->getData();
         $output = $this->dispatchStartEvent();
 
-        foreach (explode(',', $this->pool->config->getSetting(Fallback::SETTING_DEBUG_METHODS)) as $funcName) {
+        foreach (explode(',', $this->pool->config->getSetting(static::SETTING_DEBUG_METHODS)) as $funcName) {
             if (
                 $this->checkIfAccessible($data, $funcName, $reflectionClass) === true &&
                 // We ignore NULL values.
                 ($result = $this->retrieveValue($data, $funcName)) !== null
             ) {
                 $output .= $this->pool->render->renderExpandableChild(
-                    $this->dispatchEventWithModel(
-                        $funcName,
-                        $this->pool->createClass(Model::class)
-                            ->setName($funcName)
-                            ->setType(static::TYPE_DEBUG_METHOD)
-                            ->setNormal(static::UNKNOWN_VALUE)
-                            ->setHelpid($funcName)
-                            ->setConnectorType(Connectors::METHOD)
-                            ->addParameter(static::PARAM_DATA, $result)
-                            ->injectCallback($this->pool->createClass(Debug::class))
-                    )
+                    $this->dispatchEventWithModel($funcName, $this->pool->createClass(Model::class)
+                        ->setName($funcName)
+                        ->setType(static::TYPE_DEBUG_METHOD)
+                        ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
+                        ->setNormal(static::UNKNOWN_VALUE)
+                        ->setHelpid($funcName)
+                        ->setConnectorType(static::CONNECTOR_METHOD)
+                        ->addParameter(static::PARAM_DATA, $result)
+                        ->injectCallback($this->pool->createClass(Debug::class)))
                 );
                 unset($result);
             }
@@ -168,8 +170,6 @@ class DebugMethods extends AbstractObjectAnalysis
                 return false;
             }
 
-
-            /** @var \ReflectionParameter $param */
             foreach ($ref->getParameters() as $param) {
                 if ($param->isOptional() === false) {
                     // We've got a required parameter!

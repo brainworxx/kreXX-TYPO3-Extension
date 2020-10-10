@@ -35,16 +35,56 @@
 
 declare(strict_types=1);
 
-$result = [
-    // Our old legacy namespace viewhelper
-    'Tx_Includekrexx_ViewHelpers_DebugViewHelper' => Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper::class,
-];
+namespace Brainworxx\Krexx\Analyse\Model;
 
-if (version_compare(TYPO3_version, '10.0', '>=')) {
-    // Registering this class mapping in a system, where it is *not* deprecated
-    // results in really strange fluid errors.
-    $result[\TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper::class] =
-        \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper::class;
+use Brainworxx\Krexx\Analyse\Model;
+
+trait CodeGenType
+{
+    /**
+     * The code generation type.
+     *
+     * @var string
+     */
+    protected $codeGenType = '';
+
+    /**
+     * Getter for the code generation type.
+     *
+     * @return string
+     *   The string, representing the type.
+     */
+    public function getCodeGenType(): string
+    {
+        if (
+            $this->codeGenType === '' &&
+            $this->getConnectorLeft() === '' &&
+            $this->getConnectorRight() === ''
+        ) {
+            // No connectors, no nothing.
+            // Normal meta stuff.
+            // We will ignore this one.
+            return static::CODEGEN_TYPE_EMPTY;
+        }
+
+        return $this->codeGenType;
+    }
+
+    /**
+     * Setter for the code generation type
+     *
+     * @param string $codeGenType
+     *   The string, representing the type.
+     *
+     * @return $this
+     *   For chaining.
+     */
+    public function setCodeGenType(string $codeGenType): Model
+    {
+        if ($codeGenType !== '') {
+            $this->codeGenType = $codeGenType;
+        }
+
+        return $this;
+    }
 }
-
-return $result;

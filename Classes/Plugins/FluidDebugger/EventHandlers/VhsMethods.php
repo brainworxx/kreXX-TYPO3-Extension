@@ -38,7 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\ConstInterface as FluidConstInterface;
@@ -51,7 +51,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe::end
  * @package Brainworxx\Includekrexx\Plugins\FluidCodeGen\EventHandlers
  */
-class VhsMethods implements EventHandlerInterface, ConstInterface, FluidConstInterface
+class VhsMethods implements EventHandlerInterface, CallbackConstInterface, FluidConstInterface
 {
     /**
      * The resource pool
@@ -84,7 +84,7 @@ class VhsMethods implements EventHandlerInterface, ConstInterface, FluidConstInt
     {
         $params = $callback->getParameters();
         /** @var \ReflectionMethod $reflectionMethod */
-        $reflectionMethod = $params[static::PARAM_REF_METHOD];
+        $reflectionMethod = $params[static::PARAM_REFLECTION_METHOD];
 
         $paramArray = [];
         foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
@@ -92,7 +92,7 @@ class VhsMethods implements EventHandlerInterface, ConstInterface, FluidConstInt
         }
 
         // Switch to VHS Viewhelper
-        $model->setMultiLineCodeGen(Codegen::VHS_CALL_VIEWHELPER)
+        $model->setCodeGenType(Codegen::VHS_CALL_VIEWHELPER)
             ->addParameter(static::PARAM_ARRAY, $paramArray);
 
         return '';

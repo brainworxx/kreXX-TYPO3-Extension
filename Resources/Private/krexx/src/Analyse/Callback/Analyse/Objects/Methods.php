@@ -37,9 +37,11 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -55,7 +57,7 @@ use ReflectionMethod;
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class Methods extends AbstractObjectAnalysis
+class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, ViewConstInterface, ConfigConstInterface
 {
 
     /**
@@ -71,9 +73,9 @@ class Methods extends AbstractObjectAnalysis
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
 
-        $doProtected = $this->pool->config->getSetting(Fallback::SETTING_ANALYSE_PROTECTED_METHODS) ||
+        $doProtected = $this->pool->config->getSetting(static::SETTING_ANALYSE_PROTECTED_METHODS) ||
             $this->pool->scope->isInScope();
-        $doPrivate = $this->pool->config->getSetting(Fallback::SETTING_ANALYSE_PRIVATE_METHODS) ||
+        $doPrivate = $this->pool->config->getSetting(static::SETTING_ANALYSE_PRIVATE_METHODS) ||
             $this->pool->scope->isInScope();
         $domId = $this->generateDomIdFromClassname($ref->getName(), $doProtected, $doPrivate);
 

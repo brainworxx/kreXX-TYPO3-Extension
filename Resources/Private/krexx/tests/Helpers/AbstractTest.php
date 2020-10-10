@@ -36,7 +36,7 @@
 namespace Brainworxx\Krexx\Tests\Helpers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
@@ -84,11 +84,13 @@ abstract class AbstractTest extends TestCase
         $keysRef->setValue(Krexx::$pool->messages, []);
 
         // Remove possible logfiles.
-        $logList = glob(Krexx::$pool->config->getLogDir() . '*.Krexx.html');
-        if (!empty($logList)) {
-            foreach ($logList as $file) {
-                unlink($file);
-                unlink($file . '.json');
+        if (strpos(Krexx::$pool->config->getLogDir(), 'Fixtures') === false) {
+            $logList = glob(Krexx::$pool->config->getLogDir() . '*.Krexx.html');
+            if (!empty($logList)) {
+                foreach ($logList as $file) {
+                    unlink($file);
+                    unlink($file . '.json');
+                }
             }
         }
 
@@ -235,10 +237,10 @@ abstract class AbstractTest extends TestCase
             2 => [],
             3 => [],
             4 => [
-                ConstInterface::TRACE_FUNCTION => 'krexx',
-                ConstInterface::TRACE_CLASS => 'MockClass',
-                ConstInterface::TRACE_FILE => 'mockfile.php',
-                ConstInterface::TRACE_LINE => 999
+                BacktraceConstInterface::TRACE_FUNCTION => 'krexx',
+                BacktraceConstInterface::TRACE_CLASS => 'MockClass',
+                BacktraceConstInterface::TRACE_FILE => 'mockfile.php',
+                BacktraceConstInterface::TRACE_LINE => 999
             ]
         ];
 

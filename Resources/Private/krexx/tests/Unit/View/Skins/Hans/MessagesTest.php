@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
 use Brainworxx\Krexx\View\Message;
+use Krexx;
 
 class MessagesTest extends AbstractRenderHans
 {
@@ -56,7 +57,7 @@ class MessagesTest extends AbstractRenderHans
 
         $messages = [];
         foreach ($fixture as $text) {
-            $message = new Message(\Krexx::$pool);
+            $message = new Message(Krexx::$pool);
             $message->setText($text);
             $messages[] = $message;
         }

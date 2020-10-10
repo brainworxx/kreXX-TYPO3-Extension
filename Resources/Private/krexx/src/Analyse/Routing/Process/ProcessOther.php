@@ -48,6 +48,20 @@ use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
  */
 class ProcessOther extends AbstractRouting implements ProcessInterface
 {
+    /**
+     * Fall back to telling the dev to create a ticket, requesting an analysis
+     * processor for this variable type.
+     *
+     * @param Model $model
+     *   The value we are analysing.
+     *
+     * @return bool
+     *   Well, is this a resource?
+     */
+    public function canHandle(Model $model): bool
+    {
+        return true;
+    }
 
     /**
      * Render a 'dump' for a other type.
@@ -58,7 +72,7 @@ class ProcessOther extends AbstractRouting implements ProcessInterface
      * @return string
      *   The rendered markup.
      */
-    public function process(Model $model): string
+    public function handle(Model $model): string
     {
         // Unknown type, better encode it, just to be sure.
         $type = $this->pool->encodingService->encodeString(gettype($model->getData()));

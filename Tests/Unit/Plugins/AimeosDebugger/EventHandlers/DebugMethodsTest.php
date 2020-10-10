@@ -34,9 +34,11 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
+use Aimeos\Map;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods;
+use Brainworxx\Includekrexx\Tests\Fixtures\Aimeos20Item;
 use Brainworxx\Includekrexx\Tests\Fixtures\AimeosItem;
-use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -47,7 +49,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods as AnalyseDebugMethods;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 
-class DebugMethodsTest extends AbstractTest implements ConstInterface
+class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
 {
 
     /**
@@ -120,7 +122,11 @@ class DebugMethodsTest extends AbstractTest implements ConstInterface
 
         // Create the calling class an a fixture.
         $analyseDebugMethods = new AnalyseDebugMethods(\Krexx::$pool);
-        $object = new AimeosItem();
+        if (class_exists(Map::class)) {
+            $object = new Aimeos20Item();
+        } else {
+            $object = new AimeosItem();
+        }
 
         $fixture = [
             static::PARAM_DATA => new DebugMethodFixture(),
@@ -135,21 +141,29 @@ class DebugMethodsTest extends AbstractTest implements ConstInterface
         // Get the results.
         $models = Krexx::$pool->render->model['renderExpandableChild'];
 
+        if (class_exists(Map::class)) {
+            // Aimeos 2020+
+            $mapping = ['getRefItems', 'getPropertyItems', 'getListItems'];
+        } else {
+            // Aimeos 2019 and below
+            $mapping = ['getRefItems', 'getListItems'];
+        }
+
         // Testing the standard values.
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
         foreach ($models as $key => $model) {
-            if ($key === 0) {
-                $methodName = 'getRefItems';
-            } else {
-                $methodName = 'getListItems';
-            }
             $this->assertEquals(static::TYPE_DEBUG_METHOD, $model->getType());
             $this->assertEquals(static::UNKNOWN_VALUE, $model->getNormal());
             $this->assertEquals('->', $model->getConnectorLeft());
             $this->assertEquals('()', $model->getConnectorRight());
-            $this->assertEquals($methodName, $model->getName());
-            $this->assertInstanceOf(\StdClass::class, $model->getParameters()[static::PARAM_DATA][0]);
-            $this->assertInstanceOf(\DateTime::class, $model->getParameters()[static::PARAM_DATA][1]);
+            $this->assertEquals($mapping[$key], $model->getName(), 'Key is: ' . $key);
+            if ($mapping[$key] === 'getPropertyItems') {
+                $this->assertNull($model->getParameters()[static::PARAM_DATA][0], 'This data does not exist in the fixture.');
+                $this->assertNull($model->getParameters()[static::PARAM_DATA][1], 'This data does not exist in the fixture.');
+            } else {
+                $this->assertInstanceOf(\StdClass::class, $model->getParameters()[static::PARAM_DATA][0]);
+                $this->assertInstanceOf(\DateTime::class, $model->getParameters()[static::PARAM_DATA][1]);
+            }
         }
     }
 }

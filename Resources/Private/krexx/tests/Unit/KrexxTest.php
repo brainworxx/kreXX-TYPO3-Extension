@@ -465,44 +465,6 @@ class KrexxTest extends AbstractTest
     }
 
     /**
-     * Testing a call with a wrong developer handle.
-     *
-     * @covers \Brainworxx\Krexx\Krexx::__callStatic
-     */
-    public function testCallStatic()
-    {
-        $this->mockDebugBacktraceStandard();
-
-        $configMock = $this->createPartialMock(Config::class, ['getDevHandler']);
-        $configMock->expects($this->any())
-            ->method('getDevHandler')
-            ->will($this->returnValue('someValue'));
-
-        // The setup does not get executed, hence we get these settings from
-        // the already existing ones in the original class.
-        $configMock->settings =  Krexx::$pool->config->settings;
-        $this->setValueByReflection(
-            'directories',
-            [
-                'log' => Krexx::$pool->config->getLogDir(),
-                'chunks' => Krexx::$pool->config->getChunkDir(),
-                'config' => Krexx::$pool->config->getPathToIniFile()
-            ],
-            $configMock
-        );
-        // Inject the mock.
-        Krexx::$pool->config = $configMock;
-
-        Krexx::whatever();
-        // The counter should be at 0.
-        $this->assertEquals(0, $this->retrieveValueByReflection(static::KREXX_COUNT, Krexx::$pool->emergencyHandler));
-
-        Krexx::someValue();
-        // The counter should be at 1.
-        $this->assertEquals(1, $this->retrieveValueByReflection(static::KREXX_COUNT, Krexx::$pool->emergencyHandler));
-    }
-
-    /**
      * Testing, if kreXX is disabled, if the call comes from the wrong IP.
      *
      * @covers \Brainworxx\Krexx\Krexx::open

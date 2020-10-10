@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback;
 
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -47,15 +46,8 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
  *
  * @package Brainworxx\Krexx\Analyse\Callback
  */
-abstract class AbstractCallback implements ConstInterface
+abstract class AbstractCallback
 {
-    /**
-     * Marks the last part of an even, when that part is finished.
-     */
-    const EVENT_MARKER_END = '::end';
-    const EVENT_MARKER_ANALYSES_END = 'analysisEnd';
-    const EVENT_MARKER_RECURSION = 'recursion';
-
     /**
      * Here we store all relevant data.
      *
@@ -100,7 +92,7 @@ abstract class AbstractCallback implements ConstInterface
      */
     public function setParameters(array &$parameters): AbstractCallback
     {
-        $this->parameters = $parameters;
+        $this->parameters = &$parameters;
         return $this;
     }
 

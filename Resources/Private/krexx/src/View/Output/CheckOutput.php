@@ -46,6 +46,11 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 class CheckOutput
 {
+    /**
+     * Array key in the global $_SERVER array.
+     *
+     * @var string
+     */
     const REMOTE_ADDRESS = 'REMOTE_ADDR';
 
     /**

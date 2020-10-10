@@ -47,7 +47,7 @@ class ProcessBooleanTest extends AbstractTest
     /**
      * Testing the processing of booleans.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
@@ -58,7 +58,7 @@ class ProcessBooleanTest extends AbstractTest
         $model = new Model(Krexx::$pool);
         $model->setData($fixture);
         $processor = new ProcessBoolean(Krexx::$pool);
-        $processor->process($model);
+        $processor->handle($model);
 
         $fixture = false;
         $model = new Model(Krexx::$pool);
@@ -67,7 +67,7 @@ class ProcessBooleanTest extends AbstractTest
         $this->mockEventService(
             [ProcessBoolean::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->process($model);
+        $processor->handle($model);
 
         $models = $renderNothing->model['renderExpandableChild'];
 
@@ -77,5 +77,21 @@ class ProcessBooleanTest extends AbstractTest
         $this->assertEquals('FALSE', $models[1]->getData());
         $this->assertEquals('FALSE', $models[1]->getNormal());
         $this->assertEquals(ProcessBoolean::TYPE_BOOL, $models[1]->getType());
+    }
+
+    /**
+     * Test the check if we can handle the array processing.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean::canHandle
+     */
+    public function testCanHandle()
+    {
+        $processor = new ProcessBoolean(Krexx::$pool);
+        $model = new Model(Krexx::$pool);
+        $fixture = true;
+
+        $this->assertTrue($processor->canHandle($model->setData($fixture)));
+        $fixture = 'abc';
+        $this->assertFalse($processor->canHandle($model->setData($fixture)));
     }
 }

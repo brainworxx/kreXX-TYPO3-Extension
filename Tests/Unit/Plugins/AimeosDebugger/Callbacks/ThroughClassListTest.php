@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\Callbacks;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
@@ -57,15 +58,15 @@ class ThroughClassListTest extends AbstractTest
         $throughClassList = new ThroughClassList(Krexx::$pool);
         $this->mockEventService(
             [ThroughClassList::class . PluginConfigInterface::START_EVENT, $throughClassList],
-            [ThroughClassList::class . '::' . ThroughClassList::EVENT_MARKER_ANALYSES_END, $throughClassList],
-            [ThroughClassList::class . '::' . ThroughClassList::EVENT_MARKER_ANALYSES_END, $throughClassList],
-            [ThroughClassList::class . '::' . ThroughClassList::EVENT_MARKER_ANALYSES_END, $throughClassList]
+            [ThroughClassList::class . '::' . CallbackConstInterface::EVENT_MARKER_ANALYSES_END, $throughClassList],
+            [ThroughClassList::class . '::' . CallbackConstInterface::EVENT_MARKER_ANALYSES_END, $throughClassList],
+            [ThroughClassList::class . '::' . CallbackConstInterface::EVENT_MARKER_ANALYSES_END, $throughClassList]
         );
         $key1 = 'class 1';
         $key2 = 'class 2';
         $key3 = 'class 3';
         $fixture = [
-            ThroughClassList::PARAM_DATA => [
+            CallbackConstInterface::PARAM_DATA => [
                 $key1 => new StdClass(),
                 $key2 => new SimpleFixture(),
                 $key3 => 'new FirstClass()'
@@ -74,11 +75,11 @@ class ThroughClassListTest extends AbstractTest
 
         // Retrieving the models, and asserting them.
         $throughClassList->setParameters($fixture)->callMe();
-        $this->assertSame($fixture[ThroughClassList::PARAM_DATA][$key1], $routeNothing->model[0]->getData());
+        $this->assertSame($fixture[CallbackConstInterface::PARAM_DATA][$key1], $routeNothing->model[0]->getData());
         $this->assertEquals($key1, $routeNothing->model[0]->getName());
-        $this->assertSame($fixture[ThroughClassList::PARAM_DATA][$key2], $routeNothing->model[1]->getData());
+        $this->assertSame($fixture[CallbackConstInterface::PARAM_DATA][$key2], $routeNothing->model[1]->getData());
         $this->assertEquals($key2, $routeNothing->model[1]->getName());
-        $this->assertSame($fixture[ThroughClassList::PARAM_DATA][$key3], $routeNothing->model[2]->getData());
+        $this->assertSame($fixture[CallbackConstInterface::PARAM_DATA][$key3], $routeNothing->model[2]->getData());
         $this->assertEquals($key3, $routeNothing->model[2]->getName());
     }
 }

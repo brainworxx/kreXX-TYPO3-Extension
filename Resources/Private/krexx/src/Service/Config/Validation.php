@@ -50,16 +50,44 @@ use Reflector;
  */
 class Validation extends Fallback
 {
-
+    /**
+     * Part of a key for the messaging system.
+     *
+     * @var string
+     */
     const KEY_CONFIG_ERROR = 'configError';
+
+    /**
+     * Part of a key for the messaging system.
+     *
+     * @var string
+     */
     const KEY_CONFIG_ERROR_BOOL = 'configErrorBool';
+
+    /**
+     * Part of a key for the messaging system.
+     *
+     * @var string
+     */
     const KEY_CONFIG_ERROR_INT = 'configErrorInt';
+
+    /**
+     * Part of a key for the messaging system.
+     *
+     * @var string
+     */
     const KEY_CONFIG_ERROR_DEBUG_INVALID = 'configErrorDebugInvalid';
+
+    /**
+     * Preconfiguration for the logging options.
+     *
+     * @var array
+     */
     const FE_DO_NOT_EDIT = [
-        Fallback::SETTING_DESTINATION,
-        Fallback::SETTING_MAX_FILES,
-        Fallback::SETTING_DEBUG_METHODS,
-        Fallback::SETTING_IP_RANGE,
+        self::SETTING_DESTINATION,
+        self::SETTING_MAX_FILES,
+        self::SETTING_DEBUG_METHODS,
+        self::SETTING_IP_RANGE,
     ];
 
     /**
@@ -97,10 +125,10 @@ class Validation extends Fallback
      * @var array
      */
     protected $feConfigNoEdit = [
-        Fallback::SETTING_DESTINATION,
-        Fallback::SETTING_MAX_FILES,
-        Fallback::SETTING_DEBUG_METHODS,
-        Fallback::SETTING_IP_RANGE,
+        self::SETTING_DESTINATION,
+        self::SETTING_MAX_FILES,
+        self::SETTING_DEBUG_METHODS,
+        self::SETTING_IP_RANGE,
     ];
 
     /**
@@ -143,27 +171,6 @@ class Validation extends Fallback
         // We simply call the configured evaluation method.
         $callback = $this->feConfigFallback[$name][static::EVALUATE];
         return $this->$callback($value, $name, $group);
-    }
-
-    /**
-     * We check the dev handle for a-z and A-Z.
-     *
-     * @param string|int|bool|null $value
-     *   The value we want to evaluate
-     * @param string $name
-     *   The name of the value we are checking, needed for the feedback text.
-     *
-     * @return bool
-     *   Whether it does evaluate or not.
-     */
-    protected function evalDevHandle($value, string $name): bool
-    {
-        $result = preg_match('/[^a-zA-Z]/', $value) === 0;
-        if ($result === false) {
-            $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR . ucfirst($name));
-        }
-
-        return $result;
     }
 
     /**

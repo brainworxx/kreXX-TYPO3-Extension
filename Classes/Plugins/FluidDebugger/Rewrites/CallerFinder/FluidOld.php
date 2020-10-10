@@ -52,13 +52,13 @@ class FluidOld extends AbstractFluid
      */
     protected function getTemplatePath(): string
     {
-        $result = 'n/a';
+        $result = static::FLUID_NOT_AVAILABLE;
 
         if ($this->viewReflection->hasMethod('getTemplatePathAndFilename')) {
             try {
-                $templatePathAndFilenameReflection = $this->viewReflection->getMethod('getTemplatePathAndFilename');
-                $templatePathAndFilenameReflection->setAccessible(true);
-                $result = $templatePathAndFilenameReflection->invoke($this->view, null);
+                $templatePathRef = $this->viewReflection->getMethod('getTemplatePathAndFilename');
+                $templatePathRef->setAccessible(true);
+                $result = $templatePathRef->invoke($this->view, null);
             } catch (ReflectionException $e) {
                 // Do nothing.
             }
@@ -72,14 +72,14 @@ class FluidOld extends AbstractFluid
      */
     protected function getLayoutPath(): string
     {
-        $result = 'n/a';
+        $result = static::FLUID_NOT_AVAILABLE;
 
         if ($this->viewReflection->hasMethod('getLayoutPathAndFilename')) {
             $fileName = $this->parsedTemplate->getLayoutName($this->renderingContext);
             try {
-                $layoutPathAndFilenameReflection = $this->viewReflection->getMethod('getLayoutPathAndFilename');
-                $layoutPathAndFilenameReflection->setAccessible(true);
-                $result = $layoutPathAndFilenameReflection->invoke($this->view, $fileName);
+                $layoutPathRef = $this->viewReflection->getMethod('getLayoutPathAndFilename');
+                $layoutPathRef->setAccessible(true);
+                $result = $layoutPathRef->invoke($this->view, $fileName);
             } catch (ReflectionException $e) {
                 // Do nothing.
             }
@@ -105,18 +105,17 @@ class FluidOld extends AbstractFluid
 
         try {
             if ($this->viewReflection->hasProperty('partialIdentifierCache')) {
-                $partialIdentifierCacheReflection = $this->viewReflection->getProperty('partialIdentifierCache');
-                $partialIdentifierCacheReflection->setAccessible(true);
-                $partialIdentifierCache = $partialIdentifierCacheReflection->getValue($this->view);
+                $partialIdentCacheRef = $this->viewReflection->getProperty('partialIdentifierCache');
+                $partialIdentCacheRef->setAccessible(true);
+                $partialIdentifierCache = $partialIdentCacheRef->getValue($this->view);
 
                 foreach ($partialIdentifierCache as $fileName => $realIdentifier) {
                     if (strpos($realIdentifier, $hash) !== false) {
                         // We've got our real identifier, yay. :-|
-                        $getPartialPathAndFilenameReflection = $this->viewReflection
+                        $getPartialPathFilenameRef = $this->viewReflection
                             ->getMethod('getPartialPathAndFilename');
-                        $getPartialPathAndFilenameReflection->setAccessible(true);
-                        return $getPartialPathAndFilenameReflection->invoke($this->view, $fileName);
-                        break;
+                        $getPartialPathFilenameRef->setAccessible(true);
+                        return $getPartialPathFilenameRef->invoke($this->view, $fileName);
                     }
                 }
             }
@@ -124,6 +123,6 @@ class FluidOld extends AbstractFluid
             // Do nothing. We return an empty result later.
         }
 
-        return 'n/a';
+        return static::FLUID_NOT_AVAILABLE;
     }
 }

@@ -45,8 +45,22 @@ use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessFloat extends AbstractRouting implements ProcessInterface
+class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
+    /**
+     * Is this one a float?
+     *
+     * @param Model $model
+     *   The value we are analysing.
+     *
+     * @return bool
+     *   Well, is this a float?
+     */
+    public function canHandle(Model $model): bool
+    {
+        return is_float($model->getData());
+    }
+
     /**
      * Render a dump for a float value.
      *
@@ -56,7 +70,7 @@ class ProcessFloat extends AbstractRouting implements ProcessInterface
      * @return string
      *   The rendered markup.
      */
-    public function process(Model $model): string
+    public function handle(Model $model): string
     {
         return $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(

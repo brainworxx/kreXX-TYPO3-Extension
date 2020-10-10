@@ -39,14 +39,32 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
+use Brainworxx\Krexx\View\ViewConstInterface;
+use DateTime;
+use Exception;
 
 /**
  * Processing of integers.
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessInteger extends AbstractRouting implements ProcessInterface
+class ProcessInteger extends AbstractRouting implements ProcessInterface, ViewConstInterface, ProcessConstInterface
 {
+
+    /**
+     * Is this one an integer?
+     *
+     * @param Model $model
+     *   The value we are analysing.
+     *
+     * @return bool
+     *   Well, is this an integer?
+     */
+    public function canHandle(Model $model): bool
+    {
+        return is_int($model->getData());
+    }
+
     /**
      * Render a dump for a integer value.
      *
@@ -56,17 +74,17 @@ class ProcessInteger extends AbstractRouting implements ProcessInterface
      * @return string
      *   The rendered markup.
      */
-    public function process(Model $model): string
+    public function handle(Model $model): string
     {
         // Detect a timestamp. Everything bigger than 946681200
         // is assumed to be a timestamp.
         try {
             $int = $model->getData();
             if ($int > 946681200) {
-                $date = new \DateTime('@' . $int);
+                $date = new DateTime('@' . $int);
                 $model->addToJson(static::META_TIMESTAMP, $date->format('d.M Y H:i:s'));
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Do nothing.
             // Not sure how this can happen.
         }

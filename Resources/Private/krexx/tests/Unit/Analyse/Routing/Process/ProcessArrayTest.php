@@ -50,6 +50,11 @@ class ProcessArrayTest extends AbstractTest
     protected function assertResults()
     {
         $this->mockEmergencyHandler();
+        Krexx::$pool->emergencyHandler->expects($this->once())
+            ->method('upOneNestingLevel');
+        Krexx::$pool->emergencyHandler->expects($this->once())
+            ->method('downOneNestingLevel');
+
 
         $fixture = ['just', 'some', 'values'];
         $model = new Model(Krexx::$pool);
@@ -60,7 +65,7 @@ class ProcessArrayTest extends AbstractTest
             [ProcessArray::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
 
-        $processArray->process($model);
+        $processArray->handle($model);
 
         $this->assertEquals(1, CallbackCounter::$counter);
         $this->assertFalse(CallbackCounter::$staticParameters[0][CallbackCounter::PARAM_MULTILINE]);
@@ -72,8 +77,10 @@ class ProcessArrayTest extends AbstractTest
     /**
      * Test the processing of a normal array.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::handleNoneScalar
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::generateDomIdFromObject
      */
     public function testProcessNormal()
     {
@@ -84,13 +91,31 @@ class ProcessArrayTest extends AbstractTest
     /**
      * Test the processing of a large array.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::handleNoneScalar
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
+     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::generateDomIdFromObject
      */
     public function testProcessLargeArray()
     {
         Krexx::$pool->rewrite[ThroughLargeArray::class] = CallbackCounter::class;
         Krexx::$pool->config->settings[Fallback::SETTING_ARRAY_COUNT_LIMIT]->setValue('2');
         $this->assertResults();
+    }
+
+    /**
+     * Test the check if we can handle the array processing.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::canHandle
+     */
+    public function testCanHandle()
+    {
+        $processArray = new ProcessArray(Krexx::$pool);
+        $model = new Model(Krexx::$pool);
+        $fixture = [];
+
+        $this->assertTrue($processArray->canHandle($model->setData($fixture)));
+        $fixture = 'abc';
+        $this->assertFalse($processArray->canHandle($model->setData($fixture)));
     }
 }

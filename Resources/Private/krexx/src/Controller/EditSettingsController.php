@@ -42,7 +42,7 @@ namespace Brainworxx\Krexx\Controller;
  *
  * @package Brainworxx\Krexx\Controller
  */
-class EditSettingsController extends AbstractController
+class EditSettingsController extends AbstractController implements ControllerConstInterface
 {
     /**
      * Outputs the edit settings dialog, without any analysis.
@@ -72,7 +72,7 @@ class EditSettingsController extends AbstractController
         $this->pool->chunks->detectEncoding($footer);
 
         $this->outputService
-            ->addChunkString($this->pool->render->renderHeader(static::HEADLINE_EDIT_SETTINGS, $this->outputCssAndJs()))
+            ->addChunkString($this->pool->render->renderHeader(static::HEADLINE_COOKIE_CONF, $this->outputCssAndJs()))
             ->addChunkString($footer);
         $this->pool->emergencyHandler->setDisable(false);
         $this->outputService->finalize();

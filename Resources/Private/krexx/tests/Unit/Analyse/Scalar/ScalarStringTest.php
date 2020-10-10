@@ -101,7 +101,7 @@ class ScalarStringTest extends AbstractTest
         $this->assertSame($fixture, $this->scalarString->handle($fixture, $string));
         $fixture->renderMe();
 
-        $this->assertEquals(0,  ScalarNothing::$count, 'Must not get called.');
+        $this->assertEquals(0, ScalarNothing::$count, 'Must not get called.');
         $this->assertEquals(
             [$string],
             ScalarNothing::$canHandleList,

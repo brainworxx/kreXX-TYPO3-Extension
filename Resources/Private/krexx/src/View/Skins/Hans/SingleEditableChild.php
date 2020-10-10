@@ -38,7 +38,6 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Config\Fallback;
 
 trait SingleEditableChild
 {
@@ -79,7 +78,7 @@ trait SingleEditableChild
     {
         // For dropdown elements, we need to render the options.
         $options = '';
-        if ($model->getType() === Fallback::RENDER_TYPE_SELECT) {
+        if ($model->getType() === static::RENDER_TYPE_SELECT) {
             $options = $this->renderSelectOptions($model);
         }
 
@@ -89,7 +88,7 @@ trait SingleEditableChild
                 $model->getData(),
                 $model->getNormal(),
                 str_replace($this->markerDropdownOptions, $options, $this->renderSpecificEditableElement($model)),
-                Fallback::RENDER_EDITABLE,
+                static::RENDER_EDITABLE,
                 $this->renderHelp($model),
             ],
             $this->getTemplateFileContent(static::FILE_SI_EDIT_CHILD)
@@ -108,7 +107,7 @@ trait SingleEditableChild
     protected function renderSelectOptions(Model $model): string
     {
         // Here we store what the list of possible values.
-        if ($model->getDomid() === Fallback::SETTING_SKIN) {
+        if ($model->getDomid() === static::SETTING_SKIN) {
             // Get a list of all skin folders.
             $valueList = $this->pool->config->getSkinList();
         } else {

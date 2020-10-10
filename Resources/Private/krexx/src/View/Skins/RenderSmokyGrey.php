@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Skins;
 
+use Brainworxx\Krexx\Controller\ControllerConstInterface;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Button;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild;
@@ -53,7 +54,7 @@ use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
  *
  * @package Brainworxx\Krexx\View\Smokygrey
  */
-class RenderSmokyGrey extends RenderHans
+class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
 {
     use SingleChild;
     use ExpandableChild;
@@ -66,5 +67,10 @@ class RenderSmokyGrey extends RenderHans
     use ConnectorRight;
     use Help;
 
+    /**
+     * Data attribute for the help display..
+     *
+     * @var string
+     */
     const DATA_ATTRIBUTE_JSON = 'addjson';
 }

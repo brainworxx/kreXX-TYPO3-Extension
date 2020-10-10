@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use Krexx;
 
 class XmlTest extends AbstractTest
 {
@@ -79,7 +80,7 @@ class XmlTest extends AbstractTest
             'function_exists'
         );
         // The first false should prevent thge other tests from getting called.
-        $functionExistsMock->expects($this->once())
+        $functionExistsMock->expects($this->exactly(2))
             ->will($this->returnValue(true));
 
         $classExistsMock = $this->getFunctionMock(
@@ -100,20 +101,20 @@ class XmlTest extends AbstractTest
     public function testcanHandle()
     {
         $string = 'lacking the xml finfo info';
-        $model = new Model(\Krexx::$pool);
-        $xml = new Xml(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
+        $xml = new Xml(Krexx::$pool);
         $this->assertFalse($xml->canHandle($string, $model), $string);
 
         $string = 'Now with the XML finfo info,but still not XML.';
-        $model = new Model(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
         $model->addToJson(Xml::META_MIME_TYPE, 'text/xml;');
-        $xml = new Xml(\Krexx::$pool);
+        $xml = new Xml(Krexx::$pool);
         $this->assertFalse($xml->canHandle($string, $model), $string);
 
         $string = '<?xml version="1.0" encoding="utf-8"?><node><yxcv qwer="asdf" /></node>';
-        $model = new Model(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
         $model->addToJson(Xml::META_MIME_TYPE, 'text/xml;');
-        $xml = new Xml(\Krexx::$pool);
+        $xml = new Xml(Krexx::$pool);
         $this->assertTrue($xml->canHandle($string, $model), $string);
     }
 
@@ -128,14 +129,14 @@ class XmlTest extends AbstractTest
      */
     public function testHandle()
     {
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             ThroughMeta::class => CallbackCounter::class
         ];
 
         $string = '<?xml version="1.0" encoding="utf-8"?><root><node>rogue text<yxcv qwer="asdf"><![CDATA[content]]></yxcv><yxcv qwer="yxcv" /></node></root>';
-        $model = new Model(\Krexx::$pool);
+        $model = new Model(Krexx::$pool);
         $model->addToJson(Xml::META_MIME_TYPE, 'text/xml;')->setHasExtra(true);
-        $xml = new Xml(\Krexx::$pool);
+        $xml = new Xml(Krexx::$pool);
         $xml->canHandle($string, $model);
         $xml->callMe();
         $prettyPrint = '&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;

@@ -38,9 +38,9 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Code\Codegen;
-use Brainworxx\Krexx\Analyse\ConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Displaying the meta stuff from the class analysis.
@@ -48,10 +48,12 @@ use Brainworxx\Krexx\Analyse\Model;
  * @uses array data
  *   An array of the meta data we need to iterate.
  *   Might contain strings or another array.
+ * @uses string codeGenType
+ *   The code generation constants we want to use for none meta stuff.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  */
-class ThroughMeta extends AbstractCallback
+class ThroughMeta extends AbstractCallback implements ViewConstInterface, CallbackConstInterface
 {
     /**
      * These keys are rendered with an extra.
@@ -59,11 +61,11 @@ class ThroughMeta extends AbstractCallback
      * @var array
      */
     protected $keysWithExtra = [
-        ConstInterface::META_COMMENT,
-        ConstInterface::META_DECLARED_IN,
-        ConstInterface::META_SOURCE,
-        ConstInterface::META_PRETTY_PRINT,
-        ConstInterface::META_CONTENT
+        ViewConstInterface::META_COMMENT,
+        ViewConstInterface::META_DECLARED_IN,
+        ViewConstInterface::META_SOURCE,
+        ViewConstInterface::META_PRETTY_PRINT,
+        ViewConstInterface::META_CONTENT
     ];
 
     /**
@@ -119,27 +121,27 @@ class ThroughMeta extends AbstractCallback
             ->setName($key)
             ->setType($key === static::META_PRETTY_PRINT ? $key : static::TYPE_REFLECTION);
 
-        if (in_array($key, $this->keysWithExtra)) {
-            $model->setNormal(static::UNKNOWN_VALUE);
-            $model->setHasExtra(true);
+        if (isset($this->parameters[static::PARAM_CODE_GEN_TYPE])) {
+            $model->setCodeGenType($this->parameters[static::PARAM_CODE_GEN_TYPE]);
+        }
+
+        if (in_array($key, $this->keysWithExtra) === true) {
+            $model->setNormal(static::UNKNOWN_VALUE)->setHasExtra(true);
         } else {
             $model->setNormal($meta);
         }
 
         if ($key === static::META_DECODED_JSON) {
             // Prepare the json code generation.
-            return $this->pool->routing->analysisHub($model->setMultiLineCodeGen(Codegen::JSON_DECODE));
+            return $this->pool->routing->analysisHub($model);
         }
 
         // Sorry, no code generation for you guys.
         $this->pool->codegenHandler->setAllowCodegen(false);
-        if (is_string($meta)) {
+        if (is_string($meta) === true) {
             // Render a single data point.
             $result = $this->pool->render->renderExpandableChild(
-                $this->dispatchEventWithModel(
-                    __FUNCTION__ . $key . static::EVENT_MARKER_END,
-                    $model
-                )
+                $this->dispatchEventWithModel(__FUNCTION__ . $key . static::EVENT_MARKER_END, $model)
             );
         } else {
             // Fallback to whatever-rendering.

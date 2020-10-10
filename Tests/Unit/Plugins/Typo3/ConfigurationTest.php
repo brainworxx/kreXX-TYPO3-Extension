@@ -109,8 +109,8 @@ class ConfigurationTest extends AbstractTest
         $versionMock = $this->getFunctionMock($typo3Namespace, 'version_compare');
         $versionMock->expects($this->exactly(2))
             ->withConsecutive(
-                [AbstractTest::TYPO3_VERSION, '8.3', '>'],
-                [AbstractTest::TYPO3_VERSION, '9.5', '>=']
+                [Bootstrap::getTypo3Version(), '8.3', '>'],
+                [Bootstrap::getTypo3Version(), '9.5', '>=']
             )->will($this->returnValue(true));
 
         $classExistsMock = $this->getFunctionMock($typo3Namespace, 'class_exists');
@@ -129,7 +129,7 @@ class ConfigurationTest extends AbstractTest
             )
             ->will($this->returnValue(true));
 
-        // Simulationg the package
+        // Simulating the package
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/');
 
         $arrayReplaceRecursiveMock = $this->getFunctionMock(

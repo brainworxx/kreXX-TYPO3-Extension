@@ -39,6 +39,16 @@ namespace Brainworxx\Krexx\Analyse\Model;
 
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Trait IsPublic
+ * @deprecated
+ *   Since 4.0.0. Will be removed.
+ *
+ * @codeCoverageIgnore
+ *   We will not test deprecated methods.
+ *
+ * @package Brainworxx\Krexx\Analyse\Model
+ */
 trait IsPublic
 {
     /**
@@ -51,19 +61,36 @@ trait IsPublic
     /**
      * Setter for the isProtectedPrivate.
      *
+     * @deprecated
+     *   Since 4.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
      * @param $bool
      *   The value we want to set.
+     *
      * @return Model
      *   Return $this for chaining.
      */
     public function setIsPublic(bool $bool): Model
     {
         $this->isPublic = $bool;
+        if ($bool === true) {
+            $this->codeGenType = static::CODEGEN_TYPE_PUBLIC;
+        }
+
         return $this;
     }
 
     /**
      * Getter for the isPublic.
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      *
      * @return bool
      */
@@ -76,7 +103,7 @@ trait IsPublic
      * Getter for the isPublic.
      *
      * @deprecated
-     *   Since 4.0.0. Use $this->isPublic().
+     *   Since 4.0.0. Will be removed.
      *
      * @codeCoverageIgnore
      *   We will not test deprecated methods.
@@ -85,6 +112,6 @@ trait IsPublic
      */
     public function getIsPublic(): bool
     {
-        return $this->isPublic();
+        return $this->isPublic;
     }
 }

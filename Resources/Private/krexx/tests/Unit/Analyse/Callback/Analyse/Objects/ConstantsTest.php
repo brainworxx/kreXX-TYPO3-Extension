@@ -135,7 +135,11 @@ class ConstantsTest extends AbstractTest
         // Were the parameters set correctly?
         // The classname gets root-namespaced, hence the '\'
         $this->assertEquals(
-            ['data' => 'some constants', 'classname' => '\\some classname'],
+            [
+                Constants::PARAM_DATA => 'some constants',
+                Constants::PARAM_CLASSNAME => '\\some classname',
+                Constants::PARAM_REF => $reflectionMock
+            ],
             CallbackCounter::$staticParameters[0]
         );
     }

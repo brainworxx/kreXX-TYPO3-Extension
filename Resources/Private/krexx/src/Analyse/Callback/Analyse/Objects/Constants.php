@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -48,7 +49,7 @@ use Brainworxx\Krexx\Analyse\Model;
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class Constants extends AbstractObjectAnalysis
+class Constants extends AbstractObjectAnalysis implements CodegenConstInterface
 {
 
     /**
@@ -61,13 +62,15 @@ class Constants extends AbstractObjectAnalysis
     {
         $output = $this->dispatchStartEvent();
 
-        // This is actually an array, we ara analysing. But We do not want to render
-        // an array, so we need to process it like the return from an iterator.
         /** @var \ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
-        $refConst = $ref->getConstants();
 
-        if (empty($refConst) === true) {
+        // Retrieve the constants that are accessible in the scope of the class.
+        // The problem is, that the private const may or may not be available
+        // inside the higher class structure, because these parts do not inherit
+        // them.
+        $listOfConstants = $ref->getConstants();
+        if (empty($listOfConstants) === true) {
             // Nothing to see here, return an empty string.
             return '';
         }
@@ -80,9 +83,12 @@ class Constants extends AbstractObjectAnalysis
                 $this->pool->createClass(Model::class)
                     ->setName('Constants')
                     ->setType(static::TYPE_INTERNALS)
-                    ->setIsMetaConstants(true)
-                    ->addParameter(static::PARAM_DATA, $refConst)
+                    ->setCodeGenType(static::CODEGEN_TYPE_META_CONSTANTS)
+                    ->addParameter(static::PARAM_DATA, $listOfConstants)
+                    // Deprecated since 4.0.0
                     ->addParameter(static::PARAM_CLASSNAME, $classname)
+                    // Deprecated since 4.0.0
+                    ->addParameter(static::PARAM_REF, $ref)
                     ->injectCallback(
                         $this->pool->createClass(ThroughConstants::class)
                     )

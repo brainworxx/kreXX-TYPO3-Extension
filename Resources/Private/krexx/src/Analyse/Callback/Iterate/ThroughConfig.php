@@ -39,8 +39,9 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 
 /**
  * Configuration output methods.
@@ -50,7 +51,7 @@ use Brainworxx\Krexx\Service\Config\Fallback;
  * @uses null
  *   There are no parameters available here.
  */
-class ThroughConfig extends AbstractCallback
+class ThroughConfig extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
 {
 
     /**
@@ -61,27 +62,13 @@ class ThroughConfig extends AbstractCallback
      */
     public function callMe(): string
     {
-        $configOutput = $this->dispatchStartEvent() . $this->renderAllSections();
-
-        // Render the dev-handle field.
-        $devHandleLabel = $this->pool->messages->getHelp(Fallback::SETTING_DEV_HANDLE);
-        $configOutput .= $this->pool->render->renderSingleEditableChild(
-            $this->pool->createClass(Model::class)
-                ->setData($devHandleLabel)
-                ->setDomId(Fallback::SETTING_DEV_HANDLE)
-                ->setName($this->pool->config->getDevHandler())
-                ->setNormal('\krexx::')
-                ->setType(Fallback::RENDER_TYPE_INPUT)
-                ->setHelpid('localFunction')
-        );
-
-        // Render the reset-button which will delete the debug-cookie.
-        return $configOutput . $this->pool->render->renderButton(
-            $this->pool->createClass(Model::class)
-                ->setName('kresetbutton')
-                ->setNormal('Reset local settings')
-                ->setHelpid('kresetbutton')
-        );
+        return $this->dispatchStartEvent() . $this->renderAllSections() .
+            $this->pool->render->renderButton(
+                $this->pool->createClass(Model::class)
+                    ->setName('kresetbutton')
+                    ->setNormal('Reset local settings')
+                    ->setHelpid('kresetbutton')
+            );
     }
 
     /**

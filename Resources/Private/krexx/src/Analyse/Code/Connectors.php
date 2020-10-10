@@ -42,84 +42,23 @@ namespace Brainworxx\Krexx\Analyse\Code;
  *
  * @package Brainworxx\Krexx\Analyse\Code
  */
-class Connectors
+class Connectors implements ConnectorsConstInterface
 {
-
-    /**
-     * connectorLeft = ''
-     * connectorRight = ''
-     * or
-     * connectorRight = $params
-     */
-    const NOTHING = 0;
-
-    /**
-     * connectorLeft = '->'
-     * connectorRight = '()'
-     * or
-     * connectorRight = '(' . $params . ')'
-     */
-    const METHOD = 1;
-
-    /**
-     * connectorLeft = '::'
-     * connectorRight = '()'
-     * or
-     * connectorRight = '(' . $params . ')'
-     */
-    const STATIC_METHOD = 2;
-
-    /**
-     * connectorLeft = '['
-     * connectorRight = ']'
-     */
-    const NORMAL_ARRAY = 3;
-
-    /**
-     * connectorLeft = '[\''
-     * connectorRight = '\']'
-     */
-    const ASSOCIATIVE_ARRAY = 4;
-
-    /**
-     * connectorLeft = '::'
-     * connectorRight = ''
-     */
-    const CONSTANT = 5;
-
-    /**
-     * connectorLeft = '->'
-     * connectorRight = ''
-     */
-    const NORMAL_PROPERTY = 6;
-
-    /**
-     * connectorLeft = '::'
-     * connectorRight = ''
-     */
-    const STATIC_PROPERTY = 7;
-
-    /**
-     * connectorLeft = '->{\''
-     * connectorRight = '\'}'
-     */
-    const SPECIAL_CHARS_PROP = 8;
-
     /**
      * List of the combinations of connectors.
      *
      * @var array
      */
     protected $connectorArray  = [
-        Connectors::NOTHING => ['', ''],
-        Connectors::METHOD => ['->', '()'],
-        Connectors::STATIC_METHOD => ['::', '()'],
-        Connectors::NORMAL_ARRAY => ['[', ']'],
-        Connectors::ASSOCIATIVE_ARRAY => ['[\'', '\']'],
-        Connectors::CONSTANT => ['::', ''],
-        Connectors::NORMAL_PROPERTY => ['->', ''],
-        Connectors::STATIC_PROPERTY => ['::', ''],
-        Connectors::SPECIAL_CHARS_PROP => ['->{\'', '\'}'],
+        self::CONNECTOR_NOTHING => ['', ''],
+        self::CONNECTOR_METHOD => ['->', '()'],
+        self::CONNECTOR_STATIC_METHOD => ['::', '()'],
+        self::CONNECTOR_NORMAL_ARRAY => ['[', ']'],
+        self::CONNECTOR_ASSOCIATIVE_ARRAY => ['[\'', '\']'],
+        self::CONNECTOR_CONSTANT => ['::', ''],
+        self::CONNECTOR_NORMAL_PROPERTY => ['->', ''],
+        self::CONNECTOR_STATIC_PROPERTY => ['::', ''],
+        self::CONNECTOR_SPECIAL_CHARS_PROP => ['->{\'', '\'}'],
     ];
 
     /**
@@ -133,7 +72,7 @@ class Connectors
     /**
      * Parameters, in case we are connecting a method or closure.
      *
-     * @var string
+     * @var string|int
      */
     protected $params;
 
@@ -144,7 +83,7 @@ class Connectors
      *
      * @var int
      */
-    protected $type = 0;
+    protected $type = self::CONNECTOR_NOTHING;
 
     /**
      * Special snowflake connectorLeft. will be uses in case it is set.
@@ -164,7 +103,7 @@ class Connectors
      * Setter for the $params. It is used in case we are connection a method or
      * closure.
      *
-     * @param string $params
+     * @param string|int $params
      *   The parameters as a sting.
      */
     public function setParameters($params)
@@ -175,10 +114,10 @@ class Connectors
     /**
      * Getter for the connection parameters.
      *
-     * @return string
+     * @return string|int
      *   The connection parameters.
      */
-    public function getParameters(): string
+    public function getParameters()
     {
         return $this->params;
     }
@@ -189,7 +128,7 @@ class Connectors
      * @param string $type
      *   The type, @see constants above
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
     }
@@ -218,11 +157,11 @@ class Connectors
      * @return string
      *   The PHP connector, what else?
      */
-    public function getConnectorRight($cap): string
+    public function getConnectorRight(int $cap): string
     {
         if (
             empty($this->params) === true ||
-            ($this->type !== static::METHOD && $this->type !== static::STATIC_METHOD)
+            ($this->type !== static::CONNECTOR_METHOD && $this->type !== static::CONNECTOR_STATIC_METHOD)
         ) {
             return $this->connectorArray[$this->type][1];
         }
@@ -244,7 +183,7 @@ class Connectors
      * @param string $customConnectorLeft
      *   The string we want to set.
      */
-    public function setCustomConnectorLeft($customConnectorLeft)
+    public function setCustomConnectorLeft(string $customConnectorLeft)
     {
         $this->customConnectorLeft = $customConnectorLeft;
     }

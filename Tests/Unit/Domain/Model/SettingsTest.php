@@ -60,7 +60,7 @@ class SettingsTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setDebugMethods
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setDestination
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setDetectAjax
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFactory
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseScalar
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setDisabled
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseGetter
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalysePrivate
@@ -82,6 +82,7 @@ class SettingsTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmemoryLeft
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormskin
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormuseScopeAnalysis
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseScalar
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setIprange
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLevel
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMaxCall
@@ -181,5 +182,16 @@ class SettingsTest extends AbstractTest
         ];
 
         $this->assertEquals($expectation, parse_ini_string($settingsModel->generateIniContent(), true));
+    }
+
+    /**
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFactory
+     */
+    public function testSetFactory()
+    {
+        $settingsModel = new Settings();
+        $settingsModel->setFactory('faqTory');
+
+        $this->assertEquals('faqTory', $this->retrieveValueByReflection('factory', $settingsModel));
     }
 }

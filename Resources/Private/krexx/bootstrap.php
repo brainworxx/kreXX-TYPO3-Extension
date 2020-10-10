@@ -56,8 +56,23 @@ call_user_func(function () {
 
     // Defining our "autoloader". We may, or may not need this one.
     $krexxLoader = function () {
+        include_once KREXX_DIR . 'src/Analyse/Callback/CallbackConstInterface.php';
+        include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessConstInterface.php';
+        include_once KREXX_DIR . 'src/Analyse/Caller/BacktraceConstInterface.php';
+        include_once KREXX_DIR . 'src/View/ViewConstInterface.php';
+        include_once KREXX_DIR . 'src/Controller/ControllerConstInterface.php';
+        include_once KREXX_DIR . 'src/Service/Config/ConfigConstInterface.php';
+        include_once KREXX_DIR . 'src/Analyse/Code/CodegenConstInterface.php';
+        include_once KREXX_DIR . 'src/Analyse/Code/ConnectorsConstInterface.php';
+        include_once KREXX_DIR . 'src/Service/Plugin/PluginConstInterface.php';
+        // Deprecated
         include_once KREXX_DIR . 'src/Analyse/ConstInterface.php';
+        // Deprecated
         include_once KREXX_DIR . 'src/Analyse/Callback/AbstractCallback.php';
+
+        include_once KREXX_DIR . 'src/Analyse/Code/Codegen.php';
+        include_once KREXX_DIR . 'src/Analyse/Code/Connectors.php';
+        include_once KREXX_DIR . 'src/Analyse/Code/Scope.php';
 
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/AbstractObjectAnalysis.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/Constants.php';
@@ -89,10 +104,7 @@ call_user_func(function () {
 
         include_once KREXX_DIR . 'src/Analyse/Caller/AbstractCaller.php';
         include_once KREXX_DIR . 'src/Analyse/Caller/CallerFinder.php';
-
-        include_once KREXX_DIR . 'src/Analyse/Code/Codegen.php';
-        include_once KREXX_DIR . 'src/Analyse/Code/Connectors.php';
-        include_once KREXX_DIR . 'src/Analyse/Code/Scope.php';
+        include_once KREXX_DIR . 'src/Analyse/Caller/ExceptionCallerFinder.php';
 
         include_once KREXX_DIR . 'src/Analyse/Comment/AbstractComment.php';
         include_once KREXX_DIR . 'src/Analyse/Comment/Functions.php';
@@ -105,6 +117,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Routing/Routing.php';
 
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessInterface.php';
+        include_once KREXX_DIR . 'src/Analyse/Routing/Process/AbstractProcessNoneScalar.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessArray.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessBacktrace.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessBoolean.php';
@@ -134,11 +147,12 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Model/AdditionalType.php';
         include_once KREXX_DIR . 'src/Analyse/Model/DomId.php';
         include_once KREXX_DIR . 'src/Analyse/Model/HasExtra.php';
+        include_once KREXX_DIR . 'src/Analyse/Model/CodeGenType.php';
+        // Deprecated
         include_once KREXX_DIR . 'src/Analyse/Model/MultiLineCodeGen.php';
         include_once KREXX_DIR . 'src/Analyse/Model/IsPublic.php';
         include_once KREXX_DIR . 'src/Analyse/Model/IsCallback.php';
         include_once KREXX_DIR . 'src/Analyse/Model/IsMetaConstants.php';
-        // Deprecated
         include_once KREXX_DIR . 'src/Analyse/AbstractModel.php';
         // Deprecated
         include_once KREXX_DIR . 'src/Analyse/Model.php';
@@ -150,7 +164,6 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Controller/EditSettingsController.php';
         include_once KREXX_DIR . 'src/Controller/ExceptionController.php';
 
-        include_once KREXX_DIR . 'src/Service/Config/ConfigConstInterface.php';
         include_once KREXX_DIR . 'src/Service/Config/Fallback.php';
         include_once KREXX_DIR . 'src/Service/Config/Config.php';
         include_once KREXX_DIR . 'src/Service/Config/Model.php';
@@ -176,9 +189,9 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Service/Reflection/UndeclaredProperty.php';
         include_once KREXX_DIR . 'src/Service/Reflection/ReflectionClass.php';
 
+        include_once KREXX_DIR . 'src/Service/Plugin/PluginConfigInterface.php';
         include_once KREXX_DIR . 'src/Service/Plugin/Registration.php';
         include_once KREXX_DIR . 'src/Service/Plugin/SettingsGetter.php';
-        include_once KREXX_DIR . 'src/Service/Plugin/PluginConfigInterface.php';
 
         include_once KREXX_DIR . 'src/View/Output/AbstractOutput.php';
         include_once KREXX_DIR . 'src/View/Output/Chunks.php';
@@ -210,7 +223,9 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/View/Skins/Hans/ConnectorLeft.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/ConnectorRight.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/Search.php';
+        // Deprecated
         include_once KREXX_DIR . 'src/View/Skins/Hans/ConstInterface.php';
+        // Deprecated
         include_once KREXX_DIR . 'src/View/Skins/RenderHans.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Button.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/ExpandableChild.php';
@@ -232,20 +247,21 @@ call_user_func(function () {
     // When it does something stupid, krexxLoader will handle the rest.
     set_error_handler($krexxLoader);
     try {
-        if (interface_exists(\Brainworxx\Krexx\Analyse\ConstInterface::class) === false) {
+        if (class_exists(\Brainworxx\Krexx\Krexx::class) === false) {
             $krexxLoader();
         }
     } catch (\Throwable $e) {
         // Meh. The autoloader did throw an error.
         $krexxLoader();
-    } catch (\Exception $e) {
-        // Meh. The autoloader did throw an error.
-        $krexxLoader();
     }
     restore_error_handler();
 
-    // Class shorthand for object analysis.
-    // The alias method does not work in all IDEs.
+    /**
+     * Class shorthand for object analysis.
+     *
+     * The alias method does not work in all IDEs.
+     * So, we extend the namespaced class.
+     */
     class Krexx extends Brainworxx\Krexx\Krexx {}
 
     /**
@@ -257,34 +273,30 @@ call_user_func(function () {
      *
      * @param mixed $data
      *   The variable we want to analyse.
-     * @param string $handle
-     *   The developer handle.
      *
      * @return mixed
      *   Return the original anslysis value.
      */
-    function krexx($data = null, string $handle = '')
+    function krexx($data)
     {
-        if (empty($handle)) {
-            \Brainworxx\Krexx\Krexx::open($data);
-            return $data;
-        }
+        return \Brainworxx\Krexx\Krexx::open($data);
+    }
 
-        $allArgs = func_get_args();
-        if (count($allArgs) > 2) {
-            // We got more arguments than we asked for.
-            // Better dum them all.
-            \Brainworxx\Krexx\Krexx::open($allArgs);
-            return $data;
-        }
-
-        if (is_string($handle)) {
-            \Brainworxx\Krexx\Krexx::$handle($data);
-            return $data;
-        }
-
-        // Still here ?!?
-        \Brainworxx\Krexx\Krexx::open([$data, $handle]);
-        return $data;
+    /**
+     * Alias shorthand function for object analysis logging.
+     *
+     * Register an alias function for object analysis,
+     * so you will not have to type \Krexx::log($data);
+     * all the time.
+     *
+     * @param mixed $data
+     *   The variable we want to analyse.
+     *
+     * @return mixed
+     *   Return the original anslysis value.
+     */
+    function krexxlog($data)
+    {
+        return \Brainworxx\Krexx\Krexx::log($data);
     }
 });

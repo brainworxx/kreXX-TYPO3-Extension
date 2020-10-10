@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use finfo;
 use TypeError;
+use Krexx;
 
 class FilePathTest extends AbstractTest
 {
@@ -53,7 +54,7 @@ class FilePathTest extends AbstractTest
      */
     public function testConstruct()
     {
-        $filePath = new FilePath(\Krexx::$pool);
+        $filePath = new FilePath(Krexx::$pool);
         $this->assertInstanceOf(finfo::class, $this->retrieveValueByReflection('bufferInfo', $filePath));
     }
 
@@ -91,13 +92,35 @@ class FilePathTest extends AbstractTest
      */
     public function testCanHandle()
     {
-        $filePath = new FilePath(\Krexx::$pool);
-        $this->assertFalse($filePath->canHandle('just another string', new Model(\Krexx::$pool)), 'This file does not exist.');
-        $this->assertFalse($filePath->canHandle('0', new Model(\Krexx::$pool)), 'Nothing in here.');
+        $filePath = new FilePath(Krexx::$pool);
+        $this->assertFalse($filePath->canHandle(
+            'just another string',
+            new Model(Krexx::$pool)),
+            'This file does not exist.'
+        );
+        $this->assertFalse($filePath->canHandle('0', new Model(Krexx::$pool)), 'Nothing in here.');
 
-        $this->assertTrue(
-            $filePath->canHandle(__FILE__, new Model(\Krexx::$pool)),
-            'This __FILE__ should exist and can therefore get handled.'
+        $mimeInfo = 'some mime info';
+        $finfoMock = $this->createMock(finfo::class);
+        $finfoMock->expects($this->once())
+            ->method('file')
+            ->will($this->returnValue($mimeInfo));
+        $filePath = new FilePath(Krexx::$pool);
+        $this->setValueByReflection('bufferInfo', $finfoMock, $filePath);
+
+        $this->mockEmergencyHandler();
+        $model = new Model(Krexx::$pool);
+        $this->assertFalse(
+            $filePath->canHandle(__FILE__, $model),
+            'Always false. We add the stuff directly to the model.'
+        );
+
+        $result = $model->getJson();
+        $this->assertEquals($mimeInfo, $result[FilePath::META_MIME_TYPE], 'Mime info was added');
+        $this->assertArrayNotHasKey(
+            'Real path',
+            $result,
+            'No real path available, because it is the same as the __FILE__'
         );
     }
 
@@ -116,41 +139,25 @@ class FilePathTest extends AbstractTest
             });
 
         $fixture = 'whatever';
-        $filePath = new FilePath(\Krexx::$pool);
-        $this->assertFalse($filePath->canHandle($fixture, new Model(\Krexx::$pool)), 'Catching an error.');
+        $filePath = new FilePath(Krexx::$pool);
+        $this->assertFalse($filePath->canHandle($fixture, new Model(Krexx::$pool)), 'Catching an error.');
     }
 
     /**
-     * Test the retrieval of the filepath and the file info.
+     * We literally expect it to do nothing.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::callMe()
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::handle()
      */
     public function testCallMe()
     {
-        \Krexx::$pool->rewrite = [
+        Krexx::$pool->rewrite = [
             ThroughMeta::class => CallbackCounter::class
         ];
 
-        $mimeInfo = 'some mime info';
-        $finfoMock = $this->createMock(finfo::class);
-        $finfoMock->expects($this->once())
-            ->method('file')
-            ->will($this->returnValue($mimeInfo));
-        $filePath = new FilePath(\Krexx::$pool);
-        $this->setValueByReflection('bufferInfo', $finfoMock, $filePath);
-
-        $this->mockEmergencyHandler();
-        $this->mockEventService(
-            [FilePath::class . PluginConfigInterface::START_EVENT, $filePath],
-            [FilePath::class . '::callMe' . FilePath::EVENT_MARKER_END, $filePath]
-        );
-        $filePath->canHandle(__FILE__, new Model(\Krexx::$pool));
+        $filePath = new FilePath(Krexx::$pool);
         $filePath->callMe();
 
-        $result = CallbackCounter::$staticParameters[0][FilePath::PARAM_DATA];
-        $this->assertEquals(1, CallbackCounter::$counter, 'Called once.');
-        $this->assertEquals($mimeInfo, $result[FilePath::META_MIME_TYPE]);
-        $this->assertEquals(__FILE__, $result['Real path']);
+        $this->assertArrayNotHasKey(0, CallbackCounter::$staticParameters);
     }
 }

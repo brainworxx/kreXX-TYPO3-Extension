@@ -36,8 +36,8 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\EventHandlers
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -47,7 +47,7 @@ use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 
-class VhsMethodsTest extends AbstractTest implements ConstInterface
+class VhsMethodsTest extends AbstractTest implements CallbackConstInterface
 {
     /**
      * Test the setting of the pool.
@@ -97,7 +97,7 @@ class VhsMethodsTest extends AbstractTest implements ConstInterface
         /** @var \Brainworxx\Krexx\Analyse\Model[] $models */
         $models = $render->model['renderExpandableChild'];
         foreach ($models as $model) {
-            $this->assertEquals(Codegen::VHS_CALL_VIEWHELPER, $model->getMultiLineCodeGen());
+            $this->assertEquals(Codegen::VHS_CALL_VIEWHELPER, $model->getCodeGenType());
             if ($model->getName() !== 'parameterizedMethod') {
                 $this->assertEquals([], $model->getParameters()[Codegen::PARAM_ARRAY]);
             } else {

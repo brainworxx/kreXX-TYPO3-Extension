@@ -39,7 +39,6 @@ namespace Brainworxx\Includekrexx\ViewHelpers;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
 use ReflectionClass;
@@ -63,7 +62,7 @@ use ReflectionClass;
  *   Use this part if you don't want fluid to escape your string or if you are
  *   stitching together an array.
  */
-class DebugViewHelper extends AbstractViewHelper
+class DebugViewHelper extends ComptibilityViewHelper
 {
     const ARGUMENT_VALUE = 'value';
 

@@ -38,15 +38,19 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
+use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionClass;
 use ReflectionMethod;
 
 /**
- * Methods analysis methods. :rolleyes:
+ * Methods analysis methods. Pun not intended.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  *
@@ -55,8 +59,31 @@ use ReflectionMethod;
  * @uses \reflectionClass ref
  *   Reflection of the class we are analysing.
  */
-class ThroughMethods extends AbstractCallback
+class ThroughMethods extends AbstractCallback implements
+    CallbackConstInterface,
+    ViewConstInterface,
+    CodegenConstInterface,
+    ConnectorsConstInterface
 {
+
+    /**
+     * Analysis class for method comments.
+     *
+     * @var \Brainworxx\Krexx\Analyse\Comment\Methods
+     */
+    protected $commentAnalysis;
+
+    /**
+     * Inject the pool and get the comment analysis online.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(Pool $pool)
+    {
+        parent::__construct($pool);
+
+        $this->commentAnalysis = $this->pool->createClass(Methods::class);
+    }
 
     /**
      * Simply start to iterate through the methods.
@@ -69,30 +96,16 @@ class ThroughMethods extends AbstractCallback
         $result = $this->dispatchStartEvent();
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $refClass */
         $refClass = $this->parameters[static::PARAM_REF];
-        /** @var Methods $commentAnalysis */
-        $commentAnalysis = $this->pool->createClass(Methods::class);
 
         // Deep analysis of the methods.
         /** @var \ReflectionMethod $refMethod */
         foreach ($this->parameters[static::PARAM_DATA] as $refMethod) {
-            $methodData = [];
-
-            // Get the comment from the class, it's parents, interfaces or traits.
-            if (empty($methodComment = $commentAnalysis->getComment($refMethod, $refClass)) === false) {
-                $methodData[static::META_COMMENT] = $methodComment;
-            }
-
-            // Get declaration place.
             $declaringClass = $refMethod->getDeclaringClass();
-            $methodData[static::META_DECLARED_IN] = $this->getDeclarationPlace($refMethod, $declaringClass);
-
-            // Get the return type.
-            $methodData[static::META_RETURN_TYPE] = $this->pool->createClass(ReturnType::class)
-                ->getComment($refMethod, $refClass);
+            $methodData = $this->retrieveMethodData($refMethod, $refClass, $declaringClass);
 
             // Update the reflection method, so an event subscriber can do
             // something with it.
-            $this->parameters[static::PARAM_REF_METHOD] = $refMethod;
+            $this->parameters[static::PARAM_REFLECTION_METHOD] = $this->parameters[static::PARAM_REF_METHOD] = $refMethod;
 
             // Render it!
             $result .= $this->pool->render->renderExpandableChild($this->dispatchEventWithModel(
@@ -105,7 +118,7 @@ class ThroughMethods extends AbstractCallback
                         $this->getDeclarationKeywords($refMethod, $declaringClass, $refClass) . static::TYPE_METHOD
                     )->setConnectorType($this->retrieveConnectorType($refMethod))
                     ->addParameter(static::PARAM_DATA, $methodData)
-                    ->setIsPublic($refMethod->isPublic())
+                    ->setCodeGenType($refMethod->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '')
                     ->setReturnType($methodData[static::META_RETURN_TYPE])
                     ->injectCallback($this->pool->createClass(ThroughMeta::class))
             ));
@@ -115,21 +128,57 @@ class ThroughMethods extends AbstractCallback
     }
 
     /**
+     * Retrieve the method analysis data.
+     *
+     * @param \ReflectionMethod $refMethod
+     *   Reflection of the method that we are analysing.
+     * @param \ReflectionClass $refClass
+     *   Reflection of the class that we analysing right now.
+     * @param \ReflectionClass $declaringClass
+     *   Reflection of the class, where the method is hosted.
+     *   This may or may not be the same class as the one that we are analysing.
+     *
+     * @return array
+     *   The collected method data.
+     */
+    protected function retrieveMethodData(
+        ReflectionMethod $refMethod,
+        ReflectionClass $refClass,
+        ReflectionClass $declaringClass
+    ): array {
+        $methodData = [];
+        // Get the comment from the class, it's parents, interfaces or traits.
+        $methodComment = $this->commentAnalysis->getComment($refMethod, $refClass);
+        if (empty($methodComment) === false) {
+            $methodData[static::META_COMMENT] = $methodComment;
+        }
+
+        // Get declaration place.
+        $methodData[static::META_DECLARED_IN] = $this->getDeclarationPlace($refMethod, $declaringClass);
+
+        // Get the return type.
+        $methodData[static::META_RETURN_TYPE] = $this->pool->createClass(ReturnType::class)
+            ->getComment($refMethod, $refClass);
+
+        return $methodData;
+    }
+
+    /**
      * Retrieve the connector type.
      *
      * @param \ReflectionMethod $reflectionMethod
      *   The reflection method.
      *
-     * @return int
+     * @return string
      *   The connector type,
      */
-    protected function retrieveConnectorType(ReflectionMethod $reflectionMethod): int
+    protected function retrieveConnectorType(ReflectionMethod $reflectionMethod): string
     {
         if ($reflectionMethod->isStatic() === true) {
-            return Connectors::STATIC_METHOD;
+            return static::CONNECTOR_STATIC_METHOD;
         }
 
-        return Connectors::METHOD;
+        return static::CONNECTOR_METHOD;
     }
 
     /**

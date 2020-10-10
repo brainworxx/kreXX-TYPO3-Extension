@@ -40,13 +40,14 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\ConstInterface;
 use Brainworxx\Krexx\Analyse\Code\Codegen as OrgCodegen;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 
 /**
  * Special code generation for fluid.
  *
  * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code
  */
-class Codegen extends OrgCodegen implements ConstInterface
+class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterface
 {
     /**
      * Constant identifier for the multiline code generation for fluid
@@ -82,36 +83,52 @@ class Codegen extends OrgCodegen implements ConstInterface
      */
     public function generateSource(Model $model): string
     {
+        $result = '';
+
         // Get out of here as soon as possible.
         if ($this->allowCodegen === false) {
-            return '';
+            return $result;
         }
 
-        $name = $model->getName();
+        if ($model->getType() === static::TYPE_DEBUG_METHOD && $model->getName() === 'getProperties') {
+            // Doing special treatment for the getProperties debug method.
+            // This one is directly callable in fluid.
+            $result =  $this->generateAll($model->setName('properties'));
+        } elseif ($this->isUnknownType($model)) {
+            $result = static::UNKNOWN_VALUE;
+        } elseif ($model->getCodeGenType() === static::VHS_CALL_VIEWHELPER) {
+            // Check for VHS values.
+            $result = $this->generateVhsCall($model);
+        } else {
+            $result = $this->generateAll($model);
+        }
 
-        if (
+        return $result;
+    }
+
+    /**
+     * Test if we need to stop the code generation in it's tracks.
+     *
+     * - Test for a point in a variable name.
+     *   Stuff like this is not reachable by normal means.
+     * - Disallowing code generation for configured debug methods.
+     *   There is no real iterator_to_array method in vanilla fluid or vhs.
+     *   The groupedFor viewhelper can be abused, but the new variable would
+     *   only be visible inside the viewhelper scope. And adding a
+     *   variable.set inside that scope would make the code generation
+     *   really complicated.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @return bool
+     */
+    protected function isUnknownType(Model $model): bool
+    {
+        $name = $model->getName();
+        return
             (is_string($name) === true &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
             $model->getType() === static::TYPE_DEBUG_METHOD ||
-            $model->getMultiLineCodeGen() === static::ITERATOR_TO_ARRAY
-        ) {
-            // Test for a point in a variable name.
-            // Stuff like this is not reachable by normal means.
-            // Disallowing code generation for configured debug methods.
-            // There is no real iterator_to_array method in vanilla fluid or vhs.
-            // The groupedFor viewhelper can be abused, but the new variable would
-            // only be visible inside the viewhelper scope. And adding a
-            // variable.set inside that scope would make the code generation
-            // really complicated.
-            // Meh, we simply stop the generation in it's track.
-            return static::UNKNOWN_VALUE;
-        }
-
-        // Check for VHS values.
-        if ($model->getMultiLineCodeGen() === static::VHS_CALL_VIEWHELPER) {
-            return $this->generateVhsCall($model);
-        }
-
-        return $this->generateAll($model);
+            $model->getCodeGenType() === static::CODEGEN_TYPE_ITERATOR_TO_ARRAY ||
+            $model->getCodeGenType() === static::CODEGEN_TYPE_JSON_DECODE;
     }
 
     /**
@@ -197,7 +214,7 @@ class Codegen extends OrgCodegen implements ConstInterface
      * @return $this
      *   Return this, for chaining.
      */
-    public function setComplicatedWrapperLeft($wrapper): Codegen
+    public function setComplicatedWrapperLeft(string $wrapper): Codegen
     {
         $this->wrapperLeft = $wrapper;
         return $this;
@@ -212,7 +229,7 @@ class Codegen extends OrgCodegen implements ConstInterface
      * @return $this
      *   Return this, for chaining.
      */
-    public function setComplicatedWrapperRight($wrapper): Codegen
+    public function setComplicatedWrapperRight(string $wrapper): Codegen
     {
         $this->wrapperRight = $wrapper;
         return $this;

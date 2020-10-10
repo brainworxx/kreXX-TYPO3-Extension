@@ -37,6 +37,8 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Controller;
 
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
+use Brainworxx\Krexx\Analyse\Caller\ExceptionCallerFinder;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 use Throwable;
 
@@ -45,7 +47,7 @@ use Throwable;
  *
  * @package Brainworxx\Krexx\Errorhandler
  */
-class ExceptionController extends AbstractController
+class ExceptionController extends AbstractController implements BacktraceConstInterface
 {
     /**
      * Storing our singleton exception handler.
@@ -83,21 +85,16 @@ class ExceptionController extends AbstractController
         $this->pool->chunks->detectEncoding($main . $backtrace);
 
         // Get the header, footer and messages
-        $type = get_class($exception);
-        $footer = $this->outputFooter([]);
-        $header = $this->pool->render->renderFatalHeader($this->outputCssAndJs(), $type);
+        $caller = $this->pool
+            ->createClass(ExceptionCallerFinder::class)
+            ->findCaller('', $exception);
+        $footer = $this->outputFooter($caller);
+        $header = $this->pool->render->renderFatalHeader($this->outputCssAndJs(), get_class($exception));
         $messages = $this->pool->messages->outputMessages();
 
          // Add the caller as metadata to the chunks class. It will be saved as
         // additional info, in case we are logging to a file.
-        $this->pool->chunks->addMetadata(
-            [
-                static::TRACE_FILE => $exception->getFile(),
-                static::TRACE_LINE => $exception->getLine() + 1,
-                static::TRACE_VARNAME => ' ' . $type,
-                static::TRACE_LEVEL => 'error'
-            ]
-        );
+        $this->pool->chunks->addMetadata($caller);
 
         $this->outputService->addChunkString($header)->addChunkString($messages)
             ->addChunkString($main)
@@ -135,5 +132,30 @@ class ExceptionController extends AbstractController
         restore_exception_handler();
 
         return $this;
+    }
+
+    /**
+     * Generate the meta data for the exception analysis.
+     *
+     * @param \Throwable $exception
+     *   The exception we are analysing.
+     *
+     * @deprecated
+     *   Since 4.0.0. Use the ExceptionCallerFinder instead.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @return array
+     *   The meta array.
+     */
+    protected function generateMetaArray(Throwable $exception): array
+    {
+        return [
+            static::TRACE_FILE => $exception->getFile(),
+            static::TRACE_LINE => $exception->getLine() + 1,
+            static::TRACE_VARNAME => ' ' . get_class($exception),
+            static::TRACE_LEVEL => 'error'
+        ];
     }
 }

@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View;
 
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
@@ -46,7 +45,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\View
  */
-abstract class AbstractRender implements ConstInterface
+abstract class AbstractRender
 {
     /**
      * Here we store all relevant data.
@@ -70,7 +69,11 @@ abstract class AbstractRender implements ConstInterface
     protected static $fileCache = [];
 
     /**
-     * {@inheritdoc}
+     * Inject the pool and inject $this into the concrete render object of the
+     * pool.
+     *
+     * @param Pool $pool
+     *   The pool.
      */
     public function __construct(Pool $pool)
     {
@@ -88,7 +91,7 @@ abstract class AbstractRender implements ConstInterface
      * @return string
      *   The template file, without whitespaces.
      */
-    protected function getTemplateFileContent($what): string
+    protected function getTemplateFileContent(string $what): string
     {
         if (isset(static::$fileCache[$what]) === true) {
             return static::$fileCache[$what];
@@ -151,7 +154,7 @@ abstract class AbstractRender implements ConstInterface
      * @return string
      *   The generated data attribute.
      */
-    protected function generateDataAttribute($name, $data): string
+    protected function generateDataAttribute(string $name, string $data): string
     {
         if (empty($data) === true) {
             return '';

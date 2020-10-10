@@ -125,12 +125,12 @@ trait ConnectorService
     /**
      * Setter for the type we are rendering, using the class constants.
      *
-     * @param int $type
+     * @param string $type
      *
      * @return $this
      *   Return $this, for chaining.
      */
-    public function setConnectorType(int $type): Model
+    public function setConnectorType(string $type): Model
     {
         $this->connectorService->setType($type);
         return $this;
@@ -162,7 +162,7 @@ trait ConnectorService
     }
 
     /**
-     * Getter of the return type of a methos analysis.
+     * Getter of the return type of a method analysis.
      *
      * @return string
      */

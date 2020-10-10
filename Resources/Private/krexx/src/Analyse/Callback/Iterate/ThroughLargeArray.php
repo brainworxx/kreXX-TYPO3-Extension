@@ -38,8 +38,9 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Code\Codegen;
-use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
+use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -60,7 +61,10 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  */
-class ThroughLargeArray extends AbstractCallback
+class ThroughLargeArray extends AbstractCallback implements
+    CodegenConstInterface,
+    CallbackConstInterface,
+    ConnectorsConstInterface
 {
 
     /**
@@ -87,8 +91,9 @@ class ThroughLargeArray extends AbstractCallback
             }
 
             /** @var Model $model */
-            $model = $this->pool->createClass(Model::class)->setMultiLineCodeGen(
-                $this->parameters[static::PARAM_MULTILINE] === true ?  Codegen::ITERATOR_TO_ARRAY : ''
+            $model = $this->pool->createClass(Model::class)->setCodeGenType(
+                $this->parameters[static::PARAM_MULTILINE] === true ?
+                    static::CODEGEN_TYPE_ITERATOR_TO_ARRAY : static::CODEGEN_TYPE_PUBLIC
             );
 
             // Handling string keys of the array.
@@ -113,12 +118,12 @@ class ThroughLargeArray extends AbstractCallback
     {
         if (is_string($key) === true) {
             $model->setName($this->pool->encodingService->encodeString($key))
-                ->setConnectorType(Connectors::ASSOCIATIVE_ARRAY);
+                ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);
 
             return;
         }
 
-        $model->setName($key)->setConnectorType(Connectors::NORMAL_ARRAY);
+        $model->setName($key)->setConnectorType(static::CONNECTOR_NORMAL_ARRAY);
     }
 
     /**
@@ -131,7 +136,7 @@ class ThroughLargeArray extends AbstractCallback
      * @return string
      *   The generated markup
      */
-    protected function handleValue($value, Model $model): string
+    protected function handleValue(&$value, Model $model): string
     {
         if (is_object($value) === true) {
             // We will not go too deep here, and say only what it is.

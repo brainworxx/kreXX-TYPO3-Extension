@@ -95,12 +95,12 @@ class ReflectionClass extends \ReflectionClass
     {
         $propName = $refProperty->getName();
 
-        if (array_key_exists("\0*\0" . $propName, $this->objectArray)) {
+        if (array_key_exists("\0*\0" . $propName, $this->objectArray) === true) {
             // Protected or a private
             return $this->objectArray["\0*\0" . $propName];
         }
 
-        if (array_key_exists($propName, $this->objectArray)) {
+        if (array_key_exists($propName, $this->objectArray) === true) {
             // Must be a public. Those are rare.
             return $this->objectArray[$propName];
         }
@@ -125,7 +125,7 @@ class ReflectionClass extends \ReflectionClass
         // If we are facing multiple declarations, the declaring class name
         // is set in front of the key.
         $propName = "\0" . $refProperty->getDeclaringClass()->getName() . "\0" . $propName;
-        if (array_key_exists($propName, $this->objectArray)) {
+        if (array_key_exists($propName, $this->objectArray) === true) {
             // Found it!
             return $this->objectArray[$propName];
         }
@@ -177,7 +177,7 @@ class ReflectionClass extends \ReflectionClass
         foreach ($interfaceNames as $interfaceName) {
             try {
                 $result[$interfaceName] = new ReflectionClass($interfaceName);
-            } catch (ReflectionException $e) {
+            } catch (ReflectionException $exception) {
                 // Do nothing. We skip this one.
                 // Not sure how this could happen.
             }
@@ -202,7 +202,7 @@ class ReflectionClass extends \ReflectionClass
         foreach ($traits as $trait) {
             try {
                 $result[$trait] = new ReflectionClass($trait);
-            } catch (ReflectionException $e) {
+            } catch (ReflectionException $exception) {
                 // We skip this one.
             }
         }

@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Caller;
 
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -45,7 +44,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\Analyse\Caller
  */
-abstract class AbstractCaller implements ConstInterface
+abstract class AbstractCaller
 {
     /**
      * Our pool where we keep al relevant classes.
@@ -92,7 +91,7 @@ abstract class AbstractCaller implements ConstInterface
      * @return $this
      *   Return this for chaining.
      */
-    public function setPattern($pattern): AbstractCaller
+    public function setPattern(string $pattern): AbstractCaller
     {
         $this->pattern = strtolower($pattern);
         return $this;
@@ -122,10 +121,12 @@ abstract class AbstractCaller implements ConstInterface
      *     'file' => 'someFile.php',
      *     'line' => 123,
      *     'varname' => '$myVar',
-     *     'type' => 'Analysis of $myString, string'
+     *     'type' => 'Analysis of $myString, string',
+     *     'date' => '19-09-2020 10:37:04'
+     *     'url' => 'http://some.server.xx/path/'
      *   );
      */
-    abstract public function findCaller($headline, $data): array;
+    abstract public function findCaller(string $headline, $data): array;
 
     /**
      * Get the analysis type for the metadata and the page title.
@@ -140,7 +141,7 @@ abstract class AbstractCaller implements ConstInterface
      * @return string
      *   The analysis type.
      */
-    protected function getType($headline, $varname, $data): string
+    protected function getType(string $headline, string $varname, $data): string
     {
         if (empty($headline) === true) {
             $type = is_object($data) === true ? get_class($data) : gettype($data);

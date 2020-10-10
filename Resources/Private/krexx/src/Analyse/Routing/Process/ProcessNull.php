@@ -45,8 +45,22 @@ use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessNull extends AbstractRouting implements ProcessInterface
+class ProcessNull extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
+
+    /**
+     * Is this one null?
+     *
+     * @param Model $model
+     *   The value we are analysing.
+     *
+     * @return bool
+     *   Well, is this null?
+     */
+    public function canHandle(Model $model): bool
+    {
+        return $model->getData() === null;
+    }
 
     /**
      * Render a 'dump' for a NULL value.
@@ -57,7 +71,7 @@ class ProcessNull extends AbstractRouting implements ProcessInterface
      * @return string
      *   The rendered markup.
      */
-    public function process(Model $model): string
+    public function handle(Model $model): string
     {
         $data = 'NULL';
         return $this->pool->render->renderExpandableChild(

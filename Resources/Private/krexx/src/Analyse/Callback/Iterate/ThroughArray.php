@@ -38,8 +38,9 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Code\Codegen;
-use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
+use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -52,7 +53,10 @@ use Brainworxx\Krexx\Analyse\Model;
  * @uses bool multiline
  *   Do we need a multiline code generation?
  */
-class ThroughArray extends AbstractCallback
+class ThroughArray extends AbstractCallback implements
+    CallbackConstInterface,
+    CodegenConstInterface,
+    ConnectorsConstInterface
 {
 
     /**
@@ -66,7 +70,8 @@ class ThroughArray extends AbstractCallback
         $output = $this->pool->render->renderSingeChildHr() . $this->dispatchStartEvent();
 
         // Are we dealing with multiline code generation?
-        $multilineCodeGen = ($this->parameters[static::PARAM_MULTILINE] === true ? Codegen::ITERATOR_TO_ARRAY : '');
+        $multilineCodeGen = $this->parameters[static::PARAM_MULTILINE] === true ?
+            static::CODEGEN_TYPE_ITERATOR_TO_ARRAY : static::CODEGEN_TYPE_PUBLIC;
 
         $recursionMarker = $this->pool->recursionHandler->getMarker();
         $encodingService = $this->pool->encodingService;
@@ -83,19 +88,19 @@ class ThroughArray extends AbstractCallback
             }
 
             /** @var Model $model */
-            $model = $this->pool->createClass(Model::class)->setData($value)->setMultiLineCodeGen($multilineCodeGen);
+            $model = $this->pool->createClass(Model::class)->setData($value)->setCodeGenType($multilineCodeGen);
 
             if (array_key_exists($key, $array) === false) {
                 // Looks like we have an inaccessible array value here.
-                $model->setMultiLineCodeGen(Codegen::ARRAY_VALUES_ACCESS)
+                $model->setCodeGenType(static::CODEGEN_TYPE_ARRAY_VALUES_ACCESS)
                     ->setConnectorParameters(array_search($key, array_keys($array)));
             }
 
             if (is_string($key) === true) {
-                $model->setName($encodingService->encodeStringForCodeGeneration($encodingService->encodeString($key)))
-                    ->setConnectorType(Connectors::ASSOCIATIVE_ARRAY);
+                $model->setName($encodingService->encodeString($key))
+                    ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);
             } else {
-                $model->setName($key)->setConnectorType(Connectors::NORMAL_ARRAY);
+                $model->setName($key)->setConnectorType(static::CONNECTOR_NORMAL_ARRAY);
             }
 
             $output .= $this->pool->routing->analysisHub($model);

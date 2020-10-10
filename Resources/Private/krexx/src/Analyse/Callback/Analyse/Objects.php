@@ -48,9 +48,12 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PrivateProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
-use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Throwable;
+use stdClass;
+use __PHP_Incomplete_Class;
 
 /**
  * Object analysis methods.
@@ -62,7 +65,7 @@ use Throwable;
  * @uses string name
  *   The key of the class from the object/array holding this one.
  */
-class Objects extends AbstractCallback
+class Objects extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
 {
 
     /**
@@ -103,8 +106,8 @@ class Objects extends AbstractCallback
         $config = $this->pool->config;
         $stuffToDump = [PublicProperties::class];
 
-        if ($ref->getName() === \stdClass::class) {
-            // We ignore everything else for the stdClass.
+        if ($ref->getName() === stdClass::class || $ref->getName() === __PHP_Incomplete_Class::class) {
+            // We ignore everything else for these two types.
             return $stuffToDump;
         }
 
@@ -128,7 +131,7 @@ class Objects extends AbstractCallback
 
         // Dumping traversable data.
         if (
-            $config->getSetting(Fallback::SETTING_ANALYSE_TRAVERSABLE) === true &&
+            $config->getSetting(static::SETTING_ANALYSE_TRAVERSABLE) === true &&
             $this->parameters[static::PARAM_DATA] instanceof \Traversable
         ) {
             $stuffToDump[] = Traversable::class;
@@ -153,23 +156,23 @@ class Objects extends AbstractCallback
 
         // Dumping getter methods before the protected and private,
         // in case we are not in scope.
-        if ($isInScope === false && $config->getSetting(Fallback::SETTING_ANALYSE_GETTER) === true) {
+        if ($isInScope === false && $config->getSetting(static::SETTING_ANALYSE_GETTER) === true) {
             $stuffToDump[] = Getter::class;
         }
 
         // Dumping protected properties.
-        if ($isInScope === true || $config->getSetting(Fallback::SETTING_ANALYSE_PROTECTED) === true) {
+        if ($isInScope === true || $config->getSetting(static::SETTING_ANALYSE_PROTECTED) === true) {
             $stuffToDump[] = ProtectedProperties::class;
         }
 
         // Dumping private properties.
-        if ($isInScope === true || $config->getSetting(Fallback::SETTING_ANALYSE_PRIVATE) === true) {
+        if ($isInScope === true || $config->getSetting(static::SETTING_ANALYSE_PRIVATE) === true) {
             $stuffToDump[] = PrivateProperties::class;
         }
 
         // Dumping getter methods before the protected and private,
         // in case we are in scope.
-        if ($isInScope === true && $config->getSetting(Fallback::SETTING_ANALYSE_GETTER) === true) {
+        if ($isInScope === true && $config->getSetting(static::SETTING_ANALYSE_GETTER) === true) {
             $stuffToDump[] = Getter::class;
         }
     }

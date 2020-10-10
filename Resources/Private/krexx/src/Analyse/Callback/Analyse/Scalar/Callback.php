@@ -39,18 +39,19 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Comment\Functions;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionFunction;
 use ReflectionException;
 
 /**
  * The stuff we are doing here is very similar to the method analysis. The
- * main difference here is, that we do not have a hosting vlass and no
+ * main difference here is, that we do not have a hosting class and no
  * inheritance. We can extract the needed data directly out of the
  * reflection and dump it via ThroughMeta.
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
-class Callback extends AbstractScalarAnalysis
+class Callback extends AbstractScalarAnalysis implements ViewConstInterface
 {
     /**
      * The callback we are analysing.

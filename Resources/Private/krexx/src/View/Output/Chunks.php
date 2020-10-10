@@ -37,7 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Output;
 
-use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -58,9 +58,13 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Krexx\View\Output
  */
-class Chunks
+class Chunks implements ConfigConstInterface
 {
-
+    /**
+     * Marker of an address string inside the chunks.
+     *
+     * @var string
+     */
     const STRING_DELIMITER = '@@@';
 
     /**
@@ -353,7 +357,7 @@ class Chunks
      */
     public function addMetadata(array $caller)
     {
-        if ($this->pool->config->getSetting(Fallback::SETTING_DESTINATION) === Fallback::VALUE_FILE) {
+        if ($this->pool->config->getSetting(static::SETTING_DESTINATION) === static::VALUE_FILE) {
             $this->metadata[] = $caller;
         }
     }

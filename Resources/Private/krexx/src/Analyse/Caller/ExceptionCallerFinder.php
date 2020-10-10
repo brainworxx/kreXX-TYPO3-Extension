@@ -35,14 +35,36 @@
 
 declare(strict_types=1);
 
-namespace {
-    die('Access denied');
-}
+namespace Brainworxx\Krexx\Analyse\Caller;
 
-namespace {
-    class Tx_Includekrexx_ViewHelpers_DebugViewHelper extends Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper {}
-}
-
-namespace TYPO3\CMS\Fluid\Core\ViewHelper {
-    class AbstractViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper {}
+/**
+ * The caller finder for exceptions
+ *
+ * @package Brainworxx\Krexx\Analyse\Caller
+ */
+class ExceptionCallerFinder extends AbstractCaller implements BacktraceConstInterface
+{
+    /**
+     * It simply deducts everything from the exception.
+     *
+     * @param string $headline
+     *   An empty string. Not used here.
+     * @param \Throwable $exception
+     *   The exception that was thrown
+     *
+     * @return array
+     *   The exception, that was thrown.
+     */
+    public function findCaller(string $headline, $exception): array
+    {
+        return [
+            static::TRACE_FILE => $exception->getFile(),
+            static::TRACE_LINE => $exception->getLine() + 1,
+            static::TRACE_VARNAME => ' ' . get_class($exception),
+            static::TRACE_LEVEL => 'error',
+            static::TRACE_TYPE => get_class($exception),
+            static::TRACE_DATE => date('d-m-Y H:i:s', time()),
+            static::TRACE_URL => $this->getCurrentUrl(),
+        ];
+    }
 }

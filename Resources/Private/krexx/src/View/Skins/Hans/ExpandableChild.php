@@ -81,6 +81,7 @@ trait ExpandableChild
         }
 
         // Generating our code.
+        /** @var \Brainworxx\Krexx\Analyse\Code\Codegen $codegenHandler */
         $codegenHandler = $this->pool->codegenHandler;
         $generateSource = $codegenHandler->generateSource($model);
         return str_replace(
@@ -183,6 +184,28 @@ trait ExpandableChild
             ],
             $this->getTemplateFileContent(static::FILE_NEST)
         );
+    }
+
+    /**
+     * Render the 'extra' part of the singe child output.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model.
+     *
+     * @return string
+     *   The rendered HTML output.
+     */
+    protected function renderExtra(Model $model): string
+    {
+        if ($model->hasExtra() === true) {
+            return str_replace(
+                $this->markerSingleChildExtra,
+                $model->getData(),
+                $this->getTemplateFileContent(static::FILE_SI_CHILD_EX)
+            );
+        }
+
+        return '';
     }
 
     /**

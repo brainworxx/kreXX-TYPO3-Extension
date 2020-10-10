@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -51,7 +52,7 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks
  */
-class ThroughClassList extends AbstractCallback
+class ThroughClassList extends AbstractCallback implements CallbackConstInterface
 {
     /**
      * Dumps the receiver classes.

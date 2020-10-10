@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use DOMDocument;
 use finfo;
 
@@ -46,9 +47,11 @@ use finfo;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
-class Xml extends AbstractScalarAnalysis
+class Xml extends AbstractScalarAnalysis implements ViewConstInterface
 {
-
+    /**
+     * @var string
+     */
     const XML_CHILDREN = 'children';
 
     /**
@@ -84,7 +87,8 @@ class Xml extends AbstractScalarAnalysis
     {
         return function_exists('xml_parser_create') &&
             class_exists(DOMDocument::class) &&
-            class_exists(finfo::class);
+            class_exists(finfo::class) &&
+            function_exists('xml_parser_create');
     }
 
     /**
@@ -100,7 +104,7 @@ class Xml extends AbstractScalarAnalysis
      */
     public function canHandle($string, Model $model): bool
     {
-        // Get a first impression, we check the midetype of the model.
+        // Get a first impression, we check the mime type of the model.
         $metaStuff = $model->getJson();
 
         if (
@@ -135,7 +139,7 @@ class Xml extends AbstractScalarAnalysis
         $meta = [];
         $meta[static::META_DECODED_XML] = $this->decodedXml;
 
-        // The pretty print done by a domparser..
+        // The pretty print done by a dom parser.
         $dom = new DOMDocument("1.0");
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;

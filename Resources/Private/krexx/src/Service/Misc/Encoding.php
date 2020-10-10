@@ -334,13 +334,13 @@ class Encoding
         }
 
         $result = str_replace(
-            ['"', '\'', "\0", "\xEF", "\xBB", "\xBF"],
-            ['&#034;', '&#039;', '\' . "\0" . \'', '\' . "\xEF" . \'', '\' . "\xBB" . \'', '\' . "\xBF" . \''],
+            ['\'', "\0", "\xEF", "\xBB", "\xBF"],
+            ["\&#039;", '\' . "\0" . \'', '\' . "\xEF" . \'', '\' . "\xBB" . \'', '\' . "\xBF" . \''],
             $name
         );
 
         // Clean it up a bit
-        return $cache[$name] = str_replace('" . \'\' . "', '', $result);
+        return $cache[$name] = $this->encodeString(str_replace('" . \'\' . "', '', $result));
     }
 
     /**

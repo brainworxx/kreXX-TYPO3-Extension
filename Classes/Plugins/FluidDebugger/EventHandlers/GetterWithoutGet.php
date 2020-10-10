@@ -39,7 +39,6 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -50,7 +49,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList::end
  * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers
  */
-class GetterWithoutGet implements EventHandlerInterface, ConstInterface
+class GetterWithoutGet implements EventHandlerInterface
 {
     /**
      * The resource pool

@@ -124,7 +124,7 @@ class RenderNothing extends RenderHans
      * @param $javascript
      * @return mixed|string
      */
-    public function renderCssJs(string &$css, string &$javascript): string
+    public function renderCssJs(string $css, string $javascript): string
     {
         $this->css = $css;
         $this->js = $javascript;

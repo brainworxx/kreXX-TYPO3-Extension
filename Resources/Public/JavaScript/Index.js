@@ -262,6 +262,7 @@
      */
     ajaxRefresh.generateHtml = function (result) {
         var html = '';
+        var i;
 
         for (var key in result) {
             if (!result.hasOwnProperty(key)) {
@@ -270,11 +271,12 @@
 
             var file = result[key];
             html += '<tr ' + ajaxRefresh.generateBackgroundStyle(file.name) + '>';
-            html += '<td><a target="_blank" href="' + file.dispatcher + '"><div class="krexx-icon"></div></a></td>';
-            html += '<td><a target="_blank" href="' + file.dispatcher + '">  ' + file.name + '</a></td>';
-
-            html += '<td class="meta">';
-            for (var i = 0; i < file.meta.length; i++) {
+            html += '<td><a target="_blank" href="' + file.dispatcher + '">  ' + file.name + '</a></td><td class="td-icon">';
+            for (i = 0; i < file.meta.length; i++) {
+                html += '<div class="krexx-icon ' + file.meta[i].level + '" title="' + file.meta[i].level + '"></div>';
+            }
+            html += '</td><td class="meta">';
+            for (i = 0; i < file.meta.length; i++) {
                 html += '<b>' + file.meta[i].type + '</b><br />';
                 html += 'in ' + file.meta[i].filename + ', line ' + file.meta[i].line;
                 if (i < file.meta.length - 1) {

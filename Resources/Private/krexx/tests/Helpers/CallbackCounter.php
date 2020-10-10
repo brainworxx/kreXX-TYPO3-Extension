@@ -36,13 +36,15 @@
 namespace Brainworxx\Krexx\Tests\Helpers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 
 /**
  * Test replacements for the analysis callbacks.
  *
  * @package Brainworxx\Krexx\Tests\Helpers
  */
-class CallbackCounter extends AbstractCallback
+class CallbackCounter extends AbstractCallback implements ProcessConstInterface, CallbackConstInterface
 {
     public static $counter = 0;
 

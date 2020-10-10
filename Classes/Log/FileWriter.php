@@ -42,12 +42,13 @@ use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Logging\LoggingTrait;
 use Brainworxx\Krexx\Service\Config\Config;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\Writer\WriterInterface;
 use TYPO3\CMS\Core\Log\LogRecord;
 
-class FileWriter implements WriterInterface
+class FileWriter implements WriterInterface, ConfigConstInterface
 {
     use LoggingTrait;
 
@@ -105,7 +106,7 @@ class FileWriter implements WriterInterface
             ->dumpAction(
                 $data,
                 $record->getComponent() . ': ' . $record->getMessage(),
-                strtolower(LogLevel::getName($record->getLevel()))
+                $this->retrieveLogLevel($record)
             );
 
         AbstractController::$analysisInProgress = false;
@@ -113,6 +114,26 @@ class FileWriter implements WriterInterface
         static::endForcedLog();
 
         return $this;
+    }
+
+    /**
+     * Depending on the TYPO3 version, the log level is either a string or
+     * an integer
+     *
+     * @param \TYPO3\CMS\Core\Log\LogRecord $record
+     *   The log record.
+     *
+     * @return string
+     *   The readable string.
+     */
+    protected function retrieveLogLevel(LogRecord $record): string
+    {
+        $level = $record->getLevel();
+        if (is_integer($level)) {
+            $level = LogLevel::getName($level);
+        }
+
+        return strtolower($level);
     }
 
     /**

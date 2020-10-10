@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Controller;
 
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -44,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @package Brainworxx\Krexx\Controller
  */
-class DumpController extends AbstractController
+class DumpController extends AbstractController implements BacktraceConstInterface
 {
     /**
      * Dump information about a variable.
@@ -77,20 +78,12 @@ class DumpController extends AbstractController
 
         // We will only allow code generation, if we were able to determine the
         // variable name or if we are not in logging mode.
-        if ($message === '') {
-            // Normal analysis mode.
-            $this->pool->scope->setScope($caller[static::TRACE_VARNAME]);
-        } else {
-            // Logging mode.
+        $message === '' ? $this->pool->scope->setScope($caller[static::TRACE_VARNAME]) :
             $this->pool->codegenHandler->setAllowCodegen(false);
-        }
-
 
         // Start the magic.
         $analysis = $this->pool->routing->analysisHub(
-            $this->pool->createClass(Model::class)
-                ->setData($data)
-                ->setName($caller[static::TRACE_VARNAME])
+            $this->pool->createClass(Model::class)->setData($data)->setName($caller[static::TRACE_VARNAME])
         );
 
         // Detect the encoding on the start-chunk-string of the analysis

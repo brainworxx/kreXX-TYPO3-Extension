@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -48,7 +49,7 @@ use Brainworxx\Krexx\Analyse\Model;
  * @uses mixed data
  *   The result from one single configured debug method.
  */
-class Debug extends AbstractCallback
+class Debug extends AbstractCallback implements CallbackConstInterface
 {
 
     /**

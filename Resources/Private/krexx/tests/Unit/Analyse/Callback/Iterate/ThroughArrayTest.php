@@ -89,11 +89,11 @@ class ThroughArrayTest extends AbstractTest
         // Check the result
         /** @var \Brainworxx\Krexx\Analyse\Model[] $models */
         $models = Krexx::$pool->routing->model;
-        $this->assertEquals(2, count($models));
+        $this->assertCount(2, $models);
 
         // Test for multiline
-        $this->assertEquals(Codegen::ITERATOR_TO_ARRAY, $models[0]->getMultiLineCodeGen());
-        $this->assertEquals(Codegen::ITERATOR_TO_ARRAY, $models[1]->getMultiLineCodeGen());
+        $this->assertEquals(Codegen::CODEGEN_TYPE_ITERATOR_TO_ARRAY, $models[0]->getCodeGenType());
+        $this->assertEquals(Codegen::CODEGEN_TYPE_ITERATOR_TO_ARRAY, $models[1]->getCodeGenType());
         // Test the names
         $this->assertEmpty($models[0]->getName());
         $this->assertEquals('one', $models[1]->getName());
@@ -121,7 +121,7 @@ class ThroughArrayTest extends AbstractTest
         $arrayCast->{5} = 'hidden';
         $fixture = [
             'multiline' => false,
-           'data' => (array) $arrayCast
+            'data' => (array) $arrayCast
         ];
 
         // Run the test.
@@ -131,13 +131,13 @@ class ThroughArrayTest extends AbstractTest
         // Check the result
         /** @var \Brainworxx\Krexx\Analyse\Model[] $models */
         $models = Krexx::$pool->routing->model;
-        $this->assertEquals(1, count($models));
+        $this->assertCount(1, $models);
         // This bug may or may not be fixed on the used PHP version.
         // Hence, we need to test it
         if (array_key_exists(5, $fixture['data'])) {
-            $this->assertEmpty($models[0]->getMultiLineCodeGen());
+            $this->assertEquals(Codegen::CODEGEN_TYPE_PUBLIC, $models[0]->getCodeGenType());
         } else {
-            $this->assertEquals(Codegen::ARRAY_VALUES_ACCESS, $models[0]->getMultiLineCodeGen());
+            $this->assertEquals(Codegen::CODEGEN_TYPE_ARRAY_VALUES_ACCESS, $models[0]->getCodeGenType());
         }
         $this->assertEquals(5, $models[0]->getName());
     }

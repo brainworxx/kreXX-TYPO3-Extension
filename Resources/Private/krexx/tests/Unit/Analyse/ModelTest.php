@@ -35,10 +35,12 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse;
 
+use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use stdClass;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\View\Messages;
@@ -140,6 +142,8 @@ class ModelTest extends AbstractTest
             ->will($this->returnValue($mockCallback));
 
         $model = new Model(Krexx::$pool);
+
+        $this->assertEquals('', $model->renderMe(), 'No callback, no HTML.');
 
         // Test id the HTML result gates returned and both methods gets called once.
         $this->assertEquals($htmlResult, $model->injectCallback($mockCallback)->renderMe());
@@ -445,32 +449,6 @@ class ModelTest extends AbstractTest
     }
 
     /**
-     * Testing the getter for the multiline code generation.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::getMultiLineCodeGen
-     */
-    public function testGetMultiLineCodeGen()
-    {
-        $data = static::SOME_STRING_TO_PASS_THROUGH;
-
-        $this->setValueByReflection('multiLineCodeGen', $data, $this->model);
-        $this->assertEquals($data, $this->model->getMultiLineCodeGen());
-    }
-
-    /**
-     * Testing the setter for the multiline code generation.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setMultiLineCodeGen
-     */
-    public function testSetMultiLineCodeGen()
-    {
-        $data = static::SOME_STRING_TO_PASS_THROUGH;
-
-        $this->assertEquals($this->model, $this->model->setMultiLineCodeGen($data));
-        $this->assertEquals($data, $this->model->getMultiLineCodeGen());
-    }
-
-    /**
      * Testing the setter for the connector parameters.
      *
      * @covers \Brainworxx\Krexx\Analyse\Model::setConnectorParameters
@@ -578,54 +556,78 @@ class ModelTest extends AbstractTest
     }
 
     /**
-     * Testing the getter of the isMetaConstants
+     * Testing the setting of the code generation type.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Model::isMetaConstants
+     * @covers \Brainworxx\Krexx\Analyse\Model::setCodeGenType
      */
-    public function testGetIsMetaConstants()
+    public function testSetCodeGenType()
     {
-        $data = true;
+        $data = 'some constant';
 
-        $this->setValueByReflection('isMetaConstants', $data, $this->model);
-        $this->assertEquals($data, $this->model->isMetaConstants());
+        $this->assertEquals($this->model, $this->model->setCodeGenType($data));
+        $this->model->setCodeGenType('');
+        $this->assertEquals($data, $this->model->getCodeGenType(), 'The value must not get overwritten');
     }
 
     /**
-     * Testing the setter for the isMetaConstants.
+     * Testing the getter of the code generation type.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setIsMetaConstants
+     * @covers \Brainworxx\Krexx\Analyse\Model::getCodeGenType
      */
-    public function testSetIsMetaConstants()
+    public function testGetCodeGenType()
     {
-        $data = true;
+        $data = 'Another constant';
 
-        $this->assertEquals($this->model, $this->model->setIsMetaConstants($data));
-        $this->assertEquals($data, $this->model->isMetaConstants());
+        $this->assertEquals(
+            Codegen::CODEGEN_TYPE_EMPTY,
+            $this->model->getCodeGenType(),
+            'Nothing was set so far. Fallback to empty.'
+        );
+
+        $this->model->setConnectorType(Connectors::CONNECTOR_METHOD);
+        $this->assertEquals(
+            '',
+            $this->model->getCodeGenType(),
+            'With some sort of connectors, give back the empty string.'
+        );
+
+        $this->model->setCodeGenType($data);
+        $this->assertEquals($data, $this->model->getCodeGenType(), 'Standard handling.');
     }
 
     /**
-     * Testing the setting of the isPublic.
+     * Test if we are handling a callback or stuff with "extra".
      *
-     * @covers \Brainworxx\Krexx\Analyse\Model::setIsPublic
+     * @covers \Brainworxx\Krexx\Analyse\Model::isExpandable
      */
-    public function testSetIsPublic()
+    public function testIsExpandable()
     {
-        $data = true;
+        $this->assertFalse($this->model->isExpandable());
 
-        $this->assertEquals($this->model, $this->model->setIsPublic($data));
-        $this->assertEquals($data, $this->model->isPublic());
+        $this->model->setHasExtra(true);
+        $this->assertTrue($this->model->isExpandable());
+
+        $callBack = new CallbackCounter(\Krexx::$pool);
+        $this->model->injectCallback($callBack);
+        $this->model->setHasExtra(false);
+        $this->assertTrue($this->model->isExpandable());
+
+        $this->model->setHasExtra(true);
+        $this->assertTrue($this->model->isExpandable());
     }
 
     /**
-     * Testing the getting of the isPublic.
+     * Test the setter/getter for the return type.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Model::isPublic
+     * @covers \Brainworxx\Krexx\Analyse\Model::setReturnType
+     * @covers \Brainworxx\Krexx\Analyse\Model::getReturnType
+     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::getReturnType
+     * @covers \Brainworxx\Krexx\Analyse\Code\Connectors::setReturnType
      */
-    public function testGetIsPublic()
+    public function testSetGetReturnType()
     {
-        $data = true;
-
-        $this->setValueByReflection('isPublic', $data, $this->model);
-        $this->assertEquals($data, $this->model->isPublic());
+        $data = 'string';
+        $this->assertEquals($this->model, $this->model->setReturnType($data));
+        $this->assertEquals($data, $this->model->getReturnType(), 'Get of it out what you put in.');
     }
 }

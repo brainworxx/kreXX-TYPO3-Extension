@@ -1,10 +1,13 @@
-4.0.0 dev
+4.0.0
 - Added process resource analysis.
 - Added better callback analysis.
 - Added better string analysis (json, file path, callback, xml)
 - Added timestamp analysis for large integers.
 - Added throw away messages.
 - Added return type to the method and function analysis.
+- Added additional data to the constants analysis for PHP 7.1
+  and higher. The scope analysis now respects their visibility.
+- Added logging shothand "krexxlog();".
 - Change: Removed all deprecations.
 - Change: Removed the PHP 5.x fatal error handler.
 - Change: Dropped PHP 5.x support.
@@ -18,16 +21,34 @@
 - Change: Simplified the Model.
 - Change: Do not display the encoding info, if we have a buffer
   info available.
-- Change: Different analysis order, when comming from the $this
+- Change: Different analysis order, when coming from the $this
   scope, for better source generation.
 - Change: Different order in the backtrace analysis, for better
   readability.
 - Change: Use compressed css for the SmokyGrey skin.
+- Change: Refactored the code generation.
+- Change: Refactored the routing.
+- Change: "Called from" is always expanded in the smokygrey skin.
+- Change: The connector constants are now strings.
+- Change: Removed the "local opening function" aka. devHandle.
+- Bugfix: The search does now respects the selected tab.
+- Bugfix: Added missing meta data to a handled exception.
+- Bugfix: Prevent an open <pre> from messing with the output.
 
-3.2.3 dev
+3.2.4
+- Bugfix: Analysing of __PHP_Incomplete_Class does not throw
+  errors anymore.
+- Bugfix: Regression with the mixup of the two methods of code
+  escaping.
+
+3.2.3
 - Bugfix: Added missing closing li tag to the expandableChild
   template.
 - Bugfix: The fe configuration does not update the render type.
+- Bugfix: Do not mixup and/or combine escaping for keys and/or
+  code generation.
+- Bugfix: Remove a possible warning when cleaning up old log files.
+- Bugfix: Minimise interference with strange CSS styles.
 
 3.2.2
 - Updated to PHP 7.4

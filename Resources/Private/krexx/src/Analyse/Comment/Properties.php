@@ -56,6 +56,10 @@ class Properties extends AbstractComment
      */
     public function getComment(Reflector $reflectionProperty, ReflectionClass $reflectionClass = null): string
     {
+        if (isset($reflectionProperty->isUndeclared) === true) {
+            return '';
+        }
+
         // Do some static caching. The comment will not change during a run.
         static $cache = [];
         /** @var \ReflectionProperty $reflectionProperty */

@@ -38,7 +38,6 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Log;
 use Brainworxx\Includekrexx\Log\FileWriter;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Includekrexx\Tests\Helpers\ControllerNothing;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Fallback;
@@ -80,6 +79,7 @@ class FileWriterTest extends AbstractTest
      *
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveLogLevel
      */
     public function testWriteLogNormal()
     {
@@ -90,7 +90,11 @@ class FileWriterTest extends AbstractTest
         $fileWriter->writeLog($fixture);
 
         $this->assertEquals(1, ControllerNothing::$count);
-        $this->assertEquals(strtolower(LogLevel::getName($fixture->getLevel())), ControllerNothing::$level[0]);
+        $level = $fixture->getLevel();
+        if (is_integer($level)) {
+            $level = LogLevel::getName($level);
+        }
+        $this->assertEquals(strtolower($level), ControllerNothing::$level[0]);
         $this->assertEquals($fixture->getData(), ControllerNothing::$data[0]);
         $this->assertEquals($fixture->getComponent() . ': ' . $fixture->getMessage(), ControllerNothing::$message[0]);
     }
@@ -100,6 +104,7 @@ class FileWriterTest extends AbstractTest
      *
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveLogLevel
      */
     public function testWriteLogWithConfig()
     {
@@ -127,6 +132,7 @@ class FileWriterTest extends AbstractTest
      *
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveLogLevel
      */
     public function testWriteLogDisabled()
     {

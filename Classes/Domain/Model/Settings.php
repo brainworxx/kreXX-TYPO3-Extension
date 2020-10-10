@@ -98,11 +98,6 @@ class Settings
     protected $factory;
 
     /**
-     * @var string
-     */
-    protected $formdevHandle;
-
-    /**
      * @param string $factory
      */
     public function setFactory(string $factory)
@@ -141,7 +136,7 @@ class Settings
     }
 
     /**
-     * Process thge normal groups of the ini.
+     * Process the normal groups of the ini.
      *
      * @param array $moduleSettings
      *   The module settings. We store these in the user data.

@@ -40,9 +40,8 @@ namespace Brainworxx\Krexx\Controller;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig;
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
-use Brainworxx\Krexx\Analyse\ConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\View\Output\AbstractOutput;
 use Brainworxx\Krexx\View\Output\Browser;
@@ -53,7 +52,7 @@ use Brainworxx\Krexx\View\Output\File;
  *
  * @package Brainworxx\Krexx\Controller
  */
-abstract class AbstractController implements ConstInterface
+abstract class AbstractController implements ConfigConstInterface
 {
     /**
      * Here we remember, if we are currently running a analysis.
@@ -114,10 +113,10 @@ abstract class AbstractController implements ConstInterface
         // Depending on the setting, we use another class here.
         // We get a new output service for every krexx call, because the hosting
         // cms may do their stuff in the shutdown functions as well.
-        $this->destination = $pool->config->getSetting(Fallback::SETTING_DESTINATION);
-        if ($this->destination === Fallback::VALUE_BROWSER) {
+        $this->destination = $pool->config->getSetting(static::SETTING_DESTINATION);
+        if ($this->destination === static::VALUE_BROWSER) {
             $this->outputService = $pool->createClass(Browser::class);
-        } elseif ($this->destination === Fallback::VALUE_FILE) {
+        } elseif ($this->destination === static::VALUE_FILE) {
             $this->outputService = $pool->createClass(File::class);
         }
     }

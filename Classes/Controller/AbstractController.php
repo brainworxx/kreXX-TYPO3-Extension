@@ -104,7 +104,7 @@ abstract class AbstractController extends ActionController
      */
     public function __construct()
     {
-        if (version_compare(TYPO3_version, '10.0.0', '<')) {
+        if (version_compare(Bootstrap::getTypo3Version(), '10.0.0', '<')) {
             // The constructor was removed with 10.0.0.
             parent::__construct();
         }
@@ -174,12 +174,12 @@ abstract class AbstractController extends ActionController
     protected function retrieveKrexxMessages()
     {
         // Get the keys and the args.
-        $keys = $this->pool->messages->getKeys();
+        $messages = $this->pool->messages->getMessages();
 
-        foreach ($keys as $message) {
+        foreach ($messages as $message) {
             // And translate them.
             $this->addFlashMessage(
-                static::translate($message['key'], Bootstrap::EXT_KEY, $message['params']),
+                static::translate($message->getKey(), Bootstrap::EXT_KEY, $message->getArguments()),
                 static::translate('general.error.title', Bootstrap::EXT_KEY),
                 FlashMessage::ERROR
             );
@@ -261,14 +261,5 @@ abstract class AbstractController extends ActionController
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/Index.css');
         $this->view->assign('js', file_get_contents($jsPath));
         $this->view->assign('css', file_get_contents($cssPath));
-
-        if (version_compare(TYPO3_version, '10.3', '>=')) {
-            $cssTenThree = GeneralUtility::getFileAbsFileName(
-                'EXT:includekrexx/Resources/Public/Css/IndexTenThree.css'
-            );
-            $this->view->assign('cssTenThree', file_get_contents($cssTenThree));
-        } else {
-            $this->view->assign('cssTenThree', '');
-        }
     }
 }

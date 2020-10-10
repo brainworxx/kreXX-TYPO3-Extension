@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 
@@ -45,7 +46,7 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  */
-class ErrorObject extends AbstractObjectAnalysis
+class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterface
 {
 
     /**

@@ -41,13 +41,15 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use Brainworxx\Krexx\View\ViewConstInterface;
+use stdClass;
 
 class ProcessOtherTest extends AbstractTest
 {
     /**
      * Testing of not yet handled stuff, aka 'other'.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther::process
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcess()
@@ -62,10 +64,27 @@ class ProcessOtherTest extends AbstractTest
         $this->mockEventService(
             [ProcessOther::class . PluginConfigInterface::START_PROCESS, null, $model]
         );
-        $processor->process($model);
+        $processor->handle($model);
 
         $this->assertEquals('string', $model->getType());
         $this->assertEquals('Unhandled type: string', $model->getNormal());
-        $this->assertArrayHasKey(ProcessOther::META_HELP, $model->getJson());
+        $this->assertArrayHasKey(ViewConstInterface::META_HELP, $model->getJson());
+    }
+
+    /**
+     * Test the check if we can handle the array processing.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther::canHandle
+     */
+    public function testCanHandle()
+    {
+        $processor = new ProcessOther(Krexx::$pool);
+        $model = new Model(Krexx::$pool);
+        $fixture = new stdClass();
+
+        // Best. Test. Ever.
+        $this->assertTrue($processor->canHandle($model->setData($fixture)));
+        $fixture = 'abc';
+        $this->assertTrue($processor->canHandle($model->setData($fixture)));
     }
 }

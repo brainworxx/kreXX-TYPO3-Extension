@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Controller;
 
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 
 /**
@@ -44,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
  *
  * @package Brainworxx\Krexx\Controller
  */
-class BacktraceController extends AbstractController
+class BacktraceController extends AbstractController implements BacktraceConstInterface
 {
 
     /**
@@ -67,6 +68,7 @@ class BacktraceController extends AbstractController
 
         // Find caller.
         $caller = $this->callerFinder->findCaller(static::TRACE_BACKTRACE, []);
+        $caller[static::TRACE_LEVEL] = 'backtrace';
         $this->pool->codegenHandler->setAllowCodegen(false);
 
         $analysis = $this->pool

@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use ReflectionProperty;
 
 /**
@@ -49,7 +50,7 @@ use ReflectionProperty;
  * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class ProtectedProperties extends AbstractObjectAnalysis
+class ProtectedProperties extends AbstractObjectAnalysis implements CallbackConstInterface
 {
 
     /**

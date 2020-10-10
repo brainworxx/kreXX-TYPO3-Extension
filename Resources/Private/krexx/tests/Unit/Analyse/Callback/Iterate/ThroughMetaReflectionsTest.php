@@ -67,7 +67,7 @@ class ThroughMetaReflectionsTest extends AbstractTest
         $throughMetaRef->setParameters($fixture)->callMe();
         $parameter = CallbackCounter::$staticParameters[0];
         $this->assertEquals(1, CallbackCounter::$counter);
-        $this->assertEquals($parameter[$throughMetaRef::PARAM_REF], 'value');
-        $this->assertEquals($parameter[$throughMetaRef::PARAM_META_NAME], 'key');
+        $this->assertEquals('value', $parameter[$throughMetaRef::PARAM_REF]);
+        $this->assertEquals('key', $parameter[$throughMetaRef::PARAM_META_NAME]);
     }
 }

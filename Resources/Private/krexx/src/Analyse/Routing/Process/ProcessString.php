@@ -37,12 +37,14 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\Analyse\Scalar\ScalarString;
-use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\FileinfoDummy;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use finfo;
 
 /**
@@ -50,7 +52,12 @@ use finfo;
  *
  * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
-class ProcessString extends AbstractRouting implements ProcessInterface
+class ProcessString extends AbstractRouting implements
+    ProcessInterface,
+    ViewConstInterface,
+    ProcessConstInterface,
+    CallbackConstInterface,
+    ConfigConstInterface
 {
     /**
      * The buffer info class. We use it to get the mimetype from a string.
@@ -95,6 +102,20 @@ class ProcessString extends AbstractRouting implements ProcessInterface
     }
 
     /**
+     * Is this one a string?
+     *
+     * @param Model $model
+     *   The value we are analysing.
+     *
+     * @return bool
+     *   Well, is this a string?
+     */
+    public function canHandle(Model $model): bool
+    {
+        return is_string($model->getData());
+    }
+
+    /**
      * Render a dump for a string value.
      *
      * @param Model $model
@@ -103,7 +124,7 @@ class ProcessString extends AbstractRouting implements ProcessInterface
      * @return string
      *   The rendered markup.
      */
-    public function process(Model $model): string
+    public function handle(Model $model): string
     {
         $originalData = $data = $model->getData();
 
@@ -126,7 +147,7 @@ class ProcessString extends AbstractRouting implements ProcessInterface
             $model->setNormal($this->pool->encodingService->encodeString($data));
         }
 
-        if ($this->pool->config->getSetting(Fallback::SETTING_ANALYSE_SCALAR) === true) {
+        if ($this->pool->config->getSetting(static::SETTING_ANALYSE_SCALAR) === true) {
             return $this->handleStringScalar($model, $originalData);
         }
 
@@ -138,6 +159,8 @@ class ProcessString extends AbstractRouting implements ProcessInterface
      *
      * @param \Brainworxx\Krexx\Analyse\Model $model
      *   The model, so far.
+     * @param string $originalData
+     *   The original, unprocessed and unescape string.
      *
      * @return string
      *   The generated DOM.
