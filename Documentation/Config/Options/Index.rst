@@ -84,6 +84,9 @@ Properties
 | Analyse private properties     | The same as :literal:`Analyse protected properties`, only for private properties.                                                      | - true                    |
 |                                |                                                                                                                                        | - false                   |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
+| Deep analysis for scalar types | Doing a deep analysis of scalar types.                                                                                                 | - true                    |
+|                                | kreXX will decode / parse XML and JSONs. File paths and callbacks will also be analysed.                                               | - false                   |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Analyse traversable data       | Shall kreXX try to traverse through the object?                                                                                        | - true                    |
 |                                |                                                                                                                                        | - false                   |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+

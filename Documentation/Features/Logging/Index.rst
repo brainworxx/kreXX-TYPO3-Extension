@@ -11,6 +11,9 @@
 Logging
 =======
 
+Direct usage
+------------
+
 Normally, the output of kreXX is send straight to the browser. But there are always situations when this is highly impractical:
 
 - Debugging the server side of an ajax request
@@ -35,8 +38,8 @@ Alternatively, you can use the forced-logging methods:
 
 Wen using the forced logging, the following things will happen:
 
- - Output destination is set to file by force.
- - Ajax requests will get logged by force.
+- Output destination is set to file by force.
+- Ajax requests will get logged by force.
 
 kreXX will store all logfiles inside the directory
 
@@ -48,3 +51,22 @@ kreXX will store all logfiles inside the directory
 The logfiles can be accessed here: :ref:`accesslogfiles`
 
 
+Integration into the TYPO3 loging
+---------------------------------
+
+You can also use kreXX as a TYPO3 standard logger. Simply register it in your site package :literal:`ext_localconf.php`.
+
+.. code-block:: php
+
+	// Register kreXX as a new log writer
+	$GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'] = [
+	    // Using the error level, and above.
+	    \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
+	        \Brainworxx\Includekrexx\Log\FileWriter::class => [
+	            // Overwriting an existing configuration, allowing the scalar analysis.
+	            \Brainworxx\Krexx\Service\Config\ConfigConstInterface::SETTING_ANALYSE_SCALAR => 'true'
+	        ]
+	    ]
+	];
+
+`Here <https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ApiOverview/Logging/Configuration/Index.html#configuration-of-the-logging-system />`_ you can find additional documentation about the TYPO3 logging system.

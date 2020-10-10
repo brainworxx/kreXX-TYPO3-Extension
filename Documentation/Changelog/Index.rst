@@ -22,6 +22,9 @@ Changelog
     - [Feature] Make code generation possible for the getProperties debug method in Fluid.
     - [Feature] Added EXT: file path analysis
     - [Feature] Added Lll string analysis
+    - [Feature] Added Icons to the backend log list.
+    - [Feature] Added additional data to the constants analysis for PHP 7.1 and higher. The scope analysis now respects their visibility.
+    - [Feature] Added logging shothand "krexxlog();".
     - [Change] Removed all deprecations.
     - [Change] Removed the PHP 5.x fatal error handler.
     - [Change] Dropped PHP 5.x support.
@@ -41,6 +44,7 @@ Changelog
     - [Change] Refactored the routing.
     - [Change] "Called from" is always expanded in the smokygrey skin.
     - [Change] The connector constants are now strings.
+    - [Change] Removed the "local opening function" aka. devHandle.
     - [Bugfix] The search does now respects the selected tab.
     - [Bugfix] Added missing meta data to a handled exception.
     - [Bugfix] Prevent an open <pre> from messing with the output

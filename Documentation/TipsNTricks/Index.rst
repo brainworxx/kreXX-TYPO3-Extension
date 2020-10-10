@@ -20,5 +20,5 @@ Tips and tricks
    :glob:
 
    AjaxCli/Index
-   DevHandle/Index
+   DebuggingLiveSytem/Index
    T3settings/Index

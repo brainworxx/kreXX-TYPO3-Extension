@@ -17,9 +17,7 @@ Main analytic function
 .. code-block:: php
 
     krexx($myObject);
-    // Or as an alias:
-    \Krexx::open($myObject);
-    // Or even inline.
+    // Or inline.
     json_encode(krexx($myObject));
     json_encode(\Krexx::open($myObject));
 
@@ -37,7 +35,7 @@ Force kreXX to write the analysis into a logfile:
 .. code-block:: php
 
     // Force kreXX to write an analysis into a log file.
-    \Krexx::log($myObject);
+    krexxlog($myObject);
     // Force kreXX to write a backtrace into a log file
     \Krexx::logBacktrace();
     // Force the timer output into a log file
@@ -46,8 +44,8 @@ Force kreXX to write the analysis into a logfile:
 
 Wen using the forced logging, the following things will happen:
 
- - Output destination is set to file by force.
- - Ajax requests will get logged by force.
+- Output destination is set to file by force.
+- Ajax requests will get logged by force.
 
 
 Benchmarking
@@ -81,19 +79,6 @@ Backtrace
     :width: 934px
     :alt: kreXX backtrace
 
-Fatal error handler (PHP5 only)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. code-block:: php
-
-    // register the fatal error handler
-    \Krexx::registerFatal();
-    // call undefined function to cause an error
-    undefinedFunctionCall();
-    // unregister the fatal error handler
-    \Krexx::unregisterFatal();
-
-
 
 Exception handler
 ^^^^^^^^^^^^^^^^^
@@ -123,4 +108,4 @@ Often enough a kreXX call will look like this:
 
     krexx($this);
 
-Analysing "$this" means, that all protected and private values and methods are reachable from this point inside the code. When kreXX notices this, it will analyse all reachable variables and methods of this class.
+Analysing :literal:`$this` means, that all protected and private values and methods are reachable from this point inside the code. When kreXX notices this, it will analyse all reachable variables and methods of this class.
