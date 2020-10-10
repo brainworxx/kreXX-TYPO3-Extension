@@ -22,10 +22,6 @@
         border-bottom: 1px solid $grey-15;
         text-align: left;
 
-        &.th-icon {
-          width: 10px;
-        }
-
         &.time {
           width: 110px;
         }
@@ -85,6 +81,9 @@
           min-width: 77px;
           text-align: right;
         }
+        &.td-icon {
+          width: 10px;
+        }
       }
 
       @media (max-width: 991px) {
@@ -98,7 +97,8 @@
 
       @media (max-width: 768px) {
         th.meta,
-        td.meta {
+        td.meta,
+        td.td-icon {
           display: none;
         }
         td.description {

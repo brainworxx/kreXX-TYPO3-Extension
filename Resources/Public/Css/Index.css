@@ -134,9 +134,6 @@ body {
   border-bottom: 1px solid #c4c4c4;
   text-align: left;
 }
-.krexx-backend .table-wrapper table th.th-icon {
-  width: 10px;
-}
 .krexx-backend .table-wrapper table th.time {
   width: 110px;
 }
@@ -183,6 +180,9 @@ body {
   min-width: 77px;
   text-align: right;
 }
+.krexx-backend .table-wrapper table td.td-icon {
+  width: 10px;
+}
 @media (max-width: 991px) {
   .krexx-backend .table-wrapper table th.time,
 .krexx-backend .table-wrapper table th.size,
@@ -193,7 +193,8 @@ body {
 }
 @media (max-width: 768px) {
   .krexx-backend .table-wrapper table th.meta,
-.krexx-backend .table-wrapper table td.meta {
+.krexx-backend .table-wrapper table td.meta,
+.krexx-backend .table-wrapper table td.td-icon {
     display: none;
   }
   .krexx-backend .table-wrapper table td.description {
@@ -445,11 +446,14 @@ body {
 }
 .krexx-backend .krexx-icon {
   background-repeat: no-repeat;
-  margin: 2px 0 14px 5px;
+  margin: 2px 0 16px 0;
   position: relative;
   border-radius: 2px;
   width: 30px;
   height: 30px;
+}
+.krexx-backend .krexx-icon:last-child {
+  margin-bottom: 0;
 }
 .krexx-backend .krexx-icon::after {
   top: -4px;
