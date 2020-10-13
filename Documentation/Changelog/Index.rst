@@ -49,6 +49,7 @@ Changelog
     - [Bugfix] Added missing meta data to a handled exception.
     - [Bugfix] Prevent an open <pre> from messing with the output
     - [Bugfix] The Aimeos decorator analysis works now as it should.
+    - [Bugfix] Added missing Aimeos debug method 'getAttributeItems'.
 
 3.3.6
     - [Bugfix] Removed the composer definition for the class alias loader and use an alternative implementation.

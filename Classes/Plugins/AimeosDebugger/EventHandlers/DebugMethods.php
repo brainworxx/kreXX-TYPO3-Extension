@@ -40,6 +40,7 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -49,7 +50,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class DebugMethods extends AbstractEventHandler implements CallbackConstInterface
+class DebugMethods extends AbstractEventHandler implements CallbackConstInterface, CodegenConstInterface
 {
     /**
      * The 2019 version simplified much of the code, hence the configuration
@@ -76,7 +77,10 @@ class DebugMethods extends AbstractEventHandler implements CallbackConstInterfac
             'getListItems' => [
                 // Aimeos 2018 & 2019
                 \Aimeos\MShop\Common\Item\ListRef\Iface::class,
-
+            ],
+            'getAttributeItems' => [
+                // Aimeos 2020
+                \Aimeos\MShop\Order\Item\Base\Product\Base::class
             ]
         ];
 
@@ -151,6 +155,7 @@ class DebugMethods extends AbstractEventHandler implements CallbackConstInterfac
                     ->setNormal(static::UNKNOWN_VALUE)
                     ->setHelpid($methodName)
                     ->setConnectorType(Connectors::CONNECTOR_METHOD)
+                    ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
                     ->addParameter(static::PARAM_DATA, $result)
                     ->injectCallback(
                         $this->pool->createClass(Debug::class)
