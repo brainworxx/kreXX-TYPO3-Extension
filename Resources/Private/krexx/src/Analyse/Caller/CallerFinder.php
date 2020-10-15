@@ -80,8 +80,10 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
         // Setting the search pattern.
         $this->callPattern = [
             'krexx',
+            'krexxlog',
             'krexx::open',
             'Krexx',
+            'Krexxlog',
             'Krexx::open',
             'Krexx::log',
             'krexx::log',
@@ -136,7 +138,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
         return (
                 // Check for a function trace.
                 isset($caller[static::TRACE_FUNCTION]) &&
-                strtolower($caller[static::TRACE_FUNCTION]) === static::FUNCTION_PATTERN
+                strpos(strtolower($caller[static::TRACE_FUNCTION]), static::FUNCTION_PATTERN) === 0
             ) ||
             (
                 // Check for a class trace.

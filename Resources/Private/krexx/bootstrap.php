@@ -277,7 +277,7 @@ call_user_func(function () {
      * @return mixed
      *   Return the original anslysis value.
      */
-    function krexx($data)
+    function krexx($data = null)
     {
         return \Brainworxx\Krexx\Krexx::open($data);
     }
@@ -295,7 +295,7 @@ call_user_func(function () {
      * @return mixed
      *   Return the original anslysis value.
      */
-    function krexxlog($data)
+    function krexxlog($data = null)
     {
         return \Brainworxx\Krexx\Krexx::log($data);
     }

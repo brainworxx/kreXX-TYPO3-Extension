@@ -145,8 +145,10 @@ class CallerFinderTest extends AbstractTest
         $this->assertEquals(
             [
                 $krexx,
+                'krexxlog',
                 'krexx::open',
                 'Krexx',
+                'Krexxlog',
                 'Krexx::open',
                 'Krexx::log',
                 'krexx::log',
