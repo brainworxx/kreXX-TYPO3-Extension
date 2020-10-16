@@ -21,4 +21,3 @@ Tips and tricks
 
    AjaxCli/Index
    T3settings/Index
-   DebuggingLiveSytem/Index
