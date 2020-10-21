@@ -12,7 +12,7 @@
 Changelog
 =============================================================
 
-4.0.0 dev
+4.0.0
     - [Feature] Added process resource analysis.
     - [Feature] Added better callback analysis.
     - [Feature] Added better string analysis (json, file path, callback, xml)
