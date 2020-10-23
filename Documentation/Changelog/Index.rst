@@ -25,6 +25,7 @@ Changelog
     - [Feature] Added Icons to the backend log list.
     - [Feature] Added additional data to the constants analysis for PHP 7.1 and higher. The scope analysis now respects their visibility.
     - [Feature] Added logging shothand "krexxlog();".
+    - [Feature] The SQL Debugger now tells the dev if there was an error in the sql statement.
     - [Change] Removed all deprecations.
     - [Change] Removed the PHP 5.x fatal error handler.
     - [Change] Dropped PHP 5.x support.
