@@ -26,7 +26,7 @@ matrix:
       env: TYPO3_VERSION="^10.4" AIMEOS_VERSION="^20" ADMIN_PANEL="typo3/cms-adminpanel:^10.4" COVERAGE="YES"
 
 install:
-  - composer self-update 1.10.16
+  - composer self-update --1
   - composer require --no-update "typo3/cms-core:$TYPO3_VERSION"
   - composer require --no-update "aimeos/aimeos-typo3:$AIMEOS_VERSION"
   - composer require --no-update "$ADMIN_PANEL"
