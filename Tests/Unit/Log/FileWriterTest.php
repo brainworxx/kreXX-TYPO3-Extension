@@ -152,12 +152,11 @@ class FileWriterTest extends AbstractTest
     protected function prepareFixture()
     {
         Krexx::$pool->rewrite[DumpController::class] = ControllerNothing::class;
-        $fixture = new LogRecord(
+
+        return new LogRecord(
             'Unit Tests',
             LogLevel::DEBUG,
             'just testing'
         );
-
-        return $fixture;
     }
 }
