@@ -45,6 +45,7 @@ use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 class LllStringTest extends AbstractTest
 {
     const TSFE = 'TSFE';
+    const KREXX_DEBUGGER = 'kreXX Debugger';
 
     protected $originalLang;
 
@@ -103,7 +104,7 @@ class LllStringTest extends AbstractTest
             $parsedData = [
                 'default' => [
                     'mlang_tabs_tab' => [
-                        ['target' => 'kreXX Debugger']
+                        ['target' => static::KREXX_DEBUGGER]
                     ]
                 ]
             ];
@@ -118,7 +119,7 @@ class LllStringTest extends AbstractTest
             $globalLangMock = $this->createMock(LanguageService::class);
             $globalLangMock->expects($this->once())
                 ->method('sL')
-                ->will($this->returnValue('kreXX Debugger'));
+                ->will($this->returnValue(static::KREXX_DEBUGGER));
             $GLOBALS[static::TSFE] = $globalLangMock;
         }
 
@@ -127,6 +128,6 @@ class LllStringTest extends AbstractTest
         $lllString = new LllString(\Krexx::$pool);
         $lllString->canHandle($payload, $model);
 
-        $this->assertEquals('kreXX Debugger', $model->getJson()['Translation']);
+        $this->assertEquals(static::KREXX_DEBUGGER, $model->getJson()['Translation']);
     }
 }

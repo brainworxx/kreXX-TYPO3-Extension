@@ -44,6 +44,13 @@ use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
 class FluidOldTest extends AbstractTest
 {
 
+    const SET_ACCESSIBLE = 'setAccessible';
+    const VIEW_REFLECTION = 'viewReflection';
+    const INVOKE = 'invoke';
+    const GET_METHOD = 'getMethod';
+    const VARNAME = 'varname';
+    const FLUID_TEMPLATE = 'FluidTemplate3.html';
+
     /**
      * Create a functioning fluid instance with the provided rendering stack.
      *
@@ -57,7 +64,7 @@ class FluidOldTest extends AbstractTest
         $renderingStackRefMock = $this->createMock(\ReflectionProperty::class);
         // Mock the property reflection of the rendering context.
         $renderingStackRefMock->expects($this->once())
-            ->method('setAccessible')
+            ->method(static::SET_ACCESSIBLE)
             ->with(true);
         $renderingStackRefMock->expects($this->once())
             ->method('getValue')
@@ -85,7 +92,7 @@ class FluidOldTest extends AbstractTest
         $renderingContext = $this->createMock(RenderingContext::class);
 
         Krexx::$pool->registry->set('view', $view);
-        Krexx::$pool->registry->set('viewReflection', $viewReflection);
+        Krexx::$pool->registry->set(static::VIEW_REFLECTION, $viewReflection);
         Krexx::$pool->registry->set('renderingContext', $renderingContext);
 
         return new FluidOld(Krexx::$pool);
@@ -107,7 +114,7 @@ class FluidOldTest extends AbstractTest
         $templatePath = realpath(__DIR__ . '/../../../../../Fixtures/FluidTemplate1.html');
 
         /** @var \PHPUnit\Framework\MockObject\MockObject $reflectionMock */
-        $reflectionMock = Krexx::$pool->registry->get('viewReflection');
+        $reflectionMock = Krexx::$pool->registry->get(static::VIEW_REFLECTION);
         $reflectionMock->expects($this->once())
             ->method('hasMethod')
             ->with('getTemplatePathAndFilename')
@@ -115,15 +122,15 @@ class FluidOldTest extends AbstractTest
 
         $methodReflection = $this->createMock(\ReflectionMethod::class);
         $methodReflection->expects($this->once())
-            ->method('setAccessible')
+            ->method(static::SET_ACCESSIBLE)
             ->with(true);
         $methodReflection->expects($this->once())
-            ->method('invoke')
+            ->method(static::INVOKE)
             ->with(Krexx::$pool->registry->get('view'))
             ->will($this->returnValue($templatePath));
 
         $reflectionMock->expects($this->once())
-            ->method('getMethod')
+            ->method(static::GET_METHOD)
             ->will($this->returnValue($methodReflection));
 
         $headline = 'Breaking News!';
@@ -131,7 +138,7 @@ class FluidOldTest extends AbstractTest
         $result = $fluid->findCaller($headline, $data);
 
         $this->assertContains('FluidTemplate1.html', $result['file']);
-        $this->assertEquals('_all', $result['varname']);
+        $this->assertEquals('_all', $result[static::VARNAME]);
         $this->assertEquals('Fluid analysis of _all, stdClass', $result['type']);
         $this->assertNotEmpty($result['date']);
     }
@@ -160,21 +167,21 @@ class FluidOldTest extends AbstractTest
 
         $methodReflectionMock = $this->createMock(\ReflectionMethod::class);
         $methodReflectionMock->expects($this->once())
-            ->method('setAccessible')
+            ->method(static::SET_ACCESSIBLE)
             ->with(true);
         $methodReflectionMock->expects($this->once())
-            ->method('invoke')
+            ->method(static::INVOKE)
             ->with(Krexx::$pool->registry->get('view'), 'Fixtures/FluidTemplate2')
             ->will($this->returnValue($templatePath));
 
         /** @var \PHPUnit\Framework\MockObject\MockObject $viewReflection */
-        $viewReflection = Krexx::$pool->registry->get('viewReflection');
+        $viewReflection = Krexx::$pool->registry->get(static::VIEW_REFLECTION);
         $viewReflection->expects($this->once())
             ->method('hasMethod')
             ->with('getLayoutPathAndFilename')
             ->will($this->returnValue(true));
         $viewReflection->expects($this->once())
-            ->method('getMethod')
+            ->method(static::GET_METHOD)
             ->with('getLayoutPathAndFilename')
             ->will($this->returnValue($methodReflectionMock));
 
@@ -183,7 +190,7 @@ class FluidOldTest extends AbstractTest
         $result = $fluid->findCaller($headline, $data);
 
         $this->assertContains('FluidTemplate2.html', $result['file']);
-        $this->assertEquals('text', $result['varname']);
+        $this->assertEquals('text', $result[static::VARNAME]);
         $this->assertEquals('Fluid analysis of text, string', $result['type']);
         $this->assertNotEmpty($result['date']);
     }
@@ -214,10 +221,10 @@ class FluidOldTest extends AbstractTest
         $identifier = explode('_', get_class($parsedTemplateMock));
         $hash = $identifier[count($identifier) -1];
         $partialIdentifierCache = [
-            'FluidTemplate3.html' => 'abcd' . $hash
+            static::FLUID_TEMPLATE => 'abcd' . $hash
         ];
         $propertyReflection->expects($this->once())
-            ->method('setAccessible')
+            ->method(static::SET_ACCESSIBLE)
             ->with(true);
         $propertyReflection->expects($this->once())
             ->method('getValue')
@@ -226,17 +233,17 @@ class FluidOldTest extends AbstractTest
 
         $gppafMock = $this->createMock(\ReflectionMethod::class);
         $gppafMock->expects($this->once())
-            ->method('setAccessible')
+            ->method(static::SET_ACCESSIBLE)
             ->with(true);
         $gppafMock->expects($this->once())
-            ->method('invoke')
-            ->with(Krexx::$pool->registry->get('view'), 'FluidTemplate3.html')
+            ->method(static::INVOKE)
+            ->with(Krexx::$pool->registry->get('view'), static::FLUID_TEMPLATE)
             ->will($this->returnValue($templatePath));
 
         /** @var \PHPUnit\Framework\MockObject\MockObject $viewReflection */
-        $viewReflection = Krexx::$pool->registry->get('viewReflection');
+        $viewReflection = Krexx::$pool->registry->get(static::VIEW_REFLECTION);
         $viewReflection->expects($this->once())
-            ->method('getMethod')
+            ->method(static::GET_METHOD)
             ->with('getPartialPathAndFilename')
             ->will($this->returnValue($gppafMock));
 
@@ -246,8 +253,8 @@ class FluidOldTest extends AbstractTest
         $data =  [5];
         $result = $fluid->findCaller($headline, $data);
 
-        $this->assertContains('FluidTemplate3.html', $result['file']);
-        $this->assertEquals($result['varname'], 'fluidvar');
+        $this->assertContains(static::FLUID_TEMPLATE, $result['file']);
+        $this->assertEquals($result[static::VARNAME], 'fluidvar');
         $this->assertEquals($result['type'], 'Fluid analysis of fluidvar, array');
         $this->assertNotEmpty($result['date']);
     }
