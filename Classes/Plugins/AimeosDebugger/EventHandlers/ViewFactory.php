@@ -253,18 +253,18 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         $iface = static::AI_NAMESPACE . 'Iface';
 
         foreach ($subDirs as $dir) {
-            if ($dir === '.' || $dir === '..' || isset($this->helpers[$dir])) {
-                // Either not a class, tzhe dot ones.
-                // or we will add it later on, if already inside the helpers.
+            if (isset($this->helpers[$dir])) {
+                //We will add it later on, if already inside the helpers.
                 continue;
             }
 
-            if (is_dir($directory . '/' . $dir) && class_exists(static::AI_NAMESPACE . $dir . static::STANDARD)) {
-                $ref = new ReflectionClass(static::AI_NAMESPACE . $dir . static::STANDARD);
+            if (
+                class_exists(static::AI_NAMESPACE . $dir . static::STANDARD) &&
                 // Test for the view helper interface.
-                if ($ref->implementsInterface($iface)) {
-                    $reflectionList[lcfirst($dir)] = $ref->getMethod(static::METHOD);
-                }
+                is_a(static::AI_NAMESPACE . $dir . static::STANDARD, $iface, true)
+            ) {
+                $ref = new ReflectionClass(static::AI_NAMESPACE . $dir . static::STANDARD);
+                $reflectionList[lcfirst($dir)] = $ref->getMethod(static::METHOD);
             }
         }
 
