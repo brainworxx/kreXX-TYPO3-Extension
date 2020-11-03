@@ -59,9 +59,6 @@ class AimeosItem extends StandardProduct
      */
     public function getRefItems($domain = null, $type = null, $listtype = null, $active = true)
     {
-        return [
-            new \StdClass(),
-            new \DateTime()
-        ];
+        return $this->getListItems($domain, $type, $listtype, $active);
     }
 }

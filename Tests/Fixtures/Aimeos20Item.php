@@ -46,7 +46,7 @@ class Aimeos20Item extends StandardProduct
      *
      * {@inheritDoc}
      */
-    public function getListItems($domain = null, $listtype = null, $type = null, bool $active = true): \Aimeos\Map
+    public function getListItems($domain = null, $listtype = null, $type = null, bool $active = true): Map
     {
         return new Map([new \StdClass(), new \DateTime()]);
     }
@@ -56,8 +56,8 @@ class Aimeos20Item extends StandardProduct
      *
      * {@inheritDoc}
      */
-    public function getRefItems($domain = null, $listtype = null, $type = null, bool $active = true): \Aimeos\Map
+    public function getRefItems($domain = null, $listtype = null, $type = null, bool $active = true): Map
     {
-        return new Map([new \StdClass(), new \DateTime()]);
+        return $this->getListItems($domain, $listtype, $type, $active);
     }
 }
