@@ -12,6 +12,8 @@
 Changelog
 =============================================================
 
+4.0.1 dev
+
 4.0.0
     - [Feature] Added process resource analysis.
     - [Feature] Added better callback analysis.
