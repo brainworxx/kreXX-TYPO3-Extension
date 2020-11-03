@@ -340,12 +340,9 @@ class Config extends Fallback
         }
         $section = $this->feConfigFallback[$name][static::SECTION];
 
-        /** @var Model $model */
-        $model = $this->pool->createClass(Model::class)
+        return $this->pool->createClass(Model::class)
             ->setSection($section)
             ->setEditable($iniFeSettings[static::RENDER_EDITABLE] === static::VALUE_TRUE)
             ->setType($iniFeSettings[static::RENDER_TYPE]);
-
-        return $model;
     }
 }

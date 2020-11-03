@@ -337,11 +337,13 @@ class KrexxTest extends AbstractTest
      */
     protected function beginForcedLogger()
     {
+        $forcedLogging = 'forced logging';
+
         // Create two settings model mocks
         $settingsMockDest = $this->createMock(Model::class);
         $settingsMockDest->expects($this->once())
             ->method('setSource')
-            ->with($this->equalTo('forced logging'))
+            ->with($this->equalTo($forcedLogging))
             ->will($this->returnValue($settingsMockDest));
         $settingsMockDest->expects($this->once())
             ->method('setValue')
@@ -351,12 +353,12 @@ class KrexxTest extends AbstractTest
             ->will($this->returnValue(Fallback::VALUE_FILE));
         $settingsMockDest->expects($this->once())
             ->method('getSource')
-            ->will($this->returnValue('forced logging'));
+            ->will($this->returnValue($forcedLogging));
 
         $settingsMockAjax = $this->createMock(Model::class);
         $settingsMockAjax->expects($this->once())
             ->method('setSource')
-            ->with($this->equalTo('forced logging'))
+            ->with($this->equalTo($forcedLogging))
             ->will($this->returnValue($settingsMockAjax));
         $settingsMockAjax->expects($this->once())
             ->method('setValue')
@@ -366,7 +368,7 @@ class KrexxTest extends AbstractTest
             ->will($this->returnValue(false));
         $settingsMockAjax->expects($this->once())
             ->method('getSource')
-            ->will($this->returnValue('forced logging'));
+            ->will($this->returnValue($forcedLogging));
 
         // Inject the mock into the settings
         Krexx::$pool->config->settings[Fallback::SETTING_DESTINATION] = $settingsMockDest;

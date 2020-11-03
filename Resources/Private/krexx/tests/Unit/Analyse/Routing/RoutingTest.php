@@ -62,6 +62,7 @@ class RoutingTest extends AbstractTest
     const IS_IN_HIVE = 'isInHive';
     const ADD_TO_HIVE = 'addToHive';
     const NO_ROUTE = 'no routing';
+    const PROCESSOR = 'processors';
 
     /**
      * @var \Brainworxx\Krexx\Analyse\Routing\Routing
@@ -90,7 +91,7 @@ class RoutingTest extends AbstractTest
     protected function mockRouting(string $allowedRoute, Model $model)
     {
         /** @var ProcessInterface[] $processors */
-        $processors = $this->retrieveValueByReflection('processors', $this->routing);
+        $processors = $this->retrieveValueByReflection(static::PROCESSOR, $this->routing);
         foreach ($processors as $className => $processor) {
             $mock = $this->createMock($className);
             if ($className === $allowedRoute) {
@@ -112,7 +113,7 @@ class RoutingTest extends AbstractTest
             $processors[$className] = $mock;
         }
 
-        $this->setValueByReflection('processors', $processors, $this->routing);
+        $this->setValueByReflection(static::PROCESSOR, $processors, $this->routing);
         return $this->routing->analysisHub($model);
     }
 
@@ -125,7 +126,7 @@ class RoutingTest extends AbstractTest
     public function testConstruct()
     {
         /** @var ProcessInterface $processors */
-        $processors = $this->retrieveValueByReflection('processors', $this->routing);
+        $processors = $this->retrieveValueByReflection(static::PROCESSOR, $this->routing);
         foreach ($processors as $processor) {
             $this->assertInstanceOf(ProcessInterface::class, $processor);
         }

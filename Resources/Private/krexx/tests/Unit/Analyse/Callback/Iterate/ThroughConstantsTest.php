@@ -45,6 +45,11 @@ use Brainworxx\Krexx\Krexx;
 
 class ThroughConstantsTest extends AbstractTest
 {
+    const SKIPPED_PHP_VERSION = '7.1.0';
+    const SKIPPED_REASON = 'Skipped due to wrong PHP version.';
+    const PUBLIC_CONSTANT = 'public constant ';
+    const STATIC_COLON_COLON = 'static::';
+
     /**
      * Run the test with the provided class name.
      *
@@ -88,8 +93,8 @@ class ThroughConstantsTest extends AbstractTest
     public function testCallMePhp70()
     {
         // Test for the right PHP version.
-        if (version_compare(phpversion(), '7.1.0', '>=')) {
-            $this->markTestSkipped('Skipped due to wrong PHP version.');
+        if (version_compare(phpversion(), static::SKIPPED_PHP_VERSION, '>=')) {
+            $this->markTestSkipped(static::SKIPPED_REASON);
         }
 
         $fixture = $this->runTheTest(ConstantsFixture::class);
@@ -120,8 +125,8 @@ class ThroughConstantsTest extends AbstractTest
     public function testCallMe71()
     {
         // Test for the right PHP version.
-        if (version_compare(phpversion(), '7.1.0', '<')) {
-            $this->markTestSkipped('Skipped due to wrong PHP version.');
+        if (version_compare(phpversion(), static::SKIPPED_PHP_VERSION, '<')) {
+            $this->markTestSkipped(static::SKIPPED_REASON);
         }
 
         \Krexx::$pool->scope->setScope('$somethingElse');
@@ -135,8 +140,8 @@ class ThroughConstantsTest extends AbstractTest
         $this->assertCount(2, $models);
         $this->assertEquals(ConstantsFixture71::CONST_1, $models[0]->getData());
         $this->assertEquals(ConstantsFixture71::CONST_2, $models[1]->getData());
-        $this->assertEquals('public constant ', $models[0]->getAdditional());
-        $this->assertEquals('public constant ', $models[1]->getAdditional());
+        $this->assertEquals(static::PUBLIC_CONSTANT, $models[0]->getAdditional());
+        $this->assertEquals(static::PUBLIC_CONSTANT, $models[1]->getAdditional());
         $this->assertEquals('CONST_1', $models[0]->getName());
         $this->assertEquals('CONST_2', $models[1]->getName());
         $this->assertEquals('\\' . ConstantsFixture71::class . '::', $models[0]->getConnectorLeft());
@@ -154,8 +159,8 @@ class ThroughConstantsTest extends AbstractTest
     public function testCallMe71InScope()
     {
         // Test for the right PHP version.
-        if (version_compare(phpversion(), '7.1.0', '<')) {
-            $this->markTestSkipped('Skipped due to wrong PHP version.');
+        if (version_compare(phpversion(), static::SKIPPED_PHP_VERSION, '<')) {
+            $this->markTestSkipped(static::SKIPPED_REASON);
         }
 
         \Krexx::$pool->scope->setScope('$this');
@@ -170,17 +175,17 @@ class ThroughConstantsTest extends AbstractTest
         $this->assertEquals(ConstantsFixture71::CONST_2, $models[1]->getData());
         $this->assertEquals('string', $models[2]->getData());
         $this->assertEquals(21, $models[3]->getData());
-        $this->assertEquals('public constant ', $models[0]->getAdditional());
-        $this->assertEquals('public constant ', $models[1]->getAdditional());
+        $this->assertEquals(static::PUBLIC_CONSTANT, $models[0]->getAdditional());
+        $this->assertEquals(static::PUBLIC_CONSTANT, $models[1]->getAdditional());
         $this->assertEquals('protected constant ', $models[2]->getAdditional());
         $this->assertEquals('private constant ', $models[3]->getAdditional());
         $this->assertEquals('CONST_1', $models[0]->getName());
         $this->assertEquals('CONST_2', $models[1]->getName());
         $this->assertEquals('CONST_3', $models[2]->getName());
         $this->assertEquals('CONST_4', $models[3]->getName());
-        $this->assertEquals('static::', $models[0]->getConnectorLeft());
-        $this->assertEquals('static::', $models[1]->getConnectorLeft());
-        $this->assertEquals('static::', $models[2]->getConnectorLeft());
-        $this->assertEquals('static::', $models[3]->getConnectorLeft());
+        $this->assertEquals(static::STATIC_COLON_COLON, $models[0]->getConnectorLeft());
+        $this->assertEquals(static::STATIC_COLON_COLON, $models[1]->getConnectorLeft());
+        $this->assertEquals(static::STATIC_COLON_COLON, $models[2]->getConnectorLeft());
+        $this->assertEquals(static::STATIC_COLON_COLON, $models[3]->getConnectorLeft());
     }
 }

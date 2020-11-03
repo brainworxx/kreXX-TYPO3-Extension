@@ -46,4 +46,16 @@ class ConstantsFixture71
     public const CONST_2 = 'more values';
     protected const CONST_3 = 'string';
     private const CONST_4 = 21;
+
+    /**
+     * I'm supposed to do something with the CONST_4, to avoid a bad rating in
+     * the TER-Sonarcube.
+     *
+     * @return int
+     *   THe fourth const of the code-pocalypse.
+     */
+    protected function whatever(): int
+    {
+        return static::CONST_4;
+    }
 }

@@ -103,6 +103,7 @@ class ReflectionClassTest extends AbstractTest
         $fixture->{50} = 'special';
         $fixture->notSoSpecial = $normal;
         unset($fixture->value2);
+        $notSoSpecial = 'notSoSpecial';
 
         $reflection = new ReflectionClass($fixture);
         $expectations = [
@@ -114,7 +115,7 @@ class ReflectionClassTest extends AbstractTest
             'value5' => 'dont\'t look at me!',
             'static' => 'static stuff',
             50 => 'special',
-            'notSoSpecial' => $normal
+            $notSoSpecial => $normal
         ];
 
         foreach ($expectations as $name => $expectation) {
@@ -124,8 +125,8 @@ class ReflectionClassTest extends AbstractTest
             } elseif ($name === 50) {
                 // This one is dynamically declared.
                 $refProperty = new UndeclaredProperty($reflection, 50);
-            } elseif ($name === 'notSoSpecial') {
-                $refProperty = new UndeclaredProperty($reflection, 'notSoSpecial');
+            } elseif ($name === $notSoSpecial) {
+                $refProperty = new UndeclaredProperty($reflection, $notSoSpecial);
             } else {
                 $refProperty = $reflection->getProperty($name);
             }

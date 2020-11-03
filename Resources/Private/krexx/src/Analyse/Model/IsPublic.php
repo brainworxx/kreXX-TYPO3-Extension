@@ -112,6 +112,6 @@ trait IsPublic
      */
     public function getIsPublic(): bool
     {
-        return $this->isPublic;
+        return $this->isPublic();
     }
 }

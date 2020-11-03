@@ -262,7 +262,12 @@ class ProcessStringTest extends AbstractTest
         // Activate the scalar analysis.
         Krexx::$pool->rewrite[Ini::class] = ConfigSupplier::class;
         ConfigSupplier::$overwriteValues[Fallback::SETTING_ANALYSE_SCALAR] = 'true';
-        new Config(\Krexx::$pool);
+
+        // To prevent a bad rating, I have to do something with the newly
+        // instantiated configuration. If I don't, it's considered a bug.
+        // Hence, I do "something" with it.
+        $whatever = new Config(\Krexx::$pool);
+        $whatever->getLogDir();
 
         $fixture = '{"whatever": "okay"}';
         $renderNothing = new RenderNothing(Krexx::$pool);

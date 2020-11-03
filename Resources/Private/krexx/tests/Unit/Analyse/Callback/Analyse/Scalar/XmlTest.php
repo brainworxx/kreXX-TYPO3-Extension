@@ -44,6 +44,11 @@ use Krexx;
 
 class XmlTest extends AbstractTest
 {
+    const SCALAR_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar\\';
+    const TEXT_XML = 'text/xml;';
+    const ATTRIBUTES = 'attributes';
+    const CHILDREN = 'children';
+
     /**
      * Test the disabling of the XML analysis.
      *
@@ -52,7 +57,7 @@ class XmlTest extends AbstractTest
     public function testIsActiveNot()
     {
         $functionExistsMock = $this->getFunctionMock(
-            '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar\\',
+            static::SCALAR_NAMESPACE,
             'function_exists'
         );
         // The first false should prevent thge other tests from getting called.
@@ -60,7 +65,7 @@ class XmlTest extends AbstractTest
             ->will($this->returnValue(false));
 
         $classExistsMock = $this->getFunctionMock(
-            '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar\\',
+            static::SCALAR_NAMESPACE,
             'class_exists'
         );
         $classExistsMock->expects($this->never());
@@ -76,7 +81,7 @@ class XmlTest extends AbstractTest
     public function testIsActive()
     {
         $functionExistsMock = $this->getFunctionMock(
-            '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar\\',
+            static::SCALAR_NAMESPACE,
             'function_exists'
         );
         // The first false should prevent thge other tests from getting called.
@@ -84,7 +89,7 @@ class XmlTest extends AbstractTest
             ->will($this->returnValue(true));
 
         $classExistsMock = $this->getFunctionMock(
-            '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar\\',
+            static::SCALAR_NAMESPACE,
             'class_exists'
         );
         $classExistsMock->expects($this->exactly(2))
@@ -107,13 +112,13 @@ class XmlTest extends AbstractTest
 
         $string = 'Now with the XML finfo info,but still not XML.';
         $model = new Model(Krexx::$pool);
-        $model->addToJson(Xml::META_MIME_TYPE, 'text/xml;');
+        $model->addToJson(Xml::META_MIME_TYPE, static::TEXT_XML);
         $xml = new Xml(Krexx::$pool);
         $this->assertFalse($xml->canHandle($string, $model), $string);
 
         $string = '<?xml version="1.0" encoding="utf-8"?><node><yxcv qwer="asdf" /></node>';
         $model = new Model(Krexx::$pool);
-        $model->addToJson(Xml::META_MIME_TYPE, 'text/xml;');
+        $model->addToJson(Xml::META_MIME_TYPE, static::TEXT_XML);
         $xml = new Xml(Krexx::$pool);
         $this->assertTrue($xml->canHandle($string, $model), $string);
     }
@@ -135,7 +140,7 @@ class XmlTest extends AbstractTest
 
         $string = '<?xml version="1.0" encoding="utf-8"?><root><node>rogue text<yxcv qwer="asdf"><![CDATA[content]]></yxcv><yxcv qwer="yxcv" /></node></root>';
         $model = new Model(Krexx::$pool);
-        $model->addToJson(Xml::META_MIME_TYPE, 'text/xml;')->setHasExtra(true);
+        $model->addToJson(Xml::META_MIME_TYPE, static::TEXT_XML)->setHasExtra(true);
         $xml = new Xml(Krexx::$pool);
         $xml->canHandle($string, $model);
         $xml->callMe();
@@ -147,25 +152,25 @@ class XmlTest extends AbstractTest
         $decoded = [
             0 => [
                 'name' => 'ROOT',
-                'attributes' => [],
-                'children' => [
+                static::ATTRIBUTES => [],
+                static::CHILDREN => [
                     [
                         'name' => 'NODE',
-                        'attributes' => [],
-                        'children' => [
+                        static::ATTRIBUTES => [],
+                        static::CHILDREN => [
                             'rogue text',
                             [
                                 'name' => 'YXCV',
-                                'attributes' => [
+                                static::ATTRIBUTES => [
                                     'QWER' => 'asdf'
                                 ],
-                                'children' => [
+                                static::CHILDREN => [
                                     'content'
                                 ],
                             ],
                             [
                                 'name' => 'YXCV',
-                                'attributes' => [
+                                static::ATTRIBUTES => [
                                     'QWER' => 'yxcv'
                                 ],
                             ],

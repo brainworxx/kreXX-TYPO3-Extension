@@ -55,6 +55,7 @@ class ConfigTest extends AbstractTest
     const GET_CONFIG_FROM_COOKIES = 'getConfigFromCookies';
     const GET_CONFIG_FROM_FILE = 'getConfigFromFile';
     const KREXX_INI_SETTINGS = 'Krexx.ini settings';
+    const FALSE_STRING = 'false';
 
     /**
      * @return \PHPUnit\Framework\MockObject\MockObject
@@ -308,7 +309,7 @@ class ConfigTest extends AbstractTest
     public function testLoadConfigValueFromIni()
     {
         $config = new Config(Krexx::$pool);
-        $someMethods = 'false';
+        $someMethods = static::FALSE_STRING;
 
         $iniMock = $this->createMock(Ini::class);
         $iniMock->expects($this->once())
@@ -353,7 +354,7 @@ class ConfigTest extends AbstractTest
         $cookieMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_COOKIES)
             ->with($config::SECTION_METHODS, $config::SETTING_ANALYSE_GETTER)
-            ->will($this->returnValue('false'));
+            ->will($this->returnValue(static::FALSE_STRING));
 
         // Inject them.
         $this->setValueByReflection(static::INI_CONFIG, $iniMock, $config);
@@ -420,7 +421,7 @@ class ConfigTest extends AbstractTest
         $cookieMock->expects($this->once())
             ->method(static::GET_CONFIG_FROM_COOKIES)
             ->with($config::SECTION_OUTPUT, $config::SETTING_DISABLED)
-            ->will($this->returnValue('false'));
+            ->will($this->returnValue(static::FALSE_STRING));
 
         // Inject them.
         $this->setValueByReflection(static::INI_CONFIG, $iniMock, $config);

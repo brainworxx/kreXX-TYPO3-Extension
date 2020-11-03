@@ -47,6 +47,8 @@ use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 
 class ThroughMetaTest extends AbstractTest
 {
+    const RENDER_EXPANDABLE_CHILD = 'renderExpandableChild';
+
     /**
      * @var string
      */
@@ -179,9 +181,9 @@ class ThroughMetaTest extends AbstractTest
 
         $this->throughMeta->setParameters($fixture)->callMe();
 
-        $this->assertCount(1, $this->renderNothing->model['renderExpandableChild']);
+        $this->assertCount(1, $this->renderNothing->model[static::RENDER_EXPANDABLE_CHILD]);
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
-        $model = $this->renderNothing->model['renderExpandableChild'][0];
+        $model = $this->renderNothing->model[static::RENDER_EXPANDABLE_CHILD][0];
         $this->assertEquals($payload, $model->getData());
         $this->assertEquals($key, $model->getName());
         $this->assertEquals($this->throughMeta::TYPE_REFLECTION, $model->getType());
@@ -248,9 +250,9 @@ class ThroughMetaTest extends AbstractTest
 
         $this->throughMeta->setParameters($fixture)->callMe();
 
-        $this->assertCount(1, $this->renderNothing->model['renderExpandableChild']);
+        $this->assertCount(1, $this->renderNothing->model[static::RENDER_EXPANDABLE_CHILD]);
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
-        $model = $this->renderNothing->model['renderExpandableChild'][0];
+        $model = $this->renderNothing->model[static::RENDER_EXPANDABLE_CHILD][0];
         $this->assertEquals($key, $model->getName());
         $this->assertEquals($this->throughMeta::TYPE_INTERNALS, $model->getType());
         $parameters = $model->getParameters();

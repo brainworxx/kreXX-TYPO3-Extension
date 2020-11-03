@@ -92,8 +92,7 @@ abstract class AbstractRenderHans extends AbstractTest
     {
         $fileSuffix = '.html';
         $this->fileServiceMock = $this->createMock(File::class);
-        $this->fileServiceMock->expects($this->any())
-            ->method('getFileContents')
+        $this->fileServiceMock->expects($this->any())->method('getFileContents')
             ->will($this->returnValueMap([
                 // connectorLeft.html
                 [

@@ -88,7 +88,7 @@ trait IsCallback
      */
     public function getIsCallback(): bool
     {
-        return $this->isCallback;
+        return $this->isCallback();
     }
 
     /**

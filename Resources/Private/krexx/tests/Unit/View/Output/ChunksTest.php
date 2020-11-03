@@ -390,7 +390,7 @@ class ChunksTest extends AbstractTest
         // Test with browser output.
         $chunks = new Chunks(Krexx::$pool);
         $chunks->addMetadata($metadata);
-        $this->assertEmpty($this->retrieveValueByReflection('metadata', $chunks));
+        $this->assertEmpty($this->retrieveValueByReflection(static::META_DATA, $chunks));
 
         // Test with file output
         ConfigSupplier::$overwriteValues[Fallback::SETTING_DESTINATION] = Fallback::VALUE_FILE;
@@ -399,7 +399,7 @@ class ChunksTest extends AbstractTest
         Pool::createPool();
         $chunks = new Chunks(Krexx::$pool);
         $chunks->addMetadata($metadata);
-        $this->assertEquals([$metadata], $this->retrieveValueByReflection('metadata', $chunks));
+        $this->assertEquals([$metadata], $this->retrieveValueByReflection(static::META_DATA, $chunks));
     }
 
     /**
