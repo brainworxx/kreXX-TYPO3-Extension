@@ -38,7 +38,18 @@ if (!defined('TYPO3_MODE')) {
 
 // Register BE module.
 $boot = function () {
-    if (version_compare(TYPO3_version, '10.0.0', '<')) {
+    // Depending on the TYPO3 version, there may or may not be a constant defined
+    // that tells it's version.
+    if (defined('TYPO3_version') === true) {
+        $typo3Version = TYPO3_version;
+    } else {
+        // Should be used in v11.
+        $typo3Version = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            TYPO3\CMS\Core\Information\Typo3Version::class
+        )->getVersion();
+    }
+
+    if (version_compare($typo3Version, '10.0.0', '<')) {
         // The old way of the registration, with the guessing of the controller
         // name.
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
