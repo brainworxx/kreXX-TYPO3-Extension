@@ -5,11 +5,12 @@
    */
   .krexx-icon {
     background-repeat: no-repeat;
-    margin: 2px 0 16px 0;
+    margin-right: 6px;
     position: relative;
     border-radius: 2px;
     width: 30px;
     height: 30px;
+    display: inline-block;
 
     &:last-child {
       margin-bottom: 0;

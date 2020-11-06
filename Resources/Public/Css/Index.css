@@ -28,12 +28,6 @@ body {
 .krexx-backend .expert-mode .expert {
   display: table-row;
 }
-.krexx-backend .spacer {
-  background: none;
-  border: none;
-  height: 10px;
-  display: block;
-}
 .krexx-backend .codeblock pre {
   border: 1px solid #c4c4c4;
   padding: 10px;
@@ -166,6 +160,12 @@ body {
 }
 .krexx-backend .table-wrapper table.krexx-logs tr {
   border-bottom: 1px solid #a6a6a6;
+}
+.krexx-backend .table-wrapper table .krexx-data {
+  display: inline-block;
+}
+.krexx-backend .table-wrapper table .krexx-data-wrapper {
+  margin-bottom: 5px;
 }
 .krexx-backend .table-wrapper table td {
   padding: 6px 6px 3px 6px;
@@ -446,11 +446,12 @@ body {
 }
 .krexx-backend .krexx-icon {
   background-repeat: no-repeat;
-  margin: 2px 0 16px 0;
+  margin-right: 6px;
   position: relative;
   border-radius: 2px;
   width: 30px;
   height: 30px;
+  display: inline-block;
 }
 .krexx-backend .krexx-icon:last-child {
   margin-bottom: 0;

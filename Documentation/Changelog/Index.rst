@@ -13,6 +13,7 @@ Changelog
 =============================================================
 
 4.0.1 dev
+    - [Bugfix] Prevent long analysis mata data from breaking the BE layout.
 
 4.0.0
     - [Feature] Added process resource analysis.
