@@ -162,9 +162,10 @@ body {
   border-bottom: 1px solid #a6a6a6;
 }
 .krexx-backend .table-wrapper table .krexx-data {
-  display: inline-block;
+  display: table-cell;
 }
 .krexx-backend .table-wrapper table .krexx-data-wrapper {
+  display: table-row;
   margin-bottom: 5px;
 }
 .krexx-backend .table-wrapper table td {
@@ -449,9 +450,9 @@ body {
   margin-right: 6px;
   position: relative;
   border-radius: 2px;
-  width: 30px;
+  width: 40px;
   height: 30px;
-  display: inline-block;
+  display: table-cell;
 }
 .krexx-backend .krexx-icon:last-child {
   margin-bottom: 0;

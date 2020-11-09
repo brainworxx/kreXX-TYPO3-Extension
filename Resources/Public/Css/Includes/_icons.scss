@@ -8,9 +8,9 @@
     margin-right: 6px;
     position: relative;
     border-radius: 2px;
-    width: 30px;
+    width: 40px;
     height: 30px;
-    display: inline-block;
+    display: table-cell;
 
     &:last-child {
       margin-bottom: 0;

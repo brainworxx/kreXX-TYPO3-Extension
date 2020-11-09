@@ -68,10 +68,11 @@
       }
 
       .krexx-data {
-        display: inline-block;
+        display: table-cell;
       }
 
       .krexx-data-wrapper {
+        display: table-row;
         margin-bottom: 5px;
       }
 
