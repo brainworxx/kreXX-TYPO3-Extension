@@ -273,7 +273,7 @@
             html += '<tr ' + ajaxRefresh.generateBackgroundStyle(file.name) + '>';
             html += '<td><a target="_blank" href="' + file.dispatcher + '">  ' + file.name + '</a></td><td class="meta">';
             for (i = 0; i < file.meta.length; i++) {
-                html += '<div class="krexx-data-wrapper"><div class="krexx-icon ' + file.meta[i].level + '" title="' + file.meta[i].level + '"></div><div class="krexx-data">';
+                html += '<div class="krexx-data-wrapper"><div class="krexx-icon-wrapper"><div class="krexx-icon ' + file.meta[i].level + '" title="' + file.meta[i].level + '"></div></div><div class="krexx-data">';
                 html += '<b>' + file.meta[i].type + '</b><br />';
                 html += 'in ' + file.meta[i].filename + ', line ' + file.meta[i].line;
                 html += '</div></div>'

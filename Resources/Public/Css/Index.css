@@ -163,6 +163,8 @@ body {
 }
 .krexx-backend .table-wrapper table .krexx-data {
   display: table-cell;
+  vertical-align: top;
+  padding-bottom: 10px;
 }
 .krexx-backend .table-wrapper table .krexx-data-wrapper {
   display: table-row;
@@ -445,64 +447,66 @@ body {
    * Icon styling
    */
 }
-.krexx-backend .krexx-icon {
+.krexx-backend .krexx-icon-wrapper {
+  display: table-cell;
+}
+.krexx-backend .krexx-icon-wrapper .krexx-icon {
   background-repeat: no-repeat;
   margin-right: 6px;
   position: relative;
   border-radius: 2px;
-  width: 40px;
+  width: 28px;
   height: 30px;
-  display: table-cell;
 }
-.krexx-backend .krexx-icon:last-child {
+.krexx-backend .krexx-icon-wrapper .krexx-icon:last-child {
   margin-bottom: 0;
 }
-.krexx-backend .krexx-icon::after {
+.krexx-backend .krexx-icon-wrapper .krexx-icon::after {
   top: -4px;
-  left: 5px;
+  left: 4px;
   position: absolute;
   height: 15px;
   width: 15px;
   font-size: 24px;
   content: "⚠";
 }
-.krexx-backend .krexx-icon.emergency {
+.krexx-backend .krexx-icon-wrapper .krexx-icon.emergency {
   background-color: #A4276A;
   color: #fefefe;
 }
-.krexx-backend .krexx-icon.alert {
+.krexx-backend .krexx-icon-wrapper .krexx-icon.alert {
   background-color: #D04038;
   color: #fefefe;
 }
-.krexx-backend .krexx-icon.critical {
+.krexx-backend .krexx-icon-wrapper .krexx-icon.critical {
   background-color: #EE8433;
   color: #fefefe;
 }
-.krexx-backend .krexx-icon.error {
+.krexx-backend .krexx-icon-wrapper .krexx-icon.error {
   background-color: #FFCD09;
 }
-.krexx-backend .krexx-icon.warning {
+.krexx-backend .krexx-icon-wrapper .krexx-icon.warning {
   background-color: #FFE896;
 }
-.krexx-backend .krexx-icon.info {
+.krexx-backend .krexx-icon-wrapper .krexx-icon.info {
   background-color: #6DAAE0;
 }
-.krexx-backend .krexx-icon.info::after {
+.krexx-backend .krexx-icon-wrapper .krexx-icon.info::after {
   font-size: 20px;
   color: #fefefe;
   content: "i";
   left: 11px;
   top: 0;
 }
-.krexx-backend .krexx-icon.notice {
+.krexx-backend .krexx-icon-wrapper .krexx-icon.notice {
   background-color: #1D588E;
 }
-.krexx-backend .krexx-icon.notice::after {
+.krexx-backend .krexx-icon-wrapper .krexx-icon.notice::after {
   content: "n";
   color: white;
   left: 6px;
 }
-.krexx-backend .krexx-icon.debug::after {
+.krexx-backend .krexx-icon-wrapper .krexx-icon.debug::after {
   top: 4px;
   left: 4px;
   height: 20px;
@@ -510,7 +514,7 @@ body {
   content: "";
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJASURBVDhPrZXLa1pBFMbH6wNFfCGCqa3ghUDALrXQFAJ1IQWhirsuXHVXErpIQsCti+xKIJtCSf6O0l1XJTSo3cjNwraBPnDRZFHqAx/T74znmquRxIT8YDyPOfPN3HtnRsHsaZr2lf0bg7FfYA6UTz9X4XQ6X8LsUXM4HK9UcgHmrtDlcpVhZCKRkLquS/Ixwa7qtGBdoclcQeSMQqEgTUqlkkTuJ3ebIKWdwipBB/0Aql/yer3JwWDwYjgcpigJe79arYpcLqeKDMOgwjAe/T3FsM1+vx9G3QO32/2x2+0KG3UgWO31eh/g/sNsZ8FgcCWVUpqKWq0mMJFIp9OcEaJer4tWq0Wu9Hg8rzudzr7qMIHoY5vNdg5XZrNZWvGEfD4vM5kMR2OKxSK90xHENpQAM/nKWO4ndD6F6B9OXYvdbj+aXdnUtmm323UUfeZwEYZsJ1zah3ga9m4HCdIskwaewS4Eap+QsTbaQ9szzUDHQqD228zYbW00Gr2xNiS/c/214AP+ujSe+0w0vMMw+7fCKqjhC7/De7nYvUy5XBaVSoWjCzC5HgqF4hxOQWJ0FumsnkUiEdloNGj/zqXZbMpYLKYuC9Sf+ny+ZaViguQWjMTtsonNfQ/xSTQanStKYvF4nITOcZbX8R7/ov3GPfBwrDaGbpsf7AtTNBAIyGQyOdXwiJKOqN/vf0S1EF1D3EF7S7G6HAAJPsdX0jlWojiOO1iUi1MKDByg7xCnqsYpdR9i7DFcuowVd/QXIMR/pYc46KZnO3gAAAAASUVORK5CYII=") no-repeat;
 }
-.krexx-backend .krexx-icon.backtrace::after {
+.krexx-backend .krexx-icon-wrapper .krexx-icon.backtrace::after {
   top: 6px;
   left: 5px;
   height: 20px;
@@ -518,7 +522,7 @@ body {
   content: "";
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAE4SURBVDhPY+Ti4vr/+/dvBkoBKysrw7dv3xhBjP9APsUYag4DE4igJmDk4OCYBmVTDL5//57F+P8/2KXUA5SEIQsLy1UgjQIo9jLImyCakZERzKeKl2GGgQGJXhYFpttkGB/o5bNAGgWQ5GWQ97i5uZOBCXgOiA808NyfP3+MwZIwAPIysdje3p6FkAsHv5dJjmU+Pr7Cz58/94HYbGxsl2VkZFzAEkAAtOw3Pi//AGIGHh6eTCQxvBhkAV4vwxIt0FXtQFdVgAVxAKD3b0hKSjpjjU1smJeXtwmoD6vLgIZdkZeXlwCyGRiALvzHzMyMC/+FGQgCQJfWACl0wy5KSEiIAtlgQDCW0fMq0NDyT58+dYDYoFgWExNze/bs2VuwJAgge4tYDPR+ITACjsjJyQlCjYECBgYAE/0m9rR3t5YAAAAASUVORK5CYII=") no-repeat;
 }
-.krexx-backend .krexx-icon.timer::after {
+.krexx-backend .krexx-icon-wrapper .krexx-icon.timer::after {
   top: 5px;
   left: 4px;
   height: 20px;
