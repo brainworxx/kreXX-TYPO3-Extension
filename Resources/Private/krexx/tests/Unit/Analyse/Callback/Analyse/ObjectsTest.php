@@ -47,6 +47,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Logging\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
@@ -409,7 +410,7 @@ class ObjectsTest extends AbstractTest
     }
 
     /**
-     * Tst, if the analysis of an error object works.
+     * Test, if the analysis of an error object works.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
@@ -421,6 +422,31 @@ class ObjectsTest extends AbstractTest
     {
         Krexx::$pool->rewrite[ErrorObject::class] = CallbackCounter::class;
         $this->fixture[CallbackConstInterface::PARAM_DATA] = new Exception('message', 123);
+        $this->objects->setParameters($this->fixture)
+            ->callMe();
+        $this->assertEquals(1, CallbackCounter::$counter);
+        $this->parametersTest(CallbackCounter::$staticParameters[0]);
+    }
+
+    /**
+     * Test the handling of the log model.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::generateDumperList
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::addPropertyDumper
+     *
+     * @throws \ReflectionException
+     */
+    public function testCallMeLogModel()
+    {
+        $logModel = new Model();
+        $logModel->setCode(12345)
+            ->setFile('autoexec.bat')
+            ->setLine(42)
+            ->setTrace(debug_backtrace())
+            ->setMessage('Unit tests are fun.');
+        Krexx::$pool->rewrite[ErrorObject::class] = CallbackCounter::class;
+        $this->fixture[CallbackConstInterface::PARAM_DATA] = $logModel;
         $this->objects->setParameters($this->fixture)
             ->callMe();
         $this->assertEquals(1, CallbackCounter::$counter);

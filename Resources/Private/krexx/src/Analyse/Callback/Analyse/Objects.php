@@ -49,6 +49,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Logging\Model as LogModel;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Throwable;
@@ -116,7 +117,10 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
         }
 
         // Analysing error objects.
-        if (is_a($this->parameters[static::PARAM_DATA], Throwable::class)) {
+        if (
+            $this->parameters[static::PARAM_DATA] instanceof Throwable ||
+            $this->parameters[static::PARAM_DATA] instanceof LogModel
+        ) {
             $stuffToDump[] = ErrorObject::class;
         }
 

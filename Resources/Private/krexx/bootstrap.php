@@ -240,6 +240,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/View/Skins/RenderSmokyGrey.php';
 
         include_once KREXX_DIR . 'src/Logging/LoggingTrait.php';
+        include_once KREXX_DIR . 'src/Logging/Model.php';
         include_once KREXX_DIR . 'src/Krexx.php';
     };
 

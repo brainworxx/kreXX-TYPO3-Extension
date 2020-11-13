@@ -1,3 +1,6 @@
+4.0.1
+- Added a log model to use for a logger implementation.
+
 4.0.0
 - Added process resource analysis.
 - Added better callback analysis.
