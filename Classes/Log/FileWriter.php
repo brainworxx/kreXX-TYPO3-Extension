@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Logging\LoggingTrait;
+use Brainworxx\Krexx\Logging\Model as LogModel;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
@@ -101,11 +102,24 @@ class FileWriter implements WriterInterface, ConfigConstInterface
 
         AbstractController::$analysisInProgress = true;
 
-        $data = $record->getData();
+        // Get the backtrace ready.
+        $backtrace = debug_backtrace();
+        unset($backtrace[0]);
+        unset($backtrace[1]);
+        unset($backtrace[2]);
+        $backtrace = array_values($backtrace);
+        
+        $logModel = new LogModel();
+        $logModel->setTrace($backtrace)
+            ->setCode($record->getComponent())
+            ->setMessage($record->getMessage())
+            ->setFile($backtrace[0]['file'])
+            ->setLine($backtrace[0]['line']);
+
         Krexx::$pool->createClass(DumpController::class)
             ->dumpAction(
-                $data,
-                $record->getComponent() . ': ' . $record->getMessage(),
+                $logModel,
+                $record->getComponent(),
                 $this->retrieveLogLevel($record)
             );
 

@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
+use \Brainworxx\Krexx\Logging\Model as LogModel;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogRecord;
 
@@ -95,8 +96,15 @@ class FileWriterTest extends AbstractTest
             $level = LogLevel::getName($level);
         }
         $this->assertEquals(strtolower($level), ControllerNothing::$level[0]);
-        $this->assertEquals($fixture->getData(), ControllerNothing::$data[0]);
-        $this->assertEquals($fixture->getComponent() . ': ' . $fixture->getMessage(), ControllerNothing::$message[0]);
+        /** @var \Brainworxx\Krexx\Logging\Model $logModel */
+        $logModel = ControllerNothing::$data[0];
+        $this->assertInstanceOf(LogModel::class, $logModel);
+        $this->assertEquals($fixture->getMessage(), $logModel->getMessage());
+        $this->assertEquals($fixture->getComponent(), $logModel->getCode());
+        $this->assertEquals($fixture->getComponent(), $logModel->getCode());
+        $backtrace = $logModel->getTrace();
+        $this->assertEquals($backtrace[0]['file'], $logModel->getFile());
+        $this->assertEquals($backtrace[0]['line'], $logModel->getLine());
     }
 
     /**

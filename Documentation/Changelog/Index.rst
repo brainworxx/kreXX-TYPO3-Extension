@@ -13,7 +13,9 @@ Changelog
 =============================================================
 
 4.0.1 dev
-    - [Bugfix] Prevent long analysis mata data from breaking the BE layout.
+    - [Feature] Added a log model to use for a logger implementation.
+    - [Feature] Added a complete backtrace analysis to the log writer.
+    - [Bugfix] Prevent long analysis meta data from breaking the BE layout.
 
 4.0.0
     - [Feature] Added process resource analysis.
