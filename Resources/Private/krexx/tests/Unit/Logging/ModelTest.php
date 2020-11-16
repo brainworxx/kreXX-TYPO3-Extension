@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
  *
  * @package Brainworxx\Krexx\Tests\Unit\Logging
  */
-class Model extends AbstractTest
+class ModelTest extends AbstractTest
 {
     /**
      * @var \Brainworxx\Krexx\Logging\Model
