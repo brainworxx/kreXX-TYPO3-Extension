@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Controller;
 
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
+use Brainworxx\Krexx\Analyse\Caller\ExceptionCallerFinder;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
@@ -73,6 +74,9 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
         $this->pool->reset();
 
         // Find caller.
+        if ($data instanceof \Brainworxx\Krexx\Logging\Model) {
+            $this->callerFinder = $this->pool->createClass(ExceptionCallerFinder::class);
+        }
         $caller = $this->callerFinder->findCaller($message, $data);
         $caller[static::TRACE_LEVEL] = $level;
 

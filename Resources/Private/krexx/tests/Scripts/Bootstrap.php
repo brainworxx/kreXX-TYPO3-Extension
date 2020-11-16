@@ -44,6 +44,7 @@ $serviceMisc = '\\Brainworxx\\Krexx\\Service\\Misc\\';
 $viewOutput = '\\Brainworxx\\Krexx\\View\\Output\\';
 $view = '\\Brainworxx\\Krexx\\View\\';
 $callbackScalar = '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar\\';
+$caller = '\\Brainworxx\\Krexx\\Analyse\\Caller';
 
 PHPMock::defineFunctionMock($analyseRoutingProcess, 'class_exists');
 PHPMock::defineFunctionMock($serviceFlow, 'ini_get');
@@ -65,6 +66,7 @@ PHPMock::defineFunctionMock($viewOutput, 'microtime');
 PHPMock::defineFunctionMock($viewOutput, 'glob');
 PHPMock::defineFunctionMock($view, 'php_sapi_name');
 PHPMock::defineFunctionMock($view, 'defined');
+PHPMock::defineFunctionMock($caller, 'time');
 
 // Register a shutdown method to die, so we get no output on the shell.
 register_shutdown_function(function () {
