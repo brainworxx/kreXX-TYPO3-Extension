@@ -54,8 +54,8 @@ class ButtonTest extends AbstractRenderSmokyGrey
             ->will($this->returnValue('sayMyName'));
 
         $result = $this->renderSmokyGrey->renderButton($this->modelMock);
-        $this->assertContains('sayMyName', $result);
-        $this->assertContains('buttonJson', $result);
-        $this->assertContains('isFun', $result);
+        $this->assertStringContainsString('sayMyName', $result);
+        $this->assertStringContainsString('buttonJson', $result);
+        $this->assertStringContainsString('isFun', $result);
     }
 }

@@ -57,9 +57,9 @@ class AbstractController extends AbstractTest
      */
     protected $callerFinderResult;
 
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         $this->callerFinderResult = [
             BacktraceConstInterface::TRACE_FILE => 'just another path',
@@ -124,11 +124,11 @@ class AbstractController extends AbstractTest
         $pathToSkin = 'skin directory';
         $pathToKdt = 'resources/jsLibs/kdt.min.js';
         $skinJs = 'krexx.min.js';
-        $skinCss = 'skin.css';
+        $skinCss = 'skin.min.css';
 
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->once())
-            ->method('getPathToIniFile')
+            ->method('getPathToConfigFile')
             ->will($this->returnValue($pathToIni));
         $configMock->expects($this->once())
             ->method('getSkinDirectory')
@@ -136,16 +136,18 @@ class AbstractController extends AbstractTest
         $poolMock->config = $configMock;
 
         $fileServiceMock = $this->createMock(File::class);
-        $fileServiceMock->expects($this->exactly(3))
+        $fileServiceMock->expects($this->exactly(4))
             ->method('fileIsReadable')
             ->withConsecutive(
                 [$pathToIni],
                 [KREXX_DIR . $pathToKdt],
+                [$pathToSkin . $skinCss],
                 [$pathToSkin . $skinJs]
             )->will($this->returnValueMap(
                 [
                     [$pathToIni, true],
                     [KREXX_DIR . $pathToKdt, true],
+                    [$pathToSkin . $skinCss, true],
                     [$pathToSkin . $skinJs, true]
                 ]
             ));

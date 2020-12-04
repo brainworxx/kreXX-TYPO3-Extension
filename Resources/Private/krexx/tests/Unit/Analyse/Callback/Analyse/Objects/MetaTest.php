@@ -181,7 +181,7 @@ class MetaTest extends AbstractTest
             'class Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture',
             $data[$meta::META_CLASS_NAME]
         );
-        $this->assertContains('Just another meaningless class comment.', $data[$meta::META_COMMENT]);
+        $this->assertStringContainsString('Just another meaningless class comment.', $data[$meta::META_COMMENT]);
         $this->assertStringEndsWith(
             DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Fixtures' .
             DIRECTORY_SEPARATOR . 'ComplexMethodFixture.php, line 41',

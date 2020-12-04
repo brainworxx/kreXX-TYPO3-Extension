@@ -39,67 +39,36 @@ namespace Brainworxx\Krexx\Analyse\Model;
 
 use Brainworxx\Krexx\Analyse\Model;
 
-trait Json
+trait KeyType
 {
     /**
-     * Additional data, we are sending to the FE vas a json, hence the name.
+     * The type of key that is used.
      *
-     * Right now, only the smokygrey skin makes use of this.
-     *
-     * @var array
+     * @var string
      */
-    protected $json = [];
+    protected $keyType = '';
 
     /**
-     * Setter for the $helpId.
+     * Getter for the key type.
      *
-     * @param string $helpId
-     *   The ID of the help text.
-     *
-     * @return Model
-     *   $this, for chaining.
+     * @return string
      */
-    public function setHelpid(string $helpId): Model
+    public function getKeyType(): string
     {
-        $this->addToJson(static::META_HELP, $this->pool->messages->getHelp($helpId));
-        return $this;
+        return $this->keyType;
     }
 
     /**
-     * We simply add more info to our info json.
-     * Leftover linebreaks will be removed.
-     * If the value is empty, we will remove a possible previous entry to this key.
+     * Setter for the key type.
      *
-     * @param string $key
-     *   The array key.
-     * @param string $value
-     *   The value we want to set.
+     * @param string $keyType
      *
-     * @return Model
-     *   $this for chaining.
+     * @return $this
+     *   For chaining.
      */
-    public function addToJson(string $key, string $value): Model
+    public function setKeyType(string $keyType): Model
     {
-
-        if (empty($value) === true) {
-            unset($this->json[$key]);
-        } else {
-            // Remove leftover linebreaks.
-            $value = trim(str_replace(["\r", "\n"], ['', ''], $value));
-            $this->json[$key] = $value;
-        }
-
+        $this->keyType = $keyType;
         return $this;
-    }
-
-    /**
-     * Getter for json.
-     *
-     * @return array
-     *   More analysis data.
-     */
-    public function getJson(): array
-    {
-        return $this->json;
     }
 }

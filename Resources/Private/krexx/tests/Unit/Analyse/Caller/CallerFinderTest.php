@@ -76,9 +76,9 @@ class CallerFinderTest extends AbstractTest
      * Creating the Caller finder.
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         // Prepare the uri.
         // The things you do, to mock an uri call . . .

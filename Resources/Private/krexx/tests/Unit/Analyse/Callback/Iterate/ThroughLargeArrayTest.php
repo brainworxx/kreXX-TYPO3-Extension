@@ -38,6 +38,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
@@ -64,9 +65,9 @@ class ThroughLargeArrayTest extends AbstractTest
      */
     protected $renderMock;
 
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         // Test start event
         $this->throughLargeArray = new ThroughLargeArray(Krexx::$pool);
@@ -147,7 +148,15 @@ class ThroughLargeArrayTest extends AbstractTest
         );
         $this->assertEquals(
             Codegen::CODEGEN_TYPE_PUBLIC,
+            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][0]->getCodeGenType()
+        );
+        $this->assertEquals(
+            Codegen::CODEGEN_TYPE_PUBLIC,
             $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getCodeGenType()
+        );
+        $this->assertEquals(
+            ProcessConstInterface::TYPE_STRING,
+            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getKeyType()
         );
 
         $this->alwaysRun($fixture);

@@ -51,9 +51,9 @@ class BrowserTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         $this->browser = new Browser(Krexx::$pool);
     }

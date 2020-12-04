@@ -55,6 +55,7 @@ abstract class AbstractRenderHans extends AbstractTest
     const GET_DATA = 'getData';
     const GET_TYPE = 'getType';
     const RENDER_ME = 'renderMe';
+    const GET_KEY_TYPE = 'getKeyType';
 
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject
@@ -74,9 +75,9 @@ abstract class AbstractRenderHans extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
         $this->renderHans = new RenderHans(Krexx::$pool);
         $this->setValueByReflection('skinPath', static::PATH_TO_SKIN, $this->renderHans);
         $this->mockTemplate();

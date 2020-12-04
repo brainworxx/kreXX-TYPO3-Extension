@@ -61,9 +61,9 @@ class FooterTest extends AbstractRenderSmokyGrey
             ->will($this->returnValue(''));
 
         $result = $this->renderSmokyGrey->renderFooter([], $model, true);
-        $this->assertNotContains($this->renderSmokyGrey::STYLE_HIDDEN, $result);
+        $this->assertStringNotContainsString($this->renderSmokyGrey::STYLE_HIDDEN, $result);
 
         $result = $this->renderSmokyGrey->renderFooter([], $model, false);
-        $this->assertContains($this->renderSmokyGrey::STYLE_HIDDEN, $result);
+        $this->assertStringContainsString($this->renderSmokyGrey::STYLE_HIDDEN, $result);
     }
 }

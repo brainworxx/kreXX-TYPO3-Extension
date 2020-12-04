@@ -56,9 +56,9 @@ class FatalMainTest extends AbstractRenderHans
             ->will($this->returnValue('faulty code line'));
 
         $result = $this->renderHans->renderFatalMain($errorString, $inFile, $line);
-        $this->assertContains($errorString, $result);
-        $this->assertContains($inFile, $result);
-        $this->assertContains((string)$line, $result);
-        $this->assertContains('faulty code line', $result);
+        $this->assertStringContainsString($errorString, $result);
+        $this->assertStringContainsString($inFile, $result);
+        $this->assertStringContainsString((string)$line, $result);
+        $this->assertStringContainsString('faulty code line', $result);
     }
 }

@@ -45,9 +45,9 @@ use Brainworxx\Krexx\Krexx;
 class ProcessBacktraceTest extends AbstractTest
 {
 
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         $data = 'data';
         $someFile = 'some file';

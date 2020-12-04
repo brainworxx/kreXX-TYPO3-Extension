@@ -148,6 +148,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Model/DomId.php';
         include_once KREXX_DIR . 'src/Analyse/Model/HasExtra.php';
         include_once KREXX_DIR . 'src/Analyse/Model/CodeGenType.php';
+        include_once KREXX_DIR . 'src/Analyse/Model/KeyType.php';
         // Deprecated
         include_once KREXX_DIR . 'src/Analyse/Model/MultiLineCodeGen.php';
         include_once KREXX_DIR . 'src/Analyse/Model/IsPublic.php';
@@ -170,7 +171,10 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Service/Config/Validation.php';
 
         include_once KREXX_DIR . 'src/Service/Config/From/Cookie.php';
+        include_once KREXX_DIR . 'src/Service/Config/From/File.php';
+        // Deprecated
         include_once KREXX_DIR . 'src/Service/Config/From/Ini.php';
+        //
 
         include_once KREXX_DIR . 'src/Service/Factory/EventHandlerInterface.php';
         include_once KREXX_DIR . 'src/Service/Factory/Event.php';

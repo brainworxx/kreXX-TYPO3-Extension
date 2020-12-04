@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
@@ -48,9 +49,9 @@ class ThroughArrayTest extends AbstractTest
     /**
      * Injecting the routing nothing class.
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
         Krexx::$pool->routing = new RoutingNothing(Krexx::$pool);
     }
 
@@ -100,8 +101,11 @@ class ThroughArrayTest extends AbstractTest
         // Test the connectors.
         $this->assertEquals('[', $models[0]->getConnectorLeft());
         $this->assertEquals(']', $models[0]->getConnectorRight());
+        $this->assertEquals('', $models[0]->getKeyType());
         $this->assertEquals('[\'', $models[1]->getConnectorLeft());
         $this->assertEquals('\']', $models[1]->getConnectorRight());
+        $this->assertEquals(ProcessConstInterface::TYPE_STRING, $models[1]->getKeyType());
+
     }
 
     /**

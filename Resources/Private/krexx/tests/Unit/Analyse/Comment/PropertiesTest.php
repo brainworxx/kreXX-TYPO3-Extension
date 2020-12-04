@@ -54,7 +54,7 @@ class PropertiesTest extends AbstractTest
         $propertiesComment = new Properties(Krexx::$pool);
         $reflectionProperty = new ReflectionProperty(PrivateFixture::class, 'value5');
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'A private that overwrites a property from the SimpleFixture',
             $propertiesComment->getComment($reflectionProperty)
         );

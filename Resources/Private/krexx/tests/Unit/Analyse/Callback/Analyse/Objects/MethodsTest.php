@@ -91,9 +91,9 @@ class MethodsTest extends AbstractTest
      *
      * @throws \ReflectionException
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         $this->methods = new Methods(Krexx::$pool);
         // Prevent getting deeper into the rabbit hole.

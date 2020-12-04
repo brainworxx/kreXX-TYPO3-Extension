@@ -343,6 +343,12 @@
   position: relative;
   width: 100%;
 }
+.kwrapper .kchild .kname.keystring::before,
+.kwrapper .kchild .kname.keystring::after, .kfatalwrapper-outer .kchild .kname.keystring::before,
+.kfatalwrapper-outer .kchild .kname.keystring::after {
+  content: "'";
+  background: transparent;
+}
 .kwrapper .kchild .kel, .kfatalwrapper-outer .kchild .kel {
   cursor: default;
   display: block;
@@ -920,5 +926,3 @@
   color: #ffffff;
   font-weight: bold;
 }
-
-/*# sourceMappingURL=skin.css.map */

@@ -94,18 +94,18 @@ class FooterTest extends AbstractRenderHans
         $this->setValueByReflection('plugins', $pluginList, SettingsGetter::class);
 
         $result = $this->renderHans->renderFooter($caller, $model);
-        $this->assertContains('Plugin 1', $result);
-        $this->assertContains('1.0.0.', $result);
-        $this->assertContains('Plugin 2', $result);
-        $this->assertContains('2.0.0.', $result);
-        $this->assertContains('Plugin 3', $result);
-        $this->assertContains('3.0.0.', $result);
-        $this->assertContains('kisactive', $result);
-        $this->assertContains('kisinactive', $result);
-        $this->assertContains('active', $result);
-        $this->assertContains('inactive', $result);
-        $this->assertContains('filename', $result);
-        $this->assertContains('line 123', $result);
-        $this->assertContains('yesteryear', $result);
+        $this->assertStringContainsString('Plugin 1', $result);
+        $this->assertStringContainsString('1.0.0.', $result);
+        $this->assertStringContainsString('Plugin 2', $result);
+        $this->assertStringContainsString('2.0.0.', $result);
+        $this->assertStringContainsString('Plugin 3', $result);
+        $this->assertStringContainsString('3.0.0.', $result);
+        $this->assertStringContainsString('kisactive', $result);
+        $this->assertStringContainsString('kisinactive', $result);
+        $this->assertStringContainsString('active', $result);
+        $this->assertStringContainsString('inactive', $result);
+        $this->assertStringContainsString('filename', $result);
+        $this->assertStringContainsString('line 123', $result);
+        $this->assertStringContainsString('yesteryear', $result);
     }
 }

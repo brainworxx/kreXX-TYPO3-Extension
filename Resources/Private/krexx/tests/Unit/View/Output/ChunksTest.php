@@ -38,7 +38,7 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Output;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
-use Brainworxx\Krexx\Service\Config\From\Ini;
+use Brainworxx\Krexx\Service\Config\From\File as ConfigFromFile;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\File;
@@ -161,13 +161,13 @@ class ChunksTest extends AbstractTest
             ->with(
                 $this->callback(
                     function ($fileName) use ($fileStamp) {
-                        $this->assertContains($fileStamp, $fileName);
+                        $this->assertStringContainsString($fileStamp, $fileName);
                         return true;
                     }
                 ),
                 $this->callback(
                     function ($contents) use ($fixture) {
-                        $this->assertContains($fixture, $contents);
+                        $this->assertStringContainsString($fixture, $contents);
                         return true;
                     }
                 )
@@ -175,7 +175,7 @@ class ChunksTest extends AbstractTest
 
         Krexx::$pool->fileService = $fileServiceMock;
 
-        $this->assertContains('@@@12345_', $chunks->chunkMe($fixture));
+        $this->assertStringContainsString('@@@12345_', $chunks->chunkMe($fixture));
     }
 
     /**
@@ -394,7 +394,7 @@ class ChunksTest extends AbstractTest
 
         // Test with file output
         ConfigSupplier::$overwriteValues[Fallback::SETTING_DESTINATION] = Fallback::VALUE_FILE;
-        Registration::addRewrite(Ini::class, ConfigSupplier::class);
+        Registration::addRewrite(ConfigFromFile::class, ConfigSupplier::class);
         Krexx::$pool = null;
         Pool::createPool();
         $chunks = new Chunks(Krexx::$pool);

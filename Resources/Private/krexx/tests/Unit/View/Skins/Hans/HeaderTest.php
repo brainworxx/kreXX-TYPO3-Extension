@@ -80,11 +80,11 @@ class HeaderTest extends AbstractRenderHans
 
         // Run the test.
         $result = $this->renderHans->renderHeader('Headliner', 'CSS Wanne Eickel');
-        $this->assertContains('42', $result);
-        $this->assertContains('recursion Marker', $result);
-        $this->assertContains('mess ages', $result);
-        $this->assertContains('encoding', $result);
-        $this->assertContains('Headliner', $result);
-        $this->assertContains('CSS Wanne Eickel', $result);
+        $this->assertStringContainsString('42', $result);
+        $this->assertStringContainsString('recursion Marker', $result);
+        $this->assertStringContainsString('mess ages', $result);
+        $this->assertStringContainsString('encoding', $result);
+        $this->assertStringContainsString('Headliner', $result);
+        $this->assertStringContainsString('CSS Wanne Eickel', $result);
     }
 }

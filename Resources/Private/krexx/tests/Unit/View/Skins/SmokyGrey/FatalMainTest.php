@@ -49,7 +49,7 @@ class FatalMainTest extends AbstractRenderSmokyGrey
     {
         $result = $this->renderSmokyGrey->renderFatalMain('', '', 1);
         foreach ($this->renderSmokyGrey->getMarkerFatalMain() as $marker) {
-            $this->assertNotContains($marker, $result);
+            $this->assertStringNotContainsString($marker, $result);
         }
     }
 }

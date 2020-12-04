@@ -55,7 +55,7 @@ class SettingsGetterTest extends AbstractRegistration
     public function testGetConfigFile()
     {
         $this->assertEquals(
-            KREXX_DIR . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini',
+            KREXX_DIR . 'config' . DIRECTORY_SEPARATOR . 'Krexx.',
             SettingsGetter::getConfigFile(),
             static::TEST_THE_FALLBACK
         );

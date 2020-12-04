@@ -37,60 +37,19 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Config\From;
 
-use Brainworxx\Krexx\Service\Config\Fallback;
-use Brainworxx\Krexx\Service\Factory\Pool;
-
 /**
- * Reads the config from the ini file, as well as the fe editing config.
+ * Class Ini
  *
- * @package Brainworxx\Krexx\Service\Config
+ * @deprecated
+ *   Since 4.0.1. Will be removed. use Brainworxx\Krexx\Service\Config\From\File
+ *
+ * @codeCoverageIgnore
+ *   We will not test deprecated classes.
+ *
+ * @package Brainworxx\Krexx\Service\Config\From
  */
-class Ini extends Fallback
+class Ini extends File
 {
-    /**
-     * Our security handler.
-     *
-     * @var \Brainworxx\Krexx\Service\Config\Validation
-     */
-    protected $validation;
-
-    /**
-     * The content of the ini file we have loaded.
-     *
-     * @var array
-     */
-    protected $iniSettings = [];
-
-    /**
-     * Inject the pool, create the security handler, load the ini file.
-     *
-     * @param Pool $pool
-     */
-    public function __construct(Pool $pool)
-    {
-        parent::__construct($pool);
-        $this->validation = $pool->config->validation;
-    }
-
-    /**
-     * Setter for the ini path.
-     *
-     * @param string $path
-     *   The path to the ini file.
-     *
-     * @return $this
-     *   Return $this, for chaining.
-     */
-    public function loadIniFile(string $path): Ini
-    {
-        $this->iniSettings = (array)parse_ini_string(
-            $this->pool->fileService->getFileContents($path, false),
-            true
-        );
-
-        return $this;
-    }
-
     /**
      * Get the configuration of the frontend config form.
      *
@@ -120,73 +79,22 @@ class Ini extends Fallback
     }
 
     /**
-     * Get the config of the frontend config form from the file.
+     * Setter for the ini path.
      *
-     * @param string $parameterName
-     *   The parameter you want to render.
+     * @param string $path
+     *   The path to the ini file.
      *
-     * @return array|null
-     *   The configuration (is it editable, a dropdown, a textfield, ...)
+     * @deprecated
+     *   Since 4.0.1. Will be removed. Use loadFile instead.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @return $this
+     *   Return $this, for chaining.
      */
-    public function getFeConfigFromFile(string $parameterName)
+    public function loadIniFile(string $path): Ini
     {
-        // Get the human readable stuff from the ini file.
-        $value = $this->getConfigFromFile(static::SECTION_FE_EDITING, $parameterName);
-
-        if (empty($value) === true) {
-            // Sorry, no value stored.
-            return null;
-        }
-
-        // Get the rendering type.
-        $type = $this->feConfigFallback[$parameterName][static::RENDER][static::RENDER_TYPE];
-
-        // Stitch together the setting.
-        switch ($value) {
-            case static::RENDER_TYPE_INI_DISPLAY:
-                $editable = static::VALUE_FALSE;
-                break;
-
-            case static::RENDER_TYPE_INI_FULL:
-                $editable = static::VALUE_TRUE;
-                break;
-
-            default:
-                // Unknown setting, or render type none.
-                // Fallback to no display, just in case.
-                $type = static::RENDER_TYPE_NONE;
-                $editable = static::VALUE_FALSE;
-                break;
-        }
-
-        return [
-            static::RENDER_TYPE => $type,
-            static::RENDER_EDITABLE => $editable,
-        ];
-    }
-
-    /**
-     * Returns settings from the ini file, if it is validated.
-     *
-     * @param string $group
-     *   The group name inside of the ini.
-     * @param string $name
-     *   The name of the setting.
-     *
-     * @return string|null
-     *   The value from the file. Null, when not available or not validated.
-     */
-    public function getConfigFromFile(string $group, string $name)
-    {
-        // Do we have a value in the ini?
-        // Does it validate?
-        if (
-            isset($this->iniSettings[$group][$name]) === true &&
-            $this->validation->evaluateSetting($group, $name, $this->iniSettings[$group][$name]) === true
-        ) {
-            return $this->iniSettings[$group][$name];
-        }
-
-        return null;
+        return $this->loadFile($path);
     }
 }

@@ -168,6 +168,7 @@ class ValidationTest extends AbstractTest
                 '99999' => false
             ]
         ];
+
         // Nice, huh?
         foreach ($settingList as $name => $setting) {
             foreach ($testData[$setting[$validation::EVALUATE]] as $value => $expected) {
@@ -183,5 +184,15 @@ class ValidationTest extends AbstractTest
                 );
             }
         }
+
+        // Two special tests for booleans, which can not be array keys.
+        $this->assertEquals(
+            true,
+            $validation->evaluateSetting('some group', Fallback::SETTING_DISABLED, true)
+        );
+        $this->assertEquals(
+            true,
+            $validation->evaluateSetting('some group', Fallback::SETTING_DISABLED, false)
+        );
     }
 }

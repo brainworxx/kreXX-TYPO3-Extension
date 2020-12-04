@@ -35,14 +35,14 @@
 
 namespace Brainworxx\Krexx\Tests\Helpers;
 
-use Brainworxx\Krexx\Service\Config\From\Ini;
+use Brainworxx\Krexx\Service\Config\From\File;
 
 /**
  * Injectiong configuration as soon as possible.
  *
  * @package Brainworxx\Krexx\Tests\Helpers
  */
-class ConfigSupplier extends Ini
+class ConfigSupplier extends File
 {
     /**
      * Key value pair to overwrite the settings as soon as possible.

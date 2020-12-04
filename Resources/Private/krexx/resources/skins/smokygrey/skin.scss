@@ -110,50 +110,63 @@ $fontLight: lighter 10px tahoma, verdana;
     float: none;
     width: unset;
   }
+
   small {
     line-height: normal;
     font-size: 80%;
   }
+
   //Setting the display attribute, hard!
   div, ul, hr, option {
     display: block;
   }
+
   span, em, a, input, strong {
     display: inline;
     height: auto;
   }
+
   br {
     line-height: normal;
   }
+
   li {
     display: list-item;
   }
+
   table {
     display: table;
   }
+
   caption {
     display: table-caption;
     caption-side: top;
   }
+
   tbody {
     display: table-row-group;
   }
+
   tr {
     display: table-row;
   }
+
   td {
     display: table-cell;
   }
+
   select {
     display: inline-block;
     -webkit-appearance: menulist;
     -moz-appearance: menulist;
     -o-appearance: menulist;
     appearance: menulist;
+
     &::-ms-expand {
       display: block;
     }
   }
+
   option {
     padding-left: 5px;
     padding-right: 5px;
@@ -171,6 +184,7 @@ $fontLight: lighter 10px tahoma, verdana;
   @include border-radius-bottom(2px);
   @include border-radius-top(2px);
   overflow: hidden;
+
   * {
     box-sizing: content-box;
     font-family: Tahoma, Verdana;
@@ -185,15 +199,18 @@ $fontLight: lighter 10px tahoma, verdana;
 
   .kbg-wrapper {
     position: relative;
+
     &.knormal {
       background-color: $grey;
       padding: 0 2px 2px;
       position: relative;
     }
+
     &.kfatal {
       background-color: $grey;
       margin-bottom: 25px;
     }
+
     .kspacer {
       background-color: $whiteDark;
       height: 5px;
@@ -211,9 +228,11 @@ $fontLight: lighter 10px tahoma, verdana;
   .knode {
     margin: 0;
     padding: 0;
+
     ul {
       margin-left: 24px;
     }
+
     &.kfirst {
       font: $fontStandard;
     }
@@ -223,9 +242,11 @@ $fontLight: lighter 10px tahoma, verdana;
       margin: 0;
       list-style: none;
       background-color: $greyDark;
+
       &.khandle {
         cursor: move;
       }
+
       .ktab {
         display: inline-block;
         margin-left: 10px;
@@ -237,16 +258,20 @@ $fontLight: lighter 10px tahoma, verdana;
         cursor: pointer;
         height: 26px;
         @include border-radius-top(1px);
+
         &:hover {
           background-color: $greyLight;
         }
+
         &.kactive {
           background-color: $whiteDark;
           color: $greyDark;
+
           &:hover {
             color: $greyLight;
           }
         }
+
         &.ksearchbutton {
           float: right;
           margin-right: 10px;
@@ -264,6 +289,7 @@ $fontLight: lighter 10px tahoma, verdana;
         width: 20px;
         //margin-left: -2px;
         vertical-align: -2px;
+
         .klogo-xx {
           /* Klo go XX? Really? */
           margin-left: 3px;
@@ -272,12 +298,14 @@ $fontLight: lighter 10px tahoma, verdana;
           font-size: 9px;
         }
       }
+
       .ktext {
         display: inline-block;
         color: $greyLight;
         vertical-align: 2px;
         font-size: 16px;
       }
+
       .kspace {
         padding-left: 10px;
       }
@@ -288,6 +316,7 @@ $fontLight: lighter 10px tahoma, verdana;
       background-color: $whiteDark;
       padding: 10px;
       @include border-radius-bottom(2px);
+
       table {
         width: 100%;
         color: $greyDark;
@@ -296,26 +325,31 @@ $fontLight: lighter 10px tahoma, verdana;
         tbody {
           padding: 0;
         }
+
         .kheadline {
           color: $blackLight;
           text-align: left;
           margin-left: 4px;
           margin-bottom: 4px;
         }
+
         tr {
           background-color: $white;
           margin: 0 5px;
           padding: 0;
         }
+
         td {
           padding: 2px 4px;
           vertical-align: top;
           border: 1px solid $greyLight;
           @include border-radius-top(1px);
           @include border-radius-bottom(1px);
+
           &.kinfo {
             width: 150px;
           }
+
           &.kdesc {
             max-width: 50px;
           }
@@ -339,6 +373,7 @@ $fontLight: lighter 10px tahoma, verdana;
     padding: 4px 5px 3px;
     margin: 0;
     font: bold 12px tahoma, verdana;
+
     &::before {
       content: "\00a0\00a0!\00a0\00a0";
       font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
@@ -353,14 +388,17 @@ $fontLight: lighter 10px tahoma, verdana;
   .kconfiguration {
     padding: 0;
     margin: 0;
+
     .call {
       display: inline-block;
       font: $fontBold;
       padding-bottom: 5px;
+
       .kcaller {
         color: $blackLight;
       }
     }
+
     .khelp {
       position: absolute;
       border: solid 1px $grey;
@@ -374,12 +412,15 @@ $fontLight: lighter 10px tahoma, verdana;
       font-weight: lighter;
       z-index: 1;
     }
+
     .kel:hover .khelp {
       display: block;
     }
+
     .kolps {
       display: none !important;
     }
+
     .kexpand .kname {
       margin-left: 0;
     }
@@ -396,6 +437,13 @@ $fontLight: lighter 10px tahoma, verdana;
     color: $greyDark;
     position: relative;
     width: 100%;
+
+    .kname.keystring::before,
+    .kname.keystring::after {
+      content: "\27";
+      background: transparent;
+    }
+
     .kel {
       cursor: default;
       display: block;
@@ -406,8 +454,10 @@ $fontLight: lighter 10px tahoma, verdana;
       padding-left: 15px;
       @include border-radius-top(1px);
       @include border-radius-bottom(1px);
+
       &:hover, &.kcurrent-additional {
         background-color: $greyLight;
+
         input, select {
           background-color: $white !important;
           border: solid 1px $greyDark;
@@ -416,12 +466,14 @@ $fontLight: lighter 10px tahoma, verdana;
 
       em {
         font: $fontLight;
+
         &.karrow {
           font: $fontBold;
           background-color: $greyLight;
           padding: 0 2px;
           color: $greyDark !important;
           margin: 0 10px;
+
           &.ktype {
             font-size: 10px;
           }
@@ -438,28 +490,35 @@ $fontLight: lighter 10px tahoma, verdana;
         height: 20px;
         margin-top: -2px;
       }
+
       &.kexpand {
         background-image: none;
         //color: $white;
         cursor: pointer;
         padding-left: 2px;
+
         &::before {
           content: "\00a0\25B6\00a0\00a0";
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
         }
+
         .kel-bg {
           display: none;
         }
       }
+
       &.kopened {
         background-image: none;
+
         &::before {
           content: "\00a0\25BC\00a0\00a0";
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
         }
       }
+
       &:not(.kexpand) {
         position: relative;
+
         &::before {
           /* grey line */
           width: 3px;
@@ -488,6 +547,7 @@ $fontLight: lighter 10px tahoma, verdana;
         margin-left: 15px;
         display: inline-block;
         cursor: pointer;
+
         &:hover {
           color: $blackLight;
         }
@@ -499,11 +559,13 @@ $fontLight: lighter 10px tahoma, verdana;
         padding: 5px;
         margin: 5px;
         float: right;
+
         ::selection {
           /* WebKit/Blink Browsers */
           background: $yellowBwx !important;
           color: $blackLight !important;
         }
+
         ::-moz-selection {
           /* Gecko Browsers */
           background: $yellowBwx !important;
@@ -517,6 +579,7 @@ $fontLight: lighter 10px tahoma, verdana;
     .kpreview {
       padding: 0;
       margin-bottom: 5px;
+
       .kpre {
         font-style: normal;
         overflow: auto;
@@ -528,6 +591,7 @@ $fontLight: lighter 10px tahoma, verdana;
         margin: 0;
         padding: 0;
       }
+
       .source {
         padding: 0 20px;
         border-top: 1px solid $whiteDark;
@@ -535,9 +599,11 @@ $fontLight: lighter 10px tahoma, verdana;
         background-color: $white;
         margin: 0;
       }
+
       .klineno {
         font-weight: normal;
       }
+
       .highlight {
         background-color: $greyLight !important;
         padding: 5px 20px;
@@ -546,6 +612,7 @@ $fontLight: lighter 10px tahoma, verdana;
         border-top: 5px solid $whiteDark;
         border-bottom: 5px solid $whiteDark;
         position: relative;
+
         &::before {
           width: 3px;
           background: $red none repeat scroll 0 0;
@@ -568,6 +635,7 @@ $fontLight: lighter 10px tahoma, verdana;
       float: right;
       color: $greyDark;
       cursor: pointer;
+
       &::before {
         content: '\21D4';
         font-weight: bolder;
@@ -577,20 +645,25 @@ $fontLight: lighter 10px tahoma, verdana;
       &:hover {
         color: $blackLight;
       }
+
       &.kcollapsed {
         color: $yellowBwx;
+
         &::before {
           content: '\21D5';
           font-weight: bolder;
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
         }
+
         &:hover {
           color: $blackLight;
         }
       }
     }
+
     .kcurrent-additional .kolps.kcollapsed {
       color: $string-current;
+
       &:hover {
         color: $blackLight;
       }
@@ -599,6 +672,7 @@ $fontLight: lighter 10px tahoma, verdana;
     // Data payload
     .krecursion {
       color: $recursion;
+
       &::before {
         /* grey line */
         background: $recursion none repeat scroll 0 0 !important;
@@ -610,31 +684,39 @@ $fontLight: lighter 10px tahoma, verdana;
         /* yellow line */
         background: $string none repeat scroll 0 0 !important;
       }
+
       &.kexpand {
         background-image: none;
+
         &::before {
           color: $string;
           background-color: transparent !important;
         }
       }
+
       em, .kname {
         color: $string;
       }
+
       &.kcurrent-additional {
         .kel-bg {
           /* yellow line */
           background-color: $string-current;
         }
+
         &.kexpand {
           background-image: none;
+
           &::before {
             color: $string-current;
           }
         }
+
         em, .kname {
           color: $string-current;
         }
       }
+
       .kshort::before,
       .kshort::after {
         content: '\27';
@@ -645,70 +727,89 @@ $fontLight: lighter 10px tahoma, verdana;
       &::before {
         color: $object;
       }
+
       em {
         color: $object;
       }
+
       span.kname {
         color: $object;
       }
     }
+
     .kmethod {
       &::before {
         color: $object;
       }
+
       em {
         color: $object;
+
         &.kreturntype {
           color: $greyDark;
         }
       }
     }
+
     .kclosure {
       &::before {
         color: $object;
       }
+
       em {
         color: $object;
       }
     }
+
     .karray {
       background-image: none;
+
       &::before {
         color: $array;
       }
+
       &.kopened {
         background-image: none;
       }
+
       em {
         color: $array;
       }
+
       span.kname {
         color: $array;
       }
     }
+
     .kboolean {
       &::before {
         /* pink line */
         background: $bool none repeat scroll 0 0 !important;
       }
+
       em {
         color: $bool;
       }
+
       span.kname {
         color: $bool;
       }
     }
+
     .kinteger {
       &::before {
         /* black line */
         background: $integer none repeat scroll 0 0 !important;
       }
+
       &.kexpand {
         background-image: none;
+
         &::before {
           color: $integer;
         }
       }
+
       em, .kname {
         color: $integer;
       }
@@ -735,9 +836,11 @@ $fontLight: lighter 10px tahoma, verdana;
   .kchild.krootline {
     display: block !important;
   }
+
   .kfilterroot .kchild {
     display: none;
   }
+
   .ktopline .kchild {
     display: block !important;
   }
@@ -756,14 +859,17 @@ $fontLight: lighter 10px tahoma, verdana;
       color: $blackLight !important;
       @include border-radius-top(2px);
       @include border-radius-bottom(2px);
+
       &:hover {
         background: none repeat scroll 0 0 $white !important;
         border: solid 1px $greyDark;
       }
+
       &:focus {
         background-color: $white !important;
       }
     }
+
     input[type=button], select {
       cursor: pointer;
     }
@@ -773,6 +879,7 @@ $fontLight: lighter 10px tahoma, verdana;
     float: right;
     margin-right: 10px;
     margin-top: 5px;
+
     &.kfatal {
       cursor: pointer;
       display: inline-table;
@@ -780,18 +887,22 @@ $fontLight: lighter 10px tahoma, verdana;
       height: 40px;
       margin-right: 7px;
       color: $blackLight;
+
       &:hover {
         color: $white;
       }
     }
+
     &.knormal {
       cursor: pointer;
       display: inline-table;
       font-size: 20px;
       color: $white;
+
       &::before {
         content: '\2715';
       }
+
       &:hover {
         color: $grey;
       }
@@ -802,10 +913,12 @@ $fontLight: lighter 10px tahoma, verdana;
   .search-wrapper {
     list-style: none;
     z-index: 1;
+
     &.khidden {
       display: none !important;
       visibility: hidden !important;
     }
+
     .ksearch {
       background-color: $yellowBwx;
       color: $blackLight;
@@ -816,49 +929,59 @@ $fontLight: lighter 10px tahoma, verdana;
       margin-top: 2px;
       position: absolute;
       @include border-radius-top-left(2px);
+
       .ksearchhr {
         background-color: $blackLight;
         margin: 10px 5px;
         height: 1px;
       }
+
       .koptionleft,
       .koptionright {
         width: 45%;
         display: inline-block;
         margin: 2px;
+
         input {
           margin-right: 5px;
         }
       }
+
       .kclose {
         cursor: pointer;
         display: inline-table;
         font-size: 17px;
         margin: 0 5px;
         float: none;
+
         &:hover {
           color: $white;
         }
       }
+
       .koptions {
         height: 24px;
         width: 24px;
         margin: 0 5px;
         cursor: pointer;
+
         &::before {
           content: '\263C';
           font-weight: bolder;
           font-family: "Lucida Grande", "Lucida Sans Unicode", Verdana, Arial, Helvetica, sans-serif;
         }
+
         &:hover {
           color: $white;
         }
       }
     }
   }
+
   .ksearch-found-highlight {
     background-color: $yellow !important;
     color: $blackLight;
+
     .kpre {
       background-color: $yellow !important;
     }
@@ -867,6 +990,7 @@ $fontLight: lighter 10px tahoma, verdana;
   .highlight-jumpto {
     background-color: $yellowBwx !important;
     color: $blackLight !important;
+
     .kpre {
       background-color: $yellowBwx !important;
     }
@@ -883,13 +1007,16 @@ $fontLight: lighter 10px tahoma, verdana;
         color: $grey;
         text-decoration: none;
         padding: 3px 6px 6px 20px;
+
         &.kisactive {
           color: $greyDark;
+
           &::before {
             background: $object none repeat scroll 0 0;
           }
         }
       }
+
       .kisactive {
         color: $object;
       }
@@ -907,6 +1034,7 @@ $fontLight: lighter 10px tahoma, verdana;
   top: 0;
   z-index: 100000;
   overflow: auto;
+
   .kwrapper {
     //bottom: 0;
     font: $fontStandard;
@@ -928,6 +1056,7 @@ $fontLight: lighter 10px tahoma, verdana;
       color: $whiteDark;
       font-size: 36px;
       font-weight: bold;
+
       .kstop {
         background: $blackLight; /* fallback */
         background: -moz-linear-gradient(45deg, transparent 8px, $blackLight 10px),
@@ -953,13 +1082,16 @@ $fontLight: lighter 10px tahoma, verdana;
         margin-left: 4px;
         margin-top: 4px;
         margin-right: 4px;
+
         span {
           margin-left: 15px;
         }
       }
+
       .ktext.kfirst {
         margin-left: 40px;
       }
+
       .klogo {
         display: inline-block;
         background-color: $yellowBwx;
@@ -971,6 +1103,7 @@ $fontLight: lighter 10px tahoma, verdana;
         width: 28px;
         margin-left: -4px;
         vertical-align: -3px;
+
         .klogo-xx {
           /* Klo go XX? Really? */
           margin-left: 4px;
@@ -978,6 +1111,7 @@ $fontLight: lighter 10px tahoma, verdana;
           position: absolute;
         }
       }
+
       .kclose {
         font-size: 40px;
         float: none;
@@ -985,6 +1119,7 @@ $fontLight: lighter 10px tahoma, verdana;
         right: 15px;
         top: 0;
         color: $whiteDark;
+
         &:hover {
           color: $grey;
         }
@@ -1001,16 +1136,16 @@ $fontLight: lighter 10px tahoma, verdana;
       background-color: $greyDark;
       text-align: center;
       list-style: none;
+
       .kerror-str {
         color: $greyLight;
         font-weight: bold;
       }
+
       .kerror-path {
         color: $white;
         font-weight: bold;
       }
     }
-
   }
-
 }

@@ -65,10 +65,10 @@ class FatalHeaderTest extends AbstractRenderHans
         $errorType = 'Oops an error occured.';
 
         $result = $this->renderHans->renderFatalHeader($cssJs, $errorType);
-        $this->assertContains(Krexx::$pool->config->version, $result);
-        $this->assertContains('Marky Mark', $result);
-        $this->assertContains('Ute Efacht', $result);
-        $this->assertContains($cssJs, $result);
-        $this->assertContains($errorType, $result);
+        $this->assertStringContainsString(Krexx::$pool->config->version, $result);
+        $this->assertStringContainsString('Marky Mark', $result);
+        $this->assertStringContainsString('Ute Efacht', $result);
+        $this->assertStringContainsString($cssJs, $result);
+        $this->assertStringContainsString($errorType, $result);
     }
 }

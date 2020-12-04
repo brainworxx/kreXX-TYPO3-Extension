@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 
 /**
  * Going through an array with 2000 objects can create more than 1GB of
@@ -64,7 +65,8 @@ use Brainworxx\Krexx\Analyse\Model;
 class ThroughLargeArray extends AbstractCallback implements
     CodegenConstInterface,
     CallbackConstInterface,
-    ConnectorsConstInterface
+    ConnectorsConstInterface,
+    ProcessConstInterface
 {
 
     /**
@@ -118,7 +120,8 @@ class ThroughLargeArray extends AbstractCallback implements
     {
         if (is_string($key) === true) {
             $model->setName($this->pool->encodingService->encodeString($key))
-                ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);
+                ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY)
+                ->setKeyType(static::TYPE_STRING);
 
             return;
         }

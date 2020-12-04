@@ -54,6 +54,7 @@ abstract class AbstractRenderSmokyGrey extends AbstractTest
     const GET_TYPE = 'getType';
     const RENDER_ME = 'renderMe';
     const GET_CONNECTOR_LANGUAGE = 'getConnectorLanguage';
+    const GET_KEY_TYPE = 'getKeyType';
 
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject
@@ -73,9 +74,9 @@ abstract class AbstractRenderSmokyGrey extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
         $this->renderSmokyGrey = new RenderSmokyGrey(Krexx::$pool);
         $this->setValueByReflection('skinPath', static::PATH_TO_SKIN, $this->renderSmokyGrey);
         $this->mockTemplate();

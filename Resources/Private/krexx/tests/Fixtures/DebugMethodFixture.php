@@ -72,7 +72,7 @@ class DebugMethodFixture
      */
     public function uglyDebugMethod()
     {
-        trigger_error('some message', E_WARNING);
+        trigger_error('some message', E_USER_WARNING);
 
         return __FUNCTION__;
     }

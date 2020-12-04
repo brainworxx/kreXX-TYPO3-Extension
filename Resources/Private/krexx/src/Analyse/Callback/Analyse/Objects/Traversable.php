@@ -164,7 +164,7 @@ class Traversable extends AbstractObjectAnalysis implements
             ->setType(static::TYPE_FOREACH)
             ->addParameter(static::PARAM_DATA, $result)
             ->addParameter(static::PARAM_MULTILINE, $multiline)
-            ->addToJson(static::META_LENGTH, count($result));
+            ->addToJson(static::META_LENGTH, (string)count($result));
 
         // Check, if we are handling a huge array. Huge arrays tend to result in a huge
         // output, maybe even triggering a emergency break. to avoid this, we give them

@@ -56,9 +56,9 @@ class MessagesTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         $this->messagesClass = new Messages(Krexx::$pool);
     }
