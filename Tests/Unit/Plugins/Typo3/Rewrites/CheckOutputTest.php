@@ -41,9 +41,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class CheckOutputTest extends AbstractTest
 {
-    public function tearDown()
+    public function krexxDown()
     {
-        parent::tearDown();
+        parent::krexxDown();
 
         $this->setValueByReflection('indpEnvCache', [], GeneralUtility::class);
     }

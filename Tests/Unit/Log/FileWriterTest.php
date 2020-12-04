@@ -49,9 +49,9 @@ use TYPO3\CMS\Core\Log\LogRecord;
 class FileWriterTest extends AbstractTest
 {
 
-    public function tearDown()
+    public function krexxDown()
     {
-        parent::tearDown();
+        parent::krexxDown();
         ControllerNothing::$count = 0;
         ControllerNothing::$data = [];
         ControllerNothing::$level = [];

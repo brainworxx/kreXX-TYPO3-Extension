@@ -33,7 +33,7 @@
  */
 
 define('TYPO3_version', \Brainworxx\Includekrexx\Tests\Helpers\AbstractTest::TYPO3_VERSION);
-define('PATH_site', 'some/path/');
+define('PATH_site', 'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR);
 define('TYPO3_MODE', 'FE');
 
 include_once __DIR__ . '/../../Resources/Private/krexx/tests/Scripts/Bootstrap.php';

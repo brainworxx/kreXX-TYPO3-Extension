@@ -62,12 +62,12 @@ class LogTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function krexxUp()
     {
         if (class_exists(ModuleData::class) === false) {
             return;
         }
-        parent::setUp();
+        parent::krexxUp();
         $this->simulatePackage('includekrexx', 'whatever');
         $this->log = new Log();
     }

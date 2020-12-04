@@ -58,9 +58,9 @@ class ConfigurationTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
         $this->configuration = new Configuration();
     }
 
@@ -122,10 +122,10 @@ class ConfigurationTest extends AbstractTest
         $isDirMock = $this->getFunctionMock($typo3Namespace, 'is_dir');
         $isDirMock->expects($this->exactly(4))
             ->withConsecutive(
-                [$pathSite . 'typo3temp/tx_includekrexx'],
-                [$pathSite . 'typo3temp/tx_includekrexx/log'],
-                [$pathSite . 'typo3temp/tx_includekrexx/chunks'],
-                [$pathSite . 'typo3temp/tx_includekrexx/config']
+                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx'],
+                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'log'],
+                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'chunks'],
+                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'config']
             )
             ->will($this->returnValue(true));
 
@@ -159,17 +159,17 @@ class ConfigurationTest extends AbstractTest
             'Test the rewrite.'
         );
         $this->assertEquals(
-            'some/path/typo3temp/tx_includekrexx/config/Krexx.ini',
+            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'Krexx',
             SettingsGetter::getConfigFile(),
             'Test the new location of the configuration file.'
         );
         $this->assertEquals(
-            'some/path/typo3temp/tx_includekrexx/chunks/',
+            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'chunks' . DIRECTORY_SEPARATOR,
             SettingsGetter::getChunkFolder(),
             'Test the new location of the chunk folder.'
         );
         $this->assertEquals(
-            'some/path/typo3temp/tx_includekrexx/log/',
+            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR,
             SettingsGetter::getLogFolder(),
             'Test the new location of the log folder.'
         );

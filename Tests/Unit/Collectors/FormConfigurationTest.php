@@ -65,7 +65,7 @@ class FormConfigurationTest extends AbstractTest
         // Point the ini reader to the fixture.
         $this->setValueByReflection(
             'directories',
-            [Config::CONFIG_FOLDER =>__DIR__ . '/../../Fixtures/Config.ini'],
+            [Config::CONFIG_FOLDER => __DIR__ . '/../../Fixtures/Config.'],
             \Krexx::$pool->config
         );
 
@@ -77,11 +77,11 @@ class FormConfigurationTest extends AbstractTest
                 $this->callback(function ($config) {
                     // @see config.ini in the fixtures.
                     return
-                        $config[Config::SETTING_SKIN][Configuration::SETTINGS_VALUE] === Fallback::RENDER_TYPE_INI_NONE &&
+                        $config[Config::SETTING_SKIN][Configuration::SETTINGS_VALUE] === Fallback::RENDER_TYPE_CONFIG_NONE &&
                         $config[Config::SETTING_SKIN][FormConfiguration::SETTINGS_OPTIONS] === [
-                            Fallback::RENDER_TYPE_INI_FULL => Fallback::RENDER_TYPE_INI_FULL,
-                            Fallback::RENDER_TYPE_INI_DISPLAY => Fallback::RENDER_TYPE_INI_DISPLAY,
-                            Fallback::RENDER_TYPE_INI_NONE => Fallback::RENDER_TYPE_INI_NONE,
+                            Fallback::RENDER_TYPE_CONFIG_FULL => Fallback::RENDER_TYPE_CONFIG_FULL,
+                            Fallback::RENDER_TYPE_CONFIG_DISPLAY => Fallback::RENDER_TYPE_CONFIG_DISPLAY,
+                            Fallback::RENDER_TYPE_CONFIG_NONE => Fallback::RENDER_TYPE_CONFIG_NONE,
                         ];
                 })
             );
