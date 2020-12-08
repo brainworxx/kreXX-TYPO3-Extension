@@ -36,16 +36,17 @@
 namespace Brainworxx\Krexx\Tests\Helpers;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Runner\Version;
 
 /**
  * Compatibility wrapper for unit tests.
  *
  * Meh, it's better than a reflection based implementation.
  */
-if (version_compare(phpversion(), '7.1', '<')) {
+if (version_compare(Version::id(), '6.99', '<')) {
 
     /**
-     * Unit tests 6 and 7
+     * Unit tests 6
      *
      * @package Brainworxx\Krexx\Tests\Helpers
      */
@@ -81,6 +82,45 @@ if (version_compare(phpversion(), '7.1', '<')) {
         public function assertStringNotContainsString(string $needle, string $haystack, string $message = '')
         {
             $this->assertNotContains($needle, $haystack, $message);
+        }
+
+        abstract protected function krexxUp();
+
+        abstract protected function krexxDown();
+
+        abstract protected function krexxertPostConditions();
+
+        abstract protected function krexxertPreConditions();
+    }
+
+} elseif (version_compare(Version::id(), '7.99', '<')) {
+    /**
+     * Unit tests 7
+     *
+     * @package Brainworxx\Krexx\Tests\Helpers
+     */
+    abstract class TestCompatibility extends TestCase
+    {
+        protected function setUp()
+        {
+            $this->krexxUp();
+            parent::setUp();
+        }
+
+        protected function tearDown()
+        {
+            $this->krexxDown();
+            parent::tearDown();
+        }
+
+        protected function assertPreConditions()
+        {
+            $this->krexxertPreConditions();
+        }
+
+        protected function assertPostConditions()
+        {
+            $this->krexxertPostConditions();
         }
 
         abstract protected function krexxUp();
