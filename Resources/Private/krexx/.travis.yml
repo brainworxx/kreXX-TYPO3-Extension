@@ -1,22 +1,33 @@
 env:
   global:
     - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+    - XDEBUG_MODE=coverage
 
 language: php
-php:
-  - '7.4'
-  - '7.3'
-  - '7.2'
-  - '7.1'
-  - '7.0'
+
+matrix:
+  include:
+    - php: '8.0'
+      env: COVERAGE="NO"
+    - php: '7.4'
+      env: COVERAGE="YES"
+    - php: '7.3'
+      env: COVERAGE="NO"
+    - php: '7.2'
+      env: COVERAGE="NO"
+    - php: '7.1'
+      env: COVERAGE="NO"
+    - php: '7.0'
+      env: COVERAGE="NO"
 
 install:
   - composer install
 
 before_script:
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+  - if [ "$COVERAGE" == "YES" ]; then curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter; fi
+  - if [ "$COVERAGE" == "YES" ]; then chmod +x ./cc-test-reporter; fi
+  - if [ "$COVERAGE" == "YES" ]; then ./cc-test-reporter before-build; fi
 
 script:
-  - "./vendor/bin/phpunit --testsuite=krexxsuit --coverage-text --coverage-clover build/logs/clover.xml"
+  - "./vendor/bin/phpunit --testsuite=krexxsuit --coverage-clover=./build/logs/clover.xml"
+  - if [ "$COVERAGE" == "YES" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi

@@ -185,7 +185,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
         if (count($possibleCommands) === 1) {
             // Now that we have our actual call, we must remove the krexx-part
             // from it.
-            return $this->removeKrexxPartFromCommand($possibleCommands[0]);
+            return $this->removeKrexxPartFromCommand(array_shift($possibleCommands));
         }
 
         return $varname;

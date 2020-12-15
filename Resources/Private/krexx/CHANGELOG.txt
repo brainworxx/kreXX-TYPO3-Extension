@@ -4,8 +4,11 @@
 - Added apostrophes around string array keys to the SmokyGrey
   skin for better readability.
 - Added support for a JSON configuration file.
+- Added PHP 8.0 support.
 - Bugfix: Endless scrolling when clicking too fast through
   the search.
+- Bugfix: Exception when using one php statement and a krexx
+  call in the same line.
 
 4.0.0
 - Added process resource analysis.

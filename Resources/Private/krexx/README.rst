@@ -2,7 +2,7 @@
 kreXX Debugger
 ==============
 
-.. image:: https://travis-ci.com/brainworxx/kreXX.svg
+.. image:: https://travis-ci.com/brainworxx/kreXX.svg?branch=master
    :target: https://travis-ci.com/brainworxx/kreXX
 .. image:: https://api.codeclimate.com/v1/badges/c9d414a09928ede869c7/maintainability
    :target: https://codeclimate.com/github/brainworxx/kreXX/maintainability
