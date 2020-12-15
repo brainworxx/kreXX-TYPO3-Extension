@@ -36,6 +36,7 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
@@ -72,6 +73,8 @@ class ExpandableChildTest extends AbstractRenderHans
         $this->mockModel(static::RENDER_ME, 'model html');
         $this->mockModel(static::GET_DOMID, 'x12345');
         $this->mockModel(static::GET_HAS_EXTRAS, true);
+        $this->mockModel(static::GET_KEY_TYPE, ProcessConstInterface::TYPE_STRING);
+        $this->mockModel(static::GET_DATA, 'eXXtra');
 
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)
@@ -92,16 +95,17 @@ class ExpandableChildTest extends AbstractRenderHans
         Krexx::$pool->chunks = $chunkMock;
 
         $result = $this->renderHans->renderExpandableChild($this->modelMock, true);
-        $this->assertContains('Stringh', $result);
-        $this->assertContains('In-Tee-Ger', $result);
-        $this->assertContains('another name', $result);
-        $this->assertContains('not normal', $result);
-        $this->assertContains('some conn', $result);
-        $this->assertContains('any conn', $result);
-        $this->assertContains('generated source', $result);
+        $this->assertStringContainsString('Stringh', $result);
+        $this->assertStringContainsString('In-Tee-Ger', $result);
+        $this->assertStringContainsString('another name', $result);
+        $this->assertStringContainsString('not normal', $result);
+        $this->assertStringContainsString('some conn', $result);
+        $this->assertStringContainsString('any conn', $result);
+        $this->assertStringContainsString('generated source', $result);
+        $this->assertStringContainsString(ProcessConstInterface::TYPE_STRING, $result);
         // Stuff from the nest.
-        $this->assertContains('model html', $result);
-        $this->assertContains('x12345', $result);
-        $this->assertNotContains('khidden', $result);
+        $this->assertStringContainsString('model html', $result);
+        $this->assertStringContainsString('x12345', $result);
+        $this->assertStringNotContainsString('khidden', $result);
     }
 }

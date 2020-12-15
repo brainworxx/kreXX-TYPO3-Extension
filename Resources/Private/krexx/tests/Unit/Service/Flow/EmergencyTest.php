@@ -67,18 +67,18 @@ class EmergencyTest extends AbstractTest
     /**
      * Create the emergency class.
      */
-    protected function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
         $this->emergency = new Emergency(Krexx::$pool);
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function tearDown()
+    protected function krexxDown()
     {
-        parent::tearDown();
+        parent::krexxDown();
         $this->setValueByReflection(static::ALL_IS_OK, true, Emergency::class);
     }
 

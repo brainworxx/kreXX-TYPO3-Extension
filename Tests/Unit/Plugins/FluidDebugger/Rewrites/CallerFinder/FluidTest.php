@@ -90,7 +90,7 @@ class FluidTest extends AbstractTest
         $data = new \StdClass();
         $result = $fluid->findCaller($headline, $data);
 
-        $this->assertContains('FluidTemplate1.html', $result['file']);
+        $this->assertStringContainsString('FluidTemplate1.html', $result['file']);
         $this->assertEquals('_all', $result[static::VARMANE]);
         $this->assertEquals('Fluid analysis of _all, stdClass', $result['type']);
         $this->assertNotEmpty($result['date']);
@@ -133,7 +133,7 @@ class FluidTest extends AbstractTest
         $data = 'text';
         $result = $fluid->findCaller($headline, $data);
 
-        $this->assertContains('FluidTemplate2.html', $result['file']);
+        $this->assertStringContainsString('FluidTemplate2.html', $result['file']);
         $this->assertEquals('text', $result[static::VARMANE]);
         $this->assertEquals('Fluid analysis of text, string', $result['type']);
         $this->assertNotEmpty($result['date']);
@@ -182,7 +182,7 @@ class FluidTest extends AbstractTest
         $data =  [5];
         $result = $fluid->findCaller($headline, $data);
 
-        $this->assertContains('FluidTemplate3.html', $result['file']);
+        $this->assertStringContainsString('FluidTemplate3.html', $result['file']);
         $this->assertEquals('fluidvar', $result[static::VARMANE]);
         $this->assertEquals('Fluid analysis of fluidvar, array', $result['type']);
         $this->assertNotEmpty($result['date']);

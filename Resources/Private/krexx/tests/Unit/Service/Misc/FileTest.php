@@ -62,9 +62,9 @@ class FileTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
         $this->file = new File(Krexx::$pool);
         // Make sure we have a doc root, independent from everything.
         $this->setValueByReflection(static::DOC_ROOT, 'doc ruth', $this->file);

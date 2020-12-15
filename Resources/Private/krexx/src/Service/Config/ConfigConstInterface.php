@@ -426,34 +426,34 @@ interface ConfigConstInterface
     const RENDER_TYPE_NONE = 'None';
 
     /**
-     * Value from the ini file.
+     * Value from the configuration file.
      *
      * Tells the renderer, that this value will be displayed in the FE and can
      * be edited.
      *
      * @var string
      */
-    const RENDER_TYPE_INI_FULL = 'full';
+    const RENDER_TYPE_CONFIG_FULL = 'full';
 
     /**
-     * Value from the ini file.
+     * Value from the configuration file.
      *
      * Tells the renderer, that this value will be displayed in the FE.
      * kreXX will not accept values for this configuration.
      *
      * @var string
      */
-    const RENDER_TYPE_INI_DISPLAY = 'display';
+    const RENDER_TYPE_CONFIG_DISPLAY = 'display';
 
     /**
-     * Value from the ini file.
+     * Value from the configuration file.
      *
      * Tells the renderer, that this value will not be displayed in the FE.
      * kreXX will not accept values for this configuration.
      *
      * @var string
      */
-    const RENDER_TYPE_INI_NONE = 'none';
+    const RENDER_TYPE_CONFIG_NONE = 'none';
 
     /**
      * Name of the smokygrey skin.
@@ -482,4 +482,43 @@ interface ConfigConstInterface
      * @var string
      */
     const SKIN_DIRECTORY = 'dir';
+
+    /**
+     * Value from the ini file.
+     *
+     * Tells the renderer, that this value will be displayed in the FE and can
+     * be edited.
+     *
+     * @deprecated
+     *   Since 4.0.1. Will be removed. Use RENDER_TYPE_CONFIG_FULL instead.
+     *
+     * @var string
+     */
+    const RENDER_TYPE_INI_FULL = 'full';
+
+    /**
+     * Value from the ini file.
+     *
+     * Tells the renderer, that this value will be displayed in the FE.
+     * kreXX will not accept values for this configuration.
+     *
+     * @deprecated
+     *   Since 4.0.1. Will be removed. Use RENDER_TYPE_CONFIG_DISPLAY instead.
+     *
+     * @var string
+     */
+    const RENDER_TYPE_INI_DISPLAY = 'display';
+
+    /**
+     * Value from the ini file.
+     *
+     * Tells the renderer, that this value will not be displayed in the FE.
+     * kreXX will not accept values for this configuration.
+     *
+     * @deprecated
+     *   Since 4.0.1. Will be removed. Use RENDER_TYPE_CONFIG_NONE instead.
+     *
+     * @var string
+     */
+    const RENDER_TYPE_INI_NONE = 'none';
 }

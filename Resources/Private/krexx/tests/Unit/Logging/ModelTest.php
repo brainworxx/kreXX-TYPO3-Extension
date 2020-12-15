@@ -49,9 +49,9 @@ class ModelTest extends AbstractTest
      */
     protected $model;
 
-    protected function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         $this->model = new \Brainworxx\Krexx\Logging\Model();
     }

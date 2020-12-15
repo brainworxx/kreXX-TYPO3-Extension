@@ -64,7 +64,7 @@ class MessagesTest extends AbstractRenderHans
 
         $result = $this->renderHans->renderMessages($messages);
         foreach ($fixture as $text) {
-            $this->assertContains($text, $result);
+            $this->assertStringContainsString($text, $result);
         }
     }
 }

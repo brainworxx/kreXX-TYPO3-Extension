@@ -57,9 +57,9 @@ class CookieTest extends AbstractTest
      */
     protected $fixture;
 
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         $this->fixture = [
             static::SETTING_01 => static::VALUE_01,

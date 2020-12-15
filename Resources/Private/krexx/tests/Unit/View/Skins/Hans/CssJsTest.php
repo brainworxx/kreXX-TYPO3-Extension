@@ -50,7 +50,7 @@ class CssJsTest extends AbstractRenderHans
         $javaScript = 'onClick="alert(\'xss\');"';
 
         $result = $this->renderHans->renderCssJs($css, $javaScript);
-        $this->assertContains($css, $result);
-        $this->assertContains($javaScript, $result);
+        $this->assertStringContainsString($css, $result);
+        $this->assertStringContainsString($javaScript, $result);
     }
 }

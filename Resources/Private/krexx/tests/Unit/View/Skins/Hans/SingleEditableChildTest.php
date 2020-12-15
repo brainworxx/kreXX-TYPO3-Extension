@@ -67,11 +67,11 @@ class SingleEditableChildTest extends AbstractRenderHans
         Krexx::$pool->config = $configMock;
 
         $result = $this->renderHans->renderSingleEditableChild($this->modelMock);
-        $this->assertContains('nullachtwhatever', $result);
-        $this->assertContains('myinputvalue', $result);
-        $this->assertContains('myData', $result);
-        $this->assertContains('myNormal', $result);
-        $this->assertContains('<input', $result);
+        $this->assertStringContainsString('nullachtwhatever', $result);
+        $this->assertStringContainsString('myinputvalue', $result);
+        $this->assertStringContainsString('myData', $result);
+        $this->assertStringContainsString('myNormal', $result);
+        $this->assertStringContainsString('<input', $result);
     }
 
     /**
@@ -108,11 +108,11 @@ class SingleEditableChildTest extends AbstractRenderHans
         Krexx::$pool->config = $configMock;
 
         $result = $this->renderHans->renderSingleEditableChild($this->modelMock);
-        $this->assertContains(Fallback::SETTING_SKIN, $result);
-        $this->assertContains($selectedSkin, $result);
-        $this->assertContains('Herbert', $result);
-        $this->assertContains('more data', $result);
-        $this->assertContains('not normal', $result);
-        $this->assertContains('selected="selected"', $result);
+        $this->assertStringContainsString(Fallback::SETTING_SKIN, $result);
+        $this->assertStringContainsString($selectedSkin, $result);
+        $this->assertStringContainsString('Herbert', $result);
+        $this->assertStringContainsString('more data', $result);
+        $this->assertStringContainsString('not normal', $result);
+        $this->assertStringContainsString('selected="selected"', $result);
     }
 }

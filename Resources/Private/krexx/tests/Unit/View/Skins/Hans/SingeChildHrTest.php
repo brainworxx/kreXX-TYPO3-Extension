@@ -46,6 +46,6 @@ class SingeChildHrTest extends AbstractRenderHans
      */
     public function testRenderSingeChildHr()
     {
-        $this->assertContains('HR does not mean human resources', $this->renderHans->renderSingeChildHr());
+        $this->assertStringContainsString('HR does not mean human resources', $this->renderHans->renderSingeChildHr());
     }
 }

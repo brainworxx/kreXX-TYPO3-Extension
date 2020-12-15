@@ -49,18 +49,18 @@ class LllStringTest extends AbstractTest
 
     protected $originalLang;
 
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
         // We need to replace this one, because we mock the living hell out of it.
         if (isset($GLOBALS[static::TSFE])) {
             $this->originalLang = $GLOBALS[static::TSFE];
         }
     }
 
-    public function tearDown()
+    public function krexxDown()
     {
-        parent::tearDown();
+        parent::krexxDown();
         // Restore the language service to it's former "glory".
         if (isset($this->originalLang)) {
            $GLOBALS[static::TSFE] = $this->originalLang;

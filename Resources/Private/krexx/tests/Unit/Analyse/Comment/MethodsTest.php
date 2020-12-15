@@ -53,9 +53,9 @@ class MethodsTest extends AbstractTest
      * {@inheritdoc}
      * Creating out class instance to test.
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         $this->methodComment = new Methods(Krexx::$pool);
     }

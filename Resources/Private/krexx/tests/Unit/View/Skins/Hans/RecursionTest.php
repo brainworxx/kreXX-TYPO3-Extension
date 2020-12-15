@@ -62,12 +62,12 @@ class RecursionTest extends AbstractRenderHans
 
         // Run the test.
         $result = $this->renderHans->renderRecursion($this->modelMock);
-        $this->assertContains('some name', $result);
-        $this->assertContains('the DOM ID', $result);
-        $this->assertContains('normal stuff', $result);
-        $this->assertContains('connector left', $result);
-        $this->assertContains('connector right', $result);
-        $this->assertContains('Jason', $result);
-        $this->assertContains('and the testonauts', $result);
+        $this->assertStringContainsString('some name', $result);
+        $this->assertStringContainsString('the DOM ID', $result);
+        $this->assertStringContainsString('normal stuff', $result);
+        $this->assertStringContainsString('connector left', $result);
+        $this->assertStringContainsString('connector right', $result);
+        $this->assertStringContainsString('Jason', $result);
+        $this->assertStringContainsString('and the testonauts', $result);
     }
 }

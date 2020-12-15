@@ -57,9 +57,9 @@ class AbstractRegistration extends AbstractTest
      */
     protected $registration;
 
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
         $this->registration = new Registration();
     }
 
@@ -68,9 +68,9 @@ class AbstractRegistration extends AbstractTest
      *
      * Also reset the static values in the plugin registration.
      */
-    public function tearDown()
+    protected function krexxDown()
     {
-        parent::tearDown();
+        parent::krexxDown();
 
         // Reset everything.
         $this->setValueByReflection(static::PLUGINS, [], $this->registration);

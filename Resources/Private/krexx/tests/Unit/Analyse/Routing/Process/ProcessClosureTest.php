@@ -113,9 +113,9 @@ class ProcessClosureTest extends AbstractTest
         $parameters = $model->getParameters()[ProcessClosure::PARAM_DATA];
 
         // Meta data inside the callback parameters
-        $this->assertContains('Just another fixture.', $parameters[ProcessClosure::META_COMMENT]);
+        $this->assertStringContainsString('Just another fixture.', $parameters[ProcessClosure::META_COMMENT]);
         $this->assertEquals($containingCode, $parameters[ProcessClosure::META_SOURCE]);
-        $this->assertContains($filePath, $parameters[ProcessClosure::META_DECLARED_IN]);
+        $this->assertStringContainsString($filePath, $parameters[ProcessClosure::META_DECLARED_IN]);
         $this->assertEquals(__NAMESPACE__, $parameters[ProcessClosure::META_NAMESPACE]);
         $this->assertEquals($parameter, $parameters[ProcessClosure::META_PARAM_NO . '1']);
     }

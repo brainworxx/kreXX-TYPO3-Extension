@@ -135,20 +135,20 @@ abstract class AbstractController implements ConfigConstInterface
      */
     protected function outputFooter(array $caller, bool $isExpanded = false): string
     {
-        // Now we need to stitch together the content of the ini file
+        // Now we need to stitch together the content of the configuration file
         // as well as it's path.
-        $pathToIni = $this->pool->config->getPathToIniFile();
-        if ($this->pool->fileService->fileIsReadable($pathToIni) === true) {
+        $pathToConfig = $this->pool->config->getPathToConfigFile() . $this->pool->config->getConfigFileType();
+        if ($this->pool->fileService->fileIsReadable($pathToConfig) === true) {
             $path = $this->pool->messages->getHelp('currentConfig');
         } else {
             // Project settings are not accessible
             // tell the user, that we are using fallback settings.
-            $path = $this->pool->messages->getHelp('iniNotFound');
+            $path = $this->pool->messages->getHelp('configFileNotFound');
         }
 
         $model = $this->pool->createClass(Model::class)
             ->setName($path)
-            ->setType($this->pool->fileService->filterFilePath($pathToIni))
+            ->setType($this->pool->fileService->filterFilePath($pathToConfig))
             ->setHelpid('currentSettings')
             ->injectCallback(
                 $this->pool->createClass(ThroughConfig::class)
@@ -171,33 +171,35 @@ abstract class AbstractController implements ConfigConstInterface
     {
         // We only do this once per output type.
         $result = isset(static::$jsCssSend[$this->destination]);
-        static::$jsCssSend[$this->destination] = true;
         if ($result === true) {
             // Been here, done that.
             return '';
         }
+        static::$jsCssSend[$this->destination] = true;
 
-        // Adding our DOM tools to the js.
+        // Adding the js to the output.
         if ($this->pool->fileService->fileIsReadable(KREXX_DIR . 'resources/jsLibs/kdt.min.js') === true) {
-            $kdtPath = KREXX_DIR . 'resources/jsLibs/kdt.min.js';
+            $jsCode = $this->pool->fileService->getFileContents(KREXX_DIR . 'resources/jsLibs/kdt.min.js');
         } else {
-            $kdtPath = KREXX_DIR . 'resources/jsLibs/kdt.js';
+            $jsCode = $this->pool->fileService->getFileContents(KREXX_DIR . 'resources/jsLibs/kdt.js');
         }
-        $jsCode = $this->pool->fileService->getFileContents($kdtPath);
 
         // Adding the skin css and js.
         $skinDirectory = $this->pool->config->getSkinDirectory();
+
         // Get the css file.
-        $css = $this->pool->fileService->getFileContents($skinDirectory . 'skin.css');
-        // Remove whitespace.
-        $css = preg_replace('/\s+/', ' ', $css);
+        if ($this->pool->fileService->fileIsReadable($skinDirectory . 'skin.min.css') === true) {
+            $css = $this->pool->fileService->getFileContents($skinDirectory . 'skin.min.css');
+        } else {
+            $css = $this->pool->fileService->getFileContents($skinDirectory . 'skin.css');
+        }
+
         // Krexx.js is comes directly form the template.
         if ($this->pool->fileService->fileIsReadable($skinDirectory . 'krexx.min.js') === true) {
-            $skinJsPath = $skinDirectory . 'krexx.min.js';
+            $jsCode .= $this->pool->fileService->getFileContents($skinDirectory . 'krexx.min.js');
         } else {
-            $skinJsPath = $skinDirectory . 'krexx.js';
+            $jsCode .= $this->pool->fileService->getFileContents($skinDirectory . 'krexx.js');
         }
-        $jsCode .= $this->pool->fileService->getFileContents($skinJsPath);
 
         return $this->pool->render->renderCssJs($css, $jsCode);
     }

@@ -56,9 +56,9 @@ class RegistrationTest extends AbstractRegistration
      */
     public function testSetConfigFile()
     {
-        $path = 'some file.ini';
+        $path = 'some' . DIRECTORY_SEPARATOR . 'file.ini';
         Registration::setConfigFile($path);
-        $this->assertEquals($path, SettingsGetter::getConfigFile());
+        $this->assertEquals('some' . DIRECTORY_SEPARATOR . 'file', SettingsGetter::getConfigFile());
     }
 
     /**

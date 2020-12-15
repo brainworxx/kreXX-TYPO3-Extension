@@ -45,14 +45,14 @@ use stdClass;
 
 class AbstractFactoryTest extends AbstractTest
 {
-    public function tearDown()
+    protected function krexxDown()
     {
         // Remove a sdtClass, which may replace the pool.
         Krexx::$pool = null;
         $this->setValueByReflection('rewriteList', [], Registration::class);
         Pool::createPool();
 
-        parent::tearDown();
+        parent::krexxDown();
     }
 
     /**

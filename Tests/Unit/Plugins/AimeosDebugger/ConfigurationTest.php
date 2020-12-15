@@ -57,9 +57,9 @@ class ConfigurationTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
         $this->configuraton = new Configuration();
     }
 

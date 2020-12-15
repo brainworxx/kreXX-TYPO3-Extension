@@ -74,9 +74,9 @@ class ThroughMetaTest extends AbstractTest
      */
     protected $renderNothing;
 
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         $this->throughMeta = new ThroughMeta(Krexx::$pool);
         // Mock the redner class, to prevent further processing.

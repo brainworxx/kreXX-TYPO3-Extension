@@ -38,8 +38,8 @@ use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use Brainworxx\Krexx\Tests\Helpers\TestCompatibility;
 use phpmock\phpunit\PHPMock;
-use PHPUnit\Framework\TestCase;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\Environment;
@@ -56,7 +56,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
-abstract class AbstractTest extends TestCase
+abstract class AbstractTest extends TestCompatibility
 {
     use PHPMock;
 
@@ -67,9 +67,8 @@ abstract class AbstractTest extends TestCase
     /**
      * Make sure, that we always havbe a working pool.
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
         $this->resetSingletonInstances = true;
         // Reset the pool, just in case.
         Krexx::$pool = null;
@@ -79,7 +78,7 @@ abstract class AbstractTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function tearDown()
+    protected function krexxDown()
     {
         $this->setValueByReflection('packageManager', null, ExtensionManagementUtility::class);
         // Reset the possible mocks in the general utility.
@@ -318,5 +317,23 @@ abstract class AbstractTest extends TestCase
             ->method('getContentObject')
             ->will($this->returnValue($contentObject));
         $this->setValueByReflection('configurationManager', $configurationManager, $controller);
+    }
+
+    /**
+     * Performs assertions shared by all tests of a test case.
+     *
+     * This method is called between test and tearDown().
+     */
+    protected function krexxertPostConditions()
+    {
+    }
+
+    /**
+     * Performs assertions shared by all tests of a test case.
+     *
+     * This method is called between setUp() and test.
+     */
+    protected function krexxertPreConditions()
+    {
     }
 }

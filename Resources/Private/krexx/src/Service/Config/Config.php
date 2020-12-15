@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Service\Config;
 
 use Brainworxx\Krexx\Service\Config\From\Cookie;
+use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Config\From\Ini;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
@@ -95,9 +96,19 @@ class Config extends Fallback
     /**
      * Our ini file configuration handler.
      *
+     * @deprecated
+     *   Since 4.0.1. Will be removed. Use $fileConfig instead.
+     *
      * @var Ini
      */
     protected $iniConfig;
+
+    /**
+     * Our file configuration handler.
+     *
+     * @var File
+     */
+    protected $fileConfig;
 
     /**
      * Our cookie configuration handler.
@@ -144,8 +155,8 @@ class Config extends Fallback
         $this->validation = $pool->createClass(Validation::class);
         $pool->config = $this;
 
-        $this->iniConfig = $pool->createClass(Ini::class)
-            ->loadIniFile($this->getPathToIniFile());
+        $this->iniConfig = $this->fileConfig = $pool->createClass(File::class)
+            ->loadFile($this->getPathToConfigFile());
         $this->cookieConfig = $pool->createClass(Cookie::class);
 
         // Loading the settings.
@@ -243,16 +254,16 @@ class Config extends Fallback
             }
         }
 
-        // Do we have a value in the ini?
-        $iniSettings = $this->iniConfig->getConfigFromFile($section, $name);
-        if ($iniSettings === null) {
+        // Do we have a value in the configuration file?
+        $fileSettings = $this->fileConfig->getConfigFromFile($section, $name);
+        if ($fileSettings === null) {
             // Take the factory settings.
             $model->setValue($this->feConfigFallback[$name][static::VALUE])->setSource('Factory settings');
             $this->settings[$name] = $model;
             return $this;
         }
 
-        $model->setValue($iniSettings)->setSource('Krexx.ini settings');
+        $model->setValue($fileSettings)->setSource('Configuration file settings');
         $this->settings[$name] = $model;
 
         return $this;
@@ -283,10 +294,27 @@ class Config extends Fallback
     /**
      * Get the path to the configuration file.
      *
+     * @deprecated
+     *   Since 4.0.1. Will be removed. Use getPathToConfigFile
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
      * @return string
      *   The absolute path to the Krexx.ini.
      */
     public function getPathToIniFile(): string
+    {
+        return $this->getPathToConfigFile();
+    }
+
+    /**
+     * Get the path to the configuration file.
+     *
+     * @return string
+     *   The absolute path to the configuration file.
+     */
+    public function getPathToConfigFile(): string
     {
         return $this->directories[static::CONFIG_FOLDER];
     }
@@ -322,6 +350,16 @@ class Config extends Fallback
     }
 
     /**
+     * Getter for the configuration file type.
+     *
+     * @return string
+     */
+    public function getConfigFileType(): string
+    {
+        return $this->fileConfig->getConfigFileType();
+    }
+
+    /**
      * Create the model with the fe editing settings.
      *
      * @param string $name
@@ -332,17 +370,17 @@ class Config extends Fallback
      */
     protected function prepareModelWithFeSettings(string $name): Model
     {
-        $iniFeSettings = $this->iniConfig->getFeConfigFromFile($name);
+        $fileFeSettings = $this->fileConfig->getFeConfigFromFile($name);
 
-        if ($iniFeSettings === null) {
+        if ($fileFeSettings === null) {
             // Use the fallback values.
-            $iniFeSettings = $this->feConfigFallback[$name][static::RENDER];
+            $fileFeSettings = $this->feConfigFallback[$name][static::RENDER];
         }
         $section = $this->feConfigFallback[$name][static::SECTION];
 
         return $this->pool->createClass(Model::class)
             ->setSection($section)
-            ->setEditable($iniFeSettings[static::RENDER_EDITABLE] === static::VALUE_TRUE)
-            ->setType($iniFeSettings[static::RENDER_TYPE]);
+            ->setEditable($fileFeSettings[static::RENDER_EDITABLE] === static::VALUE_TRUE)
+            ->setType($fileFeSettings[static::RENDER_TYPE]);
     }
 }

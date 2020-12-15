@@ -42,9 +42,9 @@ class ConnectorsTest extends AbstractTest
 {
     const TEST_STRING = 'test me';
 
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         $this->connectors = new Connectors();
     }

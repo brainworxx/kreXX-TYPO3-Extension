@@ -51,7 +51,7 @@ class ButtonTest extends AbstractRenderHans
         $this->mockModel(static::GET_NORMAL, 'doit');
 
         $result = $this->renderHans->renderButton($this->modelMock);
-        $this->assertContains('clickme', $result);
-        $this->assertContains('doit', $result);
+        $this->assertStringContainsString('clickme', $result);
+        $this->assertStringContainsString('doit', $result);
     }
 }

@@ -38,7 +38,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Misc;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
-use Brainworxx\Krexx\Service\Config\From\Ini;
+use Brainworxx\Krexx\Service\Config\From\File as ConfigFromFile;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\Cleanup;
 use Brainworxx\Krexx\Service\Misc\File;
@@ -63,15 +63,15 @@ class CleanupTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
         $this->cleanup = new Cleanup(Krexx::$pool);
     }
 
-    public function tearDown()
+    protected function krexxDown()
     {
-        parent::tearDown();
+        parent::krexxDown();
         $this->setValueByReflection(static::CHUNKS_DONE, false, $this->cleanup);
     }
 
@@ -156,7 +156,7 @@ class CleanupTest extends AbstractTest
 
         // Prepare the configuration
         ConfigSupplier::$overwriteValues[Fallback::SETTING_MAX_FILES] = '1';
-        Registration::addRewrite(Ini::class, ConfigSupplier::class);
+        Registration::addRewrite(ConfigFromFile::class, ConfigSupplier::class);
         Registration::setLogFolder($logDir);
         Krexx::$pool = null;
         Pool::createPool();

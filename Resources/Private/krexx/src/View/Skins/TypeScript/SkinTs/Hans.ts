@@ -69,6 +69,13 @@ class Hans
     protected selectors:Selectors;
 
     /**
+     * The last jumpTo to interval.
+     *
+     * @var {number}
+     */
+    protected jumpToInterval:number = 0;
+
+    /**
      * Defining all selectors for the run method.
      */
     constructor()
@@ -331,7 +338,10 @@ class Hans
 
         // We also need to check if the setting of the new value was successful.
         let lastValue:number = container.scrollTop;
-        let interval:number = setInterval(function () {
+
+        // Make sure to end the last interval before starting a new one.
+        clearInterval(this.jumpToInterval);
+        let interval:number = this.jumpToInterval = setInterval(function () {
             container.scrollTop += step;
             if (Math.abs(container.scrollTop - destination) <= Math.abs(step) || container.scrollTop === lastValue) {
                 // We are here now, the next step would take us too far.

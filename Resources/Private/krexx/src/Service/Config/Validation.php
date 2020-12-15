@@ -299,7 +299,7 @@ class Validation extends Fallback
      */
     protected function evalBool($value, string $name, string $group): bool
     {
-        $result = ($value === static::VALUE_TRUE || $value === static::VALUE_FALSE);
+        $result = ($value === static::VALUE_TRUE || $value === static::VALUE_FALSE || is_bool($value));
         if ($result === false) {
             $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR_BOOL, [$group, $name]);
         }

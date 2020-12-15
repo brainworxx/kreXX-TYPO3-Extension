@@ -57,9 +57,9 @@ class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
      *
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         // Subscribing.
         Registration::registerEvent(

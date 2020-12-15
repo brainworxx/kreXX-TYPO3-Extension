@@ -36,6 +36,7 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Analyse\Code\Codegen;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
@@ -61,6 +62,7 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
         $this->mockModel(static::GET_JSON, ['Voldemort' => 'noNose.']);
         $this->mockModel(static::GET_DOMID, 'passport');
         $this->mockModel(static::RENDER_ME, 'birdnest');
+        $this->mockModel(static::GET_KEY_TYPE, ProcessConstInterface::TYPE_STRING);
 
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)
@@ -89,14 +91,15 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
         Krexx::$pool->codegenHandler = $codegenMock;
 
         $result = $this->renderSmokyGrey->renderExpandableChild($this->modelMock);
-        $this->assertContains('Model name', $result);
-        $this->assertContains('my', $result);
-        $this->assertContains('type', $result);
-        $this->assertContains('Turbo Pasquale', $result);
-        $this->assertContains('I am not', $result);
-        $this->assertContains('he who must not be pampered', $result);
-        $this->assertContains('noNose.', $result);
-        $this->assertContains('passport', $result);
-        $this->assertContains('birdnest', $result);
+        $this->assertStringContainsString('Model name', $result);
+        $this->assertStringContainsString('my', $result);
+        $this->assertStringContainsString('type', $result);
+        $this->assertStringContainsString('Turbo Pasquale', $result);
+        $this->assertStringContainsString('I am not', $result);
+        $this->assertStringContainsString('he who must not be pampered', $result);
+        $this->assertStringContainsString('noNose.', $result);
+        $this->assertStringContainsString('passport', $result);
+        $this->assertStringContainsString('birdnest', $result);
+        $this->assertStringContainsString(ProcessConstInterface::TYPE_STRING, $result);
     }
 }

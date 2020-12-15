@@ -54,9 +54,9 @@ class BootstrapTest extends AbstractTest
      */
     protected $bootstrap;
 
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
         $this->bootstrap = new Bootstrap();
     }
 

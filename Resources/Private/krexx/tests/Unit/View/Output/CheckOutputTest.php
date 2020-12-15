@@ -52,7 +52,7 @@ class CheckOutputTest extends AbstractTest
      *
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function krexxUp()
     {
         Pool::createPool();
     }
@@ -60,9 +60,9 @@ class CheckOutputTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    public function tearDown()
+    protected function krexxDown()
     {
-        parent::tearDown();
+        parent::krexxDown();
 
         unset($_SERVER[static::HTTP_X_REQUESTED_WITH]);
         unset($_SERVER[CheckOutput::REMOTE_ADDRESS]);

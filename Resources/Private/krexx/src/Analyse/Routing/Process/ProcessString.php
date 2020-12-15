@@ -211,7 +211,7 @@ class ProcessString extends AbstractRouting implements
             $model->addToJson(static::META_ENCODING, $encoding);
         }
 
-        $model->setType(static::TYPE_STRING . $length)->addToJson(static::META_LENGTH, $length);
+        $model->setType(static::TYPE_STRING . $length)->addToJson(static::META_LENGTH, (string)$length);
 
         return $length;
     }

@@ -51,8 +51,8 @@ class BacktraceSourceLineTest extends AbstractRenderHans
         $sourceCode = 'some code we want to display';
 
         $result = $this->renderHans->renderBacktraceSourceLine($className, $lineNumber, $sourceCode);
-        $this->assertContains($className, $result);
-        $this->assertContains($lineNumber, $result);
-        $this->assertContains($sourceCode, $result);
+        $this->assertStringContainsString($className, $result);
+        $this->assertStringContainsString($lineNumber, $result);
+        $this->assertStringContainsString($sourceCode, $result);
     }
 }

@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 
 /**
  * Array analysis methods.
@@ -56,7 +57,8 @@ use Brainworxx\Krexx\Analyse\Model;
 class ThroughArray extends AbstractCallback implements
     CallbackConstInterface,
     CodegenConstInterface,
-    ConnectorsConstInterface
+    ConnectorsConstInterface,
+    ProcessConstInterface
 {
 
     /**
@@ -89,6 +91,10 @@ class ThroughArray extends AbstractCallback implements
 
             /** @var Model $model */
             $model = $this->pool->createClass(Model::class)->setData($value)->setCodeGenType($multilineCodeGen);
+
+            if (is_string($key) === true) {
+                $model->setKeyType(static::TYPE_STRING);
+            }
 
             if (array_key_exists($key, $array) === false) {
                 // Looks like we have an inaccessible array value here.

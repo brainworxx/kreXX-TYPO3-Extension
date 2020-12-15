@@ -64,9 +64,9 @@ class ModelTest extends AbstractTest
      * {@inheritdoc}
      *
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
         $this->model = new Model(Krexx::$pool);
     }
 
@@ -75,9 +75,9 @@ class ModelTest extends AbstractTest
      *
      * {@inheritdoc}
      */
-    public function tearDown()
+    protected function krexxDown()
     {
-        parent::tearDown();
+        parent::krexxDown();
         unset($this->modelRef);
     }
 
@@ -622,5 +622,18 @@ class ModelTest extends AbstractTest
         $data = 'string';
         $this->assertEquals($this->model, $this->model->setReturnType($data));
         $this->assertEquals($data, $this->model->getReturnType(), 'Get of it out what you put in.');
+    }
+
+    /**
+     * Test the setter/getter for the key type.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Model::setKeyType
+     * @covers \Brainworxx\Krexx\Analyse\Model::getKeyType
+     */
+    public function testSetGetKeyType()
+    {
+        $data = 'just a value';
+        $this->assertEquals($this->model, $this->model->setKeyType($data));
+        $this->assertEquals($data, $this->model->getKeyType(), 'Get of it out what you put in.');
     }
 }

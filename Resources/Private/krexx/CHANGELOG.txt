@@ -1,5 +1,11 @@
 4.0.1
 - Added a log model to use for a logger implementation.
+- Added .min. support for css files.
+- Added apostrophes around string array keys to the SmokyGrey
+  skin for better readability.
+- Added support for a JSON configuration file.
+- Bugfix: Endless scrolling when clicking too fast through
+  the search.
 
 4.0.0
 - Added process resource analysis.
@@ -10,7 +16,7 @@
 - Added return type to the method and function analysis.
 - Added additional data to the constants analysis for PHP 7.1
   and higher. The scope analysis now respects their visibility.
-- Added logging shothand "krexxlog();".
+- Added logging shorthand "krexxlog();".
 - Change: Removed all deprecations.
 - Change: Removed the PHP 5.x fatal error handler.
 - Change: Dropped PHP 5.x support.

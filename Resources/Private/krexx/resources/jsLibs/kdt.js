@@ -527,6 +527,7 @@ var SearchConfig = (function () {
 var Hans = (function () {
     function Hans() {
         var _this = this;
+        this.jumpToInterval = 0;
         this.toggle = function (event, element) {
             _this.kdt.toggleClass(element, 'kopened');
             var sibling = element.nextElementSibling;
@@ -563,7 +564,8 @@ var Hans = (function () {
                 step = Math.round(diff / 12) * -1;
             }
             var lastValue = container.scrollTop;
-            var interval = setInterval(function () {
+            clearInterval(_this.jumpToInterval);
+            var interval = _this.jumpToInterval = setInterval(function () {
                 container.scrollTop += step;
                 if (Math.abs(container.scrollTop - destination) <= Math.abs(step) || container.scrollTop === lastValue) {
                     container.scrollTop = destination;
@@ -844,7 +846,8 @@ var SmokyGrey = (function (_super) {
                     step_1 = Math.round(diff / 12) * -1;
                 }
                 var lastValue_1 = container[0].scrollTop;
-                var interval_1 = setInterval(function () {
+                clearInterval(_this.jumpToInterval);
+                var interval_1 = _this.jumpToInterval = setInterval(function () {
                     container[0].scrollTop += step_1;
                     if (Math.abs(container[0].scrollTop - destination_1) <= Math.abs(step_1) || container[0].scrollTop === lastValue_1) {
                         container[0].scrollTop = destination_1;

@@ -63,9 +63,9 @@ class ProcessStringTest extends AbstractTest
      */
     protected $processString;
 
-    protected function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         $this->processString = new ProcessString(Krexx::$pool);
         $this->mockEmergencyHandler();

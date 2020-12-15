@@ -70,9 +70,9 @@ class TraversableTest extends AbstractTest
      *
      * {@inheritdoc}
      */
-    public function setUp()
+    public function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         // Create in instance of the class to test
         $this->traversable = new Traversable(Krexx::$pool);

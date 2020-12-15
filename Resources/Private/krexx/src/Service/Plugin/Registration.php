@@ -137,7 +137,8 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      */
     public static function setConfigFile(string $path)
     {
-        static::$configFile = $path;
+        $parts = pathinfo($path);
+        static::$configFile = $parts['dirname'] . DIRECTORY_SEPARATOR . $parts['filename'];
     }
 
     /**

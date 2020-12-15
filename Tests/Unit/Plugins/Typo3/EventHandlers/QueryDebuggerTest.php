@@ -70,9 +70,9 @@ class QueryDebuggerTest extends AbstractTest implements CallbackConstInterface
      *
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function krexxUp()
     {
-        parent::setUp();
+        parent::krexxUp();
 
         // Subscribing.
         Registration::registerEvent(
@@ -82,9 +82,9 @@ class QueryDebuggerTest extends AbstractTest implements CallbackConstInterface
         Krexx::$pool->eventService = new Event(Krexx::$pool);
     }
 
-    public function tearDown()
+    public function krexxDown()
     {
-        parent::tearDown();
+        parent::krexxDown();
 
         // Reset the possible mocks in the general utility.
         $this->setValueByReflection(static::FINAL_CLASS_NAME_CACHE, [], GeneralUtility::class);
