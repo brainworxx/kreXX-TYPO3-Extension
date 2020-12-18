@@ -65,7 +65,7 @@ class FormConfigurationTest extends AbstractTest
         // Point the ini reader to the fixture.
         $this->setValueByReflection(
             'directories',
-            [Config::CONFIG_FOLDER => __DIR__ . '/../../Fixtures/Config.'],
+            [Config::CONFIG_FOLDER => __DIR__ . '/../../Fixtures/Config.ini'],
             \Krexx::$pool->config
         );
 

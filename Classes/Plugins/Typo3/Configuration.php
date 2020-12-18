@@ -105,14 +105,14 @@ class Configuration implements PluginConfigInterface, ConstInterface
 
         // See if we must create a temp directory for kreXX.
         $tempPaths = [
-            'main' => $pathSite . 'typo3temp' .DIRECTORY_SEPARATOR . 'tx_includekrexx',
-            'log' => $pathSite . 'typo3temp' .DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'log',
-            'chunks' => $pathSite . 'typo3temp' .DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'chunks',
-            'config' => $pathSite . 'typo3temp' .DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'config',
+            'main' => $pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx',
+            'log' => $pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'log',
+            'chunks' => $pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'chunks',
+            'config' => $pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'config',
         ];
 
         // Register it!
-        Registration::setConfigFile($tempPaths['config'] . '/Krexx.ini');
+        Registration::setConfigFile($tempPaths['config'] . DIRECTORY_SEPARATOR . 'Krexx.ini');
         Registration::setChunksFolder($tempPaths['chunks'] . DIRECTORY_SEPARATOR);
         Registration::setLogFolder($tempPaths['log'] . DIRECTORY_SEPARATOR);
         $this->createWorkingDirectories($tempPaths);

@@ -93,19 +93,19 @@ class FormConfiguration extends AbstractCollector
      * @return array
      *   The dropdown array.
      */
-    protected function generateDropdown()
+    protected function generateDropdown(): array
     {
         return [
-            Fallback::RENDER_TYPE_INI_FULL => static::translate(
-                Fallback::RENDER_TYPE_INI_FULL,
+            Fallback::RENDER_TYPE_CONFIG_FULL => static::translate(
+                Fallback::RENDER_TYPE_CONFIG_FULL,
                 Bootstrap::EXT_KEY
             ),
-            Fallback::RENDER_TYPE_INI_DISPLAY => static::translate(
-                Fallback::RENDER_TYPE_INI_DISPLAY,
+            Fallback::RENDER_TYPE_CONFIG_DISPLAY => static::translate(
+                Fallback::RENDER_TYPE_CONFIG_DISPLAY,
                 Bootstrap::EXT_KEY
             ),
-            Fallback::RENDER_TYPE_INI_NONE => static::translate(
-                Fallback::RENDER_TYPE_INI_NONE,
+            Fallback::RENDER_TYPE_CONFIG_NONE => static::translate(
+                Fallback::RENDER_TYPE_CONFIG_NONE,
                 Bootstrap::EXT_KEY
             )
         ];

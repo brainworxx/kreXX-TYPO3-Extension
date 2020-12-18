@@ -91,7 +91,7 @@ class IndexController extends AbstractController
             $this->redirect('index');
         }
 
-        $filepath = $this->pool->config->getPathToIniFile();
+        $filepath = $this->pool->config->getPathToConfigFile();
 
         // Check for writing permission.
         // Check the actual writing process.

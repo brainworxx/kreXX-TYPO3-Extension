@@ -159,7 +159,7 @@ class ConfigurationTest extends AbstractTest
             'Test the rewrite.'
         );
         $this->assertEquals(
-            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'Krexx',
+            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini',
             SettingsGetter::getConfigFile(),
             'Test the new location of the configuration file.'
         );
