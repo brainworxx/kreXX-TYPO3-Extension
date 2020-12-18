@@ -62,13 +62,6 @@ class File extends Fallback
     protected $settings = [];
 
     /**
-     * The config file type we are using. "ini" or "json".
-     *
-     * @var string
-     */
-    protected $configFileType = '';
-
-    /**
      * Inject the pool, create the security handler, load the file.
      *
      * @param Pool $pool
@@ -90,31 +83,22 @@ class File extends Fallback
      */
     public function loadFile(string $path): File
     {
-        if ($this->pool->fileService->fileIsReadable($path . 'json') === true) {
-            $this->settings = (array)json_decode(
-                $this->pool->fileService->getFileContents($path . 'json', false),
-                true
-            );
-            $this->configFileType = 'json';
-        } else {
-            $this->settings = (array)parse_ini_string(
-                $this->pool->fileService->getFileContents($path . 'ini', false),
-                true
-            );
-            $this->configFileType = 'ini';
+        // Fallback to empty.
+        $this->settings = [];
+
+        if ($this->pool->fileService->fileIsReadable($path) === false) {
+            return $this;
+        }
+
+        $content = $this->pool->fileService->getFileContents($path, false);
+        $this->settings = json_decode($content, true);
+
+        if (empty($this->settings)) {
+            // Fallback to ini.
+            $this->settings = (array)parse_ini_string($content, true);
         }
 
         return $this;
-    }
-
-    /**
-     * Getter for the configuration file type.
-     *
-     * @return string
-     */
-    public function getConfigFileType(): string
-    {
-        return $this->configFileType;
     }
 
     /**

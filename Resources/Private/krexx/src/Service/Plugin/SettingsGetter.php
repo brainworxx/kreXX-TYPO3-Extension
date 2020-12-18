@@ -57,7 +57,7 @@ class SettingsGetter extends Registration
     public static function getConfigFile(): string
     {
         if (empty(static::$configFile)) {
-            static::$configFile = KREXX_DIR . 'config' . DIRECTORY_SEPARATOR . 'Krexx.';
+            static::$configFile = KREXX_DIR . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini';
         }
 
         return static::$configFile;

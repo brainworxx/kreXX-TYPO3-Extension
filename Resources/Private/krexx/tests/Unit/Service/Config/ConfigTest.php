@@ -460,21 +460,4 @@ class ConfigTest extends AbstractTest
             $config->getSkinList()
         );
     }
-
-    /**
-     * Testing the retrieval of the configuration file type.
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getConfigFileType
-     */
-    public function testGetConfigFileType()
-    {
-        $config = new Config(Krexx::$pool);
-        $fileConfigMock = $this->createMock(File::class);
-        $fileConfigMock->expects($this->once())
-            ->method('getConfigFileType')
-            ->will($this->returnValue('Jay Son'));
-        $this->setValueByReflection('fileConfig', $fileConfigMock, $config);
-
-        $this->assertEquals('Jay Son', $config->getConfigFileType());
-    }
 }

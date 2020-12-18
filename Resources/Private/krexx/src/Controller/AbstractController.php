@@ -137,7 +137,7 @@ abstract class AbstractController implements ConfigConstInterface
     {
         // Now we need to stitch together the content of the configuration file
         // as well as it's path.
-        $pathToConfig = $this->pool->config->getPathToConfigFile() . $this->pool->config->getConfigFileType();
+        $pathToConfig = $this->pool->config->getPathToConfigFile();
         if ($this->pool->fileService->fileIsReadable($pathToConfig) === true) {
             $path = $this->pool->messages->getHelp('currentConfig');
         } else {

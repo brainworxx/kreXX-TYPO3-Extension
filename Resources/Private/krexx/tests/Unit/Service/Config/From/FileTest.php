@@ -94,25 +94,29 @@ class FileTest extends AbstractTest
             '; Here you can disable kreXX on a global level without uninstalling it.' . PHP_EOL .
             'disabled = "false"' . PHP_EOL .
             ';disabled = "true"' . PHP_EOL;
-        $somePath = 'some path.';
-        $garbageFile = 'garbage file';
-        $notExistingFile = 'not existing file';
-        $ini = 'ini';
+        $somePath = 'some path.ini';
+        $garbageFile = 'garbage file.ini';
+        $notExistingFile = 'not existing file.ini';
 
         $fileServiceMock = $this->createMock(File::class);
-        $fileServiceMock->expects($this->exactly(3))
+        $fileServiceMock->expects($this->exactly(1))
             ->method('getFileContents')
+            ->with($somePath, false)
+            ->will($this->returnValue($this->fixture));
+
+        $fileServiceMock->expects($this->exactly(3))
+            ->method('fileIsReadable')
             ->withConsecutive(
-                [$somePath . $ini, false],
-                [$garbageFile . $ini, false],
-                [$notExistingFile . $ini, false]
+                [$somePath],
+                [$garbageFile],
+                [$notExistingFile]
             )
             ->will(
                 $this->returnValueMap(
                     [
-                        [$somePath . $ini, false, $this->fixture],
-                        [$garbageFile . $ini, false, 'Blargh'],
-                        [$notExistingFile . $ini, false, '']
+                        [$somePath, true],
+                        [$garbageFile, false],
+                        [$notExistingFile, false]
                     ]
                 )
             );
@@ -146,17 +150,16 @@ class FileTest extends AbstractTest
     {
         $setting = ['output' => ['disabled' => false]];
         $this->fixture = json_encode($setting);
-        $somePath = 'some path.';
-        $json = 'json';
+        $somePath = 'some path.json';
 
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->once())
             ->method('getFileContents')
-            ->with($somePath . $json)
+            ->with($somePath)
             ->will($this->returnValue($this->fixture));
         $fileServiceMock->expects($this->once())
             ->method('fileIsReadable')
-            ->with($somePath . $json)
+            ->with($somePath)
             ->will($this->returnValue(true));
 
         Krexx::$pool->fileService = $fileServiceMock;
@@ -250,15 +253,5 @@ class FileTest extends AbstractTest
         $this->assertNull($config->getConfigFromFile('some group', 'unknown setting'));
         $this->assertEquals($whatever, $config->getConfigFromFile($anotherGroup, $knownSetting));
         $this->assertNull($config->getConfigFromFile($groupy, $wrongSetting));
-    }
-
-    /**
-     * @covers \Brainworxx\Krexx\Service\Config\From\File::getConfigFileType
-     */
-    public function testGetConfigFileType()
-    {
-        $config = new ConfigFromFile(Krexx::$pool);
-        $config->loadFile('inni');
-        $this->assertEquals('ini', $config->getConfigFileType(), 'Why is dos inni trigger ini? We\'ll never know . . .');
     }
 }
