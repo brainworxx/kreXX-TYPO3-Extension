@@ -80,7 +80,8 @@ class DebugMethods extends AbstractEventHandler implements CallbackConstInterfac
             ],
             'getAttributeItems' => [
                 // Aimeos 2020
-                \Aimeos\MShop\Order\Item\Base\Product\Base::class
+                \Aimeos\MShop\Order\Item\Base\Product\Base::class,
+                \Aimeos\MShop\Order\Item\Base\Service\Base::class
             ]
         ];
 
