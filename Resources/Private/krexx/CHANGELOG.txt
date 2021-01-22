@@ -1,10 +1,11 @@
-4.0.1
+4.1.0
 - Added a log model to use for a logger implementation.
 - Added .min. support for css files.
 - Added apostrophes around string array keys to the SmokyGrey
   skin for better readability.
 - Added support for a JSON configuration file.
 - Added PHP 8.0 support.
+- Allow plugins to register their own settings.
 - Bugfix: Endless scrolling when clicking too fast through
   the search.
 - Bugfix: Exception when using one php statement and a krexx

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2021 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -268,8 +268,21 @@ abstract class Fallback implements ConfigConstInterface
      */
     protected function generateConfigFallback()
     {
-        // Not much so far. . .
         $this->configFallback = static::CONFIG_FALLBACK;
+
+        // Adding the new configuration options from the plugins.
+        $pluginConfig = SettingsGetter::getNewSettings();
+        if (empty($pluginConfig) === true) {
+            return;
+        }
+
+        /** @var \Brainworxx\Krexx\Service\Plugin\NewSetting $newSetting */
+        foreach ($pluginConfig as $newSetting) {
+            if (isset($this->configFallback[$newSetting->getSection()]) === false) {
+                $this->configFallback[$newSetting->getSection()] = [];
+            }
+            $this->configFallback[$newSetting->getSection()][] = $newSetting->getName();
+        }
     }
 
     /**
@@ -300,6 +313,17 @@ abstract class Fallback implements ConfigConstInterface
             static::SETTING_MAX_STEP_NUMBER => $this->returnInput(static::SECTION_PRUNE, 10),
             static::SETTING_ARRAY_COUNT_LIMIT => $this->returnInput(static::SECTION_PRUNE, 300),
         ];
+
+        // Adding the new configuration options from the plugins.
+        $pluginConfig = SettingsGetter::getNewSettings();
+        if (empty($pluginConfig) === true) {
+            return;
+        }
+
+        /** @var \Brainworxx\Krexx\Service\Plugin\NewSetting $newSetting */
+        foreach ($pluginConfig as $newSetting) {
+            $this->feConfigFallback[$newSetting->getName()] = $newSetting->getFeSettings();
+        }
     }
 
     /**
@@ -407,12 +431,12 @@ abstract class Fallback implements ConfigConstInterface
     protected function returnDestination(): array
     {
         return [
-                // Either 'file' or 'browser'.
-                static::VALUE => static::VALUE_BROWSER,
-                static::RENDER => static::DISPLAY_ONLY_SELECT,
-                static::EVALUATE => static::EVAL_DESTINATION,
-                static::SECTION => static::SECTION_BEHAVIOR,
-            ];
+            // Either 'file' or 'browser'.
+            static::VALUE => static::VALUE_BROWSER,
+            static::RENDER => static::DISPLAY_ONLY_SELECT,
+            static::EVALUATE => static::EVAL_DESTINATION,
+            static::SECTION => static::SECTION_BEHAVIOR,
+        ];
     }
 
     /**
@@ -484,5 +508,5 @@ abstract class Fallback implements ConfigConstInterface
      *
      * @var string
      */
-    public $version = '4.0.1 dev';
+    public $version = '4.1.0 dev';
 }

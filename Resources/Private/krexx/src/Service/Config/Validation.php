@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2021 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use ReflectionGenerator;
 use ReflectionType;
 use Reflector;
+use Closure;
 
 /**
  * Validation stuff for the configuration.
@@ -79,7 +80,7 @@ class Validation extends Fallback
     const KEY_CONFIG_ERROR_DEBUG_INVALID = 'configErrorDebugInvalid';
 
     /**
-     * Preconfiguration for the logging options.
+     * Preconfiguration which setting will never be editable.
      *
      * @var array
      */
@@ -89,6 +90,13 @@ class Validation extends Fallback
         self::SETTING_DEBUG_METHODS,
         self::SETTING_IP_RANGE,
     ];
+
+    /**
+     * Loaded preconfiguration which setting will never be editable.
+     *
+     * @var array
+     */
+    protected $feDoNotEdit = [];
 
     /**
      * Known Problems with debug functions, which will most likely cause a fatal.
@@ -145,6 +153,22 @@ class Validation extends Fallback
             $this->classBlacklist,
             SettingsGetter::getBlacklistDebugClass()
         );
+
+        // Load the settings for the do-not-edit config.
+        $this->feDoNotEdit = static::FE_DO_NOT_EDIT;
+
+        // Adding the new configuration options from the plugins.
+        $pluginConfig = SettingsGetter::getNewSettings();
+        if (empty($pluginConfig) === true) {
+            return;
+        }
+
+        /** @var \Brainworxx\Krexx\Service\Plugin\NewSetting $newSetting */
+        foreach ($pluginConfig as $newSetting) {
+            if ($newSetting->isFeProtected() === true) {
+                $this->feDoNotEdit[] = $newSetting->getName();
+            }
+        }
     }
 
     /**
@@ -163,13 +187,16 @@ class Validation extends Fallback
     public function evaluateSetting(string $group, string $name, $value): bool
     {
         if ($group === static::SECTION_FE_EDITING) {
-            // Logging options can never be changed in the frontend.
-            // The debug methods will also not be editable.
-            return !in_array($name, static::FE_DO_NOT_EDIT);
+            // These settings can never be changed in the frontend.
+            return !in_array($name, $this->feDoNotEdit);
         }
 
         // We simply call the configured evaluation method.
         $callback = $this->feConfigFallback[$name][static::EVALUATE];
+        if ($callback instanceof Closure) {
+            return $callback($value);
+        }
+
         return $this->$callback($value, $name, $group);
     }
 

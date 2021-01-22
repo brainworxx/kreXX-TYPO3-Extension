@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2021 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,7 +39,7 @@ if (!defined('TYPO3_MODE')) {
 $boot = function () {
     if (class_exists(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)) {
         \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)
-            ->checkVersionNumber('4.0.1 dev')
+            ->checkVersionNumber('4.1.0')
             ->run();
     }
 };

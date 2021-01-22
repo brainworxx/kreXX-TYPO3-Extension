@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2021 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -108,7 +108,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface
         unset($backtrace[1]);
         unset($backtrace[2]);
         $backtrace = array_values($backtrace);
-        
+
         $logModel = new LogModel();
         $logModel->setTrace($backtrace)
             ->setCode($record->getComponent())

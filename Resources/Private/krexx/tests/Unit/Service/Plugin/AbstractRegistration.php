@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2021 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -51,6 +51,7 @@ class AbstractRegistration extends AbstractTest
     const EVENT_LIST = 'eventList';
     const ADD_SKIN_LIST = 'additionalSkinList';
     const ADD_SCALAR_STRING = 'additionalScalarString';
+    const NEW_SETTINGS = 'newSettings';
 
     /**
      * @var Registration
@@ -84,5 +85,6 @@ class AbstractRegistration extends AbstractTest
         $this->setValueByReflection(static::EVENT_LIST, [], $this->registration);
         $this->setValueByReflection(static::ADD_SKIN_LIST, [], $this->registration);
         $this->setValueByReflection(static::ADD_SCALAR_STRING, [], $this->registration);
+        $this->setValueByReflection(static::NEW_SETTINGS, [], $this->registration);
     }
 }

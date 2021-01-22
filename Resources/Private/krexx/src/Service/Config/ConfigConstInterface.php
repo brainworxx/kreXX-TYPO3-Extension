@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2021 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -490,7 +490,7 @@ interface ConfigConstInterface
      * be edited.
      *
      * @deprecated
-     *   Since 4.0.1. Will be removed. Use RENDER_TYPE_CONFIG_FULL instead.
+     *   Since 4.1.0. Will be removed. Use RENDER_TYPE_CONFIG_FULL instead.
      *
      * @var string
      */
@@ -503,7 +503,7 @@ interface ConfigConstInterface
      * kreXX will not accept values for this configuration.
      *
      * @deprecated
-     *   Since 4.0.1. Will be removed. Use RENDER_TYPE_CONFIG_DISPLAY instead.
+     *   Since 4.1.0. Will be removed. Use RENDER_TYPE_CONFIG_DISPLAY instead.
      *
      * @var string
      */
@@ -516,7 +516,7 @@ interface ConfigConstInterface
      * kreXX will not accept values for this configuration.
      *
      * @deprecated
-     *   Since 4.0.1. Will be removed. Use RENDER_TYPE_CONFIG_NONE instead.
+     *   Since 4.1.0. Will be removed. Use RENDER_TYPE_CONFIG_NONE instead.
      *
      * @var string
      */

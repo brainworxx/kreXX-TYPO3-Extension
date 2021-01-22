@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2021 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Config;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
+use Brainworxx\Krexx\Service\Plugin\NewSetting;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\View\Skins\RenderHans;
@@ -84,5 +85,39 @@ class FallbackTest extends AbstractTest
             ]
         ];
         $this->assertSame($expectedSkinConfig, $this->retrieveValueByReflection('skinConfiguration', $config));
+    }
+
+    /**
+     * Test the assigning of custom settings.
+     *
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::generateConfigFallback
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::generateFeConfigFallback
+     */
+    public function testConstructWithCustomSettings()
+    {
+        $settingName = 'customName';
+        $sectionName = 'customSection';
+
+        $customSetting = new NewSetting();
+        $customSetting->setName($settingName)
+            ->setValidation($customSetting::EVAL_BOOL)
+            ->setSection($sectionName)
+            ->setRenderType(NewSetting::RENDER_TYPE_SELECT)
+            ->setIsEditable(true)
+            ->setDefaultValue('true')
+            ->setIsFeProtected(false);
+
+        Registration::addNewSettings($customSetting);
+        $config = new Config(Krexx::$pool);
+
+        $this->assertSame(true, $config->getSetting($settingName), 'Test the internal getter.');
+
+        $settingsModel = $config->settings[$settingName];
+
+        $this->assertSame($sectionName, $settingsModel->getSection());
+        $this->assertSame(true, $settingsModel->getValue());
+        $this->assertSame(NewSetting::RENDER_TYPE_SELECT, $settingsModel->getType());
+        $this->assertSame(true, $settingsModel->getEditable());
+        $this->assertSame('Factory settings', $settingsModel->getSource());
     }
 }

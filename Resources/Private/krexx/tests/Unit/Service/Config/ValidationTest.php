@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2021 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,6 +38,7 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Config;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Validation;
+use Brainworxx\Krexx\Service\Plugin\NewSetting;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use ReflectionType;
@@ -193,6 +194,71 @@ class ValidationTest extends AbstractTest
         $this->assertEquals(
             true,
             $validation->evaluateSetting('some group', Fallback::SETTING_DISABLED, false)
+        );
+    }
+
+    /**
+     * Crete a custom setting, and then evaluate it.
+     *
+     * @covers \Brainworxx\Krexx\Service\Config\Validation::evaluateSetting
+     */
+    public function testEvaluateSettingCustom()
+    {
+        $settingName = 'editableBoolean';
+        $sectionName = 'someWhere';
+
+        $customSetting = new NewSetting();
+        $customSetting->setName($settingName)
+            ->setValidation($customSetting::EVAL_BOOL)
+            ->setSection($sectionName)
+            ->setRenderType(NewSetting::RENDER_TYPE_SELECT)
+            ->setIsEditable(true)
+            ->setDefaultValue('true')
+            ->setIsFeProtected(false);
+        Registration::addNewSettings($customSetting);
+
+        $anotherSettingName = 'notEditableInput';
+        $customSetting = new NewSetting();
+        $customSetting->setName($anotherSettingName)
+            ->setValidation($customSetting::EVAL_DEBUG_METHODS)
+            ->setSection($sectionName)
+            ->setRenderType(NewSetting::RENDER_TYPE_INPUT)
+            ->setIsEditable(false)
+            ->setDefaultValue('true')
+            ->setIsFeProtected(true);
+        Registration::addNewSettings($customSetting);
+
+        $callbackSettingName = 'callbackSetting';
+        $callback = function ($value) {
+            return $value === 'whatever';
+        };
+        $callbackSetting = new NewSetting();
+        $callbackSetting->setName($callbackSettingName)
+            ->setValidation($callback)
+            ->setSection($sectionName)
+            ->setRenderType(NewSetting::RENDER_TYPE_NONE)
+            ->setIsEditable(true)
+            ->setDefaultValue('whatever')
+            ->setIsFeProtected(false);
+        Registration::addNewSettings($callbackSetting);
+
+        $validation = new Validation(Krexx::$pool);
+
+        $this->assertTrue(
+            $validation->evaluateSetting($sectionName, $settingName, false),
+            'Simple, editable boolean.'
+        );
+        $this->assertFalse(
+            $validation->evaluateSetting($validation::SECTION_FE_EDITING, $anotherSettingName, 'Barf!'),
+            'Test the cookie editing. It is protected and must fail.'
+        );
+        $this->assertFalse(
+            $validation->evaluateSetting($sectionName, $callbackSettingName, 'nothing to see here.'),
+            'Test the usage of the callback. Wrong value here.'
+        );
+        $this->assertTrue(
+            $validation->evaluateSetting($sectionName, $callbackSettingName, 'whatever'),
+            'Test the usage of the callback. Right'
         );
     }
 }

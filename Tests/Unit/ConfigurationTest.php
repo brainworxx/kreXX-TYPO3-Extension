@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2021 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -74,7 +74,7 @@ class ConfigurationTest extends AbstractTest
         $extLocalConf = file_get_contents($extLocalConfPath);
 
         // Our expectations.
-        $versionNumber = '4.0.1 dev';
+        $versionNumber = '4.1.0';
         $t3EmConstraint = '7.6.0-10.4.99';
         $phpEmConstraint = '7.0.0-8.0.99';
         $t3ComposerConstraint = '^7.6 || ^8 || ^9 || ^10';

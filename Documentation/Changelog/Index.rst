@@ -12,10 +12,17 @@
 Changelog
 =============================================================
 
-4.0.1 dev
+4.1.0
     - [Feature] Added a log model to use for a logger implementation.
+    - [Feature] Added .min. support for css files.
+    - [Feature] Added apostrophes around string array keys to the SmokyGrey skin for better readability.
+    - [Feature] Added support for a JSON configuration file.
+    - [Feature] Added PHP 8.0 support (bundled kreXX library only).
+    - [Feature] Allow plugins to register their own settings.
     - [Feature] Added a complete backtrace analysis to the log writer.
     - [Feature] Added the debug method definition for service attributes to the aimeos debugger.
+    - [Bugfix] Endless scrolling when clicking too fast through the search.
+    - [Bugfix] Exception when using one php statement and a krexx call in the same line.
     - [Bugfix] Prevent long analysis meta data from breaking the BE layout.
 
 4.0.0

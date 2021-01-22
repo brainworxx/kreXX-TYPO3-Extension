@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2020 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2021 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -55,7 +55,7 @@ class SettingsGetterTest extends AbstractRegistration
     public function testGetConfigFile()
     {
         $this->assertEquals(
-            KREXX_DIR . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini',
+            KREXX_DIR . 'config' . DIRECTORY_SEPARATOR . 'Krexx.',
             SettingsGetter::getConfigFile(),
             static::TEST_THE_FALLBACK
         );
@@ -196,5 +196,16 @@ class SettingsGetterTest extends AbstractRegistration
     {
          $this->setValueByReflection(static::ADD_SCALAR_STRING, [static::class], $this->registration);
          $this->assertEquals([static::class], SettingsGetter::getAdditionalScalarString());
+    }
+
+    /**
+     * Teting the getting of new registered settings definitions.
+     *
+     * @covers \Brainworxx\Krexx\Service\Plugin\SettingsGetter::getNewSettings
+     */
+    public function testGetNewSettings()
+    {
+        $this->setValueByReflection(static::NEW_SETTINGS, [static::class], $this->registration);
+        $this->assertEquals([static::class], SettingsGetter::getNewSettings());
     }
 }
