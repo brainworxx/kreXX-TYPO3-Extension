@@ -139,7 +139,7 @@ class NewSetting implements ConfigConstInterface
      *
      * @api
      *
-     * @param string $validation
+     * @param string|\Closure $validation
      *   Name of the method in the validation class, that validated this setting.
      *
      * @return $this

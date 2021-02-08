@@ -53,6 +53,7 @@ use Brainworxx\Includekrexx\Domain\Model\Settings\DetectAjax;
 use Brainworxx\Includekrexx\Domain\Model\Settings\Disabled;
 use Brainworxx\Includekrexx\Domain\Model\Settings\Iprange;
 use Brainworxx\Includekrexx\Domain\Model\Settings\Level;
+use Brainworxx\Includekrexx\Domain\Model\Settings\LogFileWriter;
 use Brainworxx\Includekrexx\Domain\Model\Settings\MaxCall;
 use Brainworxx\Includekrexx\Domain\Model\Settings\Maxfiles;
 use Brainworxx\Includekrexx\Domain\Model\Settings\MaxRuntime;
@@ -91,6 +92,7 @@ class Settings
     use MaxCall;
     use MaxRuntime;
     use MemoryLeft;
+    use LogFileWriter;
 
     /**
      * @var string

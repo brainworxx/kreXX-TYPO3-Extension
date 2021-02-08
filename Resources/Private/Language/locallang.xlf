@@ -38,6 +38,27 @@
             <trans-unit id="clear.cookies">
                 <source>Reset local cookie settings</source>
             </trans-unit>
+            <trans-unit id="loglevel.debug">
+                <source>Debug</source>
+            </trans-unit>
+            <trans-unit id="loglevel.info">
+                <source>Info</source>
+            </trans-unit>
+            <trans-unit id="loglevel.notice">
+                <source>Notice</source>
+            </trans-unit>
+            <trans-unit id="loglevel.error">
+                <source>Error</source>
+            </trans-unit>
+            <trans-unit id="loglevel.alert">
+                <source>Alert</source>
+            </trans-unit>
+            <trans-unit id="loglevel.critical">
+                <source>Critical</source>
+            </trans-unit>
+            <trans-unit id="loglevel.emergency">
+                <source>Emergency</source>
+            </trans-unit>
 
 
 
@@ -117,6 +138,12 @@
 			</trans-unit>
             <trans-unit id="arrayCountLimit">
                 <source>When encountering an array larger than this number, kreXX will resort to a simplified array analysis. This means that classes or other arrays in this large array will only get a rudimentary analysis to prevent an overkill output.</source>
+            </trans-unit>
+            <trans-unit id="activateT3FileWriter">
+                <source>Use kreXX as the TYPO3 log file writer?</source>
+            </trans-unit>
+            <trans-unit id="loglevelT3FileWriter">
+                <source>There are different log levels. Depending on the setting, you may get a lot of output.</source>
             </trans-unit>
 
 
@@ -198,6 +225,10 @@
             <trans-unit id="configErrorDebugInvalid">
                 <source>Wrong configuration for: '%s => %s'! '%s' is not a valid method. The configured setting was not applied!</source>
             </trans-unit>
+             <trans-unit id="configErrorLoglevelT3FileWriter">
+                <source>Wrong configuration for: 'TYPO3 => activateT3FileWriter'! '%s' is not a valid logging level. The configured setting was not applied!</source>
+            </trans-unit>
+
             <trans-unit id="emergencyTimer">
                 <source>Emergency break due to extensive run time!</source>
             </trans-unit>
@@ -261,6 +292,9 @@
 			</trans-unit>
             <trans-unit id="subhead.emergencystop">
                 <source>Emergency stop</source>
+            </trans-unit>
+            <trans-unit id="subhead.typo3">
+                <source>TYPO3 specific</source>
             </trans-unit>
             <trans-unit id="table.desc">
                 <source>Description</source>
@@ -335,6 +369,12 @@
             <trans-unit id="label.arrayCountLimit">
                 <source>Maximum array size before fallback to simplified analysis:</source>
 			</trans-unit>
+            <trans-unit id="label.activateT3FileWriter">
+                <source>Activate the TYPO3 Filewriter</source>
+            </trans-unit>
+            <trans-unit id="label.loglevelT3FileWriter">
+                <source>Log level of the Filewriter</source>
+            </trans-unit>
 
 
 

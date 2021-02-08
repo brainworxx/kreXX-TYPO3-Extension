@@ -8,14 +8,13 @@
  *   Complete access to all variables.
  */
 <f:section name="main">
-
-    <f:render section="table" arguments="{headline: 'subhead.output', payload: 'output', config: config, dropdown: dropdown}" />
-    <f:render section="table" arguments="{headline: 'subhead.behavior', payload: 'behavior', config: config, dropdown: dropdown}" />
-    <f:render section="table" arguments="{headline: 'subhead.pruneOutput', payload: 'pruneOutput', config: config, dropdown: dropdown}" />
-    <f:render section="table" arguments="{headline: 'subhead.properties', payload: 'properties', config: config, dropdown: dropdown}" />
-    <f:render section="table" arguments="{headline: 'subhead.methods', payload: 'methods', config: config, dropdown: dropdown}" />
+    <f:render section="table" arguments="{headline: 'subhead.output',        payload: 'output',        config: config, dropdown: dropdown}" />
+    <f:render section="table" arguments="{headline: 'subhead.behavior',      payload: 'behavior',      config: config, dropdown: dropdown}" />
+    <f:render section="table" arguments="{headline: 'subhead.pruneOutput',   payload: 'pruneOutput',   config: config, dropdown: dropdown}" />
+    <f:render section="table" arguments="{headline: 'subhead.properties',    payload: 'properties',    config: config, dropdown: dropdown}" />
+    <f:render section="table" arguments="{headline: 'subhead.methods',       payload: 'methods',       config: config, dropdown: dropdown}" />
     <f:render section="table" arguments="{headline: 'subhead.emergencystop', payload: 'emergencystop', config: config, dropdown: dropdown}" />
-
+    <f:render section="table" arguments="{headline: 'subhead.typo3',         payload: 'TYPO3',         config: config, dropdown: dropdown}" />
 </f:section>
 
 
@@ -90,14 +89,17 @@
     <f:render section="input"    arguments="{config: config.maxRuntime}" />
     <f:render section="input"    arguments="{config: config.memoryLeft}" />
 </f:section>
+<f:section name="TYPO3">
+    <f:render section="dropdown" arguments="{config: config.activateT3FileWriter, options: dropdown.bool}" />
+    <f:render section="dropdown" arguments="{config: config.loglevelT3FileWriter, options: dropdown.loglevel}" />
+</f:section>
+
 
 /**
  * Rendering of a dropdown field.
  *
  * @var string {config.name}
  *   The name of the dropdown field.
- * @var string {config.helptext}
- *   The Hepltext for the (i) icon.
  * @var array {options}
  *   The options for the dropdown.
  * @var string {config.value}
@@ -115,7 +117,7 @@
         <td class="commands">
             <div class="button tooltip-hover">
                 <div class="toolwrapper">
-                    <div class="tooltip-text">{config.helptext}</div>
+                    <div class="tooltip-text"><f:translate key="{config.name}" /></div>
                 </div>
             </div>
             <label class="button" for="factory.{config.name}">
@@ -131,8 +133,6 @@
  *
  * @var string {config.name}
  *   The name of the input field.
- * @var string {config.helptext}
- *   The Hepltext for the (i) icon.
  * @var string {config.value}
  *   The current value of the dropdown.
  * @var integer {config.useFactorySettings}
@@ -148,7 +148,7 @@
         <td class="commands">
             <div class="button tooltip-hover">
                 <div class="toolwrapper">
-                    <div class="tooltip-text">{config.helptext}</div>
+                    <div class="tooltip-text"><f:translate key="{config.name}" /></div>
                 </div>
             </div>
             <label class="button" for="factory.{config.name}">

@@ -39,7 +39,7 @@ namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Krexx\Service\Config\Fallback;
-use Brainworxx\Krexx\Service\Config\From\Ini;
+use Brainworxx\Krexx\Service\Config\From\File;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
 class FormConfiguration extends AbstractCollector
@@ -58,8 +58,8 @@ class FormConfiguration extends AbstractCollector
 
         $dropdown = $this->generateDropdown();
 
-        /** @var Ini $iniReader */
-        $iniReader = $this->pool->createClass(Ini::class)->loadIniFile($this->pool->config->getPathToIniFile());
+        /** @var File $iniReader */
+        $iniReader = $this->pool->createClass(File::class)->loadFile($this->pool->config->getPathToConfigFile());
         $config = [];
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
             $config[$settingsName] = [];

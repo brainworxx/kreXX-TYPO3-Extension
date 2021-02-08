@@ -194,7 +194,7 @@ class Validation extends Fallback
         // We simply call the configured evaluation method.
         $callback = $this->feConfigFallback[$name][static::EVALUATE];
         if ($callback instanceof Closure) {
-            return $callback($value);
+            return $callback($value, $this->pool);
         }
 
         return $this->$callback($value, $name, $group);

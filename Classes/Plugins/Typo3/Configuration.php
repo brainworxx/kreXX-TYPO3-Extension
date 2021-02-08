@@ -43,6 +43,8 @@ use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
+use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Plugin\NewSetting;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
@@ -56,6 +58,7 @@ use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper as NewAbstractViewHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder as DbQueryBuilder;
+use TYPO3\CMS\Core\Log\LogLevel;
 
 /**
  * Configuration file for the TYPO3 kreXX plugin.
@@ -144,7 +147,54 @@ class Configuration implements PluginConfigInterface, ConstInterface
         // Register the scalar analysis classes.
         Registration::addScalarStringAnalyser(ExtFilePath::class);
 
+        $this->registerFileWriterSettings();
         $this->registerVersionDependantStuff();
+    }
+
+    /**
+     * Register the new settingfor the TYPO3 file writer.
+     */
+    protected function registerFileWriterSettings()
+    {
+        // Register the two new settings for the TYPO3 log writer integration.
+        $activeT3FileWriter = GeneralUtility::makeInstance(NewSetting::class);
+        $activeT3FileWriter->setSection($this->getName())
+            ->setIsFeProtected(true)
+            ->setDefaultValue('true')
+            ->setIsEditable(false)
+            ->setRenderType(NewSetting::RENDER_TYPE_NONE)
+            ->setValidation(NewSetting::EVAL_BOOL)
+            ->setName('activateT3FileWriter');
+        Registration::addNewSettings($activeT3FileWriter);
+
+        $loglevelT3FileWriter = GeneralUtility::makeInstance(NewSetting::class);
+        $validation = function ($value, Pool $pool) {
+            $result = in_array(
+                $value,
+                [
+                    LogLevel::ERROR,
+                    LogLevel::NOTICE,
+                    LogLevel::ALERT,
+                    LogLevel::CRITICAL,
+                    LogLevel::DEBUG,
+                    LogLevel::EMERGENCY,
+                    LogLevel::INFO
+                ]
+            );
+            if ($result === false) {
+                $pool->messages->addMessage('configErrorLoglevelT3FileWriter', [$value]);
+            }
+
+            return $result;
+        };
+        $loglevelT3FileWriter->setSection($this->getName())
+            ->setIsFeProtected(true)
+            ->setDefaultValue(LogLevel::ERROR)
+            ->setIsEditable(false)
+            ->setRenderType(NewSetting::RENDER_TYPE_NONE)
+            ->setValidation($validation)
+            ->setName('loglevelT3FileWriter');
+        Registration::addNewSettings($loglevelT3FileWriter);
     }
 
     /**

@@ -39,8 +39,9 @@ namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Krexx\Service\Config\Fallback;
-use Brainworxx\Krexx\Service\Config\From\Ini;
+use Brainworxx\Krexx\Service\Config\From\File;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Core\Log\LogLevel;
 
 class Configuration extends AbstractCollector
 {
@@ -82,6 +83,16 @@ class Configuration extends AbstractCollector
             Fallback::VALUE_TRUE => static::translate(Fallback::VALUE_TRUE, Bootstrap::EXT_KEY),
             Fallback::VALUE_FALSE => static::translate(Fallback::VALUE_FALSE, Bootstrap::EXT_KEY),
         ];
+        $dropdown['loglevel'] = [
+            LogLevel::DEBUG => static::translate('loglevel.debug', Bootstrap::EXT_KEY),
+            LogLevel::INFO => static::translate('loglevel.info', Bootstrap::EXT_KEY),
+            LogLevel::NOTICE => static::translate('loglevel.notice', Bootstrap::EXT_KEY),
+            LogLevel::ERROR => static::translate('loglevel.error', Bootstrap::EXT_KEY),
+            LogLevel::ALERT => static::translate('loglevel.alert', Bootstrap::EXT_KEY),
+            LogLevel::CRITICAL => static::translate('loglevel.critical', Bootstrap::EXT_KEY),
+            LogLevel::EMERGENCY => static::translate('loglevel.emergency', Bootstrap::EXT_KEY),
+
+        ];
 
         return $dropdown;
     }
@@ -94,9 +105,9 @@ class Configuration extends AbstractCollector
      */
     protected function retrieveConfiguration(): array
     {
-        /** @var Ini $iniReader */
-        $iniReader = $this->pool->createClass(Ini::class)
-            ->loadIniFile($this->pool->config->getPathToIniFile());
+        /** @var File $iniReader */
+        $iniReader = $this->pool->createClass(File::class)
+            ->loadFile($this->pool->config->getPathToConfigFile());
 
         $config = [];
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
@@ -104,10 +115,6 @@ class Configuration extends AbstractCollector
             $group = $fallback[Fallback::SECTION];
             $config[$settingsName] = [];
             $config[$settingsName][static::SETTINGS_NAME] = $settingsName;
-            $config[$settingsName][static::SETTINGS_HELPTEXT] = static::translate(
-                $settingsName,
-                Bootstrap::EXT_KEY
-            );
             $config[$settingsName][static::SETTINGS_VALUE] = $iniReader->getConfigFromFile($group, $settingsName);
             $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = false;
             $config[$settingsName][static::SETTINGS_FALLBACK] = $fallback[static::SETTINGS_VALUE];
