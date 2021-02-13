@@ -521,4 +521,25 @@ interface ConfigConstInterface
      * @var string
      */
     const RENDER_TYPE_INI_NONE = 'none';
+
+    /**
+     * Name of the chunks folder.
+     *
+     * @var string
+     */
+    const CHUNKS_FOLDER = 'chunks';
+
+    /**
+     * Name of the log folder.
+     *
+     * @var string
+     */
+    const LOG_FOLDER = 'log';
+
+    /**
+     * Name of the config folder.
+     *
+     * @var string
+     */
+    const CONFIG_FOLDER = 'config';
 }

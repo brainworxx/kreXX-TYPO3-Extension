@@ -52,27 +52,6 @@ use Brainworxx\Krexx\View\Output\CheckOutput;
 class Config extends Fallback
 {
     /**
-     * Name of the chunks folder.
-     *
-     * @var string
-     */
-    const CHUNKS_FOLDER = 'chunks';
-
-    /**
-     * Name of the log folder.
-     *
-     * @var string
-     */
-    const LOG_FOLDER = 'log';
-
-    /**
-     * Name of the config folder.
-     *
-     * @var string
-     */
-    const CONFIG_FOLDER = 'config';
-
-    /**
      * Our current settings.
      *
      * @var Model[]

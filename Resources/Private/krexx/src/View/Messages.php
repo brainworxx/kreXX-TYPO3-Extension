@@ -220,7 +220,7 @@ class Messages
         foreach ($fileList as $filename) {
             $this->helpArray = array_merge(
                 $this->helpArray,
-                (array)parse_ini_string($this->pool->fileService->getFileContents($filename))
+                (array)parse_ini_string($this->pool->fileService->getFileContents($filename, false))
             );
         }
     }
