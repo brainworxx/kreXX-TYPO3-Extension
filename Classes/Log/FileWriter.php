@@ -45,9 +45,11 @@ use Brainworxx\Krexx\Logging\Model as LogModel;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
+use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\Writer\WriterInterface;
 use TYPO3\CMS\Core\Log\LogRecord;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class FileWriter implements WriterInterface, ConfigConstInterface
 {
@@ -86,6 +88,14 @@ class FileWriter implements WriterInterface, ConfigConstInterface
      */
     public function writeLog(LogRecord $record)
     {
+        $route = GeneralUtility::_GET('route');
+        if ($route === '/ajax/refreshLoglist' || $route === '/ajax/delete') {
+            // Do nothing.
+            // We will not spam the log folder with debug calls from the kreXX
+            // ajax backend.
+            return $this;
+        }
+
         static::startForcedLog();
         // We apply the configuration after the forced logging, to give the
         // dev the opportunity to change the stuff from the forced logging.
@@ -104,17 +114,22 @@ class FileWriter implements WriterInterface, ConfigConstInterface
 
         // Get the backtrace ready.
         $backtrace = debug_backtrace();
+        // The first one is not instance of the logger.
         unset($backtrace[0]);
-        unset($backtrace[1]);
-        unset($backtrace[2]);
-        $backtrace = array_values($backtrace);
+        $step = 1;
+        while ($backtrace[$step + 1]['object'] instanceof Logger) {
+            // Remove the backtrace steps, until we leave the logger.
+            unset($backtrace[$step]);
+            ++$step;
+        }
 
+        $backtrace = array_values($backtrace);
         $logModel = new LogModel();
         $logModel->setTrace($backtrace)
             ->setCode($record->getComponent())
             ->setMessage($record->getMessage())
-            ->setFile($backtrace[0]['file'])
-            ->setLine($backtrace[0]['line']);
+            ->setFile((string)$backtrace[0]['file'])
+            ->setLine((int)$backtrace[0]['line']);
 
         Krexx::$pool->createClass(DumpController::class)
             ->dumpAction(
