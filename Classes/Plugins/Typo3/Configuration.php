@@ -190,7 +190,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         };
         $loglevelT3FileWriter->setSection($this->getName())
             ->setIsFeProtected(true)
-            ->setDefaultValue(LogLevel::ERROR)
+            ->setDefaultValue((string)LogLevel::ERROR)
             ->setIsEditable(false)
             ->setRenderType(NewSetting::RENDER_TYPE_NONE)
             ->setValidation($validation)
