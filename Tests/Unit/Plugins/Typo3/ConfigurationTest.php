@@ -42,11 +42,14 @@ use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use TYPO3\CMS\Core\Core\Environment;
+use Psr\Log\LogLevel;
 use TYPO3\CMS\Core\Package\MetaData;
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use Brainworxx\Krexx\View\Output\CheckOutput;
+use \Krexx;
 
 class ConfigurationTest extends AbstractTest
 {
@@ -99,6 +102,7 @@ class ConfigurationTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::exec
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::createWorkingDirectories
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerVersionDependantStuff
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerFileWriterSettings
      */
     public function testExec()
     {
@@ -159,17 +163,23 @@ class ConfigurationTest extends AbstractTest
             'Test the rewrite.'
         );
         $this->assertEquals(
-            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini',
+            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR .
+            'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR .
+            'config' . DIRECTORY_SEPARATOR . 'Krexx.ini',
             SettingsGetter::getConfigFile(),
             'Test the new location of the configuration file.'
         );
         $this->assertEquals(
-            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'chunks' . DIRECTORY_SEPARATOR,
+            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR .
+            'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR .
+            'chunks' . DIRECTORY_SEPARATOR,
             SettingsGetter::getChunkFolder(),
             'Test the new location of the chunk folder.'
         );
         $this->assertEquals(
-            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR,
+            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR .
+            'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR .
+            'log' . DIRECTORY_SEPARATOR,
             SettingsGetter::getLogFolder(),
             'Test the new location of the log folder.'
         );
@@ -190,6 +200,19 @@ class ConfigurationTest extends AbstractTest
             ['what/ever/Resources/Private/Language/t3.kreXX.ini'],
             SettingsGetter::getAdditionalHelpFiles(),
             'Something about help files.'
+        );
+
+        // We create a new pool and test, if our new settings are available.
+        Krexx::$pool = null;
+        Pool::createPool();
+        $this->assertFalse(
+            Krexx::$pool->config->getSetting('activateT3FileWriter'),
+            'Default value is false.'
+        );
+        $this->assertEquals(
+            LogLevel::ERROR,
+            Krexx::$pool->config->getSetting('loglevelT3FileWriter'),
+            'Default value is the error log level.'
         );
     }
 }

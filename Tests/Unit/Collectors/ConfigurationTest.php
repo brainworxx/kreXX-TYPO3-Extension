@@ -91,7 +91,10 @@ class ConfigurationTest extends AbstractTest
                     'dropdown',
                     $this->callback(function ($dropdown) {
                         // Test the important array keys.
-                        return isset($dropdown['skins']) && isset($dropdown['destination']) && isset($dropdown['bool']);
+                        return isset($dropdown['skins'])
+                            && isset($dropdown['destination'])
+                            && isset($dropdown['bool'])
+                            && isset($dropdown['loglevel']);
                     })
                 ]
             );
