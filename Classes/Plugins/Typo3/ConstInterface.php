@@ -41,20 +41,82 @@ interface ConstInterface
 {
     /**
      * Our extension key.
+     *
+     * @var string
      */
     const EXT_KEY = 'includekrexx';
 
     /**
-     * TYPO3 configuration keys.
+     * @var string
      */
     const TYPO3_CONF_VARS = 'TYPO3_CONF_VARS';
+
+    /**
+     * @var string
+     */
     const EXTCONF = 'EXTCONF';
+
+    /**
+     * @var string
+     */
     const ADMIN_PANEL = 'adminpanel';
+
+    /**
+     * @var string
+     */
     const MODULES = 'modules';
+
+    /**
+     * @var string
+     */
     const DEBUG = 'debug';
+
+    /**
+     * @var string
+     */
     const SUBMODULES = 'submodules';
+
+    /**
+     * @var string
+     */
     const SYS = 'SYS';
+
+    /**
+     * @var string
+     */
     const FLUID = 'fluid';
+
+    /**
+     * @var string
+     */
     const FLUID_NAMESPACE = 'namespaces';
+
+    /**
+     * @var string
+     */
     const KREXX = 'krexx';
+
+    /**
+     * @var string
+     */
+    const TYPO3_TEMP = 'typo3temp';
+
+    /**
+     * @var string
+     */
+    const TX_INCLUDEKREXX = 'tx_includekrexx';
+
+    /**
+     * The activation setting name of our TYPO3 file writer.
+     *
+     * @var string
+     */
+    const ACTIVATE_T3_FILE_WRITER = 'activateT3FileWriter';
+
+    /**
+     * The configuration name of our TYPO3 file writer.
+     *
+     * @var string
+     */
+    const LOG_LEVEL_T3_FILE_WRITER = 'loglevelT3FileWriter';
 }

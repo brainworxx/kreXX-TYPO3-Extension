@@ -43,6 +43,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
 use Brainworxx\Krexx\View\Output\CheckOutput;
@@ -67,7 +68,7 @@ use TYPO3\CMS\Core\Log\LogLevel;
  *
  * @package Brainworxx\Includekrexx\Plugins\Typo3
  */
-class Configuration implements PluginConfigInterface, ConstInterface
+class Configuration implements PluginConfigInterface, ConstInterface, ConfigConstInterface
 {
     /**
      * {@inheritdoc}
@@ -104,20 +105,20 @@ class Configuration implements PluginConfigInterface, ConstInterface
 
         // Get the absolute site path. The constant PATH_site is deprecated
         // since 9.2.
-        $pathSite = class_exists(Environment::class) ?  Environment::getPublicPath() . '/' : $pathSite = PATH_site;
+        $pathSite = class_exists(Environment::class) ? Environment::getPublicPath() . '/' : PATH_site;
 
         // See if we must create a temp directory for kreXX.
         $tempPaths = [
-            'main' => $pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx',
-            'log' => $pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'log',
-            'chunks' => $pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'chunks',
-            'config' => $pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'config',
+            'main' => $pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX,
+            static::LOG_FOLDER => $pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . static::LOG_FOLDER,
+            static::CHUNKS_FOLDER => $pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . static::CHUNKS_FOLDER,
+            static::CONFIG_FOLDER => $pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . static::CONFIG_FOLDER,
         ];
 
         // Register it!
-        Registration::setConfigFile($tempPaths['config'] . DIRECTORY_SEPARATOR . 'Krexx.ini');
-        Registration::setChunksFolder($tempPaths['chunks'] . DIRECTORY_SEPARATOR);
-        Registration::setLogFolder($tempPaths['log'] . DIRECTORY_SEPARATOR);
+        Registration::setConfigFile($tempPaths[static::CONFIG_FOLDER] . DIRECTORY_SEPARATOR . 'Krexx.ini');
+        Registration::setChunksFolder($tempPaths[static::CHUNKS_FOLDER] . DIRECTORY_SEPARATOR);
+        Registration::setLogFolder($tempPaths[static::LOG_FOLDER] . DIRECTORY_SEPARATOR);
         $this->createWorkingDirectories($tempPaths);
 
         // Adding our debugging blacklist.
@@ -160,11 +161,11 @@ class Configuration implements PluginConfigInterface, ConstInterface
         $activeT3FileWriter = GeneralUtility::makeInstance(NewSetting::class);
         $activeT3FileWriter->setSection($this->getName())
             ->setIsFeProtected(true)
-            ->setDefaultValue('true')
+            ->setDefaultValue(static::VALUE_FALSE)
             ->setIsEditable(false)
             ->setRenderType(NewSetting::RENDER_TYPE_NONE)
             ->setValidation(NewSetting::EVAL_BOOL)
-            ->setName('activateT3FileWriter');
+            ->setName(static::ACTIVATE_T3_FILE_WRITER);
         Registration::addNewSettings($activeT3FileWriter);
 
         $loglevelT3FileWriter = GeneralUtility::makeInstance(NewSetting::class);
@@ -193,7 +194,7 @@ class Configuration implements PluginConfigInterface, ConstInterface
             ->setIsEditable(false)
             ->setRenderType(NewSetting::RENDER_TYPE_NONE)
             ->setValidation($validation)
-            ->setName('loglevelT3FileWriter');
+            ->setName(static::LOG_LEVEL_T3_FILE_WRITER);
         Registration::addNewSettings($loglevelT3FileWriter);
     }
 
