@@ -54,6 +54,22 @@ use \Krexx;
 class ConfigurationTest extends AbstractTest
 {
     /**
+     * Do we have to reset the reverse proxy?
+     *
+     * @var bool
+     */
+    protected $unsetReverseProxy = false;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function krexxDown()
+    {
+        unset($GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP']);
+        parent::krexxDown();
+    }
+
+    /**
      * @var \Brainworxx\Includekrexx\Plugins\Typo3\Configuration
      */
     protected $configuration;
@@ -65,6 +81,22 @@ class ConfigurationTest extends AbstractTest
     {
         parent::krexxUp();
         $this->configuration = new Configuration();
+
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP'])) {
+            return;
+        }
+
+        if (isset($GLOBALS['TYPO3_CONF_VARS']) === false) {
+            $GLOBALS['TYPO3_CONF_VARS'] = [];
+        }
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']) === false) {
+            $GLOBALS['TYPO3_CONF_VARS']['SYS'] = [];
+        }
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP']) === false) {
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP'] = '';
+        }
+
+        $this->unsetReverseProxy = true;
     }
 
     /**
