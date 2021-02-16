@@ -61,9 +61,11 @@ class Model
     /**
      * The message to log.
      *
+     * This one is public, so the dev can see the actual message right away.
+     *
      * @var string
      */
-    protected $message = '';
+    public $message = '';
 
     /**
      * The line, where the logging occurred.
