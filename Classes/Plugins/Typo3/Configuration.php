@@ -44,6 +44,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
@@ -160,9 +161,10 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
      */
     protected function registerFileWriter()
     {
-        // Now that we are done with setting up our act, we may need to register
-        // our file writer.
+        // Create the pool, it it is not present and reload the configuration
+        // with our new settings.
         Pool::createPool();
+        Krexx::$pool->createClass(Config::class);
         if (Krexx::$pool->config->getSetting(static::ACTIVATE_T3_FILE_WRITER) === true) {
             $GLOBALS[static::TYPO3_CONF_VARS]['LOG']['writerConfiguration'] = [
                 // Using the configured log level.
