@@ -48,12 +48,9 @@ use TYPO3\CMS\Core\Log\LogRecord;
 
 class FileWriterTest extends AbstractTest
 {
-    public function krexxUp()
-    {
-        parent::krexxUp();
-        $_GET['route'] = '';
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     public function krexxDown()
     {
         parent::krexxDown();

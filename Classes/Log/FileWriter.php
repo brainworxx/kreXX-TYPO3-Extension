@@ -88,8 +88,13 @@ class FileWriter implements WriterInterface, ConfigConstInterface
      */
     public function writeLog(LogRecord $record): WriterInterface
     {
-        $route = GeneralUtility::_GET('route');
-        if ($route === '/ajax/refreshLoglist' || $route === '/ajax/delete') {
+        $get = GeneralUtility::_GET();
+        // The 'route' may or may not be set at all.
+        // The GeneralUtility will then trow an error in 8.7.
+        if (
+            isset($get['route']) &&
+            ($get['route'] === '/ajax/refreshLoglist' || $get['route'] === '/ajax/delete')
+        ) {
             // Do nothing.
             // We will not spam the log folder with debug calls from the kreXX
             // ajax backend.
@@ -127,9 +132,14 @@ class FileWriter implements WriterInterface, ConfigConstInterface
         $logModel = new LogModel();
         $logModel->setTrace($backtrace)
             ->setCode($record->getComponent())
-            ->setMessage($record->getMessage())
-            ->setFile((string)$backtrace[0]['file'])
-            ->setLine((int)$backtrace[0]['line']);
+            ->setMessage($record->getMessage());
+
+        if (isset($backtrace[0]['file']) === true) {
+            $logModel->setFile((string)$backtrace[0]['file']);
+        }
+        if (isset($backtrace[0]['line']) === true) {
+            $logModel->setLine((int)$backtrace[0]['line']);
+        }
 
         Krexx::$pool->createClass(DumpController::class)
             ->dumpAction(
