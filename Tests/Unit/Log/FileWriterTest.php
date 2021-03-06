@@ -107,8 +107,18 @@ class FileWriterTest extends AbstractTest
         $this->assertEquals($fixture->getComponent(), $logModel->getCode());
         $this->assertEquals($fixture->getComponent(), $logModel->getCode());
         $backtrace = $logModel->getTrace();
-        $this->assertEquals($backtrace[0]['file'], $logModel->getFile());
-        $this->assertEquals($backtrace[0]['line'], $logModel->getLine());
+
+        if (empty($backtrace[0]['file']) === true) {
+            $this->assertEmpty($logModel->getFile());
+        } else {
+            $this->assertEquals($backtrace[0]['file'], $logModel->getFile());
+        }
+
+        if (empty($backtrace[0]['line']) === true) {
+            $this->assertEmpty($logModel->getLine());
+        } else {
+            $this->assertEquals($backtrace[0]['line'], $logModel->getLine());
+        }
     }
 
     /**
