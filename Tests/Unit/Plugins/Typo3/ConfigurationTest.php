@@ -140,6 +140,7 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerVersionDependantStuff
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerFileWriterSettings
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerFileWriter
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::createFileWriterValidator
      */
     public function testExec()
     {

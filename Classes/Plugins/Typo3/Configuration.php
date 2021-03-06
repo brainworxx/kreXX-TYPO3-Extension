@@ -63,6 +63,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder as DbQueryBuilder;
 use TYPO3\CMS\Core\Log\LogLevel;
 use Brainworxx\Includekrexx\Log\FileWriter as KrexxFileWriter;
+use Closure;
 
 /**
  * Configuration file for the TYPO3 kreXX plugin.
@@ -192,7 +193,24 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         Registration::addNewSettings($activeT3FileWriter);
 
         $loglevelT3FileWriter = GeneralUtility::makeInstance(NewSetting::class);
-        $validation = function ($value, Pool $pool) {
+        $loglevelT3FileWriter->setSection($this->getName())
+            ->setIsFeProtected(true)
+            ->setDefaultValue((string)LogLevel::ERROR)
+            ->setIsEditable(false)
+            ->setRenderType(NewSetting::RENDER_TYPE_NONE)
+            ->setValidation($this->createFileWriterValidator())
+            ->setName(static::LOG_LEVEL_T3_FILE_WRITER);
+        Registration::addNewSettings($loglevelT3FileWriter);
+    }
+
+    /**
+     * Create the validation callback for the file writer.
+     *
+     * @return \Closure
+     */
+    protected function createFileWriterValidator(): \Closure
+    {
+        return function ($value, Pool $pool) {
             $result = in_array(
                 $value,
                 [
@@ -211,14 +229,6 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
 
             return $result;
         };
-        $loglevelT3FileWriter->setSection($this->getName())
-            ->setIsFeProtected(true)
-            ->setDefaultValue((string)LogLevel::ERROR)
-            ->setIsEditable(false)
-            ->setRenderType(NewSetting::RENDER_TYPE_NONE)
-            ->setValidation($validation)
-            ->setName(static::LOG_LEVEL_T3_FILE_WRITER);
-        Registration::addNewSettings($loglevelT3FileWriter);
     }
 
     /**
