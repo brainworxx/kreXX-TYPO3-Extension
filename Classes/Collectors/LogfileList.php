@@ -212,7 +212,6 @@ class LogfileList extends AbstractCollector
     protected function getRoute(string $id, $uriBuilder): string
     {
         if ($uriBuilder instanceof UriBuilder) {
-            /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
             return (string)$uriBuilder->buildUriFromRoute(
                 'tools_IncludekrexxKrexxConfiguration_dispatch',
                 [

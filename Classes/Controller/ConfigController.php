@@ -56,7 +56,6 @@ class ConfigController extends ActionController
      * the new controller
      *
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
     public function editAction()
     {

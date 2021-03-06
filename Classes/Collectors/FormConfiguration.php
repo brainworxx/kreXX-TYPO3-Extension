@@ -134,17 +134,17 @@ class FormConfiguration extends AbstractCollector
             // with the form element.
             if ($values[Fallback::RENDER_TYPE] === Fallback::RENDER_TYPE_NONE) {
                 // It's not visible, thus we do not accept any values from it.
-                return Fallback::RENDER_TYPE_INI_NONE;
+                return Fallback::RENDER_TYPE_CONFIG_NONE;
             }
 
             if ($values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_TRUE) {
                 // It's editable and visible.
-                return Fallback::RENDER_TYPE_INI_FULL;
+                return Fallback::RENDER_TYPE_CONFIG_FULL;
             }
 
             if ($values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_FALSE) {
                 // It's only visible.
-                return Fallback::RENDER_TYPE_INI_DISPLAY;
+                return Fallback::RENDER_TYPE_CONFIG_DISPLAY;
             }
         }
 

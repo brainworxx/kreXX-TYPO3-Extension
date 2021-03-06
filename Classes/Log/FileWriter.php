@@ -86,7 +86,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface
      * @return \TYPO3\CMS\Core\Log\Writer\WriterInterface
      *   Return this, for chaining.
      */
-    public function writeLog(LogRecord $record)
+    public function writeLog(LogRecord $record): WriterInterface
     {
         $route = GeneralUtility::_GET('route');
         if ($route === '/ajax/refreshLoglist' || $route === '/ajax/delete') {

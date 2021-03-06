@@ -78,7 +78,6 @@ class IndexController extends AbstractController
      *
      * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      */
     public function saveAction(Settings $settings)
     {

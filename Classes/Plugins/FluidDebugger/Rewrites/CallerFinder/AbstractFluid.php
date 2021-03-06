@@ -214,7 +214,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      * @return array
      *   The caller array.
      */
-    protected function resolveCallerArrayByRenderType($data)
+    protected function resolveCallerArrayByRenderType($data): array
     {
         switch ($this->renderingType) {
             case 1:

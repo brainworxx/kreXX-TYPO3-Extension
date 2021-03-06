@@ -100,8 +100,6 @@ class DebugViewHelper extends ComptibilityViewHelper
     /**
      * A wrapper for kreXX();
      *
-     * @throws \ReflectionException
-     *
      * @return string
      *   Returns an empty string.
      */

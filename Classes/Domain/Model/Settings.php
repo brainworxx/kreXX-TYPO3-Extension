@@ -146,7 +146,7 @@ class Settings
      * @return string
      *   The generated ini content.
      */
-    protected function processGroups(array &$moduleSettings)
+    protected function processGroups(array &$moduleSettings): string
     {
         $result = '';
         $validation = Krexx::$pool->config->validation;
@@ -176,7 +176,7 @@ class Settings
      * @return string
      *   The generated ini content.
      */
-    protected function processFeEditing(array &$moduleSettings)
+    protected function processFeEditing(array &$moduleSettings): string
     {
         $result = '[feEditing]' . "\n";
         $allowedValues = ['full', 'display', 'none'];
