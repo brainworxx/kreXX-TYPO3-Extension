@@ -56,6 +56,8 @@ class FileWriterTest extends AbstractTest
         ControllerNothing::$data = [];
         ControllerNothing::$level = [];
         ControllerNothing::$message = [];
+
+        unset($_GET['route']);
     }
 
     /**
@@ -150,6 +152,29 @@ class FileWriterTest extends AbstractTest
         $fileWriter->writeLog($this->prepareFixture());
 
         $this->assertEquals(0, ControllerNothing::$count, 'No controller action allowed, because it is disabled.');
+    }
+
+    /**
+     * Test the disabling of the file writer, if we are facing a backend route
+     * from incluidekrexx.
+     *
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
+     */
+    public function testWriteLogRouting()
+    {
+        $_GET['route'] = '/ajax/refreshLoglist';
+        $fileWriter = new FileWriter([]);
+        $fileWriter->writeLog($this->prepareFixture());
+
+        $_GET['route'] = '/ajax/delete';
+        $fileWriter = new FileWriter([]);
+        $fileWriter->writeLog($this->prepareFixture());
+
+        $this->assertEquals(
+            0,
+            ControllerNothing::$count,
+            'No logging, while in self serving backend ajax mode.'
+        );
     }
 
     /**
