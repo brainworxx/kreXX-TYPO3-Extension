@@ -37,13 +37,17 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
+use Brainworxx\Krexx\Service\Config\Fallback;
+use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Package\MetaData;
@@ -51,7 +55,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use \Krexx;
 
-class ConfigurationTest extends AbstractTest
+class ConfigurationTest extends AbstractTest implements ConstInterface
 {
     /**
      * Do we have to reset the reverse proxy?
@@ -135,6 +139,7 @@ class ConfigurationTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::createWorkingDirectories
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerVersionDependantStuff
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerFileWriterSettings
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerFileWriter
      */
     public function testExec()
     {
@@ -143,20 +148,20 @@ class ConfigurationTest extends AbstractTest
         $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
 
         $versionMock = $this->getFunctionMock($typo3Namespace, 'version_compare');
-        $versionMock->expects($this->exactly(2))
+        $versionMock->expects($this->exactly(4))
             ->withConsecutive(
                 [Bootstrap::getTypo3Version(), '8.3', '>'],
                 [Bootstrap::getTypo3Version(), '9.5', '>=']
             )->will($this->returnValue(true));
 
         $classExistsMock = $this->getFunctionMock($typo3Namespace, 'class_exists');
-        $classExistsMock->expects($this->once())
+        $classExistsMock->expects($this->exactly(2))
             ->with(Environment::class)
             ->will($this->returnValue(false));
 
         // Mock the is_dir method. We will not create any files.
         $isDirMock = $this->getFunctionMock($typo3Namespace, 'is_dir');
-        $isDirMock->expects($this->exactly(4))
+        $isDirMock->expects($this->exactly(8))
             ->withConsecutive(
                 [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx'],
                 [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'log'],
@@ -172,7 +177,7 @@ class ConfigurationTest extends AbstractTest
             $typo3Namespace,
             'array_replace_recursive'
         );
-        $arrayReplaceRecursiveMock->expects($this->once())
+        $arrayReplaceRecursiveMock->expects($this->exactly(2))
             ->with($this->anything(), [Configuration::KREXX => ['module' => Log::class, 'before' => ['log']]]);
         // You just have to love these large arrays inside the globals.
         $GLOBALS[Configuration::TYPO3_CONF_VARS][Configuration::EXTCONF]
@@ -245,6 +250,19 @@ class ConfigurationTest extends AbstractTest
             LogLevel::ERROR,
             Krexx::$pool->config->getSetting('loglevelT3FileWriter'),
             'Default value is the error log level.'
+        );
+        $this->assertTrue(
+            empty($GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration']),
+            'File writer was not registered, because it is deactivated.'
+        );
+
+        // Test again with an activated file writer.
+        Krexx::$pool->rewrite[File::class] = ConfigSupplier::class;
+        ConfigSupplier::$overwriteValues[static::ACTIVATE_T3_FILE_WRITER] = true;
+        $this->configuration->exec();
+        $this->assertFalse(
+            empty($GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration']),
+            'File writer was registered.'
         );
     }
 }

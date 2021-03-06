@@ -38,6 +38,7 @@ use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\Tests\Helpers\TestCompatibility;
 use phpmock\phpunit\PHPMock;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
@@ -104,6 +105,8 @@ abstract class AbstractTest extends TestCompatibility
         unset($GLOBALS['BE_USER']);
         GeneralUtility::flushInternalRuntimeCaches();
         GeneralUtility::purgeInstances();
+
+        ConfigSupplier::$overwriteValues = [];
     }
 
     /**
