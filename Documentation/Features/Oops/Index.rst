@@ -31,7 +31,7 @@ Simply:
 Integrate with the backend configuration
 ----------------------------------------
 
-.. figure:: ../../Images/Usage/t3_logging.png
+.. figure:: ../../Images/Features/t3_logging.png
 	:width: 763
 	:alt: TYPO3 logging integration
 

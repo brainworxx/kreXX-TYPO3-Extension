@@ -61,7 +61,7 @@ A click on the recursion will then copy the original analysis via java script in
    :titlesonly:
    :glob:
 
-   Opps/Index
+   Oops/Index
    Logging/Index
    Scalar/Index
    Search/Index
