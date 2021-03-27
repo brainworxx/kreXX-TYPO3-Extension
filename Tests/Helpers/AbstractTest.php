@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Tests\Helpers;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
@@ -107,6 +108,8 @@ abstract class AbstractTest extends TestCompatibility
         GeneralUtility::purgeInstances();
 
         ConfigSupplier::$overwriteValues = [];
+
+        Config::$disabledByPhp = false;
     }
 
     /**

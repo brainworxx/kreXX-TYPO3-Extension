@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Log;
 
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Krexx;
@@ -50,12 +51,21 @@ use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\Writer\WriterInterface;
 use TYPO3\CMS\Core\Log\LogRecord;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Throwable;
 
-class FileWriter implements WriterInterface, ConfigConstInterface
+class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceConstInterface
 {
     use LoggingTrait;
 
+    /**
+     * @var string
+     */
     const KREXX_LOG_WRITER = 'kreXX log writer';
+
+    /**
+     * @var string
+     */
+    const EXCEPTION = 'exception';
 
     /**
      * Overwrites for the configuration.
@@ -88,57 +98,34 @@ class FileWriter implements WriterInterface, ConfigConstInterface
      */
     public function writeLog(LogRecord $record): WriterInterface
     {
-        $get = GeneralUtility::_GET();
-        // The 'route' may or may not be set at all.
-        // The GeneralUtility will then trow an error in 8.7.
-        if (
-            isset($get['route']) &&
-            ($get['route'] === '/ajax/refreshLoglist' || $get['route'] === '/ajax/delete')
-        ) {
-            // Do nothing.
-            // We will not spam the log folder with debug calls from the kreXX
-            // ajax backend.
-            return $this;
-        }
-
-        static::startForcedLog();
-        // We apply the configuration after the forced logging, to give the
-        // dev the opportunity to change the stuff from the forced logging.
-        $this->applyTheConfiguration();
-
-        // Disabled?
-        if (
-            Krexx::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
-            AbstractController::$analysisInProgress ||
-            Config::$disabledByPhp
-        ) {
+        if ($this->isDisabled()) {
             return $this;
         }
 
         AbstractController::$analysisInProgress = true;
 
         // Get the backtrace ready.
+        // We extract our own backtrace, because the objects in the thrown
+        // exception may not be available.
         $backtrace = debug_backtrace();
         // The first one is not instance of the logger.
         unset($backtrace[0]);
         $step = 1;
-        while ($backtrace[$step + 1]['object'] instanceof Logger) {
+        while (
+            isset($backtrace[$step + 1][static::TRACE_OBJECT]) === true
+            && $backtrace[$step + 1][static::TRACE_OBJECT] instanceof Logger
+        ) {
             // Remove the backtrace steps, until we leave the logger.
             unset($backtrace[$step]);
             ++$step;
         }
 
         $backtrace = array_values($backtrace);
-        $logModel = new LogModel();
-        $logModel->setTrace($backtrace)
-            ->setCode($record->getComponent())
-            ->setMessage($record->getMessage());
-
-        if (isset($backtrace[0]['file']) === true) {
-            $logModel->setFile((string)$backtrace[0]['file']);
-        }
-        if (isset($backtrace[0]['line']) === true) {
-            $logModel->setLine((int)$backtrace[0]['line']);
+        if (strpos($record->getMessage(), 'Oops, an error occurred!') === 0) {
+            $logModel = $this->prepareLogModelOops($backtrace, $record);
+        } else {
+            // This one is not an "oops" record.
+            $logModel = $this->prepareLogModelNormal($backtrace, $record);
         }
 
         Krexx::$pool->createClass(DumpController::class)
@@ -153,6 +140,134 @@ class FileWriter implements WriterInterface, ConfigConstInterface
         static::endForcedLog();
 
         return $this;
+    }
+
+    /**
+     * What the method name says. We also apply the configuration here.
+     *
+     * And no, we are not going to reset the configuration. kreXX is disabled.
+     *
+     * @return bool
+     */
+    protected function isDisabled(): bool
+    {
+        $get = GeneralUtility::_GET();
+        // The 'route' may or may not be set at all.
+        // The GeneralUtility will then trow an error in 8.7.
+        if (
+            isset($get['route']) &&
+            ($get['route'] === '/ajax/refreshLoglist' || $get['route'] === '/ajax/delete')
+        ) {
+            // Do nothing.
+            // We will not spam the log folder with debug calls from the kreXX
+            // ajax backend.
+            return true;
+        }
+
+        static::startForcedLog();
+        // We apply the configuration after the forced logging, to give the
+        // dev the opportunity to change the stuff from the forced logging.
+        $this->applyTheConfiguration();
+
+        // Disabled?
+        if (
+            Krexx::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+            AbstractController::$analysisInProgress ||
+            Config::$disabledByPhp
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Preparing the LogModel with the dreaded "Oops" exception
+     *
+     * The "Oops, an error occurred!" is the most evil thing in typo3. Getting
+     * any useful information from one of those can proof quite a challenge.
+     *
+     * Otoh, one can always revert back to development settings, so that
+     * literally everybody can see what is happening.
+     *
+     * @param array $backtrace
+     *   The original backtrace.
+     * @param \TYPO3\CMS\Core\Log\LogRecord $record
+     *   The log record from tYPO3
+     *
+     * @return \Brainworxx\Krexx\Logging\Model
+     *   The loaded kreXX log model.
+     */
+    protected function prepareLogModelOops(array $backtrace, LogRecord $record): LogModel
+    {
+        // We have to extract it from the backtrace.
+        if (
+            isset($backtrace[0][static::TRACE_ARGS][1][static::EXCEPTION]) === false ||
+            $backtrace[0][static::TRACE_ARGS][1][static::EXCEPTION] instanceof Throwable === false
+        ) {
+            // Fallback to the normal handling.
+            return $this->prepareLogModelNormal($backtrace, $record);
+        }
+
+        /** @var Throwable $oopsException */
+        $oopsException = $backtrace[0][static::TRACE_ARGS][1][static::EXCEPTION];
+        $message = '';
+
+        if (method_exists($oopsException, 'getTitle')) {
+            $message = $oopsException->getTitle() . "\r\n";
+        }
+
+        $message .= $oopsException->getMessage();
+        // We use the backtrace from the oopsException.
+        // Depending on the PHP settings and/or the PHP version, we may have no
+        // args available here. The original backtrace does not help.
+        // But this is better than nothing.
+        $realBacktrace = $oopsException->getTrace();
+
+        /** @var LogModel $logModel */
+        $logModel = \Krexx::$pool->createClass(LogModel::class)
+            ->setTrace($realBacktrace)
+            ->setCode($record->getComponent())
+            ->setMessage($message);
+
+        if (isset($realBacktrace[0][static::TRACE_FILE]) === true) {
+            $logModel->setFile((string)$realBacktrace[0][static::TRACE_FILE]);
+        }
+
+        if (isset($realBacktrace[0][static::TRACE_LINE]) === true) {
+            $logModel->setLine((int)$realBacktrace[0][static::TRACE_LINE]);
+        }
+
+        return $logModel;
+    }
+
+    /**
+     * We are handling a "normal" error. Nothing special.
+     *
+     * @param array $backtrace
+     *   The retrieved backtrace.
+     * @param \TYPO3\CMS\Core\Log\LogRecord $record
+     *   The log record from the core.
+     *
+     * @return \Brainworxx\Krexx\Logging\Model
+     *   The prepared log mode.
+     */
+    protected function prepareLogModelNormal(array $backtrace, LogRecord $record): LogModel
+    {
+        /** @var LogModel $logModel */
+        $logModel = \Krexx::$pool->createClass(LogModel::class)
+            ->setTrace($backtrace)
+            ->setCode($record->getComponent())
+            ->setMessage($record->getMessage());
+
+        if (isset($backtrace[0][static::TRACE_FILE]) === true) {
+            $logModel->setFile((string)$backtrace[0][static::TRACE_FILE]);
+        }
+        if (isset($backtrace[0][static::TRACE_LINE]) === true) {
+            $logModel->setLine((int)$backtrace[0][static::TRACE_LINE]);
+        }
+
+        return $logModel;
     }
 
     /**

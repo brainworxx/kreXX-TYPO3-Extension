@@ -38,15 +38,17 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Log;
 use Brainworxx\Includekrexx\Log\FileWriter;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Includekrexx\Tests\Helpers\ControllerNothing;
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
-use \Brainworxx\Krexx\Logging\Model as LogModel;
+use Brainworxx\Krexx\Logging\Model as LogModel;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogRecord;
+use stdClass;
 
-class FileWriterTest extends AbstractTest
+class FileWriterTest extends AbstractTest implements BacktraceConstInterface
 {
     /**
      * {@inheritDoc}
@@ -105,7 +107,6 @@ class FileWriterTest extends AbstractTest
         $this->assertInstanceOf(LogModel::class, $logModel);
         $this->assertEquals($fixture->getMessage(), $logModel->getMessage());
         $this->assertEquals($fixture->getComponent(), $logModel->getCode());
-        $this->assertEquals($fixture->getComponent(), $logModel->getCode());
         $backtrace = $logModel->getTrace();
 
         if (empty($backtrace[0]['file']) === true) {
@@ -155,6 +156,7 @@ class FileWriterTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveLogLevel
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::isDisabled
      */
     public function testWriteLogDisabled()
     {
@@ -168,9 +170,11 @@ class FileWriterTest extends AbstractTest
 
     /**
      * Test the disabling of the file writer, if we are facing a backend route
-     * from incluidekrexx.
+     * from includekrexx.
      *
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelNormal
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::isDisabled
      */
     public function testWriteLogRouting()
     {
@@ -187,6 +191,41 @@ class FileWriterTest extends AbstractTest
             ControllerNothing::$count,
             'No logging, while in self serving backend ajax mode.'
         );
+    }
+
+    /**
+     * Test the writing of the log file when getting the dreaded Oops error.
+     *
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelOops
+     */
+    public function testWriteLogOops()
+    {
+        // Inject the exception with a prepared backtrace.
+        $oopsException = new \Exception('Guru Meditation #010000C.000EF800', time());
+        $backtrace = debug_backtrace();
+        $backtrace[1][static::TRACE_ARGS][1]['exception'] = $oopsException;
+        $backtrace[2][static::TRACE_OBJECT] = new  stdClass();
+        $debugBacktraceMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
+        $debugBacktraceMock->expects($this->once())
+            ->will($this->returnValue($backtrace));
+
+        // Create the fixture.
+        $fixture = new LogRecord(
+            'Unit Tests',
+            LogLevel::ERROR,
+            'Oops, an error occurred!'
+        );
+
+        Krexx::$pool->rewrite[DumpController::class] = ControllerNothing::class;
+        $fileWriter = new FileWriter([]);
+        $fileWriter->writeLog($fixture);
+
+        $this->assertEquals(1, ControllerNothing::$count);
+        /** @var \Brainworxx\Krexx\Logging\Model $logModel */
+        $logModel = ControllerNothing::$data[0];
+        $this->assertEquals($oopsException->getMessage(), $logModel->getMessage());
+        $this->assertEquals($fixture->getComponent(), $logModel->getCode());
     }
 
     /**
