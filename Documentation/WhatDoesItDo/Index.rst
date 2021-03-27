@@ -9,7 +9,17 @@
 What does it do?
 ================
 
-kreXX will be called from within the PHP source code:
+kreXX will either be called from the fluid template:
+
+.. code-block:: html
+
+    <!-- Normal frontend output -->
+    <krexx:debug>{_all}</krexx:debug>
+    <!-- Force the logging into a file -->
+    <krexx:log>{_all}</krexx:log>
+
+
+Or from within the PHP source code:
 
 .. code-block:: php
 
