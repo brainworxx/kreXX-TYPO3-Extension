@@ -112,16 +112,16 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
             return $stuffToDump;
         }
 
-        if ($ref->isUserDefined() === true) {
-            $this->addPropertyDumper($stuffToDump);
-        }
-
         // Analysing error objects.
         if (
-            $this->parameters[static::PARAM_DATA] instanceof Throwable ||
-            $this->parameters[static::PARAM_DATA] instanceof LogModel
+            $this->parameters[static::PARAM_DATA] instanceof Throwable
+            || $this->parameters[static::PARAM_DATA] instanceof LogModel
         ) {
             $stuffToDump[] = ErrorObject::class;
+        }
+
+        if ($ref->isUserDefined() === true) {
+            $this->addPropertyDumper($stuffToDump);
         }
 
         // Dumping class meta information.
@@ -135,8 +135,8 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
 
         // Dumping traversable data.
         if (
-            $config->getSetting(static::SETTING_ANALYSE_TRAVERSABLE) === true &&
-            $this->parameters[static::PARAM_DATA] instanceof \Traversable
+            $config->getSetting(static::SETTING_ANALYSE_TRAVERSABLE) === true
+            && $this->parameters[static::PARAM_DATA] instanceof \Traversable
         ) {
             $stuffToDump[] = Traversable::class;
         }

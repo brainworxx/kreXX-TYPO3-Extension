@@ -102,7 +102,10 @@ class Model
     }
 
     /**
+     * Setter for the backtrace.
+     *
      * @param array $backtrace
+     *   The backtrace.
      *
      * @return Model
      *   Return this for chaining.
@@ -117,7 +120,10 @@ class Model
     }
 
     /**
+     * Getter for the backtrace
+     *
      * @return array
+     *   The backtrace.
      */
     public function getTrace(): array
     {
@@ -125,7 +131,10 @@ class Model
     }
 
     /**
+     * Setter for the log message.
+     *
      * @param string $message
+     *   The log message.
      *
      * @return Model
      *   Return this for chaining.
@@ -137,7 +146,10 @@ class Model
     }
 
     /**
+     * Setter for the line where the logging was triggered.
+     *
      * @param int $line
+     *   The line number.
      *
      * @return Model
      *   Return this for chaining.
@@ -149,7 +161,10 @@ class Model
     }
 
     /**
+     * Setter for the file name, where the logging was triggered.
+     *
      * @param string $file
+     *   The file name with the path.
      *
      * @return Model
      *   Return this for chaining.
@@ -161,7 +176,10 @@ class Model
     }
 
     /**
+     * Setter for the logging code.
+     *
      * @param string $code
+     *   The logging code.
      *
      * @return Model
      *   Return this for chaining.
@@ -173,7 +191,10 @@ class Model
     }
 
     /**
+     * Getter for the logging code.
+     *
      * @return string
+     *   The logging code.
      */
     public function getCode(): string
     {
@@ -181,7 +202,10 @@ class Model
     }
 
     /**
+     * Getter for the file name, where the logging was triggered.
+     *
      * @return string
+     *   The file name.
      */
     public function getFile(): string
     {
@@ -189,7 +213,10 @@ class Model
     }
 
     /**
+     * Getter for the line, where the logging was triggered.
+     *
      * @return int
+     *   The line number.
      */
     public function getLine(): int
     {
