@@ -21,6 +21,9 @@ Changelog
     - [Feature] Allow plugins to register their own settings.
     - [Feature] Added a complete backtrace analysis to the log writer.
     - [Feature] Added the debug method definition for service attributes to the aimeos debugger.
+    - [Feature] Added a backend configuration for the integration into the TYPO3 file logging.
+    - [Feature] Added a specil analysis for the dreaded literal:`Oops an error occurred!` error.
+    - [Change] When analysing a logmodel or an exception, kreXX now analyses the special log/error stuff before the getter.
     - [Bugfix] Endless scrolling when clicking too fast through the search.
     - [Bugfix] Exception when using one php statement and a krexx call in the same line.
     - [Bugfix] Prevent long analysis meta data from breaking the BE layout.

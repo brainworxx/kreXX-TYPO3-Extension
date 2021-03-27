@@ -29,13 +29,13 @@ kreXX Debugger
 		en
 
 	:Description:
-		kreXX is a feature rich php debugger with a neatly arranged debug window, featuring backend access to logfiles, code generation to reach the displayed values and much more.
+		kreXX is a feature rich fluid and php debugger with a neatly arranged debug window, featuring backend access to logfiles, code generation to reach the displayed values and much more.
 
 	:Keywords:
 		debug, debugging, object, analysis
 
 	:Copyright:
-		2014 - 2020
+		2014 - 2021
 
 	:Author:
 		BRAINWORXX GmbH
