@@ -86,7 +86,9 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface
      *
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveLogLevel
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelNormal
      */
     public function testWriteLogNormal()
     {
@@ -127,6 +129,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface
      *
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveLogLevel
      */
     public function testWriteLogWithConfig()
@@ -155,6 +158,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface
      *
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveLogLevel
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::isDisabled
      */
@@ -173,6 +177,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface
      * from includekrexx.
      *
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelNormal
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::isDisabled
      */
@@ -197,6 +202,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface
      * Test the writing of the log file when getting the dreaded Oops error.
      *
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
+     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelOops
      */
     public function testWriteLogOops()

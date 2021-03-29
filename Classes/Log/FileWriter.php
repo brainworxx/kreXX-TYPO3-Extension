@@ -104,6 +104,35 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
 
         AbstractController::$analysisInProgress = true;
 
+        $backtrace = $this->retrieveBacktrace();
+        if (strpos($record->getMessage(), 'Oops, an error occurred!') === 0) {
+            $logModel = $this->prepareLogModelOops($backtrace, $record);
+        } else {
+            // This one is not an "oops" record.
+            $logModel = $this->prepareLogModelNormal($backtrace, $record);
+        }
+
+        Krexx::$pool->createClass(DumpController::class)
+            ->dumpAction(
+                $logModel,
+                $record->getComponent(),
+                $this->retrieveLogLevel($record)
+            );
+
+        AbstractController::$analysisInProgress = false;
+        static::endForcedLog();
+
+        return $this;
+    }
+
+    /**
+     * Retrieve a cleaned up backtrace
+     *
+     * @return array
+     *   The backtrace.
+     */
+    protected function retrieveBacktrace(): array
+    {
         // Get the backtrace ready.
         // We extract our own backtrace, because the objects in the thrown
         // exception may not be available.
@@ -120,26 +149,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
             ++$step;
         }
 
-        $backtrace = array_values($backtrace);
-        if (strpos($record->getMessage(), 'Oops, an error occurred!') === 0) {
-            $logModel = $this->prepareLogModelOops($backtrace, $record);
-        } else {
-            // This one is not an "oops" record.
-            $logModel = $this->prepareLogModelNormal($backtrace, $record);
-        }
-
-        Krexx::$pool->createClass(DumpController::class)
-            ->dumpAction(
-                $logModel,
-                $record->getComponent(),
-                $this->retrieveLogLevel($record)
-            );
-
-        AbstractController::$analysisInProgress = false;
-
-        static::endForcedLog();
-
-        return $this;
+        return array_values($backtrace);
     }
 
     /**
