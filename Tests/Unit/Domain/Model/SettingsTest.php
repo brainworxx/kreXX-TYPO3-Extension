@@ -50,6 +50,23 @@ use TYPO3\CMS\Core\Package\MetaData;
 
 class SettingsTest extends AbstractTest implements ConstInterface
 {
+
+    public function krexxUp()
+    {
+        parent::krexxUp();
+
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP']) === false) {
+            $GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP'] = '';
+        }
+    }
+
+    public function krexxDown()
+    {
+        parent::krexxDown();
+
+        unset($GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP']);
+    }
+
     /**
      * The things you do, to test some simple getter . . .
      */
