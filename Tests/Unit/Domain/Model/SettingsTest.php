@@ -34,14 +34,64 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Domain\Model;
 
+use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Validation;
+use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
+use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Plugin\Registration;
+use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Log\LogLevel;
+use TYPO3\CMS\Core\Package\MetaData;
 
-class SettingsTest extends AbstractTest
+class SettingsTest extends AbstractTest implements ConstInterface
 {
+    /**
+     * The things you do, to test some simple getter . . .
+     */
+    protected function prepareConfigToRun()
+    {
+        // Short circuit the getting of the system path.
+        $pathSite = PATH_site;
+        $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
+
+        $versionMock = $this->getFunctionMock($typo3Namespace, 'version_compare');
+        $versionMock->expects($this->exactly(2))
+            ->withConsecutive(
+                [Bootstrap::getTypo3Version(), '8.3', '>'],
+                [Bootstrap::getTypo3Version(), '9.5', '>=']
+            )->will($this->returnValue(true));
+
+        $classExistsMock = $this->getFunctionMock($typo3Namespace, 'class_exists');
+        $classExistsMock->expects($this->exactly(1))
+            ->with(Environment::class)
+            ->will($this->returnValue(false));
+
+        // Mock the is_dir method. We will not create any files.
+        $isDirMock = $this->getFunctionMock($typo3Namespace, 'is_dir');
+        $isDirMock->expects($this->exactly(4))
+            ->withConsecutive(
+                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx'],
+                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'log'],
+                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'chunks'],
+                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'config']
+            )
+            ->will($this->returnValue(true));
+
+        // Simulating the package
+        $metaData = $this->createMock(MetaData::class);
+        $metaData->expects($this->once())
+            ->method('getVersion')
+            ->will($this->returnValue(AbstractTest::TYPO3_VERSION));
+        $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/')
+            ->expects($this->once())
+            ->method('getPackageMetaData')
+            ->will($this->returnValue($metaData));
+    }
 
     /**
      * There are no getter implemented. Hence, we set a value for each property
@@ -92,15 +142,25 @@ class SettingsTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMemoryLeft
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setSkin
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setUseScopeAnalysis
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setActivateT3FileWriter
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLoglevelT3FileWriter
      *
      * There is a point where we needed to stop and we have clearly passed it
      * but let's keep going and see what happens.
      */
     public function testItAll()
     {
+        $this->prepareConfigToRun();
+        // The TYPOO3 krexx plugin brings two new settings with it.
+        $t3configuration = new T3configuration();
+        Registration::register($t3configuration);
+        Registration::activatePlugin(T3configuration::class);
+        Krexx::$pool = null;
+        Pool::createPool();
+
         $settingsModel = new Settings();
         $validationMock = $this->createMock(Validation::class);
-        $validationMock->expects($this->exactly(21))
+        $validationMock->expects($this->exactly(23))
             ->method('evaluateSetting')
             ->will($this->returnValue(true));
         Krexx::$pool->config->validation = $validationMock;
@@ -122,7 +182,7 @@ class SettingsTest extends AbstractTest
                 // We let this one fail on purpose.
                 $settingsModel->{'setForm' . $settingName}('blargh');
             } else {
-                $settingsModel->{'setForm' . $settingName}(Fallback::RENDER_TYPE_INI_FULL);
+                $settingsModel->{'setForm' . $settingName}(Fallback::RENDER_TYPE_CONFIG_FULL);
             }
         }
 
@@ -160,24 +220,28 @@ class SettingsTest extends AbstractTest
                 Fallback::SETTING_MAX_RUNTIME => Fallback::SETTING_MAX_RUNTIME,
                 Fallback::SETTING_MEMORY_LEFT => Fallback::SETTING_MEMORY_LEFT,
             ],
+            $t3configuration->getName() => [
+                static::ACTIVATE_T3_FILE_WRITER => static::ACTIVATE_T3_FILE_WRITER,
+                static::LOG_LEVEL_T3_FILE_WRITER => static::LOG_LEVEL_T3_FILE_WRITER
+            ],
             Fallback::SECTION_FE_EDITING => [
                 // Skin is missing here, because we gave it an invalid value.
-                Fallback::SETTING_ANALYSE_PROTECTED_METHODS => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_ANALYSE_PRIVATE_METHODS => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_ANALYSE_PROTECTED => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_ANALYSE_PRIVATE => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_ANALYSE_SCALAR => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_ANALYSE_TRAVERSABLE => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_NESTING_LEVEL => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_MAX_CALL => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_DISABLED => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_DETECT_AJAX => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_ANALYSE_GETTER => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_MEMORY_LEFT => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_MAX_RUNTIME => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_USE_SCOPE_ANALYSIS => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_MAX_STEP_NUMBER => Fallback::RENDER_TYPE_INI_FULL,
-                Fallback::SETTING_ARRAY_COUNT_LIMIT => Fallback::RENDER_TYPE_INI_FULL,
+                Fallback::SETTING_ANALYSE_PROTECTED_METHODS => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_ANALYSE_PRIVATE_METHODS => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_ANALYSE_PROTECTED => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_ANALYSE_PRIVATE => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_ANALYSE_SCALAR => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_ANALYSE_TRAVERSABLE => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_NESTING_LEVEL => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_MAX_CALL => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_DISABLED => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_DETECT_AJAX => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_ANALYSE_GETTER => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_MEMORY_LEFT => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_MAX_RUNTIME => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_USE_SCOPE_ANALYSIS => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_MAX_STEP_NUMBER => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_ARRAY_COUNT_LIMIT => Fallback::RENDER_TYPE_CONFIG_FULL,
             ],
         ];
 

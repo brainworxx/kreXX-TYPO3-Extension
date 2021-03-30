@@ -177,7 +177,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     }
 
     /**
-     * Register the new settingfor the TYPO3 file writer.
+     * Register the new setting for the TYPO3 file writer.
      */
     protected function registerFileWriterSettings()
     {
