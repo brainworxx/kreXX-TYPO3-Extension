@@ -16,6 +16,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
+    - name: Make sure we are using composer v1
+      run: |
+        sudo composer self-update --1
+        sudo chown $USER $HOME/.composer
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
@@ -62,9 +67,7 @@ jobs:
           ${{ runner.os }}-php-
 
     - name: Install dependencies
-      uses: php-actions/composer@v5
-      with:
-        version: 1
+      run: composer install --prefer-dist --no-progress
       
     - name: Build
       run: composer test
