@@ -34,7 +34,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'kreXX Debugger',
-    'description' => 'kreXX is a feature rich php debugger, featuring backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Fluid and Aimeos',
+    'description' => 'Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos',
     'category' => 'misc',
     'version' => '4.1.0',
     'state' => 'stable',
