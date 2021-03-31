@@ -33,6 +33,11 @@ Alternatively, you can use the forced-logging methods:
 	\Krexx::logTimerEnd();
 
 
+.. code-block:: html
+
+	<krexx:log>{someFluidVariable}</krexx:log>
+	<krexx:log value="{my: 'value', to: 'analyse'}" />
+
 Wen using the forced logging, the following things will happen:
 
 - Output destination is set to file by force.

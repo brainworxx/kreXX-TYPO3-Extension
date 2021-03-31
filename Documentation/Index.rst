@@ -29,10 +29,10 @@ kreXX Debugger
 		en
 
 	:Description:
-		kreXX is a feature rich fluid and php debugger with a neatly arranged debug window, featuring backend access to logfiles, code generation to reach the displayed values and much more.
+		Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos.
 
 	:Keywords:
-		debug, debugging, object, analysis
+		debug, developer, log, development, aimeos, fluid
 
 	:Copyright:
 		2014 - 2021
