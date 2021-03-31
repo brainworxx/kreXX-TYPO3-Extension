@@ -42,6 +42,6 @@
     ]
   },
   "scripts": {
-    "test": "./vendor/bin/phpunit --color -d memory_limit=-1 -c phpunit.xml"
+    "test": "./vendor/bin/phpunit --coverage-clover=./clover.xml --color -d memory_limit=-1 -c phpunit.xml"
   }
 }

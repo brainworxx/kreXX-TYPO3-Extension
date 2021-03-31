@@ -2,8 +2,8 @@
 kreXX Debugger
 ==============
 
-.. image:: https://travis-ci.com/brainworxx/kreXX.svg?branch=master
-   :target: https://travis-ci.com/brainworxx/kreXX
+.. image:: https://github.com/brainworxx/kreXX/actions/workflows/php.yml/badge.svg?branch=master
+   :target: https://github.com/brainworxx/kreXX/actions/workflows/php.yml
 .. image:: https://api.codeclimate.com/v1/badges/c9d414a09928ede869c7/maintainability
    :target: https://codeclimate.com/github/brainworxx/kreXX/maintainability
 .. image:: https://api.codeclimate.com/v1/badges/c9d414a09928ede869c7/test_coverage.svg
