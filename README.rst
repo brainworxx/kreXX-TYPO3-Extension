@@ -2,8 +2,8 @@
 kreXX Debugger - TYPO3 Backend Extension
 ========================================
 
-.. image:: https://travis-ci.com/brainworxx/kreXX-TYPO3-Extension.svg?branch=master
-   :target: https://travis-ci.com/brainworxx/kreXX-TYPO3-Extension
+.. image:: https://github.com/brainworxx/kreXX-TYPO3-Extension/actions/workflows/php.yml/badge.svg?branch=master
+   :target: https://github.com/brainworxx/kreXX-TYPO3-Extension/actions/workflows/php.yml
 .. image:: https://api.codeclimate.com/v1/badges/43c23b7d829742003dab/maintainability
    :target: https://codeclimate.com/github/brainworxx/kreXX-TYPO3-Extension/maintainability
 .. image:: https://api.codeclimate.com/v1/badges/43c23b7d829742003dab/test_coverage
