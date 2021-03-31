@@ -41,10 +41,10 @@ Simply activate the logging integration in the backend module.
 
 
 
-Manual integration into the TYPO3 loging
-----------------------------------------
+Manual integration into the TYPO3 logging
+-----------------------------------------
 
-You can also integrate kreXX manally. Simply register it in your site package :literal:`ext_localconf.php`.
+You can also integrate kreXX manually. Simply register it in your site package :literal:`ext_localconf.php`.
 This way you can give it a different configuration from the rest of the the debug settings.
 
 .. code-block:: php

@@ -22,7 +22,7 @@ Changelog
     - [Feature] Added a complete backtrace analysis to the log writer.
     - [Feature] Added the debug method definition for service attributes to the aimeos debugger.
     - [Feature] Added a backend configuration for the integration into the TYPO3 file logging.
-    - [Feature] Added a specil analysis for the dreaded literal:`Oops an error occurred!` error.
+    - [Feature] Added a special analysis for the dreaded :literal:`Oops an error occurred!` error.
     - [Change] When analysing a logmodel or an exception, kreXX now analyses the special log/error stuff before the getter.
     - [Bugfix] Endless scrolling when clicking too fast through the search.
     - [Bugfix] Exception when using one php statement and a krexx call in the same line.
@@ -40,7 +40,7 @@ Changelog
     - [Feature] Added Lll string analysis
     - [Feature] Added Icons to the backend log list.
     - [Feature] Added additional data to the constants analysis for PHP 7.1 and higher. The scope analysis now respects their visibility.
-    - [Feature] Added logging shothand "krexxlog();".
+    - [Feature] Added logging shorthand "krexxlog();".
     - [Feature] The SQL Debugger now tells the dev if there was an error in the sql statement.
     - [Change] Removed all deprecations.
     - [Change] Removed the PHP 5.x fatal error handler.
@@ -255,7 +255,7 @@ Changelog
     - [Feature] Added a special analysis for the dataviewer values in fluid.
     - [Change] Moved the overwrites from the GLOBALS to a static class
     - [Change] Prettified the display of sourcecode in the backtrace in the smoky grey skin.
-    - [Change] Removed the option for the atomatic registration of the fatal error handler.
+    - [Change] Removed the option for the automatic registration of the fatal error handler.
     - [Change] Lots of micro optimizations.
     - [Change] Simplified array analysis is now configurable.
     - [Change] Renamed the 'Backtrace' config group to 'pruneOutput'.
@@ -318,8 +318,8 @@ Changelog
     - [Bugfix] Fixed a autoloading triggering event, when processing a string.
     - [Bugfix] Fixed an issue with the path filter and the directory separator string on windows systems.
     - [Bugfix] Fixed an issue, where the preview of the string was first escaped, and then truncated.
-    - [Bugfix] Fixed a warning, in case there is a special compartibility layer active in conjunction with T>PO3 8.7
-    - [Bugfix] The string analysis is now respection line breaks in short string.
+    - [Bugfix] Fixed a warning, in case there is a special compatibility layer active in conjunction with T>PO3 8.7
+    - [Bugfix] The string analysis is now respecting line breaks in short string.
     - [Bugfix] Make sure that the marking of text will be displayed in the browser.
     - [Bugfix] Prevent a search with no search text at all.
     - [Bugfix] The cache handling of searches is now working correctly.
@@ -339,7 +339,7 @@ Changelog
     - [Bugfix] Removed a warning in the IP-Whitelisting, in case there is no actual IP available.
     - [Bugfix] Source generation for resolved recursions works now as expected.
     - [Bugfix] Removed a warnings and some notices in case the $_SERVER variable was messed with.
-    - [Bugfix] Prevent a thrown error, in case a class implements some sort of debugger trap by explicitely throwing errors when trying to get the traversable data.
+    - [Bugfix] Prevent a thrown error, in case a class implements some sort of debugger trap by explicitly throwing errors when trying to get the traversable data.
 
 
 2.1.2
@@ -404,7 +404,7 @@ Changelog
     - [Feature] Added metadata to the backend logging
     - [Internals] Adopted PSR-2
     - [Change] Restructured the configuration options. The sorting does now make more sense than before.
-    - [Change] Removed logging options and debug methods from the frontend editing configuration optins.
+    - [Change] Removed logging options and debug methods from the frontend editing configuration options.
     - [Change] When the destination is set to 'file' via config file, this value can not be overwritten with local cookie settings.
     - [Change] Unclunked the Smokey-Grey skin.
     - [Change] [Bugfix] Removed the whole dual-output mess.

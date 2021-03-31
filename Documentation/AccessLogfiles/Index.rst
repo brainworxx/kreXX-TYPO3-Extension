@@ -11,9 +11,9 @@
 Access logfiles
 ===============
 
-The access to the logs files can be found in the frist tab of the backend module. The list is automatically updated by java script every few seconds.
+The access to the logs files can be found in the first tab of the backend module. The list is automatically updated by java script every few seconds.
 
-Each enty has a unique color to make new files better recognisable,
+Each entry has a unique color to make new files better recognisable,
 
 .. figure:: ../Images/Logging/logfiles.png
 	:width: 1246px

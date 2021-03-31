@@ -45,7 +45,7 @@ Use kreXX in a try/catch
 
     try {
         // Execute the stuff where the error may occur.
-        $this->doSometing();
+        $this->doSomething();
     } catch (\Throwable $e) {
         krexx($e);
     }

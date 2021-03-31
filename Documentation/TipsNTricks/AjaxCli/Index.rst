@@ -25,4 +25,4 @@ Debugging Both
 ^^^^^^^^^^^^^^
 If you want to debug Ajax or CLI requests, simply switch to logging: :ref:`logging`
 
-The log files can be accessd here: :ref:`accesslogfiles`
+The log files can be accessed here: :ref:`accesslogfiles`

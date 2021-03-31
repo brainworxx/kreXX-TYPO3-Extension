@@ -141,7 +141,7 @@ TYPO3 specific
 |                                |                                                                                                                                        | - false                   |
 |                                | If you are trying to ge more info about a :literal:`Oops an error occurred!` error, set this to :literal:`true`.                       |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Log level of the Filewriter    | The log level of the file writer. Depending on the setting, the file writer will produce a lot of (unneccessary) output.               | - Debug                   |
+| Log level of the Filewriter    | The log level of the file writer. Depending on the setting, the file writer will produce a lot of (unnecessary) output.                | - Debug                   |
 |                                |                                                                                                                                        | - Info                    |
 |                                | Why trying to get to the bottom of a :literal:`Oops an error occurred!` error, set this to :literal:`Error`.                           | - Notice                  |
 |                                |                                                                                                                                        | - Error                   |

@@ -23,20 +23,20 @@ Features
 
 .. figure:: ../../Images/Aimeos/getter_analysis_hans.png
 	:width: 1156px
-	:alt: aimeos getter analysis
+	:alt: Aimeos getter analysis
 
 	The getter analysis resolves the values stored inside the objects, offers source code generation to reach them, as well as some additional meta data.
 
 
 .. figure:: ../../Images/Aimeos/magic_property_smokygrey.png
 	:width: 740px
-	:alt: aimeos magical property analysis
+	:alt: Aimeos magical property analysis
 
 	Analysis of a magical property from a shop item.
 
 
 .. figure:: ../../Images/Aimeos/view_helper_smokygrey.png
 	:width: 1033px
-	:alt: aimeos view factory analysis
+	:alt: Aimeos view factory analysis
 
 	Analysis of a Aimeos view helper with source generation and comments from the source code.
