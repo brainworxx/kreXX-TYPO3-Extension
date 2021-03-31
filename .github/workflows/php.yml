@@ -17,6 +17,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
+    - name: Switch PHP Version
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+          
     - name: Make sure we are using composer v1
       run: |
         sudo composer self-update --1
