@@ -1,0 +1,71 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ '7.4', '7.3', '7.1', '7.0' ]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Downgrade composer
+      run: composer self-update --1
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+      
+    - name: Install TYPO3 8
+      run: composer require --no-update "typo3/cms-core:^8.7"
+      if: ${{ matrix.php == '7.0' || matrix.php == '7.1' }}
+      
+    - name: Install TYPO3 9
+      run: composer require --no-update "typo3/cms-core:^9.5"
+      if: ${{ matrix.php == '7.2' }}
+      
+    - name: Install TYPO3 10
+      run: composer require --no-update "typo3/cms-core:^10.4"
+      if: ${{ matrix.php == '7.3' matrix.php == '7.4' }}
+      
+    - name: Install Aimeos 18
+      run: composer require --no-update "aimeos/aimeos-typo3:^18"
+      if: ${{ matrix.php == '7.0' || matrix.php == '7.2' }}
+      
+    - name: Install Aimeos 19
+      run: composer require --no-update "aimeos/aimeos-typo3:^19"
+      if: ${{ matrix.php == '7.1' }}
+      
+    - name: Install Aimeos 20
+      run: composer require --no-update "aimeos/aimeos-typo3:^20"
+      if: ${{ matrix.php == '7.3' || matrix.php == '7.4' }}
+      
+    - name: Install Admin Panel 9
+      run: composer require --no-update "typo3/cms-adminpanel:^9.5"
+      if: ${{ matrix.php == '7.2' }}
+      
+    - name: Install Admin Panel 10
+      run: composer require --no-update "typo3/cms-adminpanel:^10.4"
+      if: ${{ matrix.php == '7.3' matrix.php == '7.4' }}
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+      
+    - name: Build
+      run: composer test
