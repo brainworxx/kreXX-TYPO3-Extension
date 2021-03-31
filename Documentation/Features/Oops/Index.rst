@@ -20,18 +20,11 @@ What is happening
 Whenever a :literal:`Oops an error occurred` is thrown on the frontend, TYPO3 normally creates a log entry with some infos about what has happened.
 The provided info about what happened tends to be a little bit sparse in the log file. kreXX however can provide much more information.
 
-Simply:
-
-- Set the option Activate :literal:`the TYPO3 Filewriter` to :literal:`true`.
-- Set the :literal:`Log level of the Filewriter` to :literal:`error`, which  is the default setting.
-- Clear the cache
-- Refresh the page with the :literal:`Oops` on the frontend.
-- Access the log entry with te backend module.
 
 Integrate with the backend configuration
 ----------------------------------------
 
-Simply activate the logging integration in the backend module.
+- Simply activate the logging integration in the backend module.
 
 
 
@@ -40,6 +33,9 @@ Simply activate the logging integration in the backend module.
 	:alt: TYPO3 logging integration
 
 
+- Clear the cache
+- Refresh the page with the :literal:`Oops` on the frontend.
+- Access the log entry with te backend module.
 
 Manual integration into the TYPO3 logging
 -----------------------------------------
