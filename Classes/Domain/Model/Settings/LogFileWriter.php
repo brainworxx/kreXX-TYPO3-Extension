@@ -68,6 +68,8 @@ trait LogFileWriter
      * Do nothing. This value will not get added to the ini.
      *
      * @param $value
+     *
+     * @return mixed
      */
     public function setFormactivateT3FileWriter($value)
     {
@@ -80,6 +82,8 @@ trait LogFileWriter
      * Do nothing. This value will not get added to the ini.
      *
      * @param $value
+     *
+     * @return mixed
      */
     public function setFormloglevelT3FileWriter($value)
     {

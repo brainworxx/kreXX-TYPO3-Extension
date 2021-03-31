@@ -208,7 +208,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
      *
      * @return \Closure
      */
-    protected function createFileWriterValidator(): \Closure
+    protected function createFileWriterValidator(): Closure
     {
         return function ($value, Pool $pool) {
             $result = in_array(

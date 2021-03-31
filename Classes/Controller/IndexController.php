@@ -120,6 +120,8 @@ class IndexController extends AbstractController
      *
      * @param ServerRequest|null $serverRequest
      *
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
+     *
      * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface|\TYPO3\CMS\Core\Http\NullResponse
      */
     public function dispatchAction(ServerRequest $serverRequest = null)

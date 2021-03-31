@@ -125,10 +125,7 @@ class DirtyModels implements EventHandlerInterface
         if ($bool === true) {
             return 'TRUE';
         }
-        if ($bool === false) {
-            return 'FALSE';
-        }
 
-        return '';
+        return 'FALSE';
     }
 }

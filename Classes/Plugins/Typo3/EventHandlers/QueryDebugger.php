@@ -131,7 +131,6 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
      */
     protected function retrieveSql($query): string
     {
-        $result = '';
         try {
             // Retrieving the SQL, depending on the object class.
             if ($query instanceof QueryBuilder) {

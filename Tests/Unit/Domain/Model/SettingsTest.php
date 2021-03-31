@@ -161,6 +161,8 @@ class SettingsTest extends AbstractTest implements ConstInterface
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setUseScopeAnalysis
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setActivateT3FileWriter
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLoglevelT3FileWriter
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormactivateT3FileWriter
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormloglevelT3FileWriter
      *
      * There is a point where we needed to stop and we have clearly passed it
      * but let's keep going and see what happens.
