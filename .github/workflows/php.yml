@@ -33,7 +33,7 @@ jobs:
       
     - name: Install TYPO3 10
       run: composer require --no-update "typo3/cms-core:^10.4"
-      if: ${{ matrix.php == '7.3' matrix.php == '7.4' }}
+      if: ${{ matrix.php == '7.3' || matrix.php == '7.4' }}
       
     - name: Install Aimeos 18
       run: composer require --no-update "aimeos/aimeos-typo3:^18"
@@ -53,7 +53,7 @@ jobs:
       
     - name: Install Admin Panel 10
       run: composer require --no-update "typo3/cms-adminpanel:^10.4"
-      if: ${{ matrix.php == '7.3' matrix.php == '7.4' }}
+      if: ${{ matrix.php == '7.3' || matrix.php == '7.4' }}
 
     - name: Cache Composer packages
       id: composer-cache
