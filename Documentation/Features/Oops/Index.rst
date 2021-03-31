@@ -11,12 +11,6 @@
 Oops an error occurred
 ======================
 
-Logging may be turned off within the :literal:`$GLOBALS`. If this is done after kreXX loads, then the kreXX logging integration will not work.
-The reason for this is simple: someone wanted to prevent the logs from overflowing.
-
-What is happening
------------------
-
 Whenever a :literal:`Oops an error occurred` is thrown on the frontend, TYPO3 normally creates a log entry with some infos about what has happened.
 The provided info about what happened tends to be a little bit sparse in the log file. kreXX however can provide much more information.
 
@@ -36,6 +30,7 @@ Integrate with the backend configuration
 - Clear the cache
 - Refresh the page with the :literal:`Oops` on the frontend.
 - Access the log entry with te backend module.
+
 
 Manual integration into the TYPO3 logging
 -----------------------------------------
@@ -57,3 +52,11 @@ This way you can give it a different configuration from the rest of the the debu
 	];
 
 `Here <https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ApiOverview/Logging/Configuration/Index.html#configuration-of-the-logging-system />`_ you can find additional documentation about the TYPO3 logging system.
+
+
+Limits to the logging
+---------------------
+
+Logging may be turned off within the :literal:`$GLOBALS`. If this is done after kreXX loads, then the kreXX logging integration will not work.
+The reason for this is simple: logging is turned off again, after kreXX added these settings.
+
