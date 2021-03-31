@@ -17,9 +17,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Downgrade composer
-      run: composer self-update --1
-
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
       
@@ -65,7 +62,9 @@ jobs:
           ${{ runner.os }}-php-
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+      uses: php-actions/composer@v5
+      with:
+        version: 1
       
     - name: Build
       run: composer test
