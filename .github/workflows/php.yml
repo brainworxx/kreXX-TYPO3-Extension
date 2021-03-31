@@ -62,15 +62,6 @@ jobs:
       run: composer require --no-update "typo3/cms-adminpanel:^10.4"
       if: ${{ matrix.php == '7.3' || matrix.php == '7.4' }}
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
       
