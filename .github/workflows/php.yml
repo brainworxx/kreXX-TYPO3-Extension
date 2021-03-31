@@ -66,6 +66,7 @@ jobs:
       id: composer-cache
       uses: actions/cache@v2
       with:
+        path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.json') }}
         restore-keys: |
           ${{ runner.os }}-php-
