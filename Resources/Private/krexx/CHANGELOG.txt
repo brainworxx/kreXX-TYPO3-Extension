@@ -12,6 +12,8 @@
   the search.
 - Bugfix: Exception when using one php statement and a krexx
   call in the same line.
+- Bugfix: Exception, when a mb_detect_encoding() could not
+  determine the encoding of a string.
 
 4.0.0
 - Added process resource analysis.

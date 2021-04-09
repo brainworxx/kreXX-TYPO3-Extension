@@ -27,6 +27,7 @@ Changelog
     - [Bugfix] Endless scrolling when clicking too fast through the search.
     - [Bugfix] Exception when using one php statement and a krexx call in the same line.
     - [Bugfix] Prevent long analysis meta data from breaking the BE layout.
+    - [Bugfix] Exception, when a mb_detect_encoding() could not determine the encoding of a string.
 
 4.0.0
     - [Feature] Added process resource analysis.
