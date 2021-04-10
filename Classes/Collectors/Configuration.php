@@ -89,10 +89,9 @@ class Configuration extends AbstractCollector
             LogLevel::NOTICE => static::translate('loglevel.notice', Bootstrap::EXT_KEY),
             LogLevel::WARNING => static::translate('loglevel.warning', Bootstrap::EXT_KEY),
             LogLevel::ERROR => static::translate('loglevel.error', Bootstrap::EXT_KEY),
-            LogLevel::ALERT => static::translate('loglevel.alert', Bootstrap::EXT_KEY),
             LogLevel::CRITICAL => static::translate('loglevel.critical', Bootstrap::EXT_KEY),
+            LogLevel::ALERT => static::translate('loglevel.alert', Bootstrap::EXT_KEY),
             LogLevel::EMERGENCY => static::translate('loglevel.emergency', Bootstrap::EXT_KEY),
-
         ];
 
         return $dropdown;

@@ -214,6 +214,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
             $result = in_array(
                 $value,
                 [
+                    LogLevel::EMERGENCY,
                     LogLevel::ALERT,
                     LogLevel::CRITICAL,
                     LogLevel::ERROR,
@@ -221,8 +222,6 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
                     LogLevel::NOTICE,
                     LogLevel::INFO,
                     LogLevel::DEBUG,
-                    LogLevel::EMERGENCY,
-
                 ]
             );
             if ($result === false) {
