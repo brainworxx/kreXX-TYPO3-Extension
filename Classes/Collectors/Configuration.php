@@ -87,6 +87,7 @@ class Configuration extends AbstractCollector
             LogLevel::DEBUG => static::translate('loglevel.debug', Bootstrap::EXT_KEY),
             LogLevel::INFO => static::translate('loglevel.info', Bootstrap::EXT_KEY),
             LogLevel::NOTICE => static::translate('loglevel.notice', Bootstrap::EXT_KEY),
+            LogLevel::WARNING => static::translate('loglevel.warning', Bootstrap::EXT_KEY),
             LogLevel::ERROR => static::translate('loglevel.error', Bootstrap::EXT_KEY),
             LogLevel::ALERT => static::translate('loglevel.alert', Bootstrap::EXT_KEY),
             LogLevel::CRITICAL => static::translate('loglevel.critical', Bootstrap::EXT_KEY),
