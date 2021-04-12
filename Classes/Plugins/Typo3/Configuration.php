@@ -166,14 +166,20 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         // with our new settings.
         Pool::createPool();
         Krexx::$pool->createClass(Config::class);
-        if (Krexx::$pool->config->getSetting(static::ACTIVATE_T3_FILE_WRITER) === true) {
-            $GLOBALS[static::TYPO3_CONF_VARS]['LOG']['writerConfiguration'] = [
-                // Using the configured log level.
-                Krexx::$pool->config->getSetting(static::LOG_LEVEL_T3_FILE_WRITER) => [
-                    KrexxFileWriter::class => []
-                ]
-            ];
+        if (Krexx::$pool->config->getSetting(static::ACTIVATE_T3_FILE_WRITER) === false) {
+            // Do nothing.
+            return;
         }
+
+        if (isset($GLOBALS[static::TYPO3_CONF_VARS][static::LOG][static::WRITER_CONFIGURATION]) === false) {
+            $GLOBALS[static::TYPO3_CONF_VARS][static::LOG][static::WRITER_CONFIGURATION] = [];
+        }
+
+        // Using the configured log level.
+        $GLOBALS[static::TYPO3_CONF_VARS][static::LOG][static::WRITER_CONFIGURATION]
+        [Krexx::$pool->config->getSetting(static::LOG_LEVEL_T3_FILE_WRITER)] = [
+            KrexxFileWriter::class => []
+        ];
     }
 
     /**

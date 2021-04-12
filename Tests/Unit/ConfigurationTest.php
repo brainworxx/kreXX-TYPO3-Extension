@@ -78,7 +78,7 @@ class ConfigurationTest extends AbstractTest
         $t3EmConstraint = '7.6.0-10.4.99';
         $phpEmConstraint = '7.0.0-8.0.99';
         $t3ComposerConstraint = '^7.6 || ^8 || ^9 || ^10';
-        $phpComposerConstraint = '^7.0 || ^7.1 || ^7.2 || ^7.3 || ^7.4 || ^8.0';
+        $phpComposerConstraint = '^7.0 || ^7.1 || ^7.2 || ^7.3 || ^7.4';
 
         // Test the EM configuration.
         $this->assertEquals($versionNumber, $EM_CONF[$_EXTKEY]['version']);

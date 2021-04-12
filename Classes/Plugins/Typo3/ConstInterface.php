@@ -59,6 +59,16 @@ interface ConstInterface
     /**
      * @var string
      */
+    const WRITER_CONFIGURATION = 'writerConfiguration';
+
+    /**
+     * @var string
+     */
+    const LOG = 'LOG';
+
+    /**
+     * @var string
+     */
     const ADMIN_PANEL = 'adminpanel';
 
     /**
