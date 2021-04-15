@@ -137,11 +137,11 @@ TYPO3 specific
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Option                         | Description                                                                                                                            | Possible values / example |
 +================================+========================================================================================================================================+===========================+
-| Activate the TYPO3 Filewriter  | Shall kreXX tab into the TYPO3 file logging?                                                                                           | - true                    |
+| Activate the TYPO3 FileWriter  | Shall kreXX tab into the TYPO3 file logging?                                                                                           | - true                    |
 |                                |                                                                                                                                        | - false                   |
 |                                | If you are trying to ge more info about a :literal:`Oops an error occurred!` error, set this to :literal:`true`.                       |                           |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Log level of the Filewriter    | The log level of the file writer. Depending on the setting, the file writer will produce a lot of (unnecessary) output.                | - Debug                   |
+| Log level of the FileWriter    | The log level of the file writer. Depending on the setting, the file writer will produce a lot of (unnecessary) output.                | - Debug                   |
 |                                |                                                                                                                                        | - Info                    |
 |                                | Why trying to get to the bottom of a :literal:`Oops an error occurred!` error, set this to :literal:`Error`.                           | - Notice                  |
 |                                |                                                                                                                                        | - Error                   |

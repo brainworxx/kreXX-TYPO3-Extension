@@ -21,3 +21,4 @@ Tips and tricks
 
    AjaxCli/Index
    T3settings/Index
+   Oops/Index

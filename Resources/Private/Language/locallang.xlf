@@ -47,9 +47,6 @@
             <trans-unit id="loglevel.notice">
                 <source>Notice</source>
             </trans-unit>
-            <trans-unit id="loglevel.warning">
-                <source>Warning</source>
-            </trans-unit>
             <trans-unit id="loglevel.error">
                 <source>Error</source>
             </trans-unit>
@@ -373,10 +370,10 @@
                 <source>Maximum array size before fallback to simplified analysis:</source>
 			</trans-unit>
             <trans-unit id="label.activateT3FileWriter">
-                <source>Activate the TYPO3 Filewriter</source>
+                <source>Activate the TYPO3 FileWriter</source>
             </trans-unit>
             <trans-unit id="label.loglevelT3FileWriter">
-                <source>Log level of the Filewriter</source>
+                <source>Log level of the FileWriter</source>
             </trans-unit>
 
 
