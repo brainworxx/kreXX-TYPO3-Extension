@@ -18,7 +18,7 @@ The provided info about what happened tends to be a little bit sparse in the log
 
 Simply
 
-- activate the FileWriter integration here ref:`logging`
+- activate the FileWriter integration here :ref:`filewriter`
 - flush the cache
 - refresh the frontend where the :literal:`Oops` is shown.
 
