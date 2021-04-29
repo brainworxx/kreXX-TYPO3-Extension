@@ -43,7 +43,6 @@ use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
@@ -53,10 +52,13 @@ use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Package\MetaData;
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use Brainworxx\Krexx\View\Output\CheckOutput;
-use \Krexx;
+use Krexx;
 
 class ConfigurationTest extends AbstractTest implements ConstInterface
 {
+
+    const REVERSE_PROXY = 'reverseProxyIP';
+
     /**
      * Do we have to reset the reverse proxy?
      *
@@ -69,7 +71,7 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
      */
     protected function krexxDown()
     {
-        unset($GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP']);
+        unset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY]);
         parent::krexxDown();
     }
 
@@ -86,18 +88,18 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         parent::krexxUp();
         $this->configuration = new Configuration();
 
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP'])) {
+        if (isset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY])) {
             return;
         }
 
-        if (isset($GLOBALS['TYPO3_CONF_VARS']) === false) {
-            $GLOBALS['TYPO3_CONF_VARS'] = [];
+        if (isset($GLOBALS[static::TYPO3_CONF_VARS]) === false) {
+            $GLOBALS[static::TYPO3_CONF_VARS] = [];
         }
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']) === false) {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS'] = [];
+        if (isset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS]) === false) {
+            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS] = [];
         }
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP']) === false) {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP'] = '';
+        if (isset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY]) === false) {
+            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY] = '';
         }
 
         $this->unsetReverseProxy = true;
@@ -144,6 +146,8 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
      */
     public function testExec()
     {
+        $log = 'log';
+
         // Short circuit the getting of the system path.
         $pathSite = PATH_site;
         $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
@@ -164,10 +168,10 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         $isDirMock = $this->getFunctionMock($typo3Namespace, 'is_dir');
         $isDirMock->expects($this->exactly(8))
             ->withConsecutive(
-                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx'],
-                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'log'],
-                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'chunks'],
-                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'config']
+                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR .  static::TX_INCLUDEKREXX],
+                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . $log],
+                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
+                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
             )
             ->will($this->returnValue(true));
 
@@ -179,11 +183,11 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
             'array_replace_recursive'
         );
         $arrayReplaceRecursiveMock->expects($this->exactly(2))
-            ->with($this->anything(), [Configuration::KREXX => ['module' => Log::class, 'before' => ['log']]]);
+            ->with($this->anything(), [Configuration::KREXX => ['module' => Log::class, 'before' => [$log]]]);
         // You just have to love these large arrays inside the globals.
         $GLOBALS[Configuration::TYPO3_CONF_VARS][Configuration::EXTCONF]
             [Configuration::ADMIN_PANEL][Configuration::MODULES][Configuration::DEBUG]
-            [Configuration::SUBMODULES] = ['module' => Log::class, 'after' => ['log']];
+            [Configuration::SUBMODULES] = ['module' => Log::class, 'after' => [$log]];
 
         $this->configuration->exec();
 
@@ -200,24 +204,21 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
             SettingsGetter::getRewriteList(),
             'Test the rewrite.'
         );
+
+        $rootpath = 'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR .
+            static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR;
         $this->assertEquals(
-            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR .
-            'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR .
-            'config' . DIRECTORY_SEPARATOR . 'Krexx.ini',
+            $rootpath . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini',
             SettingsGetter::getConfigFile(),
             'Test the new location of the configuration file.'
         );
         $this->assertEquals(
-            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR .
-            'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR .
-            'chunks' . DIRECTORY_SEPARATOR,
+            $rootpath . 'chunks' . DIRECTORY_SEPARATOR,
             SettingsGetter::getChunkFolder(),
             'Test the new location of the chunk folder.'
         );
         $this->assertEquals(
-            'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR .
-            'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR .
-            'log' . DIRECTORY_SEPARATOR,
+            $rootpath . $log . DIRECTORY_SEPARATOR,
             SettingsGetter::getLogFolder(),
             'Test the new location of the log folder.'
         );
@@ -244,16 +245,16 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         Krexx::$pool = null;
         Pool::createPool();
         $this->assertFalse(
-            Krexx::$pool->config->getSetting('activateT3FileWriter'),
+            Krexx::$pool->config->getSetting(static::ACTIVATE_T3_FILE_WRITER),
             'Default value is false.'
         );
         $this->assertEquals(
             LogLevel::ERROR,
-            Krexx::$pool->config->getSetting('loglevelT3FileWriter'),
+            Krexx::$pool->config->getSetting(static::LOG_LEVEL_T3_FILE_WRITER),
             'Default value is the error log level.'
         );
         $this->assertTrue(
-            empty($GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration']),
+            empty($GLOBALS[static::TYPO3_CONF_VARS][static::LOG][static::WRITER_CONFIGURATION]),
             'File writer was not registered, because it is deactivated.'
         );
 
@@ -262,7 +263,7 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         ConfigSupplier::$overwriteValues[static::ACTIVATE_T3_FILE_WRITER] = true;
         $this->configuration->exec();
         $this->assertFalse(
-            empty($GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration']),
+            empty($GLOBALS[static::TYPO3_CONF_VARS][static::LOG][static::WRITER_CONFIGURATION]),
             'File writer was registered.'
         );
     }

@@ -36,6 +36,7 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Log;
 
 use Brainworxx\Includekrexx\Log\FileWriter;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Includekrexx\Tests\Helpers\ControllerNothing;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
@@ -48,8 +49,10 @@ use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogRecord;
 use stdClass;
 
-class FileWriterTest extends AbstractTest implements BacktraceConstInterface
+class FileWriterTest extends AbstractTest implements BacktraceConstInterface, ConstInterface
 {
+    const ROUTE  = 'route';
+
     /**
      * {@inheritDoc}
      */
@@ -61,7 +64,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface
         ControllerNothing::$level = [];
         ControllerNothing::$message = [];
 
-        unset($_GET['route']);
+        unset($_GET[static::ROUTE]);
     }
 
     /**
@@ -111,16 +114,16 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface
         $this->assertEquals($fixture->getComponent(), $logModel->getCode());
         $backtrace = $logModel->getTrace();
 
-        if (empty($backtrace[0]['file']) === true) {
+        if (empty($backtrace[0][static::TRACE_FILE]) === true) {
             $this->assertEmpty($logModel->getFile());
         } else {
-            $this->assertEquals($backtrace[0]['file'], $logModel->getFile());
+            $this->assertEquals($backtrace[0][static::TRACE_FILE], $logModel->getFile());
         }
 
-        if (empty($backtrace[0]['line']) === true) {
+        if (empty($backtrace[0][static::TRACE_LINE]) === true) {
             $this->assertEmpty($logModel->getLine());
         } else {
-            $this->assertEquals($backtrace[0]['line'], $logModel->getLine());
+            $this->assertEquals($backtrace[0][static::TRACE_LINE], $logModel->getLine());
         }
     }
 
@@ -183,11 +186,11 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface
      */
     public function testWriteLogRouting()
     {
-        $_GET['route'] = '/ajax/refreshLoglist';
+        $_GET[static::ROUTE] = '/ajax/refreshLoglist';
         $fileWriter = new FileWriter([]);
         $fileWriter->writeLog($this->prepareFixture());
 
-        $_GET['route'] = '/ajax/delete';
+        $_GET[static::ROUTE] = '/ajax/delete';
         $fileWriter = new FileWriter([]);
         $fileWriter->writeLog($this->prepareFixture());
 

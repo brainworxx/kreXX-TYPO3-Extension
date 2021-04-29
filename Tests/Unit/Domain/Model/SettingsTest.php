@@ -45,18 +45,19 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Package\MetaData;
 
 class SettingsTest extends AbstractTest implements ConstInterface
 {
 
+    const REVERSE_PROXY = 'reverseProxyIP';
+
     public function krexxUp()
     {
         parent::krexxUp();
 
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP']) === false) {
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP'] = '';
+        if (isset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY]) === false) {
+            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY] = '';
         }
     }
 
@@ -64,7 +65,7 @@ class SettingsTest extends AbstractTest implements ConstInterface
     {
         parent::krexxDown();
 
-        unset($GLOBALS['TYPO3_CONF_VARS']['SYS']['reverseProxyIP']);
+        unset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY]);
     }
 
     /**
@@ -92,10 +93,10 @@ class SettingsTest extends AbstractTest implements ConstInterface
         $isDirMock = $this->getFunctionMock($typo3Namespace, 'is_dir');
         $isDirMock->expects($this->exactly(4))
             ->withConsecutive(
-                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx'],
-                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'log'],
-                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'chunks'],
-                [$pathSite . 'typo3temp' . DIRECTORY_SEPARATOR . 'tx_includekrexx' . DIRECTORY_SEPARATOR . 'config']
+                [$pathSite . static::TYPO3_TEMP  . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX],
+                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'log'],
+                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
+                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
             )
             ->will($this->returnValue(true));
 
