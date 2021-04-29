@@ -39,7 +39,7 @@ if (!defined('TYPO3_MODE')) {
 $boot = function () {
     if (class_exists(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)) {
         \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)
-            ->checkVersionNumber('4.1.0')
+            ->checkVersionNumber('4.1.1')
             ->run();
     }
 };

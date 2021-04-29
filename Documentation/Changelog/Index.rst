@@ -12,6 +12,8 @@
 Changelog
 =============================================================
 
+4.1.1
+
 4.1.0
     - [Feature] Added a log model to use for a logger implementation.
     - [Feature] Added .min. support for css files.
