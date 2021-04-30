@@ -51,6 +51,8 @@ class LogfileListTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::addMetaToFileInfo
      * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::fileSizeConvert
      * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::getRoute
+     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::injectBeUriBuilder
+     * @covers \Brainworxx\Includekrexx\Collectors\LogfileList::injectMvcUriBuilder
      */
     public function testAssignData()
     {
@@ -77,41 +79,34 @@ class LogfileListTest extends AbstractTest
         // We are not simulating these by function mocks.
         $this->setValueByReflection(
             'directories',
-            [Config::LOG_FOLDER =>__DIR__ . '/../../Fixtures/'],
+            [Config::LOG_FOLDER => __DIR__ . '/../../Fixtures/'],
             \Krexx::$pool->config
         );
 
         // Simulate some backend routing.
-        $uriBuilderMock = $this->createMock(\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class);
-        $uriBuilderMock->expects($this->exactly(3))
+        $mvcUriBuilderMock = $this->createMock(\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class);
+        $mvcUriBuilderMock->expects($this->exactly(3))
             ->method('reset')
             ->willReturnSelf();
-        $uriBuilderMock->expects($this->exactly(3))
+        $mvcUriBuilderMock->expects($this->exactly(3))
             ->method('setArguments')
             ->willReturnSelf();
-        $uriBuilderMock->expects($this->exactly(3))
+        $mvcUriBuilderMock->expects($this->exactly(3))
             ->method('uriFor')
             ->will($this->returnValue($someBeUrl));
 
-        $uriBeBuilderMock = $this->createMock(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
-        $uriBeBuilderMock->expects($this->exactly(3))
+        $beUriBuilderMock = $this->createMock(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
+        $beUriBuilderMock->expects($this->exactly(3))
             ->method('buildUriFromRoute')
             ->will($this->returnValue($anotherBeUrl));
 
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->exactly(2))
-            ->method('get')
-            ->willReturnMap([
-                [\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class, $uriBuilderMock],
-                [\TYPO3\CMS\Backend\Routing\UriBuilder::class, $uriBeBuilderMock]
-            ]);
-
-        $logLister->injectObjectManager($objectManagerMock);
+        $logLister->injectMvcUriBuilder($mvcUriBuilderMock);
+        $logLister->injectBeUriBuilder($beUriBuilderMock);
 
         // Simulate a TYPO3 version.
         $versionCompareMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Collectors\\', 'version_compare');
-        $versionCompareMock->expects($this->any())
-            ->willReturnOnConsecutiveCalls([false, false, false, false, true, true, true, true, ]);
+        $versionCompareMock->expects($this->exactly(6))
+            ->willReturnOnConsecutiveCalls(true, true, true, false, false, false);
 
         // Mock the filetime, because it may change in the CI server.
         $filemTimeMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Collectors\\', 'filemtime');
