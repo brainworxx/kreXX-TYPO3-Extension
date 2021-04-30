@@ -37,9 +37,8 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Collectors;
 
-use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use TYPO3\CMS\Backend\Routing\UriBuilder as BeUriBuilder;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder as MvcUriBuilder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
 /**
@@ -49,38 +48,6 @@ use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
  */
 class LogfileList extends AbstractCollector
 {
-    /**
-     * @var \TYPO3\CMS\Backend\Routing\UriBuilder
-     */
-    protected $beUriBuilder;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder
-     */
-    protected $mvcUriBuilder;
-
-    /**
-     * Inject the backend uri builder.
-     *
-     * @param \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder
-     *   The backend uri builder.
-     */
-    public function injectBeUriBuilder(BeUriBuilder $uriBuilder)
-    {
-        $this->beUriBuilder = $uriBuilder;
-    }
-
-    /**
-     * Inject the mvc uri builder.
-     *
-     * @param \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder
-     *   The mvc uri builder.
-     */
-    public function injectMvcUriBuilder(MvcUriBuilder $uriBuilder)
-    {
-        $this->mvcUriBuilder = $uriBuilder;
-    }
-
     /**
      * Assigning the list to the view. Used by out adminpanel logging module.
      *
@@ -230,31 +197,16 @@ class LogfileList extends AbstractCollector
      *
      * @return string
      *   The URL
-     *@throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
-     *
      */
     protected function getRoute(string $fileId): string
     {
-        if (version_compare(Bootstrap::getTypo3Version(), '9.0', '>=')) {
-            return (string) $this->beUriBuilder->buildUriFromRoute(
-                'tools_IncludekrexxKrexxConfiguration_dispatch',
-                [
-                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[id]' => $fileId,
-                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[action]' => 'dispatch',
-                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[controller]' => 'Index'
-                ]
-            );
-        } else {
-            return $this->mvcUriBuilder
-                ->reset()
-                ->setArguments(['M' => static::PLUGIN_NAME])
-                ->uriFor(
-                    'dispatch',
-                    ['id' => $fileId],
-                    'Index',
-                    Bootstrap::EXT_KEY,
-                    static::PLUGIN_NAME
-                );
-        }
+        return (string) GeneralUtility::makeInstance(BeUriBuilder::class)->buildUriFromRoute(
+            'tools_IncludekrexxKrexxConfiguration_dispatch',
+            [
+                'tx_includekrexx_tools_includekrexxkrexxconfiguration[id]' => $fileId,
+                'tx_includekrexx_tools_includekrexxkrexxconfiguration[action]' => 'dispatch',
+                'tx_includekrexx_tools_includekrexxkrexxconfiguration[controller]' => 'Index'
+            ]
+        );
     }
 }
