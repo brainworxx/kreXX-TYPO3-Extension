@@ -51,6 +51,7 @@ use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
+use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
 
 /**
  * Class Tx_Includekrexx_Controller_IndexController
@@ -225,16 +226,15 @@ abstract class AbstractController extends ActionController
      *
      * @throws \TYPO3\CMS\Extbase\Object\Exception
      *
-     * @return ResponseInterface|NullResponse
+     * @return MvcResponse|NullResponse
      */
     protected function createResponse()
     {
         if (class_exists(NullResponse::class)) {
             return GeneralUtility::makeInstance(NullResponse::class);
-        } else {
-            $this->response->shutdown();
-            return $this->response;
         }
+
+        return GeneralUtility::makeInstance(MvcResponse::class);
     }
 
     /**
