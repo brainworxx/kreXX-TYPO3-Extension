@@ -301,12 +301,12 @@ class IndexControllerTest extends AbstractTest
         $headerMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'header');
         $headerMock->expects($this->never());
 
-        // Mocking a class via StdClass. I love this job.
-        $nullResponseMock = new StdClass();
-        $this->injectIntoGeneralUtility(NullResponse::class, $nullResponseMock);
-
         $indexController = new IndexController();
-        $this->assertSame($nullResponseMock, $indexController->dispatchAction($serverRequestMock));
+        $responseMock = $this->createMock(Response::class);
+        $responseMock->expects($this->any())
+            ->method('shutdown');
+        $this->setValueByReflection('response', $responseMock, $indexController);
+        $indexController->dispatchAction($serverRequestMock);
     }
 
     /**
@@ -337,18 +337,16 @@ class IndexControllerTest extends AbstractTest
         $this->setValueByReflection('request', $requestMock, $controller);
         $this->expectOutputString('Et dico vide nec, sed in mazim phaedrum voluptatibus. Eum clita meliore tincidunt ei, sed utinam pertinax theophrastus ad. Porro quodsi detracto ea pri. Et vis mollis voluptaria. Per ut saperet intellegam.');
 
-        // Special handling for TYPO3 8.7 and 9.5.
-        $responseMock = $this->createMock(Response::class);
-        $responseMock->expects($this->any())
-            ->method('shutdown');
-        $this->setValueByReflection('response', $responseMock, $controller);
-
-
         // Prevent the dispatcher from doing something stupid.
         $headerMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'header');
         $headerMock->expects($this->exactly(2));
         $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'ob_flush');
         $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'flush');
+
+        $responseMock = $this->createMock(Response::class);
+        $responseMock->expects($this->any())
+            ->method('shutdown');
+        $this->setValueByReflection('response', $responseMock, $controller);
 
         $controller->dispatchAction();
     }
