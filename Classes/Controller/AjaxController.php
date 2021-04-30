@@ -46,7 +46,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use stdClass;
 
 class AjaxController
@@ -75,8 +74,7 @@ class AjaxController
 
         // There is already an access check in the LogfileList.
         // We will not check twice.
-        $fileList = GeneralUtility::makeInstance(ObjectManager::class)
-            ->get(LogfileList::class)
+        $fileList = GeneralUtility::makeInstance(LogfileList::class)
             ->retrieveFileList();
 
         $response->getBody()->write(json_encode($fileList));
