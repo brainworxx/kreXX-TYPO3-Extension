@@ -51,7 +51,6 @@ use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Class Tx_Includekrexx_Controller_IndexController
@@ -230,18 +229,12 @@ abstract class AbstractController extends ActionController
      */
     protected function createResponse()
     {
-        if (empty($this->objectManager)) {
-            // This is either 10.0 or 9.5 with frontend dispatching.
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $response = $objectManager->get(NullResponse::class);
+        if (class_exists(NullResponse::class)) {
+            return GeneralUtility::makeInstance(NullResponse::class);
         } else {
-            // 8.7 or 7.6 backend dispatching.
-            // And yes, we do need the shutdown here.
-            $response = $this->objectManager->get(ResponseInterface::class);
-            $response->shutdown();
+            $this->response->shutdown();
+            return $this->response;
         }
-
-        return $response;
     }
 
     /**
