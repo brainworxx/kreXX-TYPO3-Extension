@@ -115,12 +115,7 @@ class LogTest extends AbstractTest
         $logfileListMock->expects($this->once())
             ->method('retrieveFileList')
             ->will($this->returnValue($fileList));
-
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($logfileListMock));
-        $this->injectIntoGeneralUtility(ObjectManager::class, $objectManagerMock);
+        $this->injectIntoGeneralUtility(LogfileList::class, $logfileListMock);
 
         $request = new ServerRequest();
         $this->assertEquals($expectations, $this->log->getDataToStore($request));
