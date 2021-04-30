@@ -338,6 +338,14 @@ class IndexControllerTest extends AbstractTest
         $this->setValueByReflection('request', $requestMock, $controller);
         $this->expectOutputString('Et dico vide nec, sed in mazim phaedrum voluptatibus. Eum clita meliore tincidunt ei, sed utinam pertinax theophrastus ad. Porro quodsi detracto ea pri. Et vis mollis voluptaria. Per ut saperet intellegam.');
 
+        if (class_exists(NullResponse::class) === false) {
+            // Special handling for TYPO3 8.7 and 9.5.
+            $responseMock = $this->createMock(ResponseInterface::class);
+            $responseMock->expects($this->once())
+                ->method('shutdown');
+            $this->setValueByReflection('response', $responseMock, $controller);
+        }
+
         // Prevent the dispatcher from doing something stupid.
         $headerMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'header');
         $headerMock->expects($this->exactly(2));
