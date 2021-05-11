@@ -39,7 +39,6 @@ use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class AbstractCollectorTest extends AbstractTest
 {
