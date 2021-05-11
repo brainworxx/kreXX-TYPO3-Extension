@@ -13,6 +13,9 @@ Changelog
 =============================================================
 
 4.1.1
+    - [Change] Remove the usage of the ObjectManager whenever possible.
+    - [Change] Code cleanup.
+    - [Change] Make use of the Symfony DI.
 
 4.1.0
     - [Feature] Added a log model to use for a logger implementation.
