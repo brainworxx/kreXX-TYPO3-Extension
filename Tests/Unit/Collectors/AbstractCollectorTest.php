@@ -39,27 +39,9 @@ use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class AbstractCollectorTest extends AbstractTest
 {
-    /**
-     * Test the injection of the object manager.
-     *
-     * @covers \Brainworxx\Includekrexx\Collectors\AbstractCollector::injectObjectManager
-     */
-    public function testInjectObjectManager()
-    {
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $collector = new Configuration();
-        $collector->injectObjectManager($objectManagerMock);
-
-        $this->assertSame(
-            $objectManagerMock,
-            $this->retrieveValueByReflection('objectManager', $collector)
-        );
-    }
-
     /**
      * Test, if the current BE user has access and test the retrieval of the uc.
      *

@@ -37,9 +37,8 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Collectors;
 
-use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
-use TYPO3\CMS\Backend\Routing\UriBuilder;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder as BeUriBuilder;
+use TYPO3\CMS\Backend\Routing\UriBuilder as BeUriBuilder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
 /**
@@ -105,12 +104,6 @@ class LogfileList extends AbstractCollector
      */
     protected function retrieveFileInfo(array $files): array
     {
-        if (version_compare(Bootstrap::getTypo3Version(), '9.0', '>=')) {
-            $uriBuilder = $this->objectManager->get(UriBuilder::class);
-        } else {
-            $uriBuilder = $this->objectManager->get(BeUriBuilder::class);
-        }
-
         $fileList = [];
         foreach ($files as $file) {
             $fileinfo = [];
@@ -119,7 +112,7 @@ class LogfileList extends AbstractCollector
             $fileinfo['size'] = $this->fileSizeConvert(filesize($file));
             $fileinfo['time'] = date("d.m.y H:i:s", filemtime($file));
             $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
-            $fileinfo['dispatcher'] = $this->getRoute($fileinfo['id'], $uriBuilder);
+            $fileinfo['dispatcher'] = $this->getRoute($fileinfo['id']);
             $fileinfo['meta'] = $this->addMetaToFileInfo($file);
             $fileList[] = $fileinfo;
         }
@@ -199,39 +192,21 @@ class LogfileList extends AbstractCollector
      * Depending on the TYPO3 version, we must use different classes to get a
      * functioning link to the backend dispatcher.
      *
-     * @param string $id
+     * @param string $fileId
      *   The id of the file we want to get the url from.
-     * @param UriBuilder|BeUriBuilder
-     *  The concrete uri builder, depending on the TYPO3 version.
-     *
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
      * @return string
      *   The URL
      */
-    protected function getRoute(string $id, $uriBuilder): string
+    protected function getRoute(string $fileId): string
     {
-        if ($uriBuilder instanceof UriBuilder) {
-            return (string)$uriBuilder->buildUriFromRoute(
-                'tools_IncludekrexxKrexxConfiguration_dispatch',
-                [
-                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[id]' => $id,
-                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[action]' => 'dispatch',
-                    'tx_includekrexx_tools_includekrexxkrexxconfiguration[controller]' => 'Index'
-                ]
-            );
-        } else {
-            /** @var BeUriBuilder $uriBuilder */
-            return $uriBuilder
-                ->reset()
-                ->setArguments(['M' => static::PLUGIN_NAME])
-                ->uriFor(
-                    'dispatch',
-                    ['id' => $id],
-                    'Index',
-                    Bootstrap::EXT_KEY,
-                    static::PLUGIN_NAME
-                );
-        }
+        return (string) GeneralUtility::makeInstance(BeUriBuilder::class)->buildUriFromRoute(
+            'tools_IncludekrexxKrexxConfiguration_dispatch',
+            [
+                'tx_includekrexx_tools_includekrexxkrexxconfiguration[id]' => $fileId,
+                'tx_includekrexx_tools_includekrexxkrexxconfiguration[action]' => 'dispatch',
+                'tx_includekrexx_tools_includekrexxkrexxconfiguration[controller]' => 'Index'
+            ]
+        );
     }
 }

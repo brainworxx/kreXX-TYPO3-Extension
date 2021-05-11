@@ -42,14 +42,14 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use StdClass;
+use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
 use TYPO3\CMS\Extbase\Mvc\Request;
-use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
+use TYPO3\CMS\Extbase\Mvc\Response;
 
 class IndexControllerTest extends AbstractTest
 {
@@ -301,16 +301,12 @@ class IndexControllerTest extends AbstractTest
         $headerMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'header');
         $headerMock->expects($this->never());
 
-        // Mocking a class via StdClass. I love this job.
-        $nullResponseMock = new StdClass();
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($nullResponseMock));
-        $this->injectIntoGeneralUtility(ObjectManager::class, $objectManagerMock);
-
         $indexController = new IndexController();
-        $this->assertSame($nullResponseMock, $indexController->dispatchAction($serverRequestMock));
+        $responseMock = $this->createMock(Response::class);
+        $responseMock->expects($this->any())
+            ->method('shutdown');
+        $this->setValueByReflection('response', $responseMock, $indexController);
+        $indexController->dispatchAction($serverRequestMock);
     }
 
     /**
@@ -333,24 +329,12 @@ class IndexControllerTest extends AbstractTest
         // Use the files inside the fixture folder.
         $this->setValueByReflection(
             'directories',
-            [Config::LOG_FOLDER =>__DIR__ . '/../../Fixtures/'],
+            [Config::LOG_FOLDER => __DIR__ . '/../../Fixtures/'],
             \Krexx::$pool->config
         );
 
-        $responseMock = $this->createMock(ResponseInterface::class);
-        $responseMock->expects($this->once())
-            ->method('shutdown');
-
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(ResponseInterface::class)
-            ->will($this->returnValue($responseMock));
-
         $controller = new IndexController();
-        $this->setValueByReflection('objectManager', $objectManagerMock, $controller);
         $this->setValueByReflection('request', $requestMock, $controller);
-
         $this->expectOutputString('Et dico vide nec, sed in mazim phaedrum voluptatibus. Eum clita meliore tincidunt ei, sed utinam pertinax theophrastus ad. Porro quodsi detracto ea pri. Et vis mollis voluptaria. Per ut saperet intellegam.');
 
         // Prevent the dispatcher from doing something stupid.
@@ -359,6 +343,11 @@ class IndexControllerTest extends AbstractTest
         $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'ob_flush');
         $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'flush');
 
-        $this->assertSame($responseMock, $controller->dispatchAction());
+        $responseMock = $this->createMock(Response::class);
+        $responseMock->expects($this->any())
+            ->method('shutdown');
+        $this->setValueByReflection('response', $responseMock, $controller);
+
+        $controller->dispatchAction();
     }
 }

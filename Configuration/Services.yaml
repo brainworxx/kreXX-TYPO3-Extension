@@ -3,3 +3,19 @@ services:
     autowire: true
     autoconfigure: true
     public: false
+
+  Brainworxx\Includekrexx\:
+    resource: '../Classes/*'
+
+# Make the live preset class available for injection within
+# the extension, and wire it onto the index controller.
+  context.livepreset:
+    class: TYPO3\CMS\Install\Configuration\Context\LivePreset
+  Brainworxx\Includekrexx\Controller\IndexController:
+    calls:
+      - injectLivePreset: ['@context.livepreset']
+
+# Make sure that we can use the Typo3DbQueryParser outside of
+# extbase.
+  Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser:
+    public: true

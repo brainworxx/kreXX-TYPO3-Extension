@@ -36,11 +36,8 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Controller;
 
 use Brainworxx\Includekrexx\Controller\ConfigController;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
-use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Service\CacheService;
 
 class ConfigControllerTest extends AbstractTest
 {

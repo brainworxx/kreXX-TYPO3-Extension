@@ -42,7 +42,6 @@ use Brainworxx\Krexx\Krexx;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Core\Http\ServerRequest;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class LogTest extends AbstractTest
@@ -115,12 +114,7 @@ class LogTest extends AbstractTest
         $logfileListMock->expects($this->once())
             ->method('retrieveFileList')
             ->will($this->returnValue($fileList));
-
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($logfileListMock));
-        $this->injectIntoGeneralUtility(ObjectManager::class, $objectManagerMock);
+        $this->injectIntoGeneralUtility(LogfileList::class, $logfileListMock);
 
         $request = new ServerRequest();
         $this->assertEquals($expectations, $this->log->getDataToStore($request));

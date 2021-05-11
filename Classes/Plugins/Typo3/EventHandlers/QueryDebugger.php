@@ -46,7 +46,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser;
+use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use Throwable;
 
@@ -137,8 +137,7 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
                 $sql = $query->getSQL();
                 $parameters = $query->getParameters();
             } elseif ($query instanceof QueryInterface) {
-                $doctrineQuery = GeneralUtility::makeInstance(ObjectManager::class)
-                    ->get(Typo3DbQueryParser::class)
+                $doctrineQuery = GeneralUtility::makeInstance(Typo3DbQueryParser::class)
                     ->convertQueryToDoctrineQueryBuilder($query);
                 $sql = $doctrineQuery->getSQL();
                 $parameters = $doctrineQuery->getParameters();

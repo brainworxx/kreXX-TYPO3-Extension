@@ -38,7 +38,7 @@ use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 
 class LogfileListTest extends AbstractTest
 {
@@ -57,7 +57,6 @@ class LogfileListTest extends AbstractTest
         $assign = 'assign';
         $fileList = 'filelist';
         $someBeUrl = 'some backend url';
-        $anotherBeUrl = 'another backend url';
         $dateFormat = 'd.m.y H:i:s';
         $dispatcher = 'dispatcher';
 
@@ -77,41 +76,17 @@ class LogfileListTest extends AbstractTest
         // We are not simulating these by function mocks.
         $this->setValueByReflection(
             'directories',
-            [Config::LOG_FOLDER =>__DIR__ . '/../../Fixtures/'],
+            [Config::LOG_FOLDER => __DIR__ . '/../../Fixtures/'],
             \Krexx::$pool->config
         );
 
         // Simulate some backend routing.
-        $uriBuilderMock = $this->createMock(\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class);
-        $uriBuilderMock->expects($this->exactly(3))
-            ->method('reset')
-            ->willReturnSelf();
-        $uriBuilderMock->expects($this->exactly(3))
-            ->method('setArguments')
-            ->willReturnSelf();
-        $uriBuilderMock->expects($this->exactly(3))
-            ->method('uriFor')
+        $beUriBuilderMock = $this->createMock(UriBuilder::class);
+        $beUriBuilderMock->expects($this->exactly(3))
+            ->method('buildUriFromRoute')
             ->will($this->returnValue($someBeUrl));
 
-        $uriBeBuilderMock = $this->createMock(\TYPO3\CMS\Backend\Routing\UriBuilder::class);
-        $uriBeBuilderMock->expects($this->exactly(3))
-            ->method('buildUriFromRoute')
-            ->will($this->returnValue($anotherBeUrl));
-
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->exactly(2))
-            ->method('get')
-            ->willReturnMap([
-                [\TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder::class, $uriBuilderMock],
-                [\TYPO3\CMS\Backend\Routing\UriBuilder::class, $uriBeBuilderMock]
-            ]);
-
-        $logLister->injectObjectManager($objectManagerMock);
-
-        // Simulate a TYPO3 version.
-        $versionCompareMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Collectors\\', 'version_compare');
-        $versionCompareMock->expects($this->any())
-            ->willReturnOnConsecutiveCalls([false, false, false, false, true, true, true, true, ]);
+        $this->injectIntoGeneralUtility(UriBuilder::class, $beUriBuilderMock);
 
         // Mock the filetime, because it may change in the CI server.
         $filemTimeMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Collectors\\', 'filemtime');
@@ -124,7 +99,7 @@ class LogfileListTest extends AbstractTest
                 'size' => '390 B',
                 'time' => date($dateFormat, 104),
                 'id' => '123456',
-                $dispatcher => $anotherBeUrl,
+                $dispatcher => $someBeUrl,
                 'meta' => [
                     [
                         'file' => '.../some/directory/file.php',
@@ -141,7 +116,7 @@ class LogfileListTest extends AbstractTest
                 'size' => '316 B',
                 'time' => date($dateFormat, 105),
                 'id' => '123457',
-                $dispatcher => $anotherBeUrl,
+                $dispatcher => $someBeUrl,
                 'meta' => [
                     [
                         'file' => '.../some/directory/anotherFile.php',
@@ -158,19 +133,10 @@ class LogfileListTest extends AbstractTest
                 'size' => '205 B',
                 'time' => date($dateFormat, 106),
                 'id' => '123458',
-                $dispatcher => $anotherBeUrl,
+                $dispatcher => $someBeUrl,
                 'meta' => []
             ]
         ];
-        $viewMock = $this->createMock(ViewInterface::class);
-        $viewMock->expects($this->once())
-            ->method($assign)
-            ->with($fileList, $expectation);
-        $logLister->assignData($viewMock);
-
-        $expectation[0][$dispatcher] = $someBeUrl;
-        $expectation[1][$dispatcher] = $someBeUrl;
-        $expectation[2][$dispatcher] = $someBeUrl;
         $viewMock = $this->createMock(ViewInterface::class);
         $viewMock->expects($this->once())
             ->method($assign)

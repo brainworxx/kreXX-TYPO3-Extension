@@ -38,7 +38,6 @@ use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Controller\AjaxController;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use TYPO3\CMS\Core\Http\ServerRequest;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class AjaxControllerTest extends AbstractTest
 {
@@ -53,11 +52,8 @@ class AjaxControllerTest extends AbstractTest
         $logfileListMock->expects($this->once())
             ->method('retrieveFileList')
             ->will($this->returnValue(['file', 'list']));
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue($logfileListMock));
-        $this->injectIntoGeneralUtility(ObjectManager::class, $objectManagerMock);
+
+        $this->injectIntoGeneralUtility(LogfileList::class, $logfileListMock);
 
         $controller = new AjaxController();
         $serverRequest = new ServerRequest();
