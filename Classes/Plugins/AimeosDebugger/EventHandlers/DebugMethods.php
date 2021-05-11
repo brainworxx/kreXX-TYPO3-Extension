@@ -62,8 +62,10 @@ class DebugMethods extends AbstractEventHandler implements CallbackConstInterfac
             'getRefItems' => [
                 // Aimeos 2018
                 \Aimeos\MShop\Common\Item\ListRef\Base::class,
-                // Aimeos 2019
-                \Aimeos\MShop\Common\Item\ListRef\Iface::class
+                // Aimeos 2019 & 2020
+                \Aimeos\MShop\Common\Item\ListRef\Iface::class,
+                // Aimeos 2021
+                \Aimeos\MShop\Common\Item\ListsRef\Iface::class,
             ],
             'getPropertyItems' => [
                 // Aimeos 2018
@@ -75,8 +77,10 @@ class DebugMethods extends AbstractEventHandler implements CallbackConstInterfac
                 \Aimeos\MShop\Common\Item\PropertyRef\Iface::class,
             ],
             'getListItems' => [
-                // Aimeos 2018 & 2019
+                // Aimeos 2018 & 2019 & 2020
                 \Aimeos\MShop\Common\Item\ListRef\Iface::class,
+                // Aimeos 2021
+                \Aimeos\MShop\Common\Item\ListsRef\Iface::class
             ],
             'getAttributeItems' => [
                 // Aimeos 2020
