@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -36,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
+use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Krexx;
@@ -46,9 +48,7 @@ use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use StdClass;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
-use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser;
 
 class QueryDebuggerTest extends AbstractTest implements CallbackConstInterface
 {
@@ -171,13 +171,7 @@ class QueryDebuggerTest extends AbstractTest implements CallbackConstInterface
             ->method('convertQueryToDoctrineQueryBuilder')
             ->with($queryMock)
             ->will($this->returnValue($this->createQueryBuilderMock()));
-
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(Typo3DbQueryParser::class)
-            ->will($this->returnValue($queryParserMock));
-        $this->injectIntoGeneralUtility(ObjectManager::class, $objectManagerMock);
+        $this->injectIntoGeneralUtility(Typo3DbQueryParser::class, $queryParserMock);
 
         $this->mockStrLen()
             ->expects($this->once())
