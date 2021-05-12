@@ -50,7 +50,6 @@ use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
 
 /**
