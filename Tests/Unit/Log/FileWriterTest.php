@@ -53,6 +53,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
 {
     const REQUEST_URI  = 'REQUEST_URI';
     const REQUEST_URI_VAR = 'requestURIvar';
+    const REMOTE_ADDR = 'REMOTE_ADDR';
 
     public function krexxUp()
     {
@@ -60,6 +61,12 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
 
         if (isset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REQUEST_URI_VAR]) === false) {
             $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REQUEST_URI_VAR] = '';
+        }
+        if (isset($_SERVER[static::REQUEST_URI]) === false) {
+            $_SERVER[static::REQUEST_URI] = '';
+        }
+        if (isset($_SERVER[static::REMOTE_ADDR]) === false) {
+            $_SERVER[static::REMOTE_ADDR] = '';
         }
     }
 
@@ -76,6 +83,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
 
         unset($_SERVER[static::REQUEST_URI]);
         unset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REQUEST_URI_VAR]);
+        unset($_SERVER[static::REMOTE_ADDR]);
     }
 
     /**
