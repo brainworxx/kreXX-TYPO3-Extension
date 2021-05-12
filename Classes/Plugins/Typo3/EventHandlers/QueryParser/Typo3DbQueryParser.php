@@ -59,14 +59,21 @@ class Typo3DbQueryParser extends OriginalParser
     public function convertQueryToDoctrineQueryBuilder(QueryInterface $query)
     {
         if (empty($this->dataMapper) === true) {
-            // Well, the service.yaml configuration got ignored.
-            // Must be lower than TYPO3 10.
-            // This means that the general utility is not able to inject
-            // anything. We must use the ObjectManager to create the parser.
-            return GeneralUtility::makeInstance(ObjectManager::class)
-                ->get(OriginalParser::class)
-                ->convertQueryToDoctrineQueryBuilder($query);
+            if (method_exists(ObjectManager::class, 'get') === true) {
+                // Well, the service.yaml configuration got ignored.
+                // Must be lower than TYPO3 10.
+                // This means that the general utility is not able to inject
+                // anything. We must use the ObjectManager to create the parser.
+                return GeneralUtility::makeInstance(ObjectManager::class)
+                    ->get(OriginalParser::class)
+                    ->convertQueryToDoctrineQueryBuilder($query);
+            }
+
+            // Must be very early during the bootstrap in TYPO3 12 and beyond.
+            // Dependency injection is not available yet.
+            return 'n/a';
         }
+
         return parent::convertQueryToDoctrineQueryBuilder($query);
     }
 }
