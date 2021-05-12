@@ -186,11 +186,11 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
      */
     public function testWriteLogRouting()
     {
-        $_GET[static::ROUTE] = '/ajax/refreshLoglist';
+        $_SERVER['REQUEST_URI'] = '/ajax/refreshLoglist';
         $fileWriter = new FileWriter([]);
         $fileWriter->writeLog($this->prepareFixture());
 
-        $_GET[static::ROUTE] = '/ajax/delete';
+        $_SERVER['REQUEST_URI'] = '/ajax/delete';
         $fileWriter = new FileWriter([]);
         $fileWriter->writeLog($this->prepareFixture());
 
