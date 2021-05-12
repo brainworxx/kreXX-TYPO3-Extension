@@ -51,7 +51,7 @@ use stdClass;
 
 class FileWriterTest extends AbstractTest implements BacktraceConstInterface, ConstInterface
 {
-    const ROUTE  = 'route';
+    const REQUEST_URI  = 'REQUEST_URI';
 
     /**
      * {@inheritDoc}
@@ -64,7 +64,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
         ControllerNothing::$level = [];
         ControllerNothing::$message = [];
 
-        unset($_GET[static::ROUTE]);
+        unset($_SERVER[static::REQUEST_URI]);
     }
 
     /**
@@ -186,11 +186,11 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
      */
     public function testWriteLogRouting()
     {
-        $_SERVER['REQUEST_URI'] = '/ajax/refreshLoglist';
+        $_SERVER[static::REQUEST_URI] = '/ajax/refreshLoglist';
         $fileWriter = new FileWriter([]);
         $fileWriter->writeLog($this->prepareFixture());
 
-        $_SERVER['REQUEST_URI'] = '/ajax/delete';
+        $_SERVER[static::REQUEST_URI] = '/ajax/delete';
         $fileWriter = new FileWriter([]);
         $fileWriter->writeLog($this->prepareFixture());
 
