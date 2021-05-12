@@ -52,6 +52,16 @@ use stdClass;
 class FileWriterTest extends AbstractTest implements BacktraceConstInterface, ConstInterface
 {
     const REQUEST_URI  = 'REQUEST_URI';
+    const REQUEST_URI_VAR = 'requestURIvar';
+
+    public function krexxUp()
+    {
+        parent::krexxUp();
+
+        if (isset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REQUEST_URI_VAR]) === false) {
+            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REQUEST_URI_VAR] = '';
+        }
+    }
 
     /**
      * {@inheritDoc}
@@ -65,6 +75,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
         ControllerNothing::$message = [];
 
         unset($_SERVER[static::REQUEST_URI]);
+        unset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REQUEST_URI_VAR]);
     }
 
     /**
