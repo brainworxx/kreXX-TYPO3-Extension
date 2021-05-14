@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter;
+use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
@@ -45,6 +46,8 @@ use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 
 class GetterTest extends AbstractTest
 {
+    use AimeosTestTrait;
+
     /**
      * Subscribing our class to test to the right event.
      *
@@ -69,6 +72,8 @@ class GetterTest extends AbstractTest
      */
     public function testConstruct()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $getter = new Getter(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $getter));
     }
@@ -84,6 +89,8 @@ class GetterTest extends AbstractTest
      */
     public function testHandle()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $values = [
             // Base class (bdata)
             'log.id' => '123456',

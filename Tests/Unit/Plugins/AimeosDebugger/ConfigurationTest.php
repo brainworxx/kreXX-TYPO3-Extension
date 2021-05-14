@@ -49,6 +49,8 @@ use Aimeos\MW\DB\Statement\Base as StatementBase;
 
 class ConfigurationTest extends AbstractTest
 {
+    use AimeosTestTrait;
+
     /**
      * @var \Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration
      */
@@ -70,6 +72,8 @@ class ConfigurationTest extends AbstractTest
      */
     public function testGetName()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $this->assertNotEmpty($this->configuraton->getName());
     }
 
@@ -80,6 +84,8 @@ class ConfigurationTest extends AbstractTest
      */
     public function testGetVersion()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
@@ -99,6 +105,8 @@ class ConfigurationTest extends AbstractTest
      */
     public function testExec()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $this->simulatePackage(Bootstrap::EXT_KEY, 'A path/');
         $this->configuraton->exec();
 

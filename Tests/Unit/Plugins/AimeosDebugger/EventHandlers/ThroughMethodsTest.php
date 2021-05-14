@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ThroughMethods;
+use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -49,6 +50,7 @@ use ReflectionMethod;
 
 class ThroughMethodsTest extends AbstractTest
 {
+    use AimeosTestTrait;
 
     /**
      * Test the handling of the pool.
@@ -57,6 +59,8 @@ class ThroughMethodsTest extends AbstractTest
      */
     public function testConstruct()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $properties = new ThroughMethods(Krexx::$pool);
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $properties));
     }
@@ -68,6 +72,8 @@ class ThroughMethodsTest extends AbstractTest
      */
     public function testHandle()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         // Subscribing.
         Registration::registerEvent(
             IterateThroughMethods::class . PluginConfigInterface::END_EVENT,
