@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\Callbacks;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods;
+use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods as IterateThroughMethods;
 use Brainworxx\Krexx\Krexx;
@@ -47,6 +48,8 @@ use ReflectionMethod;
 
 class ThroughMethodsTest extends AbstractTest implements CallbackConstInterface
 {
+    use AimeosTestTrait;
+
     /**
      * Test the preprocessing of methods.
      *
@@ -54,6 +57,8 @@ class ThroughMethodsTest extends AbstractTest implements CallbackConstInterface
      */
     public function testCallMe()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $thoughMethods = new ThroughMethods(Krexx::$pool);
         // Test the start event.
         $this->mockEventService([ThroughMethods::class . PluginConfigInterface::START_EVENT, $thoughMethods]);

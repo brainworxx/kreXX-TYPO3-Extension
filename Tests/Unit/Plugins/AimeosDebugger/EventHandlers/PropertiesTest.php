@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties;
+use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
@@ -48,6 +49,8 @@ use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 
 class PropertiesTest extends AbstractTest
 {
+    use AimeosTestTrait;
+
     /**
      * Test the handling of the pool.
      *
@@ -55,6 +58,8 @@ class PropertiesTest extends AbstractTest
      */
     public function testConstruct()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $properties = new Properties(Krexx::$pool);
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $properties));
     }
@@ -69,6 +74,8 @@ class PropertiesTest extends AbstractTest
      */
     public function testHandle()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $values = [
             'log.id' => '123456',
             'log.siteid' => '42',

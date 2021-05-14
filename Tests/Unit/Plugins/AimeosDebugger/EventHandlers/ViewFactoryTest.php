@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
+use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
@@ -50,6 +51,8 @@ use Aimeos\MW\View\Helper\Csrf\Standard as CsrfHelper;
 
 class ViewFactoryTest extends AbstractTest
 {
+    use AimeosTestTrait;
+
     /**
      * Test the handling of the pool.
      *
@@ -57,6 +60,8 @@ class ViewFactoryTest extends AbstractTest
      */
     public function testConstruct()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $properties = new ViewFactory(Krexx::$pool);
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $properties));
     }
@@ -72,6 +77,8 @@ class ViewFactoryTest extends AbstractTest
      */
     public function testHandle()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         // Subscribing.
         Registration::registerEvent(
             AnalyseMethods::class . PluginConfigInterface::START_EVENT,

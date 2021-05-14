@@ -41,6 +41,7 @@ use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators;
 use Brainworxx\Includekrexx\Tests\Fixtures\AimeosJobsDecorator;
 use Brainworxx\Includekrexx\Tests\Fixtures\Fixture20Job;
 use Brainworxx\Includekrexx\Tests\Fixtures\FixtureJob;
+use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Krexx;
@@ -53,6 +54,8 @@ use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 
 class DecoratorsTest extends AbstractTest
 {
+    use AimeosTestTrait;
+
     /**
      * Test the setting of the pool.
      *
@@ -60,6 +63,8 @@ class DecoratorsTest extends AbstractTest
      */
     public function testConstruct()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $getter = new Decorators(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $getter));
     }
@@ -78,6 +83,8 @@ class DecoratorsTest extends AbstractTest
      */
     public function testHandle()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         // Create a fixture with a decorator.
         $context = new MShopContext();
         $aimeos = new Bootstrap();

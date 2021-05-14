@@ -38,6 +38,7 @@ use Aimeos\Map;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods;
 use Brainworxx\Includekrexx\Tests\Fixtures\Aimeos20Item;
 use Brainworxx\Includekrexx\Tests\Fixtures\AimeosItem;
+use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
@@ -51,6 +52,7 @@ use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 
 class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
 {
+    use AimeosTestTrait;
 
     /**
      * Subscribing our class to test to the right event.
@@ -76,6 +78,8 @@ class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
      */
     public function testConstruct()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $debugMethod = new DebugMethods(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $debugMethod));
     }
@@ -88,6 +92,8 @@ class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
      */
     public function testHandleWrongObject()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $this->mockEmergencyHandler();
 
         // Create the calling class an a fixture.
@@ -115,6 +121,8 @@ class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
      */
     public function testHandleNormal()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $this->mockEmergencyHandler();
 
         // Short circuit the rendering process.

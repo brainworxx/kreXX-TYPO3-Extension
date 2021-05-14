@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use StdClass;
 use TYPO3\CMS\Core\Http\NullResponse;
+use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
@@ -67,7 +68,9 @@ class IndexControllerTest extends AbstractTest
     {
         $indexController = new IndexController();
         $this->initFlashMessages($indexController);
-
+        if (method_exists($indexController, 'injectResponseFactory')) {
+            $indexController->injectResponseFactory(new ResponseFactory());
+        }
         $indexController->indexAction();
 
         $this->assertEquals(
@@ -136,6 +139,9 @@ class IndexControllerTest extends AbstractTest
         $indexController->injectSettingsModel($settingsModel);
         $indexController->injectConfiguration($configurationMock);
         $indexController->injectFormConfiguration($configFeMock);
+        if (method_exists($indexController, 'injectResponseFactory')) {
+            $indexController->injectResponseFactory(new ResponseFactory());
+        }
         $this->initFlashMessages($indexController);
         $this->setValueByReflection('view', $viewMock, $indexController);
 
@@ -302,10 +308,13 @@ class IndexControllerTest extends AbstractTest
         $headerMock->expects($this->never());
 
         $indexController = new IndexController();
-        $responseMock = $this->createMock(Response::class);
-        $responseMock->expects($this->any())
-            ->method('shutdown');
-        $this->setValueByReflection('response', $responseMock, $indexController);
+        if (class_exists(Response::class) === true) {
+            $responseMock = $this->createMock(Response::class);
+            $responseMock->expects($this->any())
+                ->method('shutdown');
+            $this->setValueByReflection('response', $responseMock, $indexController);
+        }
+
         $indexController->dispatchAction($serverRequestMock);
     }
 
@@ -343,10 +352,11 @@ class IndexControllerTest extends AbstractTest
         $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'ob_flush');
         $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'flush');
 
-        $responseMock = $this->createMock(Response::class);
-        $responseMock->expects($this->any())
-            ->method('shutdown');
-        $this->setValueByReflection('response', $responseMock, $controller);
+        if (class_exists(Response::class) === true) {
+            $responseMock = $this->createMock(Response::class);
+            $responseMock->expects($this->any())->method('shutdown');
+            $this->setValueByReflection('response', $responseMock, $controller);
+        }
 
         $controller->dispatchAction();
     }

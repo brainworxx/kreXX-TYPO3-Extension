@@ -35,6 +35,7 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\Callbacks;
 
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList;
+use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -45,6 +46,8 @@ use StdClass;
 
 class ThroughClassListTest extends AbstractTest
 {
+    use AimeosTestTrait;
+
     /**
      * Test the passing of a bunch of objects into the analysis hub.
      *
@@ -52,6 +55,8 @@ class ThroughClassListTest extends AbstractTest
      */
     public function testCallMe()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         $routeNothing = new RoutingNothing(Krexx::$pool);
         Krexx::$pool->routing = $routeNothing;
 
