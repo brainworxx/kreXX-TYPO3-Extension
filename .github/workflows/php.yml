@@ -84,7 +84,7 @@ jobs:
       if: ${{ matrix.what == 't39php73' }}
 
     - name: Remove Aimeos
-      run: composer remove --no-update "aimeos/aimeos-typo3"
+      run: composer remove --dev --no-update "aimeos/aimeos-typo3"
       if: ${{ matrix.what == 't311php74' }}
 
     - name: Install Aimeos 21
