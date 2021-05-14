@@ -230,7 +230,7 @@ abstract class AbstractTest extends TestCompatibility
      */
     protected function initFlashMessages($controller)
     {
-        if (class_exists(ExtensionService::class)) {
+        if (method_exists($controller, 'injectInternalExtensionService')) {
             // Doing this 11.0 style.
             $this->flashMessageQueue = new FlashMessageQueueV11('identifyer');
             $extensionServiceMock = $this->createMock(ExtensionService::class);

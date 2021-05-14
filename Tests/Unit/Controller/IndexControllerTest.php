@@ -68,7 +68,7 @@ class IndexControllerTest extends AbstractTest
     {
         $indexController = new IndexController();
         $this->initFlashMessages($indexController);
-        if (class_exists(ResponseFactory::class)) {
+        if (method_exists($indexController, 'injectResponseFactory')) {
             $indexController->injectResponseFactory(new ResponseFactory());
         }
         $indexController->indexAction();
