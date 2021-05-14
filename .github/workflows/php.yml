@@ -100,7 +100,7 @@ jobs:
       if: ${{ matrix.what == 't310php74' }}
 
     - name: Install Admin Panel 11
-      run: composer require --no-update "typo3/cms-adminpanel:^10.4"
+      run: composer require --no-update "typo3/cms-adminpanel:^11"
       if: ${{ matrix.what == 't311php74' }}
 
     - name: Get composer cache directory
