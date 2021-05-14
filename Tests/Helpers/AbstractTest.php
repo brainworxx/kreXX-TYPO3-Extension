@@ -45,6 +45,7 @@ use phpmock\phpunit\PHPMock;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -56,6 +57,7 @@ use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Mvc\Response;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\CacheService;
+use TYPO3\CMS\Extbase\Service\ExtensionService;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 abstract class AbstractTest extends TestCompatibility
@@ -228,13 +230,38 @@ abstract class AbstractTest extends TestCompatibility
      */
     protected function initFlashMessages($controller)
     {
-        $this->flashMessageQueue = new FlashMessageQueue();
+        if (class_exists(ExtensionService::class)) {
+            // Doing this 11.0 style.
+            $this->flashMessageQueue = new FlashMessageQueueV11('identifyer');
+            $extensionServiceMock = $this->createMock(ExtensionService::class);
+            $extensionServiceMock->expects($this->any())
+                ->method('getPluginNamespace')
+                ->will($this->returnValue('\\Brainworxx\\Includekrexx\\'));
+            $controller->injectInternalExtensionService($extensionServiceMock);
 
-        $controllerContextMock = $this->createMock(ControllerContext::class);
-        $controllerContextMock->expects($this->any())
-            ->method('getFlashMessageQueue')
-            ->will($this->returnValue($this->flashMessageQueue));
-        $this->setValueByReflection('controllerContext', $controllerContextMock, $controller);
+            $requestMock = $this->createMock(\TYPO3\CMS\Extbase\Mvc\Request::class);
+            $requestMock->expects($this->any())
+                ->method('getControllerExtensionName')
+                ->will($this->returnValue('ControllerExtensionName'));
+            $requestMock->expects($this->any())
+                ->method('getPluginName')
+                ->will($this->returnValue('PluginName'));
+            $this->setValueByReflection('request', $requestMock, $controller);
+
+            $flashMessageService = $this->createMock(FlashMessageService::class);
+            $flashMessageService->expects($this->any())
+                ->method('getMessageQueueByIdentifier')
+                ->will($this->returnValue($this->flashMessageQueue));
+            $controller->injectInternalFlashMessageService($flashMessageService);
+        } else {
+            // Doing this 8.7 till 10.4 style.
+            $this->flashMessageQueue = new FlashMessageQueue();
+            $controllerContextMock = $this->createMock(ControllerContext::class);
+            $controllerContextMock->expects($this->any())
+                ->method('getFlashMessageQueue')
+                ->will($this->returnValue($this->flashMessageQueue));
+            $this->setValueByReflection('controllerContext', $controllerContextMock, $controller);
+        }
     }
 
     /**
@@ -304,15 +331,17 @@ abstract class AbstractTest extends TestCompatibility
             ->will($this->returnValue('https:\\\\google.de'));
         $this->setValueByReflection('uriBuilder', $uriBuilder, $controller);
 
-        $response = $this->createMock(Response::class);
-        $response->expects($this->any())->method('setContent');
-        if (method_exists(Response::class, 'setStatus')) {
-            $response->expects($this->any())->method('setStatus');
+        if (class_exists(Response::class) === true) {
+            $response = $this->createMock(Response::class);
+            $response->expects($this->any())->method('setContent');
+            if (method_exists(Response::class, 'setStatus')) {
+                $response->expects($this->any())->method('setStatus');
+            }
+            if (method_exists(Response::class, 'setHeader')) {
+                $response->expects($this->any())->method('setHeader');
+            }
+            $this->setValueByReflection('response', $response, $controller);
         }
-        if (method_exists(Response::class, 'setHeader')) {
-            $response->expects($this->any())->method('setHeader');
-        }
-        $this->setValueByReflection('response', $response, $controller);
 
         $contentObject = $this->createMock(ContentObjectRenderer::class);
         $contentObject->expects($this->any())

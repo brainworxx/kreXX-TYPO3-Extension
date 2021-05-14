@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Scalar;
 
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility;
 use Brainworxx\Krexx\Analyse\Model;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Lang\LanguageService;
@@ -95,37 +96,11 @@ class LllStringTest extends AbstractTest
      */
     public function testCanHandle()
     {
-        $this->simulatePackage('includekrexx', 'includekrexx/');
-
-        // I'm abusing existence the EnvironmentService to identify a 8.7 TYPO3 version.
-        if (class_exists(ModuleData::class)) {
-            // Mocking LocalizationFactory with parsed data.
-            // 9.5'er style.
-            $parsedData = [
-                'default' => [
-                    'mlang_tabs_tab' => [
-                        ['target' => static::KREXX_DEBUGGER]
-                    ]
-                ]
-            ];
-            $locFacMock = $this->createMock(LocalizationFactory::class);
-            $locFacMock->expects($this->once())
-                ->method('getParsedData')
-                ->will($this->returnValue($parsedData));
-            $this->injectIntoGeneralUtility(LocalizationFactory::class, $locFacMock);
-        } else {
-            // Mocking the global language service.
-            // Just for you 8.7
-            $globalLangMock = $this->createMock(LanguageService::class);
-            $globalLangMock->expects($this->once())
-                ->method('sL')
-                ->will($this->returnValue(static::KREXX_DEBUGGER));
-            $GLOBALS[static::TSFE] = $globalLangMock;
-        }
-
         $payload = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab';
         $model = new Model(\Krexx::$pool);
         $lllString = new LllString(\Krexx::$pool);
+        $lllString->setLocalisationUtility(new LocalizationUtility());
+        LocalizationUtility::$values[$payload] = static::KREXX_DEBUGGER;
         $lllString->canHandle($payload, $model);
 
         $this->assertEquals(static::KREXX_DEBUGGER, $model->getJson()['Translation']);

@@ -37,6 +37,7 @@ namespace Brainworxx\Includekrexx\Plugins\Typo3\Scalar;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\AbstractScalarAnalysis;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\View\ViewConstInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use Throwable;
@@ -49,14 +50,27 @@ use Throwable;
 class LllString extends AbstractScalarAnalysis implements ViewConstInterface
 {
     /**
+     * The name of the localisation utility.
+     *
+     * @var LocalizationUtility
+     */
+    protected $localisationUtility;
+
+    public function __construct(Pool $pool)
+    {
+        $this->localisationUtility = new LocalizationUtility();
+        parent::__construct($pool);
+    }
+
+    /**
      * Can we get translations, at all?
      *
      * @return bool
      */
     public static function isActive(): bool
     {
-        // Test if language service is available.
-        return is_callable([LocalizationUtility::class, 'translate']);
+        // The translation service is always available.
+        return true;
     }
 
     /**
@@ -79,7 +93,7 @@ class LllString extends AbstractScalarAnalysis implements ViewConstInterface
         try {
             // Add the string directly to the model
             if (strpos($string, 'LLL:') === 0) {
-                $trans = LocalizationUtility::translate($string);
+                $trans = $this->localisationUtility::translate($string);
                 if (empty($trans) === false) {
                     $model->addToJson('Translation', $trans);
                 }
@@ -94,6 +108,20 @@ class LllString extends AbstractScalarAnalysis implements ViewConstInterface
 
         // Always false.
         return false;
+    }
+
+    /**
+     * Only used for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   Who tests the tests?
+     *
+     * @param string $name
+     *   The name of the localisation utility.
+     */
+    public function setLocalisationUtility($object)
+    {
+        $this->localisationUtility = $object;
     }
 
     /**

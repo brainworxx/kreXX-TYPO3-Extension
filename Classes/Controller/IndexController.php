@@ -48,7 +48,7 @@ class IndexController extends AbstractController
     /**
      * Simple index action, display everything.
      *
-     * @return string|null
+     * @return string|null|\Psr\Http\Message\ResponseInterface
      */
     public function indexAction()
     {
