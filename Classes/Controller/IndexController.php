@@ -59,6 +59,13 @@ class IndexController extends AbstractController
                 static::translate(static::ACCESS_DENIED, Bootstrap::EXT_KEY),
                 FlashMessage::ERROR
             );
+            if (method_exists($this, 'htmlResponse') === true) {
+                $response = $this->responseFactory->createResponse()
+                    ->withAddedHeader('Content-Type', 'text/html; charset=utf-8');
+                $response->getBody()->write('');
+                return $response;
+            }
+
             return '';
         }
 
@@ -70,6 +77,11 @@ class IndexController extends AbstractController
         $this->formConfiguration->assignData($this->view);
         $this->view->assign('settings', $this->settingsModel);
         $this->assignCssJs();
+
+        if (method_exists($this, 'htmlResponse') === true) {
+            return $this->htmlResponse();
+        }
+
         return null;
     }
 

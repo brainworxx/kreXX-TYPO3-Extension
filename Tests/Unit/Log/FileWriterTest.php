@@ -51,7 +51,24 @@ use stdClass;
 
 class FileWriterTest extends AbstractTest implements BacktraceConstInterface, ConstInterface
 {
-    const ROUTE  = 'route';
+    const REQUEST_URI  = 'REQUEST_URI';
+    const REQUEST_URI_VAR = 'requestURIvar';
+    const REMOTE_ADDR = 'REMOTE_ADDR';
+    const ORIG_SCRIPT_NAME = 'ORIG_SCRIPT_NAME';
+    const QUERY_STRING = 'QUERY_STRING';
+    const REVERSE_PROXY_IP = 'reverseProxyIP';
+
+    public function krexxUp()
+    {
+        parent::krexxUp();
+
+        $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REQUEST_URI_VAR] = '';
+        $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY_IP] = '';
+        $_SERVER[static::REQUEST_URI] = '';
+        $_SERVER[static::REMOTE_ADDR] = '';
+        $_SERVER[static::ORIG_SCRIPT_NAME] = '';
+        $_SERVER[static::QUERY_STRING] = '';
+    }
 
     /**
      * {@inheritDoc}
@@ -64,7 +81,12 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
         ControllerNothing::$level = [];
         ControllerNothing::$message = [];
 
-        unset($_GET[static::ROUTE]);
+        unset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REQUEST_URI_VAR]);
+        unset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY_IP]);
+        unset($_SERVER[static::REQUEST_URI]);
+        unset($_SERVER[static::REMOTE_ADDR]);
+        unset($_SERVER[static::ORIG_SCRIPT_NAME]);
+        unset($_SERVER[static::QUERY_STRING]);
     }
 
     /**
@@ -186,11 +208,11 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
      */
     public function testWriteLogRouting()
     {
-        $_GET[static::ROUTE] = '/ajax/refreshLoglist';
+        $_SERVER[static::REQUEST_URI] = '/ajax/refreshLoglist';
         $fileWriter = new FileWriter([]);
         $fileWriter->writeLog($this->prepareFixture());
 
-        $_GET[static::ROUTE] = '/ajax/delete';
+        $_SERVER[static::REQUEST_URI] = '/ajax/delete';
         $fileWriter = new FileWriter([]);
         $fileWriter->writeLog($this->prepareFixture());
 

@@ -161,14 +161,11 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
      */
     protected function isDisabled(): bool
     {
-        $get = GeneralUtility::_GET();
-        $route = 'route';
+        $get = GeneralUtility::getIndpEnv('REQUEST_URI');
 
-        // The 'route' may or may not be set at all.
-        // The GeneralUtility will then trow an error in 8.7.
         if (
-            isset($get[$route]) &&
-            ($get[$route] === '/ajax/refreshLoglist' || $get[$route] === '/ajax/delete')
+            strpos($get, '/ajax/refreshLoglist') !== false
+            || strpos($get, '/ajax/delete') !== false
         ) {
             // Do nothing.
             // We will not spam the log folder with debug calls from the kreXX
