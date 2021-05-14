@@ -93,6 +93,7 @@ class LllStringTest extends AbstractTest
      * Testing the "glue" to the TYPO3 translation handling.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::canHandle
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::__construct
      */
     public function testCanHandle()
     {
