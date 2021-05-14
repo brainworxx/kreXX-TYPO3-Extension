@@ -55,6 +55,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
     const REQUEST_URI_VAR = 'requestURIvar';
     const REMOTE_ADDR = 'REMOTE_ADDR';
     const ORIG_SCRIPT_NAME = 'ORIG_SCRIPT_NAME';
+    const QUERY_STRING = 'QUERY_STRING';
 
     public function krexxUp()
     {
@@ -64,6 +65,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
         $_SERVER[static::REQUEST_URI] = '';
         $_SERVER[static::REMOTE_ADDR] = '';
         $_SERVER[static::ORIG_SCRIPT_NAME] = '';
+        $_SERVER[static::QUERY_STRING] = '';
     }
 
     /**
@@ -81,6 +83,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
         unset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REQUEST_URI_VAR]);
         unset($_SERVER[static::REMOTE_ADDR]);
         unset($_SERVER[static::ORIG_SCRIPT_NAME]);
+        unset($_SERVER[static::QUERY_STRING]);
     }
 
     /**
