@@ -61,7 +61,7 @@ class NewSetting implements ConfigConstInterface
     protected $defaultValue = '';
 
     /**
-     * The name of the section, where the seeting will be stored.
+     * The name of the section, where the setting will be stored.
      *
      * @var string
      */
@@ -82,7 +82,7 @@ class NewSetting implements ConfigConstInterface
     protected $renderType = '';
 
     /**
-     * Is this seeting editable?
+     * Is this setting editable?
      *
      * @var bool
      */

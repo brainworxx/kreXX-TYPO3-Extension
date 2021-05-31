@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        what: [ 't38php70', 't38php71', 't39php72', 't39php73', 't310php74', 't311php74' ]
+        what: [ 't38php70', 't38php71', 't39php72', 't39php73', 't310php74', 't311php80' ]
 
     steps:
     - uses: actions/checkout@v2
@@ -47,6 +47,12 @@ jobs:
       with:
         php-version: '7.4'
 
+    - name: Install PHP 8.0
+      uses: shivammathur/setup-php@v2
+      if: ${{ matrix.what == 't311php80' }}
+      with:
+        php-version: '8.0'
+
     - name: Make sure we are using composer v1
       run: |
         sudo composer self-update --1
@@ -69,7 +75,7 @@ jobs:
 
     - name: Install TYPO3 11
       run: composer require --no-update "typo3/cms-core:^11"
-      if: ${{ matrix.what == 't311php74' }}
+      if: ${{ matrix.what == 't311php80' }}
 
     - name: Install Aimeos 18
       run: composer require --no-update "aimeos/aimeos-typo3:^18"
@@ -83,13 +89,13 @@ jobs:
       run: composer require --no-update "aimeos/aimeos-typo3:^20"
       if: ${{ matrix.what == 't39php73' }}
 
-    - name: Remove Aimeos
-      run: composer remove --dev --no-update "aimeos/aimeos-typo3"
-      if: ${{ matrix.what == 't311php74' }}
-
     - name: Install Aimeos 21
       run: composer require --no-update "aimeos/aimeos-typo3:^21"
       if: ${{ matrix.what == 't310php74' }}
+
+    - name: Remove Aimeos
+      run: composer remove --dev --no-update "aimeos/aimeos-typo3"
+      if: ${{ matrix.what == 't311php80' }}
 
     - name: Install Admin Panel 9
       run: composer require --no-update "typo3/cms-adminpanel:^9.5"
@@ -101,7 +107,7 @@ jobs:
 
     - name: Install Admin Panel 11
       run: composer require --no-update "typo3/cms-adminpanel:^11"
-      if: ${{ matrix.what == 't311php74' }}
+      if: ${{ matrix.what == 't311php80' }}
 
     - name: Get composer cache directory
       id: composer-cache

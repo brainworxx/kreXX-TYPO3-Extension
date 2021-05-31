@@ -123,17 +123,13 @@ class Meta extends AbstractObjectAnalysis implements CallbackConstInterface, Vie
     {
         $this->pool->recursionHandler->addToMetaHive($domId);
 
-        $data = [];
         // Get the naming on the way.
-        $data[static::META_CLASS_NAME] = $this->generateName($ref);
-        $data[static::META_COMMENT] = $this->pool->createClass(Classes::class)->getComment($ref);
-
-        if ($ref->isInternal()) {
-            $data[static::META_DECLARED_IN] = static::META_PREDECLARED;
-        } else {
-            $data[static::META_DECLARED_IN] = $this->pool->fileService
-                    ->filterFilePath($ref->getFileName()) . ', line ' . $ref->getStartLine();
-        }
+        $data = [
+            static::META_CLASS_NAME => $this->generateName($ref),
+            static::META_COMMENT => $this->pool->createClass(Classes::class)->getComment($ref),
+            static::META_DECLARED_IN => $ref->isInternal() === true ? static::META_PREDECLARED :
+                $this->pool->fileService->filterFilePath($ref->getFileName()) . ', line ' . $ref->getStartLine()
+        ];
 
         // Now to collect the inheritance stuff.
         // Each of them will get analysed by the ThroughMeta callback.

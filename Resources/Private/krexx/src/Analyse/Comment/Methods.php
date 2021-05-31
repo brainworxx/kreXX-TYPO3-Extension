@@ -215,7 +215,7 @@ class Methods extends AbstractComment
                 $originalComment = $this->replaceInheritComment($originalComment, $newComment);
             } catch (ReflectionException $e) {
                 // Failed to retrieve it.
-                // Do nothing, and hope for the rst of the code to retrieve
+                // Do nothing, and hope for the rest of the code to retrieve
                 // the comment.
             }
         }

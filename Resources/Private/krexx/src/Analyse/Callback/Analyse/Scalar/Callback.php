@@ -40,8 +40,8 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 use Brainworxx\Krexx\Analyse\Comment\Functions;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\View\ViewConstInterface;
-use ReflectionFunction;
 use ReflectionException;
+use ReflectionFunction;
 
 /**
  * The stuff we are doing here is very similar to the method analysis. The

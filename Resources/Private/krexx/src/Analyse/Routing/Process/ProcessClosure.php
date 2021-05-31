@@ -44,9 +44,9 @@ use Brainworxx\Krexx\Analyse\Comment\Functions;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\View\ViewConstInterface;
+use Closure;
 use ReflectionException;
 use ReflectionFunction;
-use Closure;
 
 /**
  * Processing of closures.

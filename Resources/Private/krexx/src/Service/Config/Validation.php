@@ -39,10 +39,10 @@ namespace Brainworxx\Krexx\Service\Config;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use Closure;
 use ReflectionGenerator;
 use ReflectionType;
 use Reflector;
-use Closure;
 
 /**
  * Validation stuff for the configuration.

@@ -46,6 +46,7 @@ use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
+use DateTime;
 
 class PublicPropertyTest extends AbstractTest
 {
@@ -81,6 +82,7 @@ class PublicPropertyTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::getReflectionPropertiesData
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::handleUndeclaredProperties
      *
      * @throws \ReflectionException
      */
@@ -118,6 +120,7 @@ class PublicPropertyTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::getReflectionPropertiesData
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::handleUndeclaredProperties
      *
      * @throws \ReflectionException
      */
@@ -164,6 +167,51 @@ class PublicPropertyTest extends AbstractTest
             new UndeclaredProperty($fixture['ref'], 'undeclared'),
             new ReflectionProperty(PublicFixture::class, 'value1'),
             new ReflectionProperty(SimpleFixture::class, 'value2'),
+        ];
+
+        $this->assertEquals($expectations, $params['data']);
+    }
+
+    /**
+     * Testing the "public" properties of a date time analysis.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::getReflectionPropertiesData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\AbstractObjectAnalysis::reflectionSorting
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties::handleUndeclaredProperties
+     */
+    public function testCallMeDateTime()
+    {
+        // Set up the events
+        $this->mockEventService(
+            [
+                'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::callMe::start',
+                $this->publicProperties
+            ],
+            [
+                'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::analysisEnd',
+                $this->publicProperties
+            ]
+        );
+
+        // Create a fixture with a date time object.
+        $data = new DateTime('now');
+        $fixture = [
+            'data' => $data,
+            'name' => 'date time',
+            'ref' => new ReflectionClass($data)
+        ];
+
+        // Run the test.
+        $this->publicProperties
+            ->setParameters($fixture)
+            ->callMe();
+
+        $params = CallbackCounter::$staticParameters[0];
+        $expectations = [
+            (new UndeclaredProperty($fixture['ref'], 'date'))->setIsPublic(false),
+            (new UndeclaredProperty($fixture['ref'], 'timezone'))->setIsPublic(false),
+            (new UndeclaredProperty($fixture['ref'], 'timezone_type'))->setIsPublic(false),
         ];
 
         $this->assertEquals($expectations, $params['data']);

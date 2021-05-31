@@ -37,8 +37,8 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Reflection;
 
-use ReflectionProperty;
 use ReflectionException;
+use ReflectionProperty;
 
 /**
  * Added a better possibility to retrieve the object values.

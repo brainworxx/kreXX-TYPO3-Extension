@@ -37,9 +37,9 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Flow;
 
+use __PHP_Incomplete_Class;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use SplObjectStorage;
-use __PHP_Incomplete_Class;
 
 /**
  * Recursion handler, formerly known as Hive.

@@ -92,10 +92,6 @@ class ThroughArray extends AbstractCallback implements
             /** @var Model $model */
             $model = $this->pool->createClass(Model::class)->setData($value)->setCodeGenType($multilineCodeGen);
 
-            if (is_string($key) === true) {
-                $model->setKeyType(static::TYPE_STRING);
-            }
-
             if (array_key_exists($key, $array) === false) {
                 // Looks like we have an inaccessible array value here.
                 $model->setCodeGenType(static::CODEGEN_TYPE_ARRAY_VALUES_ACCESS)
@@ -104,6 +100,7 @@ class ThroughArray extends AbstractCallback implements
 
             if (is_string($key) === true) {
                 $model->setName($encodingService->encodeString($key))
+                    ->setKeyType(static::TYPE_STRING)
                     ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);
             } else {
                 $model->setName($key)->setConnectorType(static::CONNECTOR_NORMAL_ARRAY);

@@ -385,7 +385,7 @@ interface ConfigConstInterface
 
 
     /**
-     * Array key. Holds the render type a single setting, whis is also the
+     * Array key. Holds the render type a single setting, who is is also the
      * template file name.
      *
      * @see

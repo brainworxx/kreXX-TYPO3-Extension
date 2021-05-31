@@ -127,7 +127,7 @@ class ExceptionController extends AbstractController implements BacktraceConstIn
      * @return $this
      *   Return $this, for chaining.
      */
-    public function unregisterAction()
+    public function unregisterAction(): ExceptionController
     {
         restore_exception_handler();
 

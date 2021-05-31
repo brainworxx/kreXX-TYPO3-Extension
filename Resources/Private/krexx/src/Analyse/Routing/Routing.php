@@ -43,13 +43,13 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger;
+use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessNull;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessString;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInterface;
 
 /**
  * "Routing" for kreXX

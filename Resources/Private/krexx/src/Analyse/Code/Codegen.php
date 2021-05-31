@@ -41,8 +41,8 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
-use ReflectionParameter;
 use ReflectionNamedType;
+use ReflectionParameter;
 use ReflectionType;
 
 /**
@@ -156,7 +156,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface
      * @return string
      *   The generated PHP source.
      */
-    protected function generateComplicatedStuff(Model $model)
+    protected function generateComplicatedStuff(Model $model): string
     {
         // Define a fallback value.
         $result = static::UNKNOWN_VALUE;

@@ -37,10 +37,10 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
+use __PHP_Incomplete_Class;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use __PHP_Incomplete_Class;
 
 /**
  * Processing of objects.

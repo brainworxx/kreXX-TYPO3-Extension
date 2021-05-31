@@ -84,7 +84,7 @@ interface CodegenConstInterface
 
     /**
      * Code generation for a public property or method
-     * Simple concationation.
+     * Simple concatenation.
      *
      * @var string
      */
@@ -112,7 +112,7 @@ interface CodegenConstInterface
 
     /**
      * Returns an empty string. Does not stop the generation. It will resume
-     * after this vaule.
+     * after this value.
      *
      * @var string
      */

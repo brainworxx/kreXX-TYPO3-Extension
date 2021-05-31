@@ -118,7 +118,7 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
      * @return string
      *   The generated DOM.
      */
-    protected function dumpPhpSevenZero(string $output, string $prefix)
+    protected function dumpPhpSevenZero(string $output, string $prefix): string
     {
         foreach ($this->parameters[static::PARAM_DATA] as $constantName => $constantValue) {
             $output .= $this->pool->routing->analysisHub(
