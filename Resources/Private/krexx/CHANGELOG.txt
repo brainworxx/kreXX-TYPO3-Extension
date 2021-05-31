@@ -1,3 +1,9 @@
+4.1.1
+- Change: Code cleanup.
+- Bugfix: Predefined objects do not get their properties
+  analysed.
+- Bugfix: Display the DateTime anomaly "public" properties.
+
 4.1.0
 - Added a log model to use for a logger implementation.
 - Added .min. support for css files.

@@ -37,6 +37,8 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Caller;
 
+use Throwable;
+
 /**
  * The caller finder for exceptions
  *
@@ -57,7 +59,7 @@ class ExceptionCallerFinder extends AbstractCaller implements BacktraceConstInte
      */
     public function findCaller(string $headline, $exception): array
     {
-        if ($exception instanceof \Throwable) {
+        if ($exception instanceof Throwable) {
             $headline = get_class($exception);
         }
         return [

@@ -74,7 +74,7 @@ interface CallbackConstInterface
     /**
      * Array key for $this->parameters.
      *
-     * Retrieved value from the getter anaylsis.
+     * Retrieved value from the getter analysis.
      *
      * @var string
      */
@@ -162,7 +162,7 @@ interface CallbackConstInterface
     /**
      * Array key for $this->parameters.
      *
-     * Contains a boolean, informing the ThrougGetter event subscriber, if there
+     * Contains a boolean, informing the ThroughGetter event subscriber, if there
      * was a result so far.
      *
      * @var string
@@ -285,7 +285,7 @@ interface CallbackConstInterface
     /**
      * Part of the event system.
      *
-     * Marks the end of the anaylsis of this specific value.
+     * Marks the end of the analysis of this specific value.
      *
      * @var string
      */
@@ -303,7 +303,7 @@ interface CallbackConstInterface
     /**
      * Translation marker for a literal in the frontend.
      *
-     * The declaration place of this method or property could not be resilved.
+     * The declaration place of this method or property could not be resolved.
      *
      * @var string
      */

@@ -52,7 +52,7 @@ interface BacktraceConstInterface
     const TRACE_FILE = 'file';
 
     /**
-     * Line numer from the call.
+     * Line number from the call.
      *
      * @var string
      */
@@ -81,7 +81,7 @@ interface BacktraceConstInterface
     const TRACE_FUNCTION = 'function';
 
     /**
-     * Name of the class from a singel backtrace step.
+     * Name of the class from a single backtrace step.
      *
      * @var string
      */
@@ -125,7 +125,7 @@ interface BacktraceConstInterface
     /**
      * The 'level' of the backtrace:
      *   - error
-     *     From a \Trowable.
+     *     From a \Throwable.
      *   - debug
      *     From a debug backtrace.
      *

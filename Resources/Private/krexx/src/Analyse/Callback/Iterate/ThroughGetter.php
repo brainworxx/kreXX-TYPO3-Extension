@@ -432,8 +432,6 @@ class ThroughGetter extends AbstractCallback implements
      * @param \ReflectionClass $parentClass
      *   The class where it may be located.
      *
-     * @throws \ReflectionException
-     *
      * @return \ReflectionProperty|null
      *   The reflection property, if found.
      */

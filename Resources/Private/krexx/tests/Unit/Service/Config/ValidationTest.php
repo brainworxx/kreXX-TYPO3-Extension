@@ -49,6 +49,9 @@ use SplObjectStorage;
 
 class ValidationTest extends AbstractTest
 {
+
+    const WHATEVER = 'whatever';
+
     /**
      * Testing the setting of the pool and the merging of the method blacklist
      *
@@ -130,7 +133,7 @@ class ValidationTest extends AbstractTest
         // Disallowed frontend editing settings.
         $disallowedSettings = $this->retrieveValueByReflection('feConfigNoEdit', $validation);
         foreach ($disallowedSettings as $settingName) {
-            $this->assertFalse($validation->evaluateSetting($validation::SECTION_FE_EDITING, $settingName, 'whatever'));
+            $this->assertFalse($validation->evaluateSetting($validation::SECTION_FE_EDITING, $settingName, static::WHATEVER));
         }
 
         // Testing each config with a valid value and wist garbage.
@@ -139,7 +142,7 @@ class ValidationTest extends AbstractTest
             Fallback::EVAL_BOOL => [
                 'true' => true,
                 'false' => true,
-                'whatever' => false
+                static::WHATEVER => false
             ],
             Fallback::EVAL_DEBUG_METHODS => [
                 'method1,method2' => true,
@@ -230,7 +233,7 @@ class ValidationTest extends AbstractTest
 
         $callbackSettingName = 'callbackSetting';
         $callback = function ($value) {
-            return $value === 'whatever';
+            return $value === static::WHATEVER;
         };
         $callbackSetting = new NewSetting();
         $callbackSetting->setName($callbackSettingName)
@@ -238,7 +241,7 @@ class ValidationTest extends AbstractTest
             ->setSection($sectionName)
             ->setRenderType(NewSetting::RENDER_TYPE_NONE)
             ->setIsEditable(true)
-            ->setDefaultValue('whatever')
+            ->setDefaultValue(static::WHATEVER)
             ->setIsFeProtected(false);
         Registration::addNewSettings($callbackSetting);
 
@@ -257,7 +260,7 @@ class ValidationTest extends AbstractTest
             'Test the usage of the callback. Wrong value here.'
         );
         $this->assertTrue(
-            $validation->evaluateSetting($sectionName, $callbackSettingName, 'whatever'),
+            $validation->evaluateSetting($sectionName, $callbackSettingName, static::WHATEVER),
             'Test the usage of the callback. Right'
         );
     }

@@ -114,10 +114,11 @@ class Json extends AbstractScalarAnalysis implements ViewConstInterface
      */
     protected function handle(): array
     {
-        $meta = [];
-        $meta[static::META_DECODED_JSON] = $this->decodedJson;
-        $meta[static::META_PRETTY_PRINT] = $this->pool->encodingService
-            ->encodeString(json_encode($this->decodedJson, JSON_PRETTY_PRINT));
+        $meta = [
+            static::META_DECODED_JSON => $this->decodedJson,
+            static::META_PRETTY_PRINT => $this->pool->encodingService
+                ->encodeString(json_encode($this->decodedJson, JSON_PRETTY_PRINT))
+        ];
 
         // Move the extra part into a nest, for better readability.
         if ($this->model->hasExtra() === true) {

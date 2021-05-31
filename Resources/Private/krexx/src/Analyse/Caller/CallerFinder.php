@@ -133,7 +133,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
      * @return bool
      *   Well, is this our caller?
      */
-    protected function identifyCaller(array $caller)
+    protected function identifyCaller(array $caller): bool
     {
         return (
                 // Check for a function trace.
@@ -158,7 +158,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
      * @return string
      *   The name of the variable.
      */
-    protected function getVarName(string $file, int $line)
+    protected function getVarName(string $file, int $line): string
     {
         // Set a fallback value.
         $varname = static::UNKNOWN_VALUE;
@@ -200,7 +200,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
      * @return string
      *   The variable, or fallback to '. . .'
      */
-    protected function removeKrexxPartFromCommand(string $command)
+    protected function removeKrexxPartFromCommand(string $command): string
     {
         foreach ($this->callPattern as $funcname) {
             // This little baby tries to resolve everything inside the
@@ -230,7 +230,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
      * @return string
      *   The variable name, after the cleanup.
      */
-    protected function cleanupVarName(string $name)
+    protected function cleanupVarName(string $name): string
     {
         // We start with a -1, because we need to stop right before. every opening
         // bracket has a closing one.

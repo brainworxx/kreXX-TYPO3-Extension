@@ -90,7 +90,7 @@ trait ConnectorService
      * @return string
      *   The second connector.
      */
-    public function getConnectorRight($cap = 0): string
+    public function getConnectorRight(int $cap = 0): string
     {
         return $this->connectorService->getConnectorRight($cap);
     }

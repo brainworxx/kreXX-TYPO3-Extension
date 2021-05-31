@@ -47,7 +47,7 @@ class Model implements ConfigConstInterface
     /**
      * The value of this setting.
      *
-     * @var string
+     * @var int|string|bool|null
      */
     protected $value;
 

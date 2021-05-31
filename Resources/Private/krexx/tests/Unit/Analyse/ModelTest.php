@@ -71,27 +71,18 @@ class ModelTest extends AbstractTest
     }
 
     /**
-     * Unsetting the reflection.
-     *
-     * {@inheritdoc}
-     */
-    protected function krexxDown()
-    {
-        parent::krexxDown();
-        unset($this->modelRef);
-    }
-
-    /**
      * Test if we get the pool as well as the connector service.
      *
      * @covers \Brainworxx\Krexx\Analyse\Model::__construct
      */
     public function testConstruct()
     {
-        $model = new Model(Krexx::$pool);
-        $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $model));
+        $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $this->model));
 
-        $this->assertInstanceOf(Connectors::class, $this->retrieveValueByReflection('connectorService', $model));
+        $this->assertInstanceOf(
+            Connectors::class,
+            $this->retrieveValueByReflection('connectorService', $this->model)
+        );
     }
 
     /**
@@ -113,10 +104,9 @@ class ModelTest extends AbstractTest
             ->method(static::SET_PARAMETERS)
             ->will($this->returnValue(null));
 
-        $model = new Model(Krexx::$pool);
-        $this->assertEquals($model, $model->injectCallback($mockCallback));
+        $this->assertEquals($this->model, $this->model->injectCallback($mockCallback));
 
-        $this->assertEquals($mockCallback, $this->retrieveValueByReflection('callback', $model));
+        $this->assertEquals($mockCallback, $this->retrieveValueByReflection('callback', $this->model));
     }
 
     /**

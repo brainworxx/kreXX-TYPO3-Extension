@@ -166,15 +166,12 @@ class Connectors implements ConnectorsConstInterface
             return $this->connectorArray[$this->type][1];
         }
 
-        // Copy the parameters, we will need the original ones later.
-        // This one is only for the quick preview.
-        $parameters = $this->params;
         // Capping the parameters for a better readability.
-        if ($cap > 0 && strlen($parameters) > $cap) {
-            $parameters = substr($parameters, 0, $cap) . ' . . . ';
+        if ($cap > 0 && strlen($this->params) > $cap) {
+            return '(' . substr($this->params, 0, $cap) . ' . . . )';
         }
 
-        return '(' . $parameters . ')';
+        return '(' . $this->params . ')';
     }
 
     /**

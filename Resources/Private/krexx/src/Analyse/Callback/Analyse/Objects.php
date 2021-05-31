@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse;
 
+use __PHP_Incomplete_Class;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Constants;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods;
@@ -52,9 +53,8 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Logging\Model as LogModel;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Throwable;
 use stdClass;
-use __PHP_Incomplete_Class;
+use Throwable;
 
 /**
  * Object analysis methods.
@@ -101,7 +101,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
      * @return array
      *   The list with class names for the analysis.
      */
-    protected function generateDumperList()
+    protected function generateDumperList(): array
     {
         $ref = $this->parameters[static::PARAM_REF] = new ReflectionClass($this->parameters[static::PARAM_DATA]);
         $config = $this->pool->config;
@@ -120,9 +120,8 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
             $stuffToDump[] = ErrorObject::class;
         }
 
-        if ($ref->isUserDefined() === true) {
-            $this->addPropertyDumper($stuffToDump);
-        }
+        // Dumping all the property related stuff.
+        $this->addPropertyDumper($stuffToDump);
 
         // Dumping class meta information.
         $stuffToDump[] = Meta::class;

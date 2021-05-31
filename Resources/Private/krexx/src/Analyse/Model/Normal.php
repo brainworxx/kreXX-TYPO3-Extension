@@ -44,7 +44,7 @@ trait Normal
     /**
      * The short result of the analysis.
      *
-     * @var string
+     * @var string|int
      */
     protected $normal = '';
 
