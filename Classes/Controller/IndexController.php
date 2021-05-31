@@ -150,9 +150,8 @@ class IndexController extends AbstractController
         }
 
         // No directory traversal for you!
-        $id = preg_replace('/[^0-9]/', '', $rawId);
         // Get the filepath.
-        $file = $this->pool->config->getLogDir() . $id . '.Krexx.html';
+        $file = $this->pool->config->getLogDir() . preg_replace('/[^0-9]/', '', (string) $rawId) . '.Krexx.html';
         if ($this->hasAccess()) {
             // We open and then send the file.
             $this->dispatchFile($file);
