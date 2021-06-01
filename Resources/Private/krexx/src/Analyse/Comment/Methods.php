@@ -63,7 +63,7 @@ class Methods extends AbstractComment
      * Simple wrapper around the getMethodComment() to make sure
      * we only escape it once!
      *
-     * @param \Reflector $reflectionMethod
+     * @param \Reflector $reflection
      *   An already existing reflection of the method.
      * @param \ReflectionClass $reflectionClass
      *   An already existing reflection of the original class.
@@ -71,13 +71,13 @@ class Methods extends AbstractComment
      * @return string
      *   The prettified and escaped comment.
      */
-    public function getComment(Reflector $reflectionMethod, ReflectionClass $reflectionClass = null): string
+    public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
     {
         // Do some static caching. The comment will not change during a run.
         static $cache = [];
-        /** @var \ReflectionMethod $reflectionMethod */
-        $this->methodName = $reflectionMethod->getName();
-        $cachingKey =  $reflectionMethod->getDeclaringClass()->name . '::' . $this->methodName;
+        /** @var \ReflectionMethod $reflection */
+        $this->methodName = $reflection->getName();
+        $cachingKey =  $reflection->getDeclaringClass()->name . '::' . $this->methodName;
 
         if (isset($cache[$cachingKey]) === true) {
             return $cache[$cachingKey];
@@ -85,7 +85,7 @@ class Methods extends AbstractComment
 
         // Cache not found. We need to generate this one.
         $cache[$cachingKey] = $this->pool->encodingService->encodeString(
-            $this->getMethodComment($reflectionMethod, $reflectionClass)
+            $this->getMethodComment($reflection, $reflectionClass)
         );
         return $cache[$cachingKey];
     }

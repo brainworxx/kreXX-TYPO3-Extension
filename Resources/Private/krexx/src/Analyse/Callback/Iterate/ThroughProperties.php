@@ -289,8 +289,9 @@ class ThroughProperties extends AbstractCallback implements
         ReflectionProperty $refProperty,
         ReflectionClass $originalRef
     ) {
+        $propertyName = $refProperty->name;
         foreach ($traits as $trait) {
-            if ($trait->hasProperty($refProperty->name)) {
+            if ($trait->hasProperty($propertyName)) {
                 if (count($trait->getTraitNames()) > 0) {
                     // Multiple layers of traits!
                     return null;

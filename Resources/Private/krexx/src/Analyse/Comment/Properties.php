@@ -50,20 +50,20 @@ class Properties extends AbstractComment
     /**
      * Get the comment from a property.
      *
-     * @param \Reflector $reflectionProperty
+     * @param \Reflector $reflection
      * @param \ReflectionClass|null $reflectionClass
      * @return mixed
      */
-    public function getComment(Reflector $reflectionProperty, ReflectionClass $reflectionClass = null): string
+    public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
     {
-        if (isset($reflectionProperty->isUndeclared) === true) {
+        if (isset($reflection->isUndeclared) === true) {
             return '';
         }
 
         // Do some static caching. The comment will not change during a run.
         static $cache = [];
-        /** @var \ReflectionProperty $reflectionProperty */
-        $cachingKey = $reflectionProperty->getDeclaringClass()->getName() . '::' . $reflectionProperty->getName();
+        /** @var \ReflectionProperty $reflection */
+        $cachingKey = $reflection->getDeclaringClass()->getName() . '::' . $reflection->getName();
         if (isset($cache[$cachingKey]) === true) {
             return $cache[$cachingKey];
         }
@@ -71,7 +71,7 @@ class Properties extends AbstractComment
         // Cache not found. We need to generate this one.
         $cache[$cachingKey] = nl2br(
             $this->pool->encodingService->encodeString(
-                $this->prettifyComment($reflectionProperty->getDocComment())
+                $this->prettifyComment($reflection->getDocComment())
             )
         );
 

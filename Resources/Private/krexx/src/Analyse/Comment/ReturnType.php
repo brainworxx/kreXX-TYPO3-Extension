@@ -73,7 +73,7 @@ class ReturnType extends AbstractComment
     /**
      * Retrieve the return type from a method. Comment parsing as a fallback
      *
-     * @param \Reflector $refMethod
+     * @param \Reflector $reflection
      *   The reflection of the method we are analysing.
      * @param \ReflectionClass $reflectionClass
      *   Reflection of t he hosting class. A lot of return types are $this, so
@@ -82,16 +82,16 @@ class ReturnType extends AbstractComment
      * @return string
      *   The return type if possible, an empty string if not.
      */
-    public function getComment(Reflector $refMethod, ReflectionClass $reflectionClass = null): string
+    public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
     {
         // Get a first impression by the reflection.
-        $result = $this->retrieveTypeByReflection($refMethod);
+        $result = $this->retrieveTypeByReflection($reflection);
         if ($result !== '') {
             return $this->pool->encodingService->encodeString($result);
         }
 
         // Fallback to the comments parsing.
-        $docComment = $refMethod->getDocComment();
+        $docComment = $reflection->getDocComment();
         if (empty($docComment) || preg_match('/(?<=@return ).*$/m', $docComment, $matches) === 0) {
             // No comment.
             return '';

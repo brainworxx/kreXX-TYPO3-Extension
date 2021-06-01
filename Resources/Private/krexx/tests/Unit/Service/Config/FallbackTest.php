@@ -60,6 +60,7 @@ class FallbackTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Service\Config\Fallback::returnSkin
      * @covers \Brainworxx\Krexx\Service\Config\Fallback::generateSkinConfiguration
      * @covers \Brainworxx\Krexx\Service\Config\Fallback::generateConfigFallback
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::generatePluginConfig
      */
     public function testConstruct()
     {
@@ -92,6 +93,7 @@ class FallbackTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Service\Config\Fallback::generateConfigFallback
      * @covers \Brainworxx\Krexx\Service\Config\Fallback::generateFeConfigFallback
+     * @covers \Brainworxx\Krexx\Service\Config\Fallback::generatePluginConfig
      */
     public function testConstructWithCustomSettings()
     {

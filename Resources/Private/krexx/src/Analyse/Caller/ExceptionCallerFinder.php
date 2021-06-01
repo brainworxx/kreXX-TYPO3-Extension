@@ -51,21 +51,21 @@ class ExceptionCallerFinder extends AbstractCaller implements BacktraceConstInte
      *
      * @param string $headline
      *   An empty string. Not used here.
-     * @param \Throwable|\Brainworxx\Krexx\Logging\Model $exception
+     * @param \Throwable|\Brainworxx\Krexx\Logging\Model $data
      *   The exception that was thrown
      *
      * @return array
      *   The exception, that was thrown.
      */
-    public function findCaller(string $headline, $exception): array
+    public function findCaller(string $headline, $data): array
     {
-        if ($exception instanceof Throwable) {
-            $headline = get_class($exception);
+        if ($data instanceof Throwable) {
+            $headline = get_class($data);
         }
         return [
-            static::TRACE_FILE => $exception->getFile(),
-            static::TRACE_LINE => $exception->getLine() + 1,
-            static::TRACE_VARNAME => ' ' . get_class($exception),
+            static::TRACE_FILE => $data->getFile(),
+            static::TRACE_LINE => $data->getLine() + 1,
+            static::TRACE_VARNAME => ' ' . get_class($data),
             static::TRACE_LEVEL => 'error',
             static::TRACE_TYPE => $headline,
             static::TRACE_DATE => date('d-m-Y H:i:s', time()),

@@ -281,7 +281,7 @@ call_user_func(function () {
      *   The variable we want to analyse.
      *
      * @return mixed
-     *   Return the original anslysis value.
+     *   Return the original analysis value.
      */
     function krexx($data = null)
     {

@@ -228,26 +228,25 @@ class Encoding
      */
     protected function encodeCompletely(string &$data, bool $code): string
     {
-        $result = '';
-
         if (strlen($data) > 102400) {
-            $result = $this->pool->messages->getHelp('stringTooLarge');
-        } else {
-            $encoding = mb_detect_encoding($data);
-            $data = mb_convert_encoding($data, 'UTF-32', $encoding === false ? null : $encoding);
-
-            if ($code === true) {
-                $sortingCallback = [$this, 'arrayMapCallbackCode'];
-            } else {
-                $sortingCallback = [$this, 'arrayMapCallbackNormal'];
-            }
-
-            if (empty($data) === false) {
-                $result = implode("", array_map($sortingCallback, unpack("N*", $data)));
-            }
+            return $this->pool->messages->getHelp('stringTooLarge');
         }
 
-        return $result;
+        $encoding = mb_detect_encoding($data);
+        $data = mb_convert_encoding($data, 'UTF-32', $encoding === false ? null : $encoding);
+        if (empty($data) === true) {
+            // Unable to convert this string into something we can completely
+            // encode. Fallback to an empty string.
+            return '';
+        }
+
+        return implode(
+            "",
+            array_map(
+                $code === true ? [$this, 'arrayMapCallbackCode'] : [$this, 'arrayMapCallbackNormal'],
+                unpack("N*", $data)
+            )
+        );
     }
 
     /**

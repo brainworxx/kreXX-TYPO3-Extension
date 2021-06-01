@@ -259,6 +259,8 @@ abstract class Fallback implements ConfigConstInterface
         $this->generateConfigFallback();
         // Generate the configuration for the fe editor.
         $this->generateFeConfigFallback();
+        // Generate the plugin configuration.
+        $this->generatePluginConfig();
         // Setting up out two bundled skins.
         $this->generateSkinConfiguration();
     }
@@ -313,7 +315,13 @@ abstract class Fallback implements ConfigConstInterface
             static::SETTING_MAX_STEP_NUMBER => $this->returnInput(static::SECTION_PRUNE, 10),
             static::SETTING_ARRAY_COUNT_LIMIT => $this->returnInput(static::SECTION_PRUNE, 300),
         ];
+    }
 
+    /**
+     * Generate the plugin configuration, if available.
+     */
+    protected function generatePluginConfig()
+    {
         // Adding the new configuration options from the plugins.
         $pluginConfig = SettingsGetter::getNewSettings();
         if (empty($pluginConfig) === true) {
