@@ -45,7 +45,6 @@ use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use Throwable;

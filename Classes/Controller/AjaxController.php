@@ -61,8 +61,6 @@ class AjaxController
      *   The prepared response object. Since 10.0, we need to create this one
      *   by ourselves.
      *
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
-     *
      * @return \TYPO3\CMS\Core\Http\Response
      *   The response with the json string.
      */

@@ -98,8 +98,6 @@ class Log extends AbstractSubModule implements
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *   The frontend request. Currently not used.
      *
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
-     *
      * @return \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData
      *   The data we will assign to the admin panel.
      */
@@ -205,7 +203,7 @@ class Log extends AbstractSubModule implements
         $view->setLayoutRootPaths(['EXT:includekrexx/Resources/Private/Layouts']);
         $view->assignMultiple(
             [
-                'text' => (string) $text,
+                'text' => $text,
                 'severity' => $severity,
             ]
         );

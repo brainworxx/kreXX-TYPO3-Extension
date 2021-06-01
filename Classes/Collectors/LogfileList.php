@@ -97,8 +97,6 @@ class LogfileList extends AbstractCollector
      * @param array $files
      *   The list of files to process.
      *
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
-     *
      * @return array
      *   The file info in a neat array.
      */

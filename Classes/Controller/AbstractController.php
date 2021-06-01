@@ -223,8 +223,6 @@ abstract class AbstractController extends ActionController
     /**
      * Create the response, depending on the calling context.
      *
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
-     *
      * @return MvcResponse|NullResponse
      */
     protected function createResponse()
