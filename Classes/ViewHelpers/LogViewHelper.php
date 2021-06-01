@@ -40,7 +40,7 @@ namespace Brainworxx\Includekrexx\ViewHelpers;
 class LogViewHelper extends DebugViewHelper
 {
     /**
-     * The name of the analysis methos in the kreXX class.
+     * The name of the analysis methods in the kreXX class.
      *
      * @var string
      */

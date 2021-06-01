@@ -133,7 +133,7 @@ class Configuration extends AbstractCollector
      * @param array $config
      *   The configuration array, so far.
      * @param string $settingsName
-     *   The name of the setting we are proseesing right now.
+     *   The name of the setting we are processing right now.
      * @param array $fallback
      *   The fallback value.
      */

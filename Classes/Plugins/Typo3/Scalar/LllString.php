@@ -116,7 +116,7 @@ class LllString extends AbstractScalarAnalysis implements ViewConstInterface
      * @codeCoverageIgnore
      *   Who tests the tests?
      *
-     * @param string $name
+     * @param $object
      *   The name of the localisation utility.
      */
     public function setLocalisationUtility($object)

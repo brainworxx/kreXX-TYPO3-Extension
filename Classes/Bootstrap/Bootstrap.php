@@ -85,6 +85,7 @@ class Bootstrap implements ConstInterface
             $this->retrieveTypo3Version();
 
             // Register and activate the TYPO3 plugin.
+            /** @var T3configuration $t3configuration */
             $t3configuration = GeneralUtility::makeInstance(T3configuration::class);
             Registration::register($t3configuration);
             Registration::activatePlugin(get_class($t3configuration));
@@ -105,7 +106,7 @@ class Bootstrap implements ConstInterface
                 [static::FLUID_NAMESPACE][static::KREXX] = [ 0 => 'Brainworxx\\Includekrexx\\ViewHelpers'];
             }
 
-            // Register the Aimoes Magic plugin.
+            // Register the Aimeos Magic plugin.
             $aimeosConfiguration = GeneralUtility::makeInstance(AimeosConfiguration::class);
             Registration::register($aimeosConfiguration);
 
