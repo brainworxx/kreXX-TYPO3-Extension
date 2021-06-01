@@ -81,7 +81,7 @@ class DebugViewHelper extends ComptibilityViewHelper
     protected $escapeOutput = false;
 
     /**
-     * The name of the analysis methos in the kreXX class.
+     * The name of the analysis methods in the kreXX class.
      *
      * @var string
      */
@@ -100,6 +100,8 @@ class DebugViewHelper extends ComptibilityViewHelper
     /**
      * A wrapper for kreXX();
      *
+     * @throws \ReflectionException
+     *
      * @return string
      *   Returns an empty string.
      */
@@ -107,9 +109,10 @@ class DebugViewHelper extends ComptibilityViewHelper
     {
         Pool::createPool();
         $view = $this->viewHelperVariableContainer->getView();
-        Krexx::$pool->registry->set('view', $view);
-        Krexx::$pool->registry->set('viewReflection', new ReflectionClass($view));
-        Krexx::$pool->registry->set('renderingContext', $this->renderingContext);
+        $pool = Krexx::$pool;
+        $pool->registry->set('view', $view);
+        $pool->registry->set('viewReflection', new ReflectionClass($view));
+        $pool->registry->set('renderingContext', $this->renderingContext);
         Registration::activatePlugin(
             FluidConfiguration::class
         );
@@ -119,9 +122,9 @@ class DebugViewHelper extends ComptibilityViewHelper
         Registration::deactivatePlugin(
             FluidConfiguration::class
         );
-        Krexx::$pool->registry->set('view', null);
-        Krexx::$pool->registry->set('viewReflection', null);
-        Krexx::$pool->registry->set('renderingContext', null);
+        $pool->registry->set('view', null);
+        $pool->registry->set('viewReflection', null);
+        $pool->registry->set('renderingContext', null);
 
         return '';
     }
