@@ -115,7 +115,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
         Krexx::$pool->createClass(DumpController::class)
             ->dumpAction(
                 $logModel,
-                $record->getComponent(),
+                Krexx::$pool->encodingService->encodeString($logModel->getMessage()),
                 $this->retrieveLogLevel($record)
             );
 

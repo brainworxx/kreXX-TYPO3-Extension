@@ -16,6 +16,7 @@ Changelog
     - [Change] Remove the usage of the ObjectManager whenever possible.
     - [Change] Code cleanup.
     - [Change] Make use of the Symfony DI.
+    - [Change] Use the message and not the component for the logging overview.
     - [Bugfix] Predefined objects do not get their properties analysed.
     - [Bugfix] Display the DateTime anomaly "public" properties.
     - [Bugfix] Consolidate PHP 8.0 compatibility.
