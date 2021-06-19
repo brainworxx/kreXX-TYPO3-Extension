@@ -20,6 +20,7 @@ Changelog
     - [Bugfix] Predefined objects do not get their properties analysed.
     - [Bugfix] Display the DateTime anomaly "public" properties.
     - [Bugfix] Consolidate PHP 8.0 compatibility.
+    - [Bugfix] Make use of the :literal:`Oops an error occurred!` analysis when the error got renamed.
 
 4.1.0
     - [Feature] Added a log model to use for a logger implementation.

@@ -105,13 +105,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
         AbstractController::$analysisInProgress = true;
 
         $backtrace = $this->retrieveBacktrace();
-        if (strpos($record->getMessage(), 'Oops, an error occurred!') === 0) {
-            $logModel = $this->prepareLogModelOops($backtrace, $record);
-        } else {
-            // This one is not an "oops" record.
-            $logModel = $this->prepareLogModelNormal($backtrace, $record);
-        }
-
+        $logModel = $this->prepareLogModelOops($backtrace, $record);
         Krexx::$pool->createClass(DumpController::class)
             ->dumpAction(
                 $logModel,
