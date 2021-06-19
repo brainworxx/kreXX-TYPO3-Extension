@@ -45,8 +45,8 @@
           text-decoration: none;
 
           &:hover {
-            border-color: $grey-10 $grey-10 $grey-15;
-            background: $grey-05;
+            border-color: $grey-15 $grey-15 $white $grey-15;
+            background: $white;
             text-decoration: none;
             cursor: pointer;
           }

@@ -21,6 +21,7 @@ Changelog
     - [Bugfix] Display the DateTime anomaly "public" properties.
     - [Bugfix] Consolidate PHP 8.0 compatibility.
     - [Bugfix] Make use of the :literal:`Oops an error occurred!` analysis when the error got renamed.
+    - [Bugfix] Minor styling fixes for the backend module.
 
 4.1.0
     - [Feature] Added a log model to use for a logger implementation.

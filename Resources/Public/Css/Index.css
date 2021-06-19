@@ -83,8 +83,8 @@ body {
   text-decoration: none;
 }
 .krexx-backend .tabpanel .nav-tabs > li > a:hover {
-  border-color: #dedede #dedede #c4c4c4;
-  background: #ededed;
+  border-color: #c4c4c4 #c4c4c4 #fefefe #c4c4c4;
+  background: #fefefe;
   text-decoration: none;
   cursor: pointer;
 }
@@ -283,14 +283,14 @@ body {
   padding-left: 24px;
   width: auto;
   height: auto;
-  margin: 0;
+  margin: 0 5px 0 0;
   vertical-align: middle;
 }
 .krexx-backend .button.cookies {
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAYAAADAQbwGAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMS41ZEdYUgAAAJ9JREFUOE+tkbsNBCEQQ2mGDgjICa8GeqD/ZA6j8wmNHK13pacdvWEsPiUiXkVKBykdpHSQ0kFKBykdpARrrRhj7BXlQ4e6tRbo0WWkBBjcAdF7P6Gg1nocenk9kRLcAQhl/fv/d52RkmBwfycI5CtQSEleDcTgfUz7yHwUBgCGPnqUOecZvHeDGg49uoyUDlI6SOkgpYOUDlI6SPmcKF9ejLsanjQbyAAAAABJRU5ErkJggg==) no-repeat left;
   width: auto;
   height: auto;
-  margin: 0;
+  margin: 0 0 0 5px;
   vertical-align: middle;
 }
 @media (max-width: 450px) {
