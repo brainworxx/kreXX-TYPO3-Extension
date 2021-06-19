@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        what: [ 't38php70', 't38php71', 't39php72', 't39php73', 't310php74', 't311php80' ]
+        what: [ 't38php70', 't38php71', 't39php72', 't39php73', 't310php74' ]
+        # what: [ 't38php70', 't38php71', 't39php72', 't39php73', 't310php74', 't311php80' ]
 
     steps:
     - uses: actions/checkout@v2
