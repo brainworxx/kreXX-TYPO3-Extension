@@ -2,6 +2,14 @@ body {
   color: $black;
 }
 
+.module .module-docheader {
+  display: none;
+}
+
+.module .module-body {
+  padding-top: 50px !important;
+}
+
 .module-loading-indicator {
   position: fixed;
   min-height: 5px;
@@ -14,6 +22,7 @@ body {
 }
 
 .krexx-backend {
+
   /**
    * General stuff
    */

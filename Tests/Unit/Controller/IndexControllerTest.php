@@ -41,10 +41,10 @@ use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
-use StdClass;
-use TYPO3\CMS\Core\Http\NullResponse;
+use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
 use TYPO3\CMS\Extbase\Mvc\Request;
@@ -93,6 +93,7 @@ class IndexControllerTest extends AbstractTest
     public function testIndexActionNormal()
     {
         $jsCssFileContent = 'file content';
+        $templateContent = 'template content';
         $fileGetContents =  $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_get_contents');
         $fileGetContents->expects($this->exactly(2))
             ->will($this->returnValue($jsCssFileContent));
@@ -115,13 +116,14 @@ class IndexControllerTest extends AbstractTest
 
         // Mock the view.
         $viewMock = $this->createMock(ViewInterface::class);
-        $viewMock->expects($this->exactly(3))
+        $viewMock->expects($this->exactly(1))
             ->method('assign')
             ->withConsecutive(
-                ['settings', $settingsModel],
-                ['js', $jsCssFileContent],
-                ['css', $jsCssFileContent]
+                ['settings', $settingsModel]
             );
+        $viewMock->expects($this->once())
+            ->method('render')
+            ->will($this->returnValue($templateContent));
 
         // Prepare the collectors
         $configurationMock = $this->createMock(Configuration::class);
@@ -133,12 +135,32 @@ class IndexControllerTest extends AbstractTest
             ->method('assignData')
             ->with($viewMock);
 
+        $pageRenderer = $this->createMock(PageRenderer::class);
+        $pageRenderer->expects($this->once())
+            ->method('addJsInlineCode')
+            ->with('krexxjs', $jsCssFileContent);
+        $pageRenderer->expects($this->once())
+            ->method('addCssInlineBlock')
+            ->with('krexxcss', $jsCssFileContent);
+
+        $moduleTemplateMock = $this->createMock(ModuleTemplate::class);
+        $moduleTemplateMock->expects($this->once())
+            ->method('getPageRenderer')
+            ->will($this->returnValue($pageRenderer));
+        $moduleTemplateMock->expects($this->once())
+            ->method('setModuleName')
+            ->with('tx_includekrexx');
+        $moduleTemplateMock->expects($this->once())
+            ->method('setContent')
+            ->with($templateContent);
+
         // Inject it, like there is no tomorrow.
         $indexController = new IndexController();
         $indexController->injectLivePreset($presetMock);
         $indexController->injectSettingsModel($settingsModel);
         $indexController->injectConfiguration($configurationMock);
         $indexController->injectFormConfiguration($configFeMock);
+        $indexController->injectModuleTemplate($moduleTemplateMock);
         if (method_exists($indexController, 'injectResponseFactory')) {
             $indexController->injectResponseFactory(new ResponseFactory());
         }

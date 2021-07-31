@@ -3,11 +3,23 @@ body {
   color: #333;
 }
 
+.module .module-docheader {
+  display: none;
+}
+
+.module .module-body {
+  padding-top: 50px !important;
+}
+
 .module-loading-indicator {
   position: fixed;
   min-height: 5px;
   width: 100%;
   z-index: 999999;
+}
+
+#typo3-inner-docbody {
+  position: static;
 }
 
 * {
@@ -324,7 +336,7 @@ body {
   pointer-events: none;
 }
 
-.krexx-backend .module-docheader {
+.krexx-backend .krexx-docheader {
   position: fixed;
   width: 100%;
   top: 0;
@@ -339,31 +351,21 @@ body {
   transition: margin-top 0.3s ease-in-out;
   min-height: auto;
 }
-.krexx-backend .module-docheader .chevron {
+.krexx-backend .krexx-docheader .chevron {
   display: inline-block;
   vertical-align: middle;
 }
-.krexx-backend .module-docheader button {
+.krexx-backend .krexx-docheader button {
   margin-top: 7px;
   color: #333;
   background-color: #ededed;
   border-color: #c4c4c4;
   padding: 0 8px 0 24px;
 }
-.krexx-backend .module-docheader button:hover {
+.krexx-backend .krexx-docheader button:hover {
   color: #333;
   background-color: #dedede;
   border-color: #a6a6a6;
-}
-.krexx-backend div#typo3-inner-docbody {
-  padding: 48px 24px 24px 24px;
-  margin-top: 0;
-  position: static;
-}
-@media (max-width: 450px) {
-  .krexx-backend div#typo3-inner-docbody {
-    padding-top: 80px;
-  }
 }
 
 .krexx-backend .tooltip-hover {

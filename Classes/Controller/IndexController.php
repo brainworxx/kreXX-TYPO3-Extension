@@ -39,8 +39,10 @@ namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
+use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 
 class IndexController extends AbstractController
@@ -79,10 +81,13 @@ class IndexController extends AbstractController
         $this->assignCssJs();
 
         if (method_exists($this, 'htmlResponse') === true) {
-            return $this->htmlResponse();
+            return GeneralUtility::makeInstance(
+                HtmlResponse::class,
+                $this->moduleTemplate->renderContent()
+            );
         }
 
-        return null;
+        return $this->moduleTemplate->renderContent();
     }
 
     /**
@@ -90,6 +95,8 @@ class IndexController extends AbstractController
      *
      * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     *
+     * @return void
      */
     public function saveAction(Settings $settings)
     {
@@ -99,7 +106,7 @@ class IndexController extends AbstractController
                 static::translate(static::SAVE_FAIL_TITLE, Bootstrap::EXT_KEY),
                 FlashMessage::ERROR
             );
-            $this->redirect('index');
+            return $this->redirect('index');
         }
 
         $filepath = $this->pool->config->getPathToConfigFile();
@@ -124,7 +131,7 @@ class IndexController extends AbstractController
 
         // Retrieve the failed messages from kreXX and redirect back.
         $this->retrieveKrexxMessages();
-        $this->redirect('index');
+        return $this->redirect('index');
     }
 
     /**

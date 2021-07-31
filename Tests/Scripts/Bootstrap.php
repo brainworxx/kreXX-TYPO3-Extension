@@ -37,6 +37,9 @@ use phpmock\phpunit\PHPMock;
 define('TYPO3_version', \Brainworxx\Includekrexx\Tests\Helpers\AbstractTest::TYPO3_VERSION);
 define('PATH_site', 'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR);
 define('TYPO3_MODE', 'FE');
+define('LF', chr(10));
+define('CR', chr(13));
+define('CRLF', CR . LF);
 
 PHPMock::defineFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
 
