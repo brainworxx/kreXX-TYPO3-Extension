@@ -39,28 +39,41 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser as OriginalParser;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 
 /**
  * Wrapper around the Typo3DbQueryParser.
  *
  * Since the object manager got himself deprecated, the DI has become somewhat
- * unstable (imho) across the LTS version.
+ * unstable (imho) across the LTS versions.
  *
  * @package Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser
  */
 class Typo3DbQueryParser extends OriginalParser
 {
     /**
-     * Short circuiting the convertQueryToDoctrineQueryBuilder to make sure that
-     * it still works outside of extbase.
+     * Short-circuiting the DI of 11.3 and beyond.
+     *
+     * @param \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper|null $dataMapper
+     */
+    public function __construct(DataMapper $dataMapper = null)
+    {
+        if (empty($dataMapper) === false) {
+            parent::__construct($dataMapper);
+        }
+    }
+
+    /**
+     * Short-circuiting the convertQueryToDoctrineQueryBuilder to make sure that
+     * it still works outside extbase.
      *
      * {@inheritDoc}
      */
     public function convertQueryToDoctrineQueryBuilder(QueryInterface $query)
     {
         if (empty($this->dataMapper) === true) {
+            // Well, the service.yaml configuration got ignored.
             if (method_exists(ObjectManager::class, 'get') === true) {
-                // Well, the service.yaml configuration got ignored.
                 // Must be lower than TYPO3 10.
                 // This means that the general utility is not able to inject
                 // anything. We must use the ObjectManager to create the parser.
