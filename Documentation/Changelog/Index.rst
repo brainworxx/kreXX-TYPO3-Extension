@@ -12,6 +12,9 @@
 Changelog
 =============================================================
 
+4.1.2
+    - [Feature] PHP 8.0 support
+
 4.1.1
     - [Change] Remove the usage of the ObjectManager whenever possible.
     - [Change] Code cleanup.
