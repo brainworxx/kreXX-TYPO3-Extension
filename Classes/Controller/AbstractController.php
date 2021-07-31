@@ -43,6 +43,7 @@ use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use Brainworxx\Includekrexx\Collectors\Configuration;
@@ -99,6 +100,11 @@ abstract class AbstractController extends ActionController
     protected $livePreset;
 
     /**
+     * @var \TYPO3\CMS\Backend\Template\ModuleTemplate
+     */
+    protected $moduleTemplate;
+
+    /**
      * Set the pool and do the parent constructor.
      */
     public function __construct()
@@ -109,6 +115,14 @@ abstract class AbstractController extends ActionController
         }
         Pool::createPool();
         $this->pool = Krexx::$pool;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Backend\Template\ModuleTemplate $moduleTemplate
+     */
+    public function injectModuleTemplate(ModuleTemplate $moduleTemplate)
+    {
+        $this->moduleTemplate = $moduleTemplate;
     }
 
     /**
@@ -251,7 +265,10 @@ abstract class AbstractController extends ActionController
     {
         $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/Index.css');
-        $this->view->assign('js', file_get_contents($jsPath));
-        $this->view->assign('css', file_get_contents($cssPath));
+        $pageRenderer = $this->moduleTemplate->getPageRenderer();
+        $pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
+        $pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));
+        $this->moduleTemplate->setContent($this->view->render());
+        $this->moduleTemplate->setModuleName('tx_includekrexx');
     }
 }
