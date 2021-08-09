@@ -77,10 +77,10 @@ class LogfileList extends AbstractCollector
             return $fileList;
         }
 
-        // Get the log files anf sort them.
+        // Get the log files and sort them.
         $files = glob($this->pool->config->getLogDir() . '*.Krexx.html');
-        if (!is_array($files)) {
-            $files = [];
+        if (empty($files) === true) {
+            return [];
         }
 
         // The function filemtime gets cached by php btw.
