@@ -81,10 +81,7 @@ class IndexController extends AbstractController
         $this->assignCssJs();
 
         if (method_exists($this, 'htmlResponse') === true) {
-            return GeneralUtility::makeInstance(
-                HtmlResponse::class,
-                $this->moduleTemplate->renderContent()
-            );
+            return GeneralUtility::makeInstance(HtmlResponse::class, $this->moduleTemplate->renderContent());
         }
 
         return $this->moduleTemplate->renderContent();
