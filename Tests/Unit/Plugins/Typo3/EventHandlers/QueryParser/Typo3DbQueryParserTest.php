@@ -52,6 +52,7 @@ class Typo3DbQueryParserTest extends AbstractTest
      * And testing the parent method across all LTS versions is a very bad idea.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser::convertQueryToDoctrineQueryBuilder
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser::__construct
      */
     public function testConvertQueryToDoctrineQueryBuilderNoDi()
     {
