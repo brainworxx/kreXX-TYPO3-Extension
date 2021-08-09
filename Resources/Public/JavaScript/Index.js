@@ -169,9 +169,9 @@
         var value = modeSwitch.options[modeSwitch.selectedIndex].value;
 
         if (value === 'expert') {
-            document.getElementById('typo3-inner-docbody').classList.add('expert-mode');
+            document.getElementById('tabpanel').classList.add('expert-mode');
         } else {
-            document.getElementById('typo3-inner-docbody').classList.remove('expert-mode');
+            document.getElementById('tabpanel').classList.remove('expert-mode');
         }
     };
 
