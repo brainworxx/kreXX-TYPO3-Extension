@@ -100,8 +100,6 @@ class LllString extends AbstractScalarAnalysis implements ViewConstInterface
             }
         } catch (Throwable $e) {
             // Huh, someone messed with the translations.
-            restore_error_handler();
-            return false;
         }
 
         restore_error_handler();
