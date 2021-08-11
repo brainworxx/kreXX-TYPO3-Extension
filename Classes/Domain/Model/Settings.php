@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Domain\Model;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
+use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseGetter;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalysePrivate;
@@ -125,11 +126,11 @@ class Settings
         /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $user */
         $user = $GLOBALS['BE_USER'];
         // Save the last settings to the backend user, so we can retrieve it later.
-        if (!isset($user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY])) {
-            $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY] = [];
+        if (!isset($user->uc[AbstractCollector::MODULE_DATA][AbstractController::MODULE_KEY])) {
+            $user->uc[AbstractCollector::MODULE_DATA][AbstractController::MODULE_KEY] = [];
         }
-        $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY] = array_merge(
-            $user->uc[AbstractCollector::MODULE_DATA][IndexController::MODULE_KEY],
+        $user->uc[AbstractCollector::MODULE_DATA][AbstractController::MODULE_KEY] = array_merge(
+            $user->uc[AbstractCollector::MODULE_DATA][AbstractController::MODULE_KEY],
             $moduleSettings
         );
         $user->writeUC();

@@ -89,7 +89,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
      */
     public function getVersion(): string
     {
-        return ExtensionManagementUtility::getExtensionVersion(Bootstrap::EXT_KEY);
+        return ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY);
     }
 
     /**
@@ -146,7 +146,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         Registration::addMethodToDebugBlacklist(DbQueryBuilder::class, $toString);
 
         // Add additional texts to the help.
-        $extPath = ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
+        $extPath = ExtensionManagementUtility::extPath(static::EXT_KEY);
         Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/t3.kreXX.ini');
 
         // Register the scalar analysis classes.
@@ -199,8 +199,8 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
             ->setIsFeProtected(true)
             ->setDefaultValue(static::VALUE_FALSE)
             ->setIsEditable(false)
-            ->setRenderType(NewSetting::RENDER_TYPE_NONE)
-            ->setValidation(NewSetting::EVAL_BOOL)
+            ->setRenderType(static::RENDER_TYPE_NONE)
+            ->setValidation(static::EVAL_BOOL)
             ->setName(static::ACTIVATE_T3_FILE_WRITER);
         Registration::addNewSettings($activeT3FileWriter);
 
@@ -209,7 +209,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
             ->setIsFeProtected(true)
             ->setDefaultValue((string)LogLevel::ERROR)
             ->setIsEditable(false)
-            ->setRenderType(NewSetting::RENDER_TYPE_NONE)
+            ->setRenderType(static::RENDER_TYPE_NONE)
             ->setValidation($this->createFileWriterValidator())
             ->setName(static::LOG_LEVEL_T3_FILE_WRITER);
         Registration::addNewSettings($loglevelT3FileWriter);

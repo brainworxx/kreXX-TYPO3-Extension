@@ -38,12 +38,14 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\From\File;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Core\Log\LogLevel;
 
-class Configuration extends AbstractCollector
+class Configuration extends AbstractCollector implements ConfigConstInterface, ConstInterface
 {
     /**
      * Assign the kreXX configuration for the view.
@@ -75,23 +77,23 @@ class Configuration extends AbstractCollector
         foreach ($this->pool->config->getSkinList() as $skin) {
             $dropdown['skins'][$skin] = $skin;
         }
-        $dropdown[Fallback::SETTING_DESTINATION] = [
-            Fallback::VALUE_BROWSER => static::translate(Fallback::VALUE_BROWSER, Bootstrap::EXT_KEY),
-            Fallback::VALUE_FILE => static::translate(Fallback::VALUE_FILE, Bootstrap::EXT_KEY),
+        $dropdown[static::SETTING_DESTINATION] = [
+            static::VALUE_BROWSER => static::translate(static::VALUE_BROWSER, static::EXT_KEY),
+            static::VALUE_FILE => static::translate(static::VALUE_FILE, static::EXT_KEY),
         ];
         $dropdown['bool'] = [
-            Fallback::VALUE_TRUE => static::translate(Fallback::VALUE_TRUE, Bootstrap::EXT_KEY),
-            Fallback::VALUE_FALSE => static::translate(Fallback::VALUE_FALSE, Bootstrap::EXT_KEY),
+            static::VALUE_TRUE => static::translate(static::VALUE_TRUE, static::EXT_KEY),
+            static::VALUE_FALSE => static::translate(static::VALUE_FALSE, static::EXT_KEY),
         ];
         $dropdown['loglevel'] = [
-            LogLevel::DEBUG => static::translate('loglevel.debug', Bootstrap::EXT_KEY),
-            LogLevel::INFO => static::translate('loglevel.info', Bootstrap::EXT_KEY),
-            LogLevel::NOTICE => static::translate('loglevel.notice', Bootstrap::EXT_KEY),
-            LogLevel::WARNING => static::translate('loglevel.warning', Bootstrap::EXT_KEY),
-            LogLevel::ERROR => static::translate('loglevel.error', Bootstrap::EXT_KEY),
-            LogLevel::CRITICAL => static::translate('loglevel.critical', Bootstrap::EXT_KEY),
-            LogLevel::ALERT => static::translate('loglevel.alert', Bootstrap::EXT_KEY),
-            LogLevel::EMERGENCY => static::translate('loglevel.emergency', Bootstrap::EXT_KEY),
+            LogLevel::DEBUG => static::translate('loglevel.debug', static::EXT_KEY),
+            LogLevel::INFO => static::translate('loglevel.info', static::EXT_KEY),
+            LogLevel::NOTICE => static::translate('loglevel.notice', static::EXT_KEY),
+            LogLevel::WARNING => static::translate('loglevel.warning', static::EXT_KEY),
+            LogLevel::ERROR => static::translate('loglevel.error', static::EXT_KEY),
+            LogLevel::CRITICAL => static::translate('loglevel.critical', static::EXT_KEY),
+            LogLevel::ALERT => static::translate('loglevel.alert', static::EXT_KEY),
+            LogLevel::EMERGENCY => static::translate('loglevel.emergency', static::EXT_KEY),
         ];
 
         return $dropdown;
@@ -112,7 +114,7 @@ class Configuration extends AbstractCollector
         $config = [];
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
             // Stitch together the settings in the template.
-            $group = $fallback[Fallback::SECTION];
+            $group = $fallback[static::SECTION];
             $config[$settingsName] = [];
             $config[$settingsName][static::SETTINGS_NAME] = $settingsName;
             $config[$settingsName][static::SETTINGS_VALUE] = $iniReader->getConfigFromFile($group, $settingsName);

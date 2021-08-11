@@ -40,10 +40,12 @@ namespace Brainworxx\Includekrexx\Controller;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use Brainworxx\Includekrexx\Collectors\Configuration;
@@ -60,7 +62,7 @@ use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
  * this extension compatible back to 4.5. This  makes the other controllers
  * (hopefully) more readable.
  */
-abstract class AbstractController extends ActionController
+abstract class AbstractController extends ActionController implements ConstInterface
 {
     use LanguageTrait;
 
@@ -134,9 +136,9 @@ abstract class AbstractController extends ActionController
         if ($this->livePreset->isActive()) {
             //Display a warning, if we are in Productive / Live settings.
             $this->addFlashMessage(
-                static::translate('debugpreset.warning.message', Bootstrap::EXT_KEY),
-                static::translate('debugpreset.warning.title', Bootstrap::EXT_KEY),
-                FlashMessage::WARNING
+                static::translate('debugpreset.warning.message', static::EXT_KEY),
+                static::translate('debugpreset.warning.title', static::EXT_KEY),
+                AbstractMessage::WARNING
             );
         }
     }
@@ -192,9 +194,9 @@ abstract class AbstractController extends ActionController
         foreach ($messages as $message) {
             // And translate them.
             $this->addFlashMessage(
-                static::translate($message->getKey(), Bootstrap::EXT_KEY, $message->getArguments()),
-                static::translate('general.error.title', Bootstrap::EXT_KEY),
-                FlashMessage::ERROR
+                static::translate($message->getKey(), static::EXT_KEY, $message->getArguments()),
+                static::translate('general.error.title', static::EXT_KEY),
+                AbstractMessage::ERROR
             );
         }
     }

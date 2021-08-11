@@ -37,7 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Collectors;
 
-use Brainworxx\Includekrexx\Controller\IndexController;
+use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -107,8 +107,8 @@ abstract class AbstractCollector
             $this->hasAccess = $user
                 ->check('modules', static::PLUGIN_NAME);
         }
-        if ($this->hasAccess && isset($user->uc[static::MODULE_DATA][IndexController::MODULE_KEY])) {
-            $this->userUc = $user->uc[static::MODULE_DATA][IndexController::MODULE_KEY];
+        if ($this->hasAccess && isset($user->uc[static::MODULE_DATA][AbstractController::MODULE_KEY])) {
+            $this->userUc = $user->uc[static::MODULE_DATA][AbstractController::MODULE_KEY];
         }
     }
 

@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
+use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
@@ -50,7 +51,10 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
-class DebugMethods extends AbstractEventHandler implements CallbackConstInterface, CodegenConstInterface
+class DebugMethods extends AbstractEventHandler implements
+    CallbackConstInterface,
+    CodegenConstInterface,
+    ConnectorsConstInterface
 {
     /**
      * The 2019 version simplified much of the code, hence the configuration
@@ -159,7 +163,7 @@ class DebugMethods extends AbstractEventHandler implements CallbackConstInterfac
                     ->setType(static::TYPE_DEBUG_METHOD)
                     ->setNormal(static::UNKNOWN_VALUE)
                     ->setHelpid($methodName)
-                    ->setConnectorType(Connectors::CONNECTOR_METHOD)
+                    ->setConnectorType(static::CONNECTOR_METHOD)
                     ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
                     ->addParameter(static::PARAM_DATA, $result)
                     ->injectCallback(

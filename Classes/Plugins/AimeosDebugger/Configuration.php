@@ -53,8 +53,9 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Aimeos\MW\DB\Statement\Base as StatementBase;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface as Typo3ConstInterface;
 
-class Configuration implements PluginConfigInterface
+class Configuration implements PluginConfigInterface, Typo3ConstInterface
 {
     /**
      * {@inheritdoc}
@@ -69,7 +70,7 @@ class Configuration implements PluginConfigInterface
      */
     public function getVersion(): string
     {
-        return ExtensionManagementUtility::getExtensionVersion(Bootstrap::EXT_KEY);
+        return ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY);
     }
 
     /**
@@ -102,7 +103,7 @@ class Configuration implements PluginConfigInterface
         Registration::addMethodToDebugBlacklist(StatementBase::class, '__toString');
 
         // Adding additional texts.
-        $extPath = ExtensionManagementUtility::extPath(Bootstrap::EXT_KEY);
+        $extPath = ExtensionManagementUtility::extPath(static::EXT_KEY);
         Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/aimeos.kreXX.ini');
     }
 }

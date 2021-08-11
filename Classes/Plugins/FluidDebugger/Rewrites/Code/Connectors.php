@@ -53,14 +53,14 @@ class Connectors extends OrgConnectors
     {
         $fluid = ['.', ''];
         $fluidParameters = ['.', '(@param@)'];
-        $this->connectorArray[Connectors::CONNECTOR_METHOD] = $fluidParameters;
-        $this->connectorArray[Connectors::CONNECTOR_STATIC_METHOD] = $fluidParameters;
-        $this->connectorArray[Connectors::CONNECTOR_NORMAL_ARRAY] = $fluid;
-        $this->connectorArray[Connectors::CONNECTOR_ASSOCIATIVE_ARRAY] = $fluid;
-        $this->connectorArray[Connectors::CONNECTOR_CONSTANT] = $fluid;
-        $this->connectorArray[Connectors::CONNECTOR_NORMAL_PROPERTY] = $fluid;
-        $this->connectorArray[Connectors::CONNECTOR_STATIC_PROPERTY] = $fluid;
-        $this->connectorArray[Connectors::CONNECTOR_SPECIAL_CHARS_PROP] = $fluid;
+        $this->connectorArray[static::CONNECTOR_METHOD] = $fluidParameters;
+        $this->connectorArray[static::CONNECTOR_STATIC_METHOD] = $fluidParameters;
+        $this->connectorArray[static::CONNECTOR_NORMAL_ARRAY] = $fluid;
+        $this->connectorArray[static::CONNECTOR_ASSOCIATIVE_ARRAY] = $fluid;
+        $this->connectorArray[static::CONNECTOR_CONSTANT] = $fluid;
+        $this->connectorArray[static::CONNECTOR_NORMAL_PROPERTY] = $fluid;
+        $this->connectorArray[static::CONNECTOR_STATIC_PROPERTY] = $fluid;
+        $this->connectorArray[static::CONNECTOR_SPECIAL_CHARS_PROP] = $fluid;
     }
 
     /**

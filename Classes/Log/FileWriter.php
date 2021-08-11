@@ -174,7 +174,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
 
         // Disabled?
         if (
-            Krexx::$pool->config->getSetting(Fallback::SETTING_DISABLED) ||
+            Krexx::$pool->config->getSetting(static::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {

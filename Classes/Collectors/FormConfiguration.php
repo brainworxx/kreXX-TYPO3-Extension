@@ -38,11 +38,13 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\From\File;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
-class FormConfiguration extends AbstractCollector
+class FormConfiguration extends AbstractCollector implements ConfigConstInterface, ConstInterface
 {
     /**
      * Assigning the form configuration to the view.
@@ -96,17 +98,17 @@ class FormConfiguration extends AbstractCollector
     protected function generateDropdown(): array
     {
         return [
-            Fallback::RENDER_TYPE_CONFIG_FULL => static::translate(
-                Fallback::RENDER_TYPE_CONFIG_FULL,
-                Bootstrap::EXT_KEY
+            static::RENDER_TYPE_CONFIG_FULL => static::translate(
+                static::RENDER_TYPE_CONFIG_FULL,
+                static::EXT_KEY
             ),
-            Fallback::RENDER_TYPE_CONFIG_DISPLAY => static::translate(
-                Fallback::RENDER_TYPE_CONFIG_DISPLAY,
-                Bootstrap::EXT_KEY
+            static::RENDER_TYPE_CONFIG_DISPLAY => static::translate(
+                static::RENDER_TYPE_CONFIG_DISPLAY,
+                static::EXT_KEY
             ),
-            Fallback::RENDER_TYPE_CONFIG_NONE => static::translate(
-                Fallback::RENDER_TYPE_CONFIG_NONE,
-                Bootstrap::EXT_KEY
+            static::RENDER_TYPE_CONFIG_NONE => static::translate(
+                static::RENDER_TYPE_CONFIG_NONE,
+                static::EXT_KEY
             )
         ];
     }
@@ -132,19 +134,19 @@ class FormConfiguration extends AbstractCollector
             // display -> we will only display the settings
             // The original values include the name of a template partial
             // with the form element.
-            if ($values[Fallback::RENDER_TYPE] === Fallback::RENDER_TYPE_NONE) {
+            if ($values[static::RENDER_TYPE] === static::RENDER_TYPE_NONE) {
                 // It's not visible, thus we do not accept any values from it.
-                return Fallback::RENDER_TYPE_CONFIG_NONE;
+                return static::RENDER_TYPE_CONFIG_NONE;
             }
 
-            if ($values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_TRUE) {
+            if ($values[static::RENDER_EDITABLE] === static::VALUE_TRUE) {
                 // It's editable and visible.
-                return Fallback::RENDER_TYPE_CONFIG_FULL;
+                return static::RENDER_TYPE_CONFIG_FULL;
             }
 
-            if ($values[Fallback::RENDER_EDITABLE] === Fallback::VALUE_FALSE) {
+            if ($values[static::RENDER_EDITABLE] === static::VALUE_FALSE) {
                 // It's only visible.
-                return Fallback::RENDER_TYPE_CONFIG_DISPLAY;
+                return static::RENDER_TYPE_CONFIG_DISPLAY;
             }
         }
 

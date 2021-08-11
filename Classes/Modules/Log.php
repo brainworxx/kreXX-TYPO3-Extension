@@ -41,6 +41,7 @@ use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Controller\AbstractController;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -64,7 +65,8 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 class Log extends AbstractSubModule implements
     DataProviderInterface,
     ContentProviderInterface,
-    ResourceProviderInterface
+    ResourceProviderInterface,
+    ConstInterface
 {
     use LanguageTrait;
 
@@ -79,7 +81,7 @@ class Log extends AbstractSubModule implements
      */
     public function getIdentifier(): string
     {
-        return Bootstrap::KREXX;
+        return static::KREXX;
     }
 
     /**
@@ -227,7 +229,7 @@ class Log extends AbstractSubModule implements
             $renderedMessages .= $this->renderMessage(
                 static::translate(
                     static::TRANSLATION_PREFIX . $message->getKey(),
-                    Bootstrap::EXT_KEY,
+                    static::EXT_KEY,
                     $message->getArguments()
                 ),
                 static::MESSAGE_SEVERITY_ERROR

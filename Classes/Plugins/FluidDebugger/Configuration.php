@@ -53,13 +53,14 @@ use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors as Fl
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen as FluidCodegen;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\FluidOld as OldCallerFinderFluid;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface as Typo3ConstInterface;
 
 /**
  * Special overwrites and event handlers for fluid.
  *
  * @package Brainworxx\Includekrexx\Plugins\FluidDebugger
  */
-class Configuration implements PluginConfigInterface
+class Configuration implements PluginConfigInterface, Typo3ConstInterface
 {
     /**
      * {@inheritdoc}
@@ -74,7 +75,7 @@ class Configuration implements PluginConfigInterface
      */
     public function getVersion(): string
     {
-        return ExtensionManagementUtility::getExtensionVersion(Bootstrap::EXT_KEY);
+        return ExtensionManagementUtility::getExtensionVersion(static::EXT_KEY);
     }
 
     /**

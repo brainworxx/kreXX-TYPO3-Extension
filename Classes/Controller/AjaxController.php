@@ -40,6 +40,7 @@ namespace Brainworxx\Includekrexx\Controller;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -48,7 +49,7 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use stdClass;
 
-class AjaxController
+class AjaxController implements ConstInterface
 {
     use LanguageTrait;
 
@@ -102,7 +103,7 @@ class AjaxController
 
         if ($this->hasAccess() === false) {
             $result->class  = 'error';
-            $result->text = static::translate(AbstractController::ACCESS_DENIED, Bootstrap::EXT_KEY);
+            $result->text = static::translate(AbstractController::ACCESS_DENIED, static::EXT_KEY);
         } else {
             Pool::createPool();
 
@@ -113,10 +114,10 @@ class AjaxController
 
             if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
                 $result->class  = 'success';
-                $result->text = static::translate('fileDeleted', Bootstrap::EXT_KEY, [$id]);
+                $result->text = static::translate('fileDeleted', static::EXT_KEY, [$id]);
             } else {
                 $result->class  = 'error';
-                $result->text = static::translate('fileDeletedFail', Bootstrap::EXT_KEY, ['n/a']);
+                $result->text = static::translate('fileDeletedFail', static::EXT_KEY, ['n/a']);
             }
         }
 

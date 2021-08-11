@@ -39,13 +39,15 @@ namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 
-class IndexController extends AbstractController
+class IndexController extends AbstractController implements ConstInterface
 {
     /**
      * Simple index action, display everything.
@@ -57,9 +59,9 @@ class IndexController extends AbstractController
         if ($this->hasAccess() === false) {
             // Sorry!
             $this->addFlashMessage(
-                static::translate(static::ACCESS_DENIED, Bootstrap::EXT_KEY),
-                static::translate(static::ACCESS_DENIED, Bootstrap::EXT_KEY),
-                FlashMessage::ERROR
+                static::translate(static::ACCESS_DENIED, static::EXT_KEY),
+                static::translate(static::ACCESS_DENIED, static::EXT_KEY),
+                AbstractMessage::ERROR
             );
             if (method_exists($this, 'htmlResponse') === true) {
                 $response = $this->responseFactory->createResponse()
@@ -99,9 +101,9 @@ class IndexController extends AbstractController
     {
         if ($this->hasAccess() === false) {
             $this->addFlashMessage(
-                static::translate(static::ACCESS_DENIED, Bootstrap::EXT_KEY),
-                static::translate(static::SAVE_FAIL_TITLE, Bootstrap::EXT_KEY),
-                FlashMessage::ERROR
+                static::translate(static::ACCESS_DENIED, static::EXT_KEY),
+                static::translate(static::SAVE_FAIL_TITLE, static::EXT_KEY),
+                AbstractMessage::ERROR
             );
             return $this->redirect('index');
         }
@@ -113,16 +115,16 @@ class IndexController extends AbstractController
         if (is_writable(dirname($filepath)) && file_put_contents($filepath, $settings->generateIniContent())) {
             // File was saved successfully.
             $this->addFlashMessage(
-                static::translate(static::SAVE_SUCCESS_TEXT, Bootstrap::EXT_KEY, [$filepath]),
-                static::translate(static::SAVE_SUCCESS_TITLE, Bootstrap::EXT_KEY),
-                FlashMessage::OK
+                static::translate(static::SAVE_SUCCESS_TEXT, static::EXT_KEY, [$filepath]),
+                static::translate(static::SAVE_SUCCESS_TITLE, static::EXT_KEY),
+                AbstractMessage::OK
             );
         } else {
             // Something went wrong here!
             $this->addFlashMessage(
-                static::translate(static::FILE_NOT_WRITABLE, Bootstrap::EXT_KEY, [$filepath]),
-                static::translate(static::SAVE_FAIL_TITLE, Bootstrap::EXT_KEY),
-                FlashMessage::ERROR
+                static::translate(static::FILE_NOT_WRITABLE, static::EXT_KEY, [$filepath]),
+                static::translate(static::SAVE_FAIL_TITLE, static::EXT_KEY),
+                AbstractMessage::ERROR
             );
         }
 
