@@ -75,7 +75,7 @@ trait LogFileWriter
     {
         // I am supposed to do something with the value in here.
         // Otherwise, this is considered a bug and will lead to a bad rating.
-        return $value;
+        return (int) $value;
     }
 
     /**
@@ -89,6 +89,6 @@ trait LogFileWriter
     {
         // I am supposed to do something with the value in here.
         // Otherwise, this is considered a bug and will lead to a bad rating.
-        return $value;
+        return (string) $value;
     }
 }
