@@ -266,5 +266,20 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
             empty($GLOBALS[static::TYPO3_CONF_VARS][static::LOG][static::WRITER_CONFIGURATION]),
             'File writer was registered.'
         );
+
+        // Test evaluation with a wrong value
+        $result = Krexx::$pool->config->validation->evaluateSetting(
+            $this->configuration->getName(),
+            static::LOG_LEVEL_T3_FILE_WRITER,
+            'wrong value'
+        );
+        $this->assertFalse($result, 'This is literally a wrong value.');
+
+        $result = Krexx::$pool->config->validation->evaluateSetting(
+            $this->configuration->getName(),
+            static::LOG_LEVEL_T3_FILE_WRITER,
+            LogLevel::ERROR
+        );
+        $this->assertTrue($result, 'Error log level.');
     }
 }

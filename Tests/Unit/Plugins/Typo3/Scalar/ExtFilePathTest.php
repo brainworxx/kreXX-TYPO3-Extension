@@ -49,11 +49,27 @@ class ExtFilePathTest extends AbstractTest
     public function testCanHandle()
     {
         $extFilePath = new ExtFilePath(\Krexx::$pool);
+
+        // Test the first impression with a random string.
+        $model = new Model(\Krexx::$pool);
+        $this->assertFalse(
+            $extFilePath->canHandle('random string', $model),
+            'This is not a handleable string.'
+        );
+        $this->assertEmpty($model->getJson());
+
         $fixture = 'EXT:includekrexx/Tests/Fixtures/123458.Krexx.html';
         $model = new Model(\Krexx::$pool);
+        // Lets rey again and throw na error inside the GeneralUtility by not
+        // simulation an installed extension.
+        $this->assertFalse(
+            $extFilePath->canHandle($fixture, $model),
+            'This should trigger a \Throwable in the GeneralUtility'
+        );
+        $this->assertEmpty($model->getJson());
 
+        // The real test starts here.
         $this->simulatePackage('includekrexx', 'includekrexx/');
-
         // Get the underlying class to find the file.
         $isFileMock = $this->getFunctionMock(
             '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar',
@@ -81,6 +97,5 @@ class ExtFilePathTest extends AbstractTest
             "Mimetype" => "just a file"
         ];
         $this->assertEquals($expectations, $jsonData);
-
     }
 }
