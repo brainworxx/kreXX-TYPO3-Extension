@@ -43,6 +43,12 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 /**
  * Old config controller, which only clears the cache.
  *
+ * @deprecated
+ *   Since 3.1.0. Will be removed.
+ *
+ * @codeCoverageIgnore
+ *   We will not test deprecated classes.
+ *
  * @package Brainworxx\Includekrexx\Controller
  */
 class ConfigController extends ActionController
