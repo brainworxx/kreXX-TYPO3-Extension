@@ -72,6 +72,8 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \TYPO3\CMS\Core\Package\Exception
      */
     public function getVersion(): string
     {

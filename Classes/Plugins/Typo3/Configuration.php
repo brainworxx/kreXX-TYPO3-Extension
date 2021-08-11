@@ -86,6 +86,8 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \TYPO3\CMS\Core\Package\Exception
      */
     public function getVersion(): string
     {
