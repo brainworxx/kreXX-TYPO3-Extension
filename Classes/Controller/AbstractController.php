@@ -47,7 +47,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;

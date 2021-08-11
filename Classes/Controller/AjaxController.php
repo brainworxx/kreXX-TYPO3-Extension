@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Controller;
 
-use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;

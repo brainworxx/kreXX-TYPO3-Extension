@@ -45,7 +45,6 @@ use Brainworxx\Krexx\Logging\LoggingTrait;
 use Brainworxx\Krexx\Logging\Model as LogModel;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\Writer\WriterInterface;

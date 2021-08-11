@@ -39,7 +39,6 @@ namespace Brainworxx\Includekrexx\Domain\Model;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Controller\AbstractController;
-use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseGetter;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalysePrivate;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalysePrivateMethods;

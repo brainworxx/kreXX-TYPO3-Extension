@@ -37,10 +37,8 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Collectors;
 
-use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\From\File;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
