@@ -142,23 +142,20 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
         // Check if we have a value. If not, we need to load the factory
         // settings. We also need to set the info, if we are using the
         // factory settings, at all.
-        if (is_null($config[$settingsName][static::SETTINGS_VALUE])) {
-            // Check if we have a value from the last time a user has saved
-            // the settings.
-            if (isset($this->userUc[$settingsName])) {
-                $config[$settingsName][static::SETTINGS_VALUE] = $this->userUc[$settingsName];
-            } else {
-                // Fallback to the fallback for a possible value.
-                $config[$settingsName][static::SETTINGS_VALUE] = $fallback[static::SETTINGS_VALUE];
-            }
-            $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
+        if ($config[$settingsName][static::SETTINGS_VALUE] !== null) {
+            // We have a setting, and are not afraid to use it.
+            return;
         }
 
+        // Check if we have a value from the last time a user has saved
+        // the settings.
+        $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
+
+        $config[$settingsName][static::SETTINGS_VALUE] = isset($this->userUc[$settingsName]) === true ?
+            $this->userUc[$settingsName] : $fallback[static::SETTINGS_VALUE];
+
         // Assign the mode-class.
-        if (
-            in_array($settingsName, $this->expertOnly) &&
-            $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS]
-        ) {
+        if (in_array($settingsName, $this->expertOnly) === true) {
             $config[$settingsName][static::SETTINGS_MODE] = 'expert';
         }
     }
