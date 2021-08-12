@@ -417,9 +417,6 @@
 			<trans-unit id="usage.label.backtrace">
 				<source>Outputs backtrace with sourcecode. When kreXX finds objects inside the backtrace, it will analyse them:</source>
 			</trans-unit>
-			<trans-unit id="usage.label.systemlogger">
-				<source>Use kreXX as a TYPO3 logwriter. Use it in your ext_localconf.php:</source>
-			</trans-unit>
 			<trans-unit id="usage.links.headline">
 				<source>More datailed help</source>
 			</trans-unit>

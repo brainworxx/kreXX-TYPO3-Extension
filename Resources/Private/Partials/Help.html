@@ -26,28 +26,16 @@ krexxlog($myObject);<f:render section="codeblock-end"/>
     <f:translate key="usage.features.simple" />
 
     <div class="spacer"></div>
-    <f:render section="codeblock-start" arguments="{name: 'moment'}"/>\Krexx::timerMoment($string);'}<f:render section="codeblock-end"/>
+    <f:render section="codeblock-start" arguments="{name: 'moment'}"/>\Krexx::timerMoment($string);<f:render section="codeblock-end"/>
     <div class="spacer"></div>
     <f:render section="codeblock-start" arguments="{name: 'timerEnd'}"/>\Krexx::timerEnd()
 // forced logging
-\Krexx::logTimerEnd();'}<f:render section="codeblock-end"/>
+\Krexx::logTimerEnd();<f:render section="codeblock-end"/>
 
     <div class="spacer"></div>
     <f:render section="codeblock-start" arguments="{name: 'backtrace'}" />\Krexx::backtrace();
 // forced logging
 \Krexx::logBacktrace();<f:render section="codeblock-end"/>
-
-    <div class="spacer"></div>
-    <f:render section="codeblock-start" arguments="{name: 'systemlogger'}"/>// Register kreXX as a new log writer
-$GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'] = [
-    // Using the error level, and above.
-    \TYPO3\CMS\Core\Log\LogLevel::ERROR => [
-        \Brainworxx\Includekrexx\Log\FileWriter::class => [
-            // Overwriting an existing configuration, allowing the scalar analysis.
-            \Brainworxx\Krexx\Service\Config\ConfigConstInterface::SETTING_ANALYSE_SCALAR => 'true'
-        ]
-    ]
-];<f:render section="codeblock-end"/>
     <br /><br />
 
     <h2><f:translate key="usage.headline.fluid" /></h2>
@@ -79,11 +67,11 @@ $GLOBALS['TYPO3_CONF_VARS']['LOG']['writerConfiguration'] = [
  * @var string {name}
  *   The name of the code block, used for the translation label.
  */
-<f:section name="codeblock-start"><f:translate key="usage.label.{name}" /><div class="codeblock"><pre><code></f:section>
+<f:section name="codeblock-start"><f:translate key="usage.label.{name}" /><div class="codeblock"><pre></f:section>
 
 /**
  * Renders the end of a codeblock
  */
-<f:section name="codeblock-end"></code></pre></div></f:section>
+<f:section name="codeblock-end"></pre></div></f:section>
 
 </html>

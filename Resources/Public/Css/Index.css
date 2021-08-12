@@ -18,10 +18,6 @@ body {
   z-index: 999999;
 }
 
-#typo3-inner-docbody {
-  position: static;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -50,6 +46,9 @@ body {
   color: #333;
   margin: 0;
   max-width: 750px;
+}
+.krexx-backend .spacer {
+  height: 10px;
 }
 
 .krexx-backend .tabpanel {
