@@ -97,7 +97,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     /**
      * TYPO3 specific stuff, like:
      *
-     * - Register the overwrite for the configuration.
+     * - Register the overwrites for the configuration.
      * - Point the directories to the temp folder.
      * - Protect the temp folder, if necessary.
      */
@@ -109,17 +109,8 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         // Registering some special stuff for the model analysis.
         Registration::registerEvent(ProcessObject::class . static::START_PROCESS, DirtyModels::class);
 
-        // Get the absolute site path. The constant PATH_site is deprecated
-        // since 9.2.
-        $pathSite = class_exists(Environment::class) ? Environment::getPublicPath() . '/' : PATH_site;
-
         // See if we must create a temp directory for kreXX.
-        $tempPaths = [
-            'main' => $pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX,
-            static::LOG_FOLDER => $pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . static::LOG_FOLDER,
-            static::CHUNKS_FOLDER => $pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . static::CHUNKS_FOLDER,
-            static::CONFIG_FOLDER => $pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . static::CONFIG_FOLDER,
-        ];
+        $tempPaths = $this->generateTempPaths();
 
         // Register it!
         Registration::setConfigFile($tempPaths[static::CONFIG_FOLDER] . DIRECTORY_SEPARATOR . 'Krexx.ini');
@@ -157,6 +148,31 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         $this->registerFileWriterSettings();
         $this->registerVersionDependantStuff();
         $this->registerFileWriter();
+    }
+
+    /**
+     * Geneerate the temp paths.
+     *
+     * @return string[]
+     *   The temp paths.
+     */
+    protected function generateTempPaths(): array
+    {
+        // Get the absolute site path. The constant PATH_site is deprecated
+        // since 9.2.
+        $pathSite = class_exists(Environment::class) ? Environment::getPublicPath() . '/' : PATH_site;
+        $pathSite .= 'typo3temp';
+
+        // See if we must create a temp directory for kreXX.
+        return [
+            'main' => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX,
+            static::LOG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
+                DIRECTORY_SEPARATOR . static::LOG_FOLDER,
+            static::CHUNKS_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
+                DIRECTORY_SEPARATOR . static::CHUNKS_FOLDER,
+            static::CONFIG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
+                DIRECTORY_SEPARATOR . static::CONFIG_FOLDER,
+        ];
     }
 
     /**

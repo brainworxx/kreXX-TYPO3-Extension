@@ -108,6 +108,9 @@ interface ConstInterface
 
     /**
      * @var string
+     *
+     * @deprecated
+     *   Since 4.1.2. Will be removed.
      */
     const TYPO3_TEMP = 'typo3temp';
 
