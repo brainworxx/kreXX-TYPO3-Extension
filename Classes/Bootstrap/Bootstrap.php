@@ -75,51 +75,44 @@ class Bootstrap implements ConstInterface
      */
     public function run()
     {
-        try {
-            if ($this->loadKrexx() === false) {
-                // "Autoloading" failed.
-                // There is no point in continuing here.
-                return;
-            }
+        if ($this->loadKrexx() === false) {
+            // "Autoloading" failed.
+            // There is no point in continuing here.
+            return;
+        }
 
-            $this->retrieveTypo3Version();
+        $this->retrieveTypo3Version();
 
-            // Register and activate the TYPO3 plugin.
-            /** @var T3configuration $t3configuration */
-            $t3configuration = GeneralUtility::makeInstance(T3configuration::class);
-            Registration::register($t3configuration);
-            Registration::activatePlugin(get_class($t3configuration));
+        // Register and activate the TYPO3 plugin.
+        /** @var T3configuration $t3configuration */
+        $t3configuration = GeneralUtility::makeInstance(T3configuration::class);
+        Registration::register($t3configuration);
+        Registration::activatePlugin(get_class($t3configuration));
 
-            // Register the fluid plugins.
-            // We activate them later in the viewhelper.
-            Registration::register(GeneralUtility::makeInstance(FluidConfiguration::class));
-            // Register our debug-viewhelper globally, so people don't have to
-            // do it inside the template. 'krexx' as a namespace should be unique enough.
-            // Theoretically, this should be part of the fluid debugger plugin, but
-            // activating it in the viewhelper is too late, for obvious reason.
-            if (
-                version_compare(static::getTypo3Version(), '8.5', '>=') &&
-                empty($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
-                [static::FLUID_NAMESPACE][static::KREXX])
-            ) {
-                $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
-                [static::FLUID_NAMESPACE][static::KREXX] = [ 0 => 'Brainworxx\\Includekrexx\\ViewHelpers'];
-            }
+        // Register the fluid plugins.
+        // We activate them later in the viewhelper.
+        Registration::register(GeneralUtility::makeInstance(FluidConfiguration::class));
+        // Register our debug-viewhelper globally, so people don't have to
+        // do it inside the template. 'krexx' as a namespace should be unique enough.
+        // Theoretically, this should be part of the fluid debugger plugin, but
+        // activating it in the viewhelper is too late, for obvious reason.
+        if (
+            version_compare(static::getTypo3Version(), '8.5', '>=') &&
+            empty($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
+            [static::FLUID_NAMESPACE][static::KREXX])
+        ) {
+            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
+            [static::FLUID_NAMESPACE][static::KREXX] = [ 0 => 'Brainworxx\\Includekrexx\\ViewHelpers'];
+        }
 
-            // Register the Aimeos Magic plugin.
-            $aimeosConfiguration = GeneralUtility::makeInstance(AimeosConfiguration::class);
-            Registration::register($aimeosConfiguration);
+        // Register the Aimeos Magic plugin.
+        /** @var AimeosConfiguration $aimeosConfiguration */
+        $aimeosConfiguration = GeneralUtility::makeInstance(AimeosConfiguration::class);
+        Registration::register($aimeosConfiguration);
 
-            // Check if we have the Aimeos shop available.
-            if (class_exists(AimeosException::class) === true || ExtensionManagementUtility::isLoaded('aimeos')) {
-                Registration::activatePlugin(get_class($aimeosConfiguration));
-            }
-        } catch (Throwable $exception) {
-            // Do nothing.
-            // When updating the extension via ExtensionManager, there is a
-            // big chance that the cache is not cleared. And that means that
-            // the part above may not work anymore. Hence, we need to make
-            // sure that the user does not brick the system.
+        // Check if we have the Aimeos shop available.
+        if (class_exists(AimeosException::class) === true || ExtensionManagementUtility::isLoaded('aimeos')) {
+            Registration::activatePlugin(get_class($aimeosConfiguration));
         }
     }
 
