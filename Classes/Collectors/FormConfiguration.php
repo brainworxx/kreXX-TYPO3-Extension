@@ -126,26 +126,28 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
      */
     protected function convertKrexxFeSetting($values)
     {
-        if (is_array($values)) {
-            // Explanation:
-            // full -> is editable and values will be accepted
-            // display -> we will only display the settings
-            // The original values include the name of a template partial
-            // with the form element.
-            if ($values[static::RENDER_TYPE] === static::RENDER_TYPE_NONE) {
-                // It's not visible, thus we do not accept any values from it.
-                return static::RENDER_TYPE_CONFIG_NONE;
-            }
+        if (is_array($values) === false) {
+            return null;
+        }
 
-            if ($values[static::RENDER_EDITABLE] === static::VALUE_TRUE) {
-                // It's editable and visible.
-                return static::RENDER_TYPE_CONFIG_FULL;
-            }
+        // Explanation:
+        // full -> is editable and values will be accepted
+        // display -> we will only display the settings
+        // The original values include the name of a template partial
+        // with the form element.
+        if ($values[static::RENDER_TYPE] === static::RENDER_TYPE_NONE) {
+            // It's not visible, thus we do not accept any values from it.
+            return static::RENDER_TYPE_CONFIG_NONE;
+        }
 
-            if ($values[static::RENDER_EDITABLE] === static::VALUE_FALSE) {
-                // It's only visible.
-                return static::RENDER_TYPE_CONFIG_DISPLAY;
-            }
+        if ($values[static::RENDER_EDITABLE] === static::VALUE_TRUE) {
+            // It's editable and visible.
+            return static::RENDER_TYPE_CONFIG_FULL;
+        }
+
+        if ($values[static::RENDER_EDITABLE] === static::VALUE_FALSE) {
+            // It's only visible.
+            return static::RENDER_TYPE_CONFIG_DISPLAY;
         }
 
         return null;
