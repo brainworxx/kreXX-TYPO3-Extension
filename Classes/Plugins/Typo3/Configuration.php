@@ -225,6 +225,12 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     protected function createFileWriterValidator(): Closure
     {
         return function ($value, Pool $pool) {
+            // All values from the ini should be strings.
+            // The emergency log level in TYPO3 9 and older is the integer 0.
+            // And when I ask 'some value' == 0, I will always get a true.
+            if (is_numeric($value)) {
+                $value = (int) $value;
+            }
             $levels = [
                 LogLevel::EMERGENCY,
                 LogLevel::ALERT,
@@ -236,9 +242,8 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
                 LogLevel::DEBUG,
             ];
             foreach ($levels as $level) {
-                // The values from the ini are always strings, hence only two
-                // equal signs.
-                if ($value == $level) {
+                if ($value === $level) {
+                    var_dump($value, $level);
                     return true;
                 }
             }
