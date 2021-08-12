@@ -94,26 +94,6 @@ class BootstrapTest extends AbstractTest
     }
 
     /**
-     * Testing the failing of the bootstrapping.
-     *
-     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::run
-     */
-    public function testRunFail()
-    {
-        // Retrieving a standard class here would cause the test to fail.
-        $t3ConfigMock = new \StdClass();
-        $this->injectIntoGeneralUtility(T3configuration::class, $t3ConfigMock);
-
-        // We simulate a failed autoloading.
-        // This normally happens during the update of the extension.
-        $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'defined');
-        $definedMock->expects($this->once())
-            ->will($this->throwException(new \Exception()));
-
-        $this->bootstrap->run();
-    }
-
-    /**
      * Testing the bootstrapping with a TYPO3 version lower than 8.5.
      *
      * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::run
