@@ -225,24 +225,26 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     protected function createFileWriterValidator(): Closure
     {
         return function ($value, Pool $pool) {
-            $result = in_array(
-                $value,
-                [
-                    LogLevel::EMERGENCY,
-                    LogLevel::ALERT,
-                    LogLevel::CRITICAL,
-                    LogLevel::ERROR,
-                    LogLevel::WARNING,
-                    LogLevel::NOTICE,
-                    LogLevel::INFO,
-                    LogLevel::DEBUG,
-                ]
-            );
-            if ($result === false) {
-                $pool->messages->addMessage('configErrorLoglevelT3FileWriter', [$value]);
+            $levels = [
+                LogLevel::EMERGENCY,
+                LogLevel::ALERT,
+                LogLevel::CRITICAL,
+                LogLevel::ERROR,
+                LogLevel::WARNING,
+                LogLevel::NOTICE,
+                LogLevel::INFO,
+                LogLevel::DEBUG,
+            ];
+            foreach ($levels as $level) {
+                // The values from the ini are always strings, hence only two
+                // equal signs.
+                if ($value == $level) {
+                    return true;
+                }
             }
 
-            return $result;
+            $pool->messages->addMessage('configErrorLoglevelT3FileWriter', [$value]);
+            return false;
         };
     }
 

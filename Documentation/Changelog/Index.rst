@@ -14,7 +14,9 @@ Changelog
 
 4.1.2
     - [Feature] PHP 8.0 support
-    - [Change] Migrate TYPOO3 11.3 changes and/or deprecations.
+    - [Change] Migrate TYPO3 11.3 changes and/or deprecations.
+    - [Change] TYPO3 11 deprecation adjustments
+    - [Bugfix] Loglevel evaluation works correctly in TYPO3 9 and older.
 
 4.1.1
     - [Change] Remove the usage of the ObjectManager whenever possible.
