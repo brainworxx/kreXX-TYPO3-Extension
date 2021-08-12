@@ -272,28 +272,29 @@ class File
     {
         $realpath = $this->realpath($filePath);
 
+        set_error_handler(function () {
+            /* do nothing */
+        });
+
         // Fast forward for the current chunk files.
         if (isset(static::$isReadableCache[$realpath]) === true) {
             unlink($realpath);
+            restore_error_handler();
             return;
         }
 
         // Check if it is an actual file and if it is writable.
         // Those are left over chunks from previous calls, or old logfiles.
         if (is_file($realpath) === true) {
-            set_error_handler(
-                function () {
-                    /* do nothing */
-                }
-            );
             // Make sure it is unlinkable.
             chmod($realpath, 0777);
             if (unlink($realpath) === false) {
                 // We have a permission problem here!
                 $this->pool->messages->addMessage('fileserviceDelete', [$this->filterFilePath($realpath)]);
             }
-            restore_error_handler();
         }
+
+        restore_error_handler();
     }
 
     /**
@@ -354,13 +355,17 @@ class File
         $filePath = $this->realpath($filePath);
 
         if ($this->fileIsReadable($filePath) === true) {
-            return filemtime($filePath);
+            set_error_handler(function () {
+                // do nothing
+            });
+            $result = filemtime($filePath);
+            restore_error_handler();
         }
 
         // Fallback to the current timestamp.
         // We are not interested in old file.
         // The current timestamp indicates, that this not-existing file is new.
-        return time();
+        return empty($result) ? time() : $result;
     }
 
     /**

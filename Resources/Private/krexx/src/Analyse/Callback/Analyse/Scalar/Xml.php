@@ -116,13 +116,6 @@ class Xml extends AbstractScalarAnalysis implements ViewConstInterface
             return false;
         }
 
-        // We try to decode it.
-        if ($this->parseXml($string) === false) {
-            // Unable to decode this one.
-            return false;
-        }
-
-        // Huh, everything went better than expected.
         $this->model = $model;
         $this->originalXml = $string;
 
@@ -137,14 +130,25 @@ class Xml extends AbstractScalarAnalysis implements ViewConstInterface
     protected function handle(): array
     {
         $meta = [];
-        $meta[static::META_DECODED_XML] = $this->decodedXml;
 
-        // The pretty print done by a dom parser.
-        $dom = new DOMDocument("1.0");
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
-        $dom->loadXML($this->originalXml);
-        $meta[static::META_PRETTY_PRINT] = $this->pool->encodingService->encodeString($dom->saveXML());
+        set_error_handler(function () {
+           // Do nothing.
+        });
+        // We try to decode it.
+        $this->parseXml($this->originalXml);
+        restore_error_handler();
+
+        if (empty($this->decodedXml) === false) {
+            $meta[static::META_DECODED_XML] = $this->decodedXml;
+            // The pretty print done by a dom parser.
+            $dom = new DOMDocument("1.0");
+            $dom->preserveWhiteSpace = false;
+            $dom->formatOutput = true;
+            $dom->loadXML($this->originalXml);
+            $meta[static::META_PRETTY_PRINT] = $this->pool->encodingService->encodeString($dom->saveXML());
+        } else {
+            $meta[static::META_DECODED_XML] = 'Unable to decode the XML structure!';
+        }
 
         // Move the extra part into a nest, for better readability.
         if ($this->model->hasExtra()) {
@@ -160,24 +164,15 @@ class Xml extends AbstractScalarAnalysis implements ViewConstInterface
      *
      * @param string $strInputXML
      *   The string we want to parse.
-     *
-     * @return bool
-     *   Was the XML paring successful?
      */
-    protected function parseXml(string $strInputXML): bool
+    protected function parseXml(string $strInputXML)
     {
         $resParser = xml_parser_create();
         xml_set_object($resParser, $this);
         xml_set_element_handler($resParser, "tagOpen", "tagClosed");
         xml_set_character_data_handler($resParser, "tagData");
-
-        if (xml_parse($resParser, $strInputXML) === 0) {
-            xml_parser_free($resParser);
-            return false;
-        }
-
+        xml_parse($resParser, $strInputXML);
         xml_parser_free($resParser);
-        return true;
     }
 
     /**
@@ -193,7 +188,11 @@ class Xml extends AbstractScalarAnalysis implements ViewConstInterface
     protected function tagOpen($parser, string $name, array $attributes)
     {
         $this->tnodeOpen = false;
-        $this->decodedXml[] = ["name" => $name, "attributes" => $attributes];
+        if (empty($attributes) === true) {
+            $this->decodedXml[] = ["name" => $name];
+        } else {
+            $this->decodedXml[] = ["name" => $name, "attributes" => $attributes];
+        }
     }
 
     /**

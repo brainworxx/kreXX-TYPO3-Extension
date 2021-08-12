@@ -167,6 +167,9 @@ class Getter extends AbstractObjectAnalysis
             return;
         }
 
+        // Sort them.
+        usort($methodList, [$this, 'reflectionSorting']);
+
         /** @var \ReflectionMethod $method */
         foreach ($methodList as $method) {
             $this->populateGetterLists($method, $ref);

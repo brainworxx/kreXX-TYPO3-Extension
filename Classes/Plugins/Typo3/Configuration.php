@@ -243,7 +243,6 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
             ];
             foreach ($levels as $level) {
                 if ($value === $level) {
-                    var_dump($value, $level);
                     return true;
                 }
             }

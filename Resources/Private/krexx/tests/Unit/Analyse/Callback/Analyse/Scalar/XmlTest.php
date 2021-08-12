@@ -114,7 +114,7 @@ class XmlTest extends AbstractTest
         $model = new Model(Krexx::$pool);
         $model->addToJson(Xml::META_MIME_TYPE, static::TEXT_XML);
         $xml = new Xml(Krexx::$pool);
-        $this->assertFalse($xml->canHandle($string, $model), $string);
+        $this->asserttrue($xml->canHandle($string, $model), $string);
 
         $string = '<?xml version="1.0" encoding="utf-8"?><node><yxcv qwer="asdf" /></node>';
         $model = new Model(Krexx::$pool);
@@ -152,11 +152,9 @@ class XmlTest extends AbstractTest
         $decoded = [
             0 => [
                 'name' => 'ROOT',
-                static::ATTRIBUTES => [],
                 static::CHILDREN => [
                     [
                         'name' => 'NODE',
-                        static::ATTRIBUTES => [],
                         static::CHILDREN => [
                             'rogue text',
                             [

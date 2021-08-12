@@ -191,8 +191,8 @@ class GetterTest extends AbstractTest
             0 => [
                 'ref' => $fixture['ref'],
                 'normalGetter' => [
-                    new ReflectionMethod($getterFixture, 'getSomething'),
-                    new ReflectionMethod($getterFixture, 'getProtectedStuff')
+                    new ReflectionMethod($getterFixture, 'getProtectedStuff'),
+                    new ReflectionMethod($getterFixture, 'getSomething')
                 ],
                 'isGetter' => [new ReflectionMethod($getterFixture, 'isGood')],
                 'hasGetter' => [new ReflectionMethod($getterFixture, 'hasValue')]
