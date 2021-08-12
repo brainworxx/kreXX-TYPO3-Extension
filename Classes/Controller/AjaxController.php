@@ -103,26 +103,27 @@ class AjaxController implements ConstInterface
         if ($this->hasAccess() === false) {
             $result->class  = 'error';
             $result->text = static::translate(AbstractController::ACCESS_DENIED, static::EXT_KEY);
+
+            $response->getBody()->write(json_encode($result));
+            return $response;
+        }
+
+        Pool::createPool();
+
+        // No directory traversal for you!
+        $fileId = preg_replace('/[^0-9]/', '', $serverRequest->getQueryParams()['fileid']);
+        // Directly add the delete result return value.
+        $file = Krexx::$pool->config->getLogDir() . $fileId . '.Krexx';
+
+        if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
+            $result->class  = 'success';
+            $result->text = static::translate('fileDeleted', static::EXT_KEY, [$fileId]);
         } else {
-            Pool::createPool();
-
-            // No directory traversal for you!
-            $id = preg_replace('/[^0-9]/', '', $serverRequest->getQueryParams()['fileid']);
-            // Directly add the delete result return value.
-            $file = Krexx::$pool->config->getLogDir() . $id . '.Krexx';
-
-            if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
-                $result->class  = 'success';
-                $result->text = static::translate('fileDeleted', static::EXT_KEY, [$id]);
-            } else {
-                $result->class  = 'error';
-                $result->text = static::translate('fileDeletedFail', static::EXT_KEY, ['n/a']);
-            }
+            $result->class  = 'error';
+            $result->text = static::translate('fileDeletedFail', static::EXT_KEY, ['n/a']);
         }
 
         $response->getBody()->write(json_encode($result));
-
-
         return $response;
     }
 
