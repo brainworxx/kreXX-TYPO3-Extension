@@ -42,6 +42,7 @@ use TYPO3\CMS\Core\Package\MetaData;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Aimeos\MShop\Exception as AimeosException;
 
@@ -117,15 +118,14 @@ class BootstrapTest extends AbstractTest
         $fluidConfigMock->expects($this->never())
             ->method('exec');
 
-        if (class_exists(AimeosException::class) === true) {
-            $aimeosConfigMock = $this->createMock(AimeosConfiguration::class);
-            $aimeosConfigMock->expects($this->once())
-                ->method('exec');
-            $this->injectIntoGeneralUtility(AimeosConfiguration::class, $aimeosConfigMock);
-        }
+        $aimeosConfigMock = $this->createMock(AimeosConfiguration::class);
+        $aimeosConfigMock->expects($this->once())
+            ->method('exec');
+        $this->injectIntoGeneralUtility(AimeosConfiguration::class, $aimeosConfigMock);
 
         $this->injectIntoGeneralUtility(T3configuration::class, $t3ConfigMock);
         $this->injectIntoGeneralUtility(FluidConfiguration::class, $fluidConfigMock);
+        $this->simulatePackage('aimeos', 'whatever');
 
         $this->bootstrap->run();
     }
@@ -146,6 +146,7 @@ class BootstrapTest extends AbstractTest
         $this->injectIntoGeneralUtility(T3configuration::class, $t3ConfigMock);
         $this->injectIntoGeneralUtility(FluidConfiguration::class, $fluidConfigMock);
         $this->injectIntoGeneralUtility(AimeosConfiguration::class, $aimeosConfigMock);
+        $this->simulatePackage('aimeos', 'whatever');
 
         $this->bootstrap->run();
 
