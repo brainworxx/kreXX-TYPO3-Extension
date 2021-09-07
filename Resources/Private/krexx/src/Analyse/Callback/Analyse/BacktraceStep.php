@@ -50,8 +50,6 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
  *
  * The iterate-part takes place in the OutputActions::backtraceAction()
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse
- *
  * @uses array data
  *   The singe step from a backtrace.
  */

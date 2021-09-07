@@ -41,8 +41,6 @@ use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 
 /**
  * Use this call to register a plugin specific new setting.
- *
- * @package Brainworxx\Krexx\Service\Plugin
  */
 class NewSetting implements ConfigConstInterface
 {
@@ -258,8 +256,6 @@ class NewSetting implements ConfigConstInterface
     /**
      * Getter of the name of this setting.
      *
-     * @internal
-     *
      * @return string
      *   The name og the setting.
      */
@@ -271,8 +267,6 @@ class NewSetting implements ConfigConstInterface
     /**
      * Getter for the section name, where this setting will be stored.
      *
-     * @internal
-     *
      * @return string
      *   The section name.
      */
@@ -283,8 +277,6 @@ class NewSetting implements ConfigConstInterface
 
     /**
      * Return the rendering settings for the Fallback class.
-     *
-     * @internal
      *
      * @return array
      *   The configuration in a way that the Config class can understand.

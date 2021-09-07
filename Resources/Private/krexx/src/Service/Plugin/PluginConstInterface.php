@@ -38,9 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Service\Plugin;
 
 /**
- * constants for the plugin registration.
- *
- * @package Brainworxx\Krexx\Service\Plugin
+ * Constants for the plugin registration.
  */
 interface PluginConstInterface
 {

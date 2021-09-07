@@ -57,8 +57,6 @@ use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Model for the view rendering
- *
- * @package Brainworxx\Krexx\Analyse
  */
 class Model implements ViewConstInterface, CodegenConstInterface
 {

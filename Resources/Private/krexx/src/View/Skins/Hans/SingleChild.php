@@ -47,8 +47,6 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @codeCoverageIgnore
  *   We will not test deprecated code.
- *
- * @package Brainworxx\Krexx\View\Skins\Hans
  */
 trait SingleChild
 {

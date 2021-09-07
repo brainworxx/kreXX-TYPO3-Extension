@@ -45,8 +45,6 @@ use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
  * Allow plugins to alter the configuration
  *
  * @api
- *
- * @package Brainworxx\Krexx\Service
  */
 class Registration implements ConfigConstInterface, PluginConstInterface
 {

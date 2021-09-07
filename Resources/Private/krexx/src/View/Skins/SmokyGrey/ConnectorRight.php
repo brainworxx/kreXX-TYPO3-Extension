@@ -37,6 +37,9 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Skins\SmokyGrey;
 
+/**
+ * Renderer the right code connector.
+ */
 trait ConnectorRight
 {
     /**

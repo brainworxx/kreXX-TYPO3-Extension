@@ -47,8 +47,6 @@ use Reflector;
 
 /**
  * Abstract class for the object analysis.
- *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  */
 abstract class AbstractObjectAnalysis extends AbstractCallback implements CallbackConstInterface
 {

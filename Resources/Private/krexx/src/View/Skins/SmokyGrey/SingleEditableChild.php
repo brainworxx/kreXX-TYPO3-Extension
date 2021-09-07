@@ -39,6 +39,11 @@ namespace Brainworxx\Krexx\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Renders a single option in the footer, aka an editable child.
+ *
+ * Pun *not* intended.
+ */
 trait SingleEditableChild
 {
     /**

@@ -41,8 +41,6 @@ use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Processing interface for the routing.
- *
- * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
 interface ProcessInterface
 {

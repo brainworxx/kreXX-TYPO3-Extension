@@ -43,8 +43,6 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 
 /**
  * Abstract class for the callback classes inside the model.
- *
- * @package Brainworxx\Krexx\Analyse\Callback
  */
 abstract class AbstractCallback
 {

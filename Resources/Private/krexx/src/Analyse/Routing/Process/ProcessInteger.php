@@ -45,8 +45,6 @@ use Exception;
 
 /**
  * Processing of integers.
- *
- * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
 class ProcessInteger extends AbstractRouting implements ProcessInterface, ViewConstInterface, ProcessConstInterface
 {

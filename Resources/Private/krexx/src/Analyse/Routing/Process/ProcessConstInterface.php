@@ -41,8 +41,6 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
  * Constants used in the routing/processing.
  *
  * All of them are literals for the frontend.
- *
- * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
 interface ProcessConstInterface
 {

@@ -43,8 +43,6 @@ namespace Brainworxx\Krexx\Logging;
  * It's being analysed like an exception, but it's not a \Throwable.
  * If you want to log something with an analysed backtrace and source display,
  * use or extend this one.
- *
- * @package Brainworxx\Krexx\Logging
  */
 class Model
 {

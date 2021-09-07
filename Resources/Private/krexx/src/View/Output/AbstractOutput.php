@@ -42,8 +42,6 @@ use Brainworxx\Krexx\Service\Misc\Cleanup;
 
 /**
  * Defining what is needed for an output class.
- *
- * @package Brainworxx\Krexx\View\Output
  */
 abstract class AbstractOutput
 {

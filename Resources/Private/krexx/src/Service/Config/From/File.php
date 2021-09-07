@@ -42,8 +42,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Reads the config from the configuration file, as well as the fe editing config.
- *
- * @package Brainworxx\Krexx\Service\Config
  */
 class File extends Fallback
 {

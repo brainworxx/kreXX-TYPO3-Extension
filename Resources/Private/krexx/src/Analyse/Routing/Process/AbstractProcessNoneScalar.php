@@ -40,6 +40,10 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 
+/**
+ * Abstract class for the analysis of more complicated stuff like classes
+ * or arrays.
+ */
 abstract class AbstractProcessNoneScalar extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
 

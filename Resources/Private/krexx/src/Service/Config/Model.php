@@ -39,8 +39,6 @@ namespace Brainworxx\Krexx\Service\Config;
 
 /**
  * Model where we store our configuration.
- *
- * @package Brainworxx\Krexx\Service\Config
  */
 class Model implements ConfigConstInterface
 {

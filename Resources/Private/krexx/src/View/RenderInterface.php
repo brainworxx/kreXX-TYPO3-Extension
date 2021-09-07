@@ -42,8 +42,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Interface for the render class, defining all public methods.
- *
- * @package Brainworxx\Krexx\View
  */
 interface RenderInterface
 {

@@ -45,15 +45,13 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
- * Class Meta
+ * Analysis of the metadata of a class
  *
  * @uses ref \Brainworxx\Krexx\Service\Reflection\ReflectionClass
  *   Here we get all out data.
  * @uses metaname string
  *   The name of the meta data, if available.
  *   Fallback to static::META_CLASS_DATA
- *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  */
 class Meta extends AbstractObjectAnalysis implements CallbackConstInterface, ViewConstInterface
 {

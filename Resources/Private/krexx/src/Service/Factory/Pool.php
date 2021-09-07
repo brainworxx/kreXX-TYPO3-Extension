@@ -51,8 +51,6 @@ use Brainworxx\Krexx\View\Output\Chunks;
 
 /**
  * Here we store all classes that we need.
- *
- * @package Brainworxx\Krexx\Service\Factory
  */
 class Pool extends AbstractFactory
 {

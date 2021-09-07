@@ -45,8 +45,6 @@ use Throwable;
 
 /**
  * Processing of resources.
- *
- * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
 class ProcessResource extends AbstractRouting implements ProcessInterface, CallbackConstInterface, ProcessConstInterface
 {

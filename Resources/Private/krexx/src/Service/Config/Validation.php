@@ -46,8 +46,6 @@ use Reflector;
 
 /**
  * Validation stuff for the configuration.
- *
- * @package Brainworxx\Krexx\Service\Config
  */
 class Validation extends Fallback
 {

@@ -43,8 +43,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Shared helper methods for logging.
- *
- * @package Brainworxx\Krexx\Logging
  */
 trait LoggingTrait
 {

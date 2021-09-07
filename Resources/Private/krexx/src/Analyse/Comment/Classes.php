@@ -42,8 +42,6 @@ use Reflector;
 
 /**
  * Get the class comment.
- *
- * @package Brainworxx\Krexx\Analyse\Comment
  */
 class Classes extends AbstractComment
 {

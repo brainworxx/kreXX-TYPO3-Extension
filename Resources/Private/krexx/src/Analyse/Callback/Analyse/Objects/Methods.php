@@ -48,8 +48,6 @@ use ReflectionMethod;
 /**
  * Method analysis for objects.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
- *
  * @uses object data
  *   The object we are currently analysing.
  * @uses string name

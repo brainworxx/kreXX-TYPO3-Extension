@@ -42,8 +42,6 @@ use ReflectionProperty;
 
 /**
  * Added a better possibility to retrieve the object values.
- *
- * @package Service\Reflection
  */
 class ReflectionClass extends \ReflectionClass
 {

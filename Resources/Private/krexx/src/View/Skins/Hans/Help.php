@@ -39,6 +39,9 @@ namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Renders the help info.
+ */
 trait Help
 {
     /**

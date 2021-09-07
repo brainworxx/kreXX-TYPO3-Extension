@@ -39,8 +39,6 @@ namespace Brainworxx\Krexx\Analyse\Code;
 
 /**
  * Generating the connectors for code generation.
- *
- * @package Brainworxx\Krexx\Analyse\Code
  */
 class Connectors implements ConnectorsConstInterface
 {

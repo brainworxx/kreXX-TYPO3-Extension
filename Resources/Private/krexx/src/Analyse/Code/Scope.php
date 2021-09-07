@@ -45,8 +45,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Scope analysis decides if a property of method is accessible in the current
  * analysis scope.
- *
- * @package Brainworxx\Krexx\Analyse\Code
  */
 class Scope implements CallbackConstInterface, ConfigConstInterface
 {

@@ -39,8 +39,6 @@ namespace Brainworxx\Krexx\Controller;
 
 /**
  * "Controller" for the edit settings "action"
- *
- * @package Brainworxx\Krexx\Controller
  */
 class EditSettingsController extends AbstractController implements ControllerConstInterface
 {

@@ -44,8 +44,6 @@ use Throwable;
 
 /**
  * Handling exceptions.
- *
- * @package Brainworxx\Krexx\Errorhandler
  */
 class ExceptionController extends AbstractController implements BacktraceConstInterface
 {

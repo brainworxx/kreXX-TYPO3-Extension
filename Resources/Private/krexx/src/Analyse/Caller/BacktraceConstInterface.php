@@ -39,8 +39,6 @@ namespace Brainworxx\Krexx\Analyse\Caller;
 
 /**
  * Array keys for the backtrace and/or caller finder.
- *
- * @package Brainworxx\Krexx\Analyse\Caller
  */
 interface BacktraceConstInterface
 {

@@ -42,8 +42,6 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 
 /**
  * Simple factory, nothing special. Offers a overwrite method.
- *
- * @package Brainworxx\Krexx\Service\Factory
  */
 abstract class AbstractFactory
 {
@@ -109,8 +107,6 @@ abstract class AbstractFactory
 
     /**
      * Create the pool, but only if it is not already there.
-     *
-     * @internal
      */
     public static function createPool()
     {

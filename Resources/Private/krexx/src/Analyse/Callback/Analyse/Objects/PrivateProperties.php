@@ -43,8 +43,6 @@ use ReflectionProperty;
 /**
  * Analysis of private properties.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
- *
  * @uses array data
  *   The class we are currently analysing.
  * @uses string name

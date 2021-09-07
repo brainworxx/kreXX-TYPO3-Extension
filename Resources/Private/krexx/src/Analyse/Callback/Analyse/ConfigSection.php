@@ -47,8 +47,6 @@ use Brainworxx\Krexx\View\ViewConstInterface;
 /**
  * Configuration "analysis" methods. Meh, naming conventions suck sometimes.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse
- *
  * @uses array data
  *   The configuration section we are rendering
  */

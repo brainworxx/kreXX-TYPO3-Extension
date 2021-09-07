@@ -51,8 +51,6 @@ use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
 
 /**
  * Individual render class for the smokey-grey skin.
- *
- * @package Brainworxx\Krexx\View\Smokygrey
  */
 class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
 {

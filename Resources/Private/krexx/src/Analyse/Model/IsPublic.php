@@ -41,13 +41,12 @@ use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Trait IsPublic
+ *
  * @deprecated
  *   Since 4.0.0. Will be removed.
  *
  * @codeCoverageIgnore
  *   We will not test deprecated methods.
- *
- * @package Brainworxx\Krexx\Analyse\Model
  */
 trait IsPublic
 {

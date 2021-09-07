@@ -39,6 +39,9 @@ namespace Brainworxx\Krexx\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Does nothing. The help is added to the JSON on the SmokyGrey skin.
+ */
 trait Help
 {
     /**

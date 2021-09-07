@@ -41,8 +41,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * "Controller" for the timer "actions".
- *
- * @package Brainworxx\Krexx\Controller
  */
 class TimerController extends AbstractController implements ControllerConstInterface
 {

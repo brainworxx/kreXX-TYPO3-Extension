@@ -44,8 +44,6 @@ namespace Brainworxx\Krexx\Service\Config;
  * And to avoid bad ratings we use constants and overly complicated logic
  * to stitch together the fallback configuration.
  * These are the constants.
- *
- * @package Brainworxx\Krexx\Service\Config
  */
 interface ConfigConstInterface
 {

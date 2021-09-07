@@ -39,6 +39,9 @@ namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 
+/**
+ * Renders the plugin list.
+ */
 trait PluginList
 {
     /**

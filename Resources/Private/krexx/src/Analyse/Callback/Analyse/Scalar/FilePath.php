@@ -47,8 +47,6 @@ use TypeError;
  * Identifying a string as a file path.
  *
  * Adding a finfo analysis and a realpath if it differs from the given path.
- *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
 class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
 {

@@ -42,8 +42,6 @@ use Reflector;
 
 /**
  * Retrieving the comment of a property.
- *
- * @package Brainworxx\Krexx\Analyse\Comment
  */
 class Properties extends AbstractComment
 {

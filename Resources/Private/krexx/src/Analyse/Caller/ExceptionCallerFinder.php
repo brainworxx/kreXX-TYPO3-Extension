@@ -41,8 +41,6 @@ use Throwable;
 
 /**
  * The caller finder for exceptions
- *
- * @package Brainworxx\Krexx\Analyse\Caller
  */
 class ExceptionCallerFinder extends AbstractCaller implements BacktraceConstInterface
 {

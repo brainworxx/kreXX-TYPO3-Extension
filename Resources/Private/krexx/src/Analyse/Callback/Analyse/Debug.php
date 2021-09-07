@@ -44,8 +44,6 @@ use Brainworxx\Krexx\Analyse\Model;
 /**
  * Debug method result analysis methods.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse
- *
  * @uses mixed data
  *   The result from one single configured debug method.
  */

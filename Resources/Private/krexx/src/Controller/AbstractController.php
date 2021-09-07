@@ -49,8 +49,6 @@ use Brainworxx\Krexx\View\Output\File;
 
 /**
  * Methods for the "controller" that are not directly "actions".
- *
- * @package Brainworxx\Krexx\Controller
  */
 abstract class AbstractController implements ConfigConstInterface
 {

@@ -59,8 +59,6 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
  *   The array want to iterate.
  * @uses bool multiline
  *   Do we need a multiline code generation?
- *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  */
 class ThroughLargeArray extends AbstractCallback implements
     CodegenConstInterface,

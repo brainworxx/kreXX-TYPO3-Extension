@@ -48,8 +48,6 @@ use Brainworxx\Krexx\View\ViewConstInterface;
  *
  * @deprecated
  *   Since 4.0.0. Will be removed. Use the smaller interfaces instead.
- *
- * @package Brainworxx\Krexx\Analyse
  */
 interface ConstInterface extends
     CallbackConstInterface,

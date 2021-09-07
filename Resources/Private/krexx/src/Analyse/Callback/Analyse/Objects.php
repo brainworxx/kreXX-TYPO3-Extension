@@ -59,8 +59,6 @@ use Throwable;
 /**
  * Object analysis methods.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse
- *
  * @uses object data
  *   The class we are analysing.
  * @uses string name

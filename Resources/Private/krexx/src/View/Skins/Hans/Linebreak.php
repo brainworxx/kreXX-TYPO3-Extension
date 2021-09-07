@@ -37,6 +37,9 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
+/**
+ * Renders a simple line break.
+ */
 trait Linebreak
 {
     /**

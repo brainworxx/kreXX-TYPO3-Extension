@@ -39,6 +39,9 @@ namespace Brainworxx\Krexx\Analyse\Model;
 
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Analysis model trait with the json that contains additional analysis results.
+ */
 trait Json
 {
     /**

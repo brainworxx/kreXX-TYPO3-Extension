@@ -42,8 +42,6 @@ use SplFixedArray;
 
 /**
  * File access service.
- *
- * @package Brainworxx\Krexx\Service\Misc
  */
 class File
 {

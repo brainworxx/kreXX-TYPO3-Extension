@@ -39,8 +39,6 @@ namespace Brainworxx\Krexx\View\Output;
 
 /**
  * File output, directly after the analysis.
- *
- * @package Brainworxx\Krexx\View\Output
  */
 class File extends AbstractOutput
 {

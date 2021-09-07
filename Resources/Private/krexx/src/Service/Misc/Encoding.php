@@ -41,8 +41,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * String encoding service.
- *
- * @package Brainworxx\Krexx\Service\Misc
  */
 class Encoding
 {

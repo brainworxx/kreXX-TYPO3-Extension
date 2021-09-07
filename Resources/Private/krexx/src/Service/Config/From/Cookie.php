@@ -41,8 +41,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Get the configuration from the cookies.
- *
- * @package Brainworxx\Krexx\Service\Config
  */
 class Cookie
 {

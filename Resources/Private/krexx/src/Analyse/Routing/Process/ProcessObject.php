@@ -44,8 +44,6 @@ use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Processing of objects.
- *
- * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
 class ProcessObject extends AbstractProcessNoneScalar implements CallbackConstInterface, ProcessConstInterface
 {

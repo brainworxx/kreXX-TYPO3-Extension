@@ -43,8 +43,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Emergency break handler for large output (runtime and memory usage).
- *
- * @package Brainworxx\Krexx\Service\Flow
  */
 class Emergency implements ConfigConstInterface
 {

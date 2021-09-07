@@ -39,6 +39,9 @@ namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Redners a recursion.
+ */
 trait Recursion
 {
     /**

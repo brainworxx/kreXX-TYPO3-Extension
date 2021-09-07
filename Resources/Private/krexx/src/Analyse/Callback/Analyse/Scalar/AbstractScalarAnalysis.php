@@ -44,8 +44,6 @@ use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Prepare everything for a deeper string analysis.
- *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
 abstract class AbstractScalarAnalysis extends AbstractCallback implements CallbackConstInterface
 {

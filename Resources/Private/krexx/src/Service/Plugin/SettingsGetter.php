@@ -39,17 +39,11 @@ namespace Brainworxx\Krexx\Service\Plugin;
 
 /**
  * Interfacing with the data supplied by the plugins.
- *
- * @internal
- *
- * @package Brainworxx\Krexx\Service\Plugin
  */
 class SettingsGetter extends Registration
 {
     /**
      * Getter for the configured configuration file
-     *
-     * @internal
      *
      * @return string
      *   Absolute path to the configuration file.
@@ -66,8 +60,6 @@ class SettingsGetter extends Registration
     /**
      * Setter for the path to the chunks folder.
      *
-     * @internal
-     *
      * @return string
      *   The absolute path to the chunks folder.
      */
@@ -82,8 +74,6 @@ class SettingsGetter extends Registration
 
     /**
      * Getter for the logfolder.
-     *
-     * @internal
      *
      * @return string
      *   The absolute path to the log folder.
@@ -100,8 +90,6 @@ class SettingsGetter extends Registration
     /**
      * Getter for the blacklisted debug methods.
      *
-     * @internal
-     *
      * @return array
      *   The debug methods.
      */
@@ -112,8 +100,6 @@ class SettingsGetter extends Registration
 
     /**
      * Getter for the blacklisted debug method classes.
-     *
-     * @internal
      *
      * @return array
      *   The list with classes.
@@ -129,8 +115,6 @@ class SettingsGetter extends Registration
      * key = original class name.
      * value = new class name.
      *
-     * @internal
-     *
      * @return array
      *   The rewrites.
      */
@@ -141,8 +125,6 @@ class SettingsGetter extends Registration
 
     /**
      * Getter for the event list.
-     *
-     * @internal
      *
      * @return array
      *   The event list.
@@ -155,8 +137,6 @@ class SettingsGetter extends Registration
     /**
      * Getter for additional help files, absolute path.
      *
-     * @internal
-     *
      * @return array
      *   List of these files
      */
@@ -167,8 +147,6 @@ class SettingsGetter extends Registration
 
     /**
      * Get the status of all registered plugins.
-     *
-     * @internal
      *
      * @return array
      *   The configuration data for the view
@@ -181,8 +159,6 @@ class SettingsGetter extends Registration
     /**
      * Getter for the skins, provided by plugins.
      *
-     * @internal
-     *
      * @return array
      *   The configuration arrays of additional skins.
      */
@@ -193,8 +169,6 @@ class SettingsGetter extends Registration
 
     /**
      * Getter for all the registered class names that can do a scalar analysis.
-     *
-     * @internal
      *
      * @return array
      *   List of the class names.

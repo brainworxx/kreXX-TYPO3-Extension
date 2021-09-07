@@ -56,6 +56,13 @@ class PublicPropertyTest extends AbstractTest
     protected $publicProperties;
 
     /**
+     * @var string
+     */
+    protected $startEvent = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::callMe::start';
+
+    protected $endEvent = 'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::analysisEnd';
+
+    /**
      * Create the class to test and inject the callback counter.
      *
      * {@inheritdoc}
@@ -89,12 +96,7 @@ class PublicPropertyTest extends AbstractTest
     public function testCallMeNoPublic()
     {
         // Test start event
-        $this->mockEventService(
-            [
-                'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::callMe::start',
-                $this->publicProperties
-            ]
-        );
+        $this->mockEventService([$this->startEvent, $this->publicProperties]);
 
         // Fixture without any private properties.
         $data = new MethodsFixture();
@@ -127,16 +129,7 @@ class PublicPropertyTest extends AbstractTest
     public function testCallMeWithPublic()
     {
         // Set up the events
-        $this->mockEventService(
-            [
-                'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::callMe::start',
-                $this->publicProperties
-            ],
-            [
-                'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::analysisEnd',
-                $this->publicProperties
-            ]
-        );
+        $this->mockEventService([$this->startEvent, $this->publicProperties], [$this->endEvent, $this->publicProperties]);
 
         // Create a fixture with several private properties with inheritance.
         $data = new PublicFixture();
@@ -183,16 +176,7 @@ class PublicPropertyTest extends AbstractTest
     public function testCallMeDateTime()
     {
         // Set up the events
-        $this->mockEventService(
-            [
-                'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::callMe::start',
-                $this->publicProperties
-            ],
-            [
-                'Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Objects\\PublicProperties::analysisEnd',
-                $this->publicProperties
-            ]
-        );
+        $this->mockEventService([$this->startEvent, $this->publicProperties], [$this->endEvent, $this->publicProperties]);
 
         // Create a fixture with a date time object.
         $data = new DateTime('now');

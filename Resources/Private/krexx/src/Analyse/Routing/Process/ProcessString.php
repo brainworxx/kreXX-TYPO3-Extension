@@ -49,8 +49,6 @@ use finfo;
 
 /**
  * Processing of strings.
- *
- * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
 class ProcessString extends AbstractRouting implements
     ProcessInterface,

@@ -41,8 +41,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Registry class, to store stuff from the outside and inside.
- *
- * @package Brainworxx\Krexx\Service\Misc
  */
 class Registry
 {

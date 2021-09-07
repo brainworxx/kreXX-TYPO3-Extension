@@ -54,8 +54,6 @@ use ReflectionProperty;
  * only thing I can think of how to fix this, is with a mockup class for the
  * ReflectionProperty.
  * So. Much. Fun.
- *
- * @package Brainworxx\Krexx\Service\Misc
  */
 class UndeclaredProperty extends ReflectionProperty
 {

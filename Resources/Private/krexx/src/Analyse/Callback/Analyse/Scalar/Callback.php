@@ -48,8 +48,6 @@ use ReflectionFunction;
  * main difference here is, that we do not have a hosting class and no
  * inheritance. We can extract the needed data directly out of the
  * reflection and dump it via ThroughMeta.
- *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
 class Callback extends AbstractScalarAnalysis implements ViewConstInterface
 {

@@ -41,6 +41,9 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
+/**
+ * Analysis model trait with the connector service for the code generation.
+ */
 trait ConnectorService
 {
     /**

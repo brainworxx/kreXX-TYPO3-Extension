@@ -39,8 +39,6 @@ namespace Brainworxx\Krexx\View\Output;
 
 /**
  * Triggers the kreXX output during shutdown phase.
- *
- * @package Brainworxx\Krexx\View\Output
  */
 class Browser extends AbstractOutput
 {

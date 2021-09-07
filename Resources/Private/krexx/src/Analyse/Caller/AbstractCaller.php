@@ -41,8 +41,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Abstract defining what a CallerFinder class must implement.
- *
- * @package Brainworxx\Krexx\Analyse\Caller
  */
 abstract class AbstractCaller
 {

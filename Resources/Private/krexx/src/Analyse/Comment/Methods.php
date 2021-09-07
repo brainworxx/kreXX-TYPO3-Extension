@@ -44,8 +44,6 @@ use Reflector;
 
 /**
  * We get the comment of a method and try to resolve the inheritdoc stuff.
- *
- * @package Brainworxx\Krexx\Analyse\Comment
  */
 class Methods extends AbstractComment
 {

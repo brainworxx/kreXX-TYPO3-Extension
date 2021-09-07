@@ -46,8 +46,6 @@ use ReflectionClassConstant;
 /**
  * Constant analysis methods.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
- *
  * @uses array data
  *   Array of constants values from the class we are analysing.
  * @uses \ReflectionClass ref

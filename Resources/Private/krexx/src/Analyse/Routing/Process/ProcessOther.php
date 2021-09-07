@@ -42,9 +42,8 @@ use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 
 /**
  * Processing of other types of values.
- * At least tell the dev that there is "something" out there.
  *
- * @package Brainworxx\Krexx\Analyse\Routing\Process
+ * At least tell the dev that there is "something" out there.
  */
 class ProcessOther extends AbstractRouting implements ProcessInterface
 {

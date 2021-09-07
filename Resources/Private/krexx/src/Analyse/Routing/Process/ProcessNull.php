@@ -42,8 +42,6 @@ use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 
 /**
  * Processing of NULL values. Really.
- *
- * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
 class ProcessNull extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {

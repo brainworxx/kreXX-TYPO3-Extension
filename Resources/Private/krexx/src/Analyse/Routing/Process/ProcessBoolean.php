@@ -42,8 +42,6 @@ use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 
 /**
  * Processing of booleans.
- *
- * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
 class ProcessBoolean extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {

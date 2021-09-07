@@ -40,6 +40,9 @@ namespace Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Analysis model trait with the callback that renders the output.
+ */
 trait Callback
 {
     /**

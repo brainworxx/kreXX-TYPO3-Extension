@@ -43,8 +43,6 @@ use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * "Controller" for the dump (aka analysis) "action".
- *
- * @package Brainworxx\Krexx\Controller
  */
 class DumpController extends AbstractController implements BacktraceConstInterface
 {

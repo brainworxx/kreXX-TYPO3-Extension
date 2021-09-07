@@ -42,8 +42,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Removing leftover chunks and old logfiles.
- *
- * @package Brainworxx\Krexx\Service\Misc
  */
 class Cleanup implements ConfigConstInterface
 {

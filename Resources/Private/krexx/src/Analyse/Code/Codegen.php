@@ -47,8 +47,6 @@ use ReflectionType;
 
 /**
  * Code generation methods.
- *
- * @package Brainworxx\Krexx\Analyse\Code
  */
 class Codegen implements CallbackConstInterface, CodegenConstInterface
 {

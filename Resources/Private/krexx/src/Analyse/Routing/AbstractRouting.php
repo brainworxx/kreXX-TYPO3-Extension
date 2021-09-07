@@ -43,8 +43,6 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 
 /**
  * Abstract class for further processing of found class properties.
- *
- * @package Brainworxx\Krexx\Analyse\Routing
  */
 abstract class AbstractRouting
 {

@@ -41,13 +41,12 @@ use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Trait SingleChild
+ *
  * @deprecated
  *   Since 4.0.0. Use ExpandableChild in stead.
  *
  * @codeCoverageIgnore
  *   We will not test deprecated code.
- *
- * @package Brainworxx\Krexx\View\Skins\SmokyGrey
  */
 trait SingleChild
 {

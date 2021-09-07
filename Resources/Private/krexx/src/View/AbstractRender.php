@@ -42,8 +42,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Protected helper methods for the real render class.
- *
- * @package Brainworxx\Krexx\View
  */
 abstract class AbstractRender
 {

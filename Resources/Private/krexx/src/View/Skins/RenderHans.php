@@ -65,8 +65,6 @@ use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Individual render class for the Hans skin.
- *
- * @package Brainworxx\Krexx\View\Hans
  */
 class RenderHans extends AbstractRender implements
     RenderInterface,

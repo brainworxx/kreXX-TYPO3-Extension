@@ -39,8 +39,6 @@ namespace Brainworxx\Krexx\Analyse\Code;
 
 /**
  * Constants for the code generation.
- *
- * @package Brainworxx\Krexx\Analyse\Code
  */
 interface CodegenConstInterface
 {

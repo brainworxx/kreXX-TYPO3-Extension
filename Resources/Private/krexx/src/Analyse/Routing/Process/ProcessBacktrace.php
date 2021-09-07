@@ -47,8 +47,6 @@ use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 /**
  * Processing of a backtrace. No abstract for you, because we are dealing with
  * an array here.
- *
- * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
 class ProcessBacktrace extends AbstractCallback implements
     ProcessConstInterface,

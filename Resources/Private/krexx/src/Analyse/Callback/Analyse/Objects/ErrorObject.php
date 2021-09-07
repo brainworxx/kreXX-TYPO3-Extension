@@ -43,8 +43,6 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 
 /**
  * When we are handling an error object, get the backtrace and analyse as such.
- *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
  */
 class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterface
 {

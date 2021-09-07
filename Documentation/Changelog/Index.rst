@@ -20,6 +20,7 @@ Changelog
     - [Bugfix] Add additional error handling to the file service to get by with high traffic sites (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
     - [Bugfix] Applied sorting to the list of getter methods.
     - [Bugfix] Make better use of the recursion detection for the XML analysis.
+    - [Bugfix] Fixed / updated the doc comments.
 
 4.1.1
     - [Change] Remove the usage of the ObjectManager whenever possible.

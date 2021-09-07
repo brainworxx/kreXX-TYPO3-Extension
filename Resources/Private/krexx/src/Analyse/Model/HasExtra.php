@@ -39,6 +39,9 @@ namespace Brainworxx\Krexx\Analyse\Model;
 
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Analysis model trait with the expandable extra section.
+ */
 trait HasExtra
 {
     /**

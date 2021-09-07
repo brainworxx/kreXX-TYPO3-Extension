@@ -39,6 +39,9 @@ namespace Brainworxx\Krexx\View\Skins\SmokyGrey;
 
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Renders a button.
+ */
 trait Button
 {
     /**

@@ -39,8 +39,6 @@ namespace Brainworxx\Krexx\Analyse\Callback;
 
 /**
  * Array key constants for the callback. As well as literals for the frontend.
- *
- * @package Brainworxx\Krexx\Analyse\Callback
  */
 interface CallbackConstInterface
 {
@@ -84,6 +82,7 @@ interface CallbackConstInterface
      * Array key for $this->parameters.
      *
      * Used in the meta analysis. Name of the meta data, if available.
+     *
      * @var string
      */
     const PARAM_META_NAME = 'metaname';

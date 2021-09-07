@@ -39,6 +39,9 @@ namespace Brainworxx\Krexx\View\Skins\Hans;
 
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Renderer en expandable child. That is tha stuff you can click and then opens.
+ */
 trait ExpandableChild
 {
     /**

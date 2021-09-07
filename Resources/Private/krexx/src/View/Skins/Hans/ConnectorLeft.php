@@ -37,6 +37,9 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
+/**
+ * Renderer the left code connector.
+ */
 trait ConnectorLeft
 {
     /**

@@ -37,6 +37,9 @@ namespace Brainworxx\Krexx\View;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
 
+/**
+ * Simple model for the storage of a message.
+ */
 class Message
 {
     /**

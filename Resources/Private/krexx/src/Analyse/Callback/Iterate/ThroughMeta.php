@@ -50,8 +50,6 @@ use Brainworxx\Krexx\View\ViewConstInterface;
  *   Might contain strings or another array.
  * @uses string codeGenType
  *   The code generation constants we want to use for none meta stuff.
- *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  */
 class ThroughMeta extends AbstractCallback implements ViewConstInterface, CallbackConstInterface
 {

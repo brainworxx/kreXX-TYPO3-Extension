@@ -42,8 +42,6 @@ namespace Brainworxx\Krexx\Service\Misc;
  *
  * @codeCoverageIgnore
  *   We will not test a cheap polyfill that essentially does nothing.
- *
- * @package Brainworxx\Krexx\Service\Misc
  */
 class FileinfoDummy
 {

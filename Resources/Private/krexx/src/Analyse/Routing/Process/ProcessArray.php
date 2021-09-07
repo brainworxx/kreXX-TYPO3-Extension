@@ -45,8 +45,6 @@ use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 
 /**
  * Processing of arrays.
- *
- * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
 class ProcessArray extends AbstractProcessNoneScalar implements
     ProcessConstInterface,

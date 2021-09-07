@@ -43,8 +43,6 @@ use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Deep analysis for json strings.
- *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
 class Json extends AbstractScalarAnalysis implements ViewConstInterface
 {

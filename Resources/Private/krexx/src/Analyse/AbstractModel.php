@@ -45,8 +45,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Housing everything that does not directly hold data.
  *
- * @package Brainworxx\Krexx\Analyse
- *
  * @codeCoverageIgnore
  *   We will not test deprecated classes.
  *

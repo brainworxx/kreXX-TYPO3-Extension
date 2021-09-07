@@ -37,6 +37,9 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Code;
 
+/**
+ * Constants for the code connectors.
+ */
 interface ConnectorsConstInterface
 {
     /**

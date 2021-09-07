@@ -50,8 +50,6 @@ use ReflectionFunction;
 
 /**
  * Processing of closures.
- *
- * @package Brainworxx\Krexx\Analyse\Routing\Process
  */
 class ProcessClosure extends AbstractProcessNoneScalar implements
     ViewConstInterface,

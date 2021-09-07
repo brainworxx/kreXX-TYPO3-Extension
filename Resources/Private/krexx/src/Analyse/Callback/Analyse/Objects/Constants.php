@@ -44,8 +44,6 @@ use Brainworxx\Krexx\Analyse\Model;
 /**
  * Class Constants analysis.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
- *
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */

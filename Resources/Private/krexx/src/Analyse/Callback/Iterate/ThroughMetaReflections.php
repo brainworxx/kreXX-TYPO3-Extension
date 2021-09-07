@@ -46,8 +46,6 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
  *
  * @use array data
  *   A list of reflections that we are iterating through.
- *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
  */
 class ThroughMetaReflections extends AbstractCallback implements CallbackConstInterface
 {

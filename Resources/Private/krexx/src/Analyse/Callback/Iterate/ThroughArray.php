@@ -47,8 +47,6 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 /**
  * Array analysis methods.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
- *
  * @uses array data
  *   The array want to iterate.
  * @uses bool multiline

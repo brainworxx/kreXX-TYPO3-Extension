@@ -46,8 +46,6 @@ use Brainworxx\Krexx\View\Output\CheckOutput;
 
 /**
  * Access the debug settings here.
- *
- * @package Brainworxx\Krexx\Service\Config
  */
 class Config extends Fallback
 {

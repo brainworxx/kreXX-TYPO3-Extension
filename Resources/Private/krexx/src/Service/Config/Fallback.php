@@ -46,15 +46,11 @@ use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
  * Configuration fallback settings.
  *
  * We have so much of them, they need an own class.
- *
- * @package Brainworxx\Krexx\Service\Config
  */
 abstract class Fallback implements ConfigConstInterface
 {
     /**
      * The fallback configuration.
-     *
-     * @internal
      *
      * @var array
      */
@@ -97,8 +93,6 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Render settings for a editable select field.
      *
-     * @internal
-     *
      * @var array
      */
     const EDITABLE_SELECT = [
@@ -108,8 +102,6 @@ abstract class Fallback implements ConfigConstInterface
 
     /**
      * Render settings for a display only input field.
-     *
-     * @internal
      *
      * @var array
      */
@@ -121,8 +113,6 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Render settings for a editable input field.
      *
-     * @internal
-     *
      * @var array
      */
     const EDITABLE_INPUT = [
@@ -133,8 +123,6 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Render settings for a display only select field.
      *
-     * @internal
-     *
      * @var array
      */
     const DISPLAY_ONLY_SELECT = [
@@ -144,8 +132,6 @@ abstract class Fallback implements ConfigConstInterface
 
     /**
      * Render settings for a field which will not be displayed, or accept values.
-     *
-     * @internal
      *
      * @var array
      */
@@ -205,6 +191,7 @@ abstract class Fallback implements ConfigConstInterface
      *
      * @deprecated
      *   Since 4.0.0. Use FALLBACK::DISPLAY_ONLY_SELECT
+     *
      * @var array
      */
     protected $displayOnlySelect = [

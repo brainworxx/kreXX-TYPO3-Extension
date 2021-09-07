@@ -45,8 +45,6 @@ use ReflectionMethod;
 /**
  * Analysis of all getter methods.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
- *
  * @uses object data
  *   The class we are currently analysing.
  * @uses string name

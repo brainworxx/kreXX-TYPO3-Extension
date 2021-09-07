@@ -42,8 +42,6 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 
 /**
  * "Controller" for the backtrace "action".
- *
- * @package Brainworxx\Krexx\Controller
  */
 class BacktraceController extends AbstractController implements BacktraceConstInterface
 {

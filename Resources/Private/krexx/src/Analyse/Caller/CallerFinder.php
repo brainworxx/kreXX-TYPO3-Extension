@@ -44,8 +44,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Finder for the script part that has actually called kreXX.
  * Used for the PHP part.
- *
- * @package Brainworxx\Krexx\Analyse\Caller
  */
 class CallerFinder extends AbstractCaller implements BacktraceConstInterface, CallbackConstInterface
 {

@@ -41,9 +41,7 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Class AbstractEventHandler
- *
- * @package Brainworxx\Krexx\Service\Factory
+ * The interface for the event handlers.
  */
 interface EventHandlerInterface
 {

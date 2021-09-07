@@ -46,8 +46,6 @@ use ReflectionProperty;
 /**
  * Analysis of public properties.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
- *
  * @uses mixed data
  *   The class we are currently analysing.
  * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref

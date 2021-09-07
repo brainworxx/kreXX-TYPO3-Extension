@@ -39,6 +39,12 @@ namespace Brainworxx\Krexx\Analyse\Model;
 
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Analysis model trait with the DOM-ID that identifies the object that we are
+ * analysing.
+ *
+ * This one is used by the recursion handling to detect and resolve recursions.
+ */
 trait DomId
 {
     /**

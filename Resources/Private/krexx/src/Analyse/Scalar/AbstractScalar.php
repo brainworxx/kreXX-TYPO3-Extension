@@ -40,6 +40,9 @@ namespace Brainworxx\Krexx\Analyse\Scalar;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
+/**
+ * Abstract class for the additional scalar analysis like strings and integers.
+ */
 abstract class AbstractScalar
 {
     /**

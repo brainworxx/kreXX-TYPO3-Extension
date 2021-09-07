@@ -39,6 +39,10 @@ namespace Brainworxx\Krexx\Analyse\Model;
 
 use Brainworxx\Krexx\Analyse\Model;
 
+/**
+ * Analysis model trait with the name or array key of the data that we are
+ * currently analysing.
+ */
 trait Name
 {
     /**

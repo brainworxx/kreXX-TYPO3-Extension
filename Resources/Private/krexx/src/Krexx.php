@@ -50,8 +50,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Public functions, allowing access to the kreXX debug features.
- *
- * @package Brainworxx\Krexx
  */
 class Krexx implements ConfigConstInterface
 {
@@ -59,8 +57,6 @@ class Krexx implements ConfigConstInterface
 
     /**
      * Our pool where we keep all relevant classes.
-     *
-     * @internal
      *
      * @var Pool
      */

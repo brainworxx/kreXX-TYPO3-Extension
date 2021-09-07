@@ -41,8 +41,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Check the kind of output.
- *
- * @package Brainworxx\Krexx\View\Output
  */
 class CheckOutput
 {

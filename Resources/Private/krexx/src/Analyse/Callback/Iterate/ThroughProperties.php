@@ -50,8 +50,6 @@ use ReflectionProperty;
 /**
  * Class properties analysis methods.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
- *
  * @uses array data
  *   Array of \ReflectionProperties.
  * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionReflectionClass ref

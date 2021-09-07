@@ -39,8 +39,6 @@ namespace Brainworxx\Krexx\View;
 
 /**
  * Array keys that are directly rendered into the frontend.
- *
- * @package Brainworxx\Krexx\View
  */
 interface ViewConstInterface
 {

@@ -55,8 +55,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * @see \Brainworxx\Krexx\Service\Factory\Pool->encodingService
  *   We use '@@@' to mark a chunk key. This function escapes the @
  *   so we have no collusion with data from strings.
- *
- * @package Brainworxx\Krexx\View\Output
  */
 class Chunks implements ConfigConstInterface
 {

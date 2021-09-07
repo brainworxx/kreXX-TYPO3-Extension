@@ -40,8 +40,6 @@ use Reflector;
 
 /**
  * Retrieve the return type of methods / functions.
- *
- * @package Brainworxx\Krexx\Analyse\Comment
  */
 class ReturnType extends AbstractComment
 {

@@ -50,8 +50,6 @@ use Throwable;
 /**
  * Object traversable analysis.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
- *
  * @uses mixed data
  *   The class we are currently analysing.
  * @uses string name

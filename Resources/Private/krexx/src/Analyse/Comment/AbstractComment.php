@@ -43,8 +43,6 @@ use Reflector;
 
 /**
  * Abstract class for the comment analysis.
- *
- * @package Brainworxx\Krexx\Analyse\Comment
  */
 abstract class AbstractComment
 {

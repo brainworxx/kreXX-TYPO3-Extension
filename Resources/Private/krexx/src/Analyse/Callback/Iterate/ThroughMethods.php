@@ -52,8 +52,6 @@ use ReflectionMethod;
 /**
  * Methods analysis methods. Pun not intended.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
- *
  * @uses array data
  *   Array of reflection methods.
  * @uses \reflectionClass ref

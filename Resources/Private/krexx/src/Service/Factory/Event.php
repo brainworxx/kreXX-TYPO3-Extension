@@ -43,8 +43,6 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 
 /**
  * Calling all registered event handlers on the event.
- *
- * @package Brainworxx\Krexx\Service\Factory
  */
 class Event
 {
@@ -58,7 +56,7 @@ class Event
     /**
      * The pool.
      *
-     * @var pool
+     * @var Pool
      */
     protected $pool;
 

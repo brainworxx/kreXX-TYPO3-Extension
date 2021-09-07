@@ -45,8 +45,6 @@ namespace Brainworxx\Krexx\Service\Config\From;
  *
  * @codeCoverageIgnore
  *   We will not test deprecated classes.
- *
- * @package Brainworxx\Krexx\Service\Config\From
  */
 class Ini extends File
 {

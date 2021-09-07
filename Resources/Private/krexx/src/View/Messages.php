@@ -42,8 +42,6 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 
 /**
  * Messaging system.
- *
- * @package Brainworxx\Krexx\View
  */
 class Messages
 {

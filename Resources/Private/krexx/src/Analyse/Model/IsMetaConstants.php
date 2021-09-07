@@ -47,8 +47,6 @@ use Brainworxx\Krexx\Analyse\Model;
  *
  * @codeCoverageIgnore
  *   We will not test deprecated methods.
- *
- * @package Brainworxx\Krexx\Analyse\Model
  */
 trait IsMetaConstants
 {

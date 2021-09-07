@@ -42,9 +42,7 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 
 /**
- * Class ThroughResource
- *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
+ * Iterate through the ressource analysis and generate an output.
  *
  * @uses array data
  *   The meta data from the stream.

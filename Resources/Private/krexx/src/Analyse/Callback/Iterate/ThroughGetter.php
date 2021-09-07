@@ -52,8 +52,6 @@ use ReflectionMethod;
 /**
  * Getter method analysis methods.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
- *
  * @uses array normalGetter
  *   The list of all reflection methods we are analysing, hosting the
  *   get methods starting with 'get'

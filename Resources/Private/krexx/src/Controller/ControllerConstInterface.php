@@ -39,8 +39,6 @@ namespace Brainworxx\Krexx\Controller;
 
 /**
  * Literals for the frontend.
- *
- * @package Brainworxx\Krexx\Controller
  */
 interface ControllerConstInterface
 {

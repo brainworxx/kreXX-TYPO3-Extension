@@ -46,8 +46,6 @@ use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 /**
  * Configuration output methods.
  *
- * @package Brainworxx\Krexx\Analyse\Callback\Iterate
- *
  * @uses null
  *   There are no parameters available here.
  */

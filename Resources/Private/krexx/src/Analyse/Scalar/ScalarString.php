@@ -53,8 +53,6 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
  *   - absolute file path
  *   - json
  *   - xml
- *
- * @package Brainworxx\Krexx\Analyse\Callback
  */
 class ScalarString extends AbstractScalar
 {
@@ -62,7 +60,7 @@ class ScalarString extends AbstractScalar
     /**
      * The list of analysis classes, that we use.
      *
-     * @var []
+     * @var array
      */
     protected $classList = [];
 

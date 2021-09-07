@@ -47,9 +47,6 @@ use SplObjectStorage;
  * We are tracking objects via object hash.
  * Arrays are stored here only for the sake of
  * the $GLOBALS array.
- *
- *
- * @package Brainworxx\Krexx\Service\Flow
  */
 class Recursion
 {
