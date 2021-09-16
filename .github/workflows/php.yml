@@ -57,6 +57,7 @@ jobs:
       run: |
         sudo composer self-update --1
         sudo chown $USER $HOME/.composer
+      if: ${{ matrix.what != 't311php80' }}
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict

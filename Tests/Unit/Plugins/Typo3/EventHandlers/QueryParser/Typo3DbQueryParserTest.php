@@ -47,7 +47,7 @@ class Typo3DbQueryParserTest extends AbstractTest
     /**
      * Test our compatibility hack for the DI.
      *
-     * We are actually somewhat supposed to test the par where the DI works.
+     * We are actually somewhat supposed to test the part where the DI works.
      * The bad thing here is that this part has changed much since 8.7.
      * And testing the parent method across all LTS versions is a very bad idea.
      *
@@ -56,7 +56,7 @@ class Typo3DbQueryParserTest extends AbstractTest
      */
     public function testConvertQueryToDoctrineQueryBuilderNoDi()
     {
-        $fixture = new Query('some type');
+        $fixture = $this->createMock(Query::class);
         $parser = new Typo3DbQueryParser();
 
         $originalParserMock = $this->createMock(OriginalParser::class);
