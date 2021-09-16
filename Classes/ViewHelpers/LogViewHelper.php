@@ -37,6 +37,9 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\ViewHelpers;
 
+/**
+ * Logs the fluid debugger output into a file.
+ */
 class LogViewHelper extends DebugViewHelper
 {
     /**

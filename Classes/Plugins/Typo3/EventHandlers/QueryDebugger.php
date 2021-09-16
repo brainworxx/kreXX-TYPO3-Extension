@@ -53,8 +53,6 @@ use Throwable;
  * TYPO3 Query debugger.
  *
  * @event Brainworxx\Krexx\Analyse\Callback\Analyse\Objects::callMe::start
- *
- * @package Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers
  */
 class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, ProcessConstInterface
 {

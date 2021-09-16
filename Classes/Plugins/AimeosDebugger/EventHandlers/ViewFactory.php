@@ -64,16 +64,24 @@ use Aimeos\MW\View\Iface as ViewInterface;
  *
  * @uses object $data
  *   The object we ara currently analysing.
- *
- * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
 class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
 {
     /**
      * The namespace of the view helpers.
+     *
+     * @var string
      */
     const AI_NAMESPACE = 'Aimeos\\MW\\View\\Helper\\';
+
+    /**
+     * @var string
+     */
     const METHOD = 'transform';
+
+    /**
+     * @var string
+     */
     const STANDARD = '\\Standard';
 
     /**

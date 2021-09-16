@@ -43,8 +43,6 @@ use TYPO3Fluid\Fluid\View\TemplatePaths;
 
 /**
  * Trying to coax the current template/layout/partial file out of the fluid framework.
- *
- * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder
  */
 class Fluid extends AbstractFluid
 {

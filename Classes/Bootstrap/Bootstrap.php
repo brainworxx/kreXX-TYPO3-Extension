@@ -58,8 +58,6 @@ use Krexx;
  * - Load the kreXX files
  * - Register/load the kreXX plugins
  * - Add a check if we need to clear the cache.
- *
- * @package Brainworxx\Includekrexx\Bootstrap
  */
 class Bootstrap implements ConstInterface
 {

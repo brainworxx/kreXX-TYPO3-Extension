@@ -53,8 +53,6 @@ use Throwable;
  * when handling an AbstractDomainModel.
  *
  * @event Brainworxx\Krexx\Analyse\Callback\Analyse::callMe::start
- *
- * @package Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers
  */
 class DirtyModels implements EventHandlerInterface
 {

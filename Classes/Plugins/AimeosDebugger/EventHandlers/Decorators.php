@@ -49,8 +49,6 @@ use ReflectionException;
 
 /**
  * Resolving Aimeos magical decorator class methods.
- *
- * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
 class Decorators extends AbstractEventHandler implements CallbackConstInterface
 {

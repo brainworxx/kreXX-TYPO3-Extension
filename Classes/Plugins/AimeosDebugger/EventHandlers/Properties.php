@@ -57,8 +57,6 @@ use Brainworxx\Krexx\View\ViewConstInterface;
  *   The class we are currently analysing.
  * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
  *   A reflection of the class we are currently analysing.
- *
- * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
 class Properties extends AbstractEventHandler implements
     CallbackConstInterface,

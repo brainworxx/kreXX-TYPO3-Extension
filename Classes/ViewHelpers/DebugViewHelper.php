@@ -64,6 +64,9 @@ use ReflectionClass;
  */
 class DebugViewHelper extends ComptibilityViewHelper
 {
+    /**
+     * @var string
+     */
     const ARGUMENT_VALUE = 'value';
 
     /**

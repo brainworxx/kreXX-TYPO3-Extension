@@ -66,8 +66,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Abusing the TYPO3 attribute mapper, to save our settings.
- *
- * @package Brainworxx\Includekrexx\Domain\Model
  */
 class Settings
 {

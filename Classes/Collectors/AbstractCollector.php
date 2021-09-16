@@ -43,19 +43,51 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
+/**
+ * General stuff for all data collectors.
+ */
 abstract class AbstractCollector
 {
     use LanguageTrait;
 
+    /**
+     * @var string
+     */
     const MODULE_DATA = 'moduleData';
+
+    /**
+     * @var string
+     */
     const PLUGIN_NAME = 'tools_IncludekrexxKrexxConfiguration';
 
+    /**
+     * @var string
+     */
     const SETTINGS_NAME = 'name';
-    const SETTINGS_HELPTEXT = 'helptext';
+
+    /**
+     * @var string
+     */
     const SETTINGS_VALUE = 'value';
+
+    /**
+     * @var string
+     */
     const SETTINGS_USE_FACTORY_SETTINGS = 'useFactorySettings';
+
+    /**
+     * @var string
+     */
     const SETTINGS_FALLBACK = 'fallback';
+
+    /**
+     * @var string
+     */
     const SETTINGS_MODE = 'mode';
+
+    /**
+     * @var string
+     */
     const SETTINGS_OPTIONS = 'options';
 
     /**

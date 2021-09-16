@@ -47,10 +47,7 @@ use Brainworxx\Krexx\Analyse\Model;
  * @uses array $data
  *   An array with the receiver classes.
  *
- * @event
- *   Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe::start
- *
- * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks
+ * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::callMe::start
  */
 class ThroughClassList extends AbstractCallback implements CallbackConstInterface
 {

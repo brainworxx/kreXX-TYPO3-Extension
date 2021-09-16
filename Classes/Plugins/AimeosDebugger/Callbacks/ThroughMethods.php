@@ -50,8 +50,6 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods as IterateThroughMe
  *
  * @uses array $data
  *   An array of reflection methods.
- *
- * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks
  */
 class ThroughMethods extends AbstractCallback implements ConstInterface, CallbackConstInterface
 {

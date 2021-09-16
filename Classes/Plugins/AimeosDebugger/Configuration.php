@@ -54,6 +54,9 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Aimeos\MW\DB\Statement\Base as StatementBase;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface as Typo3ConstInterface;
 
+/**
+ * Configuration for the Aimeos Debugger plugin.
+ */
 class Configuration implements PluginConfigInterface, Typo3ConstInterface
 {
     /**

@@ -57,8 +57,6 @@ use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface as Typo3ConstInterface;
 
 /**
  * Special overwrites and event handlers for fluid.
- *
- * @package Brainworxx\Includekrexx\Plugins\FluidDebugger
  */
 class Configuration implements PluginConfigInterface, Typo3ConstInterface
 {

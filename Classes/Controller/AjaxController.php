@@ -48,6 +48,9 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use stdClass;
 
+/**
+ * Handles the backend ajax requests for the loglist.
+ */
 class AjaxController implements ConstInterface
 {
     use LanguageTrait;

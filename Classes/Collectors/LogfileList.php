@@ -43,8 +43,6 @@ use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
 /**
  * Collection the log file list for the frontend and the backend.
- *
- * @package Brainworxx\Includekrexx\Collectors
  */
 class LogfileList extends AbstractCollector
 {

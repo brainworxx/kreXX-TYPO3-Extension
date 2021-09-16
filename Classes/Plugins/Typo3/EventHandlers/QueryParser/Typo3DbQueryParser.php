@@ -46,8 +46,6 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
  *
  * Since the object manager got himself deprecated, the DI has become somewhat
  * unstable (imho) across the LTS versions.
- *
- * @package Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser
  */
 class Typo3DbQueryParser extends OriginalParser
 {

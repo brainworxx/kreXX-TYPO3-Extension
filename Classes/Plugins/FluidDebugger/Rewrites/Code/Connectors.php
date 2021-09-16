@@ -41,8 +41,6 @@ use Brainworxx\Krexx\Analyse\Code\Connectors as OrgConnectors;
 
 /**
  * Special connectors for fluid. Used by the code generation.
- *
- * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code
  */
 class Connectors extends OrgConnectors
 {

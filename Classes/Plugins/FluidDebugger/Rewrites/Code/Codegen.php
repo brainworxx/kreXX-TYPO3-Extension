@@ -44,13 +44,13 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 
 /**
  * Special code generation for fluid.
- *
- * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code
  */
 class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterface
 {
     /**
      * Constant identifier for the multiline code generation for fluid
+     *
+     * @var string
      */
     const VHS_CALL_VIEWHELPER = 'vhsCallViewhelper';
 

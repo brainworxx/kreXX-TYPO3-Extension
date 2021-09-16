@@ -69,8 +69,6 @@ use Closure;
  * Configuration file for the TYPO3 kreXX plugin.
  *
  * Not to be confused with a TYPO3 frontend plugin.
- *
- * @package Brainworxx\Includekrexx\Plugins\Typo3
  */
 class Configuration implements PluginConfigInterface, ConstInterface, ConfigConstInterface
 {

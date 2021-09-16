@@ -47,7 +47,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * Class GetterWithoutGet
  *
  * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter::goThroughMethodList::end
- * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers
  */
 class GetterWithoutGet implements EventHandlerInterface
 {

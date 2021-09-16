@@ -58,8 +58,6 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  *
  * This class *must-not-have* any class variables, because it gets serialized
  * by the core. Any class variable would cause a fatal in the frontend.
- *
- * @package Brainworxx\Includekrexx\Modules
  */
 class Log extends AbstractSubModule implements
     DataProviderInterface,
@@ -69,12 +67,23 @@ class Log extends AbstractSubModule implements
 {
     use LanguageTrait;
 
+    /**
+     * @var string
+     */
     const MESSAGE_SEVERITY_ERROR = 'error';
+
+    /**
+     * @var string
+     */
     const MESSAGE_SEVERITY_INFO = 'info';
+
+    /**
+     * @var string
+     */
     const TRANSLATION_PREFIX = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:';
 
     /**
-     * The identifyer for the Admin Panel Module.
+     * The identifier for the Admin Panel Module.
      *
      * @return string
      */

@@ -39,11 +39,13 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
 
 /**
  * Constants for the Fluid debugger
- *
- * @package Brainworxx\Includekrexx\Plugins\FluidDebugger
  */
 interface ConstInterface
 {
-    // Additional parameter keys.
+    /**
+     * Additional parameter key.
+     *
+     * @var string
+     */
     const PARAM_ARRAY = 'paramArray';
 }

@@ -51,9 +51,6 @@ use Aimeos\MShop\Common\Item\Iface;
  * Resolving the Aimeos getter:
  * $this->values[$this->prefix . 'somekey']
  *
- * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
- * @event
- *
  * @uses array normalGetter
  *   The list of all reflection methods we are analysing, hosting the
  *   get methods starting with 'get'

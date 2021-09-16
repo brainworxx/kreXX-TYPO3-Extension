@@ -42,6 +42,9 @@ use Brainworxx\Krexx\Analyse\Model;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Throwable;
 
+/**
+ * Resolving the actual fime path from strings that start with EXT:
+ */
 class ExtFilePath extends FilePath
 {
     /**

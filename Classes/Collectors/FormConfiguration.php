@@ -42,6 +42,11 @@ use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\From\File;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
+/**
+ * Collect the current configuration for the frontend option editing.
+ *
+ * And yes, you can configure the configuration of the configuration.
+ */
 class FormConfiguration extends AbstractCollector implements ConfigConstInterface, ConstInterface
 {
     /**

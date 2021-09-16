@@ -47,8 +47,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Special DebugMethods
- *
- * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
 class DebugMethods extends AbstractEventHandler implements
     CallbackConstInterface,

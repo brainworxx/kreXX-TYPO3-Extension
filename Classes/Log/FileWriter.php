@@ -52,6 +52,9 @@ use TYPO3\CMS\Core\Log\LogRecord;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Throwable;
 
+/**
+ * File writer logging implementation.
+ */
 class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceConstInterface
 {
     use LoggingTrait;

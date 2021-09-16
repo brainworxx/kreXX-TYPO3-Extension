@@ -45,6 +45,9 @@ use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 
+/**
+ * Handle the backend interactions that are not ajax.
+ */
 class IndexController extends AbstractController implements ConstInterface
 {
     /**

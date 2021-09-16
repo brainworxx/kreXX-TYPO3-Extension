@@ -45,12 +45,17 @@ use ReflectionException;
 
 /**
  * Contains all methods, that are used by the fluid caller finder classes.
- *
- * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder
  */
 abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInterface
 {
+    /**
+     * @var string
+     */
     const FLUID_VARIABLE = 'fluidvar';
+
+    /**
+     * @var string
+     */
     const FLUID_NOT_AVAILABLE = 'n/a';
 
     /**

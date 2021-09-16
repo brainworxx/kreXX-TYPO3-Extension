@@ -41,8 +41,6 @@ use ReflectionException;
 
 /**
  * Trying to coax the current template/layout/partial file out of the fluid framework.
- *
- * @package Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder
  */
 class FluidOld extends AbstractFluid
 {

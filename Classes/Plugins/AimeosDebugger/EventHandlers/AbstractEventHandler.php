@@ -42,6 +42,9 @@ use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConst
 use ReflectionException;
 use ReflectionClass;
 
+/**
+ * General stuff for all event handlers.
+ */
 abstract class AbstractEventHandler implements EventHandlerInterface, AimeosConstInterface
 {
     /**

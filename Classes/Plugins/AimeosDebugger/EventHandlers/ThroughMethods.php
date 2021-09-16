@@ -46,8 +46,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  *
  * @uses string $factoryName
  *   If present, we will use this as a function name.
- *
- * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers
  */
 class ThroughMethods extends AbstractEventHandler
 {

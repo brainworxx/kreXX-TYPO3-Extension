@@ -43,6 +43,9 @@ use Brainworxx\Krexx\Service\Config\From\File;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Core\Log\LogLevel;
 
+/**
+ * Collect the current configuration for the backend module.
+ */
 class Configuration extends AbstractCollector implements ConfigConstInterface, ConstInterface
 {
     /**

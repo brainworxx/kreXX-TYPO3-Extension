@@ -48,8 +48,6 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
  *
  * @codeCoverageIgnore
  *   We will not test deprecated classes.
- *
- * @package Brainworxx\Includekrexx\Controller
  */
 class ConfigController extends ActionController
 {

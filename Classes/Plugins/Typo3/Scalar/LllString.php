@@ -44,8 +44,6 @@ use Throwable;
 
 /**
  * LLL string parser.
- *
- * @package Brainworxx\Includekrexx\Plugins\Typo3\Scalar
  */
 class LllString extends AbstractScalarAnalysis implements ViewConstInterface
 {
@@ -56,6 +54,11 @@ class LllString extends AbstractScalarAnalysis implements ViewConstInterface
      */
     protected $localisationUtility;
 
+    /**
+     * Inject the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
     public function __construct(Pool $pool)
     {
         $this->localisationUtility = new LocalizationUtility();

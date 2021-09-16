@@ -65,11 +65,34 @@ abstract class AbstractController extends ActionController implements ConstInter
 {
     use LanguageTrait;
 
+    /**
+     * @var string
+     */
     const MODULE_KEY = 'IncludekrexxKrexxConfiguration';
+
+    /**
+     * @var string
+     */
     const ACCESS_DENIED = 'accessDenied';
+
+    /**
+     * @var string
+     */
     const SAVE_FAIL_TITLE = 'save.fail.title';
+
+    /**
+     * @var string
+     */
     const SAVE_SUCCESS_TEXT = 'save.success.text';
+
+    /**
+     * @var string
+     */
     const SAVE_SUCCESS_TITLE = 'save.success.title';
+
+    /**
+     * @var string
+     */
     const FILE_NOT_WRITABLE = 'file.not.writable';
 
 
@@ -119,6 +142,8 @@ abstract class AbstractController extends ActionController implements ConstInter
     }
 
     /**
+     * Inject the module template instance.
+     *
      * @param \TYPO3\CMS\Backend\Template\ModuleTemplate $moduleTemplate
      */
     public function injectModuleTemplate(ModuleTemplate $moduleTemplate)

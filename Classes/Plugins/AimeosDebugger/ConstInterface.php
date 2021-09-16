@@ -39,17 +39,41 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger;
 
 /**
  * Constants for the Aimeos debugger
- *
- * @package Brainworxx\Includekrexx\Plugins\AimeosDebugger
  */
 interface ConstInterface
 {
-    // Additional parameter keys.
+    /**
+     * Additional parameter key.
+     *
+     * @var string
+     */
     const PARAM_IS_FACTORY_METHOD = 'isFactoryMethod';
+
+    /**
+     * Additional parameter key.
+     *
+     * @var string
+     */
     const PARAM_FACTORY_NAME = 'factoryName';
 
-    // Internal variable names, where Aimeos stores data.
+    /**
+     * Internal variable name, where Aimeos stores data.
+     *
+     * @var string
+     */
     const AIMEOS_B_DATA = 'bdata';
+
+    /**
+     * Internal variable name, where Aimeos stores data.
+     *
+     * @var string
+     */
     const AIMEOS_VALUES = 'values';
+
+    /**
+     * Internal variable name, where Aimeos stores data.
+     *
+     * @var string
+     */
     const AIMEOS_DATA = 'data';
 }

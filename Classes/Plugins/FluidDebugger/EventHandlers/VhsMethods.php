@@ -49,7 +49,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  * Class VhsMethods
  *
  * @event Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe::end
- * @package Brainworxx\Includekrexx\Plugins\FluidCodeGen\EventHandlers
  */
 class VhsMethods implements EventHandlerInterface, CallbackConstInterface, FluidConstInterface
 {

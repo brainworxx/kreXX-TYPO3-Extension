@@ -45,8 +45,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  * @codeCoverageIgnore
  *   The only reason for this trait is unit testing. I will not write a specific
  *   test for it.
- *
- * @package Brainworxx\Includekrexx\Service
  */
 trait LanguageTrait
 {
