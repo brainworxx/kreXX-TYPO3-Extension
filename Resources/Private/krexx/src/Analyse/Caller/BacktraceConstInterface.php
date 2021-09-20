@@ -50,7 +50,7 @@ interface BacktraceConstInterface
     const TRACE_FILE = 'file';
 
     /**
-     * Line number from the call.
+     * The line number from the call.
      *
      * @var string
      */
@@ -65,7 +65,7 @@ interface BacktraceConstInterface
 
     /**
      * When analysing an exception, the classname of the exception.
-     * Otherwise a human readable text that describes what was analysed.
+     * Otherwise, a human-readable text that describes what was analysed.
      *
      * @var string
      */

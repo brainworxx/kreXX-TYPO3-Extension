@@ -59,7 +59,7 @@ class Config extends Fallback
     /**
      * List of all configured debug methods.
      *
-     * @var array
+     * @var string[]
      */
     public $debugFuncList = [];
 
@@ -177,7 +177,7 @@ class Config extends Fallback
      * Setter for the enabling from sourcecode.
      *
      * @param bool $value
-     *   Whether it it enabled, or not.
+     *   Whether it is enabled, or not.
      */
     public function setDisabled(bool $value)
     {
@@ -223,7 +223,7 @@ class Config extends Fallback
                 ($name === static::SETTING_DISABLED && $cookieSetting === static::VALUE_FALSE) === false
             ) {
                 // We must not overwrite a disabled=true with local cookie settings!
-                // Otherwise it could get enabled locally, which might be a security
+                // Otherwise, it could get enabled locally, which might be a security
                 // issue.
                 $model->setValue($cookieSetting)->setSource('Local cookie settings');
                 $this->settings[$name] = $model;
@@ -247,7 +247,7 @@ class Config extends Fallback
     }
 
     /**
-     * Get the path to the chunks directory.
+     * Get the path to the chunks' directory.
      *
      * @return string
      *   The absolute path, trailed by the '/'
@@ -317,7 +317,7 @@ class Config extends Fallback
     }
 
     /**
-     * Simply return a list of all skins (as their configuration keys.
+     * Simply return a list of all skins as their configuration keys.
      *
      * @return array
      */

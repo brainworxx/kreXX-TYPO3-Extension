@@ -50,7 +50,7 @@ use Brainworxx\Krexx\View\ViewConstInterface;
  * @uses ref \Brainworxx\Krexx\Service\Reflection\ReflectionClass
  *   Here we get all out data.
  * @uses metaname string
- *   The name of the meta data, if available.
+ *   The name of the metadata, if available.
  *   Fallback to static::META_CLASS_DATA
  */
 class Meta extends AbstractObjectAnalysis implements CallbackConstInterface, ViewConstInterface
@@ -63,7 +63,7 @@ class Meta extends AbstractObjectAnalysis implements CallbackConstInterface, Vie
      * - Class comment
      * - Filename and line from/to
      * - Implemented interfaces
-     * - Class list from where the objects inherits stuff from
+     * - Class list from where the objects inherits its stuff from
      * - Used traits
      *
      * @return string
@@ -160,7 +160,7 @@ class Meta extends AbstractObjectAnalysis implements CallbackConstInterface, Vie
     }
 
     /**
-     * Generates a id for the DOM.
+     * Generates an id for the DOM.
      *
      * This is used to jump from a recursion to the object analysis data.
      * The ID is simply the md5 hash of the classname with the namespace.

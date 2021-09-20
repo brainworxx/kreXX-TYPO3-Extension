@@ -131,7 +131,7 @@ class ThroughMethods extends AbstractCallback implements
      * @param \ReflectionMethod $refMethod
      *   Reflection of the method that we are analysing.
      * @param \ReflectionClass $refClass
-     *   Reflection of the class that we analysing right now.
+     *   Reflection of the class that we are analysing right now.
      * @param \ReflectionClass $declaringClass
      *   Reflection of the class, where the method is hosted.
      *   This may or may not be the same class as the one that we are analysing.
@@ -188,7 +188,7 @@ class ThroughMethods extends AbstractCallback implements
      *   The method data so far.
      *
      * @return string
-     *   The human readable parameter list.
+     *   The human-readable parameter list.
      */
     protected function retrieveParameters(ReflectionMethod $reflectionMethod, array &$methodData): string
     {
@@ -260,7 +260,7 @@ class ThroughMethods extends AbstractCallback implements
      *
      * @return bool|\ReflectionClass
      *   false = unable to retrieve something.
-     *   Otherwise return a reflection class.
+     *   Otherwise, return a reflection class.
      */
     protected function retrieveDeclaringReflection(ReflectionMethod $reflectionMethod, ReflectionClass $declaringClass)
     {

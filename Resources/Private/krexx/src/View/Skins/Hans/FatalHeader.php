@@ -42,7 +42,9 @@ namespace Brainworxx\Krexx\View\Skins\Hans;
  */
 trait FatalHeader
 {
-
+    /**
+     * @var string[]
+     */
     private $markerFatalHeader = [
         '{cssJs}',
         '{version}',
@@ -51,6 +53,7 @@ trait FatalHeader
         '{type}',
         '{encoding}'
     ];
+
     /**
      * {@inheritdoc}
      */
@@ -76,7 +79,7 @@ trait FatalHeader
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerFatalHeader(): array

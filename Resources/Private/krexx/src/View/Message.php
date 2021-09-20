@@ -69,7 +69,7 @@ class Message
     protected $text = '';
 
     /**
-     * Will this message remove itself after it's display?
+     * Will this message remove itself after its display?
      *
      * @var bool
      */
@@ -101,7 +101,7 @@ class Message
     }
 
     /**
-     * setter fore the throwaway.
+     * Setter force the throwaway.
      *
      * @param bool $isThrowAway
      *   Will remove itself after display.

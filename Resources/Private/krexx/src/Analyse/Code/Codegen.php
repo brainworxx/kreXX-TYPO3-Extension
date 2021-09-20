@@ -81,7 +81,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface
      * Background:
      * Some code may disable it, while it is still disabled.
      * When that code part re-enables it, it is not aware that it must not
-     * re-enable it, because it was disabled before hand.
+     * re-enable it, because it was disabled beforehand.
      *
      * @var int
      */
@@ -127,7 +127,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface
             // variable name to the source generation.
             // Also, the string is already prepared for code generation, because
             // it comes directly from the source code itself.
-            // And of cause, there are no connectors.
+            // And of course, there are no connectors.
             $this->firstRun = false;
             return $this->pool->encodingService->encodeString((string)$model->getName());
         }
@@ -192,7 +192,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface
     }
 
     /**
-     * In case we need to wrap the everything until this point into something.
+     * In case we need to wrap everything until this point into something.
      * Right now, this is not used for PHP, only for Fluid.
      *
      * @return string
@@ -204,7 +204,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface
     }
 
     /**
-     * In case we need to wrap the everything until this point into something.
+     * In case we need to wrap everything until this point into something.
      * Right now, this is not used for PHP, only for Fluid.
      *
      * @return string
@@ -265,13 +265,13 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface
     }
 
     /**
-     * Transform a reflection parameter into a human readable form.
+     * Transform a reflection parameter into a human-readable form.
      *
      * @param \ReflectionParameter $reflectionParameter
      *   The reflection parameter we want to wrap.
      *
      * @return string
-     *   The parameter data in a human readable form.
+     *   The parameter data in a human-readable form.
      */
     public function parameterToString(ReflectionParameter $reflectionParameter): string
     {
@@ -314,7 +314,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface
         $type = '';
         if ($reflectionParameter->hasType() === true) {
             $reflectionNamedType = $reflectionParameter->getType();
-            if (is_a($reflectionNamedType, '\\ReflectionNamedType')) {
+            if (is_a($reflectionNamedType, ReflectionNamedType::class)) {
                 // PHP 7.1 and later
                 /** @var ReflectionNamedType $reflectionNamedType */
                 $type = $reflectionNamedType->getName() . ' ';
@@ -329,12 +329,12 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface
     }
 
     /**
-     * Translate the default value into something human readable.
+     * Translate the default value into something human-readable.
      *
      * @param mixed $default
      *
      * @return mixed
-     *   The type in a human readable form.
+     *   The type in a human-readable form.
      */
     protected function translateDefaultValue($default)
     {

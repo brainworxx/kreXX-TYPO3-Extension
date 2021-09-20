@@ -79,42 +79,42 @@ class Registration implements ConfigConstInterface, PluginConstInterface
     /**
      * Blacklist of forbidden debug methods.
      *
-     * @var array
+     * @var array[]
      */
     protected static $blacklistDebugMethods = [];
 
     /**
      * Blacklist of classes, that will never get debug-method-called.
      *
-     * @var array
+     * @var string[]
      */
     protected static $blacklistDebugClass = [];
 
     /**
      * Additional help files with text for the debugger.
      *
-     * @var array
+     * @var string[]
      */
     protected static $additionalHelpFiles = [];
 
     /**
      * List of all class rewrites for the factory.
      *
-     * @var array
+     * @var string[]
      */
     protected static $rewriteList = [];
 
     /**
      * List of all registered events for the event handler.
      *
-     * @var array
+     * @var array[]
      */
     protected static $eventList = [];
 
     /**
      * List of all additionally registered skins with their configuration.
      *
-     * @var array
+     * @var array[]
      */
     protected static $additionalSkinList = [];
 
@@ -157,12 +157,12 @@ class Registration implements ConfigConstInterface, PluginConstInterface
     }
 
     /**
-     * Setter for the path to the chunks folder.
+     * Setter for the path to the chunks' folder.
      *
      * @api
      *
      * @param string $path
-     *   The absolute path to the chunks folder.
+     *   The absolute path to the chunks' folder.
      */
     public static function setChunksFolder(string $path)
     {
@@ -349,7 +349,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
     public static function deactivatePlugin(string $configClass)
     {
         if (empty(static::$plugins[$configClass][static::IS_ACTIVE]) === true) {
-            // We will not purge everything for a already deactivated plugin.
+            // We will not purge everything for an already deactivated plugin.
             return;
         }
 

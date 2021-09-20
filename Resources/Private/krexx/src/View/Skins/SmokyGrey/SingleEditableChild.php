@@ -70,7 +70,7 @@ trait SingleEditableChild
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerSingleEditableChild(): array

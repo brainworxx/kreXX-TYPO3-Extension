@@ -62,7 +62,7 @@ abstract class AbstractRender
     /**
      * Caching the content fo the template files.
      *
-     * @var array
+     * @var string[]
      */
     protected static $fileCache = [];
 
@@ -145,7 +145,7 @@ abstract class AbstractRender
      * Double quotes gets replaced by &#34;
      *
      * @param string $name
-     *   The name of the attribute (without the 'data-' in front
+     *   The name of the attribute without the 'data-' in front
      * @param string $data
      *   The value. Must be string.
      *

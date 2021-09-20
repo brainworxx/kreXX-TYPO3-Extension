@@ -71,7 +71,7 @@ trait ConnectorLeft
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerConnectorLeft(): array

@@ -123,7 +123,7 @@ class Xml extends AbstractScalarAnalysis implements ViewConstInterface
     }
 
     /**
-     * Generate the meta data from the XML-
+     * Generate the metadata from the XML-
      *
      * @return array
      */
@@ -160,7 +160,7 @@ class Xml extends AbstractScalarAnalysis implements ViewConstInterface
     }
 
     /**
-     * Parse a XML string into an array structure.
+     * Parse an XML string into an array structure.
      *
      * @param string $strInputXML
      *   The string we want to parse.

@@ -142,7 +142,7 @@ class Traversable extends AbstractObjectAnalysis implements
     protected function analyseTraversableResult($originalClass, array $result): string
     {
         // Special Array Access here, resulting in more complicated source
-        // generation. So we tell the callback to to that.
+        // generation. So we tell the callback to that.
         $multiline = true;
 
         // Normal ArrayAccess, direct access to the array. Nothing special
@@ -165,7 +165,7 @@ class Traversable extends AbstractObjectAnalysis implements
             ->addToJson(static::META_LENGTH, (string)count($result));
 
         // Check, if we are handling a huge array. Huge arrays tend to result in a huge
-        // output, maybe even triggering a emergency break. to avoid this, we give them
+        // output, maybe even triggering an emergency break. to avoid this, we give them
         // a special callback.
         if (count($result) > (int) $this->pool->config->getSetting(static::SETTING_ARRAY_COUNT_LIMIT)) {
             $model->injectCallback($this->pool->createClass(ThroughLargeArray::class))

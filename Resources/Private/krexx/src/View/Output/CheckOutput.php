@@ -71,7 +71,7 @@ class CheckOutput
     /**
      * Check for an ajax request.
      *
-     * Appending stuff after a ajax request will most likely cause a js error.
+     * Appending stuff after an ajax request will most likely cause a js error.
      * But there are moments when you actually want to do this.
      *
      * @return bool
@@ -118,7 +118,7 @@ class CheckOutput
         }
 
         // Found nothing, must be HTML.
-        // And if nothing was send at this point, it is now HTML.
+        // And if nothing was sent at this point, it is now HTML.
         return true;
     }
 

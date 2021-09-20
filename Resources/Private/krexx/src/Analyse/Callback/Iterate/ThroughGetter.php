@@ -88,14 +88,14 @@ class ThroughGetter extends AbstractCallback implements
     /**
      * Stuff we need to escape in a regex.
      *
-     * @var array
+     * @var string[]
      */
     protected $regexEscapeFind = ['.', '/', '(', ')', '<', '>', '$'];
 
     /**
      * Stuff the escaped regex stuff.
      *
-     * @var array
+     * @var string[]
      */
     protected $regexEscapeReplace = ['\.', '\/', '\(', '\)', '\<', '\>', '\$'];
 
@@ -109,7 +109,7 @@ class ThroughGetter extends AbstractCallback implements
     /**
      * Class for the comment analysis.
      *
-     * @var \Brainworxx\Krexx\Analyse\comment\Methods
+     * @var \Brainworxx\Krexx\Analyse\Comment\Methods
      */
     protected $commentAnalysis;
 
@@ -147,7 +147,7 @@ class ThroughGetter extends AbstractCallback implements
     /**
      * Iterating through a list of reflection methods.
      *
-     * @param array $methodList
+     * @param \ReflectionMethod[] $methodList
      *   The list of methods we are going through, consisting of \ReflectionMethod
      *
      * @return string
@@ -157,7 +157,6 @@ class ThroughGetter extends AbstractCallback implements
     {
         $output = '';
 
-        /** @var \ReflectionMethod $reflectionMethod */
         foreach ($methodList as $reflectionMethod) {
             // Back to level 0, we reset the deep counter.
             $this->deep = 0;
@@ -468,7 +467,7 @@ class ThroughGetter extends AbstractCallback implements
      * Searching for stuff via regex.
      * Yay, dynamic regex stuff for fun and profit!
      *
-     * @param array $searchArray
+     * @param string[] $searchArray
      *   The search definition.
      * @param string $haystack
      *   The haystack, obviously.

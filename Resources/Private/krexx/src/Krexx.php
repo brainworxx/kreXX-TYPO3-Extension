@@ -77,8 +77,8 @@ class Krexx implements ConfigConstInterface
 
         // Disabled?
         // We do not use the config settings here, because we do not have any
-        // output whatsoever. The config settings are either on or off, during
-        // the entire run, meaning the can not be changed (by normal api means)
+        // output whatsoever. The config settings are either on or off during
+        // the entire run, meaning they can not be changed (by normal api means)
         // from the outside.
         // We also do not use the static ForcedLog methods here, because they
         // are somewhat time costly.
@@ -288,7 +288,7 @@ class Krexx implements ConfigConstInterface
     }
 
     /**
-     * Force log a debug backtrace.
+     * Forced logging a debug backtrace.
      *
      * When there are classes found inside the backtrace,
      * they will be analysed.

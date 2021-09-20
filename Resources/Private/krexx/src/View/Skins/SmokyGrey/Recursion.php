@@ -68,7 +68,7 @@ trait Recursion
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerRecursion(): array

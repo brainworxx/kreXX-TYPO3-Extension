@@ -68,7 +68,7 @@ abstract class AbstractObjectAnalysis extends AbstractCallback implements Callba
     /**
      * Gets the properties from a reflection property of the object.
      *
-     * @param array $refProps
+     * @param \ReflectionProperty[] $refProps
      *   The list of the reflection properties.
      * @param ReflectionClass $ref
      *   The reflection of the object we are currently analysing.

@@ -48,7 +48,7 @@ use ReflectionClass;
 use ReflectionProperty;
 
 /**
- * Class properties analysis methods.
+ * Class properties' analysis methods.
  *
  * @uses array data
  *   Array of \ReflectionProperties.
@@ -222,7 +222,7 @@ class ThroughProperties extends AbstractCallback implements
      *   A reflection of the property we are analysing.
      *
      * @return string
-     *   Human readable string, where the property was declared.
+     *   Human-readable string, where the property was declared.
      */
     protected function retrieveDeclarationPlace(ReflectionProperty $refProperty): string
     {
@@ -271,7 +271,7 @@ class ThroughProperties extends AbstractCallback implements
      * with several layers of traits. We will not parse the source code
      * for an answer.
      *
-     * @param array $traits
+     * @param \ReflectionClass[] $traits
      *   THe traits of that class.
      * @param \ReflectionProperty $refProperty
      *   Reflection of the property we are analysing.

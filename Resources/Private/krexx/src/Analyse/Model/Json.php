@@ -49,7 +49,7 @@ trait Json
      *
      * Right now, only the smokygrey skin makes use of this.
      *
-     * @var array
+     * @var string[]
      */
     protected $json = [];
 
@@ -98,7 +98,7 @@ trait Json
     /**
      * Getter for json.
      *
-     * @return array
+     * @return string[]
      *   More analysis data.
      */
     public function getJson(): array

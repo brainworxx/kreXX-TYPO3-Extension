@@ -45,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
 trait ExpandableChild
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $markerExpandableChild = [
         '{name}',
@@ -110,7 +110,7 @@ trait ExpandableChild
      *   The model.
      *
      * @return string
-     *   Th rendered HTML.
+     *   The rendered HTML.
      */
     protected function renderSourceButtonSg(string $gencode, Model $model): string
     {
@@ -137,7 +137,7 @@ trait ExpandableChild
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerExpandableChild(): array
@@ -151,7 +151,7 @@ trait ExpandableChild
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerSourceButton(): array

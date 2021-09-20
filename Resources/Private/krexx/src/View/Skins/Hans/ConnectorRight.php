@@ -43,7 +43,7 @@ namespace Brainworxx\Krexx\View\Skins\Hans;
 trait ConnectorRight
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $markerConnectorRight = [
         '{connector}',
@@ -81,7 +81,7 @@ trait ConnectorRight
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerConnectorRight(): array

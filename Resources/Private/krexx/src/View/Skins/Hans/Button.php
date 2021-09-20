@@ -45,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
 trait Button
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $markerSingleButton = [
         '{text}',
@@ -75,7 +75,7 @@ trait Button
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerSingleButton(): array

@@ -55,7 +55,7 @@ class ProcessOther extends AbstractRouting implements ProcessInterface
      *   The value we are analysing.
      *
      * @return bool
-     *   Well, is this a resource?
+     *   Sure, this one can handle anything.
      */
     public function canHandle(Model $model): bool
     {
@@ -63,7 +63,7 @@ class ProcessOther extends AbstractRouting implements ProcessInterface
     }
 
     /**
-     * Render a 'dump' for a other type.
+     * Render a 'dump' for another type.
      *
      * @param Model $model
      *   The model with the data for the output.

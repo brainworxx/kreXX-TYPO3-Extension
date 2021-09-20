@@ -58,14 +58,14 @@ class Messages
      * @deprecated
      *   Since 4.0.0. Will be removed.
      *
-     * @var array
+     * @var array[]
      */
     protected $keys = [];
 
     /**
      * A simple array to hold the values.
      *
-     * @var array
+     * @var string[]
      */
     protected $helpArray = [];
 

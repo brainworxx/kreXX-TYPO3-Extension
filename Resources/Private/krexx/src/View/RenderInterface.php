@@ -129,7 +129,7 @@ interface RenderInterface
     public function renderCssJs(string $css, string $javascript): string;
 
     /**
-     * Renders a expandable child with a callback in the middle.
+     * Renders an expandable child with a callback in the middle.
      *
      * @param Model $model
      *   The model, which hosts all the data we need.
@@ -195,7 +195,7 @@ interface RenderInterface
     /**
      * Renders all internal messages.
      *
-     * @param array $messages
+     * @param \Brainworxx\Krexx\View\Message[] $messages
      *   The current messages.
      *
      * @return string

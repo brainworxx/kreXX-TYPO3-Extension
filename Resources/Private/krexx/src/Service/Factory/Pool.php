@@ -153,7 +153,7 @@ class Pool extends AbstractFactory
     /**
      * Initializes all needed classes.
      *
-     * @param array $rewrite
+     * @param string[] $rewrite
      *   The rewrites we are using for the classes.
      */
     public function __construct(array $rewrite = [])
@@ -174,7 +174,7 @@ class Pool extends AbstractFactory
         $this->createClass(Recursion::class);
         // Initialize the code generation.
         $this->createClass(Codegen::class);
-        // Initializes the chunks handler.
+        // Initializes the chunks' handler.
         $this->createClass(Chunks::class);
         // Initializes the scope analysis.
         $this->createClass(Scope::class);

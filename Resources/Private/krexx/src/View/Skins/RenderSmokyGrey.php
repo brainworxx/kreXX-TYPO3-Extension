@@ -66,7 +66,7 @@ class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
     use Help;
 
     /**
-     * Data attribute for the help display..
+     * Data attribute for the help display.
      *
      * @var string
      */

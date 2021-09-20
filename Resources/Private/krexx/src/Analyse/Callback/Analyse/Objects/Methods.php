@@ -101,7 +101,7 @@ class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, 
      * Dumping all methods but only if we have any.
      *
      * @param \ReflectionClass $ref
-     *   The reflection of t he class we are analysing
+     *   The reflection of the class we are analysing
      * @param string $domId
      *   The already generated dom id.
      * @param bool $doProtected
@@ -148,7 +148,7 @@ class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, 
     }
 
     /**
-     * Generates a id for the DOM.
+     * Generates an id for the DOM.
      *
      * This is used to jump from a recursion to the object analysis data.
      * The ID is simply the md5 hash of the classname with the namespace.

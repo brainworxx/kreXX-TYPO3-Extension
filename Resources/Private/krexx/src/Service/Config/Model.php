@@ -64,7 +64,7 @@ class Model implements ConfigConstInterface
     protected $type;
 
     /**
-     * Whether or not his setting is editable
+     * Whether his setting is editable
      *
      * @var bool
      */
@@ -108,7 +108,7 @@ class Model implements ConfigConstInterface
     /**
      * Setter for the value.
      *
-     * @param string|int|null $value
+     * @param string|int|null|bool $value
      *
      * @return $this
      *   Return $this for Chaining.

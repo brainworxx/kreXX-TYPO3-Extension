@@ -45,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
  * Iterate through the ressource analysis and generate an output.
  *
  * @uses array data
- *   The meta data from the stream.
+ *   The metadata from the stream.
  */
 class ThroughResource extends AbstractCallback implements CallbackConstInterface
 {
@@ -58,7 +58,7 @@ class ThroughResource extends AbstractCallback implements CallbackConstInterface
      */
     public function callMe(): string
     {
-        // Allow the start event to change the provided meta data.
+        // Allow the start event to change the provided metadata.
         $output = $this->dispatchStartEvent();
 
         // Temporarily disable code gen.

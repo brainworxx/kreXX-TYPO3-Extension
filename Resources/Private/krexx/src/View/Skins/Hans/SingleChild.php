@@ -51,7 +51,7 @@ use Brainworxx\Krexx\Analyse\Model;
 trait SingleChild
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $markerSingleChild = [
         '{gensource}',
@@ -184,7 +184,7 @@ trait SingleChild
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerSingleChild(): array
@@ -198,7 +198,7 @@ trait SingleChild
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerSingleChildExtra(): array
@@ -212,7 +212,7 @@ trait SingleChild
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerSingleChildCallable(): array

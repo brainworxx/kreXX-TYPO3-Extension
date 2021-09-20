@@ -80,7 +80,7 @@ class Validation extends Fallback
     /**
      * Preconfiguration which setting will never be editable.
      *
-     * @var array
+     * @var string[]
      */
     const FE_DO_NOT_EDIT = [
         self::SETTING_DESTINATION,
@@ -92,7 +92,7 @@ class Validation extends Fallback
     /**
      * Loaded preconfiguration which setting will never be editable.
      *
-     * @var array
+     * @var string[]
      */
     protected $feDoNotEdit = [];
 
@@ -102,7 +102,7 @@ class Validation extends Fallback
      * @see \Brainworxx\Krexx\Service\Config\Config::isAllowedDebugCall()
      * @see \Brainworxx\Krexx\Service\Plugin\Registration::addMethodToDebugBlacklist()
      *
-     * @var array
+     * @var array[]
      */
     protected $methodBlacklist = [];
 
@@ -113,7 +113,7 @@ class Validation extends Fallback
      * @see \Brainworxx\Krexx\Service\Config\Security->isAllowedDebugCall()
      * @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects->pollAllConfiguredDebugMethods()
      *
-     * @var array
+     * @var string[]
      */
     protected $classBlacklist = [
         // Fun with reflection classes. Not really.
@@ -128,7 +128,7 @@ class Validation extends Fallback
      * @deprecated
      *   Since 4.0.0. Use static::FE_DO_NOT_EDIT
      *
-     * @var array
+     * @var string[]
      */
     protected $feConfigNoEdit = [
         self::SETTING_DESTINATION,

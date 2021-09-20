@@ -83,7 +83,7 @@ abstract class AbstractRouting
     }
 
     /**
-     * Generates a id for the DOM.
+     * Generates an id for the DOM.
      *
      * This is used to jump from a recursion to the object analysis data.
      * The ID is the object hash as well as the kruXX call number, to avoid

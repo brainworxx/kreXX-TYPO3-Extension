@@ -52,7 +52,7 @@ class Recursion
 {
 
     /**
-     * pool for arrays ans objects, to prevent recursions.
+     * pool for arrays an objects, to prevent recursions.
      *
      * @var \SplObjectStorage
      */
@@ -71,7 +71,7 @@ class Recursion
     /**
      * Collection of dom ID's of object meta analytic stuff.
      *
-     * @var array
+     * @var bool[]
      */
     protected $metaRecursionHive = [];
 

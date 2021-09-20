@@ -80,7 +80,7 @@ class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
     /**
      * Is this actually a path to a file? Simple wrapper around is_file().
      *
-     * Of cause, we only act, if finfo is available.
+     * Of course, we only act, if finfo is available.
      *
      * @param string $string
      *   The string to test.

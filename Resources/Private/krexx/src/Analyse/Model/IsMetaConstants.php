@@ -51,7 +51,7 @@ use Brainworxx\Krexx\Analyse\Model;
 trait IsMetaConstants
 {
     /**
-     * We need to know, if we are rendering the expandable child for the
+     * We need to know if we are rendering the expandable child for the
      * constants. The code generation does special stuff there.
      *
      * @var bool

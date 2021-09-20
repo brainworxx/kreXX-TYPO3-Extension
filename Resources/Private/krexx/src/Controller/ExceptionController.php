@@ -103,7 +103,7 @@ class ExceptionController extends AbstractController implements BacktraceConstIn
 
     /**
      * As simple wrapper around the set_exception_handler function, with a
-     * little bit of singleton handling.
+     * little of singleton handling.
      *
      * @return $this
      *   Return $this, for chaining.
@@ -133,7 +133,7 @@ class ExceptionController extends AbstractController implements BacktraceConstIn
     }
 
     /**
-     * Generate the meta data for the exception analysis.
+     * Generate the metadata for the exception analysis.
      *
      * @param \Throwable $exception
      *   The exception we are analysing.

@@ -45,7 +45,7 @@ class Connectors implements ConnectorsConstInterface
     /**
      * List of the combinations of connectors.
      *
-     * @var array
+     * @var array[]
      */
     protected $connectorArray  = [
         self::CONNECTOR_NOTHING => ['', ''],
@@ -79,7 +79,7 @@ class Connectors implements ConnectorsConstInterface
      *
      * @see constants above
      *
-     * @var int
+     * @var string
      */
     protected $type = self::CONNECTOR_NOTHING;
 

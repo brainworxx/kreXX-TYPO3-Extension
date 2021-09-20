@@ -83,9 +83,9 @@ class Chunks implements ConfigConstInterface
     protected $metadata = [];
 
     /**
-     * Is the chunks folder write protected?
+     * Is the chunks' folder write protected?
      *
-     * When we do, kreXX will store temporary files in the chunks folder.
+     * When we do, kreXX will store temporary files in the chunks' folder.
      * This saves a lot of memory!
      *
      * @var bool
@@ -162,7 +162,7 @@ class Chunks implements ConfigConstInterface
             $key = $this->genKey();
             // Detect the encoding in the chunk.
             $this->detectEncoding($string);
-            // Write the key to the chunks folder.
+            // Write the key to the chunks' folder.
             $this->pool->fileService->putFileContents($this->chunkDir . $key . '.Krexx.tmp', $string);
             // Return the first part plus the key.
             return static::STRING_DELIMITER . $key . static::STRING_DELIMITER;
@@ -189,9 +189,9 @@ class Chunks implements ConfigConstInterface
     /**
      * Gets the original data from the string.
      *
-     * Reads the data from a file in the chunks folder.
+     * Reads the data from a file in the chunks' folder.
      * The output may contain other chunk keys.
-     * nothing more then a wrapper for file_get_contents()
+     * Nothing more than a wrapper for file_get_contents()
      *
      * @param string $key
      *   The key of the chunk of which we want to get the data.
@@ -274,7 +274,7 @@ class Chunks implements ConfigConstInterface
             $chunkPart = substr($string, $chunkPos);
 
             // We translate the first chunk.
-            // Strangely, with a memory peak of 84MB, explode is
+            // Strangely, with a memory peak of 84 MB, explode is
             // 2 mb cheaper than preg_match().
             $result = explode(static::STRING_DELIMITER, $chunkPart, 3);
             $string = str_replace(
@@ -302,7 +302,7 @@ class Chunks implements ConfigConstInterface
     /**
      * Setter for the $useChunks.
      *
-     * When the chunks folder is not writable, we will not use chunks.
+     * When the chunks' folder is not writable, we will not use chunks.
      * This will increase the memory usage significantly!
      *
      * @param bool $bool
@@ -325,7 +325,7 @@ class Chunks implements ConfigConstInterface
     }
 
     /**
-     * Setter for the the the $useLogging. Here we determine, if the logfolder
+     * Setter for the $useLogging. Here we determine, if the logfolder
      * is accessible.
      *
      * @param $bool

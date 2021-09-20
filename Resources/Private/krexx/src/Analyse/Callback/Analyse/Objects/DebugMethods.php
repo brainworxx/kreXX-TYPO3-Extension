@@ -67,7 +67,7 @@ class DebugMethods extends AbstractObjectAnalysis implements
      *
      * I've added a try and an empty error function callback
      * to catch possible problems with this. This will,
-     * of cause, not stop a possible fatal in the function
+     * of course, not stop a possible fatal in the function
      * itself.
      *
      * @return string
@@ -147,7 +147,7 @@ class DebugMethods extends AbstractObjectAnalysis implements
      *   The reflection of the class that we are currently analysing.
      *
      * @return bool
-     *   Whether or not we are allowed toi access this method.
+     *   Whether we are allowed to access this method.
      */
     protected function checkIfAccessible($data, string $funcName, ReflectionClass $reflectionClass): bool
     {

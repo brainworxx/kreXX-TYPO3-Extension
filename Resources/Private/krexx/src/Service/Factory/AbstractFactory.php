@@ -41,7 +41,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 
 /**
- * Simple factory, nothing special. Offers a overwrite method.
+ * Simple factory, nothing special. Offers an overwrite method.
  */
 abstract class AbstractFactory
 {
@@ -54,7 +54,7 @@ abstract class AbstractFactory
      * key = original classname
      * value = the one we will deliver in that case.
      *
-     * @var array
+     * @var string[]
      */
     public $rewrite = [];
 
@@ -63,7 +63,7 @@ abstract class AbstractFactory
      *
      * @param string $classname
      *
-     * @return object::$classname
+     * @return object
      *   The requested object.
      */
     public function createClass(string $classname)

@@ -45,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
 trait Footer
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $markerFooter = [
         '{configInfo}',
@@ -54,7 +54,7 @@ trait Footer
     ];
 
     /**
-     * @var array
+     * @var string[]
      */
     private $markerCaller = [
         '{callerFile}',
@@ -114,7 +114,7 @@ trait Footer
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerFooter(): array
@@ -128,7 +128,7 @@ trait Footer
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerCaller(): array

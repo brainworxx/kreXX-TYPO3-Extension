@@ -64,7 +64,7 @@ class ProcessInteger extends AbstractRouting implements ProcessInterface, ViewCo
     }
 
     /**
-     * Render a dump for a integer value.
+     * Render a dump for an integer value.
      *
      * @param Model $model
      *   The data we are analysing.

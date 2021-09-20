@@ -58,10 +58,10 @@ class SettingsGetter extends Registration
     }
 
     /**
-     * Setter for the path to the chunks folder.
+     * Setter for the path to the chunks' folder.
      *
      * @return string
-     *   The absolute path to the chunks folder.
+     *   The absolute path to the chunks' folder.
      */
     public static function getChunkFolder(): string
     {
@@ -90,7 +90,7 @@ class SettingsGetter extends Registration
     /**
      * Getter for the blacklisted debug methods.
      *
-     * @return array
+     * @return array[]
      *   The debug methods.
      */
     public static function getBlacklistDebugMethods(): array
@@ -101,7 +101,7 @@ class SettingsGetter extends Registration
     /**
      * Getter for the blacklisted debug method classes.
      *
-     * @return array
+     * @return string[]
      *   The list with classes.
      */
     public static function getBlacklistDebugClass(): array
@@ -115,7 +115,7 @@ class SettingsGetter extends Registration
      * key = original class name.
      * value = new class name.
      *
-     * @return array
+     * @return string[]
      *   The rewrites.
      */
     public static function getRewriteList(): array
@@ -126,7 +126,7 @@ class SettingsGetter extends Registration
     /**
      * Getter for the event list.
      *
-     * @return array
+     * @return array[]
      *   The event list.
      */
     public static function getEventList(): array
@@ -137,7 +137,7 @@ class SettingsGetter extends Registration
     /**
      * Getter for additional help files, absolute path.
      *
-     * @return array
+     * @return string[]
      *   List of these files
      */
     public static function getAdditionalHelpFiles(): array
@@ -148,7 +148,7 @@ class SettingsGetter extends Registration
     /**
      * Get the status of all registered plugins.
      *
-     * @return array
+     * @return \Brainworxx\Krexx\Service\Plugin\PluginConfigInterface[][]
      *   The configuration data for the view
      */
     public static function getPlugins(): array
@@ -159,7 +159,7 @@ class SettingsGetter extends Registration
     /**
      * Getter for the skins, provided by plugins.
      *
-     * @return array
+     * @return array[]
      *   The configuration arrays of additional skins.
      */
     public static function getAdditionalSkinList(): array
@@ -170,7 +170,7 @@ class SettingsGetter extends Registration
     /**
      * Getter for all the registered class names that can do a scalar analysis.
      *
-     * @return array
+     * @return string[]
      *   List of the class names.
      */
     public static function getAdditionalScalarString(): array
@@ -182,7 +182,7 @@ class SettingsGetter extends Registration
      * Getter for the list of class instances that contain new settings
      * definitions.
      *
-     * @return array
+     * @return \Brainworxx\Krexx\Service\Plugin\NewSetting[]
      */
     public static function getNewSettings(): array
     {

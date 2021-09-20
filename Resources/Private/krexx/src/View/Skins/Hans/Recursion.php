@@ -45,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
 trait Recursion
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $markerRecursion = [
         '{name}',
@@ -86,7 +86,7 @@ trait Recursion
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerRecursion(): array

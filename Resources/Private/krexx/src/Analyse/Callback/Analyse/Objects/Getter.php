@@ -58,21 +58,21 @@ class Getter extends AbstractObjectAnalysis
     /**
      * List of the getter methods, that start with 'get'.
      *
-     * @var array
+     * @var string[]
      */
     protected $normalGetter = [];
 
     /**
      * List of hte boolean getter method, that start with 'is'.
      *
-     * @var array
+     * @var string[]
      */
     protected $isGetter = [];
 
     /**
      * List of hte boolean getter method, that start with 'has'.
      *
-     * @var array
+     * @var string[]
      */
     protected $hasGetter = [];
 
@@ -122,13 +122,13 @@ class Getter extends AbstractObjectAnalysis
     protected function populateGetterLists(ReflectionMethod $method, ReflectionClass $ref)
     {
         // Check, if the method is really available, inside the analysis
-        // context. A inherited private method can not be called inside the
+        // context. An inherited private method can not be called inside the
         // $this context.
         if (
             ($method->isPrivate() === true && $method->getDeclaringClass()->getName() !== $ref->getName()) ||
             empty($method->getParameters()) === false
         ) {
-            // We skip this one. Either its an out-of-scope private getter,
+            // We skip this one. Either it's an out-of-scope private getter,
             // or it has parameters.
             return;
         }

@@ -82,7 +82,7 @@ class Cleanup implements ConfigConstInterface
             return $this;
         }
 
-        // Cleanup old logfiles to prevent a overflow.
+        // Cleanup old logfiles to prevent an overflow.
         $logList = glob($this->pool->config->getLogDir() . '*.Krexx.html');
         if (empty($logList) === true) {
             return $this;
@@ -111,7 +111,7 @@ class Cleanup implements ConfigConstInterface
     }
 
     /**
-     * Deletes chunk files older then 1 hour, in case there are some left.
+     * Deletes chunk files older than 1 hour, in case there are some left.
      *
      * @return $this
      *   For chaining.

@@ -92,7 +92,7 @@ class PublicProperties extends AbstractObjectAnalysis implements CallbackConstIn
         }
 
         usort($refProps, [$this, 'reflectionSorting']);
-        // Adding a HR to reflect that the following stuff are not public
+        // Adding an HR to reflect that the following stuff are not public
         // properties anymore.
         return $output .
             $this->getReflectionPropertiesData($refProps, $ref) .
@@ -104,14 +104,14 @@ class PublicProperties extends AbstractObjectAnalysis implements CallbackConstIn
      *
      * Also: Take care of the \DateTime properties anomaly.
      *
-     * @param array $refProps
+     * @param ReflectionProperty[] $refProps
      * @param $data
-     * @param array $publicProps
+     * @param ReflectionProperty[] $publicProps
      * @param \ReflectionClass $ref
      */
     protected function handleUndeclaredProperties(array &$refProps, $data, array $publicProps, ReflectionClass $ref)
     {
-        // For every not-declared property, we add a another reflection.
+        // For every not-declared property, we add another reflection.
         // Those are simply added during runtime
         foreach (array_keys(array_diff_key(get_object_vars($data), $publicProps)) as $key) {
             $refProps[$key] = new UndeclaredProperty($ref, $key);

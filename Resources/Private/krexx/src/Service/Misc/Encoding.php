@@ -140,7 +140,7 @@ class Encoding
              *   We will not test a cheap polyfill
              *
              * @return string
-             *   always an empty string.
+             *   Always an empty string.
              */
             function mb_convert_encoding($string, $toEncoding, $fromEncoding)
             {
@@ -175,12 +175,12 @@ class Encoding
 
         // Initialize the encoding configuration.
         if ($code === true) {
-            // We encoding @, because we need them for our chunks.
+            // We are encoding @, because we need them for our chunks.
             // The { are needed in the marker of the skin.
             // We also replace tabs with two nbsp's.
             $search = ['@', '{', chr(9)];
         } else {
-            // We encoding @, because we need them for our chunks.
+            // We are encoding @, because we need them for our chunks.
             // The { are needed in the marker of the skin.
             $search = ['@', '{', '  '];
         }
@@ -214,7 +214,7 @@ class Encoding
      * Here we have another SPOF. When the string is large enough we will run
      * out of memory!
      * We will *NOT* return the unescaped string. So we must check if it is small
-     * enough for the unpack(). 100 kb should be save enough.
+     * enough for the unpack(). 100 kb should be safe enough.
      *
      * @param string $data
      *   The data which needs to be sanitized.
@@ -259,7 +259,7 @@ class Encoding
      *   Whether we want to use strict mode.
      *
      * @codeCoverageIgnore
-     *   We will not tests simple wrappers
+     *   We will not test simple wrappers
      *
      * @return string|false
      *   The result.
@@ -302,7 +302,7 @@ class Encoding
      *   The length we want.
      *
      * @codeCoverageIgnore
-     *   We will not tests simple wrappers
+     *   We will not test simple wrappers
      *
      * @return string
      *   The result.

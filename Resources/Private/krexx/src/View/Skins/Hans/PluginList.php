@@ -45,7 +45,7 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 trait PluginList
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $markerSinglePlugin = [
         '{activeclass}',
@@ -91,7 +91,7 @@ trait PluginList
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerSinglePlugin(): array

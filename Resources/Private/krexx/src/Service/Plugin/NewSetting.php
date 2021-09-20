@@ -68,7 +68,7 @@ class NewSetting implements ConfigConstInterface
     /**
      * Method name of the validation class that is used to validate this setting.
      *
-     * @var string|Closure
+     * @var string|\Closure
      */
     protected $validation = '';
 
@@ -150,7 +150,7 @@ class NewSetting implements ConfigConstInterface
     }
 
     /**
-     * Setter for the section, where tis setting is stored.
+     * Setter for the section, where its setting is stored.
      *
      * Possible values:
      *   NewSetting::SECTION_OUTPUT
@@ -219,7 +219,7 @@ class NewSetting implements ConfigConstInterface
 
     /**
      * Is this value editable by default on the frontend?
-     * Of cause, this value can be overwritten by a frontend setting in the
+     * Of course, this value can be overwritten by a frontend setting in the
      * configuration file.
      *
      * @api
@@ -278,7 +278,7 @@ class NewSetting implements ConfigConstInterface
     /**
      * Return the rendering settings for the Fallback class.
      *
-     * @return array
+     * @return array[]
      *   The configuration in a way that the Config class can understand.
      */
     public function getFeSettings(): array

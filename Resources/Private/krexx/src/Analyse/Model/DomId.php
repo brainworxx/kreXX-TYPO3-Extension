@@ -58,7 +58,7 @@ trait DomId
      * Setter for domid.
      *
      * @param string $domid
-     *   The dom id, of cause.
+     *   The dom id, of course.
      *
      * @return Model
      *   $this, for chaining.
@@ -73,7 +73,7 @@ trait DomId
      * Getter for domid.
      *
      * @return string
-     *   The dom id, of cause.
+     *   The dom id, of course.
      */
     public function getDomid(): string
     {

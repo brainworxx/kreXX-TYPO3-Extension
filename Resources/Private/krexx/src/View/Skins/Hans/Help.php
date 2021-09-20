@@ -45,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
 trait Help
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $markerHelpRow = [
         '{helptitle}',
@@ -98,7 +98,7 @@ trait Help
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerHelpRow(): array
@@ -112,7 +112,7 @@ trait Help
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerHelp(): array

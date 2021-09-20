@@ -81,7 +81,7 @@ interface CallbackConstInterface
     /**
      * Array key for $this->parameters.
      *
-     * Used in the meta analysis. Name of the meta data, if available.
+     * Used in the meta analysis. Name of the metadata, if available.
      *
      * @var string
      */
@@ -309,10 +309,10 @@ interface CallbackConstInterface
     const UNKNOWN_DECLARATION = 'unknownDeclaration';
 
     /**
-     * Literal for the frontend and the java script
+     * Literal for the frontend and the JavaScript
      *
      * Placeholder for an unknown value. Or a value that has been omitted.
-     * Also tells the java script, that source generation beyond this point is
+     * Also tells the JavaScript, that source generation beyond this point is
      * not allowed.
      *
      * @var string

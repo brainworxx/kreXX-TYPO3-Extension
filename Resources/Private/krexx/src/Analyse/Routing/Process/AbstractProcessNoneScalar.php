@@ -46,7 +46,15 @@ use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
  */
 abstract class AbstractProcessNoneScalar extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
-
+    /**
+     * Generate the output of the none scalar analysis.
+     *
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     *   The model, filled with the suff we are analysing.
+     *
+     * @return string
+     *   The generated DOM
+     */
     public function handle(Model $model): string
     {
         // Check the nesting level.

@@ -105,7 +105,7 @@ class Json extends AbstractScalarAnalysis implements ViewConstInterface
     }
 
     /**
-     * Add the decode json and a pretty-print-json to the output.
+     * Add the decoded json and a pretty-print-json to the output.
      *
      * @return array
      *   The array for the meta callback.

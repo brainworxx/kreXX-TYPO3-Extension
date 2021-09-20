@@ -200,14 +200,14 @@ interface ConfigConstInterface
 
 
     /**
-     * Dropdown value. Human readable form of a true boolean.
+     * Dropdown value. Human-readable form of a true boolean.
      *
      * @var string
      */
     const VALUE_TRUE = 'true';
 
     /**
-     * Dropdown value. Human readable form of a false boolean.
+     * Dropdown value. Human-readable form of a false boolean.
      *
      * @var string
      */
@@ -383,7 +383,7 @@ interface ConfigConstInterface
 
 
     /**
-     * Array key. Holds the render type a single setting, who is is also the
+     * Array key. Holds the render type a single setting, who is also the
      * template file name.
      *
      * @see
@@ -521,7 +521,7 @@ interface ConfigConstInterface
     const RENDER_TYPE_INI_NONE = 'none';
 
     /**
-     * Name of the chunks folder.
+     * Name of the chunks' folder.
      *
      * @var string
      */

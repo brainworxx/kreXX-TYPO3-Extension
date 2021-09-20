@@ -49,7 +49,7 @@ class Event
     /**
      * Here we save the registered event handler.
      *
-     * @var array
+     * @var string[]
      */
     public $register = [];
 

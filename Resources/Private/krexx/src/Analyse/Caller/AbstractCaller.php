@@ -52,7 +52,7 @@ abstract class AbstractCaller
     protected $pool;
 
     /**
-     * Pattern that we use to identify the caller.
+     * Pattern that we are using to identify the caller.
      *
      * We use this one to identify the line from which kreXX was called.
      *

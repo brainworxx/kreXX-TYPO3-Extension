@@ -45,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 
 /**
- * Going through an array with 2000 objects can create more than 1GB of
+ * Going through an array with 2000 objects can create more than 1 GB of
  * Output. Afaik, there is no browser that can actually display this kind
  * of garbage. Our solution is simple:
  * We only display the name and the type of the object. Everything else

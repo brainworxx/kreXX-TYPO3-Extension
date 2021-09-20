@@ -52,7 +52,7 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * The fallback configuration.
      *
-     * @var array
+     * @var array[]
      */
     const CONFIG_FALLBACK = [
         self::SECTION_OUTPUT => [
@@ -91,9 +91,9 @@ abstract class Fallback implements ConfigConstInterface
     ];
 
     /**
-     * Render settings for a editable select field.
+     * Render settings for an editable select field.
      *
-     * @var array
+     * @var string[]
      */
     const EDITABLE_SELECT = [
         self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
@@ -103,7 +103,7 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Render settings for a display only input field.
      *
-     * @var array
+     * @var string[]
      */
     const DISPLAY_ONLY_INPUT = [
         self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
@@ -113,7 +113,7 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Render settings for a editable input field.
      *
-     * @var array
+     * @var string[]
      */
     const EDITABLE_INPUT = [
         self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
@@ -123,7 +123,7 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Render settings for a display only select field.
      *
-     * @var array
+     * @var string[]
      */
     const DISPLAY_ONLY_SELECT = [
         self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
@@ -133,7 +133,7 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Render settings for a field which will not be displayed, or accept values.
      *
-     * @var array
+     * @var string[]
      */
     const DISPLAY_NOTHING = [
         self::RENDER_TYPE => self::RENDER_TYPE_NONE,
@@ -143,7 +143,7 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Defining the layout of the frontend editing form.
      *
-     * @var array
+     * @var array[]
      */
     public $configFallback = [];
 
@@ -153,7 +153,7 @@ abstract class Fallback implements ConfigConstInterface
      * @deprecated
      *   Since 4.0.0. Use Fallback::EDITABLE_SELECT
      *
-     * @var array
+     * @var string[]
      */
     protected $editableSelect = [
         self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
@@ -161,12 +161,12 @@ abstract class Fallback implements ConfigConstInterface
     ];
 
     /**
-     * Render settings for a editable input field.
+     * Render settings for an editable input field.
      *
      * @deprecated
      *   Since 4.0.0. Use Fallback::EDITABLE_INPUT.
      *
-     * @var array
+     * @var string[]
      */
     protected $editableInput = [
         self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
@@ -179,7 +179,7 @@ abstract class Fallback implements ConfigConstInterface
      * @deprecated
      *   Since 4.0.0. Use Fallback::DISPLAY_ONLY_INPUT.
      *
-     * @var array
+     * @var string[]
      */
     protected $displayOnlyInput = [
         self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
@@ -192,7 +192,7 @@ abstract class Fallback implements ConfigConstInterface
      * @deprecated
      *   Since 4.0.0. Use FALLBACK::DISPLAY_ONLY_SELECT
      *
-     * @var array
+     * @var string[]
      */
     protected $displayOnlySelect = [
         self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
@@ -205,7 +205,7 @@ abstract class Fallback implements ConfigConstInterface
      * @deprecated
      *   Since 4.0.0. Use Fallback::DISPLAY_NOTHING.
      *
-     * @var array
+     * @var string[]
      */
     protected $displayNothing = [
         self::RENDER_TYPE => self::RENDER_TYPE_NONE,
@@ -215,14 +215,14 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Values, rendering settings and the actual fallback value.
      *
-     * @var array
+     * @var array[]
      */
     public $feConfigFallback = [];
 
     /**
      * The skin configuration.
      *
-     * @var array
+     * @var array[]
      */
     protected $skinConfiguration = [];
 

@@ -43,7 +43,7 @@ namespace Brainworxx\Krexx\View\Skins\Hans;
 trait CssJs
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $markerCssJs = [
         '{css}',
@@ -68,7 +68,7 @@ trait CssJs
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerCssJs(): array

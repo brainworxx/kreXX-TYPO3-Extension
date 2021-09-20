@@ -50,7 +50,7 @@ class Properties extends AbstractComment
      *
      * @param \Reflector $reflection
      * @param \ReflectionClass|null $reflectionClass
-     * @return mixed
+     * @return string
      */
     public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
     {

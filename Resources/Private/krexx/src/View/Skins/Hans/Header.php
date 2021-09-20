@@ -43,7 +43,7 @@ namespace Brainworxx\Krexx\View\Skins\Hans;
 trait Header
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $markerHeader = [
         '{version}',
@@ -83,7 +83,7 @@ trait Header
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerHeader(): array

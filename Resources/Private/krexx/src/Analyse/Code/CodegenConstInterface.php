@@ -89,7 +89,7 @@ interface CodegenConstInterface
     const CODEGEN_TYPE_PUBLIC = 'public';
 
     /**
-     * Wraps a iterator_to_array around one of the generation values.
+     * Wraps an iterator_to_array around one of the generation values.
      *
      * @var string
      */
@@ -103,7 +103,7 @@ interface CodegenConstInterface
     const CODEGEN_TYPE_JSON_DECODE = 'jsonDecode';
 
     /**
-     * Wraps a array_values around one of the generation values.
+     * Wraps an array_values around one of the generation values.
      * @var string
      */
     const CODEGEN_TYPE_ARRAY_VALUES_ACCESS = 'arrayValuesAccess';

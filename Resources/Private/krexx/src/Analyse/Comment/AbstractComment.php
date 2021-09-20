@@ -55,7 +55,7 @@ abstract class AbstractComment
     /**
      * Pattern for the finding of inherited comments.
      *
-     * @var array
+     * @var string[]
      */
     protected $inheritdocPattern = [
         '{@inheritdoc}',
@@ -78,7 +78,7 @@ abstract class AbstractComment
      * We get the comment.
      *
      * @param \Reflector $reflection
-     *   A already existing reflection of the method or function.
+     *   An already existing reflection of the method or function.
      * @param \ReflectionClass $reflectionClass
      *   An already existing reflection of the original class.
      *

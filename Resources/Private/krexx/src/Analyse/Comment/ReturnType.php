@@ -48,7 +48,7 @@ class ReturnType extends AbstractComment
      *
      * Because, there may be a lot of BS in the comment.
      *
-     * @var array
+     * @var string[]
      */
     protected $allowedTypes = [
         'int',
@@ -74,7 +74,7 @@ class ReturnType extends AbstractComment
      * @param \Reflector $reflection
      *   The reflection of the method we are analysing.
      * @param \ReflectionClass $reflectionClass
-     *   Reflection of t he hosting class. A lot of return types are $this, so
+     *   Reflection of the hosting class. A lot of return types are $this, so
      *   we can make use of it here.
      *
      * @return string

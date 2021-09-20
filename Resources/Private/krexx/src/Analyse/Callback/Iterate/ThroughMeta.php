@@ -46,7 +46,7 @@ use Brainworxx\Krexx\View\ViewConstInterface;
  * Displaying the meta stuff from the class analysis.
  *
  * @uses array data
- *   An array of the meta data we need to iterate.
+ *   An array of the metadata we need to iterate.
  *   Might contain strings or another array.
  * @uses string codeGenType
  *   The code generation constants we want to use for none meta stuff.
@@ -56,7 +56,7 @@ class ThroughMeta extends AbstractCallback implements ViewConstInterface, Callba
     /**
      * These keys are rendered with an extra.
      *
-     * @var array
+     * @var string[]
      */
     protected $keysWithExtra = [
         ViewConstInterface::META_COMMENT,
@@ -67,7 +67,7 @@ class ThroughMeta extends AbstractCallback implements ViewConstInterface, Callba
     ];
 
     /**
-     * Renders the meta data of a class, which is actually the same as the
+     * Renders the metadata of a class, which is actually the same as the
      * method analysis rendering.
      *
      * @return string

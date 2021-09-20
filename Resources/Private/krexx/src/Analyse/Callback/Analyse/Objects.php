@@ -87,7 +87,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
         }
 
         // Dumping all configured debug functions.
-        // Adding a HR for a better readability.
+        // Adding an HR for a better readability.
         return $output . $this->pool->render->renderSingeChildHr();
     }
 
@@ -96,7 +96,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
      *
      * @throws \ReflectionException
      *
-     * @return array
+     * @return string[]
      *   The list with class names for the analysis.
      */
     protected function generateDumperList(): array
@@ -147,7 +147,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
     /**
      * Adding property and the getter-analysis to the list.
      *
-     * @param array $stuffToDump
+     * @param string[] $stuffToDump
      *   The stuff to dump, so far.
      */
     protected function addPropertyDumper(array &$stuffToDump)

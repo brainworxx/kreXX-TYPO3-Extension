@@ -43,7 +43,7 @@ namespace Brainworxx\Krexx\View\Skins\Hans;
 trait BacktraceSourceLine
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $markerBacktraceSourceLine = [
         '{className}',
@@ -73,7 +73,7 @@ trait BacktraceSourceLine
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerBacktraceSourceLine(): array

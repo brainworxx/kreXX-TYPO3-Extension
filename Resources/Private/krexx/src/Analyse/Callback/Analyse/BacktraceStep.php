@@ -101,7 +101,7 @@ class BacktraceStep extends AbstractCallback implements
     }
 
     /**
-     * Retrieve the sourcecode and render it with some meta data.
+     * Retrieve the sourcecode and render it with some metadata.
      *
      * @param \Brainworxx\Krexx\Analyse\Model $model
      *   The model, where we assign the code.
@@ -146,10 +146,10 @@ class BacktraceStep extends AbstractCallback implements
     }
 
     /**
-     * Directly render the output by an processor.
+     * Directly render the output by a processor.
      *
      * @param string $name
-     *   The human readable name of what we are rendering
+     *   The human-readable name of what we are rendering
      * @param string $type
      *   The array key inside the backtrace
      * @param string $eventName
@@ -183,7 +183,7 @@ class BacktraceStep extends AbstractCallback implements
      * Render a single child of the backtrace.
      *
      * @param string $name
-     *   The human readable name of what we are rendering
+     *   The human-readable name of what we are rendering
      * @param string $type
      *   The array key inside the backtrace
      * @param string $eventName

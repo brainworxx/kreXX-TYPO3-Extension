@@ -60,7 +60,7 @@ class ScalarString extends AbstractScalar
     /**
      * The list of analysis classes, that we use.
      *
-     * @var array
+     * @var string[]
      */
     protected $classList = [];
 

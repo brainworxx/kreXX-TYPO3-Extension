@@ -110,7 +110,7 @@ class File extends Fallback
      */
     public function getFeConfigFromFile(string $parameterName)
     {
-        // Get the human readable stuff from the file.
+        // Get the human-readable stuff from the file.
         $value = $this->getConfigFromFile(static::SECTION_FE_EDITING, $parameterName);
 
         if (empty($value) === true) {
@@ -149,7 +149,7 @@ class File extends Fallback
      * Returns settings from the file, if it is validated.
      *
      * @param string $group
-     *   The group name inside of the file.
+     *   The group name inside the file.
      * @param string $name
      *   The name of the setting.
      *

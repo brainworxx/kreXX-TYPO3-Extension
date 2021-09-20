@@ -48,7 +48,7 @@ class File
     /**
      * Here we cache, if a file exists and is readable.
      *
-     * @var array
+     * @var bool[]
      */
     protected static $isReadableCache = [];
 
@@ -201,7 +201,7 @@ class File
         }
 
         // Using \SplFixedArray to save some memory, as it can get
-        // quire huge, depending on your system. 4mb is nothing here.
+        // quite huge, depending on your system. 4mb is nothing here.
         if ($this->fileIsReadable($filePath) === true) {
             return $filecache[$filePath] = SplFixedArray::fromArray(file($filePath));
         }
@@ -274,7 +274,7 @@ class File
             /* do nothing */
         });
 
-        // Fast forward for the current chunk files.
+        // Fast-forward for the current chunk files.
         if (isset(static::$isReadableCache[$realpath]) === true) {
             unlink($realpath);
             restore_error_handler();

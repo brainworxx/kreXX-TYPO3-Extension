@@ -53,7 +53,7 @@ use Brainworxx\Krexx\View\Output\File;
 abstract class AbstractController implements ConfigConstInterface
 {
     /**
-     * Here we remember, if we are currently running a analysis.
+     * Here we remember, if we are currently running an analysis.
      * The debug methods may trigger another run, and we may get into
      * trouble, memory or runtime wise.
      *
@@ -134,7 +134,7 @@ abstract class AbstractController implements ConfigConstInterface
     protected function outputFooter(array $caller, bool $isExpanded = false): string
     {
         // Now we need to stitch together the content of the configuration file
-        // as well as it's path.
+        // as well as its path.
         $pathToConfig = $this->pool->config->getPathToConfigFile();
         if ($this->pool->fileService->fileIsReadable($pathToConfig) === true) {
             $path = $this->pool->messages->getHelp('currentConfig');

@@ -66,7 +66,7 @@ trait IsPublic
      * @codeCoverageIgnore
      *   We will not test deprecated methods.
      *
-     * @param $bool
+     * @param bool $bool
      *   The value we want to set.
      *
      * @return Model

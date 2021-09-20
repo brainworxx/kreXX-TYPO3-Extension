@@ -43,7 +43,7 @@ namespace Brainworxx\Krexx\View\Skins\SmokyGrey;
 trait FatalMain
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $markerFatalMain = [
         '{search}',
@@ -74,7 +74,7 @@ trait FatalMain
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerFatalMain(): array

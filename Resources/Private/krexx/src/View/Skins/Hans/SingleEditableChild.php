@@ -47,7 +47,7 @@ use Brainworxx\Krexx\Analyse\Model;
 trait SingleEditableChild
 {
     /**
-     * @var array
+     * @var string[]
      */
     private $markerSingleEditableChild = [
         '{name}',
@@ -63,7 +63,7 @@ trait SingleEditableChild
     private $markerDropdownOptions = '{options}';
 
     /**
-     * @var array
+     * @var string[]
      */
     private $markerSelectOption = [
         '{text}',
@@ -71,6 +71,9 @@ trait SingleEditableChild
         '{selected}'
     ];
 
+    /**
+     * @var string[]
+     */
     private $markerSingleInput = [
         '{id}',
         '{value}',
@@ -101,7 +104,7 @@ trait SingleEditableChild
     }
 
     /**
-     * Render the options of a select.
+     * Renders the options of a select.
      *
      * @param \Brainworxx\Krexx\Analyse\Model $model
      *   The model.
@@ -160,7 +163,7 @@ trait SingleEditableChild
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerSingleEditableChild(): array
@@ -174,7 +177,7 @@ trait SingleEditableChild
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerDropdownOptions(): array
@@ -188,7 +191,7 @@ trait SingleEditableChild
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerSelectOption(): array
@@ -202,7 +205,7 @@ trait SingleEditableChild
      * @codeCoverageIgnore
      *   We are not testing the unit tests.
      *
-     * @return array
+     * @return string[]
      *   The marker array.
      */
     public function getMarkerSingleInput(): array
