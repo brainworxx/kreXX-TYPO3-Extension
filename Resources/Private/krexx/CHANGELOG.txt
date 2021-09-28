@@ -9,6 +9,8 @@
 - Bugfix: Make better use of the recursion detection for
   the XML analysis.
 - Bugfix: Fixed / updated the doc comments.
+- Bugfix: Object recursions in the "$this protected" context
+  can not generate source code.
 
 4.1.1
 - Change: Code cleanup.

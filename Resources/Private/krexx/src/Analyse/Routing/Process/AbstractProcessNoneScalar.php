@@ -104,7 +104,11 @@ abstract class AbstractProcessNoneScalar extends AbstractRouting implements Proc
         }
 
         return $this->pool->render->renderRecursion(
-            $model->setDomid($domId)->setNormal($normal)
+            // Prepare the model for the recursion rendering.
+            // We also need to unset the data for the source generation.
+            $model->setDomid($domId)
+                ->setNormal($normal)
+                ->setData(null)
         );
     }
 

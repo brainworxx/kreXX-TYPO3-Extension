@@ -14,13 +14,14 @@ Changelog
 
 4.1.2
     - [Feature] PHP 8.0 support
-    - [Change] Migrate TYPO3 11.3 changes and/or deprecations.
+    - [Change] Migrate TYPO3 11.4 changes and/or deprecations.
     - [Change] Do not display an empty array, when there are no attributes in the XML analysis.
     - [Bugfix] Loglevel evaluation works correctly in TYPO3 9 and older.
     - [Bugfix] Add additional error handling to the file service to get by with high traffic sites (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
     - [Bugfix] Applied sorting to the list of getter methods.
     - [Bugfix] Make better use of the recursion detection for the XML analysis.
     - [Bugfix] Fixed / updated the doc comments.
+    - [Bugfix] Object recursions in the "$this protected" context can not generate source code.
 
 4.1.1
     - [Change] Remove the usage of the ObjectManager whenever possible.
