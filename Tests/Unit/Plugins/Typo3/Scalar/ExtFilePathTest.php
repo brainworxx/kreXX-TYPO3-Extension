@@ -38,6 +38,8 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Scalar;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Model;
+use TYPO3\CMS\Core\Package\UnitTestPackageManager;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class ExtFilePathTest extends AbstractTest
 {
@@ -60,7 +62,7 @@ class ExtFilePathTest extends AbstractTest
 
         $fixture = 'EXT:includekrexx/Tests/Fixtures/123458.Krexx.html';
         $model = new Model(\Krexx::$pool);
-        // Lets rey again and throw na error inside the GeneralUtility by not
+        // Let's try again and throw an error inside the GeneralUtility by not
         // simulation an installed extension.
         $this->assertFalse(
             $extFilePath->canHandle($fixture, $model),
@@ -70,6 +72,12 @@ class ExtFilePathTest extends AbstractTest
 
         // The real test starts here.
         $this->simulatePackage('includekrexx', 'includekrexx/');
+        $packageManagerMock = $this->createMock(UnitTestPackageManager::class);
+        $packageManagerMock->expects($this->any())
+            ->method('resolvePackagePath')
+            ->will($this->returnValue('includekrexx/Tests/Fixtures/123458.Krexx.html'));
+        $this->setValueByReflection('packageManager', $packageManagerMock, ExtensionManagementUtility::class);
+
         // Get the underlying class to find the file.
         $isFileMock = $this->getFunctionMock(
             '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar',
@@ -79,7 +87,7 @@ class ExtFilePathTest extends AbstractTest
             ->with('includekrexx/Tests/Fixtures/123458.Krexx.html')
             ->will($this->returnValue(true));
 
-        // Get the underlyingclass to provide some info and not throw an error.
+        // Get the underlying class to provide some info and not throw an error.
         $finfoMock = $this->createMock(\finfo::class);
         $finfoMock->expects($this->once())
             ->method('file')
