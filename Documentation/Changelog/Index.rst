@@ -14,6 +14,7 @@ Changelog
 
 4.1.2
     - [Feature] PHP 8.0 support
+    - [Feature] Updated to TYPO3 11.5.
     - [Change] Migrate TYPO3 11.4 changes and/or deprecations.
     - [Change] Do not display an empty array, when there are no attributes in the XML analysis.
     - [Bugfix] Loglevel evaluation works correctly in TYPO3 9 and older.
