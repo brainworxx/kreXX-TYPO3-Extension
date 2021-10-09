@@ -72,11 +72,13 @@ class ExtFilePathTest extends AbstractTest
 
         // The real test starts here.
         $this->simulatePackage('includekrexx', 'includekrexx/');
-        $packageManagerMock = $this->createMock(UnitTestPackageManager::class);
-        $packageManagerMock->expects($this->any())
-            ->method('resolvePackagePath')
-            ->will($this->returnValue('includekrexx/Tests/Fixtures/123458.Krexx.html'));
-        $this->setValueByReflection('packageManager', $packageManagerMock, ExtensionManagementUtility::class);
+        if (method_exists(UnitTestPackageManager::class, 'resolvePackagePath') === true) {
+            $packageManagerMock = $this->createMock(UnitTestPackageManager::class);
+            $packageManagerMock->expects($this->any())
+                ->method('resolvePackagePath')
+                ->will($this->returnValue('includekrexx/Tests/Fixtures/123458.Krexx.html'));
+            $this->setValueByReflection('packageManager', $packageManagerMock, ExtensionManagementUtility::class);
+        }
 
         // Get the underlying class to find the file.
         $isFileMock = $this->getFunctionMock(
