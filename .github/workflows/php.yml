@@ -67,6 +67,6 @@ jobs:
 
     - name: Publish code coverage
       uses: paambaati/codeclimate-action@v2.7.5
-      if: ${{ matrix.env.CodeClimate == yes }}
+      if: ${{ matrix.env.CodeClimate == 'yes' }}
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATEKEY }}
