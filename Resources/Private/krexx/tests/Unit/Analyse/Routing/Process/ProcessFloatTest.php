@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use Brainworxx\Krexx\View\ViewConstInterface;
 
 class ProcessFloatTest extends AbstractTest
 {
@@ -64,6 +65,25 @@ class ProcessFloatTest extends AbstractTest
 
         $this->assertEquals($fixture, $model->getData());
         $this->assertEquals($fixture, $model->getNormal());
+    }
+
+    /**
+     * Testing the float value processing, with a micro time
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat::handle
+     */
+    public function testProcessWithMicrotime()
+    {
+        Krexx::$pool->render = new RenderNothing(Krexx::$pool);
+        $fixture = microtime(true);
+        $model = new Model(Krexx::$pool);
+        $model->setData($fixture);
+        $processor = new ProcessFloat(Krexx::$pool);
+
+        $processor->handle($model);
+
+        $result = $model->getJson();
+        $this->assertArrayHasKey(ViewConstInterface::META_TIMESTAMP, $result);
     }
 
     /**

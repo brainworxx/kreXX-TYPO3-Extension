@@ -64,7 +64,9 @@ class AbstractControllerTest extends AbstractTest
 
         // Test the file output
         Krexx::$pool->config = $fileMock;
+        $oldRecursionHandler = Krexx::$pool->recursionHandler;
         $dumpController = new DumpController(Krexx::$pool);
+        $this->assertNotSame($oldRecursionHandler, Krexx::$pool->recursionHandler, 'Test the resetting of the pool');
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $dumpController));
         $this->assertInstanceOf(File::class, $this->retrieveValueByReflection('outputService', $dumpController));
 

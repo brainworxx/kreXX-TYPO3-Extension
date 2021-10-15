@@ -117,6 +117,8 @@ abstract class AbstractController implements ConfigConstInterface
         } elseif ($this->destination === static::VALUE_FILE) {
             $this->outputService = $pool->createClass(File::class);
         }
+
+        $this->pool->reset();
     }
 
     /**

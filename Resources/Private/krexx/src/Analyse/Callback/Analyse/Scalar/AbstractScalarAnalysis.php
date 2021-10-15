@@ -108,5 +108,8 @@ abstract class AbstractScalarAnalysis extends AbstractCallback implements Callba
      * @return array
      *   The meta array.
      */
-    abstract protected function handle(): array;
+    protected function handle(): array
+    {
+        return [];
+    }
 }

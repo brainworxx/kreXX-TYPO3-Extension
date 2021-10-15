@@ -81,8 +81,6 @@ class AbstractController extends AbstractTest
         $this->setValueByReflection('jsCssSend', [], $controller);
 
         $poolMock = $this->createMock(Pool::class);
-        $poolMock->expects($this->once())
-            ->method('reset');
         $this->setValueByReflection('pool', $poolMock, $controller);
 
         // And now mock the living hell outa this little bugger.

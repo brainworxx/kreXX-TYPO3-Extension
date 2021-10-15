@@ -35,61 +35,60 @@
 
 declare(strict_types=1);
 
-namespace Brainworxx\Krexx\Analyse\Routing\Process;
+namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Brainworxx\Krexx\View\ViewConstInterface;
 use DateTime;
 
-/**
- * Processing of floats.
- */
-class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessConstInterface, ViewConstInterface
+class TimeStamp extends AbstractScalarAnalysis implements ViewConstInterface
 {
     /**
-     * Is this one a float?
-     *
-     * @param Model $model
-     *   The value we are analysing.
-     *
-     * @return bool
-     *   Well, is this a float?
+     * {@inheritDoc}
      */
-    public function canHandle(Model $model): bool
+    public static function isActive(): bool
     {
-        return is_float($model->getData());
+        return true;
     }
 
     /**
-     * Render a dump for a float value.
+     * We add the short info straight to the model.
      *
-     * @param Model $model
-     *   The data we are analysing.
-     *
-     * @return string
-     *   The rendered markup.
+     * {@inheritDoc}
      */
-    public function handle(Model $model): string
+    public function canHandle($string, Model $model): bool
     {
-        // Detect a micro timestamp. Everything bigger than 946681200000
-        // is assumed to be a micro timestamp.
-        $float = $model->getData();
-        if ($float > 946681200) {
-            try {
-                $model->addToJson(
-                    static::META_TIMESTAMP,
-                    (DateTime::createFromFormat('U.u', (string)$float))->format('d.M Y H:i:s.u')
-                );
-            } catch (\Throwable $exception) {
-                // Do nothing
-            }
+        // Get a first impression.
+        $int  = (int) $string;
+        if ($int < 946681200) {
+            // We'll not treat it like a timestamp.
+            return false;
         }
 
-        return $this->pool->render->renderExpandableChild(
-            $this->dispatchProcessEvent(
-                $model->setNormal($model->getData())->setType(static::TYPE_FLOAT)
-            )
-        );
+        // Might be a regular time stamp, get a second impression.
+        if ((string)$int === $string) {
+            $model->addToJson(
+                static::META_TIMESTAMP,
+                (new DateTime('@' . $int))->format('d.M Y H:i:s')
+            );
+            return false;
+        }
+
+        // Check for a microtime string.
+        try {
+            $model->addToJson(
+                static::META_TIMESTAMP,
+                (DateTime::createFromFormat('U.u', $string)->format('d.M Y H:i:s.u'))
+            );
+        } catch (\Throwable $exception) {
+            // Do nothing
+        }
+
+        // The last part to check for would be a string return from the
+        // microtime. In over 10 years of PHP development, I've never seen one
+        //of these, ever. So no, as of, right now, we will not check these.
+
+        // Make sure that the handle part is not called, to save time.
+        return false;
     }
 }

@@ -55,8 +55,6 @@ class EditSettingsController extends AbstractController implements ControllerCon
             return $this;
         }
 
-        $this->pool->reset();
-
         // We will not check this for the cookie config, to avoid people locking
         // themselves out.
         $this->pool->emergencyHandler->setDisable(true);

@@ -79,8 +79,10 @@ class ProcessInteger extends AbstractRouting implements ProcessInterface, ViewCo
         try {
             $int = $model->getData();
             if ($int > 946681200) {
-                $date = new DateTime('@' . $int);
-                $model->addToJson(static::META_TIMESTAMP, $date->format('d.M Y H:i:s'));
+                $model->addToJson(
+                    static::META_TIMESTAMP,
+                    (new DateTime('@' . $int))->format('d.M Y H:i:s')
+                );
             }
         } catch (Exception $e) {
             // Do nothing.

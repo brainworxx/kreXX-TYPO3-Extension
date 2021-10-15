@@ -61,8 +61,6 @@ class ExceptionController extends AbstractController implements BacktraceConstIn
      */
     public function exceptionAction(Throwable $exception)
     {
-        $this->pool->reset();
-
         // Get the main part.
         $main = $this->pool->render->renderFatalMain(
             $exception->getMessage(),

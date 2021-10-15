@@ -400,6 +400,7 @@ class EmergencyTest extends AbstractTest
         $phpSapiName = $this->getFunctionMock(static::FLOW_NAMESPACE, static::PHP_SAPI_NAME);
         $phpSapiName->expects($this->exactly(1))
             ->will($this->returnValue('cli'));
+
         $this->emergency->initTimer();
         $this->emergency->initTimer();
     }

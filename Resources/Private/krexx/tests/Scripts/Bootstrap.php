@@ -50,6 +50,7 @@ PHPMock::defineFunctionMock($analyseRoutingProcess, 'class_exists');
 PHPMock::defineFunctionMock($serviceFlow, 'ini_get');
 PHPMock::defineFunctionMock($serviceFlow, 'time');
 PHPMock::defineFunctionMock($serviceFlow, 'memory_get_usage');
+PHPMock::defineFunctionMock($serviceFlow, 'php_sapi_name');
 PHPMock::defineFunctionMock($serviceMisc, 'file_put_contents');
 PHPMock::defineFunctionMock($serviceMisc, 'unlink');
 PHPMock::defineFunctionMock($serviceMisc, 'is_file');
