@@ -13,14 +13,14 @@ jobs:
     strategy:
       matrix:
         env:
-          - { php: 7.0, composer: 1, TYPO3: ^8.7,  Aimeos: ^18}
-          - { php: 7.1, composer: 1, TYPO3: ^8.7,  Aimeos: ^19}
-          - { php: 7.2, composer: 1, TYPO3: ^9.5,  Aimeos: ^19}
-          - { php: 7.3, composer: 1, TYPO3: ^9.5,  Aimeos: ^20}
-          - { php: 7.3, composer: 1, TYPO3: ^10.4, Aimeos: ^20}
-          - { php: 7.4, composer: 1, TYPO3: ^10.4, Aimeos: ^21}
-          - { php: 7.4, composer: 2, TYPO3: ^11.5, Aimeos: ^21}
-          - { php: 8.0, composer: 2, TYPO3: ^11.5, Aimeos: ^21}
+          - { php: 7.0, composer: 1, TYPO3: ^8.7,  Aimeos: ^18, CodeClimate: no  }
+          - { php: 7.1, composer: 1, TYPO3: ^8.7,  Aimeos: ^19, CodeClimate: no  }
+          - { php: 7.2, composer: 1, TYPO3: ^9.5,  Aimeos: ^19, CodeClimate: no  }
+          - { php: 7.3, composer: 1, TYPO3: ^9.5,  Aimeos: ^20, CodeClimate: no  }
+          - { php: 7.3, composer: 1, TYPO3: ^10.4, Aimeos: ^20, CodeClimate: no  }
+          - { php: 7.4, composer: 1, TYPO3: ^10.4, Aimeos: ^21, CodeClimate: no  }
+          - { php: 7.4, composer: 2, TYPO3: ^11.5, Aimeos: ^21, CodeClimate: no  }
+          - { php: 8.0, composer: 2, TYPO3: ^11.5, Aimeos: ^21, CodeClimate: yes }
 
     steps:
     - uses: actions/checkout@v2
@@ -67,6 +67,6 @@ jobs:
 
     - name: Publish code coverage
       uses: paambaati/codeclimate-action@v2.7.5
-      if: ${{ matrix.env.php == 7.4 }}
+      if: ${{ matrix.env.CodeClimate == yes }}
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATEKEY }}
