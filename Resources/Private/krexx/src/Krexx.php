@@ -196,8 +196,6 @@ class Krexx implements ConfigConstInterface
         Pool::createPool();
 
         static::$pool->config->setDisabled(true);
-        static::$pool->createClass(DumpController::class);
-
         Config::$disabledByPhp = true;
     }
 

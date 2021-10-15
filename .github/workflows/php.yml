@@ -12,103 +12,41 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        what: [ 't38php70', 't38php71', 't39php72', 't39php73', 't310php74', 't311php80' ]
+        env:
+          - { php: 7.0, composer: 1, TYPO3: ^8.7,  Aimeos: ^18, CodeClimate: no  }
+          - { php: 7.1, composer: 1, TYPO3: ^8.7,  Aimeos: ^19, CodeClimate: no  }
+          - { php: 7.2, composer: 1, TYPO3: ^9.5,  Aimeos: ^19, CodeClimate: no  }
+          - { php: 7.3, composer: 1, TYPO3: ^9.5,  Aimeos: ^20, CodeClimate: no  }
+          - { php: 7.3, composer: 1, TYPO3: ^10.4, Aimeos: ^20, CodeClimate: no  }
+          - { php: 7.4, composer: 1, TYPO3: ^10.4, Aimeos: ^21, CodeClimate: no  }
+          - { php: 7.4, composer: 2, TYPO3: ^11.5, Aimeos: ^21, CodeClimate: no  }
+          - { php: 8.0, composer: 2, TYPO3: ^11.5, Aimeos: ^21, CodeClimate: yes }
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install PHP 7.0
+    - name: Install PHP
       uses: shivammathur/setup-php@v2
-      if: ${{ matrix.what == 't38php70' }}
       with:
-        php-version: '7.0'
+        php-version: ${{ matrix.env.php }}
 
-    - name: Install PHP 7.1
-      uses: shivammathur/setup-php@v2
-      if: ${{ matrix.what == 't38php71' }}
-      with:
-        php-version: '7.1'
-
-    - name: Install PHP 7.2
-      uses: shivammathur/setup-php@v2
-      if: ${{ matrix.what == 't39php72' }}
-      with:
-        php-version: '7.2'
-
-    - name: Install PHP 7.3
-      uses: shivammathur/setup-php@v2
-      if: ${{ matrix.what == 't39php73' }}
-      with:
-        php-version: '7.3'
-
-    - name: Install PHP 7.4
-      uses: shivammathur/setup-php@v2
-      if: ${{ matrix.what == 't310php74' ||  matrix.what == 't311php74' }}
-      with:
-        php-version: '7.4'
-
-    - name: Install PHP 8.0
-      uses: shivammathur/setup-php@v2
-      if: ${{ matrix.what == 't311php80' }}
-      with:
-        php-version: '8.0'
-
-    - name: Make sure we are using composer v1
+    - name: Update Composer
       run: |
-        sudo composer self-update --1
+        sudo composer self-update --${{ matrix.env.composer }}
         sudo chown $USER $HOME/.composer
-      if: ${{ matrix.what != 't311php80' }}
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
-    - name: Install TYPO3 8
-      run: composer require --no-update "typo3/cms-core:^8.7"
-      if: ${{ matrix.what == 't38php70' || matrix.what == 't38php71' }}
+    - name: Install TYPO3
+      run: composer require --no-update "typo3/cms-core:${{ matrix.env.TYPO3 }}"
 
-    - name: Install TYPO3 9
-      run: composer require --no-update "typo3/cms-core:^9.5"
-      if: ${{ matrix.what == 't39php72' || matrix.what == 't39php73' }}
+    - name: Install Aimeos
+      run: composer require --no-update "aimeos/aimeos-typo3:${{ matrix.env.Aimeos }}"
 
-    - name: Install TYPO3 10
-      run: composer require --no-update "typo3/cms-core:^10.4"
-      if: ${{ matrix.what == 't310php74' }}
-
-    - name: Install TYPO3 11
-      run: composer require --no-update "typo3/cms-core:^11"
-      if: ${{ matrix.what == 't311php80' }}
-
-    - name: Install Aimeos 18
-      run: composer require --no-update "aimeos/aimeos-typo3:^18"
-      if: ${{ matrix.what == 't38php70' || matrix.what == 't39php72' }}
-
-    - name: Install Aimeos 19
-      run: composer require --no-update "aimeos/aimeos-typo3:^19"
-      if: ${{ matrix.what == 't38php71' }}
-
-    - name: Install Aimeos 20
-      run: composer require --no-update "aimeos/aimeos-typo3:^20"
-      if: ${{ matrix.what == 't39php73' }}
-
-    - name: Install Aimeos 21
-      run: composer require --no-update "aimeos/aimeos-typo3:^21"
-      if: ${{ matrix.what == 't310php74' }}
-
-    - name: Remove Aimeos
-      run: composer remove --dev --no-update "aimeos/aimeos-typo3"
-      if: ${{ matrix.what == 't311php80' }}
-
-    - name: Install Admin Panel 9
-      run: composer require --no-update "typo3/cms-adminpanel:^9.5"
-      if: ${{ matrix.what == 't39php72' }}
-
-    - name: Install Admin Panel 10
-      run: composer require --no-update "typo3/cms-adminpanel:^10.4"
-      if: ${{ matrix.what == 't310php74' }}
-
-    - name: Install Admin Panel 11
-      run: composer require --no-update "typo3/cms-adminpanel:^11"
-      if: ${{ matrix.what == 't311php80' }}
+    - name: Install Admin Panel
+      run: composer require --no-update "typo3/cms-adminpanel:${{ matrix.env.TYPO3 }}"
+      if: ${{ matrix.env.TYPO3 != '^8.7' }}
 
     - name: Get composer cache directory
       id: composer-cache
@@ -129,6 +67,6 @@ jobs:
 
     - name: Publish code coverage
       uses: paambaati/codeclimate-action@v2.7.5
-      if: ${{ matrix.what == 't310php74' }}
+      if: ${{ matrix.env.CodeClimate == 'yes' }}
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATEKEY }}

@@ -122,12 +122,4 @@ class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
 
         return false;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function handle(): array
-    {
-        return [];
-    }
 }

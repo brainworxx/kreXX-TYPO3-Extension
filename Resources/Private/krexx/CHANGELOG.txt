@@ -1,3 +1,7 @@
+4.2.0
+- Added microtime analysis to the float routing.
+- Added microtime analysis to the string scalar analysis.
+
 4.1.2
 - Change: Do not display an empty array, when there are no
   attributes in the XML analysis.

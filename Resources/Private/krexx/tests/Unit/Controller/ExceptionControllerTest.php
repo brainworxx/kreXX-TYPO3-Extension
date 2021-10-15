@@ -149,8 +149,6 @@ class ExceptionControllerTest extends AbstractController
         $this->setValueByReflection('jsCssSend', [], $controller);
 
         $poolMock = $this->createMock(Pool::class);
-        $poolMock->expects($this->once())
-            ->method('reset');
         $this->setValueByReflection('pool', $poolMock, $controller);
 
         $chunksMock = $this->createMock(Chunks::class);

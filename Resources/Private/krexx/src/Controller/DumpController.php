@@ -69,8 +69,6 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
             return $this;
         }
 
-        $this->pool->reset();
-
         // Find caller.
         if ($data instanceof \Brainworxx\Krexx\Logging\Model) {
             $this->callerFinder = $this->pool->createClass(ExceptionCallerFinder::class);
