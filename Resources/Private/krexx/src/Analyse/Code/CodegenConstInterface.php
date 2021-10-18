@@ -104,6 +104,7 @@ interface CodegenConstInterface
 
     /**
      * Wraps an array_values around one of the generation values.
+     *
      * @var string
      */
     const CODEGEN_TYPE_ARRAY_VALUES_ACCESS = 'arrayValuesAccess';
@@ -115,4 +116,11 @@ interface CodegenConstInterface
      * @var string
      */
     const CODEGEN_TYPE_EMPTY = 'empty';
+
+    /**
+     * "Additional" json key, that contains the source code type hint.
+     *
+     * @var string
+     */
+    const CODEGEN_TYPE_HINT = 'Type hint';
 }

@@ -141,6 +141,9 @@ class CodegenTest extends AbstractTest
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
         $this->expectConnectorCalls(1, 0);
 
+
+        $this->fixture->setType(static::class);
+
         $this->assertEquals(
             'name',
             $this->codegenHandler->generateSource($this->fixture)
@@ -148,6 +151,14 @@ class CodegenTest extends AbstractTest
 
         // It's not the first run anymore.
         $this->assertEquals(false, $this->retrieveValueByReflection(static::FIRST_RUN, $this->codegenHandler));
+        // Check the type hint value.
+        $json = $this->fixture->getJson();
+        $this->assertArrayHasKey(Codegen::CODEGEN_TYPE_HINT, $json);
+        $this->assertEquals(
+            '/** @var ' . static::class . ' name */',
+            $json[Codegen::CODEGEN_TYPE_HINT],
+            'Test the typehint'
+        );
     }
 
     /**

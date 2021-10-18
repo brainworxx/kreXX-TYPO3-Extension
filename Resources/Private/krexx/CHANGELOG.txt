@@ -1,6 +1,8 @@
 4.2.0
 - Added microtime analysis to the float routing.
 - Added microtime analysis to the string scalar analysis.
+- Added type hint to the additional data for the first
+  element.
 
 4.1.2
 - Change: Do not display an empty array, when there are no

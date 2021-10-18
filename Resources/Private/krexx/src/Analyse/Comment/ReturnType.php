@@ -140,6 +140,8 @@ class ReturnType extends AbstractComment
             $result = $returnType->getName();
         } else {
             // Must be 7.0.
+            // @deprecated
+            // Will be removes as soon as we drop 7.0 support.
             $result = $returnType->__toString();
             $nullable = '';
         }

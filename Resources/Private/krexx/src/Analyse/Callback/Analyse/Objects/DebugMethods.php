@@ -151,10 +151,12 @@ class DebugMethods extends AbstractObjectAnalysis implements
      */
     protected function checkIfAccessible($data, string $funcName, ReflectionClass $reflectionClass): bool
     {
+        $result = false;
+
         // We need to check if:
-        // 1.) Method exists. It may be protected though.
-        // 2.) Method can be called. There may be a magical method, though.
-        // 3.) It's not blacklisted.
+        // 1. Method exists. It may be protected though.
+        // 2. Method can be called. There may be a magical method, though.
+        // 3. It's not blacklisted.
         if (
             method_exists($data, $funcName) === true &&
             is_callable([$data, $funcName]) === true &&
@@ -165,20 +167,20 @@ class DebugMethods extends AbstractObjectAnalysis implements
             try {
                 $ref = $reflectionClass->getMethod($funcName);
             } catch (ReflectionException $e) {
-                return false;
+                return $result;
             }
 
             foreach ($ref->getParameters() as $param) {
                 if ($param->isOptional() === false) {
                     // We've got a required parameter!
                     // We will not call this one.
-                    return false;
+                    return $result;
                 }
             }
 
-            return true;
+            $result = true;
         }
 
-        return false;
+        return $result;
     }
 }

@@ -82,6 +82,8 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
         $prefix = $this->isInScope === true ? 'static' : '\\' . $ref->getName();
 
         // Dump the constants 7.0 style.
+        // @deprecated
+        // Will be removes as soon as we drop 7.0 support.
         if (version_compare(phpversion(), '7.1.0', '<') === true) {
             return $this->dumpPhpSevenZero($output, $prefix);
         }
@@ -107,6 +109,9 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
 
     /**
      * Dump the constants PHP 7.0 style.
+     *
+     * @deprecated
+     *   Will be removes as soon as we drop 7.0 support.
      *
      * @param string $output
      *   The output so far.
