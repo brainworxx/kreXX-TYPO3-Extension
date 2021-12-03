@@ -131,18 +131,15 @@ class Meta extends AbstractObjectAnalysis implements CallbackConstInterface, Vie
 
         // Now to collect the inheritance stuff.
         // Each of them will get analysed by the ThroughMeta callback.
-        $interfaces = $ref->getInterfaces();
-        if (empty($interfaces) === false) {
+        if (empty($interfaces = $ref->getInterfaces()) === false) {
             $data[static::META_INTERFACES] = $interfaces;
         }
-        $traitList = $ref->getTraits();
-        if (empty($traitList) === false) {
+        if (empty($traitList = $ref->getTraits()) === false) {
             $data[static::META_TRAITS] = $traitList;
         }
 
         /** @var ReflectionClass $previousClass */
-        $previousClass = $ref->getParentClass();
-        if (empty($previousClass) === false) {
+        if (empty($previousClass = $ref->getParentClass()) === false) {
             // We add it via array, because the other inheritance getters
             // are also supplying one.
             $data[static::META_INHERITED_CLASS] = [$previousClass->getName() => $previousClass];

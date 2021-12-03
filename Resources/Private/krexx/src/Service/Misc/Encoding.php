@@ -264,7 +264,7 @@ class Encoding
      * @return string|false
      *   The result.
      */
-    public function mbDetectEncoding(string $string, string $encodinglist = 'auto', $strict = false)
+    public function mbDetectEncoding(string $string, string $encodinglist = 'auto', bool $strict = false)
     {
         return mb_detect_encoding($string, $encodinglist, $strict);
     }
@@ -404,7 +404,7 @@ class Encoding
 
         // The first regex detects all allowed characters.
         // For some reason, they also allow BOM characters.
-        return $cache[$propName] = (bool) preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", $propName) &&
+        return $cache[$propName] = (bool) preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", (string)$propName) &&
             !(bool) preg_match("/[\xEF\xBB\xBF]$/", $propName);
     }
 }

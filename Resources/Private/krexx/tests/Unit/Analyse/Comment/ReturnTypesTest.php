@@ -49,6 +49,7 @@ class ReturnTypesTest extends AbstractTest
      *
      * @see \Brainworxx\Krexx\Tests\Fixtures\ReturnTypeFixture
      * @covers \Brainworxx\Krexx\Analyse\Comment\ReturnType::getComment
+     * @covers \Brainworxx\Krexx\Analyse\Comment\ReturnType::retrieveReturnTypeFromComment
      * @covers \Brainworxx\Krexx\Analyse\Comment\ReturnType::retrieveTypeByReflection
      * @throws \ReflectionException
      */

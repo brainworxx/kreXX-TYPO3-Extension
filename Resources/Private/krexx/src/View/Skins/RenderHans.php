@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\View\Skins;
 
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Plugin\PluginConstInterface;
 use Brainworxx\Krexx\View\AbstractRender;
@@ -71,7 +72,8 @@ class RenderHans extends AbstractRender implements
     ViewConstInterface,
     BacktraceConstInterface,
     PluginConstInterface,
-    ConfigConstInterface
+    ConfigConstInterface,
+    CodegenConstInterface
 {
     use BacktraceSourceLine;
     use Button;

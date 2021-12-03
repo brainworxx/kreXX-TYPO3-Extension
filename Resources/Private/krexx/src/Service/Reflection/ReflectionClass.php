@@ -96,47 +96,41 @@ class ReflectionClass extends \ReflectionClass
     public function retrieveValue(ReflectionProperty $refProperty)
     {
         $propName = $refProperty->getName();
-
+        $classedPropName = "\0" . $refProperty->getDeclaringClass()->getName() . "\0" . $propName;
+        $result = null;
+        $isUnset = true;
         if (array_key_exists("\0*\0" . $propName, $this->objectArray) === true) {
             // Protected or a private
-            return $this->objectArray["\0*\0" . $propName];
-        }
-
-        if (array_key_exists($propName, $this->objectArray) === true) {
+            $isUnset = false;
+            $result = $this->objectArray["\0*\0" . $propName];
+        } elseif (array_key_exists($classedPropName, $this->objectArray) === true) {
+            // If we are facing multiple declarations, the declaring class name
+            // is set in front of the key.
+            $isUnset = false;
+            $result = $this->objectArray[$classedPropName];
+        } elseif (array_key_exists($propName, $this->objectArray) === true) {
             // Must be a public. Those are rare.
-            return $this->objectArray[$propName];
-        }
-
-        if ($refProperty->isStatic() === true) {
+            $isUnset = false;
+            $result = $this->objectArray[$propName];
+        } elseif ($refProperty->isStatic() === true) {
             // Static values are not inside the value array.
             $refProperty->setAccessible(true);
-            return $refProperty->getValue($this->data);
-        }
-
-        // We are facing a numeric property name (yes, that is possible).
-        // To be honest, this one of the most bizarre things I've encountered so
-        // far. Depending on your PHP version, that value may not be accessible
-        // via normal means from the array we have got here. And no, we are not
-        // accessing the object directly.
-        if ($refProperty instanceof UndeclaredProperty && is_int($refProperty->propertyName)) {
-            return array_values($this->objectArray)[
+            $isUnset = false;
+            $result = $refProperty->getValue($this->data);
+        } elseif ($refProperty instanceof UndeclaredProperty && is_int($refProperty->propertyName)) {
+            // We are facing a numeric property name (yes, that is possible).
+            // To be honest, this one of the most bizarre things I've encountered so
+            // far. Depending on your PHP version, that value may not be accessible
+            // via normal means from the array we have got here. And no, we are not
+            // accessing the object directly.
+            $isUnset = false;
+            $result = array_values($this->objectArray)[
                 array_search($propName, array_keys($this->objectArray))
             ];
         }
 
-        // If we are facing multiple declarations, the declaring class name
-        // is set in front of the key.
-        $propName = "\0" . $refProperty->getDeclaringClass()->getName() . "\0" . $propName;
-        if (array_key_exists($propName, $this->objectArray) === true) {
-            // Found it!
-            return $this->objectArray[$propName];
-        }
-
-        // We are still here, which means that we are not able to get the value
-        // out of it. The only remaining possibility is, that this value was
-        // unset during runtime.
-        $refProperty->isUnset = true;
-        return null;
+        $refProperty->isUnset = $isUnset;
+        return $result;
     }
 
     /**

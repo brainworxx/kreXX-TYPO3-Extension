@@ -123,7 +123,7 @@ class ValidationTest extends AbstractTest
     public function testEvaluateSetting()
     {
         $iniGet = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Config\\', 'ini_get');
-        $iniGet->expects($this->exactly(2))
+        $iniGet->expects($this->any())
             ->with('max_execution_time')
             ->will($this->returnValue('123'));
 

@@ -140,7 +140,7 @@ trait ExpandableChild
     protected function renderSourceButtonWithStop(string $gencode): string
     {
         if (
-            $gencode === ';stop;' ||
+            $gencode === static::CODEGEN_STOP_BIT ||
             empty($gencode) === true ||
             $this->pool->codegenHandler->getAllowCodegen() === false
         ) {

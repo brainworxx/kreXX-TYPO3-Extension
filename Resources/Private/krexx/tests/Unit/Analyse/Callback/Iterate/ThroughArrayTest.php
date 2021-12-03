@@ -57,6 +57,7 @@ class ThroughArrayTest extends AbstractTest
 
     /**
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray::prepareModel
      */
     public function testCallMe()
     {
@@ -112,6 +113,7 @@ class ThroughArrayTest extends AbstractTest
      * Testing the special handling of a PHP bug.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray::prepareModel
      */
     public function testCallMeInaccessibleArray()
     {

@@ -53,4 +53,11 @@ class InheritDocFixture extends ComplexMethodFixture
     {
         return 2;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function traitComment()
+    {
+    }
 }

@@ -123,4 +123,11 @@ interface CodegenConstInterface
      * @var string
      */
     const CODEGEN_TYPE_HINT = 'Type hint';
+
+    /**
+     * The equivaqlent of a stop bit for the code generation.
+     *
+     * @var string
+     */
+    const CODEGEN_STOP_BIT = ';stop;';
 }

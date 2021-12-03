@@ -46,7 +46,6 @@ use Reflector;
  */
 abstract class AbstractComment
 {
-
     /**
      * @var Pool
      */
@@ -58,10 +57,10 @@ abstract class AbstractComment
      * @var string[]
      */
     protected $inheritdocPattern = [
+        '{@inheritDoc}',
         '{@inheritdoc}',
-        '{inheritdoc}',
-        '@inheritdoc',
-        'inheritdoc'
+        '@inheritDoc',
+        '@inheritdoc'
     ];
 
     /**
@@ -143,7 +142,7 @@ abstract class AbstractComment
             // the comment to repeat itself.
             if (strpos($originalComment, $pattern) !== false) {
                 // Found one, and end the foreach.
-                $originalComment = str_ireplace($pattern, $comment, $originalComment);
+                $originalComment = str_replace($pattern, $comment, $originalComment);
                 break;
             }
         }
@@ -163,6 +162,6 @@ abstract class AbstractComment
      */
     protected function checkComment(string $comment): bool
     {
-        return (strpos($comment, 'inheritdoc') === false);
+        return (stripos($comment, 'inheritdoc') === false);
     }
 }

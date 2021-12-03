@@ -49,6 +49,7 @@ class ReturnTypeFixture
 
     /**
      * @return $this
+     *   This?
      */
     public function returnThis()
     {

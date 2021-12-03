@@ -117,7 +117,7 @@ class ThroughPropertiesTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveConnector
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrievePropertyName
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDeclarationPlace
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveFilenameFromTraits
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDeclaringClassFromTraits
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
      *
      * @throws \ReflectionException
@@ -384,6 +384,6 @@ class ThroughPropertiesTest extends AbstractTest
         $this->assertEquals($name, $model->getName());
         $this->assertEquals($conectorLeft, $model->getConnectorLeft());
         $this->assertEquals($connectorRight, $model->getConnectorRight());
-        $this->assertEquals($additional, $model->getAdditional());
+        $this->assertEquals($additional, $model->getAdditional(), $model->getName());
     }
 }

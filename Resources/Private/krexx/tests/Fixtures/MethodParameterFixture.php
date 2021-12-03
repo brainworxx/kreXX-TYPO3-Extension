@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,27 +33,39 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-$EM_CONF[$_EXTKEY] = [
-    'title' => 'kreXX Debugger',
-    'description' => 'Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos.',
-    'category' => 'misc',
-    'version' => '4.1.3',
-    'state' => 'stable',
-    'uploadfolder' => false,
-    'createDirs' => '',
-    'clearCacheOnLoad' => 0,
-    'author_email' => 'info@brainworxx.de',
-    'author' => 'BRAINWORXX GmbH',
-    'constraints' => [
-        'depends' => [
-            'typo3' => '7.6.0-11.5.99',
-            'php' => '7.0.0-8.0.99',
-        ],
-        'conflicts' => [],
-        'suggests' => [
-            'adminpanel' => '9.5.0-11.4.99',
-            'aimeos' => '18.4.0-21.99.99'
-        ],
-    ],
-];
+namespace Brainworxx\Krexx\Tests\Fixtures;
 
+class MethodParameterFixture
+{
+    /**
+     * @param array $parameter
+     */
+    public function arrayDefault(array $parameter = [])
+    {
+        // Do nothing.
+    }
+
+    /**
+     * @param bool $parameter
+     */
+    public function trueDefault(bool $parameter = true)
+    {
+        // Do nothing.
+    }
+
+    /**
+     * @param bool $parameter
+     */
+    public function falseDefault(bool $parameter = false)
+    {
+        // Do nothing.
+    }
+
+    /**
+     * @param $parameter
+     */
+    public function nullDefault($parameter = null)
+    {
+
+    }
+}

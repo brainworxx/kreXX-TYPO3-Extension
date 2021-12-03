@@ -223,7 +223,7 @@ class ThroughMethods extends AbstractCallback implements
             return static::META_PREDECLARED;
         }
 
-        $filename = $this->pool->fileService->filterFilePath($reflectionMethod->getFileName());
+        $filename = $this->pool->fileService->filterFilePath((string)$reflectionMethod->getFileName());
         if (empty($filename) === true) {
             // Not sure, if this is possible.
             return $this->pool->messages->getHelp(static::UNKNOWN_DECLARATION);
@@ -240,14 +240,12 @@ class ThroughMethods extends AbstractCallback implements
                 $traitName = $trait->getName();
             }
 
-            return $filename . "\n" .
-                static::META_IN_TRAIT . $traitName . "\n" .
-                static::META_IN_LINE . $reflectionMethod->getStartLine();
+            $secondLine = static::META_IN_TRAIT . $traitName . "\n";
+        } else {
+            $secondLine = static::META_IN_CLASS . $reflectionMethod->class . "\n";
         }
 
-        return $filename . "\n" .
-            static::META_IN_CLASS . $reflectionMethod->class . "\n" .
-            static::META_IN_LINE . $reflectionMethod->getStartLine();
+        return $filename . "\n" . $secondLine . static::META_IN_LINE . $reflectionMethod->getStartLine();
     }
 
     /**

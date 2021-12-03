@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Tests\Fixtures\MethodParameterFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
 use ReflectionParameter;
@@ -81,7 +82,7 @@ class CodegenTest extends AbstractTest
         $this->setValueByReflection(static::FIRST_RUN, false, $this->codegenHandler);
 
         $this->fixture = new Model(Krexx::$pool);
-        $this->fixture->setName('name');
+        $this->fixture->setName('name')->setType('class');
 
         // Mock the connector service and inject it into the model.
         $this->connectorMock = $this->createMock(Connectors::class);
@@ -135,17 +136,16 @@ class CodegenTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::addTypeHint
      */
     public function testGenerateSourceFirstRun()
     {
         $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
-        $this->expectConnectorCalls(1, 0);
-
-
-        $this->fixture->setType(static::class);
+        $this->expectConnectorCalls(0, 0);
+        $this->fixture->setNormal(static::class)->setName('$name');
 
         $this->assertEquals(
-            'name',
+            '$name',
             $this->codegenHandler->generateSource($this->fixture)
         );
 
@@ -155,7 +155,71 @@ class CodegenTest extends AbstractTest
         $json = $this->fixture->getJson();
         $this->assertArrayHasKey(Codegen::CODEGEN_TYPE_HINT, $json);
         $this->assertEquals(
-            '/** @var ' . static::class . ' name */',
+            '/** @var ' . static::class . ' $name */',
+            $json[Codegen::CODEGEN_TYPE_HINT],
+            'Test the typehint'
+        );
+    }
+
+    /**
+     * Test the type hint with a more complicated varname from the source.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::addTypeHint
+     */
+    public function testGenerateSourceFirstRunNoTypeHint()
+    {
+        $this->fixture->setName('$instance->getValue()');
+        $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
+        $this->expectConnectorCalls(0, 0);
+        $this->fixture->setNormal(static::class);
+
+        $this->codegenHandler->generateSource($this->fixture);
+        $json = $this->fixture->getJson();
+        $this->assertArrayNotHasKey(Codegen::CODEGEN_TYPE_HINT, $json, 'Type hint is not set.');
+    }
+
+    /**
+     * Test an empty run, something like krexx(), without any variable.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::addTypeHint
+     */
+    public function testGenerateSourceEmptyFirstRunNoTypeHint()
+    {
+        $this->fixture->setName('');
+        $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
+        $this->codegenHandler->generateSource($this->fixture);
+        $json = $this->fixture->getJson();
+        $this->assertArrayNotHasKey(Codegen::CODEGEN_TYPE_HINT, $json, 'Type hint is not set.');
+    }
+
+    /**
+     * Test the type hint with a more complitated varname from t he source.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::concatenation
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::addTypeHint
+     */
+    public function testGenerateSourceFirstRunTypeHintScalar()
+    {
+        $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
+        $this->expectConnectorCalls(0, 0);
+        $this->fixture
+            ->setName('$variable')
+            ->setNormal(static::class)
+            ->setType('array');
+
+        $this->codegenHandler->generateSource($this->fixture);
+        $json = $this->fixture->getJson();
+        $this->assertArrayHasKey(Codegen::CODEGEN_TYPE_HINT, $json);
+        $this->assertEquals(
+            '/** @var array $variable */',
             $json[Codegen::CODEGEN_TYPE_HINT],
             'Test the typehint'
         );
@@ -429,7 +493,7 @@ class CodegenTest extends AbstractTest
 
     /**
      * Test the parameter analysis, with a required parameter.
-     * We use a special DetTime parameter as a fixture.
+     * We use a special DateTime parameter as a fixture.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
@@ -464,6 +528,45 @@ class CodegenTest extends AbstractTest
         $this->assertEquals(
             'DateTimeZone $object',
             $this->codegenHandler->parameterToString($refParamMock)
+        );
+    }
+
+    /**
+     * Test with a bunch of real parameters.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
+     */
+    public function testDefaultValueTranslation()
+    {
+        $reflection = new \ReflectionClass(MethodParameterFixture::class);
+        $reflectionMethod = $reflection->getMethod('arrayDefault');
+        $reflectionParameter = $reflectionMethod->getParameters()[0];
+        $this->assertEquals(
+            'array $parameter = array()',
+            $this->codegenHandler->parameterToString($reflectionParameter)
+        );
+
+        $reflectionMethod = $reflection->getMethod('trueDefault');
+        $reflectionParameter = $reflectionMethod->getParameters()[0];
+        $this->assertEquals(
+            'bool $parameter = TRUE',
+            $this->codegenHandler->parameterToString($reflectionParameter)
+        );
+
+        $reflectionMethod = $reflection->getMethod('falseDefault');
+        $reflectionParameter = $reflectionMethod->getParameters()[0];
+        $this->assertEquals(
+            'bool $parameter = FALSE',
+            $this->codegenHandler->parameterToString($reflectionParameter)
+        );
+
+        $reflectionMethod = $reflection->getMethod('nullDefault');
+        $reflectionParameter = $reflectionMethod->getParameters()[0];
+        $this->assertEquals(
+            '$parameter = NULL',
+            $this->codegenHandler->parameterToString($reflectionParameter)
         );
     }
 }

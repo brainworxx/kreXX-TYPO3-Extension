@@ -187,7 +187,7 @@ class ThroughProperties extends AbstractCallback implements
             $additional .= 'private ';
         }
 
-        if (isset($refProperty->isUnset) === true) {
+        if (empty($refProperty->isUnset) === false) {
             // This one was unset during runtime.
             // We need to tell the dev. Accessing an unset property may trigger
             // a warning.
@@ -226,38 +226,30 @@ class ThroughProperties extends AbstractCallback implements
      */
     protected function retrieveDeclarationPlace(ReflectionProperty $refProperty): string
     {
-        static $declarationCache = [];
-
-        if (isset($refProperty->isUndeclared) === true) {
-            return 'undeclared';
-        }
-
-        // Early return from the cache.
         $declaringClass = $refProperty->getDeclaringClass();
-        $key = $refProperty->name . '::' . $declaringClass->name;
-        if (isset($declarationCache[$key])) {
-            return $declarationCache[$key];
-        }
+        $traits = $declaringClass->getTraits();
 
-        // Not so early return for internal properties.
+        // Early returns for simple cases.
+        if (isset($refProperty->isUndeclared) === true) {
+            return static::META_UNDECLARED;
+        }
         if ($declaringClass->isInternal()) {
-            return $declarationCache[$key] = $this->pool->messages->getHelp(static::META_PREDECLARED);
+            return static::META_PREDECLARED;
         }
 
-        $traits = $refProperty->getDeclaringClass()->getTraits();
-        $type = $this->pool->render->renderLinebreak() . static::META_IN_CLASS;
         if (empty($traits) === false) {
-            $declaringClass = $this->retrieveFilenameFromTraits($traits, $refProperty, $declaringClass);
-            // Not found.
-            if ($declaringClass === null) {
-                return $declarationCache[$key] = '';
-            } elseif ($declaringClass->isTrait() === true) {
-                $type = $this->pool->render->renderLinebreak() . static::META_IN_TRAIT;
-            }
+            // Update the declaring class reflection from the traits.
+            $declaringClass = $this->retrieveDeclaringClassFromTraits($traits, $refProperty, $declaringClass);
+        }
+        $result = '';
+        if ($declaringClass !== null) {
+            $result = $this->pool->fileService->filterFilePath($declaringClass->getFileName()) .
+                $this->pool->render->renderLinebreak() .
+                ($declaringClass->isTrait() ? static::META_IN_TRAIT : static::META_IN_CLASS) .
+                $declaringClass->name;
         }
 
-        return $declarationCache[$key] = $this->pool->fileService
-                ->filterFilePath($declaringClass->getFileName()) . $type . $declaringClass->name;
+        return $result;
     }
 
     /**
@@ -272,7 +264,7 @@ class ThroughProperties extends AbstractCallback implements
      * for an answer.
      *
      * @param \ReflectionClass[] $traits
-     *   THe traits of that class.
+     *   The traits of that class.
      * @param \ReflectionProperty $refProperty
      *   Reflection of the property we are analysing.
      * @param \ReflectionClass $originalRef
@@ -282,7 +274,7 @@ class ThroughProperties extends AbstractCallback implements
      *   Either the reflection class of the trait, or null when we are unable to
      *   retrieve it.
      */
-    protected function retrieveFilenameFromTraits(
+    protected function retrieveDeclaringClassFromTraits(
         array $traits,
         ReflectionProperty $refProperty,
         ReflectionClass $originalRef

@@ -283,29 +283,25 @@ class Validation extends Fallback
      */
     protected function evalMaxRuntime($value, string $name, string $group): bool
     {
-        // Check for integer first.
-        if ($this->evalInt($value, $name, $group) === false) {
-            return false;
-        }
-
+        $result = true;
         $maxTime = (int)ini_get('max_execution_time');
-        // We need a maximum runtime in the first place
-        // and then check, if we have a value smaller than it.
+
         if ($maxTime <= 0) {
-            // We were unable to get the maximum runtime from the server.
-            // No need to check any further.
-            return true;
+            // There is no max execution time set.
+            // We ignore the max execution time on the shell anyway.
+            return $result;
         }
 
-        if ($maxTime < (int)$value) {
+        if ($this->evalInt($value, $name, $group) === false || $maxTime < (int)$value) {
             $this->pool->messages->addMessage(
                 static::KEY_CONFIG_ERROR . ucfirst($name) . 'Big',
                 [$maxTime]
             );
-            return false;
+
+            $result = false;
         }
 
-        return true;
+        return $result;
     }
 
     /**

@@ -103,34 +103,24 @@ class Methods extends AbstractComment
     {
         // Get a first impression.
         $comment = $this->prettifyComment($reflectionMethod->getDocComment());
-
-        if ($this->checkComment($comment) === true) {
-            // Found it!
-            return $comment;
-        }
-
         // Check for interfaces.
         $comment = $this->getInterfaceComment($comment, $reflectionClass);
-        if ($this->checkComment($comment) === true) {
-            // Found it!
-            return $comment;
-        }
-
         // Check for traits.
         $comment = $this->getTraitComment($comment, $reflectionClass);
-        if ($this->checkComment($comment) === true) {
-            // Found it!
-            return $comment;
+
+        // Nothing on this level, we need to take a look at the parents.
+        $reflectionClass = $reflectionClass->getParentClass();
+        if (
+            $reflectionClass !== false
+            && $reflectionClass->hasMethod($this->methodName) === true
+        ) {
+            $comment = $this->replaceInheritComment(
+                $comment,
+                $this->getMethodComment($reflectionClass->getMethod($this->methodName), $reflectionClass)
+            );
         }
 
-        // Nothing on this level, we need to take a look at the parent.
-        /** @var \ReflectionClass $parentReflection */
-        $parentReflection = $reflectionClass->getParentClass();
-        if ($parentReflection instanceof ReflectionClass) {
-            $comment = $this->retrieveComment($comment, $parentReflection);
-        }
-
-        // Still here? Tell the dev that we could not resolve the comment.
+        // Tell the dev that we could not resolve the comment.
         return $this->replaceInheritComment($comment, $this->pool->messages->getHelp('commentResolvingFail'));
     }
 
@@ -207,15 +197,9 @@ class Methods extends AbstractComment
     protected function retrieveComment(string $originalComment, ReflectionClass $reflection): string
     {
         if ($reflection->hasMethod($this->methodName) === true) {
-            try {
-                $newComment = $this->prettifyComment($reflection->getMethod($this->methodName)->getDocComment());
-                // Replace it.
-                $originalComment = $this->replaceInheritComment($originalComment, $newComment);
-            } catch (ReflectionException $e) {
-                // Failed to retrieve it.
-                // Do nothing, and hope for the rest of the code to retrieve
-                // the comment.
-            }
+            $newComment = $this->prettifyComment($reflection->getMethod($this->methodName)->getDocComment());
+            // Replace it.
+            $originalComment = $this->replaceInheritComment($originalComment, $newComment);
         }
 
         return $originalComment;

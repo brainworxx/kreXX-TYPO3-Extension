@@ -74,7 +74,6 @@ class ThroughArray extends AbstractCallback implements
             static::CODEGEN_TYPE_ITERATOR_TO_ARRAY : static::CODEGEN_TYPE_PUBLIC;
 
         $recursionMarker = $this->pool->recursionHandler->getMarker();
-        $encodingService = $this->pool->encodingService;
         $array =& $this->parameters[static::PARAM_DATA];
 
         // Iterate through.
@@ -87,26 +86,42 @@ class ThroughArray extends AbstractCallback implements
                 continue;
             }
 
-            /** @var Model $model */
-            $model = $this->pool->createClass(Model::class)->setData($value)->setCodeGenType($multilineCodeGen);
-
-            if (array_key_exists($key, $array) === false) {
-                // Looks like we have an inaccessible array value here.
-                $model->setCodeGenType(static::CODEGEN_TYPE_ARRAY_VALUES_ACCESS)
-                    ->setConnectorParameters(array_search($key, array_keys($array)));
-            }
-
-            if (is_string($key) === true) {
-                $model->setName($encodingService->encodeString($key))
-                    ->setKeyType(static::TYPE_STRING)
-                    ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);
-            } else {
-                $model->setName($key)->setConnectorType(static::CONNECTOR_NORMAL_ARRAY);
-            }
-
-            $output .= $this->pool->routing->analysisHub($model);
+            $output .= $this->pool->routing
+                ->analysisHub($this->prepareModel($array, $key, $value, $multilineCodeGen));
         }
 
         return $output . $this->pool->render->renderSingeChildHr();
+    }
+
+    /**
+     * @param array $array
+     * @param $key
+     * @param $value
+     * @param string $multilineCodeGen
+     * @return \Brainworxx\Krexx\Analyse\Model
+     */
+    protected function prepareModel(array &$array, $key, &$value, string $multilineCodeGen): Model
+    {
+        /** @var Model $model */
+        $model = $this->pool
+            ->createClass(Model::class)
+            ->setData($value)
+            ->setCodeGenType($multilineCodeGen);
+
+        if (array_key_exists($key, $array) === false) {
+            // Looks like we have an inaccessible array value here.
+            $model->setCodeGenType(static::CODEGEN_TYPE_ARRAY_VALUES_ACCESS)
+                ->setConnectorParameters(array_search($key, array_keys($array)));
+        }
+
+        if (is_string($key) === true) {
+            $model->setName($this->pool->encodingService->encodeString($key))
+                ->setKeyType(static::TYPE_STRING)
+                ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);
+        } else {
+            $model->setName($key)->setConnectorType(static::CONNECTOR_NORMAL_ARRAY);
+        }
+
+        return $model;
     }
 }

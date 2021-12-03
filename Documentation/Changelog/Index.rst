@@ -12,6 +12,15 @@
 Changelog
 =============================================================
 
+4.1.3
+    - [Feature] Added microtime analysis to the float routing.
+    - [Feature] Added microtime analysis to the string scalar analysis.
+    - [Feature] Added type hint to the additional data for the first element.
+    - [Change] Code cleanup.
+    - [Bugfix] Display info about public properties in predeclared classes.
+    - [Bugfix] Comment inheritance resolving works more reliable.
+    - [Bugfix] Method return type comment parsing works more reliable.
+
 4.1.2
     - [Feature] PHP 8.0 support
     - [Feature] Updated to TYPO3 11.5.

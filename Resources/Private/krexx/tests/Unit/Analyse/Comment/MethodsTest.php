@@ -104,6 +104,12 @@ class MethodsTest extends AbstractTest
             $this->returnTestResult(InheritDocFixture::class, 'parameterizedMethod')
         );
 
+        // Multiple comment inheritance from a deeper underlying class
+        $this->assertEquals(
+            'Do nothing.',
+            $this->returnTestResult(InheritDocFixture::class, 'traitComment')
+        );
+
         // Comment from an interface.
         $this->assertEquals(
             'Interface method comment.',

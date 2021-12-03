@@ -334,7 +334,8 @@ class ThroughGetter extends AbstractCallback implements
         }
 
         // Time to do some deep stuff. We parse the sourcecode via regex!
-        return $this->getReflectionPropertyDeep($classReflection, $reflectionMethod);
+        return $reflectionMethod->isInternal() === true ? null :
+            $this->getReflectionPropertyDeep($classReflection, $reflectionMethod);
     }
 
     /**
@@ -384,11 +385,6 @@ class ThroughGetter extends AbstractCallback implements
      */
     protected function getReflectionPropertyDeep(ReflectionClass $classReflection, ReflectionMethod $reflectionMethod)
     {
-        if ($reflectionMethod->isInternal() === true) {
-            // Early return for internal stuff.
-            return null;
-        }
-
         // Read the sourcecode into a string.
         $sourcecode = $this->pool->fileService->readFile(
             $reflectionMethod->getFileName(),
@@ -399,26 +395,26 @@ class ThroughGetter extends AbstractCallback implements
         // Execute our search pattern.
         // Right now, we are trying to get to properties that way.
         // Later on, we may also try to parse deeper for stuff.
+        $result = null;
         foreach ($this->findIt(['return $this->', ';'], $sourcecode) as $propertyName) {
             // Check if this is a property and return the first we find.
-            if (($result = $this->retrievePropertyByName($propertyName, $classReflection)) !== null) {
-                return $result;
+            $result = $this->retrievePropertyByName($propertyName, $classReflection);
+            if ($result !== null) {
+                break;
             }
 
             // Check if this is a method and go deeper!
             $methodName = rtrim($propertyName, '()');
-            if (
-                $classReflection->hasMethod($methodName) === true &&
-                ++$this->deep < 3
-            ) {
+            if ($classReflection->hasMethod($methodName) === true && ++$this->deep < 3) {
                 // We need to be careful not to goo too deep, we might end up
                 // in a loop.
-                return $this->getReflectionProperty($classReflection, $classReflection->getMethod($methodName));
+                $result = $this->getReflectionProperty($classReflection, $classReflection->getMethod($methodName));
+                break;
             }
         }
 
         // Nothing?
-        return null;
+        return $result;
     }
 
     /**

@@ -115,7 +115,7 @@ trait ExpandableChild
     protected function renderSourceButtonSg(string $gencode, Model $model): string
     {
         if (
-            $gencode === ';stop;' ||
+            $gencode === static::CODEGEN_STOP_BIT ||
             empty($gencode) === true ||
             $this->pool->codegenHandler->getAllowCodegen() === false
         ) {

@@ -135,6 +135,11 @@ interface ViewConstInterface
     /**
      * @var string
      */
+    const META_UNDECLARED = 'undeclared';
+
+    /**
+     * @var string
+     */
     const META_IN_TRAIT =  'in trait: ';
 
     /**
