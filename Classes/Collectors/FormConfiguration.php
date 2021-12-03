@@ -123,7 +123,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
      * be used does not really make sense. We will convert the
      * original kreXX settings to a more usable form for the editor.
      *
-     * @param array|string|int $values
+     * @param string[]|string|int $values
      *   The values we want to convert.
      *
      * @return string|null
@@ -131,8 +131,9 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
      */
     protected function convertKrexxFeSetting($values)
     {
+        $result = null;
         if (is_array($values) === false) {
-            return null;
+            return $result;
         }
 
         // Explanation:
@@ -142,19 +143,15 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
         // with the form element.
         if ($values[static::RENDER_TYPE] === static::RENDER_TYPE_NONE) {
             // It's not visible, thus we do not accept any values from it.
-            return static::RENDER_TYPE_CONFIG_NONE;
-        }
-
-        if ($values[static::RENDER_EDITABLE] === static::VALUE_TRUE) {
+            $result = static::RENDER_TYPE_CONFIG_NONE;
+        } elseif ($values[static::RENDER_EDITABLE] === static::VALUE_TRUE) {
             // It's editable and visible.
-            return static::RENDER_TYPE_CONFIG_FULL;
-        }
-
-        if ($values[static::RENDER_EDITABLE] === static::VALUE_FALSE) {
+            $result = static::RENDER_TYPE_CONFIG_FULL;
+        } elseif ($values[static::RENDER_EDITABLE] === static::VALUE_FALSE) {
             // It's only visible.
-            return static::RENDER_TYPE_CONFIG_DISPLAY;
+            $result = static::RENDER_TYPE_CONFIG_DISPLAY;
         }
 
-        return null;
+        return $result;
     }
 }
