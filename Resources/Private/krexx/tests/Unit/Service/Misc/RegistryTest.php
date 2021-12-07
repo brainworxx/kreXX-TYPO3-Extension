@@ -64,7 +64,9 @@ class RegistryTest extends AbstractTest
         $value = 'value';
 
         $registry->set($key, $value);
-        $this->assertEquals([$key => $value], $this->retrieveValueByReflection('data', $registry));
+        $this->assertEquals($value, $registry->get($key));
+        $registry->set($key, null);
+        $this->assertNull($registry->get($key));
     }
 
     /**

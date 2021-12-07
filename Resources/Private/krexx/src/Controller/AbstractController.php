@@ -178,27 +178,21 @@ abstract class AbstractController implements ConfigConstInterface
         static::$jsCssSend[$this->destination] = true;
 
         // Adding the js to the output.
-        if ($this->pool->fileService->fileIsReadable(KREXX_DIR . 'resources/jsLibs/kdt.min.js') === true) {
-            $jsCode = $this->pool->fileService->getFileContents(KREXX_DIR . 'resources/jsLibs/kdt.min.js');
-        } else {
-            $jsCode = $this->pool->fileService->getFileContents(KREXX_DIR . 'resources/jsLibs/kdt.js');
-        }
-
-        // Adding the skin css and js.
         $skinDirectory = $this->pool->config->getSkinDirectory();
+        if ($this->pool->fileService->fileIsReadable(KREXX_DIR . 'resources/jsLibs/kdt.min.js') === true) {
+            // The js works only if everything is minified.
+            $jsCode = $this->pool->fileService->getFileContents(KREXX_DIR . 'resources/jsLibs/kdt.min.js') .
+                $this->pool->fileService->getFileContents($skinDirectory . 'krexx.min.js');
+        } else {
+            $jsCode = $this->pool->fileService->getFileContents(KREXX_DIR . 'resources/jsLibs/kdt.js') .
+                $this->pool->fileService->getFileContents($skinDirectory . 'krexx.js');
+        }
 
         // Get the css file.
         if ($this->pool->fileService->fileIsReadable($skinDirectory . 'skin.min.css') === true) {
             $css = $this->pool->fileService->getFileContents($skinDirectory . 'skin.min.css');
         } else {
             $css = $this->pool->fileService->getFileContents($skinDirectory . 'skin.css');
-        }
-
-        // Krexx.js is comes directly form the template.
-        if ($this->pool->fileService->fileIsReadable($skinDirectory . 'krexx.min.js') === true) {
-            $jsCode .= $this->pool->fileService->getFileContents($skinDirectory . 'krexx.min.js');
-        } else {
-            $jsCode .= $this->pool->fileService->getFileContents($skinDirectory . 'krexx.js');
         }
 
         return $this->pool->render->renderCssJs($css, $jsCode);

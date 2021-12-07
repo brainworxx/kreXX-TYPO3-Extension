@@ -49,6 +49,7 @@ class ConfigSectionTest extends AbstractTest
      * Testing if the configuration is rendered correctly.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection::generateOutput
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection::prepareValue
      * @covers \Brainworxx\Krexx\Analyse\Callback\AbstractCallback::dispatchStartEvent
      */
@@ -73,13 +74,13 @@ class ConfigSectionTest extends AbstractTest
             ->setEditable(true)
             ->setSource($sourceString)
             ->setType(Fallback::RENDER_TYPE_INPUT)
-            ->setValue($valueString);
+            ->setValue(true);
 
         $renderNotEditable->setSection($sectionString)
             ->setEditable(false)
             ->setSource($sourceString)
             ->setType(Fallback::RENDER_TYPE_INPUT)
-            ->setValue($valueString);
+            ->setValue(false);
 
         $data = ['data' =>
             [

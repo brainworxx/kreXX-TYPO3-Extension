@@ -159,6 +159,7 @@ class CheckOutputTest extends AbstractTest
      * Test if the remote address is allowed to trigger kreXX
      *
      * @covers \Brainworxx\Krexx\View\Output\CheckOutput::isAllowedIp
+     * @covers \Brainworxx\Krexx\View\Output\CheckOutput::checkWildcards
      */
     public function testIsAllowedIp()
     {

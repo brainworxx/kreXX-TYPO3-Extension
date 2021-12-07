@@ -136,25 +136,39 @@ class CheckOutput
      */
     public function isAllowedIp(string $whitelist): bool
     {
-        if ($this->isCli() === true || $whitelist === '*') {
+        $server = $this->pool->getServer();
+        $remote = isset($server[static::REMOTE_ADDRESS]) === true ? (string) $server[static::REMOTE_ADDRESS] : null;
+        $ipList = array_map('trim', explode(',', $whitelist));
+        if (
             // There is no IP on the shell.
+            $this->isCli() === true
+            // Or we allow everyone.
+            || $whitelist === '*'
+            // Or the IPs are matching.
+            || in_array($remote, $ipList, true) === true
+        ) {
             return true;
         }
 
-        $server = $this->pool->getServer();
-        if (empty($server[static::REMOTE_ADDRESS]) === true) {
+        if ($remote === null) {
             // Messed up server array.
             return false;
         }
-        $remote = $server[static::REMOTE_ADDRESS];
 
-        $ipList = array_map('trim', explode(',', $whitelist));
-        if (in_array($remote, $ipList) === true) {
-            // The IP is matching.
-            return true;
-        }
+        return $this->checkWildcards($ipList, $remote);
+    }
 
-        // Check the wildcards.
+    /**
+     * Check the wildcards.
+     *
+     * @param array $ipList
+     *   The list of allowed ips
+     * @param string $remote
+     *   The remote address, according to the server array.
+     * @return bool
+     */
+    protected function checkWildcards(array $ipList, string $remote): bool
+    {
         foreach ($ipList as $ip) {
             $wildcardPos = strpos($ip, '*');
             // Check if the ip has a wildcard.

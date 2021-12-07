@@ -72,25 +72,42 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
                 continue;
             }
 
-            /** @var Model $model */
-            $model = $this->pool->createClass(Model::class)->setHelpid($id . static::META_HELP);
-            $name = $this->pool->messages->getHelp($id . 'Readable');
-            $value = $this->prepareValue($setting);
-            if ($setting->getEditable() === true) {
-                $sectionOutput .= $this->pool->render->renderSingleEditableChild(
-                    $model->setData($name)
-                        ->setName($value)
-                        ->setNormal($setting->getSource())
-                        ->setType($setting->getType())->setDomid($id)
-                );
-            } else {
-                $sectionOutput .= $this->pool->render->renderExpandableChild(
-                    $model->setData($value)->setName($name)->setNormal($value)->setType($setting->getSource())
-                );
-            }
+            $sectionOutput .= $this->generateOutput($setting, $id);
         }
 
         return $sectionOutput;
+    }
+
+    /**
+     * Generate the output of a single config setting or section.
+     *
+     * @param \Brainworxx\Krexx\Service\Config\Model $setting
+     *   The settings model.
+     * @param string $id
+     *   The ID of the setting.
+     *
+     * @return string
+     *   Th rendered output.
+     */
+    protected function generateOutput(SettingModel $setting, string $id): string
+    {
+        /** @var Model $model */
+        $model = $this->pool->createClass(Model::class)->setHelpid($id . static::META_HELP);
+        $name = $this->pool->messages->getHelp($id . 'Readable');
+        $value = $this->prepareValue($setting);
+        if ($setting->getEditable() === true) {
+            return $this->pool->render->renderSingleEditableChild(
+                $model->setData($name)
+                    ->setName($value)
+                    ->setNormal($setting->getSource())
+                    ->setType($setting->getType())->setDomid($id)
+            );
+        }
+
+        return $this->pool->render->renderExpandableChild(
+            $model->setData($value)->setName($name)->setNormal($value)->setType($setting->getSource())
+        );
+
     }
 
     /**

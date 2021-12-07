@@ -110,7 +110,7 @@ class ThroughLargeArrayTest extends AbstractTest
         );
 
         // Test of the simple type got the right value
-        $this->assertEquals($fixture['data']['key1'], $this->routingMock->model[0]->getData());
+        $this->assertEquals($fixture['data'][0], $this->routingMock->model[0]->getData());
     }
 
 
@@ -127,7 +127,7 @@ class ThroughLargeArrayTest extends AbstractTest
         $fixture = [
             'multiline' => false,
             'data' => [
-                'key1' => 'some string',
+                0 => 'some string',
                 'key2' => ['some', 'array'],
                 'key3' => new stdClass()
             ]
@@ -175,7 +175,7 @@ class ThroughLargeArrayTest extends AbstractTest
         $fixture = [
             'multiline' => true,
             'data' => [
-                'key1' => 'some string',
+                0 => 'some string',
                 'key2' => ['some', 'array'],
                 'key3' => new stdClass()
             ]

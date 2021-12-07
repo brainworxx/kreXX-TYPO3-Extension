@@ -106,6 +106,27 @@ class DeepGetterFixture
     protected $somethingDifferent = 'nine';
 
     /**
+     * Using the underscore before the getter for whatever reason.
+     *
+     * @var string
+     */
+    protected $myPropertyTen = 'ten';
+
+    /**
+     * Using a static value with a static getter.
+     *
+     * @var string
+     */
+    protected static $myStatic = 'eleven';
+
+    /**
+     * Just Null, and nothing more.
+     *
+     * @var null
+     */
+    protected $null;
+
+    /**
      * A trap for the source code parsing.
      *
      * @var bool
@@ -219,9 +240,51 @@ class DeepGetterFixture
     }
 
     /**
+     * Retrieve stuff from an underscored getter.
+     *
+     * @return string
+     */
+    public function _getMyPropertyTen(): string
+    {
+        return $this->myPropertyTen;
+    }
+
+    /**
+     * Static getter in a class instance are just esoteric.
+     *
+     * @return string
+     */
+    static public function getMyStatic(): string
+    {
+        return static::$myStatic;
+    }
+
+    /**
+     * Get null.
+     *
+     * @return null
+     */
+    public function getNull()
+    {
+        return $this->null;
+    }
+
+    /**
+     * A getter that is calling another getter.
+     *
+     * @return string
+     */
+    public function getAnotherGetter():string
+    {
+        return $this->getMyPropertyEight();
+    }
+
+    /**
      * We should not be able to retrieve this one.
      */
-    public function getLiterallyNoting(): void
+    public function getLiterallyNoting()
     {
     }
+
+
 }

@@ -112,6 +112,10 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
      *
      * @deprecated
      *   Will be removes as soon as we drop 7.0 support.
+     * @codeCoverageIgnore
+     *   We will not test deprecated function.
+     *   Actually, we do test this one, but we do not upload the coverage
+     *   result of 7.0 to codeclimate.
      *
      * @param string $output
      *   The output so far.

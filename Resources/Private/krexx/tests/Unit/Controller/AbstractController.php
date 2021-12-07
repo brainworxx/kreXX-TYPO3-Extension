@@ -134,19 +134,17 @@ class AbstractController extends AbstractTest
         $poolMock->config = $configMock;
 
         $fileServiceMock = $this->createMock(File::class);
-        $fileServiceMock->expects($this->exactly(4))
+        $fileServiceMock->expects($this->exactly(3))
             ->method('fileIsReadable')
             ->withConsecutive(
                 [$pathToIni],
                 [KREXX_DIR . $pathToKdt],
-                [$pathToSkin . $skinCss],
-                [$pathToSkin . $skinJs]
+                [$pathToSkin . $skinCss]
             )->will($this->returnValueMap(
                 [
                     [$pathToIni, true],
                     [KREXX_DIR . $pathToKdt, true],
-                    [$pathToSkin . $skinCss, true],
-                    [$pathToSkin . $skinJs, true]
+                    [$pathToSkin . $skinCss, true]
                 ]
             ));
         $fileServiceMock->expects($this->once())
@@ -157,8 +155,8 @@ class AbstractController extends AbstractTest
             ->method('getFileContents')
             ->withConsecutive(
                 [KREXX_DIR . $pathToKdt],
-                [$pathToSkin . $skinCss],
-                [$pathToSkin . $skinJs]
+                [$pathToSkin . $skinJs],
+                [$pathToSkin . $skinCss]
             )->will($this->returnValueMap(
                 [
                     [KREXX_DIR . $pathToKdt, true, 'some js'],

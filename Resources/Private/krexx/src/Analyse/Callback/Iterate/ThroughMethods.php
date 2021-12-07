@@ -231,6 +231,7 @@ class ThroughMethods extends AbstractCallback implements
 
         // If the filename of the $declaringClass and the $reflectionMethod differ,
         // we are facing a trait here.
+        $secondLine = static::META_IN_CLASS . $reflectionMethod->class . "\n";
         if ($reflectionMethod->getFileName() !== $declaringClass->getFileName()) {
             // There is no real clean way to get the name of the trait that we
             // are looking at.
@@ -241,8 +242,6 @@ class ThroughMethods extends AbstractCallback implements
             }
 
             $secondLine = static::META_IN_TRAIT . $traitName . "\n";
-        } else {
-            $secondLine = static::META_IN_CLASS . $reflectionMethod->class . "\n";
         }
 
         return $filename . "\n" . $secondLine . static::META_IN_LINE . $reflectionMethod->getStartLine();

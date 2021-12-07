@@ -398,23 +398,46 @@ class ThroughGetter extends AbstractCallback implements
         $result = null;
         foreach ($this->findIt(['return $this->', ';'], $sourcecode) as $propertyName) {
             // Check if this is a property and return the first we find.
-            $result = $this->retrievePropertyByName($propertyName, $classReflection);
+            $result = $this->analyseRegexResult($propertyName, $classReflection);
             if ($result !== null) {
-                break;
-            }
-
-            // Check if this is a method and go deeper!
-            $methodName = rtrim($propertyName, '()');
-            if ($classReflection->hasMethod($methodName) === true && ++$this->deep < 3) {
-                // We need to be careful not to goo too deep, we might end up
-                // in a loop.
-                $result = $this->getReflectionProperty($classReflection, $classReflection->getMethod($methodName));
                 break;
             }
         }
 
         // Nothing?
         return $result;
+    }
+
+    /**
+     * Analyse tone of the regex findings.
+     *
+     * @param $propertyName
+     *   The name of the property.
+     * @param $classReflection
+     *   The current class reflection
+     *
+     * @throws \ReflectionException
+     *
+     * @return \ReflectionProperty|null
+     *   The reflection of the property, or null if we found nothing.
+     */
+    protected function analyseRegexResult($propertyName, $classReflection)
+    {
+        // Check if this is a property and return the first we find.
+        $result = $this->retrievePropertyByName($propertyName, $classReflection);
+        if ($result !== null) {
+            return $result;
+        }
+
+        // Check if this is a method and go deeper!
+        $methodName = rtrim($propertyName, '()');
+        if ($classReflection->hasMethod($methodName) === true && ++$this->deep < 3) {
+            // We need to be careful not to goo too deep, we might end up
+            // in a loop.
+            return $this->getReflectionProperty($classReflection, $classReflection->getMethod($methodName));
+        }
+
+        return null;
     }
 
     /**

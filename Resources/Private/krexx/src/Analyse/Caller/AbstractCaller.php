@@ -170,17 +170,16 @@ abstract class AbstractCaller
         // Check if someone has been messing with the $_SERVER, to prevent
         // warnings and notices.
         if (
-            empty($server) === true ||
-            empty($server['SERVER_PROTOCOL']) === true ||
-            empty($server['SERVER_PORT']) === true ||
-            empty($server['SERVER_NAME']) === true ||
-            empty($server['REQUEST_URI']) === true
+            empty($server['SERVER_PROTOCOL']) === true
+            || empty($server['SERVER_PORT']) === true
+            || empty($server['SERVER_NAME']) === true
+            || empty($server['REQUEST_URI']) === true
         ) {
             return 'n/a';
         }
 
         // SSL or no SSL.
-        $ssl = (!empty($server['HTTPS']) && $server['HTTPS'] === 'on');
+        $ssl = empty($server['HTTPS']) === false && $server['HTTPS'] === 'on';
 
         $protocol = strtolower($server['SERVER_PROTOCOL']);
         $protocol = substr($protocol, 0, strpos($protocol, '/'));

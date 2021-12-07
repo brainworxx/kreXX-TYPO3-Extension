@@ -176,6 +176,11 @@ class FileTest extends AbstractTest
             ),
             'The file does not exist.'
         );
+
+        // Now to read with really messed up line numbers.
+        // The actual test ist that we do not expect any fatals.
+        $this->file->readSourcecode($simpleReflection->getFileName(), 450, -20, -10);
+        $this->file->readSourcecode($simpleReflection->getFileName(), 450, 0, 510);
     }
 
     /**
