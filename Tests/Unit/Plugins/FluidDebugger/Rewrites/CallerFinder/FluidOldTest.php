@@ -71,7 +71,7 @@ class FluidOldTest extends AbstractTest
             ->will($this->returnValue($renderingStack));
         // Mock the reflection of the view
         $viewReflection = $this->createMock(\ReflectionClass::class);
-        $viewReflection->expects($this->exactly(2))
+        $viewReflection->expects($this->exactly(1))
             ->method('hasProperty')
             ->will($this->returnValue(true));
 

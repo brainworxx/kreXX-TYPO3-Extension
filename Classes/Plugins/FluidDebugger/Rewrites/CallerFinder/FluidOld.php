@@ -102,19 +102,17 @@ class FluidOld extends AbstractFluid
         $hash = $identifier[count($identifier) - 1];
 
         try {
-            if ($this->viewReflection->hasProperty('partialIdentifierCache')) {
-                $partialIdentCacheRef = $this->viewReflection->getProperty('partialIdentifierCache');
-                $partialIdentCacheRef->setAccessible(true);
-                $partialIdentifierCache = $partialIdentCacheRef->getValue($this->view);
+            $partialIdentCacheRef = $this->viewReflection->getProperty('partialIdentifierCache');
+            $partialIdentCacheRef->setAccessible(true);
+            $partialIdentifierCache = $partialIdentCacheRef->getValue($this->view);
 
-                foreach ($partialIdentifierCache as $fileName => $realIdentifier) {
-                    if (strpos($realIdentifier, $hash) !== false) {
-                        // We've got our real identifier, yay. :-|
-                        $getPartialPathFilenameRef = $this->viewReflection
-                            ->getMethod('getPartialPathAndFilename');
-                        $getPartialPathFilenameRef->setAccessible(true);
-                        return $getPartialPathFilenameRef->invoke($this->view, $fileName);
-                    }
+            foreach ($partialIdentifierCache as $fileName => $realIdentifier) {
+                if (strpos($realIdentifier, $hash) !== false) {
+                    // We've got our real identifier, yay. :-|
+                    $getPartialPathFilenameRef = $this->viewReflection
+                        ->getMethod('getPartialPathAndFilename');
+                    $getPartialPathFilenameRef->setAccessible(true);
+                    return $getPartialPathFilenameRef->invoke($this->view, $fileName);
                 }
             }
         } catch (ReflectionException $e) {
