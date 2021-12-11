@@ -42,5 +42,9 @@ define('CR', chr(13));
 define('CRLF', CR . LF);
 
 PHPMock::defineFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
+PHPMock::defineFunctionMock(
+    '\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\EventHandlers\\QueryParser',
+    'method_exists'
+);
 
 include_once __DIR__ . '/../../Resources/Private/krexx/tests/Scripts/Bootstrap.php';

@@ -38,12 +38,31 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\EventHandlers\QueryPa
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser as OriginalParser;
 
 class Typo3DbQueryParserTest extends AbstractTest
 {
+    /**
+     * Test the creation of the query parser with nd without dependency injection
+     *
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser::__construct
+     */
+    public function testConstruct()
+    {
+        new Typo3DbQueryParser();
+        if (method_exists(OriginalParser::class, '__construct')) {
+            $dataMapperMock = $this->createMock(DataMapper::class);
+            new Typo3DbQueryParser($dataMapperMock);
+        }
+
+        // We simply assert that this part is still reached, without throwing
+        // any errors.
+        $this->assertTrue(true);
+    }
+
     /**
      * Test our compatibility hack for the DI.
      *
@@ -52,7 +71,6 @@ class Typo3DbQueryParserTest extends AbstractTest
      * And testing the parent method across all LTS versions is a very bad idea.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser::convertQueryToDoctrineQueryBuilder
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser::__construct
      */
     public function testConvertQueryToDoctrineQueryBuilderNoDi()
     {
@@ -72,5 +90,29 @@ class Typo3DbQueryParserTest extends AbstractTest
         GeneralUtility::setSingletonInstance(ObjectManager::class, $objectManagerMock);
 
         $parser->convertQueryToDoctrineQueryBuilder($fixture);
+    }
+
+    /**
+     * Test our compatibility hack for the DI, with a failed DI
+     *
+     * I'm not really sure if this is possible in TYPO3 12, because development
+     * has just begun. When DI is not available, the QueryBuilder should not be
+     * available, but that does not stop me from actually testing it.
+     *
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser::convertQueryToDoctrineQueryBuilder
+     */
+    public function testConvertQueryToDoctrineQueryBuilderFailedDi()
+    {
+        $methodExistsMock = $this->getFunctionMock(
+            '\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\EventHandlers\\QueryParser',
+            'method_exists'
+        );
+        $methodExistsMock->expects($this->once())
+            ->with(ObjectManager::class, 'get')
+            ->will($this->returnValue(false));
+
+        $parser = new Typo3DbQueryParser();
+        $fixture = $this->createMock(Query::class);
+        $this->assertSame('n/a', $parser->convertQueryToDoctrineQueryBuilder($fixture));
     }
 }
