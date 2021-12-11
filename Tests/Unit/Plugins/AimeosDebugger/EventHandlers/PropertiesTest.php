@@ -126,12 +126,14 @@ class PropertiesTest extends AbstractTest
             ++$count;
         }
 
-        // Now for the dynamic value.
-        $this->assertEquals($dynamicValue, $models[$count]->getName());
-        $this->assertEquals($dynamicValue, $models[$count]->getData());
-        $this->assertEquals('->', $models[$count]->getConnectorLeft());
-        $this->assertEquals('', $models[$count]->getConnectorRight());
-        $this->assertEquals(CodegenConstInterface::CODEGEN_TYPE_PUBLIC, $models[$count]->getCodeGenType());
+        // Now for the dynamic value, but only if the value was actually __set().
+        if (method_exists($item, '__set')) {
+            $this->assertEquals($dynamicValue, $models[$count]->getName());
+            $this->assertEquals($dynamicValue, $models[$count]->getData());
+            $this->assertEquals('->', $models[$count]->getConnectorLeft());
+            $this->assertEquals('', $models[$count]->getConnectorRight());
+            $this->assertEquals(CodegenConstInterface::CODEGEN_TYPE_PUBLIC, $models[$count]->getCodeGenType());
+        }
     }
 
     /**
