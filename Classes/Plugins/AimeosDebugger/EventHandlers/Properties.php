@@ -131,12 +131,11 @@ class Properties extends AbstractEventHandler implements
         // object inheritance. We might need to go deep into the rabbit hole
         // to actually get it.
         $parentReflection = $ref;
-        while (!empty($parentReflection)) {
+        while (
+            $parentReflection !== false
+            && empty($result) === true
+        ) {
             $result = $this->retrieveProperty($parentReflection, $name, $data);
-            if ($result !== null) {
-                break;
-            }
-            // Going deeper!
             $parentReflection = $parentReflection->getParentClass();
         }
 
