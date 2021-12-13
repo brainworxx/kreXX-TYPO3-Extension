@@ -19,5 +19,6 @@ Tips and tricks
    :titlesonly:
    :glob:
 
-   AjaxCli/Index
-   T3settings/Index
+    Limitations/Index
+    AjaxCli/Index
+    T3settings/Index
