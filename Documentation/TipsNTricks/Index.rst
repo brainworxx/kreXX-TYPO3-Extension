@@ -8,6 +8,7 @@
 
 .. _tipsntricks:
 
+
 Tips and tricks
 ===============
 
@@ -19,6 +20,6 @@ Tips and tricks
    :titlesonly:
    :glob:
 
-    Limitations/Index
-    AjaxCli/Index
-    T3settings/Index
+   Limitations/Index
+   AjaxCli/Index
+   T3settings/Index
