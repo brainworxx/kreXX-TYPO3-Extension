@@ -131,9 +131,8 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
      */
     protected function convertKrexxFeSetting($values)
     {
-        $result = null;
         if (is_array($values) === false) {
-            return $result;
+            return null;
         }
 
         // Explanation:
@@ -141,6 +140,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
         // display -> we will only display the settings
         // The original values include the name of a template partial
         // with the form element.
+        $result = null;
         if ($values[static::RENDER_TYPE] === static::RENDER_TYPE_NONE) {
             // It's not visible, thus we do not accept any values from it.
             $result = static::RENDER_TYPE_CONFIG_NONE;
