@@ -150,25 +150,27 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
         }
 
         // Do the child generation.
-        // We must also remove a leading dot, which may be there, if we are
-        // analysing the dreaded {_all} in fluid.
-        if ($this->isAll) {
-            // Simple types inherit their nesting level from the parent none-simple-type.
-            // We need to correct this value, to really get only the ones from
-            // the first level and remove the dot there. But do this only if
-            // we are analysing the {_all} at this time.
-            $nestingLevel = $this->pool->emergencyHandler->getNestingLevel();
-            $type = $model->getType();
-            if ($type === static::TYPE_ARRAY || $type === static::TYPE_CLASS) {
-                --$nestingLevel;
-            }
-            if ($nestingLevel === 1) {
-                return trim(parent::generateSource($model), '.');
-            }
+        $result = parent::generateSource($model);
+        if ($this->isAll === false) {
+            return $result;
         }
 
-        // Fallback to the parent, for normal code generation.
-        return parent::generateSource($model);
+        // We must also remove a leading dot, which may be there, if we are
+        // analysing the dreaded {_all} in fluid.
+        // Simple types inherit their nesting level from the parent none-simple-type.
+        // We need to correct this value, to really get only the ones from
+        // the first level and remove the dot there. But do this only if
+        // we are analysing the {_all} at this time.
+        $nestingLevel = $this->pool->emergencyHandler->getNestingLevel();
+        $type = $model->getType();
+        if ($type === static::TYPE_ARRAY || $type === static::TYPE_CLASS) {
+            --$nestingLevel;
+        }
+        if ($nestingLevel === 1) {
+            $result = trim($result, '.');
+        }
+
+        return $result;
     }
 
     /**
