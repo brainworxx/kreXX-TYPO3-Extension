@@ -21,6 +21,7 @@ Changelog
     - [Bugfix] Display info about public properties in predeclared classes.
     - [Bugfix] Comment inheritance resolving works more reliable.
     - [Bugfix] Method return type comment parsing works more reliable.
+    - [Bugfix] Added missing parameters to the source generation of the Aimeos debug methods.
 
 4.1.2
     - [Feature] PHP 8.0 support

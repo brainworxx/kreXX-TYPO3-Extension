@@ -44,6 +44,7 @@ use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 
 /**
  * Special DebugMethods
@@ -128,7 +129,7 @@ class DebugMethods extends AbstractEventHandler implements
         foreach ($this->methods as $method => $classNames) {
             foreach ($classNames as $className) {
                 if ($data instanceof $className && $reflection->hasMethod($method)) {
-                    $output .= $this->callDebugMethod($data, $method);
+                    $output .= $this->callDebugMethod($data, $method, $reflection);
                     // We are done with this one. On to the next method.
                     break;
                 }
@@ -149,7 +150,7 @@ class DebugMethods extends AbstractEventHandler implements
      * @return string
      *   The rendered html dom.
      */
-    protected function callDebugMethod($data, string $methodName): string
+    protected function callDebugMethod($data, string $methodName, ReflectionClass $reflectionClass): string
     {
         $result = $data->$methodName();
         // We are expecting arrays, btw.
@@ -161,6 +162,7 @@ class DebugMethods extends AbstractEventHandler implements
                     ->setNormal(static::UNKNOWN_VALUE)
                     ->setHelpid($methodName)
                     ->setConnectorType(static::CONNECTOR_METHOD)
+                    ->setConnectorParameters($this->retrieveParameters($reflectionClass->getMethod($methodName)))
                     ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
                     ->addParameter(static::PARAM_DATA, $result)
                     ->injectCallback(
@@ -170,5 +172,27 @@ class DebugMethods extends AbstractEventHandler implements
         }
 
         return '';
+    }
+
+    /**
+     * Retrieve the parameter data from the reflection method.
+     *
+     * @param \ReflectionMethod $reflectionMethod
+     *   The reflection method.
+     *
+     * @return string
+     *   The human-readable parameter list.
+     */
+    protected function retrieveParameters(\ReflectionMethod $reflectionMethod): string
+    {
+        $paramList = '';
+        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
+            $paramList .= $this->pool->codegenHandler->parameterToString($reflectionParameter);
+            // We add a comma to the parameter list, to separate them for a
+            // better readability.
+            $paramList .= ', ';
+        }
+
+        return trim($paramList, ', ');
     }
 }

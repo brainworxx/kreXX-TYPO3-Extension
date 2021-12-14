@@ -118,6 +118,7 @@ class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
      *
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::handle
      * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::callDebugMethod
+     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods::retrieveParameters
      */
     public function testHandleNormal()
     {
@@ -152,10 +153,21 @@ class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
         if (class_exists(Map::class)) {
             // Aimeos 2020+
             $mapping = ['getRefItems', 'getPropertyItems', 'getListItems'];
+            $connectorRight = [
+                '($domain = NULL, $listtype = NULL, $type = NULL, bool $active = TRUE)',
+                '($type = NULL, bool $active = TRUE)',
+                '($domain = NULL, $listtype = NULL, $type = NULL, bool $active = TRUE)'
+            ];
         } else {
             // Aimeos 2019 and below
             $mapping = ['getRefItems', 'getListItems'];
+            $connectorRight = [
+                '($domain = NULL, $listtype = NULL, $type = NULL, bool $active = TRUE)',
+                '($domain = NULL, $listtype = NULL, $type = NULL, bool $active = TRUE)'
+            ];
         }
+
+
 
         // Testing the standard values.
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
@@ -163,7 +175,7 @@ class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
             $this->assertEquals(static::TYPE_DEBUG_METHOD, $model->getType());
             $this->assertEquals(static::UNKNOWN_VALUE, $model->getNormal());
             $this->assertEquals('->', $model->getConnectorLeft());
-            $this->assertEquals('()', $model->getConnectorRight());
+            $this->assertEquals($connectorRight[$key], $model->getConnectorRight());
             $this->assertEquals($mapping[$key], $model->getName(), 'Key is: ' . $key);
             if ($mapping[$key] === 'getPropertyItems') {
                 $this->assertNull($model->getParameters()[static::PARAM_DATA][0], 'This data does not exist in the fixture.');
