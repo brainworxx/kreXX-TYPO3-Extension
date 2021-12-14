@@ -162,8 +162,8 @@ class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
             // Aimeos 2019 and below
             $mapping = ['getRefItems', 'getListItems'];
             $connectorRight = [
-                '($domain = NULL, $listtype = NULL, $type = NULL, bool $active = TRUE)',
-                '($domain = NULL, $listtype = NULL, $type = NULL, bool $active = TRUE)'
+                '($domain = NULL, $type = NULL, $listtype = NULL, $active = TRUE)',
+                '($domain = NULL, $type = NULL, $listtype = NULL, $active = TRUE)'
             ];
         }
 
@@ -175,7 +175,7 @@ class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
             $this->assertEquals(static::TYPE_DEBUG_METHOD, $model->getType());
             $this->assertEquals(static::UNKNOWN_VALUE, $model->getNormal());
             $this->assertEquals('->', $model->getConnectorLeft());
-            $this->assertEquals($connectorRight[$key], $model->getConnectorRight());
+            $this->assertEquals($connectorRight[$key], $model->getConnectorRight(), 'Method: ' . $mapping[$key]);
             $this->assertEquals($mapping[$key], $model->getName(), 'Key is: ' . $key);
             if ($mapping[$key] === 'getPropertyItems') {
                 $this->assertNull($model->getParameters()[static::PARAM_DATA][0], 'This data does not exist in the fixture.');
