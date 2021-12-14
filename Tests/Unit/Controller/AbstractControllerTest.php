@@ -40,6 +40,7 @@ use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
+use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 
 class AbstractControllerTest extends AbstractTest
@@ -53,6 +54,19 @@ class AbstractControllerTest extends AbstractTest
     {
         $indexController = new IndexController();
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $indexController));
+    }
+
+    /**
+     * Test the injection od the module template
+     *
+     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::injectModuleTemplate
+     */
+    public function testInjectModuleTemplate()
+    {
+        $moduleTemplate = $this->createMock(ModuleTemplate::class);
+        $indexController = new IndexController();
+        $indexController->injectModuleTemplate($moduleTemplate);
+        $this->assertSame($moduleTemplate, $this->retrieveValueByReflection('moduleTemplate', $indexController));
     }
 
     /**
