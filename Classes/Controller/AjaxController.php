@@ -56,13 +56,15 @@ class AjaxController implements ConstInterface
     use LanguageTrait;
 
     /**
-     * List the logfiles with their corresponding meta data.
+     * List the logfiles with their corresponding metadata.
      *
      * @param \TYPO3\CMS\Core\Http\ServerRequest $serverRequest
      *   The current server request.
      * @param \TYPO3\CMS\Core\Http\Response|null $response
      *   The prepared response object. Since 10.0, we need to create this one
      *   by ourselves.
+     *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
      * @return \TYPO3\CMS\Core\Http\Response
      *   The response with the json string.
@@ -115,7 +117,7 @@ class AjaxController implements ConstInterface
 
         // No directory traversal for you!
         $fileId = preg_replace('/[^0-9]/', '', $serverRequest->getQueryParams()['fileid']);
-        // Directly add the delete result return value.
+        // Directly add the delete-result return value.
         $file = Krexx::$pool->config->getLogDir() . $fileId . '.Krexx';
 
         if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {

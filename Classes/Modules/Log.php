@@ -106,7 +106,9 @@ class Log extends AbstractSubModule implements
      * Retrieve the file list.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     *   The frontend request. Currently not used.
+     *   The frontend request, which is currently not used.
+     *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
      * @return \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData
      *   The data we will assign to the admin panel.

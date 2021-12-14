@@ -43,7 +43,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Throwable;
 
 /**
- * Resolving the actual fime path from strings that start with EXT:
+ * Resolving the actual file path from strings that start with EXT:
  */
 class ExtFilePath extends FilePath
 {

@@ -110,13 +110,13 @@ class DirtyModels implements EventHandlerInterface
     }
 
     /**
-     * Make a boolean human readable.
+     * Make a boolean human-readable.
      *
      * @param bool $bool
      *   The boolean, like the parameter name says.
      *
      * @return string
-     *   'TRUE' or 'FALSE' or an empty string when not dealing with a boolean.
+     *   'TRUE' or 'FALSE' or an empty string when we are not dealing with a boolean.
      */
     protected function createReadableBoolean(bool $bool): string
     {

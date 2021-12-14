@@ -61,8 +61,6 @@ class LogfileList extends AbstractCollector
     /**
      * Retrieve the file list, like the method name says. Used by the ajax controller.
      *
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
-     *
      * @return array
      *   The file list with the info.
      */
@@ -117,12 +115,12 @@ class LogfileList extends AbstractCollector
     }
 
     /**
-     * Parsing a potentially 80MB file for it's content is not a good idea. That
-     * is why the kreXX lib provides some meta data. We will open this file and
+     * Parsing a potentially 80 MB file for it's content is not a good idea. That
+     * is why the kreXX lib provides some metadata. We will open this file and
      * add it's content to the template.
      *
      * @param string $file
-     *   The file name for which we are retrieving the meta data.
+     *   The file name for which we are retrieving the metadata.
      *
      * @return array
      *   The meta stuff we were able to retrieve.
@@ -148,7 +146,7 @@ class LogfileList extends AbstractCollector
     }
 
     /**
-     * Converts bytes into human readable file size.
+     * Converts bytes into human-readable file size.
      *
      * @author Mogilev Arseny
      *
@@ -156,7 +154,7 @@ class LogfileList extends AbstractCollector
      *   The bytes value we want to make readable.
      *
      * @return string
-     *   Human readable file size.
+     *   Human-readable file size.
      */
     protected function fileSizeConvert($bytes): string
     {
@@ -190,6 +188,8 @@ class LogfileList extends AbstractCollector
      *
      * @param string $fileId
      *   The id of the file we want to get the url from.
+     *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
      * @return string
      *   The URL

@@ -192,7 +192,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
      * The "Oops, an error occurred!" is the most evil thing in typo3. Getting
      * any useful information from one of those can proof quite a challenge.
      *
-     * Otoh, one can always revert back to development settings, so that
+     * Otoh, one can always revert to development settings, so that
      * literally everybody can see what is happening.
      *
      * @param array $backtrace

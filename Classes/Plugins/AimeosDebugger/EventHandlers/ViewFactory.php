@@ -129,7 +129,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
 
         // Test if we are facing an Aimeos view.
         if (is_a($data, ViewInterface::class) === false) {
-            // This is not he view we are looking for.
+            // This is not the view we are looking for.
             // Early return.
             return '';
         }
@@ -164,7 +164,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
 
         if ($ref->hasProperty('helper')) {
             // Got our helpers right here.
-            // Lets hope that other implementations use the same variable name.
+            // Let's hope that other implementations use the same variable name.
             // We store the helpers here, because we need them later for the
             // actual method analysis. It is possible to inject helpers.
             // This means that the helper may be someone else as it should be,

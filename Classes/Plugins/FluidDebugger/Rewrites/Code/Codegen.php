@@ -55,14 +55,14 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
     const VHS_CALL_VIEWHELPER = 'vhsCallViewhelper';
 
     /**
-     * The we wrap this one around the fluid code generation, on the left.
+     * We wrap this one around the fluid code generation, on the left.
      *
      * @var string
      */
     protected $wrapperLeft = '{';
 
     /**
-     * The we wrap this one around the fluid code generation, on the right.
+     * We wrap this one around the fluid code generation, on the right.
      *
      * @var string
      */
@@ -107,7 +107,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
     }
 
     /**
-     * Test if we need to stop the code generation in it's tracks.
+     * Test if we need to stop the code generation in its tracks.
      *
      * - Test for a point in a variable name.
      *   Stuff like this is not reachable by normal means.
@@ -115,7 +115,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
      *   There is no real iterator_to_array method in vanilla fluid or vhs.
      *   The groupedFor viewhelper can be abused, but the new variable would
      *   only be visible inside the viewhelper scope. And adding a
-     *   variable.set inside that scope would make the code generation
+     *   {v:variable.set()} inside that scope would make the code generation
      *   really complicated.
      *
      * @param \Brainworxx\Krexx\Analyse\Model $model
@@ -177,7 +177,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
      * We are generation fluid inline code, using the VHS Call ViewHelper
      *
      * @example
-     *   object -> v:call(method: 'functionname', arguments: {arg1: 'parmeter1', arg2: 'parameter2'})
+     *   object -> v:call(method: 'functionname', arguments: {arg1: 'parameter1', arg2: 'parameter2'})
      *
      * @param \Brainworxx\Krexx\Analyse\Model $model
      *   The model for which we are generation the source code.
@@ -208,7 +208,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
     }
 
     /**
-     * Set a individual wrapper for source generation.
+     * Set an individual wrapper for source generation.
      *
      * @param string $wrapper
      *   The wrapper we want to use.
@@ -223,7 +223,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
     }
 
     /**
-     * Set a individual wrapper for source generation.
+     * Set an individual wrapper for source generation.
      *
      * @param string $wrapper
      *   The wrapper we want to use.

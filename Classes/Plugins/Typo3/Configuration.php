@@ -149,7 +149,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     }
 
     /**
-     * Geneerate the temp paths.
+     * Generate the temp paths.
      *
      * @return string[]
      *   The temp paths.
@@ -178,7 +178,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
      */
     protected function registerFileWriter()
     {
-        // Create the pool, it it is not present and reload the configuration
+        // Create the pool, it is not present and reload the configuration
         // with our new settings.
         Pool::createPool();
         Krexx::$pool->createClass(Config::class);

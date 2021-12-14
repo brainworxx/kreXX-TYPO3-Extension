@@ -65,10 +65,10 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
     }
 
     /**
-     * Retrieve the values for the drop downs.
+     * Retrieve the values for the drop-downs.
      *
      * @return array
-     *   The values for the drop downs.
+     *   The values for the drop-downs.
      */
     protected function retrieveDropDowns(): array
     {
@@ -138,7 +138,7 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
      * @param string $settingsName
      *   The name of the setting we are processing right now.
      * @param array $fallback
-     *   The fallback value.
+     *   The fallback values.
      */
     protected function applyFallbackToConfig(array &$config, string $settingsName, array $fallback)
     {

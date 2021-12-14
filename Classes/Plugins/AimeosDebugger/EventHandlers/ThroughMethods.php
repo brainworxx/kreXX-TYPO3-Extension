@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
- * In case we are using the factory method, we we use this one as a method name.
+ * In case we are using the factory method, we use this one as a method name.
  *
  * @uses string $factoryName
  *   If present, we will use this as a function name.

@@ -87,7 +87,7 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
         // Resolving the __get().
         Registration::registerEvent(PublicProperties::class . static::START_EVENT, Properties::class);
 
-        // Resolving the getter that get their values from an private array.
+        // Resolving the getter that get their values from a private array.
         Registration::registerEvent(ThroughGetter::class . '::retrievePropertyValue::resolving', Getter::class);
 
         // Resolving the magical class methods of the decorator pattern.

@@ -44,10 +44,10 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper as AbstractViewHelperFlu
  * Thanks to Helmut Hummel for this solution.
  *
  * The class alias map works well in TYPO3 old school installations.
- * When using it in Composer Mode, things are a little bit different.
+ * When using it in Composer Mode, things are a bit different.
  * Some copy pasta from Slack:
  * > The class alias maps in Composer mode are read before dumping the
- * > autoloader. This means that the class exists call will be non functional,
+ * > autoloader. This means that the class exists call will be non-functional,
  * > as the class will never exist at this point.
  *
  * @deprecated

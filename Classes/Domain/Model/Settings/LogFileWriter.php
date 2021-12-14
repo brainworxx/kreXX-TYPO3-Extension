@@ -69,9 +69,9 @@ trait LogFileWriter
      *
      * @param $value
      *
-     * @return mixed
+     * @return int
      */
-    public function setFormactivateT3FileWriter($value)
+    public function setFormactivateT3FileWriter($value): int
     {
         // I am supposed to do something with the value in here.
         // Otherwise, this is considered a bug and will lead to a bad rating.
@@ -83,9 +83,9 @@ trait LogFileWriter
      *
      * @param $value
      *
-     * @return mixed
+     * @return string
      */
-    public function setFormloglevelT3FileWriter($value)
+    public function setFormloglevelT3FileWriter($value): string
     {
         // I am supposed to do something with the value in here.
         // Otherwise, this is considered a bug and will lead to a bad rating.

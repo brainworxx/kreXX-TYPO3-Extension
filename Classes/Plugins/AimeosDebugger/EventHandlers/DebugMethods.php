@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Special DebugMethods
@@ -147,6 +148,8 @@ class DebugMethods extends AbstractEventHandler implements
      * @param string $methodName
      *   The debug method name.
      *
+     * @throws \ReflectionException
+     *
      * @return string
      *   The rendered html dom.
      */
@@ -183,7 +186,7 @@ class DebugMethods extends AbstractEventHandler implements
      * @return string
      *   The human-readable parameter list.
      */
-    protected function retrieveParameters(\ReflectionMethod $reflectionMethod): string
+    protected function retrieveParameters(ReflectionMethod $reflectionMethod): string
     {
         $paramList = '';
         foreach ($reflectionMethod->getParameters() as $reflectionParameter) {

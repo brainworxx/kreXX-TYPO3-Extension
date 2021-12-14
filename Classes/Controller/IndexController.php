@@ -76,7 +76,7 @@ class IndexController extends AbstractController implements ConstInterface
 
         $this->checkProductiveSetting();
 
-        // Has kreXX something to say? Maybe a write protected logfolder?
+        // Has kreXX something to say? Maybe a write-protected logfolder?
         $this->retrieveKrexxMessages();
         $this->configuration->assignData($this->view);
         $this->formConfiguration->assignData($this->view);
@@ -138,8 +138,6 @@ class IndexController extends AbstractController implements ConstInterface
      * Dispatch a logfile.
      *
      * @param ServerRequest|null $serverRequest
-     *
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      *
      * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface|\TYPO3\CMS\Core\Http\NullResponse
      */
