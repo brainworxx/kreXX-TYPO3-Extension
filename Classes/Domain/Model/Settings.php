@@ -153,7 +153,7 @@ class Settings
             $result .= '[' . $group . ']' . "\n";
             foreach ($settings as $settingName) {
                 if (
-                    !is_null($this->$settingName) &&
+                    $this->$settingName !== null &&
                     $validation->evaluateSetting($group, $settingName, $this->$settingName)
                 ) {
                     $result .= $settingName . ' = "' . $this->$settingName . '"'  . "\n";
