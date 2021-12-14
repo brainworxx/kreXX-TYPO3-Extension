@@ -229,7 +229,6 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         }
 
         // Dump them, like there is no tomorrow.
-        $isFactoryMethod = true;
         return $this->pool->render->renderExpandableChild(
             $this->pool->createClass(Model::class)
                 ->setName('Aimeos view factory')
@@ -237,7 +236,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
                 ->addParameter(static::PARAM_DATA, $reflectionList)
                 // Tell the callback to pass on the factory name.
                 // Thanks to the magic factory, we must use this one.
-                ->addParameter(static::PARAM_IS_FACTORY_METHOD, $isFactoryMethod)
+                ->addParameter(static::PARAM_IS_FACTORY_METHOD, true)
                 ->setHelpid('aimeosViewInfo')
                 ->injectCallback($this->pool->createClass(ThroughMethods::class))
         );
