@@ -163,7 +163,7 @@ class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
             $mapping = ['getRefItems', 'getListItems'];
             $connectorRight = [
                 '($domain = NULL, $type = NULL, $listtype = NULL, $active = TRUE)',
-                '($domain = NULL, $type = NULL, $listtype = NULL, $active = TRUE)'
+                '($domain = NULL, $listtype = NULL, $type = NULL, $active = TRUE)'
             ];
         }
 
