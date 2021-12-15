@@ -46,6 +46,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
@@ -127,6 +128,21 @@ abstract class AbstractController extends ActionController implements ConstInter
      * @var \TYPO3\CMS\Backend\Template\ModuleTemplate
      */
     protected $moduleTemplate;
+
+    /**
+     * @var \TYPO3\CMS\Core\Page\PageRenderer
+     */
+    protected $pageRenderer;
+
+    /**
+     * Inject the page renderer.
+     *
+     * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer
+     */
+    public function injectPageRenderer(PageRenderer $pageRenderer)
+    {
+        $this->pageRenderer = $pageRenderer;
+    }
 
     /**
      * Set the pool and do the parent constructor.
@@ -291,9 +307,8 @@ abstract class AbstractController extends ActionController implements ConstInter
     {
         $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/Index.css');
-        $pageRenderer = $this->moduleTemplate->getPageRenderer();
-        $pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
-        $pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));
+        $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
+        $this->pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));
         $this->moduleTemplate->setContent($this->view->render());
         $this->moduleTemplate->setModuleName('tx_includekrexx');
     }

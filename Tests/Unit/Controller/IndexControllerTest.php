@@ -145,9 +145,6 @@ class IndexControllerTest extends AbstractTest
 
         $moduleTemplateMock = $this->createMock(ModuleTemplate::class);
         $moduleTemplateMock->expects($this->once())
-            ->method('getPageRenderer')
-            ->will($this->returnValue($pageRenderer));
-        $moduleTemplateMock->expects($this->once())
             ->method('setModuleName')
             ->with('tx_includekrexx');
         $moduleTemplateMock->expects($this->once())
@@ -161,6 +158,7 @@ class IndexControllerTest extends AbstractTest
         $indexController->injectConfiguration($configurationMock);
         $indexController->injectFormConfiguration($configFeMock);
         $indexController->injectModuleTemplate($moduleTemplateMock);
+        $indexController->injectPageRenderer($pageRenderer);
         if (method_exists($indexController, 'injectResponseFactory')) {
             $indexController->injectResponseFactory(new ResponseFactory());
         }
