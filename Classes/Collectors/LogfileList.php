@@ -49,8 +49,6 @@ class LogfileList extends AbstractCollector
     /**
      * Assigning the list to the view. Used by out adminpanel logging module.
      *
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
-     *
      * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
      */
     public function assignData(ViewInterface $view)

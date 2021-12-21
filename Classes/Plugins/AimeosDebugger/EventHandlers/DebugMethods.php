@@ -117,6 +117,8 @@ class DebugMethods extends AbstractEventHandler implements
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.
      *
+     * @throws \ReflectionException
+     *
      * @return string
      *   The generated markup.
      */

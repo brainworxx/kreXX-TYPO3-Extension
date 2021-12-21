@@ -172,7 +172,7 @@ abstract class AbstractRender
      */
     protected function retrieveTypeClasses(Model $model): string
     {
-        $typeClasses = $model->isExpandable() === true ?  'kexpand ' :  ' ';
+        $typeClasses = $model->isExpandable() === true ? 'kexpand ' : ' ';
 
         foreach (explode(' ', $model->getType()) as $typeClass) {
             $typeClasses .= 'k' . $typeClass . ' ';

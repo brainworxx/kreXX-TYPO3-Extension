@@ -64,8 +64,6 @@ class AjaxController implements ConstInterface
      *   The prepared response object. Since 10.0, we need to create this one
      *   by ourselves.
      *
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
-     *
      * @return \TYPO3\CMS\Core\Http\Response
      *   The response with the json string.
      */

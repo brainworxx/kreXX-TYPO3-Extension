@@ -164,7 +164,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
         if ($model->getType() === static::TYPE_CLASS) {
             $type = $model->getNormal();
         } else {
-            $type = $model->getType();
+            $type = gettype($model->getData()) === 'string' ? 'string' : $model->getType();
         }
 
         $blackList = ['->', '::', '[', ']', '(', ')'];
@@ -313,7 +313,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
         // Retrieve the type and the name, without calling a possible autoloader.
         $prefix = '';
         if ($reflectionParameter->isPassedByReference() === true) {
-            $prefix = '&' ;
+            $prefix = '&';
         }
 
         $name = $this->retrieveParameterType($reflectionParameter) . $prefix . '$' . $reflectionParameter->getName();
