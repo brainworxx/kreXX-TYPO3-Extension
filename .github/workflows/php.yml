@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [ master, develop, feature/*]
+    branches: [ master, develop, feature/*, 'v4.1']
   pull_request:
     branches: [ master ]
 
