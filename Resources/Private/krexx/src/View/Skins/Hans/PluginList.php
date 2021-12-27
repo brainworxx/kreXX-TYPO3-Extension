@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
+use Brainworxx\Krexx\Service\Plugin\PluginConstInterface;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 
 /**
@@ -64,7 +65,7 @@ trait PluginList
         $result = '';
         $template = $this->getTemplateFileContent(static::FILE_SI_PLUGIN);
         foreach (SettingsGetter::getPlugins() as $plugin) {
-            if ($plugin[SettingsGetter::IS_ACTIVE] === true) {
+            if ($plugin[PluginConstInterface::IS_ACTIVE] === true) {
                 $activeClass = 'kisactive';
                 $activeText = 'active';
             } else {
@@ -77,7 +78,7 @@ trait PluginList
                 [
                     $activeClass,
                     $activeText,
-                    $plugin[SettingsGetter::PLUGIN_NAME] . ' ' . $plugin[SettingsGetter::PLUGIN_VERSION]
+                    $plugin[PluginConstInterface::PLUGIN_NAME] . ' ' . $plugin[PluginConstInterface::PLUGIN_VERSION]
                 ],
                 $template
             );

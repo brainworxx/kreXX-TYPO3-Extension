@@ -13,8 +13,7 @@ jobs:
     strategy:
       matrix:
         env:
-          - { php: 7.0, composer: 1, TYPO3: ^8.7,  Aimeos: ^18, CodeClimate: no  }
-          - { php: 7.1, composer: 1, TYPO3: ^8.7,  Aimeos: ^19, CodeClimate: no  }
+          - { php: 7.1, composer: 1, TYPO3: ^8.7,  Aimeos: ^18, CodeClimate: no  }
           - { php: 7.2, composer: 1, TYPO3: ^9.5,  Aimeos: ^19, CodeClimate: no  }
           - { php: 7.3, composer: 1, TYPO3: ^10.4, Aimeos: ^20, CodeClimate: no  }
           - { php: 7.4, composer: 1, TYPO3: ^10.4, Aimeos: ^20, CodeClimate: no  }

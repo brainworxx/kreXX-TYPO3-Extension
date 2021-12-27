@@ -42,16 +42,13 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
-use ReflectionNamedType;
 use ReflectionParameter;
-use ReflectionType;
 
 /**
  * Code generation methods.
  */
 class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessConstInterface
 {
-
     /**
      * Here we store all relevant data.
      *
@@ -151,7 +148,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      *
      * @param \Brainworxx\Krexx\Analyse\Model $model
      */
-    protected function addTypeHint(Model $model)
+    protected function addTypeHint(Model $model): void
     {
         if (
             empty($name = (string) $model->getName()) === true
@@ -271,7 +268,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      *
      * @param bool $bool
      */
-    public function setAllowCodegen(bool $bool)
+    public function setAllowCodegen(bool $bool): void
     {
         if ($bool === false) {
             $this->allowCodegen = false;
@@ -349,17 +346,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
         $type = '';
         if ($reflectionParameter->hasType() === true) {
             $reflectionNamedType = $reflectionParameter->getType();
-            if (is_a($reflectionNamedType, ReflectionNamedType::class)) {
-                // PHP 7.1 and later
-                /** @var ReflectionNamedType $reflectionNamedType */
-                $type = $reflectionNamedType->getName() . ' ';
-            } else {
-                // PHP 7.0 only.
-                // @deprecated
-                // Will be removes as soon as we drop 7.0 support.
-                /** @var ReflectionType $reflectionNamedType */
-                $type = $reflectionNamedType->__toString() . ' ';
-            }
+            $type = $reflectionNamedType->getName() . ' ';
         }
 
         return $type;

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2021 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2019 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,64 +35,32 @@
 
 declare(strict_types=1);
 
-namespace Brainworxx\Krexx\Analyse\Model;
+namespace Brainworxx\Includekrexx\ViewHelpers;
 
-use Brainworxx\Krexx\Analyse\Model;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper as AbstractViewHelperCms;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper as AbstractViewHelperFluid;
 
 /**
- * Trait MultiLineCodeGen
+ * Thanks to Helmut Hummel for this solution.
+ *
+ * The class alias map works well in TYPO3 old school installations.
+ * When using it in Composer Mode, things are a bit different.
+ * Some copy pasta from Slack:
+ * > The class alias maps in Composer mode are read before dumping the
+ * > autoloader. This means that the class exists call will be non-functional,
+ * > as the class will never exist at this point.
  *
  * @deprecated
- *   Since 4.0.0. Will be removed.
- *
- * @codeCoverageIgnore
- *   We will not test deprecated methods.
+ *   Will be removed as soon as we drop 8.7 Support.
  */
-trait MultiLineCodeGen
-{
-    /**
-     * Are we dealing with multiline code generation?
-     *
-     * @var string
-     */
-    protected $multiLineCodeGen = '';
-
-    /**
-     * Getter for the multiline code generation.
-     *
-     * @deprecated
-     *   Since 4.0.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return string
-     */
-    public function getMultiLineCodeGen(): string
+if (class_exists(AbstractViewHelperCms::class) === true) {
+    class CompatibilityViewHelper extends AbstractViewHelperCms
     {
-        return $this->multiLineCodeGen;
+
     }
-
-    /**
-     * Setter for the multiline code generation.
-     *
-     * @deprecated
-     *   Since 4.0.0. Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @param string $multiLineCodeGen
-     *   The constant from the Codegen class.
-     *
-     * @return $this
-     *   $this, for chaining.
-     */
-    public function setMultiLineCodeGen(string $multiLineCodeGen): Model
+} else {
+    class CompatibilityViewHelper extends AbstractViewHelperFluid
     {
-        $this->multiLineCodeGen = $multiLineCodeGen;
-        $this->codeGenType = $multiLineCodeGen;
 
-        return $this;
     }
 }

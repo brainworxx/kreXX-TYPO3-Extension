@@ -39,7 +39,6 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use finfo;
 use TypeError;
 
@@ -48,7 +47,7 @@ use TypeError;
  *
  * Adding a finfo analysis and a realpath if it differs from the given path.
  */
-class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
+class FilePath extends AbstractScalarAnalysis
 {
     /**
      * @var \finfo
@@ -115,7 +114,10 @@ class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
                 // We only add the realpath, if it differs from the string
                 $model->addToJson('Real path', is_string($realPath) === true ? $realPath : 'n/a');
             }
-            $model->addToJson(static::META_MIME_TYPE, $this->bufferInfo->file($string));
+            $model->addToJson(
+                $this->pool->messages->getHelp('metaMimeType'),
+                $this->bufferInfo->file($string)
+            );
         }
 
         restore_error_handler();

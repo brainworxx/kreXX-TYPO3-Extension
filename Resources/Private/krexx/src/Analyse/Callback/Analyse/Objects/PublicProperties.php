@@ -109,7 +109,7 @@ class PublicProperties extends AbstractObjectAnalysis implements CallbackConstIn
      * @param ReflectionProperty[] $publicProps
      * @param \ReflectionClass $ref
      */
-    protected function handleUndeclaredProperties(array &$refProps, $data, array $publicProps, ReflectionClass $ref)
+    protected function handleUndeclaredProperties(array &$refProps, $data, array $publicProps, ReflectionClass $ref): void
     {
         // For every not-declared property, we add another reflection.
         // Those are simply added during runtime

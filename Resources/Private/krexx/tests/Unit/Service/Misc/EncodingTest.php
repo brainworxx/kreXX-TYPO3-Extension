@@ -131,9 +131,9 @@ class EncodingTest extends AbstractTest
             "\xBF" => '&#039; . &quot;\xBF&quot; . &#039;'
         ];
 
-        foreach ($specialChars as $original => $expeced) {
+        foreach ($specialChars as $original => $expected) {
             $this->assertEquals(
-                $fixture . $expeced,
+                $fixture . $expected,
                 $this->encoding->encodeStringForCodeGeneration($fixture . $original)
             );
         }

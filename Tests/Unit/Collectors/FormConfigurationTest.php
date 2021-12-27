@@ -77,8 +77,8 @@ class FormConfigurationTest extends AbstractTest
                 $this->callback(function ($config) {
                     // @see config.ini in the fixtures.
                     return
-                        $config[Config::SETTING_SKIN][Configuration::SETTINGS_VALUE] === Fallback::RENDER_TYPE_CONFIG_NONE &&
-                        $config[Config::SETTING_SKIN][FormConfiguration::SETTINGS_OPTIONS] === [
+                        $config[Config::SETTING_SKIN]['value'] === Fallback::RENDER_TYPE_CONFIG_NONE &&
+                        $config[Config::SETTING_SKIN]['options'] === [
                             Fallback::RENDER_TYPE_CONFIG_FULL => Fallback::RENDER_TYPE_CONFIG_FULL,
                             Fallback::RENDER_TYPE_CONFIG_DISPLAY => Fallback::RENDER_TYPE_CONFIG_DISPLAY,
                             Fallback::RENDER_TYPE_CONFIG_NONE => Fallback::RENDER_TYPE_CONFIG_NONE,

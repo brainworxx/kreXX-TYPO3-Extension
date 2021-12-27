@@ -62,12 +62,12 @@ use ReflectionClass;
  *   Use this part if you don't want fluid to escape your string or if you are
  *   stitching together an array.
  */
-class DebugViewHelper extends ComptibilityViewHelper
+class DebugViewHelper extends CompatibilityViewHelper
 {
     /**
      * @var string
      */
-    const ARGUMENT_VALUE = 'value';
+    protected const ARGUMENT_VALUE = 'value';
 
     /**
      * No escaping for the rendered children, we want then as they are.
@@ -95,7 +95,7 @@ class DebugViewHelper extends ComptibilityViewHelper
      *
      * @throws \TYPO3\CMS\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument(static::ARGUMENT_VALUE, 'mixed', 'The variable we want to analyse.', false);
     }
@@ -135,7 +135,7 @@ class DebugViewHelper extends ComptibilityViewHelper
     /**
      * Analyse the stuff from the template.
      */
-    protected function analysis()
+    protected function analysis(): void
     {
         $type = $this->analysisType;
         $found  = false;

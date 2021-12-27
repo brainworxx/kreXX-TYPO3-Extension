@@ -193,7 +193,7 @@ class Pool extends AbstractFactory
     /**
      * Check if the environment is as it should be.
      */
-    protected function checkEnvironment()
+    protected function checkEnvironment(): void
     {
         // Check chunk folder is writable.
         // If not, give feedback!
@@ -228,7 +228,7 @@ class Pool extends AbstractFactory
     /**
      * Renew the "semi-singletons" after an analysis.
      */
-    public function reset()
+    public function reset(): void
     {
         // We need to reset our recursion handler, because
         // the content of classes might change with another run.

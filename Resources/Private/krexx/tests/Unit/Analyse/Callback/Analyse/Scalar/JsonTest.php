@@ -122,10 +122,10 @@ class JsonTest extends AbstractTest
 
         $result = CallbackCounter::$staticParameters[0][Json::PARAM_DATA];
         $this->assertEquals(1, CallbackCounter::$counter);
-        $this->assertStringContainsString('asdf', $result[Json::META_PRETTY_PRINT]);
-        $this->assertStringContainsString('yxcv', $result[Json::META_PRETTY_PRINT]);
-        $this->assertEquals($expectation, $result[Json::META_DECODED_JSON]);
-        $this->assertEquals($encodedString, $result[Json::META_CONTENT]);
+        $this->assertStringContainsString('asdf', $result['Pretty print']);
+        $this->assertStringContainsString('yxcv', $result['Pretty print']);
+        $this->assertEquals($expectation, $result['Decoded json']);
+        $this->assertEquals($encodedString, $result['Content']);
         $this->assertFalse($model->hasExtra());
     }
 }

@@ -70,17 +70,17 @@ class Log extends AbstractSubModule implements
     /**
      * @var string
      */
-    const MESSAGE_SEVERITY_ERROR = 'error';
+    protected const MESSAGE_SEVERITY_ERROR = 'error';
 
     /**
      * @var string
      */
-    const MESSAGE_SEVERITY_INFO = 'info';
+    protected const MESSAGE_SEVERITY_INFO = 'info';
 
     /**
      * @var string
      */
-    const TRANSLATION_PREFIX = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:';
+    protected const TRANSLATION_PREFIX = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:';
 
     /**
      * The identifier for the Admin Panel Module.

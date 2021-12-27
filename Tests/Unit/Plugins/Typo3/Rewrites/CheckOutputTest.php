@@ -60,7 +60,7 @@ class CheckOutputTest extends AbstractTest
         // Prepare the General Untility.
         $this->setValueByReflection(
             'indpEnvCache',
-            [CheckOutput::REMOTE_ADDRESS => '127.0.0.0'],
+            ['REMOTE_ADDR' => '127.0.0.0'],
             GeneralUtility::class
         );
         $this->assertTrue($checkOutput->isAllowedIp('*'));

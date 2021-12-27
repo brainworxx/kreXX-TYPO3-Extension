@@ -59,15 +59,11 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Callback/CallbackConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Caller/BacktraceConstInterface.php';
-        include_once KREXX_DIR . 'src/View/ViewConstInterface.php';
         include_once KREXX_DIR . 'src/Controller/ControllerConstInterface.php';
         include_once KREXX_DIR . 'src/Service/Config/ConfigConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Code/CodegenConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Code/ConnectorsConstInterface.php';
         include_once KREXX_DIR . 'src/Service/Plugin/PluginConstInterface.php';
-        // Deprecated
-        include_once KREXX_DIR . 'src/Analyse/ConstInterface.php';
-        // Deprecated
         include_once KREXX_DIR . 'src/Analyse/Callback/AbstractCallback.php';
 
         include_once KREXX_DIR . 'src/Analyse/Code/Codegen.php';
@@ -150,13 +146,6 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Model/HasExtra.php';
         include_once KREXX_DIR . 'src/Analyse/Model/CodeGenType.php';
         include_once KREXX_DIR . 'src/Analyse/Model/KeyType.php';
-        // Deprecated
-        include_once KREXX_DIR . 'src/Analyse/Model/MultiLineCodeGen.php';
-        include_once KREXX_DIR . 'src/Analyse/Model/IsPublic.php';
-        include_once KREXX_DIR . 'src/Analyse/Model/IsCallback.php';
-        include_once KREXX_DIR . 'src/Analyse/Model/IsMetaConstants.php';
-        include_once KREXX_DIR . 'src/Analyse/AbstractModel.php';
-        // Deprecated
         include_once KREXX_DIR . 'src/Analyse/Model.php';
 
         include_once KREXX_DIR . 'src/Controller/AbstractController.php';
@@ -173,9 +162,6 @@ call_user_func(function () {
 
         include_once KREXX_DIR . 'src/Service/Config/From/Cookie.php';
         include_once KREXX_DIR . 'src/Service/Config/From/File.php';
-        // Deprecated
-        include_once KREXX_DIR . 'src/Service/Config/From/Ini.php';
-        //
 
         include_once KREXX_DIR . 'src/Service/Factory/EventHandlerInterface.php';
         include_once KREXX_DIR . 'src/Service/Factory/Event.php';
@@ -212,7 +198,6 @@ call_user_func(function () {
 
         include_once KREXX_DIR . 'src/View/Skins/Hans/SingleEditableChild.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/ExpandableChild.php';
-        include_once KREXX_DIR . 'src/View/Skins/Hans/SingleChild.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/BacktraceSourceLine.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/Button.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/CssJs.php';
@@ -229,9 +214,6 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/View/Skins/Hans/ConnectorLeft.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/ConnectorRight.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/Search.php';
-        // Deprecated
-        include_once KREXX_DIR . 'src/View/Skins/Hans/ConstInterface.php';
-        // Deprecated
         include_once KREXX_DIR . 'src/View/Skins/RenderHans.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Button.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/ExpandableChild.php';
@@ -239,7 +221,6 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Footer.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Header.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Recursion.php';
-        include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/SingleChild.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/SingleEditableChild.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/ConnectorRight.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Help.php';
@@ -300,7 +281,7 @@ call_user_func(function () {
      *   The variable we want to analyse.
      *
      * @return mixed
-     *   Return the original anslysis value.
+     *   Return the original analysis value.
      */
     function krexxlog($data = null)
     {

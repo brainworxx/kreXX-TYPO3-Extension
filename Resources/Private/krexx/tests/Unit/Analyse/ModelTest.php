@@ -170,9 +170,17 @@ class ModelTest extends AbstractTest
         // Mock the message class, which will provide the help text.
         $helpText = 'some help text';
         $messageMock = $this->createMock(Messages::class);
-        $messageMock->expects($this->once())
+        $messageMock->expects($this->exactly(2))
             ->method('getHelp')
-            ->will($this->returnValue($helpText));
+            ->withConsecutive(['metaHelp'], ['some id'])
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['metaHelp', [], 'Help'],
+                        ['some id', [], $helpText]
+                    ]
+                )
+            );
         Krexx::$pool->messages = $messageMock;
 
         // Test the return value for chaining

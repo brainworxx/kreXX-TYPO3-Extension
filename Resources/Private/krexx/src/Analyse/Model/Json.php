@@ -64,7 +64,7 @@ trait Json
      */
     public function setHelpid(string $helpId): Model
     {
-        $this->addToJson(static::META_HELP, $this->pool->messages->getHelp($helpId));
+        $this->addToJson($this->pool->messages->getHelp('metaHelp'), $this->pool->messages->getHelp($helpId));
         return $this;
     }
 

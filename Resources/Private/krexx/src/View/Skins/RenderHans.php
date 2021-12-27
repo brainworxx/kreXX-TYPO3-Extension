@@ -60,16 +60,13 @@ use Brainworxx\Krexx\View\Skins\Hans\PluginList;
 use Brainworxx\Krexx\View\Skins\Hans\Recursion;
 use Brainworxx\Krexx\View\Skins\Hans\Search;
 use Brainworxx\Krexx\View\Skins\Hans\SingeChildHr;
-use Brainworxx\Krexx\View\Skins\Hans\SingleChild;
 use Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild;
-use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Individual render class for the Hans skin.
  */
 class RenderHans extends AbstractRender implements
     RenderInterface,
-    ViewConstInterface,
     BacktraceConstInterface,
     PluginConstInterface,
     ConfigConstInterface,
@@ -92,7 +89,6 @@ class RenderHans extends AbstractRender implements
     use Recursion;
     use Search;
     use SingeChildHr;
-    use SingleChild;
     use SingleEditableChild;
 
     /**
@@ -100,201 +96,201 @@ class RenderHans extends AbstractRender implements
      *
      * @var string
      */
-    const FILE_EX_CHILD_NORMAL = 'expandableChildNormal';
+    protected const FILE_EX_CHILD_NORMAL = 'expandableChildNormal';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_SI_CHILD = 'singleChild';
+    protected const FILE_SI_CHILD = 'singleChild';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_SI_CHILD_EX = 'singleChildExtra';
+    protected const FILE_SI_CHILD_EX = 'singleChildExtra';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_SI_CHILD_CALL = 'singleChildCallable';
+    protected const FILE_SI_CHILD_CALL = 'singleChildCallable';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_SOURCE_BUTTON = 'sourcebutton';
+    protected const FILE_SOURCE_BUTTON = 'sourcebutton';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_NEST = 'nest';
+    protected const FILE_NEST = 'nest';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_BACKTRACE_SOURCELINE = 'backtraceSourceLine';
+    protected const FILE_BACKTRACE_SOURCELINE = 'backtraceSourceLine';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_CALLER = 'caller';
+    protected const FILE_CALLER = 'caller';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_HELPROW = 'helprow';
+    protected const FILE_HELPROW = 'helprow';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_HELP = 'help';
+    protected const FILE_HELP = 'help';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_CONNECTOR_LEFT = 'connectorLeft';
+    protected const FILE_CONNECTOR_LEFT = 'connectorLeft';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_CONNECTOR_RIGHT = 'connectorRight';
+    protected const FILE_CONNECTOR_RIGHT = 'connectorRight';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_SI_PLUGIN = 'singlePlugin';
+    protected const FILE_SI_PLUGIN = 'singlePlugin';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_SEARCH = 'search';
+    protected const FILE_SEARCH = 'search';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_RECURSION = 'recursion';
+    protected const FILE_RECURSION = 'recursion';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_HEADER = 'header';
+    protected const FILE_HEADER = 'header';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_FOOTER = 'footer';
+    protected const FILE_FOOTER = 'footer';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_CSSJS = 'cssJs';
+    protected const FILE_CSSJS = 'cssJs';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_SI_SELECT_OPTIONS = 'singleSelectOptions';
+    protected const FILE_SI_SELECT_OPTIONS = 'singleSelectOptions';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_SI_EDIT_CHILD = 'singleEditableChild';
+    protected const FILE_SI_EDIT_CHILD = 'singleEditableChild';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_SI_BUTTON = 'singleButton';
+    protected const FILE_SI_BUTTON = 'singleButton';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_FATAL_MAIN = 'fatalMain';
+    protected const FILE_FATAL_MAIN = 'fatalMain';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_FATAL_HEADER = 'fatalHeader';
+    protected const FILE_FATAL_HEADER = 'fatalHeader';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_MESSAGE = 'message';
+    protected const FILE_MESSAGE = 'message';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_SI_HR = 'singleChildHr';
+    protected const FILE_SI_HR = 'singleChildHr';
 
     /**
      * Template file name.
      *
      * @var string
      */
-    const FILE_BR = 'br';
+    protected const FILE_BR = 'br';
 
     /**
      * Data attribute for source generation.
      *
      * @var string
      */
-    const DATA_ATTRIBUTE_SOURCE = 'source';
+    protected const DATA_ATTRIBUTE_SOURCE = 'source';
 
     /**
      * Data attribute for source generation.
      *
      * @var string
      */
-    const DATA_ATTRIBUTE_WRAPPER_R = 'codewrapperRight';
+    protected const DATA_ATTRIBUTE_WRAPPER_R = 'codewrapperRight';
 
     /**
      * Data attribute for source generation.
      *
      * @var string
      */
-    const DATA_ATTRIBUTE_WRAPPER_L = 'codewrapperLeft';
+    protected const DATA_ATTRIBUTE_WRAPPER_L = 'codewrapperLeft';
 }

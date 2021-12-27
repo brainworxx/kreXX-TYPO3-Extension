@@ -42,7 +42,6 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Comment\Classes;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Analysis of the metadata of a class
@@ -53,7 +52,7 @@ use Brainworxx\Krexx\View\ViewConstInterface;
  *   The name of the metadata, if available.
  *   Fallback to static::META_CLASS_DATA
  */
-class Meta extends AbstractObjectAnalysis implements CallbackConstInterface, ViewConstInterface
+class Meta extends AbstractObjectAnalysis implements CallbackConstInterface
 {
 
     /**
@@ -79,7 +78,7 @@ class Meta extends AbstractObjectAnalysis implements CallbackConstInterface, Vie
         if (isset($this->parameters[static::PARAM_META_NAME])) {
             $name = $this->parameters[static::PARAM_META_NAME];
         } else {
-            $name = static::META_CLASS_DATA;
+            $name = $this->pool->messages->getHelp('metaClassData');
         }
 
         // We need to check, if we have a meta recursion here.
@@ -121,39 +120,57 @@ class Meta extends AbstractObjectAnalysis implements CallbackConstInterface, Vie
     {
         $this->pool->recursionHandler->addToMetaHive($domId);
 
-        // Get the naming on the way.
-        $data = [
-            static::META_CLASS_NAME => $this->generateName($ref),
-            static::META_COMMENT => $this->pool->createClass(Classes::class)->getComment($ref),
-            static::META_DECLARED_IN => $ref->isInternal() === true ? static::META_PREDECLARED :
-                $this->pool->fileService->filterFilePath($ref->getFileName()) . ', line ' . $ref->getStartLine()
-        ];
-
-        // Now to collect the inheritance stuff.
-        // Each of them will get analysed by the ThroughMeta callback.
-        if (empty($interfaces = $ref->getInterfaces()) === false) {
-            $data[static::META_INTERFACES] = $interfaces;
-        }
-        if (empty($traitList = $ref->getTraits()) === false) {
-            $data[static::META_TRAITS] = $traitList;
-        }
-
-        /** @var ReflectionClass $previousClass */
-        if (empty($previousClass = $ref->getParentClass()) === false) {
-            // We add it via array, because the other inheritance getters
-            // are also supplying one.
-            $data[static::META_INHERITED_CLASS] = [$previousClass->getName() => $previousClass];
-        }
-
         return $this->pool->render->renderExpandableChild($this->dispatchEventWithModel(
             static::EVENT_MARKER_ANALYSES_END,
             $this->pool->createClass(Model::class)
                 ->setName($name)
                 ->setDomid($domId)
                 ->setType(static::TYPE_INTERNALS)
-                ->addParameter(static::PARAM_DATA, $data)
+                ->addParameter(static::PARAM_DATA, $this->generateMetaData($ref))
                 ->injectCallback($this->pool->createClass(ThroughMeta::class))
         ));
+    }
+
+    /**
+     * Generate the metadata.
+     *
+     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
+     *   The reflection class, the main source of information.
+     *
+     * @return array
+     *   The generated metadata.
+     */
+    protected function generateMetaData(ReflectionClass $ref): array
+    {
+        $messages = $this->pool->messages;
+
+        // Get the naming on the way.
+        $data = [
+            $messages->getHelp('metaClassName') => $this->generateName($ref),
+            $messages->getHelp('metaComment') => $this->pool->createClass(Classes::class)->getComment($ref),
+            $messages->getHelp('metaDeclaredIn') => $ref->isInternal() === true ?
+                $messages->getHelp('metaPredeclared') :
+                $this->pool->fileService->filterFilePath($ref->getFileName()) . ' ' .
+                $messages->getHelp('metaInLine') . $ref->getStartLine()
+        ];
+
+        // Now to collect the inheritance stuff.
+        // Each of them will get analysed by the ThroughMeta callback.
+        if (empty($interfaces = $ref->getInterfaces()) === false) {
+            $data[$messages->getHelp('metaInterfaces')] = $interfaces;
+        }
+        if (empty($traitList = $ref->getTraits()) === false) {
+            $data[$messages->getHelp('metaTraits')] = $traitList;
+        }
+
+        /** @var ReflectionClass $previousClass */
+        if (empty($previousClass = $ref->getParentClass()) === false) {
+            // We add it via array, because the other inheritance getters
+            // are also supplying one.
+            $data[$messages->getHelp('metaInheritedClass')] = [$previousClass->getName() => $previousClass];
+        }
+
+        return $data;
     }
 
     /**

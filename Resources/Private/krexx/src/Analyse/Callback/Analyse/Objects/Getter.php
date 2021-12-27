@@ -119,7 +119,7 @@ class Getter extends AbstractObjectAnalysis
      * @param ReflectionMethod $method
      * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
      */
-    protected function populateGetterLists(ReflectionMethod $method, ReflectionClass $ref)
+    protected function populateGetterLists(ReflectionMethod $method, ReflectionClass $ref): void
     {
         // Check, if the method is really available, inside the analysis
         // context. An inherited private method can not be called inside the
@@ -148,7 +148,7 @@ class Getter extends AbstractObjectAnalysis
      * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
      *   The reflection of the class we are analysing.
      */
-    protected function retrieveMethodList(ReflectionClass $ref)
+    protected function retrieveMethodList(ReflectionClass $ref): void
     {
         // Get all public methods.
         $methodList = $ref->getMethods(ReflectionMethod::IS_PUBLIC);

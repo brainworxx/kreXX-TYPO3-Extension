@@ -47,5 +47,5 @@ interface ConstInterface
      *
      * @var string
      */
-    const PARAM_ARRAY = 'paramArray';
+    public const PARAM_ARRAY = 'paramArray';
 }

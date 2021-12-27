@@ -49,7 +49,7 @@ trait LoggingTrait
      /**
      * Configure everything to start the forced logging.
      */
-    protected static function startForcedLog()
+    protected static function startForcedLog(): void
     {
         Pool::createPool();
 
@@ -73,7 +73,7 @@ trait LoggingTrait
     /**
      * Reset everything after the forced logging.
      */
-    protected static function endForcedLog()
+    protected static function endForcedLog(): void
     {
         // Reset everything afterwards.
         Krexx::$pool->config = Krexx::$pool

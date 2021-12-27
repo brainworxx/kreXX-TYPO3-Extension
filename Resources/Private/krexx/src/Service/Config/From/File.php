@@ -108,7 +108,7 @@ class File extends Fallback
      * @return array|null
      *   The configuration (is it editable, a dropdown, a textfield, ...)
      */
-    public function getFeConfigFromFile(string $parameterName)
+    public function getFeConfigFromFile(string $parameterName): ?array
     {
         // Get the human-readable stuff from the file.
         $value = $this->getConfigFromFile(static::SECTION_FE_EDITING, $parameterName);
@@ -156,7 +156,7 @@ class File extends Fallback
      * @return string|null
      *   The value from the file. Null, when not available or not validated.
      */
-    public function getConfigFromFile(string $group, string $name)
+    public function getConfigFromFile(string $group, string $name): ?string
     {
         // Do we have a value in the file?
         // Does it validate?

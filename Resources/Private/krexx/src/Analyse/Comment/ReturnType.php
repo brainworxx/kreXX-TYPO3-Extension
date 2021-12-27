@@ -153,18 +153,8 @@ class ReturnType extends AbstractComment
             return $result;
         }
 
-        if (method_exists($returnType, 'getName') === true) {
-            // 7.1 or later. We alo need to check for nullable types.
-            $nullable = $returnType->allowsNull() === true ? '?' : '';
-            $result = $returnType->getName();
-        } else {
-            // Must be 7.0.
-            // @deprecated
-            // Will be removes as soon as we drop 7.0 support.
-            $result = $returnType->__toString();
-            $nullable = '';
-        }
-
+        $nullable = $returnType->allowsNull() === true ? '?' : '';
+        $result = $returnType->getName();
         if (in_array($result, $this->allowedTypes) === false && strpos($result, '\\') !== 0) {
             // Must be e un-namespaced class name.
             $result = '\\' . $result;

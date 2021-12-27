@@ -81,7 +81,7 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
     /**
      * Code generation for fluid.
      */
-    public function exec()
+    public function exec(): void
     {
         // Registering the fluid connector class.
         Registration::addRewrite(

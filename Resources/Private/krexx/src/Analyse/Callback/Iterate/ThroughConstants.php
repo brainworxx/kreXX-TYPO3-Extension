@@ -81,13 +81,6 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
         $this->isInScope = $this->pool->scope->isInScope();
         $prefix = $this->isInScope === true ? 'static' : '\\' . $ref->getName();
 
-        // Dump the constants 7.0 style.
-        // @deprecated
-        // Will be removes as soon as we drop 7.0 support.
-        if (version_compare(phpversion(), '7.1.0', '<') === true) {
-            return $this->dumpPhpSevenZero($output, $prefix);
-        }
-
         // Dump them with visibility infos.
         foreach ($this->parameters[static::PARAM_DATA] as $constantName => $constantValue) {
             /** @var ReflectionClassConstant $reflectionConstant */
@@ -102,39 +95,6 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
                         ->setCustomConnectorLeft($prefix . '::')
                 );
             }
-        }
-
-        return $output;
-    }
-
-    /**
-     * Dump the constants PHP 7.0 style.
-     *
-     * @deprecated
-     *   Will be removes as soon as we drop 7.0 support.
-     * @codeCoverageIgnore
-     *   We will not test deprecated function.
-     *   Actually, we do test this one, but we do not upload the coverage
-     *   result of 7.0 to codeclimate.
-     *
-     * @param string $output
-     *   The output so far.
-     * @param string $prefix
-     *   The constants prefix we are using.
-     *
-     * @return string
-     *   The generated DOM.
-     */
-    protected function dumpPhpSevenZero(string $output, string $prefix): string
-    {
-        foreach ($this->parameters[static::PARAM_DATA] as $constantName => $constantValue) {
-            $output .= $this->pool->routing->analysisHub(
-                $this->pool->createClass(Model::class)
-                    ->setData($constantValue)
-                    ->setName($constantName)
-                    ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
-                    ->setCustomConnectorLeft($prefix . '::')
-            );
         }
 
         return $output;

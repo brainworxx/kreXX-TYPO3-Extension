@@ -36,6 +36,7 @@
 namespace Brainworxx\Krexx\Tests\Unit\Service\Config;
 
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Validation;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
@@ -131,9 +132,21 @@ class ValidationTest extends AbstractTest
         $validation = new Validation(Krexx::$pool);
 
         // Disallowed frontend editing settings.
-        $disallowedSettings = $this->retrieveValueByReflection('feConfigNoEdit', $validation);
-        foreach ($disallowedSettings as $settingName) {
-            $this->assertFalse($validation->evaluateSetting($validation::SECTION_FE_EDITING, $settingName, static::WHATEVER));
+        $doNotEdit = [
+            ConfigConstInterface::SETTING_DESTINATION,
+            ConfigConstInterface::SETTING_MAX_FILES,
+            ConfigConstInterface::SETTING_DEBUG_METHODS,
+            ConfigConstInterface::SETTING_IP_RANGE,
+        ];
+
+        foreach ($doNotEdit as $settingName) {
+            $this->assertFalse(
+                $validation->evaluateSetting(
+                    $validation::SECTION_FE_EDITING,
+                    $settingName,
+                    static::WHATEVER
+                )
+            );
         }
 
         // Testing each config with a valid value and wist garbage.

@@ -38,7 +38,6 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Comment;
 
 use ReflectionClass;
-use ReflectionException;
 use ReflectionMethod;
 use Reflector;
 

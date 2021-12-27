@@ -68,7 +68,7 @@ class ProcessOtherTest extends AbstractTest
 
         $this->assertEquals('string', $model->getType());
         $this->assertEquals('Unhandled type: string', $model->getNormal());
-        $this->assertArrayHasKey(ViewConstInterface::META_HELP, $model->getJson());
+        $this->assertArrayHasKey('Help', $model->getJson());
     }
 
     /**

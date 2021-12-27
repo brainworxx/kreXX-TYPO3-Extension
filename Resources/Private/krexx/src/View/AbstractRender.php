@@ -45,6 +45,21 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 abstract class AbstractRender
 {
+
+    /**
+     * Css class name.
+     *
+     * @var string
+     */
+    protected const STYLE_HIDDEN = 'khidden';
+
+    /**
+     * Css class name.
+     *
+     * @var string
+     */
+    protected const STYLE_ACTIVE = 'kactive';
+
     /**
      * Here we store all relevant data.
      *

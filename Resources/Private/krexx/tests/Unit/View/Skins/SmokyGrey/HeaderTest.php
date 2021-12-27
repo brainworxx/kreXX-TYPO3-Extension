@@ -47,11 +47,11 @@ class HeaderTest extends AbstractRenderSmokyGrey
     public function testRenderHeader()
     {
         $result = $this->renderSmokyGrey->renderHeader($this->renderSmokyGrey::HEADLINE_COOKIE_CONF, '');
-        $this->assertStringContainsString($this->renderSmokyGrey::STYLE_HIDDEN, $result);
-        $this->assertStringContainsString($this->renderSmokyGrey::STYLE_ACTIVE, $result);
+        $this->assertStringContainsString('khidden', $result);
+        $this->assertStringContainsString('kactive', $result);
 
         $result = $this->renderSmokyGrey->renderHeader('', '');
-        $this->assertStringNotContainsString($this->renderSmokyGrey::STYLE_HIDDEN, $result);
-        $this->assertStringContainsString($this->renderSmokyGrey::STYLE_ACTIVE, $result);
+        $this->assertStringNotContainsString('khidden', $result);
+        $this->assertStringContainsString('kactive', $result);
     }
 }

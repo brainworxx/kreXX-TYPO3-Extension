@@ -238,7 +238,7 @@ class IndexControllerTest extends AbstractTest
 
         $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
         $filePutContentsMock->expects($this->once())
-            ->with(Krexx::$pool->config->getPathToIniFile(), $iniContent)
+            ->with(Krexx::$pool->config->getPathToConfigFile(), $iniContent)
             ->will($this->returnValue(true));
 
         try {
@@ -283,7 +283,7 @@ class IndexControllerTest extends AbstractTest
 
         $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
         $filePutContentsMock->expects($this->once())
-            ->with(Krexx::$pool->config->getPathToIniFile(), $iniContent)
+            ->with(Krexx::$pool->config->getPathToConfigFile(), $iniContent)
             ->will($this->returnValue(false));
 
         try {

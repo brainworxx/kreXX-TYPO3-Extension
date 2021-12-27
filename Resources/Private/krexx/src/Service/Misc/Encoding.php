@@ -80,7 +80,7 @@ class Encoding
              * @return string
              *   Always 'polyfill'.
              */
-            function mb_detect_encoding($string = '', $encodingList = '', $strict = false)
+            function mb_detect_encoding($string = '', $encodingList = '', $strict = false): string
             {
                 return 'polyfill';
             }
@@ -99,7 +99,7 @@ class Encoding
              * @return int
              *   The length, according to strlen();
              */
-            function mb_strlen($string, $encoding = null)
+            function mb_strlen($string, $encoding = null): int
             {
                 return strlen($string);
             }
@@ -120,7 +120,7 @@ class Encoding
              * @return string
              *   The substring, according to substr().
              */
-            function mb_substr($string, $start, $length)
+            function mb_substr($string, $start, $length): string
             {
                 return substr($string, $start, $length);
             }
@@ -142,7 +142,7 @@ class Encoding
              * @return string
              *   Always an empty string.
              */
-            function mb_convert_encoding($string, $toEncoding, $fromEncoding)
+            function mb_convert_encoding($string, $toEncoding, $fromEncoding): string
             {
                 return '';
             }

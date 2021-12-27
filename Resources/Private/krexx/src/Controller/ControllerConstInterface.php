@@ -46,24 +46,13 @@ interface ControllerConstInterface
      * Headline, when used to display the fe editing dialog.
      *
      * @var string
-     *
-     * @deprecated
-     *   Since 4.0.0. Will be removed. Use HEADLINE_COOKIE_CONF instead.
-     *
      */
-    const HEADLINE_EDIT_SETTINGS = 'Edit local settings';
-
-    /**
-     * Headline, when used to display the fe editing dialog.
-     *
-     * @var string
-     */
-    const HEADLINE_COOKIE_CONF = 'Cookie Configuration';
+    public const HEADLINE_COOKIE_CONF = 'Cookie Configuration';
 
     /**
      * Headline for the kreXX timer.
      *
      * @var string
      */
-    const HEADLINE_TIMER = 'kreXX timer';
+    public const HEADLINE_TIMER = 'kreXX timer';
 }

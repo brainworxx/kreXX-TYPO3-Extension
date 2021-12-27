@@ -63,7 +63,7 @@ class Chunks implements ConfigConstInterface
      *
      * @var string
      */
-    const STRING_DELIMITER = '@@@';
+    protected const STRING_DELIMITER = '@@@';
 
     /**
      * Here we store all relevant data.
@@ -217,7 +217,7 @@ class Chunks implements ConfigConstInterface
      * @param string $string
      *   The chunk string.
      */
-    public function sendDechunkedToBrowser(string $string)
+    public function sendDechunkedToBrowser(string $string): void
     {
         // Check for HTML output.
         if ($this->pool->createClass(CheckOutput::class)->isOutputHtml()) {
@@ -255,7 +255,7 @@ class Chunks implements ConfigConstInterface
      * @param string $string
      *   The chunked version of the output.
      */
-    public function saveDechunkedToFile(string $string)
+    public function saveDechunkedToFile(string $string): void
     {
         if ($this->loggingIsAllowed === false) {
             // We have no write access. Do nothing.
@@ -308,7 +308,7 @@ class Chunks implements ConfigConstInterface
      * @param bool $bool
      *   Are we using chunks?
      */
-    public function setChunksAreAllowed(bool $bool)
+    public function setChunksAreAllowed(bool $bool): void
     {
         $this->chunksAreAllowed = $bool;
     }
@@ -331,7 +331,7 @@ class Chunks implements ConfigConstInterface
      * @param $bool
      *   Is the log folder accessible?
      */
-    public function setLoggingIsAllowed(bool $bool)
+    public function setLoggingIsAllowed(bool $bool): void
     {
         $this->loggingIsAllowed = $bool;
     }
@@ -353,7 +353,7 @@ class Chunks implements ConfigConstInterface
      * @param array $caller
      *   The caller from the caller finder.
      */
-    public function addMetadata(array $caller)
+    public function addMetadata(array $caller): void
     {
         if ($this->pool->config->getSetting(static::SETTING_DESTINATION) === static::VALUE_FILE) {
             $this->metadata[] = $caller;
@@ -388,7 +388,7 @@ class Chunks implements ConfigConstInterface
      * @param string $string
      *   The string we are processing.
      */
-    public function detectEncoding(string $string)
+    public function detectEncoding(string $string): void
     {
         static $doNothingEncoding = ['ASCII', 'UTF-8', false];
         $encoding = $this->pool->encodingService->mbDetectEncoding($string);

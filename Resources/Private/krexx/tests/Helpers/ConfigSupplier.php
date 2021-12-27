@@ -54,7 +54,7 @@ class ConfigSupplier extends File
     /**
      * {@inheritdoc}
      */
-    public function getConfigFromFile(string $group, string $name)
+    public function getConfigFromFile(string $group, string $name): ?string
     {
         // Deliver the overwrites.
         if (isset(static::$overwriteValues[$name])) {

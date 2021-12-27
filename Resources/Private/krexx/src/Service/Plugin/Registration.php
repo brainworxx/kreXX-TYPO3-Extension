@@ -138,7 +138,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      * @param \Brainworxx\Krexx\Service\Plugin\NewSetting $newSetting
      *   A class instance containing your new setting.
      */
-    public static function addNewSettings(NewSetting $newSetting)
+    public static function addNewSettings(NewSetting $newSetting): void
     {
         static::$newSettings[] = $newSetting;
     }
@@ -151,7 +151,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      * @param string $path
      *   The absolute path to the configuration file.
      */
-    public static function setConfigFile(string $path)
+    public static function setConfigFile(string $path): void
     {
         static::$configFile = $path;
     }
@@ -164,7 +164,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      * @param string $path
      *   The absolute path to the chunks' folder.
      */
-    public static function setChunksFolder(string $path)
+    public static function setChunksFolder(string $path): void
     {
         static::$chunkFolder = $path;
     }
@@ -177,7 +177,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      * @param string $path
      *   The absolute path to the log folder.
      */
-    public static function setLogFolder(string $path)
+    public static function setLogFolder(string $path): void
     {
         static::$logFolder = $path;
     }
@@ -187,7 +187,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      *
      * @param string $class
      */
-    public static function addScalarStringAnalyser(string $class)
+    public static function addScalarStringAnalyser(string $class): void
     {
         if (in_array($class, static::$additionalScalarString) === false) {
             static::$additionalScalarString[] = $class;
@@ -204,7 +204,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      * @param string $methodName
      *   The name of the method.
      */
-    public static function addMethodToDebugBlacklist(string $className, string $methodName)
+    public static function addMethodToDebugBlacklist(string $className, string $methodName): void
     {
         if (isset(static::$blacklistDebugMethods[$className]) === false) {
             static::$blacklistDebugMethods[$className] = [];
@@ -223,7 +223,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      * @param string $class
      *   The class name that gets blacklisted.
      */
-    public static function addClassToDebugBlacklist(string $class)
+    public static function addClassToDebugBlacklist(string $class): void
     {
         if (in_array($class, static::$blacklistDebugClass) === false) {
             static::$blacklistDebugClass[] = $class;
@@ -240,7 +240,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      * @param string $originalClass
      * @param string $rewriteClass
      */
-    public static function addRewrite(string $originalClass, string $rewriteClass)
+    public static function addRewrite(string $originalClass, string $rewriteClass): void
     {
         static::$rewriteList[$originalClass] = $rewriteClass;
     }
@@ -255,7 +255,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      * @param string $className
      *   The class name.
      */
-    public static function registerEvent(string $name, string $className)
+    public static function registerEvent(string $name, string $className): void
     {
         if (isset(static::$eventList[$name]) === false) {
             static::$eventList[$name] = [];
@@ -275,7 +275,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      *
      * @param string $path
      */
-    public static function registerAdditionalHelpFile(string $path)
+    public static function registerAdditionalHelpFile(string $path): void
     {
         static::$additionalHelpFiles[] = $path;
     }
@@ -291,7 +291,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      * @param string $directory
      *   The absolute path to the skin html files.
      */
-    public static function registerAdditionalskin(string $name, string $className, string $directory)
+    public static function registerAdditionalskin(string $name, string $className, string $directory): void
     {
         static::$additionalSkinList[$name] = [
             static::SKIN_CLASS => $className,
@@ -306,7 +306,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      *   The class name of the configuration class for this plugin.
      *   Must extend the \Brainworxx\Krexx\Service\AbstractPluginConfig
      */
-    public static function register(PluginConfigInterface $configClass)
+    public static function register(PluginConfigInterface $configClass): void
     {
         static::$plugins[get_class($configClass)] = [
             static::CONFIG_CLASS => $configClass,
@@ -322,7 +322,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      * @param string $configClass
      *   The class name of the configuration class for this plugin.
      */
-    public static function activatePlugin(string $configClass)
+    public static function activatePlugin(string $configClass): void
     {
         if (isset(static::$plugins[$configClass])) {
             static::$plugins[$configClass][static::IS_ACTIVE] = true;
@@ -346,7 +346,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      * @param string $configClass
      *   The name of the plugin.
      */
-    public static function deactivatePlugin(string $configClass)
+    public static function deactivatePlugin(string $configClass): void
     {
         if (empty(static::$plugins[$configClass][static::IS_ACTIVE]) === true) {
             // We will not purge everything for an already deactivated plugin.

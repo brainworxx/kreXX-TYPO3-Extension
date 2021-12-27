@@ -180,20 +180,4 @@ class Message
     {
         return $this->key;
     }
-
-    /**
-     * Wrapper around the getText, for compatibility reasons.
-     *
-     * @deprecated since 4.0.0
-     *   Will be removed. Use $this->getText().
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getText();
-    }
 }

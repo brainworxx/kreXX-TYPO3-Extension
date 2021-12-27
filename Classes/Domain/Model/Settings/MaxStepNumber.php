@@ -52,7 +52,7 @@ trait MaxStepNumber
     /**
      * @param string $maxStepNumber
      */
-    public function setMaxStepNumber(string $maxStepNumber)
+    public function setMaxStepNumber(string $maxStepNumber): void
     {
         $this->maxStepNumber = $maxStepNumber;
     }
@@ -60,7 +60,7 @@ trait MaxStepNumber
     /**
      * @param string $formmaxStepNumber
      */
-    public function setFormmaxStepNumber(string $formmaxStepNumber)
+    public function setFormmaxStepNumber(string $formmaxStepNumber): void
     {
         $this->formmaxStepNumber = $formmaxStepNumber;
     }

@@ -104,7 +104,7 @@ class Connectors implements ConnectorsConstInterface
      * @param string|int $params
      *   The parameters as a sting.
      */
-    public function setParameters($params)
+    public function setParameters($params): void
     {
         $this->params = $params;
     }
@@ -126,7 +126,7 @@ class Connectors implements ConnectorsConstInterface
      * @param string $type
      *   The type, @see constants above
      */
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
@@ -178,7 +178,7 @@ class Connectors implements ConnectorsConstInterface
      * @param string $customConnectorLeft
      *   The string we want to set.
      */
-    public function setCustomConnectorLeft(string $customConnectorLeft)
+    public function setCustomConnectorLeft(string $customConnectorLeft): void
     {
         $this->customConnectorLeft = $customConnectorLeft;
     }
@@ -198,7 +198,7 @@ class Connectors implements ConnectorsConstInterface
      *
      * @param string $returnType
      */
-    public function setReturnType(string $returnType)
+    public function setReturnType(string $returnType): void
     {
         $this->returnType = $returnType;
     }

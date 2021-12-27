@@ -159,7 +159,7 @@ class Emergency implements ConfigConstInterface
      * @param bool $bool
      *  Whether it is enabled, or not.
      */
-    public function setDisable(bool $bool)
+    public function setDisable(bool $bool): void
     {
         $this->disabled = $bool;
     }
@@ -242,7 +242,7 @@ class Emergency implements ConfigConstInterface
     /**
      * Going up one level in the object/array hierarchy.
      */
-    public function upOneNestingLevel()
+    public function upOneNestingLevel(): void
     {
         ++$this->nestingLevel;
     }
@@ -250,7 +250,7 @@ class Emergency implements ConfigConstInterface
     /**
      * Going down one level in the object/array hierarchy.
      */
-    public function downOneNestingLevel()
+    public function downOneNestingLevel(): void
     {
         --$this->nestingLevel;
     }
@@ -286,7 +286,7 @@ class Emergency implements ConfigConstInterface
      * When coming from cli, we will reset the timer, because cli has normally
      * a much greater execution time.
      */
-    public function initTimer()
+    public function initTimer(): void
     {
         if (empty($this->timer) === true || php_sapi_name() === 'cli') {
             $this->timer = time() + $this->maxRuntime;

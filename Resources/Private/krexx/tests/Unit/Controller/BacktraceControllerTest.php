@@ -88,7 +88,7 @@ class BacktraceControllerTest extends AbstractController
 
         $proccessMock = $this->createMock(ProcessBacktrace::class);
         $proccessMock->expects($this->once())
-            ->method('process')
+            ->method('handle')
             ->with(null)
             ->will($this->returnValue('generated HTML code'));
 

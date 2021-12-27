@@ -74,11 +74,11 @@ class ConfigurationTest extends AbstractTest
         $extLocalConf = file_get_contents($extLocalConfPath);
 
         // Our expectations.
-        $versionNumber = '4.1.3';
+        $versionNumber = '5.0.0';
         $t3EmConstraint = '7.6.0-11.5.99';
-        $phpEmConstraint = '7.0.0-8.1.99';
+        $phpEmConstraint = '7.1.0-8.1.99';
         $t3ComposerConstraint = '^7.6 || ^8 || ^9 || ^10 || ^11';
-        $phpComposerConstraint = '^7.0 || ^7.1 || ^7.2 || ^7.3 || ^7.4 || ^8.0 || ^8.1';
+        $phpComposerConstraint = '^7.1 || ^7.2 || ^7.3 || ^7.4 || ^8.0 || ^8.1';
 
         // Test the EM configuration.
         $this->assertEquals($versionNumber, $EM_CONF[$_EXTKEY]['version']);

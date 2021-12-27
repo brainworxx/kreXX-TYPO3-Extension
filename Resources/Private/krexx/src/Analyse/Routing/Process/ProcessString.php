@@ -44,7 +44,6 @@ use Brainworxx\Krexx\Analyse\Scalar\ScalarString;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\FileinfoDummy;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use finfo;
 
 /**
@@ -52,7 +51,6 @@ use finfo;
  */
 class ProcessString extends AbstractRouting implements
     ProcessInterface,
-    ViewConstInterface,
     ProcessConstInterface,
     CallbackConstInterface,
     ConfigConstInterface
@@ -189,6 +187,8 @@ class ProcessString extends AbstractRouting implements
     protected function retrieveLengthAndEncoding(string $data, Model $model): int
     {
         $encoding = $this->pool->encodingService->mbDetectEncoding($data);
+        $messages = $this->pool->messages;
+
         if ($encoding === false) {
             // Looks like we have a mixed encoded string.
             $length = $this->pool->encodingService->mbStrLen($data);
@@ -200,16 +200,16 @@ class ProcessString extends AbstractRouting implements
         // Long string or with broken encoding.
         if ($length > $this->bufferInfoThreshold) {
             // Let's see, what the buffer-info can do with it.
-            $model->addToJson(static::META_MIME_TYPE, $this->bufferInfo->buffer($data));
+            $model->addToJson($messages->getHelp('metaMimeType'), $this->bufferInfo->buffer($data));
         } elseif ($encoding === false) {
             // Short string with broken encoding.
-            $model->addToJson(static::META_ENCODING, 'broken');
+            $model->addToJson($messages->getHelp('metaEncoding'), 'broken');
         } else {
             // Short string with normal encoding.
-            $model->addToJson(static::META_ENCODING, $encoding);
+            $model->addToJson($messages->getHelp('metaEncoding'), $encoding);
         }
 
-        $model->setType(static::TYPE_STRING . $length)->addToJson(static::META_LENGTH, (string)$length);
+        $model->setType(static::TYPE_STRING)->addToJson($messages->getHelp('metaLength'), (string)$length);
 
         return $length;
     }

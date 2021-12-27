@@ -49,7 +49,7 @@ class CheckOutput
      *
      * @var string
      */
-    const REMOTE_ADDRESS = 'REMOTE_ADDR';
+    protected const REMOTE_ADDRESS = 'REMOTE_ADDR';
 
     /**
      * Here we store all relevant data.

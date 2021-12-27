@@ -311,15 +311,15 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertEquals($connectorParameter, $model->getConnectorParameters());
         $this->assertStringContainsString(
             $comment,
-            $model->getParameters()[$this->throughMethods::PARAM_DATA][ViewConstInterface::META_COMMENT]
+            $model->getParameters()[$this->throughMethods::PARAM_DATA]['Comment']
         );
         $this->assertStringContainsString(
             $declaredInFile,
-            $model->getParameters()[$this->throughMethods::PARAM_DATA][ViewConstInterface::META_DECLARED_IN]
+            $model->getParameters()[$this->throughMethods::PARAM_DATA]['Declared in']
         );
         $this->assertStringContainsString(
             $declaredInClass,
-            $model->getParameters()[$this->throughMethods::PARAM_DATA][ViewConstInterface::META_DECLARED_IN]
+            $model->getParameters()[$this->throughMethods::PARAM_DATA]['Declared in']
         );
         $this->assertTrue(
             $this->throughMethods->getParameters()[$this->throughMethods::PARAM_REFLECTION_METHOD] instanceof ReflectionMethod

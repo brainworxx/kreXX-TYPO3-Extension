@@ -478,7 +478,7 @@ class KrexxTest extends AbstractTest
         Krexx::$pool->rewrite[File::class] = ConfigSupplier::class;
         ConfigSupplier::$overwriteValues[Fallback::SETTING_IP_RANGE] = '987.654.321.123';
         // Inject the IP.
-        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '123.456.789.123';
+        $_SERVER['REMOTE_ADDR'] = '123.456.789.123';
 
         // Reset the config.
         Config::$disabledByPhp = false;
@@ -487,7 +487,7 @@ class KrexxTest extends AbstractTest
         $this->assertTrue($config::$disabledByPhp);
 
         // Inject another ip.
-        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '987.654.321.123';
+        $_SERVER['REMOTE_ADDR'] = '987.654.321.123';
         // Reset the config.
         Config::$disabledByPhp = false;
         $config = new Config(Krexx::$pool);
@@ -501,7 +501,7 @@ class KrexxTest extends AbstractTest
         $this->assertFalse($config::$disabledByPhp);
 
         // Inject another ip.
-        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '123.654.321.123';
+        $_SERVER['REMOTE_ADDR'] = '123.654.321.123';
         // Reset the config.
         Config::$disabledByPhp = false;
         $config = new Config(Krexx::$pool);

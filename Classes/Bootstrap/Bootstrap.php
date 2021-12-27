@@ -71,7 +71,7 @@ class Bootstrap implements ConstInterface
     /**
      * Batch for the bootstrapping.
      */
-    public function run()
+    public function run(): void
     {
         if ($this->loadKrexx() === false) {
             // "Autoloading" failed.
@@ -177,7 +177,7 @@ class Bootstrap implements ConstInterface
      *   - TYPO3_version
      *   - TYPO3\CMS\Core\Information\Typo3Version
      */
-    protected function retrieveTypo3Version()
+    protected function retrieveTypo3Version(): void
     {
         if (class_exists(Typo3Version::class)) {
             static::$typo3Version = GeneralUtility::makeInstance(Typo3Version::class)

@@ -90,7 +90,7 @@ abstract class AbstractOutput
     /**
      * Cleanup stuff, after all is said and done.
      */
-    protected function destruct()
+    protected function destruct(): void
     {
         $this->cleanupService->cleanupOldChunks();
     }
@@ -113,5 +113,5 @@ abstract class AbstractOutput
     /**
      * Tell the output service, that we are finished.
      */
-    abstract public function finalize();
+    abstract public function finalize(): void;
 }

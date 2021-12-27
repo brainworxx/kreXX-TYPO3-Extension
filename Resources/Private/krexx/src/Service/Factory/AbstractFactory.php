@@ -108,7 +108,7 @@ abstract class AbstractFactory
     /**
      * Create the pool, but only if it is not already there.
      */
-    public static function createPool()
+    public static function createPool(): void
     {
         if (Krexx::$pool !== null) {
             // The pool is there, do nothing.

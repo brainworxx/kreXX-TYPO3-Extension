@@ -100,7 +100,7 @@ class Settings
     /**
      * @param string $factory
      */
-    public function setFactory(string $factory)
+    public function setFactory(string $factory): void
     {
         $this->factory = $factory;
     }

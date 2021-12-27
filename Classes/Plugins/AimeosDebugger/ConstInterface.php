@@ -47,33 +47,33 @@ interface ConstInterface
      *
      * @var string
      */
-    const PARAM_IS_FACTORY_METHOD = 'isFactoryMethod';
+    public const PARAM_IS_FACTORY_METHOD = 'isFactoryMethod';
 
     /**
      * Additional parameter key.
      *
      * @var string
      */
-    const PARAM_FACTORY_NAME = 'factoryName';
+    public const PARAM_FACTORY_NAME = 'factoryName';
 
     /**
      * Internal variable name, where Aimeos stores data.
      *
      * @var string
      */
-    const AIMEOS_B_DATA = 'bdata';
+    public const AIMEOS_B_DATA = 'bdata';
 
     /**
      * Internal variable name, where Aimeos stores data.
      *
      * @var string
      */
-    const AIMEOS_VALUES = 'values';
+    public const AIMEOS_VALUES = 'values';
 
     /**
      * Internal variable name, where Aimeos stores data.
      *
      * @var string
      */
-    const AIMEOS_DATA = 'data';
+    public const AIMEOS_DATA = 'data';
 }

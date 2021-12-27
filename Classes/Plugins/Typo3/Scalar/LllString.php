@@ -38,14 +38,13 @@ namespace Brainworxx\Includekrexx\Plugins\Typo3\Scalar;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\AbstractScalarAnalysis;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use Throwable;
 
 /**
  * LLL string parser.
  */
-class LllString extends AbstractScalarAnalysis implements ViewConstInterface
+class LllString extends AbstractScalarAnalysis
 {
     /**
      * The name of the localisation utility.
@@ -120,7 +119,7 @@ class LllString extends AbstractScalarAnalysis implements ViewConstInterface
      * @param $object
      *   The name of the localisation utility.
      */
-    public function setLocalisationUtility($object)
+    public function setLocalisationUtility($object): void
     {
         $this->localisationUtility = $object;
     }

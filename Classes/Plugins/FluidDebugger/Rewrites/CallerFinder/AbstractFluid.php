@@ -51,12 +51,12 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     /**
      * @var string
      */
-    const FLUID_VARIABLE = 'fluidvar';
+    protected const FLUID_VARIABLE = 'fluidvar';
 
     /**
      * @var string
      */
-    const FLUID_NOT_AVAILABLE = 'n/a';
+    protected const FLUID_NOT_AVAILABLE = 'n/a';
 
     /**
      * @var \TYPO3\CMS\Fluid\View\AbstractTemplateView|\TYPO3Fluid\Fluid\View\ViewInterface
@@ -154,7 +154,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     /**
      * Retrieves the rendering stack straight out of the view.
      */
-    protected function assignParsedTemplateRenderType()
+    protected function assignParsedTemplateRenderType(): void
     {
         if ($this->viewReflection->hasProperty('renderingStack') === false) {
             // No rendering stack, no template file  :-(
@@ -281,7 +281,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      * @param string $filePath
      *   The path to the template file we need to parse.
      */
-    protected function resolveVarname(string $filePath)
+    protected function resolveVarname(string $filePath): void
     {
         // Retrieve the call from the sourcecode file.
         if ($this->pool->fileService->fileIsReadable($filePath) === false) {

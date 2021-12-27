@@ -39,14 +39,13 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use DateTime;
 use Exception;
 
 /**
  * Processing of integers.
  */
-class ProcessInteger extends AbstractRouting implements ProcessInterface, ViewConstInterface, ProcessConstInterface
+class ProcessInteger extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
 
     /**
@@ -80,7 +79,7 @@ class ProcessInteger extends AbstractRouting implements ProcessInterface, ViewCo
             $int = $model->getData();
             if ($int > 946681200) {
                 $model->addToJson(
-                    static::META_TIMESTAMP,
+                    $this->pool->messages->getHelp('metaTimestamp'),
                     (new DateTime('@' . $int))->format('d.M Y H:i:s')
                 );
             }

@@ -39,7 +39,6 @@ namespace Brainworxx\Krexx\Service\Config;
 
 use Brainworxx\Krexx\Service\Config\From\Cookie;
 use Brainworxx\Krexx\Service\Config\From\File;
-use Brainworxx\Krexx\Service\Config\From\Ini;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use Brainworxx\Krexx\View\Output\CheckOutput;
@@ -69,16 +68,6 @@ class Config extends Fallback
      * @var Validation
      */
     public $validation;
-
-    /**
-     * Our ini file configuration handler.
-     *
-     * @deprecated
-     *   Since 4.1.0. Will be removed. Use $fileConfig instead.
-     *
-     * @var Ini
-     */
-    protected $iniConfig;
 
     /**
      * Our file configuration handler.
@@ -154,7 +143,7 @@ class Config extends Fallback
     /**
      * Check if kreXX can be enabled or not.
      */
-    protected function checkEnabledStatus()
+    protected function checkEnabledStatus(): void
     {
         if (
             $this->getSetting(static::SETTING_DESTINATION) !==  static::VALUE_FILE &&
@@ -179,7 +168,7 @@ class Config extends Fallback
      * @param bool $value
      *   Whether it is enabled, or not.
      */
-    public function setDisabled(bool $value)
+    public function setDisabled(bool $value): void
     {
         $this->settings[static::SETTING_DISABLED]
             ->setValue($value)
@@ -266,23 +255,6 @@ class Config extends Fallback
     public function getLogDir(): string
     {
         return $this->directories[static::LOG_FOLDER];
-    }
-
-    /**
-     * Get the path to the configuration file.
-     *
-     * @deprecated
-     *   Since 4.1.0. Will be removed. Use getPathToConfigFile
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return string
-     *   The absolute path to the Krexx.ini.
-     */
-    public function getPathToIniFile(): string
-    {
-        return $this->getPathToConfigFile();
     }
 
     /**

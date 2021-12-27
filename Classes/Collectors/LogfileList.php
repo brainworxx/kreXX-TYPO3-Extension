@@ -51,7 +51,7 @@ class LogfileList extends AbstractCollector
      *
      * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
      */
-    public function assignData(ViewInterface $view)
+    public function assignData(ViewInterface $view): void
     {
         $view->assign('filelist', $this->retrieveFileList());
     }

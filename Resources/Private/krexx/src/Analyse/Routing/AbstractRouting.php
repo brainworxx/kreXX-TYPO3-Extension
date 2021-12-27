@@ -65,24 +65,6 @@ abstract class AbstractRouting
     }
 
     /**
-     * Processes the model according to the type of the variable.
-     *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
-     *
-     * @deprecated
-     *   Will be removed. Use $this->handle;
-     *
-     * @codeCoverageIgnore
-     *   We will not test methods that are deprecated.
-     *
-     * @return string
-     */
-    public function process(Model $model): string
-    {
-        return $this->handle($model);
-    }
-
-    /**
      * Generates an id for the DOM.
      *
      * This is used to jump from a recursion to the object analysis data.

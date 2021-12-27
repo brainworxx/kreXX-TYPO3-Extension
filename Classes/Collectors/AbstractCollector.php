@@ -53,42 +53,42 @@ abstract class AbstractCollector
     /**
      * @var string
      */
-    const MODULE_DATA = 'moduleData';
+    public const MODULE_DATA = 'moduleData';
 
     /**
      * @var string
      */
-    const PLUGIN_NAME = 'tools_IncludekrexxKrexxConfiguration';
+    public const PLUGIN_NAME = 'tools_IncludekrexxKrexxConfiguration';
 
     /**
      * @var string
      */
-    const SETTINGS_NAME = 'name';
+    protected const SETTINGS_NAME = 'name';
 
     /**
      * @var string
      */
-    const SETTINGS_VALUE = 'value';
+    protected const SETTINGS_VALUE = 'value';
 
     /**
      * @var string
      */
-    const SETTINGS_USE_FACTORY_SETTINGS = 'useFactorySettings';
+    protected const SETTINGS_USE_FACTORY_SETTINGS = 'useFactorySettings';
 
     /**
      * @var string
      */
-    const SETTINGS_FALLBACK = 'fallback';
+    protected const SETTINGS_FALLBACK = 'fallback';
 
     /**
      * @var string
      */
-    const SETTINGS_MODE = 'mode';
+    protected const SETTINGS_MODE = 'mode';
 
     /**
      * @var string
      */
-    const SETTINGS_OPTIONS = 'options';
+    protected const SETTINGS_OPTIONS = 'options';
 
     /**
      * The kreXX pool.
@@ -149,5 +149,5 @@ abstract class AbstractCollector
      *
      * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
      */
-    abstract public function assignData(ViewInterface $view);
+    abstract public function assignData(ViewInterface $view): void;
 }

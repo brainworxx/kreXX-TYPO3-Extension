@@ -45,7 +45,7 @@ use Brainworxx\Krexx\View\Skins\RenderHans;
 class MessagesTest extends AbstractTest
 {
 
-    const KEY_VARIABLE_NAME = 'keys';
+    const KEY_VARIABLE_NAME = 'messages';
     const PARAMS = 'params';
 
     /**

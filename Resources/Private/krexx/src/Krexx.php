@@ -71,7 +71,7 @@ class Krexx implements ConfigConstInterface
      *   Defines a "moment" during a benchmark test.
      *   The string should be something meaningful, like "Model invoice db call".
      */
-    public static function timerMoment(string $string)
+    public static function timerMoment(string $string): void
     {
         Pool::createPool();
 
@@ -99,7 +99,7 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function timerEnd()
+    public static function timerEnd(): void
     {
         Pool::createPool();
 
@@ -165,7 +165,7 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function backtrace(array $backtrace = null)
+    public static function backtrace(array $backtrace = null): void
     {
         Pool::createPool();
 
@@ -191,7 +191,7 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function disable()
+    public static function disable(): void
     {
         Pool::createPool();
 
@@ -206,7 +206,7 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function editSettings()
+    public static function editSettings(): void
     {
         Pool::createPool();
 
@@ -228,7 +228,7 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function registerExceptionHandler()
+    public static function registerExceptionHandler(): void
     {
         Pool::createPool();
 
@@ -249,7 +249,7 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function unregisterExceptionHandler()
+    public static function unregisterExceptionHandler(): void
     {
         Pool::createPool();
 
@@ -296,7 +296,7 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function logBacktrace(array $backtrace = null)
+    public static function logBacktrace(array $backtrace = null): void
     {
         static::startForcedLog();
         static::backtrace($backtrace);
@@ -308,7 +308,7 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function logTimerEnd()
+    public static function logTimerEnd(): void
     {
         static::startForcedLog();
         static::timerEnd();

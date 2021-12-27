@@ -94,7 +94,10 @@ class LogTest extends AbstractTest
         if (class_exists(ModuleData::class) === false) {
             $this->markTestSkipped(static::WRONG_VERSION);
         }
-        $this->assertEquals($this->log::TRANSLATION_PREFIX . 'mlang_tabs_tab', $this->log->getLabel());
+        $this->assertEquals(
+            'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab',
+            $this->log->getLabel()
+        );
     }
 
     /**
@@ -137,8 +140,8 @@ class LogTest extends AbstractTest
         $viewMock->expects($this->once())
             ->method(static::ASSIGN_MULTIPLE)
             ->with([
-                static::TEXT => $this->log::TRANSLATION_PREFIX . 'accessDenied',
-                static::SEVERITY => $this->log::MESSAGE_SEVERITY_ERROR,
+                static::TEXT => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:accessDenied',
+                static::SEVERITY => 'error',
             ]);
         $viewMock->expects($this->once())
             ->method(static::RENDER)
@@ -173,14 +176,14 @@ class LogTest extends AbstractTest
             ->withConsecutive(
                 [
                     [
-                        static::TEXT => $this->log::TRANSLATION_PREFIX . 'translationkey',
-                        static::SEVERITY => $this->log::MESSAGE_SEVERITY_ERROR,
+                        static::TEXT => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:translationkey',
+                        static::SEVERITY => 'error',
                     ]
                 ],
                 [
                     [
-                        static::TEXT => $this->log::TRANSLATION_PREFIX . 'log.noresult',
-                        static::SEVERITY => $this->log::MESSAGE_SEVERITY_INFO,
+                        static::TEXT => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:log.noresult',
+                        static::SEVERITY => 'info',
                     ]
                 ]
             );

@@ -81,7 +81,7 @@ class ExceptionControllerTest extends AbstractController
 
         $backtraceMock = $this->createMock(ProcessBacktrace::class);
         $backtraceMock->expects($this->once())
-            ->method('process')
+            ->method('handle')
             ->with(['some backtrace'])
             ->will($this->returnValue('HTML code'));
 

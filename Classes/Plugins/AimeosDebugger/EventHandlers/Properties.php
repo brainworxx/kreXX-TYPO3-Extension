@@ -46,7 +46,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Aimeos\MShop\Common\Item\Iface as ItemIface;
 use Aimeos\MW\Tree\Node\Iface as NodeIface;
 use Aimeos\MW\View\Iface as ViewIface;
-use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Analysing the __get() implementation in aimeos items.
@@ -60,7 +59,6 @@ use Brainworxx\Krexx\View\ViewConstInterface;
  */
 class Properties extends AbstractEventHandler implements
     CallbackConstInterface,
-    ViewConstInterface,
     ConnectorsConstInterface,
     CodegenConstInterface
 {
@@ -175,7 +173,7 @@ class Properties extends AbstractEventHandler implements
                     ->setName($key)
                     ->setConnectorType($connectorType)
                     ->setCodegenType(static::CODEGEN_TYPE_PUBLIC)
-                    ->addToJson(static::META_HINT, 'Aimeos magical property')
+                    ->addToJson($this->pool->messages->getHelp('metaHint'), 'Aimeos magical property')
             );
         }
 

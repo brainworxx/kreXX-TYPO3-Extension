@@ -54,7 +54,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
      *
      * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
      */
-    public function assignData(ViewInterface $view)
+    public function assignData(ViewInterface $view): void
     {
         if ($this->hasAccess === false) {
             // No access.
@@ -129,7 +129,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
      * @return string|null
      *   The converted values.
      */
-    protected function convertKrexxFeSetting($values)
+    protected function convertKrexxFeSetting($values): ?string
     {
         if (is_array($values) === false) {
             return null;

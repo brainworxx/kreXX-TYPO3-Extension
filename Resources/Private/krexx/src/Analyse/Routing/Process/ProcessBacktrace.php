@@ -66,24 +66,6 @@ class ProcessBacktrace extends AbstractCallback implements
     }
 
     /**
-     * Processes the model according to the type of the variable.
-     *
-     * @param array $backtrace
-     *
-     * @deprecated
-     *   Will be removed. Use $this->handle;
-     *
-     * @codeCoverageIgnore
-     *   We will not test methods that are deprecated.
-     *
-     * @return string
-     */
-    public function process(&$backtrace = []): string
-    {
-        return $this->handle($backtrace);
-    }
-
-    /**
      * Do a backtrace analysis.
      *
      * @param array $backtrace

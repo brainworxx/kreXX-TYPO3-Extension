@@ -52,7 +52,7 @@ trait AnalyseProtectedMethods
     /**
      * @param string $value
      */
-    public function setAnalyseProtectedMethods(string $value)
+    public function setAnalyseProtectedMethods(string $value): void
     {
         $this->analyseProtectedMethods = $value;
     }
@@ -60,7 +60,7 @@ trait AnalyseProtectedMethods
     /**
      * @param string $value
      */
-    public function setFormanalyseProtectedMethods(string $value)
+    public function setFormanalyseProtectedMethods(string $value): void
     {
         $this->formanalyseProtectedMethods = $value;
     }

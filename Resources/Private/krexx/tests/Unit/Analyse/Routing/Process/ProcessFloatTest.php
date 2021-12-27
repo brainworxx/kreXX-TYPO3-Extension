@@ -83,7 +83,7 @@ class ProcessFloatTest extends AbstractTest
         $processor->handle($model);
 
         $result = $model->getJson();
-        $this->assertArrayHasKey(ViewConstInterface::META_TIMESTAMP, $result);
+        $this->assertArrayHasKey('Timestamp', $result);
     }
 
     /**

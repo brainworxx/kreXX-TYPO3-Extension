@@ -45,7 +45,6 @@ use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -59,7 +58,6 @@ use ReflectionMethod;
  */
 class ThroughMethods extends AbstractCallback implements
     CallbackConstInterface,
-    ViewConstInterface,
     CodegenConstInterface,
     ConnectorsConstInterface
 {
@@ -103,7 +101,7 @@ class ThroughMethods extends AbstractCallback implements
 
             // Update the reflection method, so an event subscriber can do
             // something with it.
-            $this->parameters[static::PARAM_REFLECTION_METHOD] = $this->parameters[static::PARAM_REF_METHOD] = $refMethod;
+            $this->parameters[static::PARAM_REFLECTION_METHOD] = $refMethod;
 
             // Render it!
             $result .= $this->pool->render->renderExpandableChild($this->dispatchEventWithModel(
@@ -117,7 +115,7 @@ class ThroughMethods extends AbstractCallback implements
                     )->setConnectorType($this->retrieveConnectorType($refMethod))
                     ->addParameter(static::PARAM_DATA, $methodData)
                     ->setCodeGenType($refMethod->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '')
-                    ->setReturnType($methodData[static::META_RETURN_TYPE])
+                    ->setReturnType($methodData[$this->pool->messages->getHelp('metaReturnType')])
                     ->injectCallback($this->pool->createClass(ThroughMeta::class))
             ));
         }
@@ -145,17 +143,19 @@ class ThroughMethods extends AbstractCallback implements
         ReflectionClass $declaringClass
     ): array {
         $methodData = [];
+        $messages = $this->pool->messages;
+
         // Get the comment from the class, it's parents, interfaces or traits.
         $methodComment = $this->commentAnalysis->getComment($refMethod, $refClass);
         if (empty($methodComment) === false) {
-            $methodData[static::META_COMMENT] = $methodComment;
+            $methodData[$messages->getHelp('metaComment')] = $methodComment;
         }
 
         // Get declaration place.
-        $methodData[static::META_DECLARED_IN] = $this->getDeclarationPlace($refMethod, $declaringClass);
+        $methodData[$messages->getHelp('metaDeclaredIn')] = $this->getDeclarationPlace($refMethod, $declaringClass);
 
         // Get the return type.
-        $methodData[static::META_RETURN_TYPE] = $this->pool->createClass(ReturnType::class)
+        $methodData[$messages->getHelp('metaReturnType')] = $this->pool->createClass(ReturnType::class)
             ->getComment($refMethod, $refClass);
 
         return $methodData;
@@ -195,7 +195,7 @@ class ThroughMethods extends AbstractCallback implements
         $paramList = '';
         foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
             ++$key;
-            $paramList .= $methodData[static::META_PARAM_NO . $key] = $this->pool
+            $paramList .= $methodData[$this->pool->messages->getHelp('metaParamNo') . $key] = $this->pool
                 ->codegenHandler
                 ->parameterToString($reflectionParameter);
             // We add a comma to the parameter list, to separate them for a
@@ -219,8 +219,10 @@ class ThroughMethods extends AbstractCallback implements
      */
     protected function getDeclarationPlace(ReflectionMethod $reflectionMethod, ReflectionClass $declaringClass): string
     {
+        $messages = $this->pool->messages;
+
         if ($declaringClass->isInternal() === true) {
-            return static::META_PREDECLARED;
+            return $messages->getHelp('metaPredeclared');
         }
 
         $filename = $this->pool->fileService->filterFilePath((string)$reflectionMethod->getFileName());
@@ -231,7 +233,7 @@ class ThroughMethods extends AbstractCallback implements
 
         // If the filename of the $declaringClass and the $reflectionMethod differ,
         // we are facing a trait here.
-        $secondLine = static::META_IN_CLASS . $reflectionMethod->class . "\n";
+        $secondLine = $messages->getHelp('metaInClass') . $reflectionMethod->class . "\n";
         if ($reflectionMethod->getFileName() !== $declaringClass->getFileName()) {
             // There is no real clean way to get the name of the trait that we
             // are looking at.
@@ -241,10 +243,11 @@ class ThroughMethods extends AbstractCallback implements
                 $traitName = $trait->getName();
             }
 
-            $secondLine = static::META_IN_TRAIT . $traitName . "\n";
+            $secondLine = $messages->getHelp('metaInTrait') . $traitName . "\n";
         }
 
-        return $filename . "\n" . $secondLine . static::META_IN_LINE . $reflectionMethod->getStartLine();
+        return $filename . "\n" . $secondLine . $messages->getHelp('metaInLine') .
+            $reflectionMethod->getStartLine();
     }
 
     /**

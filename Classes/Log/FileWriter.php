@@ -298,7 +298,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
     /**
      * Iterate through the configuration and overwrite the settings.
      */
-    protected function applyTheConfiguration()
+    protected function applyTheConfiguration(): void
     {
         // Early return. Do nothing.
         if (empty($this->localConfig)) {

@@ -83,16 +83,6 @@ class Recursion
     protected $globalsWereRendered = false;
 
     /**
-     * The $GLOBALS array.
-     *
-     * @deprecated since 4.1.3
-     *   Will be removed.
-     *
-     * @var array
-     */
-    protected $globals;
-
-    /**
      * Generate the recursion marker during class construction.
      *
      * @param Pool $pool
@@ -101,7 +91,6 @@ class Recursion
     {
         $this->recursionMarker = 'Krexx' . substr(str_shuffle(md5(microtime())), 0, 10);
         // Mark the $GLOBALS array.
-        $this->globals = $pool->getGlobals();
         $GLOBALS[$this->recursionMarker] = true;
         $this->recursionHive = new SplObjectStorage();
 
@@ -123,7 +112,7 @@ class Recursion
      * @param object $bee
      *   The object we want to track.
      */
-    public function addToHive($bee)
+    public function addToHive($bee): void
     {
         $this->recursionHive->attach($bee);
     }
@@ -195,7 +184,7 @@ class Recursion
      * @param string $domId
      *   The dom id we want to track.
      */
-    public function addToMetaHive(string $domId)
+    public function addToMetaHive(string $domId): void
     {
         $this->metaRecursionHive[$domId] = true;
     }

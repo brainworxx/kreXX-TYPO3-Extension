@@ -43,7 +43,6 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use SplObjectStorage;
 use Throwable;
 
@@ -56,10 +55,7 @@ use Throwable;
  *   The variable name or key in the parent object / array where the current
  *   class is stored.
  */
-class Traversable extends AbstractObjectAnalysis implements
-    CallbackConstInterface,
-    ViewConstInterface,
-    ConfigConstInterface
+class Traversable extends AbstractObjectAnalysis implements CallbackConstInterface, ConfigConstInterface
 {
 
     /**
@@ -162,7 +158,7 @@ class Traversable extends AbstractObjectAnalysis implements
             ->setType(static::TYPE_FOREACH)
             ->addParameter(static::PARAM_DATA, $result)
             ->addParameter(static::PARAM_MULTILINE, $multiline)
-            ->addToJson(static::META_LENGTH, (string)count($result));
+            ->addToJson($this->pool->messages->getHelp('metaLength'), (string)count($result));
 
         // Check, if we are handling a huge array. Huge arrays tend to result in a huge
         // output, maybe even triggering an emergency break. to avoid this, we give them

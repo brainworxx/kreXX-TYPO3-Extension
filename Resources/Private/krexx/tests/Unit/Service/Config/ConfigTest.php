@@ -77,7 +77,7 @@ class ConfigTest extends AbstractTest
     {
         parent::krexxDown();
         unset($_SERVER['HTTP_X_REQUESTED_WITH']);
-        unset($_SERVER[CheckOutput::REMOTE_ADDRESS]);
+        unset($_SERVER['REMOTE_ADDR']);
     }
 
     /**
@@ -215,7 +215,7 @@ class ConfigTest extends AbstractTest
             ->will($this->returnValue(static::NOT_CLI));
 
         // Testing coming from the wrong ip
-        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '5.4.3.2.1';
+        $_SERVER['REMOTE_ADDR'] = '5.4.3.2.1';
 
         $config = new Config(Krexx::$pool);
         $this->assertEquals(
@@ -225,7 +225,7 @@ class ConfigTest extends AbstractTest
         );
 
         // Testing coming from the right ip
-        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '1.2.3.4.5';
+        $_SERVER['REMOTE_ADDR'] = '1.2.3.4.5';
 
         $config = new Config(Krexx::$pool);
         $this->assertEquals(

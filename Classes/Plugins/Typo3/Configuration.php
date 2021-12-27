@@ -99,7 +99,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
      * - Point the directories to the temp folder.
      * - Protect the temp folder, if necessary.
      */
-    public function exec()
+    public function exec(): void
     {
         // We are using the TYPO3 ip security, instead of the kreXX implementation.
         Registration::addRewrite(CheckOutput::class, T3CheckOutput::class);
@@ -176,7 +176,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     /**
      * Register or file writer, if needed.
      */
-    protected function registerFileWriter()
+    protected function registerFileWriter(): void
     {
         // Create the pool, it is not present and reload the configuration
         // with our new settings.
@@ -207,7 +207,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     /**
      * Register the new setting for the TYPO3 file writer.
      */
-    protected function registerFileWriterSettings()
+    protected function registerFileWriterSettings(): void
     {
         // Register the two new settings for the TYPO3 log writer integration.
         $activeT3FileWriter = GeneralUtility::makeInstance(NewSetting::class);
@@ -269,7 +269,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     /**
      * Register the admin panel integration and the query debugger.
      */
-    protected function registerVersionDependantStuff()
+    protected function registerVersionDependantStuff(): void
     {
         // The QueryBuilder special analysis.
         // Only for Doctrine stuff.
@@ -297,7 +297,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
      *
      * @param array $tempPaths
      */
-    protected function createWorkingDirectories(array $tempPaths)
+    protected function createWorkingDirectories(array $tempPaths): void
     {
         // htAccess to prevent a listing
         $htAccess = '# Apache 2.2' . chr(10);

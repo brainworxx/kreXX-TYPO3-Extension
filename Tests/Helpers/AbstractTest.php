@@ -272,7 +272,7 @@ abstract class AbstractTest extends TestCompatibility
         $userMock = $this->createMock(BackendUserAuthentication::class);
         $userMock->expects($this->any())
             ->method('check')
-            ->with('modules', AbstractCollector::PLUGIN_NAME)
+            ->with('modules', 'tools_IncludekrexxKrexxConfiguration')
             ->will($this->returnValue(true));
 
         $userMock->uc = [];

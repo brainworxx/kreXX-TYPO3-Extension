@@ -43,7 +43,6 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionMethod;
 use Aimeos\MShop\Common\Item\Iface;
 
@@ -70,7 +69,7 @@ use Aimeos\MShop\Common\Item\Iface;
  * @uses array $additional
  *   Additional data from the event call.
  */
-class Getter extends AbstractEventHandler implements CallbackConstInterface, ViewConstInterface
+class Getter extends AbstractEventHandler implements CallbackConstInterface
 {
     /**
      * Our pool.
@@ -156,7 +155,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface, Vie
      * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback $callback
      *   Our original callback.
      */
-    protected function assignResultsToModel(array $values, Model $model, AbstractCallback $callback)
+    protected function assignResultsToModel(array $values, Model $model, AbstractCallback $callback): void
     {
         $params = $callback->getParameters();
         /** @var \ReflectionMethod $reflectionMethod */
@@ -176,7 +175,10 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface, Vie
                 if ($possibleResult === null) {
                     // A NULL value might mean that the values does not
                     // exist, until the getter computes it.
-                    $model->addToJson(static::META_HINT, $this->pool->messages->getHelp('getterNull'));
+                    $model->addToJson(
+                        $this->pool->messages->getHelp('metaHint'),
+                        $this->pool->messages->getHelp('getterNull')
+                    );
                 }
 
                 break;

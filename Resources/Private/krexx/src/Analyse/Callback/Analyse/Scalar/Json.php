@@ -39,12 +39,11 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Deep analysis for json strings.
  */
-class Json extends AbstractScalarAnalysis implements ViewConstInterface
+class Json extends AbstractScalarAnalysis
 {
     /**
      * Code generation for this one is the json encoder.
@@ -112,16 +111,17 @@ class Json extends AbstractScalarAnalysis implements ViewConstInterface
      */
     protected function handle(): array
     {
+        $messages = $this->pool->messages;
         $meta = [
-            static::META_DECODED_JSON => $this->decodedJson,
-            static::META_PRETTY_PRINT => $this->pool->encodingService
+            $messages->getHelp('metaDecodedJson') => $this->decodedJson,
+            $messages->getHelp('metaPrettyPrint') => $this->pool->encodingService
                 ->encodeString(json_encode($this->decodedJson, JSON_PRETTY_PRINT))
         ];
 
         // Move the extra part into a nest, for better readability.
         if ($this->model->hasExtra() === true) {
             $this->model->setHasExtra(false);
-            $meta[static::META_CONTENT] = $this->model->getData();
+            $meta[$messages->getHelp('metaContent')] = $this->model->getData();
         }
 
         return $meta;

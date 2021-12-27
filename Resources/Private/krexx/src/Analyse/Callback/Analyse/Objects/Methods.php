@@ -41,7 +41,6 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -55,7 +54,7 @@ use ReflectionMethod;
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, ViewConstInterface, ConfigConstInterface
+class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, ConfigConstInterface
 {
 
     /**
@@ -81,14 +80,15 @@ class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, 
         if ($this->pool->recursionHandler->isInMetaHive($domId) === true) {
             // We have been here before.
             // We skip this one, and leave it to the js recursion handler!
+            $metaMethods = $this->pool->messages->getHelp('metaMethods');
             return $output .
                 $this->pool->render->renderRecursion(
                     $this->dispatchEventWithModel(
                         static::EVENT_MARKER_RECURSION,
                         $this->pool->createClass(Model::class)
                             ->setDomid($domId)
-                            ->setNormal(static::META_METHODS)
-                            ->setName(static::META_METHODS)
+                            ->setNormal($metaMethods)
+                            ->setName($metaMethods)
                             ->setType(static::TYPE_INTERNALS)
                     )
                 );
@@ -137,7 +137,7 @@ class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, 
             $this->dispatchEventWithModel(
                 static::EVENT_MARKER_ANALYSES_END,
                 $this->pool->createClass(Model::class)
-                    ->setName(static::META_METHODS)
+                    ->setName($this->pool->messages->getHelp('metaMethods'))
                     ->setType(static::TYPE_INTERNALS)
                     ->addParameter(static::PARAM_DATA, $methods)
                     ->addParameter(static::PARAM_REF, $ref)

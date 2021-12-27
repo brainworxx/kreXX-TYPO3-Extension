@@ -452,46 +452,6 @@ class CodegenTest extends AbstractTest
     }
 
     /**
-     * Test the parameter analysis, with a default parameter
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
-     */
-    public function testParameterToStringWithDefaultPhpFive()
-    {
-        // Create a mock with some supply data.
-        $refTypeMock = $this->createMock(ReflectionType::class);
-        $refTypeMock->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\ConfigSection'));
-        $refParamMock = $this->createMock(ReflectionParameter::class);
-        $refParamMock->expects($this->once())
-            ->method('hasType')
-            ->will($this->returnValue(true));
-        $refParamMock->expects($this->once())
-            ->method('getType')
-            ->will($this->returnValue($refTypeMock));
-        $refParamMock->expects($this->once())
-            ->method('isDefaultValueAvailable')
-            ->will($this->returnValue(true));
-        $refParamMock->expects($this->once())
-            ->method('getDefaultValue')
-            ->will($this->returnValue('<h1>Default Stuff</h1>'));
-        $refParamMock->expects($this->once())
-            ->method('isPassedByReference')
-            ->will($this->returnValue(false));
-        $refParamMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('wahtever'));
-
-        $this->assertEquals(
-            'Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection $wahtever = &#039;&lt;h1&gt;Default Stuff&lt;/h1&gt;&#039;',
-            $this->codegenHandler->parameterToString($refParamMock)
-        );
-    }
-
-    /**
      * Test the parameter analysis, with a required parameter.
      * We use a special DateTime parameter as a fixture.
      *
@@ -499,35 +459,15 @@ class CodegenTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
      */
-    public function testParameterToStringWithRequiredPhpSeven()
+    public function testParameterToString()
     {
-        // Create a mock with some supply data.
-        $refTypeMock = $this->createMock(ReflectionType::class);
-        $refTypeMock->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue('DateTimeZone'));
-        $refParamMock = $this->createMock(ReflectionParameter::class);
-        $refParamMock->expects($this->once())
-            ->method('hasType')
-            ->will($this->returnValue(true));
-        $refParamMock->expects($this->once())
-            ->method('getType')
-            ->will($this->returnValue($refTypeMock));
-        $refParamMock->expects($this->once())
-            ->method('isDefaultValueAvailable')
-            ->will($this->returnValue(false));
-        $refParamMock->expects($this->never())
-            ->method('getDefaultValue');
-        $refParamMock->expects($this->once())
-            ->method('isPassedByReference')
-            ->will($this->returnValue(false));
-        $refParamMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('object'));
+        $fixture = function (\DateTimeZone $object){};
+        $reflectionFunction = new \ReflectionFunction($fixture);
+        $reflectionParameter = $reflectionFunction->getParameters()[0];
 
         $this->assertEquals(
             'DateTimeZone $object',
-            $this->codegenHandler->parameterToString($refParamMock)
+            $this->codegenHandler->parameterToString($reflectionParameter)
         );
     }
 

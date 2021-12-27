@@ -52,7 +52,7 @@ trait MemoryLeft
     /**
      * @param string $memoryLeft
      */
-    public function setMemoryLeft(string $memoryLeft)
+    public function setMemoryLeft(string $memoryLeft): void
     {
         $this->memoryLeft = $memoryLeft;
     }
@@ -60,7 +60,7 @@ trait MemoryLeft
     /**
      * @param string $formmemoryLeft
      */
-    public function setFormmemoryLeft(string $formmemoryLeft)
+    public function setFormmemoryLeft(string $formmemoryLeft): void
     {
         $this->formmemoryLeft = $formmemoryLeft;
     }

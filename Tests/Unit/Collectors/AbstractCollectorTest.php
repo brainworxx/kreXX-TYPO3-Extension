@@ -60,7 +60,7 @@ class AbstractCollectorTest extends AbstractTest
         $userMock = $this->createMock(BackendUserAuthentication::class);
         $userMock->expects($this->once())
             ->method('check')
-            ->with('modules', AbstractCollector::PLUGIN_NAME)
+            ->with('modules', 'tools_IncludekrexxKrexxConfiguration')
             ->will($this->returnValue(false));
         $GLOBALS['BE_USER'] = $userMock;
         $collector = new Configuration();
@@ -70,14 +70,14 @@ class AbstractCollectorTest extends AbstractTest
 
         // BE user with access.
         $uc = [
-            AbstractCollector::MODULE_DATA => [
+            'moduleData' => [
                 IndexController::MODULE_KEY => ['some', 'settings']
             ]
         ];
         $userMock = $this->createMock(BackendUserAuthentication::class);
         $userMock->expects($this->once())
             ->method('check')
-            ->with('modules', AbstractCollector::PLUGIN_NAME)
+            ->with('modules', 'tools_IncludekrexxKrexxConfiguration')
             ->will($this->returnValue(true));
         $userMock->uc = $uc;
         $GLOBALS['BE_USER'] = $userMock;

@@ -42,7 +42,6 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Model as SettingModel;
-use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Configuration "analysis" methods. Meh, naming conventions suck sometimes.
@@ -50,7 +49,7 @@ use Brainworxx\Krexx\View\ViewConstInterface;
  * @uses array data
  *   The configuration section we are rendering
  */
-class ConfigSection extends AbstractCallback implements CallbackConstInterface, ViewConstInterface, ConfigConstInterface
+class ConfigSection extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
 {
 
     /**
@@ -92,7 +91,7 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
     protected function generateOutput(SettingModel $setting, string $id): string
     {
         /** @var Model $model */
-        $model = $this->pool->createClass(Model::class)->setHelpid($id . static::META_HELP);
+        $model = $this->pool->createClass(Model::class)->setHelpid($id . 'Help');
         $name = $this->pool->messages->getHelp($id . 'Readable');
         $value = $this->prepareValue($setting);
         if ($setting->getEditable() === true) {

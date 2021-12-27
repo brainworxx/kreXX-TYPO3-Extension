@@ -81,10 +81,10 @@ class TimeStampTest extends AbstractTest
         $expectation = (new DateTime('@' . $fixture))->format('d.M Y H:i:s');
         $this->assertFalse($scalarTimeStamp->canHandle($fixture, $model));
         $result = $model->getJson();
-        $this->assertArrayHasKey(ViewConstInterface::META_TIMESTAMP, $result);
+        $this->assertArrayHasKey('Timestamp', $result);
         $this->assertEquals(
             $expectation,
-            $result[ViewConstInterface::META_TIMESTAMP],
+            $result['Timestamp'],
             'Test with a normal time stamp.'
         );
 
@@ -93,10 +93,10 @@ class TimeStampTest extends AbstractTest
         $expectation = (DateTime::createFromFormat('U.u', $fixture)->format('d.M Y H:i:s.u'));
         $this->assertFalse($scalarTimeStamp->canHandle($fixture, $model));
         $result = $model->getJson();
-        $this->assertArrayHasKey(ViewConstInterface::META_TIMESTAMP, $result);
+        $this->assertArrayHasKey('Timestamp', $result);
         $this->assertEquals(
             $expectation,
-            $result[ViewConstInterface::META_TIMESTAMP],
+            $result['Timestamp'],
             'Test with a micro time stamp.'
         );
     }

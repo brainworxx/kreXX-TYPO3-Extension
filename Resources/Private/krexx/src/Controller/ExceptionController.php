@@ -59,7 +59,7 @@ class ExceptionController extends AbstractController implements BacktraceConstIn
      *
      * @param \Throwable $exception
      */
-    public function exceptionAction(Throwable $exception)
+    public function exceptionAction(Throwable $exception): void
     {
         // Get the main part.
         $main = $this->pool->render->renderFatalMain(
@@ -70,7 +70,7 @@ class ExceptionController extends AbstractController implements BacktraceConstIn
 
         // Get the backtrace.
         $trace = $exception->getTrace();
-        $backtrace = $this->pool->createClass(ProcessBacktrace::class)->process($trace);
+        $backtrace = $this->pool->createClass(ProcessBacktrace::class)->handle($trace);
 
         if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
             return;
@@ -128,30 +128,5 @@ class ExceptionController extends AbstractController implements BacktraceConstIn
         restore_exception_handler();
 
         return $this;
-    }
-
-    /**
-     * Generate the metadata for the exception analysis.
-     *
-     * @param \Throwable $exception
-     *   The exception we are analysing.
-     *
-     * @deprecated
-     *   Since 4.0.0. Use the ExceptionCallerFinder instead.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return array
-     *   The meta array.
-     */
-    protected function generateMetaArray(Throwable $exception): array
-    {
-        return [
-            static::TRACE_FILE => $exception->getFile(),
-            static::TRACE_LINE => $exception->getLine() + 1,
-            static::TRACE_VARNAME => ' ' . get_class($exception),
-            static::TRACE_LEVEL => 'error'
-        ];
     }
 }

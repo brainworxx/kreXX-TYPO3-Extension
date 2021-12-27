@@ -52,7 +52,7 @@ trait Destination
     /**
      * @param string $destination
      */
-    public function setDestination(string $destination)
+    public function setDestination(string $destination): void
     {
         $this->destination = $destination;
     }
@@ -60,7 +60,7 @@ trait Destination
     /**
      * @param string $formdestination
      */
-    public function setFormdestination(string $formdestination)
+    public function setFormdestination(string $formdestination): void
     {
         $this->formdestination = $formdestination;
     }

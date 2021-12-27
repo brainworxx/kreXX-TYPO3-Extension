@@ -46,7 +46,6 @@ use Brainworxx\Krexx\View\Skins\SmokyGrey\Footer;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Header;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Recursion;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleChild;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
 
 /**
@@ -54,7 +53,6 @@ use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
  */
 class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
 {
-    use SingleChild;
     use ExpandableChild;
     use Recursion;
     use SingleEditableChild;
@@ -70,5 +68,5 @@ class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
      *
      * @var string
      */
-    const DATA_ATTRIBUTE_JSON = 'addjson';
+    protected const DATA_ATTRIBUTE_JSON = 'addjson';
 }

@@ -88,7 +88,7 @@ class Cookie
      * @return string|null
      *   The value.
      */
-    public function getConfigFromCookies(string $group, string $name)
+    public function getConfigFromCookies(string $group, string $name): ?string
     {
         // Do we have a value in the cookies?
         if (

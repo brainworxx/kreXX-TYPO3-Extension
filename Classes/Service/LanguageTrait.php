@@ -72,7 +72,7 @@ trait LanguageTrait
         array $arguments = null,
         string $langKey = null,
         array $altLangKeys = null
-    ) {
+    ): ?string {
         if (defined('KREXX_TEST_IN_PROGRESS')) {
             return $key;
         }

@@ -43,7 +43,6 @@ use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Properties;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -57,11 +56,9 @@ use ReflectionProperty;
  */
 class ThroughProperties extends AbstractCallback implements
     CallbackConstInterface,
-    ViewConstInterface,
     CodegenConstInterface,
     ConnectorsConstInterface
 {
-
     /**
      * Renders the properties of a class.
      *
@@ -71,6 +68,8 @@ class ThroughProperties extends AbstractCallback implements
     public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
+        $pool = $this->pool;
+        $messages = $pool->messages;
 
         // I need to preprocess them, since I do not want to render a
         // reflection property.
@@ -79,27 +78,24 @@ class ThroughProperties extends AbstractCallback implements
 
         foreach ($this->parameters[static::PARAM_DATA] as $refProperty) {
             // Check memory and runtime.
-            if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
+            if ($pool->emergencyHandler->checkEmergencyBreak() === true) {
                 return '';
             }
 
             // Stitch together our model.
             $value = $ref->retrieveValue($refProperty);
-            $output .= $this->pool->routing->analysisHub(
-                $this->dispatchEventWithModel(
-                    __FUNCTION__ . static::EVENT_MARKER_END,
-                    $this->pool->createClass(Model::class)
-                        ->setData($value)
-                        ->setName($this->retrievePropertyName($refProperty))
-                        ->addToJson(
-                            static::META_COMMENT,
-                            $this->pool->createClass(Properties::class)->getComment($refProperty)
-                        )
-                        ->addToJson(static::META_DECLARED_IN, $this->retrieveDeclarationPlace($refProperty))
-                        ->setAdditional($this->getAdditionalData($refProperty, $ref))
-                        ->setConnectorType($this->retrieveConnector($refProperty))
-                        ->setCodeGenType($refProperty->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '')
-                )
+            $output .= $pool->routing->analysisHub(
+                $this->dispatchEventWithModel(__FUNCTION__ . static::EVENT_MARKER_END, $pool->createClass(Model::class)
+                    ->setData($value)
+                    ->setName($this->retrievePropertyName($refProperty))
+                    ->addToJson(
+                        $messages->getHelp('metaComment'),
+                        $pool->createClass(Properties::class)->getComment($refProperty)
+                    )
+                    ->addToJson($messages->getHelp('metaDeclaredIn'), $this->retrieveDeclarationPlace($refProperty))
+                    ->setAdditional($this->getAdditionalData($refProperty, $ref))
+                    ->setConnectorType($this->retrieveConnector($refProperty))
+                    ->setCodeGenType($refProperty->isPublic() ? static::CODEGEN_TYPE_PUBLIC : ''))
             );
         }
 
@@ -113,7 +109,7 @@ class ThroughProperties extends AbstractCallback implements
      *   Reflection of the property we are analysing.
      *
      * @return string
-     *   The connector type.
+     *   The connector-type.
      */
     protected function retrieveConnector(ReflectionProperty $refProperty): string
     {
@@ -228,13 +224,14 @@ class ThroughProperties extends AbstractCallback implements
     {
         $declaringClass = $refProperty->getDeclaringClass();
         $traits = $declaringClass->getTraits();
+        $messages = $this->pool->messages;
 
         // Early returns for simple cases.
         if (isset($refProperty->isUndeclared) === true) {
-            return static::META_UNDECLARED;
+            return $messages->getHelp('metaUndeclared');
         }
         if ($declaringClass->isInternal()) {
-            return static::META_PREDECLARED;
+            return $messages->getHelp('metaPredeclared');
         }
 
         if (empty($traits) === false) {
@@ -245,7 +242,7 @@ class ThroughProperties extends AbstractCallback implements
         if ($declaringClass !== null) {
             $result = $this->pool->fileService->filterFilePath($declaringClass->getFileName()) .
                 $this->pool->render->renderLinebreak() .
-                ($declaringClass->isTrait() ? static::META_IN_TRAIT : static::META_IN_CLASS) .
+                ($declaringClass->isTrait() ? $messages->getHelp('metaInTrait') : $messages->getHelp('metaInClass')) .
                 $declaringClass->name;
         }
 
@@ -278,7 +275,7 @@ class ThroughProperties extends AbstractCallback implements
         array $traits,
         ReflectionProperty $refProperty,
         ReflectionClass $originalRef
-    ) {
+    ): ?ReflectionClass {
         $propertyName = $refProperty->name;
         foreach ($traits as $trait) {
             if ($trait->hasProperty($propertyName)) {

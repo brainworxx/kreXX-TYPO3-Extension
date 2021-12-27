@@ -54,35 +54,35 @@ class Validation extends Fallback
      *
      * @var string
      */
-    const KEY_CONFIG_ERROR = 'configError';
+    protected const KEY_CONFIG_ERROR = 'configError';
 
     /**
      * Part of a key for the messaging system.
      *
      * @var string
      */
-    const KEY_CONFIG_ERROR_BOOL = 'configErrorBool';
+    protected const KEY_CONFIG_ERROR_BOOL = 'configErrorBool';
 
     /**
      * Part of a key for the messaging system.
      *
      * @var string
      */
-    const KEY_CONFIG_ERROR_INT = 'configErrorInt';
+    protected const KEY_CONFIG_ERROR_INT = 'configErrorInt';
 
     /**
      * Part of a key for the messaging system.
      *
      * @var string
      */
-    const KEY_CONFIG_ERROR_DEBUG_INVALID = 'configErrorDebugInvalid';
+    protected const KEY_CONFIG_ERROR_DEBUG_INVALID = 'configErrorDebugInvalid';
 
     /**
      * Preconfiguration which setting will never be editable.
      *
      * @var string[]
      */
-    const FE_DO_NOT_EDIT = [
+    protected const FE_DO_NOT_EDIT = [
         self::SETTING_DESTINATION,
         self::SETTING_MAX_FILES,
         self::SETTING_DEBUG_METHODS,
@@ -120,21 +120,6 @@ class Validation extends Fallback
         ReflectionType::class,
         ReflectionGenerator::class,
         Reflector::class,
-    ];
-
-    /**
-     * List of stuff who's fe-editing status can not be changed. Never.
-     *
-     * @deprecated
-     *   Since 4.0.0. Use static::FE_DO_NOT_EDIT
-     *
-     * @var string[]
-     */
-    protected $feConfigNoEdit = [
-        self::SETTING_DESTINATION,
-        self::SETTING_MAX_FILES,
-        self::SETTING_DEBUG_METHODS,
-        self::SETTING_IP_RANGE,
     ];
 
     /**

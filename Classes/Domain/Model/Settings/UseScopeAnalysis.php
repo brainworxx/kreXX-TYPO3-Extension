@@ -52,7 +52,7 @@ trait UseScopeAnalysis
     /**
      * @param string $useScopeAnalysis
      */
-    public function setUseScopeAnalysis(string $useScopeAnalysis)
+    public function setUseScopeAnalysis(string $useScopeAnalysis): void
     {
         $this->useScopeAnalysis = $useScopeAnalysis;
     }
@@ -60,7 +60,7 @@ trait UseScopeAnalysis
     /**
      * @param string $formuseScopeAnalysis
      */
-    public function setFormuseScopeAnalysis(string $formuseScopeAnalysis)
+    public function setFormuseScopeAnalysis(string $formuseScopeAnalysis): void
     {
         $this->formuseScopeAnalysis = $formuseScopeAnalysis;
     }

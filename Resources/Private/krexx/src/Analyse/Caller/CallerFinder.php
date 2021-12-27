@@ -54,7 +54,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
      *
      * @var string
      */
-    const CLASS_PATTERN = Krexx::class;
+    protected const CLASS_PATTERN = Krexx::class;
 
     /**
      * Pattern used to find the krexx call in the backtrace.
@@ -63,7 +63,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
      *
      * @var string
      */
-    const FUNCTION_PATTERN = 'krexx';
+    protected const FUNCTION_PATTERN = 'krexx';
 
 
     /**

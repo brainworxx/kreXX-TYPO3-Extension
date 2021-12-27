@@ -254,7 +254,7 @@ class File
      * @param string $string
      *   The string we want to write.
      */
-    public function putFileContents(string $filePath, string $string)
+    public function putFileContents(string $filePath, string $string): void
     {
         // Register the file as a readable one.
         static::$isReadableCache[$filePath] = true;
@@ -266,7 +266,7 @@ class File
      *
      * @param string $filePath
      */
-    public function deleteFile(string $filePath)
+    public function deleteFile(string $filePath): void
     {
         $realpath = $this->realpath($filePath);
 

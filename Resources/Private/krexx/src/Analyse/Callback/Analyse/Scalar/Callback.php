@@ -39,7 +39,6 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Comment\Functions;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionException;
 use ReflectionFunction;
 
@@ -49,7 +48,7 @@ use ReflectionFunction;
  * inheritance. We can extract the needed data directly out of the
  * reflection and dump it via ThroughMeta.
  */
-class Callback extends AbstractScalarAnalysis implements ViewConstInterface
+class Callback extends AbstractScalarAnalysis
 {
     /**
      * The callback we are analysing.
@@ -105,8 +104,8 @@ class Callback extends AbstractScalarAnalysis implements ViewConstInterface
         /** @var Functions $comment */
         $comment = $this->pool->createClass(Functions::class);
         $meta = [
-            static::META_COMMENT => $comment->getComment($reflectionFunction),
-            static::META_DECLARED_IN => $this->retrieveDeclarationPlace($reflectionFunction)
+            $this->pool->messages->getHelp('metaComment') => $comment->getComment($reflectionFunction),
+            $this->pool->messages->getHelp('metaDeclaredIn') => $this->retrieveDeclarationPlace($reflectionFunction)
         ];
         $this->insertParameters($reflectionFunction, $meta);
 
@@ -125,11 +124,11 @@ class Callback extends AbstractScalarAnalysis implements ViewConstInterface
     protected function retrieveDeclarationPlace(ReflectionFunction $reflectionFunction): string
     {
         if ($reflectionFunction->isInternal() === true) {
-            return static::META_PREDECLARED;
+            return $this->pool->messages->getHelp('metaPredeclared');
         }
 
         return $this->pool->fileService->filterFilePath($reflectionFunction->getFileName()) . "\n" .
-            static::META_IN_LINE . $reflectionFunction->getStartLine();
+            $this->pool->messages->getHelp('metaInLine') . $reflectionFunction->getStartLine();
     }
 
     /**
@@ -140,11 +139,11 @@ class Callback extends AbstractScalarAnalysis implements ViewConstInterface
      * @param array $meta
      *   The meta array, so far.
      */
-    protected function insertParameters(ReflectionFunction $reflectionFunction, array &$meta)
+    protected function insertParameters(ReflectionFunction $reflectionFunction, array &$meta): void
     {
         foreach ($reflectionFunction->getParameters() as $key => $reflectionParameter) {
             ++$key;
-            $meta[static::META_PARAM_NO . $key] = $this->pool
+            $meta[$this->pool->messages->getHelp('metaParamNo') . $key] = $this->pool
                 ->codegenHandler
                 ->parameterToString($reflectionParameter);
         }

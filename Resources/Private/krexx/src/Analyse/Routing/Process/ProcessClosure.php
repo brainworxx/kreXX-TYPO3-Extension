@@ -43,7 +43,6 @@ use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Functions;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use Closure;
 use ReflectionException;
 use ReflectionFunction;
@@ -52,7 +51,6 @@ use ReflectionFunction;
  * Processing of closures.
  */
 class ProcessClosure extends AbstractProcessNoneScalar implements
-    ViewConstInterface,
     ProcessConstInterface,
     CallbackConstInterface,
     ConnectorsConstInterface
@@ -92,27 +90,7 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
             return '';
         }
 
-        $result = [];
-
-        // Adding comments from the file.
-        $result[static::META_COMMENT] =  $this->pool->createClass(Functions::class)->getComment($ref);
-
-        // Adding the sourcecode
-        $result[static::META_SOURCE] = $this->retrieveSourceCode($ref);
-
-        // Adding the place where it was declared.
-        $result[static::META_DECLARED_IN] = $this->pool->fileService->filterFilePath($ref->getFileName()) . "\n";
-        $result[static::META_DECLARED_IN] .= 'in line ' . $ref->getStartLine();
-
-        // Adding the namespace, but only if we have one.
-        $namespace = $ref->getNamespaceName();
-        if (empty($namespace) === false) {
-            $result[static::META_NAMESPACE] = $namespace;
-        }
-
-        // Adding the return type.
-        $result[static::META_RETURN_TYPE] = $this->pool->createClass(ReturnType::class)->getComment($ref);
-
+        $result = $this->retrieveMetaData($ref);
         return $this->pool->render->renderExpandableChild($this->dispatchProcessEvent(
             $model->setType(static::TYPE_CLOSURE)
                 ->setNormal(static::UNKNOWN_VALUE)
@@ -122,6 +100,45 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
                 ->addParameter(static::PARAM_DATA, $result)
                 ->injectCallback($this->pool->createClass(ThroughMeta::class))
         ));
+    }
+
+    /**
+     * Retrieve the metadata.
+     *
+     * @param \ReflectionFunction $ref
+     *   The reflection of the function we are analysing.
+     *
+     * @return array
+     *   The metadata.
+     */
+    protected function retrieveMetaData(ReflectionFunction $ref): array
+    {
+        $result = [];
+        $messages = $this->pool->messages;
+
+        // Adding comments from the file.
+        $result[$messages->getHelp('metaComment')] = $this->pool
+            ->createClass(Functions::class)
+            ->getComment($ref);
+
+        // Adding the sourcecode
+        $result[$messages->getHelp('metaSource')] = $this->retrieveSourceCode($ref);
+
+        // Adding the place where it was declared.
+        $result[$messages->getHelp('metaDeclaredIn')] =
+            $this->pool->fileService->filterFilePath($ref->getFileName()) . "\n";
+        $result[$messages->getHelp('metaDeclaredIn')] .= 'in line ' . $ref->getStartLine();
+
+        // Adding the namespace, but only if we have one.
+        $namespace = $ref->getNamespaceName();
+        if (empty($namespace) === false) {
+            $result[$messages->getHelp('metaNamespace')] = $namespace;
+        }
+
+        // Adding the return type.
+        $result[$messages->getHelp('metaReturnType')] = $this->pool->createClass(ReturnType::class)->getComment($ref);
+
+        return $result;
     }
 
     /**
@@ -161,7 +178,7 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
         $paramList = '';
         foreach ($ref->getParameters() as $key => $reflectionParameter) {
             ++$key;
-            $paramList .=  $result[static::META_PARAM_NO . $key] = $this->pool
+            $paramList .=  $result[$this->pool->messages->getHelp('metaParamNo') . $key] = $this->pool
                 ->codegenHandler
                 ->parameterToString($reflectionParameter);
             // We add a comma to the parameter list, to separate them for a

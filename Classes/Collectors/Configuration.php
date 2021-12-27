@@ -53,7 +53,7 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
      *
      * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
      */
-    public function assignData(ViewInterface $view)
+    public function assignData(ViewInterface $view): void
     {
         if ($this->hasAccess === false) {
             // No access.
@@ -140,7 +140,7 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
      * @param array $fallback
      *   The fallback values.
      */
-    protected function applyFallbackToConfig(array &$config, string $settingsName, array $fallback)
+    protected function applyFallbackToConfig(array &$config, string $settingsName, array $fallback): void
     {
         // Check if we have a value. If not, we need to load the factory
         // settings. We also need to set the info, if we are using the

@@ -114,7 +114,7 @@ class ThroughLargeArray extends AbstractCallback implements
      * @param Model $model
      *   The so far prepared model we are preparing further.
      */
-    protected function handleKey($key, Model $model)
+    protected function handleKey($key, Model $model): void
     {
         if (is_string($key) === true) {
             $model->setName($this->pool->encodingService->encodeString($key))

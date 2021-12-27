@@ -75,6 +75,11 @@ trait ExpandableChild
     ];
 
     /**
+     * @var string
+     */
+    private $markerSingleChildExtra = '{data}';
+
+    /**
      * {@inheritdoc}
      */
     public function renderExpandableChild(Model $model, bool $isExpanded = false): string
@@ -85,7 +90,6 @@ trait ExpandableChild
         }
 
         // Generating our code.
-        /** @var \Brainworxx\Krexx\Analyse\Code\Codegen $codegenHandler */
         $codegenHandler = $this->pool->codegenHandler;
         $generateSource = $codegenHandler->generateSource($model);
         return str_replace(
@@ -211,6 +215,20 @@ trait ExpandableChild
         }
 
         return '';
+    }
+
+    /**
+     * Getter of the extra for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return string[]
+     *   The marker array.
+     */
+    public function getMarkerSingleChildExtra(): array
+    {
+        return [$this->markerSingleChildExtra];
     }
 
     /**

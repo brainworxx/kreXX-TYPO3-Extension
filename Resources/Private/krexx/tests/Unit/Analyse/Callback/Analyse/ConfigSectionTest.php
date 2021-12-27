@@ -100,11 +100,13 @@ class ConfigSectionTest extends AbstractTest
 
         // Test Render Type None
         $messageMock = $this->createMock(Messages::class);
-        $messageMock->expects($this->exactly(4))
+        $messageMock->expects($this->exactly(6))
             ->method('getHelp')
             ->withConsecutive(
+                ['metaHelp'],
                 ['renderEditableHelp'],
                 ['renderEditableReadable'],
+                ['metaHelp'],
                 ['renderNotEditableHelp'],
                 ['renderNotEditableReadable']
             )
