@@ -71,7 +71,7 @@ class AbstractCollectorTest extends AbstractTest
         // BE user with access.
         $uc = [
             'moduleData' => [
-                IndexController::MODULE_KEY => ['some', 'settings']
+                'IncludekrexxKrexxConfiguration' => ['some', 'settings']
             ]
         ];
         $userMock = $this->createMock(BackendUserAuthentication::class);

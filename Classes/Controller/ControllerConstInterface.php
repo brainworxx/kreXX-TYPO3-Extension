@@ -35,24 +35,17 @@
 
 declare(strict_types=1);
 
-namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
+namespace Brainworxx\Includekrexx\Controller;
 
-/**
- * Constants for the Fluid debugger
- */
-interface ConstInterface
+interface ControllerConstInterface
 {
     /**
-     * Additional parameter key.
-     *
      * @var string
      */
-    public const PARAM_ARRAY = 'paramArray';
+    public const ACCESS_DENIED = 'accessDenied';
 
     /**
-     * Constant identifier for the multiline code generation for fluid
-     *
      * @var string
      */
-    public const VHS_CALL_VIEWHELPER = 'vhsCallViewhelper';
+    public const MODULE_KEY = 'IncludekrexxKrexxConfiguration';
 }

@@ -91,7 +91,7 @@ class VhsMethods implements EventHandlerInterface, CallbackConstInterface, Fluid
         }
 
         // Switch to VHS Viewhelper
-        $model->setCodeGenType(Codegen::VHS_CALL_VIEWHELPER)
+        $model->setCodeGenType(static::VHS_CALL_VIEWHELPER)
             ->addParameter(static::PARAM_ARRAY, $paramArray);
 
         return '';

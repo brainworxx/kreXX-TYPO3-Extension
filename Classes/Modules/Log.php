@@ -40,6 +40,7 @@ namespace Brainworxx\Includekrexx\Modules;
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Controller\AbstractController;
+use Brainworxx\Includekrexx\Controller\ControllerConstInterface;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
@@ -63,7 +64,8 @@ class Log extends AbstractSubModule implements
     DataProviderInterface,
     ContentProviderInterface,
     ResourceProviderInterface,
-    ConstInterface
+    ConstInterface,
+    ControllerConstInterface
 {
     use LanguageTrait;
 
@@ -131,7 +133,7 @@ class Log extends AbstractSubModule implements
     {
         if ($this->hasAccess() === false) {
             return $this->renderMessage(
-                static::translate(static::TRANSLATION_PREFIX . AbstractController::ACCESS_DENIED),
+                static::translate(static::TRANSLATION_PREFIX . static::ACCESS_DENIED),
                 static::MESSAGE_SEVERITY_ERROR
             );
         }

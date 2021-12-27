@@ -51,7 +51,7 @@ use stdClass;
 /**
  * Handles the backend ajax requests for the loglist.
  */
-class AjaxController implements ConstInterface
+class AjaxController implements ConstInterface, ControllerConstInterface
 {
     use LanguageTrait;
 
@@ -88,7 +88,7 @@ class AjaxController implements ConstInterface
      *
      * @param \TYPO3\CMS\Core\Http\ServerRequest $serverRequest
      *   The current server request.
-     * @param \TYPO3\CMS\Core\Http\Response $response
+     * @param \TYPO3\CMS\Core\Http\Response|null $response
      *   The prepared response object. Since 10.0, we need to create this one
      *   by ourselves.
      *
@@ -105,7 +105,7 @@ class AjaxController implements ConstInterface
 
         if ($this->hasAccess() === false) {
             $result->class  = 'error';
-            $result->text = static::translate(AbstractController::ACCESS_DENIED, static::EXT_KEY);
+            $result->text = static::translate(static::ACCESS_DENIED, static::EXT_KEY);
 
             $response->getBody()->write(json_encode($result));
             return $response;

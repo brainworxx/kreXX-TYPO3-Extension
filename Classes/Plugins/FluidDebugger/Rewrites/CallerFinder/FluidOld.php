@@ -44,7 +44,6 @@ use ReflectionException;
  */
 class FluidOld extends AbstractFluid
 {
-
     /**
      * {@inheritdoc}
      */

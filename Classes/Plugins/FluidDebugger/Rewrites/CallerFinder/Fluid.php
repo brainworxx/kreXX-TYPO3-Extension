@@ -46,7 +46,6 @@ use TYPO3Fluid\Fluid\View\TemplatePaths;
  */
 class Fluid extends AbstractFluid
 {
-
     /**
      * {@inheritdoc}
      */

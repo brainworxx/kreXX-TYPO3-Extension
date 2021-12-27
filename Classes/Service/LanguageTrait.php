@@ -55,9 +55,9 @@ trait LanguageTrait
      *   The key from the LOCAL_LANG array for which to return the value.
      * @param string|null $extensionName
      *   The name of the extension
-     * @param array $arguments
+     * @param array|null $arguments
      *   The arguments of the extension, being passed over to vsprintf
-     * @param string $langKey
+     * @param string|null $langKey
      *   The language key or null for using the current language from the system
      * @param string[] $altLangKeys
      *   The alternative language keys if no translation was found. If null and

@@ -62,40 +62,29 @@ use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
  * this extension compatible back to 4.5. This  makes the other controllers
  * (hopefully) more readable.
  */
-abstract class AbstractController extends ActionController implements ConstInterface
+abstract class AbstractController extends ActionController implements ConstInterface, ControllerConstInterface
 {
     use LanguageTrait;
 
     /**
      * @var string
      */
-    const MODULE_KEY = 'IncludekrexxKrexxConfiguration';
+    protected const SAVE_FAIL_TITLE = 'save.fail.title';
 
     /**
      * @var string
      */
-    const ACCESS_DENIED = 'accessDenied';
+    protected const SAVE_SUCCESS_TEXT = 'save.success.text';
 
     /**
      * @var string
      */
-    const SAVE_FAIL_TITLE = 'save.fail.title';
+    protected const SAVE_SUCCESS_TITLE = 'save.success.title';
 
     /**
      * @var string
      */
-    const SAVE_SUCCESS_TEXT = 'save.success.text';
-
-    /**
-     * @var string
-     */
-    const SAVE_SUCCESS_TITLE = 'save.success.title';
-
-    /**
-     * @var string
-     */
-    const FILE_NOT_WRITABLE = 'file.not.writable';
-
+    protected const FILE_NOT_WRITABLE = 'file.not.writable';
 
     /**
      * The kreXX framework.

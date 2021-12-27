@@ -74,7 +74,7 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
     /**
      * Getting the SQL out of a query builder and adding it to the output.
      *
-     * @param AbstractCallback $callback
+     * @param AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far.

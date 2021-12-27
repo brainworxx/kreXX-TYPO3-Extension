@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Includekrexx\Controller\AbstractController;
+use Brainworxx\Includekrexx\Controller\ControllerConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -46,7 +47,7 @@ use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 /**
  * General stuff for all data collectors.
  */
-abstract class AbstractCollector
+abstract class AbstractCollector implements ControllerConstInterface
 {
     use LanguageTrait;
 
@@ -139,8 +140,8 @@ abstract class AbstractCollector
             $this->hasAccess = $user
                 ->check('modules', static::PLUGIN_NAME);
         }
-        if ($this->hasAccess && isset($user->uc[static::MODULE_DATA][AbstractController::MODULE_KEY])) {
-            $this->userUc = $user->uc[static::MODULE_DATA][AbstractController::MODULE_KEY];
+        if ($this->hasAccess && isset($user->uc[static::MODULE_DATA][static::MODULE_KEY])) {
+            $this->userUc = $user->uc[static::MODULE_DATA][static::MODULE_KEY];
         }
     }
 

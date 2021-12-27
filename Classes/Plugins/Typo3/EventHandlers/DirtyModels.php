@@ -74,7 +74,7 @@ class DirtyModels implements EventHandlerInterface
     /**
      * Running three very special debug methods, on TYPO3 models.
      *
-     * @param AbstractCallback $callback
+     * @param AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far.

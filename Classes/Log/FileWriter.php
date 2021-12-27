@@ -62,12 +62,12 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
     /**
      * @var string
      */
-    const KREXX_LOG_WRITER = 'kreXX log writer';
+    protected const KREXX_LOG_WRITER = 'kreXX log writer';
 
     /**
      * @var string
      */
-    const EXCEPTION = 'exception';
+    protected const EXCEPTION = 'exception';
 
     /**
      * Overwrites for the configuration.

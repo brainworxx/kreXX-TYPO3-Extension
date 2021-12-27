@@ -48,13 +48,6 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterface
 {
     /**
-     * Constant identifier for the multiline code generation for fluid
-     *
-     * @var string
-     */
-    const VHS_CALL_VIEWHELPER = 'vhsCallViewhelper';
-
-    /**
      * We wrap this one around the fluid code generation, on the left.
      *
      * @var string

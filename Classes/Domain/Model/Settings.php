@@ -39,6 +39,7 @@ namespace Brainworxx\Includekrexx\Domain\Model;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Controller\AbstractController;
+use Brainworxx\Includekrexx\Controller\ControllerConstInterface;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseGetter;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalysePrivate;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalysePrivateMethods;
@@ -67,7 +68,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Abusing the TYPO3 attribute mapper, to save our settings.
  */
-class Settings
+class Settings implements ControllerConstInterface
 {
     use Disabled;
     use Iprange;
@@ -123,11 +124,11 @@ class Settings
         /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $user */
         $user = $GLOBALS['BE_USER'];
         // Save the last settings to the backend user, so we can retrieve it later.
-        if (!isset($user->uc[AbstractCollector::MODULE_DATA][AbstractController::MODULE_KEY])) {
-            $user->uc[AbstractCollector::MODULE_DATA][AbstractController::MODULE_KEY] = [];
+        if (!isset($user->uc[AbstractCollector::MODULE_DATA][static::MODULE_KEY])) {
+            $user->uc[AbstractCollector::MODULE_DATA][static::MODULE_KEY] = [];
         }
-        $user->uc[AbstractCollector::MODULE_DATA][AbstractController::MODULE_KEY] = array_merge(
-            $user->uc[AbstractCollector::MODULE_DATA][AbstractController::MODULE_KEY],
+        $user->uc[AbstractCollector::MODULE_DATA][static::MODULE_KEY] = array_merge(
+            $user->uc[AbstractCollector::MODULE_DATA][static::MODULE_KEY],
             $moduleSettings
         );
         $user->writeUC();

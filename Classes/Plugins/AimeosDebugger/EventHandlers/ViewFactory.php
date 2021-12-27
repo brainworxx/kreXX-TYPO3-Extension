@@ -72,17 +72,17 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
      *
      * @var string
      */
-    const AI_NAMESPACE = 'Aimeos\\MW\\View\\Helper\\';
+    protected const AI_NAMESPACE = 'Aimeos\\MW\\View\\Helper\\';
 
     /**
      * @var string
      */
-    const METHOD = 'transform';
+    protected const METHOD = 'transform';
 
     /**
      * @var string
      */
-    const STANDARD = '\\Standard';
+    protected const STANDARD = '\\Standard';
 
     /**
      * Our pool.
