@@ -55,7 +55,7 @@ class QueryDebuggerTest extends AbstractTest implements CallbackConstInterface
     const FINAL_CLASS_NAME_CACHE = 'finalClassNameCache';
     const SINGLETON_INSTANCES = 'singletonInstances';
 
-    protected $expectation = 'SELECT * FROM whatever WHERE uid=\'nothing\'';
+    protected $expectation = 'SELECT * FROM whatever WHERE uid=&#039;nothing&#039;';
 
     /**
      * @return \PHPUnit\Framework\MockObject\MockObject
@@ -139,10 +139,10 @@ class QueryDebuggerTest extends AbstractTest implements CallbackConstInterface
 
         $this->mockStrLen()
             ->expects($this->once())
-            ->with($this->expectation);
+            ->with(str_replace('&#039;', '\'', $this->expectation));
 
         $objectAnalyser = new Objects(Krexx::$pool);
-        $objectAnalyser->setParameters($fixture)->callMe();
+        $objectAnalyser->setParameters( $fixture)->callMe();
 
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
         $model = $renderNothing->model['renderExpandableChild'][0];
@@ -175,7 +175,7 @@ class QueryDebuggerTest extends AbstractTest implements CallbackConstInterface
 
         $this->mockStrLen()
             ->expects($this->once())
-            ->with($this->expectation)
+            ->with(str_replace('&#039;', '\'', $this->expectation))
             ->will($this->returnValue(500));
 
         $objectAnalyser = new Objects(Krexx::$pool);

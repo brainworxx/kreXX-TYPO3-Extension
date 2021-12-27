@@ -209,11 +209,11 @@ class CallerFinderTest extends AbstractTest
 
         // We only need to check the var name.
         $this->assertEquals(
-            '$this-&gt;parameterizedMethod(\'()&quot;2\')',
+            '$this-&gt;parameterizedMethod(&#039;()&quot;2&#039;)',
             $result[BacktraceConstInterface::TRACE_VARNAME]
         );
         $this->assertEquals(
-            'Analysis of $this-&gt;parameterizedMethod(\'()&quot;2\'), float',
+            'Analysis of $this-&gt;parameterizedMethod(&#039;()&quot;2&#039;), float',
             $result[BacktraceConstInterface::TRACE_TYPE]
         );
     }

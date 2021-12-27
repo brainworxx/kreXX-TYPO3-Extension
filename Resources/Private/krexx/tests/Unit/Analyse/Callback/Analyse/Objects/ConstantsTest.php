@@ -105,11 +105,12 @@ class ConstantsTest extends AbstractTest
      */
     public function testCallMeWithConstants()
     {
+        $returnConstants = ['some', 'constants'];
         // Create the fixture mock, without any constants.
         $reflectionMock = $this->createMock(ReflectionClass::class);
         $reflectionMock->expects($this->once())
             ->method('getConstants')
-            ->will($this->returnValue('some constants'));
+            ->will($this->returnValue($returnConstants));
 
         $reflectionMock->expects($this->once())
             ->method('getName')
@@ -136,7 +137,7 @@ class ConstantsTest extends AbstractTest
         // The classname gets root-namespaced, hence the '\'
         $this->assertEquals(
             [
-                Constants::PARAM_DATA => 'some constants',
+                Constants::PARAM_DATA => $returnConstants,
                 Constants::PARAM_CLASSNAME => '\\some classname',
                 Constants::PARAM_REF => $reflectionMock
             ],

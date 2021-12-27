@@ -486,7 +486,7 @@ class CodegenTest extends AbstractTest
             ->will($this->returnValue('wahtever'));
 
         $this->assertEquals(
-            'Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection $wahtever = \'&lt;h1&gt;Default Stuff&lt;/h1&gt;\'',
+            'Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection $wahtever = &#039;&lt;h1&gt;Default Stuff&lt;/h1&gt;&#039;',
             $this->codegenHandler->parameterToString($refParamMock)
         );
     }

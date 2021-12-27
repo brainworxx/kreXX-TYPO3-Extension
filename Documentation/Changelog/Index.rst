@@ -16,6 +16,7 @@ Changelog
     - [Feature] Added microtime analysis to the float routing.
     - [Feature] Added microtime analysis to the string scalar analysis.
     - [Feature] Added type hint to the additional data for the first element.
+    - [Feature] PHP 8.1 support
     - [Change] Code cleanup.
     - [Change] Added the Limitation page to the Tips'n'Tricks documentation.
     - [Bugfix] Display info about public properties in predeclared classes.

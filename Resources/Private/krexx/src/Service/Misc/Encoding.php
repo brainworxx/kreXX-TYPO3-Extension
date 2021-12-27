@@ -193,7 +193,7 @@ class Encoding
             }
         );
 
-        $result = str_replace($search, $replace, htmlentities($data));
+        $result = str_replace($search, $replace, htmlentities($data, ENT_QUOTES));
 
         // Check if encoding was successful.
         // 99.99% of the time, the encoding works.

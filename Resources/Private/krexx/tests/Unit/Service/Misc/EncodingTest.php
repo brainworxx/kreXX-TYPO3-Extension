@@ -125,10 +125,10 @@ class EncodingTest extends AbstractTest
         $specialChars = [
             '"' => '&quot;',
             '\'' => '\&amp;#039;',
-            "\0" => '\' . &quot;\0&quot; . \'',
-            "\xEF" => '\' . &quot;\xEF&quot; . \'',
-            "\xBB" => '\' . &quot;\xBB&quot; . \'',
-            "\xBF" => '\' . &quot;\xBF&quot; . \''
+            "\0" => '&#039; . &quot;\0&quot; . &#039;',
+            "\xEF" => '&#039; . &quot;\xEF&quot; . &#039;',
+            "\xBB" => '&#039; . &quot;\xBB&quot; . &#039;',
+            "\xBF" => '&#039; . &quot;\xBF&quot; . &#039;'
         ];
 
         foreach ($specialChars as $original => $expeced) {

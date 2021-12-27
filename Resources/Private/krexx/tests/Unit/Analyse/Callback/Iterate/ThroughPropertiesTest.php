@@ -246,7 +246,7 @@ class ThroughPropertiesTest extends AbstractTest
             'asdf',
             static::MY_PROPERTY,
             [
-                static::JSON_COMMENT_KEY => 'Re-Declaration of a \'inherited\' private property<br /><br />&#64;var string',
+                static::JSON_COMMENT_KEY => 'Re-Declaration of a &#039;inherited&#039; private property<br /><br />&#64;var string',
                 static::JSON_DECLARED_KEY => $complexDeclarationString
             ],
             '->',

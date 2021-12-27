@@ -3,6 +3,7 @@
 - Added microtime analysis to the string scalar analysis.
 - Added type hint to the additional data for the first
   element.
+- Updated to PHP 8.1
 - Change: Code cleanup.
 - Bugfix: Display info about public properties in predeclared
   classes.
