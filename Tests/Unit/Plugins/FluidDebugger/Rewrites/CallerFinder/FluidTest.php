@@ -190,7 +190,7 @@ class FluidTest extends AbstractTest
         if (version_compare(Bootstrap::getTypo3Version(), '8.6', '>=')) {
             $expected = '<f:variable value="{some: &#039;array&#039;}" name="fluidvar" /> {fluidvar}';
         } else {
-            $expected = '<v:variable.set value="{some: \'array\'}" name="fluidvar" /> {fluidvar}';
+            $expected = '<v:variable.set value="{some: &#039;array&#039;}" name="fluidvar" /> {fluidvar}';
         }
 
         $this->assertEquals(
