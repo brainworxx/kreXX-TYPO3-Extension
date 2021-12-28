@@ -56,7 +56,7 @@ class Typo3DbQueryParser extends OriginalParser
      */
     public function __construct(DataMapper $dataMapper = null)
     {
-        if (empty($dataMapper) === false) {
+        if (empty($dataMapper) === false && method_exists(OriginalParser::class, '__construct')) {
             parent::__construct($dataMapper);
         }
     }
