@@ -113,13 +113,15 @@ class Settings implements ControllerConstInterface
      * @return string
      *   The generated contend of the ini file.
      */
-    public function generateIniContent(): string
+    public function generateContent(): string
     {
         Pool::createPool();
 
         $moduleSettings = [];
         // Process the settings.
-        $result = $this->processGroups($moduleSettings) . $this->processFeEditing($moduleSettings);
+        $settings = $this->processGroups($moduleSettings);
+        $feEditing =  $this->processFeEditing($moduleSettings);
+        $result = $settings + $feEditing;
 
         /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $user */
         $user = $GLOBALS['BE_USER'];
@@ -133,7 +135,7 @@ class Settings implements ControllerConstInterface
         );
         $user->writeUC();
 
-        return $result;
+        return json_encode($result);
     }
 
     /**
@@ -142,23 +144,22 @@ class Settings implements ControllerConstInterface
      * @param array $moduleSettings
      *   The module settings. We store these in the user data.
      *
-     * @return string
-     *   The generated ini content.
+     * @return array
+     *   The generated array result.
      */
-    protected function processGroups(array &$moduleSettings): string
+    protected function processGroups(array &$moduleSettings): array
     {
-        $result = '';
+        $result = [];
         $validation = Krexx::$pool->config->validation;
 
         foreach (Krexx::$pool->config->configFallback as $group => $settings) {
-            $result .= '[' . $group . ']' . "\n";
+            $result[$group] = [];
             foreach ($settings as $settingName) {
                 if (
                     $this->$settingName !== null &&
                     $validation->evaluateSetting($group, $settingName, $this->$settingName)
                 ) {
-                    $result .= $settingName . ' = "' . $this->$settingName . '"'  . "\n";
-                    $moduleSettings[$settingName] = $this->$settingName;
+                    $moduleSettings[$settingName] = $result[$group][$settingName] = $this->$settingName;
                 }
             }
         }
@@ -172,12 +173,13 @@ class Settings implements ControllerConstInterface
      * @param array $moduleSettings
      *   The module settings. We store these in the user data.
      *
-     * @return string
+     * @return array
      *   The generated ini content.
      */
-    protected function processFeEditing(array &$moduleSettings): string
+    protected function processFeEditing(array &$moduleSettings): array
     {
-        $result = '[feEditing]' . "\n";
+        $result = ['feEditing' => []];
+
         $allowedValues = ['full', 'display', 'none'];
         foreach (Krexx::$pool->config->feConfigFallback as $settingName => $settings) {
             $settingNameInModel = 'form' . $settingName;
@@ -185,11 +187,33 @@ class Settings implements ControllerConstInterface
                 $settings['render']['Editable'] === 'true' &&
                 in_array($this->$settingNameInModel, $allowedValues)
             ) {
-                $result .= $settingName . ' = "' . $this->$settingNameInModel . '"'  . "\n";
-                $moduleSettings[$settingNameInModel] = $this->$settingNameInModel;
+                $moduleSettings[$settingNameInModel] = $result['feEditing'][$settingName]
+                    = $this->$settingNameInModel;
             }
         }
 
         return $result;
+    }
+
+    /**
+     * Prepare the filepath. We do the migration from ini to json here.
+     *
+     * @param string $filepath
+     *   The path to the current configuration file.
+     *
+     * @return string
+     *   The path to the new configuration file.
+     */
+    public function prepareFileName(string $filepath): string
+    {
+        // Make sure to switch to json.
+        $pathParts = pathinfo($filepath);
+        $rootPath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.';
+        $iniPath = $rootPath . 'ini';
+        if (file_exists($iniPath)) {
+            unlink($iniPath);
+        }
+
+        return $rootPath . 'json';
     }
 }

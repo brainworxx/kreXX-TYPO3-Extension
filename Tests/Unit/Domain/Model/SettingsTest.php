@@ -267,7 +267,7 @@ class SettingsTest extends AbstractTest implements ConstInterface
             ],
         ];
 
-        $this->assertEquals($expectation, parse_ini_string($settingsModel->generateIniContent(), true));
+        $this->assertEquals($expectation, json_decode($settingsModel->generateContent(), true));
     }
 
     /**
@@ -279,5 +279,24 @@ class SettingsTest extends AbstractTest implements ConstInterface
         $settingsModel->setFactory('faqTory');
 
         $this->assertEquals('faqTory', $this->retrieveValueByReflection('factory', $settingsModel));
+    }
+
+    /**
+     * Test the ini migration to json.
+     */
+    public function testPrepareFileName()
+    {
+        $path = DIRECTORY_SEPARATOR . 'just' . DIRECTORY_SEPARATOR . 'a' . DIRECTORY_SEPARATOR . 'Krexx';
+
+        $fileExistsMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Domain\\Model', 'file_exists');
+        $fileExistsMock->expects($this->once())
+            ->with($path . '.ini')
+            ->will($this->returnValue(true));
+        $unLinkMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Domain\\Model', 'unlink');
+        $unLinkMock->expects($this->once())
+            ->with($path . '.ini');
+
+        $settingsModel = new Settings();
+        $this->assertEquals($path . '.json', $settingsModel->prepareFileName($path));
     }
 }

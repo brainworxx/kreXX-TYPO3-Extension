@@ -109,21 +109,19 @@ class IndexController extends AbstractController implements ConstInterface
             return $this->redirect('index');
         }
 
-        $filepath = $this->pool->config->getPathToConfigFile();
-
         // Check for writing permission.
         // Check the actual writing process.
-        if (is_writable(dirname($filepath)) && file_put_contents($filepath, $settings->generateIniContent())) {
+        $jsonPath = $settings->prepareFileName($this->pool->config->getPathToConfigFile());
+        if (is_writable(dirname($jsonPath)) && file_put_contents($jsonPath, $settings->generateContent())) {
             // File was saved successfully.
             $this->addFlashMessage(
-                static::translate(static::SAVE_SUCCESS_TEXT, static::EXT_KEY, [$filepath]),
-                static::translate(static::SAVE_SUCCESS_TITLE, static::EXT_KEY),
-                AbstractMessage::OK
+                static::translate(static::SAVE_SUCCESS_TEXT, static::EXT_KEY, [$jsonPath]),
+                static::translate(static::SAVE_SUCCESS_TITLE, static::EXT_KEY)
             );
         } else {
             // Something went wrong here!
             $this->addFlashMessage(
-                static::translate(static::FILE_NOT_WRITABLE, static::EXT_KEY, [$filepath]),
+                static::translate(static::FILE_NOT_WRITABLE, static::EXT_KEY, [$jsonPath]),
                 static::translate(static::SAVE_FAIL_TITLE, static::EXT_KEY),
                 AbstractMessage::ERROR
             );

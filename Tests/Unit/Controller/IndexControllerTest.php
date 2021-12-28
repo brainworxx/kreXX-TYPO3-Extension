@@ -220,6 +220,7 @@ class IndexControllerTest extends AbstractTest
      *
      * @covers \Brainworxx\Includekrexx\Controller\IndexController::saveAction
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::prepareFileName
      */
     public function testSaveActionNormal()
     {
@@ -230,15 +231,22 @@ class IndexControllerTest extends AbstractTest
         $this->prepareRedirect($indexController);
 
         $iniContent = 'oh joy, even more settings . . .';
+        $pathParts = pathinfo(Krexx::$pool->config->getPathToConfigFile());
+        $configFilePath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.json';
 
         $settingsMock = $this->createMock(Settings::class);
         $settingsMock->expects($this->once())
-            ->method('generateIniContent')
+            ->method('generateContent')
             ->will($this->returnValue($iniContent));
+        $settingsMock->expects($this->once())
+            ->method('prepareFileName')
+            ->will($this->returnValue($configFilePath));
+
+
 
         $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
         $filePutContentsMock->expects($this->once())
-            ->with(Krexx::$pool->config->getPathToConfigFile(), $iniContent)
+            ->with($configFilePath, $iniContent)
             ->will($this->returnValue(true));
 
         try {
@@ -265,6 +273,7 @@ class IndexControllerTest extends AbstractTest
      *
      * @covers \Brainworxx\Includekrexx\Controller\IndexController::saveAction
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::prepareFileName
      */
     public function testSaveActionNoWriteAccess()
     {
@@ -275,11 +284,16 @@ class IndexControllerTest extends AbstractTest
         $this->prepareRedirect($indexController);
 
         $iniContent = 'oh joy, even more settings . . .';
+        $pathParts = pathinfo(Krexx::$pool->config->getPathToConfigFile());
+        $configFilePath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.json';
 
         $settingsMock = $this->createMock(Settings::class);
         $settingsMock->expects($this->once())
-            ->method('generateIniContent')
+            ->method('generateContent')
             ->will($this->returnValue($iniContent));
+        $settingsMock->expects($this->once())
+            ->method('prepareFileName')
+            ->will($this->returnValue($configFilePath));
 
         $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
         $filePutContentsMock->expects($this->once())
