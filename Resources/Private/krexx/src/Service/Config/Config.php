@@ -297,6 +297,17 @@ class Config extends Fallback
     }
 
     /**
+     * The path to the config file that is used.
+     *
+     * @param string $file
+     *   The file path.
+     */
+    public function setPathToConfigFile(string $file)
+    {
+        $this->directories[static::CONFIG_FOLDER] = $file;
+    }
+
+    /**
      * Get the name of the skin render class
      *
      * @return string

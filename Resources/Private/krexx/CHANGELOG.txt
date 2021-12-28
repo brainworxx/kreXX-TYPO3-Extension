@@ -10,6 +10,7 @@
 - Bugfix: Comment inheritance resolving works more reliable.
 - Bugfix: Method return type comment parsing works more
   reliable.
+- Bugfix: Standard loading of the configuration file works again.
 
 4.1.2
 - Change: Do not display an empty array, when there are no

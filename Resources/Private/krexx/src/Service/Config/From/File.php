@@ -85,6 +85,7 @@ class File extends Fallback
         $this->settings = [];
 
         if ($this->pool->fileService->fileIsReadable($path) === false) {
+            $this->fallbackLoading($path);
             return $this;
         }
 
@@ -97,6 +98,30 @@ class File extends Fallback
         }
 
         return $this;
+    }
+
+    /**
+     * Fallback loading of the configuration.
+     *
+     * @param string $path
+     *   The incomplete path to the possible ini file.
+     */
+    protected function fallbackLoading(string $path)
+    {
+        $fileExtensions = ['ini' => 'parse_ini_string', 'json' => 'json_decode'];
+        foreach ($fileExtensions as $extension => $decoder) {
+            $completePath = $path . $extension;
+            if ($this->pool->fileService->fileIsReadable($completePath) === true) {
+                $content = $this->pool->fileService->getFileContents($completePath, false);
+                $this->settings = (array)$decoder($content, true);
+                // Feedback about the file name.
+                $this->pool->config->setPathToConfigFile($completePath);
+                return;
+            }
+        }
+
+        // Still here? Give feedback about the filename.
+        $this->pool->config->setPathToConfigFile($completePath);
     }
 
     /**
