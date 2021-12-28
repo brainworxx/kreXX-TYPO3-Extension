@@ -94,29 +94,29 @@ class FileTest extends AbstractTest
             '; Here you can disable kreXX on a global level without uninstalling it.' . PHP_EOL .
             'disabled = "false"' . PHP_EOL .
             ';disabled = "true"' . PHP_EOL;
-        $somePath = 'some path.ini';
-        $garbageFile = 'garbage file.ini';
-        $notExistingFile = 'not existing file.ini';
-
+        $somePathIni = 'some path.ini';
+        $somePathJson = 'some path.json';
+        $garbageFileIni = 'garbage file.ini';
+        $garbageFileJson = 'garbage file.json';
+        $notExistingFileIni = 'not existing file.ini';
+        $notExistingFileJson = 'not existing file.json';
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->exactly(1))
             ->method('getFileContents')
-            ->with($somePath, false)
+            ->with($somePathIni, false)
             ->will($this->returnValue($this->fixture));
 
-        $fileServiceMock->expects($this->exactly(3))
+        $fileServiceMock->expects($this->any())
             ->method('fileIsReadable')
-            ->withConsecutive(
-                [$somePath],
-                [$garbageFile],
-                [$notExistingFile]
-            )
             ->will(
                 $this->returnValueMap(
                     [
-                        [$somePath, true],
-                        [$garbageFile, false],
-                        [$notExistingFile, false]
+                        [$somePathIni, true],
+                        [$somePathJson, false],
+                        [$garbageFileIni, false],
+                        [$garbageFileJson, false],
+                        [$notExistingFileIni, false],
+                        [$notExistingFileJson, false]
                     ]
                 )
             );
@@ -124,7 +124,7 @@ class FileTest extends AbstractTest
         Krexx::$pool->fileService = $fileServiceMock;
         $config = new ConfigFromFile(Krexx::$pool);
 
-        $config->loadFile($somePath);
+        $config->loadFile('some path.');
         $this->assertEquals(
             [
                 'output' => [
@@ -134,10 +134,10 @@ class FileTest extends AbstractTest
             $this->retrieveValueByReflection(static::SETTINGS, $config)
         );
 
-        $config->loadFile($garbageFile);
+        $config->loadFile('garbage file.');
         $this->assertEquals([], $this->retrieveValueByReflection(static::SETTINGS, $config));
 
-        $config->loadFile($notExistingFile);
+        $config->loadFile('not existing file.');
         $this->assertEquals([], $this->retrieveValueByReflection(static::SETTINGS, $config));
     }
 
@@ -150,21 +150,24 @@ class FileTest extends AbstractTest
     {
         $setting = ['output' => ['disabled' => false]];
         $this->fixture = json_encode($setting);
-        $somePath = 'some path.json';
+        $somePathIni = 'some path.ini';
+        $somePathJson = 'some path.json';
 
         $fileServiceMock = $this->createMock(File::class);
+        $fileServiceMock->expects($this->exactly(2))
+            ->method('fileIsReadable')
+            ->withConsecutive([$somePathIni], [$somePathJson])
+            ->will($this->returnValueMap([[$somePathIni, false], [$somePathJson, true]]));
+
         $fileServiceMock->expects($this->once())
             ->method('getFileContents')
-            ->with($somePath)
+            ->with($somePathJson)
             ->will($this->returnValue($this->fixture));
-        $fileServiceMock->expects($this->once())
-            ->method('fileIsReadable')
-            ->with($somePath)
-            ->will($this->returnValue(true));
+
 
         Krexx::$pool->fileService = $fileServiceMock;
         $config = new ConfigFromFile(Krexx::$pool);
-        $config->loadFile($somePath);
+        $config->loadFile('some path.');
         $this->assertEquals(
             $setting,
             $this->retrieveValueByReflection(static::SETTINGS, $config)

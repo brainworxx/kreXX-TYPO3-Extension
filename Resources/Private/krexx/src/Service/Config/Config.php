@@ -86,7 +86,7 @@ class Config extends Fallback
     /**
      * Here we store the paths to our files and directories.
      *
-     * @var array
+     * @var string[]
      */
     protected $directories = [];
 
@@ -121,7 +121,7 @@ class Config extends Fallback
         $this->validation = $pool->createClass(Validation::class);
         $pool->config = $this;
 
-        $this->iniConfig = $this->fileConfig = $pool->createClass(File::class)
+        $this->fileConfig = $pool->createClass(File::class)
             ->loadFile($this->getPathToConfigFile());
         $this->cookieConfig = $pool->createClass(Cookie::class);
 
@@ -266,6 +266,17 @@ class Config extends Fallback
     public function getPathToConfigFile(): string
     {
         return $this->directories[static::CONFIG_FOLDER];
+    }
+
+    /**
+     * The path to the config file that is used.
+     *
+     * @param string $file
+     *   The file path.
+     */
+    public function setPathToConfigFile(string $file): void
+    {
+        $this->directories[static::CONFIG_FOLDER] = $file;
     }
 
     /**

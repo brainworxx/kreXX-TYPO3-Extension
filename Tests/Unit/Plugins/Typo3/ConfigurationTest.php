@@ -210,7 +210,7 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         $rootpath = 'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR .
             static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR;
         $this->assertEquals(
-            $rootpath . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini',
+            $rootpath . 'config' . DIRECTORY_SEPARATOR . 'Krexx.',
             SettingsGetter::getConfigFile(),
             'Test the new location of the configuration file.'
         );

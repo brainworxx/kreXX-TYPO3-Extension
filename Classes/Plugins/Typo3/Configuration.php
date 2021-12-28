@@ -111,7 +111,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         $tempPaths = $this->generateTempPaths();
 
         // Register it!
-        Registration::setConfigFile($tempPaths[static::CONFIG_FOLDER] . DIRECTORY_SEPARATOR . 'Krexx.ini');
+        Registration::setConfigFile($tempPaths[static::CONFIG_FOLDER] . DIRECTORY_SEPARATOR . 'Krexx.');
         Registration::setChunksFolder($tempPaths[static::CHUNKS_FOLDER] . DIRECTORY_SEPARATOR);
         Registration::setLogFolder($tempPaths[static::LOG_FOLDER] . DIRECTORY_SEPARATOR);
         $this->createWorkingDirectories($tempPaths);

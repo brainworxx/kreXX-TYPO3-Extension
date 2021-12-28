@@ -93,7 +93,7 @@ class ConfigTest extends AbstractTest
     {
         // Setup some fixtures.
         $chunkPath = 'chunks' . DIRECTORY_SEPARATOR . 'path';
-        $configPath = 'config' . DIRECTORY_SEPARATOR . 'path';
+        $configPath = 'config' . DIRECTORY_SEPARATOR . 'path.';
         $logPath = 'log path';
         $evilClassOne = 'some classname';
         $evilClassTwo = 'another classname';
@@ -119,7 +119,7 @@ class ConfigTest extends AbstractTest
 
         // Setting of the three folders
         $this->assertEquals($chunkPath, $config->getChunkDir());
-        $this->assertEquals($configPath, $config->getPathToConfigFile());
+        $this->assertEquals($configPath . 'json', $config->getPathToConfigFile());
         $this->assertEquals($logPath, $config->getLogDir());
 
         // Creation of the security class.
@@ -459,5 +459,19 @@ class ConfigTest extends AbstractTest
             [$config::SKIN_SMOKY_GREY, $config::SKIN_HANS, $skinName],
             $config->getSkinList()
         );
+    }
+
+    /**
+     * Test the feedback setter from the file loader.
+     *
+     * @covers \Brainworxx\Krexx\Service\Config\Config::setPathToConfigFile
+     * @covers \Brainworxx\Krexx\Service\Config\Config::getPathToConfigFile
+     */
+    public function testSetPathToConfigFile()
+    {
+        $fixture = 'whatever';
+        $config = new Config(Krexx::$pool);
+        $config->setPathToConfigFile($fixture);
+        $this->assertEquals($fixture, $config->getPathToConfigFile());
     }
 }
