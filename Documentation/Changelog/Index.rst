@@ -25,6 +25,7 @@ Changelog
     - [Bugfix] Added missing parameters to the source generation of the Aimeos debug methods.
     - [Bugfix] Mitigated the deprecated page renderer retrieval from the ModuleTemplate instance.
     - [Bugfix] Standard loading of the configuration file works again. (Standard loading was never used with the TYPO3 extension.)
+    - [Bugfix] The SQL debugger works again.
 
 4.1.2
     - [Feature] PHP 8.0 support
