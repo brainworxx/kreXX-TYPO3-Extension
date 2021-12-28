@@ -30,7 +30,8 @@ skin = "smokygrey"
 ; Where shall kreXX put it's data?
 ; Is the output the browser or the logfolder?
 ; destination = "file"
-destination = "browser"
+; destination = "browser"
+destination = "browserImmediately"
 
 ; how many logfiles will kreXX keep?
 ; Files will only get deleted, when he creates a new one.

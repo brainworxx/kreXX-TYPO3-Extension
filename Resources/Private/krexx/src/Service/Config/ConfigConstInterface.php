@@ -212,18 +212,25 @@ interface ConfigConstInterface
     public const VALUE_FALSE = 'false';
 
     /**
-     * Dropdown value. Output destination browser.
+     * Dropdown value. Output destination browser during the php shutdown phase.
      *
      * @var string
      */
     public const VALUE_BROWSER = 'browser';
 
     /**
-     * Dropdown value. Output destination file logging..
+     * Dropdown value. Output destination file logging.
      *
      * @var string
      */
     public const VALUE_FILE = 'file';
+
+    /**
+     * Dropdown value. Output destination browser immediately.
+     *
+     * @var string
+     */
+    public const VALUE_BROWSER_IMMEDIATELY = 'browserImmediately';
 
     /**
      * "Preconfigured" debug methods.

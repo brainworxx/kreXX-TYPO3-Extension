@@ -33,44 +33,20 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Tests\Unit\View\Output;
+declare(strict_types=1);
 
-use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Krexx\View\Output\Browser;
+namespace Brainworxx\Krexx\View\Output;
 
 /**
- * Although the name implies an abstract class, it's just a normal one.
- *
- * @package Brainworxx\Krexx\Tests\View\Output
+ * Immediately send the debug output ot the browser.
  */
-class AbstractOutputTest extends AbstractTest
+class BrowserImmediately extends Browser
 {
     /**
-     * Test the setting of the pool.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\AbstractOutput::__construct
+     * We send everything to the browser at once.
      */
-    public function testConstruct()
+    public function finalize(): void
     {
-        $browser = new Browser(Krexx::$pool);
-        $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $browser));
-    }
-
-    /**
-     * Test the adding of a chunk string, just like the method name implies.
-     *
-     * @covers \Brainworxx\Krexx\View\Output\Browser::addChunkString
-     */
-    public function testAddChunkString()
-    {
-        $stringOne = 'I\'m a little string.';
-        $stringTwo = 'Tri tra whatever';
-        $browser = new Browser(Krexx::$pool);
-
-        $browser->addChunkString($stringOne);
-        $browser->addChunkString($stringTwo);
-
-        $this->assertEquals([$stringOne, $stringTwo], $this->retrieveValueByReflection('chunkStrings', $browser));
+        $this->shutdownCallback();
     }
 }

@@ -13,6 +13,7 @@ Changelog
 =============================================================
 
 5.0.0
+    - [Feature] Added immediate browser output to the output choices.
     - [Change] Removed deprecated code.
     - [Change] Drop PHP 7.0 support
     - [Change] Streamlined the type display of strings

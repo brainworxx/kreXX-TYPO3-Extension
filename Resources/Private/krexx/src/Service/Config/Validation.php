@@ -222,7 +222,10 @@ class Validation extends Fallback
      */
     protected function evalDestination($value, string $name): bool
     {
-        $result = ($value === static::VALUE_BROWSER || $value === 'file');
+        $result = ($value === static::VALUE_BROWSER
+            || $value === static::VALUE_FILE
+            || $value === static::VALUE_BROWSER_IMMEDIATELY
+        );
         if ($result === false) {
             $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR . ucfirst($name));
         }

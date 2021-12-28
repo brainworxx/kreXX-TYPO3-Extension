@@ -18,6 +18,9 @@
 			<trans-unit id="browser">
 				<source>Browser</source>
 			</trans-unit>
+			<trans-unit id="browserImmediately'">
+				<source>Browser immediately</source>
+			</trans-unit>
 			<trans-unit id="true">
 				<source>True</source>
 			</trans-unit>
@@ -92,7 +95,7 @@
 				<source>Most frameworks have objects inside of objects inside of objects, and so on. Normally kreXX does not run in circles, but going to deep inside of an object tree can result in a lot of output.</source>
 			</trans-unit>
 			<trans-unit id="destination">
-				<source><![CDATA['Browser' =  Sending everything to the browser after TYPO3 is finished with everything. 'File' = Saving everything to the log folder.]]></source>
+				<source><![CDATA['Browser' =  Sending everything to the browser after TYPO3 is finished with everything. 'File' = Saving everything to the log folder. 'Browser immediately' = Sending everything to the browser right away.]]></source>
 			</trans-unit>
 			<trans-unit id="maxCall">
 				<source>A lot of output does not only slow down your server, it also slows down your browser. When using kreXX in a loop, it will create output every time the loop is executed. To limit this, you can configure the maximum call settings.</source>

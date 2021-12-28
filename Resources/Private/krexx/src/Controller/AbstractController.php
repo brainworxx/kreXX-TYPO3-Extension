@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\View\Output\AbstractOutput;
 use Brainworxx\Krexx\View\Output\Browser;
+use Brainworxx\Krexx\View\Output\BrowserImmediately;
 use Brainworxx\Krexx\View\Output\File;
 
 /**
@@ -116,6 +117,8 @@ abstract class AbstractController implements ConfigConstInterface
             $this->outputService = $pool->createClass(Browser::class);
         } elseif ($this->destination === static::VALUE_FILE) {
             $this->outputService = $pool->createClass(File::class);
+        } elseif ($this->destination === static::VALUE_BROWSER_IMMEDIATELY) {
+            $this->outputService = $pool->createClass(BrowserImmediately::class);
         }
 
         $this->pool->reset();

@@ -81,6 +81,7 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
         $dropdown[static::SETTING_DESTINATION] = [
             static::VALUE_BROWSER => static::translate(static::VALUE_BROWSER, static::EXT_KEY),
             static::VALUE_FILE => static::translate(static::VALUE_FILE, static::EXT_KEY),
+            static::VALUE_BROWSER_IMMEDIATELY => static::translate(static::VALUE_BROWSER_IMMEDIATELY, static::EXT_KEY),
         ];
         $dropdown['bool'] = [
             static::VALUE_TRUE => static::translate(static::VALUE_TRUE, static::EXT_KEY),
@@ -109,7 +110,6 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
     protected function retrieveConfiguration(): array
     {
         $pathParts = pathinfo($this->pool->config->getPathToConfigFile());
-        var_dump($pathParts);
         $filePath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.';
 
         /** @var File $iniReader */

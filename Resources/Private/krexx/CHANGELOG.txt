@@ -1,4 +1,5 @@
 5.0.0
+- Added immediately browser output to the output choices.
 - Change: Removed deprecated code.
 - Change: Drop PHP 7.0 support
 - Change: Streamlined the type display of strings
