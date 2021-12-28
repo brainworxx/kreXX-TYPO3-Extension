@@ -89,7 +89,7 @@ class ThroughMetaTest extends AbstractTest
     /**
      * Test the initializing of the workflow.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::__constuct
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::__construct
      */
     public function testConstruct()
     {
