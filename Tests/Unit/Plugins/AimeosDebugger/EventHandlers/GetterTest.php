@@ -97,7 +97,7 @@ class GetterTest extends AbstractTest
             'log.siteid' => '42',
             'log.mtime' => 'today',
             'log.ctime' => 'yesterday',
-            'log.editor' => 'me',
+            'log.editor' => null,
             // Standard class (values)
             'log.facility' => 'kreXX',
             'log.priority' => 'high',
