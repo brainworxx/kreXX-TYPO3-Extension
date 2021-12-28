@@ -117,7 +117,7 @@ class SettingsTest extends AbstractTest implements ConstInterface
      * There are no getter implemented. Hence, we set a value for each property
      * and then test the ini.
      *
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::generateIniContent
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::generateContent
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::processGroups
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::processFeEditing
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseGetter
