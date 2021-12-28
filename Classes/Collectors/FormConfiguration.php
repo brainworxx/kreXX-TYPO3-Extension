@@ -50,6 +50,11 @@ use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 class FormConfiguration extends AbstractCollector implements ConfigConstInterface, ConstInterface
 {
     /**
+     * @var File
+     */
+    protected $fileReader;
+
+    /**
      * Assigning the form configuration to the view.
      *
      * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
@@ -65,33 +70,47 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
         $pathParts = pathinfo($this->pool->config->getPathToConfigFile());
         $filePath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.';
 
-        /** @var File $iniReader */
-        $iniReader = $this->pool->createClass(File::class)->loadFile($filePath);
+        $this->fileReader = $this->pool->createClass(File::class)->loadFile($filePath);
         $config = [];
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
-            $config[$settingsName] = [];
-            $config[$settingsName][static::SETTINGS_NAME] = $settingsName;
-            $config[$settingsName][static::SETTINGS_OPTIONS] = $dropdown;
-            $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = false;
-            $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
-                $iniReader->getFeConfigFromFile($settingsName)
-            );
-            $config[$settingsName][static::SETTINGS_FALLBACK] = $dropdown[
-                $this->convertKrexxFeSetting($iniReader->feConfigFallback[$settingsName][$iniReader::RENDER])
-            ];
-
-            // Check if we have a value. If not, we need to load the
-            // factory settings. We also need to set the info, if we
-            // are using the factory settings, at all.
-            if (is_null($config[$settingsName][static::SETTINGS_VALUE])) {
-                $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
-                    $iniReader->feConfigFallback[$settingsName][$iniReader::RENDER]
-                );
-                $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
-            }
+            $this->generateSingleSetting($settingsName, $config, $dropdown);
         }
 
         $view->assign('formConfig', $config);
+    }
+
+    /**
+     * Generate a single setting.
+     *
+     * @param string $settingsName
+     *   The name of the setting
+     * @param array $config
+     *   The configuration so far.
+     * @param array $dropdown
+     *   The pregenerated dropdown.
+     */
+    protected function generateSingleSetting(string $settingsName, array &$config, array $dropdown): void
+    {
+        $config[$settingsName] = [];
+        $config[$settingsName][static::SETTINGS_NAME] = $settingsName;
+        $config[$settingsName][static::SETTINGS_OPTIONS] = $dropdown;
+        $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = false;
+        $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
+            $this->fileReader->getFeConfigFromFile($settingsName)
+        );
+        $config[$settingsName][static::SETTINGS_FALLBACK] = $dropdown[
+            $this->convertKrexxFeSetting( $this->fileReader->feConfigFallback[$settingsName][ $this->fileReader::RENDER])
+        ];
+
+        // Check if we have a value. If not, we need to load the
+        // factory settings. We also need to set the info, if we
+        // are using the factory settings, at all.
+        if (is_null($config[$settingsName][static::SETTINGS_VALUE])) {
+            $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
+                $this->fileReader->feConfigFallback[$settingsName][ $this->fileReader::RENDER]
+            );
+            $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
+        }
     }
 
     /**

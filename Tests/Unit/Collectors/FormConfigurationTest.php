@@ -47,6 +47,7 @@ class FormConfigurationTest extends AbstractTest
      * The the assigning of data to the view.
      *
      * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::assignData
+     * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::generateSingleSetting
      * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::convertKrexxFeSetting
      * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::generateDropdown
      */
