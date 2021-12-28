@@ -58,6 +58,7 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
 {
 
     const REVERSE_PROXY = 'reverseProxyIP';
+    protected const TYPO3_TEMP = 'typo3temp';
 
     /**
      * Do we have to reset the reverse proxy?

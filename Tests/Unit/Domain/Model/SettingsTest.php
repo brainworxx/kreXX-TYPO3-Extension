@@ -52,6 +52,8 @@ class SettingsTest extends AbstractTest implements ConstInterface
 
     const REVERSE_PROXY = 'reverseProxyIP';
 
+    protected const TYPO3_TEMP = 'typo3temp';
+
     public function krexxUp()
     {
         parent::krexxUp();

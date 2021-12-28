@@ -108,14 +108,6 @@ interface ConstInterface
 
     /**
      * @var string
-     *
-     * @deprecated
-     *   Since 4.1.2. Will be removed.
-     */
-    public const TYPO3_TEMP = 'typo3temp';
-
-    /**
-     * @var string
      */
     public const TX_INCLUDEKREXX = 'tx_includekrexx';
 
