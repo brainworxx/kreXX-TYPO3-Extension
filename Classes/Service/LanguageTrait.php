@@ -57,26 +57,16 @@ trait LanguageTrait
      *   The name of the extension
      * @param array|null $arguments
      *   The arguments of the extension, being passed over to vsprintf
-     * @param string|null $langKey
-     *   The language key or null for using the current language from the system
-     * @param string[] $altLangKeys
-     *   The alternative language keys if no translation was found. If null and
-     *   we are in the frontend, then the language_alt from TypoScript setup
-     *   will be used
+     *
      * @return string|null
      *   The value from LOCAL_LANG or null if no translation was found.
      */
-    public static function translate(
-        string $key,
-        $extensionName = null,
-        array $arguments = null,
-        string $langKey = null,
-        array $altLangKeys = null
-    ): ?string {
+    public static function translate(string $key, $extensionName = null, array $arguments = null): ?string
+    {
         if (defined('KREXX_TEST_IN_PROGRESS')) {
             return $key;
         }
 
-        return LocalizationUtility::translate($key, $extensionName, $arguments, $langKey, $altLangKeys);
+        return LocalizationUtility::translate($key, $extensionName, $arguments);
     }
 }
