@@ -61,7 +61,7 @@ trait LanguageTrait
      * @return string|null
      *   The value from LOCAL_LANG or null if no translation was found.
      */
-    public static function translate(string $key, $extensionName = null, array $arguments = null): ?string
+    public static function translate(string $key, string $extensionName = null, array $arguments = null): ?string
     {
         if (defined('KREXX_TEST_IN_PROGRESS')) {
             return $key;

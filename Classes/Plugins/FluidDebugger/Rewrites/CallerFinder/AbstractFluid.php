@@ -303,7 +303,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
             // Check if we already have more than one.
             if (isset($name[1][0]) === true && count($name[1]) === 1) {
                 $this->varname =  $this->checkForComplicatedStuff(
-                    $this->pool->encodingService->encodeString(trim($name[1][0], " \t\n\r\0\x0B"))
+                    $this->pool->encodingService->encodeString(trim($name[1][0]))
                 );
                 return;
             }

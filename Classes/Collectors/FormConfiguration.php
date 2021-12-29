@@ -99,7 +99,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
             $this->fileReader->getFeConfigFromFile($settingsName)
         );
         $config[$settingsName][static::SETTINGS_FALLBACK] = $dropdown[
-            $this->convertKrexxFeSetting( $this->fileReader->feConfigFallback[$settingsName][ $this->fileReader::RENDER])
+            $this->convertKrexxFeSetting($this->fileReader->feConfigFallback[$settingsName][$this->fileReader::RENDER])
         ];
 
         // Check if we have a value. If not, we need to load the

@@ -59,6 +59,8 @@ class LogfileList extends AbstractCollector
     /**
      * Retrieve the file list, like the method name says. Used by the ajax controller.
      *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     *
      * @return array
      *   The file list with the info.
      */

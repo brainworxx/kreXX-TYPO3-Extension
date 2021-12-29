@@ -220,7 +220,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
      * @return array
      *   The values array from the class.
      */
-    protected function retrieveValueArray(array &$params, ReflectionMethod $reflectionMethod): array
+    protected function retrieveValueArray(array $params, ReflectionMethod $reflectionMethod): array
     {
         $result = [];
         // Retrieve the value array from the class.
