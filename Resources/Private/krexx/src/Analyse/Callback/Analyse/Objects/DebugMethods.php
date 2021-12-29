@@ -61,7 +61,6 @@ class DebugMethods extends AbstractObjectAnalysis implements
     ConnectorsConstInterface,
     ConfigConstInterface
 {
-
     /**
      * Calls all configured debug methods in die class.
      *

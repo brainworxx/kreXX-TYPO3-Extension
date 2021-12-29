@@ -117,7 +117,7 @@ class SmokyGrey extends Hans
     {
         let kdt:Kdt = this.kdt;
         let setPayloadMaxHeight:Function = this.setPayloadMaxHeight.bind(this);
-        // When dealing with 400MB output, or more, this one takes more time than anything else.
+        // When dealing with 400 MB output, or more, this one takes more time than anything else.
         // We will delay it, so that is does not slow down other stuff.
         setTimeout(function() {
             let wrapper:HTMLElement = (kdt.getParents(element, '.kwrapper')[0] as HTMLElement);

@@ -33,47 +33,36 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-declare(strict_types=1);
+namespace Brainworxx\Krexx\Tests\Unit\Declaration;
 
-namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
+use Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration;
+use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
-use ReflectionProperty;
-
-/**
- * Analysis of protected properties.
- *
- * @uses mixed data
- *   The class we are currently analysing.
- * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
- *   A reflection of the class we are currently analysing.
- */
-class ProtectedProperties extends AbstractObjectAnalysis implements CallbackConstInterface
+class FunctionDeclarationTest extends AbstractTest
 {
     /**
-     * Dump all protected properties.
+     * Test the retrieval of declaration of simple functions.
      *
-     * @return string
-     *   The generated HTML markup
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration::retrieveDeclaration
      */
-    public function callMe(): string
+    public function testRetrieveDeclaration()
     {
-        $output = $this->dispatchStartEvent();
+        $functionDeclaration = new FunctionDeclaration(\Krexx::$pool);
 
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
-        $ref = $this->parameters[static::PARAM_REF];
-        $refProps = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
-        if (empty($refProps) === true) {
-            return $output;
-        }
+        $fixtureA = new \ReflectionFunction('myLittleCallback');
+        $result = $functionDeclaration->retrieveDeclaration($fixtureA);
+        $this->assertStringContainsString(
+            DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'Callback.php',
+            $result,
+            'The actual declaration place in the fixtures.'
+        );
 
-        usort($refProps, [$this, 'reflectionSorting']);
-
-        return $output .
-            $this->getReflectionPropertiesData(
-                $refProps,
-                $ref,
-                'Protected properties'
-            );
+        $fixtureB = new \ReflectionFunction('time');
+        $result = $functionDeclaration->retrieveDeclaration($fixtureB);
+        $this->assertStringEndsWith(
+            'predeclared',
+            $result,
+            'It is predeclared, after all.'
+        );
     }
 }

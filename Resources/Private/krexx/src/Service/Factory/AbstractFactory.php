@@ -45,7 +45,6 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
  */
 abstract class AbstractFactory
 {
-
     /**
      * Rewrite mapping for the getter.
      *

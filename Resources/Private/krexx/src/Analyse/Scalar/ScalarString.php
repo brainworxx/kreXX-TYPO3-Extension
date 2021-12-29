@@ -57,7 +57,6 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
  */
 class ScalarString extends AbstractScalar
 {
-
     /**
      * The list of analysis classes, that we use.
      *

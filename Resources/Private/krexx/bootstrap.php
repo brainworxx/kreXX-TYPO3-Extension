@@ -109,6 +109,11 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Comment/Classes.php';
         include_once KREXX_DIR . 'src/Analyse/Comment/ReturnType.php';
 
+        include_once KREXX_DIR . 'src/Analyse/Declaration/AbstractDeclaration.php';
+        include_once KREXX_DIR . 'src/Analyse/Declaration/FunctionDeclaration.php';
+        include_once KREXX_DIR . 'src/Analyse/Declaration/MethodDeclaration.php';
+        include_once KREXX_DIR . 'src/Analyse/Declaration/PropertyDeclaration.php';
+
         include_once KREXX_DIR . 'src/Analyse/Routing/AbstractRouting.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Routing.php';
 

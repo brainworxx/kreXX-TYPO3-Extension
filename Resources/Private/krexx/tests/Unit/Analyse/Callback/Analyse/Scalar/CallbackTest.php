@@ -63,7 +63,7 @@ class CallbackTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::handle
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::retrieveDeclarationPlace
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration::retrieveDeclaration
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::insertParameters
      */
     public function testCallMeNormal()

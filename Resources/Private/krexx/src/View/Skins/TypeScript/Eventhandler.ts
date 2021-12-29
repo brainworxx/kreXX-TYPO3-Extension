@@ -46,7 +46,7 @@ class Eventhandler
     protected kdt:Kdt;
 
     /**
-     * Creating an Kdt instance, and registering of our event handler
+     * Creating a Kdt instance, and registering of our event handler
      *
      * @param {string} selector
      */
@@ -62,7 +62,7 @@ class Eventhandler
     }
 
     /**
-     * Adds a event listener to a list of elements.
+     * Adds an event listener to a list of elements.
      *
      * @param {string} selector
      * @param {string} eventName
@@ -116,7 +116,7 @@ class Eventhandler
      */
     protected handle = (event:Event): void =>
     {
-        // We stop the event in it's tracks.
+        // We stop the event in its tracks.
         event.stopPropagation();
         event.stop = false;
 
@@ -160,8 +160,7 @@ class Eventhandler
     public triggerEvent(el:Element, eventName:string): void
     {
         /** @type {Event} */
-        let event:Event = document.createEvent('HTMLEvents');
-        event.initEvent(eventName, true, false);
+        let event:Event = new Event(eventName, {bubbles: true,cancelable: false});
         el.dispatchEvent(event);
     }
 }

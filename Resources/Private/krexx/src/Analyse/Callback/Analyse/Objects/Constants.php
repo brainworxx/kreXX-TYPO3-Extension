@@ -49,7 +49,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class Constants extends AbstractObjectAnalysis implements CodegenConstInterface
 {
-
     /**
      * Dumps the constants of a class,
      *

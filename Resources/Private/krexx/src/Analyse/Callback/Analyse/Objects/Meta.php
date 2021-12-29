@@ -54,7 +54,6 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
  */
 class Meta extends AbstractObjectAnalysis implements CallbackConstInterface
 {
-
     /**
      * Dump the Meta stuff from a class.
      *
@@ -62,7 +61,7 @@ class Meta extends AbstractObjectAnalysis implements CallbackConstInterface
      * - Class comment
      * - Filename and line from/to
      * - Implemented interfaces
-     * - Class list from where the objects inherits its stuff from
+     * - Class list from where the objects inherit its stuff from
      * - Used traits
      *
      * @return string
@@ -75,11 +74,7 @@ class Meta extends AbstractObjectAnalysis implements CallbackConstInterface
 
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
-        if (isset($this->parameters[static::PARAM_META_NAME])) {
-            $name = $this->parameters[static::PARAM_META_NAME];
-        } else {
-            $name = $this->pool->messages->getHelp('metaClassData');
-        }
+        $name = $this->parameters[static::PARAM_META_NAME] ?? $this->pool->messages->getHelp('metaClassData');
 
         // We need to check, if we have a meta recursion here.
         $domId = $this->generateDomIdFromClassname($ref->getName());

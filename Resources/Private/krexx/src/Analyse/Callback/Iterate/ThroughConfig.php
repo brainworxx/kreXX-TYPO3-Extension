@@ -51,7 +51,6 @@ use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
  */
 class ThroughConfig extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
 {
-
     /**
      * Renders whole configuration.
      *

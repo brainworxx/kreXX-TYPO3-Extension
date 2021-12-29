@@ -291,7 +291,7 @@ class Krexx implements ConfigConstInterface
      * When there are classes found inside the backtrace,
      * they will be analysed.
      *
-     * @param array $backtrace
+     * @param array|null $backtrace
      *   an already existing backtrace
      *
      * @api

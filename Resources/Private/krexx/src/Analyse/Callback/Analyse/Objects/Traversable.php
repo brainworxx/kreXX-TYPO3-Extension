@@ -57,7 +57,6 @@ use Throwable;
  */
 class Traversable extends AbstractObjectAnalysis implements CallbackConstInterface, ConfigConstInterface
 {
-
     /**
      * Checks runtime, memory and nesting level. Then trigger the actual analysis.
      *
@@ -114,14 +113,7 @@ class Traversable extends AbstractObjectAnalysis implements CallbackConstInterfa
 
         // Reactivate whatever error handling we had previously.
         restore_error_handler();
-
-        if (is_array($parameter) === true) {
-            return $this->analyseTraversableResult($data, $parameter);
-        }
-
-        // Still here? Return an empty string.
-        $this->pool->emergencyHandler->downOneNestingLevel();
-        return '';
+        return $this->analyseTraversableResult($data, $parameter);
     }
 
     /**

@@ -200,7 +200,6 @@ abstract class Fallback implements ConfigConstInterface
             return;
         }
 
-        /** @var \Brainworxx\Krexx\Service\Plugin\NewSetting $newSetting */
         foreach ($pluginConfig as $newSetting) {
             if (isset($this->configFallback[$newSetting->getSection()]) === false) {
                 $this->configFallback[$newSetting->getSection()] = [];
@@ -250,7 +249,6 @@ abstract class Fallback implements ConfigConstInterface
             return;
         }
 
-        /** @var \Brainworxx\Krexx\Service\Plugin\NewSetting $newSetting */
         foreach ($pluginConfig as $newSetting) {
             $this->feConfigFallback[$newSetting->getName()] = $newSetting->getFeSettings();
         }

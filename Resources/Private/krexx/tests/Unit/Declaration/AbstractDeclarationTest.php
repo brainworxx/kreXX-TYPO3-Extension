@@ -33,47 +33,21 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-declare(strict_types=1);
+namespace Brainworxx\Krexx\Tests\Unit\Declaration;
 
-namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
+use Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration;
+use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
-use ReflectionProperty;
-
-/**
- * Analysis of protected properties.
- *
- * @uses mixed data
- *   The class we are currently analysing.
- * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
- *   A reflection of the class we are currently analysing.
- */
-class ProtectedProperties extends AbstractObjectAnalysis implements CallbackConstInterface
+class AbstractDeclarationTest extends AbstractTest
 {
     /**
-     * Dump all protected properties.
+     * Test the injection of the pool
      *
-     * @return string
-     *   The generated HTML markup
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\AbstractDeclaration::__construct
      */
-    public function callMe(): string
+    public function testConstruct()
     {
-        $output = $this->dispatchStartEvent();
-
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
-        $ref = $this->parameters[static::PARAM_REF];
-        $refProps = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
-        if (empty($refProps) === true) {
-            return $output;
-        }
-
-        usort($refProps, [$this, 'reflectionSorting']);
-
-        return $output .
-            $this->getReflectionPropertiesData(
-                $refProps,
-                $ref,
-                'Protected properties'
-            );
+        $functionDeclaration = new FunctionDeclaration(\Krexx::$pool);
+        $this->assertEquals(\Krexx::$pool, $this->retrieveValueByReflection('pool', $functionDeclaration));
     }
 }

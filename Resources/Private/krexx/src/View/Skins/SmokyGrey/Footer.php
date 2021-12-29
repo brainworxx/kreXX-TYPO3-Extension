@@ -61,7 +61,7 @@ trait Footer
             return str_replace(
                 $this->markerFooter,
                 '',
-                parent::renderFooter($caller, $model, $configOnly)
+                parent::renderFooter($caller, $model, true)
             );
         }
 

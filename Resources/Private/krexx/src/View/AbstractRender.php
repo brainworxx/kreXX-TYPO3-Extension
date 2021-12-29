@@ -45,7 +45,6 @@ use Brainworxx\Krexx\Service\Factory\Pool;
  */
 abstract class AbstractRender
 {
-
     /**
      * Css class name.
      *

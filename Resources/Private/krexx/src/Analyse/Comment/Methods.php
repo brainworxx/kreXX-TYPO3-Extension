@@ -46,7 +46,6 @@ use Reflector;
  */
 class Methods extends AbstractComment
 {
-
     /**
      * The name of the method we are analysing.
      *
@@ -62,7 +61,7 @@ class Methods extends AbstractComment
      *
      * @param \Reflector $reflection
      *   An already existing reflection of the method.
-     * @param \ReflectionClass $reflectionClass
+     * @param \ReflectionClass|null $reflectionClass
      *   An already existing reflection of the original class.
      *
      * @return string

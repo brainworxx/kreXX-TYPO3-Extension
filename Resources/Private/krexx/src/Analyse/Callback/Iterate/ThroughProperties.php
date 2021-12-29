@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Properties;
+use Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
 use ReflectionClass;
 use ReflectionProperty;
@@ -60,6 +61,16 @@ class ThroughProperties extends AbstractCallback implements
     ConnectorsConstInterface
 {
     /**
+     * @var mixed[]
+     */
+    protected $defaultProperties;
+
+    /**
+     * @var PropertyDeclaration
+     */
+    protected $propertyDeclaration;
+
+    /**
      * Renders the properties of a class.
      *
      * @return string
@@ -68,38 +79,93 @@ class ThroughProperties extends AbstractCallback implements
     public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
-        $pool = $this->pool;
-        $messages = $pool->messages;
 
         // I need to preprocess them, since I do not want to render a
         // reflection property.
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
+        $this->propertyDeclaration = $this->pool->createClass(PropertyDeclaration::class);
+        $this->defaultProperties = $ref->getDefaultProperties();
 
         foreach ($this->parameters[static::PARAM_DATA] as $refProperty) {
             // Check memory and runtime.
-            if ($pool->emergencyHandler->checkEmergencyBreak() === true) {
+            if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
                 return '';
             }
 
-            // Stitch together our model.
-            $value = $ref->retrieveValue($refProperty);
-            $output .= $pool->routing->analysisHub(
-                $this->dispatchEventWithModel(__FUNCTION__ . static::EVENT_MARKER_END, $pool->createClass(Model::class)
-                    ->setData($value)
-                    ->setName($this->retrievePropertyName($refProperty))
-                    ->addToJson(
-                        $messages->getHelp('metaComment'),
-                        $pool->createClass(Properties::class)->getComment($refProperty)
-                    )
-                    ->addToJson($messages->getHelp('metaDeclaredIn'), $this->retrieveDeclarationPlace($refProperty))
-                    ->setAdditional($this->getAdditionalData($refProperty, $ref))
-                    ->setConnectorType($this->retrieveConnector($refProperty))
-                    ->setCodeGenType($refProperty->isPublic() ? static::CODEGEN_TYPE_PUBLIC : ''))
+            $output .= $this->pool->routing->analysisHub(
+                $this->dispatchEventWithModel(
+                    __FUNCTION__ . static::EVENT_MARKER_END,
+                    $this->prepareModel($ref->retrieveValue($refProperty), $refProperty)
+                )
             );
         }
 
         return $output;
+    }
+
+    /**
+     * Prepare the model.
+     *
+     * @param mixed $value
+     *   The retrieved value
+     * @param \ReflectionProperty $refProperty
+     *   The reflection of the property we are analysing.
+     *
+     * @return \Brainworxx\Krexx\Analyse\Model
+     *   The prepared model.
+     */
+    protected function prepareModel($value, ReflectionProperty $refProperty): Model
+    {
+        $messages = $this->pool->messages;
+
+        return $this->pool->createClass(Model::class)
+            ->setData($value)
+            ->setName($this->retrievePropertyName($refProperty))
+            ->addToJson(
+                $messages->getHelp('metaComment'),
+                $this->pool->createClass(Properties::class)->getComment($refProperty)
+            )
+            ->addToJson(
+                $messages->getHelp('metaDeclaredIn'),
+                $this->propertyDeclaration->retrieveDeclaration($refProperty)
+            )
+            ->addToJson(
+                $messages->getHelp('metaDefaultValue'),
+                $this->retrieveDefaultValue($refProperty->getName())
+            )
+            ->setAdditional(
+                $this->getAdditionalData(
+                    $refProperty,
+                    $this->parameters[static::PARAM_REF]
+                )
+            )
+            ->setConnectorType($this->retrieveConnector($refProperty))
+            ->setCodeGenType($refProperty->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '');
+    }
+
+    /**
+     * @param string $propertyName
+     *
+     * @return string
+     */
+    protected function retrieveDefaultValue(string $propertyName): string
+    {
+        $default = $this->defaultProperties[$propertyName] ?? null;
+        if ($default === null) {
+            return '';
+        }
+
+        $result = '';
+        if (is_string($default)) {
+            $result = '\'' . $default . '\'';
+        } elseif (is_int($default)) {
+            $result = (string)$default;
+        } elseif (is_array($default)) {
+            $result = var_export($default, true);
+        }
+
+        return nl2br($this->pool->encodingService->encodeString($result));
     }
 
     /**
@@ -217,78 +283,17 @@ class ThroughProperties extends AbstractCallback implements
      * @param \ReflectionProperty $refProperty
      *   A reflection of the property we are analysing.
      *
+     * @deprecated since 5.0.0
+     *   Will be removed. Use PropertyDeclaration instead.
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @return string
      *   Human-readable string, where the property was declared.
      */
     protected function retrieveDeclarationPlace(ReflectionProperty $refProperty): string
     {
-        $declaringClass = $refProperty->getDeclaringClass();
-        $traits = $declaringClass->getTraits();
-        $messages = $this->pool->messages;
-
-        // Early returns for simple cases.
-        if (isset($refProperty->isUndeclared) === true) {
-            return $messages->getHelp('metaUndeclared');
-        }
-        if ($declaringClass->isInternal()) {
-            return $messages->getHelp('metaPredeclared');
-        }
-
-        if (empty($traits) === false) {
-            // Update the declaring class reflection from the traits.
-            $declaringClass = $this->retrieveDeclaringClassFromTraits($traits, $refProperty, $declaringClass);
-        }
-        $result = '';
-        if ($declaringClass !== null) {
-            $result = $this->pool->fileService->filterFilePath($declaringClass->getFileName()) .
-                $this->pool->render->renderLinebreak() .
-                ($declaringClass->isTrait() ? $messages->getHelp('metaInTrait') : $messages->getHelp('metaInClass')) .
-                $declaringClass->name;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Retrieve the declaration name from traits.
-     *
-     * A class can not redeclare a property from a trait that it is using.
-     * Hence, if one of the traits has the same property that we are
-     * analysing, it is probably declared there.
-     * Traits on the other hand can redeclare their properties.
-     * I'm not sure how to get the actual declaration place, when dealing
-     * with several layers of traits. We will not parse the source code
-     * for an answer.
-     *
-     * @param \ReflectionClass[] $traits
-     *   The traits of that class.
-     * @param \ReflectionProperty $refProperty
-     *   Reflection of the property we are analysing.
-     * @param \ReflectionClass $originalRef
-     *   The original reflection class for the declaration.
-     *
-     * @return \ReflectionClass|null
-     *   Either the reflection class of the trait, or null when we are unable to
-     *   retrieve it.
-     */
-    protected function retrieveDeclaringClassFromTraits(
-        array $traits,
-        ReflectionProperty $refProperty,
-        ReflectionClass $originalRef
-    ): ?ReflectionClass {
-        $propertyName = $refProperty->name;
-        foreach ($traits as $trait) {
-            if ($trait->hasProperty($propertyName)) {
-                if (count($trait->getTraitNames()) > 0) {
-                    // Multiple layers of traits!
-                    return null;
-                }
-                // From a trait.
-                return $trait;
-            }
-        }
-
-        // Return the original reflection class.
-        return $originalRef;
+        return $this->pool->createClass(PropertyDeclaration::class)
+            ->retrieveDeclaration($refProperty);
     }
 }

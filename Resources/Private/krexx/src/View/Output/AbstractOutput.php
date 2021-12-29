@@ -66,7 +66,7 @@ abstract class AbstractOutput
      *
      * @var array
      *   An array of all chunk strings.
-     *   A chunk string are be:
+     *   A chunk string are:
      *   - header
      *   - messages
      *   - data part

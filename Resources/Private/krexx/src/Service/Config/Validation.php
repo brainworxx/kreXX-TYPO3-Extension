@@ -78,7 +78,7 @@ class Validation extends Fallback
     protected const KEY_CONFIG_ERROR_DEBUG_INVALID = 'configErrorDebugInvalid';
 
     /**
-     * Preconfiguration which setting will never be editable.
+     * Pre-configuration which setting will never be editable.
      *
      * @var string[]
      */
@@ -146,7 +146,6 @@ class Validation extends Fallback
             return;
         }
 
-        /** @var \Brainworxx\Krexx\Service\Plugin\NewSetting $newSetting */
         foreach ($pluginConfig as $newSetting) {
             if ($newSetting->isFeProtected() === true) {
                 $this->feDoNotEdit[] = $newSetting->getName();
@@ -271,15 +270,15 @@ class Validation extends Fallback
      */
     protected function evalMaxRuntime($value, string $name, string $group): bool
     {
-        $result = true;
         $maxTime = (int)ini_get('max_execution_time');
 
         if ($maxTime <= 0) {
             // There is no max execution time set.
             // We ignore the max execution time on the shell anyway.
-            return $result;
+            return true;
         }
 
+        $result = true;
         if ($this->evalInt($value, $name, $group) === false || $maxTime < (int)$value) {
             $this->pool->messages->addMessage(
                 static::KEY_CONFIG_ERROR . ucfirst($name) . 'Big',

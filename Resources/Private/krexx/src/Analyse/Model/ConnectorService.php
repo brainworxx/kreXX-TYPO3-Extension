@@ -165,7 +165,7 @@ trait ConnectorService
     }
 
     /**
-     * Getter of the return type of a method analysis.
+     * Getter of the return type the method analysis.
      *
      * @return string
      */

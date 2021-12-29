@@ -236,7 +236,8 @@ interface ConfigConstInterface
      * "Preconfigured" debug methods.
      * @var string
      */
-    public const VALUE_DEBUG_METHODS = 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo,getProperties';
+    public const VALUE_DEBUG_METHODS =
+        'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo,getProperties';
 
     /**
      * Array key. Holds the value of disabled.

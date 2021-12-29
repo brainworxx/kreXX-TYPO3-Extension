@@ -47,7 +47,6 @@ use Exception;
  */
 class ProcessInteger extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
-
     /**
      * Is this one an integer?
      *

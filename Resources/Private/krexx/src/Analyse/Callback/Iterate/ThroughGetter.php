@@ -252,7 +252,7 @@ class ThroughGetter extends AbstractCallback implements
     protected function prepareResult(
         ReflectionClass $reflectionClass,
         ReflectionMethod $reflectionMethod,
-        $refProp,
+        ?ReflectionProperty $refProp,
         Model $model
     ): void {
         $nothingFound = true;
@@ -301,12 +301,14 @@ class ThroughGetter extends AbstractCallback implements
      *   Either the reflection of a possibly associated Property, or null to
      *   indicate that we have found nothing.
      */
-    protected function getReflectionProperty(ReflectionClass $classReflection, ReflectionMethod $reflectionMethod): ?ReflectionProperty
-    {
+    protected function getReflectionProperty(
+        ReflectionClass $classReflection,
+        ReflectionMethod $reflectionMethod
+    ): ?ReflectionProperty {
         // We may be facing different writing styles.
         // The property we want from getMyProperty() should be named myProperty,
         // but we can not rely on this.
-        // Old php 4 coders sometimes add a underscore before a protected
+        // Old php 4 coders sometimes add an underscore before a protected
         // property.
 
         // We will check:
@@ -385,8 +387,10 @@ class ThroughGetter extends AbstractCallback implements
      *   Either the reflection of a possibly associated Property, or null to
      *   indicate that we have found nothing.
      */
-    protected function getReflectionPropertyDeep(ReflectionClass $classReflection, ReflectionMethod $reflectionMethod): ?ReflectionProperty
-    {
+    protected function getReflectionPropertyDeep(
+        ReflectionClass $classReflection,
+        ReflectionMethod $reflectionMethod
+    ): ?ReflectionProperty {
         // Read the sourcecode into a string.
         $sourcecode = $this->pool->fileService->readFile(
             $reflectionMethod->getFileName(),

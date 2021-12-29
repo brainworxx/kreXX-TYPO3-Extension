@@ -2,10 +2,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -151,8 +153,7 @@ var Eventhandler = (function () {
         this.storage[selector].push(callback);
     };
     Eventhandler.prototype.triggerEvent = function (el, eventName) {
-        var event = document.createEvent('HTMLEvents');
-        event.initEvent(eventName, true, false);
+        var event = new Event(eventName, { bubbles: true, cancelable: false });
         el.dispatchEvent(event);
     };
     return Eventhandler;
@@ -500,7 +501,7 @@ var Search = (function () {
         this.searchfieldReturn = function (event) {
             event.preventDefault();
             event.stopPropagation();
-            if (event.which !== 13) {
+            if (event.key !== 'Enter') {
                 return;
             }
             _this.eventHandler.triggerEvent(event.target.parentNode.querySelectorAll('.ksearchnow')[1], 'click');

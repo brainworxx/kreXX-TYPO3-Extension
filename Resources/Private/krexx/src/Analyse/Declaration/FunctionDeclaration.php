@@ -35,45 +35,28 @@
 
 declare(strict_types=1);
 
-namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
+namespace Brainworxx\Krexx\Analyse\Declaration;
 
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
-use ReflectionProperty;
+use Reflector;
 
-/**
- * Analysis of protected properties.
- *
- * @uses mixed data
- *   The class we are currently analysing.
- * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
- *   A reflection of the class we are currently analysing.
- */
-class ProtectedProperties extends AbstractObjectAnalysis implements CallbackConstInterface
+class FunctionDeclaration extends AbstractDeclaration
 {
     /**
-     * Dump all protected properties.
+     * Retrieve the declaration place, if possible.
+     *
+     * @param \ReflectionFunction $reflection
+     *   The reflection function.
      *
      * @return string
-     *   The generated HTML markup
+     *   The declaration place.
      */
-    public function callMe(): string
+    public function retrieveDeclaration(Reflector $reflection): string
     {
-        $output = $this->dispatchStartEvent();
-
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
-        $ref = $this->parameters[static::PARAM_REF];
-        $refProps = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
-        if (empty($refProps) === true) {
-            return $output;
+        if ($reflection->isInternal() === true) {
+            return $this->pool->messages->getHelp('metaPredeclared');
         }
 
-        usort($refProps, [$this, 'reflectionSorting']);
-
-        return $output .
-            $this->getReflectionPropertiesData(
-                $refProps,
-                $ref,
-                'Protected properties'
-            );
+        return $this->pool->fileService->filterFilePath($reflection->getFileName()) . "\n" .
+            $this->pool->messages->getHelp('metaInLine') . $reflection->getStartLine();
     }
 }

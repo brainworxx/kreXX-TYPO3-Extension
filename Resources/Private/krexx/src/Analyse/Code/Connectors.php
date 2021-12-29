@@ -91,7 +91,7 @@ class Connectors implements ConnectorsConstInterface
     protected $customConnectorLeft;
 
     /**
-     * The return type of a method. Not used for code generation.
+     * The return type of the method. Not used for code generation.
      *
      * @var string
      */

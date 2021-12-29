@@ -58,7 +58,6 @@ class ThroughArray extends AbstractCallback implements
     ConnectorsConstInterface,
     ProcessConstInterface
 {
-
     /**
      * Renders the expendable around the array analysis.
      *
@@ -100,7 +99,7 @@ class ThroughArray extends AbstractCallback implements
      * @param string $multilineCodeGen
      * @return \Brainworxx\Krexx\Analyse\Model
      */
-    protected function prepareModel(array &$array, $key, &$value, string $multilineCodeGen): Model
+    protected function prepareModel(array $array, $key, &$value, string $multilineCodeGen): Model
     {
         /** @var Model $model */
         $model = $this->pool

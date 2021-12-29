@@ -45,7 +45,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 interface EventHandlerInterface
 {
-
     /**
      * Inject the pool.
      *

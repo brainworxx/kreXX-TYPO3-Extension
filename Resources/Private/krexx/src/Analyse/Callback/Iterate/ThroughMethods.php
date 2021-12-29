@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
+use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionClass;
@@ -61,13 +62,17 @@ class ThroughMethods extends AbstractCallback implements
     CodegenConstInterface,
     ConnectorsConstInterface
 {
-
     /**
      * Analysis class for method comments.
      *
      * @var \Brainworxx\Krexx\Analyse\Comment\Methods
      */
     protected $commentAnalysis;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration
+     */
+    protected $methodDeclaration;
 
     /**
      * Inject the pool and get the comment analysis online.
@@ -79,6 +84,7 @@ class ThroughMethods extends AbstractCallback implements
         parent::__construct($pool);
 
         $this->commentAnalysis = $this->pool->createClass(Methods::class);
+        $this->methodDeclaration = $this->pool->createClass(MethodDeclaration::class);
     }
 
     /**
@@ -97,7 +103,7 @@ class ThroughMethods extends AbstractCallback implements
         /** @var \ReflectionMethod $refMethod */
         foreach ($this->parameters[static::PARAM_DATA] as $refMethod) {
             $declaringClass = $refMethod->getDeclaringClass();
-            $methodData = $this->retrieveMethodData($refMethod, $refClass, $declaringClass);
+            $methodData = $this->retrieveMethodData($refMethod, $refClass);
 
             // Update the reflection method, so an event subscriber can do
             // something with it.
@@ -130,17 +136,13 @@ class ThroughMethods extends AbstractCallback implements
      *   Reflection of the method that we are analysing.
      * @param \ReflectionClass $refClass
      *   Reflection of the class that we are analysing right now.
-     * @param \ReflectionClass $declaringClass
-     *   Reflection of the class, where the method is hosted.
-     *   This may or may not be the same class as the one that we are analysing.
      *
      * @return array
      *   The collected method data.
      */
     protected function retrieveMethodData(
         ReflectionMethod $refMethod,
-        ReflectionClass $refClass,
-        ReflectionClass $declaringClass
+        ReflectionClass $refClass
     ): array {
         $methodData = [];
         $messages = $this->pool->messages;
@@ -152,11 +154,13 @@ class ThroughMethods extends AbstractCallback implements
         }
 
         // Get declaration place.
-        $methodData[$messages->getHelp('metaDeclaredIn')] = $this->getDeclarationPlace($refMethod, $declaringClass);
+        $methodData[$messages->getHelp('metaDeclaredIn')] = $this->methodDeclaration
+            ->retrieveDeclaration($refMethod);
 
         // Get the return type.
-        $methodData[$messages->getHelp('metaReturnType')] = $this->pool->createClass(ReturnType::class)
-            ->getComment($refMethod, $refClass);
+        /** @var ReturnType $returnType */
+        $returnType = $this->pool->createClass(ReturnType::class);
+        $methodData[$messages->getHelp('metaReturnType')] = $returnType->getComment($refMethod, $refClass);
 
         return $methodData;
     }
@@ -214,71 +218,17 @@ class ThroughMethods extends AbstractCallback implements
      * @param \ReflectionClass $declaringClass
      *   Reflection of the class we are analysing
      *
+     * @deprecated since 5.0.0
+     *   Will be removed. Use the MethodDeclaration instead.
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @return string
      *   The analysis result.
      */
     protected function getDeclarationPlace(ReflectionMethod $reflectionMethod, ReflectionClass $declaringClass): string
     {
-        $messages = $this->pool->messages;
-
-        if ($declaringClass->isInternal() === true) {
-            return $messages->getHelp('metaPredeclared');
-        }
-
-        $filename = $this->pool->fileService->filterFilePath((string)$reflectionMethod->getFileName());
-        if (empty($filename) === true) {
-            // Not sure, if this is possible.
-            return $this->pool->messages->getHelp(static::UNKNOWN_DECLARATION);
-        }
-
-        // If the filename of the $declaringClass and the $reflectionMethod differ,
-        // we are facing a trait here.
-        $secondLine = $messages->getHelp('metaInClass') . $reflectionMethod->class . "\n";
-        if ($reflectionMethod->getFileName() !== $declaringClass->getFileName()) {
-            // There is no real clean way to get the name of the trait that we
-            // are looking at.
-            $traitName = ':: unable to get the trait name ::';
-            $trait = $this->retrieveDeclaringReflection($reflectionMethod, $declaringClass);
-            if ($trait !== false) {
-                $traitName = $trait->getName();
-            }
-
-            $secondLine = $messages->getHelp('metaInTrait') . $traitName . "\n";
-        }
-
-        return $filename . "\n" . $secondLine . $messages->getHelp('metaInLine') .
-            $reflectionMethod->getStartLine();
-    }
-
-    /**
-     * Retrieve the declaration class reflection from traits.
-     *
-     * @param \ReflectionMethod $reflectionMethod
-     *   The reflection of the method we are analysing.
-     * @param \ReflectionClass $declaringClass
-     *   The original declaring class, the one with the traits.
-     *
-     * @return bool|\ReflectionClass
-     *   false = unable to retrieve something.
-     *   Otherwise, return a reflection class.
-     */
-    protected function retrieveDeclaringReflection(ReflectionMethod $reflectionMethod, ReflectionClass $declaringClass)
-    {
-        // Get a first impression.
-        if ($reflectionMethod->getFileName() === $declaringClass->getFileName()) {
-            return $declaringClass;
-        }
-
-        // Go through the first layer of traits.
-        // No need to recheck the availability for traits. This is done above.
-        foreach ($declaringClass->getTraits() as $trait) {
-            $result = $this->retrieveDeclaringReflection($reflectionMethod, $trait);
-            if ($result !== false) {
-                return $result;
-            }
-        }
-
-        return false;
+        return $this->methodDeclaration->retrieveDeclaration($reflectionMethod);
     }
 
     /**

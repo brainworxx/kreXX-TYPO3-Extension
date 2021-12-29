@@ -58,7 +58,6 @@ class BacktraceStep extends AbstractCallback implements
     CallbackConstInterface,
     ProcessConstInterface
 {
-
     /**
      * Renders a backtrace step.
      *

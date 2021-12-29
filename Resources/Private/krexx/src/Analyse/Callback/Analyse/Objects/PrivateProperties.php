@@ -52,7 +52,6 @@ use ReflectionProperty;
  */
 class PrivateProperties extends AbstractObjectAnalysis implements CallbackConstInterface
 {
-
     /**
      * Dumping all private properties.
      *
@@ -67,7 +66,6 @@ class PrivateProperties extends AbstractObjectAnalysis implements CallbackConstI
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
         // We need to keep the original reference intact.
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
         $reflectionClass = $ref;
 
         // The main problem here is, that you only get the private properties of

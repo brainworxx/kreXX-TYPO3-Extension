@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Model;
 use DateTime;
+use Throwable;
 
 class TimeStamp extends AbstractScalarAnalysis
 {
@@ -80,7 +81,7 @@ class TimeStamp extends AbstractScalarAnalysis
                 $metaTimestamp,
                 (DateTime::createFromFormat('U.u', $string)->format('d.M Y H:i:s.u'))
             );
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             // Do nothing
         }
 

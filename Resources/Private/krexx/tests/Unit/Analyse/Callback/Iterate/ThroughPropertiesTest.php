@@ -61,6 +61,8 @@ class ThroughPropertiesTest extends AbstractTest
     const TRAIT_PROPERTY = 'traitProperty';
     const JSON_COMMENT_KEY = 'Comment';
     const JSON_DECLARED_KEY = 'Declared in';
+    const JSON_DEFAULT_VALUE = 'Default value';
+    const PUBLIC_ARRAY_DEFAULT = 'array';
 
     /**
      * @var \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties
@@ -90,6 +92,7 @@ class ThroughPropertiesTest extends AbstractTest
      * Testing an analysis without any methods to look at.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
      */
     public function testCallMeEmpty()
     {
@@ -114,11 +117,13 @@ class ThroughPropertiesTest extends AbstractTest
      * Normal testrun for the property analysis.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveConnector
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrievePropertyName
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDeclarationPlace
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDeclaringClassFromTraits
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaration
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaringClassFromTraits
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDefaultValue
      *
      * @throws \ReflectionException
      */
@@ -127,6 +132,7 @@ class ThroughPropertiesTest extends AbstractTest
         // Test the events.
         $this->mockEventService(
             [$this->startEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
             [$this->endEvent, $this->throughProperties],
             [$this->endEvent, $this->throughProperties],
             [$this->endEvent, $this->throughProperties],
@@ -159,7 +165,8 @@ class ThroughPropertiesTest extends AbstractTest
                 new ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::INHERITED_PUBLIC),
                 new ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::INHERITED_NULL),
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::TRAIT_PROPERTY),
-                new UndeclaredProperty(new ReflectionClass($subject), $undeclaredProp)
+                new UndeclaredProperty(new ReflectionClass($subject), $undeclaredProp),
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_ARRAY_DEFAULT)
             ]
         ];
 
@@ -191,7 +198,8 @@ class ThroughPropertiesTest extends AbstractTest
             static::PUBLIC_STRING_PROPERTY,
             [
                 static::JSON_COMMENT_KEY => 'Public string property.<br /><br />&#64;var string',
-                static::JSON_DECLARED_KEY => $complexDeclarationString
+                static::JSON_DECLARED_KEY => $complexDeclarationString,
+                static::JSON_DEFAULT_VALUE => '&#039;public property value&#039;'
             ],
             '->',
             '',
@@ -205,7 +213,8 @@ class ThroughPropertiesTest extends AbstractTest
             'publicIntProperty',
             [
                 static::JSON_COMMENT_KEY => 'Public integer property.<br /><br />&#64;var int',
-                static::JSON_DECLARED_KEY => $complexDeclarationString
+                static::JSON_DECLARED_KEY => $complexDeclarationString,
+                static::JSON_DEFAULT_VALUE => '123'
             ],
             '->',
             '',
@@ -219,7 +228,8 @@ class ThroughPropertiesTest extends AbstractTest
             static::UNSET_PROPERTY,
             [
                 static::JSON_COMMENT_KEY => 'Unset property is unsettling.<br /><br />&#64;var string',
-                static::JSON_DECLARED_KEY => $complexDeclarationString
+                static::JSON_DECLARED_KEY => $complexDeclarationString,
+                static::JSON_DEFAULT_VALUE => '&#039;unset me&#039;'
             ],
             '->',
             '',
@@ -233,7 +243,8 @@ class ThroughPropertiesTest extends AbstractTest
             static::PROTECTED_PROPERTY,
             [
                 static::JSON_COMMENT_KEY => 'Protected property<br /><br />&#64;var string',
-                static::JSON_DECLARED_KEY => $complexDeclarationString
+                static::JSON_DECLARED_KEY => $complexDeclarationString,
+                static::JSON_DEFAULT_VALUE => '&#039;pro tected&#039;'
             ],
             '->',
             '',
@@ -255,13 +266,15 @@ class ThroughPropertiesTest extends AbstractTest
         );
 
         // longString
+        $longString = 'gdgdfgonidoidsfogidfo idfsoigdofgoiudsfgoü dsfo goühisdfg ohisdfghioü sdoiühfg hoisdghoi sdfghiosdg sdfg dsg sdgsdf gdsg dsg';
         $this->assertModelValues(
             $models[5],
-            'gdgdfgonidoidsfogidfo idfsoigdofgoiudsfgoü dsfo goühisdfg ohisdfghioü sdoiühfg hoisdghoi sdfghiosdg sdfg dsg sdgsdf gdsg dsg',
+            $longString,
             static::LONG_STRING,
             [
                 static::JSON_COMMENT_KEY => 'A rather long string.<br /><br />&#64;var string',
-                static::JSON_DECLARED_KEY => $complexDeclarationString
+                static::JSON_DECLARED_KEY => $complexDeclarationString,
+                static::JSON_DEFAULT_VALUE => '&#039;' . htmlentities($longString) . '&#039;'
             ],
             '->',
             '',
@@ -273,7 +286,10 @@ class ThroughPropertiesTest extends AbstractTest
             $models[6],
             1,
             '$publicStatic',
-            [static::JSON_DECLARED_KEY => $complexDeclarationString],
+            [
+                static::JSON_DECLARED_KEY => $complexDeclarationString,
+                static::JSON_DEFAULT_VALUE => '1'
+            ],
             '::',
             '',
             'public static '
@@ -299,7 +315,8 @@ class ThroughPropertiesTest extends AbstractTest
             'inherited public',
             static::INHERITED_PUBLIC,
             [
-                static::JSON_DECLARED_KEY => $complexDeclarationStringInheritance
+                static::JSON_DECLARED_KEY => $complexDeclarationStringInheritance,
+                static::JSON_DEFAULT_VALUE => '&#039;inherited public&#039;'
             ],
             '->',
             '',
@@ -326,7 +343,8 @@ class ThroughPropertiesTest extends AbstractTest
             'trait property',
             static::TRAIT_PROPERTY,
             [
-                static::JSON_COMMENT_KEY => 'A Property of a trait.<br /><br />&#64;var string'
+                static::JSON_COMMENT_KEY => 'A Property of a trait.<br /><br />&#64;var string',
+                static::JSON_DEFAULT_VALUE => '&#039;trait property&#039;'
             ],
             '->',
             '',
@@ -345,6 +363,21 @@ class ThroughPropertiesTest extends AbstractTest
             '->{\'',
             '\'}',
             'public dynamic property '
+        );
+
+        // A array default value.
+         $this->assertModelValues(
+            $models[12],
+            ['qwer', 'asdf'],
+            static::PUBLIC_ARRAY_DEFAULT,
+            [
+                static::JSON_DECLARED_KEY => 'Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture',
+                static::JSON_COMMENT_KEY => 'A simple variable with a default array.<br /><br />&#64;var string[]',
+                static::JSON_DEFAULT_VALUE => 'array (<br />&nbsp;&nbsp;0 =&gt; &#039;qwer&#039;,<br />&nbsp;&nbsp;1 =&gt; &#039;asdf&#039;,<br />)'
+            ],
+            '->',
+            '',
+            'public '
         );
     }
 

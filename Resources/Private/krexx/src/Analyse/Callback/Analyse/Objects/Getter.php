@@ -54,7 +54,6 @@ use ReflectionMethod;
  */
 class Getter extends AbstractObjectAnalysis
 {
-
     /**
      * List of the getter methods, that start with 'get'.
      *

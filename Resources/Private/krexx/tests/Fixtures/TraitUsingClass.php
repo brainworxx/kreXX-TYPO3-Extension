@@ -33,47 +33,9 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-declare(strict_types=1);
+namespace Brainworxx\Krexx\Tests\Fixtures;
 
-namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
-
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
-use ReflectionProperty;
-
-/**
- * Analysis of protected properties.
- *
- * @uses mixed data
- *   The class we are currently analysing.
- * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
- *   A reflection of the class we are currently analysing.
- */
-class ProtectedProperties extends AbstractObjectAnalysis implements CallbackConstInterface
+class TraitUsingClass
 {
-    /**
-     * Dump all protected properties.
-     *
-     * @return string
-     *   The generated HTML markup
-     */
-    public function callMe(): string
-    {
-        $output = $this->dispatchStartEvent();
-
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
-        $ref = $this->parameters[static::PARAM_REF];
-        $refProps = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
-        if (empty($refProps) === true) {
-            return $output;
-        }
-
-        usort($refProps, [$this, 'reflectionSorting']);
-
-        return $output .
-            $this->getReflectionPropertiesData(
-                $refProps,
-                $ref,
-                'Protected properties'
-            );
-    }
+    use TraitFixture;
 }

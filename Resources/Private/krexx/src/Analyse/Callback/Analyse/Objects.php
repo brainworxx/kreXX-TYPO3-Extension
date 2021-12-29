@@ -66,7 +66,6 @@ use Throwable;
  */
 class Objects extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
 {
-
     /**
      * Starts the dump of an object.
      *

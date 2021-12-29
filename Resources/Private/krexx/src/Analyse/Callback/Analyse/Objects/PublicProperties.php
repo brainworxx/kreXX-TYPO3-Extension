@@ -53,7 +53,6 @@ use ReflectionProperty;
  */
 class PublicProperties extends AbstractObjectAnalysis implements CallbackConstInterface
 {
-
     /**
      * Dump all public properties.
      *
@@ -105,12 +104,16 @@ class PublicProperties extends AbstractObjectAnalysis implements CallbackConstIn
      * Also: Take care of the \DateTime properties anomaly.
      *
      * @param ReflectionProperty[] $refProps
-     * @param $data
+     * @param mixed $data
      * @param ReflectionProperty[] $publicProps
      * @param \ReflectionClass $ref
      */
-    protected function handleUndeclaredProperties(array &$refProps, $data, array $publicProps, ReflectionClass $ref): void
-    {
+    protected function handleUndeclaredProperties(
+        array &$refProps,
+        $data,
+        array $publicProps,
+        ReflectionClass $ref
+    ): void {
         // For every not-declared property, we add another reflection.
         // Those are simply added during runtime
         foreach (array_keys(array_diff_key(get_object_vars($data), $publicProps)) as $key) {

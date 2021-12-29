@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Comment\Functions;
+use Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
 use ReflectionException;
 use ReflectionFunction;
@@ -103,9 +104,12 @@ class Callback extends AbstractScalarAnalysis
         // Stitching together the main analysis.
         /** @var Functions $comment */
         $comment = $this->pool->createClass(Functions::class);
+        /** @var FunctionDeclaration $functionDeclaration */
+        $functionDeclaration = $this->pool->createClass(FunctionDeclaration::class);
+        $messages = $this->pool->messages;
         $meta = [
-            $this->pool->messages->getHelp('metaComment') => $comment->getComment($reflectionFunction),
-            $this->pool->messages->getHelp('metaDeclaredIn') => $this->retrieveDeclarationPlace($reflectionFunction)
+            $messages->getHelp('metaComment') => $comment->getComment($reflectionFunction),
+            $messages->getHelp('metaDeclaredIn') => $functionDeclaration->retrieveDeclaration($reflectionFunction)
         ];
         $this->insertParameters($reflectionFunction, $meta);
 
@@ -118,17 +122,18 @@ class Callback extends AbstractScalarAnalysis
      * @param \ReflectionFunction $reflectionFunction
      *   The reflection function.
      *
+     * @deprecated Since 5.0.0
+     *   Will be removed use the FunctionDeclaration class instead.
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @return string
      *   The declaration place.
      */
     protected function retrieveDeclarationPlace(ReflectionFunction $reflectionFunction): string
     {
-        if ($reflectionFunction->isInternal() === true) {
-            return $this->pool->messages->getHelp('metaPredeclared');
-        }
-
-        return $this->pool->fileService->filterFilePath($reflectionFunction->getFileName()) . "\n" .
-            $this->pool->messages->getHelp('metaInLine') . $reflectionFunction->getStartLine();
+        return $this->pool->createClass(FunctionDeclaration::class)
+            ->retrieveDeclaration($reflectionFunction);
     }
 
     /**

@@ -54,7 +54,6 @@ use Brainworxx\Krexx\View\Output\Chunks;
  */
 class Pool extends AbstractFactory
 {
-
     /**
      * An instance of the recursion handler.
      *

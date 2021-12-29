@@ -86,6 +86,16 @@ class ComplexPropertiesFixture extends ComplexPropertiesInheritanceFixture
     public static $publicStatic = 1;
 
     /**
+     * A simple variable with a default array.
+     *
+     * @var string[]
+     */
+    public $array = [
+        'qwer',
+        'asdf'
+    ];
+
+    /**
      * Unset a property and dynamically declare a new one.
      */
     public function __construct()

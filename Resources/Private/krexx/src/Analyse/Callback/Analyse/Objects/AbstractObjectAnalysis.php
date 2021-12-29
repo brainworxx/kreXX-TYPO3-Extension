@@ -50,7 +50,6 @@ use Reflector;
  */
 abstract class AbstractObjectAnalysis extends AbstractCallback implements CallbackConstInterface
 {
-
     /**
      * Here we store all relevant data.
      *
@@ -59,7 +58,7 @@ abstract class AbstractObjectAnalysis extends AbstractCallback implements Callba
     protected $pool;
 
     /**
-     * The parameters from the objects callback class.
+     * The parameters from the object's callback class.
      *
      * @var array
      */
@@ -72,7 +71,7 @@ abstract class AbstractObjectAnalysis extends AbstractCallback implements Callba
      *   The list of the reflection properties.
      * @param ReflectionClass $ref
      *   The reflection of the object we are currently analysing.
-     * @param string $label
+     * @param string|null $label
      *   The additional part of the template file. If set, we will use a wrapper
      *   around the analysis output.
      *

@@ -46,7 +46,6 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
  */
 class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterface
 {
-
     /**
      * Error object analysis.
      *
@@ -60,7 +59,7 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
 
         /** @var \Throwable|\Exception $data */
         $data = $this->parameters[static::PARAM_DATA];
-        $lineNo = ((int)$data->getLine()) - 1;
+        $lineNo = ($data->getLine()) - 1;
         $source = trim(
             $this->pool->fileService->readSourcecode(
                 $data->getFile(),

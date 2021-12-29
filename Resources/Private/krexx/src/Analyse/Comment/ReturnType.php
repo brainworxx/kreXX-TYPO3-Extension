@@ -73,7 +73,7 @@ class ReturnType extends AbstractComment
      *
      * @param \Reflector $reflection
      *   The reflection of the method we are analysing.
-     * @param \ReflectionClass $reflectionClass
+     * @param \ReflectionClass|null $reflectionClass
      *   Reflection of the hosting class. A lot of return types are $this, so
      *   we can make use of it here.
      *
@@ -90,7 +90,6 @@ class ReturnType extends AbstractComment
 
         // Fallback to the comments parsing.
         $docComment = $reflection->getDocComment();
-        $result = '';
         if (
             empty($docComment) === false
             && preg_match('/(?<=@return ).*$/m', $docComment, $matches) > 0

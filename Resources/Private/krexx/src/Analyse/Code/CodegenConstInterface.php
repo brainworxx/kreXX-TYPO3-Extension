@@ -95,7 +95,7 @@ interface CodegenConstInterface
     public const CODEGEN_TYPE_HINT = 'Type hint';
 
     /**
-     * The equivaqlent of a stop bit for the code generation.
+     * The equivalent of a stop bit for the code generation.
      *
      * @var string
      */

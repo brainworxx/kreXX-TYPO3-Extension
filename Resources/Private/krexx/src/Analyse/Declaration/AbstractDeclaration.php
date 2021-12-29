@@ -35,45 +35,42 @@
 
 declare(strict_types=1);
 
-namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
+namespace Brainworxx\Krexx\Analyse\Declaration;
 
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
-use ReflectionProperty;
+use Brainworxx\Krexx\Service\Factory\Pool;
+use Reflector;
 
 /**
- * Analysis of protected properties.
- *
- * @uses mixed data
- *   The class we are currently analysing.
- * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
- *   A reflection of the class we are currently analysing.
+ * Base class for the retrieval of a declaration place
  */
-class ProtectedProperties extends AbstractObjectAnalysis implements CallbackConstInterface
+abstract class AbstractDeclaration
 {
     /**
-     * Dump all protected properties.
+     * Here we store all relevant data.
+     *
+     * @var \Brainworxx\Krexx\Service\Factory\Pool
+     */
+    protected $pool;
+
+    /**
+     * Injects the pool.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     *   The pool, where we store the classes we need.
+     */
+    public function __construct(Pool $pool)
+    {
+        $this->pool = $pool;
+    }
+
+    /**
+     * Retrieve the declaration place in the code.
+     *
+     * @param Reflector $reflection
+     *   The reflection of the method, function or property we want to retrieve.
      *
      * @return string
-     *   The generated HTML markup
+     *   The human-readable declaration place
      */
-    public function callMe(): string
-    {
-        $output = $this->dispatchStartEvent();
-
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
-        $ref = $this->parameters[static::PARAM_REF];
-        $refProps = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
-        if (empty($refProps) === true) {
-            return $output;
-        }
-
-        usort($refProps, [$this, 'reflectionSorting']);
-
-        return $output .
-            $this->getReflectionPropertiesData(
-                $refProps,
-                $ref,
-                'Protected properties'
-            );
-    }
+    abstract public function retrieveDeclaration(Reflector $reflection): string;
 }

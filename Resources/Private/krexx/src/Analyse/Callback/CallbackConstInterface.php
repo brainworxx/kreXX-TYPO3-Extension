@@ -91,7 +91,7 @@ interface CallbackConstInterface
      * Array key for $this->parameters.
      *
      * Parameter for the array analysis. Historical name, where we were planing
-     * for multiline code analysis. Now holds the info, if we do complicated
+     * for multiline code analysis. Now holds the info, if we do complicate
      * stuff to reach this value.
      *
      * @var string
@@ -289,8 +289,10 @@ interface CallbackConstInterface
 
     /**
      * Translation marker for a literal in the frontend.
-     *
      * The declaration place of this method or property could not be resolved.
+     *
+     * @deprecated since 5.0.0
+     *   We do not use constants for translations anymore.
      *
      * @var string
      */

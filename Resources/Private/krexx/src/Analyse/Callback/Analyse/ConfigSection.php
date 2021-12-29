@@ -51,7 +51,6 @@ use Brainworxx\Krexx\Service\Config\Model as SettingModel;
  */
 class ConfigSection extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
 {
-
     /**
      * Renders each section of the footer.
      *
@@ -86,7 +85,7 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
      *   The ID of the setting.
      *
      * @return string
-     *   Th rendered output.
+     *   The rendered output.
      */
     protected function generateOutput(SettingModel $setting, string $id): string
     {
@@ -106,7 +105,6 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
         return $this->pool->render->renderExpandableChild(
             $model->setData($value)->setName($name)->setNormal($value)->setType($setting->getSource())
         );
-
     }
 
     /**

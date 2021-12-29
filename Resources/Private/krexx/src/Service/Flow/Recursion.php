@@ -50,7 +50,6 @@ use SplObjectStorage;
  */
 class Recursion
 {
-
     /**
      * pool for arrays an objects, to prevent recursions.
      *

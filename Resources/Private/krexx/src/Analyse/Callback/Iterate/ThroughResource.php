@@ -49,7 +49,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class ThroughResource extends AbstractCallback implements CallbackConstInterface
 {
-
     /**
      * Renders the info of a resource.
      *

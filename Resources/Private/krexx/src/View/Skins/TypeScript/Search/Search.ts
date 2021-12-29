@@ -160,7 +160,7 @@ class Search
 
             this.retrievePayload(config);
 
-            // We need to un-collapse everything, in case it it collapsed.
+            // We need to un-collapse everything, in case it is collapsed.
             let collapsed:NodeList = config.payload.querySelectorAll('.kcollapsed');
             for (let i:number = 0; i < collapsed.length; i++) {
                 this.eventHandler.triggerEvent((collapsed[i] as Element), 'click');
@@ -297,7 +297,7 @@ class Search
         event.stopPropagation();
 
         // If this is no <RETURN> key, do nothing.
-        if (event.which !== 13) {
+        if (event.key !== 'Enter') {
             return;
         }
 

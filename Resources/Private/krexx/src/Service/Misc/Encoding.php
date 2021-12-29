@@ -214,7 +214,7 @@ class Encoding
      * Here we have another SPOF. When the string is large enough we will run
      * out of memory!
      * We will *NOT* return the unescaped string. So we must check if it is small
-     * enough for the unpack(). 100 kb should be safe enough.
+     * enough for the unpack() method. 100 kb should be safe enough.
      *
      * @param string $data
      *   The data which needs to be sanitized.
@@ -275,7 +275,7 @@ class Encoding
      *
      * @param string $string
      *   The string we want to analyse
-     * @param string $encoding
+     * @param string|null $encoding
      *   The known encoding of the string, if known.
      *
      * @return int
@@ -404,7 +404,9 @@ class Encoding
 
         // The first regex detects all allowed characters.
         // For some reason, they also allow BOM characters.
-        return $cache[$propName] = (bool) preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", (string)$propName) &&
-            !(bool) preg_match("/[\xEF\xBB\xBF]$/", $propName);
+        return $cache[$propName] = (bool) preg_match(
+            "/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/",
+            (string)$propName
+            ) && !(bool) preg_match("/[\xEF\xBB\xBF]$/", $propName);
     }
 }

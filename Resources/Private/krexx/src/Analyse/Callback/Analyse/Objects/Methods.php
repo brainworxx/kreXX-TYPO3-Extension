@@ -56,7 +56,6 @@ use ReflectionMethod;
  */
 class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, ConfigConstInterface
 {
-
     /**
      * Decides which methods we want to analyse and then starts the dump.
      *

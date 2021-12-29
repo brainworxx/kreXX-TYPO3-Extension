@@ -14,12 +14,14 @@ Changelog
 
 5.0.0
     - [Feature] Added immediate browser output to the output choices.
+    - [Feature] Added default value analysis to the additional info.
     - [Change] Removed deprecated code.
     - [Change] Drop PHP 7.0 support
     - [Change] Streamlined the type display of strings
     - [Change] Defined visibility for all constants.
     - [Change] Added missing PHP 7.1 return type to methods.
     - [Change] Moved the ViewConstInterface to the translations.
+    - [Change] Moved the local declaration retrieval methods into their own API.
 
 4.1.3
     - [Feature] Added microtime analysis to the float routing.

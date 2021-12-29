@@ -51,7 +51,6 @@ class ProcessArray extends AbstractProcessNoneScalar implements
     CallbackConstInterface,
     ConfigConstInterface
 {
-
     /**
      * Is this one an array?
      *
@@ -78,7 +77,6 @@ class ProcessArray extends AbstractProcessNoneScalar implements
     protected function handleNoneScalar(Model $model): string
     {
         $this->pool->emergencyHandler->upOneNestingLevel();
-        $multiline = false;
         $count = count($model->getData());
 
         if ($count > (int) $this->pool->config->getSetting(static::SETTING_ARRAY_COUNT_LIMIT)) {
@@ -96,7 +94,7 @@ class ProcessArray extends AbstractProcessNoneScalar implements
                 $model->setType(static::TYPE_ARRAY)
                     ->setNormal($count . ' elements')
                     ->addParameter(static::PARAM_DATA, $model->getData())
-                    ->addParameter(static::PARAM_MULTILINE, $multiline)
+                    ->addParameter(static::PARAM_MULTILINE, false)
             )
         );
 
