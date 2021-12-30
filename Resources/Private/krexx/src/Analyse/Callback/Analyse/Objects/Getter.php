@@ -57,7 +57,7 @@ class Getter extends AbstractObjectAnalysis
     /**
      * List of the getter methods, that start with 'get'.
      *
-     * @var string[]
+     * @var array
      */
     protected $normalGetter = [];
 

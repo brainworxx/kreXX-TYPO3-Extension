@@ -108,7 +108,7 @@ class ExceptionController extends AbstractController implements BacktraceConstIn
      */
     public function registerAction(): ExceptionController
     {
-        if (empty(static::$exceptionController)) {
+        if (empty(static::$exceptionController) === true) {
             static::$exceptionController = $this;
         }
 

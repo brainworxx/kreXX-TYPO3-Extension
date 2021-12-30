@@ -110,13 +110,14 @@ var Eventhandler = (function () {
             var callbackArray = [];
             do {
                 for (selector in _this.storage) {
-                    if (element.matches(selector)) {
-                        callbackArray = _this.storage[selector];
-                        for (i = 0; i < callbackArray.length; i++) {
-                            callbackArray[i](event, element);
-                            if (event.stop) {
-                                return;
-                            }
+                    if (element.matches(selector) === false) {
+                        continue;
+                    }
+                    callbackArray = _this.storage[selector];
+                    for (i = 0; i < callbackArray.length; i++) {
+                        callbackArray[i](event, element);
+                        if (event.stop) {
+                            return;
                         }
                     }
                 }

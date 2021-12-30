@@ -106,7 +106,7 @@ class Json extends AbstractScalarAnalysis
     /**
      * Add the decoded json and a pretty-print-json to the output.
      *
-     * @return array
+     * @return string[]
      *   The array for the meta callback.
      */
     protected function handle(): array

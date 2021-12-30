@@ -64,7 +64,7 @@ abstract class AbstractOutput
      *        the browser.
      * [1] -> Are we ignoring local settings?
      *
-     * @var array
+     * @var string[]
      *   An array of all chunk strings.
      *   A chunk string are:
      *   - header

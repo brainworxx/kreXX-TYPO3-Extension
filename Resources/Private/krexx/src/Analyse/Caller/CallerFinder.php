@@ -96,6 +96,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
     {
         $backtrace = array_reverse(debug_backtrace(0, 5));
 
+        $caller = [];
         // Going from the first call of the first line up
         // through the first debug call.
         foreach ($backtrace as $caller) {

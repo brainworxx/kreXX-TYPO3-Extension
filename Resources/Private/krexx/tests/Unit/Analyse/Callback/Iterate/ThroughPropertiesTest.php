@@ -282,14 +282,19 @@ class ThroughPropertiesTest extends AbstractTest
         );
 
         // publicStatic
+        $expectedJson = [static::JSON_DECLARED_KEY => $complexDeclarationString];
+        if (version_compare(phpversion(), '7.4.99', '>')) {
+            // We can not retrieve the default values of static properties
+            // in PHP 7.x. and very early PHP 8.0 versions. We ignore the early
+            // 8.0 versions for the sake of our sanity.
+            $expectedJson[static::JSON_DEFAULT_VALUE] = '1';
+        }
+
         $this->assertModelValues(
             $models[6],
             1,
             '$publicStatic',
-            [
-                static::JSON_DECLARED_KEY => $complexDeclarationString,
-                static::JSON_DEFAULT_VALUE => '1'
-            ],
+            $expectedJson,
             '::',
             '',
             'public static '
@@ -302,7 +307,8 @@ class ThroughPropertiesTest extends AbstractTest
             static::MY_PROPERTY,
             [
                 static::JSON_COMMENT_KEY => 'My private Property<br /><br />&#64;var string',
-                static::JSON_DECLARED_KEY => $complexDeclarationStringInheritance
+                static::JSON_DECLARED_KEY => $complexDeclarationStringInheritance,
+                static::JSON_DEFAULT_VALUE => '&#039;my property&#039;'
             ],
             '->',
             '',

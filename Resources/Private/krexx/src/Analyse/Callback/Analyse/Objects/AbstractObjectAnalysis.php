@@ -51,20 +51,6 @@ use Reflector;
 abstract class AbstractObjectAnalysis extends AbstractCallback implements CallbackConstInterface
 {
     /**
-     * Here we store all relevant data.
-     *
-     * @var Pool
-     */
-    protected $pool;
-
-    /**
-     * The parameters from the object's callback class.
-     *
-     * @var array
-     */
-    protected $parameters = [];
-
-    /**
      * Gets the properties from a reflection property of the object.
      *
      * @param \ReflectionProperty[] $refProps

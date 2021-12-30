@@ -161,7 +161,7 @@ class CheckOutput
     /**
      * Check the wildcards.
      *
-     * @param array $ipList
+     * @param string[] $ipList
      *   The list of allowed ips
      * @param string $remote
      *   The remote address, according to the server array.

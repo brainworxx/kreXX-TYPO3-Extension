@@ -52,7 +52,7 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * The fallback configuration.
      *
-     * @var array[]
+     * @var string[][]
      */
     protected const CONFIG_FALLBACK = [
         self::SECTION_OUTPUT => [
@@ -143,21 +143,21 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Defining the layout of the frontend editing form.
      *
-     * @var array[]
+     * @var string[][]
      */
     public $configFallback = [];
 
     /**
      * Values, rendering settings and the actual fallback value.
      *
-     * @var array[]
+     * @var string[][]
      */
     public $feConfigFallback = [];
 
     /**
      * The skin configuration.
      *
-     * @var array[]
+     * @var string[][]
      */
     protected $skinConfiguration = [];
 

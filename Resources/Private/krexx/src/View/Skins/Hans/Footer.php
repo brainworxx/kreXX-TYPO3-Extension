@@ -89,7 +89,7 @@ trait Footer
     /**
      * Renders the footer part, where we display from where krexx was called.
      *
-     * @param array $caller
+     * @param string[] $caller
      *
      * @return string
      *   The generated markup from the template files.

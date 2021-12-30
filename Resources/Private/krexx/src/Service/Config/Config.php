@@ -302,7 +302,7 @@ class Config extends Fallback
     /**
      * Simply return a list of all skins as their configuration keys.
      *
-     * @return array
+     * @return string[][]
      */
     public function getSkinList(): array
     {

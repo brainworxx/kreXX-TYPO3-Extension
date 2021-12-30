@@ -141,7 +141,7 @@ class Callback extends AbstractScalarAnalysis
      *
      * @param \ReflectionFunction $reflectionFunction
      *   The reflection of the function that we are analysing.
-     * @param array $meta
+     * @param string[] $meta
      *   The meta array, so far.
      */
     protected function insertParameters(ReflectionFunction $reflectionFunction, array &$meta): void

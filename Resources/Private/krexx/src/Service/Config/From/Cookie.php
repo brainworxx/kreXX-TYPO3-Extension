@@ -54,7 +54,7 @@ class Cookie
     /**
      * Here we cache our cookie settings.
      *
-     * @var array
+     * @var string[]
      */
     public $settings = [];
 

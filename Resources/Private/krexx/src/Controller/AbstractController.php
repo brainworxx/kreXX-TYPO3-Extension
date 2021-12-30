@@ -72,7 +72,7 @@ abstract class AbstractController implements ConfigConstInterface
     /**
      * Have we already send the CSS and JS, depending on the destination?
      *
-     * @var array
+     * @var bool[]
      */
     protected static $jsCssSend = [];
 
@@ -127,7 +127,7 @@ abstract class AbstractController implements ConfigConstInterface
     /**
      * Simply renders the footer and output current settings.
      *
-     * @param array $caller
+     * @param string[] $caller
      *   Where was kreXX initially invoked from.
      * @param bool $isExpanded
      *   Are we rendering an expanded footer?
@@ -173,8 +173,7 @@ abstract class AbstractController implements ConfigConstInterface
     protected function outputCssAndJs(): string
     {
         // We only do this once per output type.
-        $result = isset(static::$jsCssSend[$this->destination]);
-        if ($result === true) {
+        if (isset(static::$jsCssSend[$this->destination]) === true) {
             // Been here, done that.
             return '';
         }

@@ -65,7 +65,7 @@ abstract class AbstractCaller
      *
      * We use his list to identify the variable name of the call.
      *
-     * @var array
+     * @var string[]
      */
     protected $callPattern;
 
@@ -108,12 +108,12 @@ abstract class AbstractCaller
     /**
      * Finds the place in the code from where krexx was called.
      *
-     * @var string $headline
+     * @param string $headline
      *   The headline from the call.
-     * @var mixed $data
+     * @param mixed $data
      *   The variable we are currently analysing.
      *
-     * @return array
+     * @return string[]
      *   The code, from where krexx was called.
      *   array(
      *     'file' => 'someFile.php',

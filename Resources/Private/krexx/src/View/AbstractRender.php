@@ -43,7 +43,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Protected helper methods for the real render class.
  */
-abstract class AbstractRender
+abstract class AbstractRender implements RenderInterface
 {
     /**
      * Css class name.
@@ -120,7 +120,7 @@ abstract class AbstractRender
     /**
      * Some special escaping for the json output
      *
-     * @param array $array
+     * @param string[] $array
      *   The string we want to special-escape
      * @return string
      *   The json from the array.

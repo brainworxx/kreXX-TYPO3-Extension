@@ -128,15 +128,16 @@ class Eventhandler
         do {
             // We need to test the element on all selectors.
             for (selector in this.storage) {
-                if ((element as Element).matches(selector)) {
-                    callbackArray = this.storage[selector];
-                    // Got to call them all.
-                    for (i = 0; i < callbackArray.length; i++) {
-                        callbackArray[i](event, element);
-                        if (event.stop) {
-                            // Our "implementation" of stopPropagation().
-                            return;
-                        }
+                if ((element as Element).matches(selector) === false) {
+                    continue;
+                }
+                callbackArray = this.storage[selector];
+                // Got to call them all.
+                for (i = 0; i < callbackArray.length; i++) {
+                    callbackArray[i](event, element);
+                    if (event.stop) {
+                        // Our "implementation" of stopPropagation().
+                        return;
                     }
                 }
             }

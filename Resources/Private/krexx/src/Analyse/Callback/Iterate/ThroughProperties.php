@@ -46,6 +46,7 @@ use Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
 use ReflectionClass;
 use ReflectionProperty;
+use Throwable;
 
 /**
  * Class properties' analysis methods.
@@ -60,11 +61,6 @@ class ThroughProperties extends AbstractCallback implements
     CodegenConstInterface,
     ConnectorsConstInterface
 {
-    /**
-     * @var mixed[]
-     */
-    protected $defaultProperties;
-
     /**
      * @var PropertyDeclaration
      */
@@ -85,7 +81,6 @@ class ThroughProperties extends AbstractCallback implements
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
         $this->propertyDeclaration = $this->pool->createClass(PropertyDeclaration::class);
-        $this->defaultProperties = $ref->getDefaultProperties();
 
         foreach ($this->parameters[static::PARAM_DATA] as $refProperty) {
             // Check memory and runtime.
@@ -132,7 +127,7 @@ class ThroughProperties extends AbstractCallback implements
             )
             ->addToJson(
                 $messages->getHelp('metaDefaultValue'),
-                $this->retrieveDefaultValue($refProperty->getName())
+                $this->retrieveDefaultValue($refProperty)
             )
             ->setAdditional(
                 $this->getAdditionalData(
@@ -145,15 +140,31 @@ class ThroughProperties extends AbstractCallback implements
     }
 
     /**
-     * @param string $propertyName
+     * @param ReflectionProperty $property
      *
      * @return string
      */
-    protected function retrieveDefaultValue(string $propertyName): string
+    protected function retrieveDefaultValue(ReflectionProperty $property): string
     {
-        $default = $this->defaultProperties[$propertyName] ?? null;
-        if ($default === null) {
-            return '';
+        $default = null;
+
+        try {
+            // The 8.0 way of getting the default value.
+            // There is also a PHP 8.0 bug that may cause an
+            // "Internal error: Failed to retrieve the reflection object"
+            // That is not even a Reflection exception, it's an "Error".
+            $default = $property->getDefaultValue();
+        } catch (Throwable $exception) {
+            // Fallback to the 7.x way.
+            // The values of static properties are stored in the default
+            // properties of the class reflection.
+            // And we do not want these here.
+            if ($property->isStatic() === false) {
+                // We also need to get the class that actually declared this
+                // value. The default values can only be found in there.
+                $defaultProperties = $property->getDeclaringClass()->getDefaultProperties();
+                $default = $defaultProperties[$property->getName()] ?? null;
+            }
         }
 
         $result = '';

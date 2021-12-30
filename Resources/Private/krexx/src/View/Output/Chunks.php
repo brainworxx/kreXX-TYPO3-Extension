@@ -78,7 +78,7 @@ class Chunks implements ConfigConstInterface
      * We save this data in a separate file, so that a backend extension can offer
      * some additional data about the logfiles and their content.
      *
-     * @var array
+     * @var string[]
      */
     protected $metadata = [];
 
@@ -328,7 +328,7 @@ class Chunks implements ConfigConstInterface
      * Setter for the $useLogging. Here we determine, if the logfolder
      * is accessible.
      *
-     * @param $bool
+     * @param bool $bool
      *   Is the log folder accessible?
      */
     public function setLoggingIsAllowed(bool $bool): void

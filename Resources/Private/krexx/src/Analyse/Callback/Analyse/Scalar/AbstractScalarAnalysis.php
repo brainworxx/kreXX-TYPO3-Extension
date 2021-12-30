@@ -105,7 +105,7 @@ abstract class AbstractScalarAnalysis extends AbstractCallback implements Callba
     /**
      * Stitch together the meta array for the rendering.
      *
-     * @return array
+     * @return string[]
      *   The meta array.
      */
     protected function handle(): array

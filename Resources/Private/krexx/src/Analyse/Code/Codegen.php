@@ -313,7 +313,8 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
             $prefix = '&';
         }
 
-        $name = $this->retrieveParameterType($reflectionParameter) . $prefix . '$' . $reflectionParameter->getName();
+        $typedParameter = $reflectionParameter->hasType() === true ? $reflectionParameter->getType()->getName() . ' ' : '';
+        $name = $typedParameter . $prefix . '$' . $reflectionParameter->getName();
 
         // Retrieve the default value, if available.
         if ($reflectionParameter->isDefaultValueAvailable() === true) {
@@ -338,18 +339,17 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      * @param \ReflectionParameter $reflectionParameter
      *   The reflection parameter, what the variable name says.
      *
+     * @deprecated since 5.0.0
+     *   Will be removed.
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @return string
      *   The parameter type, if available.
      */
     protected function retrieveParameterType(ReflectionParameter $reflectionParameter): string
     {
-        $type = '';
-        if ($reflectionParameter->hasType() === true) {
-            $reflectionNamedType = $reflectionParameter->getType();
-            $type = $reflectionNamedType->getName() . ' ';
-        }
-
-        return $type;
+        return $reflectionParameter->hasType() === true ? $reflectionParameter->getType()->getName() . ' ' : '';
     }
 
     /**

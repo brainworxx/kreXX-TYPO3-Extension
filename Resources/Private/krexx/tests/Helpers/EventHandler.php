@@ -79,7 +79,7 @@ class EventHandler implements EventHandlerInterface
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      * @return string
      */
-    public function handle(AbstractCallback $callback = null, Model $model = null): string
+    public function handle(AbstractCallback $callback, Model $model = null): string
     {
         static::$callback = $callback;
         static::$model = $model;

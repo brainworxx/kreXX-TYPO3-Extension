@@ -55,7 +55,7 @@ class File extends Fallback
     /**
      * The content of the file we have loaded.
      *
-     * @var array
+     * @var string[][]
      */
     protected $settings = [];
 
