@@ -15,6 +15,7 @@ Changelog
 5.0.0
     - [Feature] Added immediate browser output to the output choices.
     - [Feature] Added default value analysis to the additional info.
+    - [Feature] Added the German translation for the backend module.
     - [Change] Removed deprecated code.
     - [Change] Drop PHP 7.0 support
     - [Change] Streamlined the type display of strings
