@@ -89,6 +89,7 @@ class IndexControllerTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::checkProductiveSetting
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::assignCssJs
+     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::generateAjaxTranslations
      */
     public function testIndexActionNormal()
     {
