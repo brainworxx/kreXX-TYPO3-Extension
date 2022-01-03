@@ -129,7 +129,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer
      */
-    public function injectPageRenderer(PageRenderer $pageRenderer)
+    public function injectPageRenderer(PageRenderer $pageRenderer): void
     {
         $this->pageRenderer = $pageRenderer;
     }
@@ -152,7 +152,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @param \TYPO3\CMS\Backend\Template\ModuleTemplate $moduleTemplate
      */
-    public function injectModuleTemplate(ModuleTemplate $moduleTemplate)
+    public function injectModuleTemplate(ModuleTemplate $moduleTemplate): void
     {
         $this->moduleTemplate = $moduleTemplate;
     }
@@ -161,7 +161,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      * We check if we are running with a productive preset. If we do, we
      * will display a warning.
      */
-    protected function checkProductiveSetting()
+    protected function checkProductiveSetting(): void
     {
         if ($this->livePreset->isActive()) {
             //Display a warning, if we are in Productive / Live settings.
@@ -178,7 +178,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @param \TYPO3\CMS\Install\Configuration\Context\LivePreset $livePreset
      */
-    public function injectLivePreset(LivePreset $livePreset)
+    public function injectLivePreset(LivePreset $livePreset): void
     {
         $this->livePreset = $livePreset;
     }
@@ -188,7 +188,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @param \Brainworxx\Includekrexx\Collectors\Configuration $configuration
      */
-    public function injectConfiguration(Configuration $configuration)
+    public function injectConfiguration(Configuration $configuration): void
     {
         $this->configuration = $configuration;
     }
@@ -198,7 +198,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @param \Brainworxx\Includekrexx\Collectors\FormConfiguration $formConfiguration
      */
-    public function injectFormConfiguration(FormConfiguration $formConfiguration)
+    public function injectFormConfiguration(FormConfiguration $formConfiguration): void
     {
         $this->formConfiguration = $formConfiguration;
     }
@@ -208,7 +208,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
      */
-    public function injectSettingsModel(Settings $settings)
+    public function injectSettingsModel(Settings $settings): void
     {
         $this->settingsModel = $settings;
     }
@@ -216,7 +216,7 @@ abstract class AbstractController extends ActionController implements ConstInter
     /**
      * Move all messages from kreXX to the flash messages.
      */
-    protected function retrieveKrexxMessages()
+    protected function retrieveKrexxMessages(): void
     {
         // Get the keys and the args.
         $messages = $this->pool->messages->getMessages();
@@ -237,7 +237,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      * @param string $path
      *   The path of the file we want to dispatch to the browser.
      */
-    protected function dispatchFile(string $path)
+    protected function dispatchFile(string $path): void
     {
         if (is_readable($path)) {
             header('Content-Type: text/html; charset=utf-8');
@@ -293,7 +293,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      * Imho the best way to deal with this is to (again) assign the css and js
      * inline.
      */
-    protected function assignCssJs()
+    protected function assignCssJs(): void
     {
         $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/Index.css');
