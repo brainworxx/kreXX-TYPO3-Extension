@@ -130,7 +130,7 @@ class ProcessStringTest extends AbstractTest
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
         $this->assertEquals(false, $model->hasExtra());
-        $this->assertArrayNotHasKey($model::META_MIME_TYPE, $model->getJson());
+        $this->assertArrayNotHasKey($model::META_MIME_TYPE_STRING, $model->getJson());
     }
 
     /**
@@ -157,7 +157,7 @@ class ProcessStringTest extends AbstractTest
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
         $this->assertEquals('broken', $model->getJson()[$model::META_ENCODING]);
         $this->assertEquals(false, $model->hasExtra());
-        $this->assertArrayNotHasKey($model::META_MIME_TYPE, $model->getJson());
+        $this->assertArrayNotHasKey($model::META_MIME_TYPE_STRING, $model->getJson());
     }
 
     /**
@@ -184,7 +184,7 @@ class ProcessStringTest extends AbstractTest
         $this->assertEquals(ProcessConstInterface::TYPE_STRING . $length, $model->getType());
         $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
-        $this->assertEquals($fileInfo, $model->getJson()[$model::META_MIME_TYPE]);
+        $this->assertEquals($fileInfo, $model->getJson()[$model::META_MIME_TYPE_STRING]);
         $this->assertEquals(false, $model->hasExtra());
         $this->assertArrayNotHasKey($model::META_ENCODING, $model->getJson());
     }
@@ -217,7 +217,7 @@ class ProcessStringTest extends AbstractTest
             $model->getNormal()
         );
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getData());
-        $this->assertEquals($fileInfo, $model->getJson()[$model::META_MIME_TYPE]);
+        $this->assertEquals($fileInfo, $model->getJson()[$model::META_MIME_TYPE_STRING]);
         $this->assertEquals(true, $model->hasExtra());
         $this->assertArrayNotHasKey($model::META_ENCODING, $model->getJson());
     }
@@ -248,7 +248,7 @@ class ProcessStringTest extends AbstractTest
             $model->getNormal()
         );
         $this->assertEquals(true, $model->hasExtra());
-        $this->assertArrayNotHasKey($model::META_MIME_TYPE, $model->getJson());
+        $this->assertArrayNotHasKey($model::META_MIME_TYPE_STRING, $model->getJson());
     }
 
     /**

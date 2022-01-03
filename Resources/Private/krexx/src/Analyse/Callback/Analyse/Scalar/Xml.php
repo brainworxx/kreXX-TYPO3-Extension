@@ -108,8 +108,8 @@ class Xml extends AbstractScalarAnalysis implements ViewConstInterface
         $metaStuff = $model->getJson();
 
         if (
-            empty($metaStuff[static::META_MIME_TYPE]) === true ||
-            strpos($metaStuff[static::META_MIME_TYPE], 'xml;') === false
+            empty($metaStuff[static::META_MIME_TYPE_STRING]) === true ||
+            strpos($metaStuff[static::META_MIME_TYPE_STRING], 'xml;') === false
         ) {
             // Was not identified as xml before.
             // Early return.

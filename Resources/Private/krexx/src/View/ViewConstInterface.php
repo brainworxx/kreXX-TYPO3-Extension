@@ -94,8 +94,21 @@ interface ViewConstInterface
 
     /**
      * @var string
+     *
+     * @deprecated since 4.2.3
+     *   Will be removed. Use META_MIME_TYPE_STRING or META_MIME_TYPE_FILE
      */
     const META_MIME_TYPE = 'Mimetype';
+
+    /**
+     * @var string
+     */
+    const META_MIME_TYPE_STRING = 'Mimetype string';
+
+    /**
+     * @var string
+     */
+    const META_MIME_TYPE_FILE = 'Mimetype file';
 
     /**
      * @var string

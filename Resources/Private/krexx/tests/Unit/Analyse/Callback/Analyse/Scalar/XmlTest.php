@@ -112,13 +112,13 @@ class XmlTest extends AbstractTest
 
         $string = 'Now with the XML finfo info,but still not XML.';
         $model = new Model(Krexx::$pool);
-        $model->addToJson(Xml::META_MIME_TYPE, static::TEXT_XML);
+        $model->addToJson(Xml::META_MIME_TYPE_STRING, static::TEXT_XML);
         $xml = new Xml(Krexx::$pool);
         $this->asserttrue($xml->canHandle($string, $model), $string);
 
         $string = '<?xml version="1.0" encoding="utf-8"?><node><yxcv qwer="asdf" /></node>';
         $model = new Model(Krexx::$pool);
-        $model->addToJson(Xml::META_MIME_TYPE, static::TEXT_XML);
+        $model->addToJson(Xml::META_MIME_TYPE_STRING, static::TEXT_XML);
         $xml = new Xml(Krexx::$pool);
         $this->assertTrue($xml->canHandle($string, $model), $string);
     }
@@ -140,7 +140,7 @@ class XmlTest extends AbstractTest
 
         $string = '<?xml version="1.0" encoding="utf-8"?><root><node>rogue text<yxcv qwer="asdf"><![CDATA[content]]></yxcv><yxcv qwer="yxcv" /></node></root>';
         $model = new Model(Krexx::$pool);
-        $model->addToJson(Xml::META_MIME_TYPE, static::TEXT_XML)->setHasExtra(true);
+        $model->addToJson(Xml::META_MIME_TYPE_STRING, static::TEXT_XML)->setHasExtra(true);
         $xml = new Xml(Krexx::$pool);
         $xml->canHandle($string, $model);
         $xml->callMe();

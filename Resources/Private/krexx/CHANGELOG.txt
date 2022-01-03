@@ -11,6 +11,8 @@
 - Bugfix: Method return type comment parsing works more
   reliable.
 - Bugfix: Standard loading of the configuration file works again.
+- Bugfix: Mime type string and file do not overwrite each others
+  anymore.
 
 4.1.2
 - Change: Do not display an empty array, when there are no

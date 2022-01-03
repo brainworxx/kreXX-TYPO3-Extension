@@ -26,6 +26,7 @@ Changelog
     - [Bugfix] Mitigated the deprecated page renderer retrieval from the ModuleTemplate instance.
     - [Bugfix] Standard loading of the configuration file works again. (Standard loading was never used with the TYPO3 extension.)
     - [Bugfix] The SQL debugger works again.
+    - [Bugfix] Mime type string and file do not overwrite each others anymore.
 
 4.1.2
     - [Feature] PHP 8.0 support

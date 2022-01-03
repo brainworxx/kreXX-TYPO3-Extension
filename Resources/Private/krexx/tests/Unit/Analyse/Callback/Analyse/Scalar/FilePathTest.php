@@ -116,7 +116,7 @@ class FilePathTest extends AbstractTest
         );
 
         $result = $model->getJson();
-        $this->assertEquals($mimeInfo, $result[FilePath::META_MIME_TYPE], 'Mime info was added');
+        $this->assertEquals($mimeInfo, $result[FilePath::META_MIME_TYPE_FILE], 'Mime info was added');
         $this->assertArrayNotHasKey(
             'Real path',
             $result,

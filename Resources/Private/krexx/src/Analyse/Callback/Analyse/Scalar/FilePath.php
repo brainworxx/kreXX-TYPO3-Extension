@@ -115,7 +115,7 @@ class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
                 // We only add the realpath, if it differs from the string
                 $model->addToJson('Real path', is_string($realPath) === true ? $realPath : 'n/a');
             }
-            $model->addToJson(static::META_MIME_TYPE, $this->bufferInfo->file($string));
+            $model->addToJson(static::META_MIME_TYPE_FILE, $this->bufferInfo->file($string));
         }
 
         restore_error_handler();
