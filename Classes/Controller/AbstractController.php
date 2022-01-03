@@ -54,6 +54,7 @@ use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
+use stdClass;
 
 /**
  * Class Tx_Includekrexx_Controller_IndexController
@@ -296,9 +297,30 @@ abstract class AbstractController extends ActionController implements ConstInter
     {
         $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/Index.css');
+        $this->pageRenderer->addJsInlineCode('krexxajaxtrans', $this->generateAjaxTranslations());
         $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
         $this->pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));
         $this->moduleTemplate->setContent($this->view->render());
         $this->moduleTemplate->setModuleName('tx_includekrexx');
+    }
+
+    /**
+     * Generate the translation JS object manually in PHP, because I do not
+     * trust Fluid enough to do this across all versions from 7.6 to 11.5.
+     *
+     * @return string
+     *   The generated javascript variable with the translations.
+     */
+    protected function generateAjaxTranslations(): string
+    {
+        $translation = new stdClass();
+        $translation->deletefile = static::translate('ajax.delete.file', static::EXT_KEY);
+        $translation->error = static::translate('ajax.error', static::EXT_KEY);
+        $translation->in = static::translate('ajax.in', static::EXT_KEY);
+        $translation->line = static::translate('ajax.line', static::EXT_KEY);
+        $translation->updatedLoglist = static::translate('ajax.updated.loglist', static::EXT_KEY);
+        $translation->deletedCookies = static::translate('ajax.deleted.cookies', static::EXT_KEY);
+
+        return 'var ajaxTranslate = ' .  json_encode($translation) . ';';
     }
 }

@@ -94,6 +94,8 @@ class IndexControllerTest extends AbstractTest
     {
         $jsCssFileContent = 'file content';
         $templateContent = 'template content';
+        $translationContent = 'var ajaxTranslate = {"deletefile":"ajax.delete.file","error":"ajax.error","in":"ajax.in","line":"ajax.line","updatedLoglist":"ajax.updated.loglist","deletedCookies":"ajax.deleted.cookies"};';
+
         $fileGetContents =  $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_get_contents');
         $fileGetContents->expects($this->exactly(2))
             ->will($this->returnValue($jsCssFileContent));
@@ -136,9 +138,12 @@ class IndexControllerTest extends AbstractTest
             ->with($viewMock);
 
         $pageRenderer = $this->createMock(PageRenderer::class);
-        $pageRenderer->expects($this->once())
+        $pageRenderer->expects($this->exactly(2))
             ->method('addJsInlineCode')
-            ->with('krexxjs', $jsCssFileContent);
+            ->withConsecutive(
+                ['krexxajaxtrans', $translationContent],
+                ['krexxjs', $jsCssFileContent]
+            );
         $pageRenderer->expects($this->once())
             ->method('addCssInlineBlock')
             ->with('krexxcss', $jsCssFileContent);

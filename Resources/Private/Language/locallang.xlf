@@ -459,6 +459,26 @@
 				<source>Sorry, there are currently no logfiles.</source>
 			</trans-unit>
 
+			<!-- AJAX feedback -->
+			<trans-unit id="ajax.delete.file">
+				<source>Delete this file?</source>
+			</trans-unit>
+			<trans-unit id="ajax.error">
+				<source>Error while parsing the server answer.</source>
+			</trans-unit>
+			<trans-unit id="ajax.in">
+				<source>in</source>
+			</trans-unit>
+			<trans-unit id="ajax.line">
+				<source>line</source>
+			</trans-unit>
+			<trans-unit id="ajax.updated.loglist">
+				<source>Updated the log-list!</source>
+			</trans-unit>
+			<trans-unit id="ajax.deleted.cookies">
+				<source>All cookie settings were removed!</source>
+			</trans-unit>
+
 		</body>
 	</file>
 </xliff>

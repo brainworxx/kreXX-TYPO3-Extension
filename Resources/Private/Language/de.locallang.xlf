@@ -601,6 +601,31 @@
 				<target>Es gibt leider noch keine Logdateien.</target>
 			</trans-unit>
 
+			<!-- AJAX feedback -->
+			<trans-unit id="ajax.delete.file">
+				<source>Delete this file?</source>
+				<target>Die Datei löschen?</target>
+			</trans-unit>
+			<trans-unit id="ajax.error">
+				<source>Error while parsing the server answer.</source>
+				<target>Die Serverantwort konnte nicht geparst werden.</target>
+			</trans-unit>
+			<trans-unit id="ajax.in">
+				<source>in</source>
+				<target>in</target>
+			</trans-unit>
+			<trans-unit id="ajax.line">
+				<source>line</source>
+				<target>Zeile</target>
+			</trans-unit>
+			<trans-unit id="ajax.updated.loglist">
+				<source>Updated the log-list!</source>
+				<target>Die Logliste wurde aktualisiert.</target>
+			</trans-unit>
+			<trans-unit id="ajax.deleted.cookies">
+				<source>All cookie settings were removed!</source>
+				<target>Alle Debug-Cookie Einstellungen wurden entfernt.</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

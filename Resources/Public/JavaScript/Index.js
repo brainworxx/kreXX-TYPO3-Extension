@@ -183,11 +183,21 @@
     function ajaxRefresh() {}
 
     /**
+     * The ajax translation texts.
+     *
+     * @type {{}}
+     */
+    ajaxRefresh.ajaxTranslate = {}
+
+    /**
      * Initializing the ajax handling
      *
      * @event DOMContentLoaded
      */
     ajaxRefresh.onDocumentReady = function () {
+        // Read the translation texts.
+        ajaxRefresh.ajaxTranslate = window.ajaxTranslate;
+
         // Get a first impression.
         ajaxRefresh.call();
 
@@ -242,7 +252,7 @@
             if (ajaxRefresh.lastAnswer !== html) {
                 table.innerHTML = html;
                 ajaxRefresh.message({
-                    text: 'Updated the log-list!',
+                    text: ajaxRefresh.ajaxTranslate.updatedLoglist,
                     class: 'success'
                 });
             }
@@ -275,7 +285,7 @@
             for (i = 0; i < file.meta.length; i++) {
                 html += '<div class="krexx-data-wrapper"><div class="krexx-icon-wrapper"><div class="krexx-icon ' + file.meta[i].level + '" title="' + file.meta[i].level + '"></div></div><div class="krexx-data">';
                 html += '<b>' + file.meta[i].type + '</b><br />';
-                html += 'in ' + file.meta[i].filename + ', line ' + file.meta[i].line;
+                html += ajaxRefresh.ajaxTranslate.in + ' ' + file.meta[i].filename + ', ' + ajaxRefresh.ajaxTranslate.line + ' ' + file.meta[i].line;
                 html += '</div></div>'
             }
             if (file.meta.length > 0) {
@@ -335,7 +345,7 @@
             return;
         }
 
-        var confirmed = confirm("Delete this file?");
+        var confirmed = confirm(ajaxRefresh.ajaxTranslate.deletefile);
 
         if (confirmed === false) {
             return;
@@ -350,7 +360,7 @@
             } catch (e) {
                 // We are not going to output the answer from the server, although
                 // it is visible in the browser inspector.
-                ajaxRefresh.message({class: 'error', text: 'Error while parsing the server answer.'});
+                ajaxRefresh.message({class: 'error', text: ajaxRefresh.ajaxTranslate.error});
             }
 
             ajaxRefresh.call();
