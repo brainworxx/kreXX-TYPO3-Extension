@@ -120,8 +120,12 @@ class File extends Fallback
             }
         }
 
-        // Still here? Give feedback about the filename.
-        $this->pool->config->setPathToConfigFile($completePath);
+        // Still here? Test if the path ends with a dot.
+        if (substr($path, -1) === '.') {
+            // The provided path was not a real path to begin with.
+            // Fallback to the last provided complete path.
+            $this->pool->config->setPathToConfigFile($completePath);
+        }
     }
 
     /**
