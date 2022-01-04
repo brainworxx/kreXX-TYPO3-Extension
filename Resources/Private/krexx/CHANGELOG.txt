@@ -13,6 +13,7 @@
 - Bugfix: Standard loading of the configuration file works again.
 - Bugfix: Mime type string and file do not overwrite each others
   anymore.
+- Bugfix: K-Type padding for the Hans skin is too small.
 
 4.1.2
 - Change: Do not display an empty array, when there are no
