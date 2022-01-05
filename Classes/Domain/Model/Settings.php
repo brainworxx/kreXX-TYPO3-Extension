@@ -52,6 +52,7 @@ use Brainworxx\Includekrexx\Domain\Model\Settings\Destination;
 use Brainworxx\Includekrexx\Domain\Model\Settings\DetectAjax;
 use Brainworxx\Includekrexx\Domain\Model\Settings\Disabled;
 use Brainworxx\Includekrexx\Domain\Model\Settings\Iprange;
+use Brainworxx\Includekrexx\Domain\Model\Settings\LanguageKey;
 use Brainworxx\Includekrexx\Domain\Model\Settings\Level;
 use Brainworxx\Includekrexx\Domain\Model\Settings\LogFileWriter;
 use Brainworxx\Includekrexx\Domain\Model\Settings\MaxCall;
@@ -91,6 +92,7 @@ class Settings implements ControllerConstInterface
     use MaxRuntime;
     use MemoryLeft;
     use LogFileWriter;
+    use LanguageKey;
 
     /**
      * @var string

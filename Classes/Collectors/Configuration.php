@@ -97,6 +97,7 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
             LogLevel::ALERT => static::translate('loglevel.alert', static::EXT_KEY),
             LogLevel::EMERGENCY => static::translate('loglevel.emergency', static::EXT_KEY),
         ];
+        $dropdown['languages'] = $this->pool->config->getLanguageList();
 
         return $dropdown;
     }

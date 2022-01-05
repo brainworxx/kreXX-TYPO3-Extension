@@ -145,6 +145,9 @@
 			<trans-unit id="loglevelT3FileWriter">
 				<source>There are different log levels. Depending on the setting, you may get a lot of output.</source>
 			</trans-unit>
+			<trans-unit id="languageKey">
+				<source>The language key from the help file(s). It will fallback to 'text' which is english. We provide kreXX in two language english as a fall back, and german (de).</source>
+			</trans-unit>
 
 			<!-- Messages -->
 			<trans-unit id="file.not.writable">
@@ -244,6 +247,9 @@
 			</trans-unit>
 			<trans-unit id="mbstringNotInstalled">
 				<source>The php extension 'mb-string' is not installed. The string analysis may be unreliable.</source>
+			</trans-unit>
+			<trans-unit id="configErrorLangInvalid">
+				<source>Wrong configuration for: '%s => %s'! The language '%s' is not available. The configured setting was not applied!</source>
 			</trans-unit>
 
 			<!-- Tabs -->
@@ -358,6 +364,9 @@
 			</trans-unit>
 			<trans-unit id="label.loglevelT3FileWriter">
 				<source>Log level of the FileWriter:</source>
+			</trans-unit>
+			<trans-unit id="label.languageKey">
+				<source>Language</source>
 			</trans-unit>
 
 			<!-- Content stuff  Edit Frontend Settings -->

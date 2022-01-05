@@ -90,7 +90,7 @@ class CodegenTest extends AbstractTest
         $model = new Model(Krexx::$pool);
         $model->setName('bluRay');
         $model->setCodeGenType($codeGen::VHS_CALL_VIEWHELPER);
-        $fixture =  [
+        $fixture = [
             'play' => 'dvd',
             'stop' => 'HD',
             'video' => 'BetaMax'
@@ -98,6 +98,18 @@ class CodegenTest extends AbstractTest
         $model->addParameter(Codegen::PARAM_ARRAY, $fixture);
         $this->assertEquals(
             ' -> v:call(method: \'bluRay\', arguments: {arg1: \'dvd\', arg2: \'HD\', arg3: \'BetaMax\'})',
+            $codeGen->generateSource($model)
+        );
+
+        // The VHS Version without any arguments
+        $codeGen = new Codegen(Krexx::$pool);
+        $codeGen->setAllowCodegen(true);
+        $model = new Model(Krexx::$pool);
+        $model->setName('webem');
+        $model->setCodeGenType($codeGen::VHS_CALL_VIEWHELPER);
+        $model->addParameter(Codegen::PARAM_ARRAY, []);
+        $this->assertEquals(
+            ' -> v:call(method: \'webem\')',
             $codeGen->generateSource($model)
         );
 

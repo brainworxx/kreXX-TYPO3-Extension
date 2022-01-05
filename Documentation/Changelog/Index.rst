@@ -15,7 +15,7 @@ Changelog
 5.0.0
     - [Feature] Added immediate browser output to the output choices.
     - [Feature] Added default value analysis to the additional info.
-    - [Feature] Added the German translation for the backend module.
+    - [Feature] Added the German translation.
     - [Change] Removed deprecated code.
     - [Change] Drop PHP 7.0 support
     - [Change] Streamlined the type display of strings
@@ -23,6 +23,9 @@ Changelog
     - [Change] Added missing PHP 7.1 return type to methods.
     - [Change] Moved the ViewConstInterface to the translations.
     - [Change] Moved the local declaration retrieval methods into their own API.
+    - [Change] Reworked some help texts.
+    - [Change] Input elements are now allowed to not have any eval callback.
+    - [Change] Remove the inherited constants from the kreXX main class.
 
 4.1.3
     - [Feature] Added microtime analysis to the float routing.
@@ -38,6 +41,8 @@ Changelog
     - [Bugfix] Mitigated the deprecated page renderer retrieval from the ModuleTemplate instance.
     - [Bugfix] Standard loading of the configuration file works again. (Standard loading was never used with the TYPO3 extension.)
     - [Bugfix] The SQL debugger works again.
+    - [Bugfix] Mime type string and file do not overwrite each others anymore.
+    - [Bugfix] K-Type padding for the Hans skin is too small.
 
 4.1.2
     - [Feature] PHP 8.0 support

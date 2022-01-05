@@ -166,6 +166,8 @@ class SettingsTest extends AbstractTest implements ConstInterface
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLoglevelT3FileWriter
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormactivateT3FileWriter
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormloglevelT3FileWriter
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLanguageKey
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormlanguageKey
      *
      * There is a point where we needed to stop and we have clearly passed it
      * but let's keep going and see what happens.
@@ -182,7 +184,7 @@ class SettingsTest extends AbstractTest implements ConstInterface
 
         $settingsModel = new Settings();
         $validationMock = $this->createMock(Validation::class);
-        $validationMock->expects($this->exactly(23))
+        $validationMock->expects($this->exactly(24))
             ->method('evaluateSetting')
             ->will($this->returnValue(true));
         Krexx::$pool->config->validation = $validationMock;
@@ -219,6 +221,7 @@ class SettingsTest extends AbstractTest implements ConstInterface
                 Fallback::SETTING_DESTINATION => Fallback::SETTING_DESTINATION,
                 Fallback::SETTING_MAX_FILES => Fallback::SETTING_MAX_FILES,
                 Fallback::SETTING_USE_SCOPE_ANALYSIS => Fallback::SETTING_USE_SCOPE_ANALYSIS,
+                Fallback::SETTING_LANGUAGE_KEY => Fallback::SETTING_LANGUAGE_KEY,
             ],
             Fallback::SECTION_PRUNE => [
                 Fallback::SETTING_MAX_STEP_NUMBER => Fallback::SETTING_MAX_STEP_NUMBER,
@@ -264,6 +267,7 @@ class SettingsTest extends AbstractTest implements ConstInterface
                 Fallback::SETTING_USE_SCOPE_ANALYSIS => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_MAX_STEP_NUMBER => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_ARRAY_COUNT_LIMIT => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_LANGUAGE_KEY => Fallback::RENDER_TYPE_CONFIG_FULL,
             ],
         ];
 

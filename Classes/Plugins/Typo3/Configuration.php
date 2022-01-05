@@ -46,6 +46,7 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
+use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
 use Brainworxx\Krexx\View\Output\CheckOutput;
@@ -111,9 +112,9 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         $tempPaths = $this->generateTempPaths();
 
         // Register it!
-        Registration::setConfigFile($tempPaths[static::CONFIG_FOLDER] . DIRECTORY_SEPARATOR . 'Krexx.');
-        Registration::setChunksFolder($tempPaths[static::CHUNKS_FOLDER] . DIRECTORY_SEPARATOR);
-        Registration::setLogFolder($tempPaths[static::LOG_FOLDER] . DIRECTORY_SEPARATOR);
+        Registration::setConfigFile($tempPaths[Fallback::CONFIG_FOLDER] . DIRECTORY_SEPARATOR . 'Krexx.');
+        Registration::setChunksFolder($tempPaths[Fallback::CHUNKS_FOLDER] . DIRECTORY_SEPARATOR);
+        Registration::setLogFolder($tempPaths[Fallback::LOG_FOLDER] . DIRECTORY_SEPARATOR);
         $this->createWorkingDirectories($tempPaths);
 
         // Adding our debugging blacklist.
@@ -164,12 +165,12 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         // See if we must create a temp directory for kreXX.
         return [
             'main' => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX,
-            static::LOG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
-                DIRECTORY_SEPARATOR . static::LOG_FOLDER,
-            static::CHUNKS_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
-                DIRECTORY_SEPARATOR . static::CHUNKS_FOLDER,
-            static::CONFIG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
-                DIRECTORY_SEPARATOR . static::CONFIG_FOLDER,
+            Fallback::LOG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
+                DIRECTORY_SEPARATOR . Fallback::LOG_FOLDER,
+            Fallback::CHUNKS_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
+                DIRECTORY_SEPARATOR . Fallback::CHUNKS_FOLDER,
+            Fallback::CONFIG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
+                DIRECTORY_SEPARATOR . Fallback::CONFIG_FOLDER,
         ];
     }
 
@@ -216,7 +217,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
             ->setDefaultValue(static::VALUE_FALSE)
             ->setIsEditable(false)
             ->setRenderType(static::RENDER_TYPE_NONE)
-            ->setValidation(static::EVAL_BOOL)
+            ->setValidation('evalBool')
             ->setName(static::ACTIVATE_T3_FILE_WRITER);
         Registration::addNewSettings($activeT3FileWriter);
 

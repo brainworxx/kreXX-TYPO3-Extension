@@ -378,7 +378,7 @@ class IndexControllerTest extends AbstractTest
         // Use the files inside the fixture folder.
         $this->setValueByReflection(
             'directories',
-            [Config::LOG_FOLDER => __DIR__ . '/../../Fixtures/'],
+            ['log' => __DIR__ . '/../../Fixtures/'],
             \Krexx::$pool->config
         );
 

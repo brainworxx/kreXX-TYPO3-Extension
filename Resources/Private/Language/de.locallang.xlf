@@ -235,6 +235,10 @@
 				<source>Access denied!</source>
 				<target>Zugang verweigert!</target>
 			</trans-unit>
+			<trans-unit id="languageKey">
+				<source>The language key from the help file(s). It will fallback to 'text' which is english. We provide kreXX in two language english as a fall back, and german (de).</source>
+				<target>Der Sprachschlüssel für die Hilfedatei(en). Als Fallback wird 'text' genutzt, welcher englische Werte enthällt. kreXX wird in zwei Sprachen ausgeliefert, Englisch und  Deutsch (de).</target>
+			</trans-unit>
 
 			<!--
 				Error messages from the krexx lib
@@ -319,6 +323,10 @@
 			<trans-unit id="mbstringNotInstalled">
 				<source>The php extension 'mb-string' is not installed. The string analysis may be unreliable.</source>
 				<target>Die PHP Extension 'mb-string' ist nicht installiert. Die String Analyse ist deswegen unzuverlässig.</target>
+			</trans-unit>
+			<trans-unit id="configErrorLangInvalid">
+				<source>Wrong configuration for: '%s => %s'! The language '%s' is not available. The configured setting was not applied!</source>
+				<target>Falsche Konfiguration für: '%s => %s'! Die Sprache '%s' steht nicht zur Verfügung. Dieses Setting wurde nicht angewendet!</target>
 			</trans-unit>
 
 			<!-- Tabs -->
@@ -469,6 +477,10 @@
 			<trans-unit id="label.loglevelT3FileWriter">
 				<source>Log level of the FileWriter:</source>
 				<target>Loglevel für den FileWriter:</target>
+			</trans-unit>
+			<trans-unit id="label.languageKey">
+				<source>Language</source>
+				<target>Sprache</target>
 			</trans-unit>
 
 			<!-- Content stuff  Edit Frontend Settings -->

@@ -76,7 +76,7 @@ class LogfileListTest extends AbstractTest
         // We are not simulating these by function mocks.
         $this->setValueByReflection(
             'directories',
-            [Config::LOG_FOLDER => __DIR__ . '/../../Fixtures/'],
+            ['log' => __DIR__ . '/../../Fixtures/'],
             \Krexx::$pool->config
         );
 

@@ -41,6 +41,7 @@ use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 
 class AbstractControllerTest extends AbstractTest
@@ -54,6 +55,19 @@ class AbstractControllerTest extends AbstractTest
     {
         $indexController = new IndexController();
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $indexController));
+    }
+
+    /**
+     * Test the injection of the page renderer
+     *
+     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::injectPageRenderer
+     */
+    public function testInjectPageRenderer()
+    {
+        $pageRenderer = $this->createMock(PageRenderer::class);
+        $indexController = new IndexController();
+        $indexController->injectPageRenderer($pageRenderer);
+        $this->assertSame($pageRenderer, $this->retrieveValueByReflection('pageRenderer', $indexController));
     }
 
     /**

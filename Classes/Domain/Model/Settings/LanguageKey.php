@@ -37,31 +37,31 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Domain\Model\Settings;
 
-trait Level
+trait LanguageKey
 {
     /**
      * @var string
      */
-    protected $level;
+    protected $languageKey;
 
     /**
      * @var string
      */
-    protected $formlevel;
+    protected $formlanguageKey;
 
     /**
-     * @param string $level
+     * @param string $key
      */
-    public function setLevel(string $level): void
+    public function setLanguageKey(string $key): void
     {
-        $this->level = $level;
+        $this->languageKey = $key;
     }
 
     /**
-     * @param string $formlevel
+     * @param string $formlanguageKey
      */
-    public function setFormlevel(string $formlevel): void
+    public function setFormlanguageKey(string $formlanguageKey): void
     {
-        $this->formlevel = $formlevel;
+        $this->formlanguageKey = $formlanguageKey;
     }
 }
