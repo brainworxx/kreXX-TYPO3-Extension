@@ -133,6 +133,13 @@ class Registration implements ConfigConstInterface, PluginConstInterface
     protected static $newSettings = [];
 
     /**
+     * Additional languages.
+     *
+     * @var string[][]
+     */
+    protected static $additionalLanguages = [];
+
+    /**
      * Add a new setting that is used by your plugin.
      *
      * @param \Brainworxx\Krexx\Service\Plugin\NewSetting $newSetting
@@ -243,6 +250,21 @@ class Registration implements ConfigConstInterface, PluginConstInterface
     public static function addRewrite(string $originalClass, string $rewriteClass): void
     {
         static::$rewriteList[$originalClass] = $rewriteClass;
+    }
+
+    /**
+     * Ann an additional translation.
+     *
+     * Should be used in conjunction with registerAdditionalHelpFile.
+     *
+     * @param string $key
+     *   The key in the language files.
+     * @param string $name
+     *   The human-readable name,
+     */
+    public static function addLanguage(string $key, string $name): void
+    {
+        static::$additionalLanguages[$key] = $name;
     }
 
     /**
@@ -363,6 +385,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
         static::$additionalSkinList = [];
         static::$additionalScalarString = [];
         static::$newSettings = [];
+        static::$additionalLanguages = [];
 
         // Go through the remaining plugins.
         static::$plugins[$configClass][static::IS_ACTIVE] = false;

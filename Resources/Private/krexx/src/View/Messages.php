@@ -67,6 +67,13 @@ class Messages
     protected $pool;
 
     /**
+     * The language key where the texts are stored.
+     *
+     * @var string
+     */
+    protected $languageKey = 'text';
+
+    /**
      * Injects the pool and reads the language file.
      *
      * @param Pool $pool
@@ -77,6 +84,23 @@ class Messages
         $this->pool = $pool;
         $this->readHelpTexts();
         $pool->messages = $this;
+    }
+
+    /**
+     * Setter for the language key.
+     *
+     * Gets set by the configuration class after it was loaded.
+     *
+     * @param string $languageKey
+     *   The language key.
+     *
+     * @return $this
+     *   For chaining.
+     */
+    public function setLanguageKey(string $languageKey): Messages
+    {
+        $this->languageKey = $languageKey;
+        return $this;
     }
 
     /**
@@ -165,13 +189,16 @@ class Messages
      */
     public function getHelp(string $key, array $args = []): string
     {
-        // Check if we can get a value, at all.
-        if (empty($this->helpArray[$key]) === true) {
-            return '';
+        $result = '';
+
+        if (isset($this->helpArray[$this->languageKey][$key]) === true) {
+            $result = $this->helpArray[$this->languageKey][$key];
+        } elseif (isset($this->helpArray['text'][$key]) === true) {
+            $result = $this->helpArray['text'][$key];
         }
 
         // Return the value
-        return vsprintf($this->helpArray[$key], $args);
+        return vsprintf($result, $args);
     }
 
     /**
@@ -187,9 +214,9 @@ class Messages
         );
 
         foreach ($fileList as $filename) {
-            $this->helpArray = array_merge(
+            $this->helpArray = array_merge_recursive(
                 $this->helpArray,
-                (array)parse_ini_string($this->pool->fileService->getFileContents($filename, false))
+                (array)parse_ini_string($this->pool->fileService->getFileContents($filename, false), true)
             );
         }
     }

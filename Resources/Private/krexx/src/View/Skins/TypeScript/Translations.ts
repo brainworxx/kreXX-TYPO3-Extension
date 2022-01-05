@@ -1,5 +1,3 @@
-<?php
-
 /**
  * kreXX: Krumo eXXtended
  *
@@ -33,61 +31,48 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-declare(strict_types=1);
-
-namespace Brainworxx\Krexx\View\Skins\Hans;
-
-/**
- * Renders the header of the fatal error handler.
- */
-trait FatalHeader
+class Translations
 {
     /**
-     * @var string[]
+     * Data storage for the translations
      */
-    private $markerFatalHeader = [
-        '{cssJs}',
-        '{version}',
-        '{search}',
-        '{KrexxId}',
-        '{type}',
-        '{encoding}',
-        '{noJavaScript}',
-        '{searchHeadline}'
-    ];
+    protected translations:Object = {};
 
     /**
-     * {@inheritdoc}
+     * Set the translations
+     *
+     * @param {string} selector
+     * @param {Kdt} kdt
      */
-    public function renderFatalHeader(string $cssJs, string $errorType): string
+    constructor(selector:string, kdt:Kdt)
     {
-        return str_replace(
-            $this->markerFatalHeader,
-            [
-                $cssJs,
-                $this->pool->config->version,
-                $this->renderSearch(),
-                $this->pool->recursionHandler->getMarker(),
-                $errorType,
-                $this->pool->chunks->getOfficialEncoding(),
-                $this->pool->messages->getHelp('noJavaScript'),
-                $this->pool->messages->getHelp('searchHeadline'),
-            ],
-            $this->getTemplateFileContent(static::FILE_FATAL_HEADER)
-        );
+        let dataElements = document.querySelectorAll(selector);
+        let data:string;
+        let json:Object;
+
+        // Load the translations from the elements.
+        for (let i = 0; i < dataElements.length; i++) {
+            data = kdt.getDataset(dataElements[i], 'translations');
+            json = kdt.parseJson(data);
+            if (json !== false) {
+                this.translations = {...this.translations, ...json};
+            }
+        }
     }
 
     /**
-     * Getter of the fatal header for unit tests.
+     * Translate the key.
      *
-     * @codeCoverageIgnore
-     *   We are not testing the unit tests.
-     *
-     * @return string[]
-     *   The marker array.
+     * @param {string} key
      */
-    public function getMarkerFatalHeader(): array
+    public translate(key:string): string
     {
-        return $this->markerFatalHeader;
+        if (typeof this.translations[key] === 'undefined') {
+            // At least return the key.
+            return key;
+        }
+
+        // Return the translation.
+        return this.translations[key];
     }
 }

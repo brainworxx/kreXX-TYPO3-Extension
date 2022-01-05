@@ -72,11 +72,11 @@ class FallbackTest extends AbstractTest
 
         // Test the reading of the skin values.
         $expectedSkinConfig = [
-            $config::SKIN_SMOKY_GREY => [
+            'smokygrey' => [
                 $config::SKIN_CLASS => RenderSmokyGrey::class,
                 $config::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/smokygrey/'
             ],
-            $config::SKIN_HANS => [
+            'hans' => [
                 $config::SKIN_CLASS => RenderHans::class,
                 $config::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/hans/'
             ],
@@ -102,7 +102,7 @@ class FallbackTest extends AbstractTest
 
         $customSetting = new NewSetting();
         $customSetting->setName($settingName)
-            ->setValidation($customSetting::EVAL_BOOL)
+            ->setValidation('evalBool')
             ->setSection($sectionName)
             ->setRenderType(NewSetting::RENDER_TYPE_SELECT)
             ->setIsEditable(true)

@@ -105,7 +105,7 @@ class Xml extends AbstractScalarAnalysis
     {
         // Get a first impression, we check the mime type of the model.
         $metaStuff = $model->getJson();
-        $mimeType = $this->pool->messages->getHelp('metaMimeType');
+        $mimeType = $this->pool->messages->getHelp('metaMimeTypeString');
         if (
             empty($metaStuff[$mimeType]) === true ||
             strpos($metaStuff[$mimeType], 'xml;') === false

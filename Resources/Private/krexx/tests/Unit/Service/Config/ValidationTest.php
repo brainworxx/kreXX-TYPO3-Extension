@@ -120,6 +120,7 @@ class ValidationTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Service\Config\Validation::evalIpRange
      * @covers \Brainworxx\Krexx\Service\Config\Validation::evalMaxRuntime
      * @covers \Brainworxx\Krexx\Service\Config\Validation::evalSkin
+     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalLanguage
      */
     public function testEvaluateSetting()
     {
@@ -152,42 +153,51 @@ class ValidationTest extends AbstractTest
         // Testing each config with a valid value and wist garbage.
         $settingList = $this->retrieveValueByReflection('feConfigFallback', $validation);
         $testData = [
-            Fallback::EVAL_BOOL => [
+            'evalBool' => [
                 'true' => true,
                 'false' => true,
                 static::WHATEVER => false
             ],
-            Fallback::EVAL_DEBUG_METHODS => [
+            'evalDebugMethods' => [
                 'method1,method2' => true,
                 'method 1,method2' => false,
             ],
-            Fallback::EVAL_INT => [
+            'evalInt' => [
                 '5' => true,
                 'five' => false
             ],
-            Fallback::EVAL_DESTINATION => [
+            'evalDestination' => [
                 'browser' => true,
                 'file' => true,
                 'nowhere' => false
             ],
-            Fallback::EVAL_SKIN => [
+            'evalSkin' => [
                 'hans' => true,
                 'smokygrey' => true,
                 'bernd' => false
             ],
-            Fallback::EVAL_IP_RANGE => [
+            'evalIpRange' => [
                 'some values' => true,
                 '' => false
             ],
-            Fallback::EVAL_MAX_RUNTIME => [
+            'evalMaxRuntime' => [
                 'seven' => false,
                 '42' => true,
                 '99999' => false
+            ],
+            'evalLanguage' => [
+                'text' => true,
+                'de' => true,
+                'fr' => false
             ]
         ];
 
         // Nice, huh?
         foreach ($settingList as $name => $setting) {
+            if (isset($setting[$validation::EVALUATE]) === false) {
+                // We skip the one without any evaluation method.
+                continue;
+            }
             foreach ($testData[$setting[$validation::EVALUATE]] as $value => $expected) {
                 $this->assertEquals(
                     $expected,
@@ -225,7 +235,7 @@ class ValidationTest extends AbstractTest
 
         $customSetting = new NewSetting();
         $customSetting->setName($settingName)
-            ->setValidation($customSetting::EVAL_BOOL)
+            ->setValidation('evalBool')
             ->setSection($sectionName)
             ->setRenderType(NewSetting::RENDER_TYPE_SELECT)
             ->setIsEditable(true)
@@ -236,7 +246,7 @@ class ValidationTest extends AbstractTest
         $anotherSettingName = 'notEditableInput';
         $customSetting = new NewSetting();
         $customSetting->setName($anotherSettingName)
-            ->setValidation($customSetting::EVAL_DEBUG_METHODS)
+            ->setValidation('evalDebugMethods')
             ->setSection($sectionName)
             ->setRenderType(NewSetting::RENDER_TYPE_INPUT)
             ->setIsEditable(false)

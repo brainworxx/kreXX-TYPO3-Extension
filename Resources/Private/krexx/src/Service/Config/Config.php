@@ -136,6 +136,7 @@ class Config extends Fallback
         // or ajax mode and have no file output.
         $this->checkOutput = $pool->createClass(CheckOutput::class);
         $this->debugFuncList = explode(',', $this->getSetting(static::SETTING_DEBUG_METHODS));
+        $this->pool->messages->setLanguageKey($this->getSetting(static::SETTING_LANGUAGE_KEY));
 
         $this->checkEnabledStatus();
     }
@@ -302,11 +303,25 @@ class Config extends Fallback
     /**
      * Simply return a list of all skins as their configuration keys.
      *
-     * @return string[][]
+     * @return string[]
      */
     public function getSkinList(): array
     {
-        return array_keys($this->skinConfiguration);
+        $keys = array_keys($this->skinConfiguration);
+        return array_combine($keys, $keys);
+    }
+
+    /**
+     * Return the list of available languages.
+     *
+     * @return string[]
+     */
+    public function getLanguageList(): array
+    {
+        return array_merge(
+            ['text' => 'English', 'de' => 'Deutsch'],
+            SettingsGetter::getAdditionalLanguages()
+        );
     }
 
     /**

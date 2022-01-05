@@ -118,17 +118,19 @@ trait SingleEditableChild
         if ($model->getDomid() === static::SETTING_SKIN) {
             // Get a list of all skin folders.
             $valueList = $this->pool->config->getSkinList();
+        } elseif ($model->getDomid() === static::SETTING_LANGUAGE_KEY) {
+            $valueList = $this->pool->config->getLanguageList();
         } else {
-            $valueList = ['true', 'false'];
+            $valueList = ['true' => 'true', 'false' => 'false'];
         }
 
         // Paint it.
         $options = '';
-        foreach ($valueList as $value) {
+        foreach ($valueList as $value => $text) {
             $value === $model->getName() ? $selected = 'selected="selected"' : $selected = '';
             $options .= str_replace(
                 $this->markerSelectOption,
-                [$value, $value, $selected],
+                [$text, $value, $selected],
                 $this->getTemplateFileContent(static::FILE_SI_SELECT_OPTIONS)
             );
         }

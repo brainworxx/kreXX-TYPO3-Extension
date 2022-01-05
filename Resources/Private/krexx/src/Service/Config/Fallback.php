@@ -50,6 +50,113 @@ use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
 abstract class Fallback implements ConfigConstInterface
 {
     /**
+     * Method name used to evaluate a boolean.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    protected const EVAL_BOOL = 'evalBool';
+
+    /**
+     * Method name used to evaluate an integer.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    protected const EVAL_INT = 'evalInt';
+
+    /**
+     * Method name used to evaluate the maximum runtime.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    protected const EVAL_MAX_RUNTIME = 'evalMaxRuntime';
+
+    /**
+     * Method name used to evaluate the output destination.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    protected const EVAL_DESTINATION = 'evalDestination';
+
+    /**
+     * Method name used to evaluate the skin name.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    protected const EVAL_SKIN = 'evalSkin';
+
+    /**
+     * Method name used to evaluate the allowed ip range.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    protected const EVAL_IP_RANGE = 'evalIpRange';
+
+    /**
+     * Method name used to evaluate the debug methods.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    protected const EVAL_DEBUG_METHODS = 'evalDebugMethods';
+
+    /**
+     * Method name used to evaluate the configured language
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    protected const EVAL_LANG = 'evalLanguage';
+
+    /**
+     * Name of the chunks' folder.
+     *
+     * @var string
+     */
+    public const CHUNKS_FOLDER = 'chunks';
+
+    /**
+     * Name of the log folder.
+     *
+     * @var string
+     */
+    public const LOG_FOLDER = 'log';
+
+    /**
+     * Name of the config folder.
+     *
+     * @var string
+     */
+    public const CONFIG_FOLDER = 'config';
+
+    /**
+     * Name of the smokygrey skin.
+     *
+     * @var string
+     */
+    protected const SKIN_SMOKY_GREY = 'smokygrey';
+
+    /**
+     * Name of the hans skin.
+     *
+     * @var string
+     */
+    protected const SKIN_HANS = 'hans';
+
+    /**
      * The fallback configuration.
      *
      * @var string[][]
@@ -65,6 +172,7 @@ abstract class Fallback implements ConfigConstInterface
             self::SETTING_DESTINATION,
             self::SETTING_MAX_FILES,
             self::SETTING_USE_SCOPE_ANALYSIS,
+            self::SETTING_LANGUAGE_KEY,
         ],
         self::SECTION_PRUNE => [
             self::SETTING_MAX_STEP_NUMBER,
@@ -150,7 +258,7 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Values, rendering settings and the actual fallback value.
      *
-     * @var string[][]
+     * @var string[][]|\Closure[][]
      */
     public $feConfigFallback = [];
 
@@ -235,6 +343,7 @@ abstract class Fallback implements ConfigConstInterface
             static::SETTING_USE_SCOPE_ANALYSIS => $this->returnBoolSelectTrue(static::SECTION_BEHAVIOR),
             static::SETTING_MAX_STEP_NUMBER => $this->returnInput(static::SECTION_PRUNE, 10),
             static::SETTING_ARRAY_COUNT_LIMIT => $this->returnInput(static::SECTION_PRUNE, 300),
+            static::SETTING_LANGUAGE_KEY => $this->returnLanguages(),
         ];
     }
 
@@ -313,7 +422,7 @@ abstract class Fallback implements ConfigConstInterface
     }
 
     /**
-     * The render settings for a simple input field.
+     * The render settings for a simple integer input field.
      *
      * @param string $section
      *   The section, where it belongs to
@@ -330,6 +439,28 @@ abstract class Fallback implements ConfigConstInterface
             static::RENDER => static::EDITABLE_INPUT,
             static::EVALUATE => static::EVAL_INT,
             static::SECTION => $section,
+        ];
+    }
+
+    /**
+     * The render settings for a simple string input field,
+     * that we do not evaluate.
+     *
+     * @param string $section
+     *   The section, where it belongs to
+     * @param string $value
+     *   The prefilled value.
+     *
+     * @return array
+     *   The settings.
+     */
+    protected function returnLanguages(): array
+    {
+        return [
+            static::VALUE => 'text',
+            static::RENDER => static::EDITABLE_SELECT,
+             static::EVALUATE => static::EVAL_LANG,
+            static::SECTION => static::SECTION_BEHAVIOR,
         ];
     }
 

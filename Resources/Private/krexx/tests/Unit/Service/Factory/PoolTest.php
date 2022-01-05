@@ -93,8 +93,7 @@ class PoolTest extends AbstractTest
         $this->assertInstanceOf(AbstractRender::class, Krexx::$pool->render);
 
         Krexx::$pool = null;
-        ConfigSupplier::$overwriteValues[Fallback::SETTING_SKIN] = Fallback::SKIN_HANS;
-        Registration::addRewrite(Ini::class, ConfigSupplier::class);
+        ConfigSupplier::$overwriteValues[Fallback::SETTING_SKIN] = 'hans';
         Pool::createPool();
         $this->assertInstanceOf(RenderHans::class, Krexx::$pool->render);
     }

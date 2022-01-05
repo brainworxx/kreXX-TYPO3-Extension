@@ -184,7 +184,7 @@ class ProcessStringTest extends AbstractTest
         $this->assertEquals(ProcessConstInterface::TYPE_STRING, $model->getType());
         $this->assertEquals($length, $model->getJson()['Length']);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
-        $this->assertEquals($fileInfo, $model->getJson()['Mimetype']);
+        $this->assertEquals($fileInfo, $model->getJson()['Mimetype string']);
         $this->assertEquals(false, $model->hasExtra());
         $this->assertArrayNotHasKey('Encoding', $model->getJson());
     }
@@ -217,7 +217,7 @@ class ProcessStringTest extends AbstractTest
             $model->getNormal()
         );
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getData());
-        $this->assertEquals($fileInfo, $model->getJson()['Mimetype']);
+        $this->assertEquals($fileInfo, $model->getJson()['Mimetype string']);
         $this->assertEquals(true, $model->hasExtra());
         $this->assertArrayNotHasKey('Encoding', $model->getJson());
     }

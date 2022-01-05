@@ -115,7 +115,7 @@ class FilePath extends AbstractScalarAnalysis
                 $model->addToJson('Real path', is_string($realPath) === true ? $realPath : 'n/a');
             }
             $model->addToJson(
-                $this->pool->messages->getHelp('metaMimeType'),
+                $this->pool->messages->getHelp('metaMimeTypeFile'),
                 $this->bufferInfo->file($string)
             );
         }

@@ -1,6 +1,7 @@
 5.0.0
 - Added immediately browser output to the output choices.
 - Added default value analysis to the additional info.
+- Added German localisation.
 - Change: Removed deprecated code.
 - Change: Drop PHP 7.0 support
 - Change: Streamlined the type display of strings
@@ -9,6 +10,11 @@
 - Change: Moved the ViewConstInterface to the translations.
 - Change: Moved the local declaration retrieval methods into
   their own API.
+- Change: Reworked some help texts.
+- Change: Input elements are now allowed to not have any eval
+  callback.
+- Change: Remove the inherited constants from the kreXX
+  main class.
 
 4.1.3
 - Added microtime analysis to the float routing.
@@ -22,7 +28,10 @@
 - Bugfix: Comment inheritance resolving works more reliable.
 - Bugfix: Method return type comment parsing works more
   reliable.
-- Bugfix: Loading of the configuration file works again.
+- Bugfix: Standard Loading of the configuration file works again.
+- Bugfix: Mime type string and file do not overwrite each others
+  anymore.
+- Bugfix: K-Type padding for the Hans skin is too small.
 
 4.1.2
 - Change: Do not display an empty array, when there are no

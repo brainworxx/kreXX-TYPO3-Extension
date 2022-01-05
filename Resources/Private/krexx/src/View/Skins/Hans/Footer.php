@@ -50,6 +50,7 @@ trait Footer
     private $markerFooter = [
         '{configInfo}',
         '{caller}',
+        '{pluginList}',
         '{plugins}',
     ];
 
@@ -57,6 +58,10 @@ trait Footer
      * @var string[]
      */
     private $markerCaller = [
+        '{calledFromTxt}',
+        '{calledFromLine}',
+        '{calledFromAt}',
+        '{calledFromUrl}',
         '{callerFile}',
         '{callerLine}',
         '{date}',
@@ -80,6 +85,7 @@ trait Footer
             [
                 $this->renderExpandableChild($model, $configOnly),
                 $callerString,
+                $this->pool->messages->getHelp('pluginList'),
                 $this->renderPluginList(),
             ],
             $this->getTemplateFileContent(static::FILE_FOOTER)
@@ -96,9 +102,15 @@ trait Footer
      */
     protected function renderCaller(array $caller): string
     {
+        $messages = $this->pool->messages;
+
         return str_replace(
             $this->markerCaller,
             [
+                $messages->getHelp('calledFromTxt'),
+                $messages->getHelp('calledFromLine'),
+                $messages->getHelp('calledFromAt'),
+                $messages->getHelp('calledFromUrl'),
                 $caller[static::TRACE_FILE],
                 $caller[static::TRACE_LINE],
                 $caller[static::TRACE_DATE],

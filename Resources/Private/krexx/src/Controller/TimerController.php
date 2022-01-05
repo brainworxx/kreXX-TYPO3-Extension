@@ -131,7 +131,7 @@ class TimerController extends AbstractController implements ControllerConstInter
         // Get the very first key.
         $start = key($timeKeeping);
         $totalTime = round((end($timeKeeping) - $timeKeeping[$start]) * 1000, 4);
-        $result['total_time'] = $totalTime;
+        $result[$this->pool->messages->getHelp('metaTotalTime')] = $totalTime;
         $prevMomentName = $start;
         $prevMomentStart = $timeKeeping[$start];
 

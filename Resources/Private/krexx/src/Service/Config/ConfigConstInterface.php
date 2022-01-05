@@ -50,7 +50,6 @@ interface ConfigConstInterface
     /**
      * Array key. Containing the render info of one of the configurations.
      *
-     *
      * @var string
      */
     public const RENDER = 'render';
@@ -84,69 +83,6 @@ interface ConfigConstInterface
      * @var string
      */
     public const SECTION = 'section';
-
-    /**
-     * Method name used to evaluate a boolean.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    public const EVAL_BOOL = 'evalBool';
-
-    /**
-     * Method name used to evaluate an integer.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    public const EVAL_INT = 'evalInt';
-
-    /**
-     * Method name used to evaluate the maximum runtime.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    public const EVAL_MAX_RUNTIME = 'evalMaxRuntime';
-
-    /**
-     * Method name used to evaluate the output destination.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    public const EVAL_DESTINATION = 'evalDestination';
-
-    /**
-     * Method name used to evaluate the skin name.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    public const EVAL_SKIN = 'evalSkin';
-
-    /**
-     * Method name used to evaluate the allowed ip range.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    public const EVAL_IP_RANGE = 'evalIpRange';
-
-    /**
-     * Method name used to evaluate the debug methods.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    public const EVAL_DEBUG_METHODS = 'evalDebugMethods';
 
     /**
      * Array key. Contains the config of the output section.
@@ -317,6 +253,13 @@ interface ConfigConstInterface
     public const SETTING_USE_SCOPE_ANALYSIS = 'useScopeAnalysis';
 
     /**
+     * The language keys for the language file.
+     *
+     * @var string
+     */
+    public const SETTING_LANGUAGE_KEY = 'languageKey';
+
+    /**
      * Array key. Holds the value of analyseProtected.
      *
      * @var string
@@ -458,20 +401,6 @@ interface ConfigConstInterface
     public const RENDER_TYPE_CONFIG_NONE = 'none';
 
     /**
-     * Name of the smokygrey skin.
-     *
-     * @var string
-     */
-    public const SKIN_SMOKY_GREY = 'smokygrey';
-
-    /**
-     * Name of the hans skin.
-     *
-     * @var string
-     */
-    public const SKIN_HANS = 'hans';
-
-    /**
      * Class name that renders a registered skin.
      *
      * @var string
@@ -484,25 +413,4 @@ interface ConfigConstInterface
      * @var string
      */
     public const SKIN_DIRECTORY = 'dir';
-
-    /**
-     * Name of the chunks' folder.
-     *
-     * @var string
-     */
-    public const CHUNKS_FOLDER = 'chunks';
-
-    /**
-     * Name of the log folder.
-     *
-     * @var string
-     */
-    public const LOG_FOLDER = 'log';
-
-    /**
-     * Name of the config folder.
-     *
-     * @var string
-     */
-    public const CONFIG_FOLDER = 'config';
 }

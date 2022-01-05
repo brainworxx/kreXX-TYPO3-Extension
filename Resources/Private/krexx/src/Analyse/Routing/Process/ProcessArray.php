@@ -92,7 +92,7 @@ class ProcessArray extends AbstractProcessNoneScalar implements
         $result = $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
                 $model->setType(static::TYPE_ARRAY)
-                    ->setNormal($count . ' elements')
+                    ->setNormal($count . $this->pool->messages->getHelp('countElements'))
                     ->addParameter(static::PARAM_DATA, $model->getData())
                     ->addParameter(static::PARAM_MULTILINE, false)
             )

@@ -45,7 +45,15 @@ trait Search
     /**
      * @var string
      */
-    private $markerSearch = '{KrexxId}';
+    private $markerSearch = [
+        '{KrexxId}',
+        '{searchHeadline}',
+        '{searchCaseSensitive}',
+        '{searchShortResults}',
+        '{searchKeys}',
+        '{searchLongResults}',
+        '{searchWholeValues}',
+    ];
 
     /**
      * Renders the search button and the search menu.
@@ -55,9 +63,18 @@ trait Search
      */
     protected function renderSearch(): string
     {
+        $messages = $this->pool->messages;
         return str_replace(
             $this->markerSearch,
-            $this->pool->recursionHandler->getMarker(),
+            [
+                $this->pool->recursionHandler->getMarker(),
+                $messages->getHelp('searchHeadline'),
+                $messages->getHelp('searchCaseSensitive'),
+                $messages->getHelp('searchShortResults'),
+                $messages->getHelp('searchKeys'),
+                $messages->getHelp('searchLongResults'),
+                $messages->getHelp('searchWholeValues'),
+            ],
             $this->getTemplateFileContent(static::FILE_SEARCH)
         );
     }
@@ -73,6 +90,6 @@ trait Search
      */
     public function getMarkerSearch(): array
     {
-        return [$this->markerSearch];
+        return $this->markerSearch;
     }
 }

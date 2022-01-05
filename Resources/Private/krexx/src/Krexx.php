@@ -51,7 +51,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Public functions, allowing access to the kreXX debug features.
  */
-class Krexx implements ConfigConstInterface
+class Krexx
 {
     use LoggingTrait;
 
@@ -105,7 +105,7 @@ class Krexx implements ConfigConstInterface
 
         // Disabled ?
         if (
-            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -137,7 +137,7 @@ class Krexx implements ConfigConstInterface
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -171,7 +171,7 @@ class Krexx implements ConfigConstInterface
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -213,7 +213,7 @@ class Krexx implements ConfigConstInterface
         // Disabled?
         // We are ignoring local settings here.
         if (
-            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
@@ -234,7 +234,7 @@ class Krexx implements ConfigConstInterface
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
@@ -255,7 +255,7 @@ class Krexx implements ConfigConstInterface
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;

@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Unit\View;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\View\Message;
 use Brainworxx\Krexx\View\Messages;
@@ -61,6 +62,16 @@ class MessagesTest extends AbstractTest
         parent::krexxUp();
 
         $this->messagesClass = new Messages(Krexx::$pool);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function krexxDown()
+    {
+        parent::krexxDown();
+
+        $this->setValueByReflection('additionalLanguages', [], Registration::class);
     }
 
     /**
@@ -142,9 +153,7 @@ class MessagesTest extends AbstractTest
      */
     public function testGetHelp()
     {
-        $helpArray = [
-            'doctor' => 'Some %s string.'
-        ];
+        $helpArray = ['text' =>['doctor' => 'Some %s string.']];
         $this->setValueByReflection('helpArray', $helpArray, $this->messagesClass);
 
         $this->assertEquals('', $this->messagesClass->getHelp('unknown key'));
@@ -197,8 +206,35 @@ class MessagesTest extends AbstractTest
 
         $this->messagesClass->readHelpTexts();
         $this->assertEquals(
-            ['someKey' => 'a string'],
+            ['text' => ['someKey' => 'a string']],
             $this->retrieveValueByReflection('helpArray', $this->messagesClass)
+        );
+    }
+
+    /**
+     * Test the assignment of the language key.
+     *
+     * @covers \Brainworxx\Krexx\View\Messages::setLanguageKey
+     * @covers \Brainworxx\Krexx\View\Messages::readHelpTexts
+     * @covers \Brainworxx\Krexx\View\Messages::getHelp
+     */
+    public function testSetLanguageKey()
+    {
+        $this->messagesClass->setLanguageKey('de');
+        Registration::addLanguage('anykey', 'Any Key');
+        Registration::registerAdditionalHelpFile(KREXX_DIR . 'tests/Fixtures/Language.ini');
+        $this->messagesClass->readHelpTexts();
+
+        $this->assertEquals(
+            'a string',
+            $this->messagesClass->getHelp('someKey'),
+            'Test the usage of the language key above.'
+        );
+
+        $this->assertEquals(
+            'Gesamtzeit',
+            $this->messagesClass->getHelp('metaTotalTime'),
+            'Test if the original language is still available'
         );
     }
 }

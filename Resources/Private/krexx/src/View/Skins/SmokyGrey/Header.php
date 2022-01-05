@@ -48,7 +48,10 @@ trait Header
     private $markerHeader = [
         '{kdebug-classes}',
         '{kconfiguration-classes}',
-        '{plugins}'
+        '{plugins}',
+        '{debugHeadline}',
+        '{configHeadline}',
+        '{pluginsHeadline}'
     ];
 
     /**
@@ -67,12 +70,16 @@ trait Header
             $configClass = '';
         }
 
+        $messages = $this->pool->messages;
         return str_replace(
             $this->markerHeader,
             [
                 $debugClass,
                 $configClass,
                 $this->renderPluginList(),
+                $messages->getHelp('debugHeadline'),
+                $messages->getHelp('configHeadline'),
+                $messages->getHelp('pluginsHeadline')
             ],
             parent::renderHeader($headline, $cssJs)
         );

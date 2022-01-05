@@ -80,7 +80,7 @@ class AbstractProcessNoneScalarTest extends AbstractTest
 
         // Check the model.
         $this->assertEquals(
-            'To increase this value, change the runtime => level setting.',
+            'To increase this value, change the Prune output => level setting.',
             $model->getData()
         );
         $this->assertEquals(

@@ -47,7 +47,13 @@ trait CssJs
      */
     private $markerCssJs = [
         '{css}',
-        '{js}'
+        '{js}',
+        '{tsEnterText}',
+        '{tsTooSmall}',
+        '{tsPleaseReload}',
+        '{tsConfigReset}',
+        '{tsNoDataAvailable}',
+        '{tsAdditionalData}',
     ];
 
     /**
@@ -55,9 +61,19 @@ trait CssJs
      */
     public function renderCssJs(string $css, string $javascript): string
     {
+        $messages = $this->pool->messages;
         return str_replace(
             $this->markerCssJs,
-            [$css, $javascript],
+            [
+                $css,
+                $javascript,
+                $messages->getHelp('tsEnterText'),
+                $messages->getHelp('tsTooSmall'),
+                $messages->getHelp('tsPleaseReload'),
+                $messages->getHelp('tsConfigReset'),
+                $messages->getHelp('tsNoDataAvailable'),
+                $messages->getHelp('tsAdditionalData')
+            ],
             $this->getTemplateFileContent(static::FILE_CSSJS)
         );
     }

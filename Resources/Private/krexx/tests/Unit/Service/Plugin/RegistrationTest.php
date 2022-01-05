@@ -217,13 +217,33 @@ class RegistrationTest extends AbstractRegistration
     }
 
     /**
+     * Test the adding of a language.
+     *
+     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::addLanguage
+     * @covers \Brainworxx\Krexx\Service\Config\Config::getLanguageList
+     */
+    public function testAddLanguage()
+    {
+        Registration::addLanguage('fr', 'français');
+        $this->assertEquals(['fr' => 'français'], SettingsGetter::getAdditionalLanguages());
+
+        // Test the French is available in the config.
+        $expectation = [
+            'text' => 'English',
+            'de' => 'Deutsch',
+            'fr' => 'français'
+        ];
+
+        $this->assertEquals($expectation, \Krexx::$pool->config->getLanguageList());
+    }
+
+    /**
      * Create a plugin mock.
      *
      * @return PluginConfigInterface
      */
     protected function createMockPlugin()
     {
-
         $pluginMock = $this->createMock(PluginConfigInterface::class);
         $pluginMock->expects($this->once())
             ->method('getName')

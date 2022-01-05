@@ -1,3 +1,14 @@
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -177,7 +188,14 @@ var Kdt = (function () {
             var expires = 'expires=' + date.toUTCString();
             document.cookie = 'KrexxDebugSettings=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             document.cookie = 'KrexxDebugSettings=' + JSON.stringify(settings) + '; ' + expires + '; path=/';
-            alert(valueName + ' --> ' + newValue + '\n\nPlease reload the page to use the new local settings.');
+            alert(valueName + ' --> ' + newValue + '\n\n' + _this.translations.translate('tsPleaseReload'));
+        };
+        this.resetSetting = function (event, element) {
+            var date = new Date();
+            date.setTime(date.getTime() + (99 * 24 * 60 * 60 * 1000));
+            var expires = 'expires=' + date.toUTCString();
+            document.cookie = 'KrexxDebugSettings={}; ' + expires + '; path=/';
+            alert(_this.translations.translate('tsConfigReset') + '\n\n' + _this.translations.translate('tsPleaseReload'));
         };
         this.collapse = function (event, element) {
             event.stop = true;
@@ -236,6 +254,7 @@ var Kdt = (function () {
                 element.parentNode.removeChild(element);
             }
         };
+        this.translations = new Translations('.krdata-structure.krtrans', this);
     }
     Kdt.prototype.getParents = function (el, selector) {
         var result = [];
@@ -363,13 +382,6 @@ var Kdt = (function () {
         }
         return result;
     };
-    Kdt.prototype.resetSetting = function (event, element) {
-        var date = new Date();
-        date.setTime(date.getTime() + (99 * 24 * 60 * 60 * 1000));
-        var expires = 'expires=' + date.toUTCString();
-        document.cookie = 'KrexxDebugSettings={}; ' + expires + '; path=/';
-        alert('All local configuration have been reset.\n\nPlease reload the page to use the these settings.');
-    };
     Kdt.prototype.parseJson = function (string) {
         try {
             return JSON.parse(string);
@@ -386,8 +398,29 @@ var Kdt = (function () {
             }
         }
     };
-    ;
     return Kdt;
+}());
+var Translations = (function () {
+    function Translations(selector, kdt) {
+        this.translations = {};
+        var dataElements = document.querySelectorAll(selector);
+        var data;
+        var json;
+        for (var i = 0; i < dataElements.length; i++) {
+            data = kdt.getDataset(dataElements[i], 'translations');
+            json = kdt.parseJson(data);
+            if (json !== false) {
+                this.translations = __assign(__assign({}, this.translations), json);
+            }
+        }
+    }
+    Translations.prototype.translate = function (key) {
+        if (typeof this.translations[key] === 'undefined') {
+            return key;
+        }
+        return this.translations[key];
+    };
+    return Translations;
 }());
 var Search = (function () {
     function Search(eventHandler, jumpTo) {
@@ -412,7 +445,7 @@ var Search = (function () {
                 config.searchtext = config.searchtext.toLowerCase();
             }
             if (config.searchtext.length === 0) {
-                element.parentNode.querySelector('.ksearch-state').textContent = '<- Please enter a search text.';
+                element.parentNode.querySelector('.ksearch-state').textContent = _this.kdt.translations.translate('tsEnterText');
                 return;
             }
             if (config.searchtext.length > 2 || config.searchWhole) {
@@ -454,7 +487,7 @@ var Search = (function () {
                 _this.results[config.instance][config.searchtext]['pointer'] = pointer;
             }
             else {
-                element.parentNode.querySelector('.ksearch-state').textContent = '<- must be bigger than 3 characters';
+                element.parentNode.querySelector('.ksearch-state').textContent = _this.kdt.translations.translate('tsTooSmall');
             }
         };
         this.retrievePayload = function (config) {
@@ -811,9 +844,10 @@ var SmokyGrey = (function (_super) {
                     }
                 }
                 if (counter === 0) {
-                    html = '<tr><td class="kinfo">No data available for this item.</td><td class="kdesc">Sorry.</td></tr>';
+                    html = '<tr><td class="kinfo">' + kdt.translations.translate('tsNoDataAvailable') + '</td><td class="kdesc"></td></tr>';
                 }
-                html = '<table><caption class="kheadline">Additional data</caption><tbody class="kdatabody">' + html + '</tbody></table>';
+                html = '<table><caption class="kheadline">' + kdt.translations.translate('tsAdditionalData') +
+                    '</caption><tbody class="kdatabody">' + html + '</tbody></table>';
                 body.parentNode.parentNode.innerHTML = html;
                 setPayloadMaxHeight();
             }, 100);

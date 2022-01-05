@@ -154,11 +154,12 @@ class SmokyGrey extends Hans
             }
             if (counter === 0) {
                 // We have no data. Tell the user that there is nothing to see.
-                html = '<tr><td class="kinfo">No data available for this item.</td><td class="kdesc">Sorry.</td></tr>';
+                html = '<tr><td class="kinfo">' + kdt.translations.translate('tsNoDataAvailable') + '</td><td class="kdesc"></td></tr>';
             }
 
             // Add it to the DOM.
-            html = '<table><caption class="kheadline">Additional data</caption><tbody class="kdatabody">' + html + '</tbody></table>';
+            html = '<table><caption class="kheadline">' + kdt.translations.translate('tsAdditionalData') +
+                '</caption><tbody class="kdatabody">' + html + '</tbody></table>';
             // Meh, IE9 does not allow me to edit the contents of a table. I have to
             // redraw the whole thing.  :-(
             (body.parentNode.parentNode as HTMLElement).innerHTML = html;

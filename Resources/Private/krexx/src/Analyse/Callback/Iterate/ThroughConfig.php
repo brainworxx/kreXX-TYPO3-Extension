@@ -63,7 +63,7 @@ class ThroughConfig extends AbstractCallback implements CallbackConstInterface, 
             $this->pool->render->renderButton(
                 $this->pool->createClass(Model::class)
                     ->setName('kresetbutton')
-                    ->setNormal('Reset local settings')
+                    ->setNormal($this->pool->messages->getHelp('resetCookiesReadable'))
                     ->setHelpid('kresetbutton')
             );
     }

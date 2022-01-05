@@ -48,6 +48,7 @@ trait FatalMain
     private $markerFatalMain = [
         '{errstr}',
         '{file}',
+        '{calledIn}',
         '{source}',
         '{line}',
     ];
@@ -69,6 +70,7 @@ trait FatalMain
             [
                 $errstr,
                 $errfile,
+                $this->pool->messages->getHelp('calledIn'),
                 $source,
                 $errline
             ],

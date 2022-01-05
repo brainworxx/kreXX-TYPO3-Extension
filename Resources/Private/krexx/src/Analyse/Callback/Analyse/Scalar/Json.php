@@ -43,14 +43,14 @@ use Brainworxx\Krexx\Analyse\Model;
 /**
  * Deep analysis for json strings.
  */
-class Json extends AbstractScalarAnalysis
+class Json extends AbstractScalarAnalysis implements CodegenConstInterface
 {
     /**
      * Code generation for this one is the json encoder.
      *
      * @var string
      */
-    protected $codeGenType = CodegenConstInterface::CODEGEN_TYPE_JSON_DECODE;
+    protected $codeGenType = self::CODEGEN_TYPE_JSON_DECODE;
 
     /**
      * What the variable name says.

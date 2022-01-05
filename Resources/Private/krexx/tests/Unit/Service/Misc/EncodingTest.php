@@ -124,7 +124,7 @@ class EncodingTest extends AbstractTest
 
         $specialChars = [
             '"' => '&quot;',
-            '\'' => '\&amp;#039;',
+            '\'' => '&#039;',
             "\0" => '&#039; . &quot;\0&quot; . &#039;',
             "\xEF" => '&#039; . &quot;\xEF&quot; . &#039;',
             "\xBB" => '&#039; . &quot;\xBB&quot; . &#039;',
