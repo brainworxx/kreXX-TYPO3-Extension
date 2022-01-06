@@ -65,6 +65,8 @@ class Typo3DbQueryParser extends OriginalParser
      * Short-circuiting the convertQueryToDoctrineQueryBuilder to make sure that
      * it still works outside extbase.
      *
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
+     *
      * {@inheritDoc}
      */
     public function convertQueryToDoctrineQueryBuilder(QueryInterface $query)
