@@ -121,9 +121,8 @@ class Scope implements CallbackConstInterface, ConfigConstInterface
      */
     public function isInScope(): bool
     {
-        return  $this->pool->emergencyHandler->getNestingLevel() <= 1 &&
-            $this->scope === static::THIS_SCOPE &&
-            $this->pool->config->getSetting(static::SETTING_USE_SCOPE_ANALYSIS);
+        return $this->scope === static::THIS_SCOPE &&
+            $this->pool->emergencyHandler->getNestingLevel() <= 1;
     }
 
     /**

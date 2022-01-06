@@ -133,9 +133,6 @@
 			<trans-unit id="analyseGetter">
 				<source>Shall kreXX try to determine the output of getter methods? These methods will not be called. kreXX will try to get the (possible) result from the class properties, which may lead to false results.</source>
 			</trans-unit>
-			<trans-unit id="useScopeAnalysis">
-				<source>Shall kreXX analyse all reachable class properties and methods? If set to "TRUE", the configuration for private and protected stuff is overwritten, in case that value is reachable.</source>
-			</trans-unit>
 			<trans-unit id="arrayCountLimit">
 				<source>When encountering an array larger than this number, kreXX will resort to a simplified array analysis. This means that classes or other arrays in this large array will only get a rudimentary analysis to prevent an overkill output.</source>
 			</trans-unit>
@@ -349,9 +346,6 @@
 			</trans-unit>
 			<trans-unit id="label.analyseGetter">
 				<source>Analyse getter methods:</source>
-			</trans-unit>
-			<trans-unit id="label.useScopeAnalysis">
-				<source>Use scope analysis</source>
 			</trans-unit>
 			<trans-unit id="label.maxStepNumber">
 				<source>Maximum steps in the backtrace:</source>

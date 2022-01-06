@@ -56,15 +56,15 @@ class AbstractControllerTest extends AbstractTest
     {
         // Mock the settings.
         $fileMock = $this->createMock(Config::class);
-        $fileMock->expects($this->once())
+        $fileMock->expects($this->any())
             ->method('getSetting')
             ->will($this->returnValue(ConfigConstInterface::VALUE_FILE));
         $browserMock = $this->createMock(Config::class);
-        $browserMock->expects($this->once())
+        $browserMock->expects($this->any())
             ->method('getSetting')
             ->will($this->returnValue(ConfigConstInterface::VALUE_BROWSER));
         $immediateMock = $this->createMock(Config::class);
-        $immediateMock->expects($this->once())
+        $immediateMock->expects($this->any())
             ->method('getSetting')
             ->will($this->returnValue(ConfigConstInterface::VALUE_BROWSER_IMMEDIATELY));
 

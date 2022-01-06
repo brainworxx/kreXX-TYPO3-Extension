@@ -173,10 +173,12 @@ class PoolTest extends AbstractTest
         Krexx::$pool->recursionHandler = new stdClass();
         Krexx::$pool->codegenHandler = new stdClass();
         Krexx::$pool->scope = new stdClass();
+        Krexx::$pool->routing = new stdClass();
         Krexx::$pool->reset();
 
         $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->recursionHandler);
         $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->codegenHandler);
         $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->scope);
+        $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->routing);
     }
 }

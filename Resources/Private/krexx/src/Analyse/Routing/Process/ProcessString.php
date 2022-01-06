@@ -77,6 +77,13 @@ class ProcessString extends AbstractRouting implements
     protected $bufferInfoThreshold = 20;
 
     /**
+     * Caching og the setting SETTING_ANALYSE_SCALAR
+     *
+     * @var bool
+     */
+    protected $analyseScalar;
+
+    /**
      * Inject the pool and initialize the buffer-info class.
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
@@ -94,7 +101,10 @@ class ProcessString extends AbstractRouting implements
             $pool->messages->addMessage('fileinfoNotInstalled');
         }
 
-        $this->scalarString = $pool->createClass(ScalarString::class);
+        $this->analyseScalar = $this->pool->config->getSetting(static::SETTING_ANALYSE_SCALAR);
+        if ($this->analyseScalar === true) {
+            $this->scalarString = $pool->createClass(ScalarString::class);
+        }
     }
 
     /**
@@ -143,7 +153,7 @@ class ProcessString extends AbstractRouting implements
             $model->setNormal($this->pool->encodingService->encodeString($data));
         }
 
-        if ($this->pool->config->getSetting(static::SETTING_ANALYSE_SCALAR) === true) {
+        if ($this->analyseScalar === true) {
             return $this->handleStringScalar($model, $originalData);
         }
 

@@ -248,6 +248,9 @@ interface ConfigConstInterface
     /**
      * Array key. Holds the value of useScopeAnalysis.
      *
+     * @deprecated since 5.0.0 Will be removed
+     *   The setting for the scope analysis was removed.
+     *
      * @var string
      */
     public const SETTING_USE_SCOPE_ANALYSIS = 'useScopeAnalysis';

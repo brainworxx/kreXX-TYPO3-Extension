@@ -232,9 +232,14 @@ class Pool extends AbstractFactory
         // We need to reset our recursion handler, because
         // the content of classes might change with another run.
         $this->createClass(Recursion::class);
+
         // Initialize the code generation.
         $this->createClass(Codegen::class);
         $this->createClass(Scope::class);
+
+        // Reset the routing, because they cache their settings.
+        $this->createClass(Routing::class);
+
         // We also initialize emergency handler timer.
         $this->emergencyHandler->initTimer();
     }

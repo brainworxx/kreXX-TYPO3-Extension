@@ -89,6 +89,10 @@ class ProcessStringTest extends AbstractTest
             FileinfoDummy::class,
             $this->retrieveValueByReflection(static::BUFFER_INFO, $processor)
         );
+
+        // And while we are at it, test if the internal setting was set.
+        $this->assertNotNull($this->retrieveValueByReflection('scalarString', $processor));
+        $this->assertNotNull($this->retrieveValueByReflection('analyseScalar', $processor));
     }
 
     /**

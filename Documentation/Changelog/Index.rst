@@ -26,6 +26,9 @@ Changelog
     - [Change] Reworked some help texts.
     - [Change] Input elements are now allowed to not have any eval callback.
     - [Change] Remove the inherited constants from the kreXX main class.
+    - [Change] String and array analysis now cache their settings.
+    - [Change] The ScalarString class gets instantiated only once per run.
+    - [Change] Removed the scope analysis setting.
 
 4.1.3
     - [Feature] Added microtime analysis to the float routing.

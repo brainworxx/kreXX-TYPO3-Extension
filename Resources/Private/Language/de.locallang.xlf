@@ -173,10 +173,6 @@
 				<source>Shall kreXX try to determine the output of getter methods? These methods will not be called. kreXX will try to get the (possible) result from the class properties, which may lead to false results.</source>
 				<target>Soll kreXX versuchen die Ergebnisse von Getter-Methoden zu erraten? Diese Methoden werden nicht aufgerufen. kreXX wird versuchen die (möglichen) Werte aus den Klassen Properties zu zeihen, was zu falschen Ergebnissen führen kann.</target>
 			</trans-unit>
-			<trans-unit id="useScopeAnalysis">
-				<source>Shall kreXX analyse all reachable class properties and methods? If set to "TRUE", the configuration for private and protected stuff is overwritten, in case that value is reachable.</source>
-				<target>Soll kreXX alle erreichbaren Klassen Properties und Methoden analysieren? Wenn ja, werden die entsprechenden Einstellungen lokal überschrieben, falls die dazugehörigen Werte erreichbar sind.</target>
-			</trans-unit>
 			<trans-unit id="arrayCountLimit">
 				<source>When encountering an array larger than this number, kreXX will resort to a simplified array analysis. This means that classes or other arrays in this large array will only get a rudimentary analysis to prevent an overkill output.</source>
 				<target>Wenn kreXX auf einen sehr großen Array analysieren soll wird eine einfachere Array Analyse genutzt. Das bedeutet, dass Objekte oder andere Arrays welche darin enthalten sind nur rudimentär analysiert werden, um nicht zu viel Output zu erzeugen.</target>
@@ -457,10 +453,6 @@
 			<trans-unit id="label.analyseGetter">
 				<source>Analyse getter methods:</source>
 				<target>Analysiere Getter Methoden:</target>
-			</trans-unit>
-			<trans-unit id="label.useScopeAnalysis">
-				<source>Use scope analysis</source>
-				<target>Benutze die Scope Analyse</target>
 			</trans-unit>
 			<trans-unit id="label.maxStepNumber">
 				<source>Maximum steps in the backtrace:</source>

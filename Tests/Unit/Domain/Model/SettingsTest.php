@@ -151,7 +151,6 @@ class SettingsTest extends AbstractTest implements ConstInterface
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmaxStepNumber
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmemoryLeft
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormskin
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormuseScopeAnalysis
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseScalar
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setIprange
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLevel
@@ -161,7 +160,6 @@ class SettingsTest extends AbstractTest implements ConstInterface
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMaxStepNumber
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMemoryLeft
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setSkin
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setUseScopeAnalysis
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setActivateT3FileWriter
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLoglevelT3FileWriter
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormactivateT3FileWriter
@@ -184,7 +182,7 @@ class SettingsTest extends AbstractTest implements ConstInterface
 
         $settingsModel = new Settings();
         $validationMock = $this->createMock(Validation::class);
-        $validationMock->expects($this->exactly(24))
+        $validationMock->expects($this->exactly(23))
             ->method('evaluateSetting')
             ->will($this->returnValue(true));
         Krexx::$pool->config->validation = $validationMock;
@@ -220,7 +218,6 @@ class SettingsTest extends AbstractTest implements ConstInterface
                 Fallback::SETTING_SKIN => Fallback::SETTING_SKIN,
                 Fallback::SETTING_DESTINATION => Fallback::SETTING_DESTINATION,
                 Fallback::SETTING_MAX_FILES => Fallback::SETTING_MAX_FILES,
-                Fallback::SETTING_USE_SCOPE_ANALYSIS => Fallback::SETTING_USE_SCOPE_ANALYSIS,
                 Fallback::SETTING_LANGUAGE_KEY => Fallback::SETTING_LANGUAGE_KEY,
             ],
             Fallback::SECTION_PRUNE => [
@@ -264,7 +261,6 @@ class SettingsTest extends AbstractTest implements ConstInterface
                 Fallback::SETTING_ANALYSE_GETTER => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_MEMORY_LEFT => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_MAX_RUNTIME => Fallback::RENDER_TYPE_CONFIG_FULL,
-                Fallback::SETTING_USE_SCOPE_ANALYSIS => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_MAX_STEP_NUMBER => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_ARRAY_COUNT_LIMIT => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_LANGUAGE_KEY => Fallback::RENDER_TYPE_CONFIG_FULL,
