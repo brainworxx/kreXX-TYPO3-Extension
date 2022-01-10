@@ -166,8 +166,8 @@ abstract class AbstractController extends ActionController implements ConstInter
         if ($this->livePreset->isActive()) {
             //Display a warning, if we are in Productive / Live settings.
             $this->addFlashMessage(
-                static::translate('debugpreset.warning.message', static::EXT_KEY),
-                static::translate('debugpreset.warning.title', static::EXT_KEY),
+                static::translate('debugpreset.warning.message'),
+                static::translate('debugpreset.warning.title'),
                 AbstractMessage::WARNING
             );
         }
@@ -224,8 +224,8 @@ abstract class AbstractController extends ActionController implements ConstInter
         foreach ($messages as $message) {
             // And translate them.
             $this->addFlashMessage(
-                static::translate($message->getKey(), static::EXT_KEY, $message->getArguments()),
-                static::translate('general.error.title', static::EXT_KEY),
+                static::translate($message->getKey(), $message->getArguments()),
+                static::translate('general.error.title'),
                 AbstractMessage::ERROR
             );
         }
@@ -314,12 +314,12 @@ abstract class AbstractController extends ActionController implements ConstInter
     protected function generateAjaxTranslations(): string
     {
         $translation = new stdClass();
-        $translation->deletefile = static::translate('ajax.delete.file', static::EXT_KEY);
-        $translation->error = static::translate('ajax.error', static::EXT_KEY);
-        $translation->in = static::translate('ajax.in', static::EXT_KEY);
-        $translation->line = static::translate('ajax.line', static::EXT_KEY);
-        $translation->updatedLoglist = static::translate('ajax.updated.loglist', static::EXT_KEY);
-        $translation->deletedCookies = static::translate('ajax.deleted.cookies', static::EXT_KEY);
+        $translation->deletefile = static::translate('ajax.delete.file');
+        $translation->error = static::translate('ajax.error');
+        $translation->in = static::translate('ajax.in');
+        $translation->line = static::translate('ajax.line');
+        $translation->updatedLoglist = static::translate('ajax.updated.loglist');
+        $translation->deletedCookies = static::translate('ajax.deleted.cookies');
 
         return 'var ajaxTranslate = ' .  json_encode($translation) . ';';
     }

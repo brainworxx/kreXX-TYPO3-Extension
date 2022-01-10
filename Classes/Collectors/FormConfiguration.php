@@ -123,16 +123,13 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
     {
         return [
             static::RENDER_TYPE_CONFIG_FULL => static::translate(
-                static::RENDER_TYPE_CONFIG_FULL,
-                static::EXT_KEY
+                static::RENDER_TYPE_CONFIG_FULL
             ),
             static::RENDER_TYPE_CONFIG_DISPLAY => static::translate(
-                static::RENDER_TYPE_CONFIG_DISPLAY,
-                static::EXT_KEY
+                static::RENDER_TYPE_CONFIG_DISPLAY
             ),
             static::RENDER_TYPE_CONFIG_NONE => static::translate(
-                static::RENDER_TYPE_CONFIG_NONE,
-                static::EXT_KEY
+                static::RENDER_TYPE_CONFIG_NONE
             )
         ];
     }

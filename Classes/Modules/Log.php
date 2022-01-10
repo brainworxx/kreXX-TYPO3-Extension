@@ -240,7 +240,6 @@ class Log extends AbstractSubModule implements
             $renderedMessages .= $this->renderMessage(
                 static::translate(
                     static::TRANSLATION_PREFIX . $message->getKey(),
-                    static::EXT_KEY,
                     $message->getArguments()
                 ),
                 static::MESSAGE_SEVERITY_ERROR

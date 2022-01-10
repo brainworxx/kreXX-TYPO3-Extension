@@ -60,8 +60,8 @@ class IndexController extends AbstractController implements ConstInterface
         if ($this->hasAccess() === false) {
             // Sorry!
             $this->addFlashMessage(
-                static::translate(static::ACCESS_DENIED, static::EXT_KEY),
-                static::translate(static::ACCESS_DENIED, static::EXT_KEY),
+                static::translate(static::ACCESS_DENIED),
+                static::translate(static::ACCESS_DENIED),
                 AbstractMessage::ERROR
             );
             if (method_exists($this, 'htmlResponse') === true) {
@@ -102,8 +102,8 @@ class IndexController extends AbstractController implements ConstInterface
     {
         if ($this->hasAccess() === false) {
             $this->addFlashMessage(
-                static::translate(static::ACCESS_DENIED, static::EXT_KEY),
-                static::translate(static::SAVE_FAIL_TITLE, static::EXT_KEY),
+                static::translate(static::ACCESS_DENIED),
+                static::translate(static::SAVE_FAIL_TITLE),
                 AbstractMessage::ERROR
             );
             return $this->redirect('index');
@@ -116,14 +116,14 @@ class IndexController extends AbstractController implements ConstInterface
         if (is_writable(dirname($jsonPath)) && file_put_contents($jsonPath, $settings->generateContent())) {
             // File was saved successfully.
             $this->addFlashMessage(
-                static::translate(static::SAVE_SUCCESS_TEXT, static::EXT_KEY, [$displayFilePath]),
-                static::translate(static::SAVE_SUCCESS_TITLE, static::EXT_KEY)
+                static::translate(static::SAVE_SUCCESS_TEXT, [$displayFilePath]),
+                static::translate(static::SAVE_SUCCESS_TITLE)
             );
         } else {
             // Something went wrong here!
             $this->addFlashMessage(
-                static::translate(static::FILE_NOT_WRITABLE, static::EXT_KEY, [$displayFilePath]),
-                static::translate(static::SAVE_FAIL_TITLE, static::EXT_KEY),
+                static::translate(static::FILE_NOT_WRITABLE, [$displayFilePath]),
+                static::translate(static::SAVE_FAIL_TITLE),
                 AbstractMessage::ERROR
             );
         }

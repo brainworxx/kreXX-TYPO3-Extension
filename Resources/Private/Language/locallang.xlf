@@ -18,7 +18,7 @@
 			<trans-unit id="browser">
 				<source>Browser shutdown phase</source>
 			</trans-unit>
-			<trans-unit id="browserImmediately'">
+			<trans-unit id="browserImmediately">
 				<source>Browser immediately</source>
 			</trans-unit>
 			<trans-unit id="true">

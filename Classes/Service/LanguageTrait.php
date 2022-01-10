@@ -53,20 +53,18 @@ trait LanguageTrait
      *
      * @param string $key
      *   The key from the LOCAL_LANG array for which to return the value.
-     * @param string|null $extensionName
-     *   The name of the extension
      * @param array|null $arguments
      *   The arguments of the extension, being passed over to vsprintf
      *
      * @return string|null
      *   The value from LOCAL_LANG or null if no translation was found.
      */
-    public static function translate(string $key, string $extensionName = null, array $arguments = null): ?string
+    public static function translate(string $key, array $arguments = null): ?string
     {
         if (defined('KREXX_TEST_IN_PROGRESS')) {
             return $key;
         }
 
-        return LocalizationUtility::translate($key, $extensionName, $arguments);
+        return LocalizationUtility::translate($key, 'includekrexx', $arguments);
     }
 }

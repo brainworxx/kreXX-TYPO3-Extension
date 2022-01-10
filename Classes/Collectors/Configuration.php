@@ -78,23 +78,23 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
             $dropdown['skins'][$skin] = $skin;
         }
         $dropdown[static::SETTING_DESTINATION] = [
-            static::VALUE_BROWSER => static::translate(static::VALUE_BROWSER, static::EXT_KEY),
-            static::VALUE_FILE => static::translate(static::VALUE_FILE, static::EXT_KEY),
-            static::VALUE_BROWSER_IMMEDIATELY => static::translate(static::VALUE_BROWSER_IMMEDIATELY, static::EXT_KEY),
+            static::VALUE_BROWSER => static::translate(static::VALUE_BROWSER),
+            static::VALUE_FILE => static::translate(static::VALUE_FILE),
+            static::VALUE_BROWSER_IMMEDIATELY => static::translate(static::VALUE_BROWSER_IMMEDIATELY),
         ];
         $dropdown['bool'] = [
-            static::VALUE_TRUE => static::translate(static::VALUE_TRUE, static::EXT_KEY),
-            static::VALUE_FALSE => static::translate(static::VALUE_FALSE, static::EXT_KEY),
+            static::VALUE_TRUE => static::translate(static::VALUE_TRUE),
+            static::VALUE_FALSE => static::translate(static::VALUE_FALSE),
         ];
         $dropdown['loglevel'] = [
-            LogLevel::DEBUG => static::translate('loglevel.debug', static::EXT_KEY),
-            LogLevel::INFO => static::translate('loglevel.info', static::EXT_KEY),
-            LogLevel::NOTICE => static::translate('loglevel.notice', static::EXT_KEY),
-            LogLevel::WARNING => static::translate('loglevel.warning', static::EXT_KEY),
-            LogLevel::ERROR => static::translate('loglevel.error', static::EXT_KEY),
-            LogLevel::CRITICAL => static::translate('loglevel.critical', static::EXT_KEY),
-            LogLevel::ALERT => static::translate('loglevel.alert', static::EXT_KEY),
-            LogLevel::EMERGENCY => static::translate('loglevel.emergency', static::EXT_KEY),
+            LogLevel::DEBUG => static::translate('loglevel.debug'),
+            LogLevel::INFO => static::translate('loglevel.info'),
+            LogLevel::NOTICE => static::translate('loglevel.notice'),
+            LogLevel::WARNING => static::translate('loglevel.warning'),
+            LogLevel::ERROR => static::translate('loglevel.error'),
+            LogLevel::CRITICAL => static::translate('loglevel.critical'),
+            LogLevel::ALERT => static::translate('loglevel.alert'),
+            LogLevel::EMERGENCY => static::translate('loglevel.emergency'),
         ];
         $dropdown['languages'] = $this->pool->config->getLanguageList();
 

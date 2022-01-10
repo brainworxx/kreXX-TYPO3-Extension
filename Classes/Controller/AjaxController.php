@@ -107,7 +107,7 @@ class AjaxController implements ConstInterface, ControllerConstInterface
 
         if ($this->hasAccess() === false) {
             $result->class  = 'error';
-            $result->text = static::translate(static::ACCESS_DENIED, static::EXT_KEY);
+            $result->text = static::translate(static::ACCESS_DENIED);
 
             $response->getBody()->write(json_encode($result));
             return $response;
@@ -122,10 +122,10 @@ class AjaxController implements ConstInterface, ControllerConstInterface
 
         if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
             $result->class  = 'success';
-            $result->text = static::translate('fileDeleted', static::EXT_KEY, [$fileId]);
+            $result->text = static::translate('fileDeleted', [$fileId]);
         } else {
             $result->class  = 'error';
-            $result->text = static::translate('fileDeletedFail', static::EXT_KEY, ['n/a']);
+            $result->text = static::translate('fileDeletedFail', ['n/a']);
         }
 
         $response->getBody()->write(json_encode($result));
