@@ -73,8 +73,7 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
     protected function retrieveDropDowns(): array
     {
         // Adding the dropdown values.
-        $dropdown = [];
-        $dropdown['skins'] = [];
+        $dropdown = ['skins' => []];
         foreach ($this->pool->config->getSkinList() as $skin) {
             $dropdown['skins'][$skin] = $skin;
         }

@@ -159,18 +159,15 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     {
         // Get the absolute site path. The constant PATH_site is deprecated
         // since 9.2.
-        $pathSite = class_exists(Environment::class) ? Environment::getPublicPath() . '/' : PATH_site;
-        $pathSite .= 'typo3temp';
+        $pathSite = class_exists(Environment::class) ? Environment::getPublicPath() . DIRECTORY_SEPARATOR : PATH_site;
+        $pathSite .= 'typo3temp' . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX;
 
         // See if we must create a temp directory for kreXX.
         return [
-            'main' => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX,
-            Fallback::LOG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
-                DIRECTORY_SEPARATOR . Fallback::LOG_FOLDER,
-            Fallback::CHUNKS_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
-                DIRECTORY_SEPARATOR . Fallback::CHUNKS_FOLDER,
-            Fallback::CONFIG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
-                DIRECTORY_SEPARATOR . Fallback::CONFIG_FOLDER,
+            'main' => $pathSite,
+            Fallback::LOG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . Fallback::LOG_FOLDER,
+            Fallback::CHUNKS_FOLDER => $pathSite . DIRECTORY_SEPARATOR . Fallback::CHUNKS_FOLDER,
+            Fallback::CONFIG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . Fallback::CONFIG_FOLDER,
         ];
     }
 
@@ -321,8 +318,8 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
                 // Create it!
                 GeneralUtility::mkdir($tempPath);
                 // Protect it!
-                GeneralUtility::writeFileToTypo3tempDir($tempPath . '/' . '.htaccess', $htAccess);
-                GeneralUtility::writeFileToTypo3tempDir($tempPath . '/' . 'index.html', $indexHtml);
+                GeneralUtility::writeFileToTypo3tempDir($tempPath . DIRECTORY_SEPARATOR . '.htaccess', $htAccess);
+                GeneralUtility::writeFileToTypo3tempDir($tempPath . DIRECTORY_SEPARATOR . 'index.html', $indexHtml);
             }
         }
     }
