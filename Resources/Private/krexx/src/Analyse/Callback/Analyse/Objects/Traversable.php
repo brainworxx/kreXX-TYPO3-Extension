@@ -38,7 +38,6 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use ArrayAccess;
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
@@ -55,7 +54,7 @@ use Throwable;
  *   The variable name or key in the parent object / array where the current
  *   class is stored.
  */
-class Traversable extends AbstractObjectAnalysis implements CallbackConstInterface, ConfigConstInterface
+class Traversable extends AbstractObjectAnalysis implements ConfigConstInterface
 {
     /**
      * Checks runtime, memory and nesting level. Then trigger the actual analysis.
@@ -129,20 +128,10 @@ class Traversable extends AbstractObjectAnalysis implements CallbackConstInterfa
      */
     protected function analyseTraversableResult($originalClass, array $result): string
     {
-        // Special Array Access here, resulting in more complicated source
-        // generation. So we tell the callback to that.
-        $multiline = true;
-
-        // Normal ArrayAccess, direct access to the array. Nothing special
-        // SplObject pool use the object as keys, so we need some
-        // multiline stuff!
-        // A SplObject is also an ArrayAccess btw.
-        if (
-            ($originalClass instanceof ArrayAccess) &&
-            ($originalClass instanceof SplObjectStorage) === false
-        ) {
-            $multiline = false;
-        }
+        // Direct access to the iterator object,de depending on the object itself.
+        $multiline = ($originalClass instanceof ArrayAccess) === false
+            || ($originalClass instanceof SplObjectStorage) === true;
+        $messages = $this->pool->messages;
 
         /** @var Model $model */
         $model = $this->pool->createClass(Model::class)
@@ -150,17 +139,18 @@ class Traversable extends AbstractObjectAnalysis implements CallbackConstInterfa
             ->setType(static::TYPE_FOREACH)
             ->addParameter(static::PARAM_DATA, $result)
             ->addParameter(static::PARAM_MULTILINE, $multiline)
-            ->addToJson($this->pool->messages->getHelp('metaLength'), (string)count($result));
+            ->addToJson($messages->getHelp('metaLength'), (string)count($result));
 
         // Check, if we are handling a huge array. Huge arrays tend to result in a huge
         // output, maybe even triggering an emergency break. to avoid this, we give them
         // a special callback.
         if (count($result) > (int) $this->pool->config->getSetting(static::SETTING_ARRAY_COUNT_LIMIT)) {
             $model->injectCallback($this->pool->createClass(ThroughLargeArray::class))
-                ->setNormal('Simplified Traversable Info')
+                ->setNormal($messages->getHelp('simplifiedTraversableInfo'))
                 ->setHelpid('simpleArray');
         } else {
-            $model->injectCallback($this->pool->createClass(ThroughArray::class))->setNormal('Traversable Info');
+            $model->injectCallback($this->pool->createClass(ThroughArray::class))
+                ->setNormal($messages->getHelp('traversableInfo'));
         }
 
         $analysisResult = $this->pool->render->renderExpandableChild(

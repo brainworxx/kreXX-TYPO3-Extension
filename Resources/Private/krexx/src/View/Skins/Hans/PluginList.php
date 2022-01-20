@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Skins\Hans;
 
-use Brainworxx\Krexx\Service\Plugin\PluginConstInterface;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 
 /**

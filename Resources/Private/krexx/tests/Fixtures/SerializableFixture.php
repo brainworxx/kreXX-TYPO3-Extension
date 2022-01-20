@@ -33,46 +33,41 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-declare(strict_types=1);
+namespace Brainworxx\Krexx\Tests\Fixtures;
 
-namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
+use Serializable as SerializableInterface;
 
-use ReflectionProperty;
-
-/**
- * Analysis of protected properties.
- *
- * @uses mixed data
- *   The class we are currently analysing.
- * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
- *   A reflection of the class we are currently analysing.
- */
-class ProtectedProperties extends AbstractObjectAnalysis
+class SerializableFixture implements SerializableInterface
 {
-    /**
-     * Dump all protected properties.
-     *
-     * @return string
-     *   The generated HTML markup
-     */
-    public function callMe(): string
+
+    protected $data;
+
+    public function __construct()
     {
-        $output = $this->dispatchStartEvent();
+        $this->data = "just a string";
+    }
 
-        /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
-        $ref = $this->parameters[static::PARAM_REF];
-        $refProps = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
-        if (empty($refProps) === true) {
-            return $output;
-        }
+    public function serialize()
+    {
+        return serialize($this->data);
+    }
 
-        usort($refProps, [$this, 'reflectionSorting']);
+    public function unserialize($data)
+    {
+        $this->data = unserialize($data);
+    }
 
-        return $output .
-            $this->getReflectionPropertiesData(
-                $refProps,
-                $ref,
-                'Protected properties'
-            );
+    public function getData() {
+        return $this->data;
+    }
+
+    public function __serialize(): array
+    {
+        return [$this->serialize()];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->unserialize($data);
     }
 }

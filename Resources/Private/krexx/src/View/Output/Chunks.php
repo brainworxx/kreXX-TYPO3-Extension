@@ -181,9 +181,7 @@ class Chunks implements ConfigConstInterface
     protected function genKey(): string
     {
         static $counter = 0;
-        ++$counter;
-
-        return $this->fileStamp . '_' . $counter;
+        return $this->fileStamp . '_' . ++$counter;
     }
 
     /**

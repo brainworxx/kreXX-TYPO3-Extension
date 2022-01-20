@@ -62,7 +62,7 @@ trait Header
         // Doing special stuff for smokygrey:
         // We hide the debug-tab when we are displaying the config-only and switch
         // to the config as the current payload.
-        if ($headline === static::HEADLINE_COOKIE_CONF) {
+        if ($headline === $this->pool->messages->getHelp('headlineCookieConf')) {
             $debugClass = static::STYLE_HIDDEN;
             $configClass = static::STYLE_ACTIVE;
         } else {

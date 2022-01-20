@@ -120,6 +120,20 @@ class DeepGetterFixture
     protected static $myStatic = 'eleven';
 
     /**
+     * Property for the 'is'er.
+     *
+     * @var bool
+     */
+    protected $myPropertyTwelve = true;
+
+    /**
+     * Prperty for the 'has'er.
+     *
+     * @var bool
+     */
+    protected $myPropertyThirteen = false;
+
+    /**
      * Just Null, and nothing more.
      *
      * @var null
@@ -286,5 +300,23 @@ class DeepGetterFixture
     {
     }
 
+    /**
+     * Is it 12?
+     *
+     * @return bool
+     */
+    public function isMyPropertyTwelve(): bool
+    {
+        return $this->myPropertyTwelve;
+    }
 
+    /**
+     * Has it 13? Probably not.
+     *
+     * @return bool
+     */
+    public function hasMyPropertyThirteen(): bool
+    {
+        return $this->myPropertyThirteen;
+    }
 }

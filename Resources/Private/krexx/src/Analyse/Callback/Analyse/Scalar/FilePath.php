@@ -55,6 +55,16 @@ class FilePath extends AbstractScalarAnalysis
     protected $bufferInfo;
 
     /**
+     * @var string
+     */
+    protected const REAL_PATH = 'realpath';
+
+    /**
+     * @var string
+     */
+    protected const MIME_TYPE = 'mimetype';
+
+    /**
      * No file path analysis without the finfo class.
      *
      * @return bool
@@ -92,12 +102,45 @@ class FilePath extends AbstractScalarAnalysis
      */
     public function canHandle($string, Model $model): bool
     {
-        if (empty($string) === true) {
+        // Some fast static caching.
+        static $cache = [];
+
+        if (strlen($string) < 25) {
             // Early return for the most values.
             return false;
         }
 
-        // Prevent a warning in case of open_basedir restrictions.
+        if (isset($cache[$string]) === false) {
+            $cache[$string] = $this->retrieveFileInfo($string);
+        }
+
+        if (empty($cache[$string]) === true) {
+            // Not a file.
+            return false;
+        }
+
+        if (empty($cache[$string][static::REAL_PATH]) === false) {
+            $model->addToJson('Real path', $cache[$string][static::REAL_PATH]);
+        }
+
+        if (empty($cache[$string][static::MIME_TYPE]) === false) {
+            $model->addToJson(
+                $this->pool->messages->getHelp('metaMimeTypeFile'),
+                $cache[$string][static::MIME_TYPE]
+            );
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $string
+     * @return string[]
+     */
+    protected function retrieveFileInfo(string $string): array
+    {
+        $result = [];
+
         set_error_handler(function () {
             // Do nothing.
         });
@@ -108,20 +151,20 @@ class FilePath extends AbstractScalarAnalysis
             $isFile = false;
         }
 
-        if ($isFile === true) {
-            $realPath = realpath($string);
-            if ($string !== $realPath) {
-                // We only add the realpath, if it differs from the string
-                $model->addToJson('Real path', is_string($realPath) === true ? $realPath : 'n/a');
-            }
-            $model->addToJson(
-                $this->pool->messages->getHelp('metaMimeTypeFile'),
-                $this->bufferInfo->file($string)
-            );
+        if ($isFile === false) {
+            // Early return
+            return $result;
         }
+
+        $realPath = realpath($string);
+        if ($string !== $realPath) {
+            // We only add the realpath, if it differs from the string
+            $result[static::REAL_PATH] = $realPath;
+        }
+        $result[static::MIME_TYPE] = $this->bufferInfo->file($string);
 
         restore_error_handler();
 
-        return false;
+        return $result;
     }
 }

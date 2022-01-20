@@ -149,38 +149,9 @@ class XmlTest extends AbstractTest
 &nbsp;&nbsp;&lt;node&gt;rogue text&lt;yxcv qwer=&quot;asdf&quot;&gt;&lt;![CDATA[content]]&gt;&lt;/yxcv&gt;&lt;yxcv qwer=&quot;yxcv&quot;/&gt;&lt;/node&gt;
 &lt;/root&gt;
 ';
-        $decoded = [
-            0 => [
-                'name' => 'ROOT',
-                static::CHILDREN => [
-                    [
-                        'name' => 'NODE',
-                        static::CHILDREN => [
-                            'rogue text',
-                            [
-                                'name' => 'YXCV',
-                                static::ATTRIBUTES => [
-                                    'QWER' => 'asdf'
-                                ],
-                                static::CHILDREN => [
-                                    'content'
-                                ],
-                            ],
-                            [
-                                'name' => 'YXCV',
-                                static::ATTRIBUTES => [
-                                    'QWER' => 'yxcv'
-                                ],
-                            ],
-                        ],
-                    ]
-                ],
-            ]
-        ];
 
         $this->assertEquals(1, CallbackCounter::$counter);
         $result = CallbackCounter::$staticParameters[0][XML::PARAM_DATA];
         $this->assertEquals($prettyPrint, $result['Pretty print']);
-        $this->assertEquals($decoded, $result['Decoded xml']);
     }
 }

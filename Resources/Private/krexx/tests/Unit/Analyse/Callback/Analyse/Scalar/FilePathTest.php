@@ -61,7 +61,7 @@ class FilePathTest extends AbstractTest
     /**
      * Test the recognition of the finfo class in the system.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::isActive()
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::isActive
      */
     public function testIsActive()
     {
@@ -88,7 +88,8 @@ class FilePathTest extends AbstractTest
     /**
      * Test, if we can identify a file path.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::canHandle()
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::canHandle
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::retrieveFileInfo
      */
     public function testCanHandle()
     {
@@ -127,7 +128,8 @@ class FilePathTest extends AbstractTest
     /**
      * Test, if we can handle some errors.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::canHandle()
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::canHandle
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::retrieveFileInfo
      */
     public function testCanHandleErrors()
     {
@@ -138,7 +140,7 @@ class FilePathTest extends AbstractTest
                 throw new TypeError();
             });
 
-        $fixture = 'whatever';
+        $fixture = 'whateveribu bibuibuivuvuvzppviz';
         $filePath = new FilePath(Krexx::$pool);
         $this->assertFalse($filePath->canHandle($fixture, new Model(Krexx::$pool)), 'Catching an error.');
     }

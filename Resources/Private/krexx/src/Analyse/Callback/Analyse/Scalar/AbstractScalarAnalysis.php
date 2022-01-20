@@ -53,6 +53,14 @@ abstract class AbstractScalarAnalysis extends AbstractCallback implements Callba
      * @var string
      */
     protected $codeGenType = '';
+
+    /**
+     * Classname that renders the data.
+     *
+     * @var string
+     */
+    protected $iteratorRenderer = ThroughMeta::class;
+
     /**
      * Is this scalar deep analysis class able to do something here?
      *
@@ -96,7 +104,7 @@ abstract class AbstractScalarAnalysis extends AbstractCallback implements Callba
         $model = $this->pool->createClass(Model::class)
             ->addParameter(static::PARAM_DATA, $meta)
             ->addParameter(static::PARAM_CODE_GEN_TYPE, $this->codeGenType)
-            ->injectCallback($this->pool->createClass(ThroughMeta::class));
+            ->injectCallback($this->pool->createClass($this->iteratorRenderer));
 
         // We render the model directly. This class acts only as a proxy.
         return $output . $this->dispatchEventWithModel(__FUNCTION__ . static::EVENT_MARKER_END, $model)->renderMe();

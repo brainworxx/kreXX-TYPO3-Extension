@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Skins;
 
-use Brainworxx\Krexx\Controller\ControllerConstInterface;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Button;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild;
@@ -51,7 +50,7 @@ use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
 /**
  * Individual render class for the smokey-grey skin.
  */
-class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
+class RenderSmokyGrey extends RenderHans
 {
     use ExpandableChild;
     use Recursion;

@@ -46,7 +46,10 @@ class HeaderTest extends AbstractRenderSmokyGrey
      */
     public function testRenderHeader()
     {
-        $result = $this->renderSmokyGrey->renderHeader($this->renderSmokyGrey::HEADLINE_COOKIE_CONF, '');
+        $result = $this->renderSmokyGrey->renderHeader(
+            \Krexx::$pool->messages->getHelp('headlineCookieConf'),
+            ''
+        );
         $this->assertStringContainsString('khidden', $result);
         $this->assertStringContainsString('kactive', $result);
 

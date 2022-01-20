@@ -109,12 +109,11 @@ abstract class AbstractRender implements RenderInterface
             return static::$fileCache[$what];
         }
 
-        static::$fileCache[$what] = preg_replace(
+        return static::$fileCache[$what] = preg_replace(
             '/\s+/',
             ' ',
             $this->pool->fileService->getFileContents($this->skinPath . $what . '.html')
         );
-        return static::$fileCache[$what];
     }
 
     /**
@@ -168,10 +167,6 @@ abstract class AbstractRender implements RenderInterface
      */
     protected function generateDataAttribute(string $name, string $data): string
     {
-        if (empty($data) === true) {
-            return '';
-        }
-
         return ' data-' . $name . '="' . str_replace('"', '&#34;', $data) . '" ';
     }
 

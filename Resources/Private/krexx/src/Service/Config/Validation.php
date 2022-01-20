@@ -109,7 +109,7 @@ class Validation extends Fallback
      * @see \Brainworxx\Krexx\Service\Config\Config::isAllowedDebugCall()
      * @see \Brainworxx\Krexx\Service\Plugin\Registration::addMethodToDebugBlacklist()
      *
-     * @var string[]
+     * @var string[][]
      */
     protected $methodBlacklist = [];
 

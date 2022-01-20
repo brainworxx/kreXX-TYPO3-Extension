@@ -37,27 +37,15 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
-use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Misc\FormatSerialize;
 
-/**
- * Deep analysis for json strings.
- */
-class Json extends AbstractScalarAnalysis implements CodegenConstInterface
+class Serialized extends AbstractScalarAnalysis
 {
     /**
-     * Code generation for this one is the json encoder.
-     *
      * @var string
      */
-    protected $codeGenType = self::CODEGEN_TYPE_JSON_DECODE;
-
-    /**
-     * What the variable name says.
-     *
-     * @var \stdClass|array
-     */
-    protected $decodedJson;
+    protected $originalString;
 
     /**
      * The model, so far.
@@ -67,15 +55,17 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
     protected $model;
 
     /**
-     * {@inheritDoc}
+     * Works only when hte multibyte extension is installed.
+     *
+     * @return bool
      */
     public static function isActive(): bool
     {
-        return function_exists('json_decode');
+        return true;
     }
 
     /**
-     * Test, if this is a json, and if we can decode it.
+     * Test if this one looks like a serialized whatever.
      *
      * @param string $string
      *   The string we want to take a look at.
@@ -87,46 +77,49 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
      */
     public function canHandle($string, Model $model): bool
     {
-        // Get a fist impression.
-        $first = substr($string, 0, 1);
-        if (($first === '{' xor $first === '[') === false) {
+        $jsonData = $model->getJson();
+        $jsonKey = $this->pool->messages->getHelp('metaMimeTypeString');
+        if (
+            isset($jsonData[$jsonKey]) === false
+            || strpos($jsonData[$jsonKey], 'binary') === false
+        ) {
+            // A serialised string is always binary.
+            // This should sort out 99% of our contestants.
             return false;
         }
 
-        // The only way to test a valid json, is to decode it.
-        $this->decodedJson = json_decode($string);
-        if (json_last_error() === JSON_ERROR_NONE || $this->decodedJson !== null) {
+        // We only handle objects and arrays.
+        // Everything else is not really pretty print worthy.
+        if (in_array(substr($string, 0, 2), ['o:', 'O:','a:', 'C:'], true) === true) {
+            $this->originalString = $string;
             $this->model = $model;
             return true;
         }
 
-        unset($this->decodedJson);
         return false;
     }
 
     /**
-     * Add the decoded json and a pretty-print-json to the output.
+     * We do some pretty print with the serialized string
      *
      * @return string[]
-     *   The array for the meta callback.
      */
     protected function handle(): array
     {
         $messages = $this->pool->messages;
-        $meta = [
-            $messages->getHelp('metaDecodedJson') => $this->decodedJson,
-            $messages->getHelp('metaPrettyPrint') => $this->pool->encodingService
-                ->encodeString(json_encode($this->decodedJson, JSON_PRETTY_PRINT))
-        ];
+        $meta = [];
+        $result = $this->pool->createClass(FormatSerialize::class)
+            ->prettyPrint($this->originalString);
 
-        // Move the extra part into a nest, for better readability.
-        if ($this->model->hasExtra() === true) {
+        if ($result !== null) {
+            $meta[$messages->getHelp('metaPrettyPrint')] = $this->pool
+                ->encodingService->encodeString($result);
             $this->model->setHasExtra(false);
             $meta[$messages->getHelp('metaContent')] = $this->model->getData();
         }
 
-        unset($this->decodedJson);
         unset($this->model);
+        $this->originalString = '';
 
         return $meta;
     }

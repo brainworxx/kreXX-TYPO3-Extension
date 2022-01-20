@@ -42,7 +42,6 @@ use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Plugin\PluginConstInterface;
 use Brainworxx\Krexx\View\AbstractRender;
-use Brainworxx\Krexx\View\RenderInterface;
 use Brainworxx\Krexx\View\Skins\Hans\BacktraceSourceLine;
 use Brainworxx\Krexx\View\Skins\Hans\Button;
 use Brainworxx\Krexx\View\Skins\Hans\ConnectorLeft;

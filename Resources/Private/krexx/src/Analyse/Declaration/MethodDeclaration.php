@@ -38,8 +38,8 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Declaration;
 
 use ReflectionClass;
-use Reflector;
 use ReflectionMethod;
+use Reflector;
 
 class MethodDeclaration extends AbstractDeclaration
 {

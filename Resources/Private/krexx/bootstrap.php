@@ -59,7 +59,9 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Callback/CallbackConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Caller/BacktraceConstInterface.php';
+        // deprecated
         include_once KREXX_DIR . 'src/Controller/ControllerConstInterface.php';
+        // deprecated
         include_once KREXX_DIR . 'src/Service/Config/ConfigConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Code/CodegenConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Code/ConnectorsConstInterface.php';
@@ -139,6 +141,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Json.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Xml.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/TimeStamp.php';
+        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Serialized.php';
 
         include_once KREXX_DIR . 'src/Analyse/Model/ConnectorService.php';
         include_once KREXX_DIR . 'src/Analyse/Model/Callback.php';
@@ -181,6 +184,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Service/Misc/Registry.php';
         include_once KREXX_DIR . 'src/Service/Misc/FileinfoDummy.php';
         include_once KREXX_DIR . 'src/Service/Misc/Cleanup.php';
+        include_once KREXX_DIR . 'src/Service/Misc/FormatSerialize.php';
 
         include_once KREXX_DIR . 'src/Service/Reflection/UndeclaredProperty.php';
         include_once KREXX_DIR . 'src/Service/Reflection/ReflectionClass.php';

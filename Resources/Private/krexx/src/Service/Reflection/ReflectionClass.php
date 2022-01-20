@@ -152,14 +152,9 @@ class ReflectionClass extends \ReflectionClass
 
     public function getInterfaces(): array
     {
-        // Get a list of the names.
-        $interfaceNames = $this->getInterfaceNames();
-        if (empty($interfaceNames)) {
-            return [];
-        }
-
         // Compare the names with the ones from the parent.
         $parent = $this->getParentClass();
+        $interfaceNames = $this->getInterfaceNames();
         if ($parent !== false) {
             $interfaceNames = array_diff($interfaceNames, $parent->getInterfaceNames());
         }

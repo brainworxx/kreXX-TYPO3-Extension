@@ -80,6 +80,13 @@ class Xml extends AbstractScalarAnalysis
     protected $tnodeOpen = false;
 
     /**
+     * Was the decoding of the XML successful?
+     *
+     * @var bool
+     */
+    protected $hasErrors = false;
+
+    /**
      * {@inheritDoc}
      */
     public static function isActive(): bool
@@ -117,6 +124,7 @@ class Xml extends AbstractScalarAnalysis
 
         $this->model = $model;
         $this->originalXml = $string;
+        $this->hasErrors = false;
 
         return true;
     }
@@ -129,38 +137,46 @@ class Xml extends AbstractScalarAnalysis
     protected function handle(): array
     {
         $meta = [];
+        $messages = $this->pool->messages;
+        // The pretty print done by a dom parser.
+        $dom = new DOMDocument("1.0");
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
 
-        set_error_handler(function () {
-           // Do nothing.
-        });
-        // We try to decode it.
-        $this->parseXml($this->originalXml);
+        set_error_handler(
+            function () {
+                $this->hasErrors = true;
+            });
+        $dom->loadXML($this->originalXml);
         restore_error_handler();
 
-        $messages = $this->pool->messages;
-        if (empty($this->decodedXml) === false) {
-            $meta[$messages->getHelp('metaDecodedXml')] = $this->decodedXml;
-            // The pretty print done by a dom parser.
-            $dom = new DOMDocument("1.0");
-            $dom->preserveWhiteSpace = false;
-            $dom->formatOutput = true;
-            $dom->loadXML($this->originalXml);
-            $meta[$messages->getHelp('metaPrettyPrint')] = $this->pool->encodingService->encodeString($dom->saveXML());
-        } else {
+        if ($this->hasErrors === true) {
             $meta[$messages->getHelp('metaDecodedXml')] = $this->pool->messages->getHelp('metaNoXml');
-        }
-
-        // Move the extra part into a nest, for better readability.
-        if ($this->model->hasExtra()) {
+        } else {
+            $meta[$messages->getHelp('metaPrettyPrint')] = $this->pool
+                ->encodingService
+                ->encodeString($dom->saveXML());
+            // Move the extra part into a nest, for better readability.
             $this->model->setHasExtra(false);
             $meta[$messages->getHelp('metaContent')] = $this->model->getData();
         }
+
+
+        $this->originalXml = '';
+        $this->hasErrors = false;
+        unset($this->model);
 
         return $meta;
     }
 
     /**
      * Parse an XML string into an array structure.
+     *
+     * @deprecated since 5.0.0
+     *   Will be removed
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated code.
      *
      * @param string $strInputXML
      *   The string we want to parse.
@@ -177,6 +193,12 @@ class Xml extends AbstractScalarAnalysis
 
     /**
      * Handle the opening of a tag.
+     *
+     * @deprecated since 5.0.0
+     *   Will be removed
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated code.
      *
      * @param resource $parser
      *   The parser resource.
@@ -198,6 +220,12 @@ class Xml extends AbstractScalarAnalysis
     /**
      * Retrieve the tag data.
      *
+     * @deprecated since 5.0.0
+     *   Will be removed
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated code.
+     *
      * @param resource $parser
      *   The parser resource.
      * @param string $tagData
@@ -218,6 +246,12 @@ class Xml extends AbstractScalarAnalysis
 
     /**
      * Handle the closing of a tag.
+     *
+     * @deprecated since 5.0.0
+     *   Will be removed
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated code.
      *
      * @param resource $parser
      *   The parser resource.

@@ -39,14 +39,13 @@ namespace Brainworxx\Krexx\Analyse\Code;
 
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Scope analysis decides if a property of method is accessible in the current
  * analysis scope.
  */
-class Scope implements CallbackConstInterface, ConfigConstInterface
+class Scope implements CallbackConstInterface
 {
     /**
      * We use this scope, when kreXX was called like kreXX($this);

@@ -41,7 +41,6 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 
 /**
  * Configuration output methods.
@@ -49,7 +48,7 @@ use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
  * @uses null
  *   There are no parameters available here.
  */
-class ThroughConfig extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
+class ThroughConfig extends AbstractCallback implements CallbackConstInterface
 {
     /**
      * Renders whole configuration.

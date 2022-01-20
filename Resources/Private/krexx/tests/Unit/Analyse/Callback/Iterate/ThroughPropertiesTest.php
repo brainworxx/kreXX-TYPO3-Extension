@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
+use Brainworxx\Krexx\Tests\Fixtures\ReadOnlyFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
@@ -63,6 +64,7 @@ class ThroughPropertiesTest extends AbstractTest
     const JSON_DECLARED_KEY = 'Declared in';
     const JSON_DEFAULT_VALUE = 'Default value';
     const PUBLIC_ARRAY_DEFAULT = 'array';
+    const READ_ONLY_STRING = 'readOnyString';
 
     /**
      * @var \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties
@@ -114,7 +116,7 @@ class ThroughPropertiesTest extends AbstractTest
     }
 
     /**
-     * Normal testrun for the property analysis.
+     * Normal test run for the property analysis.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
@@ -124,6 +126,7 @@ class ThroughPropertiesTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaringClassFromTraits
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDefaultValue
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveValueStatus
      *
      * @throws \ReflectionException
      */
@@ -368,11 +371,11 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->{\'',
             '\'}',
-            'public dynamic property '
+            'public dynamic '
         );
 
         // A array default value.
-         $this->assertModelValues(
+        $this->assertModelValues(
             $models[12],
             ['qwer', 'asdf'],
             static::PUBLIC_ARRAY_DEFAULT,
@@ -384,6 +387,64 @@ class ThroughPropertiesTest extends AbstractTest
             '->',
             '',
             'public '
+        );
+    }
+
+    /**
+     * Special tests for PHP 8, actually with some 7.4'er stuff.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::prepareModel
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveConnector
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrievePropertyName
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaration
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaringClassFromTraits
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDefaultValue
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveValueStatus
+     */
+    public function testCallMePhpEight()
+    {
+        if (version_compare(phpversion(), '8.0.99', '<')) {
+            $this->markTestSkipped('Wrong PHP Version');
+        }
+
+        // Test the events.
+        $this->mockEventService(
+            [$this->startEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties]
+        );
+
+        $subject = new ReadOnlyFixture();
+        $fixture = [
+            $this->throughProperties::PARAM_REF => new ReflectionClass($subject),
+            $this->throughProperties::PARAM_DATA => [
+                new ReflectionProperty(ReadOnlyFixture::class, static::READ_ONLY_STRING),
+            ]
+        ];
+
+        // Inject the nothing-router.
+        $routeNothing = new RoutingNothing(Krexx::$pool);
+        Krexx::$pool->routing = $routeNothing;
+        $this->mockEmergencyHandler();
+
+        // Run the test
+        $this->throughProperties
+            ->setParameters($fixture)
+            ->callMe();
+        $models = $routeNothing->model;
+
+        $this->assertModelValues(
+            $models[0],
+            null,
+            static::READ_ONLY_STRING,
+            [
+                static::JSON_COMMENT_KEY => 'An uninitialized, readonly variable.<br /><br />&#64;var string',
+                static::JSON_DECLARED_KEY => 'ReadOnlyFixture.php<br />in class: Brainworxx\Krexx\Tests\Fixtures\ReadOnlyFixture'
+            ],
+            '->',
+            '',
+            'public readonly uninitialized '
         );
     }
 

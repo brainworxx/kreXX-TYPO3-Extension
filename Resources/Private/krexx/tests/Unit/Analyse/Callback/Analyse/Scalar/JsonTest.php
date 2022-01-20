@@ -36,6 +36,7 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Json;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -102,7 +103,7 @@ class JsonTest extends AbstractTest
         $this->mockEmergencyHandler();
         $this->mockEventService(
             [Json::class . PluginConfigInterface::START_EVENT, $json],
-            [Json::class . '::callMe' . Json::EVENT_MARKER_END, $json]
+            [Json::class . '::callMe' . CallbackConstInterface::EVENT_MARKER_END, $json]
         );
 
         Krexx::$pool->rewrite = [

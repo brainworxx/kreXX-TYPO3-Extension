@@ -103,7 +103,6 @@ class ExtFilePathTest extends AbstractTest
         $jsonData = $model->getJson();
         $expectations = [
             "Resolved EXT path" => "includekrexx/Tests/Fixtures/123458.Krexx.html",
-            "Real path" => "n/a",
             "Mimetype file" => "just a file"
         ];
         $this->assertEquals($expectations, $jsonData);

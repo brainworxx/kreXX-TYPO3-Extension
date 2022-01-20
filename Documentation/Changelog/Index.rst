@@ -16,6 +16,8 @@ Changelog
     - [Feature] Added immediate browser output to the output choices.
     - [Feature] Added default value analysis to the additional info.
     - [Feature] Added the German translation.
+    - [Feature] Added serialized string pretty print.
+    - [Feature]  Added static cache to the filepath scalar analysis.
     - [Change] Removed deprecated code.
     - [Change] Drop PHP 7.0 support
     - [Change] Streamlined the type display of strings
@@ -29,6 +31,14 @@ Changelog
     - [Change] String and array analysis now cache their settings.
     - [Change] The ScalarString class gets instantiated only once per run.
     - [Change] Removed the scope analysis setting.
+    - [Change] Removed the scope analysis setting.
+    - [Change] Lots of deprecations.
+    - [Change] Removed the XML decoder.
+
+4.1.4
+    - [Feature] Added support for readonly properties
+    - [Bugfix] Correctly identify uninitialized properties.
+    - [Bugfix] Prevent unnecessary filesystem calls in the filepath analysis.
 
 4.1.3
     - [Feature] Added microtime analysis to the float routing.

@@ -87,12 +87,18 @@ class ThroughGetter extends AbstractCallback implements
     /**
      * Stuff we need to escape in a regex.
      *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     *
      * @var string[]
      */
     protected $regexEscapeFind = ['.', '/', '(', ')', '<', '>', '$'];
 
     /**
      * Stuff the escaped regex stuff.
+     *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
      *
      * @var string[]
      */
@@ -133,14 +139,22 @@ class ThroughGetter extends AbstractCallback implements
     {
         $output = $this->dispatchStartEvent();
 
-        $this->parameters[static::CURRENT_PREFIX] = 'get';
-        $output .= $this->goThroughMethodList($this->parameters[static::PARAM_NORMAL_GETTER]);
+        if (empty($this->parameters[static::PARAM_NORMAL_GETTER]) === false) {
+            $this->parameters[static::CURRENT_PREFIX] = 'get';
+            $output .= $this->goThroughMethodList($this->parameters[static::PARAM_NORMAL_GETTER]);
+        }
 
-        $this->parameters[static::CURRENT_PREFIX] = 'is';
-        $output .= $this->goThroughMethodList($this->parameters[static::PARAM_IS_GETTER]);
+        if (empty($this->parameters[static::PARAM_IS_GETTER]) === false) {
+            $this->parameters[static::CURRENT_PREFIX] = 'is';
+            $output .= $this->goThroughMethodList($this->parameters[static::PARAM_IS_GETTER]);
+        }
 
-        $this->parameters[static::CURRENT_PREFIX] = 'has';
-        return $output . $this->goThroughMethodList($this->parameters[static::PARAM_HAS_GETTER]);
+        if (empty($this->parameters[static::PARAM_HAS_GETTER]) === false) {
+            $this->parameters[static::CURRENT_PREFIX] = 'has';
+            $output .= $this->goThroughMethodList($this->parameters[static::PARAM_HAS_GETTER]);
+        }
+
+        return $output;
     }
 
     /**
@@ -502,20 +516,16 @@ class ThroughGetter extends AbstractCallback implements
      */
     protected function findIt(array $searchArray, string $haystack): array
     {
-
-        // Defining our regex.
-        $regex = '/(?<=###0###).*?(?=###1###)/';
-
-        // Regex escaping our search stuff
-        $searchArray[0] = $this->regexEscaping($searchArray[0]);
-        $searchArray[1] = $this->regexEscaping($searchArray[1]);
-
-        // Add the search stuff to the regex
-        $regex = str_replace('###0###', $searchArray[0], $regex);
-        $regex = str_replace('###1###', $searchArray[1], $regex);
-
-        // Trigger the search.
-        preg_match_all($regex, $haystack, $findings);
+        $findings = [];
+        preg_match_all(
+            str_replace(
+                ['###0###', '###1###'],
+                [preg_quote($searchArray[0]), preg_quote($searchArray[1])],
+                '/(?<=###0###).*?(?=###1###)/'
+            ),
+            $haystack,
+            $findings
+        );
 
         // Return the file name as well as stuff from the path.
         return $findings[0];
@@ -526,6 +536,12 @@ class ThroughGetter extends AbstractCallback implements
      *
      * @param string $string
      *   The string we want to escape.
+     *
+     * @deprecated
+     *   Since 5.0.0. Will be removed. Use preg_quote().
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
      *
      * @return string
      *   The escaped string.

@@ -103,7 +103,7 @@ trait ExpandableChild
                 $this->renderConnectorRight($model->getConnectorRight(128), $model->getReturnType()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $generateSource),
                 $this->renderSourceButtonWithStop($generateSource),
-                $this->retrieveOpenedClass($isExpanded),
+                $isExpanded === true ? 'kopened' : '',
                 $this->pool->chunks->chunkMe($this->renderNest($model, $isExpanded)),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_L, $codegenHandler->generateWrapperLeft()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_R, $codegenHandler->generateWrapperRight()),
@@ -119,6 +119,12 @@ trait ExpandableChild
      *
      * @param bool $isExpanded
      *   Well? Is it?
+     *
+     * @deprecated since 5.0.0
+     *   Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
      *
      * @return string
      *   The css class name.

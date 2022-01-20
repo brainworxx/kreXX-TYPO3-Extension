@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Comment\Classes;
 use Brainworxx\Krexx\Analyse\Model;
@@ -52,7 +51,7 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
  *   The name of the metadata, if available.
  *   Fallback to static::META_CLASS_DATA
  */
-class Meta extends AbstractObjectAnalysis implements CallbackConstInterface
+class Meta extends AbstractObjectAnalysis
 {
     /**
      * Dump the Meta stuff from a class.

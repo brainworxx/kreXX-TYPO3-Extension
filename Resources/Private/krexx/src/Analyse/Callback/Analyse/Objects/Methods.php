@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
@@ -54,7 +53,7 @@ use ReflectionMethod;
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, ConfigConstInterface
+class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
 {
     /**
      * Decides which methods we want to analyse and then starts the dump.

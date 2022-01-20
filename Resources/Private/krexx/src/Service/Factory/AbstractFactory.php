@@ -61,6 +61,7 @@ abstract class AbstractFactory
      * Create objects and returns them. Singletons are handled by the pool.
      *
      * @param string $classname
+     *   Name of the class we want to create.
      *
      * @return object
      *   The requested object.
