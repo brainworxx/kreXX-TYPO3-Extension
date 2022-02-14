@@ -13,6 +13,9 @@ Changelog
 =============================================================
 
 4.1.4
+    - [Feature] Added support for readonly properties
+    - [Bugfix] Correctly identify uninitialized properties.
+    - [Bugfix] Prevent unnecessary filesystem calls in the filepath analysis.
 
 4.1.3
     - [Feature] Added microtime analysis to the float routing.

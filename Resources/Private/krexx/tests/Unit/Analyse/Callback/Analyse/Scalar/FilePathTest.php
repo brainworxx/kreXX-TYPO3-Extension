@@ -138,7 +138,7 @@ class FilePathTest extends AbstractTest
                 throw new TypeError();
             });
 
-        $fixture = 'whatever';
+        $fixture = 'whateveribu bibuibuivuvuvzppviz';
         $filePath = new FilePath(Krexx::$pool);
         $this->assertFalse($filePath->canHandle($fixture, new Model(Krexx::$pool)), 'Catching an error.');
     }
