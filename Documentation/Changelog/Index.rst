@@ -12,6 +12,8 @@
 Changelog
 =============================================================
 
+4.1.4
+
 4.1.3
     - [Feature] Added microtime analysis to the float routing.
     - [Feature] Added microtime analysis to the string scalar analysis.
