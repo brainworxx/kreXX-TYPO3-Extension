@@ -39,7 +39,7 @@ namespace Brainworxx\Includekrexx\Collectors;
 
 use TYPO3\CMS\Backend\Routing\UriBuilder as BeUriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
 /**
  * Collection the log file list for the frontend and the backend.
@@ -51,9 +51,9 @@ class LogfileList extends AbstractCollector
      *
      * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
+     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView $view
      */
-    public function assignData(ViewInterface $view): void
+    public function assignData(AbstractTemplateView $view): void
     {
         $view->assign('filelist', $this->retrieveFileList());
     }

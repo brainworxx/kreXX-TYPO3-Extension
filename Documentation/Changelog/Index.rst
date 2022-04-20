@@ -36,6 +36,9 @@ Changelog
     - [Change] Removed the XML decoder.
     - [Change] Drop TYPO3 7.6 support.
 
+4.1.5
+    - [Bugfix] Remove the use of the deprecated \TYPO3\CMS\Extbase\Mvc\View\ViewInterface.
+
 4.1.4
     - [Feature] Added support for readonly properties
     - [Bugfix] Correctly identify uninitialized properties.

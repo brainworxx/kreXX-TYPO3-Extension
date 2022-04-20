@@ -36,8 +36,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Krexx\Service\Config\Config;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 
 class LogfileListTest extends AbstractTest
@@ -62,7 +61,7 @@ class LogfileListTest extends AbstractTest
 
         // No access. Show no files at all.
         $logLister = new LogfileList();
-        $viewMock = $this->createMock(ViewInterface::class);
+        $viewMock = $this->createMock(AbstractTemplateView::class);
         $viewMock->expects($this->once())
             ->method($assign)
             ->with($fileList, []);
@@ -137,7 +136,7 @@ class LogfileListTest extends AbstractTest
                 'meta' => []
             ]
         ];
-        $viewMock = $this->createMock(ViewInterface::class);
+        $viewMock = $this->createMock(AbstractTemplateView::class);
         $viewMock->expects($this->once())
             ->method($assign)
             ->with($fileList, $expectation);
