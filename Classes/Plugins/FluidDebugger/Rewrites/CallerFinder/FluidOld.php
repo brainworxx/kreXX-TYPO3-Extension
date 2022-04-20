@@ -41,6 +41,12 @@ use ReflectionException;
 
 /**
  * Trying to coax the current template/layout/partial file out of the fluid framework.
+ *
+ * @deprecated
+ *   Since 5.0.0. Will be removed.
+ *
+ * @codeCoverageIgnore
+ *   We do not test deprecated code.
  */
 class FluidOld extends AbstractFluid
 {

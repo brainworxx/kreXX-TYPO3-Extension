@@ -47,7 +47,6 @@ use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen as FluidCodegen;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\FluidOld as OldCallerFinderFluid;
 
 class ConfigurationTest extends AbstractTest
 {
@@ -123,42 +122,15 @@ class ConfigurationTest extends AbstractTest
     }
 
     /**
-     * Test the registration of all neccessary adjustments to the kreXX lib.
+     * Test the registration of all necessary adjustments to the kreXX lib.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration::exec
      */
-    public function testExecHighVersion()
+    public function testExec()
     {
-        $versionCompMock = $this->getFunctionMock(
-            '\\Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\',
-            'version_compare'
-        );
-        $versionCompMock->expects($this->exactly(1))
-            ->will($this->returnValue(true));
-
         $this->configuration->exec();
 
         $this->assertEquals($this->expectedRewrites, SettingsGetter::getRewriteList());
         $this->assertEquals($this->expectedEvents, SettingsGetter::getEventList());
-    }
-    /**
-     * Same as the testExecHighVersion, but with a lower TYPO3 version.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration::exec
-     */
-    public function testExecLowVersion()
-    {
-        $versionCompMock = $this->getFunctionMock(
-            '\\Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\',
-            'version_compare'
-        );
-        $versionCompMock->expects($this->exactly(1))
-            ->will($this->returnValue(false));
-
-        $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/');
-        $this->configuration->exec();
-
-        $this->expectedRewrites[CallerFinder::class] = OldCallerFinderFluid::class;
-        $this->assertEquals($this->expectedRewrites, SettingsGetter::getRewriteList());
     }
 }

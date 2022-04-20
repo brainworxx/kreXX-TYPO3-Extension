@@ -52,7 +52,6 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors as FluidConnectors;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen as FluidCodegen;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\FluidOld as OldCallerFinderFluid;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface as Typo3ConstInterface;
 
 /**
@@ -91,15 +90,9 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
 
         // Registering the special source generation for methods.
         Registration::addRewrite(Codegen::class, FluidCodegen::class);
+        // Special caller finder for Fluid.
+        Registration::addRewrite(CallerFinder::class, CallerFinderFluid::class);
 
-        // Depending on the TYPO3 version, we need another fluid caller finder.
-        if (version_compare(Bootstrap::getTypo3Version(), '8.4', '>')) {
-            // Fluid 2.2 or higher
-            Registration::addRewrite(CallerFinder::class, CallerFinderFluid::class);
-        } else {
-            // Fluid 2.0 or lower.
-            Registration::addRewrite(CallerFinder::class, OldCallerFinderFluid::class);
-        }
 
         // The code generation class is a singleton.
         // We need to reset the pool.

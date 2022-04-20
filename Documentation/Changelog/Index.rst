@@ -35,6 +35,7 @@ Changelog
     - [Change] Lots of deprecations.
     - [Change] Removed the XML decoder.
     - [Change] Drop TYPO3 7.6 support.
+    - [Change] Deprecate the old 4.5 till 7.6 Fluid caller finder.
 
 4.1.5
     - [Bugfix] Remove the use of the deprecated \TYPO3\CMS\Extbase\Mvc\View\ViewInterface.
