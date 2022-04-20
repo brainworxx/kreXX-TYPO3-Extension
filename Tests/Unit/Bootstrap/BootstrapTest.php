@@ -94,50 +94,10 @@ class BootstrapTest extends AbstractTest
         $this->bootstrap->run();
     }
 
-    /**
-     * Testing the bootstrapping with a TYPO3 version lower than 8.5.
-     *
-     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::run
-     * @covers \Brainworxx\Includekrexx\Bootstrap\Bootstrap::loadKrexx
-     */
-    public function testRunLowT3Version()
+    public function testRunNormal()
     {
         $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, static::DEFINED);
         $definedMock->expects($this->once())
-            ->will($this->returnValue(true));
-
-        $versionCompMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'version_compare');
-        $versionCompMock->expects($this->exactly(1))
-            ->will($this->returnValue(false));
-
-        $t3ConfigMock = $this->createMock(T3configuration::class);
-        $t3ConfigMock->expects($this->once())
-            ->method('exec');
-
-        $fluidConfigMock = $this->createMock(FluidConfiguration::class);
-        $fluidConfigMock->expects($this->never())
-            ->method('exec');
-
-        $aimeosConfigMock = $this->createMock(AimeosConfiguration::class);
-        $aimeosConfigMock->expects($this->once())
-            ->method('exec');
-        $this->injectIntoGeneralUtility(AimeosConfiguration::class, $aimeosConfigMock);
-
-        $this->injectIntoGeneralUtility(T3configuration::class, $t3ConfigMock);
-        $this->injectIntoGeneralUtility(FluidConfiguration::class, $fluidConfigMock);
-        $this->simulatePackage('aimeos', 'whatever');
-
-        $this->bootstrap->run();
-    }
-
-    public function testRunHighT3Version()
-    {
-        $definedMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, static::DEFINED);
-        $definedMock->expects($this->once())
-            ->will($this->returnValue(true));
-
-        $versionCompMock = $this->getFunctionMock(static::BOOTSTRAP_NAMESPACE, 'version_compare');
-        $versionCompMock->expects($this->exactly(1))
             ->will($this->returnValue(true));
 
         $t3ConfigMock = $this->createMock(T3configuration::class);

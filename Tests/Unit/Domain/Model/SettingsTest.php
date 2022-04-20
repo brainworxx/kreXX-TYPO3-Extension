@@ -79,13 +79,6 @@ class SettingsTest extends AbstractTest implements ConstInterface
         $pathSite = PATH_site;
         $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
 
-        $versionMock = $this->getFunctionMock($typo3Namespace, 'version_compare');
-        $versionMock->expects($this->exactly(2))
-            ->withConsecutive(
-                [Bootstrap::getTypo3Version(), '8.3', '>'],
-                [Bootstrap::getTypo3Version(), '9.5', '>=']
-            )->will($this->returnValue(true));
-
         $classExistsMock = $this->getFunctionMock($typo3Namespace, 'class_exists');
         $classExistsMock->expects($this->exactly(1))
             ->with(Environment::class)

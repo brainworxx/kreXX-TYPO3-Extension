@@ -94,14 +94,8 @@ class Bootstrap implements ConstInterface
         // do it inside the template. 'krexx' as a namespace should be unique enough.
         // Theoretically, this should be part of the fluid debugger plugin, but
         // activating it in the viewhelper is too late, for obvious reason.
-        if (
-            version_compare(static::getTypo3Version(), '8.5', '>=') &&
-            empty($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
-            [static::FLUID_NAMESPACE][static::KREXX])
-        ) {
-            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
-            [static::FLUID_NAMESPACE][static::KREXX] = [ 0 => 'Brainworxx\\Includekrexx\\ViewHelpers'];
-        }
+        $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
+            [static::FLUID_NAMESPACE][static::KREXX][] = 'Brainworxx\\Includekrexx\\ViewHelpers';
 
         // Register the Aimeos Magic plugin.
         /** @var AimeosConfiguration $aimeosConfiguration */
