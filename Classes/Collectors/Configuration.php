@@ -40,7 +40,7 @@ namespace Brainworxx\Includekrexx\Collectors;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\From\File;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use TYPO3\CMS\Core\Log\LogLevel;
 
 /**
@@ -51,9 +51,9 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
     /**
      * Assign the kreXX configuration for the view.
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
+     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView $view
      */
-    public function assignData(ViewInterface $view)
+    public function assignData(AbstractTemplateView $view)
     {
         if ($this->hasAccess === false) {
             // No access.

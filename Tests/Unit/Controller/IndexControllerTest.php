@@ -48,7 +48,7 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
 use TYPO3\CMS\Extbase\Mvc\Request;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use TYPO3\CMS\Extbase\Mvc\Response;
 
@@ -115,7 +115,7 @@ class IndexControllerTest extends AbstractTest
         $settingsModel = new Settings();
 
         // Mock the view.
-        $viewMock = $this->createMock(ViewInterface::class);
+        $viewMock = $this->createMock(AbstractTemplateView::class);
         $viewMock->expects($this->exactly(1))
             ->method('assign')
             ->withConsecutive(

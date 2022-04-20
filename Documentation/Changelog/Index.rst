@@ -13,6 +13,7 @@ Changelog
 =============================================================
 
 4.1.5
+    - [Bugfix] Remove the use of the deprecated \TYPO3\CMS\Extbase\Mvc\View\ViewInterface.
 
 4.1.4
     - [Feature] Added support for readonly properties

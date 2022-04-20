@@ -37,7 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Service\Config\Config;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
 class ConfigurationTest extends AbstractTest
 {
@@ -53,7 +53,7 @@ class ConfigurationTest extends AbstractTest
     {
         // No access.
         $configuration = new Configuration();
-        $viewMock = $this->createMock(ViewInterface::class);
+        $viewMock = $this->createMock(AbstractTemplateView::class);
         $viewMock->expects($this->never())
             ->method('assign');
         $configuration->assignData($viewMock);
@@ -72,7 +72,7 @@ class ConfigurationTest extends AbstractTest
         $this->setValueByReflection('userUc', [Config::SETTING_MAX_FILES => '1000'], $configuration);
 
         // Mock the view.
-        $viewMock = $this->createMock(ViewInterface::class);
+        $viewMock = $this->createMock(AbstractTemplateView::class);
         $viewMock->expects($this->exactly(2))
             ->method('assign')
             ->withConsecutive(

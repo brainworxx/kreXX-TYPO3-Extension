@@ -41,7 +41,7 @@ use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
 /**
  * General stuff for all data collectors.
@@ -147,7 +147,7 @@ abstract class AbstractCollector
     /**
      * Assigning stuff to the view.
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
+     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView $view
      */
-    abstract public function assignData(ViewInterface $view);
+    abstract public function assignData(AbstractTemplateView $view);
 }
