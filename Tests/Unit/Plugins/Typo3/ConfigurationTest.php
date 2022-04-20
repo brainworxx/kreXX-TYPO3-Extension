@@ -177,7 +177,7 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
             $typo3Namespace,
             'array_replace_recursive'
         );
-        $arrayReplaceRecursiveMock->expects($this->exactly(2))
+        $arrayReplaceRecursiveMock->expects($this->any())
             ->with($this->anything(), [Configuration::KREXX => ['module' => Log::class, 'before' => [$log]]]);
         // You just have to love these large arrays inside the globals.
         $GLOBALS[Configuration::TYPO3_CONF_VARS][Configuration::EXTCONF]
