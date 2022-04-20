@@ -187,14 +187,8 @@ class FluidTest extends AbstractTest
         $this->assertEquals('Fluid analysis of fluidvar, array', $result['type']);
         $this->assertNotEmpty($result['date']);
 
-        if (version_compare(Bootstrap::getTypo3Version(), '8.6', '>=')) {
-            $expected = '<f:variable value="{some: &#039;array&#039;}" name="fluidvar" /> {fluidvar}';
-        } else {
-            $expected = '<v:variable.set value="{some: &#039;array&#039;}" name="fluidvar" /> {fluidvar}';
-        }
-
         $this->assertEquals(
-            $expected,
+            '<f:variable value="{some: &#039;array&#039;}" name="fluidvar" /> {fluidvar}',
             Krexx::$pool->codegenHandler->generateWrapperLeft() . $result[static::VARMANE] .
             Krexx::$pool->codegenHandler->generateWrapperRight(),
             'Testing the complicated code generation stuff.'
