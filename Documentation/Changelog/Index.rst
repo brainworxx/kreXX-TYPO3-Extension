@@ -12,6 +12,8 @@
 Changelog
 =============================================================
 
+4.1.5
+
 4.1.4
     - [Feature] Added support for readonly properties
     - [Bugfix] Correctly identify uninitialized properties.
