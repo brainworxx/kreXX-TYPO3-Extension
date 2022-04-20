@@ -34,7 +34,6 @@ Changelog
     - [Change] Removed the scope analysis setting.
     - [Change] Lots of deprecations.
     - [Change] Removed the XML decoder.
-    - [Change] Drop Unit Tests 6.5 usage.
 
 4.1.4
     - [Feature] Added support for readonly properties
