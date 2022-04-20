@@ -45,7 +45,7 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'BRAINWORXX GmbH',
     'constraints' => [
         'depends' => [
-            'typo3' => '7.6.0-11.5.99',
+            'typo3' => '8.7.0-11.5.99',
             'php' => '7.1.0-8.1.99',
         ],
         'conflicts' => [],

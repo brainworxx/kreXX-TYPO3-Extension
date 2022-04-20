@@ -34,6 +34,7 @@ Changelog
     - [Change] Removed the scope analysis setting.
     - [Change] Lots of deprecations.
     - [Change] Removed the XML decoder.
+    - [Change] Drop TYPO3 7.6 support.
 
 4.1.4
     - [Feature] Added support for readonly properties
