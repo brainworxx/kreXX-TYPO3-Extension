@@ -4,6 +4,7 @@
 - Added German localisation.
 - Added serialized string pretty print.
 - Added static cache to the filepath scalar analysis.
+- Added support for the hidden properties of ext_dom classes.
 - Change: Removed deprecated code.
 - Change: Drop PHP 7.0 support
 - Change: Streamlined the type display of strings
@@ -23,6 +24,7 @@
 - Change: Removed the scope analysis setting.
 - Change: Lots of deprecations.
 - Change: Removed the XML decoder.
+- Change: Drop Unit Tests 6.5 usage.
 
 4.1.4
 - Added support for readonly properties

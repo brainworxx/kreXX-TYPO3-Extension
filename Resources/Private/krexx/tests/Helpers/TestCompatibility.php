@@ -43,57 +43,7 @@ use PHPUnit\Runner\Version;
  *
  * Meh, it's better than a reflection based implementation.
  */
-if (version_compare(Version::id(), '6.99', '<')) {
-
-    /**
-     * Unit tests 6
-     *
-     * @package Brainworxx\Krexx\Tests\Helpers
-     */
-    abstract class TestCompatibility extends TestCase
-    {
-        protected function setUp()
-        {
-            $this->krexxUp();
-            parent::setUp();
-        }
-
-        protected function tearDown()
-        {
-            $this->krexxDown();
-            parent::tearDown();
-        }
-
-        protected function assertPreConditions()
-        {
-            $this->krexxertPreConditions();
-        }
-
-        protected function assertPostConditions()
-        {
-            $this->krexxertPostConditions();
-        }
-
-        public function assertStringContainsString(string $needle, string $haystack, string $message = '')
-        {
-            $this->assertContains($needle, $haystack, $message);
-        }
-
-        public function assertStringNotContainsString(string $needle, string $haystack, string $message = '')
-        {
-            $this->assertNotContains($needle, $haystack, $message);
-        }
-
-        abstract protected function krexxUp();
-
-        abstract protected function krexxDown();
-
-        abstract protected function krexxertPostConditions();
-
-        abstract protected function krexxertPreConditions();
-    }
-
-} elseif (version_compare(Version::id(), '7.99', '<')) {
+if (version_compare(Version::id(), '7.99', '<')) {
     /**
      * Unit tests 7
      *

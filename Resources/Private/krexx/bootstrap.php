@@ -187,6 +187,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Service/Misc/FormatSerialize.php';
 
         include_once KREXX_DIR . 'src/Service/Reflection/UndeclaredProperty.php';
+        include_once KREXX_DIR . 'src/Service/Reflection/HiddenProperty.php';
         include_once KREXX_DIR . 'src/Service/Reflection/ReflectionClass.php';
 
         include_once KREXX_DIR . 'src/Service/Plugin/PluginConfigInterface.php';

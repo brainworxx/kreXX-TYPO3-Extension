@@ -37,8 +37,8 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Service\Reflection\HiddenProperty;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
-use DateTime;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -119,15 +119,15 @@ class PublicProperties extends AbstractObjectAnalysis
             $refProps[$key] = new UndeclaredProperty($ref, $key);
         }
 
-        // There is an anomaly with a \DateTime instance.
-        // The "public" properties date, timezone and timezone_type may be in
-        // there as undeclared properties.
-        // Since PHP 7.4, those are not available via get_object_vars(), so we
-        // have to take care of them manually.
-        if ($data instanceof DateTime === true) {
-            $refProps['date'] = (new UndeclaredProperty($ref, 'date'))->setIsPublic(false);
-            $refProps['timezone'] = (new UndeclaredProperty($ref, 'timezone'))->setIsPublic(false);
-            $refProps['timezone_type'] = (new UndeclaredProperty($ref, 'timezone_type'))->setIsPublic(false);
+        // Test for hidden properties
+        foreach (HiddenProperty::HIDDEN_LIST as $className => $propertyNames) {
+            if ($data instanceof $className === true) {
+                foreach ($propertyNames as $propertyName) {
+                    if (isset($refProps[$propertyName]) === false) {
+                        $refProps[$propertyName] = new HiddenProperty($ref, $propertyName);
+                    }
+                }
+            }
         }
     }
 }
