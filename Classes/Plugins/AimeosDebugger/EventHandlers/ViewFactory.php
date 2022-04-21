@@ -175,7 +175,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
                 $this->pool->codegenHandler->setAllowCodegen(false);
                 $result .= $this->pool->render->renderExpandableChild(
                     $this->pool->createClass(Model::class)
-                        ->setName('Instantiated view helpers')
+                        ->setName($this->pool->messages->getHelp('aimeosViewHelpers'))
                         ->setType('class internals magical factory')
                         ->addParameter(static::PARAM_DATA, $this->helpers)
                         ->setHelpid('aimeosViewExisting')
@@ -231,7 +231,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         // Dump them, like there is no tomorrow.
         return $this->pool->render->renderExpandableChild(
             $this->pool->createClass(Model::class)
-                ->setName('Aimeos view factory')
+                ->setName($this->pool->messages->getHelp('aimeosViewFactory'))
                 ->setType('class internals view magic')
                 ->addParameter(static::PARAM_DATA, $reflectionList)
                 // Tell the callback to pass on the factory name.

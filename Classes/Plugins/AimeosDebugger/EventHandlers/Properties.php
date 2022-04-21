@@ -173,7 +173,10 @@ class Properties extends AbstractEventHandler implements
                     ->setName($key)
                     ->setConnectorType($connectorType)
                     ->setCodegenType(static::CODEGEN_TYPE_PUBLIC)
-                    ->addToJson($this->pool->messages->getHelp('metaHint'), 'Aimeos magical property')
+                    ->addToJson(
+                        $this->pool->messages->getHelp('metaHint'),
+                        $this->pool->messages->getHelp('aimeosMagicProp')
+                    )
             );
         }
 

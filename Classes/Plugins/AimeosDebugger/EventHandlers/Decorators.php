@@ -111,7 +111,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
         if (empty($methods) === false) {
             // Got to dump them all!
             $result .= $this->pool->render->renderExpandableChild($this->pool->createClass(Model::class)
-                ->setName('Undecorated Methods')
+                ->setName($this->pool->messages->getHelp('aimeosUndecoratedMeth'))
                 ->setType('class internals decorator')
                 ->addParameter(static::PARAM_DATA, $methods)
                 ->setHelpid('aimeosDecoratorsInfo')
@@ -122,7 +122,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
         if (empty($allReceivers) === false) {
             $this->pool->codegenHandler->setAllowCodegen(false);
             $result .= $this->pool->render->renderExpandableChild($this->pool->createClass(Model::class)
-                ->setName('Decorated Object')
+                ->setName($this->pool->messages->getHelp('aimeosDecoratedObj'))
                 ->setType('class internals decorator')
                 ->addParameter(static::PARAM_DATA, $allReceivers)
                 ->injectCallback($this->pool->createClass(ThroughClassList::class)));
