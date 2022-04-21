@@ -160,7 +160,7 @@ class AjaxController implements ConstInterface, ControllerConstInterface
      */
     protected function hasAccess(): bool
     {
-        return isset($GLOBALS['BE_USER']) &&
-            $GLOBALS['BE_USER']->check('modules', AbstractCollector::PLUGIN_NAME);
+        return isset($GLOBALS[static::BE_USER]) &&
+            $GLOBALS[static::BE_USER]->check(static::BE_MODULES, AbstractCollector::PLUGIN_NAME);
     }
 }

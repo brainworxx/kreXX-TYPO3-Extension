@@ -48,4 +48,24 @@ interface ControllerConstInterface
      * @var string
      */
     public const MODULE_KEY = 'IncludekrexxKrexxConfiguration';
+
+    /**
+     * @var string
+     */
+    public const BE_USER = 'BE_USER';
+
+    /**
+     * @var string
+     */
+    public const BE_MODULES = 'modules';
+
+    /**
+     * @var string
+     */
+    public const PATHINFO_DIRNAME = 'dirname';
+
+    /**
+     * @var string
+     */
+    public const PATHINFO_FILENAME = 'filename';
 }

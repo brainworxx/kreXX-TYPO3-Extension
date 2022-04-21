@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Collectors;
 
+use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use TYPO3\CMS\Backend\Routing\UriBuilder as BeUriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
@@ -44,7 +45,7 @@ use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 /**
  * Collection the log file list for the frontend and the backend.
  */
-class LogfileList extends AbstractCollector
+class LogfileList extends AbstractCollector implements BacktraceConstInterface
 {
     /**
      * Assigning the list to the view. Used by out adminpanel logging module.
@@ -138,9 +139,9 @@ class LogfileList extends AbstractCollector
             }
 
             foreach ($metaArray as &$meta) {
-                $meta['filename'] = basename($meta['file']);
+                $meta[static::PATHINFO_FILENAME] = basename($meta['file']);
                 // Unescape the stuff from the json, to prevent double escaping.
-                $meta['varname'] = htmlspecialchars_decode($meta['varname']);
+                $meta[static::TRACE_VARNAME] = htmlspecialchars_decode($meta[static::TRACE_VARNAME]);
             }
 
             return $metaArray;

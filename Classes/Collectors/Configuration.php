@@ -111,7 +111,8 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
     protected function retrieveConfiguration(): array
     {
         $pathParts = pathinfo($this->pool->config->getPathToConfigFile());
-        $filePath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.';
+        $filePath = $pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
+            $pathParts[static::PATHINFO_FILENAME] . '.';
 
         /** @var File $iniReader */
         $iniReader = $this->pool->createClass(File::class)->loadFile($filePath);

@@ -68,7 +68,8 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
 
         $dropdown = $this->generateDropdown();
         $pathParts = pathinfo($this->pool->config->getPathToConfigFile());
-        $filePath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.';
+        $filePath = $pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
+            $pathParts[static::PATHINFO_FILENAME] . '.';
 
         $this->fileReader = $this->pool->createClass(File::class)->loadFile($filePath);
         $config = [];

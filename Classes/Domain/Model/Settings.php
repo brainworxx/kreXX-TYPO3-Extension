@@ -62,12 +62,13 @@ use Brainworxx\Includekrexx\Domain\Model\Settings\MaxStepNumber;
 use Brainworxx\Includekrexx\Domain\Model\Settings\MemoryLeft;
 use Brainworxx\Includekrexx\Domain\Model\Settings\Skin;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Abusing the TYPO3 attribute mapper, to save our settings.
  */
-class Settings implements ControllerConstInterface
+class Settings implements ControllerConstInterface, ConfigConstInterface
 {
     use Disabled;
     use Iprange;
@@ -75,7 +76,6 @@ class Settings implements ControllerConstInterface
     use Skin;
     use Destination;
     use Maxfiles;
-    use UseScopeAnalysis;
     use MaxStepNumber;
     use ArrayCountLimit;
     use Level;
@@ -124,7 +124,7 @@ class Settings implements ControllerConstInterface
         $result = $settings + $feEditing;
 
         /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $user */
-        $user = $GLOBALS['BE_USER'];
+        $user = $GLOBALS[static::BE_USER];
         // Save the last settings to the backend user, so we can retrieve it later.
         if (!isset($user->uc[AbstractCollector::MODULE_DATA][static::MODULE_KEY])) {
             $user->uc[AbstractCollector::MODULE_DATA][static::MODULE_KEY] = [];
@@ -178,16 +178,20 @@ class Settings implements ControllerConstInterface
      */
     protected function processFeEditing(array &$moduleSettings): array
     {
-        $result = ['feEditing' => []];
+        $result = [static::SECTION_FE_EDITING => []];
 
-        $allowedValues = ['full', 'display', 'none'];
+        $allowedValues = [
+            static::RENDER_TYPE_CONFIG_FULL,
+            static::RENDER_TYPE_CONFIG_DISPLAY,
+            static::RENDER_TYPE_CONFIG_NONE
+        ];
         foreach (Krexx::$pool->config->feConfigFallback as $settingName => $settings) {
             $settingNameInModel = 'form' . $settingName;
             if (
-                $settings['render']['Editable'] === 'true' &&
+                $settings[static::RENDER][static::RENDER_EDITABLE] === static::VALUE_TRUE &&
                 in_array($this->$settingNameInModel, $allowedValues)
             ) {
-                $moduleSettings[$settingNameInModel] = $result['feEditing'][$settingName]
+                $moduleSettings[$settingNameInModel] = $result[static::SECTION_FE_EDITING][$settingName]
                     = $this->$settingNameInModel;
             }
         }
@@ -208,7 +212,8 @@ class Settings implements ControllerConstInterface
     {
         // Make sure to switch to json.
         $pathParts = pathinfo($filepath);
-        $rootPath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.';
+        $rootPath = $pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
+            $pathParts[static::PATHINFO_FILENAME] . '.';
         $iniPath = $rootPath . 'ini';
         if (file_exists($iniPath)) {
             unlink($iniPath);

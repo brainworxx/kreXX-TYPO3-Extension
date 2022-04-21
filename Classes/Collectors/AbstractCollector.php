@@ -40,13 +40,14 @@ namespace Brainworxx\Includekrexx\Collectors;
 use Brainworxx\Includekrexx\Controller\ControllerConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
 /**
  * General stuff for all data collectors.
  */
-abstract class AbstractCollector implements ControllerConstInterface
+abstract class AbstractCollector implements ControllerConstInterface, ConfigConstInterface
 {
     use LanguageTrait;
 
@@ -110,14 +111,13 @@ abstract class AbstractCollector implements ControllerConstInterface
      * @var array
      */
     protected $expertOnly = [
-        'detectAjax',
-        'useScopeAnalysis',
-        'maxStepNumber',
-        'arrayCountLimit',
-        'debugMethods',
-        'maxRuntime',
-        'memoryLeft',
-        'maxfiles'
+        self::SETTING_DETECT_AJAX,
+        self::SETTING_MAX_STEP_NUMBER,
+        self::SETTING_ARRAY_COUNT_LIMIT,
+        self::SETTING_DEBUG_METHODS,
+        self::SETTING_MAX_RUNTIME,
+        self::SETTING_MEMORY_LEFT,
+        self::SETTING_MAX_FILES
     ];
 
     /**
@@ -134,10 +134,10 @@ abstract class AbstractCollector implements ControllerConstInterface
     {
         Pool::createPool();
         $this->pool = Krexx::$pool;
-        if (isset($GLOBALS['BE_USER'])) {
-            $user = $GLOBALS['BE_USER'];
+        if (isset($GLOBALS[static::BE_USER])) {
+            $user = $GLOBALS[static::BE_USER];
             $this->hasAccess = $user
-                ->check('modules', static::PLUGIN_NAME);
+                ->check(static::BE_MODULES, static::PLUGIN_NAME);
         }
         if ($this->hasAccess && isset($user->uc[static::MODULE_DATA][static::MODULE_KEY])) {
             $this->userUc = $user->uc[static::MODULE_DATA][static::MODULE_KEY];
