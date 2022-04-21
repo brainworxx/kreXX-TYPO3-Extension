@@ -70,6 +70,21 @@ class DebugViewHelper extends CompatibilityViewHelper
     protected const ARGUMENT_VALUE = 'value';
 
     /**
+     * @var string
+     */
+    public const REGISTRY_VIEW = 'view';
+
+    /**
+     * @var string
+     */
+    public const REGISTRY_VIEW_REFLECTION = 'viewReflection';
+
+    /**
+     * @var string
+     */
+    public const REGISTRY_RENDERING_CONTEXT = 'renderingContext';
+
+    /**
      * No escaping for the rendered children, we want then as they are.
      *
      * @var bool
@@ -113,9 +128,9 @@ class DebugViewHelper extends CompatibilityViewHelper
         Pool::createPool();
         $view = $this->viewHelperVariableContainer->getView();
         $pool = Krexx::$pool;
-        $pool->registry->set('view', $view);
-        $pool->registry->set('viewReflection', new ReflectionClass($view));
-        $pool->registry->set('renderingContext', $this->renderingContext);
+        $pool->registry->set(static::REGISTRY_VIEW, $view);
+        $pool->registry->set(static::REGISTRY_VIEW_REFLECTION, new ReflectionClass($view));
+        $pool->registry->set(static::REGISTRY_RENDERING_CONTEXT, $this->renderingContext);
         Registration::activatePlugin(
             FluidConfiguration::class
         );
@@ -125,9 +140,9 @@ class DebugViewHelper extends CompatibilityViewHelper
         Registration::deactivatePlugin(
             FluidConfiguration::class
         );
-        $pool->registry->set('view', null);
-        $pool->registry->set('viewReflection', null);
-        $pool->registry->set('renderingContext', null);
+        $pool->registry->set(static::REGISTRY_VIEW, null);
+        $pool->registry->set(static::REGISTRY_VIEW_REFLECTION, null);
+        $pool->registry->set(static::REGISTRY_RENDERING_CONTEXT, null);
 
         return '';
     }

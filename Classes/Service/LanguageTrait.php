@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Service;
 
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -65,6 +66,6 @@ trait LanguageTrait
             return $key;
         }
 
-        return LocalizationUtility::translate($key, 'includekrexx', $arguments);
+        return LocalizationUtility::translate($key, ConstInterface::EXT_KEY, $arguments);
     }
 }

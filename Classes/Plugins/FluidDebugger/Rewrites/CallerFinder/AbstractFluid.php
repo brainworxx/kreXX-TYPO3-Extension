@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
+use Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper;
 use Brainworxx\Krexx\Analyse\Caller\AbstractCaller;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -143,9 +144,9 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
 
         // Handling the injections.
         $this->varname = static::FLUID_VARIABLE;
-        $this->view = $this->pool->registry->get('view');
-        $this->viewReflection = $this->pool->registry->get('viewReflection');
-        $this->renderingContext = $this->pool->registry->get('renderingContext');
+        $this->view = $this->pool->registry->get(DebugViewHelper::REGISTRY_VIEW);
+        $this->viewReflection = $this->pool->registry->get(DebugViewHelper::REGISTRY_VIEW_REFLECTION);
+        $this->renderingContext = $this->pool->registry->get(DebugViewHelper::REGISTRY_RENDERING_CONTEXT);
 
         // Assign the parsed template and the render type.
         $this->assignParsedTemplateRenderType();
