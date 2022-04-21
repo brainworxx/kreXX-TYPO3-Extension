@@ -61,7 +61,6 @@ use Brainworxx\Includekrexx\Domain\Model\Settings\MaxRuntime;
 use Brainworxx\Includekrexx\Domain\Model\Settings\MaxStepNumber;
 use Brainworxx\Includekrexx\Domain\Model\Settings\MemoryLeft;
 use Brainworxx\Includekrexx\Domain\Model\Settings\Skin;
-use Brainworxx\Includekrexx\Domain\Model\Settings\UseScopeAnalysis;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
