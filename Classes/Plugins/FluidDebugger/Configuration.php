@@ -109,5 +109,9 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
             ThroughMethods::class . static::END_EVENT,
             VhsMethods::class
         );
+
+        // Adding additional texts.
+        $extPath = ExtensionManagementUtility::extPath(static::EXT_KEY);
+        Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/fluid.kreXX.ini');
     }
 }

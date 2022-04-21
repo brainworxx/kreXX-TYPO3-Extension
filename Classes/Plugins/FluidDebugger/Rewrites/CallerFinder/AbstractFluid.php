@@ -198,7 +198,11 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
                 static::TRACE_FILE => static::FLUID_NOT_AVAILABLE,
                 static::TRACE_LINE => static::FLUID_NOT_AVAILABLE,
                 static::TRACE_VARNAME => static::FLUID_VARIABLE,
-                static::TRACE_TYPE => $this->getType('Fluid analysis', static::FLUID_VARIABLE, $data),
+                static::TRACE_TYPE => $this->getType(
+                    $this->pool->messages->getHelp('fluidAnalysis'),
+                    static::FLUID_VARIABLE,
+                    $data
+                ),
                 static::TRACE_DATE => date('d-m-Y H:i:s', time()),
                 static::TRACE_URL => $this->getCurrentUrl(),
             ];
@@ -245,7 +249,11 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
              static::TRACE_FILE => $this->pool->fileService->filterFilePath($path),
              static::TRACE_LINE => $this->line,
              static::TRACE_VARNAME => $this->varname,
-             static::TRACE_TYPE => $this->getType('Fluid analysis', $this->varname, $data),
+             static::TRACE_TYPE => $this->getType(
+                 $this->pool->messages->getHelp('fluidAnalysis'),
+                 $this->varname,
+                 $data
+             ),
              static::TRACE_DATE => date('d-m-Y H:i:s', time()),
              static::TRACE_URL => $this->getCurrentUrl(),
          ];
@@ -271,7 +279,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
         } else {
             $type = gettype($data);
         }
-        return $headline . ' of ' . $varname . ', ' . $type;
+        return $headline . $this->pool->messages->getHelp('fluidAnalysisOf') . $varname . ', ' . $type;
     }
 
     /**

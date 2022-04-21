@@ -128,9 +128,14 @@ class ConfigurationTest extends AbstractTest
      */
     public function testExec()
     {
+        $this->simulatePackage(Bootstrap::EXT_KEY, 'A path/');
         $this->configuration->exec();
 
         $this->assertEquals($this->expectedRewrites, SettingsGetter::getRewriteList());
         $this->assertEquals($this->expectedEvents, SettingsGetter::getEventList());
+        $expectedHelpFiles = [
+            'A path/Resources/Private/Language/fluid.kreXX.ini'
+        ];
+        $this->assertEquals($expectedHelpFiles, SettingsGetter::getAdditionalHelpFiles());
     }
 }

@@ -90,10 +90,15 @@ class GetterWithoutGetTest extends AbstractTest implements CallbackConstInterfac
         $routing = new RoutingNothing(Krexx::$pool);
         Krexx::$pool->routing = $routing;
 
+        // Load the fluid language files
+        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
+            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 'fluid.kreXX.ini');
+        Krexx::$pool->messages->readHelpTexts();
+
         $throughGetter = new ThroughGetter(Krexx::$pool);
         $throughGetter->setParameters($fixture)->callMe();
 
-        $methodName = 'method name';
+        $methodName = 'Method name';
         $this->assertEquals('something', $routing->model[0]->getName());
         $this->assertEquals('getSomething()', $routing->model[0]->getJson()[$methodName]);
         // We expect the getProtectedStuff to be ignored.

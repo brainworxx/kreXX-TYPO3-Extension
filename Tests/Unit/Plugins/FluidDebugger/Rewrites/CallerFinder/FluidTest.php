@@ -38,6 +38,7 @@ use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
 use TYPO3Fluid\Fluid\Core\Parser\ParsedTemplateInterface;
 
@@ -46,6 +47,15 @@ class FluidTest extends AbstractTest
     const RENDERING_CONTEXT = 'renderingContext';
     const GET_TEMPLATE_PATHS = 'getTemplatePaths';
     const VARMANE = 'varname';
+
+    public function krexxUp()
+    {
+        parent::krexxUp();
+        // Load the fluid language files
+        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
+            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 'fluid.kreXX.ini');
+        Krexx::$pool->messages->readHelpTexts();
+    }
 
     /**
      * Test the template part.
