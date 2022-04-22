@@ -112,22 +112,22 @@ class GetterTest extends AbstractTest
 
         // Create the fixture.
         $fixture = [
-          'normalGetter' => [
-              new \ReflectionMethod($item, 'getFacility'),
-              new \ReflectionMethod($item, 'getTimestamp'),
-              new \ReflectionMethod($item, 'getPriority'),
-              new \ReflectionMethod($item, 'getMessage'),
-              new \ReflectionMethod($item, 'getRequest'),
-              new \ReflectionMethod($item, 'getResourceType'),
-              new \ReflectionMethod($item, 'getId'),
-              new \ReflectionMethod($item, 'getSiteId'),
-              new \ReflectionMethod($item, 'getTimeModified'),
-              new \ReflectionMethod($item, 'getTimeCreated')
-          ],
-          'isGetter' => [],
-          'hasGetter' => [],
-          'ref' => $ref,
-          'data' => $item
+            'normalGetter' => [
+                new \ReflectionMethod($item, 'getFacility'),
+                new \ReflectionMethod($item, 'getTimestamp'),
+                new \ReflectionMethod($item, 'getPriority'),
+                new \ReflectionMethod($item, 'getMessage'),
+                new \ReflectionMethod($item, 'getRequest'),
+                new \ReflectionMethod($item, 'getResourceType'),
+                new \ReflectionMethod($item, 'getId'),
+                new \ReflectionMethod($item, 'getSiteId'),
+                new \ReflectionMethod($item, 'getTimeModified'),
+                new \ReflectionMethod($item, 'getTimeCreated')
+            ],
+            'isGetter' => [],
+            'hasGetter' => [],
+            'ref' => $ref,
+            'data' => $item
         ];
 
         // Prevent the further routing.
