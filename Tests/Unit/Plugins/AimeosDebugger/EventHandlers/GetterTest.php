@@ -97,8 +97,7 @@ class GetterTest extends AbstractTest
             'log.siteid' => '42',
             'log.mtime' => 'today',
             'log.ctime' => 'yesterday',
-            // The editor was removed in 2022.
-            // 'log.editor' => null,
+            'log.timestamp' => null,
             // Standard class (values)
             'log.facility' => 'kreXX',
             'log.priority' => 'high',
