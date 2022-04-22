@@ -97,7 +97,8 @@ class GetterTest extends AbstractTest
             'log.siteid' => '42',
             'log.mtime' => 'today',
             'log.ctime' => 'yesterday',
-            'log.editor' => null,
+            // The editor was removed in 2022.
+            // 'log.editor' => null,
             // Standard class (values)
             'log.facility' => 'kreXX',
             'log.priority' => 'high',
@@ -121,9 +122,7 @@ class GetterTest extends AbstractTest
               new \ReflectionMethod($item, 'getId'),
               new \ReflectionMethod($item, 'getSiteId'),
               new \ReflectionMethod($item, 'getTimeModified'),
-              new \ReflectionMethod($item, 'getTimeCreated'),
-              new \ReflectionMethod($item, 'getEditor'),
-
+              new \ReflectionMethod($item, 'getTimeCreated')
           ],
           'isGetter' => [],
           'hasGetter' => [],

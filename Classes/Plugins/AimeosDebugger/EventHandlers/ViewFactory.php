@@ -46,7 +46,9 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionClass;
 use ReflectionException;
 use Aimeos\MW\View\Helper\Base as HelperBase;
+use Aimeos\Base\View\Helper\Base as BaseHelperBase;
 use Aimeos\MW\View\Iface as ViewInterface;
+use Aimeos\Base\View\Iface as BaseViewInterface;
 
 /**
  * Resolving the Aimoes view helper factory. Not to be confused with fluid
@@ -128,7 +130,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         $data = $ref->getData();
 
         // Test if we are facing an Aimeos view.
-        if (is_a($data, ViewInterface::class) === false) {
+        if (is_a($data, ViewInterface::class) === false && is_a($data, BaseViewInterface::class) === false) {
             // This is not the view we are looking for.
             // Early return.
             return '';
@@ -150,7 +152,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     /**
      * Retrieve the already instantiated helper classes from the view.
      *
-     * @param \Aimeos\MW\View\Iface $data
+     * @param ViewInterface|BaseViewInterface $data
      *   The class we are analysing.
      * @param \ReflectionClass $ref
      *   The reflection of the class we are analysing.
@@ -158,7 +160,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
      * @return string
      *   The generated html.
      */
-    protected function retrieveHelpers(ViewInterface $data, ReflectionClass $ref): string
+    protected function retrieveHelpers($data, ReflectionClass $ref): string
     {
         $result = '';
 
@@ -213,7 +215,13 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         // Get a list of the core view helpers
         // Get the core view helpers directory
 
-        $ref = new ReflectionClass(HelperBase::class);
+        if (class_exists(HelperBase::class)) {
+            $ref = new ReflectionClass(HelperBase::class);
+        } else {
+            $ref = new ReflectionClass(BaseHelperBase::class);
+        }
+
+
         // Scan the main view helpers, to get a first impression.
         $reflectionList = $this->retrieveHelperList(dirname($ref->getFileName()));
 
