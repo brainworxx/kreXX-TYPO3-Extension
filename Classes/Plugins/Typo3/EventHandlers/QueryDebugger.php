@@ -153,7 +153,7 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
             $result = $sql;
         } catch (Throwable $e) {
             // Tell the dev, that there is an error in the sql.
-            return 'Error: ' . $e->getMessage();
+            return $this->pool->messages->getHelp('TYPO3Error') . $e->getMessage();
         }
 
         return $result;

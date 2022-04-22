@@ -92,15 +92,16 @@ class DirtyModels implements EventHandlerInterface
             return '';
         }
 
+        $msg = $this->pool->messages;
         try {
             try {
-                $model->addToJson('Is dirty', $this->createReadableBoolean($data->_isDirty()));
+                $model->addToJson($msg->getHelp('TYPO3ModelIsDirty'), $this->createReadableBoolean($data->_isDirty()));
             } catch (TooDirtyException $e) {
-                $model->addToJson('Is dirty', 'TRUE, even the UID was modified!');
+                $model->addToJson($msg->getHelp('TYPO3ModelIsDirty'), $msg->getHelp('TYPO3ModelIsTooDirty'));
             }
 
-            $model->addToJson('Is a clone', $this->createReadableBoolean($data->_isClone()));
-            $model->addToJson('Is a new', $this->createReadableBoolean($data->_isNew()));
+            $model->addToJson($msg->getHelp('TYPO3ModelIsAClone'), $this->createReadableBoolean($data->_isClone()));
+            $model->addToJson($msg->getHelp('TYPO3ModelIsNew'), $this->createReadableBoolean($data->_isNew()));
         } catch (Throwable $e) {
             // Do nothing.
             // Somebody has messed with the models.
@@ -120,10 +121,6 @@ class DirtyModels implements EventHandlerInterface
      */
     protected function createReadableBoolean(bool $bool): string
     {
-        if ($bool === true) {
-            return 'TRUE';
-        }
-
-        return 'FALSE';
+        return $bool ? 'TRUE' : 'FALSE';
     }
 }

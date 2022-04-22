@@ -38,11 +38,24 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Scalar;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class ExtFilePathTest extends AbstractTest
 {
+
+    protected function krexxUp()
+    {
+        parent::krexxUp();
+
+        // Load the TYPO3 language files
+        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
+            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 't3.kreXX.ini');
+        Krexx::$pool->messages->readHelpTexts();
+    }
+
     /**
      * Test the resolving of EXT: strings for their actual files.
      *

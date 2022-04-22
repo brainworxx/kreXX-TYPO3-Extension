@@ -39,6 +39,8 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Lang\LanguageService;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
@@ -57,6 +59,11 @@ class LllStringTest extends AbstractTest
         if (isset($GLOBALS[static::TSFE])) {
             $this->originalLang = $GLOBALS[static::TSFE];
         }
+
+        // Load the TYPO3 language files
+        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
+            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 't3.kreXX.ini');
+        Krexx::$pool->messages->readHelpTexts();
     }
 
     public function krexxDown()

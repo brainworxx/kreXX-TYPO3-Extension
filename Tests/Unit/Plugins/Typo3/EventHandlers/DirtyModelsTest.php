@@ -63,6 +63,11 @@ class DirtyModelsTest extends AbstractTest
             DirtyModels::class
         );
         Krexx::$pool->eventService = new Event(Krexx::$pool);
+
+        // Load the TYPO3 language files
+        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
+            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 't3.kreXX.ini');
+        Krexx::$pool->messages->readHelpTexts();
     }
 
     /**
