@@ -35,7 +35,8 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\EventHandlers;
 
 use Aimeos\Map;
-use Aimeos\MShop\Context\Item\Standard as MShopContext;
+use Aimeos\MShop\Context\Item\Standard as MShopContextStandard;
+use Aimeos\MShop\Context as MShopContext;
 use Aimeos\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators;
 use Brainworxx\Includekrexx\Tests\Fixtures\AimeosJobsDecorator;
@@ -86,7 +87,12 @@ class DecoratorsTest extends AbstractTest
         $this->skipIfAimeosIsNotInstalled();
 
         // Create a fixture with a decorator.
-        $context = new MShopContext();
+        if (class_exists(MShopContextStandard::class)) {
+            $context = new MShopContextStandard();
+        } else {
+            $context = new MShopContext();
+        }
+
         $aimeos = new Bootstrap();
         if (class_exists(Map::class)) {
             $testJob = new Fixture20Job();

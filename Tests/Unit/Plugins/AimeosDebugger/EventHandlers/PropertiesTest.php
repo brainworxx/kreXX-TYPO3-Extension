@@ -47,6 +47,7 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Aimeos\MW\View\Standard as StandardView;
+use Aimeos\Base\View\Standard as BaseView;
 
 class PropertiesTest extends AbstractTest
 {
@@ -148,7 +149,11 @@ class PropertiesTest extends AbstractTest
      */
     public function testHandleView()
     {
-        $view = new StandardView();
+        if (class_exists(StandardView::class)) {
+            $view = new StandardView();
+        } else {
+            $view = new BaseView();
+        }
         $dynamicValue = 'dynamicValue';
         $view->$dynamicValue = $dynamicValue;
         $fixture = [
