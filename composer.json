@@ -60,11 +60,5 @@
   },
   "scripts": {
     "test": "./vendor/bin/phpunit --coverage-clover=./clover.xml --color -d memory_limit=-1 -c Build/phpunit.xml"
-  },
-  "config": {
-    "allow-plugins": {
-      "typo3/cms-composer-installers": true,
-      "typo3/class-alias-loader": true
-    }
   }
 }
