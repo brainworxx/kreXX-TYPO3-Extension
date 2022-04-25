@@ -132,14 +132,14 @@ class Properties extends AbstractEventHandler implements
         $parentReflection = $ref;
         while (
             $parentReflection !== false
-            && empty($result) === true
+            && empty($result)
         ) {
             $result = $this->retrieveProperty($parentReflection, $name, $data);
             $parentReflection = $parentReflection->getParentClass();
         }
 
         // Huh, something went wrong here!
-        if (empty($result) === true || is_array($result) === false) {
+        if (empty($result) || is_array($result) === false) {
             return '';
         }
 
@@ -162,7 +162,7 @@ class Properties extends AbstractEventHandler implements
         foreach ($array as $key => $value) {
             // Could be anything.
             // We need to route it though the analysis hub.
-            if ($this->pool->encodingService->isPropertyNameNormal($key) === true) {
+            if ($this->pool->encodingService->isPropertyNameNormal($key)) {
                 $connectorType = static::CONNECTOR_NORMAL_PROPERTY;
             } else {
                 $connectorType = static::CONNECTOR_SPECIAL_CHARS_PROP;

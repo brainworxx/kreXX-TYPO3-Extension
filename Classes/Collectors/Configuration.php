@@ -159,11 +159,11 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
         // the settings.
         $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
 
-        $config[$settingsName][static::SETTINGS_VALUE] = isset($this->userUc[$settingsName]) === true ?
+        $config[$settingsName][static::SETTINGS_VALUE] = isset($this->userUc[$settingsName]) ?
             $this->userUc[$settingsName] : $fallback[static::SETTINGS_VALUE];
 
         // Assign the mode-class.
-        if (in_array($settingsName, $this->expertOnly) === true) {
+        if (in_array($settingsName, $this->expertOnly, true)) {
             $config[$settingsName][static::SETTINGS_MODE] = 'expert';
         }
     }

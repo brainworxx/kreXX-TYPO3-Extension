@@ -137,7 +137,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
         unset($backtrace[0]);
         $step = 1;
         while (
-            isset($backtrace[$step + 1][static::TRACE_OBJECT]) === true
+            isset($backtrace[$step + 1][static::TRACE_OBJECT])
             && $backtrace[$step + 1][static::TRACE_OBJECT] instanceof Logger
         ) {
             // Remove the backtrace steps, until we leave the logger.
@@ -235,11 +235,11 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
             ->setCode($record->getComponent())
             ->setMessage($message);
 
-        if (isset($realBacktrace[0][static::TRACE_FILE]) === true) {
+        if (isset($realBacktrace[0][static::TRACE_FILE])) {
             $logModel->setFile((string)$realBacktrace[0][static::TRACE_FILE]);
         }
 
-        if (isset($realBacktrace[0][static::TRACE_LINE]) === true) {
+        if (isset($realBacktrace[0][static::TRACE_LINE])) {
             $logModel->setLine((int)$realBacktrace[0][static::TRACE_LINE]);
         }
 
@@ -265,10 +265,10 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
             ->setCode($record->getComponent())
             ->setMessage($record->getMessage());
 
-        if (isset($backtrace[0][static::TRACE_FILE]) === true) {
+        if (isset($backtrace[0][static::TRACE_FILE])) {
             $logModel->setFile((string)$backtrace[0][static::TRACE_FILE]);
         }
-        if (isset($backtrace[0][static::TRACE_LINE]) === true) {
+        if (isset($backtrace[0][static::TRACE_LINE])) {
             $logModel->setLine((int)$backtrace[0][static::TRACE_LINE]);
         }
 

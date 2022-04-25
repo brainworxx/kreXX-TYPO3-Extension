@@ -118,7 +118,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
     {
         $name = $model->getName();
         return
-            (is_string($name) === true &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
+            (is_string($name) &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
             $model->getType() === static::TYPE_DEBUG_METHOD ||
             $model->getCodeGenType() === static::CODEGEN_TYPE_ITERATOR_TO_ARRAY ||
             $model->getCodeGenType() === static::CODEGEN_TYPE_JSON_DECODE;

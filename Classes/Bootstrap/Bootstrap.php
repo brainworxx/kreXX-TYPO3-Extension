@@ -103,7 +103,7 @@ class Bootstrap implements ConstInterface
         Registration::register($aimeosConfiguration);
 
         // Check if we have the Aimeos shop available.
-        if (class_exists(AimeosException::class) === true || ExtensionManagementUtility::isLoaded('aimeos')) {
+        if (class_exists(AimeosException::class) || ExtensionManagementUtility::isLoaded('aimeos')) {
             Registration::activatePlugin(get_class($aimeosConfiguration));
         }
     }
@@ -145,13 +145,13 @@ class Bootstrap implements ConstInterface
     {
         // There may be a composer version of kreXX installed.
         // We will not load the bundled one.
-        if (defined('KREXX_DIR') === true) {
+        if (defined('KREXX_DIR')) {
             return true;
         }
 
         // Simply load the main file.
         $krexxFile =  ExtensionManagementUtility::extPath(static::EXT_KEY) . 'Resources/Private/krexx/bootstrap.php';
-        if (file_exists($krexxFile) === true && class_exists(Krexx::class, false) === false) {
+        if (file_exists($krexxFile) && class_exists(Krexx::class, false)) {
             include_once $krexxFile;
             return true;
         }

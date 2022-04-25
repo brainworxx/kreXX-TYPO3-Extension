@@ -189,7 +189,7 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
             $settingNameInModel = 'form' . $settingName;
             if (
                 $settings[static::RENDER][static::RENDER_EDITABLE] === static::VALUE_TRUE &&
-                in_array($this->$settingNameInModel, $allowedValues)
+                in_array($this->$settingNameInModel, $allowedValues, true)
             ) {
                 $moduleSettings[$settingNameInModel] = $result[static::SECTION_FE_EDITING][$settingName]
                     = $this->$settingNameInModel;

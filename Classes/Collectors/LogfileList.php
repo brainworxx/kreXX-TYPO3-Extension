@@ -78,7 +78,7 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
 
         // Get the log files and sort them.
         $files = glob($this->pool->config->getLogDir() . '*.Krexx.html');
-        if (empty($files) === true) {
+        if (empty($files)) {
             return [];
         }
 

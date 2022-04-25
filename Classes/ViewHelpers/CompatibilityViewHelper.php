@@ -53,7 +53,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper as AbstractViewHelperFlu
  * @deprecated
  *   Will be removed as soon as we drop 8.7 Support.
  */
-if (class_exists(AbstractViewHelperCms::class) === true) {
+if (class_exists(AbstractViewHelperCms::class)) {
     class CompatibilityViewHelper extends AbstractViewHelperCms
     {
 

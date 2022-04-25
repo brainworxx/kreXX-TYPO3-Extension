@@ -84,7 +84,7 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
      */
     public function handle(AbstractCallback $callback = null, Model $model = null): string
     {
-        if (empty($sql = $this->retrieveSql($callback->getParameters()[static::PARAM_DATA]))  === true) {
+        if (empty($sql = $this->retrieveSql($callback->getParameters()[static::PARAM_DATA]))) {
             // Wrong object type, or problems with the SQL retrieval.
             return '';
         }

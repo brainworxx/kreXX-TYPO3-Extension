@@ -193,7 +193,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     public function findCaller(string $headline, $data): array
     {
         // Did we get our stuff together so far?
-        if ($this->error === true) {
+        if ($this->error) {
             // Something went wrong!
             return [
                 static::TRACE_FILE => static::FLUID_NOT_AVAILABLE,
@@ -275,7 +275,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      */
     protected function getType(string $headline, string $varname, $data): string
     {
-        if (is_object($data) === true) {
+        if (is_object($data)) {
             $type = get_class($data);
         } else {
             $type = gettype($data);
@@ -310,7 +310,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
 
             // Found something!
             // Check if we already have more than one.
-            if (isset($name[1][0]) === true && count($name[1]) === 1) {
+            if (isset($name[1][0]) && count($name[1]) === 1) {
                 $this->varname =  $this->checkForComplicatedStuff(
                     $this->pool->encodingService->encodeString(trim($name[1][0]))
                 );

@@ -64,7 +64,7 @@ class IndexController extends AbstractController implements ConstInterface
                 static::translate(static::ACCESS_DENIED),
                 AbstractMessage::ERROR
             );
-            if (method_exists($this, 'htmlResponse') === true) {
+            if (method_exists($this, 'htmlResponse')) {
                 $response = $this->responseFactory->createResponse()
                     ->withAddedHeader('Content-Type', 'text/html; charset=utf-8');
                 $response->getBody()->write('');
@@ -83,7 +83,7 @@ class IndexController extends AbstractController implements ConstInterface
         $this->view->assign('settings', $this->settingsModel);
         $this->assignCssJs();
 
-        if (method_exists($this, 'htmlResponse') === true) {
+        if (method_exists($this, 'htmlResponse')) {
             return GeneralUtility::makeInstance(HtmlResponse::class, $this->moduleTemplate->renderContent());
         }
 

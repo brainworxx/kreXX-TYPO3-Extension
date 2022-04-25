@@ -132,7 +132,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
         /** @var \ReflectionMethod $reflectionMethod */
         $reflectionMethod = $params[static::PARAM_ADDITIONAL][static::PARAM_REFLECTION_METHOD];
         $values = $this->retrieveValueArray($params, $reflectionMethod);
-        if (empty($values) === true) {
+        if (empty($values)) {
             // There is nothing to retrieve here.
             // Not-so-Early return.
             return '';
