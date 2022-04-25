@@ -67,7 +67,7 @@ class Constants extends AbstractObjectAnalysis implements CodegenConstInterface
         // inside the higher class structure, because these parts do not inherit
         // them.
         $listOfConstants = $ref->getConstants();
-        if (empty($listOfConstants) === true) {
+        if (empty($listOfConstants)) {
             // Nothing to see here, return an empty string.
             return '';
         }

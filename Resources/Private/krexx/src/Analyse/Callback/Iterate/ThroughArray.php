@@ -69,7 +69,7 @@ class ThroughArray extends AbstractCallback implements
         $output = $this->pool->render->renderSingeChildHr() . $this->dispatchStartEvent();
 
         // Are we dealing with multiline code generation?
-        $multilineCodeGen = $this->parameters[static::PARAM_MULTILINE] === true ?
+        $multilineCodeGen = $this->parameters[static::PARAM_MULTILINE] ?
             static::CODEGEN_TYPE_ITERATOR_TO_ARRAY : static::CODEGEN_TYPE_PUBLIC;
 
         $recursionMarker = $this->pool->recursionHandler->getMarker();
@@ -113,7 +113,7 @@ class ThroughArray extends AbstractCallback implements
                 ->setConnectorParameters(array_search($key, array_keys($array)));
         }
 
-        if (is_string($key) === true) {
+        if (is_string($key)) {
             $model->setName($this->pool->encodingService->encodeString($key))
                 ->setKeyType(static::TYPE_STRING)
                 ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);

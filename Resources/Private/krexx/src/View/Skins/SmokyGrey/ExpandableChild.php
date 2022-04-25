@@ -73,7 +73,7 @@ trait ExpandableChild
     public function renderExpandableChild(Model $model, bool $isExpanded = false): string
     {
         // Check for emergency break.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
             return '';
         }
 
@@ -115,7 +115,7 @@ trait ExpandableChild
     {
         if (
             $gencode === static::CODEGEN_STOP_BIT ||
-            empty($gencode) === true ||
+            empty($gencode) ||
             $this->pool->codegenHandler->getAllowCodegen() === false
         ) {
             // Remove the button marker, because here is nothing to add.

@@ -69,8 +69,8 @@ class Traversable extends AbstractObjectAnalysis implements ConfigConstInterface
         // Check nesting level, memory and runtime.
         $this->pool->emergencyHandler->upOneNestingLevel();
         if (
-            $this->pool->emergencyHandler->checkNesting() === true ||
-            $this->pool->emergencyHandler->checkEmergencyBreak() === true
+            $this->pool->emergencyHandler->checkNesting() ||
+            $this->pool->emergencyHandler->checkEmergencyBreak()
         ) {
             // We will not be doing this one, but we need to get down with our
             // nesting level again.
@@ -130,7 +130,7 @@ class Traversable extends AbstractObjectAnalysis implements ConfigConstInterface
     {
         // Direct access to the iterator object,de depending on the object itself.
         $multiline = ($originalClass instanceof ArrayAccess) === false
-            || ($originalClass instanceof SplObjectStorage) === true;
+            || $originalClass instanceof SplObjectStorage;
         $messages = $this->pool->messages;
 
         /** @var Model $model */

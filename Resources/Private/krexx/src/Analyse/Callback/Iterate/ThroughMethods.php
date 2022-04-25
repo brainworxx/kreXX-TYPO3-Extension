@@ -176,11 +176,7 @@ class ThroughMethods extends AbstractCallback implements
      */
     protected function retrieveConnectorType(ReflectionMethod $reflectionMethod): string
     {
-        if ($reflectionMethod->isStatic() === true) {
-            return static::CONNECTOR_STATIC_METHOD;
-        }
-
-        return static::CONNECTOR_METHOD;
+        return $reflectionMethod->isStatic() ? static::CONNECTOR_STATIC_METHOD : static::CONNECTOR_METHOD;
     }
 
     /**
@@ -249,9 +245,9 @@ class ThroughMethods extends AbstractCallback implements
         ReflectionClass $declaringClass,
         ReflectionClass $reflectionClass
     ): string {
-        if ($reflectionMethod->isPublic() === true) {
+        if ($reflectionMethod->isPublic()) {
             $result = ' public';
-        } elseif ($reflectionMethod->isProtected() === true) {
+        } elseif ($reflectionMethod->isProtected()) {
             $result = ' protected';
         } else {
             $result = ' private';
@@ -261,11 +257,11 @@ class ThroughMethods extends AbstractCallback implements
             $result .= ' inherited';
         }
 
-        if ($reflectionMethod->isStatic() === true) {
+        if ($reflectionMethod->isStatic()) {
             $result .= ' static';
         }
 
-        if ($reflectionMethod->isFinal() === true) {
+        if ($reflectionMethod->isFinal()) {
             $result .= ' final';
         }
 

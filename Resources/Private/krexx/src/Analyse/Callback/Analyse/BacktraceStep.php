@@ -113,7 +113,7 @@ class BacktraceStep extends AbstractCallback implements
         $stepData = $this->parameters[static::PARAM_DATA];
         $output = '';
 
-        if (isset($stepData[static::TRACE_LINE]) === true) {
+        if (isset($stepData[static::TRACE_LINE])) {
             // Adding the line info to the output
             $output = $this->pool->render->renderExpandableChild(
                 $this->pool->createClass(Model::class)
@@ -136,7 +136,7 @@ class BacktraceStep extends AbstractCallback implements
         }
 
         // Check if we could load the code.
-        if (empty($source) === true) {
+        if (empty($source)) {
             $source = $this->pool->messages->getHelp('noSourceAvailable');
         }
         $model->setData($source);
@@ -162,7 +162,7 @@ class BacktraceStep extends AbstractCallback implements
     protected function outputProcessor(string $name, string $type, string $eventName, string $processorName): string
     {
         $stepData = $this->parameters[static::PARAM_DATA];
-        if (isset($stepData[$type]) === true) {
+        if (isset($stepData[$type])) {
             return $this->pool
                 ->createClass($processorName)
                     ->handle(
@@ -194,7 +194,7 @@ class BacktraceStep extends AbstractCallback implements
     protected function outputSingleChild(string $name, string $type, string $eventName): string
     {
         $stepData = $this->parameters[static::PARAM_DATA];
-        if (isset($stepData[$type]) === true) {
+        if (isset($stepData[$type])) {
             return $this->pool->render->renderExpandableChild(
                 $this->dispatchEventWithModel(
                     $eventName . static::EVENT_MARKER_END,

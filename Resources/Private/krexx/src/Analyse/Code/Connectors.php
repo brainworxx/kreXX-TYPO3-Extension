@@ -158,7 +158,7 @@ class Connectors implements ConnectorsConstInterface
     public function getConnectorRight(int $cap): string
     {
         if (
-            empty($this->params) === true ||
+            empty($this->params) ||
             ($this->type !== static::CONNECTOR_METHOD && $this->type !== static::CONNECTOR_STATIC_METHOD)
         ) {
             return $this->connectorArray[$this->type][1];

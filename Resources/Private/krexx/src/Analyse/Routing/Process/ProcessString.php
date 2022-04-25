@@ -93,7 +93,7 @@ class ProcessString extends AbstractRouting implements
         parent::__construct($pool);
 
         // Init the fileinfo class.
-        if (class_exists(finfo::class, false) === true) {
+        if (class_exists(finfo::class, false)) {
             $this->bufferInfo = new finfo(FILEINFO_MIME);
         } else {
             // Use a "polyfill" dummy, tell the dev that we have a problem.
@@ -175,7 +175,7 @@ class ProcessString extends AbstractRouting implements
     {
         $this->scalarString->handle($model, $originalData);
         $domId = $model->getDomid();
-        if ($domId !== '' && $this->pool->recursionHandler->isInMetaHive($domId) === true) {
+        if ($domId !== '' && $this->pool->recursionHandler->isInMetaHive($domId)) {
             return $this->pool->render->renderRecursion($model);
         }
 

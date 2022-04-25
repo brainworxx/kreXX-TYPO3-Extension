@@ -81,7 +81,7 @@ class TimerController extends AbstractController
     public function timerAction(string $string): TimerController
     {
         // Did we use this one before?
-        if (isset(static::$counterCache[$string]) === true) {
+        if (isset(static::$counterCache[$string])) {
             // Add another to the counter.
             ++static::$counterCache[$string];
             static::$timekeeping['[' . static::$counterCache[$string] . ']' . $string] = microtime(true);

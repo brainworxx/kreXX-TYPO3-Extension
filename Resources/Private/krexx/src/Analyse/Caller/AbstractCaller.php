@@ -141,8 +141,8 @@ abstract class AbstractCaller
      */
     protected function getType(string $headline, string $varname, $data): string
     {
-        if (empty($headline) === true) {
-            $type = is_object($data) === true ? get_class($data) : gettype($data);
+        if (empty($headline)) {
+            $type = is_object($data) ? get_class($data) : gettype($data);
             if ($type === 'double') {
                 $type = 'float';
             }
@@ -170,10 +170,10 @@ abstract class AbstractCaller
         // Check if someone has been messing with the $_SERVER, to prevent
         // warnings and notices.
         if (
-            empty($server['SERVER_PROTOCOL']) === true
-            || empty($server['SERVER_PORT']) === true
-            || empty($server['SERVER_NAME']) === true
-            || empty($server['REQUEST_URI']) === true
+            empty($server['SERVER_PROTOCOL'])
+            || empty($server['SERVER_PORT'])
+            || empty($server['SERVER_NAME'])
+            || empty($server['REQUEST_URI'])
         ) {
             return 'n/a';
         }
@@ -183,15 +183,15 @@ abstract class AbstractCaller
 
         $protocol = strtolower($server['SERVER_PROTOCOL']);
         $protocol = substr($protocol, 0, strpos($protocol, '/'));
-        if ($ssl === true) {
+        if ($ssl) {
             $protocol .= 's';
         }
 
         $port = $server['SERVER_PORT'];
 
-        ($ssl === false && $port === '80') || ($ssl === true && $port === '443') ? $port = '' : $port = ':' . $port;
+        ($ssl === false && $port === '80') || ($ssl && $port === '443') ? $port = '' : $port = ':' . $port;
 
-        if (isset($server['HTTP_HOST']) === true) {
+        if (isset($server['HTTP_HOST'])) {
             $host = $server['HTTP_HOST'];
         } else {
             $host = $server['SERVER_NAME'] . $port;

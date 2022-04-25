@@ -157,7 +157,7 @@ class Chunks implements ConfigConstInterface
      */
     public function chunkMe(string $string): string
     {
-        if ($this->chunksAreAllowed === true && strlen($string) > 10000) {
+        if ($this->chunksAreAllowed && strlen($string) > 10000) {
             // Get the key.
             $key = $this->genKey();
             // Detect the encoding in the chunk.
@@ -365,7 +365,7 @@ class Chunks implements ConfigConstInterface
     {
         // Get a list of all chunk files from the run.
         $chunkList = glob($this->chunkDir . $this->fileStamp . '_*');
-        if (empty($chunkList) === true) {
+        if (empty($chunkList)) {
             return;
         }
 

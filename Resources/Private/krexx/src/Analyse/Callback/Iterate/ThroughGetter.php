@@ -190,7 +190,7 @@ class ThroughGetter extends AbstractCallback implements
                 ->addToJson($this->pool->messages->getHelp('metaMethodComment'), $comments);
 
             // We need to decide if we are handling static getters.
-            if ($reflectionMethod->isStatic() === true) {
+            if ($reflectionMethod->isStatic()) {
                 $model->setConnectorType(static::CONNECTOR_STATIC_METHOD);
             } else {
                 $model->setConnectorType(static::CONNECTOR_METHOD);
@@ -346,13 +346,13 @@ class ThroughGetter extends AbstractCallback implements
         ];
 
         foreach ($names as $name) {
-            if ($classReflection->hasProperty($name) === true) {
+            if ($classReflection->hasProperty($name)) {
                 return $classReflection->getProperty($name);
             }
         }
 
         // Time to do some deep stuff. We parse the sourcecode via regex!
-        return $reflectionMethod->isInternal() === true ? null :
+        return $reflectionMethod->isInternal() ? null :
             $this->getReflectionPropertyDeep($classReflection, $reflectionMethod);
     }
 
@@ -451,7 +451,7 @@ class ThroughGetter extends AbstractCallback implements
 
         // Check if this is a method and go deeper!
         $methodName = rtrim($propertyName, '()');
-        if ($classReflection->hasMethod($methodName) === true && ++$this->deep < 3) {
+        if ($classReflection->hasMethod($methodName) && ++$this->deep < 3) {
             // We need to be careful not to goo too deep, we might end up
             // in a loop.
             return $this->getReflectionProperty($classReflection, $classReflection->getMethod($methodName));
@@ -476,7 +476,7 @@ class ThroughGetter extends AbstractCallback implements
         while ($parentClass !== false) {
             // Check if it was declared somewhere deeper in the
             // class structure.
-            if ($parentClass->hasProperty($propertyName) === true) {
+            if ($parentClass->hasProperty($propertyName)) {
                 return $parentClass->getProperty($propertyName);
             }
             $parentClass = $parentClass->getParentClass();

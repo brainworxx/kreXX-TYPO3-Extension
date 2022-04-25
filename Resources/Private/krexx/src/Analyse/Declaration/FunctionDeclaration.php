@@ -52,7 +52,7 @@ class FunctionDeclaration extends AbstractDeclaration
      */
     public function retrieveDeclaration(Reflector $reflection): string
     {
-        if ($reflection->isInternal() === true) {
+        if ($reflection->isInternal()) {
             return $this->pool->messages->getHelp('metaPredeclared');
         }
 

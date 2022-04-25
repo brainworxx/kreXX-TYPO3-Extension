@@ -61,7 +61,7 @@ trait Footer
         // Doing special stuff for smokygrey:
         // We hide the debug-tab when we are displaying the config-only and switch
         // to the config as the current payload.
-        if ($configOnly === true) {
+        if ($configOnly) {
             return str_replace(
                 $this->markerFooter,
                 [

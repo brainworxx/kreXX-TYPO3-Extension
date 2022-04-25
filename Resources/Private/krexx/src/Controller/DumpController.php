@@ -64,7 +64,7 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
      */
     public function dumpAction(&$data, string $message = '', string $level = 'debug'): DumpController
     {
-        if ($this->pool->emergencyHandler->checkMaxCall() === true) {
+        if ($this->pool->emergencyHandler->checkMaxCall()) {
             // Called too often, we might get into trouble here!
             return $this;
         }
@@ -92,7 +92,7 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
 
         // Now that our analysis is done, we must check if there was an emergency
         // break.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
             return $this;
         }
 

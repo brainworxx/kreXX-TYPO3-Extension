@@ -84,7 +84,7 @@ class ThroughProperties extends AbstractCallback implements
 
         foreach ($this->parameters[static::PARAM_DATA] as $refProperty) {
             // Check memory and runtime.
-            if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
+            if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
                 return '';
             }
 
@@ -192,10 +192,10 @@ class ThroughProperties extends AbstractCallback implements
     {
         $connectorType = static::CONNECTOR_NORMAL_PROPERTY;
 
-        if ($refProperty->isStatic() === true) {
+        if ($refProperty->isStatic()) {
             $connectorType = static::CONNECTOR_STATIC_PROPERTY;
         } elseif (
-            isset($refProperty->isUndeclared) === true &&
+            isset($refProperty->isUndeclared) &&
             $this->pool->encodingService->isPropertyNameNormal($refProperty->getName()) === false
         ) {
             // This one was undeclared and does not follow the standard naming
@@ -219,11 +219,11 @@ class ThroughProperties extends AbstractCallback implements
     {
         $propName = $refProperty->getName();
         // Static properties are very special.
-        if ($refProperty->isStatic() === true) {
+        if ($refProperty->isStatic()) {
             // There is always a $ in front of a static property.
             $propName = '$' . $propName;
         } elseif (
-            isset($refProperty->isUndeclared) === true &&
+            isset($refProperty->isUndeclared) &&
             $this->pool->encodingService->isPropertyNameNormal($refProperty->getName()) === false
         ) {
             // There can be anything in there. We must take special preparations
@@ -252,9 +252,9 @@ class ThroughProperties extends AbstractCallback implements
         // Now that we have the key and the value, we can analyse it.
         // Stitch together our additional info about the data:
         // public access, protected access, private access, static declaration.
-        if ($refProperty->isProtected() === true) {
+        if ($refProperty->isProtected()) {
             $additional = 'protected ';
-        } elseif ($refProperty->isPrivate() === true) {
+        } elseif ($refProperty->isPrivate()) {
             $additional = 'private ';
         }
 
@@ -269,7 +269,7 @@ class ThroughProperties extends AbstractCallback implements
         }
 
         // Add the info, if this is static.
-        if ($refProperty->isStatic() === true) {
+        if ($refProperty->isStatic()) {
             $additional .= 'static ';
         }
 
@@ -303,7 +303,7 @@ class ThroughProperties extends AbstractCallback implements
         // trigger an
         // "Error : Internal error: Failed to retrieve the reflection object".
         try {
-            if ($refProperty->isReadOnly() === true) {
+            if ($refProperty->isReadOnly()) {
                 $additional .= 'readonly ';
             }
         } catch (Throwable $exception) {
@@ -315,7 +315,7 @@ class ThroughProperties extends AbstractCallback implements
             return $additional;
         }
 
-        if (method_exists($refProperty, 'hasType') === true && $refProperty->hasType() === true) {
+        if (method_exists($refProperty, 'hasType') && $refProperty->hasType()) {
             // Types properties where introduced in 7.4.
             // This one was either unset, or never received a value in the
             // first place. Either way, it's status is uninitialized.

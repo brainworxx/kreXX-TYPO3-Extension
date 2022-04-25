@@ -162,7 +162,7 @@ class Message
      */
     public function getText(): string
     {
-        if ($this->isThrowAway === true) {
+        if ($this->isThrowAway) {
             // Removes itself, if it is a throwaway message.
             $this->pool->messages->removeKey($this->key);
         }

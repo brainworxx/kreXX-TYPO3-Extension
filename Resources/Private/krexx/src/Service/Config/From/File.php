@@ -86,7 +86,7 @@ class File extends Fallback
         $fileExtensions = ['ini' => 'parse_ini_string', 'json' => 'json_decode'];
         foreach ($fileExtensions as $extension => $decoder) {
             $completePath = $path . $extension;
-            if ($this->pool->fileService->fileIsReadable($completePath) === true) {
+            if ($this->pool->fileService->fileIsReadable($completePath)) {
                 $content = $this->pool->fileService->getFileContents($completePath, false);
                 $this->settings = (array)$decoder($content, true);
                 // Feedback about the file name.
@@ -115,7 +115,7 @@ class File extends Fallback
         // Get the human-readable stuff from the file.
         $value = $this->getConfigFromFile(static::SECTION_FE_EDITING, $parameterName);
 
-        if (empty($value) === true) {
+        if (empty($value)) {
             // Sorry, no value stored.
             return null;
         }
@@ -155,16 +155,16 @@ class File extends Fallback
      * @param string $name
      *   The name of the setting.
      *
-     * @return string|null
+     * @return mixed
      *   The value from the file. Null, when not available or not validated.
      */
-    public function getConfigFromFile(string $group, string $name): ?string
+    public function getConfigFromFile(string $group, string $name)
     {
         // Do we have a value in the file?
         // Does it validate?
         if (
-            isset($this->settings[$group][$name]) === true &&
-            $this->validation->evaluateSetting($group, $name, $this->settings[$group][$name]) === true
+            isset($this->settings[$group][$name]) &&
+            $this->validation->evaluateSetting($group, $name, $this->settings[$group][$name])
         ) {
             return $this->settings[$group][$name];
         }

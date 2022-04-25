@@ -174,7 +174,7 @@ class Encoding
         }
 
         // Initialize the encoding configuration.
-        if ($code === true) {
+        if ($code) {
             // We are encoding @, because we need them for our chunks.
             // The { are needed in the marker of the skin.
             // We also replace tabs with two nbsp's.
@@ -197,7 +197,7 @@ class Encoding
 
         // Check if encoding was successful.
         // 99.99% of the time, the encoding works.
-        if (empty($result) === true) {
+        if (empty($result)) {
             $result = $this->encodeCompletely($data, $code);
         }
 
@@ -232,7 +232,7 @@ class Encoding
 
         $encoding = mb_detect_encoding($data);
         $data = mb_convert_encoding($data, 'UTF-32', $encoding === false ? null : $encoding);
-        if (empty($data) === true) {
+        if (empty($data)) {
             // Unable to convert this string into something we can completely
             // encode. Fallback to an empty string.
             return '';
@@ -241,7 +241,7 @@ class Encoding
         return implode(
             "",
             array_map(
-                $code === true ? [$this, 'arrayMapCallbackCode'] : [$this, 'arrayMapCallbackNormal'],
+                $code ? [$this, 'arrayMapCallbackCode'] : [$this, 'arrayMapCallbackNormal'],
                 unpack("N*", $data)
             )
         );

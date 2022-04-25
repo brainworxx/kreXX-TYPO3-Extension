@@ -91,7 +91,7 @@ class ThroughLargeArray extends AbstractCallback implements
 
             /** @var Model $model */
             $model = $this->pool->createClass(Model::class)->setCodeGenType(
-                $this->parameters[static::PARAM_MULTILINE] === true ?
+                $this->parameters[static::PARAM_MULTILINE] ?
                     static::CODEGEN_TYPE_ITERATOR_TO_ARRAY : static::CODEGEN_TYPE_PUBLIC
             );
 
@@ -115,7 +115,7 @@ class ThroughLargeArray extends AbstractCallback implements
      */
     protected function handleKey($key, Model $model): void
     {
-        if (is_string($key) === true) {
+        if (is_string($key)) {
             $model->setName($this->pool->encodingService->encodeString($key))
                 ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY)
                 ->setKeyType(static::TYPE_STRING);
@@ -138,7 +138,7 @@ class ThroughLargeArray extends AbstractCallback implements
      */
     protected function handleValue($value, Model $model): string
     {
-        if (is_object($value) === true) {
+        if (is_object($value)) {
             // We will not go too deep here, and say only what it is.
             $model->setType(static::TYPE_SIMPLE_CLASS)
                 ->setNormal(get_class($value));
@@ -146,7 +146,7 @@ class ThroughLargeArray extends AbstractCallback implements
             return $this->pool->render->renderExpandableChild($model);
         }
 
-        if (is_array($value) === true) {
+        if (is_array($value)) {
             // Adding another array to the output may be as bad as a
             // complete object analysis.
             $model->setType(static::TYPE_SIMPLE_ARRAY)

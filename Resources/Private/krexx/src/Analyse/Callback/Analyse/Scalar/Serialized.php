@@ -90,7 +90,7 @@ class Serialized extends AbstractScalarAnalysis
 
         // We only handle objects and arrays.
         // Everything else is not really pretty print worthy.
-        if (in_array(substr($string, 0, 2), ['o:', 'O:','a:', 'C:'], true) === true) {
+        if (in_array(substr($string, 0, 2), ['o:', 'O:','a:', 'C:'], true)) {
             $this->originalString = $string;
             $this->model = $model;
             return true;

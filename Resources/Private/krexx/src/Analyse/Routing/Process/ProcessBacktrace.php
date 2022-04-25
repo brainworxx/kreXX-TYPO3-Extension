@@ -77,7 +77,7 @@ class ProcessBacktrace extends AbstractCallback implements
      */
     public function handle(?array &$backtrace = []): string
     {
-        if (empty($backtrace) === true) {
+        if (empty($backtrace)) {
             $backtrace = $this->getBacktrace();
         }
 

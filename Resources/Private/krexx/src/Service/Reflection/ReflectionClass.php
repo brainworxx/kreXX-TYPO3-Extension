@@ -107,12 +107,12 @@ class ReflectionClass extends \ReflectionClass
         ];
 
         foreach ($lookup as $arrayKey) {
-            if (array_key_exists($arrayKey, $this->objectArray) === true) {
+            if (array_key_exists($arrayKey, $this->objectArray)) {
                 return $this->objectArray[$arrayKey];
             }
         }
 
-        if ($refProperty->isStatic() === true) {
+        if ($refProperty->isStatic()) {
             // Static values are not inside the value array.
             $refProperty->setAccessible(true);
             return $refProperty->getValue($this->data);

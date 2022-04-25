@@ -191,9 +191,9 @@ class Messages
     {
         $result = '';
 
-        if (isset($this->helpArray[$this->languageKey][$key]) === true) {
+        if (isset($this->helpArray[$this->languageKey][$key])) {
             $result = $this->helpArray[$this->languageKey][$key];
-        } elseif (isset($this->helpArray['text'][$key]) === true) {
+        } elseif (isset($this->helpArray['text'][$key])) {
             $result = $this->helpArray['text'][$key];
         }
 

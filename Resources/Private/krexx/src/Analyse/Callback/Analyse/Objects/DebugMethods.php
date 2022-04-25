@@ -81,7 +81,7 @@ class DebugMethods extends AbstractObjectAnalysis implements
 
         foreach (explode(',', $this->pool->config->getSetting(static::SETTING_DEBUG_METHODS)) as $funcName) {
             if (
-                $this->checkIfAccessible($data, $funcName, $reflectionClass) === true &&
+                $this->checkIfAccessible($data, $funcName, $reflectionClass) &&
                 // We ignore NULL values.
                 ($result = $this->retrieveValue($data, $funcName)) !== null
             ) {

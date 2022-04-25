@@ -148,7 +148,7 @@ class Config extends Fallback
     {
         if (
             $this->getSetting(static::SETTING_DESTINATION) !==  static::VALUE_FILE &&
-            ($this->checkOutput->isAjax() === true || $this->checkOutput->isCli() === true)
+            ($this->checkOutput->isAjax() || $this->checkOutput->isCli())
         ) {
             // No kreXX for you. At least until you start forced logging.
             $this->setDisabled(true);
@@ -205,7 +205,7 @@ class Config extends Fallback
         $section = $model->getSection();
 
         // Do we accept cookie settings here?
-        if ($model->getEditable() === true) {
+        if ($model->getEditable()) {
             $cookieSetting = $this->cookieConfig->getConfigFromCookies($section, $name);
             // Do we have a value in the cookies?
             if (

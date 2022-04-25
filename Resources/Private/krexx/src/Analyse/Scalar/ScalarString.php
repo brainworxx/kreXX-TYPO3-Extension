@@ -84,7 +84,7 @@ class ScalarString extends AbstractScalar
         $classList = array_merge($classList, SettingsGetter::getAdditionalScalarString());
 
         foreach ($classList as $className) {
-            if ($className::isActive() === true) {
+            if ($className::isActive()) {
                 $this->classList[] = $className;
             }
         }
@@ -110,7 +110,7 @@ class ScalarString extends AbstractScalar
             /** @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\AbstractScalarAnalysis $scalarHandler */
             $scalarHandler = $this->pool->createClass($className);
 
-            if ($scalarHandler->canHandle($originalData, $model) === true) {
+            if ($scalarHandler->canHandle($originalData, $model)) {
                 $model->injectCallback($scalarHandler)->setDomid($this->generateDomId($originalData, $className));
                 return $model;
             }

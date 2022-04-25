@@ -71,7 +71,7 @@ class ExceptionController extends AbstractController
         $trace = $exception->getTrace();
         $backtrace = $this->pool->createClass(ProcessBacktrace::class)->handle($trace);
 
-        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
             return;
         }
 
@@ -107,7 +107,7 @@ class ExceptionController extends AbstractController
      */
     public function registerAction(): ExceptionController
     {
-        if (empty(static::$exceptionController) === true) {
+        if (empty(static::$exceptionController)) {
             static::$exceptionController = $this;
         }
 

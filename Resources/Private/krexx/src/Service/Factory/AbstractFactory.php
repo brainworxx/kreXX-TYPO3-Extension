@@ -69,7 +69,7 @@ abstract class AbstractFactory
     public function createClass(string $classname)
     {
         // Check for possible overwrite.
-        if (isset($this->rewrite[$classname]) === true) {
+        if (isset($this->rewrite[$classname])) {
             $classname = $this->rewrite[$classname];
         }
 
@@ -87,7 +87,7 @@ abstract class AbstractFactory
      */
     public function &getGlobals($what = '')
     {
-        if (empty($what) === true) {
+        if (empty($what)) {
             return $GLOBALS;
         }
 
@@ -119,7 +119,7 @@ abstract class AbstractFactory
 
         // Create a new pool where we store all our classes.
         // We also need to check if we have an overwrite for the pool.
-        if (empty($rewrite[Pool::class]) === true) {
+        if (empty($rewrite[Pool::class])) {
             Krexx::$pool = new Pool($rewrite);
         } else {
             $classname = $rewrite[Pool::class];

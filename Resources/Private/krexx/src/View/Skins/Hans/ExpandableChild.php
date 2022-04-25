@@ -85,7 +85,7 @@ trait ExpandableChild
     public function renderExpandableChild(Model $model, bool $isExpanded = false): string
     {
         // Check for emergency break.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
             return '';
         }
 
@@ -103,7 +103,7 @@ trait ExpandableChild
                 $this->renderConnectorRight($model->getConnectorRight(128), $model->getReturnType()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $generateSource),
                 $this->renderSourceButtonWithStop($generateSource),
-                $isExpanded === true ? 'kopened' : '',
+                $isExpanded ? 'kopened' : '',
                 $this->pool->chunks->chunkMe($this->renderNest($model, $isExpanded)),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_L, $codegenHandler->generateWrapperLeft()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_R, $codegenHandler->generateWrapperRight()),
@@ -131,7 +131,7 @@ trait ExpandableChild
      */
     protected function retrieveOpenedClass(bool $isExpanded): string
     {
-        if ($isExpanded === true) {
+        if ($isExpanded) {
             return 'kopened';
         }
 
@@ -151,7 +151,7 @@ trait ExpandableChild
     {
         if (
             $gencode === static::CODEGEN_STOP_BIT ||
-            empty($gencode) === true ||
+            empty($gencode) ||
             $this->pool->codegenHandler->getAllowCodegen() === false
         ) {
             // Remove the button marker, because here is nothing to add.
@@ -183,7 +183,7 @@ trait ExpandableChild
         }
 
         // Are we expanding this one?
-        if ($isExpanded === true) {
+        if ($isExpanded) {
             $style = '';
         } else {
             $style = static::STYLE_HIDDEN;
@@ -212,7 +212,7 @@ trait ExpandableChild
      */
     protected function renderExtra(Model $model): string
     {
-        if ($model->hasExtra() === true) {
+        if ($model->hasExtra()) {
             return str_replace(
                 $this->markerSingleChildExtra,
                 $model->getData(),

@@ -90,7 +90,7 @@ class Getter extends AbstractObjectAnalysis
 
         // Get all public methods.
         $this->retrieveMethodList($ref);
-        if (empty($this->normalGetter + $this->isGetter + $this->hasGetter) === true) {
+        if (empty($this->normalGetter + $this->isGetter + $this->hasGetter)) {
             // There are no getter methods in here.
             return $output;
         }
@@ -124,7 +124,7 @@ class Getter extends AbstractObjectAnalysis
         // context. An inherited private method can not be called inside the
         // $this context.
         if (
-            ($method->isPrivate() === true && $method->getDeclaringClass()->getName() !== $ref->getName()) ||
+            ($method->isPrivate() && $method->getDeclaringClass()->getName() !== $ref->getName()) ||
             empty($method->getParameters()) === false
         ) {
             // We skip this one. Either it's an out-of-scope private getter,
@@ -152,7 +152,7 @@ class Getter extends AbstractObjectAnalysis
         // Get all public methods.
         $methodList = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
 
-        if ($this->pool->scope->isInScope() === true) {
+        if ($this->pool->scope->isInScope()) {
             // Looks like we also need the protected and private methods.
             $methodList = array_merge(
                 $methodList,

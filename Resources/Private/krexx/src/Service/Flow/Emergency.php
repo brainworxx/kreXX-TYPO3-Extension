@@ -174,7 +174,7 @@ class Emergency implements ConfigConstInterface
      */
     public function checkEmergencyBreak(): bool
     {
-        if ($this->disabled === true) {
+        if ($this->disabled) {
             // Tell them, everything is OK!
             return false;
         }
@@ -288,7 +288,7 @@ class Emergency implements ConfigConstInterface
      */
     public function initTimer(): void
     {
-        if (empty($this->timer) === true || php_sapi_name() === 'cli') {
+        if (empty($this->timer) || php_sapi_name() === 'cli') {
             $this->timer = time() + $this->maxRuntime;
         }
     }

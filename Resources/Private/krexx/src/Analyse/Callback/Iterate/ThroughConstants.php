@@ -79,13 +79,13 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
 
         // Setting the prefix, depending on the scope.
         $this->isInScope = $this->pool->scope->isInScope();
-        $prefix = $this->isInScope === true ? 'static' : '\\' . $ref->getName();
+        $prefix = $this->isInScope ? 'static' : '\\' . $ref->getName();
 
         // Dump them with visibility infos.
         foreach ($this->parameters[static::PARAM_DATA] as $constantName => $constantValue) {
             /** @var ReflectionClassConstant $reflectionConstant */
             $reflectionConstant = $this->parameters[static::PARAM_REF]->getReflectionConstant($constantName);
-            if ($this->canDump($reflectionConstant) === true) {
+            if ($this->canDump($reflectionConstant)) {
                 $output .= $this->pool->routing->analysisHub(
                     $this->pool->createClass(Model::class)
                         ->setData($constantValue)
@@ -111,11 +111,11 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
      */
     protected function retrieveAdditionalData(ReflectionClassConstant $reflectionConstant): string
     {
-        if ($reflectionConstant->isPublic() === true) {
+        if ($reflectionConstant->isPublic()) {
             return 'public constant ';
         }
 
-        if ($reflectionConstant->isProtected() === true) {
+        if ($reflectionConstant->isProtected()) {
             return 'protected constant ';
         }
 
@@ -134,7 +134,7 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
      */
     protected function canDump(ReflectionClassConstant $reflectionConstant): bool
     {
-        if ($reflectionConstant->isPublic() === true || $this->isInScope === true) {
+        if ($reflectionConstant->isPublic() || $this->isInScope) {
             // It's either public or inside the scope.
             // This includes also some private classes from the highest levels of
             // the class.

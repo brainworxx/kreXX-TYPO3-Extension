@@ -68,7 +68,7 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
                 $lineNo + 5
             )
         );
-        if (empty($source) === true) {
+        if (empty($source)) {
             $source = $this->pool->messages->getHelp('noSourceAvailable');
         }
 

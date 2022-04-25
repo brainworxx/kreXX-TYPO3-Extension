@@ -77,7 +77,7 @@ class Meta extends AbstractObjectAnalysis
 
         // We need to check, if we have a meta recursion here.
         $domId = $this->generateDomIdFromClassname($ref->getName());
-        if ($this->pool->recursionHandler->isInMetaHive($domId) === true) {
+        if ($this->pool->recursionHandler->isInMetaHive($domId)) {
             // We have been here before.
             // We skip this one, and leave it to the js recursion handler!
             $this->pool->codegenHandler->setAllowCodegen(true);
@@ -142,7 +142,7 @@ class Meta extends AbstractObjectAnalysis
         $data = [
             $messages->getHelp('metaClassName') => $this->generateName($ref),
             $messages->getHelp('metaComment') => $this->pool->createClass(Classes::class)->getComment($ref),
-            $messages->getHelp('metaDeclaredIn') => $ref->isInternal() === true ?
+            $messages->getHelp('metaDeclaredIn') => $ref->isInternal() ?
                 $messages->getHelp('metaPredeclared') :
                 $this->pool->fileService->filterFilePath($ref->getFileName()) . ' ' .
                 $messages->getHelp('metaInLine') . $ref->getStartLine()
@@ -196,19 +196,19 @@ class Meta extends AbstractObjectAnalysis
     protected function generateName(ReflectionClass $ref): string
     {
         $result = '';
-        if ($ref->isFinal() === true) {
+        if ($ref->isFinal()) {
             $result .= 'final ';
         }
-        if ($ref->isAbstract() === true && $ref->isTrait() === false) {
+        if ($ref->isAbstract() && $ref->isTrait() === false) {
             // Huh, traits are abstract, but you do not declare them as such.
             $result .= 'abstract ';
         }
-        if ($ref->isInternal() === true) {
+        if ($ref->isInternal()) {
             $result .= 'internal ';
         }
-        if ($ref->isInterface() === true) {
+        if ($ref->isInterface()) {
             $result .= 'interface ';
-        } elseif ($ref->isTrait() === true) {
+        } elseif ($ref->isTrait()) {
             $result .= 'trait ';
         } else {
             $result .= 'class ';

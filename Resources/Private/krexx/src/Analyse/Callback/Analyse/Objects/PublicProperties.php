@@ -85,7 +85,7 @@ class PublicProperties extends AbstractObjectAnalysis
         }
 
         $this->handleUndeclaredProperties($refProps, $data, $publicProps, $ref);
-        if (empty($refProps) === true) {
+        if (empty($refProps)) {
             return $output;
         }
 
@@ -121,7 +121,7 @@ class PublicProperties extends AbstractObjectAnalysis
 
         // Test for hidden properties
         foreach (HiddenProperty::HIDDEN_LIST as $className => $propertyNames) {
-            if ($data instanceof $className === true) {
+            if ($data instanceof $className) {
                 foreach ($propertyNames as $propertyName) {
                     if (isset($refProps[$propertyName]) === false) {
                         $refProps[$propertyName] = new HiddenProperty($ref, $propertyName);

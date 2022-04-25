@@ -75,7 +75,7 @@ class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
         $domId = $this->generateDomIdFromClassname($ref->getName(), $doProtected, $doPrivate);
 
         // We need to check, if we have a meta recursion here.
-        if ($this->pool->recursionHandler->isInMetaHive($domId) === true) {
+        if ($this->pool->recursionHandler->isInMetaHive($domId)) {
             // We have been here before.
             // We skip this one, and leave it to the js recursion handler!
             $metaMethods = $this->pool->messages->getHelp('metaMethods');
@@ -113,15 +113,15 @@ class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
     protected function analyseMethods(ReflectionClass $ref, string $domId, bool $doProtected, bool $doPrivate): string
     {
         $methods = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
-        if ($doProtected === true) {
+        if ($doProtected) {
             $methods = array_merge($methods, $ref->getMethods(ReflectionMethod::IS_PROTECTED));
         }
-        if ($doPrivate === true) {
+        if ($doPrivate) {
             $methods = array_merge($methods, $ref->getMethods(ReflectionMethod::IS_PRIVATE));
         }
 
         // Is there anything to analyse?
-        if (empty($methods) === true) {
+        if (empty($methods)) {
             return '';
         }
 
@@ -164,11 +164,11 @@ class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
     protected function generateDomIdFromClassname(string $data, bool $doProtected, bool $doPrivate): string
     {
         $string = 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_m_';
-        if ($doProtected === true) {
+        if ($doProtected) {
             $string .= 'pro_';
         }
 
-        if ($doPrivate === true) {
+        if ($doPrivate) {
             $string .= 'pri_';
         }
 

@@ -114,7 +114,7 @@ class FilePath extends AbstractScalarAnalysis
             $cache[$string] = $this->retrieveFileInfo($string);
         }
 
-        if (empty($cache[$string]) === true) {
+        if (empty($cache[$string])) {
             // Not a file.
             return false;
         }

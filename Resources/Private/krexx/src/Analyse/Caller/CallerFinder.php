@@ -100,12 +100,12 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
         // Going from the first call of the first line up
         // through the first debug call.
         foreach ($backtrace as $caller) {
-            if ($this->identifyCaller($caller) === true) {
+            if ($this->identifyCaller($caller)) {
                 break;
             }
         }
 
-        $varname = empty($headline) === true ?
+        $varname = empty($headline) ?
             $this->getVarName($caller[static::TRACE_FILE], $caller[static::TRACE_LINE]) :
             $headline;
 
@@ -203,7 +203,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
             // This little baby tries to resolve everything inside the
             // brackets of the kreXX call.
             preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', $command, $name);
-            if (isset($name[1]) === true) {
+            if (isset($name[1])) {
                 return $this->pool
                     ->encodingService
                     ->encodeString($this->cleanupVarName(trim($name[1], " \t\n\r\0\x0B'\"")));
@@ -237,7 +237,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
 
         // Counting all real round brackets, while ignoring the ones inside strings.
         foreach (str_split($name) as $count => $char) {
-            if ($singleQuoteInactive === true && $doubleQuoteInactive === true) {
+            if ($singleQuoteInactive && $doubleQuoteInactive) {
                 if ($char === '(') {
                     --$level;
                 } elseif ($char === ')') {

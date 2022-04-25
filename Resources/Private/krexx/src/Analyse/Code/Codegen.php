@@ -119,7 +119,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
         }
 
         // Handle the first run.
-        if ($this->firstRun === true) {
+        if ($this->firstRun) {
             // We handle the first one special, because we need to add the original
             // variable name to the source generation.
             // Also, the string is already prepared for code generation, because
@@ -151,7 +151,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     protected function addTypeHint(Model $model): void
     {
         if (
-            empty($name = (string) $model->getName()) === true
+            empty($name = (string) $model->getName())
             || strpos($name, '$') === false
         ) {
             // There is no name, no need for a hint.
@@ -209,7 +209,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
                 break;
 
             default:
-                if ($this->pool->scope->testModelForCodegen($model) === true) {
+                if ($this->pool->scope->testModelForCodegen($model)) {
                     // Test if we are inside the scope. Everything within our scope is reachable.
                     $result = $this->concatenation($model);
                 }
@@ -304,15 +304,15 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     {
         // Retrieve the type and the name, without calling a possible autoloader.
         $prefix = '';
-        if ($reflectionParameter->isPassedByReference() === true) {
+        if ($reflectionParameter->isPassedByReference()) {
             $prefix = '&';
         }
 
-        $typedParameter = $reflectionParameter->hasType() === true ? $reflectionParameter->getType()->getName() . ' ' : '';
+        $typedParameter = $reflectionParameter->hasType() ? $reflectionParameter->getType()->getName() . ' ' : '';
         $name = $typedParameter . $prefix . '$' . $reflectionParameter->getName();
 
         // Retrieve the default value, if available.
-        if ($reflectionParameter->isDefaultValueAvailable() === true) {
+        if ($reflectionParameter->isDefaultValueAvailable()) {
             try {
                 $default = $reflectionParameter->getDefaultValue();
             } catch (ReflectionException $e) {
@@ -344,7 +344,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      */
     protected function retrieveParameterType(ReflectionParameter $reflectionParameter): string
     {
-        return $reflectionParameter->hasType() === true ? $reflectionParameter->getType()->getName() . ' ' : '';
+        return $reflectionParameter->hasType() ? $reflectionParameter->getType()->getName() . ' ' : '';
     }
 
     /**

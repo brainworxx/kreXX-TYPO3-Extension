@@ -74,7 +74,7 @@ class File
         $this->pool = $pool;
         $server = $pool->getServer();
         $this->docRoot = trim($this->realpath($server['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR);
-        if (empty($this->docRoot) === true) {
+        if (empty($this->docRoot)) {
             $this->docRoot = false;
         }
         $pool->fileService = $this;
@@ -196,13 +196,13 @@ class File
 
         static $filecache = [];
 
-        if (isset($filecache[$filePath]) === true) {
+        if (isset($filecache[$filePath])) {
             return $filecache[$filePath];
         }
 
         // Using \SplFixedArray to save some memory, as it can get
         // quite huge, depending on your system. 4mb is nothing here.
-        if ($this->fileIsReadable($filePath) === true) {
+        if ($this->fileIsReadable($filePath)) {
             return $filecache[$filePath] = SplFixedArray::fromArray(file($filePath));
         }
         // Not readable!
@@ -225,7 +225,7 @@ class File
     public function getFileContents(string $filePath, bool $showError = true): string
     {
         if ($this->fileIsReadable($filePath) === false) {
-            if ($showError === true) {
+            if ($showError) {
                 // This file was not readable! We need to tell the user!
                 $this->pool->messages->addMessage('fileserviceAccess', [$this->filterFilePath($filePath)], true);
             }
@@ -275,7 +275,7 @@ class File
         });
 
         // Fast-forward for the current chunk files.
-        if (isset(static::$isReadableCache[$realpath]) === true) {
+        if (isset(static::$isReadableCache[$realpath])) {
             unlink($realpath);
             restore_error_handler();
             return;
@@ -283,7 +283,7 @@ class File
 
         // Check if it is an actual file and if it is writable.
         // Those are left over chunks from previous calls, or old logfiles.
-        if (is_file($realpath) === true) {
+        if (is_file($realpath)) {
             // Make sure it is unlinkable.
             chmod($realpath, 0777);
             if (unlink($realpath) === false) {
@@ -332,7 +332,7 @@ class File
         $realPath = $this->realpath($filePath);
 
         // Return the cache, if we have any.
-        if (isset(static::$isReadableCache[$realPath]) === true) {
+        if (isset(static::$isReadableCache[$realPath])) {
             return static::$isReadableCache[$realPath];
         }
 
@@ -352,7 +352,7 @@ class File
     {
         $filePath = $this->realpath($filePath);
 
-        if ($this->fileIsReadable($filePath) === true) {
+        if ($this->fileIsReadable($filePath)) {
             set_error_handler(function () {
                 // do nothing
             });

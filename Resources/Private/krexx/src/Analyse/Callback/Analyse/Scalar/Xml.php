@@ -114,7 +114,7 @@ class Xml extends AbstractScalarAnalysis
         $metaStuff = $model->getJson();
         $mimeType = $this->pool->messages->getHelp('metaMimeTypeString');
         if (
-            empty($metaStuff[$mimeType]) === true ||
+            empty($metaStuff[$mimeType]) ||
             strpos($metaStuff[$mimeType], 'xml;') === false
         ) {
             // Was not identified as xml before.
@@ -150,7 +150,7 @@ class Xml extends AbstractScalarAnalysis
         $dom->loadXML($this->originalXml);
         restore_error_handler();
 
-        if ($this->hasErrors === true) {
+        if ($this->hasErrors) {
             $meta[$messages->getHelp('metaDecodedXml')] = $this->pool->messages->getHelp('metaNoXml');
         } else {
             $meta[$messages->getHelp('metaPrettyPrint')] = $this->pool
@@ -210,7 +210,7 @@ class Xml extends AbstractScalarAnalysis
     protected function tagOpen($parser, string $name, array $attributes): void
     {
         $this->tnodeOpen = false;
-        if (empty($attributes) === true) {
+        if (empty($attributes)) {
             $this->decodedXml[] = ["name" => $name];
         } else {
             $this->decodedXml[] = ["name" => $name, "attributes" => $attributes];

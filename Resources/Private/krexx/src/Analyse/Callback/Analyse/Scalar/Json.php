@@ -120,7 +120,7 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
         ];
 
         // Move the extra part into a nest, for better readability.
-        if ($this->model->hasExtra() === true) {
+        if ($this->model->hasExtra()) {
             $this->model->setHasExtra(false);
             $meta[$messages->getHelp('metaContent')] = $this->model->getData();
         }

@@ -141,7 +141,7 @@ abstract class AbstractController implements ConfigConstInterface
         // Now we need to stitch together the content of the configuration file
         // as well as its path.
         $pathToConfig = $this->pool->config->getPathToConfigFile();
-        if ($this->pool->fileService->fileIsReadable($pathToConfig) === true) {
+        if ($this->pool->fileService->fileIsReadable($pathToConfig)) {
             $path = $this->pool->messages->getHelp('currentConfig');
         } else {
             // Project settings are not accessible
@@ -173,7 +173,7 @@ abstract class AbstractController implements ConfigConstInterface
     protected function outputCssAndJs(): string
     {
         // We only do this once per output type.
-        if (isset(static::$jsCssSend[$this->destination]) === true) {
+        if (isset(static::$jsCssSend[$this->destination])) {
             // Been here, done that.
             return '';
         }
@@ -181,7 +181,7 @@ abstract class AbstractController implements ConfigConstInterface
 
         // Adding the js to the output.
         $skinDirectory = $this->pool->config->getSkinDirectory();
-        if ($this->pool->fileService->fileIsReadable(KREXX_DIR . 'resources/jsLibs/kdt.min.js') === true) {
+        if ($this->pool->fileService->fileIsReadable(KREXX_DIR . 'resources/jsLibs/kdt.min.js')) {
             // The js works only if everything is minified.
             $jsCode = $this->pool->fileService->getFileContents(KREXX_DIR . 'resources/jsLibs/kdt.min.js') .
                 $this->pool->fileService->getFileContents($skinDirectory . 'krexx.min.js');
@@ -191,7 +191,7 @@ abstract class AbstractController implements ConfigConstInterface
         }
 
         // Get the css file.
-        if ($this->pool->fileService->fileIsReadable($skinDirectory . 'skin.min.css') === true) {
+        if ($this->pool->fileService->fileIsReadable($skinDirectory . 'skin.min.css')) {
             $css = $this->pool->fileService->getFileContents($skinDirectory . 'skin.min.css');
         } else {
             $css = $this->pool->fileService->getFileContents($skinDirectory . 'skin.css');

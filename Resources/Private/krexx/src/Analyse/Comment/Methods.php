@@ -75,7 +75,7 @@ class Methods extends AbstractComment
         $this->methodName = $reflection->getName();
         $cachingKey =  $reflection->getDeclaringClass()->name . '::' . $this->methodName;
 
-        if (isset($cache[$cachingKey]) === true) {
+        if (isset($cache[$cachingKey])) {
             return $cache[$cachingKey];
         }
 
@@ -110,7 +110,7 @@ class Methods extends AbstractComment
         $reflectionClass = $reflectionClass->getParentClass();
         if (
             $reflectionClass !== false
-            && $reflectionClass->hasMethod($this->methodName) === true
+            && $reflectionClass->hasMethod($this->methodName)
         ) {
             $comment = $this->replaceInheritComment(
                 $comment,
@@ -145,7 +145,7 @@ class Methods extends AbstractComment
         // traits in the class we are currently looking at.
         foreach ($reflection->getTraits() as $trait) {
             $originalComment = $this->retrieveComment($originalComment, $trait);
-            if ($this->checkComment($originalComment) === true) {
+            if ($this->checkComment($originalComment)) {
                 // Looks like we've resolved them all.
                 return $originalComment;
             }
@@ -173,7 +173,7 @@ class Methods extends AbstractComment
     {
         foreach ($reflectionClass->getInterfaces() as $interface) {
             $originalComment = $this->retrieveComment($originalComment, $interface);
-            if ($this->checkComment($originalComment) === true) {
+            if ($this->checkComment($originalComment)) {
                 // Looks like we've resolved them all.
                 return $originalComment;
             }
@@ -194,7 +194,7 @@ class Methods extends AbstractComment
      */
     protected function retrieveComment(string $originalComment, ReflectionClass $reflection): string
     {
-        if ($reflection->hasMethod($this->methodName) === true) {
+        if ($reflection->hasMethod($this->methodName)) {
             $newComment = $this->prettifyComment($reflection->getMethod($this->methodName)->getDocComment());
             // Replace it.
             $originalComment = $this->replaceInheritComment($originalComment, $newComment);

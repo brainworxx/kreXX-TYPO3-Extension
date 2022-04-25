@@ -149,12 +149,12 @@ class Validation extends Fallback
 
         // Adding the new configuration options from the plugins.
         $pluginConfig = SettingsGetter::getNewSettings();
-        if (empty($pluginConfig) === true) {
+        if (empty($pluginConfig)) {
             return;
         }
 
         foreach ($pluginConfig as $newSetting) {
-            if ($newSetting->isFeProtected() === true) {
+            if ($newSetting->isFeProtected()) {
                 $this->feDoNotEdit[] = $newSetting->getName();
             }
         }
@@ -177,7 +177,7 @@ class Validation extends Fallback
     {
         if ($group === static::SECTION_FE_EDITING) {
             // These settings can never be changed in the frontend.
-            return !in_array($name, $this->feDoNotEdit);
+            return !in_array($name, $this->feDoNotEdit, true);
         }
 
         if (empty($this->feConfigFallback[$name][static::EVALUATE])) {
@@ -258,7 +258,7 @@ class Validation extends Fallback
     protected function evalIpRange($value, string $name): bool
     {
         $result = empty($value);
-        if ($result === true) {
+        if ($result) {
             $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR . ucfirst($name));
         }
 
@@ -433,7 +433,7 @@ class Validation extends Fallback
 
         // Check if the combination of class and method is blacklisted.
         foreach ($this->methodBlacklist as $classname => $debugMethod) {
-            if ($data instanceof $classname && in_array($method, $debugMethod, true) === true) {
+            if ($data instanceof $classname && in_array($method, $debugMethod, true)) {
                 return false;
             }
         }

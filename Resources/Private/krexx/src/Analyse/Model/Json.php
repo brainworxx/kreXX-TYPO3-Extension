@@ -84,7 +84,7 @@ trait Json
     public function addToJson(string $key, string $value): Model
     {
 
-        if (empty($value) === true) {
+        if (empty($value)) {
             unset($this->json[$key]);
         } else {
             // Remove leftover linebreaks.

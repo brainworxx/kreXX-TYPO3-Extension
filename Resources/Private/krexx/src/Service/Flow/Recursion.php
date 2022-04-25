@@ -130,14 +130,14 @@ class Recursion
         // Check objects.
         // As of PHP 7.1 and lower, PHP does not recognise an __PHP_Incomplete_Class
         // as an object via is_object. Hence, we must test the class itself.
-        if (is_object($bee) === true || $bee instanceof __PHP_Incomplete_Class) {
+        if (is_object($bee) || $bee instanceof __PHP_Incomplete_Class) {
             return $this->recursionHive->contains($bee);
         }
 
         // Check arrays (only the $GLOBAL array may apply).
-        if (isset($bee[$this->recursionMarker]) === true) {
+        if (isset($bee[$this->recursionMarker])) {
             // We render the $GLOBALS only once.
-            if ($this->globalsWereRendered === true) {
+            if ($this->globalsWereRendered) {
                 return true;
             }
 

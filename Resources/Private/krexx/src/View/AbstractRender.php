@@ -105,7 +105,7 @@ abstract class AbstractRender implements RenderInterface
      */
     protected function getTemplateFileContent(string $what): string
     {
-        if (isset(static::$fileCache[$what]) === true) {
+        if (isset(static::$fileCache[$what])) {
             return static::$fileCache[$what];
         }
 
@@ -127,7 +127,7 @@ abstract class AbstractRender implements RenderInterface
     protected function encodeJson(array $array): string
     {
         // No data, no json!
-        if (empty($array) === true) {
+        if (empty($array)) {
             return '';
         }
 
@@ -181,7 +181,7 @@ abstract class AbstractRender implements RenderInterface
      */
     protected function retrieveTypeClasses(Model $model): string
     {
-        $typeClasses = $model->isExpandable() === true ? 'kexpand ' : ' ';
+        $typeClasses = $model->isExpandable() ? 'kexpand ' : ' ';
 
         foreach (explode(' ', $model->getType()) as $typeClass) {
             $typeClasses .= 'k' . $typeClass . ' ';

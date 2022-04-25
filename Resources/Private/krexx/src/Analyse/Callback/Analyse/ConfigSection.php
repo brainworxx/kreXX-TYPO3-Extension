@@ -93,7 +93,7 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
         $model = $this->pool->createClass(Model::class)->setHelpid($id . 'Help');
         $name = $this->pool->messages->getHelp($id . 'Readable');
         $value = $this->prepareValue($setting);
-        if ($setting->getEditable() === true) {
+        if ($setting->getEditable()) {
             return $this->pool->render->renderSingleEditableChild(
                 $model->setData($name)
                     ->setName($value)

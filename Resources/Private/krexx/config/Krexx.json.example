@@ -7,7 +7,7 @@
     "behavior": {
         "skin": "smokygrey",
         "destination": "browser",
-        "maxfiles": "10",
+        "maxfiles": "10"
     },
     "prune": {
         "maxStepNumber": "10",
