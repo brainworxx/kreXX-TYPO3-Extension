@@ -130,7 +130,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         $data = $ref->getData();
 
         // Test if we are facing an Aimeos view.
-        if (!is_a($data, ViewInterface::class) && !is_a($data, BaseViewInterface::class)) {
+        if (!($data instanceof ViewInterface) && !($data instanceof BaseViewInterface)) {
             // This is not the view we are looking for.
             // Early return.
             return '';
@@ -274,7 +274,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
             }
 
             $className = static::AI_NAMESPACE . $dir . static::STANDARD;
-            if (class_exists($className) && is_a($className, $iface, true)) {
+            if (class_exists($className) &&  $className instanceof $iface) {
                 $ref = new ReflectionClass($className);
                 $reflectionList[lcfirst($dir)] = $ref->getMethod(static::METHOD);
             }

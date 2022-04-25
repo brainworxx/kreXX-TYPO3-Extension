@@ -98,9 +98,10 @@ class Properties extends AbstractEventHandler implements
         $data = $params[static::PARAM_DATA];
         $result = '';
 
-        if (is_a($data, ItemIface::class)) {
+        if ($data instanceof ItemIface) {
             $result .= $this->extractValues(static::AIMEOS_B_DATA, $params);
-        } elseif (is_a($data, NodeIface::class) || is_a($data, ViewIface::class) || is_a($data, BaseViewIface::class)) {
+        } elseif ($data instanceof NodeIface || $data instanceof ViewIface || $data instanceof BaseViewIface
+        ) {
             $result .= $this->extractValues(static::AIMEOS_VALUES, $params);
         }
 
