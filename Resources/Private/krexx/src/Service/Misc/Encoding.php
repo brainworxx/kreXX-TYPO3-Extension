@@ -62,7 +62,7 @@ class Encoding
 
         // Register some namespaced cheap polyfills, in case the mb-string
         // extension is not available
-        if (function_exists('mb_detect_encoding') === false) {
+        if (!function_exists('mb_detect_encoding')) {
 
             /**
              * Cheap dummy "polyfill" for mb_detect_encoding

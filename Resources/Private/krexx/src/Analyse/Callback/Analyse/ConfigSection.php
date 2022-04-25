@@ -120,20 +120,12 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
     {
         $value = $setting->getValue();
 
-        if (is_bool($value) === false) {
+        if (!is_bool($value)) {
             // Early return.
             return $value;
         }
 
         // We need to re-translate booleans to something the frontend can understand.
-        if ($value === true) {
-            $value = 'true';
-        }
-
-        if ($value === false) {
-            $value = 'false';
-        }
-
-        return $value;
+        return $value ? 'true' : 'false';
     }
 }

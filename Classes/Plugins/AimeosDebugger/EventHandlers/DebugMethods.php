@@ -159,7 +159,7 @@ class DebugMethods extends AbstractEventHandler implements
     {
         $result = $data->$methodName();
         // We are expecting arrays, btw.
-        if (empty($result) === false) {
+        if (!empty($result)) {
             return $this->pool->render->renderExpandableChild(
                 $this->pool->createClass(Model::class)
                     ->setName($methodName)

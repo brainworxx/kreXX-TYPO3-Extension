@@ -80,7 +80,7 @@ class Serialized extends AbstractScalarAnalysis
         $jsonData = $model->getJson();
         $jsonKey = $this->pool->messages->getHelp('metaMimeTypeString');
         if (
-            isset($jsonData[$jsonKey]) === false
+            !isset($jsonData[$jsonKey])
             || strpos($jsonData[$jsonKey], 'binary') === false
         ) {
             // A serialised string is always binary.

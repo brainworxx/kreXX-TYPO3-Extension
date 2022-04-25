@@ -139,17 +139,17 @@ class ThroughGetter extends AbstractCallback implements
     {
         $output = $this->dispatchStartEvent();
 
-        if (empty($this->parameters[static::PARAM_NORMAL_GETTER]) === false) {
+        if (!empty($this->parameters[static::PARAM_NORMAL_GETTER])) {
             $this->parameters[static::CURRENT_PREFIX] = 'get';
             $output .= $this->goThroughMethodList($this->parameters[static::PARAM_NORMAL_GETTER]);
         }
 
-        if (empty($this->parameters[static::PARAM_IS_GETTER]) === false) {
+        if (!empty($this->parameters[static::PARAM_IS_GETTER])) {
             $this->parameters[static::CURRENT_PREFIX] = 'is';
             $output .= $this->goThroughMethodList($this->parameters[static::PARAM_IS_GETTER]);
         }
 
-        if (empty($this->parameters[static::PARAM_HAS_GETTER]) === false) {
+        if (!empty($this->parameters[static::PARAM_HAS_GETTER])) {
             $this->parameters[static::CURRENT_PREFIX] = 'has';
             $output .= $this->goThroughMethodList($this->parameters[static::PARAM_HAS_GETTER]);
         }
@@ -272,7 +272,7 @@ class ThroughGetter extends AbstractCallback implements
         $nothingFound = true;
         $value = null;
 
-        if (empty($refProp) === false) {
+        if (!empty($refProp)) {
             // We've got ourselves a possible result!
             $nothingFound = false;
             $value = $reflectionClass->retrieveValue($refProp);

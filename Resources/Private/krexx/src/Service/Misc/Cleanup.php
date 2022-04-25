@@ -77,7 +77,7 @@ class Cleanup implements ConfigConstInterface
      */
     public function cleanupOldLogs(): Cleanup
     {
-        if ($this->pool->chunks->getLoggingIsAllowed() === false) {
+        if (!$this->pool->chunks->getLoggingIsAllowed()) {
             // We have no write access. Do nothing.
             return $this;
         }
@@ -119,7 +119,7 @@ class Cleanup implements ConfigConstInterface
     public function cleanupOldChunks(): Cleanup
     {
         // Check for write access. We also do this only once.
-        if (static::$chunksDone || $this->pool->chunks->getChunksAreAllowed() === false) {
+        if (static::$chunksDone || !$this->pool->chunks->getChunksAreAllowed()) {
             return $this;
         }
 

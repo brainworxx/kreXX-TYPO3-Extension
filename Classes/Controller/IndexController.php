@@ -57,7 +57,7 @@ class IndexController extends AbstractController implements ConstInterface
      */
     public function indexAction()
     {
-        if ($this->hasAccess() === false) {
+        if (!$this->hasAccess()) {
             // Sorry!
             $this->addFlashMessage(
                 static::translate(static::ACCESS_DENIED),
@@ -100,7 +100,7 @@ class IndexController extends AbstractController implements ConstInterface
      */
     public function saveAction(Settings $settings)
     {
-        if ($this->hasAccess() === false) {
+        if (!$this->hasAccess()) {
             $this->addFlashMessage(
                 static::translate(static::ACCESS_DENIED),
                 static::translate(static::SAVE_FAIL_TITLE),

@@ -116,7 +116,7 @@ class Messages
     public function addMessage(string $key, array $args = [], bool $isThrowAway = false): void
     {
         // We will only display these messages once.
-        if (isset($this->messages[$key]) === false) {
+        if (!isset($this->messages[$key])) {
             // Add it to the keys, so the CMS can display it.
             $this->messages[$key] = $this->pool->createClass(Message::class)
                 ->setKey($key)
@@ -159,8 +159,8 @@ class Messages
         // Simple Wrapper for OutputActions::$render->renderMessages
         if (
             php_sapi_name() === 'cli' &&
-            empty($this->messages) === false &&
-            defined('KREXX_TEST_IN_PROGRESS') === false
+            !empty($this->messages) &&
+            !defined('KREXX_TEST_IN_PROGRESS')
         ) {
             // Output the messages on the shell.
             $result = "\n\nkreXX messages\n";

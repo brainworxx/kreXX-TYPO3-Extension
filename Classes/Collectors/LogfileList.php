@@ -71,7 +71,7 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
     {
         $fileList = [];
 
-        if ($this->hasAccess === false) {
+        if (!$this->hasAccess) {
             // No access.
             return $fileList;
         }

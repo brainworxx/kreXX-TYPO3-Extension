@@ -118,7 +118,7 @@ class Fluid extends AbstractFluid
      */
     protected function resolveTemplateName($resolvedIdentifiers, string $hash, TemplatePaths $templatePath): string
     {
-        if (isset($resolvedIdentifiers['partials']) === false) {
+        if (!isset($resolvedIdentifiers['partials'])) {
             // Unable to identify the partial.
             return static::FLUID_NOT_AVAILABLE;
         }

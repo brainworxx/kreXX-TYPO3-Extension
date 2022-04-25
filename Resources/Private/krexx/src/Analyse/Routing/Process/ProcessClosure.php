@@ -131,7 +131,7 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
 
         // Adding the namespace, but only if we have one.
         $namespace = $ref->getNamespaceName();
-        if (empty($namespace) === false) {
+        if (empty(!$namespace)) {
             $result[$messages->getHelp('metaNamespace')] = $namespace;
         }
 

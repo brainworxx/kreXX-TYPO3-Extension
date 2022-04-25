@@ -105,7 +105,7 @@ class AjaxController implements ConstInterface, ControllerConstInterface
 
         $result = new stdClass();
 
-        if ($this->hasAccess() === false) {
+        if (!$this->hasAccess()) {
             $result->class  = 'error';
             $result->text = static::translate(static::ACCESS_DENIED);
 

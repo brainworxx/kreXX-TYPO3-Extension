@@ -159,7 +159,7 @@ class ThroughProperties extends AbstractCallback implements
             // The values of static properties are stored in the default
             // properties of the class reflection.
             // And we do not want these here.
-            if ($property->isStatic() === false) {
+            if (!$property->isStatic()) {
                 // We also need to get the class that actually declared this
                 // value. The default values can only be found in there.
                 $defaultProperties = $property->getDeclaringClass()->getDefaultProperties();
@@ -196,7 +196,7 @@ class ThroughProperties extends AbstractCallback implements
             $connectorType = static::CONNECTOR_STATIC_PROPERTY;
         } elseif (
             isset($refProperty->isUndeclared) &&
-            $this->pool->encodingService->isPropertyNameNormal($refProperty->getName()) === false
+            !$this->pool->encodingService->isPropertyNameNormal($refProperty->getName())
         ) {
             // This one was undeclared and does not follow the standard naming
             // conventions of PHP. Maybe something for a rest service?
@@ -224,7 +224,7 @@ class ThroughProperties extends AbstractCallback implements
             $propName = '$' . $propName;
         } elseif (
             isset($refProperty->isUndeclared) &&
-            $this->pool->encodingService->isPropertyNameNormal($refProperty->getName()) === false
+            !$this->pool->encodingService->isPropertyNameNormal($refProperty->getName())
         ) {
             // There can be anything in there. We must take special preparations
             // for the code generation.
@@ -273,7 +273,7 @@ class ThroughProperties extends AbstractCallback implements
             $additional .= 'static ';
         }
 
-        if (empty($refProperty->isUndeclared) === false) {
+        if (!empty($refProperty->isUndeclared)) {
             // The property 'isUndeclared' is not a part of the reflectionProperty.
             // @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
             $additional .= 'dynamic ';
@@ -311,7 +311,7 @@ class ThroughProperties extends AbstractCallback implements
             // We ignore this one.
         }
 
-        if (isset($refProperty->isUnset) === false) {
+        if (!isset($refProperty->isUnset)) {
             return $additional;
         }
 

@@ -89,7 +89,7 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
     {
         // Get a fist impression.
         $first = substr($string, 0, 1);
-        if (($first === '{' xor $first === '[') === false) {
+        if (!($first === '{' xor $first === '[')) {
             return false;
         }
 

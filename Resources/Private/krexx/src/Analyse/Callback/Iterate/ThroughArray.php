@@ -107,7 +107,7 @@ class ThroughArray extends AbstractCallback implements
             ->setData($value)
             ->setCodeGenType($multilineCodeGen);
 
-        if (array_key_exists($key, $array) === false) {
+        if (!array_key_exists($key, $array)) {
             // Looks like we have an inaccessible array value here.
             $model->setCodeGenType(static::CODEGEN_TYPE_ARRAY_VALUES_ACCESS)
                 ->setConnectorParameters(array_search($key, array_keys($array)));

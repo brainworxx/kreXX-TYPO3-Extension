@@ -179,7 +179,7 @@ class Emergency implements ConfigConstInterface
             return false;
         }
 
-        if (static::$allIsOk === false) {
+        if (!static::$allIsOk) {
             // This has failed before!
             // No need to check again!
             return true;

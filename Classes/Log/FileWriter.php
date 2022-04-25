@@ -207,7 +207,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
     {
         // We have to extract it from the backtrace.
         if (
-            isset($backtrace[0][static::TRACE_ARGS][1][static::EXCEPTION]) === false ||
+            !isset($backtrace[0][static::TRACE_ARGS][1][static::EXCEPTION]) ||
             $backtrace[0][static::TRACE_ARGS][1][static::EXCEPTION] instanceof Throwable === false
         ) {
             // Fallback to the normal handling.

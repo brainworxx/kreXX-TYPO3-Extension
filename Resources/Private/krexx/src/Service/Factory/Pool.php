@@ -197,7 +197,7 @@ class Pool extends AbstractFactory
         // Check chunk folder is writable.
         // If not, give feedback!
         $chunkFolder = $this->config->getChunkDir();
-        if ($this->fileService->isDirectoryWritable($chunkFolder) === false) {
+        if (!$this->fileService->isDirectoryWritable($chunkFolder)) {
             $this->messages->addMessage(
                 'chunksNotWritable',
                 [$this->fileService->filterFilePath($chunkFolder)]
@@ -209,7 +209,7 @@ class Pool extends AbstractFactory
         // Check if the log folder is writable.
         // If not, give feedback!
         $logFolder = $this->config->getLogDir();
-        if ($this->fileService->isDirectoryWritable($logFolder) === false) {
+        if (!$this->fileService->isDirectoryWritable($logFolder)) {
             $this->messages->addMessage(
                 'logNotWritable',
                 [$this->fileService->filterFilePath($logFolder)]

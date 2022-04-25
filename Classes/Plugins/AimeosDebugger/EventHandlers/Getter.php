@@ -120,7 +120,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
         if (
             $params[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND] === false ||
             $params[ThroughGetter::CURRENT_PREFIX] !== 'get' ||
-            is_a($data, Iface::class) === false
+            !is_a($data, Iface::class)
         ) {
             // Early return.
             return '';

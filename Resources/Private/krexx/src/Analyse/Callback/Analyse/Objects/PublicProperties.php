@@ -123,7 +123,7 @@ class PublicProperties extends AbstractObjectAnalysis
         foreach (HiddenProperty::HIDDEN_LIST as $className => $propertyNames) {
             if ($data instanceof $className) {
                 foreach ($propertyNames as $propertyName) {
-                    if (isset($refProps[$propertyName]) === false) {
+                    if (!isset($refProps[$propertyName])) {
                         $refProps[$propertyName] = new HiddenProperty($ref, $propertyName);
                     }
                 }

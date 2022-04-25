@@ -114,7 +114,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     public function generateSource(Model $model): string
     {
         // Do some early return stuff.
-        if ($this->allowCodegen === false) {
+        if (!$this->allowCodegen) {
             return static::UNKNOWN_VALUE;
         }
 
@@ -265,16 +265,17 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      */
     public function setAllowCodegen(bool $bool): void
     {
-        if ($bool === false) {
+        if (!$bool) {
             $this->allowCodegen = false;
             ++$this->disableCount;
             return;
-        } else {
-            --$this->disableCount;
-            if ($this->disableCount < 1) {
-                $this->allowCodegen = true;
-            }
         }
+
+        --$this->disableCount;
+        if ($this->disableCount < 1) {
+            $this->allowCodegen = true;
+        }
+
 
         if ($this->disableCount < 0) {
             $this->disableCount = 0;

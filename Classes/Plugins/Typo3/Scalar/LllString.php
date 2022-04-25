@@ -96,7 +96,7 @@ class LllString extends AbstractScalarAnalysis
             // Add the string directly to the model
             if (strpos($string, 'LLL:') === 0) {
                 $trans = $this->localisationUtility::translate($string);
-                if (empty($trans) === false) {
+                if (!empty($trans)) {
                     $model->addToJson($this->pool->messages->getHelp('TYPO3Trans'), $trans);
                 }
             }

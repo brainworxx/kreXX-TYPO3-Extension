@@ -61,7 +61,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
      */
     public function assignData(AbstractTemplateView $view): void
     {
-        if ($this->hasAccess === false) {
+        if (!$this->hasAccess) {
             // No access.
             return;
         }
@@ -150,7 +150,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
      */
     protected function convertKrexxFeSetting($values): ?string
     {
-        if (is_array($values) === false) {
+        if (!is_array($values)) {
             return null;
         }
 

@@ -255,7 +255,7 @@ class Chunks implements ConfigConstInterface
      */
     public function saveDechunkedToFile(string $string): void
     {
-        if ($this->loggingIsAllowed === false) {
+        if (!$this->loggingIsAllowed) {
             // We have no write access. Do nothing.
             return;
         }
@@ -287,7 +287,7 @@ class Chunks implements ConfigConstInterface
         $this->pool->fileService->putFileContents($filename, $string);
         // Save our metadata, so a potential backend module can display it.
         // We may or may not have already some output for this file.
-        if (empty($this->metadata) === false) {
+        if (!empty($this->metadata)) {
             $filename .= '.json';
             // Remove the old metadata file. We still have all it's content
             // available in $this->metadata.
@@ -394,7 +394,7 @@ class Chunks implements ConfigConstInterface
         // We need to decide, if we need to change the official encoding of
         // the HTML output with a meta tag. We ignore everything in the
         // doNothingEncoding array.
-        if (in_array($encoding, $doNothingEncoding, true) === false) {
+        if (!in_array($encoding, $doNothingEncoding, true)) {
             $this->officialEncoding = $encoding;
         }
     }

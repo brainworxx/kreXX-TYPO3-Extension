@@ -308,7 +308,7 @@ abstract class Fallback implements ConfigConstInterface
         }
 
         foreach ($pluginConfig as $newSetting) {
-            if (isset($this->configFallback[$newSetting->getSection()]) === false) {
+            if (!isset($this->configFallback[$newSetting->getSection()])) {
                 $this->configFallback[$newSetting->getSection()] = [];
             }
             $this->configFallback[$newSetting->getSection()][] = $newSetting->getName();

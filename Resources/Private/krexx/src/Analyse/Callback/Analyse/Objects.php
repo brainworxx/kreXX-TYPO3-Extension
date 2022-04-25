@@ -157,7 +157,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
 
         // Dumping getter methods before the protected and private,
         // in case we are not in scope.
-        if ($isInScope === false && $config->getSetting(static::SETTING_ANALYSE_GETTER) === true) {
+        if (!$isInScope && $config->getSetting(static::SETTING_ANALYSE_GETTER) === true) {
             $stuffToDump[] = Getter::class;
         }
 

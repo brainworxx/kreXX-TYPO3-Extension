@@ -91,7 +91,7 @@ class ReturnType extends AbstractComment
         // Fallback to the comments parsing.
         $docComment = $reflection->getDocComment();
         if (
-            empty($docComment) === false
+            !empty($docComment)
             && preg_match('/(?<=@return ).*$/m', $docComment, $matches) > 0
         ) {
             $result = $this->retrieveReturnTypeFromComment($matches[0], $reflectionClass);
@@ -154,7 +154,7 @@ class ReturnType extends AbstractComment
 
         $nullable = $returnType->allowsNull() ? '?' : '';
         $result = $returnType->getName();
-        if (in_array($result, $this->allowedTypes, true) === false && strpos($result, '\\') !== 0) {
+        if (!in_array($result, $this->allowedTypes, true) && strpos($result, '\\') !== 0) {
             // Must be e un-namespaced class name.
             $result = '\\' . $result;
         }

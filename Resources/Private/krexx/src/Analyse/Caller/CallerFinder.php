@@ -161,7 +161,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
         $varname = static::UNKNOWN_VALUE;
 
         // Retrieve the call from the sourcecode file.
-        if ($this->pool->fileService->fileIsReadable($file) === false) {
+        if (!$this->pool->fileService->fileIsReadable($file)) {
             return $varname;
         }
 

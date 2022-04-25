@@ -107,7 +107,7 @@ class File
              $readFrom = 0;
         }
 
-        if (isset($content[$readFrom]) === false) {
+        if (!isset($content[$readFrom])) {
             // We can not even start reading this file!
             // Return empty string.
             return '';
@@ -117,7 +117,7 @@ class File
             $readTo = 0;
         }
 
-        if (isset($content[$readTo]) === false) {
+        if (!isset($content[$readTo])) {
             // We can not read this far, set it to the last line.
             $readTo = $content->count() - 1;
         }
@@ -224,7 +224,7 @@ class File
      */
     public function getFileContents(string $filePath, bool $showError = true): string
     {
-        if ($this->fileIsReadable($filePath) === false) {
+        if (!$this->fileIsReadable($filePath)) {
             if ($showError) {
                 // This file was not readable! We need to tell the user!
                 $this->pool->messages->addMessage('fileserviceAccess', [$this->filterFilePath($filePath)], true);
@@ -286,7 +286,7 @@ class File
         if (is_file($realpath)) {
             // Make sure it is unlinkable.
             chmod($realpath, 0777);
-            if (unlink($realpath) === false) {
+            if (!unlink($realpath)) {
                 // We have a permission problem here!
                 $this->pool->messages->addMessage('fileserviceDelete', [$this->filterFilePath($realpath)]);
             }

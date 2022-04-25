@@ -213,7 +213,7 @@ class Validation extends Fallback
                 $this->skinConfiguration[$value][static::SKIN_DIRECTORY] . 'header.html'
             );
 
-        if ($result === false) {
+        if (!$result) {
             $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR . ucfirst($name));
         }
 
@@ -233,11 +233,11 @@ class Validation extends Fallback
      */
     protected function evalDestination($value, string $name): bool
     {
-        $result = ($value === static::VALUE_BROWSER
+        $result = $value === static::VALUE_BROWSER
             || $value === static::VALUE_FILE
-            || $value === static::VALUE_BROWSER_IMMEDIATELY
-        );
-        if ($result === false) {
+            || $value === static::VALUE_BROWSER_IMMEDIATELY;
+
+        if (!$result) {
             $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR . ucfirst($name));
         }
 
@@ -291,7 +291,7 @@ class Validation extends Fallback
         }
 
         $result = true;
-        if ($this->evalInt($value, $name, $group) === false || $maxTime < (int)$value) {
+        if (!$this->evalInt($value, $name, $group) || $maxTime < (int)$value) {
             $this->pool->messages->addMessage(
                 static::KEY_CONFIG_ERROR . ucfirst($name) . 'Big',
                 [$maxTime]
@@ -319,8 +319,8 @@ class Validation extends Fallback
      */
     protected function evalBool($value, string $name, string $group): bool
     {
-        $result = ($value === static::VALUE_TRUE || $value === static::VALUE_FALSE || is_bool($value));
-        if ($result === false) {
+        $result = $value === static::VALUE_TRUE || $value === static::VALUE_FALSE || is_bool($value);
+        if (!$result) {
             $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR_BOOL, [$group, $name]);
         }
 
@@ -345,8 +345,8 @@ class Validation extends Fallback
      */
     protected function evalInt($value, string $name, string $group): bool
     {
-        $result = ((int) $value) > 0;
-        if ($result === false) {
+        $result = (int) $value > 0;
+        if (!$result) {
             $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR_INT, [$group, $name]);
         }
 
@@ -401,7 +401,7 @@ class Validation extends Fallback
      */
     protected function evalLanguage($value, string $name, string $group): bool
     {
-        if (isset($this->pool->config->getLanguageList()[$value]) === false) {
+        if (!isset($this->pool->config->getLanguageList()[$value])) {
             $this->pool->messages
                 ->addMessage(static::KEY_CONFIG_ERROR_LANGUAGE_INVALID, [$group, $name, $value]);
             return false;

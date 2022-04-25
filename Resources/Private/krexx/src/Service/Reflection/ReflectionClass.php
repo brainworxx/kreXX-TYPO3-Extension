@@ -249,7 +249,7 @@ class ReflectionClass extends \ReflectionClass
         }
         $result = false;
         $parent = parent::getParentClass();
-        if (empty($parent) === false) {
+        if (!empty($parent)) {
             try {
                 $result = new ReflectionClass($parent->name);
             } catch (ReflectionException $e) {

@@ -139,7 +139,7 @@ class Properties extends AbstractEventHandler implements
         }
 
         // Huh, something went wrong here!
-        if (empty($result) || is_array($result) === false) {
+        if (empty($result) || !is_array($result)) {
             return '';
         }
 

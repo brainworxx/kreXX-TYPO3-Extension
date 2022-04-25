@@ -155,9 +155,9 @@ class DebugMethods extends AbstractObjectAnalysis implements
         // 2. Method can be called. There may be a magical method, though.
         // 3. It's not blacklisted.
         if (
-            method_exists($data, $funcName) === false ||
-            is_callable([$data, $funcName]) === false ||
-            $this->pool->config->validation->isAllowedDebugCall($data, $funcName) === false
+            !method_exists($data, $funcName) ||
+            !is_callable([$data, $funcName]) ||
+            !$this->pool->config->validation->isAllowedDebugCall($data, $funcName)
         ) {
             return false;
         }
@@ -168,7 +168,7 @@ class DebugMethods extends AbstractObjectAnalysis implements
         try {
             $ref = $reflectionClass->getMethod($funcName);
             foreach ($ref->getParameters() as $param) {
-                if ($param->isOptional() === false) {
+                if (!$param->isOptional()) {
                     // We've got a required parameter!
                     // We will not call this one.
                     $result = false;

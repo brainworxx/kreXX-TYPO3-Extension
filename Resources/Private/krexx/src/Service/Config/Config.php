@@ -156,7 +156,7 @@ class Config extends Fallback
 
         // Now that our settings are in place, we need to check the
         // ip to decide if we need to deactivate kreXX.
-        if ($this->checkOutput->isAllowedIp($this->getSetting(static::SETTING_IP_RANGE)) === false) {
+        if (!$this->checkOutput->isAllowedIp($this->getSetting(static::SETTING_IP_RANGE))) {
             // No kreXX for you! At all.
             $this->setDisabled(true);
             static::$disabledByPhp = true;
@@ -210,7 +210,7 @@ class Config extends Fallback
             // Do we have a value in the cookies?
             if (
                 $cookieSetting  !== null &&
-                ($name === static::SETTING_DISABLED && $cookieSetting === static::VALUE_FALSE) === false
+                !($name === static::SETTING_DISABLED && $cookieSetting === static::VALUE_FALSE)
             ) {
                 // We must not overwrite a disabled=true with local cookie settings!
                 // Otherwise, it could get enabled locally, which might be a security

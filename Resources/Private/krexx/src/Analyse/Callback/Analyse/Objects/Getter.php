@@ -125,7 +125,7 @@ class Getter extends AbstractObjectAnalysis
         // $this context.
         if (
             ($method->isPrivate() && $method->getDeclaringClass()->getName() !== $ref->getName()) ||
-            empty($method->getParameters()) === false
+            !empty($method->getParameters())
         ) {
             // We skip this one. Either it's an out-of-scope private getter,
             // or it has parameters.

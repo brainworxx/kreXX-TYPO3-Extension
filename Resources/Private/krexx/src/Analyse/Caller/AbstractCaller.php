@@ -179,7 +179,7 @@ abstract class AbstractCaller
         }
 
         // SSL or no SSL.
-        $ssl = empty($server['HTTPS']) === false && $server['HTTPS'] === 'on';
+        $ssl = !empty($server['HTTPS']) && $server['HTTPS'] === 'on';
 
         $protocol = strtolower($server['SERVER_PROTOCOL']);
         $protocol = substr($protocol, 0, strpos($protocol, '/'));
@@ -189,7 +189,7 @@ abstract class AbstractCaller
 
         $port = $server['SERVER_PORT'];
 
-        ($ssl === false && $port === '80') || ($ssl && $port === '443') ? $port = '' : $port = ':' . $port;
+        (!$ssl && $port === '80') || ($ssl && $port === '443') ? $port = '' : $port = ':' . $port;
 
         if (isset($server['HTTP_HOST'])) {
             $host = $server['HTTP_HOST'];

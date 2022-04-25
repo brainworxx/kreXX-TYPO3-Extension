@@ -110,7 +110,7 @@ class FilePath extends AbstractScalarAnalysis
             return false;
         }
 
-        if (isset($cache[$string]) === false) {
+        if (!isset($cache[$string])) {
             $cache[$string] = $this->retrieveFileInfo($string);
         }
 
@@ -119,11 +119,11 @@ class FilePath extends AbstractScalarAnalysis
             return false;
         }
 
-        if (empty($cache[$string][static::REAL_PATH]) === false) {
+        if (!empty($cache[$string][static::REAL_PATH])) {
             $model->addToJson('Real path', $cache[$string][static::REAL_PATH]);
         }
 
-        if (empty($cache[$string][static::MIME_TYPE]) === false) {
+        if (!empty($cache[$string][static::MIME_TYPE])) {
             $model->addToJson(
                 $this->pool->messages->getHelp('metaMimeTypeFile'),
                 $cache[$string][static::MIME_TYPE]
@@ -151,7 +151,7 @@ class FilePath extends AbstractScalarAnalysis
             $isFile = false;
         }
 
-        if ($isFile === false) {
+        if (!$isFile) {
             // Early return
             return $result;
         }

@@ -129,7 +129,7 @@ class Traversable extends AbstractObjectAnalysis implements ConfigConstInterface
     protected function analyseTraversableResult($originalClass, array $result): string
     {
         // Direct access to the iterator object,de depending on the object itself.
-        $multiline = ($originalClass instanceof ArrayAccess) === false
+        $multiline = !($originalClass instanceof ArrayAccess)
             || $originalClass instanceof SplObjectStorage;
         $messages = $this->pool->messages;
 

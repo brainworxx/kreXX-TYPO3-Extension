@@ -79,7 +79,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
         $result = '';
 
         // Get out of here as soon as possible.
-        if ($this->allowCodegen === false) {
+        if (!$this->allowCodegen) {
             return $result;
         }
 
@@ -144,7 +144,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
 
         // Do the child generation.
         $result = parent::generateSource($model);
-        if ($this->isAll === false) {
+        if (!$this->isAll) {
             return $result;
         }
 

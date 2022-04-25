@@ -150,15 +150,15 @@ class Meta extends AbstractObjectAnalysis
 
         // Now to collect the inheritance stuff.
         // Each of them will get analysed by the ThroughMeta callback.
-        if (empty($interfaces = $ref->getInterfaces()) === false) {
+        if (!empty($interfaces = $ref->getInterfaces())) {
             $data[$messages->getHelp('metaInterfaces')] = $interfaces;
         }
-        if (empty($traitList = $ref->getTraits()) === false) {
+        if (!empty($traitList = $ref->getTraits())) {
             $data[$messages->getHelp('metaTraits')] = $traitList;
         }
 
         /** @var ReflectionClass $previousClass */
-        if (empty($previousClass = $ref->getParentClass()) === false) {
+        if (!empty($previousClass = $ref->getParentClass())) {
             // We add it via array, because the other inheritance getters
             // are also supplying one.
             $data[$messages->getHelp('metaInheritedClass')] = [$previousClass->getName() => $previousClass];
@@ -199,7 +199,7 @@ class Meta extends AbstractObjectAnalysis
         if ($ref->isFinal()) {
             $result .= 'final ';
         }
-        if ($ref->isAbstract() && $ref->isTrait() === false) {
+        if ($ref->isAbstract() && !$ref->isTrait()) {
             // Huh, traits are abstract, but you do not declare them as such.
             $result .= 'abstract ';
         }

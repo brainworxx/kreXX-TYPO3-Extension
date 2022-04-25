@@ -65,7 +65,7 @@ class PropertyDeclaration extends AbstractDeclaration
         }
 
         $traits = $reflectionClass->getTraits();
-        if (empty($traits) === false) {
+        if (!empty($traits)) {
             // Update the declaring class reflection from the traits.
             $reflectionClass = $this->retrieveDeclaringClassFromTraits($traits, $reflection, $reflectionClass);
         }

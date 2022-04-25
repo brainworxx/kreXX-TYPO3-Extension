@@ -73,7 +73,7 @@ class Bootstrap implements ConstInterface
      */
     public function run(): void
     {
-        if ($this->loadKrexx() === false) {
+        if (!$this->loadKrexx()) {
             // "Autoloading" failed.
             // There is no point in continuing here.
             return;

@@ -157,7 +157,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      */
     protected function assignParsedTemplateRenderType(): void
     {
-        if ($this->viewReflection->hasProperty('renderingStack') === false) {
+        if (!$this->viewReflection->hasProperty('renderingStack')) {
             // No rendering stack, no template file  :-(
             $this->error = true;
             return;
@@ -293,7 +293,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     protected function resolveVarname(string $filePath): void
     {
         // Retrieve the call from the sourcecode file.
-        if ($this->pool->fileService->fileIsReadable($filePath) === false) {
+        if (!$this->pool->fileService->fileIsReadable($filePath)) {
             // File is not readable. We can not do this.
             // Fallback to the standard values in the class header.
             return ;

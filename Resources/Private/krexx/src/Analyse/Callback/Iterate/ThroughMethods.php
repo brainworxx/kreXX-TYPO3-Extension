@@ -149,7 +149,7 @@ class ThroughMethods extends AbstractCallback implements
 
         // Get the comment from the class, it's parents, interfaces or traits.
         $methodComment = $this->commentAnalysis->getComment($refMethod, $refClass);
-        if (empty($methodComment) === false) {
+        if (!empty($methodComment)) {
             $methodData[$messages->getHelp('metaComment')] = $methodComment;
         }
 

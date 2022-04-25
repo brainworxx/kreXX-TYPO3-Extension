@@ -130,7 +130,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         $data = $ref->getData();
 
         // Test if we are facing an Aimeos view.
-        if (is_a($data, ViewInterface::class) === false && is_a($data, BaseViewInterface::class) === false) {
+        if (!is_a($data, ViewInterface::class) && !is_a($data, BaseViewInterface::class)) {
             // This is not the view we are looking for.
             // Early return.
             return '';
@@ -172,7 +172,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
             // This means that the helper may be someone else as it should be,
             // according to the key.
             $this->helpers = $this->retrieveProperty($ref, 'helper', $data);
-            if (is_array($this->helpers) && empty($this->helpers) === false) {
+            if (is_array($this->helpers) && !empty($this->helpers)) {
                 // We got ourselves some classes to analyse.
                 $this->pool->codegenHandler->setAllowCodegen(false);
                 $result .= $this->pool->render->renderExpandableChild(

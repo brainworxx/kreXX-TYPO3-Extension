@@ -132,7 +132,7 @@ class Log extends AbstractSubModule implements
      */
     public function getContent(ModuleData $data): string
     {
-        if ($this->hasAccess() === false) {
+        if (!$this->hasAccess()) {
             return $this->renderMessage(
                 static::translate(static::TRANSLATION_PREFIX . static::ACCESS_DENIED),
                 static::MESSAGE_SEVERITY_ERROR

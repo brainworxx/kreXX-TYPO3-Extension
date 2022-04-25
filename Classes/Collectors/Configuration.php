@@ -56,7 +56,7 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
      */
     public function assignData(AbstractTemplateView $view): void
     {
-        if ($this->hasAccess === false) {
+        if (!$this->hasAccess) {
             // No access.
             return;
         }
