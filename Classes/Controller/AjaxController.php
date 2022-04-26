@@ -72,6 +72,7 @@ class AjaxController implements ConstInterface, ControllerConstInterface
     public function refreshLoglistAction(ServerRequest $serverRequest, Response $response = null): Response
     {
         if ($response === null) {
+            /** @var Response $response */
             $response = GeneralUtility::makeInstance(Response::class);
         }
 
@@ -100,6 +101,7 @@ class AjaxController implements ConstInterface, ControllerConstInterface
     public function deleteAction(ServerRequest $serverRequest, Response $response = null): Response
     {
         if ($response === null) {
+            /** @var Response $response */
             $response = GeneralUtility::makeInstance(Response::class);
         }
 

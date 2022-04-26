@@ -59,7 +59,7 @@ class DebugMethods extends AbstractEventHandler implements
      * The 2019 version simplified much of the code, hence the configuration
      * handling here.
      *
-     * @var array
+     * @var string[][]
      */
     protected $methods = [
             'getRefItems' => [

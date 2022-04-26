@@ -108,7 +108,7 @@ abstract class AbstractCollector implements ControllerConstInterface, ConfigCons
     /**
      * List of options, that are 'expert' only.
      *
-     * @var array
+     * @var string[]
      */
     protected $expertOnly = [
         self::SETTING_DETECT_AJAX,

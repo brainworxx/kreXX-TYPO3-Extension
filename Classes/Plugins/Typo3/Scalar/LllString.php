@@ -116,10 +116,10 @@ class LllString extends AbstractScalarAnalysis
      * @codeCoverageIgnore
      *   Who tests the tests?
      *
-     * @param $object
+     * @param \Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility $object
      *   The name of the localisation utility.
      */
-    public function setLocalisationUtility($object): void
+    public function setLocalisationUtility(\Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility $object): void
     {
         $this->localisationUtility = $object;
     }

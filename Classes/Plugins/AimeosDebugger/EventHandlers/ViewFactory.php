@@ -96,7 +96,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     /**
      * List of all retrieved helper classes from the view.
      *
-     * @var array
+     * @var object[]
      */
     protected $helpers = [];
 
@@ -274,7 +274,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
             }
 
             $className = static::AI_NAMESPACE . $dir . static::STANDARD;
-            if (class_exists($className) &&  $className instanceof $iface) {
+            if ($className instanceof $iface) {
                 $ref = new ReflectionClass($className);
                 $reflectionList[lcfirst($dir)] = $ref->getMethod(static::METHOD);
             }

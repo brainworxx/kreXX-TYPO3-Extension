@@ -54,7 +54,7 @@ trait LanguageTrait
      *
      * @param string $key
      *   The key from the LOCAL_LANG array for which to return the value.
-     * @param array|null $arguments
+     * @param string[]|null $arguments
      *   The arguments of the extension, being passed over to vsprintf
      *
      * @return string|null

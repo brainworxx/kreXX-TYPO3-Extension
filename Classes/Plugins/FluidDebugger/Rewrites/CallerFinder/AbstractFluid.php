@@ -121,7 +121,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     /**
      * Meh, the regex un-comments the doc-comment.
      *
-     * {@inheritdoc}
+     * @var string[][]
      */
     protected $callPattern = [
         ['<krexx:debug>{', '}<\/krexx:debug>'],
@@ -220,7 +220,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      * @param mixed $data
      *   The variable that was passes to the viewHelper.
      *
-     * @return array
+     * @return string[]
      *   The caller array.
      */
     protected function resolveCallerArrayByRenderType($data): array

@@ -85,9 +85,9 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
      *
      * @param string $settingsName
      *   The name of the setting
-     * @param array $config
+     * @param string[][] $config
      *   The configuration so far.
-     * @param array $dropdown
+     * @param string[] $dropdown
      *   The pregenerated dropdown.
      */
     protected function generateSingleSetting(string $settingsName, array &$config, array $dropdown): void
@@ -117,7 +117,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
     /**
      * Generate the dropdown array.
      *
-     * @return array
+     * @return string[]
      *   The dropdown array.
      */
     protected function generateDropdown(): array

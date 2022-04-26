@@ -106,7 +106,7 @@ class Fluid extends AbstractFluid
     }
 
     /**
-     * @param $resolvedIdentifiers
+     * @param mixed $resolvedIdentifiers
      *   This should be an array, depending on how successful the script so far was.
      * @param string $hash
      *   The hash form the temp template path.

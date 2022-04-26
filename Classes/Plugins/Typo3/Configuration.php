@@ -290,7 +290,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     /**
      * Create and protect the working directories.
      *
-     * @param array $tempPaths
+     * @param string[] $tempPaths
      */
     protected function createWorkingDirectories(array $tempPaths): void
     {

@@ -55,7 +55,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
     /**
      * List of possible internal names of the recipient class.
      *
-     * @var array
+     * @var string[]
      */
     protected $internalObjectNames = [
         'controller' => '$this->controller,',
@@ -137,11 +137,11 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      *
      * @param array $params
      *   The parameters from the original callback.
-     * @param array $allReceivers
+     * @param object[] $allReceivers
      *   By value of all known receivers. We can only have one return value,
      *   but we retrieve two different values.
      *
-     * @return array
+     * @return string[]
      *   The  methods we need to analyse.
      */
     protected function retrieveMethods(array $params, array &$allReceivers): array

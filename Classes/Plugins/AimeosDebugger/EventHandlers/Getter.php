@@ -81,7 +81,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
     /**
      * The names of the internal storages if Aimeos items.
      *
-     * @var array
+     * @var string[]
      */
     protected $aimeosDataStorages = [
         AimeosConstInterface::AIMEOS_B_DATA,

@@ -40,7 +40,6 @@ namespace Brainworxx\Includekrexx\Collectors;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\From\File;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
@@ -68,7 +67,7 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
     /**
      * Retrieve the values for the drop-downs.
      *
-     * @return array
+     * @return string[][]
      *   The values for the drop-downs.
      */
     protected function retrieveDropDowns(): array
@@ -105,7 +104,7 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
     /**
      * Retrieve the ini configuration, like the method name implies.
      *
-     * @return array
+     * @return string[][]
      *   The configuration array for the view
      */
     protected function retrieveConfiguration(): array
@@ -118,6 +117,10 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
         $iniReader = $this->pool->createClass(File::class)->loadFile($filePath);
 
         $config = [];
+        /**
+         * @var string $settingsName
+         * @var string[] $fallback
+         */
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
             // Stitch together the settings in the template.
             $group = $fallback[static::SECTION];
@@ -138,11 +141,11 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
      * If not, we need to load the factory settings. We also need to set the
      * info, if we are using the factory settings, at all.
      *
-     * @param array $config
+     * @param string[][] $config
      *   The configuration array, so far.
      * @param string $settingsName
      *   The name of the setting we are processing right now.
-     * @param array $fallback
+     * @param string[] $fallback
      *   The fallback values.
      */
     protected function applyFallbackToConfig(array &$config, string $settingsName, array $fallback): void
@@ -159,8 +162,8 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
         // the settings.
         $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
 
-        $config[$settingsName][static::SETTINGS_VALUE] = isset($this->userUc[$settingsName]) ?
-            $this->userUc[$settingsName] : $fallback[static::SETTINGS_VALUE];
+        $config[$settingsName][static::SETTINGS_VALUE] = $this->userUc[$settingsName] ??
+            $fallback[static::SETTINGS_VALUE];
 
         // Assign the mode-class.
         if (in_array($settingsName, $this->expertOnly, true)) {

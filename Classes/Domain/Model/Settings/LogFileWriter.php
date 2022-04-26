@@ -67,7 +67,7 @@ trait LogFileWriter
     /**
      * Do nothing. This value will not get added to the ini.
      *
-     * @param $value
+     * @param mixed $value
      *
      * @return int
      */
@@ -81,7 +81,7 @@ trait LogFileWriter
     /**
      * Do nothing. This value will not get added to the ini.
      *
-     * @param $value
+     * @param mixed $value
      *
      * @return string
      */

@@ -87,7 +87,7 @@ class DirtyModels implements EventHandlerInterface
         /** @var AbstractDomainObject $data */
         $data = $model->getData();
 
-        if ($data instanceof AbstractDomainObject === false) {
+        if (!($data instanceof AbstractDomainObject)) {
             // Early return. Wrong kind of object.
             return '';
         }

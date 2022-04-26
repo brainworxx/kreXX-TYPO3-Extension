@@ -157,7 +157,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
      */
     protected function isDisabled(): bool
     {
-        $get = GeneralUtility::getIndpEnv('REQUEST_URI');
+        $get = (string)GeneralUtility::getIndpEnv('REQUEST_URI');
 
         if (
             strpos($get, '/ajax/refreshLoglist') !== false

@@ -64,7 +64,7 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      *
      * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
-     * @return array
+     * @return string[][]
      *   The file list with the info.
      */
     public function retrieveFileList(): array
@@ -93,12 +93,12 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
     /**
      * Get all the log file infos together.
      *
-     * @param array $files
+     * @param string[] $files
      *   The list of files to process.
      *
      * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
-     * @return array
+     * @return string[][]
      *   The file info in a neat array.
      */
     protected function retrieveFileInfo(array $files): array
@@ -127,7 +127,7 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      * @param string $file
      *   The file name for which we are retrieving the metadata.
      *
-     * @return array
+     * @return string[]
      *   The meta stuff we were able to retrieve.
      */
     protected function addMetaToFileInfo(string $file): array
