@@ -61,7 +61,7 @@ class ModelTest extends AbstractTest
     public function testSetEditable()
     {
         $this->assertSame($this->model, $this->model->setEditable(true));
-        $this->assertEquals(true, $this->model->getEditable());
+        $this->assertEquals(true, $this->model->isEditable());
     }
 
     /**
@@ -91,12 +91,12 @@ class ModelTest extends AbstractTest
     }
 
     /**
-     * @covers \Brainworxx\Krexx\Service\Config\Model::getEditable
+     * @covers \Brainworxx\Krexx\Service\Config\Model::isEditable
      */
     public function testGetEditable()
     {
         $this->setValueByReflection('editable', true, $this->model);
-        $this->assertEquals(true, $this->model->getEditable());
+        $this->assertEquals(true, $this->model->isEditable());
     }
 
     /**

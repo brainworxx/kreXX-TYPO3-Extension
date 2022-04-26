@@ -79,7 +79,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
         $result = '';
 
         // Get out of here as soon as possible.
-        if (!$this->allowCodegen) {
+        if (!$this->codegenAllowed) {
             return $result;
         }
 

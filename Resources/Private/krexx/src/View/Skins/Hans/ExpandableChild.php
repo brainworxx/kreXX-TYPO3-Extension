@@ -152,7 +152,7 @@ trait ExpandableChild
         if (
             $gencode === static::CODEGEN_STOP_BIT ||
             empty($gencode) ||
-            !$this->pool->codegenHandler->getAllowCodegen()
+            !$this->pool->codegenHandler->isCodegenAllowed()
         ) {
             // Remove the button marker, because here is nothing to add.
             return '';

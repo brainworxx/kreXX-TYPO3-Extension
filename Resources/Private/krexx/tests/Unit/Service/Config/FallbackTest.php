@@ -119,7 +119,7 @@ class FallbackTest extends AbstractTest
         $this->assertSame($sectionName, $settingsModel->getSection());
         $this->assertSame(true, $settingsModel->getValue());
         $this->assertSame(NewSetting::RENDER_TYPE_SELECT, $settingsModel->getType());
-        $this->assertSame(true, $settingsModel->getEditable());
+        $this->assertSame(true, $settingsModel->isEditable());
         $this->assertSame('Factory settings', $settingsModel->getSource());
     }
 }

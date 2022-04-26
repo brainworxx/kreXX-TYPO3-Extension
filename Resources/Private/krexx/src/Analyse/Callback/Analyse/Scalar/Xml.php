@@ -146,7 +146,8 @@ class Xml extends AbstractScalarAnalysis
         set_error_handler(
             function () {
                 $this->hasErrors = true;
-            });
+            }
+        );
         $dom->loadXML($this->originalXml);
         restore_error_handler();
 

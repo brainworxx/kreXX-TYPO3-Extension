@@ -96,7 +96,7 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
         $output = '';
         $trace = $this->parameters[static::PARAM_DATA]->getTrace();
         if (is_array($trace)) {
-            $this->pool->codegenHandler->setAllowCodegen(false);
+            $this->pool->codegenHandler->setCodegenAllowed(false);
             $output .= $this->pool->render->renderExpandableChild(
                 $this->dispatchEventWithModel(
                     static::TRACE_BACKTRACE,
@@ -109,7 +109,7 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
                         )
                 )
             );
-            $this->pool->codegenHandler->setAllowCodegen(true);
+            $this->pool->codegenHandler->setCodegenAllowed(true);
         }
 
         return$output;

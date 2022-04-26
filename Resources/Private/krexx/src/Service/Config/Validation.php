@@ -399,7 +399,7 @@ class Validation extends Fallback
      * @return bool
      *   Whether it does evaluate or not.
      */
-    protected function evalLanguage($value, string $name, string $group): bool
+    protected function evalLanguage(string $value, string $name, string $group): bool
     {
         if (!isset($this->pool->config->getLanguageList()[$value])) {
             $this->pool->messages

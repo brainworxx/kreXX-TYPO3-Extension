@@ -89,7 +89,7 @@ trait ExpandableChild
                 $model->getNormal(),
                 $this->renderConnectorRight($model->getConnectorRight(128), $model->getReturnType()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $generateSource),
-                $this->pool->chunks->chunkMe($this->renderNest($model, false)),
+                $this->pool->chunks->chunkMe($this->renderNest($model)),
                 $this->renderSourceButtonSg($generateSource, $model),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_L, $codegenHandler->generateWrapperLeft()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_R, $codegenHandler->generateWrapperRight()),
@@ -116,7 +116,7 @@ trait ExpandableChild
         if (
             $gencode === static::CODEGEN_STOP_BIT ||
             empty($gencode) ||
-            !$this->pool->codegenHandler->getAllowCodegen()
+            !$this->pool->codegenHandler->isCodegenAllowed()
         ) {
             // Remove the button marker, because here is nothing to add.
             return '';

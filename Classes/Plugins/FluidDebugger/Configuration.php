@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
 
-use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;

@@ -98,7 +98,7 @@ class Scope implements CallbackConstInterface
             $this->scope = $scope;
             // Now that we have a scope, we can actually generate code to
             // reach the variables inside the analysis.
-            $this->pool->codegenHandler->setAllowCodegen(true);
+            $this->pool->codegenHandler->setCodegenAllowed(true);
         }
     }
 

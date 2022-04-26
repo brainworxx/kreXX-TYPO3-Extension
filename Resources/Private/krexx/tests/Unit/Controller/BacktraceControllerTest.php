@@ -94,7 +94,7 @@ class BacktraceControllerTest extends AbstractController
 
         $poolMock->codegenHandler = $this->createMock(Codegen::class);
         $poolMock->codegenHandler->expects($this->once())
-            ->method('setAllowCodegen')
+            ->method('setCodegenAllowed')
             ->with(false);
 
         $poolMock->emergencyHandler->expects($this->once())

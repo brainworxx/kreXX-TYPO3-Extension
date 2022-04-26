@@ -191,11 +191,7 @@ abstract class AbstractCaller
 
         (!$ssl && $port === '80') || ($ssl && $port === '443') ? $port = '' : $port = ':' . $port;
 
-        if (isset($server['HTTP_HOST'])) {
-            $host = $server['HTTP_HOST'];
-        } else {
-            $host = $server['SERVER_NAME'] . $port;
-        }
+        $host = $server['HTTP_HOST'] ?? $server['SERVER_NAME'] . $port;
 
         return $this->pool->encodingService->encodeString($protocol . '://' . $host . $server['REQUEST_URI']);
     }

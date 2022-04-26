@@ -61,7 +61,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      *
      * @var bool
      */
-    protected $allowCodegen = false;
+    protected $codegenAllowed = false;
 
     /**
      * We treat the first run of the code generation different, because then we
@@ -114,7 +114,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     public function generateSource(Model $model): string
     {
         // Do some early return stuff.
-        if (!$this->allowCodegen) {
+        if (!$this->codegenAllowed) {
             return static::UNKNOWN_VALUE;
         }
 
@@ -161,7 +161,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
         $type = $model->getType() === static::TYPE_CLASS ? $model->getNormal() : $model->getType();
         $blackList = ['->', '::', '[', ']', '(', ')'];
         foreach ($blackList as $value) {
-            if (strpos($name, $value) != false) {
+            if (strpos($name, $value) !== false) {
                 // We are analysing something like:
                 // $this->getWhatever();
                 // We can not type hint this.
@@ -261,19 +261,36 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     /**
      * Gets set, as soon as we have a scope to come from.
      *
+     * @deprecated
+     *   Since 5.0.0. Use setCodegenAllowed() instead.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated code.
+     *
      * @param bool $bool
      */
     public function setAllowCodegen(bool $bool): void
     {
+        $this->setCodegenAllowed($bool);
+    }
+
+    /**
+     * Set, if we are allowed to generate code to reach the stuff inside
+     * of the analysis.
+     *
+     * @param bool $bool
+     */
+    public function setCodegenAllowed(bool $bool): void
+    {
         if (!$bool) {
-            $this->allowCodegen = false;
+            $this->codegenAllowed = false;
             ++$this->disableCount;
             return;
         }
 
         --$this->disableCount;
         if ($this->disableCount < 1) {
-            $this->allowCodegen = true;
+            $this->codegenAllowed = true;
         }
 
 
@@ -285,11 +302,27 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     /**
      * Getter for the allowance of the code generation.
      *
+     * @deprecated
+     *   Since 5.0.0. Use isCodegenAllowed() instead.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated code.
+     *
      * @return bool
      */
     public function getAllowCodegen(): bool
     {
-        return $this->allowCodegen;
+        return $this->isCodegenAllowed();
+    }
+
+    /**
+     * Getter for the allowance of the code generation.
+     *
+     * @return bool
+     */
+    public function isCodegenAllowed(): bool
+    {
+        return $this->codegenAllowed;
     }
 
     /**

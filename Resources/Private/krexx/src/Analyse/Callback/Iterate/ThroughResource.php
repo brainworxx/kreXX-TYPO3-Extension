@@ -61,8 +61,8 @@ class ThroughResource extends AbstractCallback implements CallbackConstInterface
         $output = $this->dispatchStartEvent();
 
         // Temporarily disable code gen.
-        $isAllowedCodeGen = $this->pool->codegenHandler->getAllowCodegen();
-        $this->pool->codegenHandler->setAllowCodegen(false);
+        $isAllowedCodeGen = $this->pool->codegenHandler->isCodegenAllowed();
+        $this->pool->codegenHandler->setCodegenAllowed(false);
 
         foreach ($this->parameters[static::PARAM_DATA] as $name => $data) {
             $output .= $this->pool->routing->analysisHub(
@@ -74,7 +74,7 @@ class ThroughResource extends AbstractCallback implements CallbackConstInterface
         }
 
         // Reset code generation.
-        $this->pool->codegenHandler->setAllowCodegen($isAllowedCodeGen);
+        $this->pool->codegenHandler->setCodegenAllowed($isAllowedCodeGen);
 
         return $output;
     }

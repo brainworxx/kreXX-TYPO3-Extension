@@ -90,14 +90,14 @@ class Chunks implements ConfigConstInterface
      *
      * @var bool
      */
-    protected $chunksAreAllowed = true;
+    protected $chunkAllowed = true;
 
     /**
      * Is the log folder write protected?
      *
      * @var bool
      */
-    protected $loggingIsAllowed = true;
+    protected $loggingAllowed = true;
 
     /**
      * The logfolder.
@@ -157,7 +157,7 @@ class Chunks implements ConfigConstInterface
      */
     public function chunkMe(string $string): string
     {
-        if ($this->chunksAreAllowed && strlen($string) > 10000) {
+        if ($this->chunkAllowed && strlen($string) > 10000) {
             // Get the key.
             $key = $this->genKey();
             // Detect the encoding in the chunk.
@@ -255,7 +255,7 @@ class Chunks implements ConfigConstInterface
      */
     public function saveDechunkedToFile(string $string): void
     {
-        if (!$this->loggingIsAllowed) {
+        if (!$this->loggingAllowed) {
             // We have no write access. Do nothing.
             return;
         }
@@ -303,23 +303,78 @@ class Chunks implements ConfigConstInterface
      * When the chunks' folder is not writable, we will not use chunks.
      * This will increase the memory usage significantly!
      *
+     * @deprecated
+     *   Since 5.0.0. Use setChunkAllowed() instead.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated code.
+     *
      * @param bool $bool
      *   Are we using chunks?
      */
     public function setChunksAreAllowed(bool $bool): void
     {
-        $this->chunksAreAllowed = $bool;
+        $this->setChunkAllowed($bool);
+    }
+
+    /**
+     * Setter for the $chunkAllowed.
+     *
+     * When the chunks' folder is not writable, we will not use chunks.
+     * This will increase the memory usage significantly!
+     *
+     * @param bool $bool
+     *   Are we using chunks?
+     */
+    public function setChunkAllowed(bool $bool): void
+    {
+        $this->chunkAllowed = $bool;
     }
 
     /**
      * Getter for the useChunks value.
+     *
+     * @deprecated
+     *   Since 5.0.0. Use isChunkAllowed() instead.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated code.
      *
      * @return bool
      *   Are we using chunks?
      */
     public function getChunksAreAllowed(): bool
     {
-        return $this->chunksAreAllowed;
+        return $this->isChunkAllowed();
+    }
+
+    /**
+     * Getter for the chunkAllowed value.
+     *
+     * @return bool
+     *   Are we using chunks?
+     */
+    public function isChunkAllowed(): bool
+    {
+        return $this->chunkAllowed;
+    }
+
+    /**
+     * Setter for the $useLogging. Here we determine, if the logfolder
+     * is accessible.
+     *
+     * @deprecated
+     *   Since 5.0.0. Use setLoggingAllowed() instead.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated code.
+     *
+     * @param bool $bool
+     *   Is the log folder accessible?
+     */
+    public function setLoggingIsAllowed(bool $bool): void
+    {
+        $this->setLoggingAllowed($bool);
     }
 
     /**
@@ -329,20 +384,37 @@ class Chunks implements ConfigConstInterface
      * @param bool $bool
      *   Is the log folder accessible?
      */
-    public function setLoggingIsAllowed(bool $bool): void
+    public function setLoggingAllowed(bool $bool): void
     {
-        $this->loggingIsAllowed = $bool;
+        $this->loggingAllowed = $bool;
     }
 
     /**
      * Getter for the useLogging.
+     *
+     * @deprecated
+     *   Since 5.0.0. Use isLoggingAllowed instead.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated code.
      *
      * @return bool
      *   Is the log folder accessible?
      */
     public function getLoggingIsAllowed(): bool
     {
-        return $this->loggingIsAllowed;
+        return $this->isLoggingAllowed();
+    }
+
+    /**
+     * Getter for the loggingAllowed.
+     *
+     * @return bool
+     *   Is the log folder accessible?
+     */
+    public function isLoggingAllowed(): bool
+    {
+        return $this->loggingAllowed;
     }
 
     /**

@@ -108,11 +108,11 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
         }
 
         // Disable source generation
-        $this->pool->codegenHandler->setAllowCodegen(false);
+        $this->pool->codegenHandler->setCodegenAllowed(false);
         $result = $this->pool->render->renderExpandableChild($model);
 
         // Enable source generation.
-        $this->pool->codegenHandler->setAllowCodegen(true);
+        $this->pool->codegenHandler->setCodegenAllowed(true);
 
         return $result;
     }

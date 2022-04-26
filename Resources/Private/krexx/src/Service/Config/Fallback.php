@@ -444,11 +444,6 @@ abstract class Fallback implements ConfigConstInterface
      * The render settings for a simple string input field,
      * that we do not evaluate.
      *
-     * @param string $section
-     *   The section, where it belongs to
-     * @param string $value
-     *   The prefilled value.
-     *
      * @return array
      *   The settings.
      */

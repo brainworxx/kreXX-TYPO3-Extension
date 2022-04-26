@@ -55,6 +55,8 @@ class TimeStamp extends AbstractScalarAnalysis
      * We add the short info straight to the model.
      *
      * {@inheritDoc}
+     * 
+     * @throws \Exception
      */
     public function canHandle($string, Model $model): bool
     {

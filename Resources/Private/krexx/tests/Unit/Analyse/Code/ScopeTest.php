@@ -80,7 +80,7 @@ class ScopeTest extends AbstractTest
     {
         $codegenMock = $this->createMock(Codegen::class);
         $codegenMock->expects($this->never())
-            ->method('setAllowCodegen');
+            ->method('setCodegenAllowed');
         Krexx::$pool->codegenHandler = $codegenMock;
 
         $this->scope->setScope($this->scope::UNKNOWN_VALUE);
@@ -88,7 +88,7 @@ class ScopeTest extends AbstractTest
 
         $codegenMock = $this->createMock(Codegen::class);
         $codegenMock->expects($this->once())
-            ->method('setAllowCodegen')
+            ->method('setCodegenAllowed')
             ->with(true);
         Krexx::$pool->codegenHandler = $codegenMock;
 

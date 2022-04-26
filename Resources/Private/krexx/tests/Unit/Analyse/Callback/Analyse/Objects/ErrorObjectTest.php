@@ -90,7 +90,7 @@ class ErrorObjectTest extends AbstractTest
 
         $codegenMock = $this->createMock(Codegen::class);
         $codegenMock->expects($this->exactly(2))
-            ->method('setAllowCodegen')
+            ->method('setCodegenAllowed')
             ->withConsecutive(
                 [false],
                 [true]

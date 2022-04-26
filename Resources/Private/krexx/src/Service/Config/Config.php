@@ -205,7 +205,7 @@ class Config extends Fallback
         $section = $model->getSection();
 
         // Do we accept cookie settings here?
-        if ($model->getEditable()) {
+        if ($model->isEditable()) {
             $cookieSetting = $this->cookieConfig->getConfigFromCookies($section, $name);
             // Do we have a value in the cookies?
             if (

@@ -120,13 +120,13 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
 
         // Do a normal analysis of all receiver objects.
         if (!empty($allReceivers)) {
-            $this->pool->codegenHandler->setAllowCodegen(false);
+            $this->pool->codegenHandler->setCodegenAllowed(false);
             $result .= $this->pool->render->renderExpandableChild($this->pool->createClass(Model::class)
                 ->setName($this->pool->messages->getHelp('aimeosDecoratedObj'))
                 ->setType('class internals decorator')
                 ->addParameter(static::PARAM_DATA, $allReceivers)
                 ->injectCallback($this->pool->createClass(ThroughClassList::class)));
-            $this->pool->codegenHandler->setAllowCodegen(true);
+            $this->pool->codegenHandler->setCodegenAllowed(true);
         }
 
         return $result;

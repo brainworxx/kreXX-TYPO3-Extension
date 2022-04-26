@@ -157,7 +157,9 @@ class ReflectionClass extends \ReflectionClass
                 // Do nothing.
             });
             try {
-                return $this->data->$propName;
+                $result = $this->data->$propName;
+                restore_error_handler();
+                return $result;
             } catch (Throwable $exception) {
                 // Do nothing.
                 // Looks like somebody did not like me accessing it directly.

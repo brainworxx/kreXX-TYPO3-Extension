@@ -158,7 +158,7 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
         }
 
         // Sorry, no code generation for you guys.
-        $this->pool->codegenHandler->setAllowCodegen(false);
+        $this->pool->codegenHandler->setCodegenAllowed(false);
         if (is_string($meta)) {
             // Render a single data point.
             $result = $this->pool->render->renderExpandableChild(
@@ -169,7 +169,7 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
             $result = $this->pool->routing->analysisHub($model);
         }
 
-        $this->pool->codegenHandler->setAllowCodegen(true);
+        $this->pool->codegenHandler->setCodegenAllowed(true);
         return $result;
     }
 }

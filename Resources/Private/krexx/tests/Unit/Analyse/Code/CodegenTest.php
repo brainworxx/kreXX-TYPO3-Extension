@@ -77,7 +77,7 @@ class CodegenTest extends AbstractTest
         parent::krexxUp();
 
         $this->codegenHandler = new Codegen(Krexx::$pool);
-        $this->codegenHandler->setAllowCodegen(true);
+        $this->codegenHandler->setCodegenAllowed(true);
         $this->setValueByReflection(static::DISABLE_COUNT, 0, $this->codegenHandler);
         $this->setValueByReflection(static::FIRST_RUN, false, $this->codegenHandler);
 
@@ -124,7 +124,7 @@ class CodegenTest extends AbstractTest
      */
     public function testGenerateSourceNoGen()
     {
-        $this->codegenHandler->setAllowCodegen(false);
+        $this->codegenHandler->setCodegenAllowed(false);
         $this->expectConnectorCalls(0, 0);
 
         $this->assertEquals('. . .', $this->codegenHandler->generateSource($this->fixture));
@@ -407,46 +407,46 @@ class CodegenTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateWrapperLeft
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateWrapperRight
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::setAllowCodegen
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::getAllowCodegen
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::setCodegenAllowed
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::isCodegenAllowed
      */
     public function testSimpleGetterandSetter()
     {
         $this->assertEquals('', $this->codegenHandler->generateWrapperLeft());
         $this->assertEquals('', $this->codegenHandler->generateWrapperRight());
         // This is set during the setUp
-        $this->assertEquals(true, $this->codegenHandler->getAllowCodegen());
-        $this->assertEquals(true, $this->codegenHandler->getAllowCodegen());
+        $this->assertEquals(true, $this->codegenHandler->isCodegenAllowed());
+        $this->assertEquals(true, $this->codegenHandler->isCodegenAllowed());
     }
 
     /**
      * Test the multiple enabling / disabling of the code generation.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::setAllowCodegen
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::setCodegenAllowed
      */
     public function testSetAllowCodegen()
     {
-        $this->codegenHandler->setAllowCodegen(false);
+        $this->codegenHandler->setCodegenAllowed(false);
         $this->assertFalse(
-            $this->codegenHandler->getAllowCodegen(),
+            $this->codegenHandler->isCodegenAllowed(),
             'Normal getter test.'
         );
-        $this->codegenHandler->setAllowCodegen(false);
-        $this->codegenHandler->setAllowCodegen(true);
+        $this->codegenHandler->setCodegenAllowed(false);
+        $this->codegenHandler->setCodegenAllowed(true);
         $this->assertFalse(
-            $this->codegenHandler->getAllowCodegen(),
+            $this->codegenHandler->isCodegenAllowed(),
             'Should still be disabled, because we enabled it ony once.'
         );
-        $this->codegenHandler->setAllowCodegen(true);
+        $this->codegenHandler->setCodegenAllowed(true);
         $this->assertTrue(
-            $this->codegenHandler->getAllowCodegen(),
+            $this->codegenHandler->isCodegenAllowed(),
             'Should be enabled, because we enabled it twice.'
         );
 
-        $this->codegenHandler->setAllowCodegen(true);
-        $this->codegenHandler->setAllowCodegen(false);
+        $this->codegenHandler->setCodegenAllowed(true);
+        $this->codegenHandler->setCodegenAllowed(false);
         $this->assertFalse(
-            $this->codegenHandler->getAllowCodegen(),
+            $this->codegenHandler->isCodegenAllowed(),
             'Should be disabled, because we are not counting the enableding after 0.'
         );
     }

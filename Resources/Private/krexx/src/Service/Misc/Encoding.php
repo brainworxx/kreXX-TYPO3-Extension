@@ -59,11 +59,20 @@ class Encoding
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
+        $this->registerPolyfill();
+        $pool->encodingService = $this;
+    }
 
-        // Register some namespaced cheap polyfills, in case the mb-string
-        // extension is not available
+    /**
+     * Register some namespaced cheap polyfills, in case the mb-string
+     * extension is not available
+     *
+     * @codeCoverageIgnore
+     *   We will not test a cheap polyfill.
+     */
+    protected function registerPolyfill(): void
+    {
         if (!function_exists('mb_detect_encoding')) {
-
             /**
              * Cheap dummy "polyfill" for mb_detect_encoding
              *
@@ -73,9 +82,6 @@ class Encoding
              *   Will not get used.
              * @param bool $strict
              *   Will not get used.
-             *
-             * @codeCoverageIgnore
-             *   We will not test a cheap polyfill
              *
              * @return string
              *   Always 'polyfill'.
@@ -92,9 +98,6 @@ class Encoding
              *   The sting we want to measure.
              * @param $encoding
              *   Will not get used.
-             *
-             * @codeCoverageIgnore
-             *   We will not test a cheap polyfill
              *
              * @return int
              *   The length, according to strlen();
@@ -113,9 +116,6 @@ class Encoding
              *   The start.
              * @param $length
              *   The length we want.
-             *
-             * @codeCoverageIgnore
-             *   We will not test a cheap polyfill
              *
              * @return string
              *   The substring, according to substr().
@@ -136,9 +136,6 @@ class Encoding
              * @param string $fromEncoding
              *   Will not get used.
              *
-             * @codeCoverageIgnore
-             *   We will not test a cheap polyfill
-             *
              * @return string
              *   Always an empty string.
              */
@@ -148,9 +145,8 @@ class Encoding
             }
 
             // Tell the dev, that we have a problem.
-            $pool->messages->addMessage('mbstringNotInstalled');
+            $this->pool->messages->addMessage('mbstringNotInstalled');
         }
-        $pool->encodingService = $this;
     }
 
     /**
@@ -261,7 +257,7 @@ class Encoding
      * @codeCoverageIgnore
      *   We will not test simple wrappers
      *
-     * @return string|false
+     * @return string|bool
      *   The result.
      */
     public function mbDetectEncoding(string $string, string $encodinglist = 'auto', bool $strict = false)
@@ -407,6 +403,6 @@ class Encoding
         return $cache[$propName] = (bool) preg_match(
             "/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/",
             (string)$propName
-            ) && !(bool) preg_match("/[\xEF\xBB\xBF]$/", $propName);
+        ) && !(bool) preg_match("/[\xEF\xBB\xBF]$/", $propName);
     }
 }

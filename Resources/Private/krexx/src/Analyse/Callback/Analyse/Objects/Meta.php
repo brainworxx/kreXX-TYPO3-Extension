@@ -69,7 +69,7 @@ class Meta extends AbstractObjectAnalysis
     public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
-        $this->pool->codegenHandler->setAllowCodegen(false);
+        $this->pool->codegenHandler->setCodegenAllowed(false);
 
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
@@ -80,7 +80,7 @@ class Meta extends AbstractObjectAnalysis
         if ($this->pool->recursionHandler->isInMetaHive($domId)) {
             // We have been here before.
             // We skip this one, and leave it to the js recursion handler!
-            $this->pool->codegenHandler->setAllowCodegen(true);
+            $this->pool->codegenHandler->setCodegenAllowed(true);
             return $output .
                 $this->pool->render->renderRecursion(
                     $this->dispatchEventWithModel(
@@ -93,7 +93,7 @@ class Meta extends AbstractObjectAnalysis
                     )
                 );
         }
-        $this->pool->codegenHandler->setAllowCodegen(true);
+        $this->pool->codegenHandler->setCodegenAllowed(true);
         return $output . $this->analyseMeta($domId, $ref, $name);
     }
 

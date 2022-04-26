@@ -174,7 +174,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
             $this->helpers = $this->retrieveProperty($ref, 'helper', $data);
             if (is_array($this->helpers) && !empty($this->helpers)) {
                 // We got ourselves some classes to analyse.
-                $this->pool->codegenHandler->setAllowCodegen(false);
+                $this->pool->codegenHandler->setCodegenAllowed(false);
                 $result .= $this->pool->render->renderExpandableChild(
                     $this->pool->createClass(Model::class)
                         ->setName($this->pool->messages->getHelp('aimeosViewHelpers'))
@@ -183,7 +183,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
                         ->setHelpid('aimeosViewExisting')
                         ->injectCallback($this->pool->createClass(ThroughClassList::class))
                 );
-                $this->pool->codegenHandler->setAllowCodegen(true);
+                $this->pool->codegenHandler->setCodegenAllowed(true);
             }
         }
 
