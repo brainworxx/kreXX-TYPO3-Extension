@@ -151,7 +151,7 @@ class Bootstrap implements ConstInterface
 
         // Simply load the main file.
         $krexxFile =  ExtensionManagementUtility::extPath(static::EXT_KEY) . 'Resources/Private/krexx/bootstrap.php';
-        if (file_exists($krexxFile) && class_exists(Krexx::class, false)) {
+        if (file_exists($krexxFile)) {
             include_once $krexxFile;
             return true;
         }
