@@ -35,11 +35,13 @@
 
 namespace Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser;
 
+use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser as OriginalParser;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
+use Exception;
 
 /**
  * Wrapper around the Typo3DbQueryParser.
@@ -66,6 +68,7 @@ class Typo3DbQueryParser extends OriginalParser
      * it still works outside extbase.
      *
      * @throws \TYPO3\CMS\Extbase\Object\Exception
+     * @throws \Exception
      *
      * {@inheritDoc}
      */
@@ -84,7 +87,7 @@ class Typo3DbQueryParser extends OriginalParser
 
             // Must be very early during the bootstrap in TYPO3 12 and beyond.
             // Dependency injection is not available yet.
-            return 'n/a';
+            throw new Exception(Krexx::$pool->messages->getHelp('TYPO3DiNotReady'));
         }
 
         return parent::convertQueryToDoctrineQueryBuilder($query);
