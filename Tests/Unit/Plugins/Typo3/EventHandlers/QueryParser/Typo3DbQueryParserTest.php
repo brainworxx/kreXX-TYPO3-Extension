@@ -36,7 +36,9 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\EventHandlers\QueryParser;
 
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\View\Messages;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
@@ -110,9 +112,17 @@ class Typo3DbQueryParserTest extends AbstractTest
         $methodExistsMock->expects($this->once())
             ->with(ObjectManager::class, 'get')
             ->will($this->returnValue(false));
+        $messageMock = $this->createMock(Messages::class);
+        $messageMock->expects($this->once())
+            ->method('getHelp')
+            ->with('TYPO3DiNotReady')
+            ->will($this->returnValue('text'));
+        Krexx::$pool->messages = $messageMock;
 
         $parser = new Typo3DbQueryParser();
         $fixture = $this->createMock(Query::class);
-        $this->assertSame('n/a', $parser->convertQueryToDoctrineQueryBuilder($fixture));
+
+        $this->expectException(\Exception::class);
+        $parser->convertQueryToDoctrineQueryBuilder($fixture);
     }
 }
