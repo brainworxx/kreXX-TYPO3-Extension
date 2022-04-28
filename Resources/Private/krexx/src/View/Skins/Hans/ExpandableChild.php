@@ -61,7 +61,6 @@ trait ExpandableChild
         '{codewrapperLeft}',
         '{codewrapperRight}',
         '{help}',
-        '{key-ktype}',
     ];
 
     /**
@@ -108,7 +107,6 @@ trait ExpandableChild
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_L, $codegenHandler->generateWrapperLeft()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_R, $codegenHandler->generateWrapperRight()),
                 $this->renderHelp($model),
-                'key' . $model->getKeyType(),
             ],
             $this->getTemplateFileContent(static::FILE_EX_CHILD_NORMAL)
         );

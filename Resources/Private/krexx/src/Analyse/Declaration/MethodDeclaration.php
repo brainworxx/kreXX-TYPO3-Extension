@@ -40,6 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Declaration;
 use ReflectionClass;
 use ReflectionMethod;
 use Reflector;
+use ReflectionParameter;
 
 class MethodDeclaration extends AbstractDeclaration
 {
@@ -84,6 +85,42 @@ class MethodDeclaration extends AbstractDeclaration
 
         return $filename . "\n" . $secondLine . $messages->getHelp('metaInLine') .
             $reflection->getStartLine();
+    }
+
+    /**
+     * Retrieve the return type by the reflection.
+     *
+     * @param \Reflector $reflection
+     * @return string
+     */
+    public function retrieveReturnType(Reflector $reflection): string
+    {
+        $namedType = $reflection->getReturnType();
+        if ($namedType === null) {
+            // It is not typed.
+            return '';
+        }
+
+        $nullable = $namedType->allowsNull() ? '?' : '';
+
+        return $nullable . $this->retrieveNamedType($namedType);
+    }
+
+    /**
+     * Retrieve the parameter type.
+     *
+     * Depending on the available PHP version, we need to take different measures.
+     *
+     * @param \ReflectionParameter $reflectionParameter
+     *   The reflection parameter, what the variable name says.
+     *
+     * @return string
+     *   The parameter type, if available.
+     */
+    public function retrieveParameterType(ReflectionParameter $reflectionParameter): string
+    {
+        return $reflectionParameter->hasType() ?
+            $this->retrieveNamedType($reflectionParameter->getType()) . ' ' : '';
     }
 
     /**

@@ -64,7 +64,7 @@ trait PluginList
         $result = '';
         $template = $this->getTemplateFileContent(static::FILE_SI_PLUGIN);
         foreach (SettingsGetter::getPlugins() as $plugin) {
-            if ($plugin[self::IS_ACTIVE] === true) {
+            if ($plugin[self::IS_ACTIVE]) {
                 $activeClass = 'kisactive';
                 $activeText = 'active';
             } else {

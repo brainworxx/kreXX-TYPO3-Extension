@@ -235,8 +235,8 @@ class ThroughMethodsTest extends AbstractTest
             $fixture[$this->throughMethods::PARAM_DATA][4]->name,
             'public inherited method',
             '->',
-            '(someNotExistingClass $parameter)',
-            'someNotExistingClass $parameter',
+            '(\someNotExistingClass $parameter)',
+            '\someNotExistingClass $parameter',
             'Asking politely for trouble here',
             $methodFixtureFile,
             $methodFixtureClass

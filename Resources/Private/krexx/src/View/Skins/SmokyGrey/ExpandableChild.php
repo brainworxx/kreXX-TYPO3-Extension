@@ -59,7 +59,6 @@ trait ExpandableChild
         '{codewrapperLeft}',
         '{codewrapperRight}',
         '{addjson}',
-        '{key-ktype}',
     ];
 
     /**
@@ -94,7 +93,6 @@ trait ExpandableChild
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_L, $codegenHandler->generateWrapperLeft()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_R, $codegenHandler->generateWrapperRight()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_JSON, $this->encodeJson($model->getJson())),
-                'key' . $model->getKeyType(),
             ],
             $this->getTemplateFileContent(static::FILE_EX_CHILD_NORMAL)
         );

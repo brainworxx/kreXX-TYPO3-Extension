@@ -35,51 +35,26 @@
 
 namespace Brainworxx\Krexx\Tests\Fixtures;
 
-/**
- * A simple fixture to test the methods analysis.
- *
- * @package Brainworxx\Krexx\Tests\Fixtures
- */
-class MethodsFixture implements EmptyInterfaceFixture
+class TypeFixture
 {
     /**
-     * Some comment.
+     * Simply typed property.
+     *
+     * @var string
      */
-    public function publicMethod()
-    {
-    }
+    protected string $simplyTyped;
 
     /**
-     * More comments
+     * An uninitialized typed property.
+     *
+     * @var \Reflection
      */
-    protected function protectedMethod()
-    {
-    }
+    public \Reflection $reflection;
 
     /**
-     * Private method. Duh.
+     * What the class name says.
      *
-     * @return string
+     * @var \Does\Not\Exist
      */
-    private function privateMethod()
-    {
-        return '';
-    }
-
-    /**
-     * Asking politely for trouble here.
-     *
-     * @param \someNotExistingClass $parameter
-     *
-     * @return string
-     */
-    public function troublesomeMethod(\someNotExistingClass $parameter)
-    {
-        return $parameter->stuff . $this->privateMethod();
-    }
-
-    public function classMethod(LoggerCallerFixture $loggerCallerFixture): LoggerCallerFixture
-    {
-        return $loggerCallerFixture;
-    }
+    private \Does\Not\Exist $nothing;
 }

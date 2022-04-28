@@ -53,6 +53,7 @@ class MethodsTest extends AbstractTest
     const PROTECTED_METHOD = 'protectedMethod';
     const PUBLIC_METHOD = 'publicMethod';
     const TROUBLESOME_METHOD = 'troublesomeMethod';
+    const CLASS_METHOD = 'classMethod';
 
     /**
      * @var string
@@ -171,6 +172,7 @@ class MethodsTest extends AbstractTest
             [
                 0 => [
                     'data' => [
+                        new ReflectionMethod($this->fixture['data'], static::CLASS_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PUBLIC_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::TROUBLESOME_METHOD),
                     ],
@@ -209,6 +211,7 @@ class MethodsTest extends AbstractTest
             [
                 0 => [
                     'data' => [
+                        new ReflectionMethod($this->fixture['data'], static::CLASS_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PROTECTED_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PUBLIC_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::TROUBLESOME_METHOD),
@@ -248,6 +251,7 @@ class MethodsTest extends AbstractTest
             [
                 0 => [
                     'data' => [
+                        new ReflectionMethod($this->fixture['data'], static::CLASS_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PRIVATE_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PUBLIC_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::TROUBLESOME_METHOD),
@@ -287,6 +291,7 @@ class MethodsTest extends AbstractTest
             [
                 0 => [
                     'data' => [
+                        new ReflectionMethod($this->fixture['data'], static::CLASS_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PRIVATE_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PROTECTED_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PUBLIC_METHOD),

@@ -41,11 +41,23 @@ use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Analysis model trait with output styling information.
+ *
+ * @deprecated since 5.0.0
+ *   Will be removed
+ *
+ * @codeCoverageIgnore
+ *   We do not test deprecated methods.
  */
 trait KeyType
 {
     /**
      * The type of key that is used.
+     *
+     * @deprecated since 5.0.0
+     *   Will be removed
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
      *
      * @var string
      */
@@ -53,6 +65,12 @@ trait KeyType
 
     /**
      * Getter for the key type.
+     *
+     * @deprecated since 5.0.0
+     *   Will be removed
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
      *
      * @return string
      */
@@ -65,6 +83,12 @@ trait KeyType
      * Setter for the key type.
      *
      * @param string $keyType
+     *
+     * @deprecated since 5.0.0
+     *   Will be removed
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
      *
      * @return $this
      *   For chaining.

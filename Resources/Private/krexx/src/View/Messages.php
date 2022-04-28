@@ -82,7 +82,6 @@ class Messages
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-        $this->readHelpTexts();
         $pool->messages = $this;
     }
 
@@ -100,6 +99,7 @@ class Messages
     public function setLanguageKey(string $languageKey): Messages
     {
         $this->languageKey = $languageKey;
+        $this->readHelpTexts();
         return $this;
     }
 
@@ -191,10 +191,8 @@ class Messages
     {
         $result = '';
 
-        if (isset($this->helpArray[$this->languageKey][$key])) {
-            $result = $this->helpArray[$this->languageKey][$key];
-        } elseif (isset($this->helpArray['text'][$key])) {
-            $result = $this->helpArray['text'][$key];
+        if (isset($this->helpArray[$key])) {
+            $result = $this->helpArray[$key];
         }
 
         // Return the value
@@ -206,7 +204,7 @@ class Messages
      */
     public function readHelpTexts(): void
     {
-        $this->helpArray = [];
+        $helpArray = [];
 
         $fileList = array_merge(
             [KREXX_DIR . 'resources/language/Help.ini'],
@@ -214,10 +212,12 @@ class Messages
         );
 
         foreach ($fileList as $filename) {
-            $this->helpArray = array_merge_recursive(
-                $this->helpArray,
+            $helpArray = array_replace_recursive(
+                $helpArray,
                 (array)parse_ini_string($this->pool->fileService->getFileContents($filename, false), true)
             );
         }
+
+        $this->helpArray = array_merge($helpArray['text'], $helpArray[$this->languageKey]);
     }
 }

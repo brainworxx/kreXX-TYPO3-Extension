@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Code;
 
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -55,6 +56,13 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      * @var Pool
      */
     protected $pool;
+
+    /**
+     * Retrieves the declared method parameters from the declaration.
+     *
+     * @var \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration
+     */
+    protected $methodDeclaration;
 
     /**
      * Is the code generation allowed? We only allow it during a normal analysis.
@@ -94,8 +102,8 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-
         $pool->codegenHandler = $this;
+        $this->methodDeclaration = $pool->createClass(MethodDeclaration::class);
     }
 
     /**
@@ -342,8 +350,8 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
             $prefix = '&';
         }
 
-        $typedParameter = $reflectionParameter->hasType() ? $reflectionParameter->getType()->getName() . ' ' : '';
-        $name = $typedParameter . $prefix . '$' . $reflectionParameter->getName();
+        $name = $this->methodDeclaration->retrieveParameterType($reflectionParameter) .
+            $prefix . '$' . $reflectionParameter->getName();
 
         // Retrieve the default value, if available.
         if ($reflectionParameter->isDefaultValueAvailable()) {
@@ -369,16 +377,17 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
      *   The reflection parameter, what the variable name says.
      *
      * @deprecated since 5.0.0
-     *   Will be removed.
+     *   Will be removed. Use $this->methodDeclaration->retrieveParameterType().
+     *
      * @codeCoverageIgnore
-     *   We do not test deprecated methods.
+     *   We will not test deprecated code.
      *
      * @return string
      *   The parameter type, if available.
      */
     protected function retrieveParameterType(ReflectionParameter $reflectionParameter): string
     {
-        return $reflectionParameter->hasType() ? $reflectionParameter->getType()->getName() . ' ' : '';
+        return $this->methodDeclaration->retrieveParameterType($reflectionParameter);
     }
 
     /**

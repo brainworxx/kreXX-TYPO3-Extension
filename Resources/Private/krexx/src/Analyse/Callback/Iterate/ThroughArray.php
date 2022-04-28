@@ -115,7 +115,6 @@ class ThroughArray extends AbstractCallback implements
 
         if (is_string($key)) {
             $model->setName($this->pool->encodingService->encodeString($key))
-                ->setKeyType(static::TYPE_STRING)
                 ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);
         } else {
             $model->setName($key)->setConnectorType(static::CONNECTOR_NORMAL_ARRAY);

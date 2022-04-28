@@ -234,7 +234,7 @@ class ThroughGetter extends AbstractCallback implements
         $this->prepareResult($reflectionClass, $reflectionMethod, $refProp, $model);
         $this->dispatchEventWithModel(__FUNCTION__ . '::resolving', $model);
 
-        if ($this->parameters[static::PARAM_ADDITIONAL]['nothingFound'] === true) {
+        if ($this->parameters[static::PARAM_ADDITIONAL]['nothingFound']) {
             // Found nothing  :-(
             // We literally have no info. We need to tell the user.
             // We render this right away, without any routing.

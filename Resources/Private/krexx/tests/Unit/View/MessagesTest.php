@@ -153,7 +153,7 @@ class MessagesTest extends AbstractTest
      */
     public function testGetHelp()
     {
-        $helpArray = ['text' =>['doctor' => 'Some %s string.']];
+        $helpArray = ['doctor' => 'Some %s string.'];
         $this->setValueByReflection('helpArray', $helpArray, $this->messagesClass);
 
         $this->assertEquals('', $this->messagesClass->getHelp('unknown key'));
@@ -206,7 +206,7 @@ class MessagesTest extends AbstractTest
 
         $this->messagesClass->readHelpTexts();
         $this->assertEquals(
-            ['text' => ['someKey' => 'a string']],
+            ['someKey' => 'a string'],
             $this->retrieveValueByReflection('helpArray', $this->messagesClass)
         );
     }

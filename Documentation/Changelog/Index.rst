@@ -19,6 +19,7 @@ Changelog
     - [Feature] Added serialized string pretty print.
     - [Feature] Added static cache to the filepath scalar analysis.
     - [Feature] Added support for the hidden properties of ext_dom classes.
+    - [Feature] Added typed property analysis.
     - [Change] Removed deprecated code.
     - [Change] Drop PHP 7.0 support
     - [Change] Streamlined the type display of strings
@@ -35,7 +36,8 @@ Changelog
     - [Change] Lots of deprecations.
     - [Change] Removed the XML decoder.
     - [Change] Drop TYPO3 7.6 support.
-    - [Change] Deprecate the old 4.5 till 7.6 Fluid caller finder.
+    - [Change] Moved the return type retrieval by reflection to the declaration analysis classes.
+    - [Change] Moved the parameter analysis to the declaration analysis classes.
 
 4.1.5
     - [Feature] Aimeos 2022 support

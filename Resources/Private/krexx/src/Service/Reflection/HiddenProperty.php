@@ -210,15 +210,4 @@ class HiddenProperty extends UndeclaredProperty
             $this->isProtected = true;
         }
     }
-
-    /**
-     * Actually, there is a good chance that these values are typed.
-     * For debugging purpose, we do not handle this.
-     *
-     * @return false
-     */
-    public function hasType(): bool
-    {
-        return false;
-    }
 }

@@ -102,11 +102,8 @@ class ThroughArrayTest extends AbstractTest
         // Test the connectors.
         $this->assertEquals('[', $models[0]->getConnectorLeft());
         $this->assertEquals(']', $models[0]->getConnectorRight());
-        $this->assertEquals('', $models[0]->getKeyType());
         $this->assertEquals('[\'', $models[1]->getConnectorLeft());
         $this->assertEquals('\']', $models[1]->getConnectorRight());
-        $this->assertEquals(ProcessConstInterface::TYPE_STRING, $models[1]->getKeyType());
-
     }
 
     /**

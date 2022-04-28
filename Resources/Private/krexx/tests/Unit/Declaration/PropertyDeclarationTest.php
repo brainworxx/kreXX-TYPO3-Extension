@@ -38,7 +38,10 @@ namespace Brainworxx\Krexx\Tests\Unit\Declaration;
 use Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture;
+use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Fixtures\TraitUsingClass;
+use Brainworxx\Krexx\Tests\Fixtures\TypeFixture;
+use Brainworxx\Krexx\Tests\Fixtures\UnionTypeFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 
 class PropertyDeclarationTest extends AbstractTest
@@ -80,5 +83,74 @@ class PropertyDeclarationTest extends AbstractTest
         $fixture = $reflectionClass->getProperty('traitProperty');
         $result = $propertyDeclaration->retrieveDeclaration($fixture);
         $this->assertStringContainsString(DIRECTORY_SEPARATOR .'tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR. 'TraitFixture.php', $result);
+    }
+
+    /**
+     * Test the retrieval of a typed property declaration type.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveNamedPropertyType
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveNamedType
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::formatNamedType
+     */
+    public function testRetrieveNamedPropertyType()
+    {
+        $propertyDeclaration = new PropertyDeclaration(\Krexx::$pool);
+
+        // Test with an untyped property.
+        $reflection = new \ReflectionClass(SimpleFixture::class);
+        $fixture = $reflection->getProperty('value1');
+        $this->assertEquals(
+            '',
+            $propertyDeclaration->retrieveNamedPropertyType($fixture),
+            'It is not typed, we expect an empty string.'
+        );
+
+
+        // Test with an undeclared property.
+        $fixture = new UndeclaredProperty($reflection, 'justaName');
+        $this->assertEquals(
+            '',
+            $propertyDeclaration->retrieveNamedPropertyType($fixture),
+            'It is not typed, we expect an empty string.'
+        );
+
+
+        if (version_compare(phpversion(), '7.4.0', '>=')) {
+            // Test with a simple typed property.
+            $reflection = new \ReflectionClass(TypeFixture::class);
+            $fixture = $reflection->getProperty('simplyTyped');
+            $this->assertEquals(
+                'string',
+                $propertyDeclaration->retrieveNamedPropertyType($fixture),
+                'It\'s just typed that way.'
+            );
+
+            // Test with a class typed property.
+            $fixture = $reflection->getProperty('reflection');
+            $this->assertEquals(
+                '\Reflection',
+                $propertyDeclaration->retrieveNamedPropertyType($fixture),
+                'A namespaced class name.'
+            );
+
+            // Test with a class that does not exist.
+             $fixture = $reflection->getProperty('nothing');
+             $this->assertEquals(
+                '\Does\Not\Exist',
+                $propertyDeclaration->retrieveNamedPropertyType($fixture),
+                'A namespaced class name, that does not exist.'
+            );
+        }
+
+        // Test with a union type property.
+        if (version_compare(phpversion(), '8.0.0', '>=')) {
+            $reflection = new \ReflectionClass(UnionTypeFixture::class);
+            $fixture = $reflection->getProperty('unionType');
+            $this->assertEquals(
+                'array|int|bool',
+                $propertyDeclaration->retrieveNamedPropertyType($fixture),
+                'It\'s just typed that way.'
+            );
+        }
     }
 }

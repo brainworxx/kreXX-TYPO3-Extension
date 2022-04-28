@@ -210,4 +210,14 @@ class UndeclaredProperty extends ReflectionProperty
     {
         return '';
     }
+
+    /**
+     * Undeclared properties are not typed.
+     *
+     * @return bool
+     */
+    public function hasType(): bool
+    {
+        return false;
+    }
 }

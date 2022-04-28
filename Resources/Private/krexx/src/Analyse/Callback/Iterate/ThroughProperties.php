@@ -129,11 +129,12 @@ class ThroughProperties extends AbstractCallback implements
                 $messages->getHelp('metaDefaultValue'),
                 $this->retrieveDefaultValue($refProperty)
             )
+            ->addToJson(
+                $messages->getHelp('metaTypedValue'),
+                $this->propertyDeclaration->retrieveNamedPropertyType($refProperty)
+            )
             ->setAdditional(
-                $this->getAdditionalData(
-                    $refProperty,
-                    $this->parameters[static::PARAM_REF]
-                )
+                $this->getAdditionalData($refProperty, $this->parameters[static::PARAM_REF])
             )
             ->setConnectorType($this->retrieveConnector($refProperty))
             ->setCodeGenType($refProperty->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '');
@@ -326,7 +327,6 @@ class ThroughProperties extends AbstractCallback implements
             // a warning.
             $additional .= 'unset ';
         }
-
 
         return $additional;
     }

@@ -81,6 +81,21 @@ class PropertyDeclaration extends AbstractDeclaration
     }
 
     /**
+     * Retrieve the named property type, if possible.
+     *
+     * @param \ReflectionProperty $refProperty
+     * @return string
+     */
+    public function retrieveNamedPropertyType(ReflectionProperty $refProperty): string
+    {
+        if (method_exists($refProperty, 'hasType') && $refProperty->hasType()) {
+            return trim($this->retrieveNamedType($refProperty->getType()));
+        }
+
+        return '';
+    }
+
+    /**
      * Retrieve the declaration name from traits.
      *
      * A class can not redeclare a property from a trait that it is using.

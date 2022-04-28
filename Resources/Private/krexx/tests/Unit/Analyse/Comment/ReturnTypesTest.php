@@ -36,6 +36,7 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
+use Brainworxx\Krexx\Tests\Fixtures\UnionTypeFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ReturnTypeFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Krexx;
@@ -50,8 +51,6 @@ class ReturnTypesTest extends AbstractTest
      * @see \Brainworxx\Krexx\Tests\Fixtures\ReturnTypeFixture
      * @covers \Brainworxx\Krexx\Analyse\Comment\ReturnType::getComment
      * @covers \Brainworxx\Krexx\Analyse\Comment\ReturnType::retrieveReturnTypeFromComment
-     * @covers \Brainworxx\Krexx\Analyse\Comment\ReturnType::retrieveTypeByReflection
-     * @throws \ReflectionException
      */
     public function testGetComment()
     {
@@ -61,9 +60,6 @@ class ReturnTypesTest extends AbstractTest
 
         $refMethod = $refClass->getMethod('returnSelf');
         $this->assertEquals('\\' . ReturnTypeFixture::class, $returnType->getComment($refMethod, $refClass));
-
-        $refMethod = $refClass->getMethod('returnBool');
-        $this->assertEquals('bool', $returnType->getComment($refMethod, $refClass));
 
         $refMethod = $refClass->getMethod('returnThis');
         $this->assertEquals('\\' . ReturnTypeFixture::class, $returnType->getComment($refMethod, $refClass));

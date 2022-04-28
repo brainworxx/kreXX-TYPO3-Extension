@@ -5,6 +5,7 @@
 - Added serialized string pretty print.
 - Added static cache to the filepath scalar analysis.
 - Added support for the hidden properties of ext_dom classes.
+- Added typed property analysis.
 - Change: Removed deprecated code.
 - Change: Drop PHP 7.0 support
 - Change: Streamlined the type display of strings
@@ -24,6 +25,10 @@
 - Change: Removed the scope analysis setting.
 - Change: Lots of deprecations.
 - Change: Removed the XML decoder.
+- Change: Moved the return type retrieval by reflection to the
+  more appropriate AbstractDeclaration class.
+- Change: Moved the parameter analysis to the declaration
+  analysis classes.
 
 4.1.4
 - Added support for readonly properties

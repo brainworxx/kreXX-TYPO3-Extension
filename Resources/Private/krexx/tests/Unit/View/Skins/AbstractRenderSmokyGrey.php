@@ -52,7 +52,6 @@ abstract class AbstractRenderSmokyGrey extends AbstractTest
     const GET_TYPE = 'getType';
     const RENDER_ME = 'renderMe';
     const GET_CONNECTOR_LANGUAGE = 'getConnectorLanguage';
-    const GET_KEY_TYPE = 'getKeyType';
 
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject

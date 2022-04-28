@@ -65,5 +65,6 @@ class Model implements CodegenConstInterface
     use DomId;
     use HasExtra;
     use CodeGenType;
+
     use KeyType;
 }

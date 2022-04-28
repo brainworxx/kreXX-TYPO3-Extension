@@ -102,7 +102,7 @@ class ProcessString extends AbstractRouting implements
         }
 
         $this->analyseScalar = $this->pool->config->getSetting(static::SETTING_ANALYSE_SCALAR);
-        if ($this->analyseScalar === true) {
+        if ($this->analyseScalar) {
             $this->scalarString = $pool->createClass(ScalarString::class);
         }
     }
@@ -153,7 +153,7 @@ class ProcessString extends AbstractRouting implements
             $model->setNormal($this->pool->encodingService->encodeString($data));
         }
 
-        if ($this->analyseScalar === true) {
+        if ($this->analyseScalar) {
             return $this->handleStringScalar($model, $originalData);
         }
 

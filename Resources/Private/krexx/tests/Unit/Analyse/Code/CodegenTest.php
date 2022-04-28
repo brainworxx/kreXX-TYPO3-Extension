@@ -40,6 +40,7 @@ use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Fixtures\MethodParameterFixture;
+use Brainworxx\Krexx\Tests\Fixtures\UnionTypeFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
 use ReflectionParameter;
@@ -465,7 +466,7 @@ class CodegenTest extends AbstractTest
         $reflectionParameter = $reflectionFunction->getParameters()[0];
 
         $this->assertEquals(
-            'DateTimeZone $object',
+            '\DateTimeZone $object',
             $this->codegenHandler->parameterToString($reflectionParameter)
         );
     }
@@ -475,6 +476,7 @@ class CodegenTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
      */
     public function testDefaultValueTranslation()
     {
@@ -506,5 +508,16 @@ class CodegenTest extends AbstractTest
             '$parameter = NULL',
             $this->codegenHandler->parameterToString($reflectionParameter)
         );
+
+        if (version_compare(phpversion(), '8.0.0', '>=')) {
+            // Test for union types.
+            $reflection = new \ReflectionClass(UnionTypeFixture::class);
+            $reflectionMethod = $reflection->getMethod('unionParameter');
+            $reflectionParameter = $reflectionMethod->getParameters()[0];
+            $this->assertEquals(
+                'array|int|bool $parameter',
+                $this->codegenHandler->parameterToString($reflectionParameter)
+            );
+        }
     }
 }
