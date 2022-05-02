@@ -42,6 +42,7 @@ use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
+use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
@@ -142,6 +143,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
 
         // Register the scalar analysis classes.
         Registration::addScalarStringAnalyser(ExtFilePath::class);
+        Registration::addScalarStringAnalyser(LllString::class);
 
         $this->registerFileWriterSettings();
         $this->registerVersionDependantStuff();

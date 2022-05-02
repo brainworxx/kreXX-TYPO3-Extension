@@ -40,6 +40,8 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
+use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
+use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
@@ -240,6 +242,12 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
             ['what/ever/Resources/Private/Language/t3.kreXX.ini'],
             SettingsGetter::getAdditionalHelpFiles(),
             'Something about help files.'
+        );
+
+        $this->assertEquals(
+            [ExtFilePath::class, LllString::class],
+            SettingsGetter::getAdditionalScalarString(),
+            'Both scalar analyser are registered.'
         );
 
         // We create a new pool and test, if our new settings are available.
