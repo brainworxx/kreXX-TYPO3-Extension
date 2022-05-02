@@ -100,6 +100,7 @@ class LllStringTest extends AbstractTest
      * Testing the "glue" to the TYPO3 translation handling.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::canHandle
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::resolveExtPath
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::__construct
      */
     public function testCanHandle()
@@ -109,8 +110,17 @@ class LllStringTest extends AbstractTest
         $lllString = new LllString(\Krexx::$pool);
         $lllString->setLocalisationUtility(new LocalizationUtility());
         LocalizationUtility::$values[$payload] = static::KREXX_DEBUGGER;
-        $lllString->canHandle($payload, $model);
+        $this->simulatePackage('includekrexx', 'some path');
 
-        $this->assertEquals(static::KREXX_DEBUGGER, $model->getJson()['Translation']);
+        $lllString->canHandle($payload, $model);
+        $result = $model->getJson();
+        $this->assertEquals(
+            [
+                'Translation' => static::KREXX_DEBUGGER,
+                'Error' => 'The file does not exist.'
+            ],
+            $result,
+            'When the error message is missing, this means that an error was thrown, which was handeled by the try/catch in the class.'
+        );
     }
 }
