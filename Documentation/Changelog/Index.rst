@@ -16,6 +16,8 @@ Changelog
     - [Feature] Aimeos 2022 support
     - [Bugfix] Remove the use of the deprecated \TYPO3\CMS\Extbase\Mvc\View\ViewInterface.
     - [Bugfix] Give valid feedback, in case the DI fails during query debugging.
+    - [Bugfix] Unnecessary uri encoding in the smoky grey skin prevents the display of certain additional info values.
+    - [Bugfix] Prevent an overfow in the additional info of the smoky grey skin.
 
 4.1.4
     - [Feature] Added support for readonly properties

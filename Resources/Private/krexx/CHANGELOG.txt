@@ -1,7 +1,16 @@
+4.1.5
+- Bugfix: Unnecessary uri encoding in the smoky grey skin prevents
+  the display of certain additional info values.
+- Bugfix: Prevent an overfow in the additional info of the smoky
+  grey skin.
+
 4.1.4
 - Added support for readonly properties
 - Bugfix: Correctly identify uninitialized properties.
-- Bugfix: Prevent unnecessary filesystem calls in the filepath analysis.
+- Bugfix: Prevent unnecessary filesystem calls in the filepath
+  analysis.
+- Bugfix: Unnecessary uri encoding in the smoky grey skin prevents
+  the display of certain additional info values.
 
 4.1.3
 - Added microtime analysis to the float routing.
