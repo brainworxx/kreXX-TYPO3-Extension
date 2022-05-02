@@ -276,6 +276,7 @@
 }
 .kwrapper .knode.kadditional table td.kdesc, .kfatalwrapper-outer .knode.kadditional table td.kdesc {
   max-width: 50px;
+  word-wrap: break-word;
 }
 .kwrapper .knode.kpayload, .kfatalwrapper-outer .knode.kpayload {
   background-color: #F2F2F2;

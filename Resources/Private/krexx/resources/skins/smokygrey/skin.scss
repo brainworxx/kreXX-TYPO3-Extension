@@ -352,6 +352,7 @@ $fontLight: lighter 10px tahoma, verdana;
 
           &.kdesc {
             max-width: 50px;
+            word-wrap: break-word;
           }
         }
       }

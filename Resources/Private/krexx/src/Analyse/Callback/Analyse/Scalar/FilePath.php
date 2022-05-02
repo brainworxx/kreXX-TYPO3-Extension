@@ -104,7 +104,7 @@ class FilePath extends AbstractScalarAnalysis
     {
         // Some fast static caching.
         static $cache = [];
-
+    
         if (strlen($string) < 25) {
             // Early return for the most values.
             return false;
@@ -120,7 +120,10 @@ class FilePath extends AbstractScalarAnalysis
         }
 
         if (!empty($cache[$string][static::REAL_PATH])) {
-            $model->addToJson('Real path', $cache[$string][static::REAL_PATH]);
+            $model->addToJson(
+                $this->pool->messages->getHelp('realPath'),
+                $cache[$string][static::REAL_PATH]
+            );
         }
 
         if (!empty($cache[$string][static::MIME_TYPE])) {
@@ -155,8 +158,8 @@ class FilePath extends AbstractScalarAnalysis
             // Early return
             return $result;
         }
-
         $realPath = realpath($string);
+
         if ($string !== $realPath) {
             // We only add the realpath, if it differs from the string
             $result[static::REAL_PATH] = $realPath;

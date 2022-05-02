@@ -146,7 +146,6 @@ class SmokyGrey extends Hans
                         json[prop] = json[prop].replace(regex, function (match, grp) {
                             return String.fromCharCode(parseInt(grp, 16));
                         });
-                        json[prop] = decodeURI(json[prop]);
                         html += '<tr><td class="kinfo">' + prop + '</td><td class="kdesc">' + json[prop] + '</td></tr>';
                         counter++;
                     }
