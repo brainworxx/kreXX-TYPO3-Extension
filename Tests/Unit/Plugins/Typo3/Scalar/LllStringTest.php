@@ -114,13 +114,13 @@ class LllStringTest extends AbstractTest
 
         $lllString->canHandle($payload, $model);
         $result = $model->getJson();
-        $this->assertEquals(
-            [
-                'Translation' => static::KREXX_DEBUGGER,
-                'Error' => 'The file does not exist.'
-            ],
-            $result,
-            'When the error message is missing, this means that an error was thrown, which was handeled by the try/catch in the class.'
-        );
+        $this->assertEquals(static::KREXX_DEBUGGER, $result['Translation']);
+        $this->assertEquals('The file does not exist.', $result['Error']);
+
+        // Do it again, with an early return this time.
+        $payload = 'Just a string, nothing special';
+        $model = new Model(\Krexx::$pool);
+        $lllString->canHandle($payload, $model);
+        $this->assertEmpty($model->getJson(), 'Expecting an empty array.');
     }
 }
