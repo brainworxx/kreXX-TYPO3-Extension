@@ -20,6 +20,7 @@ Changelog
     - [Feature] Added static cache to the filepath scalar analysis.
     - [Feature] Added support for the hidden properties of ext_dom classes.
     - [Feature] Added typed property analysis.
+    - [Feature] The ext filepath analysis gives feedback if the file does not exist in the first place.
     - [Change] Removed deprecated code.
     - [Change] Drop PHP 7.0 support
     - [Change] Streamlined the type display of strings

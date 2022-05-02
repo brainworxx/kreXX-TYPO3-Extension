@@ -78,6 +78,14 @@ class ExtFilePath extends FilePath
 
         // Preserve the result from the getFileAbsFileName.
         $model->addToJson($this->pool->messages->getHelp('TYPO3ResPath'), $string);
+
+        if (!file_exists($string)) {
+            $model->addToJson(
+                $this->pool->messages->getHelp('TYPO3ResPathError'),
+                $this->pool->messages->getHelp('TYPO3ResPathDoesNotExist')
+            );
+        }
+
         return parent::canHandle($string, $model);
     }
 }
