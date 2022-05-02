@@ -115,9 +115,14 @@ class ExtFilePathTest extends AbstractTest
         // Look at the model.
         $jsonData = $model->getJson();
         $expectations = [
-            "Resolved EXT path" => "includekrexx/Tests/Fixtures/123458.Krexx.html",
-            "Mimetype file" => "just a file"
+            'Resolved EXT path' => 'includekrexx/Tests/Fixtures/123458.Krexx.html',
+            'Mimetype file' => 'just a file',
+            'Error' => 'The file does not exist.'
         ];
-        $this->assertEquals($expectations, $jsonData);
+        $this->assertEquals(
+            $expectations,
+            $jsonData,
+            'The file does exists, we just did not mock the file_exists(). We need to test the feedback about a missing file.'
+        );
     }
 }
