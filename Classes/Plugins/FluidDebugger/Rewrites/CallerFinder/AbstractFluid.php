@@ -115,6 +115,13 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     protected $varname;
 
     /**
+     * The absolute path to the template file.
+     *
+     * @var string
+     */
+    protected $path;
+
+    /**
      * The regex should look something like this:
      */
      // \s*<krexx:debug value="{(.*)}"\/>\s*/u
@@ -191,6 +198,9 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      */
     public function findCaller(string $headline, $data): array
     {
+        $messages = $this->pool->messages;
+        $helpKey = 'fluidAnalysis';
+
         // Did we get our stuff together so far?
         if ($this->error) {
             // Something went wrong!
@@ -198,65 +208,47 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
                 static::TRACE_FILE => static::FLUID_NOT_AVAILABLE,
                 static::TRACE_LINE => static::FLUID_NOT_AVAILABLE,
                 static::TRACE_VARNAME => static::FLUID_VARIABLE,
-                static::TRACE_TYPE => $this->getType(
-                    $this->pool->messages->getHelp('fluidAnalysis'),
-                    static::FLUID_VARIABLE,
-                    $data
-                ),
+                static::TRACE_TYPE => $this->getType($messages->getHelp($helpKey), static::FLUID_VARIABLE, $data),
                 static::TRACE_DATE => date('d-m-Y H:i:s', time()),
                 static::TRACE_URL => $this->getCurrentUrl(),
             ];
         }
 
-        return $this->resolveCallerArrayByRenderType($data);
+        // Trying to resolve the line as well as the variable name, if possible.
+        $this->resolvePath();
+        $this->resolveVarname();
+
+        return [
+            static::TRACE_FILE => $this->pool->fileService->filterFilePath($this->path),
+            static::TRACE_LINE => $this->line,
+            static::TRACE_VARNAME => $this->varname,
+            static::TRACE_TYPE => $this->getType($messages->getHelp($helpKey), $this->varname, $data),
+            static::TRACE_DATE => date('d-m-Y H:i:s', time()),
+            static::TRACE_URL => $this->getCurrentUrl(),
+        ];
     }
 
     /**
-     * Resolving the caller array, depending on the render type:
-     *   - template
-     *   - partial
-     *   - layout
-     *
-     * @param mixed $data
-     *   The variable that was passes to the viewHelper.
-     *
-     * @return string[]
-     *   The caller array.
+     * Resolve the path to the template file.
      */
-    protected function resolveCallerArrayByRenderType($data): array
+    protected function resolvePath(): void
     {
         switch ($this->renderingType) {
             case 1:
                 // RENDERING_TEMPLATE = 1
-                $path = $this->getTemplatePath();
+                $this->path = $this->getTemplatePath();
                 break;
             case 2:
                 // RENDERING_PARTIAL = 2
-                $path = $this->getPartialPath();
+                $this->path = $this->getPartialPath();
                 break;
             case 3:
                 // RENDERING_LAYOUT = 3
-                $path = $this->getLayoutPath();
+                $this->path = $this->getLayoutPath();
                 break;
             default:
-                $path = static::FLUID_NOT_AVAILABLE;
+                $this->path = static::FLUID_NOT_AVAILABLE;
         }
-
-        // Trying to resolve the line as well as the variable name, if possible.
-        $this->resolveVarname($path);
-
-         return [
-             static::TRACE_FILE => $this->pool->fileService->filterFilePath($path),
-             static::TRACE_LINE => $this->line,
-             static::TRACE_VARNAME => $this->varname,
-             static::TRACE_TYPE => $this->getType(
-                 $this->pool->messages->getHelp('fluidAnalysis'),
-                 $this->varname,
-                 $data
-             ),
-             static::TRACE_DATE => date('d-m-Y H:i:s', time()),
-             static::TRACE_URL => $this->getCurrentUrl(),
-         ];
     }
 
     /**
@@ -285,14 +277,11 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     /**
      * Resolve the variable name and the line number of the
      * debug call from fluid.
-     *
-     * @param string $filePath
-     *   The path to the template file we need to parse.
      */
-    protected function resolveVarname(string $filePath): void
+    protected function resolveVarname(): void
     {
         // Retrieve the call from the sourcecode file.
-        if (!$this->pool->fileService->fileIsReadable($filePath)) {
+        if (!$this->pool->fileService->fileIsReadable($this->path)) {
             // File is not readable. We can not do this.
             // Fallback to the standard values in the class header.
             return ;
@@ -301,7 +290,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
         // Define the fallback.
         $this->varname = static::FLUID_VARIABLE;
 
-        $fileContent = $this->pool->fileService->getFileContents($filePath, false);
+        $fileContent = $this->pool->fileService->getFileContents($this->path, false);
         foreach ($this->callPattern as $funcname) {
             // This little baby tries to resolve everything inside the
             // brackets of the kreXX call.

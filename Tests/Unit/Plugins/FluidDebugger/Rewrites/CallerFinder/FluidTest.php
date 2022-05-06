@@ -61,7 +61,7 @@ class FluidTest extends AbstractTest
      * Test the template part.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveCallerArrayByRenderType
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getTemplatePath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveVarname
@@ -110,7 +110,7 @@ class FluidTest extends AbstractTest
      * Test the layout part.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveCallerArrayByRenderType
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getLayoutPath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveVarname
@@ -153,7 +153,7 @@ class FluidTest extends AbstractTest
      * Test the partial part.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveCallerArrayByRenderType
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getPartialPath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::resolveTemplateName
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
@@ -208,7 +208,7 @@ class FluidTest extends AbstractTest
      * Test what happens when there is an error.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveCallerArrayByRenderType
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
      */
     public function testFindCallerError()
     {
