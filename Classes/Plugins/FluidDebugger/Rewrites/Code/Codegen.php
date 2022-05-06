@@ -76,27 +76,23 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
      */
     public function generateSource(Model $model): string
     {
-        $result = '';
-
         // Get out of here as soon as possible.
         if (!$this->codegenAllowed) {
-            return $result;
+            return '';
         }
 
         if ($model->getType() === static::TYPE_DEBUG_METHOD && $model->getName() === 'getProperties') {
             // Doing special treatment for the getProperties debug method.
             // This one is directly callable in fluid.
-            $result =  $this->generateAll($model->setName('properties'));
+            $model->setName('properties');
         } elseif ($this->isUnknownType($model)) {
-            $result = static::UNKNOWN_VALUE;
+            return static::UNKNOWN_VALUE;
         } elseif ($model->getCodeGenType() === static::VHS_CALL_VIEWHELPER) {
             // Check for VHS values.
-            $result = $this->generateVhsCall($model);
-        } else {
-            $result = $this->generateAll($model);
+            return $this->generateVhsCall($model);
         }
 
-        return $result;
+        return $this->generateAll($model);
     }
 
     /**
