@@ -132,22 +132,23 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      */
     protected function addMetaToFileInfo(string $file): array
     {
-        if (is_readable($file . '.json')) {
-            $metaArray = (array)json_decode(file_get_contents($file . '.json'), true);
-            if (empty($metaArray)) {
-                return [];
-            }
-
-            foreach ($metaArray as &$meta) {
-                $meta[static::PATHINFO_FILENAME] = basename($meta['file']);
-                // Unescape the stuff from the json, to prevent double escaping.
-                $meta[static::TRACE_VARNAME] = htmlspecialchars_decode($meta[static::TRACE_VARNAME]);
-            }
-
-            return $metaArray;
+        if (is_readable($file . '.json') === false) {
+            return [];
         }
 
-        return [];
+        $metaArray = (array)json_decode(file_get_contents($file . '.json'), true);
+        if (empty($metaArray)) {
+            return [];
+        }
+
+        foreach ($metaArray as &$meta) {
+            $meta[static::PATHINFO_FILENAME] = $meta[static::TRACE_FILE] === 'n/a' ?
+                $meta[static::TRACE_FILE] : basename($meta[static::TRACE_FILE]);
+            // Unescape the stuff from the json, to prevent double escaping.
+            $meta[static::TRACE_VARNAME] = htmlspecialchars_decode($meta[static::TRACE_VARNAME]);
+        }
+
+        return $metaArray;
     }
 
     /**
