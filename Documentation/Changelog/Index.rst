@@ -19,6 +19,7 @@ Changelog
     - [Bugfix] Unnecessary uri encoding in the smoky grey skin prevents the display of certain additional info values.
     - [Bugfix] Prevent an overflow in the additional info of the smoky grey skin.
     - [Bugfix] Register the scalar translation analyser.
+    - [Bugfix] Do not basename() an unknown file path in the backend logging.
 
 4.1.4
     - [Feature] Added support for readonly properties
