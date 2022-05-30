@@ -295,8 +295,8 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function assignCssJs(): void
     {
-        $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
-        $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/Index.css');
+        $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/JavaScript/Index.js');
+        $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Css/Index.css');
         $this->pageRenderer->addJsInlineCode('krexxajaxtrans', $this->generateAjaxTranslations());
         $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
         $this->pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));

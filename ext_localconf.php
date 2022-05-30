@@ -36,21 +36,21 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-$boot = function () {
-    if (class_exists(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)) {
-        try {
-            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                \Brainworxx\Includekrexx\Bootstrap\Bootstrap::class
-            )->checkVersionNumber('5.0.0')
-                ->run();
-        } catch (\Throwable $exception) {
-            // Do nothing.
-            // When updating the extension via ExtensionManager, there is a
-            // big chance that the cache is not cleared. And that means that
-            // the part above may not work anymore. Hence, we need to make
-            // sure that the user does not brick the system.
+call_user_func(
+    function () {
+        if (class_exists(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)) {
+            try {
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                    \Brainworxx\Includekrexx\Bootstrap\Bootstrap::class
+                )->checkVersionNumber('5.0.0')
+                    ->run();
+            } catch (\Throwable $exception) {
+                // Do nothing.
+                // When updating the extension via ExtensionManager, there is a
+                // big chance that the cache is not cleared. And that means that
+                // the part above may not work anymore. Hence, we need to make
+                // sure that the user does not brick the system.
+            }
         }
     }
-};
-$boot();
-unset($boot);
+);
