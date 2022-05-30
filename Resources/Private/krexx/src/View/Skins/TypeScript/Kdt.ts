@@ -279,28 +279,18 @@ class Kdt
      * @return {object}
      *   The value, set in the cookie.
      */
-    public readSettings(cookieName:string): string|object
+    public readSettings(cookieName:string): object
     {
-        /** @type {string} */
-        cookieName = cookieName + "=";
-        let cookieArray:string[] = document.cookie.split(';');
+        let match:RegExpMatchArray = document.cookie.match(new RegExp('(^| )' + cookieName + '=([^;]+)'));
         let result:object = {};
-        let cookieString:string;
+        if (match === null) {
+            return result;
+        }
 
-        for (let i = 0; i < cookieArray.length; i++) {
-            cookieString = cookieArray[i];
-            while (cookieString.charAt(0) === ' ') {
-                cookieString = cookieString.substring(1, cookieString.length);
-            }
-            if (cookieString.indexOf(cookieName) === 0) {
-                try {
-                    // Return json, if possible.
-                    result = JSON.parse(cookieString.substring(cookieName.length, cookieString.length));
-                }
-                catch (error) {
-                    // Do nothing, we already have a fallback.
-                }
-            }
+        try {
+            result = JSON.parse(match[2]);
+        } catch (error) {
+            // Do nothing, we already have a fallback.
         }
 
         return result;

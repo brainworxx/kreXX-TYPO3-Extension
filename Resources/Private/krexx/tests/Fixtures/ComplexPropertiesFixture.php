@@ -56,6 +56,13 @@ class ComplexPropertiesFixture extends ComplexPropertiesInheritanceFixture
     public $publicIntProperty = 123;
 
     /**
+     * Public float property
+     *
+     * @var float
+     */
+    public $publicFloatProperty = 123.456;
+
+    /**
      * Unset property is unsettling.
      *
      * @var string

@@ -52,6 +52,7 @@ class ThroughPropertiesTest extends AbstractTest
 {
     const PUBLIC_STRING_PROPERTY = 'publicStringProperty';
     const PUBLIC_INT_PROPERTY = 'publicIntProperty';
+    const PUBLIC_FLOAT_PROPERTY = 'publicFloatProperty';
     const UNSET_PROPERTY = 'unsetProperty';
     const PROTECTED_PROPERTY = 'protectedProperty';
     const MY_PROPERTY = 'myProperty';
@@ -126,6 +127,7 @@ class ThroughPropertiesTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveDeclaringClassFromTraits
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDefaultValue
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::formatDefaultValue
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveValueStatus
      *
      * @throws \ReflectionException
@@ -135,6 +137,7 @@ class ThroughPropertiesTest extends AbstractTest
         // Test the events.
         $this->mockEventService(
             [$this->startEvent, $this->throughProperties],
+            [$this->endEvent, $this->throughProperties],
             [$this->endEvent, $this->throughProperties],
             [$this->endEvent, $this->throughProperties],
             [$this->endEvent, $this->throughProperties],
@@ -169,7 +172,8 @@ class ThroughPropertiesTest extends AbstractTest
                 new ReflectionProperty(ComplexPropertiesInheritanceFixture::class, static::INHERITED_NULL),
                 new ReflectionProperty(ComplexPropertiesFixture::class, static::TRAIT_PROPERTY),
                 new UndeclaredProperty(new ReflectionClass($subject), $undeclaredProp),
-                new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_ARRAY_DEFAULT)
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_ARRAY_DEFAULT),
+                new ReflectionProperty(ComplexPropertiesFixture::class, static::PUBLIC_FLOAT_PROPERTY),
             ]
         ];
 
@@ -388,6 +392,21 @@ class ThroughPropertiesTest extends AbstractTest
             '',
             'public '
         );
+
+        // A float default vaule.
+        $this->assertModelValues(
+            $models[13],
+            123.456,
+            static::PUBLIC_FLOAT_PROPERTY,
+            [
+                static::JSON_DECLARED_KEY => 'Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture',
+                static::JSON_COMMENT_KEY => 'Public float property<br /><br />&#64;var float',
+                static::JSON_DEFAULT_VALUE => '123.456'
+            ],
+            '->',
+            '',
+            'public '
+        );
     }
 
     /**
@@ -402,6 +421,7 @@ class ThroughPropertiesTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration::retrieveNamedPropertyType
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::getAdditionalData
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveDefaultValue
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::formatDefaultValue
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties::retrieveValueStatus
      */
     public function testCallMePhpEight()

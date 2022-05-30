@@ -177,7 +177,7 @@ class Validation extends Fallback
     {
         if ($group === static::SECTION_FE_EDITING) {
             // These settings can never be changed in the frontend.
-            return !in_array($name, $this->feDoNotEdit, true);
+            return !in_array($name, $this->feDoNotEdit, true) || $value === static::RENDER_TYPE_CONFIG_NONE;
         }
 
         if (empty($this->feConfigFallback[$name][static::EVALUATE])) {

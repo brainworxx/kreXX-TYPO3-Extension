@@ -141,6 +141,8 @@ class ThroughProperties extends AbstractCallback implements
     }
 
     /**
+     * Retrieve the default value, if possible.
+     *
      * @param ReflectionProperty $property
      *
      * @return string
@@ -168,11 +170,25 @@ class ThroughProperties extends AbstractCallback implements
             }
         }
 
+        return $default === null ? '' : $this->formatDefaultValue($default);
+    }
+
+    /**
+     * Format the default value into something readable
+     *
+     * @param string|int|float|array $default
+     * @return string
+     */
+    protected function formatDefaultValue($default): string
+    {
+        if (is_int($default) || is_float($default)) {
+            // We do not need to escape an integer or a float,
+            return (string)$default;
+        }
+
         $result = '';
         if (is_string($default)) {
             $result = '\'' . $default . '\'';
-        } elseif (is_int($default)) {
-            $result = (string)$default;
         } elseif (is_array($default)) {
             $result = var_export($default, true);
         }

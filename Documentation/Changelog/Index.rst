@@ -40,6 +40,8 @@ Changelog
     - [Change] Drop TYPO3 7.6 support.
     - [Change] Moved the return type retrieval by reflection to the declaration analysis classes.
     - [Change] Moved the parameter analysis to the declaration analysis classes.
+    - [Change] Empty configuration sections are not rendered anymore.
+    - [Change] Always allow a none rendering of configuration settings.
 
 4.1.5
     - [Feature] Aimeos 2022 support

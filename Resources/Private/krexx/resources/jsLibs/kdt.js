@@ -363,22 +363,15 @@ var Kdt = (function () {
         selection.addRange(range);
     };
     Kdt.prototype.readSettings = function (cookieName) {
-        cookieName = cookieName + "=";
-        var cookieArray = document.cookie.split(';');
+        var match = document.cookie.match(new RegExp('(^| )' + cookieName + '=([^;]+)'));
         var result = {};
-        var cookieString;
-        for (var i = 0; i < cookieArray.length; i++) {
-            cookieString = cookieArray[i];
-            while (cookieString.charAt(0) === ' ') {
-                cookieString = cookieString.substring(1, cookieString.length);
-            }
-            if (cookieString.indexOf(cookieName) === 0) {
-                try {
-                    result = JSON.parse(cookieString.substring(cookieName.length, cookieString.length));
-                }
-                catch (error) {
-                }
-            }
+        if (match === null) {
+            return result;
+        }
+        try {
+            result = JSON.parse(match[2]);
+        }
+        catch (error) {
         }
         return result;
     };

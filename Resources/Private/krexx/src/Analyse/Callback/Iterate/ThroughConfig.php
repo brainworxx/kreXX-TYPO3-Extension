@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 
 /**
  * Configuration output methods.
@@ -48,7 +49,7 @@ use Brainworxx\Krexx\Analyse\Model;
  * @uses null
  *   There are no parameters available here.
  */
-class ThroughConfig extends AbstractCallback implements CallbackConstInterface
+class ThroughConfig extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
 {
     /**
      * Renders whole configuration.
@@ -85,18 +86,40 @@ class ThroughConfig extends AbstractCallback implements CallbackConstInterface
         $configOutput = '';
         foreach ($sections as $sectionName => $sectionData) {
             // Render a whole section.
-            $configOutput .= $this->pool->render->renderExpandableChild(
-                $this->pool->createClass(Model::class)
-                    ->setName($this->pool->messages->getHelp($sectionName . 'Readable'))
-                    ->setType(static::TYPE_CONFIG)
-                    ->setNormal(static::UNKNOWN_VALUE)
-                    ->addParameter(static::PARAM_DATA, $sectionData)
-                    ->injectCallback(
-                        $this->pool->createClass(ConfigSection::class)
-                    )
-            );
+            if ($this->hasSomethingToRender($sectionData)) {
+                $configOutput .= $this->pool->render->renderExpandableChild(
+                    $this->pool->createClass(Model::class)
+                        ->setName($this->pool->messages->getHelp($sectionName . 'Readable'))
+                        ->setType(static::TYPE_CONFIG)
+                        ->setNormal(static::UNKNOWN_VALUE)
+                        ->addParameter(static::PARAM_DATA, $sectionData)
+                        ->injectCallback(
+                            $this->pool->createClass(ConfigSection::class)
+                        )
+                );
+            }
         }
 
         return $configOutput;
+    }
+
+    /**
+     * Is there anything to render in this config seaction?
+     *
+     * @param \Brainworxx\Krexx\Service\Config\Model[] $sectionData
+     *   The section data we want to render.
+     *
+     * @return bool
+     *   Well? Is there anything to render at all?
+     */
+    protected function hasSomethingToRender(array $sectionData): bool
+    {
+        foreach ($sectionData as $setting) {
+            if ($setting->getType() !== static::RENDER_TYPE_NONE) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -117,7 +117,7 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
                     )
                 );
             } elseif (!empty($metaData)) {
-                $output .= $this->handleNoneReflections($key, $metaData);
+                $output .= $this->handleNoneReflections($this->prepareModel($key, $metaData));
             }
         }
 
@@ -125,22 +125,25 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
     }
 
     /**
-     * The info is already here. We just need to output them.
+     * Prepare the model for the noe reflection rendering.
      *
      * @param string $key
      *   The key in the output list.
-     * @param mixed $meta
+     * @param $meta
      *   The text to display.
      *
-     * @return string
-     *   The rendered html.
+     * @return \Brainworxx\Krexx\Analyse\Model
+     *   The prepared model.
      */
-    protected function handleNoneReflections(string $key, $meta): string
+    protected function prepareModel(string $key, $meta): Model
     {
-        $messages = $this->pool->messages;
         /** @var Model $model */
-        $model = $this->pool->createClass(Model::class)->setData($meta)->setName($key)
-            ->setType($key === $messages->getHelp('metaPrettyPrint') ? $key : static::TYPE_REFLECTION);
+        $model = $this->pool->createClass(Model::class)
+            ->setData($meta)
+            ->setName($key)
+            ->setType(
+                $key === $this->pool->messages->getHelp('metaPrettyPrint') ? $key : static::TYPE_REFLECTION
+            );
 
         if (isset($this->parameters[static::PARAM_CODE_GEN_TYPE])) {
             $model->setCodeGenType($this->parameters[static::PARAM_CODE_GEN_TYPE]);
@@ -152,14 +155,30 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
             $model->setNormal($meta);
         }
 
-        if ($key === $messages->getHelp('metaDecodedJson')) {
+        return $model;
+    }
+
+    /**
+     * The info is already here. We just need to output them.
+     *
+     * @param string $key
+     *   The key in the output list.
+     *
+     * @return string
+     *   The rendered html.
+     */
+    protected function handleNoneReflections(Model $model): string
+    {
+        $key = $model->getName();
+
+        if ($key === $this->pool->messages->getHelp('metaDecodedJson')) {
             // Prepare the json code generation.
             return $this->pool->routing->analysisHub($model);
         }
 
         // Sorry, no code generation for you guys.
         $this->pool->codegenHandler->setCodegenAllowed(false);
-        if (is_string($meta)) {
+        if (is_string($model->getData())) {
             // Render a single data point.
             $result = $this->pool->render->renderExpandableChild(
                 $this->dispatchEventWithModel(__FUNCTION__ . $key . static::EVENT_MARKER_END, $model)

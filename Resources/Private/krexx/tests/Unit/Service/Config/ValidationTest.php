@@ -221,6 +221,24 @@ class ValidationTest extends AbstractTest
             true,
             $validation->evaluateSetting('some group', Fallback::SETTING_DISABLED, false)
         );
+
+        // Test the frontend rendering.
+        $this->assertTrue(
+            $validation->evaluateSetting(
+                Fallback::SECTION_FE_EDITING,
+                Fallback::SETTING_DESTINATION,
+                Fallback::RENDER_TYPE_CONFIG_NONE
+            ),
+            'We allow a none-rendering for write protected settings.'
+        );
+        $this->assertFalse(
+            $validation->evaluateSetting(
+                Fallback::SECTION_FE_EDITING,
+                Fallback::SETTING_DESTINATION,
+                Fallback::RENDER_TYPE_CONFIG_FULL
+            ),
+            'We do not allow a full-rendering for write protected settings.'
+        );
     }
 
     /**

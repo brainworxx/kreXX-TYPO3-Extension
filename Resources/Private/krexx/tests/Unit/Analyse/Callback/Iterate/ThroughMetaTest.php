@@ -106,6 +106,7 @@ class ThroughMetaTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeComment()
     {
@@ -120,6 +121,7 @@ class ThroughMetaTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testcallMeDecodedJson()
     {
@@ -144,6 +146,7 @@ class ThroughMetaTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeDeclaredIn()
     {
@@ -161,6 +164,7 @@ class ThroughMetaTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeSource()
     {
