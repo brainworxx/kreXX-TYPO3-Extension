@@ -188,7 +188,7 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
         foreach (Krexx::$pool->config->feConfigFallback as $settingName => $settings) {
             $settingNameInModel = 'form' . $settingName;
             if (
-                $settings[static::RENDER][static::RENDER_EDITABLE] === static::VALUE_TRUE &&
+                $settings[static::RENDER][static::RENDER_TYPE] !== static::RENDER_TYPE_NONE &&
                 in_array($this->$settingNameInModel, $allowedValues, true)
             ) {
                 $moduleSettings[$settingNameInModel] = $result[static::SECTION_FE_EDITING][$settingName]

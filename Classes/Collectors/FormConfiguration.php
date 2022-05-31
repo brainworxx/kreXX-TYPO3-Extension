@@ -66,7 +66,6 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
             return;
         }
 
-        $dropdown = $this->generateDropdown();
         $pathParts = pathinfo($this->pool->config->getPathToConfigFile());
         $filePath = $pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
             $pathParts[static::PATHINFO_FILENAME] . '.';
@@ -74,7 +73,7 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
         $this->fileReader = $this->pool->createClass(File::class)->loadFile($filePath);
         $config = [];
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
-            $this->generateSingleSetting($settingsName, $config, $dropdown);
+            $this->generateSingleSetting($settingsName, $config, $this->generateDropdown($fallback));
         }
 
         $view->assign('formConfig', $config);
@@ -99,16 +98,14 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
         $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
             $this->fileReader->getFeConfigFromFile($settingsName)
         );
-        $config[$settingsName][static::SETTINGS_FALLBACK] = $dropdown[
-            $this->convertKrexxFeSetting($this->fileReader->feConfigFallback[$settingsName][$this->fileReader::RENDER])
-        ];
+        $config[$settingsName][static::SETTINGS_FALLBACK] = array_key_first($dropdown);
 
         // Check if we have a value. If not, we need to load the
         // factory settings. We also need to set the info, if we
         // are using the factory settings, at all.
         if (is_null($config[$settingsName][static::SETTINGS_VALUE])) {
             $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
-                $this->fileReader->feConfigFallback[$settingsName][ $this->fileReader::RENDER]
+                $this->fileReader->feConfigFallback[$settingsName][$this->fileReader::RENDER]
             );
             $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
         }
@@ -117,18 +114,41 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
     /**
      * Generate the dropdown array.
      *
+     * @param array $fallback
+     *   The rendering options.
+     *
      * @return string[]
      *   The dropdown array.
      */
-    protected function generateDropdown(): array
+    protected function generateDropdown(array $fallback): array
     {
+        // Yes, we are testing for the string "true", and not for a boolean.
+        if ($fallback['render']['Editable'] === static::VALUE_TRUE) {
+            return [
+                static::RENDER_TYPE_CONFIG_FULL => static::translate(
+                    static::RENDER_TYPE_CONFIG_FULL
+                ),
+                static::RENDER_TYPE_CONFIG_DISPLAY => static::translate(
+                    static::RENDER_TYPE_CONFIG_DISPLAY
+                ),
+                static::RENDER_TYPE_CONFIG_NONE => static::translate(
+                    static::RENDER_TYPE_CONFIG_NONE
+                )
+            ];
+        }
+
+        if ($fallback['render']['Type'] !== static::RENDER_TYPE_NONE) {
+            return [
+                static::RENDER_TYPE_CONFIG_DISPLAY => static::translate(
+                    static::RENDER_TYPE_CONFIG_DISPLAY
+                ),
+                static::RENDER_TYPE_CONFIG_NONE => static::translate(
+                    static::RENDER_TYPE_CONFIG_NONE
+                )
+            ];
+        }
+
         return [
-            static::RENDER_TYPE_CONFIG_FULL => static::translate(
-                static::RENDER_TYPE_CONFIG_FULL
-            ),
-            static::RENDER_TYPE_CONFIG_DISPLAY => static::translate(
-                static::RENDER_TYPE_CONFIG_DISPLAY
-            ),
             static::RENDER_TYPE_CONFIG_NONE => static::translate(
                 static::RENDER_TYPE_CONFIG_NONE
             )

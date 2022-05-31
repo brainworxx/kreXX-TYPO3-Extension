@@ -257,6 +257,11 @@ class SettingsTest extends AbstractTest implements ConstInterface
                 Fallback::SETTING_MAX_STEP_NUMBER => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_ARRAY_COUNT_LIMIT => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_LANGUAGE_KEY => Fallback::RENDER_TYPE_CONFIG_FULL,
+                // We also expect these to render as "full", because we mocked the
+                // validation class, which validates everything as ok.
+                Fallback::SETTING_DEBUG_METHODS => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_DESTINATION => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_MAX_FILES => Fallback::RENDER_TYPE_CONFIG_FULL,
             ],
         ];
 

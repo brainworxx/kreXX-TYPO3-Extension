@@ -96,6 +96,11 @@ class Validation extends Fallback
         self::SETTING_IP_RANGE,
     ];
 
+    protected const FE_MINIMAL_SETTINGS = [
+        self::RENDER_TYPE_CONFIG_NONE,
+        self::RENDER_TYPE_CONFIG_DISPLAY
+    ];
+
     /**
      * Loaded preconfiguration which setting will never be editable.
      *
@@ -177,7 +182,9 @@ class Validation extends Fallback
     {
         if ($group === static::SECTION_FE_EDITING) {
             // These settings can never be changed in the frontend.
-            return !in_array($name, $this->feDoNotEdit, true) || $value === static::RENDER_TYPE_CONFIG_NONE;
+            // But we may decide to display or hide them.
+            return !in_array($name, $this->feDoNotEdit, true) ||
+                in_array($value, static::FE_MINIMAL_SETTINGS, true);
         }
 
         if (empty($this->feConfigFallback[$name][static::EVALUATE])) {

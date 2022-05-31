@@ -139,13 +139,22 @@ class ValidationTest extends AbstractTest
             ConfigConstInterface::SETTING_DEBUG_METHODS,
             ConfigConstInterface::SETTING_IP_RANGE,
         ];
-
         foreach ($doNotEdit as $settingName) {
             $this->assertFalse(
                 $validation->evaluateSetting(
                     $validation::SECTION_FE_EDITING,
                     $settingName,
-                    static::WHATEVER
+                    ConfigConstInterface::RENDER_TYPE_CONFIG_FULL
+                )
+            );
+        }
+        foreach ($doNotEdit as $settingName) {
+            // Decide to display them.
+            $this->assertTrue(
+                $validation->evaluateSetting(
+                    $validation::SECTION_FE_EDITING,
+                    $settingName,
+                    ConfigConstInterface::RENDER_TYPE_CONFIG_DISPLAY
                 )
             );
         }
