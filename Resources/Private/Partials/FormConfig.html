@@ -12,11 +12,11 @@
     <f:translate key="display" /><f:translate key="display.help" /><br />
     <f:translate key="none" /><f:translate key="none.help" /><br />
 
-    <f:render section="table" arguments="{headline: 'subhead.output', payload: 'output', formConfig: formConfig}" />
-    <f:render section="table" arguments="{headline: 'subhead.behavior', payload: 'behavior', formConfig: formConfig}" />
-    <f:render section="table" arguments="{headline: 'subhead.pruneOutput', payload: 'pruneOutput', formConfig: formConfig}" />
-    <f:render section="table" arguments="{headline: 'subhead.properties', payload: 'properties', formConfig: formConfig}" />
-    <f:render section="table" arguments="{headline: 'subhead.methods', payload: 'methods', formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.output',        payload: 'output',        formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.behavior',      payload: 'behavior',      formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.pruneOutput',   payload: 'pruneOutput',   formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.properties',    payload: 'properties',    formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.methods',       payload: 'methods',       formConfig: formConfig}" />
     <f:render section="table" arguments="{headline: 'subhead.emergencystop', payload: 'emergencystop', formConfig: formConfig}" />
 </f:section>
 
@@ -35,6 +35,7 @@
     <f:render section="dropdown" arguments="{formConfig.skin}" />
     <f:render section="dropdown" arguments="{formConfig.destination}" />
     <f:render section="dropdown" arguments="{formConfig.maxfiles}" />
+    <f:render section="dropdown" arguments="{formConfig.languageKey}" />
 </f:section>
 <f:section name="pruneOutput">
     <f:render section="dropdown" arguments="{formConfig.maxStepNumber}" />
