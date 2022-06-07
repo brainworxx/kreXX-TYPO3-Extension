@@ -238,7 +238,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
      */
     protected function createFileWriterValidator(): Closure
     {
-        return function ($value, Pool $pool) {
+        return function ($value, Pool $pool): bool {
             // All values from the ini should be strings.
             // The emergency log level in TYPO3 9 and older is the integer 0.
             // And when I ask 'some value' == 0, I will always get a true.

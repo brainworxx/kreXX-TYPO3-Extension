@@ -63,7 +63,7 @@ class ExtFilePath extends FilePath
         }
 
         // Retrieve the EXT path from the framework.
-        set_error_handler(function () {
+        set_error_handler(function (): void {
             // Do nothing.
         });
         try {
