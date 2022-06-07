@@ -89,6 +89,7 @@ class ProcessBacktraceTest extends AbstractTest
     /**
      * Create a mock backtrace, and see if it is processed.
      *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::callMe
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::handle
      */
     public function testProcessNormal()
@@ -114,8 +115,10 @@ class ProcessBacktraceTest extends AbstractTest
             'Step 11',
             'Step 12',
         ];
+        $parameters = [ProcessBacktrace::PARAM_DATA => $fixture];
+
         $processBacktrace = new ProcessBacktrace(Krexx::$pool);
-        $processBacktrace->handle($fixture);
+        $processBacktrace->setParameters($parameters)->callMe();
 
         $message = Krexx::$pool->messages->getMessages()['omittedBacktrace'];
         $this->assertEquals('omittedBacktrace', $message->getKey(), 'Check messages for omitted steps');

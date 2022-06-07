@@ -76,7 +76,7 @@ class MethodDeclaration extends AbstractDeclaration
             // are looking at.
             $traitName = ':: unable to get the trait name ::';
             $trait = $this->retrieveDeclaringReflection($reflection, $reflectionClass);
-            if ($trait !== false) {
+            if ($trait !== null) {
                 $traitName = $trait->getName();
             }
 
@@ -135,8 +135,10 @@ class MethodDeclaration extends AbstractDeclaration
      *   false = unable to retrieve something.
      *   Otherwise, return a reflection class.
      */
-    protected function retrieveDeclaringReflection(ReflectionMethod $reflectionMethod, ReflectionClass $declaringClass)
-    {
+    protected function retrieveDeclaringReflection(
+        ReflectionMethod $reflectionMethod,
+        ReflectionClass $declaringClass
+    ): ?ReflectionClass {
         // Get a first impression.
         if ($reflectionMethod->getFileName() === $declaringClass->getFileName()) {
             return $declaringClass;
@@ -146,11 +148,11 @@ class MethodDeclaration extends AbstractDeclaration
         // No need to recheck the availability for traits. This is done above.
         foreach ($declaringClass->getTraits() as $trait) {
             $result = $this->retrieveDeclaringReflection($reflectionMethod, $trait);
-            if ($result !== false) {
+            if ($result !== null) {
                 return $result;
             }
         }
 
-        return false;
+        return null;
     }
 }

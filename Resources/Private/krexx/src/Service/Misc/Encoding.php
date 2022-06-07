@@ -184,7 +184,7 @@ class Encoding
 
         // There are several places here, that may throw a warning.
         set_error_handler(
-            function () {
+            function (): void {
                 // Do nothing.
             }
         );

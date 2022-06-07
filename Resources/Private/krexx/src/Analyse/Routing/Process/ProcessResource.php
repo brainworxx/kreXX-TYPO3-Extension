@@ -63,7 +63,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
         // The is_resource can not identify closed stream resource types.
         // And the get_resource_type() throws a warning, in case this is not a
         // resource.
-        set_error_handler(function () {
+        set_error_handler(function (): void {
             // Do nothing. We need to catch a possible warning.
         });
 

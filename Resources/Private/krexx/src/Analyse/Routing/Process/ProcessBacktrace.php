@@ -81,6 +81,12 @@ class ProcessBacktrace extends AbstractCallback implements
             $backtrace = $this->getBacktrace();
         }
 
+        if (empty($backtrace)) {
+            // Not sure if this is possible.
+            // But, there is no backtrace, which means there is nothing to analyse.
+            return '';
+        }
+
         $output = '';
         $maxStep = (int) $this->pool->config->getSetting(static::SETTING_MAX_STEP_NUMBER);
         $stepCount = count($backtrace);
@@ -99,9 +105,7 @@ class ProcessBacktrace extends AbstractCallback implements
                     ->setName($step)
                     ->setType(static::TYPE_STACK_FRAME)
                     ->addParameter(static::PARAM_DATA, $backtrace[$step - 1])
-                    ->injectCallback(
-                        $this->pool->createClass(BacktraceStep::class)
-                    )
+                    ->injectCallback($this->pool->createClass(BacktraceStep::class))
             );
         }
 
@@ -116,8 +120,6 @@ class ProcessBacktrace extends AbstractCallback implements
      */
     protected function getBacktrace(): array
     {
-        // Remove the fist step from the backtrace,
-        // because that is the internal function in kreXX.
         $backtrace = debug_backtrace();
 
         // We remove all steps that came from inside the kreXX lib.
@@ -128,11 +130,12 @@ class ProcessBacktrace extends AbstractCallback implements
             } else {
                 // No need to go further, because we should have passed the
                 // kreXX part.
-                break;
+                // Reset the array keys, because the 0 is now missing.
+                return array_values($backtrace);
             }
         }
 
-        // Reset the array keys, because the 0 is now missing.
-        return array_values($backtrace);
+        // Fallback to an empty array.
+        return [];
     }
 }

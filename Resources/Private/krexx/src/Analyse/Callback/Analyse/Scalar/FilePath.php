@@ -104,7 +104,7 @@ class FilePath extends AbstractScalarAnalysis
     {
         // Some fast static caching.
         static $cache = [];
-    
+
         if (strlen($string) < 25) {
             // Early return for the most values.
             return false;
@@ -144,7 +144,7 @@ class FilePath extends AbstractScalarAnalysis
     {
         $result = [];
 
-        set_error_handler(function () {
+        set_error_handler(function (): void {
             // Do nothing.
         });
 

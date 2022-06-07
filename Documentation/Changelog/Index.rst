@@ -43,6 +43,7 @@ Changelog
     - [Change] Empty configuration sections are not rendered anymore.
     - [Change] Always allow a none rendering of configuration settings.
     - [Change] Moved the JS and CSS files to the private folder.
+    - [Change] Streamlined the return type of the retrieveDeclaringReflection of class methods.
 
 4.1.5
     - [Feature] Aimeos 2022 support

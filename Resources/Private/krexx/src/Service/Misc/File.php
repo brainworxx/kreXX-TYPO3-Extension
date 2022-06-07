@@ -270,7 +270,7 @@ class File
     {
         $realpath = $this->realpath($filePath);
 
-        set_error_handler(function () {
+        set_error_handler(function (): void {
             /* do nothing */
         });
 
@@ -353,7 +353,7 @@ class File
         $filePath = $this->realpath($filePath);
 
         if ($this->fileIsReadable($filePath)) {
-            set_error_handler(function () {
+            set_error_handler(function (): void {
                 // do nothing
             });
             $result = filemtime($filePath);
@@ -403,7 +403,7 @@ class File
     public function isDirectoryWritable(string $path): bool
     {
         $filename = 'test';
-        set_error_handler(function () {
+        set_error_handler(function (): void {
             // do nothing
         });
         $result = (bool)file_put_contents($path . $filename, 'x') && unlink($path . $filename);

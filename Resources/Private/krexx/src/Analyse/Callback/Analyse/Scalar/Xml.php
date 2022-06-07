@@ -144,7 +144,7 @@ class Xml extends AbstractScalarAnalysis
         $dom->formatOutput = true;
 
         set_error_handler(
-            function () {
+            function (): void {
                 $this->hasErrors = true;
             }
         );

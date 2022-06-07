@@ -98,7 +98,7 @@ class Traversable extends AbstractObjectAnalysis implements ConfigConstInterface
             // We need to deactivate the current error handling to
             // prevent the host system to do anything stupid.
             set_error_handler(
-                function () {
+                function (): void {
                     // Do nothing.
                 }
             );

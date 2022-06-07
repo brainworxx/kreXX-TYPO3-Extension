@@ -82,10 +82,10 @@ abstract class AbstractFactory
      * @param string|int $what
      *   The part of the globals we want to access.
      *
-     * @return mixed
+     * @return array
      *   The part we are requesting.
      */
-    public function &getGlobals($what = '')
+    public function &getGlobals($what = ''): array
     {
         if (empty($what)) {
             return $GLOBALS;

@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Service\Reflection;
 
 use ReflectionProperty;
+use ReflectionClass;
 
 /**
  * The original \ReflectionProperty may throw an error when used with
@@ -125,7 +126,7 @@ class UndeclaredProperty extends ReflectionProperty
      * @return \ReflectionClass
      *   The refection.
      */
-    public function getDeclaringClass(): \ReflectionClass
+    public function getDeclaringClass(): ReflectionClass
     {
         return $this->declaringClass;
     }

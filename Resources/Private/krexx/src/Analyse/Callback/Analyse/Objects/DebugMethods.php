@@ -119,7 +119,7 @@ class DebugMethods extends AbstractObjectAnalysis implements
         $result = null;
         // Add a try to prevent the hosting CMS from doing something stupid.
         set_error_handler(
-            function () {
+            function (): void {
                 // Do nothing.
             }
         );
@@ -164,21 +164,11 @@ class DebugMethods extends AbstractObjectAnalysis implements
 
         // We need to check if the callable function requires any parameters.
         // We will not call those, because we simply can not provide them.
-        $result = true;
         try {
             $ref = $reflectionClass->getMethod($funcName);
-            foreach ($ref->getParameters() as $param) {
-                if (!$param->isOptional()) {
-                    // We've got a required parameter!
-                    // We will not call this one.
-                    $result = false;
-                    break;
-                }
-            }
+            return $ref->getNumberOfRequiredParameters() === 0;
         } catch (ReflectionException $e) {
-            $result = false;
+            return false;
         }
-
-        return $result;
     }
 }

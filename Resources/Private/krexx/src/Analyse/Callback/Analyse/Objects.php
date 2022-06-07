@@ -105,7 +105,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
         $config = $this->pool->config;
         $stuffToDump = [PublicProperties::class];
 
-        if ($ref->getName() === stdClass::class || $ref->getName() === __PHP_Incomplete_Class::class) {
+        if (in_array($ref->getName(), [stdClass::class, __PHP_Incomplete_Class::class], true)) {
             // We ignore everything else for these two types.
             return $stuffToDump;
         }
