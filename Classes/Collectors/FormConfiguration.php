@@ -98,7 +98,8 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
         $config[$settingsName][static::SETTINGS_VALUE] = $this->convertKrexxFeSetting(
             $this->fileReader->getFeConfigFromFile($settingsName)
         );
-        $config[$settingsName][static::SETTINGS_FALLBACK] = array_key_first($dropdown);
+        reset($dropdown);
+        $config[$settingsName][static::SETTINGS_FALLBACK] = key($dropdown);
 
         // Check if we have a value. If not, we need to load the
         // factory settings. We also need to set the info, if we
