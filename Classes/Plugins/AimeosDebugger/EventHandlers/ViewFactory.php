@@ -258,25 +258,26 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
      *
      * @throws \ReflectionException
      *
-     * @return array
+     * @return \ReflectionMethod[]
      *   The list with the reflections.
      */
     protected function retrieveHelperList(string $directory): array
     {
-        $reflectionList = [];
-        $subDirs = scandir($directory);
         $iface = static::AI_NAMESPACE . 'Iface';
+        if (class_exists($iface) === false) {
+            // Since 2022, all view helpers are present in the view, so we do not need
+            // to scan for them anymore.
+            // Early return.
+            return [];
+        }
 
-        foreach ($subDirs as $dir) {
-            if (isset($this->helpers[$dir]) === true) {
-                //We will add it later on, if already inside the helpers.
-                continue;
-            }
-
+        $reflectionList = [];
+        foreach (scandir($directory) as $dir) {
             $className = static::AI_NAMESPACE . $dir . static::STANDARD;
-            if ($className instanceof $iface) {
-                $ref = new ReflectionClass($className);
-                $reflectionList[lcfirst($dir)] = $ref->getMethod(static::METHOD);
+            if (empty($this->helpers[$dir]) && is_a($className, $iface, true)) {
+                // We did not process this one before.
+                $reflectionList[lcfirst($dir)] = (new ReflectionClass($className))
+                    ->getMethod(static::METHOD);
             }
         }
 
