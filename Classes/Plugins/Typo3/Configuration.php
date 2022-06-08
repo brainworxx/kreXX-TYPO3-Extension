@@ -40,9 +40,11 @@ namespace Brainworxx\Includekrexx\Plugins\Typo3;
 use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
+use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
@@ -108,6 +110,9 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
 
         // Registering some special stuff for the model analysis.
         Registration::registerEvent(ProcessObject::class . static::START_PROCESS, DirtyModels::class);
+
+        // Registering the flexform parser.
+        Registration::registerEvent(Xml::class . static::END_EVENT, FlexFormParser::class);
 
         // See if we must create a temp directory for kreXX.
         $tempPaths = $this->generateTempPaths();
