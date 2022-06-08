@@ -62,6 +62,13 @@ abstract class AbstractScalarAnalysis extends AbstractCallback implements Callba
     protected $iteratorRenderer = ThroughMeta::class;
 
     /**
+     * The value that we are handling. Must be set by the canHandle method.
+     *
+     * @var string|int|float
+     */
+    protected $handledValue;
+
+    /**
      * Is this scalar deep analysis class able to do something here?
      *
      * @param string|int|bool $string
@@ -104,6 +111,7 @@ abstract class AbstractScalarAnalysis extends AbstractCallback implements Callba
         $model = $this->pool->createClass(Model::class)
             ->addParameter(static::PARAM_DATA, $meta)
             ->addParameter(static::PARAM_CODE_GEN_TYPE, $this->codeGenType)
+            ->addParameter(static::PARAM_VALUE, $this->handledValue)
             ->injectCallback($this->pool->createClass($this->iteratorRenderer));
 
         // We render the model directly. This class acts only as a proxy.

@@ -43,11 +43,6 @@ use Brainworxx\Krexx\Service\Misc\FormatSerialize;
 class Serialized extends AbstractScalarAnalysis
 {
     /**
-     * @var string
-     */
-    protected $originalString;
-
-    /**
      * The model, so far.
      *
      * @var Model
@@ -91,7 +86,7 @@ class Serialized extends AbstractScalarAnalysis
         // We only handle objects and arrays.
         // Everything else is not really pretty print worthy.
         if (in_array(substr($string, 0, 2), ['o:', 'O:','a:', 'C:'], true)) {
-            $this->originalString = $string;
+            $this->handledValue = $string;
             $this->model = $model;
             return true;
         }
@@ -109,7 +104,7 @@ class Serialized extends AbstractScalarAnalysis
         $messages = $this->pool->messages;
         $meta = [];
         $result = $this->pool->createClass(FormatSerialize::class)
-            ->prettyPrint($this->originalString);
+            ->prettyPrint($this->handledValue);
 
         if ($result !== null) {
             $meta[$messages->getHelp('metaPrettyPrint')] = $this->pool
@@ -117,9 +112,6 @@ class Serialized extends AbstractScalarAnalysis
             $this->model->setHasExtra(false);
             $meta[$messages->getHelp('metaContent')] = $this->model->getData();
         }
-
-        unset($this->model);
-        $this->originalString = '';
 
         return $meta;
     }

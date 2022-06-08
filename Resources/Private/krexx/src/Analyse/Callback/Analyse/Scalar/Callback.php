@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
 use ReflectionException;
 use ReflectionFunction;
+use TypeError;
 
 /**
  * The stuff we are doing here is very similar to the method analysis. The
@@ -51,13 +52,6 @@ use ReflectionFunction;
  */
 class Callback extends AbstractScalarAnalysis
 {
-    /**
-     * The callback we are analysing.
-     *
-     * @var string
-     */
-    protected $callback = '';
-
     /**
      * Is always active, because there are no system dependencies.
      *
@@ -82,7 +76,7 @@ class Callback extends AbstractScalarAnalysis
     public function canHandle($string, Model $model): bool
     {
         if (is_callable($string)) {
-            $this->callback = $string;
+            $this->handledValue = $string;
             return true;
         }
         return false;
@@ -94,8 +88,8 @@ class Callback extends AbstractScalarAnalysis
     protected function handle(): array
     {
         try {
-            $reflectionFunction = new ReflectionFunction($this->callback);
-        } catch (ReflectionException $e) {
+            $reflectionFunction = new ReflectionFunction($this->handledValue);
+        } catch (ReflectionException|TypeError $e) {
             // Huh, we were unable to retrieve the reflection.
             // Nothing left to do here.
             return [];

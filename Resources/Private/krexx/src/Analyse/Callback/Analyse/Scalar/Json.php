@@ -97,10 +97,10 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
         $this->decodedJson = json_decode($string);
         if (json_last_error() === JSON_ERROR_NONE || $this->decodedJson !== null) {
             $this->model = $model;
+            $this->handledValue = $string;
             return true;
         }
 
-        unset($this->decodedJson);
         return false;
     }
 

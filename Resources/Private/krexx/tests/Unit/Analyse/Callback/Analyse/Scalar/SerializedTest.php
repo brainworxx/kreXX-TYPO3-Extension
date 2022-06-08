@@ -86,6 +86,7 @@ class SerializedTest extends AbstractTest
         $fixture = serialize(['one', 'two', 'three']);
         $model->setData($fixture);
         $this->assertTrue($serialized->canHandle($fixture, $model));
+        $this->assertEquals($fixture, $this->retrieveValueByReflection('handledValue', $serialized));
     }
 
     /**
