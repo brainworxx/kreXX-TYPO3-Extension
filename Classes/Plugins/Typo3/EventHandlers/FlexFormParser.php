@@ -97,7 +97,6 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
             // Do nothing.
             // We did a TYPO3 framework call. Which may or may not be unstable.
             // This is a debugging tool, after all.
-            var_dump($exception->getMessage());
         }
 
         return '';
