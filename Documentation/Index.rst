@@ -71,5 +71,4 @@ kreXX Debugger
 	Config/Index
 	Features/Index
 	TipsNTricks/Index
-	Plugins/Index
 	Changelog/Index

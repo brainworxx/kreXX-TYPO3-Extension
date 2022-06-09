@@ -6,7 +6,7 @@
 .. include:: ../../Includes.txt
 
 
-.. _typo3:
+.. _flexform:
 
 
 Flexform

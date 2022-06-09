@@ -73,3 +73,4 @@ A click on the recursion will then copy the original analysis via java script in
    Fluid/Index
    Sql/Index
    Typo3/Index
+   Flexform/Index
