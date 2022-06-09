@@ -89,6 +89,7 @@ class JsonTest extends AbstractTest
 
         $fixture = '{"qwer": "asdf"}';
         $this->assertTrue($json->canHandle($fixture, new Model(Krexx::$pool)), 'A real json.');
+        $this->assertEquals($fixture, $this->retrieveValueByReflection('handledValue', $json));
     }
 
     /**

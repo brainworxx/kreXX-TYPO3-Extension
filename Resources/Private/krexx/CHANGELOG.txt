@@ -6,6 +6,9 @@
 - Added static cache to the filepath scalar analysis.
 - Added support for the hidden properties of ext_dom classes.
 - Added typed property analysis.
+- Added the original value to the parameters of the scalar
+  analysis events, so event listeners can actually do something
+  useful.
 - Change: Removed deprecated code.
 - Change: Drop PHP 7.0 support
 - Change: Streamlined the type display of strings

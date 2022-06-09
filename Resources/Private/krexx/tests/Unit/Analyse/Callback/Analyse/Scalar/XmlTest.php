@@ -114,13 +114,14 @@ class XmlTest extends AbstractTest
         $model = new Model(Krexx::$pool);
         $model->addToJson('Mimetype string', static::TEXT_XML);
         $xml = new Xml(Krexx::$pool);
-        $this->asserttrue($xml->canHandle($string, $model), $string);
+        $this->assertTrue($xml->canHandle($string, $model), $string);
 
         $string = '<?xml version="1.0" encoding="utf-8"?><node><yxcv qwer="asdf" /></node>';
         $model = new Model(Krexx::$pool);
         $model->addToJson('Mimetype string', static::TEXT_XML);
         $xml = new Xml(Krexx::$pool);
         $this->assertTrue($xml->canHandle($string, $model), $string);
+        $this->assertEquals($string, $this->retrieveValueByReflection('handledValue', $xml));
     }
 
     /**

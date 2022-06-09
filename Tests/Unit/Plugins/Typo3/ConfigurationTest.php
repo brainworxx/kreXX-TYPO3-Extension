@@ -39,11 +39,13 @@ use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
+use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -191,7 +193,8 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         $this->assertEquals(
             [
                 ProcessObject::class . Configuration::START_PROCESS => [DirtyModels::class => DirtyModels::class],
-                Objects::class . Configuration::START_EVENT => [QueryDebugger::class => QueryDebugger::class]
+                Objects::class . Configuration::START_EVENT => [QueryDebugger::class => QueryDebugger::class],
+                Xml::class . Configuration::END_EVENT => [FlexFormParser::class => FlexFormParser::class]
             ],
             SettingsGetter::getEventList()
         );
