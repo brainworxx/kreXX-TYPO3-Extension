@@ -429,9 +429,6 @@
 			<trans-unit id="usage.headline.fluid">
 				<source>Usage Fluid</source>
 			</trans-unit>
-			<trans-unit id="usage.label.fluidnamespace">
-				<source>When using TYPO3 7.6 until 8.4, you need to declare the namespace first. If you are using TYPO3 8.5 and later, this will not be necessary anymore.</source>
-			</trans-unit>
 			<trans-unit id="usage.label.fluidnormal">
 				<source>Calling the ViewHelper is pretty much straight forward.</source>
 			</trans-unit>
