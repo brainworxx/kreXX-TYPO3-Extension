@@ -3,7 +3,7 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-.. include:: ../Includes.txt
+.. include:: ../../Includes.txt
 
 
 .. _recursion:
@@ -16,7 +16,7 @@ When going through a complicated framework, sooner or later kreXX will reach obj
 When a recursion is detected, krexx will render a grey recursion. Since the original analysis result is somewhere else in the output window, a rendered recursion contains only the info where to find the first output.
 A click on the recursion will then copy the original analysis via java script into the place of the recursion.
 
-.. figure:: ../Images/Features/recursion.png
+.. figure:: ../../Images/Recursion/recursion.png
 	:width: 678px
 	:alt: A rendered recursion
 
