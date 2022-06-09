@@ -124,35 +124,23 @@ class FormConfiguration extends AbstractCollector implements ConfigConstInterfac
     protected function generateDropdown(array $fallback): array
     {
         // Yes, we are testing for the string "true", and not for a boolean.
-        if ($fallback['render']['Editable'] === static::VALUE_TRUE) {
+        if ($fallback[static::RENDER][static::RENDER_EDITABLE] === static::VALUE_TRUE) {
             return [
-                static::RENDER_TYPE_CONFIG_FULL => static::translate(
-                    static::RENDER_TYPE_CONFIG_FULL
-                ),
-                static::RENDER_TYPE_CONFIG_DISPLAY => static::translate(
-                    static::RENDER_TYPE_CONFIG_DISPLAY
-                ),
-                static::RENDER_TYPE_CONFIG_NONE => static::translate(
-                    static::RENDER_TYPE_CONFIG_NONE
-                )
+                static::RENDER_TYPE_CONFIG_FULL => static::translate(static::RENDER_TYPE_CONFIG_FULL),
+                static::RENDER_TYPE_CONFIG_DISPLAY => static::translate(static::RENDER_TYPE_CONFIG_DISPLAY),
+                static::RENDER_TYPE_CONFIG_NONE => static::translate(static::RENDER_TYPE_CONFIG_NONE)
             ];
         }
 
-        if ($fallback['render']['Type'] !== static::RENDER_TYPE_NONE) {
+        if ($fallback[static::RENDER][static::RENDER_TYPE] !== static::RENDER_TYPE_NONE) {
             return [
-                static::RENDER_TYPE_CONFIG_DISPLAY => static::translate(
-                    static::RENDER_TYPE_CONFIG_DISPLAY
-                ),
-                static::RENDER_TYPE_CONFIG_NONE => static::translate(
-                    static::RENDER_TYPE_CONFIG_NONE
-                )
+                static::RENDER_TYPE_CONFIG_DISPLAY => static::translate(static::RENDER_TYPE_CONFIG_DISPLAY),
+                static::RENDER_TYPE_CONFIG_NONE => static::translate(static::RENDER_TYPE_CONFIG_NONE)
             ];
         }
 
         return [
-            static::RENDER_TYPE_CONFIG_NONE => static::translate(
-                static::RENDER_TYPE_CONFIG_NONE
-            )
+            static::RENDER_TYPE_CONFIG_NONE => static::translate(static::RENDER_TYPE_CONFIG_NONE)
         ];
     }
 
