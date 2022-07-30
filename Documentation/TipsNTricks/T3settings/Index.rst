@@ -47,4 +47,4 @@ The install tool does have 2 configuration presets for debugging:
 - Live
 - Debug
 
-What these presets do and where you can find them is documented `here <https://docs.typo3.org/m/typo3/tutorial-getting-started/main/en-us/Troubleshooting/TYPO3.html#debug-settings />`__.
+What these presets do and where you can find them is documented `here <https://docs.typo3.org/m/typo3/tutorial-getting-started/main/en-us/Troubleshooting/TYPO3.html#debug-settings>`__.
