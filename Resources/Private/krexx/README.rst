@@ -1,7 +1,3 @@
-==============
-kreXX Debugger
-==============
-
 .. image:: https://github.com/brainworxx/kreXX/actions/workflows/php.yml/badge.svg?branch=master
    :target: https://github.com/brainworxx/kreXX/actions/workflows/php.yml
 .. image:: https://api.codeclimate.com/v1/badges/c9d414a09928ede869c7/maintainability
@@ -12,6 +8,10 @@ kreXX Debugger
    :target: https://packagist.org/packages/brainworxx/krexx
 .. image:: https://poser.pugx.org/brainworxx/krexx/license
    :target: https://packagist.org/packages/brainworxx/krexx
+
+==============
+kreXX Debugger
+==============
 
 |
 

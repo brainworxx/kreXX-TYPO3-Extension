@@ -36,6 +36,10 @@
 - Change: Always allow a none rendering of configuration settings.
 - Change: Streamlined the return type of the
   retrieveDeclaringReflection of class methods.
+- Change: Simplified the rendering of the plugin list.
+
+4.1.6
+- Bugfix: Added the missing path filter to the real path resolver.
 
 4.1.5
 - Bugfix: Unnecessary uri encoding in the smoky grey skin prevents

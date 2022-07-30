@@ -63,6 +63,8 @@ class GetterWithoutGetTest extends AbstractTest implements CallbackConstInterfac
      */
     public function testHandle()
     {
+        $this->mockEmergencyHandler();
+
         $getterFixture = new GetterFixture();
         $ref = new ReflectionClass($getterFixture);
         $fixture = [

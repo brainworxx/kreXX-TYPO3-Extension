@@ -63,21 +63,23 @@ trait PluginList
     {
         $result = '';
         $template = $this->getTemplateFileContent(static::FILE_SI_PLUGIN);
+        $messages = $this->pool->messages;
         foreach (SettingsGetter::getPlugins() as $plugin) {
             if ($plugin[self::IS_ACTIVE]) {
                 $activeClass = 'kisactive';
-                $activeText = 'active';
+                $activeText = $messages->getHelp('pluginActive');
             } else {
                 $activeClass = 'kisinactive';
-                $activeText = 'inactive';
+                $activeText = $messages->getHelp('pluginInactive');
             }
 
+            $configClass = $plugin[self::CONFIG_CLASS];
             $result .= str_replace(
                 $this->markerSinglePlugin,
                 [
                     $activeClass,
                     $activeText,
-                    $plugin[self::PLUGIN_NAME] . ' ' . $plugin[self::PLUGIN_VERSION]
+                    $configClass->getName() . ' ' . $configClass->getVersion()
                 ],
                 $template
             );

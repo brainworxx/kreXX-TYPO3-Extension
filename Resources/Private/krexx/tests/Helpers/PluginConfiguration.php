@@ -33,46 +33,42 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-declare(strict_types=1);
+namespace Brainworxx\Krexx\Tests\Helpers;
 
-namespace Brainworxx\Krexx\Service\Plugin;
+use Brainworxx\Krexx\Service\Plugin\Registration;
+use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 
 /**
- * Constants for the plugin registration.
+ * This class exists only to get mocked.
+ * Meh, feels like the old days. :-(
  */
-interface PluginConstInterface
+class PluginConfiguration implements PluginConfigInterface
 {
     /**
-     * Boolean. What the name says.
+     * {@inheritdoc}
      *
-     * @var string
+     * @return string
      */
-    public const IS_ACTIVE = 'isActive';
+    public function getName(): string
+    {
+        return 'Test Dev Plugin';
+    }
 
     /**
-     * Name of the configuration class of the plugin.
+     * {@inheritdoc}
      *
-     * @var string
+     * @return string
      */
-    public const CONFIG_CLASS = 'configClass';
+    public function getVersion(): string
+    {
+        return 'vX.X.X';
+    }
 
-    /**
-     * Name of the plugin.
-     *
-     * @deprecated since 5.0.0
-     *   Will be removed. Use the configuration class directly.
-     *
-     * @var string
+     /**
+     * Registering the plugin like a boss!
      */
-    public const PLUGIN_NAME = 'name';
-
-    /**
-     * Version of the plugin.
-     *
-     * @deprecated since 5.0.
-     *   Will be removed. Use the configuration class directly.
-     *
-     * @var string
-     */
-    public const PLUGIN_VERSION = 'ver';
+    public function exec(): void
+    {
+        // Do nothing.
+    }
 }

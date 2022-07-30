@@ -90,6 +90,7 @@ class GetterTest extends AbstractTest
     public function testHandle()
     {
         $this->skipIfAimeosIsNotInstalled();
+        $this->mockEmergencyHandler();
 
         $values = [
             // Base class (bdata)

@@ -333,7 +333,15 @@ class Registration implements ConfigConstInterface, PluginConstInterface
         static::$plugins[get_class($configClass)] = [
             static::CONFIG_CLASS => $configClass,
             static::IS_ACTIVE => false,
+            /**
+             * @deprecated since 5.0.0
+             *   Will be removed. Use the configuration class directly.
+             */
             static::PLUGIN_NAME => $configClass->getName(),
+            /**
+             * @deprecated since 5.0.0
+             *   Will be removed. Use the configuration class directly.
+             */
             static::PLUGIN_VERSION => $configClass->getVersion()
         ];
     }

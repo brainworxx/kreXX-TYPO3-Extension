@@ -153,16 +153,16 @@ class FilePath extends AbstractScalarAnalysis
         } catch (TypeError $exception) {
             $isFile = false;
         }
-
+        
         if (!$isFile) {
             // Early return
             return $result;
         }
-        $realPath = realpath($string);
 
-        if ($string !== $realPath) {
+        $realPath = realpath($string);
+        if ($string !== $realPath && is_string($realPath)) {
             // We only add the realpath, if it differs from the string
-            $result[static::REAL_PATH] = $realPath;
+            $result[static::REAL_PATH] = $this->pool->fileService->filterFilePath($realPath);
         }
         $result[static::MIME_TYPE] = $this->bufferInfo->file($string);
 

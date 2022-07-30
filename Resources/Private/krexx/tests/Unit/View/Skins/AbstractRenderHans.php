@@ -80,6 +80,7 @@ abstract class AbstractRenderHans extends AbstractTest
         $this->renderHans = new RenderHans(Krexx::$pool);
         $this->setValueByReflection('skinPath', static::PATH_TO_SKIN, $this->renderHans);
         $this->mockTemplate();
+        $this->mockEmergencyHandler();
     }
 
     /**
