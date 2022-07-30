@@ -48,6 +48,7 @@ Changelog
 
 4.1.6
     - [Bugfix] Link to the documentation of the debug preset does not work anymore in the documentation.
+    - [Bugfix] Added the missing path filter to the EXT: path resolver.
 
 4.1.5
     - [Feature] Aimeos 2022 support

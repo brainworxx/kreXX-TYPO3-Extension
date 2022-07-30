@@ -77,7 +77,10 @@ class ExtFilePath extends FilePath
         restore_error_handler();
 
         // Preserve the result from the getFileAbsFileName.
-        $model->addToJson($this->pool->messages->getHelp('TYPO3ResPath'), $string);
+        $model->addToJson(
+            $this->pool->messages->getHelp('TYPO3ResPath'),
+            $this->pool->fileService->filterFilePath($string)
+        );
 
         if (!file_exists($string)) {
             $model->addToJson(

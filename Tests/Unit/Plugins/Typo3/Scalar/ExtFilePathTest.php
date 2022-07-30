@@ -109,6 +109,14 @@ class ExtFilePathTest extends AbstractTest
             ->will($this->returnValue('just a file'));
         $this->setValueByReflection('bufferInfo', $finfoMock, $extFilePath);
 
+        // Make sure that the resolved path gets filtered.
+        $fileServiceMock = $this->createMock(File::class);
+        $fileServiceMock->expects($this->once())
+            ->method('filterFilePath')
+            ->with('includekrexx/Tests/Fixtures/123458.Krexx.html')
+            ->will($this->returnValue('Tests/Fixtures/123458.Krexx.html'));
+        \Krexx::$pool->fileService = $fileServiceMock;
+
         $this->assertFalse($extFilePath->canHandle($fixture, $model), 'Always false. We add the stuff to the model.');
         $extFilePath->callMe();
 
