@@ -51,6 +51,7 @@ use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
  */
 class ThroughConfig extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
 {
+
     /**
      * Renders whole configuration.
      *
@@ -63,7 +64,7 @@ class ThroughConfig extends AbstractCallback implements CallbackConstInterface, 
             $this->pool->render->renderButton(
                 $this->pool->createClass(Model::class)
                     ->setName('kresetbutton')
-                    ->setNormal($this->pool->messages->getHelp('resetCookiesReadable'))
+                    ->setNormal('Reset local settings')
                     ->setHelpid('kresetbutton')
             );
     }
@@ -86,40 +87,18 @@ class ThroughConfig extends AbstractCallback implements CallbackConstInterface, 
         $configOutput = '';
         foreach ($sections as $sectionName => $sectionData) {
             // Render a whole section.
-            if ($this->hasSomethingToRender($sectionData)) {
-                $configOutput .= $this->pool->render->renderExpandableChild(
-                    $this->pool->createClass(Model::class)
-                        ->setName($this->pool->messages->getHelp($sectionName . 'Readable'))
-                        ->setType(static::TYPE_CONFIG)
-                        ->setNormal(static::UNKNOWN_VALUE)
-                        ->addParameter(static::PARAM_DATA, $sectionData)
-                        ->injectCallback(
-                            $this->pool->createClass(ConfigSection::class)
-                        )
-                );
-            }
+            $configOutput .= $this->pool->render->renderExpandableChild(
+                $this->pool->createClass(Model::class)
+                    ->setName($this->pool->messages->getHelp($sectionName . 'Readable'))
+                    ->setType(static::TYPE_CONFIG)
+                    ->setNormal(static::UNKNOWN_VALUE)
+                    ->addParameter(static::PARAM_DATA, $sectionData)
+                    ->injectCallback(
+                        $this->pool->createClass(ConfigSection::class)
+                    )
+            );
         }
 
         return $configOutput;
-    }
-
-    /**
-     * Is there anything to render in this config seaction?
-     *
-     * @param \Brainworxx\Krexx\Service\Config\Model[] $sectionData
-     *   The section data we want to render.
-     *
-     * @return bool
-     *   Well? Is there anything to render at all?
-     */
-    protected function hasSomethingToRender(array $sectionData): bool
-    {
-        foreach ($sectionData as $setting) {
-            if ($setting->getType() !== static::RENDER_TYPE_NONE) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

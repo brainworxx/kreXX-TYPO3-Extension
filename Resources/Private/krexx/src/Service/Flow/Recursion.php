@@ -50,6 +50,7 @@ use SplObjectStorage;
  */
 class Recursion
 {
+
     /**
      * pool for arrays an objects, to prevent recursions.
      *
@@ -82,6 +83,16 @@ class Recursion
     protected $globalsWereRendered = false;
 
     /**
+     * The $GLOBALS array.
+     *
+     * @deprecated since 4.1.3
+     *   Will be removed.
+     *
+     * @var array
+     */
+    protected $globals;
+
+    /**
      * Generate the recursion marker during class construction.
      *
      * @param Pool $pool
@@ -90,6 +101,7 @@ class Recursion
     {
         $this->recursionMarker = 'Krexx' . substr(str_shuffle(md5(microtime())), 0, 10);
         // Mark the $GLOBALS array.
+        $this->globals = $pool->getGlobals();
         $GLOBALS[$this->recursionMarker] = true;
         $this->recursionHive = new SplObjectStorage();
 
@@ -111,7 +123,7 @@ class Recursion
      * @param object $bee
      *   The object we want to track.
      */
-    public function addToHive($bee): void
+    public function addToHive($bee)
     {
         $this->recursionHive->attach($bee);
     }
@@ -130,14 +142,14 @@ class Recursion
         // Check objects.
         // As of PHP 7.1 and lower, PHP does not recognise an __PHP_Incomplete_Class
         // as an object via is_object. Hence, we must test the class itself.
-        if (is_object($bee) || $bee instanceof __PHP_Incomplete_Class) {
+        if (is_object($bee) === true || $bee instanceof __PHP_Incomplete_Class) {
             return $this->recursionHive->contains($bee);
         }
 
         // Check arrays (only the $GLOBAL array may apply).
-        if (isset($bee[$this->recursionMarker])) {
+        if (isset($bee[$this->recursionMarker]) === true) {
             // We render the $GLOBALS only once.
-            if ($this->globalsWereRendered) {
+            if ($this->globalsWereRendered === true) {
                 return true;
             }
 
@@ -183,7 +195,7 @@ class Recursion
      * @param string $domId
      *   The dom id we want to track.
      */
-    public function addToMetaHive(string $domId): void
+    public function addToMetaHive(string $domId)
     {
         $this->metaRecursionHive[$domId] = true;
     }

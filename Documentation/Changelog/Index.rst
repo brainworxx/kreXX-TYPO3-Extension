@@ -12,39 +12,8 @@
 Changelog
 =============================================================
 
-5.0.0
-    - [Feature] Added immediate browser output to the output choices.
-    - [Feature] Added default value analysis to the additional info.
-    - [Feature] Added the German translation.
-    - [Feature] Added serialized string pretty print.
-    - [Feature] Added static cache to the filepath scalar analysis.
-    - [Feature] Added support for the hidden properties of ext_dom classes.
-    - [Feature] Added typed property analysis.
-    - [Feature] The translation analyser gives feedback if the translation file does not exist in the first place.
-    - [Feature] The ext filepath analysis gives feedback if the file does not exist in the first place.
-    - [Feature] Added Flexform data analysis.
-    - [Change] Removed deprecated code.
-    - [Change] Drop PHP 7.0 support
-    - [Change] Streamlined the type display of strings
-    - [Change] Defined visibility for all constants.
-    - [Change] Added missing PHP 7.1 return type to methods.
-    - [Change] Moved the ViewConstInterface to the translations.
-    - [Change] Moved the local declaration retrieval methods into their own API.
-    - [Change] Reworked some help texts.
-    - [Change] Input elements are now allowed to not have any eval callback.
-    - [Change] Remove the inherited constants from the kreXX main class.
-    - [Change] String and array analysis now cache their settings.
-    - [Change] The ScalarString class gets instantiated only once per run.
-    - [Change] Removed the scope analysis setting.
-    - [Change] Lots of deprecations.
-    - [Change] Removed the XML decoder.
-    - [Change] Drop TYPO3 7.6 support.
-    - [Change] Moved the return type retrieval by reflection to the declaration analysis classes.
-    - [Change] Moved the parameter analysis to the declaration analysis classes.
-    - [Change] Empty configuration sections are not rendered anymore.
-    - [Change] Always allow a none rendering of configuration settings.
-    - [Change] Moved the JS and CSS files to the private folder.
-    - [Change] Streamlined the return type of the retrieveDeclaringReflection of class methods.
+4.1.6
+    - [Bugfix] Link to the documentation of the debug preset does not work anymore in the documentation.
 
 4.1.5
     - [Feature] Aimeos 2022 support

@@ -88,13 +88,13 @@ class BacktraceControllerTest extends AbstractController
 
         $proccessMock = $this->createMock(ProcessBacktrace::class);
         $proccessMock->expects($this->once())
-            ->method('handle')
+            ->method('process')
             ->with(null)
             ->will($this->returnValue('generated HTML code'));
 
         $poolMock->codegenHandler = $this->createMock(Codegen::class);
         $poolMock->codegenHandler->expects($this->once())
-            ->method('setCodegenAllowed')
+            ->method('setAllowCodegen')
             ->with(false);
 
         $poolMock->emergencyHandler->expects($this->once())

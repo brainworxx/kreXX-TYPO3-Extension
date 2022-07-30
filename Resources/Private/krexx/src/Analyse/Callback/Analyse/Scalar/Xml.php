@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use DOMDocument;
 use finfo;
 
@@ -46,12 +47,12 @@ use finfo;
  *
  * @package Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar
  */
-class Xml extends AbstractScalarAnalysis
+class Xml extends AbstractScalarAnalysis implements ViewConstInterface
 {
     /**
      * @var string
      */
-    protected const XML_CHILDREN = 'children';
+    const XML_CHILDREN = 'children';
 
     /**
      * @var array|bool
@@ -66,21 +67,18 @@ class Xml extends AbstractScalarAnalysis
     protected $model;
 
     /**
-     * Is there currently a node open?
+     * The original, un-pretty-print XML string.
      *
-     * @deprecated since 5.0.0
-     *   Will be removed.
+     * @var string
+     */
+    protected $originalXml = '';
+
+    /**
+     * Is there currently a node open?
      *
      * @var bool
      */
     protected $tnodeOpen = false;
-
-    /**
-     * Was the decoding of the XML successful?
-     *
-     * @var bool
-     */
-    protected $hasErrors = false;
 
     /**
      * {@inheritDoc}
@@ -108,10 +106,10 @@ class Xml extends AbstractScalarAnalysis
     {
         // Get a first impression, we check the mime type of the model.
         $metaStuff = $model->getJson();
-        $mimeType = $this->pool->messages->getHelp('metaMimeTypeString');
+
         if (
-            empty($metaStuff[$mimeType]) ||
-            strpos($metaStuff[$mimeType], 'xml;') === false
+            empty($metaStuff[static::META_MIME_TYPE_STRING]) === true ||
+            strpos($metaStuff[static::META_MIME_TYPE_STRING], 'xml;') === false
         ) {
             // Was not identified as xml before.
             // Early return.
@@ -119,8 +117,7 @@ class Xml extends AbstractScalarAnalysis
         }
 
         $this->model = $model;
-        $this->handledValue = $string;
-        $this->hasErrors = false;
+        $this->originalXml = $string;
 
         return true;
     }
@@ -133,32 +130,31 @@ class Xml extends AbstractScalarAnalysis
     protected function handle(): array
     {
         $meta = [];
-        $messages = $this->pool->messages;
-        // The pretty print done by a dom parser.
-        $dom = new DOMDocument("1.0");
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
 
-        set_error_handler(
-            function (): void {
-                $this->hasErrors = true;
-            }
-        );
-        $dom->loadXML($this->handledValue);
+        set_error_handler(function () {
+           // Do nothing.
+        });
+        // We try to decode it.
+        $this->parseXml($this->originalXml);
         restore_error_handler();
 
-        if ($this->hasErrors) {
-            $meta[$messages->getHelp('metaDecodedXml')] = $this->pool->messages->getHelp('metaNoXml');
+        if (empty($this->decodedXml) === false) {
+            $meta[static::META_DECODED_XML] = $this->decodedXml;
+            // The pretty print done by a dom parser.
+            $dom = new DOMDocument("1.0");
+            $dom->preserveWhiteSpace = false;
+            $dom->formatOutput = true;
+            $dom->loadXML($this->originalXml);
+            $meta[static::META_PRETTY_PRINT] = $this->pool->encodingService->encodeString($dom->saveXML());
         } else {
-            $meta[$messages->getHelp('metaPrettyPrint')] = $this->pool
-                ->encodingService
-                ->encodeString($dom->saveXML());
-            // Move the extra part into a nest, for better readability.
-            $this->model->setHasExtra(false);
-            $meta[$messages->getHelp('metaContent')] = $this->model->getData();
+            $meta[static::META_DECODED_XML] = 'Unable to decode the XML structure!';
         }
 
-        $this->hasErrors = false;
+        // Move the extra part into a nest, for better readability.
+        if ($this->model->hasExtra()) {
+            $this->model->setHasExtra(false);
+            $meta[static::META_CONTENT] = $this->model->getData();
+        }
 
         return $meta;
     }
@@ -166,16 +162,10 @@ class Xml extends AbstractScalarAnalysis
     /**
      * Parse an XML string into an array structure.
      *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
      * @param string $strInputXML
      *   The string we want to parse.
      */
-    protected function parseXml(string $strInputXML): void
+    protected function parseXml(string $strInputXML)
     {
         $resParser = xml_parser_create();
         xml_set_object($resParser, $this);
@@ -188,12 +178,6 @@ class Xml extends AbstractScalarAnalysis
     /**
      * Handle the opening of a tag.
      *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
      * @param resource $parser
      *   The parser resource.
      * @param string $name
@@ -201,10 +185,10 @@ class Xml extends AbstractScalarAnalysis
      * @param array $attributes
      *   The attributes of the tag we are opening.
      */
-    protected function tagOpen($parser, string $name, array $attributes): void
+    protected function tagOpen($parser, string $name, array $attributes)
     {
         $this->tnodeOpen = false;
-        if (empty($attributes)) {
+        if (empty($attributes) === true) {
             $this->decodedXml[] = ["name" => $name];
         } else {
             $this->decodedXml[] = ["name" => $name, "attributes" => $attributes];
@@ -214,18 +198,12 @@ class Xml extends AbstractScalarAnalysis
     /**
      * Retrieve the tag data.
      *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
      * @param resource $parser
      *   The parser resource.
      * @param string $tagData
      *   The tag data.
      */
-    protected function tagData($parser, string $tagData): void
+    protected function tagData($parser, string $tagData)
     {
         $count = count($this->decodedXml) - 1;
         if ($this->tnodeOpen) {
@@ -241,18 +219,12 @@ class Xml extends AbstractScalarAnalysis
     /**
      * Handle the closing of a tag.
      *
-     * @deprecated since 5.0.0
-     *   Will be removed
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
      * @param resource $parser
      *   The parser resource.
      * @param string $name
      *   The name of the tag we are handling.
      */
-    protected function tagClosed($parser, string $name): void
+    protected function tagClosed($parser, string $name)
     {
         $count = count($this->decodedXml);
         $this->tnodeOpen = false;

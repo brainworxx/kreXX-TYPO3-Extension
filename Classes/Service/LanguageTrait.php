@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Service;
 
-use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -54,18 +53,30 @@ trait LanguageTrait
      *
      * @param string $key
      *   The key from the LOCAL_LANG array for which to return the value.
-     * @param string[]|null $arguments
+     * @param string|null $extensionName
+     *   The name of the extension
+     * @param array $arguments
      *   The arguments of the extension, being passed over to vsprintf
-     *
+     * @param string $langKey
+     *   The language key or null for using the current language from the system
+     * @param string[] $altLangKeys
+     *   The alternative language keys if no translation was found. If null and
+     *   we are in the frontend, then the language_alt from TypoScript setup
+     *   will be used
      * @return string|null
      *   The value from LOCAL_LANG or null if no translation was found.
      */
-    public static function translate(string $key, array $arguments = null): ?string
-    {
+    public static function translate(
+        string $key,
+        $extensionName = null,
+        array $arguments = null,
+        string $langKey = null,
+        array $altLangKeys = null
+    ) {
         if (defined('KREXX_TEST_IN_PROGRESS')) {
             return $key;
         }
 
-        return LocalizationUtility::translate($key, ConstInterface::EXT_KEY, $arguments);
+        return LocalizationUtility::translate($key, $extensionName, $arguments, $langKey, $altLangKeys);
     }
 }

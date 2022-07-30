@@ -47,26 +47,26 @@ interface PluginConstInterface
      *
      * @var string
      */
-    public const IS_ACTIVE = 'isActive';
+    const IS_ACTIVE = 'isActive';
 
     /**
      * Name of the configuration class of the plugin.
      *
      * @var string
      */
-    public const CONFIG_CLASS = 'configClass';
+    const CONFIG_CLASS = 'configClass';
 
     /**
      * Name of the plugin.
      *
      * @var string
      */
-    public const PLUGIN_NAME = 'name';
+    const PLUGIN_NAME = 'name';
 
     /**
      * Version of the plugin.
      *
      * @var string
      */
-    public const PLUGIN_VERSION = 'ver';
+    const PLUGIN_VERSION = 'ver';
 }

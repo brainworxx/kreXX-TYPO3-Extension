@@ -78,7 +78,7 @@ abstract class AbstractTest extends TestCompatibility
      */
     protected function krexxUp()
     {
-        $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
+        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '1.2.3.4';
         $this->mockPhpSapiNameStandard();
         Pool::createPool();
     }
@@ -96,7 +96,7 @@ abstract class AbstractTest extends TestCompatibility
 
         // Reset the messages.
         $messageRef = new \ReflectionClass(Krexx::$pool->messages);
-        $keysRef = $messageRef->getProperty('messages');
+        $keysRef = $messageRef->getProperty('keys');
         $keysRef->setAccessible(true);
         $keysRef->setValue(Krexx::$pool->messages, []);
 

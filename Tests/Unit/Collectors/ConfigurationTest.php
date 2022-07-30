@@ -64,7 +64,7 @@ class ConfigurationTest extends AbstractTest
         // Point the ini reader to the fixture.
         $this->setValueByReflection(
             'directories',
-            ['config' => __DIR__ . '/../../Fixtures/Config.'],
+            [Config::CONFIG_FOLDER => __DIR__ . '/../../Fixtures/Config.ini'],
             \Krexx::$pool->config
         );
 
@@ -80,11 +80,11 @@ class ConfigurationTest extends AbstractTest
                     'config',
                     $this->callback(function ($config) {
                         // @see config.ini in the fixtures.
-                        return $config[Config::SETTING_SKIN]['value'] === 'hans' &&
-                            $config[Config::SETTING_SKIN]['useFactorySettings'] === false &&
-                            $config[Config::SETTING_IP_RANGE]['value'] === 'testing . . .' &&
-                            $config[Config::SETTING_MAX_FILES]['value'] === '1000' &&
-                            $config[Config::SETTING_MAX_FILES]['useFactorySettings'] === true;
+                        return $config[Config::SETTING_SKIN][Configuration::SETTINGS_VALUE] === 'hans' &&
+                            $config[Config::SETTING_SKIN][Configuration::SETTINGS_USE_FACTORY_SETTINGS] === false &&
+                            $config[Config::SETTING_IP_RANGE][Configuration::SETTINGS_VALUE] === 'testing . . .' &&
+                            $config[Config::SETTING_MAX_FILES][Configuration::SETTINGS_VALUE] === '1000' &&
+                            $config[Config::SETTING_MAX_FILES][Configuration::SETTINGS_USE_FACTORY_SETTINGS] === true;
                     })
                 ],
                 [

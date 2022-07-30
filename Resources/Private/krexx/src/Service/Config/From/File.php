@@ -55,7 +55,7 @@ class File extends Fallback
     /**
      * The content of the file we have loaded.
      *
-     * @var string[][]
+     * @var array
      */
     protected $settings = [];
 
@@ -81,24 +81,51 @@ class File extends Fallback
      */
     public function loadFile(string $path): File
     {
+        // Fallback to empty.
         $this->settings = [];
 
+        if ($this->pool->fileService->fileIsReadable($path) === false) {
+            $this->fallbackLoading($path);
+            return $this;
+        }
+
+        $content = $this->pool->fileService->getFileContents($path, false);
+        $this->settings = json_decode($content, true);
+
+        if (empty($this->settings)) {
+            // Fallback to ini.
+            $this->settings = (array)parse_ini_string($content, true);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Fallback loading of the configuration.
+     *
+     * @param string $path
+     *   The incomplete path to the possible ini file.
+     */
+    protected function fallbackLoading(string $path)
+    {
         $fileExtensions = ['ini' => 'parse_ini_string', 'json' => 'json_decode'];
         foreach ($fileExtensions as $extension => $decoder) {
             $completePath = $path . $extension;
-            if ($this->pool->fileService->fileIsReadable($completePath)) {
+            if ($this->pool->fileService->fileIsReadable($completePath) === true) {
                 $content = $this->pool->fileService->getFileContents($completePath, false);
                 $this->settings = (array)$decoder($content, true);
                 // Feedback about the file name.
                 $this->pool->config->setPathToConfigFile($completePath);
-                return $this;
+                return;
             }
         }
 
-        // Still here? Give feedback about the filename.
-        $this->pool->config->setPathToConfigFile($completePath);
-
-        return $this;
+        // Still here? Test if the path ends with a dot.
+        if (substr($path, -1) === '.') {
+            // The provided path was not a real path to begin with.
+            // Fallback to the last provided complete path.
+            $this->pool->config->setPathToConfigFile($completePath);
+        }
     }
 
     /**
@@ -110,12 +137,12 @@ class File extends Fallback
      * @return array|null
      *   The configuration (is it editable, a dropdown, a textfield, ...)
      */
-    public function getFeConfigFromFile(string $parameterName): ?array
+    public function getFeConfigFromFile(string $parameterName)
     {
         // Get the human-readable stuff from the file.
         $value = $this->getConfigFromFile(static::SECTION_FE_EDITING, $parameterName);
 
-        if (empty($value)) {
+        if (empty($value) === true) {
             // Sorry, no value stored.
             return null;
         }
@@ -155,7 +182,7 @@ class File extends Fallback
      * @param string $name
      *   The name of the setting.
      *
-     * @return mixed
+     * @return string|null
      *   The value from the file. Null, when not available or not validated.
      */
     public function getConfigFromFile(string $group, string $name)
@@ -163,8 +190,8 @@ class File extends Fallback
         // Do we have a value in the file?
         // Does it validate?
         if (
-            isset($this->settings[$group][$name]) &&
-            $this->validation->evaluateSetting($group, $name, $this->settings[$group][$name])
+            isset($this->settings[$group][$name]) === true &&
+            $this->validation->evaluateSetting($group, $name, $this->settings[$group][$name]) === true
         ) {
             return $this->settings[$group][$name];
         }

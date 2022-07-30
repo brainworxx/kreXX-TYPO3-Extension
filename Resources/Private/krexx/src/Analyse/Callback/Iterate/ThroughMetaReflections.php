@@ -49,6 +49,7 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
  */
 class ThroughMetaReflections extends AbstractCallback implements CallbackConstInterface
 {
+
     /**
      * Simply iterate through reflections coming from the ThoughMeta callback.
      *

@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Model as SettingModel;
+use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Configuration "analysis" methods. Meh, naming conventions suck sometimes.
@@ -49,8 +50,9 @@ use Brainworxx\Krexx\Service\Config\Model as SettingModel;
  * @uses array data
  *   The configuration section we are rendering
  */
-class ConfigSection extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
+class ConfigSection extends AbstractCallback implements CallbackConstInterface, ViewConstInterface, ConfigConstInterface
 {
+
     /**
      * Renders each section of the footer.
      *
@@ -85,15 +87,15 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
      *   The ID of the setting.
      *
      * @return string
-     *   The rendered output.
+     *   Th rendered output.
      */
     protected function generateOutput(SettingModel $setting, string $id): string
     {
         /** @var Model $model */
-        $model = $this->pool->createClass(Model::class)->setHelpid($id . 'Help');
+        $model = $this->pool->createClass(Model::class)->setHelpid($id . static::META_HELP);
         $name = $this->pool->messages->getHelp($id . 'Readable');
         $value = $this->prepareValue($setting);
-        if ($setting->isEditable()) {
+        if ($setting->getEditable() === true) {
             return $this->pool->render->renderSingleEditableChild(
                 $model->setData($name)
                     ->setName($value)
@@ -105,6 +107,7 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
         return $this->pool->render->renderExpandableChild(
             $model->setData($value)->setName($name)->setNormal($value)->setType($setting->getSource())
         );
+
     }
 
     /**
@@ -113,19 +116,22 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
      * @param \Brainworxx\Krexx\Service\Config\Model $setting
      *   The setting model.
      *
-     * @return int|string|null
+     * @return bool|int|string|null
      *   The prepared value.
      */
     protected function prepareValue(SettingModel $setting)
     {
         $value = $setting->getValue();
 
-        if (!is_bool($value)) {
-            // Early return.
-            return $value;
+        // We need to re-translate booleans to something the frontend can understand.
+        if ($value === true) {
+            $value = 'true';
         }
 
-        // We need to re-translate booleans to something the frontend can understand.
-        return $value ? 'true' : 'false';
+        if ($value === false) {
+            $value = 'false';
+        }
+
+        return $value;
     }
 }

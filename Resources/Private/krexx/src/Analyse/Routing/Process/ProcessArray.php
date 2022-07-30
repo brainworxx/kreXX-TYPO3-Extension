@@ -42,7 +42,6 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Processing of arrays.
@@ -52,24 +51,6 @@ class ProcessArray extends AbstractProcessNoneScalar implements
     CallbackConstInterface,
     ConfigConstInterface
 {
-    /**
-     * Cached setting for the array count limit before switching to the
-     * simpified version.
-     *
-     * @var int
-     */
-    protected $arrayCountLimit = 0;
-
-    /**
-     * {@inheritDoc}
-     */
-    public function __construct(Pool $pool)
-    {
-        parent::__construct($pool);
-
-        $this->arrayCountLimit = (int) $this->pool->config
-            ->getSetting(static::SETTING_ARRAY_COUNT_LIMIT);
-    }
 
     /**
      * Is this one an array?
@@ -97,9 +78,10 @@ class ProcessArray extends AbstractProcessNoneScalar implements
     protected function handleNoneScalar(Model $model): string
     {
         $this->pool->emergencyHandler->upOneNestingLevel();
+        $multiline = false;
         $count = count($model->getData());
 
-        if ($count > $this->arrayCountLimit) {
+        if ($count > (int) $this->pool->config->getSetting(static::SETTING_ARRAY_COUNT_LIMIT)) {
             // Budget array analysis.
             $model->injectCallback($this->pool->createClass(ThroughLargeArray::class))
                 ->setHelpid('simpleArray');
@@ -112,9 +94,9 @@ class ProcessArray extends AbstractProcessNoneScalar implements
         $result = $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
                 $model->setType(static::TYPE_ARRAY)
-                    ->setNormal($count . $this->pool->messages->getHelp('countElements'))
+                    ->setNormal($count . ' elements')
                     ->addParameter(static::PARAM_DATA, $model->getData())
-                    ->addParameter(static::PARAM_MULTILINE, false)
+                    ->addParameter(static::PARAM_MULTILINE, $multiline)
             )
         );
 

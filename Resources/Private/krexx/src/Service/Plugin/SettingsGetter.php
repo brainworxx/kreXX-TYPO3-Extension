@@ -90,7 +90,7 @@ class SettingsGetter extends Registration
     /**
      * Getter for the blacklisted debug methods.
      *
-     * @return string[]
+     * @return array[]
      *   The debug methods.
      */
     public static function getBlacklistDebugMethods(): array
@@ -187,15 +187,5 @@ class SettingsGetter extends Registration
     public static function getNewSettings(): array
     {
         return static::$newSettings;
-    }
-
-    /**
-     * Getter for the additional languages.
-     *
-     * @return string[][]
-     */
-    public static function getAdditionalLanguages(): array
-    {
-        return self::$additionalLanguages;
     }
 }

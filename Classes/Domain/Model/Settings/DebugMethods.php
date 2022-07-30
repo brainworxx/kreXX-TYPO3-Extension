@@ -52,7 +52,7 @@ trait DebugMethods
     /**
      * @param string $debugMethods
      */
-    public function setDebugMethods(string $debugMethods): void
+    public function setDebugMethods(string $debugMethods)
     {
         $this->debugMethods = $debugMethods;
     }
@@ -60,7 +60,7 @@ trait DebugMethods
     /**
      * @param string $formdebugMethods
      */
-    public function setFormdebugMethods(string $formdebugMethods): void
+    public function setFormdebugMethods(string $formdebugMethods)
     {
         $this->formdebugMethods = $formdebugMethods;
     }

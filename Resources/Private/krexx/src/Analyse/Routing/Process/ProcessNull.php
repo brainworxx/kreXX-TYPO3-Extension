@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
  */
 class ProcessNull extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
+
     /**
      * Is this one null?
      *

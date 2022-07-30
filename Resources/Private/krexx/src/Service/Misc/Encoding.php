@@ -59,20 +59,11 @@ class Encoding
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-        $this->registerPolyfill();
-        $pool->encodingService = $this;
-    }
 
-    /**
-     * Register some namespaced cheap polyfills, in case the mb-string
-     * extension is not available
-     *
-     * @codeCoverageIgnore
-     *   We will not test a cheap polyfill.
-     */
-    protected function registerPolyfill(): void
-    {
-        if (!function_exists('mb_detect_encoding')) {
+        // Register some namespaced cheap polyfills, in case the mb-string
+        // extension is not available
+        if (function_exists('mb_detect_encoding') === false) {
+
             /**
              * Cheap dummy "polyfill" for mb_detect_encoding
              *
@@ -83,10 +74,13 @@ class Encoding
              * @param bool $strict
              *   Will not get used.
              *
+             * @codeCoverageIgnore
+             *   We will not test a cheap polyfill
+             *
              * @return string
              *   Always 'polyfill'.
              */
-            function mb_detect_encoding($string = '', $encodingList = '', $strict = false): string
+            function mb_detect_encoding($string = '', $encodingList = '', $strict = false)
             {
                 return 'polyfill';
             }
@@ -99,10 +93,13 @@ class Encoding
              * @param $encoding
              *   Will not get used.
              *
+             * @codeCoverageIgnore
+             *   We will not test a cheap polyfill
+             *
              * @return int
              *   The length, according to strlen();
              */
-            function mb_strlen($string, $encoding = null): int
+            function mb_strlen($string, $encoding = null)
             {
                 return strlen($string);
             }
@@ -117,10 +114,13 @@ class Encoding
              * @param $length
              *   The length we want.
              *
+             * @codeCoverageIgnore
+             *   We will not test a cheap polyfill
+             *
              * @return string
              *   The substring, according to substr().
              */
-            function mb_substr($string, $start, $length): string
+            function mb_substr($string, $start, $length)
             {
                 return substr($string, $start, $length);
             }
@@ -136,17 +136,21 @@ class Encoding
              * @param string $fromEncoding
              *   Will not get used.
              *
+             * @codeCoverageIgnore
+             *   We will not test a cheap polyfill
+             *
              * @return string
              *   Always an empty string.
              */
-            function mb_convert_encoding($string, $toEncoding, $fromEncoding): string
+            function mb_convert_encoding($string, $toEncoding, $fromEncoding)
             {
                 return '';
             }
 
             // Tell the dev, that we have a problem.
-            $this->pool->messages->addMessage('mbstringNotInstalled');
+            $pool->messages->addMessage('mbstringNotInstalled');
         }
+        $pool->encodingService = $this;
     }
 
     /**
@@ -170,7 +174,7 @@ class Encoding
         }
 
         // Initialize the encoding configuration.
-        if ($code) {
+        if ($code === true) {
             // We are encoding @, because we need them for our chunks.
             // The { are needed in the marker of the skin.
             // We also replace tabs with two nbsp's.
@@ -184,7 +188,7 @@ class Encoding
 
         // There are several places here, that may throw a warning.
         set_error_handler(
-            function (): void {
+            function () {
                 // Do nothing.
             }
         );
@@ -193,7 +197,7 @@ class Encoding
 
         // Check if encoding was successful.
         // 99.99% of the time, the encoding works.
-        if (empty($result)) {
+        if (empty($result) === true) {
             $result = $this->encodeCompletely($data, $code);
         }
 
@@ -210,7 +214,7 @@ class Encoding
      * Here we have another SPOF. When the string is large enough we will run
      * out of memory!
      * We will *NOT* return the unescaped string. So we must check if it is small
-     * enough for the unpack() method. 100 kb should be safe enough.
+     * enough for the unpack(). 100 kb should be safe enough.
      *
      * @param string $data
      *   The data which needs to be sanitized.
@@ -228,7 +232,7 @@ class Encoding
 
         $encoding = mb_detect_encoding($data);
         $data = mb_convert_encoding($data, 'UTF-32', $encoding === false ? null : $encoding);
-        if (empty($data)) {
+        if (empty($data) === true) {
             // Unable to convert this string into something we can completely
             // encode. Fallback to an empty string.
             return '';
@@ -237,7 +241,7 @@ class Encoding
         return implode(
             "",
             array_map(
-                $code ? [$this, 'arrayMapCallbackCode'] : [$this, 'arrayMapCallbackNormal'],
+                $code === true ? [$this, 'arrayMapCallbackCode'] : [$this, 'arrayMapCallbackNormal'],
                 unpack("N*", $data)
             )
         );
@@ -257,7 +261,7 @@ class Encoding
      * @codeCoverageIgnore
      *   We will not test simple wrappers
      *
-     * @return string|bool
+     * @return string|false
      *   The result.
      */
     public function mbDetectEncoding(string $string, string $encodinglist = 'auto', bool $strict = false)
@@ -271,7 +275,7 @@ class Encoding
      *
      * @param string $string
      *   The string we want to analyse
-     * @param string|null $encoding
+     * @param string $encoding
      *   The known encoding of the string, if known.
      *
      * @return int
@@ -334,8 +338,8 @@ class Encoding
         }
 
         $result = str_replace(
-            ['&#039;', "\0", "\xEF", "\xBB", "\xBF"],
-            ["\&#039;", '\' . "\0" . \'', '\' . "\xEF" . \'', '\' . "\xBB" . \'', '\' . "\xBF" . \''],
+            ['&#039;', '\'', "\0", "\xEF", "\xBB", "\xBF"],
+            ["\&#039;", "\&#039;", '\' . "\0" . \'', '\' . "\xEF" . \'', '\' . "\xBB" . \'', '\' . "\xBF" . \''],
             $name
         );
 
@@ -400,9 +404,7 @@ class Encoding
 
         // The first regex detects all allowed characters.
         // For some reason, they also allow BOM characters.
-        return $cache[$propName] = (bool) preg_match(
-            "/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/",
-            (string)$propName
-        ) && !(bool) preg_match("/[\xEF\xBB\xBF]$/", $propName);
+        return $cache[$propName] = (bool) preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", (string)$propName) &&
+            !(bool) preg_match("/[\xEF\xBB\xBF]$/", $propName);
     }
 }

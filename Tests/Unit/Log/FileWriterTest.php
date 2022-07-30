@@ -171,7 +171,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
             ->will($this->returnValue($configModelMock));
         $configModelMock->expects(($this->once()))
             ->method('setSource')
-            ->with('kreXX log writer');
+            ->with(FileWriter::KREXX_LOG_WRITER);
         \Krexx::$pool->config->settings[Fallback::SETTING_ANALYSE_SCALAR] = $configModelMock;
 
         $fileWriter = new FileWriter($config);

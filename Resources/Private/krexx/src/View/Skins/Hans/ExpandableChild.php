@@ -61,6 +61,7 @@ trait ExpandableChild
         '{codewrapperLeft}',
         '{codewrapperRight}',
         '{help}',
+        '{key-ktype}',
     ];
 
     /**
@@ -74,21 +75,17 @@ trait ExpandableChild
     ];
 
     /**
-     * @var string
-     */
-    private $markerSingleChildExtra = '{data}';
-
-    /**
      * {@inheritdoc}
      */
     public function renderExpandableChild(Model $model, bool $isExpanded = false): string
     {
         // Check for emergency break.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
             return '';
         }
 
         // Generating our code.
+        /** @var \Brainworxx\Krexx\Analyse\Code\Codegen $codegenHandler */
         $codegenHandler = $this->pool->codegenHandler;
         $generateSource = $codegenHandler->generateSource($model);
         return str_replace(
@@ -102,11 +99,12 @@ trait ExpandableChild
                 $this->renderConnectorRight($model->getConnectorRight(128), $model->getReturnType()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $generateSource),
                 $this->renderSourceButtonWithStop($generateSource),
-                $isExpanded ? 'kopened' : '',
+                $this->retrieveOpenedClass($isExpanded),
                 $this->pool->chunks->chunkMe($this->renderNest($model, $isExpanded)),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_L, $codegenHandler->generateWrapperLeft()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_R, $codegenHandler->generateWrapperRight()),
                 $this->renderHelp($model),
+                'key' . $model->getKeyType(),
             ],
             $this->getTemplateFileContent(static::FILE_EX_CHILD_NORMAL)
         );
@@ -118,18 +116,12 @@ trait ExpandableChild
      * @param bool $isExpanded
      *   Well? Is it?
      *
-     * @deprecated since 5.0.0
-     *   Will be removed.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
      * @return string
      *   The css class name.
      */
     protected function retrieveOpenedClass(bool $isExpanded): string
     {
-        if ($isExpanded) {
+        if ($isExpanded === true) {
             return 'kopened';
         }
 
@@ -149,8 +141,8 @@ trait ExpandableChild
     {
         if (
             $gencode === static::CODEGEN_STOP_BIT ||
-            empty($gencode) ||
-            !$this->pool->codegenHandler->isCodegenAllowed()
+            empty($gencode) === true ||
+            $this->pool->codegenHandler->getAllowCodegen() === false
         ) {
             // Remove the button marker, because here is nothing to add.
             return '';
@@ -181,7 +173,7 @@ trait ExpandableChild
         }
 
         // Are we expanding this one?
-        if ($isExpanded) {
+        if ($isExpanded === true) {
             $style = '';
         } else {
             $style = static::STYLE_HIDDEN;
@@ -210,7 +202,7 @@ trait ExpandableChild
      */
     protected function renderExtra(Model $model): string
     {
-        if ($model->hasExtra()) {
+        if ($model->hasExtra() === true) {
             return str_replace(
                 $this->markerSingleChildExtra,
                 $model->getData(),
@@ -219,20 +211,6 @@ trait ExpandableChild
         }
 
         return '';
-    }
-
-    /**
-     * Getter of the extra for unit tests.
-     *
-     * @codeCoverageIgnore
-     *   We are not testing the unit tests.
-     *
-     * @return string[]
-     *   The marker array.
-     */
-    public function getMarkerSingleChildExtra(): array
-    {
-        return [$this->markerSingleChildExtra];
     }
 
     /**

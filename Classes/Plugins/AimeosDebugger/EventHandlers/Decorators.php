@@ -55,7 +55,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
     /**
      * List of possible internal names of the recipient class.
      *
-     * @var string[]
+     * @var array
      */
     protected $internalObjectNames = [
         'controller' => '$this->controller,',
@@ -98,7 +98,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
         $params = $callback->getParameters();
 
         // Get a first impression.
-        if (!$this->checkClassName($params[static::PARAM_REF])) {
+        if ($this->checkClassName($params[static::PARAM_REF]) === false) {
             // Early return, we skip this one.
             return $result;
         }
@@ -108,10 +108,10 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
         $allReceivers = [];
         $methods = $this->retrieveMethods($params, $allReceivers);
 
-        if (!empty($methods)) {
+        if (empty($methods) === false) {
             // Got to dump them all!
             $result .= $this->pool->render->renderExpandableChild($this->pool->createClass(Model::class)
-                ->setName($this->pool->messages->getHelp('aimeosUndecoratedMeth'))
+                ->setName('Undecorated Methods')
                 ->setType('class internals decorator')
                 ->addParameter(static::PARAM_DATA, $methods)
                 ->setHelpid('aimeosDecoratorsInfo')
@@ -119,14 +119,14 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
         }
 
         // Do a normal analysis of all receiver objects.
-        if (!empty($allReceivers)) {
-            $this->pool->codegenHandler->setCodegenAllowed(false);
+        if (empty($allReceivers) === false) {
+            $this->pool->codegenHandler->setAllowCodegen(false);
             $result .= $this->pool->render->renderExpandableChild($this->pool->createClass(Model::class)
-                ->setName($this->pool->messages->getHelp('aimeosDecoratedObj'))
+                ->setName('Decorated Object')
                 ->setType('class internals decorator')
                 ->addParameter(static::PARAM_DATA, $allReceivers)
                 ->injectCallback($this->pool->createClass(ThroughClassList::class)));
-            $this->pool->codegenHandler->setCodegenAllowed(true);
+            $this->pool->codegenHandler->setAllowCodegen(true);
         }
 
         return $result;
@@ -137,11 +137,11 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      *
      * @param array $params
      *   The parameters from the original callback.
-     * @param object[] $allReceivers
+     * @param array $allReceivers
      *   By value of all known receivers. We can only have one return value,
      *   but we retrieve two different values.
      *
-     * @return string[]
+     * @return array
      *   The  methods we need to analyse.
      */
     protected function retrieveMethods(array $params, array &$allReceivers): array

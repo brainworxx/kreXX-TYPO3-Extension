@@ -50,11 +50,9 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
     /**
      * Assigning the list to the view. Used by out adminpanel logging module.
      *
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
-     *
      * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView $view
      */
-    public function assignData(AbstractTemplateView $view): void
+    public function assignData(AbstractTemplateView $view)
     {
         $view->assign('filelist', $this->retrieveFileList());
     }
@@ -62,23 +60,21 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
     /**
      * Retrieve the file list, like the method name says. Used by the ajax controller.
      *
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
-     *
-     * @return string[][]
+     * @return array
      *   The file list with the info.
      */
     public function retrieveFileList(): array
     {
         $fileList = [];
 
-        if (!$this->hasAccess) {
+        if ($this->hasAccess === false) {
             // No access.
             return $fileList;
         }
 
         // Get the log files and sort them.
         $files = glob($this->pool->config->getLogDir() . '*.Krexx.html');
-        if (empty($files)) {
+        if (empty($files) === true) {
             return [];
         }
 
@@ -93,12 +89,10 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
     /**
      * Get all the log file infos together.
      *
-     * @param string[] $files
+     * @param array $files
      *   The list of files to process.
      *
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
-     *
-     * @return string[][]
+     * @return array
      *   The file info in a neat array.
      */
     protected function retrieveFileInfo(array $files): array
@@ -127,28 +121,28 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      * @param string $file
      *   The file name for which we are retrieving the metadata.
      *
-     * @return string[]
+     * @return array
      *   The meta stuff we were able to retrieve.
      */
     protected function addMetaToFileInfo(string $file): array
     {
-        if (is_readable($file . '.json') === false) {
-            return [];
+        if (is_readable($file . '.json')) {
+            $metaArray = (array)json_decode(file_get_contents($file . '.json'), true);
+            if (empty($metaArray)) {
+                return [];
+            }
+
+            foreach ($metaArray as &$meta) {
+                $meta['filename'] = $meta[static::TRACE_FILE] === 'n/a' ?
+                    $meta[static::TRACE_FILE] : basename($meta[static::TRACE_FILE]);
+                // Unescape the stuff from the json, to prevent double escaping.
+                $meta[static::TRACE_VARNAME] = htmlspecialchars_decode($meta[static::TRACE_VARNAME]);
+            }
+
+            return $metaArray;
         }
 
-        $metaArray = (array)json_decode(file_get_contents($file . '.json'), true);
-        if (empty($metaArray)) {
-            return [];
-        }
-
-        foreach ($metaArray as &$meta) {
-            $meta[static::PATHINFO_FILENAME] = $meta[static::TRACE_FILE] === 'n/a' ?
-                $meta[static::TRACE_FILE] : basename($meta[static::TRACE_FILE]);
-            // Unescape the stuff from the json, to prevent double escaping.
-            $meta[static::TRACE_VARNAME] = htmlspecialchars_decode($meta[static::TRACE_VARNAME]);
-        }
-
-        return $metaArray;
+        return [];
     }
 
     /**

@@ -52,7 +52,7 @@ trait AnalyseGetter
     /**
      * @param string $analyseGetter
      */
-    public function setAnalyseGetter(string $analyseGetter): void
+    public function setAnalyseGetter(string $analyseGetter)
     {
         $this->analyseGetter = $analyseGetter;
     }
@@ -60,7 +60,7 @@ trait AnalyseGetter
     /**
      * @param string $formanalyseGetter
      */
-    public function setFormanalyseGetter(string $formanalyseGetter): void
+    public function setFormanalyseGetter(string $formanalyseGetter)
     {
         $this->formanalyseGetter = $formanalyseGetter;
     }

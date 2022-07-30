@@ -54,10 +54,11 @@ use ReflectionMethod;
  */
 class Getter extends AbstractObjectAnalysis
 {
+
     /**
      * List of the getter methods, that start with 'get'.
      *
-     * @var array
+     * @var string[]
      */
     protected $normalGetter = [];
 
@@ -90,7 +91,7 @@ class Getter extends AbstractObjectAnalysis
 
         // Get all public methods.
         $this->retrieveMethodList($ref);
-        if (empty($this->normalGetter + $this->isGetter + $this->hasGetter)) {
+        if (empty($this->normalGetter + $this->isGetter + $this->hasGetter) === true) {
             // There are no getter methods in here.
             return $output;
         }
@@ -118,14 +119,14 @@ class Getter extends AbstractObjectAnalysis
      * @param ReflectionMethod $method
      * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
      */
-    protected function populateGetterLists(ReflectionMethod $method, ReflectionClass $ref): void
+    protected function populateGetterLists(ReflectionMethod $method, ReflectionClass $ref)
     {
         // Check, if the method is really available, inside the analysis
         // context. An inherited private method can not be called inside the
         // $this context.
         if (
-            ($method->isPrivate() && $method->getDeclaringClass()->getName() !== $ref->getName()) ||
-            !empty($method->getParameters())
+            ($method->isPrivate() === true && $method->getDeclaringClass()->getName() !== $ref->getName()) ||
+            empty($method->getParameters()) === false
         ) {
             // We skip this one. Either it's an out-of-scope private getter,
             // or it has parameters.
@@ -147,12 +148,12 @@ class Getter extends AbstractObjectAnalysis
      * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
      *   The reflection of the class we are analysing.
      */
-    protected function retrieveMethodList(ReflectionClass $ref): void
+    protected function retrieveMethodList(ReflectionClass $ref)
     {
         // Get all public methods.
         $methodList = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
 
-        if ($this->pool->scope->isInScope()) {
+        if ($this->pool->scope->isInScope() === true) {
             // Looks like we also need the protected and private methods.
             $methodList = array_merge(
                 $methodList,

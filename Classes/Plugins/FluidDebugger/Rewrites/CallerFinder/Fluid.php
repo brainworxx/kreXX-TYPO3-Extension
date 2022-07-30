@@ -46,6 +46,7 @@ use TYPO3Fluid\Fluid\View\TemplatePaths;
  */
 class Fluid extends AbstractFluid
 {
+
     /**
      * {@inheritdoc}
      */
@@ -106,7 +107,7 @@ class Fluid extends AbstractFluid
     }
 
     /**
-     * @param mixed $resolvedIdentifiers
+     * @param $resolvedIdentifiers
      *   This should be an array, depending on how successful the script so far was.
      * @param string $hash
      *   The hash form the temp template path.
@@ -118,7 +119,7 @@ class Fluid extends AbstractFluid
      */
     protected function resolveTemplateName($resolvedIdentifiers, string $hash, TemplatePaths $templatePath): string
     {
-        if (!isset($resolvedIdentifiers['partials'])) {
+        if (isset($resolvedIdentifiers['partials']) === false) {
             // Unable to identify the partial.
             return static::FLUID_NOT_AVAILABLE;
         }

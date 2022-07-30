@@ -52,7 +52,7 @@ trait Skin
     /**
      * @param string $skin
      */
-    public function setSkin(string $skin): void
+    public function setSkin(string $skin)
     {
         $this->skin = $skin;
     }
@@ -60,7 +60,7 @@ trait Skin
     /**
      * @param string $formskin
      */
-    public function setFormskin(string $formskin): void
+    public function setFormskin(string $formskin)
     {
         $this->formskin = $formskin;
     }

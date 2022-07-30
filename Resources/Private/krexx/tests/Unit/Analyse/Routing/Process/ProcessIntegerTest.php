@@ -84,7 +84,7 @@ class ProcessIntegerTest extends AbstractTest
 
         $this->assertStringStartsWith(
             '11.Mar 2020',
-            $model->getJson()['Timestamp'],
+            $model->getJson()[ProcessInteger::META_TIMESTAMP],
             'Looking for the timestamp.'
         );
     }

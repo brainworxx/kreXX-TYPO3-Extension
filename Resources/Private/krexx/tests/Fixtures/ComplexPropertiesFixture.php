@@ -56,13 +56,6 @@ class ComplexPropertiesFixture extends ComplexPropertiesInheritanceFixture
     public $publicIntProperty = 123;
 
     /**
-     * Public float property
-     *
-     * @var float
-     */
-    public $publicFloatProperty = 123.456;
-
-    /**
      * Unset property is unsettling.
      *
      * @var string
@@ -91,16 +84,6 @@ class ComplexPropertiesFixture extends ComplexPropertiesInheritanceFixture
     public $longString = 'gdgdfgonidoidsfogidfo idfsoigdofgoiudsfgoü dsfo goühisdfg ohisdfghioü sdoiühfg hoisdghoi sdfghiosdg sdfg dsg sdgsdf gdsg dsg';
 
     public static $publicStatic = 1;
-
-    /**
-     * A simple variable with a default array.
-     *
-     * @var string[]
-     */
-    public $array = [
-        'qwer',
-        'asdf'
-    ];
 
     /**
      * Unset a property and dynamically declare a new one.

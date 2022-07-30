@@ -78,7 +78,7 @@ abstract class AbstractComment
      *
      * @param \Reflector $reflection
      *   An already existing reflection of the method or function.
-     * @param \ReflectionClass|null $reflectionClass
+     * @param \ReflectionClass $reflectionClass
      *   An already existing reflection of the original class.
      *
      * @return string

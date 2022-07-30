@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Service\Config;
 
 use Brainworxx\Krexx\Service\Config\From\Cookie;
 use Brainworxx\Krexx\Service\Config\From\File;
+use Brainworxx\Krexx\Service\Config\From\Ini;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use Brainworxx\Krexx\View\Output\CheckOutput;
@@ -70,6 +71,16 @@ class Config extends Fallback
     public $validation;
 
     /**
+     * Our ini file configuration handler.
+     *
+     * @deprecated
+     *   Since 4.1.0. Will be removed. Use $fileConfig instead.
+     *
+     * @var Ini
+     */
+    protected $iniConfig;
+
+    /**
      * Our file configuration handler.
      *
      * @var File
@@ -86,7 +97,7 @@ class Config extends Fallback
     /**
      * Here we store the paths to our files and directories.
      *
-     * @var string[]
+     * @var array
      */
     protected $directories = [];
 
@@ -121,7 +132,7 @@ class Config extends Fallback
         $this->validation = $pool->createClass(Validation::class);
         $pool->config = $this;
 
-        $this->fileConfig = $pool->createClass(File::class)
+        $this->iniConfig = $this->fileConfig = $pool->createClass(File::class)
             ->loadFile($this->getPathToConfigFile());
         $this->cookieConfig = $pool->createClass(Cookie::class);
 
@@ -136,7 +147,6 @@ class Config extends Fallback
         // or ajax mode and have no file output.
         $this->checkOutput = $pool->createClass(CheckOutput::class);
         $this->debugFuncList = explode(',', $this->getSetting(static::SETTING_DEBUG_METHODS));
-        $this->pool->messages->setLanguageKey($this->getSetting(static::SETTING_LANGUAGE_KEY));
 
         $this->checkEnabledStatus();
     }
@@ -144,11 +154,11 @@ class Config extends Fallback
     /**
      * Check if kreXX can be enabled or not.
      */
-    protected function checkEnabledStatus(): void
+    protected function checkEnabledStatus()
     {
         if (
             $this->getSetting(static::SETTING_DESTINATION) !==  static::VALUE_FILE &&
-            ($this->checkOutput->isAjax() || $this->checkOutput->isCli())
+            ($this->checkOutput->isAjax() === true || $this->checkOutput->isCli() === true)
         ) {
             // No kreXX for you. At least until you start forced logging.
             $this->setDisabled(true);
@@ -156,7 +166,7 @@ class Config extends Fallback
 
         // Now that our settings are in place, we need to check the
         // ip to decide if we need to deactivate kreXX.
-        if (!$this->checkOutput->isAllowedIp($this->getSetting(static::SETTING_IP_RANGE))) {
+        if ($this->checkOutput->isAllowedIp($this->getSetting(static::SETTING_IP_RANGE)) === false) {
             // No kreXX for you! At all.
             $this->setDisabled(true);
             static::$disabledByPhp = true;
@@ -169,7 +179,7 @@ class Config extends Fallback
      * @param bool $value
      *   Whether it is enabled, or not.
      */
-    public function setDisabled(bool $value): void
+    public function setDisabled(bool $value)
     {
         $this->settings[static::SETTING_DISABLED]
             ->setValue($value)
@@ -205,12 +215,12 @@ class Config extends Fallback
         $section = $model->getSection();
 
         // Do we accept cookie settings here?
-        if ($model->isEditable()) {
+        if ($model->getEditable() === true) {
             $cookieSetting = $this->cookieConfig->getConfigFromCookies($section, $name);
             // Do we have a value in the cookies?
             if (
                 $cookieSetting  !== null &&
-                !($name === static::SETTING_DISABLED && $cookieSetting === static::VALUE_FALSE)
+                ($name === static::SETTING_DISABLED && $cookieSetting === static::VALUE_FALSE) === false
             ) {
                 // We must not overwrite a disabled=true with local cookie settings!
                 // Otherwise, it could get enabled locally, which might be a security
@@ -261,6 +271,23 @@ class Config extends Fallback
     /**
      * Get the path to the configuration file.
      *
+     * @deprecated
+     *   Since 4.1.0. Will be removed. Use getPathToConfigFile
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @return string
+     *   The absolute path to the Krexx.ini.
+     */
+    public function getPathToIniFile(): string
+    {
+        return $this->getPathToConfigFile();
+    }
+
+    /**
+     * Get the path to the configuration file.
+     *
      * @return string
      *   The absolute path to the configuration file.
      */
@@ -275,7 +302,7 @@ class Config extends Fallback
      * @param string $file
      *   The file path.
      */
-    public function setPathToConfigFile(string $file): void
+    public function setPathToConfigFile(string $file)
     {
         $this->directories[static::CONFIG_FOLDER] = $file;
     }
@@ -303,25 +330,11 @@ class Config extends Fallback
     /**
      * Simply return a list of all skins as their configuration keys.
      *
-     * @return string[]
+     * @return array
      */
     public function getSkinList(): array
     {
-        $keys = array_keys($this->skinConfiguration);
-        return array_combine($keys, $keys);
-    }
-
-    /**
-     * Return the list of available languages.
-     *
-     * @return string[]
-     */
-    public function getLanguageList(): array
-    {
-        return array_merge(
-            ['text' => 'English', 'de' => 'Deutsch'],
-            SettingsGetter::getAdditionalLanguages()
-        );
+        return array_keys($this->skinConfiguration);
     }
 
     /**

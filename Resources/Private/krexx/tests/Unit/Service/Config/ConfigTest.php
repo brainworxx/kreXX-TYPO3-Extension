@@ -77,7 +77,7 @@ class ConfigTest extends AbstractTest
     {
         parent::krexxDown();
         unset($_SERVER['HTTP_X_REQUESTED_WITH']);
-        unset($_SERVER['REMOTE_ADDR']);
+        unset($_SERVER[CheckOutput::REMOTE_ADDRESS]);
     }
 
     /**
@@ -134,9 +134,6 @@ class ConfigTest extends AbstractTest
 
         // kreXX should not be disabled.
         $this->assertEquals(false, $config->getSetting($config::SETTING_DISABLED));
-
-        // Test the selected language. Should be the fallback,
-        $this->assertEquals('text', $config->getSetting($config::SETTING_LANGUAGE_KEY));
     }
 
     /**
@@ -218,7 +215,7 @@ class ConfigTest extends AbstractTest
             ->will($this->returnValue(static::NOT_CLI));
 
         // Testing coming from the wrong ip
-        $_SERVER['REMOTE_ADDR'] = '5.4.3.2.1';
+        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '5.4.3.2.1';
 
         $config = new Config(Krexx::$pool);
         $this->assertEquals(
@@ -228,7 +225,7 @@ class ConfigTest extends AbstractTest
         );
 
         // Testing coming from the right ip
-        $_SERVER['REMOTE_ADDR'] = '1.2.3.4.5';
+        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '1.2.3.4.5';
 
         $config = new Config(Krexx::$pool);
         $this->assertEquals(
@@ -456,15 +453,12 @@ class ConfigTest extends AbstractTest
         $config = new Config(Krexx::$pool);
         $config->settings[$config::SETTING_SKIN]->setValue($skinName);
 
-         $expectations = [
-             'smokygrey' => 'smokygrey',
-             'hans' => 'hans',
-             $skinName => $skinName
-        ];
-
         $this->assertEquals($skinRenderClass, $config->getSkinClass());
         $this->assertEquals($skinDirectory, $config->getSkinDirectory());
-        $this->assertEquals($expectations, $config->getSkinList());
+        $this->assertEquals(
+            [$config::SKIN_SMOKY_GREY, $config::SKIN_HANS, $skinName],
+            $config->getSkinList()
+        );
     }
 
     /**
@@ -479,20 +473,5 @@ class ConfigTest extends AbstractTest
         $config = new Config(Krexx::$pool);
         $config->setPathToConfigFile($fixture);
         $this->assertEquals($fixture, $config->getPathToConfigFile());
-    }
-
-    /**
-     * Test the retrieval of the language list
-     *
-     * @covers \Brainworxx\Krexx\Service\Config\Config::getLanguageList
-     */
-    public function testGetLanguageList()
-    {
-        $expectations = [
-            'text' => 'English',
-            'de' => 'Deutsch'
-        ];
-        $config = new Config(Krexx::$pool);
-        $this->assertEquals($expectations, $config->getLanguageList());
     }
 }

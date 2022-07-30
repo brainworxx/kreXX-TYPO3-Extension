@@ -47,8 +47,8 @@ Behavior
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Maximum files in the logfolder | How many files should it keep? Files will only get deleted, when a new one is created.                                                 | 10                        |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Language                       | The language of the kreXX debug output.                                                                                                | - English                 |
-|                                |                                                                                                                                        | - Deutsch                 |
+| Use scope analysis             | kreXX will analyse all values and methods that can be reached from the point where the analysis was called. This will automatically    | - true                    |
+|                                | overwrite existing configurations, it can be considered the "auto config mode".                                                        | - false                   |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 
 

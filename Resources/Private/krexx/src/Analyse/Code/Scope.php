@@ -39,13 +39,14 @@ namespace Brainworxx\Krexx\Analyse\Code;
 
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Scope analysis decides if a property of method is accessible in the current
  * analysis scope.
  */
-class Scope implements CallbackConstInterface
+class Scope implements CallbackConstInterface, ConfigConstInterface
 {
     /**
      * We use this scope, when kreXX was called like kreXX($this);
@@ -55,7 +56,7 @@ class Scope implements CallbackConstInterface
      *
      * @var string
      */
-    protected const THIS_SCOPE = '$this';
+    const THIS_SCOPE = '$this';
 
     /**
      * Here we store all relevant data.
@@ -92,13 +93,13 @@ class Scope implements CallbackConstInterface
      * @param string $scope
      *   The scope ('$this' or something else) .
      */
-    public function setScope(string $scope): void
+    public function setScope(string $scope)
     {
         if ($scope !== static::UNKNOWN_VALUE) {
             $this->scope = $scope;
             // Now that we have a scope, we can actually generate code to
             // reach the variables inside the analysis.
-            $this->pool->codegenHandler->setCodegenAllowed(true);
+            $this->pool->codegenHandler->setAllowCodegen(true);
         }
     }
 
@@ -120,8 +121,9 @@ class Scope implements CallbackConstInterface
      */
     public function isInScope(): bool
     {
-        return $this->scope === static::THIS_SCOPE &&
-            $this->pool->emergencyHandler->getNestingLevel() <= 1;
+        return  $this->pool->emergencyHandler->getNestingLevel() <= 1 &&
+            $this->scope === static::THIS_SCOPE &&
+            $this->pool->config->getSetting(static::SETTING_USE_SCOPE_ANALYSIS);
     }
 
     /**
@@ -151,7 +153,7 @@ class Scope implements CallbackConstInterface
             return false;
         }
 
-        if (is_object($model->getData()) || is_array($model->getData())) {
+        if (is_object($model->getData()) === true || is_array($model->getData()) === true) {
             // When analysing a class or array, we have + 1 on our nesting level, when
             // coming from the code generation. That is, because that class is currently
             // being analysed.

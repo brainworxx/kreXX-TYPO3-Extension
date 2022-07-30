@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Reflector;
 
@@ -49,6 +50,21 @@ use Reflector;
  */
 abstract class AbstractObjectAnalysis extends AbstractCallback implements CallbackConstInterface
 {
+
+    /**
+     * Here we store all relevant data.
+     *
+     * @var Pool
+     */
+    protected $pool;
+
+    /**
+     * The parameters from the objects callback class.
+     *
+     * @var array
+     */
+    protected $parameters = [];
+
     /**
      * Gets the properties from a reflection property of the object.
      *
@@ -56,7 +72,7 @@ abstract class AbstractObjectAnalysis extends AbstractCallback implements Callba
      *   The list of the reflection properties.
      * @param ReflectionClass $ref
      *   The reflection of the object we are currently analysing.
-     * @param string|null $label
+     * @param string $label
      *   The additional part of the template file. If set, we will use a wrapper
      *   around the analysis output.
      *

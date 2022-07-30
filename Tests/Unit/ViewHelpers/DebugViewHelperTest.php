@@ -54,7 +54,7 @@ class DebugViewHelperTest extends AbstractTest
         $debugViewHelper->initializeArguments();
 
         $this->assertArrayHasKey(
-            'value',
+            DebugViewHelper::ARGUMENT_VALUE,
             $this->retrieveValueByReflection('argumentDefinitions', $debugViewHelper)
         );
     }

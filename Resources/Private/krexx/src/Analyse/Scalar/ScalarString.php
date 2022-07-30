@@ -40,7 +40,6 @@ namespace Brainworxx\Krexx\Analyse\Scalar;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Json;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Serialized;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\TimeStamp;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml;
 use Brainworxx\Krexx\Analyse\Model;
@@ -58,6 +57,7 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
  */
 class ScalarString extends AbstractScalar
 {
+
     /**
      * The list of analysis classes, that we use.
      *
@@ -78,13 +78,12 @@ class ScalarString extends AbstractScalar
             Json::class,
             Xml::class,
             TimeStamp::class,
-            Serialized::class
         ];
 
         $classList = array_merge($classList, SettingsGetter::getAdditionalScalarString());
 
         foreach ($classList as $className) {
-            if ($className::isActive()) {
+            if ($className::isActive() === true) {
                 $this->classList[] = $className;
             }
         }
@@ -110,7 +109,7 @@ class ScalarString extends AbstractScalar
             /** @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\AbstractScalarAnalysis $scalarHandler */
             $scalarHandler = $this->pool->createClass($className);
 
-            if ($scalarHandler->canHandle($originalData, $model)) {
+            if ($scalarHandler->canHandle($originalData, $model) === true) {
                 $model->injectCallback($scalarHandler)->setDomid($this->generateDomId($originalData, $className));
                 return $model;
             }

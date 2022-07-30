@@ -85,13 +85,44 @@ class ThroughConstantsTest extends AbstractTest
     }
 
     /**
+     * Testing the constants iterator.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
+     * @throws \ReflectionException
+     */
+    public function testCallMePhp70()
+    {
+        // Test for the right PHP version.
+        if (version_compare(phpversion(), static::SKIPPED_PHP_VERSION, '>=')) {
+            $this->markTestSkipped(static::SKIPPED_REASON);
+        }
+
+        $fixture = $this->runTheTest(ConstantsFixture::class);
+
+        // Check the models from the route nothing
+        $count = 0;
+        $models = Krexx::$pool->routing->model;
+
+        foreach ($fixture['data'] as $name => $value) {
+            $this->assertEquals($name, $models[$count]->getName());
+            $this->assertEquals($value, $models[$count]->getData());
+            $this->assertEquals(
+                '\\' . $fixture[ThroughConstants::PARAM_CLASSNAME] . '::',
+                $models[$count]->getConnectorLeft()
+            );
+            ++$count;
+        }
+    }
+
+    /**
      * Testing the PHP 7.1 plus constants handling.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::canDump
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::dumpPhpSevenZero
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::retrieveAdditionalData
      */
-    public function testCallMe()
+    public function testCallMe71()
     {
         // Test for the right PHP version.
         if (version_compare(phpversion(), static::SKIPPED_PHP_VERSION, '<')) {
@@ -122,6 +153,7 @@ class ThroughConstantsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::canDump
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::dumpPhpSevenZero
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::retrieveAdditionalData
      */
     public function testCallMe71InScope()

@@ -44,6 +44,7 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 interface ProcessInterface
 {
+
     /**
      * Decide, if the processor class is able to handle this value.
      *

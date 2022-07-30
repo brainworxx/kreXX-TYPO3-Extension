@@ -77,14 +77,14 @@ class Cleanup implements ConfigConstInterface
      */
     public function cleanupOldLogs(): Cleanup
     {
-        if (!$this->pool->chunks->isLoggingAllowed()) {
+        if ($this->pool->chunks->getLoggingIsAllowed() === false) {
             // We have no write access. Do nothing.
             return $this;
         }
 
         // Cleanup old logfiles to prevent an overflow.
         $logList = glob($this->pool->config->getLogDir() . '*.Krexx.html');
-        if (empty($logList)) {
+        if (empty($logList) === true) {
             return $this;
         }
 
@@ -119,14 +119,14 @@ class Cleanup implements ConfigConstInterface
     public function cleanupOldChunks(): Cleanup
     {
         // Check for write access. We also do this only once.
-        if (static::$chunksDone || !$this->pool->chunks->isChunkAllowed()) {
+        if (static::$chunksDone === true || $this->pool->chunks->getChunksAreAllowed() === false) {
             return $this;
         }
 
         static::$chunksDone = true;
         // Clean up leftover files.
         $chunkList = glob($this->pool->config->getChunkDir() . '*.Krexx.tmp');
-        if (empty($chunkList)) {
+        if (empty($chunkList) === true) {
             return $this;
         }
 

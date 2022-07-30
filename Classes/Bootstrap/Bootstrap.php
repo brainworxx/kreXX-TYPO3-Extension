@@ -71,9 +71,9 @@ class Bootstrap implements ConstInterface
     /**
      * Batch for the bootstrapping.
      */
-    public function run(): void
+    public function run()
     {
-        if (!$this->loadKrexx()) {
+        if ($this->loadKrexx() === false) {
             // "Autoloading" failed.
             // There is no point in continuing here.
             return;
@@ -94,8 +94,14 @@ class Bootstrap implements ConstInterface
         // do it inside the template. 'krexx' as a namespace should be unique enough.
         // Theoretically, this should be part of the fluid debugger plugin, but
         // activating it in the viewhelper is too late, for obvious reason.
-        $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
-            [static::FLUID_NAMESPACE][static::KREXX][] = 'Brainworxx\\Includekrexx\\ViewHelpers';
+        if (
+            version_compare(static::getTypo3Version(), '8.5', '>=') &&
+            empty($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
+            [static::FLUID_NAMESPACE][static::KREXX])
+        ) {
+            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
+            [static::FLUID_NAMESPACE][static::KREXX] = [ 0 => 'Brainworxx\\Includekrexx\\ViewHelpers'];
+        }
 
         // Register the Aimeos Magic plugin.
         /** @var AimeosConfiguration $aimeosConfiguration */
@@ -103,7 +109,7 @@ class Bootstrap implements ConstInterface
         Registration::register($aimeosConfiguration);
 
         // Check if we have the Aimeos shop available.
-        if (class_exists(AimeosException::class) || ExtensionManagementUtility::isLoaded('aimeos')) {
+        if (class_exists(AimeosException::class) === true || ExtensionManagementUtility::isLoaded('aimeos')) {
             Registration::activatePlugin(get_class($aimeosConfiguration));
         }
     }
@@ -145,13 +151,13 @@ class Bootstrap implements ConstInterface
     {
         // There may be a composer version of kreXX installed.
         // We will not load the bundled one.
-        if (defined('KREXX_DIR')) {
+        if (defined('KREXX_DIR') === true) {
             return true;
         }
 
         // Simply load the main file.
         $krexxFile =  ExtensionManagementUtility::extPath(static::EXT_KEY) . 'Resources/Private/krexx/bootstrap.php';
-        if (file_exists($krexxFile)) {
+        if (file_exists($krexxFile) === true && class_exists(Krexx::class, false) === false) {
             include_once $krexxFile;
             return true;
         }
@@ -171,7 +177,7 @@ class Bootstrap implements ConstInterface
      *   - TYPO3_version
      *   - TYPO3\CMS\Core\Information\Typo3Version
      */
-    protected function retrieveTypo3Version(): void
+    protected function retrieveTypo3Version()
     {
         if (class_exists(Typo3Version::class)) {
             static::$typo3Version = GeneralUtility::makeInstance(Typo3Version::class)

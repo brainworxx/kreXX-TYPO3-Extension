@@ -52,7 +52,7 @@ trait Maxfiles
     /**
      * @param string $maxfiles
      */
-    public function setMaxfiles(string $maxfiles): void
+    public function setMaxfiles(string $maxfiles)
     {
         $this->maxfiles = $maxfiles;
     }
@@ -60,7 +60,7 @@ trait Maxfiles
     /**
      * @param string $formmaxfiles
      */
-    public function setFormmaxfiles(string $formmaxfiles): void
+    public function setFormmaxfiles(string $formmaxfiles)
     {
         $this->formmaxfiles = $formmaxfiles;
     }

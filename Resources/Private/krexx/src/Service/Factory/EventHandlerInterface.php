@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 interface EventHandlerInterface
 {
+
     /**
      * Inject the pool.
      *
@@ -55,7 +56,7 @@ interface EventHandlerInterface
     /**
      * Blueprint for the event handler.
      *
-     * @param AbstractCallback $callback
+     * @param AbstractCallback|null $callback
      *   The original callback. Or null, when coming from the processing.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.

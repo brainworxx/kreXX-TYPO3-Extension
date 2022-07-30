@@ -170,17 +170,9 @@ class ModelTest extends AbstractTest
         // Mock the message class, which will provide the help text.
         $helpText = 'some help text';
         $messageMock = $this->createMock(Messages::class);
-        $messageMock->expects($this->exactly(2))
+        $messageMock->expects($this->once())
             ->method('getHelp')
-            ->withConsecutive(['metaHelp'], ['some id'])
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['metaHelp', [], 'Help'],
-                        ['some id', [], $helpText]
-                    ]
-                )
-            );
+            ->will($this->returnValue($helpText));
         Krexx::$pool->messages = $messageMock;
 
         // Test the return value for chaining
@@ -620,5 +612,18 @@ class ModelTest extends AbstractTest
         $data = 'string';
         $this->assertEquals($this->model, $this->model->setReturnType($data));
         $this->assertEquals($data, $this->model->getReturnType(), 'Get of it out what you put in.');
+    }
+
+    /**
+     * Test the setter/getter for the key type.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Model::setKeyType
+     * @covers \Brainworxx\Krexx\Analyse\Model::getKeyType
+     */
+    public function testSetGetKeyType()
+    {
+        $data = 'just a value';
+        $this->assertEquals($this->model, $this->model->setKeyType($data));
+        $this->assertEquals($data, $this->model->getKeyType(), 'Get of it out what you put in.');
     }
 }

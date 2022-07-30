@@ -74,17 +74,17 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
      *
      * @var string
      */
-    protected const AI_NAMESPACE = 'Aimeos\\MW\\View\\Helper\\';
+    const AI_NAMESPACE = 'Aimeos\\MW\\View\\Helper\\';
 
     /**
      * @var string
      */
-    protected const METHOD = 'transform';
+    const METHOD = 'transform';
 
     /**
      * @var string
      */
-    protected const STANDARD = '\\Standard';
+    const STANDARD = '\\Standard';
 
     /**
      * Our pool.
@@ -96,7 +96,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     /**
      * List of all retrieved helper classes from the view.
      *
-     * @var object[]
+     * @var array
      */
     protected $helpers = [];
 
@@ -130,7 +130,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         $data = $ref->getData();
 
         // Test if we are facing an Aimeos view.
-        if (!($data instanceof ViewInterface) && !($data instanceof BaseViewInterface)) {
+        if (is_a($data, ViewInterface::class) === false && is_a($data, BaseViewInterface::class) === false) {
             // This is not the view we are looking for.
             // Early return.
             return '';
@@ -172,18 +172,18 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
             // This means that the helper may be someone else as it should be,
             // according to the key.
             $this->helpers = $this->retrieveProperty($ref, 'helper', $data);
-            if (is_array($this->helpers) && !empty($this->helpers)) {
+            if (is_array($this->helpers) && empty($this->helpers) === false) {
                 // We got ourselves some classes to analyse.
-                $this->pool->codegenHandler->setCodegenAllowed(false);
+                $this->pool->codegenHandler->setAllowCodegen(false);
                 $result .= $this->pool->render->renderExpandableChild(
                     $this->pool->createClass(Model::class)
-                        ->setName($this->pool->messages->getHelp('aimeosViewHelpers'))
+                        ->setName('Instantiated view helpers')
                         ->setType('class internals magical factory')
                         ->addParameter(static::PARAM_DATA, $this->helpers)
                         ->setHelpid('aimeosViewExisting')
                         ->injectCallback($this->pool->createClass(ThroughClassList::class))
                 );
-                $this->pool->codegenHandler->setCodegenAllowed(true);
+                $this->pool->codegenHandler->setAllowCodegen(true);
             }
         }
 
@@ -220,8 +220,6 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         } else {
             $ref = new ReflectionClass(BaseHelperBase::class);
         }
-
-
         // Scan the main view helpers, to get a first impression.
         $reflectionList = $this->retrieveHelperList(dirname($ref->getFileName()));
 
@@ -239,7 +237,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
         // Dump them, like there is no tomorrow.
         return $this->pool->render->renderExpandableChild(
             $this->pool->createClass(Model::class)
-                ->setName($this->pool->messages->getHelp('aimeosViewFactory'))
+                ->setName('Aimeos view factory')
                 ->setType('class internals view magic')
                 ->addParameter(static::PARAM_DATA, $reflectionList)
                 // Tell the callback to pass on the factory name.
@@ -258,26 +256,25 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
      *
      * @throws \ReflectionException
      *
-     * @return \ReflectionMethod[]
+     * @return array
      *   The list with the reflections.
      */
     protected function retrieveHelperList(string $directory): array
     {
-        $iface = static::AI_NAMESPACE . 'Iface';
-        if (class_exists($iface) === false) {
-            // Since 2022, all view helpers are present in the view, so we do not need
-            // to scan for them anymore.
-            // Early return.
-            return [];
-        }
-
         $reflectionList = [];
-        foreach (scandir($directory) as $dir) {
+        $subDirs = scandir($directory);
+        $iface = static::AI_NAMESPACE . 'Iface';
+
+        foreach ($subDirs as $dir) {
+            if (isset($this->helpers[$dir]) === true) {
+                //We will add it later on, if already inside the helpers.
+                continue;
+            }
+
             $className = static::AI_NAMESPACE . $dir . static::STANDARD;
-            if (empty($this->helpers[$dir]) && is_a($className, $iface, true)) {
-                // We did not process this one before.
-                $reflectionList[lcfirst($dir)] = (new ReflectionClass($className))
-                    ->getMethod(static::METHOD);
+            if (class_exists($className) && is_a($className, $iface, true)) {
+                $ref = new ReflectionClass($className);
+                $reflectionList[lcfirst($dir)] = $ref->getMethod(static::METHOD);
             }
         }
 

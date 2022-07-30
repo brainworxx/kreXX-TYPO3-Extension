@@ -49,7 +49,7 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_DATA = 'data';
+    const PARAM_DATA = 'data';
 
     /**
      * Array key for $this->parameters.
@@ -58,7 +58,7 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_REF = 'ref';
+    const PARAM_REF = 'ref';
 
     /**
      * Array key for $this->parameters.
@@ -67,7 +67,7 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_NAME = 'name';
+    const PARAM_NAME = 'name';
 
     /**
      * Array key for $this->parameters.
@@ -76,7 +76,7 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_VALUE = 'value';
+    const PARAM_VALUE = 'value';
 
     /**
      * Array key for $this->parameters.
@@ -85,18 +85,18 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_META_NAME = 'metaname';
+    const PARAM_META_NAME = 'metaname';
 
     /**
      * Array key for $this->parameters.
      *
      * Parameter for the array analysis. Historical name, where we were planing
-     * for multiline code analysis. Now holds the info, if we do complicate
+     * for multiline code analysis. Now holds the info, if we do complicated
      * stuff to reach this value.
      *
      * @var string
      */
-    public const PARAM_MULTILINE = 'multiline';
+    const PARAM_MULTILINE = 'multiline';
 
     /**
      * Array key for $this->parameters.
@@ -105,7 +105,7 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_CLASSNAME = 'classname';
+    const PARAM_CLASSNAME = 'classname';
 
     /**
      * Array key for $this->parameters.
@@ -115,7 +115,7 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_NORMAL_GETTER = 'normalGetter';
+    const PARAM_NORMAL_GETTER = 'normalGetter';
 
     /**
      * Array key for $this->parameters.
@@ -125,7 +125,7 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_IS_GETTER = 'isGetter';
+    const PARAM_IS_GETTER = 'isGetter';
 
     /**
      * Array key for $this->parameters.
@@ -135,7 +135,19 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_HAS_GETTER = 'hasGetter';
+    const PARAM_HAS_GETTER = 'hasGetter';
+
+    /**
+     * Array key for $this->parameters.
+     *
+     * Reflection of the method, that we are currently analysing.
+     *
+     * @deprecated since 4.0.0
+     *   Will be removed. Use PARAM_REFLECTION_METHOD instead.
+     *
+     * @var string
+     */
+    const PARAM_REF_METHOD = 'reflectionMethod';
 
     /**
      * Array key for $this->parameters.
@@ -144,7 +156,7 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_ADDITIONAL = 'additional';
+    const PARAM_ADDITIONAL = 'additional';
 
     /**
      * Array key for $this->parameters.
@@ -154,7 +166,7 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_NOTHING_FOUND = 'nothingFound';
+    const PARAM_NOTHING_FOUND = 'nothingFound';
 
     /**
      * Array key for $this->parameters.
@@ -163,7 +175,7 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_REFLECTION_METHOD = 'refMethod';
+    const PARAM_REFLECTION_METHOD = 'refMethod';
 
     /**
      * Array key for $this->parameters.
@@ -172,7 +184,7 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_REFLECTION_PROPERTY = 'refProperty';
+    const PARAM_REFLECTION_PROPERTY = 'refProperty';
 
     /**
      * Array key for $this->parameters.
@@ -188,77 +200,77 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const PARAM_CODE_GEN_TYPE = 'codeGenType';
+    const PARAM_CODE_GEN_TYPE = 'codeGenType';
 
     /**
      * Frontend literal.
      *
      * @var string
      */
-    public const TYPE_PHP = 'PHP';
+    const TYPE_PHP = 'PHP';
 
     /**
      * Frontend literal.
      *
      * @var string
      */
-    public const TYPE_INTERNALS = 'class internals';
+    const TYPE_INTERNALS = 'class internals';
 
     /**
      * Frontend literal.
      *
      * @var string
      */
-    public const TYPE_DEBUG_METHOD = 'debug method';
+    const TYPE_DEBUG_METHOD = 'debug method';
 
     /**
      * Frontend literal.
      *
      * @var string
      */
-    public const TYPE_FOREACH = 'foreach';
+    const TYPE_FOREACH = 'foreach';
 
     /**
      * Frontend literal.
      *
      * @var string
      */
-    public const TYPE_CONFIG = 'config';
+    const TYPE_CONFIG = 'config';
 
     /**
      * Frontend literal.
      *
      * @var string
      */
-    public const TYPE_UNKNOWN = 'unknown';
+    const TYPE_UNKNOWN = 'unknown';
 
     /**
      * Frontend literal.
      *
      * @var string
      */
-    public const TYPE_SIMPLE_CLASS = 'simplified class analysis';
+    const TYPE_SIMPLE_CLASS = 'simplified class analysis';
 
     /**
      * Frontend literal.
      *
      * @var string
      */
-    public const TYPE_SIMPLE_ARRAY = 'simplified array analysis';
+    const TYPE_SIMPLE_ARRAY = 'simplified array analysis';
 
     /**
      * Frontend literal.
      *
      * @var string
      */
-    public const TYPE_REFLECTION = 'reflection';
+    const TYPE_REFLECTION = 'reflection';
 
     /**
      * Frontend literal.
      *
      * @var string
      */
-    public const TYPE_METHOD = ' method';
+    const TYPE_METHOD = ' method';
 
     /**
      * Part of the event system.
@@ -267,7 +279,7 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const EVENT_MARKER_END = '::end';
+    const EVENT_MARKER_END = '::end';
 
     /**
      * Part of the event system.
@@ -276,7 +288,7 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const EVENT_MARKER_ANALYSES_END = 'analysisEnd';
+    const EVENT_MARKER_ANALYSES_END = 'analysisEnd';
 
     /**
      * Part of the event system.
@@ -285,18 +297,16 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const EVENT_MARKER_RECURSION = 'recursion';
+    const EVENT_MARKER_RECURSION = 'recursion';
 
     /**
      * Translation marker for a literal in the frontend.
-     * The declaration place of this method or property could not be resolved.
      *
-     * @deprecated since 5.0.0
-     *   We do not use constants for translations anymore.
+     * The declaration place of this method or property could not be resolved.
      *
      * @var string
      */
-    public const UNKNOWN_DECLARATION = 'unknownDeclaration';
+    const UNKNOWN_DECLARATION = 'unknownDeclaration';
 
     /**
      * Literal for the frontend and the JavaScript
@@ -307,5 +317,5 @@ interface CallbackConstInterface
      *
      * @var string
      */
-    public const UNKNOWN_VALUE = '. . .';
+    const UNKNOWN_VALUE = '. . .';
 }

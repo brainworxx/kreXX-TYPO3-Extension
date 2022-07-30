@@ -42,10 +42,11 @@ namespace Brainworxx\Krexx\View\Output;
  */
 class File extends AbstractOutput
 {
+
     /**
      * Run the cleanup service.
      */
-    protected function destruct(): void
+    protected function destruct()
     {
         parent::destruct();
         $this->cleanupService->cleanupOldLogs();
@@ -54,7 +55,7 @@ class File extends AbstractOutput
     /**
      * Creating the logfile after the analysis.
      */
-    public function finalize(): void
+    public function finalize()
     {
         // Output our chunks.
         // Every output is split into 4 chunk strings (header, messages,

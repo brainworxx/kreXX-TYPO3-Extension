@@ -52,7 +52,7 @@ trait Disabled
     /**
      * @param string $disabled
      */
-    public function setDisabled(string $disabled): void
+    public function setDisabled(string $disabled)
     {
         $this->disabled = $disabled;
     }
@@ -60,7 +60,7 @@ trait Disabled
     /**
      * @param string $formdisabled
      */
-    public function setFormdisabled(string $formdisabled): void
+    public function setFormdisabled(string $formdisabled)
     {
         $this->formdisabled = $formdisabled;
     }

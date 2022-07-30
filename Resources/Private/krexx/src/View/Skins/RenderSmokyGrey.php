@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Skins;
 
+use Brainworxx\Krexx\Controller\ControllerConstInterface;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Button;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild;
@@ -45,13 +46,15 @@ use Brainworxx\Krexx\View\Skins\SmokyGrey\Footer;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Header;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Recursion;
+use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleChild;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
 
 /**
  * Individual render class for the smokey-grey skin.
  */
-class RenderSmokyGrey extends RenderHans
+class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
 {
+    use SingleChild;
     use ExpandableChild;
     use Recursion;
     use SingleEditableChild;
@@ -67,5 +70,5 @@ class RenderSmokyGrey extends RenderHans
      *
      * @var string
      */
-    protected const DATA_ATTRIBUTE_JSON = 'addjson';
+    const DATA_ATTRIBUTE_JSON = 'addjson';
 }

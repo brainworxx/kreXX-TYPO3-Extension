@@ -37,59 +37,58 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Collectors;
 
-use Brainworxx\Includekrexx\Controller\ControllerConstInterface;
+use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
 /**
  * General stuff for all data collectors.
  */
-abstract class AbstractCollector implements ControllerConstInterface, ConfigConstInterface
+abstract class AbstractCollector
 {
     use LanguageTrait;
 
     /**
      * @var string
      */
-    public const MODULE_DATA = 'moduleData';
+    const MODULE_DATA = 'moduleData';
 
     /**
      * @var string
      */
-    public const PLUGIN_NAME = 'tools_IncludekrexxKrexxConfiguration';
+    const PLUGIN_NAME = 'tools_IncludekrexxKrexxConfiguration';
 
     /**
      * @var string
      */
-    protected const SETTINGS_NAME = 'name';
+    const SETTINGS_NAME = 'name';
 
     /**
      * @var string
      */
-    protected const SETTINGS_VALUE = 'value';
+    const SETTINGS_VALUE = 'value';
 
     /**
      * @var string
      */
-    protected const SETTINGS_USE_FACTORY_SETTINGS = 'useFactorySettings';
+    const SETTINGS_USE_FACTORY_SETTINGS = 'useFactorySettings';
 
     /**
      * @var string
      */
-    protected const SETTINGS_FALLBACK = 'fallback';
+    const SETTINGS_FALLBACK = 'fallback';
 
     /**
      * @var string
      */
-    protected const SETTINGS_MODE = 'mode';
+    const SETTINGS_MODE = 'mode';
 
     /**
      * @var string
      */
-    protected const SETTINGS_OPTIONS = 'options';
+    const SETTINGS_OPTIONS = 'options';
 
     /**
      * The kreXX pool.
@@ -108,16 +107,17 @@ abstract class AbstractCollector implements ControllerConstInterface, ConfigCons
     /**
      * List of options, that are 'expert' only.
      *
-     * @var string[]
+     * @var array
      */
     protected $expertOnly = [
-        self::SETTING_DETECT_AJAX,
-        self::SETTING_MAX_STEP_NUMBER,
-        self::SETTING_ARRAY_COUNT_LIMIT,
-        self::SETTING_DEBUG_METHODS,
-        self::SETTING_MAX_RUNTIME,
-        self::SETTING_MEMORY_LEFT,
-        self::SETTING_MAX_FILES
+        'detectAjax',
+        'useScopeAnalysis',
+        'maxStepNumber',
+        'arrayCountLimit',
+        'debugMethods',
+        'maxRuntime',
+        'memoryLeft',
+        'maxfiles'
     ];
 
     /**
@@ -134,20 +134,20 @@ abstract class AbstractCollector implements ControllerConstInterface, ConfigCons
     {
         Pool::createPool();
         $this->pool = Krexx::$pool;
-        if (isset($GLOBALS[static::BE_USER])) {
-            $user = $GLOBALS[static::BE_USER];
+        if (isset($GLOBALS['BE_USER'])) {
+            $user = $GLOBALS['BE_USER'];
             $this->hasAccess = $user
-                ->check(static::BE_MODULES, static::PLUGIN_NAME);
+                ->check('modules', static::PLUGIN_NAME);
         }
-        if ($this->hasAccess && isset($user->uc[static::MODULE_DATA][static::MODULE_KEY])) {
-            $this->userUc = $user->uc[static::MODULE_DATA][static::MODULE_KEY];
+        if ($this->hasAccess && isset($user->uc[static::MODULE_DATA][AbstractController::MODULE_KEY])) {
+            $this->userUc = $user->uc[static::MODULE_DATA][AbstractController::MODULE_KEY];
         }
     }
 
     /**
      * Assigning stuff to the view.
      *
-     * @param AbstractTemplateView $view
+     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView $view
      */
-    abstract public function assignData(AbstractTemplateView $view): void;
+    abstract public function assignData(AbstractTemplateView $view);
 }

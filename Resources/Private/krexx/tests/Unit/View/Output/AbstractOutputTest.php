@@ -36,11 +36,12 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Output;
 
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Misc\Cleanup;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\View\Output\Browser;
 
 /**
- * Although the name implies an abstract class, it's just a normal one.
+ * Although the name impleis an abstract class, it's just a normal one.
  *
  * @package Brainworxx\Krexx\Tests\View\Output
  */

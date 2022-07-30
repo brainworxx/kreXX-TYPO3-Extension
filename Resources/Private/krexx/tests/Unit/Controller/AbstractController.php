@@ -167,12 +167,10 @@ class AbstractController extends AbstractTest
         $poolMock->fileService = $fileServiceMock;
 
         $messageMock = $this->createMock(Messages::class);
-        $messageMock->expects($this->any())
+        $messageMock->expects($this->once())
             ->method('getHelp')
-            ->with($this->anything())
+            ->with('currentConfig')
             ->will($this->returnValue('some helpful description'));
-
-
         $messageMock->expects($this->any())
             ->method('outputMessages')
             ->will($this->returnValue(''));

@@ -48,6 +48,13 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterface
 {
     /**
+     * Constant identifier for the multiline code generation for fluid
+     *
+     * @var string
+     */
+    const VHS_CALL_VIEWHELPER = 'vhsCallViewhelper';
+
+    /**
      * We wrap this one around the fluid code generation, on the left.
      *
      * @var string
@@ -76,23 +83,27 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
      */
     public function generateSource(Model $model): string
     {
+        $result = '';
+
         // Get out of here as soon as possible.
-        if (!$this->codegenAllowed) {
-            return '';
+        if ($this->allowCodegen === false) {
+            return $result;
         }
 
         if ($model->getType() === static::TYPE_DEBUG_METHOD && $model->getName() === 'getProperties') {
             // Doing special treatment for the getProperties debug method.
             // This one is directly callable in fluid.
-            $model->setName('properties');
+            $result =  $this->generateAll($model->setName('properties'));
         } elseif ($this->isUnknownType($model)) {
-            return static::UNKNOWN_VALUE;
+            $result = static::UNKNOWN_VALUE;
         } elseif ($model->getCodeGenType() === static::VHS_CALL_VIEWHELPER) {
             // Check for VHS values.
-            return $this->generateVhsCall($model);
+            $result = $this->generateVhsCall($model);
+        } else {
+            $result = $this->generateAll($model);
         }
 
-        return $this->generateAll($model);
+        return $result;
     }
 
     /**
@@ -114,7 +125,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
     {
         $name = $model->getName();
         return
-            (is_string($name) &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
+            (is_string($name) === true &&  strpos($name, '.') !== false && $this->pool->scope->getScope() !== $name) ||
             $model->getType() === static::TYPE_DEBUG_METHOD ||
             $model->getCodeGenType() === static::CODEGEN_TYPE_ITERATOR_TO_ARRAY ||
             $model->getCodeGenType() === static::CODEGEN_TYPE_JSON_DECODE;
@@ -140,7 +151,7 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
 
         // Do the child generation.
         $result = parent::generateSource($model);
-        if (!$this->isAll) {
+        if ($this->isAll === false) {
             return $result;
         }
 

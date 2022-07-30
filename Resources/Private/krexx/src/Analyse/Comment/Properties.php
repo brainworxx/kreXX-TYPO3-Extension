@@ -54,7 +54,7 @@ class Properties extends AbstractComment
      */
     public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
     {
-        if (isset($reflection->isUndeclared)) {
+        if (isset($reflection->isUndeclared) === true) {
             return '';
         }
 
@@ -62,7 +62,7 @@ class Properties extends AbstractComment
         static $cache = [];
         /** @var \ReflectionProperty $reflection */
         $cachingKey = $reflection->getDeclaringClass()->getName() . '::' . $reflection->getName();
-        if (isset($cache[$cachingKey])) {
+        if (isset($cache[$cachingKey]) === true) {
             return $cache[$cachingKey];
         }
 

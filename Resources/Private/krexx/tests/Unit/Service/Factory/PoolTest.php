@@ -93,7 +93,8 @@ class PoolTest extends AbstractTest
         $this->assertInstanceOf(AbstractRender::class, Krexx::$pool->render);
 
         Krexx::$pool = null;
-        ConfigSupplier::$overwriteValues[Fallback::SETTING_SKIN] = 'hans';
+        ConfigSupplier::$overwriteValues[Fallback::SETTING_SKIN] = Fallback::SKIN_HANS;
+        Registration::addRewrite(Ini::class, ConfigSupplier::class);
         Pool::createPool();
         $this->assertInstanceOf(RenderHans::class, Krexx::$pool->render);
     }
@@ -128,8 +129,8 @@ class PoolTest extends AbstractTest
 
         Krexx::$pool = null;
         Pool::createPool();
-        $this->assertEquals(true, Krexx::$pool->chunks->isChunkAllowed());
-        $this->assertEquals(true, Krexx::$pool->chunks->isLoggingAllowed());
+        $this->assertEquals(true, Krexx::$pool->chunks->getChunksAreAllowed());
+        $this->assertEquals(true, Krexx::$pool->chunks->getLoggingIsAllowed());
         $this->assertEmpty(Krexx::$pool->messages->getMessages());
     }
 
@@ -158,8 +159,8 @@ class PoolTest extends AbstractTest
 
         Krexx::$pool = null;
         Pool::createPool();
-        $this->assertEquals(false, Krexx::$pool->chunks->isChunkAllowed());
-        $this->assertEquals(false, Krexx::$pool->chunks->isLoggingAllowed());
+        $this->assertEquals(false, Krexx::$pool->chunks->getChunksAreAllowed());
+        $this->assertEquals(false, Krexx::$pool->chunks->getLoggingIsAllowed());
         $this->assertCount(2, Krexx::$pool->messages->getMessages());
     }
 
@@ -173,12 +174,10 @@ class PoolTest extends AbstractTest
         Krexx::$pool->recursionHandler = new stdClass();
         Krexx::$pool->codegenHandler = new stdClass();
         Krexx::$pool->scope = new stdClass();
-        Krexx::$pool->routing = new stdClass();
         Krexx::$pool->reset();
 
         $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->recursionHandler);
         $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->codegenHandler);
         $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->scope);
-        $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->routing);
     }
 }

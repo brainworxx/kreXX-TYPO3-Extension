@@ -34,6 +34,7 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
+use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Service\Config\Config;
@@ -46,7 +47,6 @@ class FormConfigurationTest extends AbstractTest
      * The the assigning of data to the view.
      *
      * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::assignData
-     * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::generateSingleSetting
      * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::convertKrexxFeSetting
      * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::generateDropdown
      */
@@ -65,7 +65,7 @@ class FormConfigurationTest extends AbstractTest
         // Point the ini reader to the fixture.
         $this->setValueByReflection(
             'directories',
-            ['config' => __DIR__ . '/../../Fixtures/Config.'],
+            [Config::CONFIG_FOLDER => __DIR__ . '/../../Fixtures/Config.ini'],
             \Krexx::$pool->config
         );
 
@@ -77,8 +77,8 @@ class FormConfigurationTest extends AbstractTest
                 $this->callback(function ($config) {
                     // @see config.ini in the fixtures.
                     return
-                        $config[Config::SETTING_SKIN]['value'] === Fallback::RENDER_TYPE_CONFIG_NONE &&
-                        $config[Config::SETTING_SKIN]['options'] === [
+                        $config[Config::SETTING_SKIN][Configuration::SETTINGS_VALUE] === Fallback::RENDER_TYPE_CONFIG_NONE &&
+                        $config[Config::SETTING_SKIN][FormConfiguration::SETTINGS_OPTIONS] === [
                             Fallback::RENDER_TYPE_CONFIG_FULL => Fallback::RENDER_TYPE_CONFIG_FULL,
                             Fallback::RENDER_TYPE_CONFIG_DISPLAY => Fallback::RENDER_TYPE_CONFIG_DISPLAY,
                             Fallback::RENDER_TYPE_CONFIG_NONE => Fallback::RENDER_TYPE_CONFIG_NONE,

@@ -49,6 +49,7 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class Debug extends AbstractCallback implements CallbackConstInterface
 {
+
     /**
      * Iterate though the result of the polled debug methods.
      *

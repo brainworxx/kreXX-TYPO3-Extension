@@ -45,7 +45,7 @@ class Connectors implements ConnectorsConstInterface
     /**
      * List of the combinations of connectors.
      *
-     * @var string[][]
+     * @var array[]
      */
     protected $connectorArray  = [
         self::CONNECTOR_NOTHING => ['', ''],
@@ -91,7 +91,7 @@ class Connectors implements ConnectorsConstInterface
     protected $customConnectorLeft;
 
     /**
-     * The return type of the method. Not used for code generation.
+     * The return type of a method. Not used for code generation.
      *
      * @var string
      */
@@ -104,7 +104,7 @@ class Connectors implements ConnectorsConstInterface
      * @param string|int $params
      *   The parameters as a sting.
      */
-    public function setParameters($params): void
+    public function setParameters($params)
     {
         $this->params = $params;
     }
@@ -126,7 +126,7 @@ class Connectors implements ConnectorsConstInterface
      * @param string $type
      *   The type, @see constants above
      */
-    public function setType(string $type): void
+    public function setType(string $type)
     {
         $this->type = $type;
     }
@@ -158,7 +158,7 @@ class Connectors implements ConnectorsConstInterface
     public function getConnectorRight(int $cap): string
     {
         if (
-            empty($this->params) ||
+            empty($this->params) === true ||
             ($this->type !== static::CONNECTOR_METHOD && $this->type !== static::CONNECTOR_STATIC_METHOD)
         ) {
             return $this->connectorArray[$this->type][1];
@@ -178,7 +178,7 @@ class Connectors implements ConnectorsConstInterface
      * @param string $customConnectorLeft
      *   The string we want to set.
      */
-    public function setCustomConnectorLeft(string $customConnectorLeft): void
+    public function setCustomConnectorLeft(string $customConnectorLeft)
     {
         $this->customConnectorLeft = $customConnectorLeft;
     }
@@ -198,7 +198,7 @@ class Connectors implements ConnectorsConstInterface
      *
      * @param string $returnType
      */
-    public function setReturnType(string $returnType): void
+    public function setReturnType(string $returnType)
     {
         $this->returnType = $returnType;
     }

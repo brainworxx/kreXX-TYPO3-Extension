@@ -38,7 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Domain\Model;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
-use Brainworxx\Includekrexx\Controller\ControllerConstInterface;
+use Brainworxx\Includekrexx\Controller\AbstractController;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalyseGetter;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalysePrivate;
 use Brainworxx\Includekrexx\Domain\Model\Settings\AnalysePrivateMethods;
@@ -52,7 +52,6 @@ use Brainworxx\Includekrexx\Domain\Model\Settings\Destination;
 use Brainworxx\Includekrexx\Domain\Model\Settings\DetectAjax;
 use Brainworxx\Includekrexx\Domain\Model\Settings\Disabled;
 use Brainworxx\Includekrexx\Domain\Model\Settings\Iprange;
-use Brainworxx\Includekrexx\Domain\Model\Settings\LanguageKey;
 use Brainworxx\Includekrexx\Domain\Model\Settings\Level;
 use Brainworxx\Includekrexx\Domain\Model\Settings\LogFileWriter;
 use Brainworxx\Includekrexx\Domain\Model\Settings\MaxCall;
@@ -61,14 +60,14 @@ use Brainworxx\Includekrexx\Domain\Model\Settings\MaxRuntime;
 use Brainworxx\Includekrexx\Domain\Model\Settings\MaxStepNumber;
 use Brainworxx\Includekrexx\Domain\Model\Settings\MemoryLeft;
 use Brainworxx\Includekrexx\Domain\Model\Settings\Skin;
+use Brainworxx\Includekrexx\Domain\Model\Settings\UseScopeAnalysis;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Abusing the TYPO3 attribute mapper, to save our settings.
  */
-class Settings implements ControllerConstInterface, ConfigConstInterface
+class Settings
 {
     use Disabled;
     use Iprange;
@@ -76,6 +75,7 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
     use Skin;
     use Destination;
     use Maxfiles;
+    use UseScopeAnalysis;
     use MaxStepNumber;
     use ArrayCountLimit;
     use Level;
@@ -91,7 +91,6 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
     use MaxRuntime;
     use MemoryLeft;
     use LogFileWriter;
-    use LanguageKey;
 
     /**
      * @var string
@@ -101,7 +100,7 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
     /**
      * @param string $factory
      */
-    public function setFactory(string $factory): void
+    public function setFactory(string $factory)
     {
         $this->factory = $factory;
     }
@@ -113,29 +112,27 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
      * @return string
      *   The generated contend of the ini file.
      */
-    public function generateContent(): string
+    public function generateIniContent(): string
     {
         Pool::createPool();
 
         $moduleSettings = [];
         // Process the settings.
-        $settings = $this->processGroups($moduleSettings);
-        $feEditing =  $this->processFeEditing($moduleSettings);
-        $result = $settings + $feEditing;
+        $result = $this->processGroups($moduleSettings) . $this->processFeEditing($moduleSettings);
 
         /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $user */
-        $user = $GLOBALS[static::BE_USER];
+        $user = $GLOBALS['BE_USER'];
         // Save the last settings to the backend user, so we can retrieve it later.
-        if (!isset($user->uc[AbstractCollector::MODULE_DATA][static::MODULE_KEY])) {
-            $user->uc[AbstractCollector::MODULE_DATA][static::MODULE_KEY] = [];
+        if (!isset($user->uc[AbstractCollector::MODULE_DATA][AbstractController::MODULE_KEY])) {
+            $user->uc[AbstractCollector::MODULE_DATA][AbstractController::MODULE_KEY] = [];
         }
-        $user->uc[AbstractCollector::MODULE_DATA][static::MODULE_KEY] = array_merge(
-            $user->uc[AbstractCollector::MODULE_DATA][static::MODULE_KEY],
+        $user->uc[AbstractCollector::MODULE_DATA][AbstractController::MODULE_KEY] = array_merge(
+            $user->uc[AbstractCollector::MODULE_DATA][AbstractController::MODULE_KEY],
             $moduleSettings
         );
         $user->writeUC();
 
-        return json_encode($result);
+        return $result;
     }
 
     /**
@@ -144,22 +141,23 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
      * @param array $moduleSettings
      *   The module settings. We store these in the user data.
      *
-     * @return array
-     *   The generated array result.
+     * @return string
+     *   The generated ini content.
      */
-    protected function processGroups(array &$moduleSettings): array
+    protected function processGroups(array &$moduleSettings): string
     {
-        $result = [];
+        $result = '';
         $validation = Krexx::$pool->config->validation;
 
         foreach (Krexx::$pool->config->configFallback as $group => $settings) {
-            $result[$group] = [];
+            $result .= '[' . $group . ']' . "\n";
             foreach ($settings as $settingName) {
                 if (
                     $this->$settingName !== null &&
                     $validation->evaluateSetting($group, $settingName, $this->$settingName)
                 ) {
-                    $moduleSettings[$settingName] = $result[$group][$settingName] = $this->$settingName;
+                    $result .= $settingName . ' = "' . $this->$settingName . '"'  . "\n";
+                    $moduleSettings[$settingName] = $this->$settingName;
                 }
             }
         }
@@ -173,52 +171,24 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
      * @param array $moduleSettings
      *   The module settings. We store these in the user data.
      *
-     * @return array
+     * @return string
      *   The generated ini content.
      */
-    protected function processFeEditing(array &$moduleSettings): array
+    protected function processFeEditing(array &$moduleSettings): string
     {
-        $result = [static::SECTION_FE_EDITING => []];
-
-        $allowedValues = [
-            static::RENDER_TYPE_CONFIG_FULL,
-            static::RENDER_TYPE_CONFIG_DISPLAY,
-            static::RENDER_TYPE_CONFIG_NONE
-        ];
+        $result = '[feEditing]' . "\n";
+        $allowedValues = ['full', 'display', 'none'];
         foreach (Krexx::$pool->config->feConfigFallback as $settingName => $settings) {
             $settingNameInModel = 'form' . $settingName;
             if (
-                $settings[static::RENDER][static::RENDER_TYPE] !== static::RENDER_TYPE_NONE &&
-                in_array($this->$settingNameInModel, $allowedValues, true)
+                $settings['render']['Editable'] === 'true' &&
+                in_array($this->$settingNameInModel, $allowedValues)
             ) {
-                $moduleSettings[$settingNameInModel] = $result[static::SECTION_FE_EDITING][$settingName]
-                    = $this->$settingNameInModel;
+                $result .= $settingName . ' = "' . $this->$settingNameInModel . '"'  . "\n";
+                $moduleSettings[$settingNameInModel] = $this->$settingNameInModel;
             }
         }
 
         return $result;
-    }
-
-    /**
-     * Prepare the filepath. We do the migration from ini to json here.
-     *
-     * @param string $filepath
-     *   The path to the current configuration file.
-     *
-     * @return string
-     *   The path to the new configuration file.
-     */
-    public function prepareFileName(string $filepath): string
-    {
-        // Make sure to switch to json.
-        $pathParts = pathinfo($filepath);
-        $rootPath = $pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
-            $pathParts[static::PATHINFO_FILENAME] . '.';
-        $iniPath = $rootPath . 'ini';
-        if (file_exists($iniPath)) {
-            unlink($iniPath);
-        }
-
-        return $rootPath . 'json';
     }
 }

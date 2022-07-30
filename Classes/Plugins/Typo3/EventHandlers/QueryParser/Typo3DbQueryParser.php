@@ -58,7 +58,7 @@ class Typo3DbQueryParser extends OriginalParser
      */
     public function __construct(DataMapper $dataMapper = null)
     {
-        if (!empty($dataMapper) && method_exists(OriginalParser::class, '__construct')) {
+        if (empty($dataMapper) === false && method_exists(OriginalParser::class, '__construct')) {
             parent::__construct($dataMapper);
         }
     }
@@ -67,16 +67,13 @@ class Typo3DbQueryParser extends OriginalParser
      * Short-circuiting the convertQueryToDoctrineQueryBuilder to make sure that
      * it still works outside extbase.
      *
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
-     * @throws \Exception
-     *
      * {@inheritDoc}
      */
     public function convertQueryToDoctrineQueryBuilder(QueryInterface $query)
     {
-        if (empty($this->dataMapper)) {
+        if (empty($this->dataMapper) === true) {
             // Well, the service.yaml configuration got ignored.
-            if (method_exists(ObjectManager::class, 'get')) {
+            if (method_exists(ObjectManager::class, 'get') === true) {
                 // Must be lower than TYPO3 10.
                 // This means that the general utility is not able to inject
                 // anything. We must use the ObjectManager to create the parser.

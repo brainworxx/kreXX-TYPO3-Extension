@@ -128,25 +128,9 @@ class Model implements ConfigConstInterface
     /**
      * Getter for the editable value.
      *
-     * @deprecated
-     *   Since 5.0.0. Use isEditable() instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
      * @return bool
      */
     public function getEditable(): bool
-    {
-        return $this->isEditable();
-    }
-
-    /**
-     * Getter for the editable value.
-     *
-     * @return bool
-     */
-    public function isEditable(): bool
     {
         return $this->editable;
     }

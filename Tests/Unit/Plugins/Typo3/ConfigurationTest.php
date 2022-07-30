@@ -39,13 +39,11 @@ use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
-use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -62,7 +60,6 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
 {
 
     const REVERSE_PROXY = 'reverseProxyIP';
-    protected const TYPO3_TEMP = 'typo3temp';
 
     /**
      * Do we have to reset the reverse proxy?
@@ -158,6 +155,13 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         $pathSite = PATH_site;
         $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
 
+        $versionMock = $this->getFunctionMock($typo3Namespace, 'version_compare');
+        $versionMock->expects($this->exactly(4))
+            ->withConsecutive(
+                [Bootstrap::getTypo3Version(), '8.3', '>'],
+                [Bootstrap::getTypo3Version(), '9.5', '>=']
+            )->will($this->returnValue(true));
+
         $classExistsMock = $this->getFunctionMock($typo3Namespace, 'class_exists');
         $classExistsMock->expects($this->exactly(2))
             ->with(Environment::class)
@@ -181,7 +185,7 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
             $typo3Namespace,
             'array_replace_recursive'
         );
-        $arrayReplaceRecursiveMock->expects($this->any())
+        $arrayReplaceRecursiveMock->expects($this->exactly(2))
             ->with($this->anything(), [Configuration::KREXX => ['module' => Log::class, 'before' => [$log]]]);
         // You just have to love these large arrays inside the globals.
         $GLOBALS[Configuration::TYPO3_CONF_VARS][Configuration::EXTCONF]
@@ -193,8 +197,7 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         $this->assertEquals(
             [
                 ProcessObject::class . Configuration::START_PROCESS => [DirtyModels::class => DirtyModels::class],
-                Objects::class . Configuration::START_EVENT => [QueryDebugger::class => QueryDebugger::class],
-                Xml::class . Configuration::END_EVENT => [FlexFormParser::class => FlexFormParser::class]
+                Objects::class . Configuration::START_EVENT => [QueryDebugger::class => QueryDebugger::class]
             ],
             SettingsGetter::getEventList()
         );
@@ -208,7 +211,7 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         $rootpath = 'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR .
             static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR;
         $this->assertEquals(
-            $rootpath . 'config' . DIRECTORY_SEPARATOR . 'Krexx.',
+            $rootpath . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini',
             SettingsGetter::getConfigFile(),
             'Test the new location of the configuration file.'
         );

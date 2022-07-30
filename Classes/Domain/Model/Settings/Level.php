@@ -52,15 +52,15 @@ trait Level
     /**
      * @param string $level
      */
-    public function setLevel(string $level): void
+    public function setLevel(string $level)
     {
         $this->level = $level;
     }
 
-    /**
+     /**
      * @param string $formlevel
      */
-    public function setFormlevel(string $formlevel): void
+    public function setFormlevel(string $formlevel)
     {
         $this->formlevel = $formlevel;
     }

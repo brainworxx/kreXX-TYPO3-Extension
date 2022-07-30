@@ -47,12 +47,5 @@ interface ConstInterface
      *
      * @var string
      */
-    public const PARAM_ARRAY = 'paramArray';
-
-    /**
-     * Constant identifier for the multiline code generation for fluid
-     *
-     * @var string
-     */
-    public const VHS_CALL_VIEWHELPER = 'vhsCallViewhelper';
+    const PARAM_ARRAY = 'paramArray';
 }

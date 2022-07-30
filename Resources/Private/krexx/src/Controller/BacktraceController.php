@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
  */
 class BacktraceController extends AbstractController implements BacktraceConstInterface
 {
+
     /**
      * Outputs a backtrace.
      *
@@ -56,7 +57,7 @@ class BacktraceController extends AbstractController implements BacktraceConstIn
      */
     public function backtraceAction(array $backtrace = null): BacktraceController
     {
-        if ($this->pool->emergencyHandler->checkMaxCall()) {
+        if ($this->pool->emergencyHandler->checkMaxCall() === true) {
             // Called too often, we might get into trouble here!
             return $this;
         }
@@ -64,11 +65,11 @@ class BacktraceController extends AbstractController implements BacktraceConstIn
         // Find caller.
         $caller = $this->callerFinder->findCaller(static::TRACE_BACKTRACE, []);
         $caller[static::TRACE_LEVEL] = 'backtrace';
-        $this->pool->codegenHandler->setCodegenAllowed(false);
+        $this->pool->codegenHandler->setAllowCodegen(false);
 
         $analysis = $this->pool
             ->createClass(ProcessBacktrace::class)
-            ->handle($backtrace);
+            ->process($backtrace);
 
         // Detect the encoding on the start-chunk-string of the analysis
         // for a complete encoding picture.
@@ -76,7 +77,7 @@ class BacktraceController extends AbstractController implements BacktraceConstIn
 
         // Now that our analysis is done, we must check if there was an emergency
         // break.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
             return $this;
         }
 

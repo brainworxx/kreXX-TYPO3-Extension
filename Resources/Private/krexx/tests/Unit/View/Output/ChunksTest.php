@@ -61,7 +61,7 @@ class ChunksTest extends AbstractTest
     const FILE_STAMP = 'fileStamp';
     const PUT_FILE_CONTENTS = 'putFileContents';
     const DELETE_FILE = 'deleteFile';
-    const LOGGING_IS_ALLOWED = 'loggingAllowed';
+    const LOGGING_IS_ALLOWED = 'loggingIsAllowed';
     const OFFICIAL_ENCODING = 'officialEncoding';
     const META_DATA = 'metadata';
 
@@ -126,7 +126,7 @@ class ChunksTest extends AbstractTest
     public function testChunkMeLargeNochunk()
     {
         $chunks = new Chunks(Krexx::$pool);
-        $chunks->setChunkAllowed(false);
+        $chunks->setChunksAreAllowed(false);
 
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->never())
@@ -321,61 +321,61 @@ class ChunksTest extends AbstractTest
     /**
      * Test the setter for chunk allowance. Pun intended.
      *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::setChunkAllowed
+     * @covers \Brainworxx\Krexx\View\Output\Chunks::setChunksAreAllowed
      */
-    public function testSetChunkAllowed()
+    public function testSetChunksAreAllowed()
     {
         $chunks = new Chunks(Krexx::$pool);
-        $chunks->setChunkAllowed(true);
-        $this->assertEquals(true, $chunks->isChunkAllowed());
+        $chunks->setChunksAreAllowed(true);
+        $this->assertEquals(true, $chunks->getChunksAreAllowed());
 
-        $chunks->setChunkAllowed(false);
-        $this->assertEquals(false, $chunks->isChunkAllowed());
+        $chunks->setChunksAreAllowed(false);
+        $this->assertEquals(false, $chunks->getChunksAreAllowed());
     }
 
     /**
      * Test the getter for chunk allowance. Pun intended.
      *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::isChunkAllowed
+     * @covers \Brainworxx\Krexx\View\Output\Chunks::getChunksAreAllowed
      */
-    public function testIsChunkAllowed()
+    public function testGetChunksAreAllowed()
     {
         $chunks = new Chunks(Krexx::$pool);
-        $this->setValueByReflection('chunkAllowed', true, $chunks);
-        $this->assertTrue($chunks->isChunkAllowed());
+        $this->setValueByReflection('chunksAreAllowed', true, $chunks);
+        $this->assertTrue($chunks->getChunksAreAllowed());
 
-        $this->setValueByReflection('chunkAllowed', false, $chunks);
-        $this->assertFalse($chunks->isChunkAllowed());
+        $this->setValueByReflection('chunksAreAllowed', false, $chunks);
+        $this->assertFalse($chunks->getChunksAreAllowed());
     }
 
     /**
      * Test the setter fpr the logging allowance. The puns are killing me.
      *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::setLoggingAllowed
+     * @covers \Brainworxx\Krexx\View\Output\Chunks::setLoggingIsAllowed
      */
-    public function testSetLoggingAllowed()
+    public function testSetLoggingIsAllowed()
     {
         $chunks = new Chunks(Krexx::$pool);
-        $chunks->setLoggingAllowed(true);
-        $this->assertEquals(true, $chunks->isLoggingAllowed());
+        $chunks->setLoggingIsAllowed(true);
+        $this->assertEquals(true, $chunks->getLoggingIsAllowed());
 
-        $chunks->setLoggingAllowed(false);
-        $this->assertEquals(false, $chunks->isLoggingAllowed());
+        $chunks->setLoggingIsAllowed(false);
+        $this->assertEquals(false, $chunks->getLoggingIsAllowed());
     }
 
     /**
      * Test the getter fpr the logging is allowed. No pun,see?
      *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::isLoggingAllowed
+     * @covers \Brainworxx\Krexx\View\Output\Chunks::getLoggingIsAllowed
      */
-    public function testIsLoggingAllowed()
+    public function testGetLoggingIsAllowed()
     {
         $chunks = new Chunks(Krexx::$pool);
         $this->setValueByReflection(static::LOGGING_IS_ALLOWED, true, $chunks);
-        $this->assertTrue($chunks->isLoggingAllowed());
+        $this->assertTrue($chunks->getLoggingIsAllowed());
 
         $this->setValueByReflection(static::LOGGING_IS_ALLOWED, false, $chunks);
-        $this->assertFalse($chunks->isLoggingAllowed());
+        $this->assertFalse($chunks->getLoggingIsAllowed());
     }
 
     /**

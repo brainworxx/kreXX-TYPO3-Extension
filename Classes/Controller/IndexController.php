@@ -57,14 +57,14 @@ class IndexController extends AbstractController implements ConstInterface
      */
     public function indexAction()
     {
-        if (!$this->hasAccess()) {
+        if ($this->hasAccess() === false) {
             // Sorry!
             $this->addFlashMessage(
-                static::translate(static::ACCESS_DENIED),
-                static::translate(static::ACCESS_DENIED),
+                static::translate(static::ACCESS_DENIED, static::EXT_KEY),
+                static::translate(static::ACCESS_DENIED, static::EXT_KEY),
                 AbstractMessage::ERROR
             );
-            if (method_exists($this, 'htmlResponse')) {
+            if (method_exists($this, 'htmlResponse') === true) {
                 $response = $this->responseFactory->createResponse()
                     ->withAddedHeader('Content-Type', 'text/html; charset=utf-8');
                 $response->getBody()->write('');
@@ -83,7 +83,7 @@ class IndexController extends AbstractController implements ConstInterface
         $this->view->assign('settings', $this->settingsModel);
         $this->assignCssJs();
 
-        if (method_exists($this, 'htmlResponse')) {
+        if (method_exists($this, 'htmlResponse') === true) {
             return GeneralUtility::makeInstance(HtmlResponse::class, $this->moduleTemplate->renderContent());
         }
 
@@ -100,30 +100,31 @@ class IndexController extends AbstractController implements ConstInterface
      */
     public function saveAction(Settings $settings)
     {
-        if (!$this->hasAccess()) {
+        if ($this->hasAccess() === false) {
             $this->addFlashMessage(
-                static::translate(static::ACCESS_DENIED),
-                static::translate(static::SAVE_FAIL_TITLE),
+                static::translate(static::ACCESS_DENIED, static::EXT_KEY),
+                static::translate(static::SAVE_FAIL_TITLE, static::EXT_KEY),
                 AbstractMessage::ERROR
             );
             return $this->redirect('index');
         }
 
+        $filepath = $this->pool->config->getPathToConfigFile();
+
         // Check for writing permission.
         // Check the actual writing process.
-        $jsonPath = $settings->prepareFileName($this->pool->config->getPathToConfigFile());
-        $displayFilePath = $this->pool->fileService->filterFilePath($jsonPath);
-        if (is_writable(dirname($jsonPath)) && file_put_contents($jsonPath, $settings->generateContent())) {
+        if (is_writable(dirname($filepath)) && file_put_contents($filepath, $settings->generateIniContent())) {
             // File was saved successfully.
             $this->addFlashMessage(
-                static::translate(static::SAVE_SUCCESS_TEXT, [$displayFilePath]),
-                static::translate(static::SAVE_SUCCESS_TITLE)
+                static::translate(static::SAVE_SUCCESS_TEXT, static::EXT_KEY, [$filepath]),
+                static::translate(static::SAVE_SUCCESS_TITLE, static::EXT_KEY),
+                AbstractMessage::OK
             );
         } else {
             // Something went wrong here!
             $this->addFlashMessage(
-                static::translate(static::FILE_NOT_WRITABLE, [$displayFilePath]),
-                static::translate(static::SAVE_FAIL_TITLE),
+                static::translate(static::FILE_NOT_WRITABLE, static::EXT_KEY, [$filepath]),
+                static::translate(static::SAVE_FAIL_TITLE, static::EXT_KEY),
                 AbstractMessage::ERROR
             );
         }

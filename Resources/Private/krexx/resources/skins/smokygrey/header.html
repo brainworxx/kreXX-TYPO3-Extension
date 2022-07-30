@@ -11,24 +11,24 @@
   </head>
   <body>
     <div class="kwrapper kouterwrapper" id="{KrexxId}" style="top: {KrexxCount}5px;">
-      <noscript>{noJavaScript}</noscript>
+      <noscript>To properly view this debug info, please open it in a browser with enabled javascript.</noscript>
       <div class="krela-wrapper">
         <ul class="knode kfirst">
           {search}
           <li class="ktool-tabs khandle" data-instance="{KrexxId}">
 
 
-            <div class="ktab {kdebug-classes}" data-what="kdebug">{debugHeadline}</div>
-            <div class="ktab {kconfiguration-classes}" data-what="kconfiguration">{configHeadline}</div>
-            <div class="ktab" data-what="kplugins">{pluginsHeadline}</div>
+            <div class="ktab {kdebug-classes}" data-what="kdebug">debug</div>
+            <div class="ktab {kconfiguration-classes}" data-what="kconfiguration">config</div>
+            <div class="ktab" data-what="kplugins">plugins</div>
 
             <span class="ktext kspace">kre</span>
             <div class="klogo"><div class="klogo-xx">XX</div></div>
             <span class="ktext">{version}</span>
-            <span class="ktext kspace">{callNumber} {KrexxCount}</span>
+            <span class="ktext kspace">Call no: {KrexxCount}</span>
 
             <span class="kclose knormal" data-instance="{KrexxId}"></span>
-            <div class="ktab ksearchbutton" data-instance="{KrexxId}">{searchHeadline}</div>
+            <div class="ktab ksearchbutton" data-instance="{KrexxId}">search</div>
           </li>
           {messages}
         </ul>

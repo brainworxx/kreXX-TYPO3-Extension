@@ -52,7 +52,7 @@ trait AnalyseTraversable
     /**
      * @param string $value
      */
-    public function setAnalyseTraversable(string $value): void
+    public function setAnalyseTraversable(string $value)
     {
         $this->analyseTraversable = $value;
     }
@@ -60,7 +60,7 @@ trait AnalyseTraversable
     /**
      * @param string $value
      */
-    public function setFormanalyseTraversable(string $value): void
+    public function setFormanalyseTraversable(string $value)
     {
         $this->formanalyseTraversable = $value;
     }

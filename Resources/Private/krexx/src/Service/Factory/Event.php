@@ -90,7 +90,7 @@ class Event
      */
     public function dispatch(string $name, AbstractCallback $callback = null, Model $model = null): string
     {
-        if (!isset($this->register[$name])) {
+        if (isset($this->register[$name]) === false) {
             // No registered handler. Early return.
             return '';
         }

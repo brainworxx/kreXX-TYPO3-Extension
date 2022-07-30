@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * "Controller" for the timer "actions".
  */
-class TimerController extends AbstractController
+class TimerController extends AbstractController implements ControllerConstInterface
 {
     /**
      * Here we save all timekeeping stuff.
@@ -81,7 +81,7 @@ class TimerController extends AbstractController
     public function timerAction(string $string): TimerController
     {
         // Did we use this one before?
-        if (isset(static::$counterCache[$string])) {
+        if (isset(static::$counterCache[$string]) === true) {
             // Add another to the counter.
             ++static::$counterCache[$string];
             static::$timekeeping['[' . static::$counterCache[$string] . ']' . $string] = microtime(true);
@@ -106,7 +106,7 @@ class TimerController extends AbstractController
         // And we are done. Feedback to the user.
         $miniBench = $this->miniBenchTo(static::$timekeeping);
         $this->pool->createClass(DumpController::class)
-            ->dumpAction($miniBench, $this->pool->messages->getHelp('headlineTimer'), 'timer');
+            ->dumpAction($miniBench, static::HEADLINE_TIMER, 'timer');
         // Reset the timer vars.
         static::$timekeeping = [];
         static::$counterCache = [];
@@ -131,7 +131,7 @@ class TimerController extends AbstractController
         // Get the very first key.
         $start = key($timeKeeping);
         $totalTime = round((end($timeKeeping) - $timeKeeping[$start]) * 1000, 4);
-        $result[$this->pool->messages->getHelp('metaTotalTime')] = $totalTime;
+        $result['total_time'] = $totalTime;
         $prevMomentName = $start;
         $prevMomentStart = $timeKeeping[$start];
 

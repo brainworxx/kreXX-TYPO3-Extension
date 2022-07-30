@@ -40,6 +40,7 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\ConstInterface as FluidConstInterface;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -90,7 +91,7 @@ class VhsMethods implements EventHandlerInterface, CallbackConstInterface, Fluid
         }
 
         // Switch to VHS Viewhelper
-        $model->setCodeGenType(static::VHS_CALL_VIEWHELPER)
+        $model->setCodeGenType(Codegen::VHS_CALL_VIEWHELPER)
             ->addParameter(static::PARAM_ARRAY, $paramArray);
 
         return '';

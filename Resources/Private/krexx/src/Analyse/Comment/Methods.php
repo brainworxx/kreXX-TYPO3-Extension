@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Comment;
 
 use ReflectionClass;
+use ReflectionException;
 use ReflectionMethod;
 use Reflector;
 
@@ -46,6 +47,7 @@ use Reflector;
  */
 class Methods extends AbstractComment
 {
+
     /**
      * The name of the method we are analysing.
      *
@@ -61,7 +63,7 @@ class Methods extends AbstractComment
      *
      * @param \Reflector $reflection
      *   An already existing reflection of the method.
-     * @param \ReflectionClass|null $reflectionClass
+     * @param \ReflectionClass $reflectionClass
      *   An already existing reflection of the original class.
      *
      * @return string
@@ -75,7 +77,7 @@ class Methods extends AbstractComment
         $this->methodName = $reflection->getName();
         $cachingKey =  $reflection->getDeclaringClass()->name . '::' . $this->methodName;
 
-        if (isset($cache[$cachingKey])) {
+        if (isset($cache[$cachingKey]) === true) {
             return $cache[$cachingKey];
         }
 
@@ -110,7 +112,7 @@ class Methods extends AbstractComment
         $reflectionClass = $reflectionClass->getParentClass();
         if (
             $reflectionClass !== false
-            && $reflectionClass->hasMethod($this->methodName)
+            && $reflectionClass->hasMethod($this->methodName) === true
         ) {
             $comment = $this->replaceInheritComment(
                 $comment,
@@ -145,7 +147,7 @@ class Methods extends AbstractComment
         // traits in the class we are currently looking at.
         foreach ($reflection->getTraits() as $trait) {
             $originalComment = $this->retrieveComment($originalComment, $trait);
-            if ($this->checkComment($originalComment)) {
+            if ($this->checkComment($originalComment) === true) {
                 // Looks like we've resolved them all.
                 return $originalComment;
             }
@@ -173,7 +175,7 @@ class Methods extends AbstractComment
     {
         foreach ($reflectionClass->getInterfaces() as $interface) {
             $originalComment = $this->retrieveComment($originalComment, $interface);
-            if ($this->checkComment($originalComment)) {
+            if ($this->checkComment($originalComment) === true) {
                 // Looks like we've resolved them all.
                 return $originalComment;
             }
@@ -194,7 +196,7 @@ class Methods extends AbstractComment
      */
     protected function retrieveComment(string $originalComment, ReflectionClass $reflection): string
     {
-        if ($reflection->hasMethod($this->methodName)) {
+        if ($reflection->hasMethod($this->methodName) === true) {
             $newComment = $this->prettifyComment($reflection->getMethod($this->methodName)->getDocComment());
             // Replace it.
             $originalComment = $this->replaceInheritComment($originalComment, $newComment);

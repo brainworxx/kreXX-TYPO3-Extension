@@ -64,7 +64,7 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
      */
     public function dumpAction(&$data, string $message = '', string $level = 'debug'): DumpController
     {
-        if ($this->pool->emergencyHandler->checkMaxCall()) {
+        if ($this->pool->emergencyHandler->checkMaxCall() === true) {
             // Called too often, we might get into trouble here!
             return $this;
         }
@@ -79,7 +79,7 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
         // We will only allow code generation, if we were able to determine the
         // variable name or if we are not in logging mode.
         $message === '' ? $this->pool->scope->setScope($caller[static::TRACE_VARNAME]) :
-            $this->pool->codegenHandler->setCodegenAllowed(false);
+            $this->pool->codegenHandler->setAllowCodegen(false);
 
         // Start the magic.
         $analysis = $this->pool->routing->analysisHub(
@@ -92,7 +92,7 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
 
         // Now that our analysis is done, we must check if there was an emergency
         // break.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
             return $this;
         }
 

@@ -50,118 +50,11 @@ use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
 abstract class Fallback implements ConfigConstInterface
 {
     /**
-     * Method name used to evaluate a boolean.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    protected const EVAL_BOOL = 'evalBool';
-
-    /**
-     * Method name used to evaluate an integer.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    protected const EVAL_INT = 'evalInt';
-
-    /**
-     * Method name used to evaluate the maximum runtime.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    protected const EVAL_MAX_RUNTIME = 'evalMaxRuntime';
-
-    /**
-     * Method name used to evaluate the output destination.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    protected const EVAL_DESTINATION = 'evalDestination';
-
-    /**
-     * Method name used to evaluate the skin name.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    protected const EVAL_SKIN = 'evalSkin';
-
-    /**
-     * Method name used to evaluate the allowed ip range.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    protected const EVAL_IP_RANGE = 'evalIpRange';
-
-    /**
-     * Method name used to evaluate the debug methods.
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    protected const EVAL_DEBUG_METHODS = 'evalDebugMethods';
-
-    /**
-     * Method name used to evaluate the configured language
-     *
-     * @see \Brainworxx\Krexx\Service\Config\Validation
-     *
-     * @var string
-     */
-    protected const EVAL_LANG = 'evalLanguage';
-
-    /**
-     * Name of the chunks' folder.
-     *
-     * @var string
-     */
-    public const CHUNKS_FOLDER = 'chunks';
-
-    /**
-     * Name of the log folder.
-     *
-     * @var string
-     */
-    public const LOG_FOLDER = 'log';
-
-    /**
-     * Name of the config folder.
-     *
-     * @var string
-     */
-    public const CONFIG_FOLDER = 'config';
-
-    /**
-     * Name of the smokygrey skin.
-     *
-     * @var string
-     */
-    protected const SKIN_SMOKY_GREY = 'smokygrey';
-
-    /**
-     * Name of the hans skin.
-     *
-     * @var string
-     */
-    protected const SKIN_HANS = 'hans';
-
-    /**
      * The fallback configuration.
      *
-     * @var string[][]
+     * @var array[]
      */
-    protected const CONFIG_FALLBACK = [
+    const CONFIG_FALLBACK = [
         self::SECTION_OUTPUT => [
             self::SETTING_DISABLED,
             self::SETTING_IP_RANGE,
@@ -171,7 +64,7 @@ abstract class Fallback implements ConfigConstInterface
             self::SETTING_SKIN,
             self::SETTING_DESTINATION,
             self::SETTING_MAX_FILES,
-            self::SETTING_LANGUAGE_KEY,
+            self::SETTING_USE_SCOPE_ANALYSIS,
         ],
         self::SECTION_PRUNE => [
             self::SETTING_MAX_STEP_NUMBER,
@@ -202,7 +95,7 @@ abstract class Fallback implements ConfigConstInterface
      *
      * @var string[]
      */
-    protected const EDITABLE_SELECT = [
+    const EDITABLE_SELECT = [
         self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
         self::RENDER_EDITABLE => self::VALUE_TRUE,
     ];
@@ -212,7 +105,7 @@ abstract class Fallback implements ConfigConstInterface
      *
      * @var string[]
      */
-    protected const DISPLAY_ONLY_INPUT = [
+    const DISPLAY_ONLY_INPUT = [
         self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
         self::RENDER_EDITABLE => self::VALUE_FALSE,
     ];
@@ -222,7 +115,7 @@ abstract class Fallback implements ConfigConstInterface
      *
      * @var string[]
      */
-    protected const EDITABLE_INPUT = [
+    const EDITABLE_INPUT = [
         self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
         self::RENDER_EDITABLE => self::VALUE_TRUE,
     ];
@@ -232,7 +125,7 @@ abstract class Fallback implements ConfigConstInterface
      *
      * @var string[]
      */
-    protected const DISPLAY_ONLY_SELECT = [
+    const DISPLAY_ONLY_SELECT = [
         self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
         self::RENDER_EDITABLE => self::VALUE_FALSE,
     ];
@@ -242,7 +135,7 @@ abstract class Fallback implements ConfigConstInterface
      *
      * @var string[]
      */
-    protected const DISPLAY_NOTHING = [
+    const DISPLAY_NOTHING = [
         self::RENDER_TYPE => self::RENDER_TYPE_NONE,
         self::RENDER_EDITABLE => self::VALUE_FALSE,
     ];
@@ -250,21 +143,86 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Defining the layout of the frontend editing form.
      *
-     * @var string[][]
+     * @var array[]
      */
     public $configFallback = [];
 
     /**
+     * Render settings for a editable select field.
+     *
+     * @deprecated
+     *   Since 4.0.0. Use Fallback::EDITABLE_SELECT
+     *
+     * @var string[]
+     */
+    protected $editableSelect = [
+        self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
+        self::RENDER_EDITABLE => self::VALUE_TRUE,
+    ];
+
+    /**
+     * Render settings for an editable input field.
+     *
+     * @deprecated
+     *   Since 4.0.0. Use Fallback::EDITABLE_INPUT.
+     *
+     * @var string[]
+     */
+    protected $editableInput = [
+        self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
+        self::RENDER_EDITABLE => self::VALUE_TRUE,
+    ];
+
+    /**
+     * Render settings for a display only input field.
+     *
+     * @deprecated
+     *   Since 4.0.0. Use Fallback::DISPLAY_ONLY_INPUT.
+     *
+     * @var string[]
+     */
+    protected $displayOnlyInput = [
+        self::RENDER_TYPE => self::RENDER_TYPE_INPUT,
+        self::RENDER_EDITABLE => self::VALUE_FALSE,
+    ];
+
+    /**
+     * Render settings for a display only select field.
+     *
+     * @deprecated
+     *   Since 4.0.0. Use FALLBACK::DISPLAY_ONLY_SELECT
+     *
+     * @var string[]
+     */
+    protected $displayOnlySelect = [
+        self::RENDER_TYPE => self::RENDER_TYPE_SELECT,
+        self::RENDER_EDITABLE => self::VALUE_FALSE,
+    ];
+
+    /**
+     * Render settings for a field which will not be displayed, or accept values.
+     *
+     * @deprecated
+     *   Since 4.0.0. Use Fallback::DISPLAY_NOTHING.
+     *
+     * @var string[]
+     */
+    protected $displayNothing = [
+        self::RENDER_TYPE => self::RENDER_TYPE_NONE,
+        self::RENDER_EDITABLE => self::VALUE_FALSE,
+    ];
+
+    /**
      * Values, rendering settings and the actual fallback value.
      *
-     * @var string[][]|\Closure[][]
+     * @var array[]
      */
     public $feConfigFallback = [];
 
     /**
      * The skin configuration.
      *
-     * @var string[][]
+     * @var array[]
      */
     protected $skinConfiguration = [];
 
@@ -297,18 +255,19 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Generate the configuration fallback.
      */
-    protected function generateConfigFallback(): void
+    protected function generateConfigFallback()
     {
         $this->configFallback = static::CONFIG_FALLBACK;
 
         // Adding the new configuration options from the plugins.
         $pluginConfig = SettingsGetter::getNewSettings();
-        if (empty($pluginConfig)) {
+        if (empty($pluginConfig) === true) {
             return;
         }
 
+        /** @var \Brainworxx\Krexx\Service\Plugin\NewSetting $newSetting */
         foreach ($pluginConfig as $newSetting) {
-            if (!isset($this->configFallback[$newSetting->getSection()])) {
+            if (isset($this->configFallback[$newSetting->getSection()]) === false) {
                 $this->configFallback[$newSetting->getSection()] = [];
             }
             $this->configFallback[$newSetting->getSection()][] = $newSetting->getName();
@@ -318,7 +277,7 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Generate the frontend configuration fallback.
      */
-    protected function generateFeConfigFallback(): void
+    protected function generateFeConfigFallback()
     {
         $this->feConfigFallback = [
             static::SETTING_ANALYSE_PROTECTED_METHODS => $this->returnBoolSelectFalse(static::SECTION_METHODS),
@@ -339,23 +298,24 @@ abstract class Fallback implements ConfigConstInterface
             static::SETTING_ANALYSE_GETTER => $this->returnBoolSelectTrue(static::SECTION_METHODS),
             static::SETTING_MEMORY_LEFT => $this->returnInput(static::SECTION_EMERGENCY, 64),
             static::SETTING_MAX_RUNTIME => $this->returnMaxRuntime(),
+            static::SETTING_USE_SCOPE_ANALYSIS => $this->returnBoolSelectTrue(static::SECTION_BEHAVIOR),
             static::SETTING_MAX_STEP_NUMBER => $this->returnInput(static::SECTION_PRUNE, 10),
             static::SETTING_ARRAY_COUNT_LIMIT => $this->returnInput(static::SECTION_PRUNE, 300),
-            static::SETTING_LANGUAGE_KEY => $this->returnLanguages(),
         ];
     }
 
     /**
      * Generate the plugin configuration, if available.
      */
-    protected function generatePluginConfig(): void
+    protected function generatePluginConfig()
     {
         // Adding the new configuration options from the plugins.
         $pluginConfig = SettingsGetter::getNewSettings();
-        if (empty($pluginConfig)) {
+        if (empty($pluginConfig) === true) {
             return;
         }
 
+        /** @var \Brainworxx\Krexx\Service\Plugin\NewSetting $newSetting */
         foreach ($pluginConfig as $newSetting) {
             $this->feConfigFallback[$newSetting->getName()] = $newSetting->getFeSettings();
         }
@@ -364,7 +324,7 @@ abstract class Fallback implements ConfigConstInterface
     /**
      * Generate the skin configuration.
      */
-    protected function generateSkinConfiguration(): void
+    protected function generateSkinConfiguration()
     {
         $this->skinConfiguration = array_merge(
             [
@@ -420,7 +380,7 @@ abstract class Fallback implements ConfigConstInterface
     }
 
     /**
-     * The render settings for a simple integer input field.
+     * The render settings for a simple input field.
      *
      * @param string $section
      *   The section, where it belongs to
@@ -437,23 +397,6 @@ abstract class Fallback implements ConfigConstInterface
             static::RENDER => static::EDITABLE_INPUT,
             static::EVALUATE => static::EVAL_INT,
             static::SECTION => $section,
-        ];
-    }
-
-    /**
-     * The render settings for a simple string input field,
-     * that we do not evaluate.
-     *
-     * @return array
-     *   The settings.
-     */
-    protected function returnLanguages(): array
-    {
-        return [
-            static::VALUE => 'text',
-            static::RENDER => static::EDITABLE_SELECT,
-             static::EVALUATE => static::EVAL_LANG,
-            static::SECTION => static::SECTION_BEHAVIOR,
         ];
     }
 
@@ -483,7 +426,7 @@ abstract class Fallback implements ConfigConstInterface
     protected function returnDestination(): array
     {
         return [
-            // Either 'file', 'browser' or 'browserImmediately'.
+            // Either 'file' or 'browser'.
             static::VALUE => static::VALUE_BROWSER,
             static::RENDER => static::DISPLAY_ONLY_SELECT,
             static::EVALUATE => static::EVAL_DESTINATION,
@@ -560,5 +503,5 @@ abstract class Fallback implements ConfigConstInterface
      *
      * @var string
      */
-    public $version = '5.0.0';
+    public $version = '4.1.5';
 }

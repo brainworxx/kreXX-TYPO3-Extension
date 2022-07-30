@@ -74,7 +74,7 @@ class File
         $this->pool = $pool;
         $server = $pool->getServer();
         $this->docRoot = trim($this->realpath($server['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR);
-        if (empty($this->docRoot)) {
+        if (empty($this->docRoot) === true) {
             $this->docRoot = false;
         }
         $pool->fileService = $this;
@@ -107,7 +107,7 @@ class File
              $readFrom = 0;
         }
 
-        if (!isset($content[$readFrom])) {
+        if (isset($content[$readFrom]) === false) {
             // We can not even start reading this file!
             // Return empty string.
             return '';
@@ -117,7 +117,7 @@ class File
             $readTo = 0;
         }
 
-        if (!isset($content[$readTo])) {
+        if (isset($content[$readTo]) === false) {
             // We can not read this far, set it to the last line.
             $readTo = $content->count() - 1;
         }
@@ -196,13 +196,13 @@ class File
 
         static $filecache = [];
 
-        if (isset($filecache[$filePath])) {
+        if (isset($filecache[$filePath]) === true) {
             return $filecache[$filePath];
         }
 
         // Using \SplFixedArray to save some memory, as it can get
         // quite huge, depending on your system. 4mb is nothing here.
-        if ($this->fileIsReadable($filePath)) {
+        if ($this->fileIsReadable($filePath) === true) {
             return $filecache[$filePath] = SplFixedArray::fromArray(file($filePath));
         }
         // Not readable!
@@ -224,8 +224,8 @@ class File
      */
     public function getFileContents(string $filePath, bool $showError = true): string
     {
-        if (!$this->fileIsReadable($filePath)) {
-            if ($showError) {
+        if ($this->fileIsReadable($filePath) === false) {
+            if ($showError === true) {
                 // This file was not readable! We need to tell the user!
                 $this->pool->messages->addMessage('fileserviceAccess', [$this->filterFilePath($filePath)], true);
             }
@@ -254,7 +254,7 @@ class File
      * @param string $string
      *   The string we want to write.
      */
-    public function putFileContents(string $filePath, string $string): void
+    public function putFileContents(string $filePath, string $string)
     {
         // Register the file as a readable one.
         static::$isReadableCache[$filePath] = true;
@@ -266,16 +266,16 @@ class File
      *
      * @param string $filePath
      */
-    public function deleteFile(string $filePath): void
+    public function deleteFile(string $filePath)
     {
         $realpath = $this->realpath($filePath);
 
-        set_error_handler(function (): void {
+        set_error_handler(function () {
             /* do nothing */
         });
 
         // Fast-forward for the current chunk files.
-        if (isset(static::$isReadableCache[$realpath])) {
+        if (isset(static::$isReadableCache[$realpath]) === true) {
             unlink($realpath);
             restore_error_handler();
             return;
@@ -283,10 +283,10 @@ class File
 
         // Check if it is an actual file and if it is writable.
         // Those are left over chunks from previous calls, or old logfiles.
-        if (is_file($realpath)) {
+        if (is_file($realpath) === true) {
             // Make sure it is unlinkable.
             chmod($realpath, 0777);
-            if (!unlink($realpath)) {
+            if (unlink($realpath) === false) {
                 // We have a permission problem here!
                 $this->pool->messages->addMessage('fileserviceDelete', [$this->filterFilePath($realpath)]);
             }
@@ -332,7 +332,7 @@ class File
         $realPath = $this->realpath($filePath);
 
         // Return the cache, if we have any.
-        if (isset(static::$isReadableCache[$realPath])) {
+        if (isset(static::$isReadableCache[$realPath]) === true) {
             return static::$isReadableCache[$realPath];
         }
 
@@ -352,8 +352,8 @@ class File
     {
         $filePath = $this->realpath($filePath);
 
-        if ($this->fileIsReadable($filePath)) {
-            set_error_handler(function (): void {
+        if ($this->fileIsReadable($filePath) === true) {
+            set_error_handler(function () {
                 // do nothing
             });
             $result = filemtime($filePath);
@@ -403,7 +403,7 @@ class File
     public function isDirectoryWritable(string $path): bool
     {
         $filename = 'test';
-        set_error_handler(function (): void {
+        set_error_handler(function () {
             // do nothing
         });
         $result = (bool)file_put_contents($path . $filename, 'x') && unlink($path . $filename);

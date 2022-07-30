@@ -54,6 +54,7 @@ use Brainworxx\Krexx\View\Output\Chunks;
  */
 class Pool extends AbstractFactory
 {
+
     /**
      * An instance of the recursion handler.
      *
@@ -192,31 +193,31 @@ class Pool extends AbstractFactory
     /**
      * Check if the environment is as it should be.
      */
-    protected function checkEnvironment(): void
+    protected function checkEnvironment()
     {
         // Check chunk folder is writable.
         // If not, give feedback!
         $chunkFolder = $this->config->getChunkDir();
-        if (!$this->fileService->isDirectoryWritable($chunkFolder)) {
+        if ($this->fileService->isDirectoryWritable($chunkFolder) === false) {
             $this->messages->addMessage(
                 'chunksNotWritable',
                 [$this->fileService->filterFilePath($chunkFolder)]
             );
             // We can work without chunks, but this will require much more memory!
-            $this->chunks->setChunkAllowed(false);
+            $this->chunks->setChunksAreAllowed(false);
         }
 
         // Check if the log folder is writable.
         // If not, give feedback!
         $logFolder = $this->config->getLogDir();
-        if (!$this->fileService->isDirectoryWritable($logFolder)) {
+        if ($this->fileService->isDirectoryWritable($logFolder) === false) {
             $this->messages->addMessage(
                 'logNotWritable',
                 [$this->fileService->filterFilePath($logFolder)]
             );
             // Tell the chunk output that we have no write access in the logging
             // folder.
-            $this->chunks->setLoggingAllowed(false);
+            $this->chunks->setLoggingIsAllowed(false);
         }
 
         // At this point, we won't inform the dev right away. The error message
@@ -227,19 +228,14 @@ class Pool extends AbstractFactory
     /**
      * Renew the "semi-singletons" after an analysis.
      */
-    public function reset(): void
+    public function reset()
     {
         // We need to reset our recursion handler, because
         // the content of classes might change with another run.
         $this->createClass(Recursion::class);
-
         // Initialize the code generation.
         $this->createClass(Codegen::class);
         $this->createClass(Scope::class);
-
-        // Reset the routing, because they cache their settings.
-        $this->createClass(Routing::class);
-
         // We also initialize emergency handler timer.
         $this->emergencyHandler->initTimer();
     }

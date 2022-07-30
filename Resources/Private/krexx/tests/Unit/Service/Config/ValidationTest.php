@@ -36,7 +36,6 @@
 namespace Brainworxx\Krexx\Tests\Unit\Service\Config;
 
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Validation;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
@@ -120,7 +119,6 @@ class ValidationTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Service\Config\Validation::evalIpRange
      * @covers \Brainworxx\Krexx\Service\Config\Validation::evalMaxRuntime
      * @covers \Brainworxx\Krexx\Service\Config\Validation::evalSkin
-     * @covers \Brainworxx\Krexx\Service\Config\Validation::evalLanguage
      */
     public function testEvaluateSetting()
     {
@@ -133,80 +131,50 @@ class ValidationTest extends AbstractTest
         $validation = new Validation(Krexx::$pool);
 
         // Disallowed frontend editing settings.
-        $doNotEdit = [
-            ConfigConstInterface::SETTING_DESTINATION,
-            ConfigConstInterface::SETTING_MAX_FILES,
-            ConfigConstInterface::SETTING_DEBUG_METHODS,
-            ConfigConstInterface::SETTING_IP_RANGE,
-        ];
-        foreach ($doNotEdit as $settingName) {
-            $this->assertFalse(
-                $validation->evaluateSetting(
-                    $validation::SECTION_FE_EDITING,
-                    $settingName,
-                    ConfigConstInterface::RENDER_TYPE_CONFIG_FULL
-                )
-            );
-        }
-        foreach ($doNotEdit as $settingName) {
-            // Decide to display them.
-            $this->assertTrue(
-                $validation->evaluateSetting(
-                    $validation::SECTION_FE_EDITING,
-                    $settingName,
-                    ConfigConstInterface::RENDER_TYPE_CONFIG_DISPLAY
-                )
-            );
+        $disallowedSettings = $this->retrieveValueByReflection('feConfigNoEdit', $validation);
+        foreach ($disallowedSettings as $settingName) {
+            $this->assertFalse($validation->evaluateSetting($validation::SECTION_FE_EDITING, $settingName, static::WHATEVER));
         }
 
         // Testing each config with a valid value and wist garbage.
         $settingList = $this->retrieveValueByReflection('feConfigFallback', $validation);
         $testData = [
-            'evalBool' => [
+            Fallback::EVAL_BOOL => [
                 'true' => true,
                 'false' => true,
                 static::WHATEVER => false
             ],
-            'evalDebugMethods' => [
+            Fallback::EVAL_DEBUG_METHODS => [
                 'method1,method2' => true,
                 'method 1,method2' => false,
             ],
-            'evalInt' => [
+            Fallback::EVAL_INT => [
                 '5' => true,
                 'five' => false
             ],
-            'evalDestination' => [
+            Fallback::EVAL_DESTINATION => [
                 'browser' => true,
                 'file' => true,
                 'nowhere' => false
             ],
-            'evalSkin' => [
+            Fallback::EVAL_SKIN => [
                 'hans' => true,
                 'smokygrey' => true,
                 'bernd' => false
             ],
-            'evalIpRange' => [
+            Fallback::EVAL_IP_RANGE => [
                 'some values' => true,
                 '' => false
             ],
-            'evalMaxRuntime' => [
+            Fallback::EVAL_MAX_RUNTIME => [
                 'seven' => false,
                 '42' => true,
                 '99999' => false
-            ],
-            'evalLanguage' => [
-                'text' => true,
-                'de' => true,
-                'fr' => false
             ]
         ];
 
         // Nice, huh?
         foreach ($settingList as $name => $setting) {
-            if (isset($setting[$validation::EVALUATE]) === false) {
-                // We skip the one without any evaluation method.
-                continue;
-            }
             foreach ($testData[$setting[$validation::EVALUATE]] as $value => $expected) {
                 $this->assertEquals(
                     $expected,
@@ -230,24 +198,6 @@ class ValidationTest extends AbstractTest
             true,
             $validation->evaluateSetting('some group', Fallback::SETTING_DISABLED, false)
         );
-
-        // Test the frontend rendering.
-        $this->assertTrue(
-            $validation->evaluateSetting(
-                Fallback::SECTION_FE_EDITING,
-                Fallback::SETTING_DESTINATION,
-                Fallback::RENDER_TYPE_CONFIG_NONE
-            ),
-            'We allow a none-rendering for write protected settings.'
-        );
-        $this->assertFalse(
-            $validation->evaluateSetting(
-                Fallback::SECTION_FE_EDITING,
-                Fallback::SETTING_DESTINATION,
-                Fallback::RENDER_TYPE_CONFIG_FULL
-            ),
-            'We do not allow a full-rendering for write protected settings.'
-        );
     }
 
     /**
@@ -262,7 +212,7 @@ class ValidationTest extends AbstractTest
 
         $customSetting = new NewSetting();
         $customSetting->setName($settingName)
-            ->setValidation('evalBool')
+            ->setValidation($customSetting::EVAL_BOOL)
             ->setSection($sectionName)
             ->setRenderType(NewSetting::RENDER_TYPE_SELECT)
             ->setIsEditable(true)
@@ -273,7 +223,7 @@ class ValidationTest extends AbstractTest
         $anotherSettingName = 'notEditableInput';
         $customSetting = new NewSetting();
         $customSetting->setName($anotherSettingName)
-            ->setValidation('evalDebugMethods')
+            ->setValidation($customSetting::EVAL_DEBUG_METHODS)
             ->setSection($sectionName)
             ->setRenderType(NewSetting::RENDER_TYPE_INPUT)
             ->setIsEditable(false)

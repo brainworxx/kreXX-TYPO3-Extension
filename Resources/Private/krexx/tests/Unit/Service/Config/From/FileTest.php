@@ -81,6 +81,7 @@ class FileTest extends AbstractTest
      * Test the loading of an ini file into the settings.
      *
      * @covers \Brainworxx\Krexx\Service\Config\From\File::loadFile
+     * @covers \Brainworxx\Krexx\Service\Config\From\File::fallbackLoading
      */
     public function testLoadFileIni()
     {
@@ -116,7 +117,15 @@ class FileTest extends AbstractTest
                         [$garbageFileIni, false],
                         [$garbageFileJson, false],
                         [$notExistingFileIni, false],
-                        [$notExistingFileJson, false]
+                        [$notExistingFileJson, false],
+                        [$garbageFileIni . 'ini', false],
+                        [$garbageFileIni . 'json', false],
+                        [$garbageFileJson . 'ini', false],
+                        [$garbageFileJson . 'json', false],
+                        [$notExistingFileIni . 'ini', false],
+                        [$notExistingFileIni . 'json', false],
+                        [$notExistingFileJson . 'ini', false],
+                        [$notExistingFileJson . 'json', false],
                     ]
                 )
             );
@@ -124,7 +133,7 @@ class FileTest extends AbstractTest
         Krexx::$pool->fileService = $fileServiceMock;
         $config = new ConfigFromFile(Krexx::$pool);
 
-        $config->loadFile('some path.');
+        $config->loadFile($somePathIni);
         $this->assertEquals(
             [
                 'output' => [
@@ -134,10 +143,10 @@ class FileTest extends AbstractTest
             $this->retrieveValueByReflection(static::SETTINGS, $config)
         );
 
-        $config->loadFile('garbage file.');
+        $config->loadFile($garbageFileIni);
         $this->assertEquals([], $this->retrieveValueByReflection(static::SETTINGS, $config));
 
-        $config->loadFile('not existing file.');
+        $config->loadFile($notExistingFileIni);
         $this->assertEquals([], $this->retrieveValueByReflection(static::SETTINGS, $config));
     }
 
@@ -150,24 +159,21 @@ class FileTest extends AbstractTest
     {
         $setting = ['output' => ['disabled' => false]];
         $this->fixture = json_encode($setting);
-        $somePathIni = 'some path.ini';
-        $somePathJson = 'some path.json';
+        $somePath = 'some path.json';
 
         $fileServiceMock = $this->createMock(File::class);
-        $fileServiceMock->expects($this->exactly(2))
-            ->method('fileIsReadable')
-            ->withConsecutive([$somePathIni], [$somePathJson])
-            ->will($this->returnValueMap([[$somePathIni, false], [$somePathJson, true]]));
-
         $fileServiceMock->expects($this->once())
             ->method('getFileContents')
-            ->with($somePathJson)
+            ->with($somePath)
             ->will($this->returnValue($this->fixture));
-
+        $fileServiceMock->expects($this->once())
+            ->method('fileIsReadable')
+            ->with($somePath)
+            ->will($this->returnValue(true));
 
         Krexx::$pool->fileService = $fileServiceMock;
         $config = new ConfigFromFile(Krexx::$pool);
-        $config->loadFile('some path.');
+        $config->loadFile($somePath);
         $this->assertEquals(
             $setting,
             $this->retrieveValueByReflection(static::SETTINGS, $config)

@@ -154,7 +154,6 @@ class PropertiesTest extends AbstractTest
         } else {
             $view = new BaseView();
         }
-
         $dynamicValue = 'dynamicValue';
         $view->$dynamicValue = $dynamicValue;
         $fixture = [

@@ -55,6 +55,7 @@ abstract class AbstractRenderHans extends AbstractTest
     const GET_DATA = 'getData';
     const GET_TYPE = 'getType';
     const RENDER_ME = 'renderMe';
+    const GET_KEY_TYPE = 'getKeyType';
 
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject
@@ -96,97 +97,109 @@ abstract class AbstractRenderHans extends AbstractTest
             ->will($this->returnValueMap([
                 // connectorLeft.html
                 [
-                    static::PATH_TO_SKIN . 'connectorLeft' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_CONNECTOR_LEFT . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerConnectorLeft())
                 ],
                 // connectorRight.html
                 [
-                    static::PATH_TO_SKIN . 'connectorRight' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_CONNECTOR_RIGHT . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerConnectorRight())
                 ],
                 // helprow.html
                 [
-                    static::PATH_TO_SKIN . 'helprow' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_HELPROW . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerHelpRow())
                 ],
                 // help.html
                 [
-                    static::PATH_TO_SKIN . 'help' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_HELP . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerHelp())
                 ],
                 // recursion.html
                 [
-                    static::PATH_TO_SKIN . 'recursion' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_RECURSION . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerRecursion())
                 ],
                 // header.html
                 [
-                    static::PATH_TO_SKIN . 'header' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_HEADER . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerHeader())
                 ],
                 // search.html
                 [
-                    static::PATH_TO_SKIN . 'search' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_SEARCH . $fileSuffix,
                     true,
                     ''
                 ],
                 // footer.html
                 [
-                    static::PATH_TO_SKIN . 'footer' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_FOOTER . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerFooter())
                 ],
                 // caller.html
                 [
-                    static::PATH_TO_SKIN . 'caller' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_CALLER . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerCaller())
                 ],
                 // singlePlugin.html
                 [
-                    static::PATH_TO_SKIN . 'singlePlugin' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_SI_PLUGIN . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerSinglePlugin())
                 ],
                 // cssJs.html
                 [
-                    static::PATH_TO_SKIN . 'cssJs' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_CSSJS . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerCssJs())
                 ],
+                // singleChild.html
+                [
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_SI_CHILD . $fileSuffix,
+                    true,
+                    implode('', $this->renderHans->getMarkerSingleChild())
+                ],
+                // singelChildCallable.html
+                [
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_SI_CHILD_CALL . $fileSuffix,
+                    true,
+                    implode('', $this->renderHans->getMarkerSingleChildCallable())
+                ],
                 // singleChildExtra.html
                 [
-                  static::PATH_TO_SKIN . 'singleChildExtra' . $fileSuffix,
+                  static::PATH_TO_SKIN . $this->renderHans::FILE_SI_CHILD_EX . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerSingleChildExtra())
                 ],
                 // sourceButton.html
                 [
-                    static::PATH_TO_SKIN . 'sourcebutton' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_SOURCE_BUTTON . $fileSuffix,
                     true,
                     'sourcebutton'
                 ],
                 // expandableChildNormal.html
                 [
-                    static::PATH_TO_SKIN . 'expandableChildNormal' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_EX_CHILD_NORMAL . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerExpandableChild())
                 ],
                 // nest.html
                 [
-                    static::PATH_TO_SKIN . 'nest' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_NEST . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerNest())
                 ],
                 // singleEditableChild.html
                 [
-                    static::PATH_TO_SKIN . 'singleEditableChild' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_SI_EDIT_CHILD . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerSingleEditableChild())
                 ],
@@ -205,49 +218,49 @@ abstract class AbstractRenderHans extends AbstractTest
                 ],
                 // singleSelectOption.html
                 [
-                    static::PATH_TO_SKIN . 'singleSelectOptions' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_SI_SELECT_OPTIONS . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerSelectOption())
                 ],
                 // singleButton.html
                 [
-                    static::PATH_TO_SKIN . 'singleButton' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_SI_BUTTON . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerSingleButton())
                 ],
                 // fatalMain.html
                 [
-                    static::PATH_TO_SKIN . 'fatalMain' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_FATAL_MAIN . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerFatalMain())
                 ],
                 // fatalHeader.html
                 [
-                    static::PATH_TO_SKIN . 'fatalHeader' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_FATAL_HEADER . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerFatalHeader())
                 ],
                 // messages.html
                 [
-                    static::PATH_TO_SKIN . 'message' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_MESSAGE . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerMessages())
                 ],
                 // backtraceSourceLine
                 [
-                    static::PATH_TO_SKIN . 'backtraceSourceLine' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_BACKTRACE_SOURCELINE . $fileSuffix,
                     true,
                     implode('', $this->renderHans->getMarkerBacktraceSourceLine())
                 ],
                 // singleChildHr.html
                 [
-                    static::PATH_TO_SKIN . 'singleChildHr' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_SI_HR . $fileSuffix,
                     true,
                     'HR does not mean human resources'
                 ],
                 // br.html
                 [
-                    static::PATH_TO_SKIN . 'br' . $fileSuffix,
+                    static::PATH_TO_SKIN . $this->renderHans::FILE_BR . $fileSuffix,
                     true,
                     'Breaking the line! Breaking the line!'
                 ]

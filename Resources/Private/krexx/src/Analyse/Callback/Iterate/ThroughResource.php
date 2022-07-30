@@ -49,6 +49,7 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class ThroughResource extends AbstractCallback implements CallbackConstInterface
 {
+
     /**
      * Renders the info of a resource.
      *
@@ -61,8 +62,8 @@ class ThroughResource extends AbstractCallback implements CallbackConstInterface
         $output = $this->dispatchStartEvent();
 
         // Temporarily disable code gen.
-        $isAllowedCodeGen = $this->pool->codegenHandler->isCodegenAllowed();
-        $this->pool->codegenHandler->setCodegenAllowed(false);
+        $isAllowedCodeGen = $this->pool->codegenHandler->getAllowCodegen();
+        $this->pool->codegenHandler->setAllowCodegen(false);
 
         foreach ($this->parameters[static::PARAM_DATA] as $name => $data) {
             $output .= $this->pool->routing->analysisHub(
@@ -74,7 +75,7 @@ class ThroughResource extends AbstractCallback implements CallbackConstInterface
         }
 
         // Reset code generation.
-        $this->pool->codegenHandler->setCodegenAllowed($isAllowedCodeGen);
+        $this->pool->codegenHandler->setAllowCodegen($isAllowedCodeGen);
 
         return $output;
     }

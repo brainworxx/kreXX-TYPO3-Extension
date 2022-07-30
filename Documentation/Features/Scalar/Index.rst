@@ -27,7 +27,7 @@ When kreXX encounters a :literal:`JSON`, it does the following:
 
 |
 
-.. figure:: ../../Images/Scalar/sample_data_json.png
+.. figure:: ../../Images/Features/sample_data_json.png
 	:width: 833px
 	:alt: Code generation for a lorem ipsum sample data json
 
@@ -44,7 +44,7 @@ When kreXX encounters a :literal:`XML`, it does the following:
 
 |
 
-.. figure:: ../../Images/Scalar/sample_data_xml.png
+.. figure:: ../../Images/Features/sample_data_xml.png
 	:width: 648px
 	:alt: Pretty print for a lorem ipsum sample data xml
 
@@ -69,7 +69,7 @@ When kreXX encounters a callback, it does the following:
 
 |
 
-.. figure:: ../../Images/Scalar/callback_analysis.png
+.. figure:: ../../Images/Features/callback_analysis.png
 	:width: 620px
 	:alt: Callback analysis with comments and parameters
 

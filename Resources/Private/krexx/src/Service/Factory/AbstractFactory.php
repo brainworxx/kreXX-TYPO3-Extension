@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
  */
 abstract class AbstractFactory
 {
+
     /**
      * Rewrite mapping for the getter.
      *
@@ -61,7 +62,6 @@ abstract class AbstractFactory
      * Create objects and returns them. Singletons are handled by the pool.
      *
      * @param string $classname
-     *   Name of the class we want to create.
      *
      * @return object
      *   The requested object.
@@ -69,7 +69,7 @@ abstract class AbstractFactory
     public function createClass(string $classname)
     {
         // Check for possible overwrite.
-        if (isset($this->rewrite[$classname])) {
+        if (isset($this->rewrite[$classname]) === true) {
             $classname = $this->rewrite[$classname];
         }
 
@@ -82,12 +82,12 @@ abstract class AbstractFactory
      * @param string|int $what
      *   The part of the globals we want to access.
      *
-     * @return array
+     * @return mixed
      *   The part we are requesting.
      */
-    public function &getGlobals($what = ''): array
+    public function &getGlobals($what = '')
     {
-        if (empty($what)) {
+        if (empty($what) === true) {
             return $GLOBALS;
         }
 
@@ -108,7 +108,7 @@ abstract class AbstractFactory
     /**
      * Create the pool, but only if it is not already there.
      */
-    public static function createPool(): void
+    public static function createPool()
     {
         if (Krexx::$pool !== null) {
             // The pool is there, do nothing.
@@ -119,7 +119,7 @@ abstract class AbstractFactory
 
         // Create a new pool where we store all our classes.
         // We also need to check if we have an overwrite for the pool.
-        if (empty($rewrite[Pool::class])) {
+        if (empty($rewrite[Pool::class]) === true) {
             Krexx::$pool = new Pool($rewrite);
         } else {
             $classname = $rewrite[Pool::class];

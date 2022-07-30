@@ -37,9 +37,11 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -53,8 +55,9 @@ use ReflectionMethod;
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
+class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, ViewConstInterface, ConfigConstInterface
 {
+
     /**
      * Decides which methods we want to analyse and then starts the dump.
      *
@@ -75,18 +78,17 @@ class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
         $domId = $this->generateDomIdFromClassname($ref->getName(), $doProtected, $doPrivate);
 
         // We need to check, if we have a meta recursion here.
-        if ($this->pool->recursionHandler->isInMetaHive($domId)) {
+        if ($this->pool->recursionHandler->isInMetaHive($domId) === true) {
             // We have been here before.
             // We skip this one, and leave it to the js recursion handler!
-            $metaMethods = $this->pool->messages->getHelp('metaMethods');
             return $output .
                 $this->pool->render->renderRecursion(
                     $this->dispatchEventWithModel(
                         static::EVENT_MARKER_RECURSION,
                         $this->pool->createClass(Model::class)
                             ->setDomid($domId)
-                            ->setNormal($metaMethods)
-                            ->setName($metaMethods)
+                            ->setNormal(static::META_METHODS)
+                            ->setName(static::META_METHODS)
                             ->setType(static::TYPE_INTERNALS)
                     )
                 );
@@ -113,15 +115,15 @@ class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
     protected function analyseMethods(ReflectionClass $ref, string $domId, bool $doProtected, bool $doPrivate): string
     {
         $methods = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
-        if ($doProtected) {
+        if ($doProtected === true) {
             $methods = array_merge($methods, $ref->getMethods(ReflectionMethod::IS_PROTECTED));
         }
-        if ($doPrivate) {
+        if ($doPrivate === true) {
             $methods = array_merge($methods, $ref->getMethods(ReflectionMethod::IS_PRIVATE));
         }
 
         // Is there anything to analyse?
-        if (empty($methods)) {
+        if (empty($methods) === true) {
             return '';
         }
 
@@ -135,7 +137,7 @@ class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
             $this->dispatchEventWithModel(
                 static::EVENT_MARKER_ANALYSES_END,
                 $this->pool->createClass(Model::class)
-                    ->setName($this->pool->messages->getHelp('metaMethods'))
+                    ->setName(static::META_METHODS)
                     ->setType(static::TYPE_INTERNALS)
                     ->addParameter(static::PARAM_DATA, $methods)
                     ->addParameter(static::PARAM_REF, $ref)
@@ -164,11 +166,11 @@ class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
     protected function generateDomIdFromClassname(string $data, bool $doProtected, bool $doPrivate): string
     {
         $string = 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_m_';
-        if ($doProtected) {
+        if ($doProtected === true) {
             $string .= 'pro_';
         }
 
-        if ($doPrivate) {
+        if ($doPrivate === true) {
             $string .= 'pri_';
         }
 

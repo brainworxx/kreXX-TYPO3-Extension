@@ -54,8 +54,7 @@ class CallbackTest extends AbstractTest
     {
         $stringCallback = new Callback(Krexx::$pool);
         $model = new Model(Krexx::$pool);
-        $this->assertTrue($stringCallback->canHandle('strpos', $model), 'This ia a predefined php function.');
-        $this->assertEquals('strpos', $this->retrieveValueByReflection('handledValue', $stringCallback));
+        $this->assertTrue($stringCallback->canHandle('strpos', $model), 'This ia a predefinedphp function.');
         $this->assertFalse($stringCallback->canHandle('sdfsd dsf sdf ', $model), 'Just a random string.');
     }
 
@@ -64,7 +63,7 @@ class CallbackTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::handle
-     * @covers \Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration::retrieveDeclaration
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::retrieveDeclarationPlace
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::insertParameters
      */
     public function testCallMeNormal()
@@ -89,9 +88,6 @@ class CallbackTest extends AbstractTest
         $result = CallbackCounter::$staticParameters[0][Callback::PARAM_DATA];
         $this->assertEquals(1, CallbackCounter::$counter);
 
-        $originalString = CallbackCounter::$staticParameters[0][Callback::PARAM_VALUE];
-        $this->assertEquals($originalString, 'myLittleCallback');
-
         $this->assertStringStartsWith('Fixture for the callback analysis.', $result['Comment']);
         $this->assertStringContainsString(
             'tests' . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR . 'Callback.php',
@@ -111,9 +107,10 @@ class CallbackTest extends AbstractTest
     {
         // Create a fixture that is supposed to trigger a ReflectionException.
         $stringCallback = new Callback(Krexx::$pool);
+        $fixture = [Callback::PARAM_DATA => 'dgdg dsf '];
+        $stringCallback->setParameters($fixture);
 
-        // Expect a start event, nothing more here.
-        // The callback should be null, triggering a TypeError.
+        // Expect a start event. nothing more here.
         $this->mockEventService([Callback::class . PluginConfigInterface::START_EVENT, $stringCallback]);
 
         $stringCallback->callMe();

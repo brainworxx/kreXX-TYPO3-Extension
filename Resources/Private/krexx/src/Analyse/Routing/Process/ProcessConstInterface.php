@@ -49,74 +49,74 @@ interface ProcessConstInterface
      *
      * @var string
      */
-    public const TYPE_STRING = 'string';
+    const TYPE_STRING = 'string ';
 
     /**
      * Tell the developer: This value is an integer.
      *
      * @var string
      */
-    public const TYPE_INTEGER = 'integer';
+    const TYPE_INTEGER = 'integer';
 
     /**
      * Tell the developer: This value is an array.
      *
      * @var string
      */
-    public const TYPE_ARRAY = 'array';
+    const TYPE_ARRAY = 'array';
 
     /**
      * Tell the developer: This value is an object.
      *
      * @var string
      */
-    public const TYPE_OBJECT = 'object';
+    const TYPE_OBJECT = 'object';
 
     /**
      * Tell the developer: This value is a stack frame from a backtrace.
      *
      * @var string
      */
-    public const TYPE_STACK_FRAME = 'stack frame';
+    const TYPE_STACK_FRAME = 'stack frame';
 
     /**
      * Tell the developer: This value is a boolean.
      *
      * @var string
      */
-    public const TYPE_BOOL = 'boolean';
+    const TYPE_BOOL = 'boolean';
 
     /**
      * Tell the developer: This value is a closure.
      *
      * @var string
      */
-    public const TYPE_CLOSURE = 'closure';
+    const TYPE_CLOSURE = 'closure';
 
     /**
      * Tell the developer: This value is a float.
      * @var string
      */
-    public const TYPE_FLOAT = 'float';
+    const TYPE_FLOAT = 'float';
 
     /**
      * Tell the developer: This value is null.
      *
      * @var string
      */
-    public const TYPE_NULL = 'null';
+    const TYPE_NULL = 'null';
 
     /**
      * Tell the developer: This value is a class.
      *
      * @var string
      */
-    public const TYPE_CLASS = 'class';
+    const TYPE_CLASS = 'class';
 
     /**
      * Tell the developer: This value is a resource.
      *
      * @var string
      */
-    public const TYPE_RESOURCE = 'resource';
+    const TYPE_RESOURCE = 'resource';
 }

@@ -52,7 +52,7 @@ trait Iprange
     /**
      * @param string $formiprange
      */
-    public function setFormiprange(string $formiprange): void
+    public function setFormiprange(string $formiprange)
     {
         $this->formiprange = $formiprange;
     }
@@ -60,7 +60,7 @@ trait Iprange
     /**
      * @param string $iprange
      */
-    public function setIprange(string $iprange): void
+    public function setIprange(string $iprange)
     {
         $this->iprange = $iprange;
     }

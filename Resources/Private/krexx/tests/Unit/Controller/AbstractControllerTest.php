@@ -38,11 +38,9 @@ namespace Brainworxx\Krexx\Tests\Unit\Controller;
 use Brainworxx\Krexx\Controller\DumpController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
-use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\View\Output\Browser;
-use Brainworxx\Krexx\View\Output\BrowserImmediately;
 use Brainworxx\Krexx\View\Output\File;
 
 class AbstractControllerTest extends AbstractTest
@@ -56,17 +54,13 @@ class AbstractControllerTest extends AbstractTest
     {
         // Mock the settings.
         $fileMock = $this->createMock(Config::class);
-        $fileMock->expects($this->any())
+        $fileMock->expects($this->once())
             ->method('getSetting')
-            ->will($this->returnValue(ConfigConstInterface::VALUE_FILE));
+            ->will($this->returnValue(Fallback::VALUE_FILE));
         $browserMock = $this->createMock(Config::class);
-        $browserMock->expects($this->any())
+        $browserMock->expects($this->once())
             ->method('getSetting')
-            ->will($this->returnValue(ConfigConstInterface::VALUE_BROWSER));
-        $immediateMock = $this->createMock(Config::class);
-        $immediateMock->expects($this->any())
-            ->method('getSetting')
-            ->will($this->returnValue(ConfigConstInterface::VALUE_BROWSER_IMMEDIATELY));
+            ->will($this->returnValue(Fallback::VALUE_BROWSER));
 
         // Test the file output
         Krexx::$pool->config = $fileMock;
@@ -81,11 +75,5 @@ class AbstractControllerTest extends AbstractTest
         $dumpController = new DumpController(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $dumpController));
         $this->assertInstanceOf(Browser::class, $this->retrieveValueByReflection('outputService', $dumpController));
-
-        // Test the immediate output.
-        Krexx::$pool->config = $immediateMock;
-        $dumpController = new DumpController(Krexx::$pool);
-        $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $dumpController));
-        $this->assertInstanceOf(BrowserImmediately::class, $this->retrieveValueByReflection('outputService', $dumpController));
     }
 }

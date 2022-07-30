@@ -61,7 +61,7 @@ class CodegenTest extends AbstractTest
 
         // The dotty name.
         $codeGen = new Codegen(Krexx::$pool);
-        $codeGen->setCodegenAllowed(true);
+        $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
         $model->setName('dotty.dot');
         $helpMock = $this->createMock(Messages::class);
@@ -70,7 +70,7 @@ class CodegenTest extends AbstractTest
 
         // The configured debug method.
         $codeGen = new Codegen(Krexx::$pool);
-        $codeGen->setCodegenAllowed(true);
+        $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
         $model->setName('debugmethod');
         $model->setType($codeGen::TYPE_DEBUG_METHOD);
@@ -78,7 +78,7 @@ class CodegenTest extends AbstractTest
 
         // The special debug method getProperties
         $codeGen = new Codegen(Krexx::$pool);
-        $codeGen->setCodegenAllowed(true);
+        $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
         $model->setName('getProperties');
         $model->setType($codeGen::TYPE_DEBUG_METHOD);
@@ -86,11 +86,11 @@ class CodegenTest extends AbstractTest
 
         // The VHS version.
         $codeGen = new Codegen(Krexx::$pool);
-        $codeGen->setCodegenAllowed(true);
+        $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
         $model->setName('bluRay');
         $model->setCodeGenType($codeGen::VHS_CALL_VIEWHELPER);
-        $fixture = [
+        $fixture =  [
             'play' => 'dvd',
             'stop' => 'HD',
             'video' => 'BetaMax'
@@ -101,21 +101,9 @@ class CodegenTest extends AbstractTest
             $codeGen->generateSource($model)
         );
 
-        // The VHS Version without any arguments
-        $codeGen = new Codegen(Krexx::$pool);
-        $codeGen->setCodegenAllowed(true);
-        $model = new Model(Krexx::$pool);
-        $model->setName('webem');
-        $model->setCodeGenType($codeGen::VHS_CALL_VIEWHELPER);
-        $model->addParameter(Codegen::PARAM_ARRAY, []);
-        $this->assertEquals(
-            ' -> v:call(method: \'webem\')',
-            $codeGen->generateSource($model)
-        );
-
         // The dreaded _all variable name, the _all itself.
         $codeGen = new Codegen(Krexx::$pool);
-        $codeGen->setCodegenAllowed(true);
+        $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
         $model->setName('_all');
         $this->assertEquals('', $codeGen->generateSource($model));
@@ -134,7 +122,7 @@ class CodegenTest extends AbstractTest
 
         // Iterator to array generation (which does not exist).
         $codeGen = new Codegen(Krexx::$pool);
-        $codeGen->setCodegenAllowed(true);
+        $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
         $model->setName('somIteratorClass');
         $model->setCodeGenType(Codegen::CODEGEN_TYPE_ITERATOR_TO_ARRAY);
@@ -142,7 +130,7 @@ class CodegenTest extends AbstractTest
 
         // Json deconding, which also does not exist.
         $codeGen = new Codegen(Krexx::$pool);
-        $codeGen->setCodegenAllowed(true);
+        $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
         $model->setName('somIteratorClass');
         $model->setCodeGenType(Codegen::CODEGEN_TYPE_JSON_DECODE);
@@ -150,7 +138,7 @@ class CodegenTest extends AbstractTest
 
         // And finally, some normal generation.
         $codeGen = new Codegen(Krexx::$pool);
-        $codeGen->setCodegenAllowed(true);
+        $codeGen->setAllowCodegen(true);
         $model = new Model(Krexx::$pool);
         $model->setName('normalStuff');
         $this->assertEquals('normalStuff', $codeGen->generateSource($model));

@@ -58,12 +58,12 @@ abstract class AbstractProcessNoneScalar extends AbstractRouting implements Proc
     public function handle(Model $model): string
     {
         // Check the nesting level.
-        if ($this->pool->emergencyHandler->checkNesting()) {
+        if ($this->pool->emergencyHandler->checkNesting() === true) {
             return $this->handleNestedTooDeep($model);
         }
 
         // Render recursion.
-        if ($this->pool->recursionHandler->isInHive($model->getData())) {
+        if ($this->pool->recursionHandler->isInHive($model->getData()) === true) {
             return $this->handleRecursion($model);
         }
 
@@ -94,7 +94,7 @@ abstract class AbstractProcessNoneScalar extends AbstractRouting implements Proc
     protected function handleRecursion(Model $model): string
     {
         $data = $model->getData();
-        if (is_object($data)) {
+        if (is_object($data) === true) {
             $normal = '\\' . get_class($data);
             $domId = $this->generateDomIdFromObject($data);
         } else {
@@ -127,7 +127,7 @@ abstract class AbstractProcessNoneScalar extends AbstractRouting implements Proc
 
         $model->setData($text)
             ->setNormal($this->pool->messages->getHelp('maximumLevelReached1'))
-            ->setType(is_array($model->getData()) ? static::TYPE_ARRAY : static::TYPE_OBJECT)
+            ->setType((is_array($model->getData()) === true) ? static::TYPE_ARRAY : static::TYPE_OBJECT)
             ->setHasExtra(true);
 
         // Render it directly.

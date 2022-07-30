@@ -133,7 +133,7 @@ class TimerControllerTest extends AbstractController
                     $this->assertEquals('kreXX timer', $headline);
                     $this->assertEquals(
                         [
-                            'Total time' => 2000000.0,
+                            'total_time' => 2000000.0,
                             'first->second' => '50%',
                             'second->end' => '50%'
                         ],
@@ -148,7 +148,6 @@ class TimerControllerTest extends AbstractController
             ->method('createClass')
             ->with(DumpController::class)
             ->will($this->returnValue($dumpMock));
-        $poolMock->messages = \Krexx::$pool->messages;
 
         $this->setValueByReflection('pool', $poolMock, $this->controller);
         $this->setValueByReflection(static::TIME_KEEPING, ['first' => 1000, 'second' => 2000], $this->controller);

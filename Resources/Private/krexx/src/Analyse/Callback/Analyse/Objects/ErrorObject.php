@@ -46,6 +46,7 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
  */
 class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterface
 {
+
     /**
      * Error object analysis.
      *
@@ -59,7 +60,7 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
 
         /** @var \Throwable|\Exception $data */
         $data = $this->parameters[static::PARAM_DATA];
-        $lineNo = ($data->getLine()) - 1;
+        $lineNo = ((int)$data->getLine()) - 1;
         $source = trim(
             $this->pool->fileService->readSourcecode(
                 $data->getFile(),
@@ -68,7 +69,7 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
                 $lineNo + 5
             )
         );
-        if (empty($source)) {
+        if (empty($source) === true) {
             $source = $this->pool->messages->getHelp('noSourceAvailable');
         }
 
@@ -96,7 +97,7 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
         $output = '';
         $trace = $this->parameters[static::PARAM_DATA]->getTrace();
         if (is_array($trace)) {
-            $this->pool->codegenHandler->setCodegenAllowed(false);
+            $this->pool->codegenHandler->setAllowCodegen(false);
             $output .= $this->pool->render->renderExpandableChild(
                 $this->dispatchEventWithModel(
                     static::TRACE_BACKTRACE,
@@ -109,7 +110,7 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
                         )
                 )
             );
-            $this->pool->codegenHandler->setCodegenAllowed(true);
+            $this->pool->codegenHandler->setAllowCodegen(true);
         }
 
         return$output;

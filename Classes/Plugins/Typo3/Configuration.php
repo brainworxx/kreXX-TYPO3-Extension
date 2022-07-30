@@ -40,16 +40,13 @@ namespace Brainworxx\Includekrexx\Plugins\Typo3;
 use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
-use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
 use Brainworxx\Krexx\View\Output\CheckOutput;
@@ -103,7 +100,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
      * - Point the directories to the temp folder.
      * - Protect the temp folder, if necessary.
      */
-    public function exec(): void
+    public function exec()
     {
         // We are using the TYPO3 ip security, instead of the kreXX implementation.
         Registration::addRewrite(CheckOutput::class, T3CheckOutput::class);
@@ -111,16 +108,13 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         // Registering some special stuff for the model analysis.
         Registration::registerEvent(ProcessObject::class . static::START_PROCESS, DirtyModels::class);
 
-        // Registering the flexform parser.
-        Registration::registerEvent(Xml::class . static::END_EVENT, FlexFormParser::class);
-
         // See if we must create a temp directory for kreXX.
         $tempPaths = $this->generateTempPaths();
 
         // Register it!
-        Registration::setConfigFile($tempPaths[Fallback::CONFIG_FOLDER] . DIRECTORY_SEPARATOR . 'Krexx.');
-        Registration::setChunksFolder($tempPaths[Fallback::CHUNKS_FOLDER] . DIRECTORY_SEPARATOR);
-        Registration::setLogFolder($tempPaths[Fallback::LOG_FOLDER] . DIRECTORY_SEPARATOR);
+        Registration::setConfigFile($tempPaths[static::CONFIG_FOLDER] . DIRECTORY_SEPARATOR . 'Krexx.ini');
+        Registration::setChunksFolder($tempPaths[static::CHUNKS_FOLDER] . DIRECTORY_SEPARATOR);
+        Registration::setLogFolder($tempPaths[static::LOG_FOLDER] . DIRECTORY_SEPARATOR);
         $this->createWorkingDirectories($tempPaths);
 
         // Adding our debugging blacklist.
@@ -166,22 +160,25 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     {
         // Get the absolute site path. The constant PATH_site is deprecated
         // since 9.2.
-        $pathSite = class_exists(Environment::class) ? Environment::getPublicPath() . DIRECTORY_SEPARATOR : PATH_site;
-        $pathSite .= 'typo3temp' . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX;
+        $pathSite = class_exists(Environment::class) ? Environment::getPublicPath() . '/' : PATH_site;
+        $pathSite .= 'typo3temp';
 
         // See if we must create a temp directory for kreXX.
         return [
-            'main' => $pathSite,
-            Fallback::LOG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . Fallback::LOG_FOLDER,
-            Fallback::CHUNKS_FOLDER => $pathSite . DIRECTORY_SEPARATOR . Fallback::CHUNKS_FOLDER,
-            Fallback::CONFIG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . Fallback::CONFIG_FOLDER,
+            'main' => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX,
+            static::LOG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
+                DIRECTORY_SEPARATOR . static::LOG_FOLDER,
+            static::CHUNKS_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
+                DIRECTORY_SEPARATOR . static::CHUNKS_FOLDER,
+            static::CONFIG_FOLDER => $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX .
+                DIRECTORY_SEPARATOR . static::CONFIG_FOLDER,
         ];
     }
 
     /**
      * Register or file writer, if needed.
      */
-    protected function registerFileWriter(): void
+    protected function registerFileWriter()
     {
         // Create the pool, it is not present and reload the configuration
         // with our new settings.
@@ -212,7 +209,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     /**
      * Register the new setting for the TYPO3 file writer.
      */
-    protected function registerFileWriterSettings(): void
+    protected function registerFileWriterSettings()
     {
         // Register the two new settings for the TYPO3 log writer integration.
         $activeT3FileWriter = GeneralUtility::makeInstance(NewSetting::class);
@@ -221,7 +218,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
             ->setDefaultValue(static::VALUE_FALSE)
             ->setIsEditable(false)
             ->setRenderType(static::RENDER_TYPE_NONE)
-            ->setValidation('evalBool')
+            ->setValidation(static::EVAL_BOOL)
             ->setName(static::ACTIVATE_T3_FILE_WRITER);
         Registration::addNewSettings($activeT3FileWriter);
 
@@ -243,7 +240,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
      */
     protected function createFileWriterValidator(): Closure
     {
-        return function ($value, Pool $pool): bool {
+        return function ($value, Pool $pool) {
             // All values from the ini should be strings.
             // The emergency log level in TYPO3 9 and older is the integer 0.
             // And when I ask 'some value' == 0, I will always get a true.
@@ -274,10 +271,13 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     /**
      * Register the admin panel integration and the query debugger.
      */
-    protected function registerVersionDependantStuff(): void
+    protected function registerVersionDependantStuff()
     {
         // The QueryBuilder special analysis.
-        Registration::registerEvent(Objects::class . static::START_EVENT, QueryDebugger::class);
+        // Only for Doctrine stuff.
+        if (version_compare(Bootstrap::getTypo3Version(), '8.3', '>')) {
+            Registration::registerEvent(Objects::class . static::START_EVENT, QueryDebugger::class);
+        }
 
         // Register our modules for the admin panel.
         if (
@@ -297,9 +297,9 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
     /**
      * Create and protect the working directories.
      *
-     * @param string[] $tempPaths
+     * @param array $tempPaths
      */
-    protected function createWorkingDirectories(array $tempPaths): void
+    protected function createWorkingDirectories(array $tempPaths)
     {
         // htAccess to prevent a listing
         $htAccess = '# Apache 2.2' . chr(10);
@@ -322,8 +322,8 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
                 // Create it!
                 GeneralUtility::mkdir($tempPath);
                 // Protect it!
-                GeneralUtility::writeFileToTypo3tempDir($tempPath . DIRECTORY_SEPARATOR . '.htaccess', $htAccess);
-                GeneralUtility::writeFileToTypo3tempDir($tempPath . DIRECTORY_SEPARATOR . 'index.html', $indexHtml);
+                GeneralUtility::writeFileToTypo3tempDir($tempPath . '/' . '.htaccess', $htAccess);
+                GeneralUtility::writeFileToTypo3tempDir($tempPath . '/' . 'index.html', $indexHtml);
             }
         }
     }

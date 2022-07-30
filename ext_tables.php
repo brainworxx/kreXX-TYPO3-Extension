@@ -37,52 +37,54 @@ if (!defined('TYPO3_MODE')) {
 }
 
 // Register BE module.
-call_user_func(
-    function () {
-        // Depending on the TYPO3 version, there may or may not be a constant defined
-        // that tells its version.
-        if (defined('TYPO3_version') === true) {
-            $typo3Version = TYPO3_version;
-        } else {
-            // Should be used in v11.
-            $typo3Version = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                TYPO3\CMS\Core\Information\Typo3Version::class
-            )->getVersion();
-        }
-
-        if (version_compare($typo3Version, '10.0.0', '<')) {
-            // The old way of the registration, with the guessing of the controller
-            // name.
-            \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-                'Brainworxx.Includekrexx',
-                'tools',
-                'kreXX configuration',
-                '',
-                [
-                    'Index' => 'index, save, dispatch'
-                ],
-                [
-                    'access' => 'user,group',
-                    'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
-                    'labels' => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf',
-                ]
-            );
-        } else {
-            // The new way, with the extension name only, and real controller names.
-            \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-                'Includekrexx',
-                'tools',
-                'kreXX configuration',
-                '',
-                [
-                    \Brainworxx\Includekrexx\Controller\IndexController::class => 'index, save, dispatch'
-                ],
-                [
-                    'access' => 'user,group',
-                    'icon' => 'EXT:includekrexx/Resources/Public/Icons/Extension.svg',
-                    'labels' => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf',
-                ]
-            );
-        }
+$boot = function () {
+    // Depending on the TYPO3 version, there may or may not be a constant defined
+    // that tells it's version.
+    if (defined('TYPO3_version') === true) {
+        $typo3Version = TYPO3_version;
+    } else {
+        // Should be used in v11.
+        $typo3Version = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            TYPO3\CMS\Core\Information\Typo3Version::class
+        )->getVersion();
     }
-);
+
+    if (version_compare($typo3Version, '10.0.0', '<')) {
+        // The old way of the registration, with the guessing of the controller
+        // name.
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+            'Brainworxx.Includekrexx',
+            'tools',
+            'kreXX configuration',
+            '',
+            [
+                'Index' => 'index, save, dispatch'
+            ],
+            [
+                'access' => 'user,group',
+                'icon' => 'EXT:includekrexx/Resources/Public/Icons/icon_medium.png',
+                'labels' => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf',
+            ]
+        );
+    } else {
+        // The new way, with the extension name only, and real controller names.
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+            'Includekrexx',
+            'tools',
+            'kreXX configuration',
+            '',
+            [
+                \Brainworxx\Includekrexx\Controller\IndexController::class => 'index, save, dispatch'
+            ],
+            [
+                'access' => 'user,group',
+                'icon' => 'EXT:includekrexx/Resources/Public/Icons/Extension.svg',
+                'labels' => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf',
+            ]
+        );
+    }
+
+};
+$boot();
+unset($boot);
+

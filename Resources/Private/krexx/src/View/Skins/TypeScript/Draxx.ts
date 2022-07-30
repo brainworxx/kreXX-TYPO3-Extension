@@ -34,7 +34,7 @@
 class Draxx
 {
     /**
-     * The selector, where we initialize the draXX
+     * The selector, where we init the draXX
      *
      * @var {string}
      */
@@ -239,7 +239,7 @@ class Draxx
     protected getElementOffset(element:Element): Offset
     {
         let de:Element = document.documentElement;
-        let box:DOMRect = element.getBoundingClientRect();
+        let box:ClientRect = element.getBoundingClientRect();
         let top:number = box.top + window.pageYOffset - de.clientTop;
         let left:number = box.left + window.pageXOffset - de.clientLeft;
         return {top: top, left: left};

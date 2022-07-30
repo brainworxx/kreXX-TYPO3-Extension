@@ -47,21 +47,21 @@ interface PluginConfigInterface
      *
      * @var string
      */
-    public const START_EVENT = '::callMe::start';
+    const START_EVENT = '::callMe::start';
 
     /**
      * Event marker. End marker of the callback.
      *
      * @var string
      */
-    public const END_EVENT = '::callMe::end';
+    const END_EVENT = '::callMe::end';
 
     /**
      * Event marker. Somewhere-in-the-middle marker of the callback.
      *
      * @var string
      */
-    public const START_PROCESS = '::process';
+    const START_PROCESS = '::process';
 
     /**
      * Get the name of the plugin.
@@ -80,5 +80,5 @@ interface PluginConfigInterface
     /**
      * Registers all Overwrites
      */
-    public function exec(): void;
+    public function exec();
 }

@@ -75,14 +75,14 @@ class SingleEditableChildTest extends AbstractRenderHans
     }
 
     /**
-     * Test the rendering of an editable dropdown field, the skin list
+     * Test the rendering of a editable dropdown field., the skin list
      *
      * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSingleEditableChild
      * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSpecificEditableElement
      * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSelectOptions
      * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
-    public function testRenderSingleEditableChildSelectSkin()
+    public function testRenderSingleEditableChildSelect()
     {
         $selectedSkin = 'selectedSkin';
         $this->mockModel(static::GET_DATA, 'more data');
@@ -102,8 +102,8 @@ class SingleEditableChildTest extends AbstractRenderHans
         $configMock->expects($this->once())
             ->method('getSkinList')
             ->will($this->returnValue([
-                $selectedSkin => $selectedSkin,
-                'Herbert' => 'Herbert'
+                $selectedSkin,
+                'Herbert'
             ]));
         Krexx::$pool->config = $configMock;
 
@@ -114,51 +114,5 @@ class SingleEditableChildTest extends AbstractRenderHans
         $this->assertStringContainsString('more data', $result);
         $this->assertStringContainsString('not normal', $result);
         $this->assertStringContainsString('selected="selected"', $result);
-    }
-
-    /**
-     * Test the rendering of a simple boolean.
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSingleEditableChild
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSpecificEditableElement
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSelectOptions
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
-     */
-    public function testRenderSingleEditableChildSelectBool()
-    {
-        $this->mockModel(static::GET_DATA, 'some data');
-        $this->mockModel(static::GET_NORMAL, 'totally normal');
-        $this->modelMock->expects($this->exactly(3))
-            ->method(static::GET_DOMID)
-            ->will($this->returnValue('barf!'));
-        $this->modelMock->expects($this->exactly(2))
-            ->method(static::GET_TYPE)
-            ->will($this->returnValue(Fallback::RENDER_TYPE_SELECT));
-
-        $result = $this->renderHans->renderSingleEditableChild($this->modelMock);
-        $this->assertStringContainsString('truetruefalsefalse', $result);
-    }
-
-    /**
-     * Test the rendering of the language dropdown
-     *
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSingleEditableChild
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSpecificEditableElement
-     * @covers \Brainworxx\Krexx\View\Skins\Hans\SingleEditableChild::renderSelectOptions
-     * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
-     */
-    public function testRenderSingleEditableChildSelectLang()
-    {
-        $this->mockModel(static::GET_DATA, 'some data');
-        $this->mockModel(static::GET_NORMAL, 'totally normal');
-        $this->modelMock->expects($this->exactly(3))
-            ->method(static::GET_DOMID)
-            ->will($this->returnValue(Fallback::SETTING_LANGUAGE_KEY));
-        $this->modelMock->expects($this->exactly(2))
-            ->method(static::GET_TYPE)
-            ->will($this->returnValue(Fallback::RENDER_TYPE_SELECT));
-
-        $result = $this->renderHans->renderSingleEditableChild($this->modelMock);
-        $this->assertStringContainsString('EnglishtextDeutschde', $result);
     }
 }

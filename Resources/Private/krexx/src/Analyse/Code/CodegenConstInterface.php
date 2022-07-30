@@ -43,12 +43,42 @@ namespace Brainworxx\Krexx\Analyse\Code;
 interface CodegenConstInterface
 {
     /**
+     * Constant identifier for the array multiline code generation.
+     *
+     * @var string
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed. Use CODEGEN_TYPE_ITERATOR_TO_ARRAY.
+     */
+    const ITERATOR_TO_ARRAY = 'iteratorToArray';
+
+    /**
+     * Constant identifier for the json multiline code generation.
+     *
+     * @var string
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed. Use CODEGEN_TYPE_JSON_DECODE.
+     */
+    const JSON_DECODE = 'jsonDecode';
+
+    /**
+     * Identifier for inaccessible array multiline code generation.
+     *
+     * @var string
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed. Use CODEGEN_TYPE_ARRAY_VALUES_ACCESS.
+     */
+    const ARRAY_VALUES_ACCESS = 'arrayValuesAccess';
+
+    /**
      * Meta stuff can not be reached in the code. Stops the code generation
      * right in its tracks.
      *
      * @var string
      */
-    public const CODEGEN_TYPE_META_CONSTANTS = 'metaConstants';
+    const CODEGEN_TYPE_META_CONSTANTS = 'metaConstants';
 
     /**
      * Code generation for a public property or method
@@ -56,28 +86,28 @@ interface CodegenConstInterface
      *
      * @var string
      */
-    public const CODEGEN_TYPE_PUBLIC = 'public';
+    const CODEGEN_TYPE_PUBLIC = 'public';
 
     /**
      * Wraps an iterator_to_array around one of the generation values.
      *
      * @var string
      */
-    public const CODEGEN_TYPE_ITERATOR_TO_ARRAY = 'iteratorToArray';
+    const CODEGEN_TYPE_ITERATOR_TO_ARRAY = 'iteratorToArray';
 
     /**
      * Wraps a json_decode around one of the generation values.
      *
      * @var string
      */
-    public const CODEGEN_TYPE_JSON_DECODE = 'jsonDecode';
+    const CODEGEN_TYPE_JSON_DECODE = 'jsonDecode';
 
     /**
      * Wraps an array_values around one of the generation values.
      *
      * @var string
      */
-    public const CODEGEN_TYPE_ARRAY_VALUES_ACCESS = 'arrayValuesAccess';
+    const CODEGEN_TYPE_ARRAY_VALUES_ACCESS = 'arrayValuesAccess';
 
     /**
      * Returns an empty string. Does not stop the generation. It will resume
@@ -85,19 +115,19 @@ interface CodegenConstInterface
      *
      * @var string
      */
-    public const CODEGEN_TYPE_EMPTY = 'empty';
+    const CODEGEN_TYPE_EMPTY = 'empty';
 
     /**
      * "Additional" json key, that contains the source code type hint.
      *
      * @var string
      */
-    public const CODEGEN_TYPE_HINT = 'Type hint';
+    const CODEGEN_TYPE_HINT = 'Type hint';
 
     /**
-     * The equivalent of a stop bit for the code generation.
+     * The equivaqlent of a stop bit for the code generation.
      *
      * @var string
      */
-    public const CODEGEN_STOP_BIT = ';stop;';
+    const CODEGEN_STOP_BIT = ';stop;';
 }

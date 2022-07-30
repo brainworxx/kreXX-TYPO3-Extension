@@ -65,7 +65,7 @@ class CheckOutputTest extends AbstractTest
         parent::krexxDown();
 
         unset($_SERVER[static::HTTP_X_REQUESTED_WITH]);
-        unset($_SERVER['REMOTE_ADDR']);
+        unset($_SERVER[CheckOutput::REMOTE_ADDRESS]);
     }
 
     /**
@@ -167,7 +167,7 @@ class CheckOutputTest extends AbstractTest
         $sapiMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::PHP_SAPI_NAME);
         $sapiMock->expects($this->any())
             ->will($this->returnValue('browser'));
-        $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
+        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '1.2.3.4';
         $checkOutput = new CheckOutput(Krexx::$pool);
 
 
@@ -192,7 +192,7 @@ class CheckOutputTest extends AbstractTest
         $whitelist = '1.5.*, 1.6.*, 1.7.*';
         $this->assertFalse($checkOutput->isAllowedIp($whitelist), 'Wrong IP ranges.');
 
-        unset($_SERVER['REMOTE_ADDR']);
+        unset($_SERVER[CheckOutput::REMOTE_ADDRESS]);
         $whitelist = '1.5.*, 1.6.*, 1.7.*';
         $this->assertFalse(
             $checkOutput->isAllowedIp($whitelist),

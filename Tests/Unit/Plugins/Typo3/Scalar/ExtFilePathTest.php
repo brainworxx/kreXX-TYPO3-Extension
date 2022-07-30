@@ -38,24 +38,11 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Scalar;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 class ExtFilePathTest extends AbstractTest
 {
-
-    protected function krexxUp()
-    {
-        parent::krexxUp();
-
-        // Load the TYPO3 language files
-        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
-            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 't3.kreXX.ini');
-        Krexx::$pool->messages->readHelpTexts();
-    }
-
     /**
      * Test the resolving of EXT: strings for their actual files.
      *
@@ -115,14 +102,10 @@ class ExtFilePathTest extends AbstractTest
         // Look at the model.
         $jsonData = $model->getJson();
         $expectations = [
-            'Resolved EXT path' => 'includekrexx/Tests/Fixtures/123458.Krexx.html',
-            'Mimetype file' => 'just a file',
-            'Error' => 'The file does not exist.'
+            "Resolved EXT path" => "includekrexx/Tests/Fixtures/123458.Krexx.html",
+            "Real path" => "n/a",
+            "Mimetype file" => "just a file"
         ];
-        $this->assertEquals(
-            $expectations,
-            $jsonData,
-            'The file does exists, we just did not mock the file_exists(). We need to test the feedback about a missing file.'
-        );
+        $this->assertEquals($expectations, $jsonData);
     }
 }

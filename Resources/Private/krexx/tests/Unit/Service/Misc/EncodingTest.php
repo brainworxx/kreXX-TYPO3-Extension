@@ -124,16 +124,16 @@ class EncodingTest extends AbstractTest
 
         $specialChars = [
             '"' => '&quot;',
-            '\'' => '&#039;',
+            '\'' => '\&amp;#039;',
             "\0" => '&#039; . &quot;\0&quot; . &#039;',
             "\xEF" => '&#039; . &quot;\xEF&quot; . &#039;',
             "\xBB" => '&#039; . &quot;\xBB&quot; . &#039;',
             "\xBF" => '&#039; . &quot;\xBF&quot; . &#039;'
         ];
 
-        foreach ($specialChars as $original => $expected) {
+        foreach ($specialChars as $original => $expeced) {
             $this->assertEquals(
-                $fixture . $expected,
+                $fixture . $expeced,
                 $this->encoding->encodeStringForCodeGeneration($fixture . $original)
             );
         }

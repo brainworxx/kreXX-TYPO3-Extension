@@ -39,29 +39,31 @@ namespace Brainworxx\Krexx\Controller;
 
 /**
  * Literals for the frontend.
- *
- * @deprecated since 5.0.0
- *   Will ber removed. Use the translations.
  */
 interface ControllerConstInterface
 {
     /**
      * Headline, when used to display the fe editing dialog.
      *
-     * @deprecated since 5.0.0
-     *   Use $pool->messages->getHelp('headlineCookieConf') instead.
+     * @var string
+     *
+     * @deprecated
+     *   Since 4.0.0. Will be removed. Use HEADLINE_COOKIE_CONF instead.
+     *
+     */
+    const HEADLINE_EDIT_SETTINGS = 'Edit local settings';
+
+    /**
+     * Headline, when used to display the fe editing dialog.
      *
      * @var string
      */
-    public const HEADLINE_COOKIE_CONF = 'Cookie Configuration';
+    const HEADLINE_COOKIE_CONF = 'Cookie Configuration';
 
     /**
      * Headline for the kreXX timer.
      *
-     * @deprecated  since 5.0.0
-     *   Use $pool->messages->getHelp('headlineTimer') instead.
-     *
      * @var string
      */
-    public const HEADLINE_TIMER = 'kreXX timer';
+    const HEADLINE_TIMER = 'kreXX timer';
 }

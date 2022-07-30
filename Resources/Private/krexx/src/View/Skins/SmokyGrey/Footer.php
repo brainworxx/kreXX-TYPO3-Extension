@@ -47,11 +47,7 @@ trait Footer
     /**
      * @var string
      */
-    private $markerFooter = [
-        '{kconfiguration-classes}',
-        '{additionalData}',
-        '{noDataAvailable}'
-    ];
+    private $markerFooter = '{kconfiguration-classes}';
 
     /**
      * {@inheritDoc}
@@ -61,25 +57,17 @@ trait Footer
         // Doing special stuff for smokygrey:
         // We hide the debug-tab when we are displaying the config-only and switch
         // to the config as the current payload.
-        if ($configOnly) {
+        if ($configOnly === true) {
             return str_replace(
                 $this->markerFooter,
-                [
-                    '',
-                    $this->pool->messages->getHelp('additionalData'),
-                    $this->pool->messages->getHelp('noDataAvailable'),
-                ],
-                parent::renderFooter($caller, $model, true)
+                '',
+                parent::renderFooter($caller, $model, $configOnly)
             );
         }
 
         return str_replace(
             $this->markerFooter,
-            [
-                static::STYLE_HIDDEN,
-                $this->pool->messages->getHelp('additionalData'),
-                $this->pool->messages->getHelp('noDataAvailable'),
-            ],
+            static::STYLE_HIDDEN,
             parent::renderFooter($caller, $model, $configOnly)
         );
     }
@@ -95,6 +83,6 @@ trait Footer
      */
     public function getMarkerFooter(): array
     {
-        return $this->markerFooter;
+        return [$this->markerFooter];
     }
 }

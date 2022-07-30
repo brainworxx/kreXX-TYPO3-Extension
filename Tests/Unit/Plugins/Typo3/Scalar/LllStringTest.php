@@ -39,8 +39,6 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Localization\LocalizationFactory;
 use TYPO3\CMS\Lang\LanguageService;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
@@ -59,11 +57,6 @@ class LllStringTest extends AbstractTest
         if (isset($GLOBALS[static::TSFE])) {
             $this->originalLang = $GLOBALS[static::TSFE];
         }
-
-        // Load the TYPO3 language files
-        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
-            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 't3.kreXX.ini');
-        Krexx::$pool->messages->readHelpTexts();
     }
 
     public function krexxDown()
@@ -100,7 +93,6 @@ class LllStringTest extends AbstractTest
      * Testing the "glue" to the TYPO3 translation handling.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::canHandle
-     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::resolveExtPath
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::__construct
      */
     public function testCanHandle()
@@ -110,17 +102,8 @@ class LllStringTest extends AbstractTest
         $lllString = new LllString(\Krexx::$pool);
         $lllString->setLocalisationUtility(new LocalizationUtility());
         LocalizationUtility::$values[$payload] = static::KREXX_DEBUGGER;
-        $this->simulatePackage('includekrexx', 'some path');
-
         $lllString->canHandle($payload, $model);
-        $result = $model->getJson();
-        $this->assertEquals(static::KREXX_DEBUGGER, $result['Translation']);
-        $this->assertEquals('The file does not exist.', $result['Error']);
 
-        // Do it again, with an early return this time.
-        $payload = 'Just a string, nothing special';
-        $model = new Model(\Krexx::$pool);
-        $lllString->canHandle($payload, $model);
-        $this->assertEmpty($model->getJson(), 'Expecting an empty array.');
+        $this->assertEquals(static::KREXX_DEBUGGER, $model->getJson()['Translation']);
     }
 }

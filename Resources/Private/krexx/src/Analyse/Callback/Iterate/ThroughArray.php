@@ -58,6 +58,7 @@ class ThroughArray extends AbstractCallback implements
     ConnectorsConstInterface,
     ProcessConstInterface
 {
+
     /**
      * Renders the expendable around the array analysis.
      *
@@ -69,7 +70,7 @@ class ThroughArray extends AbstractCallback implements
         $output = $this->pool->render->renderSingeChildHr() . $this->dispatchStartEvent();
 
         // Are we dealing with multiline code generation?
-        $multilineCodeGen = $this->parameters[static::PARAM_MULTILINE] ?
+        $multilineCodeGen = $this->parameters[static::PARAM_MULTILINE] === true ?
             static::CODEGEN_TYPE_ITERATOR_TO_ARRAY : static::CODEGEN_TYPE_PUBLIC;
 
         $recursionMarker = $this->pool->recursionHandler->getMarker();
@@ -99,7 +100,7 @@ class ThroughArray extends AbstractCallback implements
      * @param string $multilineCodeGen
      * @return \Brainworxx\Krexx\Analyse\Model
      */
-    protected function prepareModel(array $array, $key, &$value, string $multilineCodeGen): Model
+    protected function prepareModel(array &$array, $key, &$value, string $multilineCodeGen): Model
     {
         /** @var Model $model */
         $model = $this->pool
@@ -107,14 +108,15 @@ class ThroughArray extends AbstractCallback implements
             ->setData($value)
             ->setCodeGenType($multilineCodeGen);
 
-        if (!array_key_exists($key, $array)) {
+        if (array_key_exists($key, $array) === false) {
             // Looks like we have an inaccessible array value here.
             $model->setCodeGenType(static::CODEGEN_TYPE_ARRAY_VALUES_ACCESS)
                 ->setConnectorParameters(array_search($key, array_keys($array)));
         }
 
-        if (is_string($key)) {
+        if (is_string($key) === true) {
             $model->setName($this->pool->encodingService->encodeString($key))
+                ->setKeyType(static::TYPE_STRING)
                 ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);
         } else {
             $model->setName($key)->setConnectorType(static::CONNECTOR_NORMAL_ARRAY);

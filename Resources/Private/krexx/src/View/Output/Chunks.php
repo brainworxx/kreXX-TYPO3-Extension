@@ -63,7 +63,7 @@ class Chunks implements ConfigConstInterface
      *
      * @var string
      */
-    protected const STRING_DELIMITER = '@@@';
+    const STRING_DELIMITER = '@@@';
 
     /**
      * Here we store all relevant data.
@@ -78,7 +78,7 @@ class Chunks implements ConfigConstInterface
      * We save this data in a separate file, so that a backend extension can offer
      * some additional data about the logfiles and their content.
      *
-     * @var string[]
+     * @var array
      */
     protected $metadata = [];
 
@@ -90,14 +90,14 @@ class Chunks implements ConfigConstInterface
      *
      * @var bool
      */
-    protected $chunkAllowed = true;
+    protected $chunksAreAllowed = true;
 
     /**
      * Is the log folder write protected?
      *
      * @var bool
      */
-    protected $loggingAllowed = true;
+    protected $loggingIsAllowed = true;
 
     /**
      * The logfolder.
@@ -157,7 +157,7 @@ class Chunks implements ConfigConstInterface
      */
     public function chunkMe(string $string): string
     {
-        if ($this->chunkAllowed && strlen($string) > 10000) {
+        if ($this->chunksAreAllowed === true && strlen($string) > 10000) {
             // Get the key.
             $key = $this->genKey();
             // Detect the encoding in the chunk.
@@ -181,7 +181,9 @@ class Chunks implements ConfigConstInterface
     protected function genKey(): string
     {
         static $counter = 0;
-        return $this->fileStamp . '_' . ++$counter;
+        ++$counter;
+
+        return $this->fileStamp . '_' . $counter;
     }
 
     /**
@@ -215,7 +217,7 @@ class Chunks implements ConfigConstInterface
      * @param string $string
      *   The chunk string.
      */
-    public function sendDechunkedToBrowser(string $string): void
+    public function sendDechunkedToBrowser(string $string)
     {
         // Check for HTML output.
         if ($this->pool->createClass(CheckOutput::class)->isOutputHtml()) {
@@ -253,9 +255,9 @@ class Chunks implements ConfigConstInterface
      * @param string $string
      *   The chunked version of the output.
      */
-    public function saveDechunkedToFile(string $string): void
+    public function saveDechunkedToFile(string $string)
     {
-        if (!$this->loggingAllowed) {
+        if ($this->loggingIsAllowed === false) {
             // We have no write access. Do nothing.
             return;
         }
@@ -287,7 +289,7 @@ class Chunks implements ConfigConstInterface
         $this->pool->fileService->putFileContents($filename, $string);
         // Save our metadata, so a potential backend module can display it.
         // We may or may not have already some output for this file.
-        if (!empty($this->metadata)) {
+        if (empty($this->metadata) === false) {
             $filename .= '.json';
             // Remove the old metadata file. We still have all it's content
             // available in $this->metadata.
@@ -303,118 +305,46 @@ class Chunks implements ConfigConstInterface
      * When the chunks' folder is not writable, we will not use chunks.
      * This will increase the memory usage significantly!
      *
-     * @deprecated
-     *   Since 5.0.0. Use setChunkAllowed() instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
      * @param bool $bool
      *   Are we using chunks?
      */
-    public function setChunksAreAllowed(bool $bool): void
+    public function setChunksAreAllowed(bool $bool)
     {
-        $this->setChunkAllowed($bool);
-    }
-
-    /**
-     * Setter for the $chunkAllowed.
-     *
-     * When the chunks' folder is not writable, we will not use chunks.
-     * This will increase the memory usage significantly!
-     *
-     * @param bool $bool
-     *   Are we using chunks?
-     */
-    public function setChunkAllowed(bool $bool): void
-    {
-        $this->chunkAllowed = $bool;
+        $this->chunksAreAllowed = $bool;
     }
 
     /**
      * Getter for the useChunks value.
-     *
-     * @deprecated
-     *   Since 5.0.0. Use isChunkAllowed() instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
      *
      * @return bool
      *   Are we using chunks?
      */
     public function getChunksAreAllowed(): bool
     {
-        return $this->isChunkAllowed();
-    }
-
-    /**
-     * Getter for the chunkAllowed value.
-     *
-     * @return bool
-     *   Are we using chunks?
-     */
-    public function isChunkAllowed(): bool
-    {
-        return $this->chunkAllowed;
+        return $this->chunksAreAllowed;
     }
 
     /**
      * Setter for the $useLogging. Here we determine, if the logfolder
      * is accessible.
      *
-     * @deprecated
-     *   Since 5.0.0. Use setLoggingAllowed() instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
-     *
-     * @param bool $bool
+     * @param $bool
      *   Is the log folder accessible?
      */
-    public function setLoggingIsAllowed(bool $bool): void
+    public function setLoggingIsAllowed(bool $bool)
     {
-        $this->setLoggingAllowed($bool);
-    }
-
-    /**
-     * Setter for the $useLogging. Here we determine, if the logfolder
-     * is accessible.
-     *
-     * @param bool $bool
-     *   Is the log folder accessible?
-     */
-    public function setLoggingAllowed(bool $bool): void
-    {
-        $this->loggingAllowed = $bool;
+        $this->loggingIsAllowed = $bool;
     }
 
     /**
      * Getter for the useLogging.
-     *
-     * @deprecated
-     *   Since 5.0.0. Use isLoggingAllowed instead.
-     *
-     * @codeCoverageIgnore
-     *   We do not test deprecated code.
      *
      * @return bool
      *   Is the log folder accessible?
      */
     public function getLoggingIsAllowed(): bool
     {
-        return $this->isLoggingAllowed();
-    }
-
-    /**
-     * Getter for the loggingAllowed.
-     *
-     * @return bool
-     *   Is the log folder accessible?
-     */
-    public function isLoggingAllowed(): bool
-    {
-        return $this->loggingAllowed;
+        return $this->loggingIsAllowed;
     }
 
     /**
@@ -423,7 +353,7 @@ class Chunks implements ConfigConstInterface
      * @param array $caller
      *   The caller from the caller finder.
      */
-    public function addMetadata(array $caller): void
+    public function addMetadata(array $caller)
     {
         if ($this->pool->config->getSetting(static::SETTING_DESTINATION) === static::VALUE_FILE) {
             $this->metadata[] = $caller;
@@ -437,7 +367,7 @@ class Chunks implements ConfigConstInterface
     {
         // Get a list of all chunk files from the run.
         $chunkList = glob($this->chunkDir . $this->fileStamp . '_*');
-        if (empty($chunkList)) {
+        if (empty($chunkList) === true) {
             return;
         }
 
@@ -458,7 +388,7 @@ class Chunks implements ConfigConstInterface
      * @param string $string
      *   The string we are processing.
      */
-    public function detectEncoding(string $string): void
+    public function detectEncoding(string $string)
     {
         static $doNothingEncoding = ['ASCII', 'UTF-8', false];
         $encoding = $this->pool->encodingService->mbDetectEncoding($string);
@@ -466,7 +396,7 @@ class Chunks implements ConfigConstInterface
         // We need to decide, if we need to change the official encoding of
         // the HTML output with a meta tag. We ignore everything in the
         // doNothingEncoding array.
-        if (!in_array($encoding, $doNothingEncoding, true)) {
+        if (in_array($encoding, $doNothingEncoding, true) === false) {
             $this->officialEncoding = $encoding;
         }
     }

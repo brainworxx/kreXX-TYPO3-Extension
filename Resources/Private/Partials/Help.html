@@ -39,6 +39,12 @@ krexxlog($myObject);<f:render section="codeblock-end"/>
     <br /><br />
 
     <h2><f:translate key="usage.headline.fluid" /></h2>
+    <f:render section="codeblock-start" arguments="{name: 'fluidnamespace'}" />&#123;namespace krexx=Brainworxx\Includekrexx\ViewHelpers&#125;
+&lt;html xmlns:f=&quot;http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers&quot;
+      xmlns:krexx=&quot;http://typo3.org/ns/Brainworxx/Includekrexx/ViewHelpers&quot;
+      data-namespace-typo3-fluid=&quot;true&quot;&gt;<f:render section="codeblock-end"/>
+
+    <div class="spacer"></div>
     <f:render section="codeblock-start" arguments="{name: 'fluidnormal'}" />&lt;krexx:debug&gt;&#123;_all&#125;&lt;/krexx:debug&gt;
 &lt;krexx:log&gt;&#123;_all&#125;&lt;/krexx:debug&gt;<f:render section="codeblock-end"/>
 
@@ -50,7 +56,7 @@ krexxlog($myObject);<f:render section="codeblock-end"/>
     <br /><br />
 
     <h2><f:translate key="usage.links.headline" /></h2>
-    <a class="krexx-link" target="_blank" href="https://docs.typo3.org/p/brainworxx/includekrexx/main/en-us/"><f:translate key="usage.links.typo3" /></a><br/>
+    <a class="krexx-link" target="_blank" href="https://docs.typo3.org/p/brainworxx/includekrexx/master/en-us/"><f:translate key="usage.links.typo3" /></a><br/>
     <a class="krexx-link" target="_blank" href="https://github.com/brainworxx/kreXX/wiki"><f:translate key="usage.links.github" /></a>
 
 </f:spaceless></f:section>

@@ -37,8 +37,9 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
-use Brainworxx\Krexx\Service\Reflection\HiddenProperty;
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
+use DateTime;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -50,7 +51,7 @@ use ReflectionProperty;
  * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class PublicProperties extends AbstractObjectAnalysis
+class PublicProperties extends AbstractObjectAnalysis implements CallbackConstInterface
 {
     /**
      * Dump all public properties.
@@ -85,7 +86,7 @@ class PublicProperties extends AbstractObjectAnalysis
         }
 
         $this->handleUndeclaredProperties($refProps, $data, $publicProps, $ref);
-        if (empty($refProps)) {
+        if (empty($refProps) === true) {
             return $output;
         }
 
@@ -103,31 +104,27 @@ class PublicProperties extends AbstractObjectAnalysis
      * Also: Take care of the \DateTime properties anomaly.
      *
      * @param ReflectionProperty[] $refProps
-     * @param mixed $data
+     * @param $data
      * @param ReflectionProperty[] $publicProps
      * @param \ReflectionClass $ref
      */
-    protected function handleUndeclaredProperties(
-        array &$refProps,
-        $data,
-        array $publicProps,
-        ReflectionClass $ref
-    ): void {
+    protected function handleUndeclaredProperties(array &$refProps, $data, array $publicProps, ReflectionClass $ref)
+    {
         // For every not-declared property, we add another reflection.
         // Those are simply added during runtime
         foreach (array_keys(array_diff_key(get_object_vars($data), $publicProps)) as $key) {
             $refProps[$key] = new UndeclaredProperty($ref, $key);
         }
 
-        // Test for hidden properties
-        foreach (HiddenProperty::HIDDEN_LIST as $className => $propertyNames) {
-            if ($data instanceof $className) {
-                foreach ($propertyNames as $propertyName) {
-                    if (!isset($refProps[$propertyName])) {
-                        $refProps[$propertyName] = new HiddenProperty($ref, $propertyName);
-                    }
-                }
-            }
+        // There is an anomaly with a \DateTime instance.
+        // The "public" properties date, timezone and timezone_type may be in
+        // there as undeclared properties.
+        // Since PHP 7.4, those are not available via get_object_vars(), so we
+        // have to take care of them manually.
+        if ($data instanceof DateTime === true) {
+            $refProps['date'] = (new UndeclaredProperty($ref, 'date'))->setIsPublic(false);
+            $refProps['timezone'] = (new UndeclaredProperty($ref, 'timezone'))->setIsPublic(false);
+            $refProps['timezone_type'] = (new UndeclaredProperty($ref, 'timezone_type'))->setIsPublic(false);
         }
     }
 }

@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
+use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use ReflectionProperty;
 
 /**
@@ -47,8 +48,9 @@ use ReflectionProperty;
  * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class ProtectedProperties extends AbstractObjectAnalysis
+class ProtectedProperties extends AbstractObjectAnalysis implements CallbackConstInterface
 {
+
     /**
      * Dump all protected properties.
      *
@@ -62,7 +64,7 @@ class ProtectedProperties extends AbstractObjectAnalysis
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
         $refProps = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
-        if (empty($refProps)) {
+        if (empty($refProps) === true) {
             return $output;
         }
 

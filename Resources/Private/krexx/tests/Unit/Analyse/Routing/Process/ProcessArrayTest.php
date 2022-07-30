@@ -75,17 +75,6 @@ class ProcessArrayTest extends AbstractTest
     }
 
     /**
-     * Test the reading of the settings
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::__construct
-     */
-    public function testConstruct()
-    {
-        $processArray = new ProcessArray(\Krexx::$pool);
-        $this->assertNotEquals(0, $this->retrieveValueByReflection('arrayCountLimit', $processArray));
-    }
-
-    /**
      * Test the processing of a normal array.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::handleNoneScalar

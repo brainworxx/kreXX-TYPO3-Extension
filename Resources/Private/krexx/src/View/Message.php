@@ -162,7 +162,7 @@ class Message
      */
     public function getText(): string
     {
-        if ($this->isThrowAway) {
+        if ($this->isThrowAway === true) {
             // Removes itself, if it is a throwaway message.
             $this->pool->messages->removeKey($this->key);
         }
@@ -179,5 +179,21 @@ class Message
     public function getKey(): string
     {
         return $this->key;
+    }
+
+    /**
+     * Wrapper around the getText, for compatibility reasons.
+     *
+     * @deprecated since 4.0.0
+     *   Will be removed. Use $this->getText().
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getText();
     }
 }

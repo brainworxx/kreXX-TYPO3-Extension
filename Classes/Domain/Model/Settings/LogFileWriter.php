@@ -51,7 +51,7 @@ trait LogFileWriter
     /**
      * @param string $activateT3FileWriter
      */
-    public function setActivateT3FileWriter(string $activateT3FileWriter): void
+    public function setActivateT3FileWriter(string $activateT3FileWriter)
     {
         $this->activateT3FileWriter = $activateT3FileWriter;
     }
@@ -59,7 +59,7 @@ trait LogFileWriter
     /**
      * @param string $loglevelT3FileWriter
      */
-    public function setLoglevelT3FileWriter(string $loglevelT3FileWriter): void
+    public function setLoglevelT3FileWriter(string $loglevelT3FileWriter)
     {
         $this->loglevelT3FileWriter = $loglevelT3FileWriter;
     }
@@ -67,7 +67,7 @@ trait LogFileWriter
     /**
      * Do nothing. This value will not get added to the ini.
      *
-     * @param mixed $value
+     * @param $value
      *
      * @return int
      */
@@ -81,7 +81,7 @@ trait LogFileWriter
     /**
      * Do nothing. This value will not get added to the ini.
      *
-     * @param mixed $value
+     * @param $value
      *
      * @return string
      */

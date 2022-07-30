@@ -40,6 +40,7 @@ use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Http\ServerRequest;
@@ -88,14 +89,11 @@ class IndexControllerTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::checkProductiveSetting
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::assignCssJs
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::generateAjaxTranslations
      */
     public function testIndexActionNormal()
     {
         $jsCssFileContent = 'file content';
         $templateContent = 'template content';
-        $translationContent = 'var ajaxTranslate = {"deletefile":"ajax.delete.file","error":"ajax.error","in":"ajax.in","line":"ajax.line","updatedLoglist":"ajax.updated.loglist","deletedCookies":"ajax.deleted.cookies"};';
-
         $fileGetContents =  $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_get_contents');
         $fileGetContents->expects($this->exactly(2))
             ->will($this->returnValue($jsCssFileContent));
@@ -138,12 +136,9 @@ class IndexControllerTest extends AbstractTest
             ->with($viewMock);
 
         $pageRenderer = $this->createMock(PageRenderer::class);
-        $pageRenderer->expects($this->exactly(2))
+        $pageRenderer->expects($this->once())
             ->method('addJsInlineCode')
-            ->withConsecutive(
-                ['krexxajaxtrans', $translationContent],
-                ['krexxjs', $jsCssFileContent]
-            );
+            ->with('krexxjs', $jsCssFileContent);
         $pageRenderer->expects($this->once())
             ->method('addCssInlineBlock')
             ->with('krexxcss', $jsCssFileContent);
@@ -225,7 +220,6 @@ class IndexControllerTest extends AbstractTest
      *
      * @covers \Brainworxx\Includekrexx\Controller\IndexController::saveAction
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::prepareFileName
      */
     public function testSaveActionNormal()
     {
@@ -236,22 +230,15 @@ class IndexControllerTest extends AbstractTest
         $this->prepareRedirect($indexController);
 
         $iniContent = 'oh joy, even more settings . . .';
-        $pathParts = pathinfo(Krexx::$pool->config->getPathToConfigFile());
-        $configFilePath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.json';
 
         $settingsMock = $this->createMock(Settings::class);
         $settingsMock->expects($this->once())
-            ->method('generateContent')
+            ->method('generateIniContent')
             ->will($this->returnValue($iniContent));
-        $settingsMock->expects($this->once())
-            ->method('prepareFileName')
-            ->will($this->returnValue($configFilePath));
-
-
 
         $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
         $filePutContentsMock->expects($this->once())
-            ->with($configFilePath, $iniContent)
+            ->with(Krexx::$pool->config->getPathToIniFile(), $iniContent)
             ->will($this->returnValue(true));
 
         try {
@@ -278,7 +265,6 @@ class IndexControllerTest extends AbstractTest
      *
      * @covers \Brainworxx\Includekrexx\Controller\IndexController::saveAction
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::prepareFileName
      */
     public function testSaveActionNoWriteAccess()
     {
@@ -289,20 +275,15 @@ class IndexControllerTest extends AbstractTest
         $this->prepareRedirect($indexController);
 
         $iniContent = 'oh joy, even more settings . . .';
-        $pathParts = pathinfo(Krexx::$pool->config->getPathToConfigFile());
-        $configFilePath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.json';
 
         $settingsMock = $this->createMock(Settings::class);
         $settingsMock->expects($this->once())
-            ->method('generateContent')
+            ->method('generateIniContent')
             ->will($this->returnValue($iniContent));
-        $settingsMock->expects($this->once())
-            ->method('prepareFileName')
-            ->will($this->returnValue($configFilePath));
 
         $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
         $filePutContentsMock->expects($this->once())
-            ->with(Krexx::$pool->config->getPathToConfigFile(), $iniContent)
+            ->with(Krexx::$pool->config->getPathToIniFile(), $iniContent)
             ->will($this->returnValue(false));
 
         try {
@@ -377,7 +358,7 @@ class IndexControllerTest extends AbstractTest
         // Use the files inside the fixture folder.
         $this->setValueByReflection(
             'directories',
-            ['log' => __DIR__ . '/../../Fixtures/'],
+            [Config::LOG_FOLDER => __DIR__ . '/../../Fixtures/'],
             \Krexx::$pool->config
         );
 

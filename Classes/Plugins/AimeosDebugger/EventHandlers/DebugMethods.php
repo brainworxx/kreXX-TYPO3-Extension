@@ -59,7 +59,7 @@ class DebugMethods extends AbstractEventHandler implements
      * The 2019 version simplified much of the code, hence the configuration
      * handling here.
      *
-     * @var string[][]
+     * @var array
      */
     protected $methods = [
             'getRefItems' => [
@@ -159,7 +159,7 @@ class DebugMethods extends AbstractEventHandler implements
     {
         $result = $data->$methodName();
         // We are expecting arrays, btw.
-        if (!empty($result)) {
+        if (empty($result) === false) {
             return $this->pool->render->renderExpandableChild(
                 $this->pool->createClass(Model::class)
                     ->setName($methodName)

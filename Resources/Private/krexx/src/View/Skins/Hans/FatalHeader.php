@@ -51,9 +51,7 @@ trait FatalHeader
         '{search}',
         '{KrexxId}',
         '{type}',
-        '{encoding}',
-        '{noJavaScript}',
-        '{searchHeadline}'
+        '{encoding}'
     ];
 
     /**
@@ -69,9 +67,7 @@ trait FatalHeader
                 $this->renderSearch(),
                 $this->pool->recursionHandler->getMarker(),
                 $errorType,
-                $this->pool->chunks->getOfficialEncoding(),
-                $this->pool->messages->getHelp('noJavaScript'),
-                $this->pool->messages->getHelp('searchHeadline'),
+                $this->pool->chunks->getOfficialEncoding()
             ],
             $this->getTemplateFileContent(static::FILE_FATAL_HEADER)
         );

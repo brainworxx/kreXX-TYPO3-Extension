@@ -65,7 +65,7 @@ abstract class AbstractCaller
      *
      * We use his list to identify the variable name of the call.
      *
-     * @var string[]
+     * @var array
      */
     protected $callPattern;
 
@@ -108,12 +108,12 @@ abstract class AbstractCaller
     /**
      * Finds the place in the code from where krexx was called.
      *
-     * @param string $headline
+     * @var string $headline
      *   The headline from the call.
-     * @param mixed $data
+     * @var mixed $data
      *   The variable we are currently analysing.
      *
-     * @return string[]
+     * @return array
      *   The code, from where krexx was called.
      *   array(
      *     'file' => 'someFile.php',
@@ -141,8 +141,8 @@ abstract class AbstractCaller
      */
     protected function getType(string $headline, string $varname, $data): string
     {
-        if (empty($headline)) {
-            $type = is_object($data) ? get_class($data) : gettype($data);
+        if (empty($headline) === true) {
+            $type = is_object($data) === true ? get_class($data) : gettype($data);
             if ($type === 'double') {
                 $type = 'float';
             }
@@ -170,28 +170,32 @@ abstract class AbstractCaller
         // Check if someone has been messing with the $_SERVER, to prevent
         // warnings and notices.
         if (
-            empty($server['SERVER_PROTOCOL'])
-            || empty($server['SERVER_PORT'])
-            || empty($server['SERVER_NAME'])
-            || empty($server['REQUEST_URI'])
+            empty($server['SERVER_PROTOCOL']) === true
+            || empty($server['SERVER_PORT']) === true
+            || empty($server['SERVER_NAME']) === true
+            || empty($server['REQUEST_URI']) === true
         ) {
             return 'n/a';
         }
 
         // SSL or no SSL.
-        $ssl = !empty($server['HTTPS']) && $server['HTTPS'] === 'on';
+        $ssl = empty($server['HTTPS']) === false && $server['HTTPS'] === 'on';
 
         $protocol = strtolower($server['SERVER_PROTOCOL']);
         $protocol = substr($protocol, 0, strpos($protocol, '/'));
-        if ($ssl) {
+        if ($ssl === true) {
             $protocol .= 's';
         }
 
         $port = $server['SERVER_PORT'];
 
-        (!$ssl && $port === '80') || ($ssl && $port === '443') ? $port = '' : $port = ':' . $port;
+        ($ssl === false && $port === '80') || ($ssl === true && $port === '443') ? $port = '' : $port = ':' . $port;
 
-        $host = $server['HTTP_HOST'] ?? $server['SERVER_NAME'] . $port;
+        if (isset($server['HTTP_HOST']) === true) {
+            $host = $server['HTTP_HOST'];
+        } else {
+            $host = $server['SERVER_NAME'] . $port;
+        }
 
         return $this->pool->encodingService->encodeString($protocol . '://' . $host . $server['REQUEST_URI']);
     }

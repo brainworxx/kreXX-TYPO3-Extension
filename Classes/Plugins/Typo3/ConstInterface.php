@@ -44,84 +44,92 @@ interface ConstInterface
      *
      * @var string
      */
-    public const EXT_KEY = 'includekrexx';
+    const EXT_KEY = 'includekrexx';
 
     /**
      * @var string
      */
-    public const TYPO3_CONF_VARS = 'TYPO3_CONF_VARS';
+    const TYPO3_CONF_VARS = 'TYPO3_CONF_VARS';
 
     /**
      * @var string
      */
-    public const EXTCONF = 'EXTCONF';
+    const EXTCONF = 'EXTCONF';
 
     /**
      * @var string
      */
-    public const WRITER_CONFIGURATION = 'writerConfiguration';
+    const WRITER_CONFIGURATION = 'writerConfiguration';
 
     /**
      * @var string
      */
-    public const LOG = 'LOG';
+    const LOG = 'LOG';
 
     /**
      * @var string
      */
-    public const ADMIN_PANEL = 'adminpanel';
+    const ADMIN_PANEL = 'adminpanel';
 
     /**
      * @var string
      */
-    public const MODULES = 'modules';
+    const MODULES = 'modules';
 
     /**
      * @var string
      */
-    public const DEBUG = 'debug';
+    const DEBUG = 'debug';
 
     /**
      * @var string
      */
-    public const SUBMODULES = 'submodules';
+    const SUBMODULES = 'submodules';
 
     /**
      * @var string
      */
-    public const SYS = 'SYS';
+    const SYS = 'SYS';
 
     /**
      * @var string
      */
-    public const FLUID = 'fluid';
+    const FLUID = 'fluid';
 
     /**
      * @var string
      */
-    public const FLUID_NAMESPACE = 'namespaces';
+    const FLUID_NAMESPACE = 'namespaces';
 
     /**
      * @var string
      */
-    public const KREXX = 'krexx';
+    const KREXX = 'krexx';
+
+    /**
+     * @var string
+     *
+     * @deprecated
+     *   Since 4.1.2. Will be removed.
+     */
+    const TYPO3_TEMP = 'typo3temp';
 
     /**
      * @var string
      */
-    public const TX_INCLUDEKREXX = 'tx_includekrexx';
+    const TX_INCLUDEKREXX = 'tx_includekrexx';
 
     /**
      * The activation setting name of our TYPO3 file writer.
      *
      * @var string
      */
-    public const ACTIVATE_T3_FILE_WRITER = 'activateT3FileWriter';
+    const ACTIVATE_T3_FILE_WRITER = 'activateT3FileWriter';
 
     /**
      * The configuration name of our TYPO3 file writer.
      *
      * @var string
      */
-    public const LOG_LEVEL_T3_FILE_WRITER = 'loglevelT3FileWriter';
+    const LOG_LEVEL_T3_FILE_WRITER = 'loglevelT3FileWriter';
 }

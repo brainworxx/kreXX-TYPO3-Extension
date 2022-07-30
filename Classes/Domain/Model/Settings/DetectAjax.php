@@ -52,7 +52,7 @@ trait DetectAjax
     /**
      * @param string $detectAjax
      */
-    public function setDetectAjax(string $detectAjax): void
+    public function setDetectAjax(string $detectAjax)
     {
         $this->detectAjax = $detectAjax;
     }
@@ -60,7 +60,7 @@ trait DetectAjax
     /**
      * @param string $formdetectAjax
      */
-    public function setFormdetectAjax(string $formdetectAjax): void
+    public function setFormdetectAjax(string $formdetectAjax)
     {
         $this->formdetectAjax = $formdetectAjax;
     }

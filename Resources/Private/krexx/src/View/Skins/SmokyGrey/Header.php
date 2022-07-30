@@ -48,10 +48,7 @@ trait Header
     private $markerHeader = [
         '{kdebug-classes}',
         '{kconfiguration-classes}',
-        '{plugins}',
-        '{debugHeadline}',
-        '{configHeadline}',
-        '{pluginsHeadline}'
+        '{plugins}'
     ];
 
     /**
@@ -62,7 +59,7 @@ trait Header
         // Doing special stuff for smokygrey:
         // We hide the debug-tab when we are displaying the config-only and switch
         // to the config as the current payload.
-        if ($headline === $this->pool->messages->getHelp('headlineCookieConf')) {
+        if ($headline === static::HEADLINE_COOKIE_CONF) {
             $debugClass = static::STYLE_HIDDEN;
             $configClass = static::STYLE_ACTIVE;
         } else {
@@ -70,16 +67,12 @@ trait Header
             $configClass = '';
         }
 
-        $messages = $this->pool->messages;
         return str_replace(
             $this->markerHeader,
             [
                 $debugClass,
                 $configClass,
                 $this->renderPluginList(),
-                $messages->getHelp('debugHeadline'),
-                $messages->getHelp('configHeadline'),
-                $messages->getHelp('pluginsHeadline')
             ],
             parent::renderHeader($headline, $cssJs)
         );

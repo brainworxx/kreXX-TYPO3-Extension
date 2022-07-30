@@ -47,21 +47,21 @@ interface BacktraceConstInterface
      *
      * @var string
      */
-    public const TRACE_FILE = 'file';
+    const TRACE_FILE = 'file';
 
     /**
      * The line number from the call.
      *
      * @var string
      */
-    public const TRACE_LINE = 'line';
+    const TRACE_LINE = 'line';
 
     /**
      * Variable name of the kreXX call.
      *
      * @var string
      */
-    public const TRACE_VARNAME = 'varname';
+    const TRACE_VARNAME = 'varname';
 
     /**
      * When analysing an exception, the classname of the exception.
@@ -69,21 +69,21 @@ interface BacktraceConstInterface
      *
      * @var string
      */
-    public const TRACE_TYPE = 'type';
+    const TRACE_TYPE = 'type';
 
     /**
      * Function name that was called during single backtrace step.
      *
      * @var string
      */
-    public const TRACE_FUNCTION = 'function';
+    const TRACE_FUNCTION = 'function';
 
     /**
      * Name of the class from a single backtrace step.
      *
      * @var string
      */
-    public const TRACE_CLASS = 'class';
+    const TRACE_CLASS = 'class';
 
     /**
      * Instance in a backtrace step, where the object is stored from where the
@@ -91,34 +91,34 @@ interface BacktraceConstInterface
      *
      * @var string
      */
-    public const TRACE_OBJECT = 'object';
+    const TRACE_OBJECT = 'object';
 
     /**
      * The arguments from the last function call.
      *
      * @var string
      */
-    public const TRACE_ARGS = 'args';
+    const TRACE_ARGS = 'args';
 
     /**
      * Not an array key. Literal for the frontend, saying that this is a backtrace.
      *
      * @var string
      */
-    public const TRACE_BACKTRACE = 'backtrace';
+    const TRACE_BACKTRACE = 'backtrace';
 
     /**
      * The system date, when this backtrace was made.
      * @var string
      */
-    public const TRACE_DATE = 'date';
+    const TRACE_DATE = 'date';
 
     /**
      * The url that was called to generate this backtrace.
      *
      * @var string
      */
-    public const TRACE_URL = 'url';
+    const TRACE_URL = 'url';
 
     /**
      * The 'level' of the backtrace:
@@ -129,5 +129,5 @@ interface BacktraceConstInterface
      *
      * @var string
      */
-    public const TRACE_LEVEL = 'level';
+    const TRACE_LEVEL = 'level';
 }

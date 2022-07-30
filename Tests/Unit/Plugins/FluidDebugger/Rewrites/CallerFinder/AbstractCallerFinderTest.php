@@ -91,7 +91,7 @@ class AbstractCallerFinderTest extends AbstractTest
         $newFluid = new Fluid(Krexx::$pool);
 
         // Check the injections from above.
-        $this->assertEquals('fluidvar', $this->retrieveValueByReflection('varname', $newFluid));
+        $this->assertEquals(AbstractFluid::FLUID_VARIABLE, $this->retrieveValueByReflection('varname', $newFluid));
         $this->assertSame($viewMock, $this->retrieveValueByReflection('view', $newFluid));
         $this->assertSame($reflectionMock, $this->retrieveValueByReflection(static::VIEW_REFLECTION, $newFluid));
         $this->assertSame($contextMock, $this->retrieveValueByReflection(static::RENDERING_CONTEXT, $newFluid));

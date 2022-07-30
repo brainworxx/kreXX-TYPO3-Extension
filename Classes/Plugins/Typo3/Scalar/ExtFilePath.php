@@ -63,7 +63,7 @@ class ExtFilePath extends FilePath
         }
 
         // Retrieve the EXT path from the framework.
-        set_error_handler(function (): void {
+        set_error_handler(function () {
             // Do nothing.
         });
         try {
@@ -77,15 +77,7 @@ class ExtFilePath extends FilePath
         restore_error_handler();
 
         // Preserve the result from the getFileAbsFileName.
-        $model->addToJson($this->pool->messages->getHelp('TYPO3ResPath'), $string);
-
-        if (!file_exists($string)) {
-            $model->addToJson(
-                $this->pool->messages->getHelp('TYPO3ResPathError'),
-                $this->pool->messages->getHelp('TYPO3ResPathDoesNotExist')
-            );
-        }
-
+        $model->addToJson('Resolved EXT path', $string);
         return parent::canHandle($string, $model);
     }
 }

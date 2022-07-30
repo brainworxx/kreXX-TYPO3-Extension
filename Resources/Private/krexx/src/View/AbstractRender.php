@@ -43,22 +43,8 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Protected helper methods for the real render class.
  */
-abstract class AbstractRender implements RenderInterface
+abstract class AbstractRender
 {
-    /**
-     * Css class name.
-     *
-     * @var string
-     */
-    protected const STYLE_HIDDEN = 'khidden';
-
-    /**
-     * Css class name.
-     *
-     * @var string
-     */
-    protected const STYLE_ACTIVE = 'kactive';
-
     /**
      * Here we store all relevant data.
      *
@@ -105,21 +91,22 @@ abstract class AbstractRender implements RenderInterface
      */
     protected function getTemplateFileContent(string $what): string
     {
-        if (isset(static::$fileCache[$what])) {
+        if (isset(static::$fileCache[$what]) === true) {
             return static::$fileCache[$what];
         }
 
-        return static::$fileCache[$what] = preg_replace(
+        static::$fileCache[$what] = preg_replace(
             '/\s+/',
             ' ',
             $this->pool->fileService->getFileContents($this->skinPath . $what . '.html')
         );
+        return static::$fileCache[$what];
     }
 
     /**
      * Some special escaping for the json output
      *
-     * @param string[] $array
+     * @param array $array
      *   The string we want to special-escape
      * @return string
      *   The json from the array.
@@ -127,7 +114,7 @@ abstract class AbstractRender implements RenderInterface
     protected function encodeJson(array $array): string
     {
         // No data, no json!
-        if (empty($array)) {
+        if (empty($array) === true) {
             return '';
         }
 
@@ -167,6 +154,10 @@ abstract class AbstractRender implements RenderInterface
      */
     protected function generateDataAttribute(string $name, string $data): string
     {
+        if (empty($data) === true) {
+            return '';
+        }
+
         return ' data-' . $name . '="' . str_replace('"', '&#34;', $data) . '" ';
     }
 
@@ -181,7 +172,7 @@ abstract class AbstractRender implements RenderInterface
      */
     protected function retrieveTypeClasses(Model $model): string
     {
-        $typeClasses = $model->isExpandable() ? 'kexpand ' : ' ';
+        $typeClasses = $model->isExpandable() === true ? 'kexpand ' : ' ';
 
         foreach (explode(' ', $model->getType()) as $typeClass) {
             $typeClasses .= 'k' . $typeClass . ' ';

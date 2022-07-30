@@ -48,9 +48,114 @@ interface ConnectorsConstInterface
      * or
      * connectorRight = $params
      *
+     * @var int
+     *
+     * @deprecated
+     *   Since 4.0.0. Use the prefixed constants.
+     */
+    const NOTHING = 0;
+
+    /**
+     * connectorLeft = '->'
+     * connectorRight = '()'
+     * or
+     * connectorRight = '(' . $params . ')'
+     *
+     * @var int
+     *
+     * @deprecated
+     *   Since 4.0.0. Use the prefixed constants.
+     */
+    const METHOD = 1;
+
+    /**
+     * connectorLeft = '::'
+     * connectorRight = '()'
+     * or
+     * connectorRight = '(' . $params . ')'
+     *
+     * @var int
+     *
+     * @deprecated
+     *   Since 4.0.0. Use the prefixed constants.
+     */
+    const STATIC_METHOD = 2;
+
+    /**
+     * connectorLeft = '['
+     * connectorRight = ']'
+     *
+     * @var int
+     *
+     * @deprecated
+     *   Since 4.0.0. Use the prefixed constants.
+     */
+    const NORMAL_ARRAY = 3;
+
+    /**
+     * connectorLeft = '[\''
+     * connectorRight = '\']'
+     *
+     * @var int
+     *
+     * @deprecated
+     *   Since 4.0.0. Use the prefixed constants.
+     */
+    const ASSOCIATIVE_ARRAY = 4;
+
+    /**
+     * connectorLeft = '::'
+     * connectorRight = ''
+     *
+     * @var int
+     *
+     * @deprecated
+     *   Since 4.0.0. Use the prefixed constants.
+     */
+    const CONSTANT = 5;
+
+    /**
+     * connectorLeft = '->'
+     * connectorRight = ''
+     *
+     * @var int
+     *
+     * @deprecated
+     *   Since 4.0.0. Use the prefixed constants.
+     */
+    const NORMAL_PROPERTY = 6;
+
+    /**
+     * connectorLeft = '::'
+     * connectorRight = ''
+     *
+     * @var int
+     *
+     * @deprecated
+     *   Since 4.0.0. Use the prefixed constants.
+     */
+    const STATIC_PROPERTY = 7;
+
+    /**
+     * connectorLeft = '->{\''
+     * connectorRight = '\'}'
+     *
+     * @var int
+     *
+     * @deprecated
+     *   Since 4.0.0. Use the prefixed constants.
+     */
+    const SPECIAL_CHARS_PROP = 8;
+
+    /**
+     * connectorLeft = ''
+     * connectorRight = ''
+     * or
+     * connectorRight = $params
+     *
      * @var string
      */
-    public const CONNECTOR_NOTHING = 'NOTHING';
+    const CONNECTOR_NOTHING = 'NOTHING';
 
     /**
      * connectorLeft = '->'
@@ -60,7 +165,7 @@ interface ConnectorsConstInterface
      *
      * @var string
      */
-    public const CONNECTOR_METHOD = 'METHOD';
+    const CONNECTOR_METHOD = 'METHOD';
 
     /**
      * connectorLeft = '::'
@@ -70,7 +175,7 @@ interface ConnectorsConstInterface
      *
      * @var string
      */
-    public const CONNECTOR_STATIC_METHOD = 'STATIC_METHOD';
+    const CONNECTOR_STATIC_METHOD = 'STATIC_METHOD';
 
     /**
      * connectorLeft = '['
@@ -78,7 +183,7 @@ interface ConnectorsConstInterface
      *
      * @var string
      */
-    public const CONNECTOR_NORMAL_ARRAY = 'NORMAL_ARRAY';
+    const CONNECTOR_NORMAL_ARRAY = 'NORMAL_ARRAY';
 
     /**
      * connectorLeft = '[\''
@@ -86,7 +191,7 @@ interface ConnectorsConstInterface
      *
      * @var string
      */
-    public const CONNECTOR_ASSOCIATIVE_ARRAY = 'ASSOCIATIVE_ARRAY';
+    const CONNECTOR_ASSOCIATIVE_ARRAY = 'ASSOCIATIVE_ARRAY';
 
     /**
      * connectorLeft = '::'
@@ -94,7 +199,7 @@ interface ConnectorsConstInterface
      *
      * @var string
      */
-    public const CONNECTOR_CONSTANT = 'CONSTANT';
+    const CONNECTOR_CONSTANT = 'CONSTANT';
 
     /**
      * connectorLeft = '->'
@@ -102,7 +207,7 @@ interface ConnectorsConstInterface
      *
      * @var string
      */
-    public const CONNECTOR_NORMAL_PROPERTY = 'NORMAL_PROPERTY';
+    const CONNECTOR_NORMAL_PROPERTY = 'NORMAL_PROPERTY';
 
     /**
      * connectorLeft = '::'
@@ -110,7 +215,7 @@ interface ConnectorsConstInterface
      *
      * @var string
      */
-    public const CONNECTOR_STATIC_PROPERTY = 'STATIC_PROPERTY';
+    const CONNECTOR_STATIC_PROPERTY = 'STATIC_PROPERTY';
 
     /**
      * connectorLeft = '->{\''
@@ -118,5 +223,5 @@ interface ConnectorsConstInterface
      *
      * @var string
      */
-    public const CONNECTOR_SPECIAL_CHARS_PROP = 'SPECIAL_CHARS_PROP';
+    const CONNECTOR_SPECIAL_CHARS_PROP = 'SPECIAL_CHARS_PROP';
 }

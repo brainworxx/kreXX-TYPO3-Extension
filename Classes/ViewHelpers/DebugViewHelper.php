@@ -62,27 +62,12 @@ use ReflectionClass;
  *   Use this part if you don't want fluid to escape your string or if you are
  *   stitching together an array.
  */
-class DebugViewHelper extends CompatibilityViewHelper
+class DebugViewHelper extends ComptibilityViewHelper
 {
     /**
      * @var string
      */
-    protected const ARGUMENT_VALUE = 'value';
-
-    /**
-     * @var string
-     */
-    public const REGISTRY_VIEW = 'view';
-
-    /**
-     * @var string
-     */
-    public const REGISTRY_VIEW_REFLECTION = 'viewReflection';
-
-    /**
-     * @var string
-     */
-    public const REGISTRY_RENDERING_CONTEXT = 'renderingContext';
+    const ARGUMENT_VALUE = 'value';
 
     /**
      * No escaping for the rendered children, we want then as they are.
@@ -110,7 +95,7 @@ class DebugViewHelper extends CompatibilityViewHelper
      *
      * @throws \TYPO3\CMS\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments(): void
+    public function initializeArguments()
     {
         $this->registerArgument(static::ARGUMENT_VALUE, 'mixed', 'The variable we want to analyse.', false);
     }
@@ -128,9 +113,9 @@ class DebugViewHelper extends CompatibilityViewHelper
         Pool::createPool();
         $view = $this->viewHelperVariableContainer->getView();
         $pool = Krexx::$pool;
-        $pool->registry->set(static::REGISTRY_VIEW, $view);
-        $pool->registry->set(static::REGISTRY_VIEW_REFLECTION, new ReflectionClass($view));
-        $pool->registry->set(static::REGISTRY_RENDERING_CONTEXT, $this->renderingContext);
+        $pool->registry->set('view', $view);
+        $pool->registry->set('viewReflection', new ReflectionClass($view));
+        $pool->registry->set('renderingContext', $this->renderingContext);
         Registration::activatePlugin(
             FluidConfiguration::class
         );
@@ -140,9 +125,9 @@ class DebugViewHelper extends CompatibilityViewHelper
         Registration::deactivatePlugin(
             FluidConfiguration::class
         );
-        $pool->registry->set(static::REGISTRY_VIEW, null);
-        $pool->registry->set(static::REGISTRY_VIEW_REFLECTION, null);
-        $pool->registry->set(static::REGISTRY_RENDERING_CONTEXT, null);
+        $pool->registry->set('view', null);
+        $pool->registry->set('viewReflection', null);
+        $pool->registry->set('renderingContext', null);
 
         return '';
     }
@@ -150,7 +135,7 @@ class DebugViewHelper extends CompatibilityViewHelper
     /**
      * Analyse the stuff from the template.
      */
-    protected function analysis(): void
+    protected function analysis()
     {
         $type = $this->analysisType;
         $found  = false;

@@ -54,7 +54,7 @@ class Cookie
     /**
      * Here we cache our cookie settings.
      *
-     * @var string[]
+     * @var array
      */
     public $settings = [];
 
@@ -68,10 +68,10 @@ class Cookie
         $this->validation = $pool->config->validation;
         $cookies = $pool->getGlobals('_COOKIE');
 
-        if (isset($cookies['KrexxDebugSettings'])) {
+        if (isset($cookies['KrexxDebugSettings']) === true) {
             // We have local settings.
             $settings = json_decode($cookies['KrexxDebugSettings'], true);
-            if (is_array($settings)) {
+            if (is_array($settings) === true) {
                 $this->settings = $settings;
             }
         }
@@ -88,12 +88,12 @@ class Cookie
      * @return string|null
      *   The value.
      */
-    public function getConfigFromCookies(string $group, string $name): ?string
+    public function getConfigFromCookies(string $group, string $name)
     {
         // Do we have a value in the cookies?
         if (
-            isset($this->settings[$name]) &&
-            $this->validation->evaluateSetting($group, $name, $this->settings[$name])
+            isset($this->settings[$name]) === true &&
+            $this->validation->evaluateSetting($group, $name, $this->settings[$name]) === true
         ) {
             // We escape them, just in case.
             return htmlspecialchars($this->settings[$name]);

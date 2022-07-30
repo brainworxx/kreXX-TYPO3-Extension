@@ -87,31 +87,15 @@ class ThroughMetaTest extends AbstractTest
     }
 
     /**
-     * Test the initializing of the workflow.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::__construct
-     */
-    public function testConstruct()
-    {
-        $keysWithExtra = $this->retrieveValueByReflection('keysWithExtra', $this->throughMeta);
-        $stuffToProcess = $this->retrieveValueByReflection('stuffToProcess', $this->throughMeta);
-
-        // We simply assuethat there is some kind of workfow in there.
-        $this->assertNotEmpty($keysWithExtra);
-        $this->assertNotEmpty($stuffToProcess);
-    }
-
-    /**
      * Test with a comment string.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeComment()
     {
         $this->handleNoneReflections(
-            'Comment',
+            $this->throughMeta::META_COMMENT,
             'Look at me, I\'m a comment!'
         );
     }
@@ -121,14 +105,13 @@ class ThroughMetaTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testcallMeDecodedJson()
     {
         $this->mockEventService([$this->startEvent, $this->throughMeta]);
         $fixture = [
             $this->throughMeta::PARAM_DATA => [
-                'Decoded json' => json_decode('{"Friday": "the 13\'th"}')
+                $this->throughMeta::META_DECODED_JSON => json_decode('{"Friday": "the 13\'th"}')
             ],
             $this->throughMeta::PARAM_CODE_GEN_TYPE => Codegen::CODEGEN_TYPE_JSON_DECODE
         ];
@@ -146,12 +129,11 @@ class ThroughMetaTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeDeclaredIn()
     {
         $this->handleNoneReflections(
-            'Declared in',
+            $this->throughMeta::META_DECLARED_IN,
             'Some file with a line number.'
         );
     }
@@ -164,7 +146,6 @@ class ThroughMetaTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeSource()
     {
@@ -174,7 +155,7 @@ class ThroughMetaTest extends AbstractTest
         $source .= 'die();';
 
         $this->handleNoneReflections(
-            'Source',
+            $this->throughMeta::META_SOURCE,
             $source
         );
     }
@@ -219,7 +200,7 @@ class ThroughMetaTest extends AbstractTest
      */
     public function testCallMeInterfaces()
     {
-        $this->handleReflections('Interfaces');
+        $this->handleReflections($this->throughMeta::META_INTERFACES);
     }
 
     /**
@@ -231,7 +212,7 @@ class ThroughMetaTest extends AbstractTest
      */
     public function testCallMeTraits()
     {
-        $this->handleReflections('Traits');
+        $this->handleReflections($this->throughMeta::META_TRAITS);
     }
 
     /**
@@ -241,7 +222,7 @@ class ThroughMetaTest extends AbstractTest
      */
     public function testCallMeInherited()
     {
-        $this->handleReflections('Inherited class');
+        $this->handleReflections($this->throughMeta::META_INHERITED_CLASS);
     }
 
     /**

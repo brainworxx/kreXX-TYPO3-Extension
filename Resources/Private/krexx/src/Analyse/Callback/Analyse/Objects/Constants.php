@@ -49,6 +49,7 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class Constants extends AbstractObjectAnalysis implements CodegenConstInterface
 {
+
     /**
      * Dumps the constants of a class,
      *
@@ -67,7 +68,7 @@ class Constants extends AbstractObjectAnalysis implements CodegenConstInterface
         // inside the higher class structure, because these parts do not inherit
         // them.
         $listOfConstants = $ref->getConstants();
-        if (empty($listOfConstants)) {
+        if (empty($listOfConstants) === true) {
             // Nothing to see here, return an empty string.
             return '';
         }

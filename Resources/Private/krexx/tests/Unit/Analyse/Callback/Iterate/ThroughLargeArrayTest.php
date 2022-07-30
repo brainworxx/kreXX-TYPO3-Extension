@@ -154,6 +154,10 @@ class ThroughLargeArrayTest extends AbstractTest
             Codegen::CODEGEN_TYPE_PUBLIC,
             $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getCodeGenType()
         );
+        $this->assertEquals(
+            ProcessConstInterface::TYPE_STRING,
+            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getKeyType()
+        );
 
         $this->alwaysRun($fixture);
     }

@@ -66,6 +66,7 @@ class ThroughLargeArray extends AbstractCallback implements
     ConnectorsConstInterface,
     ProcessConstInterface
 {
+
     /**
      * Renders the expendable around the array analysis.
      *
@@ -80,7 +81,7 @@ class ThroughLargeArray extends AbstractCallback implements
         $output .= $this->pool->render->renderSingeChildHr();
 
         // Iterate through.
-        foreach ($this->parameters[static::PARAM_DATA] as $key => $value) {
+        foreach ($this->parameters[static::PARAM_DATA] as $key => &$value) {
             // We will not output our recursion marker.
             // Meh, the only reason for the recursion marker
             // in arrays is because of the $GLOBAL array, which
@@ -91,7 +92,7 @@ class ThroughLargeArray extends AbstractCallback implements
 
             /** @var Model $model */
             $model = $this->pool->createClass(Model::class)->setCodeGenType(
-                $this->parameters[static::PARAM_MULTILINE] ?
+                $this->parameters[static::PARAM_MULTILINE] === true ?
                     static::CODEGEN_TYPE_ITERATOR_TO_ARRAY : static::CODEGEN_TYPE_PUBLIC
             );
 
@@ -113,11 +114,12 @@ class ThroughLargeArray extends AbstractCallback implements
      * @param Model $model
      *   The so far prepared model we are preparing further.
      */
-    protected function handleKey($key, Model $model): void
+    protected function handleKey($key, Model $model)
     {
-        if (is_string($key)) {
+        if (is_string($key) === true) {
             $model->setName($this->pool->encodingService->encodeString($key))
-                ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);
+                ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY)
+                ->setKeyType(static::TYPE_STRING);
 
             return;
         }
@@ -135,9 +137,9 @@ class ThroughLargeArray extends AbstractCallback implements
      * @return string
      *   The generated markup
      */
-    protected function handleValue($value, Model $model): string
+    protected function handleValue(&$value, Model $model): string
     {
-        if (is_object($value)) {
+        if (is_object($value) === true) {
             // We will not go too deep here, and say only what it is.
             $model->setType(static::TYPE_SIMPLE_CLASS)
                 ->setNormal(get_class($value));
@@ -145,7 +147,7 @@ class ThroughLargeArray extends AbstractCallback implements
             return $this->pool->render->renderExpandableChild($model);
         }
 
-        if (is_array($value)) {
+        if (is_array($value) === true) {
             // Adding another array to the output may be as bad as a
             // complete object analysis.
             $model->setType(static::TYPE_SIMPLE_ARRAY)

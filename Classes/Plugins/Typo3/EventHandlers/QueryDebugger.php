@@ -74,7 +74,7 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
     /**
      * Getting the SQL out of a query builder and adding it to the output.
      *
-     * @param AbstractCallback|null $callback
+     * @param AbstractCallback $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far.
@@ -84,7 +84,7 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
      */
     public function handle(AbstractCallback $callback = null, Model $model = null): string
     {
-        if (empty($sql = $this->retrieveSql($callback->getParameters()[static::PARAM_DATA]))) {
+        if (empty($sql = $this->retrieveSql($callback->getParameters()[static::PARAM_DATA]))  === true) {
             // Wrong object type, or problems with the SQL retrieval.
             return '';
         }
@@ -108,11 +108,11 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
         }
 
         // Disable source generation
-        $this->pool->codegenHandler->setCodegenAllowed(false);
+        $this->pool->codegenHandler->setAllowCodegen(false);
         $result = $this->pool->render->renderExpandableChild($model);
 
         // Enable source generation.
-        $this->pool->codegenHandler->setCodegenAllowed(true);
+        $this->pool->codegenHandler->setAllowCodegen(true);
 
         return $result;
     }
@@ -153,7 +153,7 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
             $result = $sql;
         } catch (Throwable $e) {
             // Tell the dev, that there is an error in the sql.
-            return $this->pool->messages->getHelp('TYPO3Error') . $e->getMessage();
+            return 'Error: ' . $e->getMessage();
         }
 
         return $result;

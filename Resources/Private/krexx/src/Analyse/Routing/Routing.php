@@ -101,7 +101,7 @@ class Routing extends AbstractRouting
     public function analysisHub(Model $model): string
     {
         // Check memory and runtime.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
             return '';
         }
 

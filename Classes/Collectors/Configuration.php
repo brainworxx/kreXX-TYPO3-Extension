@@ -40,8 +40,8 @@ namespace Brainworxx\Includekrexx\Collectors;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\From\File;
-use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
+use TYPO3\CMS\Core\Log\LogLevel;
 
 /**
  * Collect the current configuration for the backend module.
@@ -53,9 +53,9 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
      *
      * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView $view
      */
-    public function assignData(AbstractTemplateView $view): void
+    public function assignData(AbstractTemplateView $view)
     {
-        if (!$this->hasAccess) {
+        if ($this->hasAccess === false) {
             // No access.
             return;
         }
@@ -67,36 +67,35 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
     /**
      * Retrieve the values for the drop-downs.
      *
-     * @return string[][]
+     * @return array
      *   The values for the drop-downs.
      */
     protected function retrieveDropDowns(): array
     {
         // Adding the dropdown values.
-        $dropdown = ['skins' => []];
+        $dropdown = [];
+        $dropdown['skins'] = [];
         foreach ($this->pool->config->getSkinList() as $skin) {
             $dropdown['skins'][$skin] = $skin;
         }
         $dropdown[static::SETTING_DESTINATION] = [
-            static::VALUE_BROWSER => static::translate(static::VALUE_BROWSER),
-            static::VALUE_FILE => static::translate(static::VALUE_FILE),
-            static::VALUE_BROWSER_IMMEDIATELY => static::translate(static::VALUE_BROWSER_IMMEDIATELY),
+            static::VALUE_BROWSER => static::translate(static::VALUE_BROWSER, static::EXT_KEY),
+            static::VALUE_FILE => static::translate(static::VALUE_FILE, static::EXT_KEY),
         ];
         $dropdown['bool'] = [
-            static::VALUE_TRUE => static::translate(static::VALUE_TRUE),
-            static::VALUE_FALSE => static::translate(static::VALUE_FALSE),
+            static::VALUE_TRUE => static::translate(static::VALUE_TRUE, static::EXT_KEY),
+            static::VALUE_FALSE => static::translate(static::VALUE_FALSE, static::EXT_KEY),
         ];
         $dropdown['loglevel'] = [
-            LogLevel::DEBUG => static::translate('loglevel.debug'),
-            LogLevel::INFO => static::translate('loglevel.info'),
-            LogLevel::NOTICE => static::translate('loglevel.notice'),
-            LogLevel::WARNING => static::translate('loglevel.warning'),
-            LogLevel::ERROR => static::translate('loglevel.error'),
-            LogLevel::CRITICAL => static::translate('loglevel.critical'),
-            LogLevel::ALERT => static::translate('loglevel.alert'),
-            LogLevel::EMERGENCY => static::translate('loglevel.emergency'),
+            LogLevel::DEBUG => static::translate('loglevel.debug', static::EXT_KEY),
+            LogLevel::INFO => static::translate('loglevel.info', static::EXT_KEY),
+            LogLevel::NOTICE => static::translate('loglevel.notice', static::EXT_KEY),
+            LogLevel::WARNING => static::translate('loglevel.warning', static::EXT_KEY),
+            LogLevel::ERROR => static::translate('loglevel.error', static::EXT_KEY),
+            LogLevel::CRITICAL => static::translate('loglevel.critical', static::EXT_KEY),
+            LogLevel::ALERT => static::translate('loglevel.alert', static::EXT_KEY),
+            LogLevel::EMERGENCY => static::translate('loglevel.emergency', static::EXT_KEY),
         ];
-        $dropdown['languages'] = $this->pool->config->getLanguageList();
 
         return $dropdown;
     }
@@ -104,23 +103,16 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
     /**
      * Retrieve the ini configuration, like the method name implies.
      *
-     * @return string[][]
+     * @return array
      *   The configuration array for the view
      */
     protected function retrieveConfiguration(): array
     {
-        $pathParts = pathinfo($this->pool->config->getPathToConfigFile());
-        $filePath = $pathParts[static::PATHINFO_DIRNAME] . DIRECTORY_SEPARATOR .
-            $pathParts[static::PATHINFO_FILENAME] . '.';
-
         /** @var File $iniReader */
-        $iniReader = $this->pool->createClass(File::class)->loadFile($filePath);
+        $iniReader = $this->pool->createClass(File::class)
+            ->loadFile($this->pool->config->getPathToConfigFile());
 
         $config = [];
-        /**
-         * @var string $settingsName
-         * @var string[] $fallback
-         */
         foreach ($this->pool->config->feConfigFallback as $settingsName => $fallback) {
             // Stitch together the settings in the template.
             $group = $fallback[static::SECTION];
@@ -141,14 +133,14 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
      * If not, we need to load the factory settings. We also need to set the
      * info, if we are using the factory settings, at all.
      *
-     * @param string[][] $config
+     * @param array $config
      *   The configuration array, so far.
      * @param string $settingsName
      *   The name of the setting we are processing right now.
-     * @param string[] $fallback
+     * @param array $fallback
      *   The fallback values.
      */
-    protected function applyFallbackToConfig(array &$config, string $settingsName, array $fallback): void
+    protected function applyFallbackToConfig(array &$config, string $settingsName, array $fallback)
     {
         // Check if we have a value. If not, we need to load the factory
         // settings. We also need to set the info, if we are using the
@@ -162,11 +154,11 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
         // the settings.
         $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = true;
 
-        $config[$settingsName][static::SETTINGS_VALUE] = $this->userUc[$settingsName] ??
-            $fallback[static::SETTINGS_VALUE];
+        $config[$settingsName][static::SETTINGS_VALUE] = isset($this->userUc[$settingsName]) === true ?
+            $this->userUc[$settingsName] : $fallback[static::SETTINGS_VALUE];
 
         // Assign the mode-class.
-        if (in_array($settingsName, $this->expertOnly, true)) {
+        if (in_array($settingsName, $this->expertOnly) === true) {
             $config[$settingsName][static::SETTINGS_MODE] = 'expert';
         }
     }

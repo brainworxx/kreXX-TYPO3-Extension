@@ -51,7 +51,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Public functions, allowing access to the kreXX debug features.
  */
-class Krexx
+class Krexx implements ConfigConstInterface
 {
     use LoggingTrait;
 
@@ -71,7 +71,7 @@ class Krexx
      *   Defines a "moment" during a benchmark test.
      *   The string should be something meaningful, like "Model invoice db call".
      */
-    public static function timerMoment(string $string): void
+    public static function timerMoment(string $string)
     {
         Pool::createPool();
 
@@ -99,13 +99,13 @@ class Krexx
      *
      * @api
      */
-    public static function timerEnd(): void
+    public static function timerEnd()
     {
         Pool::createPool();
 
         // Disabled ?
         if (
-            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -137,7 +137,7 @@ class Krexx
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -165,13 +165,13 @@ class Krexx
      *
      * @api
      */
-    public static function backtrace(array $backtrace = null): void
+    public static function backtrace(array $backtrace = null)
     {
         Pool::createPool();
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -191,7 +191,7 @@ class Krexx
      *
      * @api
      */
-    public static function disable(): void
+    public static function disable()
     {
         Pool::createPool();
 
@@ -206,14 +206,14 @@ class Krexx
      *
      * @api
      */
-    public static function editSettings(): void
+    public static function editSettings()
     {
         Pool::createPool();
 
         // Disabled?
         // We are ignoring local settings here.
         if (
-            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
@@ -228,13 +228,13 @@ class Krexx
      *
      * @api
      */
-    public static function registerExceptionHandler(): void
+    public static function registerExceptionHandler()
     {
         Pool::createPool();
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
@@ -249,13 +249,13 @@ class Krexx
      *
      * @api
      */
-    public static function unregisterExceptionHandler(): void
+    public static function unregisterExceptionHandler()
     {
         Pool::createPool();
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
@@ -291,12 +291,12 @@ class Krexx
      * When there are classes found inside the backtrace,
      * they will be analysed.
      *
-     * @param array|null $backtrace
+     * @param array $backtrace
      *   an already existing backtrace
      *
      * @api
      */
-    public static function logBacktrace(array $backtrace = null): void
+    public static function logBacktrace(array $backtrace = null)
     {
         static::startForcedLog();
         static::backtrace($backtrace);
@@ -308,7 +308,7 @@ class Krexx
      *
      * @api
      */
-    public static function logTimerEnd(): void
+    public static function logTimerEnd()
     {
         static::startForcedLog();
         static::timerEnd();

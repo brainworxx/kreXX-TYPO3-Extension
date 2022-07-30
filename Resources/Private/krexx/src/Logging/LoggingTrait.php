@@ -39,7 +39,6 @@ namespace Brainworxx\Krexx\Logging;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
-use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -50,31 +49,31 @@ trait LoggingTrait
      /**
      * Configure everything to start the forced logging.
      */
-    protected static function startForcedLog(): void
+    protected static function startForcedLog()
     {
         Pool::createPool();
 
         // Output destination: file
         Krexx::$pool->config
-            ->settings[ConfigConstInterface::SETTING_DESTINATION]
+            ->settings[static::SETTING_DESTINATION]
             ->setSource('forced logging')
-            ->setValue(ConfigConstInterface::VALUE_FILE);
+            ->setValue(static::VALUE_FILE);
 
         // Do not care about ajax requests.
         Krexx::$pool->config
-            ->settings[ConfigConstInterface::SETTING_DETECT_AJAX]
+            ->settings[static::SETTING_DETECT_AJAX]
             ->setSource('forced logging')
             ->setValue(false);
 
         // Reload the disabled settings with the new ajax setting.
          Krexx::$pool->config
-            ->loadConfigValue(ConfigConstInterface::SETTING_DISABLED);
+            ->loadConfigValue(static::SETTING_DISABLED);
     }
 
     /**
      * Reset everything after the forced logging.
      */
-    protected static function endForcedLog(): void
+    protected static function endForcedLog()
     {
         // Reset everything afterwards.
         Krexx::$pool->config = Krexx::$pool

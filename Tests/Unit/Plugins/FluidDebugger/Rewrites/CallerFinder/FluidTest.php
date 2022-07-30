@@ -38,7 +38,6 @@ use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
 use TYPO3Fluid\Fluid\Core\Parser\ParsedTemplateInterface;
 
@@ -48,20 +47,11 @@ class FluidTest extends AbstractTest
     const GET_TEMPLATE_PATHS = 'getTemplatePaths';
     const VARMANE = 'varname';
 
-    public function krexxUp()
-    {
-        parent::krexxUp();
-        // Load the fluid language files
-        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
-            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 'fluid.kreXX.ini');
-        Krexx::$pool->messages->readHelpTexts();
-    }
-
     /**
      * Test the template part.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveCallerArrayByRenderType
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getTemplatePath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveVarname
@@ -110,7 +100,7 @@ class FluidTest extends AbstractTest
      * Test the layout part.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveCallerArrayByRenderType
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getLayoutPath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveVarname
@@ -153,7 +143,7 @@ class FluidTest extends AbstractTest
      * Test the partial part.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveCallerArrayByRenderType
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::getPartialPath
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid::resolveTemplateName
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::getType
@@ -197,8 +187,14 @@ class FluidTest extends AbstractTest
         $this->assertEquals('Fluid analysis of fluidvar, array', $result['type']);
         $this->assertNotEmpty($result['date']);
 
+        if (version_compare(Bootstrap::getTypo3Version(), '8.6', '>=')) {
+            $expected = '<f:variable value="{some: &#039;array&#039;}" name="fluidvar" /> {fluidvar}';
+        } else {
+            $expected = '<v:variable.set value="{some: &#039;array&#039;}" name="fluidvar" /> {fluidvar}';
+        }
+
         $this->assertEquals(
-            '<f:variable value="{some: &#039;array&#039;}" name="fluidvar" /> {fluidvar}',
+            $expected,
             Krexx::$pool->codegenHandler->generateWrapperLeft() . $result[static::VARMANE] .
             Krexx::$pool->codegenHandler->generateWrapperRight(),
             'Testing the complicated code generation stuff.'
@@ -208,7 +204,7 @@ class FluidTest extends AbstractTest
      * Test what happens when there is an error.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::findCaller
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolvePath
+     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid::resolveCallerArrayByRenderType
      */
     public function testFindCallerError()
     {

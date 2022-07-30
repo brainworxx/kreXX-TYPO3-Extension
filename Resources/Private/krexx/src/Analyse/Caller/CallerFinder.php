@@ -54,7 +54,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
      *
      * @var string
      */
-    protected const CLASS_PATTERN = Krexx::class;
+    const CLASS_PATTERN = Krexx::class;
 
     /**
      * Pattern used to find the krexx call in the backtrace.
@@ -63,7 +63,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
      *
      * @var string
      */
-    protected const FUNCTION_PATTERN = 'krexx';
+    const FUNCTION_PATTERN = 'krexx';
 
 
     /**
@@ -96,16 +96,15 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
     {
         $backtrace = array_reverse(debug_backtrace(0, 5));
 
-        $caller = [];
         // Going from the first call of the first line up
         // through the first debug call.
         foreach ($backtrace as $caller) {
-            if ($this->identifyCaller($caller)) {
+            if ($this->identifyCaller($caller) === true) {
                 break;
             }
         }
 
-        $varname = empty($headline) ?
+        $varname = empty($headline) === true ?
             $this->getVarName($caller[static::TRACE_FILE], $caller[static::TRACE_LINE]) :
             $headline;
 
@@ -161,7 +160,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
         $varname = static::UNKNOWN_VALUE;
 
         // Retrieve the call from the sourcecode file.
-        if (!$this->pool->fileService->fileIsReadable($file)) {
+        if ($this->pool->fileService->fileIsReadable($file) === false) {
             return $varname;
         }
 
@@ -203,7 +202,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
             // This little baby tries to resolve everything inside the
             // brackets of the kreXX call.
             preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', $command, $name);
-            if (isset($name[1])) {
+            if (isset($name[1]) === true) {
                 return $this->pool
                     ->encodingService
                     ->encodeString($this->cleanupVarName(trim($name[1], " \t\n\r\0\x0B'\"")));
@@ -237,7 +236,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
 
         // Counting all real round brackets, while ignoring the ones inside strings.
         foreach (str_split($name) as $count => $char) {
-            if ($singleQuoteInactive && $doubleQuoteInactive) {
+            if ($singleQuoteInactive === true && $doubleQuoteInactive === true) {
                 if ($char === '(') {
                     --$level;
                 } elseif ($char === ')') {

@@ -39,18 +39,19 @@ namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Deep analysis for json strings.
  */
-class Json extends AbstractScalarAnalysis implements CodegenConstInterface
+class Json extends AbstractScalarAnalysis implements ViewConstInterface
 {
     /**
      * Code generation for this one is the json encoder.
      *
      * @var string
      */
-    protected $codeGenType = self::CODEGEN_TYPE_JSON_DECODE;
+    protected $codeGenType = CodegenConstInterface::CODEGEN_TYPE_JSON_DECODE;
 
     /**
      * What the variable name says.
@@ -89,7 +90,7 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
     {
         // Get a fist impression.
         $first = substr($string, 0, 1);
-        if (!($first === '{' xor $first === '[')) {
+        if (($first === '{' xor $first === '[') === false) {
             return false;
         }
 
@@ -97,7 +98,6 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
         $this->decodedJson = json_decode($string);
         if (json_last_error() === JSON_ERROR_NONE || $this->decodedJson !== null) {
             $this->model = $model;
-            $this->handledValue = $string;
             return true;
         }
 
@@ -107,26 +107,22 @@ class Json extends AbstractScalarAnalysis implements CodegenConstInterface
     /**
      * Add the decoded json and a pretty-print-json to the output.
      *
-     * @return string[]
+     * @return array
      *   The array for the meta callback.
      */
     protected function handle(): array
     {
-        $messages = $this->pool->messages;
         $meta = [
-            $messages->getHelp('metaDecodedJson') => $this->decodedJson,
-            $messages->getHelp('metaPrettyPrint') => $this->pool->encodingService
+            static::META_DECODED_JSON => $this->decodedJson,
+            static::META_PRETTY_PRINT => $this->pool->encodingService
                 ->encodeString(json_encode($this->decodedJson, JSON_PRETTY_PRINT))
         ];
 
         // Move the extra part into a nest, for better readability.
-        if ($this->model->hasExtra()) {
+        if ($this->model->hasExtra() === true) {
             $this->model->setHasExtra(false);
-            $meta[$messages->getHelp('metaContent')] = $this->model->getData();
+            $meta[static::META_CONTENT] = $this->model->getData();
         }
-
-        unset($this->decodedJson);
-        unset($this->model);
 
         return $meta;
     }

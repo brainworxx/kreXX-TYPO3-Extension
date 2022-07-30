@@ -66,25 +66,37 @@ class ProcessBacktrace extends AbstractCallback implements
     }
 
     /**
+     * Processes the model according to the type of the variable.
+     *
+     * @param array $backtrace
+     *
+     * @deprecated
+     *   Will be removed. Use $this->handle;
+     *
+     * @codeCoverageIgnore
+     *   We will not test methods that are deprecated.
+     *
+     * @return string
+     */
+    public function process(&$backtrace = []): string
+    {
+        return $this->handle($backtrace);
+    }
+
+    /**
      * Do a backtrace analysis.
      *
-     * @param array|null $backtrace
+     * @param array $backtrace
      *   The backtrace, which may (or may not) come from other sources.
      *   If omitted, a new debug_backtrace() will be retrieved.
      *
      * @return string
      *   The rendered backtrace.
      */
-    public function handle(?array &$backtrace = []): string
+    public function handle(&$backtrace = []): string
     {
-        if (empty($backtrace)) {
+        if (empty($backtrace) === true) {
             $backtrace = $this->getBacktrace();
-        }
-
-        if (empty($backtrace)) {
-            // Not sure if this is possible.
-            // But, there is no backtrace, which means there is nothing to analyse.
-            return '';
         }
 
         $output = '';
@@ -105,7 +117,9 @@ class ProcessBacktrace extends AbstractCallback implements
                     ->setName($step)
                     ->setType(static::TYPE_STACK_FRAME)
                     ->addParameter(static::PARAM_DATA, $backtrace[$step - 1])
-                    ->injectCallback($this->pool->createClass(BacktraceStep::class))
+                    ->injectCallback(
+                        $this->pool->createClass(BacktraceStep::class)
+                    )
             );
         }
 
@@ -120,6 +134,8 @@ class ProcessBacktrace extends AbstractCallback implements
      */
     protected function getBacktrace(): array
     {
+        // Remove the fist step from the backtrace,
+        // because that is the internal function in kreXX.
         $backtrace = debug_backtrace();
 
         // We remove all steps that came from inside the kreXX lib.
@@ -130,12 +146,11 @@ class ProcessBacktrace extends AbstractCallback implements
             } else {
                 // No need to go further, because we should have passed the
                 // kreXX part.
-                // Reset the array keys, because the 0 is now missing.
-                return array_values($backtrace);
+                break;
             }
         }
 
-        // Fallback to an empty array.
-        return [];
+        // Reset the array keys, because the 0 is now missing.
+        return array_values($backtrace);
     }
 }

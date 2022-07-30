@@ -38,11 +38,10 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Comment\Functions;
-use Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionException;
 use ReflectionFunction;
-use TypeError;
 
 /**
  * The stuff we are doing here is very similar to the method analysis. The
@@ -50,8 +49,15 @@ use TypeError;
  * inheritance. We can extract the needed data directly out of the
  * reflection and dump it via ThroughMeta.
  */
-class Callback extends AbstractScalarAnalysis
+class Callback extends AbstractScalarAnalysis implements ViewConstInterface
 {
+    /**
+     * The callback we are analysing.
+     *
+     * @var string
+     */
+    protected $callback = '';
+
     /**
      * Is always active, because there are no system dependencies.
      *
@@ -76,7 +82,7 @@ class Callback extends AbstractScalarAnalysis
     public function canHandle($string, Model $model): bool
     {
         if (is_callable($string)) {
-            $this->handledValue = $string;
+            $this->callback = $string;
             return true;
         }
         return false;
@@ -88,8 +94,8 @@ class Callback extends AbstractScalarAnalysis
     protected function handle(): array
     {
         try {
-            $reflectionFunction = new ReflectionFunction($this->handledValue);
-        } catch (ReflectionException|TypeError $e) {
+            $reflectionFunction = new ReflectionFunction($this->callback);
+        } catch (ReflectionException $e) {
             // Huh, we were unable to retrieve the reflection.
             // Nothing left to do here.
             return [];
@@ -98,12 +104,9 @@ class Callback extends AbstractScalarAnalysis
         // Stitching together the main analysis.
         /** @var Functions $comment */
         $comment = $this->pool->createClass(Functions::class);
-        /** @var FunctionDeclaration $functionDeclaration */
-        $functionDeclaration = $this->pool->createClass(FunctionDeclaration::class);
-        $messages = $this->pool->messages;
         $meta = [
-            $messages->getHelp('metaComment') => $comment->getComment($reflectionFunction),
-            $messages->getHelp('metaDeclaredIn') => $functionDeclaration->retrieveDeclaration($reflectionFunction)
+            static::META_COMMENT => $comment->getComment($reflectionFunction),
+            static::META_DECLARED_IN => $this->retrieveDeclarationPlace($reflectionFunction)
         ];
         $this->insertParameters($reflectionFunction, $meta);
 
@@ -116,18 +119,17 @@ class Callback extends AbstractScalarAnalysis
      * @param \ReflectionFunction $reflectionFunction
      *   The reflection function.
      *
-     * @deprecated Since 5.0.0
-     *   Will be removed use the FunctionDeclaration class instead.
-     * @codeCoverageIgnore
-     *   We do not test deprecated methods.
-     *
      * @return string
      *   The declaration place.
      */
     protected function retrieveDeclarationPlace(ReflectionFunction $reflectionFunction): string
     {
-        return $this->pool->createClass(FunctionDeclaration::class)
-            ->retrieveDeclaration($reflectionFunction);
+        if ($reflectionFunction->isInternal() === true) {
+            return static::META_PREDECLARED;
+        }
+
+        return $this->pool->fileService->filterFilePath($reflectionFunction->getFileName()) . "\n" .
+            static::META_IN_LINE . $reflectionFunction->getStartLine();
     }
 
     /**
@@ -135,14 +137,14 @@ class Callback extends AbstractScalarAnalysis
      *
      * @param \ReflectionFunction $reflectionFunction
      *   The reflection of the function that we are analysing.
-     * @param string[] $meta
+     * @param array $meta
      *   The meta array, so far.
      */
-    protected function insertParameters(ReflectionFunction $reflectionFunction, array &$meta): void
+    protected function insertParameters(ReflectionFunction $reflectionFunction, array &$meta)
     {
         foreach ($reflectionFunction->getParameters() as $key => $reflectionParameter) {
             ++$key;
-            $meta[$this->pool->messages->getHelp('metaParamNo') . $key] = $this->pool
+            $meta[static::META_PARAM_NO . $key] = $this->pool
                 ->codegenHandler
                 ->parameterToString($reflectionParameter);
         }

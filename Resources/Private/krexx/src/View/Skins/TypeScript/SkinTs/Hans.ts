@@ -178,7 +178,7 @@ class Hans
         this.eventHandler.addEvent(this.selectors.performSearch, 'click', this.search.performSearch);
 
         /**
-         * Register the Collapse-All functions on its symbol
+         * Register the Collapse-All functions on it's symbol
          *
          * @event click
          */
@@ -224,7 +224,7 @@ class Hans
             '.kheadnote',
             function () {
                 let searchWrapper:NodeList = document.querySelectorAll('.search-wrapper');
-                let viewportOffset:DOMRect;
+                let viewportOffset:ClientRect;
                 for (let i = 0; i < searchWrapper.length; i++) {
                     viewportOffset = (searchWrapper[i] as HTMLElement).getBoundingClientRect();
                     (searchWrapper[i] as HTMLElement).style.position = 'fixed';
@@ -508,7 +508,7 @@ class Hans
     };
 
     /**
-     * Toggle the display of the infobox.
+     * Toggle the display of t he infobox.
      *
      * @param {Event} event
      * @param {Element} element

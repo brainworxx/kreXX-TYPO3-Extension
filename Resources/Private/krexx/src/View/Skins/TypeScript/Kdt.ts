@@ -39,19 +39,6 @@ class Kdt
     protected jumpTo:Function;
 
     /**
-     * Our translations class.
-     */
-    public translations:Translations;
-
-    /**
-     * Init the translations.
-     */
-    constructor()
-    {
-        this.translations = new Translations('.krdata-structure.krtrans', this);
-    }
-
-    /**
      * Set the currently used jump to callback.
      *
      * @param {Function} jumpTo
@@ -279,18 +266,28 @@ class Kdt
      * @return {object}
      *   The value, set in the cookie.
      */
-    public readSettings(cookieName:string): object
+    public readSettings(cookieName:string): string|object
     {
-        let match:RegExpMatchArray = document.cookie.match(new RegExp('(^| )' + cookieName + '=([^;]+)'));
+        /** @type {string} */
+        cookieName = cookieName + "=";
+        let cookieArray:string[] = document.cookie.split(';');
         let result:object = {};
-        if (match === null) {
-            return result;
-        }
+        let cookieString:string;
 
-        try {
-            result = JSON.parse(match[2]);
-        } catch (error) {
-            // Do nothing, we already have a fallback.
+        for (let i = 0; i < cookieArray.length; i++) {
+            cookieString = cookieArray[i];
+            while (cookieString.charAt(0) === ' ') {
+                cookieString = cookieString.substring(1, cookieString.length);
+            }
+            if (cookieString.indexOf(cookieName) === 0) {
+                try {
+                    // Return json, if possible.
+                    result = JSON.parse(cookieString.substring(cookieName.length, cookieString.length));
+                }
+                catch (error) {
+                    // Do nothing, we already have a fallback.
+                }
+            }
         }
 
         return result;
@@ -328,7 +325,7 @@ class Kdt
 
         document.cookie = 'KrexxDebugSettings=' + JSON.stringify(settings) + '; ' + expires + '; path=/';
         // Feedback about update.
-        alert(valueName + ' --> ' + newValue + '\n\n' + this.translations.translate('tsPleaseReload'));
+        alert(valueName + ' --> ' + newValue + '\n\nPlease reload the page to use the new local settings.');
     };
 
     /**
@@ -339,7 +336,7 @@ class Kdt
      * @param {Node} element
      *   The element that was clicked.
      */
-    public resetSetting = (event:Event, element:Node): void =>
+    public resetSetting(event:Event, element:Node): void
     {
         // We do not delete the cookie, we simply remove all settings in it.
         let date:Date = new Date();
@@ -347,7 +344,7 @@ class Kdt
         let expires:string = 'expires=' + date.toUTCString();
 
         document.cookie = 'KrexxDebugSettings={}; ' + expires + '; path=/';
-        alert(this.translations.translate('tsConfigReset') + '\n\n' + this.translations.translate('tsPleaseReload'));
+        alert('All local configuration have been reset.\n\nPlease reload the page to use the these settings.');
     }
 
     /**
@@ -386,7 +383,7 @@ class Kdt
                 document.querySelector('body').appendChild(elements[i]);
             }
         }
-    }
+    };
 
     /**
      * Collapses elements for a breadcrumb

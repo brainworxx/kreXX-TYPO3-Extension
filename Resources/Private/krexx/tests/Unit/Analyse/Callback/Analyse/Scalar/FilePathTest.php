@@ -61,7 +61,7 @@ class FilePathTest extends AbstractTest
     /**
      * Test the recognition of the finfo class in the system.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::isActive
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::isActive()
      */
     public function testIsActive()
     {
@@ -88,8 +88,7 @@ class FilePathTest extends AbstractTest
     /**
      * Test, if we can identify a file path.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::canHandle
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::retrieveFileInfo
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::canHandle()
      */
     public function testCanHandle()
     {
@@ -117,7 +116,7 @@ class FilePathTest extends AbstractTest
         );
 
         $result = $model->getJson();
-        $this->assertEquals($mimeInfo, $result['Mimetype file'], 'Mime info was added');
+        $this->assertEquals($mimeInfo, $result[FilePath::META_MIME_TYPE_FILE], 'Mime info was added');
         $this->assertArrayNotHasKey(
             'Real path',
             $result,
@@ -128,8 +127,7 @@ class FilePathTest extends AbstractTest
     /**
      * Test, if we can handle some errors.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::canHandle
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::retrieveFileInfo
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::canHandle()
      */
     public function testCanHandleErrors()
     {

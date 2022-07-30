@@ -11,7 +11,7 @@
 TYPO3 FileWriter
 ================
 
-TYPO3 has two different logging systems:
+TYPOO3 has two differend logging systems:
 
 - Database logging, which can be accessed by the Log module in the backend.
 - File logging which can only be accessed by downloading the log via FTP.
@@ -26,7 +26,7 @@ Integrate with the backend configuration
 
 
 
-.. figure:: ../../Images/FileWriter/t3_logging.png
+.. figure:: ../../Images/Features/t3_logging.png
 	:width: 763
 	:alt: TYPO3 logging integration
 

@@ -61,6 +61,7 @@ class DebugMethods extends AbstractObjectAnalysis implements
     ConnectorsConstInterface,
     ConfigConstInterface
 {
+
     /**
      * Calls all configured debug methods in die class.
      *
@@ -81,7 +82,7 @@ class DebugMethods extends AbstractObjectAnalysis implements
 
         foreach (explode(',', $this->pool->config->getSetting(static::SETTING_DEBUG_METHODS)) as $funcName) {
             if (
-                $this->checkIfAccessible($data, $funcName, $reflectionClass) &&
+                $this->checkIfAccessible($data, $funcName, $reflectionClass) === true &&
                 // We ignore NULL values.
                 ($result = $this->retrieveValue($data, $funcName)) !== null
             ) {
@@ -119,7 +120,7 @@ class DebugMethods extends AbstractObjectAnalysis implements
         $result = null;
         // Add a try to prevent the hosting CMS from doing something stupid.
         set_error_handler(
-            function (): void {
+            function () {
                 // Do nothing.
             }
         );
@@ -155,20 +156,30 @@ class DebugMethods extends AbstractObjectAnalysis implements
         // 2. Method can be called. There may be a magical method, though.
         // 3. It's not blacklisted.
         if (
-            !method_exists($data, $funcName) ||
-            !is_callable([$data, $funcName]) ||
-            !$this->pool->config->validation->isAllowedDebugCall($data, $funcName)
+            method_exists($data, $funcName) === false ||
+            is_callable([$data, $funcName]) === false ||
+            $this->pool->config->validation->isAllowedDebugCall($data, $funcName) === false
         ) {
             return false;
         }
 
         // We need to check if the callable function requires any parameters.
         // We will not call those, because we simply can not provide them.
+        $result = true;
         try {
             $ref = $reflectionClass->getMethod($funcName);
-            return $ref->getNumberOfRequiredParameters() === 0;
+            foreach ($ref->getParameters() as $param) {
+                if ($param->isOptional() === false) {
+                    // We've got a required parameter!
+                    // We will not call this one.
+                    $result = false;
+                    break;
+                }
+            }
         } catch (ReflectionException $e) {
-            return false;
+            $result = false;
         }
+
+        return $result;
     }
 }

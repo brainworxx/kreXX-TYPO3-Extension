@@ -36,6 +36,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 
@@ -75,7 +76,7 @@ class LogfileListTest extends AbstractTest
         // We are not simulating these by function mocks.
         $this->setValueByReflection(
             'directories',
-            ['log' => __DIR__ . '/../../Fixtures/'],
+            [Config::LOG_FOLDER => __DIR__ . '/../../Fixtures/'],
             \Krexx::$pool->config
         );
 

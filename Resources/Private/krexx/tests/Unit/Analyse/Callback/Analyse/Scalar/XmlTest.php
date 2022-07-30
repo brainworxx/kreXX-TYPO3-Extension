@@ -112,16 +112,15 @@ class XmlTest extends AbstractTest
 
         $string = 'Now with the XML finfo info,but still not XML.';
         $model = new Model(Krexx::$pool);
-        $model->addToJson('Mimetype string', static::TEXT_XML);
+        $model->addToJson(Xml::META_MIME_TYPE_STRING, static::TEXT_XML);
         $xml = new Xml(Krexx::$pool);
-        $this->assertTrue($xml->canHandle($string, $model), $string);
+        $this->asserttrue($xml->canHandle($string, $model), $string);
 
         $string = '<?xml version="1.0" encoding="utf-8"?><node><yxcv qwer="asdf" /></node>';
         $model = new Model(Krexx::$pool);
-        $model->addToJson('Mimetype string', static::TEXT_XML);
+        $model->addToJson(Xml::META_MIME_TYPE_STRING, static::TEXT_XML);
         $xml = new Xml(Krexx::$pool);
         $this->assertTrue($xml->canHandle($string, $model), $string);
-        $this->assertEquals($string, $this->retrieveValueByReflection('handledValue', $xml));
     }
 
     /**
@@ -141,7 +140,7 @@ class XmlTest extends AbstractTest
 
         $string = '<?xml version="1.0" encoding="utf-8"?><root><node>rogue text<yxcv qwer="asdf"><![CDATA[content]]></yxcv><yxcv qwer="yxcv" /></node></root>';
         $model = new Model(Krexx::$pool);
-        $model->addToJson('Mimetype string', static::TEXT_XML)->setHasExtra(true);
+        $model->addToJson(Xml::META_MIME_TYPE_STRING, static::TEXT_XML)->setHasExtra(true);
         $xml = new Xml(Krexx::$pool);
         $xml->canHandle($string, $model);
         $xml->callMe();
@@ -150,9 +149,38 @@ class XmlTest extends AbstractTest
 &nbsp;&nbsp;&lt;node&gt;rogue text&lt;yxcv qwer=&quot;asdf&quot;&gt;&lt;![CDATA[content]]&gt;&lt;/yxcv&gt;&lt;yxcv qwer=&quot;yxcv&quot;/&gt;&lt;/node&gt;
 &lt;/root&gt;
 ';
+        $decoded = [
+            0 => [
+                'name' => 'ROOT',
+                static::CHILDREN => [
+                    [
+                        'name' => 'NODE',
+                        static::CHILDREN => [
+                            'rogue text',
+                            [
+                                'name' => 'YXCV',
+                                static::ATTRIBUTES => [
+                                    'QWER' => 'asdf'
+                                ],
+                                static::CHILDREN => [
+                                    'content'
+                                ],
+                            ],
+                            [
+                                'name' => 'YXCV',
+                                static::ATTRIBUTES => [
+                                    'QWER' => 'yxcv'
+                                ],
+                            ],
+                        ],
+                    ]
+                ],
+            ]
+        ];
 
         $this->assertEquals(1, CallbackCounter::$counter);
         $result = CallbackCounter::$staticParameters[0][XML::PARAM_DATA];
-        $this->assertEquals($prettyPrint, $result['Pretty print']);
+        $this->assertEquals($prettyPrint, $result[Xml::META_PRETTY_PRINT]);
+        $this->assertEquals($decoded, $result[Xml::META_DECODED_XML]);
     }
 }

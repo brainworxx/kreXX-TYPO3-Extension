@@ -38,7 +38,6 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Service\Reflection;
 
 use ReflectionProperty;
-use ReflectionClass;
 
 /**
  * The original \ReflectionProperty may throw an error when used with
@@ -89,14 +88,7 @@ class UndeclaredProperty extends ReflectionProperty
     protected $isPublic = true;
 
     /**
-     * Is this property protected? Probably not.
-     *
-     * @var bool
-     */
-    protected $isProtected = false;
-
-    /**
-     * Setting the necessary properties constructor.
+     * ReflectionUndeclaredProperty constructor.
      *
      * @param \ReflectionClass $ref
      *   The instance of the class with the property.
@@ -126,7 +118,7 @@ class UndeclaredProperty extends ReflectionProperty
      * @return \ReflectionClass
      *   The refection.
      */
-    public function getDeclaringClass(): ReflectionClass
+    public function getDeclaringClass(): \ReflectionClass
     {
         return $this->declaringClass;
     }
@@ -161,7 +153,7 @@ class UndeclaredProperty extends ReflectionProperty
      */
     public function isProtected(): bool
     {
-        return $this->isProtected;
+        return false;
     }
 
     /**
@@ -210,15 +202,5 @@ class UndeclaredProperty extends ReflectionProperty
     public function __toString(): string
     {
         return '';
-    }
-
-    /**
-     * Undeclared properties are not typed.
-     *
-     * @return bool
-     */
-    public function hasType(): bool
-    {
-        return false;
     }
 }

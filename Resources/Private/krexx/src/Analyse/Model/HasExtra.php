@@ -56,6 +56,23 @@ trait HasExtra
     /**
      * Getter for the hasExtra property.
      *
+     * @deprecated
+     *   Since 4.0.0. Use $this->hasExtra() instead.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
+     *
+     * @return bool
+     *   Info for the render class, if we need to render the extras part.
+     */
+    public function getHasExtra(): bool
+    {
+        return $this->hasExtra();
+    }
+
+    /**
+     * Getter for the hasExtra property.
+     *
      * @return bool
      *   Info for the render class, if we need to render the extras part.
      */

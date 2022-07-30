@@ -64,7 +64,7 @@ trait Json
      */
     public function setHelpid(string $helpId): Model
     {
-        $this->addToJson($this->pool->messages->getHelp('metaHelp'), $this->pool->messages->getHelp($helpId));
+        $this->addToJson(static::META_HELP, $this->pool->messages->getHelp($helpId));
         return $this;
     }
 
@@ -84,7 +84,7 @@ trait Json
     public function addToJson(string $key, string $value): Model
     {
 
-        if (empty($value)) {
+        if (empty($value) === true) {
             unset($this->json[$key]);
         } else {
             // Remove leftover linebreaks.

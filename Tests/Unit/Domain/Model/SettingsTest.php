@@ -52,8 +52,6 @@ class SettingsTest extends AbstractTest implements ConstInterface
 
     const REVERSE_PROXY = 'reverseProxyIP';
 
-    protected const TYPO3_TEMP = 'typo3temp';
-
     public function krexxUp()
     {
         parent::krexxUp();
@@ -78,6 +76,13 @@ class SettingsTest extends AbstractTest implements ConstInterface
         // Short circuit the getting of the system path.
         $pathSite = PATH_site;
         $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
+
+        $versionMock = $this->getFunctionMock($typo3Namespace, 'version_compare');
+        $versionMock->expects($this->exactly(2))
+            ->withConsecutive(
+                [Bootstrap::getTypo3Version(), '8.3', '>'],
+                [Bootstrap::getTypo3Version(), '9.5', '>=']
+            )->will($this->returnValue(true));
 
         $classExistsMock = $this->getFunctionMock($typo3Namespace, 'class_exists');
         $classExistsMock->expects($this->exactly(1))
@@ -110,7 +115,7 @@ class SettingsTest extends AbstractTest implements ConstInterface
      * There are no getter implemented. Hence, we set a value for each property
      * and then test the ini.
      *
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::generateContent
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::generateIniContent
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::processGroups
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::processFeEditing
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setAnalyseGetter
@@ -144,6 +149,7 @@ class SettingsTest extends AbstractTest implements ConstInterface
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmaxStepNumber
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormmemoryLeft
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormskin
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormuseScopeAnalysis
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormanalyseScalar
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setIprange
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLevel
@@ -153,12 +159,11 @@ class SettingsTest extends AbstractTest implements ConstInterface
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMaxStepNumber
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setMemoryLeft
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setSkin
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setUseScopeAnalysis
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setActivateT3FileWriter
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLoglevelT3FileWriter
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormactivateT3FileWriter
      * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormloglevelT3FileWriter
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setLanguageKey
-     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::setFormlanguageKey
      *
      * There is a point where we needed to stop and we have clearly passed it
      * but let's keep going and see what happens.
@@ -211,7 +216,7 @@ class SettingsTest extends AbstractTest implements ConstInterface
                 Fallback::SETTING_SKIN => Fallback::SETTING_SKIN,
                 Fallback::SETTING_DESTINATION => Fallback::SETTING_DESTINATION,
                 Fallback::SETTING_MAX_FILES => Fallback::SETTING_MAX_FILES,
-                Fallback::SETTING_LANGUAGE_KEY => Fallback::SETTING_LANGUAGE_KEY,
+                Fallback::SETTING_USE_SCOPE_ANALYSIS => Fallback::SETTING_USE_SCOPE_ANALYSIS,
             ],
             Fallback::SECTION_PRUNE => [
                 Fallback::SETTING_MAX_STEP_NUMBER => Fallback::SETTING_MAX_STEP_NUMBER,
@@ -254,18 +259,13 @@ class SettingsTest extends AbstractTest implements ConstInterface
                 Fallback::SETTING_ANALYSE_GETTER => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_MEMORY_LEFT => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_MAX_RUNTIME => Fallback::RENDER_TYPE_CONFIG_FULL,
+                Fallback::SETTING_USE_SCOPE_ANALYSIS => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_MAX_STEP_NUMBER => Fallback::RENDER_TYPE_CONFIG_FULL,
                 Fallback::SETTING_ARRAY_COUNT_LIMIT => Fallback::RENDER_TYPE_CONFIG_FULL,
-                Fallback::SETTING_LANGUAGE_KEY => Fallback::RENDER_TYPE_CONFIG_FULL,
-                // We also expect these to render as "full", because we mocked the
-                // validation class, which validates everything as ok.
-                Fallback::SETTING_DEBUG_METHODS => Fallback::RENDER_TYPE_CONFIG_FULL,
-                Fallback::SETTING_DESTINATION => Fallback::RENDER_TYPE_CONFIG_FULL,
-                Fallback::SETTING_MAX_FILES => Fallback::RENDER_TYPE_CONFIG_FULL,
             ],
         ];
 
-        $this->assertEquals($expectation, json_decode($settingsModel->generateContent(), true));
+        $this->assertEquals($expectation, parse_ini_string($settingsModel->generateIniContent(), true));
     }
 
     /**
@@ -277,24 +277,5 @@ class SettingsTest extends AbstractTest implements ConstInterface
         $settingsModel->setFactory('faqTory');
 
         $this->assertEquals('faqTory', $this->retrieveValueByReflection('factory', $settingsModel));
-    }
-
-    /**
-     * Test the ini migration to json.
-     */
-    public function testPrepareFileName()
-    {
-        $path = DIRECTORY_SEPARATOR . 'just' . DIRECTORY_SEPARATOR . 'a' . DIRECTORY_SEPARATOR . 'Krexx';
-
-        $fileExistsMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Domain\\Model', 'file_exists');
-        $fileExistsMock->expects($this->once())
-            ->with($path . '.ini')
-            ->will($this->returnValue(true));
-        $unLinkMock = $this->getFunctionMock('\\Brainworxx\\Includekrexx\\Domain\\Model', 'unlink');
-        $unLinkMock->expects($this->once())
-            ->with($path . '.ini');
-
-        $settingsModel = new Settings();
-        $this->assertEquals($path . '.json', $settingsModel->prepareFileName($path));
     }
 }

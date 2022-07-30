@@ -82,7 +82,7 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
      *
      * This plugin tries to resolve them.
      */
-    public function exec(): void
+    public function exec()
     {
         // Resolving the __get().
         Registration::registerEvent(PublicProperties::class . static::START_EVENT, Properties::class);

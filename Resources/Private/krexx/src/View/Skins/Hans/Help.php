@@ -71,7 +71,7 @@ trait Help
         $data = $model->getJson();
 
         // Test if we have anything to display at all.
-        if (empty($data)) {
+        if (empty($data) === true) {
             return '';
         }
 

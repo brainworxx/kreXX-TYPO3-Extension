@@ -36,7 +36,6 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Json;
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -89,7 +88,6 @@ class JsonTest extends AbstractTest
 
         $fixture = '{"qwer": "asdf"}';
         $this->assertTrue($json->canHandle($fixture, new Model(Krexx::$pool)), 'A real json.');
-        $this->assertEquals($fixture, $this->retrieveValueByReflection('handledValue', $json));
     }
 
     /**
@@ -104,7 +102,7 @@ class JsonTest extends AbstractTest
         $this->mockEmergencyHandler();
         $this->mockEventService(
             [Json::class . PluginConfigInterface::START_EVENT, $json],
-            [Json::class . '::callMe' . CallbackConstInterface::EVENT_MARKER_END, $json]
+            [Json::class . '::callMe' . Json::EVENT_MARKER_END, $json]
         );
 
         Krexx::$pool->rewrite = [
@@ -124,10 +122,10 @@ class JsonTest extends AbstractTest
 
         $result = CallbackCounter::$staticParameters[0][Json::PARAM_DATA];
         $this->assertEquals(1, CallbackCounter::$counter);
-        $this->assertStringContainsString('asdf', $result['Pretty print']);
-        $this->assertStringContainsString('yxcv', $result['Pretty print']);
-        $this->assertEquals($expectation, $result['Decoded json']);
-        $this->assertEquals($encodedString, $result['Content']);
+        $this->assertStringContainsString('asdf', $result[Json::META_PRETTY_PRINT]);
+        $this->assertStringContainsString('yxcv', $result[Json::META_PRETTY_PRINT]);
+        $this->assertEquals($expectation, $result[Json::META_DECODED_JSON]);
+        $this->assertEquals($encodedString, $result[Json::META_CONTENT]);
         $this->assertFalse($model->hasExtra());
     }
 }

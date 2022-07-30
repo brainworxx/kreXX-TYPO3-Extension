@@ -7,16 +7,18 @@
  *   Complete access to all variables.
  */
 <f:section name="main">
+
     <h3><f:translate key="editfeconfig.help.headline" /></h3>
     <f:translate key="full" /><f:translate key="full.help" /><br />
     <f:translate key="display" /><f:translate key="display.help" /><br />
     <f:translate key="none" /><f:translate key="none.help" /><br />
 
-    <f:render section="table" arguments="{headline: 'subhead.output',        payload: 'output',        formConfig: formConfig}" />
-    <f:render section="table" arguments="{headline: 'subhead.behavior',      payload: 'behavior',      formConfig: formConfig}" />
-    <f:render section="table" arguments="{headline: 'subhead.pruneOutput',   payload: 'pruneOutput',   formConfig: formConfig}" />
-    <f:render section="table" arguments="{headline: 'subhead.properties',    payload: 'properties',    formConfig: formConfig}" />
-    <f:render section="table" arguments="{headline: 'subhead.methods',       payload: 'methods',       formConfig: formConfig}" />
+
+    <f:render section="table" arguments="{headline: 'subhead.output', payload: 'output', formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.behavior', payload: 'behavior', formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.pruneOutput', payload: 'pruneOutput', formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.properties', payload: 'properties', formConfig: formConfig}" />
+    <f:render section="table" arguments="{headline: 'subhead.methods', payload: 'methods', formConfig: formConfig}" />
     <f:render section="table" arguments="{headline: 'subhead.emergencystop', payload: 'emergencystop', formConfig: formConfig}" />
 </f:section>
 
@@ -28,14 +30,14 @@
  */
 <f:section name="output">
     <f:render section="dropdown" arguments="{formConfig.disabled}" />
-    <f:render section="dropdown" arguments="{formConfig.iprange}" />
+    <f:render section="noedit"   arguments="{formConfig.iprange}" />
     <f:render section="dropdown" arguments="{formConfig.detectAjax}" />
 </f:section>
 <f:section name="behavior">
     <f:render section="dropdown" arguments="{formConfig.skin}" />
-    <f:render section="dropdown" arguments="{formConfig.destination}" />
-    <f:render section="dropdown" arguments="{formConfig.maxfiles}" />
-    <f:render section="dropdown" arguments="{formConfig.languageKey}" />
+    <f:render section="noedit"   arguments="{formConfig.destination}" />
+    <f:render section="noedit"   arguments="{formConfig.maxfiles}" />
+    <f:render section="dropdown" arguments="{formConfig.useScopeAnalysis}" />
 </f:section>
 <f:section name="pruneOutput">
     <f:render section="dropdown" arguments="{formConfig.maxStepNumber}" />
@@ -52,7 +54,7 @@
     <f:render section="dropdown" arguments="{formConfig.analyseProtectedMethods}" />
     <f:render section="dropdown" arguments="{formConfig.analysePrivateMethods}" />
     <f:render section="dropdown" arguments="{formConfig.analyseGetter}" />
-    <f:render section="dropdown" arguments="{formConfig.debugMethods}" />
+    <f:render section="noedit"   arguments="{formConfig.debugMethods}" />
 </f:section>
 <f:section name="emergencystop">
     <f:render section="dropdown" arguments="{formConfig.maxCall}" />
@@ -97,12 +99,10 @@
  *   The name of the dropdown.
  * @var array {options}
  *   The options for the dropdown.
- * @var bool {useFactorySettings}
- *   Are we using factory settings here?
  * @var string {value}
  *   The current value of the dropdown.
- * @var string {fallback}
- *   The used value if there is nothing configured.
+ * @var boolean {useFactorySettings}
+ *   Are we using factory settings here?
  */
 <f:section name="dropdown">
     <tr>
@@ -118,6 +118,16 @@
             </label>
         </td>
     </tr>
+</f:section>
+
+/**
+ * Renders the "This setting is not editable on the frontend." part.
+ *
+ * @var string {name}
+ *   The name of the setting, used for the language key.
+ */
+<f:section name="noedit">
+    <tr><td><f:translate key="label.{name}" /></td><td colspan="2"><f:translate key="logging.noteditable"/></td></tr>
 </f:section>
 
 </html>

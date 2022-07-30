@@ -48,7 +48,7 @@ class Classes extends AbstractComment
     /**
      * Get the prettified class comment.
      *
-     * @param \ReflectionClass $reflection
+     * @param Reflector $reflection
      *   The actual reflection class.
      * @param \ReflectionClass|null $reflectionClass
      *   Not used.
@@ -61,7 +61,7 @@ class Classes extends AbstractComment
         static $cache = [];
         $name = $reflection->getName();
 
-        if (!isset($cache[$name])) {
+        if (isset($cache[$name]) === false) {
             $cache[$name] = $this->pool->encodingService->encodeString(
                 $this->prettifyComment($reflection->getDocComment())
             );

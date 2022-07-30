@@ -63,7 +63,7 @@ class Functions extends AbstractComment
         /** @var \ReflectionFunction $reflection */
         $cachingKey = $reflection->getName();
 
-        if (isset($cache[$cachingKey])) {
+        if (isset($cache[$cachingKey]) === true) {
             return $cache[$cachingKey];
         }
 

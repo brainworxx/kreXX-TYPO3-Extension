@@ -52,7 +52,7 @@ trait AnalysePrivate
     /**
      * @param string $analysePrivate
      */
-    public function setAnalysePrivate(string $analysePrivate): void
+    public function setAnalysePrivate(string $analysePrivate)
     {
         $this->analysePrivate = $analysePrivate;
     }
@@ -60,7 +60,7 @@ trait AnalysePrivate
     /**
      * @param string $formanalysePrivate
      */
-    public function setFormanalysePrivate(string $formanalysePrivate): void
+    public function setFormanalysePrivate(string $formanalysePrivate)
     {
         $this->formanalysePrivate = $formanalysePrivate;
     }

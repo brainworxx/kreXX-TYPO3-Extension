@@ -74,7 +74,7 @@ class DirtyModels implements EventHandlerInterface
     /**
      * Running three very special debug methods, on TYPO3 models.
      *
-     * @param AbstractCallback|null $callback
+     * @param AbstractCallback $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far.
@@ -87,21 +87,20 @@ class DirtyModels implements EventHandlerInterface
         /** @var AbstractDomainObject $data */
         $data = $model->getData();
 
-        if (!($data instanceof AbstractDomainObject)) {
+        if ($data instanceof AbstractDomainObject === false) {
             // Early return. Wrong kind of object.
             return '';
         }
 
-        $msg = $this->pool->messages;
         try {
             try {
-                $model->addToJson($msg->getHelp('TYPO3ModelIsDirty'), $this->createReadableBoolean($data->_isDirty()));
+                $model->addToJson('Is dirty', $this->createReadableBoolean($data->_isDirty()));
             } catch (TooDirtyException $e) {
-                $model->addToJson($msg->getHelp('TYPO3ModelIsDirty'), $msg->getHelp('TYPO3ModelIsTooDirty'));
+                $model->addToJson('Is dirty', 'TRUE, even the UID was modified!');
             }
 
-            $model->addToJson($msg->getHelp('TYPO3ModelIsAClone'), $this->createReadableBoolean($data->_isClone()));
-            $model->addToJson($msg->getHelp('TYPO3ModelIsNew'), $this->createReadableBoolean($data->_isNew()));
+            $model->addToJson('Is a clone', $this->createReadableBoolean($data->_isClone()));
+            $model->addToJson('Is a new', $this->createReadableBoolean($data->_isNew()));
         } catch (Throwable $e) {
             // Do nothing.
             // Somebody has messed with the models.
@@ -121,6 +120,10 @@ class DirtyModels implements EventHandlerInterface
      */
     protected function createReadableBoolean(bool $bool): string
     {
-        return $bool ? 'TRUE' : 'FALSE';
+        if ($bool === true) {
+            return 'TRUE';
+        }
+
+        return 'FALSE';
     }
 }

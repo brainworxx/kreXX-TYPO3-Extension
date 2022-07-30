@@ -51,7 +51,6 @@ trait Recursion
         '{name}',
         '{domId}',
         '{normal}',
-        '{type}',
         '{connectorLeft}',
         '{connectorRight}',
         '{gensource}',
@@ -69,7 +68,6 @@ trait Recursion
                 $model->getName(),
                 $model->getDomid(),
                 $model->getNormal(),
-                $this->pool->messages->getHelp('recursion'),
                 $this->renderConnectorLeft($model->getConnectorLeft()),
                 $this->renderConnectorRight($model->getConnectorRight()),
                 $this->generateDataAttribute(

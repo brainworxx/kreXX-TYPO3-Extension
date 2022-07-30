@@ -40,7 +40,7 @@ namespace Brainworxx\Krexx\Controller;
 /**
  * "Controller" for the edit settings "action"
  */
-class EditSettingsController extends AbstractController
+class EditSettingsController extends AbstractController implements ControllerConstInterface
 {
     /**
      * Outputs the edit settings dialog, without any analysis.
@@ -50,7 +50,7 @@ class EditSettingsController extends AbstractController
      */
     public function editSettingsAction(): EditSettingsController
     {
-        if ($this->pool->emergencyHandler->checkMaxCall()) {
+        if ($this->pool->emergencyHandler->checkMaxCall() === true) {
             // Called too often, we might get into trouble here!
             return $this;
         }
@@ -60,8 +60,7 @@ class EditSettingsController extends AbstractController
         $this->pool->emergencyHandler->setDisable(true);
 
         // Find caller.
-        $headLine = $this->pool->messages->getHelp('headlineCookieConf');
-        $caller = $this->callerFinder->findCaller($headLine, []);
+        $caller = $this->callerFinder->findCaller(static::HEADLINE_COOKIE_CONF, []);
         $this->pool->chunks->addMetadata($caller);
 
         // Render it.
@@ -69,7 +68,7 @@ class EditSettingsController extends AbstractController
         $this->pool->chunks->detectEncoding($footer);
 
         $this->outputService
-            ->addChunkString($this->pool->render->renderHeader($headLine, $this->outputCssAndJs()))
+            ->addChunkString($this->pool->render->renderHeader(static::HEADLINE_COOKIE_CONF, $this->outputCssAndJs()))
             ->addChunkString($footer);
         $this->pool->emergencyHandler->setDisable(false);
         $this->outputService->finalize();

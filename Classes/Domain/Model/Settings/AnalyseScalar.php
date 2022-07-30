@@ -52,7 +52,7 @@ trait AnalyseScalar
     /**
      * @param string $analyseScalar
      */
-    public function setAnalyseScalar(string $analyseScalar): void
+    public function setAnalyseScalar(string $analyseScalar)
     {
         $this->analyseScalar = $analyseScalar;
     }
@@ -60,7 +60,7 @@ trait AnalyseScalar
     /**
      * @param string $formanalyseScalar
      */
-    public function setFormanalyseScalar(string $formanalyseScalar): void
+    public function setFormanalyseScalar(string $formanalyseScalar)
     {
         $this->formanalyseScalar = $formanalyseScalar;
     }

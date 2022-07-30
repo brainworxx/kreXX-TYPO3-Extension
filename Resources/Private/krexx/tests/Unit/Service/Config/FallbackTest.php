@@ -72,11 +72,11 @@ class FallbackTest extends AbstractTest
 
         // Test the reading of the skin values.
         $expectedSkinConfig = [
-            'smokygrey' => [
+            $config::SKIN_SMOKY_GREY => [
                 $config::SKIN_CLASS => RenderSmokyGrey::class,
                 $config::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/smokygrey/'
             ],
-            'hans' => [
+            $config::SKIN_HANS => [
                 $config::SKIN_CLASS => RenderHans::class,
                 $config::SKIN_DIRECTORY => KREXX_DIR . 'resources/skins/hans/'
             ],
@@ -102,7 +102,7 @@ class FallbackTest extends AbstractTest
 
         $customSetting = new NewSetting();
         $customSetting->setName($settingName)
-            ->setValidation('evalBool')
+            ->setValidation($customSetting::EVAL_BOOL)
             ->setSection($sectionName)
             ->setRenderType(NewSetting::RENDER_TYPE_SELECT)
             ->setIsEditable(true)
@@ -119,7 +119,7 @@ class FallbackTest extends AbstractTest
         $this->assertSame($sectionName, $settingsModel->getSection());
         $this->assertSame(true, $settingsModel->getValue());
         $this->assertSame(NewSetting::RENDER_TYPE_SELECT, $settingsModel->getType());
-        $this->assertSame(true, $settingsModel->isEditable());
+        $this->assertSame(true, $settingsModel->getEditable());
         $this->assertSame('Factory settings', $settingsModel->getSource());
     }
 }

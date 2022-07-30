@@ -54,7 +54,6 @@ use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
-use stdClass;
 
 /**
  * Class Tx_Includekrexx_Controller_IndexController
@@ -63,29 +62,40 @@ use stdClass;
  * this extension compatible back to 4.5. This  makes the other controllers
  * (hopefully) more readable.
  */
-abstract class AbstractController extends ActionController implements ConstInterface, ControllerConstInterface
+abstract class AbstractController extends ActionController implements ConstInterface
 {
     use LanguageTrait;
 
     /**
      * @var string
      */
-    protected const SAVE_FAIL_TITLE = 'save.fail.title';
+    const MODULE_KEY = 'IncludekrexxKrexxConfiguration';
 
     /**
      * @var string
      */
-    protected const SAVE_SUCCESS_TEXT = 'save.success.text';
+    const ACCESS_DENIED = 'accessDenied';
 
     /**
      * @var string
      */
-    protected const SAVE_SUCCESS_TITLE = 'save.success.title';
+    const SAVE_FAIL_TITLE = 'save.fail.title';
 
     /**
      * @var string
      */
-    protected const FILE_NOT_WRITABLE = 'file.not.writable';
+    const SAVE_SUCCESS_TEXT = 'save.success.text';
+
+    /**
+     * @var string
+     */
+    const SAVE_SUCCESS_TITLE = 'save.success.title';
+
+    /**
+     * @var string
+     */
+    const FILE_NOT_WRITABLE = 'file.not.writable';
+
 
     /**
      * The kreXX framework.
@@ -129,7 +139,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer
      */
-    public function injectPageRenderer(PageRenderer $pageRenderer): void
+    public function injectPageRenderer(PageRenderer $pageRenderer)
     {
         $this->pageRenderer = $pageRenderer;
     }
@@ -152,7 +162,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @param \TYPO3\CMS\Backend\Template\ModuleTemplate $moduleTemplate
      */
-    public function injectModuleTemplate(ModuleTemplate $moduleTemplate): void
+    public function injectModuleTemplate(ModuleTemplate $moduleTemplate)
     {
         $this->moduleTemplate = $moduleTemplate;
     }
@@ -161,13 +171,13 @@ abstract class AbstractController extends ActionController implements ConstInter
      * We check if we are running with a productive preset. If we do, we
      * will display a warning.
      */
-    protected function checkProductiveSetting(): void
+    protected function checkProductiveSetting()
     {
         if ($this->livePreset->isActive()) {
             //Display a warning, if we are in Productive / Live settings.
             $this->addFlashMessage(
-                static::translate('debugpreset.warning.message'),
-                static::translate('debugpreset.warning.title'),
+                static::translate('debugpreset.warning.message', static::EXT_KEY),
+                static::translate('debugpreset.warning.title', static::EXT_KEY),
                 AbstractMessage::WARNING
             );
         }
@@ -178,7 +188,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @param \TYPO3\CMS\Install\Configuration\Context\LivePreset $livePreset
      */
-    public function injectLivePreset(LivePreset $livePreset): void
+    public function injectLivePreset(LivePreset $livePreset)
     {
         $this->livePreset = $livePreset;
     }
@@ -188,7 +198,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @param \Brainworxx\Includekrexx\Collectors\Configuration $configuration
      */
-    public function injectConfiguration(Configuration $configuration): void
+    public function injectConfiguration(Configuration $configuration)
     {
         $this->configuration = $configuration;
     }
@@ -198,7 +208,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @param \Brainworxx\Includekrexx\Collectors\FormConfiguration $formConfiguration
      */
-    public function injectFormConfiguration(FormConfiguration $formConfiguration): void
+    public function injectFormConfiguration(FormConfiguration $formConfiguration)
     {
         $this->formConfiguration = $formConfiguration;
     }
@@ -208,7 +218,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
      */
-    public function injectSettingsModel(Settings $settings): void
+    public function injectSettingsModel(Settings $settings)
     {
         $this->settingsModel = $settings;
     }
@@ -216,7 +226,7 @@ abstract class AbstractController extends ActionController implements ConstInter
     /**
      * Move all messages from kreXX to the flash messages.
      */
-    protected function retrieveKrexxMessages(): void
+    protected function retrieveKrexxMessages()
     {
         // Get the keys and the args.
         $messages = $this->pool->messages->getMessages();
@@ -224,8 +234,8 @@ abstract class AbstractController extends ActionController implements ConstInter
         foreach ($messages as $message) {
             // And translate them.
             $this->addFlashMessage(
-                static::translate($message->getKey(), $message->getArguments()),
-                static::translate('general.error.title'),
+                static::translate($message->getKey(), static::EXT_KEY, $message->getArguments()),
+                static::translate('general.error.title', static::EXT_KEY),
                 AbstractMessage::ERROR
             );
         }
@@ -237,7 +247,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      * @param string $path
      *   The path of the file we want to dispatch to the browser.
      */
-    protected function dispatchFile(string $path): void
+    protected function dispatchFile(string $path)
     {
         if (is_readable($path)) {
             header('Content-Type: text/html; charset=utf-8');
@@ -262,8 +272,8 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function hasAccess(): bool
     {
-        return isset($GLOBALS[static::BE_USER]) &&
-            $GLOBALS[static::BE_USER]->check(static::BE_MODULES, AbstractCollector::PLUGIN_NAME);
+        return isset($GLOBALS['BE_USER']) &&
+            $GLOBALS['BE_USER']->check('modules', AbstractCollector::PLUGIN_NAME);
     }
 
     /**
@@ -293,34 +303,13 @@ abstract class AbstractController extends ActionController implements ConstInter
      * Imho the best way to deal with this is to (again) assign the css and js
      * inline.
      */
-    protected function assignCssJs(): void
+    protected function assignCssJs()
     {
-        $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/JavaScript/Index.js');
-        $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Css/Index.css');
-        $this->pageRenderer->addJsInlineCode('krexxajaxtrans', $this->generateAjaxTranslations());
+        $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
+        $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/Index.css');
         $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
         $this->pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));
         $this->moduleTemplate->setContent($this->view->render());
         $this->moduleTemplate->setModuleName('tx_includekrexx');
-    }
-
-    /**
-     * Generate the translation JS object manually in PHP, because I do not
-     * trust Fluid enough to do this across all versions from 7.6 to 11.5.
-     *
-     * @return string
-     *   The generated javascript variable with the translations.
-     */
-    protected function generateAjaxTranslations(): string
-    {
-        $translation = new stdClass();
-        $translation->deletefile = static::translate('ajax.delete.file');
-        $translation->error = static::translate('ajax.error');
-        $translation->in = static::translate('ajax.in');
-        $translation->line = static::translate('ajax.line');
-        $translation->updatedLoglist = static::translate('ajax.updated.loglist');
-        $translation->deletedCookies = static::translate('ajax.deleted.cookies');
-
-        return 'var ajaxTranslate = ' .  json_encode($translation) . ';';
     }
 }

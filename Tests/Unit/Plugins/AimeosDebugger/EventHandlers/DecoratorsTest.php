@@ -117,11 +117,6 @@ class DecoratorsTest extends AbstractTest
         // Short circuit the rendering process.
         Krexx::$pool->render = new RenderNothing(Krexx::$pool);
 
-        // Load the aimeos language files
-        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
-            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 'aimeos.kreXX.ini');
-        Krexx::$pool->messages->readHelpTexts();
-
         // Create the event calling class.
         $methods = new Methods(Krexx::$pool);
         $this->triggerStartEvent($methods->setParameters($fixture));
@@ -132,7 +127,7 @@ class DecoratorsTest extends AbstractTest
         /** @var \Brainworxx\Krexx\Analyse\Model $objectsModel */
         $objectsModel = Krexx::$pool->render->model['renderExpandableChild'][1];
 
-        $this->assertEquals('Undecorated methods', $methodsModel->getName());
+        $this->assertEquals('Undecorated Methods', $methodsModel->getName());
         // List of the methods of the decorated class, that are not implemented of
         // the surrounding class.
         $expectations = [
@@ -147,7 +142,7 @@ class DecoratorsTest extends AbstractTest
         }
         $this->assertEquals(1, $index, 'There should only be one method undecorated.');
 
-        $this->assertEquals('Decorated object', $objectsModel->getName());
+        $this->assertEquals('Decorated Object', $objectsModel->getName());
         $this->assertSame(
             $testJob,
             $objectsModel->getParameters()[CallbackConstInterface::PARAM_DATA][0],

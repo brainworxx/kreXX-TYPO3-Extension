@@ -38,10 +38,10 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\View\ViewConstInterface;
 use DateTime;
-use Throwable;
 
-class TimeStamp extends AbstractScalarAnalysis
+class TimeStamp extends AbstractScalarAnalysis implements ViewConstInterface
 {
     /**
      * {@inheritDoc}
@@ -55,8 +55,6 @@ class TimeStamp extends AbstractScalarAnalysis
      * We add the short info straight to the model.
      *
      * {@inheritDoc}
-     * 
-     * @throws \Exception
      */
     public function canHandle($string, Model $model): bool
     {
@@ -68,10 +66,9 @@ class TimeStamp extends AbstractScalarAnalysis
         }
 
         // Might be a regular time stamp, get a second impression.
-        $metaTimestamp = $this->pool->messages->getHelp('metaTimestamp');
         if ((string)$int === $string) {
             $model->addToJson(
-                $metaTimestamp,
+                static::META_TIMESTAMP,
                 (new DateTime('@' . $int))->format('d.M Y H:i:s')
             );
             return false;
@@ -80,10 +77,10 @@ class TimeStamp extends AbstractScalarAnalysis
         // Check for a microtime string.
         try {
             $model->addToJson(
-                $metaTimestamp,
+                static::META_TIMESTAMP,
                 (DateTime::createFromFormat('U.u', $string)->format('d.M Y H:i:s.u'))
             );
-        } catch (Throwable $exception) {
+        } catch (\Throwable $exception) {
             // Do nothing
         }
 

@@ -59,6 +59,7 @@ trait ExpandableChild
         '{codewrapperLeft}',
         '{codewrapperRight}',
         '{addjson}',
+        '{key-ktype}',
     ];
 
     /**
@@ -72,11 +73,12 @@ trait ExpandableChild
     public function renderExpandableChild(Model $model, bool $isExpanded = false): string
     {
         // Check for emergency break.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
             return '';
         }
 
         // Generating our code.
+        /** @var \Brainworxx\Krexx\Analyse\Code\Codegen $codegenHandler */
         $codegenHandler =  $this->pool->codegenHandler;
         $generateSource = $codegenHandler->generateSource($model);
         return str_replace(
@@ -88,11 +90,12 @@ trait ExpandableChild
                 $model->getNormal(),
                 $this->renderConnectorRight($model->getConnectorRight(128), $model->getReturnType()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $generateSource),
-                $this->pool->chunks->chunkMe($this->renderNest($model)),
+                $this->pool->chunks->chunkMe($this->renderNest($model, false)),
                 $this->renderSourceButtonSg($generateSource, $model),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_L, $codegenHandler->generateWrapperLeft()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_R, $codegenHandler->generateWrapperRight()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_JSON, $this->encodeJson($model->getJson())),
+                'key' . $model->getKeyType(),
             ],
             $this->getTemplateFileContent(static::FILE_EX_CHILD_NORMAL)
         );
@@ -113,8 +116,8 @@ trait ExpandableChild
     {
         if (
             $gencode === static::CODEGEN_STOP_BIT ||
-            empty($gencode) ||
-            !$this->pool->codegenHandler->isCodegenAllowed()
+            empty($gencode) === true ||
+            $this->pool->codegenHandler->getAllowCodegen() === false
         ) {
             // Remove the button marker, because here is nothing to add.
             return '';

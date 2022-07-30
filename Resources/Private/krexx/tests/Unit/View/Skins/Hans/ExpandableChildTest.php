@@ -51,6 +51,7 @@ class ExpandableChildTest extends AbstractRenderHans
      * with the name 'Hans'.
      *
      * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderExpandableChild
+     * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::retrieveOpenedClass
      * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderSourceButtonWithStop
      * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderNest
      * @covers \Brainworxx\Krexx\View\Skins\Hans\ExpandableChild::renderExtra
@@ -72,6 +73,7 @@ class ExpandableChildTest extends AbstractRenderHans
         $this->mockModel(static::RENDER_ME, 'model html');
         $this->mockModel(static::GET_DOMID, 'x12345');
         $this->mockModel(static::GET_HAS_EXTRAS, true);
+        $this->mockModel(static::GET_KEY_TYPE, ProcessConstInterface::TYPE_STRING);
         $this->mockModel(static::GET_DATA, 'eXXtra');
 
         $this->modelMock->expects($this->exactly(2))
@@ -100,6 +102,7 @@ class ExpandableChildTest extends AbstractRenderHans
         $this->assertStringContainsString('some conn', $result);
         $this->assertStringContainsString('any conn', $result);
         $this->assertStringContainsString('generated source', $result);
+        $this->assertStringContainsString(ProcessConstInterface::TYPE_STRING, $result);
         // Stuff from the nest.
         $this->assertStringContainsString('model html', $result);
         $this->assertStringContainsString('x12345', $result);

@@ -64,9 +64,9 @@ abstract class AbstractOutput
      *        the browser.
      * [1] -> Are we ignoring local settings?
      *
-     * @var string[]
+     * @var array
      *   An array of all chunk strings.
-     *   A chunk string are:
+     *   A chunk string are be:
      *   - header
      *   - messages
      *   - data part
@@ -90,7 +90,7 @@ abstract class AbstractOutput
     /**
      * Cleanup stuff, after all is said and done.
      */
-    protected function destruct(): void
+    protected function destruct()
     {
         $this->cleanupService->cleanupOldChunks();
     }
@@ -113,5 +113,5 @@ abstract class AbstractOutput
     /**
      * Tell the output service, that we are finished.
      */
-    abstract public function finalize(): void;
+    abstract public function finalize();
 }

@@ -50,9 +50,10 @@ interface ConfigConstInterface
     /**
      * Array key. Containing the render info of one of the configurations.
      *
+     *
      * @var string
      */
-    public const RENDER = 'render';
+    const RENDER = 'render';
 
     /**
      * Array key. Containing the name of the evaluation method inside the
@@ -68,269 +69,318 @@ interface ConfigConstInterface
      *
      * @var string
      */
-    public const EVALUATE = 'eval';
+    const EVALUATE = 'eval';
 
     /**
      * Array kay. Containing the actual value.
      *
      * @var string
      */
-    public const VALUE = 'value';
+    const VALUE = 'value';
 
     /**
      * Array Key. Containing the section name used for better readability.
      *
      * @var string
      */
-    public const SECTION = 'section';
+    const SECTION = 'section';
+
+    /**
+     * Method name used to evaluate a boolean.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    const EVAL_BOOL = 'evalBool';
+
+    /**
+     * Method name used to evaluate an integer.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    const EVAL_INT = 'evalInt';
+
+    /**
+     * Method name used to evaluate the maximum runtime.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    const EVAL_MAX_RUNTIME = 'evalMaxRuntime';
+
+    /**
+     * Method name used to evaluate the output destination.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    const EVAL_DESTINATION = 'evalDestination';
+
+    /**
+     * Method name used to evaluate the skin name.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    const EVAL_SKIN = 'evalSkin';
+
+    /**
+     * Method name used to evaluate the allowed ip range.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    const EVAL_IP_RANGE = 'evalIpRange';
+
+    /**
+     * Method name used to evaluate the debug methods.
+     *
+     * @see \Brainworxx\Krexx\Service\Config\Validation
+     *
+     * @var string
+     */
+    const EVAL_DEBUG_METHODS = 'evalDebugMethods';
 
     /**
      * Array key. Contains the config of the output section.
      *
      * @var string
      */
-    public const SECTION_OUTPUT = 'output';
+    const SECTION_OUTPUT = 'output';
 
     /**
      * Array key. Contains the config of the behavior section.
      *
      * @var string
      */
-    public const SECTION_BEHAVIOR = 'behavior';
+    const SECTION_BEHAVIOR = 'behavior';
 
     /**
      * Array key. Contains the config of the prune section.
      *
      * @var string
      */
-    public const SECTION_PRUNE = 'prune';
+    const SECTION_PRUNE = 'prune';
 
     /**
      * Array key. Contains the config of the properties section.
      *
      * @var string
      */
-    public const SECTION_PROPERTIES = 'properties';
+    const SECTION_PROPERTIES = 'properties';
 
     /**
      * Array key. Contains the config of the methods section.
      *
      * @var string
      */
-    public const SECTION_METHODS = 'methods';
+    const SECTION_METHODS = 'methods';
 
     /**
      * Array key. Contains the config of the emergency section.
      *
      * @var string
      */
-    public const SECTION_EMERGENCY = 'emergency';
+    const SECTION_EMERGENCY = 'emergency';
 
     /**
      * Array key. Contains the config of the feEditing section.
      *
      * @var string
      */
-    public const SECTION_FE_EDITING = 'feEditing';
+    const SECTION_FE_EDITING = 'feEditing';
+
+
 
     /**
      * Dropdown value. Human-readable form of a true boolean.
      *
      * @var string
      */
-    public const VALUE_TRUE = 'true';
+    const VALUE_TRUE = 'true';
 
     /**
      * Dropdown value. Human-readable form of a false boolean.
      *
      * @var string
      */
-    public const VALUE_FALSE = 'false';
+    const VALUE_FALSE = 'false';
 
     /**
-     * Dropdown value. Output destination browser during the php shutdown phase.
+     * Dropdown value. Output destination browser.
      *
      * @var string
      */
-    public const VALUE_BROWSER = 'browser';
+    const VALUE_BROWSER = 'browser';
 
     /**
-     * Dropdown value. Output destination file logging.
+     * Dropdown value. Output destination file logging..
      *
      * @var string
      */
-    public const VALUE_FILE = 'file';
-
-    /**
-     * Dropdown value. Output destination browser immediately.
-     *
-     * @var string
-     */
-    public const VALUE_BROWSER_IMMEDIATELY = 'browserImmediately';
+    const VALUE_FILE = 'file';
 
     /**
      * "Preconfigured" debug methods.
      * @var string
      */
-    public const VALUE_DEBUG_METHODS =
-        'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo,getProperties';
+    const VALUE_DEBUG_METHODS = 'debug,__toArray,toArray,__toString,toString,_getProperties,__debugInfo,getProperties';
 
     /**
      * Array key. Holds the value of disabled.
      *
      * @var string
      */
-    public const SETTING_DISABLED = 'disabled';
+    const SETTING_DISABLED = 'disabled';
 
     /**
      * Array key. Holds the value of iprange.
      *
      * @var string
      */
-    public const SETTING_IP_RANGE = 'iprange';
+    const SETTING_IP_RANGE = 'iprange';
 
     /**
      * Array key. Holds the value of skin.
      *
      * @var string
      */
-    public const SETTING_SKIN = 'skin';
+    const SETTING_SKIN = 'skin';
 
     /**
      * Array key. Holds the value of destination.
      *
      * @var string
      */
-    public const SETTING_DESTINATION = 'destination';
+    const SETTING_DESTINATION = 'destination';
 
     /**
      * Array key. Holds the value of maxfiles.
      *
      * @var string
      */
-    public const SETTING_MAX_FILES = 'maxfiles';
+    const SETTING_MAX_FILES = 'maxfiles';
 
     /**
      * Array key. Holds the value of detectAjax.
      *
      * @var string
      */
-    public const SETTING_DETECT_AJAX = 'detectAjax';
+    const SETTING_DETECT_AJAX = 'detectAjax';
 
     /**
      * Array key. Holds the value of level.
      *
      * @var string
      */
-    public const SETTING_NESTING_LEVEL = 'level';
+    const SETTING_NESTING_LEVEL = 'level';
 
     /**
      * Array key. Holds the value of maxCall.
      *
      * @var string
      */
-    public const SETTING_MAX_CALL = 'maxCall';
+    const SETTING_MAX_CALL = 'maxCall';
 
     /**
      * Array key. Holds the value of maxRuntime.
      *
      * @var string
      */
-    public const SETTING_MAX_RUNTIME = 'maxRuntime';
+    const SETTING_MAX_RUNTIME = 'maxRuntime';
 
     /**
      * Array key. Holds the value of memoryLeft.
      *
      * @var string
      */
-    public const SETTING_MEMORY_LEFT = 'memoryLeft';
+    const SETTING_MEMORY_LEFT = 'memoryLeft';
 
     /**
      * Array key. Holds the value of useScopeAnalysis.
      *
-     * @deprecated since 5.0.0 Will be removed
-     *   The setting for the scope analysis was removed.
-     *
      * @var string
      */
-    public const SETTING_USE_SCOPE_ANALYSIS = 'useScopeAnalysis';
-
-    /**
-     * The language keys for the language file.
-     *
-     * @var string
-     */
-    public const SETTING_LANGUAGE_KEY = 'languageKey';
+    const SETTING_USE_SCOPE_ANALYSIS = 'useScopeAnalysis';
 
     /**
      * Array key. Holds the value of analyseProtected.
      *
      * @var string
      */
-    public const SETTING_ANALYSE_PROTECTED = 'analyseProtected';
+    const SETTING_ANALYSE_PROTECTED = 'analyseProtected';
 
     /**
      * Array key. Holds the value of analysePrivate.
      *
      * @var string
      */
-    public const SETTING_ANALYSE_PRIVATE = 'analysePrivate';
+    const SETTING_ANALYSE_PRIVATE = 'analysePrivate';
 
     /**
      * Array key. Holds the value of analyseScalar.
      *
      * @var string
      */
-    public const SETTING_ANALYSE_SCALAR = 'analyseScalar';
+    const SETTING_ANALYSE_SCALAR = 'analyseScalar';
 
     /**
      * Array key. Holds the value of analyseTraversable.
      *
      * @var string
      */
-    public const SETTING_ANALYSE_TRAVERSABLE = 'analyseTraversable';
+    const SETTING_ANALYSE_TRAVERSABLE = 'analyseTraversable';
 
     /**
      * Array key. Holds the value of analyseProtectedMethods.
      *
      * @var string
      */
-    public const SETTING_ANALYSE_PROTECTED_METHODS = 'analyseProtectedMethods';
+    const SETTING_ANALYSE_PROTECTED_METHODS = 'analyseProtectedMethods';
 
     /**
      * Array key. Holds the value of analysePrivateMethods.
      *
      * @var string
      */
-    public const SETTING_ANALYSE_PRIVATE_METHODS = 'analysePrivateMethods';
+    const SETTING_ANALYSE_PRIVATE_METHODS = 'analysePrivateMethods';
 
     /**
      * Array key. Holds the value of analyseGetter.
      *
      * @var string
      */
-    public const SETTING_ANALYSE_GETTER = 'analyseGetter';
+    const SETTING_ANALYSE_GETTER = 'analyseGetter';
 
     /**
      * Array key. Holds the value of debugMethods.
      *
      * @var string
      */
-    public const SETTING_DEBUG_METHODS = 'debugMethods';
+    const SETTING_DEBUG_METHODS = 'debugMethods';
 
     /**
      * Array key. Holds the value of maxStepNumber.
      *
      * @var string
      */
-    public const SETTING_MAX_STEP_NUMBER = 'maxStepNumber';
+    const SETTING_MAX_STEP_NUMBER = 'maxStepNumber';
 
     /**
      * Array key. Holds the value of arrayCountLimit.
      *
      * @var string
      */
-    public const SETTING_ARRAY_COUNT_LIMIT = 'arrayCountLimit';
+    const SETTING_ARRAY_COUNT_LIMIT = 'arrayCountLimit';
+
+
 
     /**
      * Array key. Holds the render type a single setting, who is also the
@@ -343,35 +393,35 @@ interface ConfigConstInterface
      *
      * @var string
      */
-    public const RENDER_TYPE = 'Type';
+    const RENDER_TYPE = 'Type';
 
     /**
      * Identifies this configuration as editable in the frontend.
      *
      * @var string
      */
-    public const RENDER_EDITABLE = 'Editable';
+    const RENDER_EDITABLE = 'Editable';
 
     /**
      * Renders a select dropdown.
      *
      * @var string
      */
-    public const RENDER_TYPE_SELECT = 'Select';
+    const RENDER_TYPE_SELECT = 'Select';
 
     /**
      * Renders a text input field.
      *
      * @var string
      */
-    public const RENDER_TYPE_INPUT = 'Input';
+    const RENDER_TYPE_INPUT = 'Input';
 
     /**
      * Renders nothing. no output at all.
      *
      * @var string
      */
-    public const RENDER_TYPE_NONE = 'None';
+    const RENDER_TYPE_NONE = 'None';
 
     /**
      * Value from the configuration file.
@@ -381,7 +431,7 @@ interface ConfigConstInterface
      *
      * @var string
      */
-    public const RENDER_TYPE_CONFIG_FULL = 'full';
+    const RENDER_TYPE_CONFIG_FULL = 'full';
 
     /**
      * Value from the configuration file.
@@ -391,7 +441,7 @@ interface ConfigConstInterface
      *
      * @var string
      */
-    public const RENDER_TYPE_CONFIG_DISPLAY = 'display';
+    const RENDER_TYPE_CONFIG_DISPLAY = 'display';
 
     /**
      * Value from the configuration file.
@@ -401,19 +451,93 @@ interface ConfigConstInterface
      *
      * @var string
      */
-    public const RENDER_TYPE_CONFIG_NONE = 'none';
+    const RENDER_TYPE_CONFIG_NONE = 'none';
+
+    /**
+     * Name of the smokygrey skin.
+     *
+     * @var string
+     */
+    const SKIN_SMOKY_GREY = 'smokygrey';
+
+    /**
+     * Name of the hans skin.
+     *
+     * @var string
+     */
+    const SKIN_HANS = 'hans';
 
     /**
      * Class name that renders a registered skin.
      *
      * @var string
      */
-    public const SKIN_CLASS = 'class';
+    const SKIN_CLASS = 'class';
 
     /**
      * Directory with the template files of a registered skin.
      *
      * @var string
      */
-    public const SKIN_DIRECTORY = 'dir';
+    const SKIN_DIRECTORY = 'dir';
+
+    /**
+     * Value from the ini file.
+     *
+     * Tells the renderer, that this value will be displayed in the FE and can
+     * be edited.
+     *
+     * @deprecated
+     *   Since 4.1.0. Will be removed. Use RENDER_TYPE_CONFIG_FULL instead.
+     *
+     * @var string
+     */
+    const RENDER_TYPE_INI_FULL = 'full';
+
+    /**
+     * Value from the ini file.
+     *
+     * Tells the renderer, that this value will be displayed in the FE.
+     * kreXX will not accept values for this configuration.
+     *
+     * @deprecated
+     *   Since 4.1.0. Will be removed. Use RENDER_TYPE_CONFIG_DISPLAY instead.
+     *
+     * @var string
+     */
+    const RENDER_TYPE_INI_DISPLAY = 'display';
+
+    /**
+     * Value from the ini file.
+     *
+     * Tells the renderer, that this value will not be displayed in the FE.
+     * kreXX will not accept values for this configuration.
+     *
+     * @deprecated
+     *   Since 4.1.0. Will be removed. Use RENDER_TYPE_CONFIG_NONE instead.
+     *
+     * @var string
+     */
+    const RENDER_TYPE_INI_NONE = 'none';
+
+    /**
+     * Name of the chunks' folder.
+     *
+     * @var string
+     */
+    const CHUNKS_FOLDER = 'chunks';
+
+    /**
+     * Name of the log folder.
+     *
+     * @var string
+     */
+    const LOG_FOLDER = 'log';
+
+    /**
+     * Name of the config folder.
+     *
+     * @var string
+     */
+    const CONFIG_FOLDER = 'config';
 }

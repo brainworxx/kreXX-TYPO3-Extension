@@ -53,7 +53,6 @@ Or from within the PHP source code:
 - Debugger for Fluid
 - Advanced analysing of error objects
 - Analysis of :literal:`JSON` and :literal:`XML` strings
-- Analysis of Flexform data string.
 
 |
 |

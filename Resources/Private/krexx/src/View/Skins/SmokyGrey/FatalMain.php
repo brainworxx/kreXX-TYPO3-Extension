@@ -48,11 +48,7 @@ trait FatalMain
     private $markerFatalMain = [
         '{search}',
         '{KrexxId}',
-        '{plugins}',
-        '{searchHeadline}',
-        '{debugHeadline}',
-        '{configHeadline}',
-        '{pluginsHeadline}'
+        '{plugins}'
     ];
 
     /**
@@ -61,17 +57,12 @@ trait FatalMain
     public function renderFatalMain(string $errstr, string $errfile, int $errline): string
     {
         // Add the search.
-        $messages = $this->pool->messages;
         return str_replace(
             $this->markerFatalMain,
             [
                 $this->renderSearch(),
                 $this->pool->recursionHandler->getMarker(),
-                $this->renderPluginList(),
-                $messages->getHelp('searchHeadline'),
-                $messages->getHelp('debugHeadline'),
-                $messages->getHelp('configHeadline'),
-                $messages->getHelp('pluginsHeadline')
+                $this->renderPluginList()
             ],
             parent::renderFatalMain($errstr, $errfile, $errline)
         );

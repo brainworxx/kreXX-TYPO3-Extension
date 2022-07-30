@@ -76,7 +76,7 @@ class ThroughMethods extends AbstractCallback implements ConstInterface, Callbac
             ];
             // We may not be able to use the method name here
             // @see ViewFactory
-            if ($isFactoryMethod) {
+            if ($isFactoryMethod === true) {
                 $params[static::PARAM_FACTORY_NAME] = $factoryName;
             }
             // Now, that we have set the reflection class, we can call the original.
