@@ -39,6 +39,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -123,7 +124,7 @@ class ExtFilePathTest extends AbstractTest
         // Look at the model.
         $jsonData = $model->getJson();
         $expectations = [
-            'Resolved EXT path' => 'includekrexx/Tests/Fixtures/123458.Krexx.html',
+            'Resolved EXT path' => 'Tests/Fixtures/123458.Krexx.html',
             'Mimetype file' => 'just a file',
             'Error' => 'The file does not exist.'
         ];
