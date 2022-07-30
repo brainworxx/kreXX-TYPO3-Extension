@@ -38,6 +38,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Scalar;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Misc\File;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
@@ -96,13 +97,21 @@ class ExtFilePathTest extends AbstractTest
             ->will($this->returnValue('just a file'));
         $this->setValueByReflection('bufferInfo', $finfoMock, $extFilePath);
 
+        // Make sure that the resolved path gets filtered.
+        $fileServiceMock = $this->createMock(File::class);
+        $fileServiceMock->expects($this->once())
+            ->method('filterFilePath')
+            ->with('includekrexx/Tests/Fixtures/123458.Krexx.html')
+            ->will($this->returnValue('Tests/Fixtures/123458.Krexx.html'));
+        \Krexx::$pool->fileService = $fileServiceMock;
+
         $this->assertFalse($extFilePath->canHandle($fixture, $model), 'Always false. We add the stuff to the model.');
         $extFilePath->callMe();
 
         // Look at the model.
         $jsonData = $model->getJson();
         $expectations = [
-            "Resolved EXT path" => "includekrexx/Tests/Fixtures/123458.Krexx.html",
+            "Resolved EXT path" => "Tests/Fixtures/123458.Krexx.html",
             "Real path" => "n/a",
             "Mimetype file" => "just a file"
         ];
