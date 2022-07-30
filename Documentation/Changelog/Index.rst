@@ -13,6 +13,7 @@ Changelog
 =============================================================
 
 4.1.6
+    - [Bugfix] Link to the documentation of the debug preset does not work anymore in the documentation.
 
 4.1.5
     - [Feature] Aimeos 2022 support
