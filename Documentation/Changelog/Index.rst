@@ -46,6 +46,9 @@ Changelog
     - [Change] Moved the JS and CSS files to the private folder.
     - [Change] Streamlined the return type of the retrieveDeclaringReflection of class methods.
 
+4.1.6
+    - [Bugfix] Link to the documentation of the debug preset does not work anymore in the documentation.
+
 4.1.5
     - [Feature] Aimeos 2022 support
     - [Bugfix] Remove the use of the deprecated \TYPO3\CMS\Extbase\Mvc\View\ViewInterface.
