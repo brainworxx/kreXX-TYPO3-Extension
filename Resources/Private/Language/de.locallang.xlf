@@ -392,7 +392,7 @@
 			</trans-unit>
 			<trans-unit id="label.maxRuntime">
 				<source>Maximum Runtime [Seconds]:</source>
-				<target>Maximale Leufzeit [Sekunden]:</target>
+				<target>Maximale Laufzeit [Sekunden]:</target>
 			</trans-unit>
 			<trans-unit id="label.maxfiles">
 				<source>Maximum files in the logfolder:</source>
