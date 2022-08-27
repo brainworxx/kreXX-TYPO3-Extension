@@ -153,7 +153,7 @@ class FilePath extends AbstractScalarAnalysis
         } catch (TypeError $exception) {
             $isFile = false;
         }
-        
+
         if (!$isFile) {
             // Early return
             return $result;

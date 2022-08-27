@@ -110,6 +110,16 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
             return $stuffToDump;
         }
 
+        // Dumping traversable data.
+        // We do this early on, because we do not want other analysis methods
+        // fetch traversable results, that are only fetchable once.
+        if (
+            $config->getSetting(static::SETTING_ANALYSE_TRAVERSABLE) === true
+            && $data instanceof \Traversable
+        ) {
+            $stuffToDump[] = Traversable::class;
+        }
+
         // Analysing error objects.
         if (
             $data instanceof Throwable
@@ -129,14 +139,6 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
 
         // Dumping all methods.
         $stuffToDump[] = Methods::class;
-
-        // Dumping traversable data.
-        if (
-            $config->getSetting(static::SETTING_ANALYSE_TRAVERSABLE) === true
-            && $data instanceof \Traversable
-        ) {
-            $stuffToDump[] = Traversable::class;
-        }
 
         // Dumping debug methods.
         $stuffToDump[] = DebugMethods::class;
