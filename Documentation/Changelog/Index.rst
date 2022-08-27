@@ -17,6 +17,7 @@ Changelog
     - [Bugfix] Added the missing path filter to the EXT: path resolver.
     - [Bugfix] Added the missing path filter to the real path resolver.
     - [Bugfix] Use strict encoding detection for strings for more reliable results.
+    - [Bugfix] Fetch traversable data as soon as possible, because we do not want other analysis methods fetch traversable results, that are only fetchable once. DB results are a good example for this.
 
 4.1.5
     - [Feature] Aimeos 2022 support
