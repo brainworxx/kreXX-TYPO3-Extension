@@ -1,10 +1,12 @@
 4.1.6
 - Bugfix: Added the missing path filter to the real path resolver.
+- Bugfix: Use strict encoding detection for strings for more
+  reliable results.
 
 4.1.5
 - Bugfix: Unnecessary uri encoding in the smoky grey skin prevents
   the display of certain additional info values.
-- Bugfix: Prevent an overfow in the additional info of the smoky
+- Bugfix: Prevent an overflow in the additional info of the smoky
   grey skin.
 
 4.1.4

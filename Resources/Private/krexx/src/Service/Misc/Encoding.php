@@ -80,7 +80,7 @@ class Encoding
              * @return string
              *   Always 'polyfill'.
              */
-            function mb_detect_encoding($string = '', $encodingList = '', $strict = false)
+            function mb_detect_encoding($string = '', $encodingList = null, $strict = false)
             {
                 return 'polyfill';
             }
@@ -230,7 +230,7 @@ class Encoding
             return $this->pool->messages->getHelp('stringTooLarge');
         }
 
-        $encoding = mb_detect_encoding($data);
+        $encoding = mb_detect_encoding($data, 'auto', true);
         $data = mb_convert_encoding($data, 'UTF-32', $encoding === false ? null : $encoding);
         if (empty($data) === true) {
             // Unable to convert this string into something we can completely
@@ -264,7 +264,7 @@ class Encoding
      * @return string|false
      *   The result.
      */
-    public function mbDetectEncoding(string $string, string $encodinglist = 'auto', bool $strict = false)
+    public function mbDetectEncoding(string $string, string $encodinglist = 'auto', bool $strict = true)
     {
         return mb_detect_encoding($string, $encodinglist, $strict);
     }
