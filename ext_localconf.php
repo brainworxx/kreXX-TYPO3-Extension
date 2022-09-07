@@ -41,7 +41,7 @@ $boot = function () {
         try {
             \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
                 \Brainworxx\Includekrexx\Bootstrap\Bootstrap::class
-            )->checkVersionNumber('4.1.6')
+            )->checkVersionNumber('4.1.7')
                 ->run();
         } catch (\Throwable $exception) {
             // Do nothing.
