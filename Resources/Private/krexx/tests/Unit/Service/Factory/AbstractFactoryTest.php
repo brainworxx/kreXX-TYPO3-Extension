@@ -125,4 +125,15 @@ class AbstractFactoryTest extends AbstractTest
         AbstractFactory::createPool();
         $this->assertInstanceOf(stdClass::class, Krexx::$pool);
     }
+
+    /**
+     * Test the retrieval of the error callback, as well as running it.
+     *
+     * @covers \Brainworxx\Krexx\Service\Factory\AbstractFactory::retrieveErrorCallback
+     */
+    public function testRetrieveErrorCallback()
+    {
+        $callback = Krexx::$pool->retrieveErrorCallback();
+        $this->assertTrue($callback(1234, 'Barf!'), 'Must do nothing, and return TRUE');
+    }
 }

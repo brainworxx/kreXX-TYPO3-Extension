@@ -103,11 +103,7 @@ class Traversable extends AbstractObjectAnalysis implements
         try {
             // We need to deactivate the current error handling to
             // prevent the host system to do anything stupid.
-            set_error_handler(
-                function () {
-                    // Do nothing.
-                }
-            );
+            set_error_handler($this->pool->retrieveErrorCallback());
             $parameter = iterator_to_array($data);
         } catch (Throwable $e) {
             //Restore the previous error handler, and return an empty string.

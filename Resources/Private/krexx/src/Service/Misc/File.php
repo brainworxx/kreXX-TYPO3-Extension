@@ -270,9 +270,7 @@ class File
     {
         $realpath = $this->realpath($filePath);
 
-        set_error_handler(function () {
-            /* do nothing */
-        });
+        set_error_handler($this->pool->retrieveErrorCallback());
 
         // Fast-forward for the current chunk files.
         if (isset(static::$isReadableCache[$realpath]) === true) {
@@ -353,9 +351,7 @@ class File
         $filePath = $this->realpath($filePath);
 
         if ($this->fileIsReadable($filePath) === true) {
-            set_error_handler(function () {
-                // do nothing
-            });
+            set_error_handler($this->pool->retrieveErrorCallback());
             $result = filemtime($filePath);
             restore_error_handler();
         }
@@ -403,9 +399,7 @@ class File
     public function isDirectoryWritable(string $path): bool
     {
         $filename = 'test';
-        set_error_handler(function () {
-            // do nothing
-        });
+        set_error_handler($this->pool->retrieveErrorCallback());
         $result = (bool)file_put_contents($path . $filename, 'x') && unlink($path . $filename);
         restore_error_handler();
 

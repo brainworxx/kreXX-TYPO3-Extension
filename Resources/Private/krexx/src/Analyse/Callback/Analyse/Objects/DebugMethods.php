@@ -119,11 +119,7 @@ class DebugMethods extends AbstractObjectAnalysis implements
     {
         $result = null;
         // Add a try to prevent the hosting CMS from doing something stupid.
-        set_error_handler(
-            function () {
-                // Do nothing.
-            }
-        );
+        set_error_handler($this->pool->retrieveErrorCallback());
         try {
             $result = $object->$methodName();
         } catch (Throwable $e) {

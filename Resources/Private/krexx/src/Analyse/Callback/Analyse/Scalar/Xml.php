@@ -131,9 +131,7 @@ class Xml extends AbstractScalarAnalysis implements ViewConstInterface
     {
         $meta = [];
 
-        set_error_handler(function () {
-           // Do nothing.
-        });
+        set_error_handler($this->pool->retrieveErrorCallback());
         // We try to decode it.
         $this->parseXml($this->originalXml);
         restore_error_handler();

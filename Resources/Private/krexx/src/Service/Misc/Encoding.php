@@ -187,11 +187,7 @@ class Encoding
         $replace = ['&#64;', '&#123;', '&nbsp;&nbsp;'];
 
         // There are several places here, that may throw a warning.
-        set_error_handler(
-            function () {
-                // Do nothing.
-            }
-        );
+        set_error_handler($this->pool->retrieveErrorCallback());
 
         $result = str_replace($search, $replace, htmlentities($data, ENT_QUOTES));
 
@@ -405,6 +401,6 @@ class Encoding
         // The first regex detects all allowed characters.
         // For some reason, they also allow BOM characters.
         return $cache[$propName] = (bool) preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", (string)$propName) &&
-            !(bool) preg_match("/[\xEF\xBB\xBF]$/", $propName);
+            !(bool) preg_match("/\xEF\xBB\xBF/", $propName);
     }
 }

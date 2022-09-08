@@ -99,9 +99,7 @@ class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
         }
 
         // Prevent a warning in case of open_basedir restrictions.
-        set_error_handler(function () {
-            // Do nothing.
-        });
+        set_error_handler($this->pool->retrieveErrorCallback());
 
         try {
             $isFile = is_file($string);

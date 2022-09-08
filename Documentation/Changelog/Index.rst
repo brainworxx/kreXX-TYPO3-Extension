@@ -13,6 +13,9 @@ Changelog
 =============================================================
 
 4.1.7
+    - [Bugfix] Removed a faulty 'use' doc comment.
+    - [Bugfix] Use the correct method signature for the error handler callback.
+    - [Bugfix] Fixed the BOM detection in property names.
 
 4.1.6
     - [Bugfix] Link to the documentation of the debug preset does not work anymore in the documentation.
