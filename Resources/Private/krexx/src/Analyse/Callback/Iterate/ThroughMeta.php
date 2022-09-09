@@ -61,7 +61,7 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
     protected $keysWithExtra = [];
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $stuffToProcess = [];
 
@@ -129,8 +129,8 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
      *
      * @param string $key
      *   The key in the output list.
-     * @param $meta
-     *   The text to display.
+     * @param mixed $meta
+     *   The data to display.
      *
      * @return \Brainworxx\Krexx\Analyse\Model
      *   The prepared model.
@@ -161,8 +161,8 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
     /**
      * The info is already here. We just need to output them.
      *
-     * @param string $key
-     *   The key in the output list.
+     * @param Model $model
+     *   THe model so far.
      *
      * @return string
      *   The rendered html.

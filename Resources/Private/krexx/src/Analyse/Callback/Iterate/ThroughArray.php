@@ -93,11 +93,20 @@ class ThroughArray extends AbstractCallback implements
     }
 
     /**
+     * Create the model and set the values that we have.
+     *
      * @param array $array
-     * @param $key
-     * @param $value
+     *   The array we are analysing.
+     * @param int|string $key
+     *   A current key that we check if the value in that array is actually
+     *   accessible. And yes, inaccessible array values do exist.
+     * @param mixed $value
+     *   The value of that key that we are analysing
      * @param string $multilineCodeGen
+     *   The prepared code generation.
+     *
      * @return \Brainworxx\Krexx\Analyse\Model
+     *   The prepared model.
      */
     protected function prepareModel(array $array, $key, &$value, string $multilineCodeGen): Model
     {

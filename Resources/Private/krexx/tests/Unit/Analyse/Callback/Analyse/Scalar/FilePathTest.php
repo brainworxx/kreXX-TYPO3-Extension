@@ -35,10 +35,9 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Scalar;
 
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath;
+use Brainworxx\Krexx\Analyse\Scalar\String\FilePath;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use finfo;
@@ -50,7 +49,7 @@ class FilePathTest extends AbstractTest
     /**
      * Test the assigning of the finfo class.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::__construct
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::__construct
      */
     public function testConstruct()
     {
@@ -61,12 +60,12 @@ class FilePathTest extends AbstractTest
     /**
      * Test the recognition of the finfo class in the system.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::isActive
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::isActive
      */
     public function testIsActive()
     {
         $classExistsMock = $this->getFunctionMock(
-            '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar\\',
+            '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\',
             'class_exists'
         );
         $classExistsMock->expects($this->exactly(2))
@@ -88,8 +87,8 @@ class FilePathTest extends AbstractTest
     /**
      * Test, if we can identify a file path.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::canHandle
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::retrieveFileInfo
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::canHandle
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::retrieveFileInfo
      */
     public function testCanHandle()
     {
@@ -123,17 +122,25 @@ class FilePathTest extends AbstractTest
             $result,
             'No real path available, because it is the same as the __FILE__'
         );
+
+        // We do this a second time, to test the internal caching.
+        $model = new Model(Krexx::$pool);
+        $filePath->canHandle(__FILE__, $model);
+        $this->assertEquals($mimeInfo,
+            $result['Mimetype file'],
+            'Mime info was added, but the mock above was only called once.'
+        );
     }
 
     /**
      * Test, if we can handle some errors.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::canHandle
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::retrieveFileInfo
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::canHandle
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::retrieveFileInfo
      */
     public function testCanHandleErrors()
     {
-        $isFileMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar\\', 'is_file');
+        $isFileMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\', 'is_file');
         $isFileMock->expects($this->once())
             ->willReturnCallback(function () {
                 // Meh, the willThrowException does not allow \Error's.
@@ -148,8 +155,8 @@ class FilePathTest extends AbstractTest
     /**
      * We literally expect it to do nothing.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::callMe()
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath::handle()
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::callMe()
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::handle()
      */
     public function testCallMe()
     {

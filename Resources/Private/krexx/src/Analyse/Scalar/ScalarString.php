@@ -37,12 +37,12 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Scalar;
 
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Json;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Serialized;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\TimeStamp;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml;
+use Brainworxx\Krexx\Analyse\Scalar\String\Callback;
+use Brainworxx\Krexx\Analyse\Scalar\String\FilePath;
+use Brainworxx\Krexx\Analyse\Scalar\String\Json;
+use Brainworxx\Krexx\Analyse\Scalar\String\Serialized;
+use Brainworxx\Krexx\Analyse\Scalar\String\TimeStamp;
+use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
@@ -107,7 +107,7 @@ class ScalarString extends AbstractScalar
     public function handle(Model $model, string $originalData): Model
     {
         foreach ($this->classList as $className) {
-            /** @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\AbstractScalarAnalysis $scalarHandler */
+            /** @var \Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis $scalarHandler */
             $scalarHandler = $this->pool->createClass($className);
 
             if ($scalarHandler->canHandle($originalData, $model)) {

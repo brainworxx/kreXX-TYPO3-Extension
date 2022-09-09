@@ -167,8 +167,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
         }
 
         $type = $model->getType() === static::TYPE_CLASS ? $model->getNormal() : $model->getType();
-        $blackList = ['->', '::', '[', ']', '(', ')'];
-        foreach ($blackList as $value) {
+        foreach (['->', '::', '[', ']', '(', ')'] as $value) {
             if (strpos($name, $value) !== false) {
                 // We are analysing something like:
                 // $this->getWhatever();
@@ -284,7 +283,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
 
     /**
      * Set, if we are allowed to generate code to reach the stuff inside
-     * of the analysis.
+     * the analysis.
      *
      * @param bool $bool
      */

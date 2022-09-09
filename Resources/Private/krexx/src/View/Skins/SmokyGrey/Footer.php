@@ -45,7 +45,7 @@ use Brainworxx\Krexx\Analyse\Model;
 trait Footer
 {
     /**
-     * @var string
+     * @var string[]
      */
     private $markerFooter = [
         '{kconfiguration-classes}',

@@ -83,8 +83,7 @@ class File extends Fallback
     {
         $this->settings = [];
 
-        $fileExtensions = ['ini' => 'parse_ini_string', 'json' => 'json_decode'];
-        foreach ($fileExtensions as $extension => $decoder) {
+        foreach (['ini' => 'parse_ini_string', 'json' => 'json_decode'] as $extension => $decoder) {
             $completePath = $path . $extension;
             if ($this->pool->fileService->fileIsReadable($completePath)) {
                 $content = $this->pool->fileService->getFileContents($completePath, false);

@@ -37,82 +37,15 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
-use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Misc\FormatSerialize;
+use Brainworxx\Krexx\Analyse\Scalar\String\Serialized as SerializedString;
 
-class Serialized extends AbstractScalarAnalysis
+/**
+ * @deprecated
+ *   Since 5.0.0. Will be removed. Use the class that we extend here.
+ *
+ * @codeCoverageIgnore
+ *   We are not testing the unit tests.
+ */
+class Serialized extends SerializedString
 {
-    /**
-     * The model, so far.
-     *
-     * @var Model
-     */
-    protected $model;
-
-    /**
-     * Works only when hte multibyte extension is installed.
-     *
-     * @return bool
-     */
-    public static function isActive(): bool
-    {
-        return true;
-    }
-
-    /**
-     * Test if this one looks like a serialized whatever.
-     *
-     * @param string $string
-     *   The string we want to take a look at.
-     * @param Model $model
-     *   The model, so far.
-     *
-     * @return bool
-     *   Well? Can we handle it?
-     */
-    public function canHandle($string, Model $model): bool
-    {
-        $jsonData = $model->getJson();
-        $jsonKey = $this->pool->messages->getHelp('metaMimeTypeString');
-        if (
-            !isset($jsonData[$jsonKey])
-            || strpos($jsonData[$jsonKey], 'binary') === false
-        ) {
-            // A serialised string is always binary.
-            // This should sort out 99% of our contestants.
-            return false;
-        }
-
-        // We only handle objects and arrays.
-        // Everything else is not really pretty print worthy.
-        if (in_array(substr($string, 0, 2), ['o:', 'O:','a:', 'C:'], true)) {
-            $this->handledValue = $string;
-            $this->model = $model;
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * We do some pretty print with the serialized string
-     *
-     * @return string[]
-     */
-    protected function handle(): array
-    {
-        $messages = $this->pool->messages;
-        $meta = [];
-        $result = $this->pool->createClass(FormatSerialize::class)
-            ->prettyPrint($this->handledValue);
-
-        if ($result !== null) {
-            $meta[$messages->getHelp('metaPrettyPrint')] = $this->pool
-                ->encodingService->encodeString($result);
-            $this->model->setHasExtra(false);
-            $meta[$messages->getHelp('metaContent')] = $this->model->getData();
-        }
-
-        return $meta;
-    }
 }

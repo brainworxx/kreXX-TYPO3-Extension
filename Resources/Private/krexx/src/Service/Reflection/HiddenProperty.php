@@ -67,7 +67,7 @@ class HiddenProperty extends UndeclaredProperty
     /**
      * Class and property list of possible hidden properties.
      *
-     * @var array
+     * @var string[][]
      */
     public const HIDDEN_LIST = [
         DOMDocument::class => [

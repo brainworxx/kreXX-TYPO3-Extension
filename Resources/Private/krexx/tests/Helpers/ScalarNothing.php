@@ -35,7 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Helpers;
 
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\AbstractScalarAnalysis;
+use Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis;
 use Brainworxx\Krexx\Analyse\Model;
 
 class ScalarNothing extends AbstractScalarAnalysis

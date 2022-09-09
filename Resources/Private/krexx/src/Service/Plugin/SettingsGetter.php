@@ -90,7 +90,7 @@ class SettingsGetter extends Registration
     /**
      * Getter for the blacklisted debug methods.
      *
-     * @return string[]
+     * @return string[][]
      *   The debug methods.
      */
     public static function getBlacklistDebugMethods(): array
@@ -126,7 +126,7 @@ class SettingsGetter extends Registration
     /**
      * Getter for the event list.
      *
-     * @return array[]
+     * @return string[][]
      *   The event list.
      */
     public static function getEventList(): array
@@ -159,7 +159,7 @@ class SettingsGetter extends Registration
     /**
      * Getter for the skins, provided by plugins.
      *
-     * @return array[]
+     * @return string[][]
      *   The configuration arrays of additional skins.
      */
     public static function getAdditionalSkinList(): array

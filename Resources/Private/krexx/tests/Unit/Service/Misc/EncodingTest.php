@@ -168,5 +168,7 @@ class EncodingTest extends AbstractTest
         $this->assertTrue($this->encoding->isPropertyNameNormal('getValue'));
         $this->assertFalse($this->encoding->isPropertyNameNormal('get value'));
         $this->assertTrue($this->encoding->isPropertyNameNormal('getValue'));
+        $this->assertFalse($this->encoding->isPropertyNameNormal("\xEF\xBB\xBF"));
+        $this->assertFalse($this->encoding->isPropertyNameNormal('x' . "\xEF\xBB\xBF" . 'y'));
     }
 }

@@ -135,6 +135,14 @@ call_user_func(function () {
 
         include_once KREXX_DIR . 'src/Analyse/Scalar/AbstractScalar.php';
         include_once KREXX_DIR . 'src/Analyse/Scalar/ScalarString.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/AbstractScalarAnalysis.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/Callback.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/FilePath.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/Json.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/Xml.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/TimeStamp.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/Serialized.php';
+        // @deprecated
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/AbstractScalarAnalysis.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Callback.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/FilePath.php';
@@ -142,6 +150,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Xml.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/TimeStamp.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Serialized.php';
+        // @deprecated
 
         include_once KREXX_DIR . 'src/Analyse/Model/ConnectorService.php';
         include_once KREXX_DIR . 'src/Analyse/Model/Callback.php';

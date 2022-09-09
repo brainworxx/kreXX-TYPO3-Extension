@@ -79,7 +79,7 @@ trait CodeGenType
      * @param string $codeGenType
      *   The string, representing the type.
      *
-     * @return $this
+     * @return Model
      *   For chaining.
      */
     public function setCodeGenType(string $codeGenType): Model

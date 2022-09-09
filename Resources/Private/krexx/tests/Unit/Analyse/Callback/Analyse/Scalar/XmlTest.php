@@ -35,7 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Scalar;
 
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml;
+use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
@@ -44,7 +44,7 @@ use Krexx;
 
 class XmlTest extends AbstractTest
 {
-    const SCALAR_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar\\';
+    const SCALAR_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\';
     const TEXT_XML = 'text/xml;';
     const ATTRIBUTES = 'attributes';
     const CHILDREN = 'children';
@@ -52,7 +52,7 @@ class XmlTest extends AbstractTest
     /**
      * Test the disabling of the XML analysis.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml::isActive
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::isActive
      */
     public function testIsActiveNot()
     {
@@ -76,7 +76,7 @@ class XmlTest extends AbstractTest
     /**
      * Test the enabling of the XML analysis.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml::isActive
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::isActive
      */
     public function testIsActive()
     {
@@ -101,7 +101,7 @@ class XmlTest extends AbstractTest
     /**
      * Test the handling of strings.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml::canHandle
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::canHandle
      */
     public function testcanHandle()
     {
@@ -127,11 +127,11 @@ class XmlTest extends AbstractTest
     /**
      * Test the actual handling of a XML string.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml::handle
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml::parseXml
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml::tagOpen
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml::tagClosed
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml::tagData
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::handle
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::parseXml
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::tagOpen
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::tagClosed
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Xml::tagData
      */
     public function testHandle()
     {

@@ -35,60 +35,69 @@
 
 declare(strict_types=1);
 
-namespace Brainworxx\Includekrexx\Plugins\Typo3\Scalar;
+namespace Brainworxx\Krexx\Analyse\Scalar\String;
 
-use Brainworxx\Krexx\Analyse\Scalar\String\FilePath;
 use Brainworxx\Krexx\Analyse\Model;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use DateTime;
 use Throwable;
 
 /**
- * Resolving the actual file path from strings that start with EXT:
+ * "Analysing" a timestamp in a string.
+ *
+ * @see \Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger
+ *   Here happens the integer version.
  */
-class ExtFilePath extends FilePath
+class TimeStamp extends AbstractScalarAnalysis
 {
     /**
-     * Retrieve the absolute path and then pass it into the original FilePath.
+     * {@inheritDoc}
+     */
+    public static function isActive(): bool
+    {
+        return true;
+    }
+
+    /**
+     * We add the short info straight to the model.
      *
-     * @param string $string
-     * @param \Brainworxx\Krexx\Analyse\Model $model
-     * @return bool
+     * {@inheritDoc}
+     *
+     * @throws \Exception
      */
     public function canHandle($string, Model $model): bool
     {
-        if (strpos($string, 'EXT:') !== 0) {
-            // Does not start with EXT:
-            // Nothing to do here.
+        // Get a first impression.
+        $int  = (int) $string;
+        if ($int < 946681200) {
+            // We'll not treat it like a timestamp.
             return false;
         }
 
-        // Retrieve the EXT path from the framework.
-        set_error_handler(function (): void {
-            // Do nothing.
-        });
-        try {
-            $string = GeneralUtility::getFileAbsFileName($string);
-        } catch (Throwable $e) {
-            // Huh, someone messed with the GeneralUtility.
-            restore_error_handler();
-            return false;
-        }
-
-        restore_error_handler();
-
-        // Preserve the result from the getFileAbsFileName.
-        $model->addToJson(
-            $this->pool->messages->getHelp('TYPO3ResPath'),
-            $this->pool->fileService->filterFilePath($string)
-        );
-
-        if (!file_exists($string)) {
+        // Might be a regular time stamp, get a second impression.
+        $metaTimestamp = $this->pool->messages->getHelp('metaTimestamp');
+        if ((string)$int === $string) {
             $model->addToJson(
-                $this->pool->messages->getHelp('TYPO3ResPathError'),
-                $this->pool->messages->getHelp('TYPO3ResPathDoesNotExist')
+                $metaTimestamp,
+                (new DateTime('@' . $int))->format('d.M Y H:i:s')
             );
+            return false;
         }
 
-        return parent::canHandle($string, $model);
+        // Check for a microtime string.
+        try {
+            $model->addToJson(
+                $metaTimestamp,
+                (DateTime::createFromFormat('U.u', $string)->format('d.M Y H:i:s.u'))
+            );
+        } catch (Throwable $exception) {
+            // Do nothing
+        }
+
+        // The last part to check for would be a string return from the
+        // microtime. In over 10 years of PHP development, I've never seen one
+        //of these, ever. So no, as of, right now, we will not check these.
+
+        // Make sure that the handle part is not called, to save time.
+        return false;
     }
 }

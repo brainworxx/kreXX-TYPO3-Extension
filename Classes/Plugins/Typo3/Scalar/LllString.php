@@ -35,7 +35,7 @@
 
 namespace Brainworxx\Includekrexx\Plugins\Typo3\Scalar;
 
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\AbstractScalarAnalysis;
+use Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;

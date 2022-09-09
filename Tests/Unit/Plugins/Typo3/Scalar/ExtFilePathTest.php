@@ -96,7 +96,7 @@ class ExtFilePathTest extends AbstractTest
 
         // Get the underlying class to find the file.
         $isFileMock = $this->getFunctionMock(
-            '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar',
+            '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String',
             'is_file'
         );
         $isFileMock->expects($this->once())

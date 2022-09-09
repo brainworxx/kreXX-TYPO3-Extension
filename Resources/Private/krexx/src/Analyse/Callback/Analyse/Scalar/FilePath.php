@@ -37,137 +37,15 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
-use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\Pool;
-use finfo;
-use TypeError;
+use Brainworxx\Krexx\Analyse\Scalar\String\FilePath as FilePathString;
 
 /**
- * Identifying a string as a file path.
+ * @deprecated
+ *   Since 5.0.0. Will be removed. Use the class that we extend here.
  *
- * Adding a finfo analysis and a realpath if it differs from the given path.
+ * @codeCoverageIgnore
+ *   We are not testing the unit tests.
  */
-class FilePath extends AbstractScalarAnalysis
+class FilePath extends FilePathString
 {
-    /**
-     * @var \finfo
-     */
-    protected $bufferInfo;
-
-    /**
-     * @var string
-     */
-    protected const REAL_PATH = 'realpath';
-
-    /**
-     * @var string
-     */
-    protected const MIME_TYPE = 'mimetype';
-
-    /**
-     * No file path analysis without the finfo class.
-     *
-     * @return bool
-     *   Is the finfo class available?
-     */
-    public static function isActive(): bool
-    {
-        return class_exists(finfo::class, false);
-    }
-
-    /**
-     * Get the finfo class ready, if available.
-     *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
-     */
-    public function __construct(Pool $pool)
-    {
-        parent::__construct($pool);
-        $this->bufferInfo = new finfo(FILEINFO_MIME);
-    }
-
-    /**
-     * Is this actually a path to a file? Simple wrapper around is_file().
-     *
-     * Of course, we only act, if finfo is available.
-     *
-     * @param string $string
-     *   The string to test.
-     *
-     * @param Model $model
-     *   The model, so far.
-     *
-     * @return bool
-     *   The result, if it's callable.
-     */
-    public function canHandle($string, Model $model): bool
-    {
-        // Some fast static caching.
-        static $cache = [];
-
-        if (strlen($string) < 25) {
-            // Early return for the most values.
-            return false;
-        }
-
-        if (!isset($cache[$string])) {
-            $cache[$string] = $this->retrieveFileInfo($string);
-        }
-
-        if (empty($cache[$string])) {
-            // Not a file.
-            return false;
-        }
-
-        if (!empty($cache[$string][static::REAL_PATH])) {
-            $model->addToJson(
-                $this->pool->messages->getHelp('realPath'),
-                $cache[$string][static::REAL_PATH]
-            );
-        }
-
-        if (!empty($cache[$string][static::MIME_TYPE])) {
-            $model->addToJson(
-                $this->pool->messages->getHelp('metaMimeTypeFile'),
-                $cache[$string][static::MIME_TYPE]
-            );
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string $string
-     * @return string[]
-     */
-    protected function retrieveFileInfo(string $string): array
-    {
-        $result = [];
-
-        set_error_handler(function (): void {
-            // Do nothing.
-        });
-
-        try {
-            $isFile = is_file($string);
-        } catch (TypeError $exception) {
-            $isFile = false;
-        }
-
-        if (!$isFile) {
-            // Early return
-            return $result;
-        }
-
-        $realPath = realpath($string);
-        if ($string !== $realPath && is_string($realPath)) {
-            // We only add the realpath, if it differs from the string
-            $result[static::REAL_PATH] = $this->pool->fileService->filterFilePath($realPath);
-        }
-        $result[static::MIME_TYPE] = $this->bufferInfo->file($string);
-
-        restore_error_handler();
-
-        return $result;
-    }
 }

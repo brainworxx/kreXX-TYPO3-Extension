@@ -105,7 +105,7 @@ trait ConnectorService
      * @param string|int $params
      *   The parameters as a sting.
      *
-     * @return $this
+     * @return Model
      *   $this for chaining.
      */
     public function setConnectorParameters($params): Model
@@ -130,7 +130,7 @@ trait ConnectorService
      *
      * @param string $type
      *
-     * @return $this
+     * @return Model
      *   Return $this, for chaining.
      */
     public function setConnectorType(string $type): Model
@@ -145,7 +145,7 @@ trait ConnectorService
      *
      * @param string $string
      *
-     * @return $this
+     * @return Model
      *   Return $this for chaining.
      */
     public function setCustomConnectorLeft(string $string): Model
@@ -180,7 +180,7 @@ trait ConnectorService
      * @param string $returnType
      *   The return type.
      *
-     * @return $this
+     * @return Model
      *   Return $this for chaining.
      */
     public function setReturnType(string $returnType): Model

@@ -130,6 +130,9 @@ class Recursion
         // Check objects.
         // As of PHP 7.1 and lower, PHP does not recognise an __PHP_Incomplete_Class
         // as an object via is_object. Hence, we must test the class itself.
+        // @deprecated
+        // The __PHP_Incomplete_Class check will be removed as soon as we drop
+        // 7.1 support.
         if (is_object($bee) || $bee instanceof __PHP_Incomplete_Class) {
             return $this->recursionHive->contains($bee);
         }

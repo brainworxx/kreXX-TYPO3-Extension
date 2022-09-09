@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Service\Factory;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use Closure;
 
 /**
  * Simple factory, nothing special. Offers an overwrite method.
@@ -103,6 +104,25 @@ abstract class AbstractFactory
     public function &getServer(): array
     {
         return $_SERVER;
+    }
+
+    /**
+     * Retrieve the do-nothing-error-handler callback.
+     *
+     * @return \Closure
+     */
+    public function retrieveErrorCallback(): Closure
+    {
+        return function (
+            int $errno,
+            string $errstr,
+            string $errfile = null,
+            int $errline = null,
+            array $errcontext = null
+        ): bool {
+            // Do nothing.
+            return true;
+        };
     }
 
     /**

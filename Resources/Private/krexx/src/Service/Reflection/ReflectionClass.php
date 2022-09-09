@@ -153,9 +153,7 @@ class ReflectionClass extends \ReflectionClass
             // But first we must make sure that the hosting cms does not do
             // something stupid. Accessing this value directly it probably
             // a bad idea, but the only way to get the value.
-            set_error_handler(function (): void {
-                // Do nothing.
-            });
+            set_error_handler(\Krexx::$pool->retrieveErrorCallback());
             try {
                 $result = $this->data->$propName;
                 restore_error_handler();

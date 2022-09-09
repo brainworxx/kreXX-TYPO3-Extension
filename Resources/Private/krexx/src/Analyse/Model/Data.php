@@ -57,7 +57,7 @@ trait Data
      * @param mixed $data
      *   The current variable we are rendering.
      *
-     * @return $this
+     * @return Model
      *   $this, for chaining.
      */
     public function setData($data): Model

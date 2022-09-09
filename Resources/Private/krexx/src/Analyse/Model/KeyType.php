@@ -90,7 +90,7 @@ trait KeyType
      * @codeCoverageIgnore
      *   We do not test deprecated methods.
      *
-     * @return $this
+     * @return Model
      *   For chaining.
      */
     public function setKeyType(string $keyType): Model

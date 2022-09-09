@@ -43,7 +43,7 @@ $serviceFlow = '\\Brainworxx\\Krexx\\Service\\Flow\\';
 $serviceMisc = '\\Brainworxx\\Krexx\\Service\\Misc\\';
 $viewOutput = '\\Brainworxx\\Krexx\\View\\Output\\';
 $view = '\\Brainworxx\\Krexx\\View\\';
-$callbackScalar = '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar\\';
+$callbackScalar = '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\';
 $caller = '\\Brainworxx\\Krexx\\Analyse\\Caller';
 
 PHPMock::defineFunctionMock($analyseRoutingProcess, 'class_exists');

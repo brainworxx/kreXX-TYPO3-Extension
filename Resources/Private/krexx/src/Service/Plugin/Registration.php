@@ -79,7 +79,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
     /**
      * Blacklist of forbidden debug methods.
      *
-     * @var array[]
+     * @var string[][]
      */
     protected static $blacklistDebugMethods = [];
 
@@ -107,14 +107,14 @@ class Registration implements ConfigConstInterface, PluginConstInterface
     /**
      * List of all registered events for the event handler.
      *
-     * @var array[]
+     * @var string[][]
      */
     protected static $eventList = [];
 
     /**
      * List of all additionally registered skins with their configuration.
      *
-     * @var array[]
+     * @var string[][]
      */
     protected static $additionalSkinList = [];
 
@@ -356,7 +356,6 @@ class Registration implements ConfigConstInterface, PluginConstInterface
     {
         if (isset(static::$plugins[$configClass])) {
             static::$plugins[$configClass][static::IS_ACTIVE] = true;
-            /** @var \Brainworxx\Krexx\Service\Plugin\PluginConfigInterface $staticPlugin */
             static::$plugins[$configClass][static::CONFIG_CLASS]->exec();
 
             if (isset(Krexx::$pool)) {

@@ -35,7 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Scalar;
 
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Json;
+use Brainworxx\Krexx\Analyse\Scalar\String\Json;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
@@ -50,12 +50,12 @@ class JsonTest extends AbstractTest
     /**
      * Test the json extension detection.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Json::isActive()
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Json::isActive()
      */
     public function testIsActive()
     {
         $functionExists = $this
-            ->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar\\', 'function_exists');
+            ->getFunctionMock('\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\', 'function_exists');
 
         $functionExists->expects($this->exactly(2))
             ->willReturnCallback(function () {
@@ -75,7 +75,7 @@ class JsonTest extends AbstractTest
     /**
      * Test the json recognition.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Json::canHandle
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Json::canHandle
      */
     public function testCanHandle()
     {
@@ -95,7 +95,7 @@ class JsonTest extends AbstractTest
     /**
      * Test the handling of the json.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Json::handle
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Json::handle
      */
     public function testHandle()
     {

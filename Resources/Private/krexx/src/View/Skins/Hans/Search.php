@@ -43,7 +43,7 @@ namespace Brainworxx\Krexx\View\Skins\Hans;
 trait Search
 {
     /**
-     * @var string
+     * @var string[]
      */
     private $markerSearch = [
         '{KrexxId}',

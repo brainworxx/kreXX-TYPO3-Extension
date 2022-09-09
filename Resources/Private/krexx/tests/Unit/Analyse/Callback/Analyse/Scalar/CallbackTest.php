@@ -35,7 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Scalar;
 
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback;
+use Brainworxx\Krexx\Analyse\Scalar\String\Callback;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
@@ -48,7 +48,7 @@ class CallbackTest extends AbstractTest
     /**
      * Test if the callback analyser can identify a callback.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::canHandle
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Callback::canHandle
      */
     public function testCanHandle()
     {
@@ -62,10 +62,10 @@ class CallbackTest extends AbstractTest
     /**
      * Test the analysis of a callback.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::handle
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Callback::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Callback::handle
      * @covers \Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration::retrieveDeclaration
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::insertParameters
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Callback::insertParameters
      */
     public function testCallMeNormal()
     {
@@ -104,8 +104,8 @@ class CallbackTest extends AbstractTest
     /**
      * Test the error handling in the callMe.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::callMe
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback::handle
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Callback::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\Callback::handle
      */
     public function testCallMeError()
     {

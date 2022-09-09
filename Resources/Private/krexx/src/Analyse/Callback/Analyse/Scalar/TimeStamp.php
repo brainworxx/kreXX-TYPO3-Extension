@@ -37,61 +37,15 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
-use Brainworxx\Krexx\Analyse\Model;
-use DateTime;
-use Throwable;
+use Brainworxx\Krexx\Analyse\Scalar\String\TimeStamp as TimeStampString;
 
-class TimeStamp extends AbstractScalarAnalysis
+/**
+ * @deprecated
+ *   Since 5.0.0. Will be removed. Use the class that we extend here.
+ *
+ * @codeCoverageIgnore
+ *   We are not testing the unit tests.
+ */
+class TimeStamp extends TimeStampString
 {
-    /**
-     * {@inheritDoc}
-     */
-    public static function isActive(): bool
-    {
-        return true;
-    }
-
-    /**
-     * We add the short info straight to the model.
-     *
-     * {@inheritDoc}
-     * 
-     * @throws \Exception
-     */
-    public function canHandle($string, Model $model): bool
-    {
-        // Get a first impression.
-        $int  = (int) $string;
-        if ($int < 946681200) {
-            // We'll not treat it like a timestamp.
-            return false;
-        }
-
-        // Might be a regular time stamp, get a second impression.
-        $metaTimestamp = $this->pool->messages->getHelp('metaTimestamp');
-        if ((string)$int === $string) {
-            $model->addToJson(
-                $metaTimestamp,
-                (new DateTime('@' . $int))->format('d.M Y H:i:s')
-            );
-            return false;
-        }
-
-        // Check for a microtime string.
-        try {
-            $model->addToJson(
-                $metaTimestamp,
-                (DateTime::createFromFormat('U.u', $string)->format('d.M Y H:i:s.u'))
-            );
-        } catch (Throwable $exception) {
-            // Do nothing
-        }
-
-        // The last part to check for would be a string return from the
-        // microtime. In over 10 years of PHP development, I've never seen one
-        //of these, ever. So no, as of, right now, we will not check these.
-
-        // Make sure that the handle part is not called, to save time.
-        return false;
-    }
 }

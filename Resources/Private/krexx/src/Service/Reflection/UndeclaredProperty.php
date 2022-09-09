@@ -96,14 +96,14 @@ class UndeclaredProperty extends ReflectionProperty
     protected $isProtected = false;
 
     /**
-     * Setting the necessary properties constructor.
+     * Setting the necessary property's constructor.
      *
      * @param \ReflectionClass $ref
      *   The instance of the class with the property.
      * @param string|int $name
      *   The name of the property.
      */
-    public function __construct(\ReflectionClass $ref, $name)
+    public function __construct(ReflectionClass $ref, $name)
     {
         $this->declaringClass = $ref;
         $this->propertyName = $name;

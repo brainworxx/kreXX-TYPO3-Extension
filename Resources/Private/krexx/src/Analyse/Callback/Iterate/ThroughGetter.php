@@ -273,7 +273,7 @@ class ThroughGetter extends AbstractCallback implements
         $value = null;
 
         if (!empty($refProp)) {
-            // We've got ourselves a possible result!
+            // We've got ourselves a possible result.
             $nothingFound = false;
             $value = $reflectionClass->retrieveValue($refProp);
             $model->setData($value);
@@ -431,9 +431,9 @@ class ThroughGetter extends AbstractCallback implements
     /**
      * Analyse tone of the regex findings.
      *
-     * @param $propertyName
+     * @param string $propertyName
      *   The name of the property.
-     * @param $classReflection
+     * @param ReflectionClass $classReflection
      *   The current class reflection
      *
      * @throws \ReflectionException
@@ -441,7 +441,7 @@ class ThroughGetter extends AbstractCallback implements
      * @return \ReflectionProperty|null
      *   The reflection of the property, or null if we found nothing.
      */
-    protected function analyseRegexResult($propertyName, $classReflection): ?ReflectionProperty
+    protected function analyseRegexResult(string $propertyName, ReflectionClass $classReflection): ?ReflectionProperty
     {
         // Check if this is a property and return the first we find.
         $result = $this->retrievePropertyByName($propertyName, $classReflection);
@@ -511,7 +511,7 @@ class ThroughGetter extends AbstractCallback implements
      * @param string $haystack
      *   The haystack, obviously.
      *
-     * @return array
+     * @return string[]|int[]
      *   The findings.
      */
     protected function findIt(array $searchArray, string $haystack): array

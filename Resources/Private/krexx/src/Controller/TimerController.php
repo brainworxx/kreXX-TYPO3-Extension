@@ -47,14 +47,14 @@ class TimerController extends AbstractController
     /**
      * Here we save all timekeeping stuff.
      *
-     * @var array
+     * @var float[]
      */
     protected static $timekeeping = [];
 
     /**
      * More timekeeping stuff.
      *
-     * @var array
+     * @var int[]
      */
     protected static $counterCache = [];
 
@@ -120,7 +120,7 @@ class TimerController extends AbstractController
      * @param array $timeKeeping
      *   The timekeeping array.
      *
-     * @return array
+     * @return string[]
      *   The benchmark array.
      *
      * @see http://php.net/manual/de/function.microtime.php
