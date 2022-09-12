@@ -16,6 +16,7 @@ Changelog
     - [Bugfix] Removed a faulty 'use' doc comment.
     - [Bugfix] Use the correct method signature for the error handler callback.
     - [Bugfix] Fixed the BOM detection in property names.
+    - [Bugfix] Fixed the SQL query debugger in PHP 8 strict mode.
 
 4.1.6
     - [Bugfix] Link to the documentation of the debug preset does not work anymore in the documentation.

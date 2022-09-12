@@ -147,7 +147,7 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
                 if (is_string($parameter)) {
                     $parameter = '\'' . $parameter . '\'';
                 }
-                $sql = str_replace(':' . $key, $parameter, $sql);
+                $sql = str_replace(':' . $key, (string) $parameter, $sql);
             }
 
             $result = $sql;
