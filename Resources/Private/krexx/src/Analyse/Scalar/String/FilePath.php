@@ -154,6 +154,7 @@ class FilePath extends AbstractScalarAnalysis
 
         if (!$isFile) {
             // Early return
+            restore_error_handler();
             return $result;
         }
 
