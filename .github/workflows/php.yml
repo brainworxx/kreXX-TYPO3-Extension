@@ -47,10 +47,14 @@ jobs:
       run: composer require --no-update "typo3/cms-adminpanel:${{ matrix.env.TYPO3 }}"
       if: ${{ matrix.env.TYPO3 != '^8.7' }}
 
+    - name: Get composer cache directory
+      id: composer-cache
+      run: echo "dir=$(composer config cache-files-dir)" >>$GITHUB_OUTPUT
+
     - name: Cache Composer packages
       uses: actions/cache@v3
       with:
-        path: $(composer config cache-files-dir)
+        path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
         restore-keys: ${{ runner.os }}-composer-
 
