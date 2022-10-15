@@ -74,7 +74,7 @@ class AbstractControllerTest extends AbstractTest
                 ->method('get')
                 ->with(ModuleTemplate::class)
                 ->will($this->returnValue($mtMock));
-            $indexController->injectObjectManager($objectManagerMock);
+            $this->setValueByReflection('objectManager', $objectManagerMock, $indexController);
             $indexController->initializeAction();
         } else {
             // TYPO3 12 style.
