@@ -157,7 +157,7 @@ class IndexControllerTest extends AbstractTest
         $indexController->injectSettingsModel($settingsModel);
         $indexController->injectConfiguration($configurationMock);
         $indexController->injectFormConfiguration($configFeMock);
-        $indexController->injectModuleTemplate($moduleTemplateMock);
+        $this->setValueByReflection('moduleTemplate', $moduleTemplateMock, $indexController);
         $indexController->injectPageRenderer($pageRenderer);
         if (method_exists($indexController, 'injectResponseFactory')) {
             $indexController->injectResponseFactory(new ResponseFactory());

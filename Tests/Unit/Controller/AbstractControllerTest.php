@@ -41,6 +41,8 @@ use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 
 class AbstractControllerTest extends AbstractTest
@@ -57,16 +59,32 @@ class AbstractControllerTest extends AbstractTest
     }
 
     /**
-     * Test the injection od the module template
+     * Test if the initialize action can produce the module template
      *
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::injectModuleTemplate
+     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::initializeAction
      */
-    public function testInjectModuleTemplate()
+    public function testInitializeAction()
     {
-        $moduleTemplate = $this->createMock(ModuleTemplate::class);
         $indexController = new IndexController();
-        $indexController->injectModuleTemplate($moduleTemplate);
-        $this->assertSame($moduleTemplate, $this->retrieveValueByReflection('moduleTemplate', $indexController));
+        $mtMock = $this->createMock(ModuleTemplate::class);
+        if (method_exists($indexController, 'injectObjectManager')) {
+            // TYPO3 11 style
+            $objectManagerMock = $this->createMock(ObjectManager::class);
+            $objectManagerMock->expects($this->once())
+                ->method('get')
+                ->with(ModuleTemplate::class)
+                ->will($this->returnValue($mtMock));
+            $indexController->injectObjectManager($objectManagerMock);
+            $indexController->initializeAction();
+        } else {
+            // TYPO3 12 style.
+            // We are using the ModuleTemplateFactory.
+            $mtFactoryMock = $this->createMock(ModuleTemplateFactory::class);
+            $mtFactoryMock->expects($this->once())
+                ->method('create')
+                ->will($this->returnValue($mtMock));
+            $indexController->initializeAction();
+        }
     }
 
     /**

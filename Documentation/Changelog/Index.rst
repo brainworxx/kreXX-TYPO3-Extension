@@ -13,6 +13,7 @@ Changelog
 =============================================================
 
 4.1.7
+    - [Feature] TYPO3 12.0 support
     - [Bugfix] Removed a faulty 'use' doc comment.
     - [Bugfix] Use the correct method signature for the error handler callback.
     - [Bugfix] Fixed the BOM detection in property names.

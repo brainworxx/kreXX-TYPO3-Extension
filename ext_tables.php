@@ -32,7 +32,11 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-if (!defined('TYPO3_MODE')) {
+/**
+ * @deprecated
+ *   Will be removed as soon as we drop TYPO3 11 support.
+ */
+if (!defined('TYPO3_MODE') && !defined('TYPO3')) {
     die('Access denied.');
 }
 
@@ -87,4 +91,3 @@ $boot = function () {
 };
 $boot();
 unset($boot);
-

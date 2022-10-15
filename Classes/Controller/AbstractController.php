@@ -45,6 +45,7 @@ use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -158,13 +159,20 @@ abstract class AbstractController extends ActionController implements ConstInter
     }
 
     /**
-     * Inject the module template instance.
+     * Trying to get the ModuleTemplate from TYPO3 7 to 12.
      *
-     * @param \TYPO3\CMS\Backend\Template\ModuleTemplate $moduleTemplate
+     * @return void
      */
-    public function injectModuleTemplate(ModuleTemplate $moduleTemplate)
+    public function initializeAction()
     {
-        $this->moduleTemplate = $moduleTemplate;
+        parent::initializeAction();
+
+        if (empty($this->objectManager)) {
+            $this->moduleTemplate = GeneralUtility::makeInstance(ModuleTemplateFactory::class)
+                ->create($this->request);
+        } else {
+            $this->moduleTemplate = $this->objectManager->get(ModuleTemplate::class);
+        }
     }
 
     /**
@@ -305,9 +313,17 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function assignCssJs()
     {
-        $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
+        if (method_exists($this->pageRenderer, 'loadJavaScriptModule')) {
+            // Doing this the TYPO3 12 way.
+            $this->pageRenderer->loadJavaScriptModule('@brainworxx/includekrexx/Index.js');
+        } else {
+            // @deprecated
+            // Will be removed as soon as we drop TYPO3 11 support.
+            $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
+            $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
+        }
+
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/Index.css');
-        $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
         $this->pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));
         $this->moduleTemplate->setContent($this->view->render());
         $this->moduleTemplate->setModuleName('tx_includekrexx');
