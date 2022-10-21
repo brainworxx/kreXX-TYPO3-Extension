@@ -62,7 +62,7 @@ class IndexController extends AbstractController implements ConstInterface
             $this->addFlashMessage(
                 static::translate(static::ACCESS_DENIED, static::EXT_KEY),
                 static::translate(static::ACCESS_DENIED, static::EXT_KEY),
-                AbstractMessage::ERROR
+                $this->flashMessageError
             );
             if (method_exists($this, 'htmlResponse') === true) {
                 $response = $this->responseFactory->createResponse()
@@ -104,7 +104,7 @@ class IndexController extends AbstractController implements ConstInterface
             $this->addFlashMessage(
                 static::translate(static::ACCESS_DENIED, static::EXT_KEY),
                 static::translate(static::SAVE_FAIL_TITLE, static::EXT_KEY),
-                AbstractMessage::ERROR
+                $this->flashMessageError
             );
             return $this->redirect('index');
         }
@@ -118,14 +118,14 @@ class IndexController extends AbstractController implements ConstInterface
             $this->addFlashMessage(
                 static::translate(static::SAVE_SUCCESS_TEXT, static::EXT_KEY, [$filepath]),
                 static::translate(static::SAVE_SUCCESS_TITLE, static::EXT_KEY),
-                AbstractMessage::OK
+                $this->flashMessageOk
             );
         } else {
             // Something went wrong here!
             $this->addFlashMessage(
                 static::translate(static::FILE_NOT_WRITABLE, static::EXT_KEY, [$filepath]),
                 static::translate(static::SAVE_FAIL_TITLE, static::EXT_KEY),
-                AbstractMessage::ERROR
+                $this->flashMessageError
             );
         }
 
@@ -144,7 +144,7 @@ class IndexController extends AbstractController implements ConstInterface
     public function dispatchAction(ServerRequest $serverRequest = null)
     {
         // And I was so happy to get rid of the 4.5 compatibility nightmare.
-        if ($this->request === null) {
+        if (empty($this->request)) {
             $rawId = $serverRequest->getQueryParams()['tx_includekrexx_tools_includekrexxkrexxconfiguration']['id'];
         } else {
             try {

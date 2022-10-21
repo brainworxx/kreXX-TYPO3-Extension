@@ -69,6 +69,7 @@ class ExtFilePathTest extends AbstractTest
             $extFilePath->canHandle($fixture, $model),
             'This should trigger a \Throwable in the GeneralUtility'
         );
+
         $this->assertEmpty($model->getJson());
 
         // The real test starts here.

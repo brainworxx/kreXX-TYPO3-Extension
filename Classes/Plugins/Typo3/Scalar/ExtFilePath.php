@@ -73,8 +73,11 @@ class ExtFilePath extends FilePath
             restore_error_handler();
             return false;
         }
-
         restore_error_handler();
+
+        if (empty($string)) {
+            return false;
+        }
 
         // Preserve the result from the getFileAbsFileName.
         $model->addToJson(

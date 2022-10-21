@@ -41,7 +41,7 @@ use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
-use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -95,7 +95,7 @@ class IndexControllerTest extends AbstractTest
         $jsCssFileContent = 'file content';
         $templateContent = 'template content';
         $fileGetContents =  $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_get_contents');
-        $fileGetContents->expects($this->exactly(2))
+        $fileGetContents->expects($this->any())
             ->will($this->returnValue($jsCssFileContent));
 
         // Prepare a BE user.
@@ -136,7 +136,7 @@ class IndexControllerTest extends AbstractTest
             ->with($viewMock);
 
         $pageRenderer = $this->createMock(PageRenderer::class);
-        $pageRenderer->expects($this->once())
+        $pageRenderer->expects($this->any())
             ->method('addJsInlineCode')
             ->with('krexxjs', $jsCssFileContent);
         $pageRenderer->expects($this->once())
@@ -197,7 +197,7 @@ class IndexControllerTest extends AbstractTest
         $settingsModel = new Settings();
 
         try {
-            $indexController->saveAction($settingsModel);
+            $exceptionWasThrown = !empty($indexController->saveAction($settingsModel));
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
@@ -242,7 +242,7 @@ class IndexControllerTest extends AbstractTest
             ->will($this->returnValue(true));
 
         try {
-            $indexController->saveAction($settingsMock);
+            $exceptionWasThrown = !empty($indexController->saveAction($settingsMock));
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
@@ -287,7 +287,7 @@ class IndexControllerTest extends AbstractTest
             ->will($this->returnValue(false));
 
         try {
-            $indexController->saveAction($settingsMock);
+            $exceptionWasThrown = !empty($indexController->saveAction($settingsMock));
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,20 +33,21 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+namespace Brainworxx\Includekrexx\Tests\Helpers;
 
-define('TYPO3_version', \Brainworxx\Includekrexx\Tests\Helpers\AbstractTest::TYPO3_VERSION);
-define('PATH_site', 'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR);
-define('TYPO3_MODE', 'FE');
-define('LF', chr(10));
-define('CR', chr(13));
-define('CRLF', CR . LF);
+class ModuleTemplate
+{
+    public function setModuleName($whatever)
+    {
 
+    }
 
-AbstractTest::defineFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
-AbstractTest::defineFunctionMock(
-    '\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\EventHandlers\\QueryParser',
-    'method_exists'
-);
+    public function setContent($whatever)
+    {
 
-include_once __DIR__ . '/../../Resources/Private/krexx/tests/Scripts/Bootstrap.php';
+    }
+
+    public function renderContent() {
+        return 'stuff';
+    }
+}

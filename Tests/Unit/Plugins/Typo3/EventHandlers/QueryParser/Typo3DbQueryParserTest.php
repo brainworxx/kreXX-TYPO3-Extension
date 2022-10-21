@@ -79,17 +79,24 @@ class Typo3DbQueryParserTest extends AbstractTest
         $fixture = $this->createMock(Query::class);
         $parser = new Typo3DbQueryParser();
 
-        $originalParserMock = $this->createMock(OriginalParser::class);
-        $originalParserMock->expects($this->once())
-            ->method('convertQueryToDoctrineQueryBuilder')
-            ->with($fixture)
-            ->will($this->returnValue('some sql'));
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with(OriginalParser::class)
-            ->will($this->returnValue($originalParserMock));
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $objectManagerMock);
+
+        if (class_exists(ObjectManager::class)) {
+            $originalParserMock = $this->createMock(OriginalParser::class);
+            $originalParserMock->expects($this->once())
+                ->method('convertQueryToDoctrineQueryBuilder')
+                ->with($fixture)
+                ->will($this->returnValue('some sql'));
+
+            $objectManagerMock = $this->createMock(ObjectManager::class);
+            $objectManagerMock->expects($this->once())
+                ->method('get')
+                ->with(OriginalParser::class)
+                ->will($this->returnValue($originalParserMock));
+            GeneralUtility::setSingletonInstance(ObjectManager::class, $objectManagerMock);
+        } else {
+            $this->expectException(\Exception::class);
+        }
+
 
         $parser->convertQueryToDoctrineQueryBuilder($fixture);
     }

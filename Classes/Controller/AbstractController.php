@@ -48,6 +48,7 @@ use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
@@ -55,6 +56,7 @@ use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Class Tx_Includekrexx_Controller_IndexController
@@ -136,6 +138,21 @@ abstract class AbstractController extends ActionController implements ConstInter
     protected $pageRenderer;
 
     /**
+     * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
+     */
+    protected $flashMessageWarning = AbstractMessage::WARNING;
+
+    /**
+     * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
+     */
+    protected $flashMessageError = AbstractMessage::ERROR;
+
+    /**
+     * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
+     */
+    protected $flashMessageOk = AbstractMessage::OK;
+
+    /**
      * Inject the page renderer.
      *
      * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer
@@ -154,8 +171,15 @@ abstract class AbstractController extends ActionController implements ConstInter
             // The constructor was removed with 10.0.0.
             parent::__construct();
         }
+
         Pool::createPool();
         $this->pool = Krexx::$pool;
+
+        if (!class_exists(ObjectManager::class)) {
+            $this->flashMessageError = ContextualFeedbackSeverity::ERROR;
+            $this->flashMessageOk = ContextualFeedbackSeverity::OK;
+            $this->flashMessageWarning = ContextualFeedbackSeverity::WARNING;
+        }
     }
 
     /**
@@ -186,7 +210,7 @@ abstract class AbstractController extends ActionController implements ConstInter
             $this->addFlashMessage(
                 static::translate('debugpreset.warning.message', static::EXT_KEY),
                 static::translate('debugpreset.warning.title', static::EXT_KEY),
-                AbstractMessage::WARNING
+                $this->flashMessageWarning
             );
         }
     }
@@ -244,7 +268,7 @@ abstract class AbstractController extends ActionController implements ConstInter
             $this->addFlashMessage(
                 static::translate($message->getKey(), static::EXT_KEY, $message->getArguments()),
                 static::translate('general.error.title', static::EXT_KEY),
-                AbstractMessage::ERROR
+                $this->flashMessageError
             );
         }
     }

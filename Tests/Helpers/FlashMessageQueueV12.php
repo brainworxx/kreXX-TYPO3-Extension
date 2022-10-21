@@ -32,20 +32,33 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+namespace Brainworxx\Includekrexx\Tests\Helpers;
 
-define('TYPO3_version', \Brainworxx\Includekrexx\Tests\Helpers\AbstractTest::TYPO3_VERSION);
-define('PATH_site', 'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR);
-define('TYPO3_MODE', 'FE');
-define('LF', chr(10));
-define('CR', chr(13));
-define('CRLF', CR . LF);
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 
+/**
+ * Helper class to retrieve flash messages in V11 and beyond.
+ *
+ * @package Brainworxx\Includekrexx\Tests\Helpers
+ */
+class FlashMessageQueueV12 extends FlashMessageQueue
+{
+    /**
+     * @var \TYPO3\CMS\Core\Messaging\FlashMessage[]
+     */
+    protected $messages = [];
 
-AbstractTest::defineFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
-AbstractTest::defineFunctionMock(
-    '\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\EventHandlers\\QueryParser',
-    'method_exists'
-);
+    public function enqueue($message): void
+    {
+        $this->messages[] = $message;
+    }
 
-include_once __DIR__ . '/../../Resources/Private/krexx/tests/Scripts/Bootstrap.php';
+    /**
+     * @return \TYPO3\CMS\Core\Messaging\FlashMessage[]
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+}

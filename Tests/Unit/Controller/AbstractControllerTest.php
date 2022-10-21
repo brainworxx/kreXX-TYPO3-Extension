@@ -39,9 +39,10 @@ use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplateFactory;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
-use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 
@@ -66,7 +67,7 @@ class AbstractControllerTest extends AbstractTest
     public function testInitializeAction()
     {
         $indexController = new IndexController();
-        $mtMock = $this->createMock(ModuleTemplate::class);
+        $mtMock = $this->createMock(\stdClass::class);
         if (method_exists($indexController, 'injectObjectManager')) {
             // TYPO3 11 style
             $objectManagerMock = $this->createMock(ObjectManager::class);
@@ -83,6 +84,9 @@ class AbstractControllerTest extends AbstractTest
             $mtFactoryMock->expects($this->once())
                 ->method('create')
                 ->will($this->returnValue($mtMock));
+            $this->injectIntoGeneralUtility(\TYPO3\CMS\Backend\Template\ModuleTemplateFactory::class , $mtFactoryMock);
+            $requestMock = $this->createMock(RequestInterface::class);
+            $this->setValueByReflection('request', $requestMock, $indexController);
             $indexController->initializeAction();
         }
     }
