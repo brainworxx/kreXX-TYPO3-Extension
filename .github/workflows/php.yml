@@ -46,11 +46,11 @@ jobs:
       if: ${{ matrix.env.Aimeos != 'no' }}
 
     - name: Remove Aimeos
-      run: composer remove --no-update "aimeos/aimeos-typo3"
+      run: composer remove --dev --no-update "aimeos/aimeos-typo3"
       if: ${{ matrix.env.Aimeos == 'no' }}
 
     - name: Install Admin Panel
-      run: composer require --no-update --dev "typo3/cms-adminpanel:${{ matrix.env.TYPO3 }}"
+      run: composer require --no-update "typo3/cms-adminpanel:${{ matrix.env.TYPO3 }}"
       if: ${{ matrix.env.TYPO3 != '^8.7' }}
 
     - name: Get composer cache directory
