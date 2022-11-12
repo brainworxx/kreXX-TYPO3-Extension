@@ -179,6 +179,20 @@ class CodegenTest extends AbstractTest
         $this->codegenHandler->generateSource($this->fixture);
         $json = $this->fixture->getJson();
         $this->assertArrayNotHasKey(Codegen::CODEGEN_TYPE_HINT, $json, 'Type hint is not set.');
+
+        // do it again, with another name.
+        $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
+        $this->fixture->setNormal(static::class)->setName('justastring');
+        $this->codegenHandler->generateSource($this->fixture);
+        $json = $this->fixture->getJson();
+        $this->assertArrayNotHasKey(Codegen::CODEGEN_TYPE_HINT, $json, 'Do not add a typehint ot a none variable');
+
+        // And again.
+        $this->setValueByReflection(static::FIRST_RUN, true, $this->codegenHandler);
+        $this->fixture->setNormal(static::class)->setName('$justastring . \'wasGehtAb\'');
+        $this->codegenHandler->generateSource($this->fixture);
+        $json = $this->fixture->getJson();
+        $this->assertArrayNotHasKey(Codegen::CODEGEN_TYPE_HINT, $json, 'Do not add a typehint ot a none variable');
     }
 
     /**

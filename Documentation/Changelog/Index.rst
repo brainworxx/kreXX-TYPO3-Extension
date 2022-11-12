@@ -18,6 +18,9 @@ Changelog
     - [Bugfix] Use the correct method signature for the error handler callback.
     - [Bugfix] Fixed the BOM detection in property names.
     - [Bugfix] Fixed the SQL query debugger in PHP 8 strict mode.
+    - [Bugfix] Prevent a second the JS initialization if the hosting cms thinks that calling 'DOMContentLoaded' more than once is a good idea.
+    - [Bugfix] Prevent a type hint for none variables.
+    - [Bugfix] Add the missing file path filter to the backtrace analysis.
 
 4.1.6
     - [Bugfix] Link to the documentation of the debug preset does not work anymore in the documentation.

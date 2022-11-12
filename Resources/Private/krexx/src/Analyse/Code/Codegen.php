@@ -155,7 +155,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     {
         if (
             empty($name = (string) $model->getName()) === true
-            || strpos($name, '$') === false
+            || strpos($name, '$') !== 0
         ) {
             // There is no name, no need for a hint.
             return;
@@ -167,7 +167,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
             $type = gettype($model->getData()) === 'string' ? 'string' : $model->getType();
         }
 
-        $blackList = ['->', '::', '[', ']', '(', ')'];
+        $blackList = ['->', '::', '[', ']', '(', ')', '.'];
         foreach ($blackList as $value) {
             if (strpos($name, $value) != false) {
                 // We are analysing something like:

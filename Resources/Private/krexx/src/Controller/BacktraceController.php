@@ -69,7 +69,7 @@ class BacktraceController extends AbstractController implements BacktraceConstIn
 
         $analysis = $this->pool
             ->createClass(ProcessBacktrace::class)
-            ->process($backtrace);
+            ->handle($backtrace);
 
         // Detect the encoding on the start-chunk-string of the analysis
         // for a complete encoding picture.
