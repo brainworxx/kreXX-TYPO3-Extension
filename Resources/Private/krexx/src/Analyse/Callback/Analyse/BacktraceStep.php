@@ -52,6 +52,8 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
  *
  * @uses array data
  *   The singe step from a backtrace.
+ * @uses string metaname
+ *   The unfiltered file name where the step happened.
  */
 class BacktraceStep extends AbstractCallback implements
     BacktraceConstInterface,
@@ -128,7 +130,7 @@ class BacktraceStep extends AbstractCallback implements
             $lineNo = $stepData[static::TRACE_LINE] - 1;
             $source = trim(
                 $this->pool->fileService->readSourcecode(
-                    $stepData[static::TRACE_FILE],
+                    $stepData[static::TRACE_ORG_FILE] ?? '',
                     $lineNo,
                     $lineNo - 5,
                     $lineNo + 5

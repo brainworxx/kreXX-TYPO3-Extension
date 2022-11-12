@@ -138,6 +138,7 @@ class ProcessBacktrace extends AbstractCallback implements
     protected function filterFilePath(array $backtraceStep): array
     {
         if (isset($backtraceStep[static::TRACE_FILE])) {
+            $backtraceStep[static::TRACE_ORG_FILE] = $backtraceStep[static::TRACE_FILE];
             $backtraceStep[static::TRACE_FILE] = $this->pool->fileService->filterFilePath($backtraceStep[static::TRACE_FILE]);
         }
 

@@ -9,6 +9,8 @@
 - Bugfix: Prevent a type hint for none variables.
 - Bugfix: Add the missing file path filter to the backtrace
   analysis.
+- Bugfix: Fix the handling of the 8.1 Enum as a default value in
+  the source generation.
 
 4.1.6
 - Bugfix: Added the missing path filter to the real path resolver.

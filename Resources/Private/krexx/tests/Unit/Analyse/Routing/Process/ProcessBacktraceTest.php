@@ -178,21 +178,24 @@ class ProcessBacktraceTest extends AbstractTest
 
         // Check the parameters
         $data = 'data';
-        $someFile = 'some file';
+        $someFile = $orgPath = 'some file';
         for ($i = 0; $i <= 2; $i++) {
             /** @var \Brainworxx\Krexx\Analyse\Model $model */
             $model = $renderNothing->model['renderExpandableChild'][$i];
 
             if ($i === 2) {
                 $someFile = '...' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'whatever';
+                $orgPath = KREXX_DIR . 'src' . DIRECTORY_SEPARATOR . 'whatever';
             }
 
+            $result = $model->getParameters()[CallbackCounter::PARAM_DATA];
             $this->assertEquals(
                 [
                     BacktraceConstInterface::TRACE_FILE => $someFile,
                     $data => 'Step ' . ($i + 2),
+                    BacktraceConstInterface::TRACE_ORG_FILE => $orgPath
                 ],
-                $model->getParameters()[CallbackCounter::PARAM_DATA],
+                $result,
                 'Checking the steps, the first one should be omitted.'
             );
 

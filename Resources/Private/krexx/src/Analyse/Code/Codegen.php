@@ -45,6 +45,7 @@ use ReflectionException;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionType;
+use UnitEnum;
 
 /**
  * Code generation methods.
@@ -385,6 +386,8 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
             $default = 'FALSE';
         } elseif ($default === null) {
             $default = 'NULL';
+        } elseif ($default instanceof UnitEnum) {
+            $default = get_class($default) . '::' . $default->name;
         }
 
         return $default;
