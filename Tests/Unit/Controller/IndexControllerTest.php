@@ -149,8 +149,8 @@ class IndexControllerTest extends AbstractTest
             $pageRenderer->expects($this->any())
                 ->method('addJsInlineCode')
                 ->withConsecutive(
-                    ['krexxajaxtrans', $translationContent],
-                    ['krexxjs', $jsCssFileContent]
+                    ['krexxjs', $jsCssFileContent],
+                    ['krexxajaxtrans', $translationContent]
                 );
         }
 
