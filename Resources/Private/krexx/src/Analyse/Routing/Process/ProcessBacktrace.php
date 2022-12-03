@@ -104,12 +104,32 @@ class ProcessBacktrace extends AbstractCallback implements
                 $this->pool->createClass(Model::class)
                     ->setName($step)
                     ->setType(static::TYPE_STACK_FRAME)
-                    ->addParameter(static::PARAM_DATA, $backtrace[$step - 1])
+                    ->addParameter(static::PARAM_DATA, $this->filterFilePath($backtrace[$step - 1]))
                     ->injectCallback($this->pool->createClass(BacktraceStep::class))
             );
         }
 
         return $output;
+    }
+
+    /**
+     * Filter the file path, for better readability.
+     *
+     * @param array $backtraceStep
+     *   The backtrace step.
+     *
+     * @return array
+     *   The same backtrace step., but with a filtered file path.
+     */
+    protected function filterFilePath(array $backtraceStep): array
+    {
+        if (isset($backtraceStep[static::TRACE_FILE])) {
+            $backtraceStep[static::TRACE_ORG_FILE] = $backtraceStep[static::TRACE_FILE];
+            $backtraceStep[static::TRACE_FILE] = $this->pool->fileService
+                ->filterFilePath($backtraceStep[static::TRACE_FILE]);
+        }
+
+        return $backtraceStep;
     }
 
     /**

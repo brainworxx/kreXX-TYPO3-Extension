@@ -44,6 +44,7 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionException;
 use ReflectionParameter;
+use UnitEnum;
 
 /**
  * Code generation methods.
@@ -160,14 +161,14 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     {
         if (
             empty($name = (string) $model->getName())
-            || strpos($name, '$') === false
+            || strpos($name, '$') !== 0
         ) {
             // There is no name, no need for a hint.
             return;
         }
 
         $type = $model->getType() === static::TYPE_CLASS ? $model->getNormal() : $model->getType();
-        foreach (['->', '::', '[', ']', '(', ')'] as $value) {
+        foreach (['->', '::', '[', ']', '(', ')', '.'] as $value) {
             if (strpos($name, $value) !== false) {
                 // We are analysing something like:
                 // $this->getWhatever();
@@ -409,6 +410,8 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
             $default = 'FALSE';
         } elseif ($default === null) {
             $default = 'NULL';
+        } elseif ($default instanceof UnitEnum) {
+            $default = get_class($default) . '::' . $default->name;
         }
 
         return $default;

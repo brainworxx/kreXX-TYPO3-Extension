@@ -50,6 +50,13 @@ interface BacktraceConstInterface
     public const TRACE_FILE = 'file';
 
     /**
+     * Contains the original, unfilterd path to the TRACE_FILE.
+     *
+     * @var string
+     */
+    const TRACE_ORG_FILE = 'originalFile';
+
+    /**
      * The line number from the call.
      *
      * @var string
