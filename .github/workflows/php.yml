@@ -42,6 +42,7 @@ jobs:
 
     - name: Install Aimeos
       run: composer require --no-update "aimeos/aimeos-typo3:${{ matrix.env.Aimeos }}"
+      if: ${{ matrix.env.Aimeos != 'no' }}
 
     - name: Remove Aimeos
       run: composer remove --dev --no-update "aimeos/aimeos-typo3"
