@@ -149,6 +149,8 @@ class PropertiesTest extends AbstractTest
      */
     public function testHandleView()
     {
+        $this->skipIfAimeosIsNotInstalled();
+
         if (class_exists(StandardView::class)) {
             $view = new StandardView();
         } else {

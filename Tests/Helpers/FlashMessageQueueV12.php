@@ -32,24 +32,33 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-if (!defined('TYPO3_MODE') && !defined('TYPO3')) {
-    die('Access denied.');
-}
+namespace Brainworxx\Includekrexx\Tests\Helpers;
 
-call_user_func(
-    function () {
-        if (class_exists(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)) {
-            try {
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                    \Brainworxx\Includekrexx\Bootstrap\Bootstrap::class
-                )->run();
-            } catch (\Throwable $exception) {
-                // Do nothing.
-                // When updating the extension via ExtensionManager, there is a
-                // big chance that the cache is not cleared. And that means that
-                // the part above may not work anymore. Hence, we need to make
-                // sure that the user does not brick the system.
-            }
-        }
+use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
+
+/**
+ * Helper class to retrieve flash messages in V11 and beyond.
+ *
+ * @package Brainworxx\Includekrexx\Tests\Helpers
+ */
+class FlashMessageQueueV12 extends FlashMessageQueue
+{
+    /**
+     * @var \TYPO3\CMS\Core\Messaging\FlashMessage[]
+     */
+    protected $messages = [];
+
+    public function enqueue($message): void
+    {
+        $this->messages[] = $message;
     }
-);
+
+    /**
+     * @return \TYPO3\CMS\Core\Messaging\FlashMessage[]
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+}

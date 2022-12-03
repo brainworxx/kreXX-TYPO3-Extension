@@ -84,7 +84,7 @@ abstract class AbstractTest extends TestCompatibility
      */
     protected function krexxDown()
     {
-        $this->setValueByReflection('packageManager', null, ExtensionManagementUtility::class);
+//        $this->setValueByReflection('packageManager', null, ExtensionManagementUtility::class);
         // Reset the possible mocks in the general utility.
         $this->setValueByReflection(static::FINAL_CLASS_NAME_CACHE, [], GeneralUtility::class);
         $this->setValueByReflection(static::SINGLETON_INSTANCES, [], GeneralUtility::class);
@@ -232,7 +232,15 @@ abstract class AbstractTest extends TestCompatibility
     {
         if (method_exists($controller, 'injectInternalExtensionService')) {
             // Doing this 11.0 style.
-            $this->flashMessageQueue = new FlashMessageQueueV11('identifyer');
+            // Doing this 11 and 12 style.
+            if (method_exists($controller, 'injectObjectManager')) {
+                // 11
+                $this->flashMessageQueue = new FlashMessageQueueV11('identifyer');
+            } else {
+                // 12
+                $this->flashMessageQueue = new FlashMessageQueueV12('identifyer');
+            }
+
             $extensionServiceMock = $this->createMock(ExtensionService::class);
             $extensionServiceMock->expects($this->any())
                 ->method('getPluginNamespace')
@@ -289,23 +297,26 @@ abstract class AbstractTest extends TestCompatibility
      */
     protected function prepareRedirect($controller)
     {
-        $cacheManagerMock = $this->createMock(CacheManager::class);
-        $cacheManagerMock->expects($this->any())
-            ->method('flushCachesInGroup')
-            ->with('system');
+        if (class_exists(ObjectManager::class)) {
+            $cacheManagerMock = $this->createMock(CacheManager::class);
+            $cacheManagerMock->expects($this->any())
+                ->method('flushCachesInGroup')
+                ->with('system');
 
-        $cacheServiceMock = $this->createMock(CacheService::class);
-        $cacheServiceMock->expects($this->any())
-            ->method('clearCachesOfRegisteredPageIds');
+            $cacheServiceMock = $this->createMock(CacheService::class);
+            $cacheServiceMock->expects($this->any())
+                ->method('clearCachesOfRegisteredPageIds');
 
-        $objectManagerMock = $this->createMock(ObjectManager::class);
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->willReturnMap([
-                [CacheManager::class, $cacheManagerMock],
-                [CacheService::class, $cacheServiceMock]
-            ]);
-        $this->setValueByReflection('objectManager', $objectManagerMock, $controller);
+            $objectManagerMock = $this->createMock(ObjectManager::class);
+            $objectManagerMock->expects($this->any())
+                ->method('get')
+                ->willReturnMap([
+                    [CacheManager::class, $cacheManagerMock],
+                    [CacheService::class, $cacheServiceMock]
+                ]);
+
+            $this->setValueByReflection('objectManager', $objectManagerMock, $controller);
+        }
 
         $request = $this->createMock(Request::class);
         $request->expects($this->any())

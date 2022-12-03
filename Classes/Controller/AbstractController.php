@@ -45,11 +45,14 @@ use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -125,6 +128,21 @@ abstract class AbstractController extends ActionController implements ConstInter
     protected $pageRenderer;
 
     /**
+     * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
+     */
+    protected $flashMessageWarning = AbstractMessage::WARNING;
+
+    /**
+     * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
+     */
+    protected $flashMessageError = AbstractMessage::ERROR;
+
+    /**
+     * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
+     */
+    protected $flashMessageOk = AbstractMessage::OK;
+
+    /**
      * Inject the page renderer.
      *
      * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer
@@ -143,18 +161,32 @@ abstract class AbstractController extends ActionController implements ConstInter
             // The constructor was removed with 10.0.0.
             parent::__construct();
         }
+
         Pool::createPool();
         $this->pool = Krexx::$pool;
+
+        if (!class_exists(ObjectManager::class)) {
+            $this->flashMessageError = ContextualFeedbackSeverity::ERROR;
+            $this->flashMessageOk = ContextualFeedbackSeverity::OK;
+            $this->flashMessageWarning = ContextualFeedbackSeverity::WARNING;
+        }
     }
 
     /**
-     * Inject the module template instance.
+     * Trying to get the ModuleTemplate from TYPO3 7 to 12.
      *
-     * @param \TYPO3\CMS\Backend\Template\ModuleTemplate $moduleTemplate
+     * @return void
      */
-    public function injectModuleTemplate(ModuleTemplate $moduleTemplate): void
+    public function initializeAction()
     {
-        $this->moduleTemplate = $moduleTemplate;
+        parent::initializeAction();
+
+        if (empty($this->objectManager)) {
+            $this->moduleTemplate = GeneralUtility::makeInstance(ModuleTemplateFactory::class)
+                ->create($this->request);
+        } else {
+            $this->moduleTemplate = $this->objectManager->get(ModuleTemplate::class);
+        }
     }
 
     /**
@@ -168,7 +200,7 @@ abstract class AbstractController extends ActionController implements ConstInter
             $this->addFlashMessage(
                 static::translate('debugpreset.warning.message'),
                 static::translate('debugpreset.warning.title'),
-                AbstractMessage::WARNING
+                $this->flashMessageWarning
             );
         }
     }
@@ -226,7 +258,7 @@ abstract class AbstractController extends ActionController implements ConstInter
             $this->addFlashMessage(
                 static::translate($message->getKey(), $message->getArguments()),
                 static::translate('general.error.title'),
-                AbstractMessage::ERROR
+                $this->flashMessageError
             );
         }
     }
@@ -295,10 +327,18 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function assignCssJs(): void
     {
-        $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/JavaScript/Index.js');
+        if (method_exists($this->pageRenderer, 'loadJavaScriptModule')) {
+            // Doing this the TYPO3 12 way.
+            $this->pageRenderer->loadJavaScriptModule('@brainworxx/includekrexx/Index.js');
+        } else {
+            // @deprecated
+            // Will be removed as soon as we drop TYPO3 11 support.
+            $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/JavaScript/Index.js');
+            $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
+        }
+
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Css/Index.css');
         $this->pageRenderer->addJsInlineCode('krexxajaxtrans', $this->generateAjaxTranslations());
-        $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
         $this->pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));
         $this->moduleTemplate->setContent($this->view->render());
         $this->moduleTemplate->setModuleName('tx_includekrexx');

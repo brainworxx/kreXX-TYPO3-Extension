@@ -40,7 +40,7 @@ use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Krexx;
-use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -97,7 +97,7 @@ class IndexControllerTest extends AbstractTest
         $translationContent = 'var ajaxTranslate = {"deletefile":"ajax.delete.file","error":"ajax.error","in":"ajax.in","line":"ajax.line","updatedLoglist":"ajax.updated.loglist","deletedCookies":"ajax.deleted.cookies"};';
 
         $fileGetContents =  $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_get_contents');
-        $fileGetContents->expects($this->exactly(2))
+        $fileGetContents->expects($this->any())
             ->will($this->returnValue($jsCssFileContent));
 
         // Prepare a BE user.
@@ -138,12 +138,22 @@ class IndexControllerTest extends AbstractTest
             ->with($viewMock);
 
         $pageRenderer = $this->createMock(PageRenderer::class);
-        $pageRenderer->expects($this->exactly(2))
-            ->method('addJsInlineCode')
-            ->withConsecutive(
-                ['krexxajaxtrans', $translationContent],
-                ['krexxjs', $jsCssFileContent]
-            );
+
+        if (method_exists(PageRenderer::class, 'loadJavaScriptModule')) {
+            $pageRenderer->expects($this->any())
+                ->method('addJsInlineCode')
+                ->withConsecutive(
+                    ['krexxajaxtrans', $translationContent]
+                );
+        } else {
+            $pageRenderer->expects($this->any())
+                ->method('addJsInlineCode')
+                ->withConsecutive(
+                    ['krexxajaxtrans', $translationContent],
+                    ['krexxjs', $jsCssFileContent]
+                );
+        }
+
         $pageRenderer->expects($this->once())
             ->method('addCssInlineBlock')
             ->with('krexxcss', $jsCssFileContent);
@@ -162,7 +172,7 @@ class IndexControllerTest extends AbstractTest
         $indexController->injectSettingsModel($settingsModel);
         $indexController->injectConfiguration($configurationMock);
         $indexController->injectFormConfiguration($configFeMock);
-        $indexController->injectModuleTemplate($moduleTemplateMock);
+        $this->setValueByReflection('moduleTemplate', $moduleTemplateMock, $indexController);
         $indexController->injectPageRenderer($pageRenderer);
         if (method_exists($indexController, 'injectResponseFactory')) {
             $indexController->injectResponseFactory(new ResponseFactory());
@@ -202,7 +212,7 @@ class IndexControllerTest extends AbstractTest
         $settingsModel = new Settings();
 
         try {
-            $indexController->saveAction($settingsModel);
+            $exceptionWasThrown = !empty($indexController->saveAction($settingsModel));
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
@@ -255,7 +265,7 @@ class IndexControllerTest extends AbstractTest
             ->will($this->returnValue(true));
 
         try {
-            $indexController->saveAction($settingsMock);
+            $exceptionWasThrown = !empty($indexController->saveAction($settingsMock));
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
@@ -306,7 +316,7 @@ class IndexControllerTest extends AbstractTest
             ->will($this->returnValue(false));
 
         try {
-            $indexController->saveAction($settingsMock);
+            $exceptionWasThrown = !empty($indexController->saveAction($settingsMock));
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;

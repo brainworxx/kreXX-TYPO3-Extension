@@ -41,7 +41,6 @@ use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 
@@ -62,7 +61,7 @@ class IndexController extends AbstractController implements ConstInterface
             $this->addFlashMessage(
                 static::translate(static::ACCESS_DENIED),
                 static::translate(static::ACCESS_DENIED),
-                AbstractMessage::ERROR
+                $this->flashMessageError
             );
             if (method_exists($this, 'htmlResponse')) {
                 $response = $this->responseFactory->createResponse()
@@ -104,7 +103,7 @@ class IndexController extends AbstractController implements ConstInterface
             $this->addFlashMessage(
                 static::translate(static::ACCESS_DENIED),
                 static::translate(static::SAVE_FAIL_TITLE),
-                AbstractMessage::ERROR
+                $this->flashMessageError
             );
             return $this->redirect('index');
         }
@@ -124,7 +123,7 @@ class IndexController extends AbstractController implements ConstInterface
             $this->addFlashMessage(
                 static::translate(static::FILE_NOT_WRITABLE, [$displayFilePath]),
                 static::translate(static::SAVE_FAIL_TITLE),
-                AbstractMessage::ERROR
+                $this->flashMessageError
             );
         }
 
@@ -143,7 +142,7 @@ class IndexController extends AbstractController implements ConstInterface
     public function dispatchAction(ServerRequest $serverRequest = null)
     {
         // And I was so happy to get rid of the 4.5 compatibility nightmare.
-        if ($this->request === null) {
+        if (empty($this->request)) {
             $rawId = $serverRequest->getQueryParams()['tx_includekrexx_tools_includekrexxkrexxconfiguration']['id'];
         } else {
             try {

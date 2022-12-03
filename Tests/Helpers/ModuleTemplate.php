@@ -1,4 +1,5 @@
 <?php
+
 /**
  * kreXX: Krumo eXXtended
  *
@@ -32,24 +33,21 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-if (!defined('TYPO3_MODE') && !defined('TYPO3')) {
-    die('Access denied.');
-}
+namespace Brainworxx\Includekrexx\Tests\Helpers;
 
-call_user_func(
-    function () {
-        if (class_exists(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)) {
-            try {
-                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                    \Brainworxx\Includekrexx\Bootstrap\Bootstrap::class
-                )->run();
-            } catch (\Throwable $exception) {
-                // Do nothing.
-                // When updating the extension via ExtensionManager, there is a
-                // big chance that the cache is not cleared. And that means that
-                // the part above may not work anymore. Hence, we need to make
-                // sure that the user does not brick the system.
-            }
-        }
+class ModuleTemplate
+{
+    public function setModuleName($whatever)
+    {
+
     }
-);
+
+    public function setContent($whatever)
+    {
+
+    }
+
+    public function renderContent() {
+        return 'stuff';
+    }
+}

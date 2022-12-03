@@ -34,12 +34,6 @@
 (function (TYPO3) {
     "use strict";
 
-    document.addEventListener("DOMContentLoaded", function () {
-        tabs.onDocumentReady();
-        formSupport.onDocumentReady();
-        ajaxRefresh.onDocumentReady();
-    });
-
     /**
      * @namespace tabs
      */
@@ -95,7 +89,7 @@
      * @event DOMContentLoaded
      */
     formSupport.onDocumentReady = function () {
-        var checkboxes = document.getElementsByName('tx_includekrexx_tools_includekrexxkrexxconfiguration[settings][factory]');
+        var checkboxes = document.querySelectorAll('[id^="factory."]');
 
         for (var i = 0, n = checkboxes.length; i < n; i++) {
             formSupport.toggle(checkboxes[i]);
@@ -370,7 +364,7 @@
     };
 
     /**
-     * Ajax relaqted messaging.
+     * Ajax related messaging.
      *
      * @param {{}} json
      */
@@ -392,6 +386,20 @@
                 }, 600);
             }, 600);
         }, 4000);
+    }
+
+    if (document.readyState === "complete" || document.readyState === "loaded") {
+        tabs.onDocumentReady();
+        formSupport.onDocumentReady();
+        ajaxRefresh.onDocumentReady();
+    } else {
+        // @deprecated
+        // Will be removed as soon as we drop TYPO3 11 support.
+        document.addEventListener("DOMContentLoaded", function () {
+            tabs.onDocumentReady();
+            formSupport.onDocumentReady();
+            ajaxRefresh.onDocumentReady();
+        });
     }
 
 })(TYPO3);

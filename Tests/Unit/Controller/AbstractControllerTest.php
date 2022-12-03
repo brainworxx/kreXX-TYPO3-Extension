@@ -39,8 +39,11 @@ use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplateFactory;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Extbase\Mvc\RequestInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 
@@ -71,16 +74,35 @@ class AbstractControllerTest extends AbstractTest
     }
 
     /**
-     * Test the injection od the module template
+     * Test if the initialize action can produce the module template
      *
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::injectModuleTemplate
+     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::initializeAction
      */
-    public function testInjectModuleTemplate()
+    public function testInitializeAction()
     {
-        $moduleTemplate = $this->createMock(ModuleTemplate::class);
         $indexController = new IndexController();
-        $indexController->injectModuleTemplate($moduleTemplate);
-        $this->assertSame($moduleTemplate, $this->retrieveValueByReflection('moduleTemplate', $indexController));
+        $mtMock = $this->createMock(\stdClass::class);
+        if (method_exists($indexController, 'injectObjectManager')) {
+            // TYPO3 11 style
+            $objectManagerMock = $this->createMock(ObjectManager::class);
+            $objectManagerMock->expects($this->once())
+                ->method('get')
+                ->with(ModuleTemplate::class)
+                ->will($this->returnValue($mtMock));
+            $this->setValueByReflection('objectManager', $objectManagerMock, $indexController);
+            $indexController->initializeAction();
+        } else {
+            // TYPO3 12 style.
+            // We are using the ModuleTemplateFactory.
+            $mtFactoryMock = $this->createMock(ModuleTemplateFactory::class);
+            $mtFactoryMock->expects($this->once())
+                ->method('create')
+                ->will($this->returnValue($mtMock));
+            $this->injectIntoGeneralUtility(\TYPO3\CMS\Backend\Template\ModuleTemplateFactory::class , $mtFactoryMock);
+            $requestMock = $this->createMock(RequestInterface::class);
+            $this->setValueByReflection('request', $requestMock, $indexController);
+            $indexController->initializeAction();
+        }
     }
 
     /**

@@ -48,10 +48,15 @@ Changelog
     - [Change] Moved the scalar analysis to a more appropriate namespace.
 
 4.1.7
+    - [Feature] TYPO3 12.0 support
     - [Bugfix] Removed a faulty 'use' doc comment.
     - [Bugfix] Use the correct method signature for the error handler callback.
     - [Bugfix] Fixed the BOM detection in property names.
     - [Bugfix] Fixed the SQL query debugger in PHP 8 strict mode.
+    - [Bugfix] Prevent a second the JS initialization if the hosting cms thinks that calling 'DOMContentLoaded' more than once is a good idea.
+    - [Bugfix] Prevent a type hint for none variables.
+    - [Bugfix] Add the missing file path filter to the backtrace analysis.
+    - [Bugfix] Fix the handling of the 8.1 Enum as a default value in the source generation.
 
 4.1.6
     - [Bugfix] Link to the documentation of the debug preset does not work anymore in the documentation.

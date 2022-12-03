@@ -32,7 +32,7 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use phpmock\phpunit\PHPMock;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 
 define('TYPO3_version', \Brainworxx\Includekrexx\Tests\Helpers\AbstractTest::TYPO3_VERSION);
 define('PATH_site', 'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR);
@@ -41,8 +41,8 @@ define('LF', chr(10));
 define('CR', chr(13));
 define('CRLF', CR . LF);
 
-PHPMock::defineFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
-PHPMock::defineFunctionMock(
+AbstractTest::defineFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
+AbstractTest::defineFunctionMock(
     '\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\EventHandlers\\QueryParser',
     'method_exists'
 );

@@ -115,6 +115,9 @@ class Bootstrap implements ConstInterface
      * @param string $version
      *   The version number from the ext_localconf.
      *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     *
      * @return $this
      *   Return $this, for chaining.
      */
