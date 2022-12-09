@@ -12,6 +12,8 @@
 Changelog
 =============================================================
 
+4.1.8
+    - [Feature] TYPO3 12.1 support
 4.1.7
     - [Feature] TYPO3 12.0 support
     - [Bugfix] Removed a faulty 'use' doc comment.
