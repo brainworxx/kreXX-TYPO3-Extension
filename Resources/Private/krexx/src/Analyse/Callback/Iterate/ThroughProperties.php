@@ -168,7 +168,7 @@ class ThroughProperties extends AbstractCallback implements
      *
      * @param \ReflectionProperty $refProperty
      *   A reflection of the property we ara analysing.
-     * @param \ReflectionClass $ref
+     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
      *   A reflection of the class we are analysing.
      *
      * @return string
@@ -201,9 +201,9 @@ class ThroughProperties extends AbstractCallback implements
             // We ignore this one.
         }
 
-        if (empty($refProperty->isUnset) === false) {
+        if ($ref->isPropertyUnset($refProperty)) {
             if (method_exists($refProperty, 'hasType') === true && $refProperty->hasType() === true) {
-                // Types properties where introduced in 7.4.
+                // Typed properties where introduced in 7.4.
                 // This one was either unset, or never received a value in the
                 // first place. Either way, it's status is uninitialized.
                 $additional .= 'uninitialized ';

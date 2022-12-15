@@ -37,6 +37,7 @@ namespace Brainworxx\Krexx\Tests\Fixtures;
 
 use stdClass;
 
+#[\AllowDynamicProperties]
 class ComplexPropertiesFixture extends ComplexPropertiesInheritanceFixture
 {
     use MultitraitFixture;

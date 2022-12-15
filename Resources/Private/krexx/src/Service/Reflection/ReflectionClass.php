@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Service\Reflection;
 
 use ReflectionException;
 use ReflectionProperty;
+use SplObjectStorage;
 
 /**
  * Added a better possibility to retrieve the object values.
@@ -67,6 +68,11 @@ class ReflectionClass extends \ReflectionClass
     protected $data;
 
     /**
+     * @var SplObjectStorage
+     */
+    protected $unsetPropertyStorage;
+
+    /**
      * ReflectionClass constructor.
      *
      * @param object|string $data
@@ -80,6 +86,8 @@ class ReflectionClass extends \ReflectionClass
         $this->objectArray = (array) $data;
         // Remember the current object.
         $this->data = $data;
+        // Init our unset object storage;
+        $this->unsetPropertyStorage = new SplObjectStorage();
 
         parent::__construct($data);
     }
@@ -129,8 +137,24 @@ class ReflectionClass extends \ReflectionClass
             ];
         }
 
-        $refProperty->isUnset = $isUnset;
+        if ($isUnset) {
+            $this->unsetPropertyStorage->attach($refProperty);
+        }
+
         return $result;
+    }
+
+    /**
+     * Was this propery unset?
+     *
+     * The info is only available if you retrieve the value beforehand.
+     *
+     * @param \ReflectionProperty $reflectionProperty
+     * @return bool
+     */
+    public function isPropertyUnset(ReflectionProperty $reflectionProperty): bool
+    {
+        return $this->unsetPropertyStorage->contains($reflectionProperty);
     }
 
     /**
@@ -211,6 +235,7 @@ class ReflectionClass extends \ReflectionClass
      *
      * @return bool|\ReflectionClass
      */
+    #[\ReturnTypeWillChange]
     public function getParentClass()
     {
         // Do some static caching. This one is called quite often.

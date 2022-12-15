@@ -93,6 +93,7 @@ class ReflectionClassTest extends AbstractTest
      * Here we retrieve the values from objects.
      *
      * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::retrieveValue
+     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::isPropertyUnset
      *
      * @throws \ReflectionException
      */
@@ -133,7 +134,9 @@ class ReflectionClassTest extends AbstractTest
 
             $this->assertEquals($expectation, $reflection->retrieveValue($refProperty));
             if ($name === 'value2') {
-                $this->assertTrue($refProperty->isUnset);
+                $this->assertTrue($reflection->isPropertyUnset($refProperty));
+            } else {
+                $this->assertFalse($reflection->isPropertyUnset($refProperty));
             }
         }
     }

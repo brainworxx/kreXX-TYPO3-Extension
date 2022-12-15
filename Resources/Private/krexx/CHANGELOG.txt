@@ -1,3 +1,8 @@
+4.1.8
+- Added support for PHP 8.2.
+- Bugfix: Added missing double escaping to the code generation.
+- Bugfix: Add Backslashes to quotation marks of generated source.
+
 4.1.7
 - Bugfix: Removed a faulty 'use' doc comment.
 - Bugfix: Use the correct method signature for the error handler

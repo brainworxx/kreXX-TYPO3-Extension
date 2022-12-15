@@ -14,7 +14,10 @@ Changelog
 
 4.1.8
     - [Feature] TYPO3 12.1 support
+	- [Feature] Added support for PHP 8.2. (bundeled kreXX lib)
     - [Bugfix] Fixed the Aimeos settings in the ext_emconf.
+    - [Bugfix] Added missing double escaping to the code generation.
+    - [Bugfix] Add Backslashes to quotation marks of generated source.
 
 4.1.7
     - [Feature] TYPO3 12.0 support
