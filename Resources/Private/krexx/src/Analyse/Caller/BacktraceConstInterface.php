@@ -54,7 +54,7 @@ interface BacktraceConstInterface
      *
      * @var string
      */
-    const TRACE_ORG_FILE = 'originalFile';
+    public const TRACE_ORG_FILE = 'originalFile';
 
     /**
      * The line number from the call.

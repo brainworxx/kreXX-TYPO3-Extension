@@ -42,6 +42,9 @@ use ReflectionMethod;
 use Reflector;
 use ReflectionParameter;
 
+/**
+ * Retrieve the declaration pace of methods.
+ */
 class MethodDeclaration extends AbstractDeclaration
 {
     /**

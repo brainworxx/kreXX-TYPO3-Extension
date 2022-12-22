@@ -112,6 +112,6 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
             $this->pool->codegenHandler->setCodegenAllowed(true);
         }
 
-        return$output;
+        return $output;
     }
 }

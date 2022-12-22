@@ -428,7 +428,7 @@ class Validation extends Fallback
      * @return bool
      *   Whether the function is allowed to be called.
      */
-    public function isAllowedDebugCall($data, string $method): bool
+    public function isAllowedDebugCall(object $data, string $method): bool
     {
         // Check if the class itself is blacklisted.
         foreach ($this->classBlacklist as $classname) {

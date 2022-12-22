@@ -167,14 +167,14 @@ class BacktraceStep extends AbstractCallback implements
         if (isset($stepData[$type])) {
             return $this->pool
                 ->createClass($processorName)
-                    ->handle(
-                        $this->dispatchEventWithModel(
-                            $eventName . static::EVENT_MARKER_END,
-                            $this->pool->createClass(Model::class)
-                                ->setData($stepData[$type])
-                                ->setName($name)
-                        )
-                    );
+                ->handle(
+                    $this->dispatchEventWithModel(
+                        $eventName . static::EVENT_MARKER_END,
+                        $this->pool->createClass(Model::class)
+                            ->setData($stepData[$type])
+                            ->setName($name)
+                    )
+                );
         }
 
         return '';

@@ -114,7 +114,7 @@ class DebugMethods extends AbstractObjectAnalysis implements
      * @return mixed
      *   Whatever the method would return.
      */
-    protected function retrieveValue($object, string $methodName)
+    protected function retrieveValue(object $object, string $methodName)
     {
         $result = null;
         // Add a try to prevent the hosting CMS from doing something stupid.

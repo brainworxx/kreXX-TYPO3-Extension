@@ -40,6 +40,8 @@ namespace Brainworxx\Krexx\Service\Reflection;
 use ReflectionException;
 use ReflectionProperty;
 use Throwable;
+use SplObjectStorage;
+use Krexx;
 
 /**
  * Added a better possibility to retrieve the object values.
@@ -67,6 +69,8 @@ class ReflectionClass extends \ReflectionClass
      */
     protected $data;
 
+    protected $unsetPropertyStorage;
+
     /**
      * ReflectionClass constructor.
      *
@@ -81,6 +85,8 @@ class ReflectionClass extends \ReflectionClass
         $this->objectArray = (array) $data;
         // Remember the current object.
         $this->data = $data;
+        // Init our unset object storage;
+        $this->unsetPropertyStorage = new SplObjectStorage();
 
         parent::__construct($data);
     }
@@ -153,7 +159,7 @@ class ReflectionClass extends \ReflectionClass
             // But first we must make sure that the hosting cms does not do
             // something stupid. Accessing this value directly it probably
             // a bad idea, but the only way to get the value.
-            set_error_handler(\Krexx::$pool->retrieveErrorCallback());
+            set_error_handler(Krexx::$pool->retrieveErrorCallback());
             try {
                 $result = $this->data->$propName;
                 restore_error_handler();
@@ -165,8 +171,21 @@ class ReflectionClass extends \ReflectionClass
             restore_error_handler();
         }
 
-        $refProperty->isUnset = true;
+        $this->unsetPropertyStorage->attach($refProperty);
         return null;
+    }
+
+    /**
+     * Was this propery unset?
+     *
+     * The info is only available if you retrieve the value beforehand.
+     *
+     * @param \ReflectionProperty $reflectionProperty
+     * @return bool
+     */
+    public function isPropertyUnset(ReflectionProperty $reflectionProperty): bool
+    {
+        return $this->unsetPropertyStorage->contains($reflectionProperty);
     }
 
     /**
@@ -174,7 +193,7 @@ class ReflectionClass extends \ReflectionClass
      *
      * @return object
      */
-    public function getData()
+    public function getData(): object
     {
         return $this->data;
     }
@@ -185,7 +204,6 @@ class ReflectionClass extends \ReflectionClass
      * @return ReflectionClass[]
      *   Array with the interfaces.
      */
-
     public function getInterfaces(): array
     {
         // Compare the names with the ones from the parent.
@@ -241,6 +259,7 @@ class ReflectionClass extends \ReflectionClass
      *
      * @return bool|\ReflectionClass
      */
+    #[\ReturnTypeWillChange]
     public function getParentClass()
     {
         // Do some static caching. This one is called quite often.

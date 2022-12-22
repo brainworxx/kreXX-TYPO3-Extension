@@ -47,7 +47,7 @@ use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionMethod;
-use ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 
 class ThroughMethodsTest extends AbstractTest
 {

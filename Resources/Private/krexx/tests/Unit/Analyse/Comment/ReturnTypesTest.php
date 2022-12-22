@@ -36,11 +36,10 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
-use Brainworxx\Krexx\Tests\Fixtures\UnionTypeFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ReturnTypeFixture;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Krexx;
-use ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionFunction;
 
 class ReturnTypesTest extends AbstractTest

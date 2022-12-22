@@ -95,6 +95,7 @@ class ReflectionClassTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::retrieveValue
      * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::retrieveEsotericValue
+     * @covers \Brainworxx\Krexx\Service\Reflection\ReflectionClass::isPropertyUnset
      *
      * @throws \ReflectionException
      */
@@ -130,9 +131,7 @@ class ReflectionClassTest extends AbstractTest
                 // This one is dynamically declared.
                 $refProperty = new UndeclaredProperty($reflection, 50);
             } elseif ($name === $notSoSpecial) {
-                $refProperty = new UndeclaredProperty(
-                    $reflection, $notSoSpecial
-                );
+                $refProperty = new UndeclaredProperty($reflection, $notSoSpecial);
             } elseif ($name === $verySpecial) {
                 $refProperty = new HiddenProperty($reflection, $verySpecial);
             } else {
@@ -141,7 +140,9 @@ class ReflectionClassTest extends AbstractTest
 
             $this->assertEquals($expectation, $reflection->retrieveValue($refProperty));
             if ($name === 'value2') {
-                $this->assertTrue($refProperty->isUnset);
+                $this->assertTrue($reflection->isPropertyUnset($refProperty));
+            } else {
+                $this->assertFalse($reflection->isPropertyUnset($refProperty));
             }
         }
     }

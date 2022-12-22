@@ -122,7 +122,7 @@ class Traversable extends AbstractObjectAnalysis implements ConfigConstInterface
      * @return string
      *   The rendered HTML.
      */
-    protected function analyseTraversableResult($originalClass, array $result): string
+    protected function analyseTraversableResult(object $originalClass, array $result): string
     {
         // Direct access to the iterator object,de depending on the object itself.
         $multiline = !($originalClass instanceof ArrayAccess)

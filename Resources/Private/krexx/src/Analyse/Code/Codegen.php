@@ -42,7 +42,6 @@ use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use ReflectionException;
 use ReflectionParameter;
 use UnitEnum;
 
@@ -149,7 +148,9 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
             $result = $this->generateComplicatedStuff($model);
         }
 
-        return $result;
+        // I'm not really sure if it is possible to create element names that
+        // we need to escape.
+        return $this->pool->encodingService->encodeString($result);
     }
 
     /**
@@ -262,7 +263,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     {
         // We simply add the connectors for public access.
         return $model->getConnectorLeft() .
-            $this->pool->encodingService->encodeStringForCodeGeneration($model->getName()) .
+            $model->getName() .
             $model->getConnectorRight();
     }
 
@@ -355,12 +356,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
 
         // Retrieve the default value, if available.
         if ($reflectionParameter->isDefaultValueAvailable()) {
-            try {
-                $default = $reflectionParameter->getDefaultValue();
-            } catch (ReflectionException $e) {
-                $default = null;
-            }
-
+            $default = $reflectionParameter->getDefaultValue();
             $name .= ' = ' . $this->translateDefaultValue($default);
         }
 
@@ -401,7 +397,7 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
     protected function translateDefaultValue($default)
     {
         if (is_string($default)) {
-            $default = '\'' . $default . '\'';
+            $default = '\'' . str_replace('\'', '\\\'', $default) . '\'';
         } elseif (is_array($default)) {
             $default = 'array()';
         } elseif ($default ===  true) {

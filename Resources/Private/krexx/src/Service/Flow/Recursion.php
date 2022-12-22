@@ -111,7 +111,7 @@ class Recursion
      * @param object $bee
      *   The object we want to track.
      */
-    public function addToHive($bee): void
+    public function addToHive(object $bee): void
     {
         $this->recursionHive->attach($bee);
     }

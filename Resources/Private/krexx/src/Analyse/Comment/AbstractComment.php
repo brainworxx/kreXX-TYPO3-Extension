@@ -38,7 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Comment;
 
 use Brainworxx\Krexx\Service\Factory\Pool;
-use ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Reflector;
 
 /**
@@ -78,7 +78,7 @@ abstract class AbstractComment
      *
      * @param \Reflector $reflection
      *   An already existing reflection of the method or function.
-     * @param \ReflectionClass|null $reflectionClass
+     * @param ReflectionClass|null $reflectionClass
      *   An already existing reflection of the original class.
      *
      * @return string

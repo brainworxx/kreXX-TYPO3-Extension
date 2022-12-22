@@ -37,7 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Comment;
 
-use ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Reflector;
 
 /**
@@ -49,7 +49,7 @@ class Properties extends AbstractComment
      * Get the comment from a property.
      *
      * @param \Reflector $reflection
-     * @param \ReflectionClass|null $reflectionClass
+     * @param ReflectionClass|null $reflectionClass
      * @return string
      */
     public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string

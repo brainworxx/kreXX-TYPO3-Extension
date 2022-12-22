@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Tests\Fixtures;
 
+#[\AllowDynamicProperties]
 class PublicFixture extends SimpleFixture
 {
     /**

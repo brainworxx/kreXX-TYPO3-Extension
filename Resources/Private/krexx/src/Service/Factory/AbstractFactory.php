@@ -67,7 +67,7 @@ abstract class AbstractFactory
      * @return object
      *   The requested object.
      */
-    public function createClass(string $classname)
+    public function createClass(string $classname): object
     {
         // Check for possible overwrite.
         if (isset($this->rewrite[$classname])) {

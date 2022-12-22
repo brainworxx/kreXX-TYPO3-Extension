@@ -37,7 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Comment;
 
-use ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Reflector;
 
 /**
@@ -50,7 +50,7 @@ class Classes extends AbstractComment
      *
      * @param \ReflectionClass $reflection
      *   The actual reflection class.
-     * @param \ReflectionClass|null $reflectionClass
+     * @param ReflectionClass|null $reflectionClass
      *   Not used.
      *
      * @return string

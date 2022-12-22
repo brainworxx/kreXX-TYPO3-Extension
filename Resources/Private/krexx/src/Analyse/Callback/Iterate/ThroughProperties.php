@@ -44,7 +44,7 @@ use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Properties;
 use Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
-use ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionProperty;
 use Throwable;
 
@@ -162,6 +162,8 @@ class ThroughProperties extends AbstractCallback implements
             // The values of static properties are stored in the default
             // properties of the class reflection.
             // And we do not want these here.
+            // @deprecated
+            //   Will be removed as soon als we drop php 8.0 support.
             if (!$property->isStatic()) {
                 // We also need to get the class that actually declared this
                 // value. The default values can only be found in there.
@@ -255,9 +257,9 @@ class ThroughProperties extends AbstractCallback implements
     /**
      * Adding declaration keywords to our data in the additional field.
      *
-     * @param \ReflectionProperty $refProperty
+     * @param ReflectionProperty $refProperty
      *   A reflection of the property we ara analysing.
-     * @param \ReflectionClass $ref
+     * @param ReflectionClass $ref
      *   A reflection of the class we are analysing.
      *
      * @return string
@@ -276,7 +278,7 @@ class ThroughProperties extends AbstractCallback implements
         }
 
         // Retrieve the value status of the property.
-        $additional .= $this->retrieveValueStatus($refProperty);
+        $additional .= $this->retrieveValueStatus($refProperty, $ref);
 
         // Test if the property is inherited or not by testing the
         // declaring class
@@ -311,7 +313,7 @@ class ThroughProperties extends AbstractCallback implements
      * @return string
      *   The human-readable result string.
      */
-    protected function retrieveValueStatus(ReflectionProperty $refProperty): string
+    protected function retrieveValueStatus(ReflectionProperty $refProperty, ReflectionClass $ref): string
     {
         $additional = '';
 
@@ -328,12 +330,12 @@ class ThroughProperties extends AbstractCallback implements
             // We ignore this one.
         }
 
-        if (!isset($refProperty->isUnset)) {
+        if (!$ref->isPropertyUnset($refProperty)) {
             return $additional;
         }
 
         if (method_exists($refProperty, 'hasType') && $refProperty->hasType()) {
-            // Types properties where introduced in 7.4.
+            // Typed properties where introduced in 7.4.
             // This one was either unset, or never received a value in the
             // first place. Either way, it's status is uninitialized.
             $additional .= 'uninitialized ';
