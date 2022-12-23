@@ -155,22 +155,19 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         $log = 'log';
 
         // Short circuit the getting of the system path.
-        $pathSite = PATH_site;
-        $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
+        $pathSite = 'somePath';
+        $this->setValueByReflection('varPath', $pathSite, Environment::class);
 
-        $classExistsMock = $this->getFunctionMock($typo3Namespace, 'class_exists');
-        $classExistsMock->expects($this->exactly(2))
-            ->with(Environment::class)
-            ->will($this->returnValue(false));
+        $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
 
         // Mock the is_dir method. We will not create any files.
         $isDirMock = $this->getFunctionMock($typo3Namespace, 'is_dir');
         $isDirMock->expects($this->exactly(8))
             ->withConsecutive(
-                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR .  static::TX_INCLUDEKREXX],
-                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . $log],
-                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
-                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
+                [$pathSite . DIRECTORY_SEPARATOR .  static::TX_INCLUDEKREXX],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . $log],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
             )
             ->will($this->returnValue(true));
 
@@ -205,8 +202,7 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
             'Test the rewrite.'
         );
 
-        $rootpath = 'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR .
-            static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR;
+        $rootpath = $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR;
         $this->assertEquals(
             $rootpath . 'config' . DIRECTORY_SEPARATOR . 'Krexx.',
             SettingsGetter::getConfigFile(),

@@ -76,22 +76,18 @@ class SettingsTest extends AbstractTest implements ConstInterface
     protected function prepareConfigToRun()
     {
         // Short circuit the getting of the system path.
-        $pathSite = PATH_site;
+        $pathSite = 'somePath';
+        $this->setValueByReflection('varPath', $pathSite, Environment::class);
         $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
-
-        $classExistsMock = $this->getFunctionMock($typo3Namespace, 'class_exists');
-        $classExistsMock->expects($this->exactly(1))
-            ->with(Environment::class)
-            ->will($this->returnValue(false));
 
         // Mock the is_dir method. We will not create any files.
         $isDirMock = $this->getFunctionMock($typo3Namespace, 'is_dir');
         $isDirMock->expects($this->exactly(4))
             ->withConsecutive(
-                [$pathSite . static::TYPO3_TEMP  . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX],
-                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'log'],
-                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
-                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'log'],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
             )
             ->will($this->returnValue(true));
 

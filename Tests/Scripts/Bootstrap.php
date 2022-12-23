@@ -34,9 +34,6 @@
 
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
 
-define('TYPO3_version', \Brainworxx\Includekrexx\Tests\Helpers\AbstractTest::TYPO3_VERSION);
-define('PATH_site', 'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR);
-define('TYPO3_MODE', 'FE');
 define('LF', chr(10));
 define('CR', chr(13));
 define('CRLF', CR . LF);

@@ -162,10 +162,8 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
      */
     protected function generateTempPaths(): array
     {
-        // Get the absolute site path. The constant PATH_site is deprecated
-        // since 9.2.
-        $pathSite = class_exists(Environment::class) ? Environment::getPublicPath() . DIRECTORY_SEPARATOR : PATH_site;
-        $pathSite .= 'typo3temp' . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX;
+        $pathSite = Environment::getVarPath();
+        $pathSite .= DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX;
 
         // See if we must create a temp directory for kreXX.
         return [
@@ -277,7 +275,6 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
 
         // Register our modules for the admin panel.
         if (
-            version_compare(Bootstrap::getTypo3Version(), '9.5', '>=') &&
             isset($GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
                 [static::MODULES][static::DEBUG])
         ) {
