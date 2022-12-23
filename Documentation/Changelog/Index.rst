@@ -25,6 +25,7 @@ Changelog
     - [Feature] Added Flexform data analysis.
     - [Change] Removed deprecated code.
     - [Change] Drop PHP 7.0 support
+    - [Change] Drop PHP 7.1 support
     - [Change] Streamlined the type display of strings
     - [Change] Defined visibility for all constants.
     - [Change] Added missing PHP 7.1 return type to methods.
@@ -39,6 +40,8 @@ Changelog
     - [Change] Lots of deprecations.
     - [Change] Removed the XML decoder.
     - [Change] Drop TYPO3 7.6 support.
+    - [Change] Drop TYPO3 8.7 support.
+    - [Change] Drop TYPO3 9.5 support.
     - [Change] Moved the return type retrieval by reflection to the declaration analysis classes.
     - [Change] Moved the parameter analysis to the declaration analysis classes.
     - [Change] Empty configuration sections are not rendered anymore.
@@ -46,6 +49,13 @@ Changelog
     - [Change] Moved the JS and CSS files to the private folder.
     - [Change] Streamlined the return type of the retrieveDeclaringReflection of class methods.
     - [Change] Moved the scalar analysis to a more appropriate namespace.
+
+4.1.8
+    - [Feature] TYPO3 12.1 support
+    - [Feature] Added support for PHP 8.2. (bundeled kreXX lib)
+    - [Bugfix] Fixed the Aimeos settings in the ext_emconf.
+    - [Bugfix] Added missing double escaping to the code generation.
+    - [Bugfix] Add Backslashes to quotation marks of generated source.
 
 4.1.7
     - [Feature] TYPO3 12.0 support

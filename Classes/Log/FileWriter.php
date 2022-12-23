@@ -112,7 +112,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
             ->dumpAction(
                 $logModel,
                 Krexx::$pool->encodingService->encodeString($logModel->getMessage()),
-                $this->retrieveLogLevel($record)
+                $record->getLevel()
             );
 
         AbstractController::$analysisInProgress = false;
@@ -284,6 +284,12 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
      *
      * @return string
      *   The readable string.
+     *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      */
     protected function retrieveLogLevel(LogRecord $record): string
     {

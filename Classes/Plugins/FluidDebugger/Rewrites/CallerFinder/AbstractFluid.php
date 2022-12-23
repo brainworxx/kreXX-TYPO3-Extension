@@ -91,7 +91,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
     /**
      * The rendering context of the template.
      *
-     * @var \TYPO3\CMS\Fluid\Core\Rendering\RenderingContextInterface|\TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface
+     * @var \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface
      */
     protected $renderingContext;
 

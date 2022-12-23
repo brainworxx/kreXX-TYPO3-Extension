@@ -60,16 +60,12 @@ abstract class AbstractEventHandler implements EventHandlerInterface, AimeosCons
      * @return mixed
      *   The property, if successful, or NULL if not successful.
      */
-    protected function retrieveProperty(ReflectionClass $reflectionClass, string $objectName, $object)
+    protected function retrieveProperty(ReflectionClass $reflectionClass, string $objectName, object $object)
     {
-        try {
-            if ($reflectionClass->hasProperty($objectName)) {
-                $propertyRef = $reflectionClass->getProperty($objectName);
-                $propertyRef->setAccessible(true);
-                return $propertyRef->getValue($object);
-            }
-        } catch (ReflectionException $e) {
-            // Do nothing.
+        if ($reflectionClass->hasProperty($objectName)) {
+            $propertyRef = $reflectionClass->getProperty($objectName);
+            $propertyRef->setAccessible(true);
+            return $propertyRef->getValue($object);
         }
 
         // Unable to retrieve the value.

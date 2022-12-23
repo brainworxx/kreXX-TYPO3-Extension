@@ -46,9 +46,7 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
-use Aimeos\MShop\Exception as AimeosException;
 use Throwable;
-use Krexx;
 
 /**
  * There is no way to clear the cache after an extension update automatically
@@ -79,7 +77,8 @@ class Bootstrap implements ConstInterface
             return;
         }
 
-        $this->retrieveTypo3Version();
+        static::$typo3Version = GeneralUtility::makeInstance(Typo3Version::class)
+            ->getVersion();
 
         // Register and activate the TYPO3 plugin.
         /** @var T3configuration $t3configuration */
@@ -103,7 +102,7 @@ class Bootstrap implements ConstInterface
         Registration::register($aimeosConfiguration);
 
         // Check if we have the Aimeos shop available.
-        if (class_exists(AimeosException::class) || ExtensionManagementUtility::isLoaded('aimeos')) {
+        if (ExtensionManagementUtility::isLoaded('aimeos')) {
             Registration::activatePlugin(get_class($aimeosConfiguration));
         }
     }
@@ -173,15 +172,17 @@ class Bootstrap implements ConstInterface
      * Wrapper around either
      *   - TYPO3_version
      *   - TYPO3\CMS\Core\Information\Typo3Version
+     *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      */
     protected function retrieveTypo3Version(): void
     {
-        if (class_exists(Typo3Version::class)) {
-            static::$typo3Version = GeneralUtility::makeInstance(Typo3Version::class)
-                ->getVersion();
-        } else {
-            static::$typo3Version = TYPO3_version;
-        }
+        static::$typo3Version = GeneralUtility::makeInstance(Typo3Version::class)
+            ->getVersion();
     }
 
     /**

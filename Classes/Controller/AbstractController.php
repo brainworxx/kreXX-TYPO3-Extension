@@ -157,11 +157,6 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     public function __construct()
     {
-        if (version_compare(Bootstrap::getTypo3Version(), '10.0.0', '<')) {
-            // The constructor was removed with 10.0.0.
-            parent::__construct();
-        }
-
         Pool::createPool();
         $this->pool = Krexx::$pool;
 

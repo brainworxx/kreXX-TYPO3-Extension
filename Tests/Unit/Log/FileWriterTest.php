@@ -112,7 +112,6 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveLogLevel
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelNormal
      */
     public function testWriteLogNormal()
@@ -155,7 +154,6 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveLogLevel
      */
     public function testWriteLogWithConfig()
     {
@@ -184,7 +182,6 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveLogLevel
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::isDisabled
      */
     public function testWriteLogDisabled()

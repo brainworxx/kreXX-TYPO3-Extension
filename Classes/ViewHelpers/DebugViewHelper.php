@@ -41,6 +41,7 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use ReflectionClass;
 
 /**
@@ -62,7 +63,7 @@ use ReflectionClass;
  *   Use this part if you don't want fluid to escape your string or if you are
  *   stitching together an array.
  */
-class DebugViewHelper extends CompatibilityViewHelper
+class DebugViewHelper extends AbstractViewHelper
 {
     /**
      * @var string

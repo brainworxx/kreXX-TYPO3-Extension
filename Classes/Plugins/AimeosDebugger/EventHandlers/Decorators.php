@@ -178,7 +178,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      * @param ReflectionClass $reflectionClass
      *   The class we are currently analysing.
      *
-     * @return boolean
+     * @return bool
      *   Whether we have found a potential class.
      */
     protected function checkClassName(ReflectionClass $reflectionClass): bool

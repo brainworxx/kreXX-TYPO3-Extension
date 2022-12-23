@@ -63,8 +63,6 @@ class DebugMethods extends AbstractEventHandler implements
      */
     protected $methods = [
             'getRefItems' => [
-                // Aimeos 2018
-                \Aimeos\MShop\Common\Item\ListRef\Base::class,
                 // Aimeos 2019 & 2020
                 \Aimeos\MShop\Common\Item\ListRef\Iface::class,
                 // Aimeos 2021
@@ -155,7 +153,7 @@ class DebugMethods extends AbstractEventHandler implements
      * @return string
      *   The rendered html dom.
      */
-    protected function callDebugMethod($data, string $methodName, ReflectionClass $reflectionClass): string
+    protected function callDebugMethod(object $data, string $methodName, ReflectionClass $reflectionClass): string
     {
         $result = $data->$methodName();
         // We are expecting arrays, btw.

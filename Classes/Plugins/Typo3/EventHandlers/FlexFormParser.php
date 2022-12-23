@@ -43,8 +43,8 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Service\FlexFormService as FlexFromServiceCore;
-use TYPO3\CMS\Extbase\Service\FlexFormService as FlexFromServiceExtbase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Throwable;
 
 /**
  * Parsing flexforms, if possible.
@@ -81,19 +81,12 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
         $parameters = $model->getParameters();
 
         try {
-            if (class_exists(FlexFromServiceCore::class)) {
-                // TYPO3 9.5+'er style.
-                $flexFormService = GeneralUtility::makeInstance(FlexFromServiceCore::class);
-            } else {
-                // TYPO3 8.7'er style
-                $flexFormService = GeneralUtility::makeInstance(FlexFromServiceExtbase::class);
-            }
-
+            $flexFormService = GeneralUtility::makeInstance(FlexFromServiceCore::class);
             $result = $flexFormService->convertFlexFormContentToArray($parameters[static::PARAM_VALUE]);
             $meta = $parameters[static::PARAM_DATA];
             $meta[$messages->getHelp('metaDecodedXml')] = $result;
             $model->addParameter(static::PARAM_DATA, $meta);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             // Do nothing.
             // We did a TYPO3 framework call. Which may or may not be unstable.
             // This is a debugging tool, after all.

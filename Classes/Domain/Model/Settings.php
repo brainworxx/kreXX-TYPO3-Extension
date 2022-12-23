@@ -156,8 +156,8 @@ class Settings implements ControllerConstInterface, ConfigConstInterface
             $result[$group] = [];
             foreach ($settings as $settingName) {
                 if (
-                    $this->$settingName !== null &&
-                    $validation->evaluateSetting($group, $settingName, $this->$settingName)
+                    $this->$settingName !== null
+                    && $validation->evaluateSetting($group, $settingName, $this->$settingName)
                 ) {
                     $moduleSettings[$settingName] = $result[$group][$settingName] = $this->$settingName;
                 }
