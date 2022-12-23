@@ -226,7 +226,6 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         $toString = '__toString';
         $this->assertEquals(
             [
-                'TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper' => [$toString],
                 'TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper' => [$toString],
                 'TYPO3\CMS\Extbase\Persistence\RepositoryInterface' => ['removeAll'],
                 'TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy' => [$toString],

@@ -61,11 +61,10 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\RepositoryInterface;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper as NewAbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder as DbQueryBuilder;
-use TYPO3\CMS\Core\Log\LogLevel;
+use Psr\Log\LogLevel;
 use Brainworxx\Includekrexx\Log\FileWriter as KrexxFileWriter;
 use Closure;
 
@@ -131,7 +130,6 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         $toString = '__toString';
         $removeAll = 'removeAll';
         Registration::addMethodToDebugBlacklist(AbstractViewHelper::class, $toString);
-        Registration::addMethodToDebugBlacklist(NewAbstractViewHelper::class, $toString);
 
         // Deleting all rows from the DB via typo3 repository is NOT a good
         // debug method!
@@ -228,7 +226,7 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         $loglevelT3FileWriter = GeneralUtility::makeInstance(NewSetting::class);
         $loglevelT3FileWriter->setSection($this->getName())
             ->setIsFeProtected(true)
-            ->setDefaultValue((string)LogLevel::ERROR)
+            ->setDefaultValue(LogLevel::ERROR)
             ->setIsEditable(false)
             ->setRenderType(static::RENDER_TYPE_NONE)
             ->setValidation($this->createFileWriterValidator())
@@ -260,10 +258,8 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
                 LogLevel::INFO,
                 LogLevel::DEBUG,
             ];
-            foreach ($levels as $level) {
-                if ($value === $level) {
-                    return true;
-                }
+            if (in_array($value, $levels, true)) {
+                return true;
             }
 
             $pool->messages->addMessage('configErrorLoglevelT3FileWriter', [$value]);
