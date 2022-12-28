@@ -62,6 +62,9 @@ class Bootstrap implements ConstInterface
     /**
      * The TYPO3 version.
      *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     *
      * @var string
      */
     protected static $typo3Version;
@@ -116,6 +119,8 @@ class Bootstrap implements ConstInterface
      *
      * @deprecated
      *   Since 5.0.0. Will be removed.
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
      *
      * @return $this
      *   Return $this, for chaining.
@@ -187,6 +192,11 @@ class Bootstrap implements ConstInterface
 
     /**
      * Getter for the TYPO3 version.
+     *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
      *
      * @return string
      */
