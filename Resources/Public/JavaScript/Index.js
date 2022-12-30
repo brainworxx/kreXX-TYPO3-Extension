@@ -388,7 +388,7 @@
         }, 4000);
     }
 
-    if (document.readyState === "complete" || document.readyState === "loaded") {
+    if (document.readyState !== 'loading') {
         tabs.onDocumentReady();
         formSupport.onDocumentReady();
         ajaxRefresh.onDocumentReady();

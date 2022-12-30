@@ -36,17 +36,8 @@
 declare(strict_types=1);
 
 return [
-    'tools_includekrexx' => [
-        'parent' => 'tools',
-        'position' => ['bottom'],
-        'access' => 'user,group',
-        'workspaces' => '*',
-        'path' => '/module/tools/includekrexx',
-        'labels' => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf',
-        'extensionName' => 'Includekrexx',
-        'iconIdentifier' => 'module-includekrexx',
-        'controllerActions' => [
-            \Brainworxx\Includekrexx\Controller\IndexController::class => 'index, save, dispatch'
-        ],
-    ],
+    'module-includekrexx' => [
+        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        'source' => 'EXT:includekrexx/Resources/Public/Icons/Extension.svg'
+    ]
 ];

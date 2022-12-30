@@ -328,7 +328,7 @@ abstract class AbstractController extends ActionController implements ConstInter
         } else {
             // @deprecated
             // Will be removed as soon as we drop TYPO3 11 support.
-            $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/JavaScript/Index.js');
+            $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
             $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
         }
 
