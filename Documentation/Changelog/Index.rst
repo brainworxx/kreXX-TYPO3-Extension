@@ -18,6 +18,8 @@ Changelog
     - [Bugfix] Fixed the Aimeos settings in the ext_emconf.
     - [Bugfix] Added missing double escaping to the code generation.
     - [Bugfix] Add Backslashes to quotation marks of generated source.
+    - [Bugfix] Reworked the backend module registering according to the updated documentation.
+    - [Bugfix] Fix the JS initializing in TYPO3 12.
 
 4.1.7
     - [Feature] TYPO3 12.0 support
