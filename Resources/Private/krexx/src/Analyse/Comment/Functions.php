@@ -37,7 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Comment;
 
-use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
+use ReflectionClass;
 use Reflector;
 
 /**
