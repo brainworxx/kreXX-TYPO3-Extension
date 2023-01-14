@@ -1,0 +1,76 @@
+name: Build
+
+on:
+  push:
+    branches: [ master, develop, feature/*, 'v4.1']
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env:
+          - { php: 7.0, composer: 1, TYPO3: ^8.7,  Aimeos: ^18, CodeClimate: no  }
+          - { php: 7.1, composer: 1, TYPO3: ^8.7,  Aimeos: ^19, CodeClimate: no  }
+          - { php: 7.2, composer: 1, TYPO3: ^9.5,  Aimeos: ^19, CodeClimate: no  }
+          - { php: 7.3, composer: 1, TYPO3: ^10.4, Aimeos: ^20, CodeClimate: no  }
+          - { php: 7.4, composer: 1, TYPO3: ^10.4, Aimeos: ^21, CodeClimate: no  }
+          - { php: 8.0, composer: 2, TYPO3: ^11.5, Aimeos: ^21, CodeClimate: yes }
+          - { php: 8.1, composer: 2, TYPO3: ^11.5, Aimeos: ^22, CodeClimate: no  }
+          - { php: 8.1, composer: 2, TYPO3: ^12.1, Aimeos:  no, CodeClimate: no  }
+          - { php: 8.2, composer: 2, TYPO3: ^11.5, Aimeos: ^22, CodeClimate: no  }
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.env.php }}
+
+    - name: Update Composer
+      run: |
+        sudo composer self-update --${{ matrix.env.composer }}
+        sudo chown $USER $HOME/.composer
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Install TYPO3
+      run: composer require --no-update "typo3/cms-core:${{ matrix.env.TYPO3 }}"
+
+    - name: Install Aimeos
+      run: composer require --no-update "aimeos/aimeos-typo3:${{ matrix.env.Aimeos }}"
+      if: ${{ matrix.env.Aimeos != 'no' }}
+
+    - name: Remove Aimeos
+      run: composer remove --dev --no-update "aimeos/aimeos-typo3"
+      if: ${{ matrix.env.Aimeos == 'no' }}
+
+    - name: Install Admin Panel
+      run: composer require --no-update "typo3/cms-adminpanel:${{ matrix.env.TYPO3 }}"
+      if: ${{ matrix.env.TYPO3 != '^8.7' }}
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Build
+      run: composer test
+
+    - name: Publish code coverage
+      uses: paambaati/codeclimate-action@v3.1.1
+      if: ${{ matrix.env.CodeClimate == 'yes' }}
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATEKEY }}
