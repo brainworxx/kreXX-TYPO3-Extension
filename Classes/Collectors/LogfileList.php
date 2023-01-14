@@ -103,6 +103,9 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      */
     protected function retrieveFileInfo(array $files): array
     {
+        // These files may not be available anymore on high traffic sites. The
+        // filemtime() will throw a warning if the file does not exist anymore.
+        set_error_handler(\Krexx::$pool->retrieveErrorCallback());
         $fileList = [];
         foreach ($files as $file) {
             $fileinfo = [];
@@ -115,6 +118,7 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
             $fileinfo['meta'] = $this->addMetaToFileInfo($file);
             $fileList[] = $fileinfo;
         }
+        restore_error_handler();
 
         return $fileList;
     }
