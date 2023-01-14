@@ -45,13 +45,16 @@ use Brainworxx\Includekrexx\Tests\Fixtures\FixtureJob;
 use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use stdClass;
 
 class DecoratorsTest extends AbstractTest
 {
@@ -68,6 +71,34 @@ class DecoratorsTest extends AbstractTest
 
         $getter = new Decorators(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $getter));
+    }
+
+    /**
+     * Call the handle with an invalid class instance.
+     *
+     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::handle
+     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::checkClassName
+     *
+     */
+    public function testHandleEarlyReturn()
+    {
+        $this->skipIfAimeosIsNotInstalled();
+
+        $wrongClass = new stdClass();
+        $fixture = [
+            Methods::PARAM_DATA => $wrongClass,
+            Methods::PARAM_NAME => 'decorator fixture',
+            Methods::PARAM_REF => new ReflectionClass($wrongClass)
+        ];
+
+        $decorators = new Decorators(\Krexx::$pool);
+        $callback = new CallbackNothing(\Krexx::$pool);
+        $callback->setParameters($fixture);
+        $this->assertEquals(
+            '',
+            $decorators->handle($callback, new Model(\Krexx::$pool)),
+            'Empy output and no crash.'
+        );
     }
 
     /**
