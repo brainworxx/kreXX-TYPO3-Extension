@@ -20,6 +20,7 @@ Changelog
     - [Bugfix] Add Backslashes to quotation marks of generated source.
     - [Bugfix] Reworked the backend module registering according to the updated documentation.
     - [Bugfix] Fix the JS initializing in TYPO3 12.
+    - [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
 
 4.1.7
     - [Feature] TYPO3 12.0 support

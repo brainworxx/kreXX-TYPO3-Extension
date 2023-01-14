@@ -92,23 +92,32 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      * @param array $files
      *   The list of files to process.
      *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     *
      * @return array
      *   The file info in a neat array.
      */
     protected function retrieveFileInfo(array $files): array
     {
+        // These files may not be available anymore on high traffic sites. The
+        // filemtime() will throw a warning if the file does not exist anymore.
+        set_error_handler(\Krexx::$pool->retrieveErrorCallback());
         $fileList = [];
         foreach ($files as $file) {
-            $fileinfo = [];
+            if (false === ($fileTime = filemtime($file))) {
+                continue;
+            }
             // Getting the basic info.
-            $fileinfo['name'] = basename($file);
-            $fileinfo['size'] = $this->fileSizeConvert(filesize($file));
-            $fileinfo['time'] = date("d.m.y H:i:s", filemtime($file));
-            $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
-            $fileinfo['dispatcher'] = $this->getRoute($fileinfo['id']);
-            $fileinfo['meta'] = $this->addMetaToFileInfo($file);
-            $fileList[] = $fileinfo;
+            $fileInfo = [];
+            $fileInfo['name'] = basename($file);
+            $fileInfo['size'] = $this->fileSizeConvert(filesize($file));
+            $fileInfo['time'] = date("d.m.y H:i:s", $fileTime);
+            $fileInfo['id'] = str_replace('.Krexx.html', '', $fileInfo['name']);
+            $fileInfo['dispatcher'] = $this->getRoute($fileInfo['id']);
+            $fileInfo['meta'] = $this->addMetaToFileInfo($file);
+            $fileList[] = $fileInfo;
         }
+        restore_error_handler();
 
         return $fileList;
     }
