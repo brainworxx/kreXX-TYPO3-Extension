@@ -343,26 +343,14 @@ class IndexControllerTest extends AbstractTest
     public function testDispatchActionNoAccess()
     {
         $serverRequestMock = $this->createMock(ServerRequest::class);
-        $request = [
-            'tx_includekrexx_tools_includekrexxkrexxconfiguration' => [
-                'id' => 123
-            ]
-        ];
-        $serverRequestMock->expects($this->once())
-            ->method('getQueryParams')
-            ->will($this->returnValue($request));
+        // Never, because we have no access.
+        $serverRequestMock->expects($this->never())
+            ->method('getQueryParams');
 
         $headerMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'header');
         $headerMock->expects($this->never());
 
         $indexController = new IndexController();
-        if (class_exists(Response::class) === true) {
-            $responseMock = $this->createMock(Response::class);
-            $responseMock->expects($this->any())
-                ->method('shutdown');
-            $this->setValueByReflection('response', $responseMock, $indexController);
-        }
-
         $indexController->dispatchAction($serverRequestMock);
     }
 
@@ -376,12 +364,6 @@ class IndexControllerTest extends AbstractTest
     {
         $this->mockBeUser();
 
-        $requestMock = $this->createMock(Request::class);
-        $requestMock->expects($this->once())
-            ->method('getArgument')
-            ->with('id')
-            ->will($this->returnValue('123458'));
-
         // Use the files inside the fixture folder.
         $this->setValueByReflection(
             'directories',
@@ -390,7 +372,6 @@ class IndexControllerTest extends AbstractTest
         );
 
         $controller = new IndexController();
-        $this->setValueByReflection('request', $requestMock, $controller);
         $this->expectOutputString('Et dico vide nec, sed in mazim phaedrum voluptatibus. Eum clita meliore tincidunt ei, sed utinam pertinax theophrastus ad. Porro quodsi detracto ea pri. Et vis mollis voluptaria. Per ut saperet intellegam.');
 
         // Prevent the dispatcher from doing something stupid.
@@ -399,12 +380,14 @@ class IndexControllerTest extends AbstractTest
         $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'ob_flush');
         $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'flush');
 
-        if (class_exists(Response::class) === true) {
-            $responseMock = $this->createMock(Response::class);
-            $responseMock->expects($this->any())->method('shutdown');
-            $this->setValueByReflection('response', $responseMock, $controller);
-        }
+        $serverRequestMock = $this->createMock(ServerRequest::class);
+        $request = [
+            'tx_includekrexx_tools_includekrexxkrexxconfiguration' => ['id' => 123458]
+        ];
+        $serverRequestMock->expects($this->once())
+            ->method('getQueryParams')
+            ->will($this->returnValue($request));
 
-        $controller->dispatchAction();
+        $controller->dispatchAction($serverRequestMock);
     }
 }

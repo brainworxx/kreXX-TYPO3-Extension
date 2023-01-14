@@ -142,24 +142,18 @@ class IndexController extends AbstractController implements ConstInterface
      */
     public function dispatchAction(ServerRequest $serverRequest = null): NullResponse
     {
-        // And I was so happy to get rid of the 4.5 compatibility nightmare.
-        if (empty($this->request)) {
-            $rawId = $serverRequest->getQueryParams()['tx_includekrexx_tools_includekrexxkrexxconfiguration']['id'];
-        } else {
-            try {
-                $rawId = $this->request->getArgument('id');
-            } catch (NoSuchArgumentException $e) {
-                $rawId = '';
-            }
+        $response = GeneralUtility::makeInstance(NullResponse::class);
+        if (!$this->hasAccess()) {
+            return $response;
         }
 
         // No directory traversal for you!
         // Get the filepath.
+        $rawId = $serverRequest->getQueryParams()['tx_includekrexx_tools_includekrexxkrexxconfiguration']['id'];
         $file = $this->pool->config->getLogDir() . preg_replace('/[^0-9]/', '', (string) $rawId) . '.Krexx.html';
-        if ($this->hasAccess()) {
-            // We open and then send the file.
-            $this->dispatchFile($file);
-        }
+        // We open and then send the file.
+        $this->dispatchFile($file);
+
         return GeneralUtility::makeInstance(NullResponse::class);
     }
 }

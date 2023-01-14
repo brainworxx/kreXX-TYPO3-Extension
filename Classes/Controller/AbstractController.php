@@ -296,8 +296,11 @@ abstract class AbstractController extends ActionController implements ConstInter
     /**
      * Create the response, depending on the calling context.
      *
-     * @deprecated since 5.0.0
-     *   Will be removed.
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated functions.
      *
      * @return MvcResponse|NullResponse
      */
