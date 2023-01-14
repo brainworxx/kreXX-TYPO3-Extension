@@ -1,0 +1,77 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:layout name="Modules"/>
+
+/**
+ * Entry point for the rendering of the log list.
+ */
+<f:section name="main">
+    <div class="typo3-adminPanel-table-overflow">
+        <table class="typo3-adminPanel-table typo3-adminPanel-table-debug">
+            <thead>
+            <tr>
+                <th scope="col" class="typo3-adminPanel-table-cell-icon"></th>
+                <th scope="col" class="typo3-adminPanel-table-cell-xx-filename"><b><f:translate extensionName="includekrexx" key="log.filename" /></b></th>
+                <th scope="col" class="typo3-adminPanel-table-cell-xx-meta"><b><f:translate extensionName="includekrexx" key="log.meta" /></b></th>
+                <th scope="col" class="typo3-adminPanel-table-cell-xx-time"><b><f:translate extensionName="includekrexx" key="log.time" /></b></th>
+                <th scope="col" class="typo3-adminPanel-table-cell-xx-size"><b><f:translate extensionName="includekrexx" key="log.size" /></b></th>
+            </tr>
+            </thead>
+            <tbody>
+            <f:for each="{files}" as="file">
+                <f:render section="tablerow" arguments="{file}"/>
+            </f:for>
+            </tbody>
+        </table>
+    </div>
+</f:section>
+
+/**
+ * Render a table row with data
+ *
+ * @param string {name}
+ *   The filename.
+ * @param string {size}
+ *   The file size.
+ * @param string {time}
+ *   Human readable file time.
+ * @param string {id}
+ *   The file id
+ * @param string {dispatcher}
+ *   Link to the file dispatcher in the backend.
+ * @param array {meta}
+ *   Meta data for the content of the file.
+ */
+<f:section name="tablerow">
+    <tr>
+        <td scope="col" class="typo3-adminPanel-table-cell-icon"><a target="_blank" href="{dispatcher}"><div class="typo3-adminPanel-table-cell-xx-icon"></div></a></td>
+        <td scope="col" class="typo3-adminPanel-table-cell-xx-filename"><a target="_blank" href="{dispatcher}">{name}</a></td>
+        <td scope="col" class="typo3-adminPanel-table-cell-xx-meta">
+            <f:for each="{meta}" as="singlemeta" iteration="iterator">
+                <f:render section="meta" arguments="{meta: singlemeta, iterator: iterator}"/>
+            </f:for>
+        </td>
+        <td scope="col" class="typo3-adminPanel-table-cell-xx-time">{time}</td>
+        <td scope="col" class="typo3-adminPanel-table-cell-xx-size">{size}</td>
+    </tr>
+</f:section>
+
+/**
+ * Rendering of the meta data of a file, about what was analysed.
+ *
+ * The output is already escaped at this point, hence the format raw.
+ *
+ * @param array {meta}
+ *   Content of the metadata json.
+ * @param array {iterator}
+ *   The iterator from the f:for
+ */
+<f:section name="meta">
+    <b><f:format.raw>{meta.type}</f:format.raw></b><br />
+    in {meta.filename}, line {meta.line}
+    <f:if condition="{iterator.isLast}===false">
+        <div class="typo3-adminPanel-table-cell-xx-spacer"></div>
+    </f:if>
+</f:section>
+
+</html>

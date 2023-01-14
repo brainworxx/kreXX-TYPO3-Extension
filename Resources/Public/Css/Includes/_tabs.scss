@@ -1,0 +1,80 @@
+.krexx-backend {
+  .tabpanel {
+    max-width: 1200px;
+
+    .nav-tabs {
+      border-radius: 2px 2px 0 0;
+      background-color: $grey-05;
+      border-bottom: 1px solid $grey-15;
+      margin-bottom: 0;
+      padding-left: 0;
+      list-style: none;
+      margin-top: 0;
+      height: 31px;
+
+      > li {
+        float: left;
+        margin-bottom: -1px;
+
+        &.active {
+          position: relative;
+          display: block;
+          cursor: default;
+
+          > a {
+            border: 1px solid $grey-15;
+            border-bottom-color: $white;
+            background-color: $white;
+            color: $black;
+            cursor: default;
+            margin-right: 0;
+
+          }
+        }
+
+        > a {
+          margin-right: 0;
+          transition: all .1s ease-in-out;
+          line-height: 1.5;
+          border: 1px solid transparent;
+          border-radius: 2px 2px 0 0;
+          position: relative;
+          display: block;
+          padding: 6px 12px;
+          color: $black;
+          text-decoration: none;
+
+          &:hover {
+            border-color: $grey-15 $grey-15 $white $grey-15;
+            background: $white;
+            text-decoration: none;
+            cursor: pointer;
+          }
+        }
+      }
+
+      > li + li {
+        margin-left: 2px;
+      }
+    }
+  }
+
+  .tab-content {
+    > .tab-pane {
+      display: block;
+      height: 0;
+      width: 0;
+      overflow: hidden;
+      background-color: $white;
+
+      &.active {
+        height: auto;
+        width: auto;
+        overflow: visible;
+        padding: 15px 12px;
+        border: 1px solid $grey-15;
+        border-top: none;
+      }
+    }
+  }
+}

@@ -1,0 +1,156 @@
+;
+; kreXX CONFIGURATION FILE
+;
+; ------------------------------------------------------------------------------
+[output]
+
+; Is kreXX actually active?
+; Here you can disable kreXX on a global level without uninstalling it.
+disabled = "false"
+; disabled = "true"
+
+; Comma separated list of ip's that can access kreXX. Wildcards are supported.
+; You can do something like '192.168.1.*', but not something like '192.168.*.110'.
+; iprange = "192.168.0.110,192.168.1.*"
+iprange = "*"
+
+; Shall kreXX try to detect an AJAX request?
+; If set to true, there will be no output when AJAX is detected, to prevent a
+; js error.
+detectAjax = "true"
+; detectAjax = "false"
+
+; ------------------------------------------------------------------------------
+[behavior]
+
+; Change the above value to set the CSS skin used to render kreXX layout.
+; skin = "hans"
+skin = "smokygrey"
+
+; Where shall kreXX put it's data?
+; Is the output the browser or the logfolder?
+; destination = "file"
+destination = "browser"
+
+; how many logfiles will kreXX keep?
+; Files will only get deleted, when he creates a new one.
+maxfiles = "10"
+
+; When you are using the scope analysis, kreXX will analyse everything that can
+; be reached from the point where kreXX was callen in the code. When coming from
+; the $this environment, all protected and most private values / methods are
+; reachable, and kreXX will take this into account.
+useScopeAnalysis = "true"
+; useScopeAnalysis = "false"
+
+; ------------------------------------------------------------------------------
+[prune]
+
+; A backtrace tends to produce a lot of output, and browsers tend to have problems
+; with more than 100MB output in HTML text. Normally it is not unneccessary to go
+; back more than 10 steps, but if you need to, you can increase this number here.
+maxStepNumber = 10
+
+; When doing a database loading operation, most framewors return a class which holds
+; models inside. Getting more than 1000 of these can result in an overkill output.
+; The content of such a class will be transformed into an array by the traversasble
+; analysis. But there are also a lot of situations, where you get large arrays of
+; objects as well, without a traversable analysis.
+; When encountering an array larger than this number, kreXX will resort to a
+; simplified array analysis. This means that classes or other arrays in this large
+; array will only get a rudimentary analysis to prevent an overkill output.
+arrayCountLimit = 300
+
+; How deep shall we analyse objects?
+; When we reach a certain level, we simply stop there and won't go any further.
+level = "10"
+
+; ------------------------------------------------------------------------------
+[properties]
+; kreXX can poll a lot of info. Depending on your needs, these might be a little
+; too much. It also increases the output, which might not be a good idea
+
+; Shall kreXX create a reflection and poll it for data?
+; There might be a setter/getter for it somewhere . . .
+; analyseProtected = "true"
+analyseProtected = "false"
+; analysePrivate = "true"
+analysePrivate = "false"
+
+; Shall kreXX do a deep analysis of scalar variables?
+analyseScalar = "true"
+;analyseScalar = "false"
+
+; Shall kreXX try to traverse through the object?
+analyseTraversable = "true"
+; analyseTraversable = "false"
+
+; ------------------------------------------------------------------------------
+[methods]
+
+; Here you can configure, what analysis will be done on class methods.
+; analyseProtectedMethods = "true"
+analyseProtectedMethods = "false"
+; analysePrivateMethods = "true"
+analysePrivateMethods = "false"
+
+; When dealing with models, it'S all about the getter (and setter) methods.
+; kreXX can try to analyse the (possible) result from the getters.
+; These methods will not be called, instead the result will come from the
+; class properties.
+; A proper getter method starts with 'get' and has no parameters.
+analyseGetter = "true"
+; analyseGetter = "false"
+
+; What kind of additional methods shall be called from the object?
+; Comma separated list of functions. They are only called, when they are
+; callable. These functions are called without parameters. They also might
+; actually do stuff which might be unwanted.
+debugMethods = "debug,toArray,__toString,toString"
+
+; ------------------------------------------------------------------------------
+[emergency]
+
+; How often can you call kreXX in one run?
+; kreXX can generate a lot of data, and depending on your settings
+; increasing this number might not be a good idea.
+maxCall = "15"
+
+; kreXX checks during the analysis how much time has elapsed since start. Here
+; you can adjust the amount where it will trigger an emergency break. Unit of
+; measurement is seconds.
+maxRuntime = "60"
+
+; Setting up the config for the emergency break.
+; When analysing large objects, there is always the chance that you run out of
+; time or memory. kreXX checks these values regularly.
+; kreXX checks regularly how much memory is left. Here you can adjust the amount
+; where it will trigger an emergency break. Unit of measurement is MB.
+memoryLeft = "64"
+
+; ------------------------------------------------------------------------------
+[feEditing]
+; Here you can edit the frontend configuration form
+; full    = can be edited
+; display = is displayed only
+; none    = is not displayed at all
+; Since the local configuration is stored in a cookie, settings will be
+; ignored, in case a setting can not be edited.
+; Please note, that the logging and debug methods options can never be edited
+; on the frontend.
+disabled = "full"
+detectAjax = "full"
+skin = "full"
+useScopeAnalysis = "full"
+maxStepNumber = "full"
+arrayCountLimit = "full"
+level = "full"
+analyseProtected = "full"
+analysePrivate = "full"
+analyseTraversable = "full"
+analyseProtectedMethods = "full"
+analysePrivateMethods = "full"
+analyseGetter = "full"
+maxCall = "full"
+memoryLeft = "full"
+maxRuntime = "full"
