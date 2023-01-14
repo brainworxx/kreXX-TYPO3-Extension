@@ -40,6 +40,7 @@ namespace Brainworxx\Includekrexx\Controller;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use TYPO3\CMS\Core\Http\HtmlResponse;
+use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
@@ -137,9 +138,9 @@ class IndexController extends AbstractController implements ConstInterface
      *
      * @param ServerRequest|null $serverRequest
      *
-     * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface|\TYPO3\CMS\Core\Http\NullResponse
+     * @return \TYPO3\CMS\Core\Http\NullResponse
      */
-    public function dispatchAction(ServerRequest $serverRequest = null)
+    public function dispatchAction(ServerRequest $serverRequest = null): NullResponse
     {
         // And I was so happy to get rid of the 4.5 compatibility nightmare.
         if (empty($this->request)) {
@@ -159,6 +160,6 @@ class IndexController extends AbstractController implements ConstInterface
             // We open and then send the file.
             $this->dispatchFile($file);
         }
-        return $this->createResponse();
+        return GeneralUtility::makeInstance(NullResponse::class);
     }
 }

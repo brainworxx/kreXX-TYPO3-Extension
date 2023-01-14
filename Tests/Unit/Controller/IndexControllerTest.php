@@ -339,7 +339,6 @@ class IndexControllerTest extends AbstractTest
      * Testing the dispatching without access.
      *
      * @covers \Brainworxx\Includekrexx\Controller\IndexController::dispatchAction
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::createResponse
      */
     public function testDispatchActionNoAccess()
     {
@@ -371,7 +370,6 @@ class IndexControllerTest extends AbstractTest
      * Testing the normal dispatching of a file.
      *
      * @covers \Brainworxx\Includekrexx\Controller\IndexController::dispatchAction
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::createResponse
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::dispatchFile
      */
     public function testDispatchActionNormal()
