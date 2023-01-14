@@ -136,7 +136,7 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      */
     protected function addMetaToFileInfo(string $file): array
     {
-        if (is_readable($file . '.json') === false) {
+        if (!is_readable($file . '.json')) {
             return [];
         }
 

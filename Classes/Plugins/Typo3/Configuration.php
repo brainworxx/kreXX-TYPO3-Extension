@@ -190,14 +190,14 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
 
         // The things you have to do when you don't know if anybody has messed
         // with globals.
-        if (isset($GLOBALS[static::TYPO3_CONF_VARS][static::LOG]) === false) {
+        if (!isset($GLOBALS[static::TYPO3_CONF_VARS][static::LOG])) {
             $GLOBALS[static::TYPO3_CONF_VARS][static::LOG] = [];
         }
-        if (isset($GLOBALS[static::TYPO3_CONF_VARS][static::LOG][static::WRITER_CONFIGURATION]) === false) {
+        if (!isset($GLOBALS[static::TYPO3_CONF_VARS][static::LOG][static::WRITER_CONFIGURATION])) {
             $GLOBALS[static::TYPO3_CONF_VARS][static::LOG][static::WRITER_CONFIGURATION] = [];
         }
         $level = Krexx::$pool->config->getSetting(static::LOG_LEVEL_T3_FILE_WRITER);
-        if (isset($GLOBALS[static::TYPO3_CONF_VARS][static::LOG][static::WRITER_CONFIGURATION][$level]) === false) {
+        if (!isset($GLOBALS[static::TYPO3_CONF_VARS][static::LOG][static::WRITER_CONFIGURATION][$level])) {
             $GLOBALS[static::TYPO3_CONF_VARS][static::LOG][static::WRITER_CONFIGURATION][$level] = [];
         }
         // Using the configured log level.

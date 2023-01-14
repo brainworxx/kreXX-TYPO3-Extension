@@ -232,7 +232,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
             $reflectionList[$key] = $ref->getMethod(static::METHOD);
         }
 
-        if (empty($reflectionList) === true) {
+        if (empty($reflectionList)) {
             return '';
         }
 
@@ -264,7 +264,7 @@ class ViewFactory extends AbstractEventHandler implements CallbackConstInterface
     protected function retrieveHelperList(string $directory): array
     {
         $iface = static::AI_NAMESPACE . 'Iface';
-        if (class_exists($iface) === false) {
+        if (!class_exists($iface)) {
             // Since 2022, all view helpers are present in the view, so we do not need
             // to scan for them anymore.
             // Early return.
