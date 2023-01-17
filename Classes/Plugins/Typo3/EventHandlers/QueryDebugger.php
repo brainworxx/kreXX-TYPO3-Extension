@@ -129,33 +129,30 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
     protected function retrieveSql($query): string
     {
         try {
-            // Retrieving the SQL, depending on the object class.
-            if ($query instanceof QueryBuilder) {
-                $sql = $query->getSQL();
-                $parameters = $query->getParameters();
-            } elseif ($query instanceof QueryInterface) {
-                $doctrineQuery = GeneralUtility::makeInstance(Typo3DbQueryParser::class)
+            if ($query instanceof QueryInterface) {
+                $query = GeneralUtility::makeInstance(Typo3DbQueryParser::class)
                     ->convertQueryToDoctrineQueryBuilder($query);
-                $sql = $doctrineQuery->getSQL();
-                $parameters = $doctrineQuery->getParameters();
-            } else {
+            }
+
+            if (!$query instanceof QueryBuilder) {
                 return '';
             }
 
+            // Retrieving the SQL.
+            $sql = $query->getSQL();
+
             // Insert the parameters into the sql
-            foreach ($parameters as $key => $parameter) {
+            foreach ($query->getParameters() as $key => $parameter) {
                 if (is_string($parameter)) {
                     $parameter = '\'' . $parameter . '\'';
                 }
                 $sql = str_replace(':' . $key, (string) $parameter, $sql);
             }
 
-            $result = $sql;
+            return $sql;
         } catch (Throwable $e) {
             // Tell the dev, that there is an error in the sql.
             return $this->pool->messages->getHelp('TYPO3Error') . $e->getMessage();
         }
-
-        return $result;
     }
 }
