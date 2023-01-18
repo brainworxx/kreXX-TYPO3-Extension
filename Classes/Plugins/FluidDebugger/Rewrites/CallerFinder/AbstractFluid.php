@@ -119,7 +119,7 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
      *
      * @var string
      */
-    protected $path;
+    protected $path = self::FLUID_NOT_AVAILABLE;
 
     /**
      * The regex should look something like this:
@@ -246,8 +246,6 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
                 // RENDERING_LAYOUT = 3
                 $this->path = $this->getLayoutPath();
                 break;
-            default:
-                $this->path = static::FLUID_NOT_AVAILABLE;
         }
     }
 
