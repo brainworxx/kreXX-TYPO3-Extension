@@ -60,7 +60,7 @@ class File
     /**
      * The current docroot.
      *
-     * @var string|bool
+     * @var string
      */
     protected $docRoot;
 
@@ -74,9 +74,6 @@ class File
         $this->pool = $pool;
         $server = $pool->getServer();
         $this->docRoot = trim($this->realpath($server['DOCUMENT_ROOT']), DIRECTORY_SEPARATOR);
-        if (empty($this->docRoot)) {
-            $this->docRoot = false;
-        }
         $pool->fileService = $this;
     }
 
@@ -308,7 +305,7 @@ class File
     public function filterFilePath(string $filePath): string
     {
         $realpath = ltrim($this->realpath($filePath), DIRECTORY_SEPARATOR);
-        if ($this->docRoot !== false && strpos($realpath, $this->docRoot) === 0) {
+        if (!empty($this->docRoot) && strpos($realpath, $this->docRoot) === 0) {
             // Found it on position 0.
             $realpath = '...' . DIRECTORY_SEPARATOR . substr($realpath, strlen($this->docRoot) + 1);
         }

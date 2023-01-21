@@ -62,6 +62,7 @@ AbstractTest::defineFunctionMock($serviceMisc, 'time');
 AbstractTest::defineFunctionMock($callbackScalar, 'class_exists');
 AbstractTest::defineFunctionMock($callbackScalar, 'is_file');
 AbstractTest::defineFunctionMock($callbackScalar, 'function_exists');
+AbstractTest::defineFunctionMock($callbackScalar, 'realpath');
 AbstractTest::defineFunctionMock($viewOutput, 'register_shutdown_function');
 AbstractTest::defineFunctionMock($viewOutput, 'microtime');
 AbstractTest::defineFunctionMock($viewOutput, 'glob');

@@ -126,9 +126,38 @@ class FilePathTest extends AbstractTest
         // We do this a second time, to test the internal caching.
         $model = new Model(Krexx::$pool);
         $filePath->canHandle(__FILE__, $model);
-        $this->assertEquals($mimeInfo,
+        $result = $model->getJson();
+        $this->assertEquals(
+            $mimeInfo,
             $result['Mimetype file'],
             'Mime info was added, but the mock above was only called once.'
+        );
+    }
+
+    /**
+     * Test the adding of the realpath, if it differs.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::canHandle
+     * @covers \Brainworxx\Krexx\Analyse\Scalar\String\FilePath::retrieveFileInfo
+     */
+    public function testCanHandleRealpath()
+    {
+        $filePath = new FilePath(Krexx::$pool);
+        $realpathMock = $this->getFunctionMock(
+            '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String',
+            'realpath'
+        );
+        $myPath = __DIR__ . '/XmlTest.php';
+        $realpathMock->expects($this->once())
+            ->with($myPath)
+            ->will($this->returnValue('theRealPath'));
+        $model = new Model(Krexx::$pool);
+        $filePath->canHandle($myPath, $model);
+        $result = $model->getJson();
+        $this->assertEquals(
+            'theRealPath',
+            $result['Real path'],
+            'The real path was added.'
         );
     }
 

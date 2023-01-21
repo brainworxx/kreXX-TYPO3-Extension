@@ -167,7 +167,6 @@ class CallerFinderTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
      * @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::getCurrentUrl
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::cleanupVarName
      *
      * @throws \ReflectionException
      */
@@ -193,8 +192,7 @@ class CallerFinderTest extends AbstractTest
      * Test the resolving of inline calles of kreXX.
      *
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::cleanupVarName
-     *  @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::getType
+     * @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::getType
      *
      * @throws \ReflectionException
      */

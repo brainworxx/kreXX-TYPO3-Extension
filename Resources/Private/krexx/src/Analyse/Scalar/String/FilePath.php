@@ -119,18 +119,13 @@ class FilePath extends AbstractScalarAnalysis
             return false;
         }
 
+        $messages = $this->pool->messages;
         if (!empty($cache[$string][static::REAL_PATH])) {
-            $model->addToJson(
-                $this->pool->messages->getHelp('realPath'),
-                $cache[$string][static::REAL_PATH]
-            );
+            $model->addToJson($messages->getHelp('realPath'), $cache[$string][static::REAL_PATH]);
         }
 
         if (!empty($cache[$string][static::MIME_TYPE])) {
-            $model->addToJson(
-                $this->pool->messages->getHelp('metaMimeTypeFile'),
-                $cache[$string][static::MIME_TYPE]
-            );
+            $model->addToJson($messages->getHelp('metaMimeTypeFile'), $cache[$string][static::MIME_TYPE]);
         }
 
         return false;

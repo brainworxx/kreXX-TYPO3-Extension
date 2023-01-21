@@ -102,6 +102,7 @@ call_user_func(function () {
 
         include_once KREXX_DIR . 'src/Analyse/Caller/AbstractCaller.php';
         include_once KREXX_DIR . 'src/Analyse/Caller/CallerFinder.php';
+        include_once KREXX_DIR . 'src/Analyse/Caller/CleanUpVarName.php';
         include_once KREXX_DIR . 'src/Analyse/Caller/ExceptionCallerFinder.php';
 
         include_once KREXX_DIR . 'src/Analyse/Comment/AbstractComment.php';
