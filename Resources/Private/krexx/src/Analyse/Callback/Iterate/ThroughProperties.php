@@ -338,15 +338,13 @@ class ThroughProperties extends AbstractCallback implements
             // Typed properties where introduced in 7.4.
             // This one was either unset, or never received a value in the
             // first place. Either way, it's status is uninitialized.
-            $additional .= 'uninitialized ';
-        } else {
-            // This one was unset during runtime.
-            // We need to tell the dev. Accessing an unset property may trigger
-            // a warning.
-            $additional .= 'unset ';
+            return $additional . 'uninitialized ';
         }
 
-        return $additional;
+        // This one was unset during runtime.
+        // We need to tell the dev. Accessing an unset property may trigger
+        // a warning.
+        return $additional . 'unset ';
     }
 
     /**
