@@ -13,12 +13,12 @@
     "log"
   ],
   "require": {
-    "typo3/cms-core": "^10.4 || ^11 || ^12.1",
+    "typo3/cms-core": "^10.4 || ^11 || ^12",
     "php": "^7.2 || ^7.3 || ^7.4 || ^8.0 || ^8.1 || ^8.2",
     "ext-json": "*"
   },
   "require-dev": {
-    "typo3/cms-base-distribution": "^10.4 || ^11.5 || ^12.1",
+    "typo3/cms-base-distribution": "^10.4 || ^11.5 || ^12",
     "phpunit/phpunit": "^6.5 || ^7.5 || ^8.5 || ^9.5",
     "php-mock/php-mock-phpunit": "^2",
     "aimeos/aimeos-typo3": "^20 || ^21 || ^22"
