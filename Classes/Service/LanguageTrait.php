@@ -77,6 +77,6 @@ trait LanguageTrait
             return $key;
         }
 
-        return LocalizationUtility::translate($key, $extensionName, $arguments, $langKey, $altLangKeys);
+        return LocalizationUtility::translate($key, $extensionName, $arguments, $langKey, (array)$altLangKeys);
     }
 }

@@ -13,6 +13,7 @@ Changelog
 =============================================================
 
 4.1.9
+    - [Feature] TYPO3 12.2 support.
     - [Bugfix] Fixed the indention in the changelog.
 
 4.1.8
