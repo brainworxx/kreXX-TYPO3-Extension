@@ -89,13 +89,8 @@ class FlexFormParserTest extends AbstractTest
         $model->addParameter(CallbackConstInterface::PARAM_VALUE, $fixture)
             ->addParameter(CallbackConstInterface::PARAM_DATA, $meta);
 
-        if (class_exists(FlexFromServiceCore::class)) {
-            // TYPO3 9.5+'er style.
-            $flexFormServiceMock = $this->createMock(FlexFromServiceCore::class);
-        } else {
-            // TYPO3 8.7'er style
-            $flexFormServiceMock = $this->createMock(FlexFromServiceExtbase::class);
-        }
+        $flexFormServiceMock = $this->createMock(FlexFromServiceCore::class);
+
         $expectation = [
             'basePath' => 'fileadmin/',
             'pathType' => 'relative',
@@ -106,7 +101,6 @@ class FlexFormParserTest extends AbstractTest
             ->with($fixture)
             ->will($this->returnValue($expectation));
         $this->injectIntoGeneralUtility(FlexFromServiceCore::class, $flexFormServiceMock);
-        $this->injectIntoGeneralUtility(FlexFromServiceExtbase::class, $flexFormServiceMock);
 
         // Run the test.
         $flexFormParser->handle($callback, $model);
