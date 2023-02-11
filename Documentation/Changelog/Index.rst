@@ -50,6 +50,10 @@ Changelog
     - [Change] Streamlined the return type of the retrieveDeclaringReflection of class methods.
     - [Change] Moved the scalar analysis to a more appropriate namespace.
 
+4.1.9
+    - [Feature] TYPO3 12.1 support.
+    - [Bugfix] Fixed the indention in the changelog.
+
 4.1.8
     - [Feature] TYPO3 12.1 support.
     - [Feature] PHP 8.2 support.
