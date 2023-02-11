@@ -60,11 +60,8 @@ use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
 use stdClass;
 
 /**
- * Class Tx_Includekrexx_Controller_IndexController
- *
- * This is not a real controller. It hosts all those ugly workarounds to keep
- * this extension compatible back to 4.5. This  makes the other controllers
- * (hopefully) more readable.
+ * Hosting all those ugly workarounds to keep this extension compatible back to
+ * 10.4. This  makes the other controllers (hopefully) more readable.
  */
 abstract class AbstractController extends ActionController implements ConstInterface, ControllerConstInterface
 {
@@ -143,20 +140,15 @@ abstract class AbstractController extends ActionController implements ConstInter
     protected $flashMessageOk = AbstractMessage::OK;
 
     /**
-     * Inject the page renderer.
-     *
-     * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer
-     */
-    public function injectPageRenderer(PageRenderer $pageRenderer): void
-    {
-        $this->pageRenderer = $pageRenderer;
-    }
-
-    /**
      * Set the pool and do the parent constructor.
      */
-    public function __construct()
+    public function __construct(Configuration $configuration, FormConfiguration $formConfiguration, Settings $settings, PageRenderer $pageRenderer)
     {
+        $this->configuration = $configuration;
+        $this->formConfiguration = $formConfiguration;
+        $this->settingsModel = $settings;
+        $this->pageRenderer = $pageRenderer;
+
         Pool::createPool();
         $this->pool = Krexx::$pool;
 
@@ -185,6 +177,16 @@ abstract class AbstractController extends ActionController implements ConstInter
     }
 
     /**
+     * Inject the private LivePreset.
+     *
+     * @param \TYPO3\CMS\Install\Configuration\Context\LivePreset $livePreset
+     */
+    public function injectLivePreset(LivePreset $livePreset): void
+    {
+        $this->livePreset = $livePreset;
+    }
+
+    /**
      * We check if we are running with a productive preset. If we do, we
      * will display a warning.
      */
@@ -198,46 +200,6 @@ abstract class AbstractController extends ActionController implements ConstInter
                 $this->flashMessageWarning
             );
         }
-    }
-
-    /**
-     * Inject the live preset.
-     *
-     * @param \TYPO3\CMS\Install\Configuration\Context\LivePreset $livePreset
-     */
-    public function injectLivePreset(LivePreset $livePreset): void
-    {
-        $this->livePreset = $livePreset;
-    }
-
-    /**
-     * Inject the configuration collector.
-     *
-     * @param \Brainworxx\Includekrexx\Collectors\Configuration $configuration
-     */
-    public function injectConfiguration(Configuration $configuration): void
-    {
-        $this->configuration = $configuration;
-    }
-
-    /**
-     * Inject the form configuration collector.
-     *
-     * @param \Brainworxx\Includekrexx\Collectors\FormConfiguration $formConfiguration
-     */
-    public function injectFormConfiguration(FormConfiguration $formConfiguration): void
-    {
-        $this->formConfiguration = $formConfiguration;
-    }
-
-    /**
-     * Inject the settings model.
-     *
-     * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
-     */
-    public function injectSettingsModel(Settings $settings): void
-    {
-        $this->settingsModel = $settings;
     }
 
     /**

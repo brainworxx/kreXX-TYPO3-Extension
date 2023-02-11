@@ -57,6 +57,23 @@ class IndexControllerTest extends AbstractTest
     const CONTROLLER_NAMESPACE = '\\Brainworxx\\Includekrexx\\Controller\\';
     const REDIRECT_MESSAGE = 'We did have an redirect here.';
 
+    protected $indexController;
+
+    /**
+     * Creating a new controller instance.
+     */
+    public function krexxUp(): void
+    {
+        parent::krexxUp();
+
+        $configMock = $this->createMock(Configuration::class);
+        $formConfigMock = $this->createMock(FormConfiguration::class);
+        $settings = $this->createMock(Settings::class);
+        $pageRenderer = $this->createMock(PageRenderer::class);
+
+        $this->indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer);
+    }
+
     /**
      * Test the index action, without access.
      *
@@ -65,12 +82,11 @@ class IndexControllerTest extends AbstractTest
      */
     public function testIndexActionNoAccess()
     {
-        $indexController = new IndexController();
-        $this->initFlashMessages($indexController);
-        if (method_exists($indexController, 'injectResponseFactory')) {
-            $indexController->injectResponseFactory(new ResponseFactory());
+        $this->initFlashMessages($this->indexController);
+        if (method_exists($this->indexController, 'injectResponseFactory')) {
+            $this->indexController->injectResponseFactory(new ResponseFactory());
         }
-        $indexController->indexAction();
+        $this->indexController->indexAction();
 
         $this->assertEquals(
             'accessDenied',
@@ -167,22 +183,19 @@ class IndexControllerTest extends AbstractTest
             ->with($templateContent);
 
         // Inject it, like there is no tomorrow.
-        $indexController = new IndexController();
-        $indexController->injectLivePreset($presetMock);
-        $indexController->injectSettingsModel($settingsModel);
-        $indexController->injectConfiguration($configurationMock);
-        $indexController->injectFormConfiguration($configFeMock);
-        $this->setValueByReflection('moduleTemplate', $moduleTemplateMock, $indexController);
-        $indexController->injectPageRenderer($pageRenderer);
-        if (method_exists($indexController, 'injectResponseFactory')) {
-            $indexController->injectResponseFactory(new ResponseFactory());
+        $this->indexController = new IndexController($configurationMock, $configFeMock, $settingsModel, $pageRenderer);
+        $this->indexController->injectLivePreset($presetMock);
+        $this->setValueByReflection('moduleTemplate', $moduleTemplateMock, $this->indexController);
+
+        if (method_exists($this->indexController, 'injectResponseFactory')) {
+            $this->indexController->injectResponseFactory(new ResponseFactory());
         }
-        $this->initFlashMessages($indexController);
-        $this->setValueByReflection('view', $viewMock, $indexController);
+        $this->initFlashMessages($this->indexController);
+        $this->setValueByReflection('view', $viewMock, $this->indexController);
 
         // Run it through like a tunnel on a marathon route.
         $this->simulatePackage('includekrexx', 'includekrexx/');
-        $indexController->indexAction();
+        $this->indexController->indexAction();
 
         // Test for the kreXX messages.
         $this->assertEquals(
@@ -205,14 +218,13 @@ class IndexControllerTest extends AbstractTest
      */
     public function testSaveActionNoAccess()
     {
-        $indexController = new IndexController();
-        $this->initFlashMessages($indexController);
-        $this->prepareRedirect($indexController);
+        $this->initFlashMessages($this->indexController);
+        $this->prepareRedirect($this->indexController);
 
         $settingsModel = new Settings();
 
         try {
-            $exceptionWasThrown = !empty($indexController->saveAction($settingsModel));
+            $exceptionWasThrown = !empty($this->indexController->saveAction($settingsModel));
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
@@ -241,9 +253,8 @@ class IndexControllerTest extends AbstractTest
     {
         $this->mockBeUser();
 
-        $indexController = new IndexController();
-        $this->initFlashMessages($indexController);
-        $this->prepareRedirect($indexController);
+        $this->initFlashMessages($this->indexController);
+        $this->prepareRedirect($this->indexController);
 
         $iniContent = 'oh joy, even more settings . . .';
         $pathParts = pathinfo(Krexx::$pool->config->getPathToConfigFile());
@@ -265,7 +276,7 @@ class IndexControllerTest extends AbstractTest
             ->will($this->returnValue(true));
 
         try {
-            $exceptionWasThrown = !empty($indexController->saveAction($settingsMock));
+            $exceptionWasThrown = !empty($this->indexController->saveAction($settingsMock));
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
@@ -294,9 +305,8 @@ class IndexControllerTest extends AbstractTest
     {
         $this->mockBeUser();
 
-        $indexController = new IndexController();
-        $this->initFlashMessages($indexController);
-        $this->prepareRedirect($indexController);
+        $this->initFlashMessages($this->indexController);
+        $this->prepareRedirect($this->indexController);
 
         $iniContent = 'oh joy, even more settings . . .';
         $pathParts = pathinfo(Krexx::$pool->config->getPathToConfigFile());
@@ -316,7 +326,7 @@ class IndexControllerTest extends AbstractTest
             ->will($this->returnValue(false));
 
         try {
-            $exceptionWasThrown = !empty($indexController->saveAction($settingsMock));
+            $exceptionWasThrown = !empty($this->indexController->saveAction($settingsMock));
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
@@ -350,8 +360,7 @@ class IndexControllerTest extends AbstractTest
         $headerMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'header');
         $headerMock->expects($this->never());
 
-        $indexController = new IndexController();
-        $indexController->dispatchAction($serverRequestMock);
+        $this->indexController->dispatchAction($serverRequestMock);
     }
 
     /**
@@ -371,7 +380,7 @@ class IndexControllerTest extends AbstractTest
             \Krexx::$pool->config
         );
 
-        $controller = new IndexController();
+
         $this->expectOutputString('Et dico vide nec, sed in mazim phaedrum voluptatibus. Eum clita meliore tincidunt ei, sed utinam pertinax theophrastus ad. Porro quodsi detracto ea pri. Et vis mollis voluptaria. Per ut saperet intellegam.');
 
         // Prevent the dispatcher from doing something stupid.
@@ -388,6 +397,6 @@ class IndexControllerTest extends AbstractTest
             ->method('getQueryParams')
             ->will($this->returnValue($request));
 
-        $controller->dispatchAction($serverRequestMock);
+        $this->indexController->dispatchAction($serverRequestMock);
     }
 }
