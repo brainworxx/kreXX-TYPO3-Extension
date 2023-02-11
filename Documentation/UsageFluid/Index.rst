@@ -14,20 +14,7 @@ Usage inside the Fluid template
 
 kreXX does not only work in PHP. We have added a debug viewhelper for fluid.
 
-Namespace
-^^^^^^^^^
-
-When using TYPO3 6.2 until 8.4, you need to declare the namespace first. If you are using TYPO3 8.5 and later, this will not be necessary anymore.
-
-.. code-block:: html
-
-    {namespace krexx=Brainworxx\Includekrexx\ViewHelpers}
-    or
-    <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-          xmlns:krexx="http://typo3.org/ns/Brainworxx/Includekrexx/ViewHelpers"
-          data-namespace-typo3-fluid="true">
-
-The debugging viewhelpers
+The debugging ViewHelpers
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Using the viewhelper is pretty much straight forward:
@@ -52,3 +39,21 @@ Using the viewhelper is pretty much straight forward:
 	Fluid debugger output with source generation for fluid.
 
 kreXX will then try to analyse everything inside the variable given to it.
+
+Benchmarking ViewHelpers
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: html
+
+    <!-- Take a moment -->
+    <krexx:timer.moment value="Start rendering"/>
+    <!-- A lot more template code -->
+    . . . .
+    <!-- Take another  moment -->
+    <krexx:timer.moment value="Start meue rendering"/>
+    <!-- Even more template code -->
+    . . . .
+    <!-- Output the benchmark -->
+    <krexx:timer.end/>
+
+kreXX measures the time between every call, and then outputs it as a benchmark.

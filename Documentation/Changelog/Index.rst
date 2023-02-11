@@ -23,6 +23,7 @@ Changelog
     - [Feature] The translation analyser gives feedback if the translation file does not exist in the first place.
     - [Feature] The ext filepath analysis gives feedback if the file does not exist in the first place.
     - [Feature] Added Flexform data analysis.
+    - [Feature] Added Fluid ViewHelper :literal:`<krexx:timer.moment value="Render the menue" />` and :literal:`<krexx:timer.end />`.
     - [Change] Removed deprecated code.
     - [Change] Drop PHP 7.0 support
     - [Change] Drop PHP 7.1 support

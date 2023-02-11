@@ -47,15 +47,6 @@ use ReflectionClass;
 /**
  * Our fluid wrapper for kreXX.
  *
- * @namespace
- *   When using TYPO3 6.2 until 8.4, you need to declare the namespace first:
- *   {namespace krexx=Brainworxx\Includekrexx\ViewHelpers}
- *   or
- *   <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
- *         xmlns:krexx="http://typo3.org/ns/Brainworxx/Includekrexx/ViewHelpers"
- *         data-namespace-typo3-fluid="true">
- *   TYPO3 8.5 and beyond don't need to do that anymore  ;-)
- *
  * @usage
  *   <krexx:debug>{_all}</krexx:debug>
  *   or
@@ -108,8 +99,6 @@ class DebugViewHelper extends AbstractViewHelper
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \TYPO3\CMS\Fluid\Core\ViewHelper\Exception
      */
     public function initializeArguments(): void
     {
