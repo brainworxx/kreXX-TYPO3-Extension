@@ -13,10 +13,11 @@ Changelog
 =============================================================
 
 4.1.9
+    - [Bugfix] Fixed the indention in the changelog.
 
 4.1.8
     - [Feature] TYPO3 12.1 support.
-	- [Feature] PHP 8.2 support.
+    - [Feature] PHP 8.2 support.
     - [Bugfix] Fixed the Aimeos settings in the ext_emconf.
     - [Bugfix] Added missing double escaping to the code generation.
     - [Bugfix] Add Backslashes to quotation marks of generated source.
