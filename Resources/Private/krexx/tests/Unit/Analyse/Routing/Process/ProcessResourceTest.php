@@ -45,16 +45,19 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use stdClass;
+use CurlHandle;
 
 class ProcessResourceTest extends AbstractTest
 {
     const PROCESS_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\';
     const GET_RESOURCE_TYPE = 'get_resource_type';
+    const CURL_GETINFO = 'curl_getinfo';
 
     /**
      * Testing the processing of a stream resource.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::retrieveTypeString
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessStream()
@@ -79,6 +82,7 @@ class ProcessResourceTest extends AbstractTest
      * Testing the processing of a curl resource.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::retrieveTypeString
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessCurl()
@@ -92,8 +96,8 @@ class ProcessResourceTest extends AbstractTest
         $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
         $getResourceType->expects($this->once())
             ->will($this->returnValue('curl'));
-        $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'curl_getinfo');
-        $getResourceType->expects($this->once())
+        $getCurlInfo = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::CURL_GETINFO);
+        $getCurlInfo->expects($this->once())
             ->will($this->returnValue($metaResults));
 
         $this->runTheTest($resource, 1, 'resource (curl)', null, $metaResults);
@@ -103,6 +107,7 @@ class ProcessResourceTest extends AbstractTest
      * Testing the processing of a not yet implemented resource type analysis.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::retrieveTypeString
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::renderUnknownOrClosed
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchNamedEvent
      */
@@ -125,6 +130,7 @@ class ProcessResourceTest extends AbstractTest
      * Testing the processing of a not yet implemented resource type analysis.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::retrieveTypeString
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::renderUnknownOrClosed
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchNamedEvent
      */
@@ -147,6 +153,7 @@ class ProcessResourceTest extends AbstractTest
      * Test the processing of a shell resource.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::retrieveTypeString
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchProcessEvent
      */
     public function testProcessShell()
@@ -223,9 +230,9 @@ class ProcessResourceTest extends AbstractTest
         $processor = new ProcessResource(Krexx::$pool);
         $model = new Model(Krexx::$pool);
         $fixture = new stdClass();
-        $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
+        $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'is_resource');
         $getResourceType->expects($this->once())
-            ->will($this->returnValue('whatever'));
+            ->will($this->returnValue(true));
 
         $this->assertTrue($processor->canHandle($model->setData($fixture)));
     }

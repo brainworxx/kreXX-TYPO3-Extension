@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Throwable;
+use CurlHandle;
 
 /**
  * Processing of resources.
@@ -59,20 +60,21 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
      */
     public function canHandle(Model $model): bool
     {
-        // Resource?
-        // The is_resource can not identify closed stream resource types.
-        // And the get_resource_type() throws a warning, in case this is not a
-        // resource.
-        set_error_handler($this->pool->retrieveErrorCallback());
+        $possibleResource = $model->getData();
+        $isObject = is_object($possibleResource);
 
-        try {
-            $result = get_resource_type($model->getData()) !== null;
-        } catch (Throwable $exception) {
-            $result = false;
-        }
-
-        restore_error_handler();
-        return $result;
+        return
+            (
+                // First impression.
+                is_resource($possibleResource)
+                || (
+                    // A ressource is never one of these.
+                    !is_scalar($possibleResource)
+                    && !is_array($possibleResource)
+                    && !$isObject
+                    && $possibleResource !== null
+                )
+            );
     }
 
     /**
@@ -87,21 +89,20 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
     public function handle(Model $model): string
     {
         $resource = $model->getData();
-        $type = get_resource_type($resource);
-        $typeString = 'resource (' . $type . ')';
+        $typeString = $this->retrieveTypeString($resource);
 
-        switch ($type) {
-            case 'stream':
+        switch ($typeString) {
+            case 'resource (stream)':
                 $meta = stream_get_meta_data($resource);
                 break;
 
-            case 'curl':
+            case 'resource (curl)':
                 // No need to check for a curl installation, because we are
                 // facing a curl instance right here.
                 $meta = curl_getinfo($resource);
                 break;
 
-            case 'process':
+            case 'resource (process)':
                 $meta = proc_get_status($resource);
                 break;
 
@@ -118,6 +119,24 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
                     ->injectCallback($this->pool->createClass(ThroughResource::class))
             )
         );
+    }
+
+    /**
+     * Retrieve the ressource type string.
+     *
+     * @param resource|object $resource
+     *   The ressource
+     *
+     * @return string
+     *   The type string.
+     */
+    protected function retrieveTypeString($resource): string
+    {
+        if (is_object($resource)) {
+            return get_class($resource);
+        }
+
+        return 'resource (' . get_resource_type($resource) . ')';
     }
 
     /**

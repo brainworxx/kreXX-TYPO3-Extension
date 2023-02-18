@@ -50,6 +50,8 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
  * @uses metaname string
  *   The name of the metadata, if available.
  *   Fallback to static::META_CLASS_DATA
+ * @uses data object
+ *   This one may or may not be present.
  */
 class Meta extends AbstractObjectAnalysis
 {

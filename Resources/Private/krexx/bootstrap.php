@@ -83,6 +83,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/Traversable.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/ErrorObject.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/Meta.php';
+        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/OpaqueRessource.php';
 
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/BacktraceStep.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/ConfigSection.php';

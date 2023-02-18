@@ -50,9 +50,11 @@ Changelog
     - [Change] Moved the JS and CSS files to the private folder.
     - [Change] Streamlined the return type of the retrieveDeclaringReflection of class methods.
     - [Change] Moved the scalar analysis to a more appropriate namespace.
+    - [Change] Moved the Opaque Ressource Class analysis into its own class.
 
 4.1.9
     - [Feature] TYPO3 12.1 support.
+    - [Feature] Added Support for the PHP 8 cUrl handle class.
     - [Bugfix] Fixed the indention in the changelog.
 
 4.1.8

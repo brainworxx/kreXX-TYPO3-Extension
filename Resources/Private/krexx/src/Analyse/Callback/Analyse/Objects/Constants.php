@@ -78,7 +78,7 @@ class Constants extends AbstractObjectAnalysis implements CodegenConstInterface
             $this->dispatchEventWithModel(
                 static::EVENT_MARKER_ANALYSES_END,
                 $this->pool->createClass(Model::class)
-                    ->setName('Constants')
+                    ->setName($this->pool->messages->getHelp('metaConstants'))
                     ->setType(static::TYPE_INTERNALS)
                     ->setCodeGenType(static::CODEGEN_TYPE_META_CONSTANTS)
                     ->addParameter(static::PARAM_DATA, $listOfConstants)

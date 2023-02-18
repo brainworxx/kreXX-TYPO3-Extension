@@ -253,17 +253,9 @@ class ThroughMethods extends AbstractCallback implements
             $result = 'private';
         }
 
-        if ($declaringClass->getName() !== $reflectionClass->getName()) {
-            $result .= ' inherited';
-        }
-
-        if ($reflectionMethod->isStatic()) {
-            $result .= ' static';
-        }
-
-        if ($reflectionMethod->isFinal()) {
-            $result .= ' final';
-        }
+        $declaringClass->getName() === $reflectionClass->getName() ?: $result .= ' inherited';
+        $reflectionMethod->isStatic() ? $result .= ' static' : null;
+        $reflectionMethod->isFinal() ? $result .= ' final' : null;
 
         return $result;
     }

@@ -47,6 +47,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\OpaqueRessource;
 use Brainworxx\Krexx\Logging\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
@@ -91,6 +92,7 @@ class ObjectsTest extends AbstractTest
             DebugMethods::class => CallbackNothing::class,
             ErrorObject::class => CallbackNothing::class,
             Meta::class => CallbackNothing::class,
+            OpaqueRessource::class => CallbackNothing::class,
         ];
 
         $this->objects = new Objects(Krexx::$pool);

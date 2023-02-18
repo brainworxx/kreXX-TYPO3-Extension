@@ -48,7 +48,7 @@ use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Output\Chunks;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class AbstractController extends AbstractTest
+abstract class AbstractController extends AbstractTest
 {
     /**
      * Result mock from the caller finder.

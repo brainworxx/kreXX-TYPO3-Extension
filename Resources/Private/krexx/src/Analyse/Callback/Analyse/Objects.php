@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Getter;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\OpaqueRessource;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PrivateProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
@@ -130,6 +131,9 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
 
         // Dumping all the property related stuff.
         $this->addPropertyDumper($stuffToDump);
+
+        // Dumping the PHP opaque analysis.
+        $stuffToDump[] = OpaqueRessource::class;
 
         // Dumping class meta information.
         $stuffToDump[] = Meta::class;

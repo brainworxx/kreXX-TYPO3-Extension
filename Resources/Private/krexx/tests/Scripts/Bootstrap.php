@@ -47,6 +47,7 @@ $callbackScalar = '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\';
 $caller = '\\Brainworxx\\Krexx\\Analyse\\Caller';
 
 AbstractTest::defineFunctionMock($analyseRoutingProcess, 'class_exists');
+AbstractTest::defineFunctionMock($analyseRoutingProcess, 'is_object');
 AbstractTest::defineFunctionMock($serviceFlow, 'ini_get');
 AbstractTest::defineFunctionMock($serviceFlow, 'time');
 AbstractTest::defineFunctionMock($serviceFlow, 'memory_get_usage');
