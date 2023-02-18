@@ -68,6 +68,19 @@ use Throwable;
 class Objects extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
 {
     /**
+     * The standard dumper.
+     *
+     * @var string[]
+     */
+    protected $standardDumper = [
+        OpaqueRessource::class,
+        Meta::class,
+        Constants::class,
+        Methods::class,
+        DebugMethods::class,
+    ];
+
+    /**
      * Starts the dump of an object.
      *
      * @throws \ReflectionException
@@ -132,22 +145,7 @@ class Objects extends AbstractCallback implements CallbackConstInterface, Config
         // Dumping all the property related stuff.
         $this->addPropertyDumper($stuffToDump);
 
-        // Dumping the PHP opaque analysis.
-        $stuffToDump[] = OpaqueRessource::class;
-
-        // Dumping class meta information.
-        $stuffToDump[] = Meta::class;
-
-        // Dumping class constants.
-        $stuffToDump[] = Constants::class;
-
-        // Dumping all methods.
-        $stuffToDump[] = Methods::class;
-
-        // Dumping debug methods.
-        $stuffToDump[] = DebugMethods::class;
-
-        return $stuffToDump;
+        return array_merge($stuffToDump, $this->standardDumper);
     }
 
     /**
