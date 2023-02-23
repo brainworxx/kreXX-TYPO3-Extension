@@ -6,6 +6,10 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
+use Throwable;
+use CurlHandle;
+use OpenSSLCertificate;
+use AddressInfo;
 
 /**
  * Analyse the so-called opaque ressource classes of PHP 8, if possible.
@@ -20,9 +24,9 @@ class OpaqueRessource extends AbstractCallback implements CallbackConstInterface
      * @var string[]
      */
     protected $analysesCallbacks  = [
-        \CurlHandle::class => 'curl_getinfo',
-        \OpenSSLCertificate::class => 'openssl_x509_parse',
-        \AddressInfo::class => 'socket_addrinfo_explain'
+        CurlHandle::class => 'curl_getinfo',
+        OpenSSLCertificate::class => 'openssl_x509_parse',
+        AddressInfo::class => 'socket_addrinfo_explain'
     ];
 
     /**
@@ -44,21 +48,26 @@ class OpaqueRessource extends AbstractCallback implements CallbackConstInterface
         // We iterate through the class list.
         // When we get the right instance, we trigger the analysis callback.
         // Every analysis callback is supposed to return an array.
-        foreach ($this->analysesCallbacks as $className => $callback) {
-            if ($data instanceof $className) {
-                $output .= $this->pool->render->renderExpandableChild(
-                    $this->dispatchEventWithModel(
-                        static::EVENT_MARKER_ANALYSES_END,
-                        $this->pool->createClass(Model::class)
-                            ->setName($this->pool->messages->getHelp('metaRessourceAnalysis'))
-                            ->setType(static::TYPE_INTERNALS)
-                            ->addParameter(static::PARAM_DATA, (array)$callback($data))
-                            ->injectCallback($this->pool->createClass(ThroughMeta::class))
-                    )
-                );
-                break;
+        try {
+            foreach ($this->analysesCallbacks as $className => $callback) {
+                if ($data instanceof $className) {
+                    $output .= $this->pool->render->renderExpandableChild(
+                        $this->dispatchEventWithModel(
+                            static::EVENT_MARKER_ANALYSES_END,
+                            $this->pool->createClass(Model::class)
+                                ->setName($this->pool->messages->getHelp('metaRessourceAnalysis'))
+                                ->setType(static::TYPE_INTERNALS)
+                                ->addParameter(static::PARAM_DATA, (array)$callback($data))
+                                ->injectCallback($this->pool->createClass(ThroughMeta::class))
+                        )
+                    );
+                }
             }
+        } catch (Throwable $throwable) {
+            // Do nothing. We are out.
+            // Looks someone mocked the class, without having the extension installed.
         }
+
 
         $this->pool->codegenHandler->setCodegenAllowed(true);
         return $output;
