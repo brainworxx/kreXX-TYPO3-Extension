@@ -110,7 +110,7 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
             // Getting the basic info.
             $fileInfo = [];
             $fileInfo['name'] = basename($file);
-            $fileInfo['size'] = $this->fileSizeConvert(filesize($file));
+            $fileInfo['size'] = $this->fileSizeConvert((int)filesize($file));
             $fileInfo['time'] = date("d.m.y H:i:s", $fileTime);
             $fileInfo['id'] = str_replace('.Krexx.html', '', $fileInfo['name']);
             $fileInfo['dispatcher'] = $this->getRoute($fileInfo['id']);
