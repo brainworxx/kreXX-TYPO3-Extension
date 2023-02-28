@@ -77,10 +77,10 @@ class Routing extends AbstractRouting
         $this->processors[ProcessNull::class] = $pool->createClass(ProcessNull::class);
         $this->processors[ProcessArray::class] = $pool->createClass(ProcessArray::class);
         $this->processors[ProcessClosure::class] = $pool->createClass(ProcessClosure::class);
+        $this->processors[ProcessResource::class] = $pool->createClass(ProcessResource::class);
         $this->processors[ProcessObject::class] = $pool->createClass(ProcessObject::class);
         $this->processors[ProcessBoolean::class] = $pool->createClass(ProcessBoolean::class);
         $this->processors[ProcessFloat::class] = $pool->createClass(ProcessFloat::class);
-        $this->processors[ProcessResource::class] = $pool->createClass(ProcessResource::class);
         $this->processors[ProcessOther::class] = $pool->createClass(ProcessOther::class);
 
         $pool->routing = $this;

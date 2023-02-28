@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use Throwable;
+use CurlHandle;
 
 /**
  * Processing of resources.
@@ -66,7 +67,9 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
         set_error_handler($this->pool->retrieveErrorCallback());
 
         try {
-            $result = get_resource_type($model->getData()) !== null;
+            $result = $model->getData() instanceof \CurlHandle ||
+                get_resource_type($model->getData()) !== null;
+
         } catch (Throwable $exception) {
             $result = false;
         }
@@ -87,7 +90,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
     public function handle(Model $model): string
     {
         $resource = $model->getData();
-        $type = get_resource_type($resource);
+        $type = is_object($resource) ? get_class($resource) : get_resource_type($resource);
         $typeString = 'resource (' . $type . ')';
 
         switch ($type) {
@@ -95,6 +98,8 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
                 $meta = stream_get_meta_data($resource);
                 break;
 
+            case CurlHandle::class:
+                $typeString = $type;
             case 'curl':
                 // No need to check for a curl installation, because we are
                 // facing a curl instance right here.
