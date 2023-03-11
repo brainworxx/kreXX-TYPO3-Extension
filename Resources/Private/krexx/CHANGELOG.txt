@@ -1,5 +1,7 @@
 4.1.9
 - Added Support for the PHP 8 cUrl handle class.
+- Bugfix: Is'er and has'er analysis will not accidentally return
+  the value itself.
 
 4.1.8
 - Added support for PHP 8.2.
