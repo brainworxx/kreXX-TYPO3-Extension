@@ -74,15 +74,6 @@ class EmergencyTest extends AbstractTest
     }
 
     /**
-     * {@inheritDoc}
-     */
-    protected function krexxDown()
-    {
-        parent::krexxDown();
-        $this->setValueByReflection(static::ALL_IS_OK, true, Emergency::class);
-    }
-
-    /**
      * Inject the configuration mack.
      */
     protected function setConfigMock()
@@ -213,7 +204,7 @@ class EmergencyTest extends AbstractTest
     public function testCheckEmergencyBreakDisabled()
     {
         $this->setValueByReflection(Fallback::SETTING_DISABLED, true, $this->emergency);
-        $this->setValueByReflection(static::ALL_IS_OK, false, Emergency::class);
+        $this->setValueByReflection(static::ALL_IS_OK, false, $this->emergency);
         $this->assertEquals(false, $this->emergency->checkEmergencyBreak());
     }
 
@@ -224,7 +215,7 @@ class EmergencyTest extends AbstractTest
      */
     public function testCheckEmergencyBreakFailedBefore()
     {
-        $this->setValueByReflection(static::ALL_IS_OK, false, Emergency::class);
+        $this->setValueByReflection(static::ALL_IS_OK, false, $this->emergency);
         $this->assertEquals(true, $this->emergency->checkEmergencyBreak());
     }
 

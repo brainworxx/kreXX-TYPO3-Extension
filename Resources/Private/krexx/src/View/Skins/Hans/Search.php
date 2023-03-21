@@ -75,7 +75,7 @@ trait Search
                 $messages->getHelp('searchLongResults'),
                 $messages->getHelp('searchWholeValues'),
             ],
-            $this->getTemplateFileContent(static::FILE_SEARCH)
+            $this->fileCache[static::FILE_SEARCH]
         );
     }
 

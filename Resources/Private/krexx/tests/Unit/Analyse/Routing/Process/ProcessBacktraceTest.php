@@ -114,6 +114,11 @@ class ProcessBacktraceTest extends AbstractTest
             ['Step 10'],
             ['Step 11'],
             ['Step 12'],
+            ['Step 13'],
+            ['Step 14'],
+            ['Step 15'],
+            ['Step 16'],
+            ['Step 17'],
         ];
         $parameters = [ProcessBacktrace::PARAM_DATA => $fixture];
 
@@ -122,7 +127,7 @@ class ProcessBacktraceTest extends AbstractTest
 
         $message = Krexx::$pool->messages->getMessages()['omittedBacktrace'];
         $this->assertEquals('omittedBacktrace', $message->getKey(), 'Check messages for omitted steps');
-        $this->assertEquals([0 => 11, 1 => 12], $message->getArguments(), 'Check messages for omitted steps');
+        $this->assertEquals([0 => 16, 1 => 17], $message->getArguments(), 'Check messages for omitted steps');
 
         // Check the parameters
         // The standatd value is 10.

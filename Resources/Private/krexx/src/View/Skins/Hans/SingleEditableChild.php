@@ -99,7 +99,7 @@ trait SingleEditableChild
                 static::RENDER_EDITABLE,
                 $this->renderHelp($model),
             ],
-            $this->getTemplateFileContent(static::FILE_SI_EDIT_CHILD)
+            $this->fileCache[static::FILE_SI_EDIT_CHILD]
         );
     }
 
@@ -131,7 +131,7 @@ trait SingleEditableChild
             $options .= str_replace(
                 $this->markerSelectOption,
                 [$text, $value, $selected],
-                $this->getTemplateFileContent(static::FILE_SI_SELECT_OPTIONS)
+                $this->fileCache[static::FILE_SI_SELECT_OPTIONS]
             );
         }
 
@@ -155,7 +155,7 @@ trait SingleEditableChild
                 $model->getDomid(),
                 $model->getName()
             ],
-            $this->getTemplateFileContent('single' . $model->getType())
+            $this->fileCache['single' . $model->getType()]
         );
     }
 

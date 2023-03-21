@@ -63,7 +63,7 @@ trait BacktraceSourceLine
                 $lineNo,
                 $sourceCode,
             ],
-            $this->getTemplateFileContent(static::FILE_BACKTRACE_SOURCELINE)
+            $this->fileCache[static::FILE_BACKTRACE_SOURCELINE]
         );
     }
 

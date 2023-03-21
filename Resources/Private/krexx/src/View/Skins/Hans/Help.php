@@ -76,7 +76,6 @@ trait Help
         }
 
         // We have at least something to display here.
-        $helpRow = $this->getTemplateFileContent(static::FILE_HELPROW);
         $helpContent = '';
 
         // Add the stuff from the json after the help text, if any.
@@ -84,12 +83,12 @@ trait Help
             $helpContent .= str_replace(
                 $this->markerHelpRow,
                 [$title, $text],
-                $helpRow
+                $this->fileCache[static::FILE_HELPROW]
             );
         }
 
         // Add it into the wrapper.
-        return str_replace($this->markerHelp, $helpContent, $this->getTemplateFileContent(static::FILE_HELP));
+        return str_replace($this->markerHelp, $helpContent, $this->fileCache[static::FILE_HELP]);
     }
 
     /**

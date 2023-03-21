@@ -51,6 +51,9 @@ class ReflectionClass extends \ReflectionClass
     /**
      * static caching, to speed things up.
      *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     *
      * @var array
      */
     protected static $cache = [];
@@ -262,10 +265,6 @@ class ReflectionClass extends \ReflectionClass
     #[\ReturnTypeWillChange]
     public function getParentClass()
     {
-        // Do some static caching. This one is called quite often.
-        if (isset(static::$cache[$this->name])) {
-            return static::$cache[$this->name];
-        }
         $result = false;
         $parent = parent::getParentClass();
         if (!empty($parent)) {
@@ -276,6 +275,6 @@ class ReflectionClass extends \ReflectionClass
             }
         }
 
-        return static::$cache[$this->name] = $result;
+        return $result;
     }
 }

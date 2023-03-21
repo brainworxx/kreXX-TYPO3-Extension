@@ -54,28 +54,10 @@ class ClassesTest extends AbstractTest
         $cachedComment .= ' */';
         $prettifiedComment = 'was geht ab?';
 
-        $methodName = 'dubdidoo';
-
         $reflectionMock = $this->createMock(ReflectionClass::class);
-        $reflectionMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue($methodName));
-
         $reflectionMock->expects($this->once())
             ->method('getDocComment')
             ->will($this->returnValue($cachedComment));
-
-        $classComment = new Classes(Krexx::$pool);
-        $this->assertEquals($prettifiedComment, $classComment->getComment($reflectionMock));
-
-        // Now with the caching.
-        $reflectionMock = $this->createMock(ReflectionClass::class);
-        $reflectionMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue($methodName));
-
-        $reflectionMock->expects($this->never())
-            ->method('getDocComment');
 
         $classComment = new Classes(Krexx::$pool);
         $this->assertEquals($prettifiedComment, $classComment->getComment($reflectionMock));

@@ -51,6 +51,10 @@ Changelog
     - [Change] Streamlined the return type of the retrieveDeclaringReflection of class methods.
     - [Change] Moved the scalar analysis to a more appropriate namespace.
     - [Change] Moved the Opaque Ressource Class analysis into its own class.
+    - [Change] The max count of analysed backtrace steps is set to 15.
+    - [Change] Removed the reflection cache.
+    - [Change] Refactored the template file loading.
+    - [Change] Set the nesting level to 10.
 
 4.1.9
     - [Feature] TYPO3 12.1 support.

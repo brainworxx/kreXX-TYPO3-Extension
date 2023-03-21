@@ -61,7 +61,7 @@ trait ConnectorLeft
         return str_replace(
             $this->markerConnectorLeft,
             $connector,
-            $this->getTemplateFileContent(static::FILE_CONNECTOR_LEFT)
+            $this->fileCache[static::FILE_CONNECTOR_LEFT]
         );
     }
 

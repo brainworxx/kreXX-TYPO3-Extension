@@ -65,7 +65,7 @@ trait Button
                 $model->getName(),
                 $this->renderHelp($model),
             ],
-            $this->getTemplateFileContent(static::FILE_SI_BUTTON)
+            $this->fileCache[static::FILE_SI_BUTTON]
         );
     }
 

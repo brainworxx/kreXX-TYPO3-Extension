@@ -58,15 +58,8 @@ class Classes extends AbstractComment
      */
     public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
     {
-        static $cache = [];
-        $name = $reflection->getName();
-
-        if (!isset($cache[$name])) {
-            $cache[$name] = $this->pool->encodingService->encodeString(
-                $this->prettifyComment($reflection->getDocComment())
-            );
-        }
-
-        return $cache[$name];
+        return $this->pool->encodingService->encodeString(
+            $this->prettifyComment($reflection->getDocComment())
+        );
     }
 }

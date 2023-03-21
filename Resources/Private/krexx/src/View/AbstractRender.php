@@ -69,6 +69,9 @@ abstract class AbstractRender implements RenderInterface
     /**
      * The name of the current skin.
      *
+     * @deprecated
+     *   Since 5.0.0. Will be removed
+     *
      * @var string
      */
     protected $skinPath;
@@ -78,7 +81,7 @@ abstract class AbstractRender implements RenderInterface
      *
      * @var string[]
      */
-    protected static $fileCache = [];
+    protected $fileCache = [];
 
     /**
      * Inject the pool and inject $this into the concrete render object of the
@@ -91,7 +94,11 @@ abstract class AbstractRender implements RenderInterface
     {
         $this->pool = $pool;
         $this->pool->render = $this;
-        $this->skinPath = $this->pool->config->getSkinDirectory();
+
+        // Prepare the template file cache.
+        foreach (glob(($this->skinPath = $this->pool->config->getSkinDirectory()) . '*.html') as $filePath) {
+            $this->fileCache[basename($filePath, '.html')] = $pool->fileService->getFileContents($filePath);
+        }
     }
 
     /**
@@ -100,16 +107,22 @@ abstract class AbstractRender implements RenderInterface
      * @param string $what
      *   Filename in the skin folder without the ".html" at the end.
      *
+     * @deprecated
+     *   Since 5.0.0. Access the file cache directly.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @return string
      *   The template file, without whitespaces.
      */
     protected function getTemplateFileContent(string $what): string
     {
-        if (isset(static::$fileCache[$what])) {
-            return static::$fileCache[$what];
+        if (isset($this->fileCache[$what])) {
+            return $this->fileCache[$what];
         }
 
-        return static::$fileCache[$what] = preg_replace(
+        return $this->fileCache[$what] = preg_replace(
             '/\s+/',
             ' ',
             $this->pool->fileService->getFileContents($this->skinPath . $what . '.html')

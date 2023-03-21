@@ -94,7 +94,7 @@ trait ExpandableChild
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_R, $codegenHandler->generateWrapperRight()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_JSON, $this->encodeJson($model->getJson())),
             ],
-            $this->getTemplateFileContent(static::FILE_EX_CHILD_NORMAL)
+            $this->fileCache[static::FILE_EX_CHILD_NORMAL]
         );
     }
 
@@ -123,7 +123,7 @@ trait ExpandableChild
             return str_replace(
                 $this->markerSourceButton,
                 $model->getConnectorLanguage(),
-                $this->getTemplateFileContent(static::FILE_SOURCE_BUTTON)
+                $this->fileCache[static::FILE_SOURCE_BUTTON]
             );
         }
     }

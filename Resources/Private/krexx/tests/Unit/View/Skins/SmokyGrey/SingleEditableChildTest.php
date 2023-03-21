@@ -40,7 +40,7 @@ use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderSmokyGrey;
 class SingleEditableChildTest extends AbstractRenderSmokyGrey
 {
     /**
-     * Test the additional stuff of the singel editable child rendering.
+     * Test the additional stuff of the single editable child rendering.
      *
      * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild::renderSingleEditableChild
      * @covers \Brainworxx\Krexx\View\Skins\SmokyGrey\Help::renderHelp
@@ -49,6 +49,9 @@ class SingleEditableChildTest extends AbstractRenderSmokyGrey
     public function testRenderSingleEditableChild()
     {
         $this->mockModel(static::GET_JSON, ['formless' => 'forming']);
+        $this->modelMock->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue('Input'));
         $result = $this->renderSmokyGrey->renderSingleEditableChild($this->modelMock);
         $this->assertStringContainsString('formless', $result);
         $this->assertStringContainsString('forming', $result);

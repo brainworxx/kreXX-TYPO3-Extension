@@ -221,4 +221,15 @@ class UndeclaredProperty extends ReflectionProperty
     {
         return false;
     }
+
+    /**
+     * Undeclared properties have no default value.
+     *
+     * @return null
+     */
+    #[\ReturnTypeWillChange]
+    public function getDefaultValue()
+    {
+        return null;
+    }
 }

@@ -133,9 +133,6 @@ abstract class AbstractTest extends TestCompatibility
 
         // Reset the cache in the ReflectionClass.
         $this->setValueByReflection('cache', [], ReflectionClass::class);
-
-        // Reset the cached template files.
-        $this->setValueByReflection('fileCache', [], AbstractRender::class);
     }
 
     /**

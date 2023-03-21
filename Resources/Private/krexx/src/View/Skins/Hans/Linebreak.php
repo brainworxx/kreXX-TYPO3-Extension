@@ -47,6 +47,6 @@ trait Linebreak
      */
     public function renderLinebreak(): string
     {
-        return $this->getTemplateFileContent(static::FILE_BR);
+        return $this->fileCache[static::FILE_BR];
     }
 }

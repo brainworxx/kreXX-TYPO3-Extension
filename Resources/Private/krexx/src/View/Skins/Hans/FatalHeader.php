@@ -73,7 +73,7 @@ trait FatalHeader
                 $this->pool->messages->getHelp('noJavaScript'),
                 $this->pool->messages->getHelp('searchHeadline'),
             ],
-            $this->getTemplateFileContent(static::FILE_FATAL_HEADER)
+            $this->fileCache[static::FILE_FATAL_HEADER]
         );
     }
 

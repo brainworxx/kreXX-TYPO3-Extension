@@ -74,7 +74,7 @@ trait CssJs
                 $messages->getHelp('tsNoDataAvailable'),
                 $messages->getHelp('tsAdditionalData')
             ],
-            $this->getTemplateFileContent(static::FILE_CSSJS)
+            $this->fileCache[static::FILE_CSSJS]
         );
     }
 

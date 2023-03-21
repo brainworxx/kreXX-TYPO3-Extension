@@ -105,11 +105,6 @@ class AbstractControllerTest extends AbstractTest
             ->will($this->returnValue(false));
         $fileMock->expects($this->any())
             ->method('getFileContents')
-            ->withConsecutive(
-                [KREXX_DIR . 'resources/jsLibs/kdt.js', true],
-                [$skinDirectory . 'krexx.js', true],
-                [$skinDirectory . 'skin.css', true]
-            )
             ->will($this->returnValue('some content'));
         $fileMock->expects($this->any())
             ->method('filterFilePath')

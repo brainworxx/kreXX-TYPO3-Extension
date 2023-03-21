@@ -86,7 +86,7 @@ class ThroughGetterTest extends AbstractTest
         // mockEventService method.
         $throughGetter = new ThroughGetter(Krexx::$pool);
         $eventServiceMock = $this->createMock(Event::class);
-        $eventServiceMock->expects($this->exactly(48))
+        $eventServiceMock->expects($this->exactly(51))
             ->method('dispatch')
             ->withConsecutive(
                 [
@@ -141,10 +141,11 @@ class ThroughGetterTest extends AbstractTest
               new ReflectionMethod($data, 'getLiterallyNoting'),
           ],
           'isGetter' => [
-              new ReflectionMethod($data, 'isMyPropertyTwelve')
+              new ReflectionMethod($data, 'isMyPropertyTwelve'),
           ],
           'hasGetter' => [
-              new ReflectionMethod($data, 'hasMyPropertyThirteen')
+              new ReflectionMethod($data, 'hasMyPropertyThirteen'),
+              new ReflectionMethod($data, 'hasMyPropertyOne'),
           ],
           'ref' => $ref,
           'data' => $data
@@ -156,25 +157,42 @@ class ThroughGetterTest extends AbstractTest
         // Get the models from RoutingNothing and assert their values.
         $models = Krexx::$pool->routing->model;
         $expectations = [
-            'one',
-            'two',
-            'three',
-            'four',
-            'five',
-            'six',
-            'seven',
-            'eight',
-            'nine',
-            'ten',
-            'eleven',
-            null,
-            'eight',
-            true,
-            false
+            //getMyPropertyOne
+            0 => 'one',
+            // getMyPropertyTwo
+            1 => 'two',
+            // getMyPropertyThree
+            2 => 'three',
+            // getMyPropertyFour
+            3 => 'four',
+            // getMyPropertyFive
+            4 => 'five',
+            // getMyPropertySix
+            5 => 'six',
+            // getMyPropertySeven
+            6 => 'seven',
+            // getMyPropertyEight
+            7 => 'eight',
+            // getMyPropertyNine
+            8 => 'nine',
+            // _getMyPropertyTen
+            9 => 'ten',
+            // getMyStatic
+            10 => 'eleven',
+            // getNull
+            11 => null,
+            // getAnotherGetter
+            12 => 'eight',
+            // isMyPropertyTwelve
+            13 => true,
+            // hasMyPropertyThirteen
+            14 => false,
+            // hasDynamicValue
+            15 => true
         ];
         // The last one is missing.
         foreach ($expectations as $key => $result) {
-            $this->assertEquals($result, $models[$key]->getData());
+            $this->assertEquals($result, $models[$key]->getData(), 'Count: ' . $key);
         }
     }
 }

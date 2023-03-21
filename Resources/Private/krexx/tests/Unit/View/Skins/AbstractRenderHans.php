@@ -77,178 +77,177 @@ abstract class AbstractRenderHans extends AbstractTest
     protected function krexxUp()
     {
         parent::krexxUp();
-        $this->renderHans = new RenderHans(Krexx::$pool);
-        $this->setValueByReflection('skinPath', static::PATH_TO_SKIN, $this->renderHans);
         $this->mockTemplate();
+        $this->renderHans = new RenderHans(Krexx::$pool);
         $this->mockEmergencyHandler();
     }
 
     /**
      * Short circuiting the existence of a specific template file.
      * Nice, huh?
-     *
-     * @see \Brainworxx\Krexx\View\AbstractRender::getTemplateFileContent
      */
     protected function mockTemplate()
     {
         $fileSuffix = '.html';
+        $hans = new RenderHans(Krexx::$pool);
+        $pathToSkin = Krexx::$pool->config->getSkinDirectory();
         $this->fileServiceMock = $this->createMock(File::class);
         $this->fileServiceMock->expects($this->any())->method('getFileContents')
             ->will($this->returnValueMap([
                 // connectorLeft.html
                 [
-                    static::PATH_TO_SKIN . 'connectorLeft' . $fileSuffix,
+                    $pathToSkin . 'connectorLeft' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerConnectorLeft())
+                    implode('', $hans->getMarkerConnectorLeft())
                 ],
                 // connectorRight.html
                 [
-                    static::PATH_TO_SKIN . 'connectorRight' . $fileSuffix,
+                    $pathToSkin . 'connectorRight' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerConnectorRight())
+                    implode('', $hans->getMarkerConnectorRight())
                 ],
                 // helprow.html
                 [
-                    static::PATH_TO_SKIN . 'helprow' . $fileSuffix,
+                    $pathToSkin . 'helprow' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerHelpRow())
+                    implode('', $hans->getMarkerHelpRow())
                 ],
                 // help.html
                 [
-                    static::PATH_TO_SKIN . 'help' . $fileSuffix,
+                    $pathToSkin . 'help' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerHelp())
+                    implode('', $hans->getMarkerHelp())
                 ],
                 // recursion.html
                 [
-                    static::PATH_TO_SKIN . 'recursion' . $fileSuffix,
+                    $pathToSkin . 'recursion' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerRecursion())
+                    implode('', $hans->getMarkerRecursion())
                 ],
                 // header.html
                 [
-                    static::PATH_TO_SKIN . 'header' . $fileSuffix,
+                    $pathToSkin . 'header' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerHeader())
+                    implode('', $hans->getMarkerHeader())
                 ],
                 // search.html
                 [
-                    static::PATH_TO_SKIN . 'search' . $fileSuffix,
+                    $pathToSkin . 'search' . $fileSuffix,
                     true,
                     ''
                 ],
                 // footer.html
                 [
-                    static::PATH_TO_SKIN . 'footer' . $fileSuffix,
+                    $pathToSkin . 'footer' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerFooter())
+                    implode('', $hans->getMarkerFooter())
                 ],
                 // caller.html
                 [
-                    static::PATH_TO_SKIN . 'caller' . $fileSuffix,
+                    $pathToSkin . 'caller' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerCaller())
+                    implode('', $hans->getMarkerCaller())
                 ],
                 // singlePlugin.html
                 [
-                    static::PATH_TO_SKIN . 'singlePlugin' . $fileSuffix,
+                    $pathToSkin . 'singlePlugin' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerSinglePlugin())
+                    implode('', $hans->getMarkerSinglePlugin())
                 ],
                 // cssJs.html
                 [
-                    static::PATH_TO_SKIN . 'cssJs' . $fileSuffix,
+                    $pathToSkin . 'cssJs' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerCssJs())
+                    implode('', $hans->getMarkerCssJs())
                 ],
                 // singleChildExtra.html
                 [
-                  static::PATH_TO_SKIN . 'singleChildExtra' . $fileSuffix,
+                  $pathToSkin . 'singleChildExtra' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerSingleChildExtra())
+                    implode('', $hans->getMarkerSingleChildExtra())
                 ],
                 // sourceButton.html
                 [
-                    static::PATH_TO_SKIN . 'sourcebutton' . $fileSuffix,
+                    $pathToSkin . 'sourcebutton' . $fileSuffix,
                     true,
                     'sourcebutton'
                 ],
                 // expandableChildNormal.html
                 [
-                    static::PATH_TO_SKIN . 'expandableChildNormal' . $fileSuffix,
+                    $pathToSkin . 'expandableChildNormal' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerExpandableChild())
+                    implode('', $hans->getMarkerExpandableChild())
                 ],
                 // nest.html
                 [
-                    static::PATH_TO_SKIN . 'nest' . $fileSuffix,
+                    $pathToSkin . 'nest' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerNest())
+                    implode('', $hans->getMarkerNest())
                 ],
                 // singleEditableChild.html
                 [
-                    static::PATH_TO_SKIN . 'singleEditableChild' . $fileSuffix,
+                    $pathToSkin . 'singleEditableChild' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerSingleEditableChild())
+                    implode('', $hans->getMarkerSingleEditableChild())
                 ],
                 // singleInput.html
                 [
-                    static::PATH_TO_SKIN . 'singleInput' . $fileSuffix,
+                    $pathToSkin . 'singleInput' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerSingleInput()) . '<input'
+                    implode('', $hans->getMarkerSingleInput()) . '<input'
                 ],
                 // singleSelect.html
                 [
-                    static::PATH_TO_SKIN . 'single' . Fallback::RENDER_TYPE_SELECT . $fileSuffix,
+                    $pathToSkin . 'single' . Fallback::RENDER_TYPE_SELECT . $fileSuffix,
                     true,
                     '{id}' .
-                    implode('', $this->renderHans->getMarkerDropdownOptions())
+                    implode('', $hans->getMarkerDropdownOptions())
                 ],
                 // singleSelectOption.html
                 [
-                    static::PATH_TO_SKIN . 'singleSelectOptions' . $fileSuffix,
+                    $pathToSkin . 'singleSelectOptions' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerSelectOption())
+                    implode('', $hans->getMarkerSelectOption())
                 ],
                 // singleButton.html
                 [
-                    static::PATH_TO_SKIN . 'singleButton' . $fileSuffix,
+                    $pathToSkin . 'singleButton' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerSingleButton())
+                    implode('', $hans->getMarkerSingleButton())
                 ],
                 // fatalMain.html
                 [
-                    static::PATH_TO_SKIN . 'fatalMain' . $fileSuffix,
+                    $pathToSkin . 'fatalMain' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerFatalMain())
+                    implode('', $hans->getMarkerFatalMain())
                 ],
                 // fatalHeader.html
                 [
-                    static::PATH_TO_SKIN . 'fatalHeader' . $fileSuffix,
+                    $pathToSkin . 'fatalHeader' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerFatalHeader())
+                    implode('', $hans->getMarkerFatalHeader())
                 ],
                 // messages.html
                 [
-                    static::PATH_TO_SKIN . 'message' . $fileSuffix,
+                    $pathToSkin . 'message' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerMessages())
+                    implode('', $hans->getMarkerMessages())
                 ],
                 // backtraceSourceLine
                 [
-                    static::PATH_TO_SKIN . 'backtraceSourceLine' . $fileSuffix,
+                    $pathToSkin . 'backtraceSourceLine' . $fileSuffix,
                     true,
-                    implode('', $this->renderHans->getMarkerBacktraceSourceLine())
+                    implode('', $hans->getMarkerBacktraceSourceLine())
                 ],
                 // singleChildHr.html
                 [
-                    static::PATH_TO_SKIN . 'singleChildHr' . $fileSuffix,
+                    $pathToSkin . 'singleChildHr' . $fileSuffix,
                     true,
                     'HR does not mean human resources'
                 ],
                 // br.html
                 [
-                    static::PATH_TO_SKIN . 'br' . $fileSuffix,
+                    $pathToSkin . 'br' . $fileSuffix,
                     true,
                     'Breaking the line! Breaking the line!'
                 ]

@@ -47,7 +47,6 @@ class RecursionTest extends AbstractRenderHans
      * @covers \Brainworxx\Krexx\View\Skins\Hans\ConnectorRight::renderConnectorRight
      * @covers \Brainworxx\Krexx\View\AbstractRender::generateDataAttribute
      * @covers \Brainworxx\Krexx\View\Skins\Hans\Help::renderHelp
-     * @covers \Brainworxx\Krexx\View\AbstractRender::getTemplateFileContent
      * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderRecursion()

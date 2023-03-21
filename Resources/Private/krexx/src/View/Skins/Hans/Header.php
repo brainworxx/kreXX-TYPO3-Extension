@@ -80,7 +80,7 @@ trait Header
                 $messages->getHelp('callNumber'),
                 $messages->getHelp('searchHeadline'),
             ],
-            $this->getTemplateFileContent(static::FILE_HEADER)
+            $this->fileCache[static::FILE_HEADER]
         );
     }
 

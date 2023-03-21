@@ -74,7 +74,7 @@ trait FatalMain
                 $source,
                 $errline
             ],
-            $this->getTemplateFileContent(static::FILE_FATAL_MAIN)
+            $this->fileCache[static::FILE_FATAL_MAIN]
         );
     }
 

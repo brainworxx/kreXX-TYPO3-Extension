@@ -269,33 +269,41 @@ class ThroughGetter extends AbstractCallback implements
         ?ReflectionProperty $refProp,
         Model $model
     ): void {
-        $nothingFound = true;
-        $value = null;
+        $this->parameters[static::PARAM_ADDITIONAL] = [
+            static::PARAM_NOTHING_FOUND => true,
+            static::PARAM_VALUE => null,
+            static::PARAM_REFLECTION_PROPERTY => null,
+            static::PARAM_REFLECTION_METHOD => $reflectionMethod
+        ];
 
-        if (!empty($refProp)) {
-            // We've got ourselves a possible result.
-            $nothingFound = false;
-            $value = $reflectionClass->retrieveValue($refProp);
-            $model->setData($value);
-            if ($value === null) {
-                // A NULL value might mean that the values does not
-                // exist, until the getter computes it.
-                $model->addToJson(
-                    $this->pool->messages->getHelp('metaHint'),
-                    $this->pool->messages->getHelp('getterNull')
-                );
-            }
+        if ($refProp === null) {
+            return;
+        }
+
+        // We've got ourselves a possible result.
+        $value = $reflectionClass->retrieveValue($refProp);
+        // If we are handling a getter, we retrieve the value itself
+        // If we are handling an is'er of has'er, we return a boolean.
+        if ($this->parameters[static::CURRENT_PREFIX] !== 'get' && !is_bool($value)) {
+            $value = $value !== null;
+        }
+        $model->setData($value);
+
+        if ($value === null) {
+            // A NULL value might mean that the values does not
+            // exist, until the getter computes it.
+            $model->addToJson(
+                $this->pool->messages->getHelp('metaHint'),
+                $this->pool->messages->getHelp('getterNull')
+            );
         }
 
         // Give the plugins the opportunity to do something with the value, or
-        // try to resolve it,  if nothing was found.
+        // try to resolve it, if nothing was found.
         // We also add the stuff, that we were able to do so far.
-        $this->parameters[static::PARAM_ADDITIONAL] = [
-            static::PARAM_NOTHING_FOUND => $nothingFound,
-            static::PARAM_VALUE => $value,
-            static::PARAM_REFLECTION_PROPERTY => $refProp,
-            static::PARAM_REFLECTION_METHOD => $reflectionMethod
-        ];
+        $this->parameters[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND] = false;
+        $this->parameters[static::PARAM_ADDITIONAL][static::PARAM_VALUE] = $value;
+        $this->parameters[static::PARAM_ADDITIONAL][static::PARAM_REFLECTION_PROPERTY] = $refProp;
     }
 
     /**

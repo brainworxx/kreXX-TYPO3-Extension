@@ -72,7 +72,7 @@ class Emergency implements ConfigConstInterface
      *
      * @var bool
      */
-    protected static $allIsOk = true;
+    protected $allIsOk = true;
 
     /**
      * Maximum runtime from the config, cached.
@@ -179,7 +179,7 @@ class Emergency implements ConfigConstInterface
             return false;
         }
 
-        if (!static::$allIsOk) {
+        if (!$this->allIsOk) {
             // This has failed before!
             // No need to check again!
             return true;
@@ -204,7 +204,7 @@ class Emergency implements ConfigConstInterface
             $this->pool->messages->addMessage('emergencyTimer');
             Krexx::editSettings();
             Krexx::disable();
-            static::$allIsOk = false;
+            $this->allIsOk = false;
             return true;
         }
 
@@ -231,7 +231,7 @@ class Emergency implements ConfigConstInterface
                 // Show settings to give the dev to repair the situation.
                 Krexx::editSettings();
                 Krexx::disable();
-                static::$allIsOk = false;
+                $this->allIsOk = false;
                 return true;
             }
         }

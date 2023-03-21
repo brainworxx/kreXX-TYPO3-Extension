@@ -37,6 +37,8 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Skins;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
+use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
@@ -74,126 +76,192 @@ abstract class AbstractRenderSmokyGrey extends AbstractTest
     protected function krexxUp()
     {
         parent::krexxUp();
-        $this->renderSmokyGrey = new RenderSmokyGrey(Krexx::$pool);
-        $this->setValueByReflection('skinPath', static::PATH_TO_SKIN, $this->renderSmokyGrey);
         $this->mockTemplate();
+        $this->renderSmokyGrey = new RenderSmokyGrey(Krexx::$pool);
     }
 
      /**
      * Short circuiting the existence of a specific template file.
      * We only simulate the differences in the smoky grey skin.
-     *
-     * @see \Brainworxx\Krexx\View\AbstractRender::getTemplateFileContent
      */
     protected function mockTemplate()
     {
         $fileSuffix = '.html';
+        $smoky = new RenderSmokyGrey(Krexx::$pool);
         $this->fileServiceMock = $this->createMock(File::class);
+        $pathToSkin = Krexx::$pool->config->getSkinDirectory();
         $this->fileServiceMock->expects($this->any())
             ->method('getFileContents')
             ->will($this->returnValueMap([
                 // sourceButton.html
                 [
-                    static::PATH_TO_SKIN . 'sourcebutton' . $fileSuffix,
+                    $pathToSkin . 'sourcebutton' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerSourceButton())
+                    implode('', $smoky->getMarkerSourceButton())
                 ],
                 // nest.html
                 [
-                    static::PATH_TO_SKIN . 'nest' . $fileSuffix,
+                    $pathToSkin . 'nest' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerNest())
+                    implode('', $smoky->getMarkerNest())
                 ],
                 // expandableChildNormal.html
                 [
-                    static::PATH_TO_SKIN . 'expandableChildNormal' . $fileSuffix,
+                    $pathToSkin . 'expandableChildNormal' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerExpandableChild())
+                    implode('',$smoky->getMarkerExpandableChild())
                 ],
                 // connectorRight.html
                 [
-                    static::PATH_TO_SKIN . 'connectorRight' . $fileSuffix,
+                    $pathToSkin . 'connectorRight' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerConnectorRight())
+                    implode('', $smoky->getMarkerConnectorRight())
                 ],
                 // recursion.html
                 [
-                    static::PATH_TO_SKIN . 'recursion' . $fileSuffix,
+                    $pathToSkin . 'recursion' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerRecursion())
+                    implode('', $smoky->getMarkerRecursion())
                 ],
                 // singleEditableChild.html
                 [
-                    static::PATH_TO_SKIN . 'singleEditableChild' . $fileSuffix,
+                    $pathToSkin . 'singleEditableChild' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerSingleEditableChild())
+                    implode('', $smoky->getMarkerSingleEditableChild())
                 ],
                 // singleButton.html
                 [
-                    static::PATH_TO_SKIN . 'singleButton' . $fileSuffix,
+                    $pathToSkin . 'singleButton' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerSingleButton())
+                    implode('', $smoky->getMarkerSingleButton())
                 ],
                 // header.html
                 [
-                    static::PATH_TO_SKIN . 'header' . $fileSuffix,
+                    $pathToSkin . 'header' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerHeader())
+                    implode('', $smoky->getMarkerHeader())
                 ],
                 // footer.html
                 [
-                    static::PATH_TO_SKIN . 'footer' . $fileSuffix,
+                    $pathToSkin . 'footer' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerFooter())
+                    implode('', $smoky->getMarkerFooter())
                 ],
                 // fatalMain.html
                 [
-                    static::PATH_TO_SKIN . 'fatalMain' . $fileSuffix,
+                    $pathToSkin . 'fatalMain' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerFatalMain())
+                    implode('', $smoky->getMarkerFatalMain())
                 ],
                 // search.html
                 [
-                    static::PATH_TO_SKIN . 'search' . $fileSuffix,
+                    $pathToSkin . 'search' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerSearch())
+                    implode('', $smoky->getMarkerSearch())
                 ],
                 // singlePlugin.html
                 [
-                    static::PATH_TO_SKIN . 'singlePlugin' . $fileSuffix,
+                    $pathToSkin . 'singlePlugin' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerSinglePlugin())
+                    implode('', $smoky->getMarkerSinglePlugin())
                 ],
                 // connectorLeft.html
                 [
-                    static::PATH_TO_SKIN . 'connectorLeft' . $fileSuffix,
+                    $pathToSkin . 'connectorLeft' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerConnectorLeft())
+                    implode('', $smoky->getMarkerConnectorLeft())
                 ],
                 // connectorRight.html
                 [
-                    static::PATH_TO_SKIN . 'connectorRight' . $fileSuffix,
+                    $pathToSkin . 'connectorRight' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerConnectorRight())
+                    implode('', $smoky->getMarkerConnectorRight())
                 ],
                 // singleSelectOption.html
                 [
-                    static::PATH_TO_SKIN . 'singleSelectOptions' . $fileSuffix,
+                    $pathToSkin . 'singleSelectOptions' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerSelectOption())
+                    implode('', $smoky->getMarkerSelectOption())
                 ],
                 // single.html
                 // Meh, whatever. Rendering of a 'single' undefined editable child.
                 [
-                    static::PATH_TO_SKIN . 'single' . $fileSuffix,
+                    $pathToSkin . 'single' . $fileSuffix,
                     true,
                     implode('', [])
                 ],
                 // message.html
                 [
-                    static::PATH_TO_SKIN . 'message' . $fileSuffix,
+                    $pathToSkin . 'message' . $fileSuffix,
                     true,
-                    implode('', $this->renderSmokyGrey->getMarkerMessages())
+                    implode('', $smoky->getMarkerMessages())
+                ],
+                // backtraceSourceLine.html
+                [
+                    $pathToSkin . 'backtraceSourceLine' . $fileSuffix,
+                    true,
+                    implode('', $smoky->getMarkerBacktraceSourceLine())
+                ],
+                // br.html
+                [
+                    $pathToSkin . 'br' . $fileSuffix,
+                    true,
+                    implode('', [])
+                ],
+                // caller.html
+                [
+                    $pathToSkin . 'caller' . $fileSuffix,
+                    true,
+                    implode('', $smoky->getMarkerCaller())
+                ],
+                // cssJs.html
+                [
+                    $pathToSkin . 'cssJs' . $fileSuffix,
+                    true,
+                    implode('', $smoky->getMarkerCssJs())
+                ],
+                // fatalHeader.html
+                [
+                    $pathToSkin . 'fatalHeader' . $fileSuffix,
+                    true,
+                    implode('', $smoky->getMarkerFatalHeader())
+                ],
+                // help.html
+                [
+                    $pathToSkin . 'help' . $fileSuffix,
+                    true,
+                    implode('', $smoky->getMarkerHelp())
+                ],
+                // singleChildExtra.html
+                [
+                  $pathToSkin . 'singleChildExtra' . $fileSuffix,
+                    true,
+                    implode('', $smoky->getMarkerSingleChildExtra())
+                ],
+                // singleChildHr.html
+                [
+                    $pathToSkin . 'singleChildHr' . $fileSuffix,
+                    true,
+                    'HR does not mean human resources'
+                ],
+                // singleInput.html
+                [
+                    $pathToSkin . 'singleInput' . $fileSuffix,
+                    true,
+                    implode('', $smoky->getMarkerSingleInput()) . '<input'
+                ],
+                // singleSelect.html
+                [
+                    $pathToSkin . 'single' . ConfigConstInterface::RENDER_TYPE_SELECT . $fileSuffix,
+                    true,
+                    '{id}' .
+                    implode('', $smoky->getMarkerDropdownOptions())
+                ],
+                // helprow.html
+                [
+                    $pathToSkin . 'helprow' . $fileSuffix,
+                    true,
+                    'Unhelpful stuff.'
                 ],
             ]));
 

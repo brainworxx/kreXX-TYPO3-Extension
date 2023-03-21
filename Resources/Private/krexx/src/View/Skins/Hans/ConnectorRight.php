@@ -71,7 +71,7 @@ trait ConnectorRight
         return str_replace(
             $this->markerConnectorRight,
             [$connector, $returnType === '' ? '' : ': ' . $returnType],
-            $this->getTemplateFileContent(static::FILE_CONNECTOR_RIGHT)
+            $this->fileCache[static::FILE_CONNECTOR_RIGHT]
         );
     }
 

@@ -88,7 +88,7 @@ trait Footer
                 $this->pool->messages->getHelp('pluginList'),
                 $this->renderPluginList(),
             ],
-            $this->getTemplateFileContent(static::FILE_FOOTER)
+            $this->fileCache[static::FILE_FOOTER]
         );
     }
 
@@ -116,7 +116,7 @@ trait Footer
                 $caller[static::TRACE_DATE],
                 $caller[static::TRACE_URL],
             ],
-            $this->getTemplateFileContent(static::FILE_CALLER)
+            $this->fileCache[static::FILE_CALLER]
         );
     }
 

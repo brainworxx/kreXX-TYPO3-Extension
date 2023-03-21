@@ -319,4 +319,14 @@ class DeepGetterFixture
     {
         return $this->myPropertyThirteen;
     }
+
+    /**
+     * Has'er, finding out if a value is set.
+     *
+     * @return bool
+     */
+    public function hasMyPropertyOne(): bool
+    {
+        return isset($this->myPropertyOne);
+    }
 }

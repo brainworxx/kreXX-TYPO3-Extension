@@ -57,6 +57,7 @@ class UndeclaredPropertyTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::setIsPublic
      * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::getName
      * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::__toString
+     * @covers \Brainworxx\Krexx\Service\Reflection\UndeclaredProperty::getDefaultValue
      *
      * @throws \ReflectionException
      */
@@ -78,5 +79,6 @@ class UndeclaredPropertyTest extends AbstractTest
         $this->assertFalse($undeclaredProperty->setIsPublic(false)->isPublic(), 'Changed value.');
         $this->assertSame($name, $undeclaredProperty->getName());
         $this->assertEmpty($undeclaredProperty->__toString());
+        $this->assertNull($undeclaredProperty->getDefaultValue());
     }
 }

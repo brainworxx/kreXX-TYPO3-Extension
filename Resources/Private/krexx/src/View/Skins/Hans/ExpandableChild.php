@@ -108,7 +108,7 @@ trait ExpandableChild
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_R, $codegenHandler->generateWrapperRight()),
                 $this->renderHelp($model),
             ],
-            $this->getTemplateFileContent(static::FILE_EX_CHILD_NORMAL)
+            $this->fileCache[static::FILE_EX_CHILD_NORMAL]
         );
     }
 
@@ -156,7 +156,7 @@ trait ExpandableChild
             return '';
         } else {
             // Add the button.
-            return $this->getTemplateFileContent(static::FILE_SOURCE_BUTTON);
+            return $this->fileCache[static::FILE_SOURCE_BUTTON];
         }
     }
 
@@ -195,7 +195,7 @@ trait ExpandableChild
                 $domid,
                 $this->renderExtra($model),
             ],
-            $this->getTemplateFileContent(static::FILE_NEST)
+            $this->fileCache[static::FILE_NEST]
         );
     }
 
@@ -214,7 +214,7 @@ trait ExpandableChild
             return str_replace(
                 $this->markerSingleChildExtra,
                 $model->getData(),
-                $this->getTemplateFileContent(static::FILE_SI_CHILD_EX)
+                $this->fileCache[static::FILE_SI_CHILD_EX]
             );
         }
 

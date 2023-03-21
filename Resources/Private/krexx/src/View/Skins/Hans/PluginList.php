@@ -62,7 +62,6 @@ trait PluginList
     protected function renderPluginList(): string
     {
         $result = '';
-        $template = $this->getTemplateFileContent(static::FILE_SI_PLUGIN);
         $messages = $this->pool->messages;
         foreach (SettingsGetter::getPlugins() as $plugin) {
             if ($plugin[self::IS_ACTIVE]) {
@@ -81,7 +80,7 @@ trait PluginList
                     $activeText,
                     $configClass->getName() . ' ' . $configClass->getVersion()
                 ],
-                $template
+                $this->fileCache[static::FILE_SI_PLUGIN]
             );
         }
         return $result;

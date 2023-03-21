@@ -214,7 +214,7 @@ class ThroughProperties extends AbstractCallback implements
         if ($refProperty->isStatic()) {
             $connectorType = static::CONNECTOR_STATIC_PROPERTY;
         } elseif (
-            isset($refProperty->isUndeclared) &&
+            !empty($refProperty->isUndeclared) &&
             !$this->pool->encodingService->isPropertyNameNormal($refProperty->getName())
         ) {
             // This one was undeclared and does not follow the standard naming
@@ -242,7 +242,7 @@ class ThroughProperties extends AbstractCallback implements
             // There is always a $ in front of a static property.
             $propName = '$' . $propName;
         } elseif (
-            isset($refProperty->isUndeclared) &&
+            !empty($refProperty->isUndeclared) &&
             !$this->pool->encodingService->isPropertyNameNormal($refProperty->getName())
         ) {
             // There can be anything in there. We must take special preparations
@@ -268,6 +268,13 @@ class ThroughProperties extends AbstractCallback implements
     {
         $additional = 'public ';
 
+        if (!empty($refProperty->isUndeclared)) {
+            // The property 'isUndeclared' is not a part of the reflectionProperty.
+            // @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
+            // A dynamically declared property is always public, and nothing else.
+            return $additional . 'dynamic ';
+        }
+
         // Now that we have the key and the value, we can analyse it.
         // Stitch together our additional info about the data:
         // public access, protected access, private access, static declaration.
@@ -290,12 +297,6 @@ class ThroughProperties extends AbstractCallback implements
         // Add the info, if this is static.
         if ($refProperty->isStatic()) {
             $additional .= 'static ';
-        }
-
-        if (!empty($refProperty->isUndeclared)) {
-            // The property 'isUndeclared' is not a part of the reflectionProperty.
-            // @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
-            $additional .= 'dynamic ';
         }
 
         return $additional;

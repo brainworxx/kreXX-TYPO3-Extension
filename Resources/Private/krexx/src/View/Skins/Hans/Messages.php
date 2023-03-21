@@ -53,10 +53,13 @@ trait Messages
     public function renderMessages(array $messages): string
     {
         $result = '';
-        $messageTemplate = $this->getTemplateFileContent(static::FILE_MESSAGE);
         /** @var \Brainworxx\Krexx\View\Message $message */
         foreach ($messages as $message) {
-            $result .= str_replace($this->markerMessages, $message->getText(), $messageTemplate);
+            $result .= str_replace(
+                $this->markerMessages,
+                $message->getText(),
+                $this->fileCache[static::FILE_MESSAGE]
+            );
         }
 
         return $result;

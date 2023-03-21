@@ -208,7 +208,5 @@ class ReflectionClassTest extends AbstractTest
         $reflection = new ReflectionClass($fixture);
         $result = $reflection->getParentClass();
         $this->assertInstanceOf(ReflectionClass::class, $result);
-        $reflection = new ReflectionClass($fixture);
-        $this->assertSame($result, $reflection->getParentClass(), 'Test the caching.');
     }
 }

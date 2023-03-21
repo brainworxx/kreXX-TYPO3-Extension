@@ -78,7 +78,7 @@ trait Recursion
                 ),
                 $this->renderHelp($model),
             ],
-            $this->getTemplateFileContent(static::FILE_RECURSION)
+            $this->fileCache[static::FILE_RECURSION]
         );
     }
 

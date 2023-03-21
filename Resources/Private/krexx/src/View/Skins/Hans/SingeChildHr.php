@@ -47,6 +47,6 @@ trait SingeChildHr
      */
     public function renderSingeChildHr(): string
     {
-        return $this->getTemplateFileContent(static::FILE_SI_HR);
+        return $this->fileCache[static::FILE_SI_HR];
     }
 }
