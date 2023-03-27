@@ -39,7 +39,7 @@ namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
-use ReflectionException;
+use Throwable;
 use ReflectionClass;
 
 /**
@@ -62,10 +62,14 @@ abstract class AbstractEventHandler implements EventHandlerInterface, AimeosCons
      */
     protected function retrieveProperty(ReflectionClass $reflectionClass, string $objectName, object $object)
     {
-        if ($reflectionClass->hasProperty($objectName)) {
-            $propertyRef = $reflectionClass->getProperty($objectName);
-            $propertyRef->setAccessible(true);
-            return $propertyRef->getValue($object);
+        try {
+            if ($reflectionClass->hasProperty($objectName)) {
+                $propertyRef = $reflectionClass->getProperty($objectName);
+                $propertyRef->setAccessible(true);
+                return $propertyRef->getValue($object);
+            }
+        } catch (Throwable $e) {
+            // Do nothing.
         }
 
         // Unable to retrieve the value.

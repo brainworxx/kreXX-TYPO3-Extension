@@ -57,10 +57,12 @@ Changelog
     - [Change] Set the nesting level to 10.
 
 4.1.9
-    - [Feature] TYPO3 12.1 support.
+    - [Feature] TYPO3 12.2 support.
     - [Feature] Added Support for the PHP 8 cUrl handle class.
     - [Bugfix] Fixed the indention in the changelog.
     - [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
+    - [Bugfix] Is'er and has'er analysis will not accidentally return the value itself.
+    - [Bugfix] Fix an Error when the Aimeos debugger tries to access uninitialized properties.
 
 4.1.8
     - [Feature] TYPO3 12.1 support.
