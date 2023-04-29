@@ -181,6 +181,9 @@ class IndexControllerTest extends AbstractTest
         $moduleTemplateMock->expects($this->once())
             ->method('setContent')
             ->with($templateContent);
+        $moduleTemplateMock->expects($this->once())
+            ->method('renderContent')
+            ->will($this->returnValue($templateContent));
 
         // Inject it, like there is no tomorrow.
         $this->indexController = new IndexController($configurationMock, $configFeMock, $settingsModel, $pageRenderer);
