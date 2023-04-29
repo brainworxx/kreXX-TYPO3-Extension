@@ -51,7 +51,7 @@ $EM_CONF[$_EXTKEY] = [
         'conflicts' => [],
         'suggests' => [
             'adminpanel' => '10.4.0-12.1.99',
-            'aimeos' => '20.10.5-22.99.99'
+            'aimeos' => '20.10.5-23.99.99'
         ],
     ],
 ];
