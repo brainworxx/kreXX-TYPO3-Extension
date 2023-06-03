@@ -77,7 +77,7 @@ class MethodDeclaration extends AbstractDeclaration
         if ($reflection->getFileName() !== $reflectionClass->getFileName()) {
             // There is no real clean way to get the name of the trait that we
             // are looking at.
-            $traitName = ':: unable to get the trait name ::';
+            $traitName = $this->pool->messages->getHelp('canNotResolveTrait');
             $trait = $this->retrieveDeclaringReflection($reflection, $reflectionClass);
             if ($trait !== null) {
                 $traitName = $trait->getName();

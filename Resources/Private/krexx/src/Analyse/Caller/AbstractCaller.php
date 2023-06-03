@@ -147,7 +147,7 @@ abstract class AbstractCaller
                 $type = 'float';
             }
 
-            return 'Analysis of ' . $varname . ', ' . $type;
+            return $this->pool->messages->getHelp('analysisOf') . $varname . ', ' . $type;
         }
 
         // We already have a headline and will not touch it.

@@ -179,7 +179,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[0],
             $fixture[$this->throughMethods::PARAM_DATA][0]->name,
-            'public inherited method',
+            'Public Inherited method',
             '->',
             '()',
             '',
@@ -192,7 +192,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[1],
             $fixture[$this->throughMethods::PARAM_DATA][1]->name,
-            'protected inherited method',
+            'Protected Inherited method',
             '->',
             '()',
             '',
@@ -206,7 +206,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[2],
             $fixture[$this->throughMethods::PARAM_DATA][2]->name,
-            'private method',
+            'Private method',
             '->',
             '()',
             '',
@@ -220,7 +220,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[3],
             $fixture[$this->throughMethods::PARAM_DATA][3]->name,
-            'private inherited method',
+            'Private Inherited method',
             '->',
             '()',
             '',
@@ -233,7 +233,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[4],
             $fixture[$this->throughMethods::PARAM_DATA][4]->name,
-            'public inherited method',
+            'Public Inherited method',
             '->',
             '(\someNotExistingClass $parameter)',
             '\someNotExistingClass $parameter',
@@ -246,7 +246,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[5],
             $fixture[$this->throughMethods::PARAM_DATA][5]->name,
-            'public final method',
+            'Public Final method',
             '->',
             '()',
             '',
@@ -259,7 +259,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[6],
             $fixture[$this->throughMethods::PARAM_DATA][6]->name,
-            'public method',
+            'Public method',
             '->',
             '($parameter)',
             '$parameter',
@@ -272,7 +272,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[7],
             $fixture[$this->throughMethods::PARAM_DATA][7]->name,
-            'protected method',
+            'Protected method',
             '->',
             '()',
             '',

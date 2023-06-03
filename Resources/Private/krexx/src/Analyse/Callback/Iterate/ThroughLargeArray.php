@@ -149,7 +149,7 @@ class ThroughLargeArray extends AbstractCallback implements
             // Adding another array to the output may be as bad as a
             // complete object analysis.
             $model->setType(static::TYPE_SIMPLE_ARRAY)
-                ->setNormal('count: ' . count($value));
+                ->setNormal($this->pool->messages->getHelp('count') . count($value));
 
                 return $this->pool->render->renderExpandableChild($model);
         }

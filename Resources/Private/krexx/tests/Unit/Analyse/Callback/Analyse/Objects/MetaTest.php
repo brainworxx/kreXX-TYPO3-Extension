@@ -182,7 +182,7 @@ class MetaTest extends AbstractTest
         // Retrieve the parameters and test them.
         $data = $model->getParameters()[$meta::PARAM_DATA];
         $this->assertEquals(
-            'class Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture',
+            'Class Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture',
             $data['Classname']
         );
         $this->assertStringContainsString('Just another meaningless class comment.', $data['Comment']);
@@ -224,11 +224,11 @@ class MetaTest extends AbstractTest
         Krexx::$pool->render = $renderNothing;
 
         $testCourt = [
-            EmptyInterfaceFixture::class => 'interface ' . EmptyInterfaceFixture::class,
-            FinalFixture::class => 'final class ' . FinalFixture::class,
-            MultitraitFixture::class => 'trait ' . MultitraitFixture::class,
-            AbstractFixture::class => 'abstract class ' . AbstractFixture::class,
-            DateTime::class => 'internal class ' . DateTime::class,
+            EmptyInterfaceFixture::class => 'Interface ' . EmptyInterfaceFixture::class,
+            FinalFixture::class => 'Final Class ' . FinalFixture::class,
+            MultitraitFixture::class => 'Trait ' . MultitraitFixture::class,
+            AbstractFixture::class => 'Abstract Class ' . AbstractFixture::class,
+            DateTime::class => 'Internal Class ' . DateTime::class,
         ];
 
         $count = 0;

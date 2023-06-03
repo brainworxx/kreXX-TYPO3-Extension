@@ -337,7 +337,7 @@ class KrexxTest extends AbstractTest
      */
     protected function beginForcedLogger()
     {
-        $forcedLogging = 'forced logging';
+        $forcedLogging = 'Forced logging';
 
         // Create two settings model mocks
         $settingsMockDest = $this->createMock(Model::class);

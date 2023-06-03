@@ -129,7 +129,7 @@ class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
         $this->pool->recursionHandler->addToMetaHive($domId);
 
         // We need to sort these alphabetically.
-        usort($methods, [$this, 'reflectionSorting']);
+        usort($methods, [$this, static::REFLECTION_SORTING]);
 
         return $this->pool->render->renderExpandableChild(
             $this->dispatchEventWithModel(

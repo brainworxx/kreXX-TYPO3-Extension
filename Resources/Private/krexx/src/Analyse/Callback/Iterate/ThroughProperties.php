@@ -266,22 +266,23 @@ class ThroughProperties extends AbstractCallback implements
      */
     protected function getAdditionalData(ReflectionProperty $refProperty, ReflectionClass $ref): string
     {
-        $additional = 'public ';
+        $messages = $this->pool->messages;
+        $additional = $messages->getHelp('public') . ' ';
 
         if (!empty($refProperty->isUndeclared)) {
             // The property 'isUndeclared' is not a part of the reflectionProperty.
             // @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
             // A dynamically declared property is always public, and nothing else.
-            return $additional . 'dynamic ';
+            return $additional . $messages->getHelp('dynamic') . ' ';
         }
 
         // Now that we have the key and the value, we can analyse it.
         // Stitch together our additional info about the data:
         // public access, protected access, private access, static declaration.
         if ($refProperty->isProtected()) {
-            $additional = 'protected ';
+            $additional = $messages->getHelp('protected') . ' ';
         } elseif ($refProperty->isPrivate()) {
-            $additional = 'private ';
+            $additional = $messages->getHelp('private') . ' ';
         }
 
         // Retrieve the value status of the property.
@@ -291,12 +292,12 @@ class ThroughProperties extends AbstractCallback implements
         // declaring class
         if ($refProperty->getDeclaringClass()->getName() !== $ref->getName()) {
             // This one got inherited fom a lower level.
-            $additional .= 'inherited ';
+            $additional .= $messages->getHelp('inherited') . ' ';
         }
 
         // Add the info, if this is static.
         if ($refProperty->isStatic()) {
-            $additional .= 'static ';
+            $additional .= $messages->getHelp('static') . ' ';
         }
 
         return $additional;
@@ -317,6 +318,7 @@ class ThroughProperties extends AbstractCallback implements
     protected function retrieveValueStatus(ReflectionProperty $refProperty, ReflectionClass $ref): string
     {
         $additional = '';
+        $messages = $this->pool->messages;
 
         // There are readonly properties since PHP 8.1 available.
         // In a rather buggy state. When the property is not readonly, this may
@@ -324,7 +326,7 @@ class ThroughProperties extends AbstractCallback implements
         // "Error : Internal error: Failed to retrieve the reflection object".
         try {
             if ($refProperty->isReadOnly()) {
-                $additional .= 'readonly ';
+                $additional .= $messages->getHelp('readonly') . ' ';
             }
         } catch (Throwable $exception) {
             // Do nothing.
@@ -339,13 +341,13 @@ class ThroughProperties extends AbstractCallback implements
             // Typed properties where introduced in 7.4.
             // This one was either unset, or never received a value in the
             // first place. Either way, it's status is uninitialized.
-            return $additional . 'uninitialized ';
+            return $additional . $messages->getHelp('uninitialized') . ' ';
         }
 
         // This one was unset during runtime.
         // We need to tell the dev. Accessing an unset property may trigger
         // a warning.
-        return $additional . 'unset ';
+        return $additional . $messages->getHelp('unset') . ' ';
     }
 
     /**

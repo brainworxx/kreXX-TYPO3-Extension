@@ -189,14 +189,7 @@ class Messages
      */
     public function getHelp(string $key, array $args = []): string
     {
-        $result = '';
-
-        if (isset($this->helpArray[$key])) {
-            $result = $this->helpArray[$key];
-        }
-
-        // Return the value
-        return vsprintf($result, $args);
+        return vsprintf($this->helpArray[$key] ?? '', $args);
     }
 
     /**

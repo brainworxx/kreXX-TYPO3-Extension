@@ -75,7 +75,7 @@ class ProcessResourceTest extends AbstractTest
         $streamGetMetsData->expects($this->once())
             ->will($this->returnValue($metaResults));
 
-        $this->runTheTest($resource, 1, 'resource (stream)', null, $metaResults);
+        $this->runTheTest($resource, 1, 'Resource (stream)', null, $metaResults);
     }
 
     /**
@@ -100,7 +100,7 @@ class ProcessResourceTest extends AbstractTest
         $getCurlInfo->expects($this->once())
             ->will($this->returnValue($metaResults));
 
-        $this->runTheTest($resource, 1, 'resource (curl)', null, $metaResults);
+        $this->runTheTest($resource, 1, 'Resource (curl)', null, $metaResults);
     }
 
     /**
@@ -123,7 +123,7 @@ class ProcessResourceTest extends AbstractTest
         $versionCompare->expects($this->once())
             ->will($this->returnValue(false));
 
-        $this->runTheTest($resource, 0, 'resource (whatever)', $resource);
+        $this->runTheTest($resource, 0, 'Resource (whatever)', $resource);
     }
 
     /**
@@ -171,7 +171,7 @@ class ProcessResourceTest extends AbstractTest
         $getResourceType->expects($this->once())
             ->will($this->returnValue($metaResults));
 
-        $this->runTheTest($resource, 1, 'resource (process)', null, $metaResults);
+        $this->runTheTest($resource, 1, 'Resource (process)', null, $metaResults);
     }
 
     /**

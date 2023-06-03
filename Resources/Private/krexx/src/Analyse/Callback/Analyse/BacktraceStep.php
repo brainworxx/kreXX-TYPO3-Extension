@@ -70,13 +70,29 @@ class BacktraceStep extends AbstractCallback implements
     {
         // We are handling the following values here:
         // file, line, function, object, type, args, sourcecode.
+        $messages = $this->pool->messages;
         return $this->dispatchStartEvent() .
-            $this->outputSingleChild('File', static::TRACE_FILE, 'fileToOutput') .
+            $this->outputSingleChild($messages->getHelp('file'), static::TRACE_FILE, 'fileToOutput') .
             $this->lineToOutput() .
-            $this->outputProcessor('Calling object', static::TRACE_OBJECT, 'objectToOutput', ProcessObject::class) .
-            $this->outputSingleChild('Call type', static::TRACE_TYPE, 'typeToOutput') .
-            $this->outputSingleChild('Last called function', static::TRACE_FUNCTION, 'functionToOutput') .
-            $this->outputProcessor('Arguments from the call', static::TRACE_ARGS, 'argsToOutput', ProcessArray::class);
+            $this->outputProcessor(
+                $messages->getHelp('callingObject'),
+                static::TRACE_OBJECT,
+                'objectToOutput',
+                ProcessObject::class
+            ) . $this->outputSingleChild(
+                $messages->getHelp('callType'),
+                static::TRACE_TYPE,
+                'typeToOutput'
+            ) . $this->outputSingleChild(
+                $messages->getHelp('lastCalledFunction'),
+                static::TRACE_FUNCTION,
+                'functionToOutput'
+            ) . $this->outputProcessor(
+                $messages->getHelp('argumentsFromTheCall'),
+                static::TRACE_ARGS,
+                'argsToOutput',
+                ProcessArray::class
+            );
     }
 
     /**
@@ -88,7 +104,7 @@ class BacktraceStep extends AbstractCallback implements
     protected function lineToOutput(): string
     {
         $model = $this->pool->createClass(Model::class)
-            ->setName('Sourcecode')
+            ->setName($this->pool->messages->getHelp('sourceCode'))
             ->setNormal(static::UNKNOWN_VALUE)
             ->setHasExtra(true)
             ->setType(static::TYPE_PHP);

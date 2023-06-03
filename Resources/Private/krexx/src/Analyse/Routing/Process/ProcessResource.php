@@ -90,19 +90,20 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
     {
         $resource = $model->getData();
         $typeString = $this->retrieveTypeString($resource);
+        $transRes = $this->pool->messages->getHelp('resource');
 
         switch ($typeString) {
-            case 'resource (stream)':
+            case $transRes . ' (stream)':
                 $meta = stream_get_meta_data($resource);
                 break;
 
-            case 'resource (curl)':
+            case $transRes . ' (curl)':
                 // No need to check for a curl installation, because we are
                 // facing a curl instance right here.
                 $meta = curl_getinfo($resource);
                 break;
 
-            case 'resource (process)':
+            case $transRes . ' (process)':
                 $meta = proc_get_status($resource);
                 break;
 
@@ -136,7 +137,7 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
             return get_class($resource);
         }
 
-        return 'resource (' . get_resource_type($resource) . ')';
+        return $this->pool->messages->getHelp('resource') . ' (' . get_resource_type($resource) . ')';
     }
 
     /**

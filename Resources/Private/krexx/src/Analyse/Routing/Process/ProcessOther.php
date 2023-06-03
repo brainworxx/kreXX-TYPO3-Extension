@@ -78,7 +78,7 @@ class ProcessOther extends AbstractRouting implements ProcessInterface
         return $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
                 $model->setType($type)
-                    ->setNormal('Unhandled type: ' . $type)
+                    ->setNormal($this->pool->messages->getHelp('UnhandledType') . $type)
                     ->setHelpid('unhandedOtherHelp')
             )
         );

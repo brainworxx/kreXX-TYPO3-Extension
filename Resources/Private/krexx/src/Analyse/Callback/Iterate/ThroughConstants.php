@@ -112,15 +112,15 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
     protected function retrieveAdditionalData(ReflectionClassConstant $reflectionConstant): string
     {
         if ($reflectionConstant->isPublic()) {
-            return 'public constant ';
+            return $this->pool->messages->getHelp('publicConstant');
         }
 
         if ($reflectionConstant->isProtected()) {
-            return 'protected constant ';
+            return $this->pool->messages->getHelp('protectedConstant');
         }
 
         // It either is public, protected or private, and nothing else.
-        return 'private constant ';
+        return $this->pool->messages->getHelp('privateConstant');
     }
 
     /**

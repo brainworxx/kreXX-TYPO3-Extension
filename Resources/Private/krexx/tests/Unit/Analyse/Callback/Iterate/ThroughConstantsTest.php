@@ -47,7 +47,7 @@ class ThroughConstantsTest extends AbstractTest
 {
     const SKIPPED_PHP_VERSION = '7.1.0';
     const SKIPPED_REASON = 'Skipped due to wrong PHP version.';
-    const PUBLIC_CONSTANT = 'public constant ';
+    const PUBLIC_CONSTANT = 'Public constant ';
     const STATIC_COLON_COLON = 'static::';
 
     /**
@@ -145,8 +145,8 @@ class ThroughConstantsTest extends AbstractTest
         $this->assertEquals(21, $models[3]->getData());
         $this->assertEquals(static::PUBLIC_CONSTANT, $models[0]->getAdditional());
         $this->assertEquals(static::PUBLIC_CONSTANT, $models[1]->getAdditional());
-        $this->assertEquals('protected constant ', $models[2]->getAdditional());
-        $this->assertEquals('private constant ', $models[3]->getAdditional());
+        $this->assertEquals('Protected constant ', $models[2]->getAdditional());
+        $this->assertEquals('Private constant ', $models[3]->getAdditional());
         $this->assertEquals('CONST_1', $models[0]->getName());
         $this->assertEquals('CONST_2', $models[1]->getName());
         $this->assertEquals('CONST_3', $models[2]->getName());

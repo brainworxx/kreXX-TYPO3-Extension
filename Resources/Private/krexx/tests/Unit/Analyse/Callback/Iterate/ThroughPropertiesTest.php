@@ -188,7 +188,7 @@ class ThroughPropertiesTest extends AbstractTest
             ->callMe();
 
         // Retrieve the result models and assert them.
-        $public = 'public ';
+        $public = 'Public ';
         $models = $routeNothing->model;
 
         $complexDeclarationString = DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR .
@@ -240,7 +240,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->',
             '',
-            'public unset '
+            'Public Unset '
         );
 
         // protectedProperty
@@ -255,7 +255,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->',
             '',
-            'protected '
+            'Protected '
         );
 
         // myProperty
@@ -269,7 +269,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->',
             '',
-            'private '
+            'Private '
         );
 
         // longString
@@ -304,7 +304,7 @@ class ThroughPropertiesTest extends AbstractTest
             $expectedJson,
             '::',
             '',
-            'public static '
+            'Public Static '
         );
 
         // myProperty
@@ -319,7 +319,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->',
             '',
-            'private inherited '
+            'Private Inherited '
         );
 
         // inheritedPublic
@@ -333,7 +333,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->',
             '',
-            'public inherited '
+            'Public Inherited '
         );
 
         // inheritedNull
@@ -347,7 +347,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->',
             '',
-            'protected inherited '
+            'Protected Inherited '
         );
 
         // traitProperty
@@ -361,7 +361,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->',
             '',
-            'protected '
+            'Protected '
         );
 
         // The special undeclared one.
@@ -375,7 +375,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->{\'',
             '\'}',
-            'public dynamic '
+            'Public Dynamic '
         );
 
         // A array default value.
@@ -390,7 +390,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->',
             '',
-            'public '
+            'Public '
         );
 
         // A float default vaule.
@@ -405,7 +405,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->',
             '',
-            'public '
+            'Public '
         );
     }
 
@@ -466,7 +466,7 @@ class ThroughPropertiesTest extends AbstractTest
             ],
             '->',
             '',
-            'public readonly uninitialized '
+            'Public Readonly Uninitialized '
         );
     }
 

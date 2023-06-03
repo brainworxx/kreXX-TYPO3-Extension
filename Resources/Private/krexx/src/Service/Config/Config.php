@@ -173,7 +173,7 @@ class Config extends Fallback
     {
         $this->settings[static::SETTING_DISABLED]
             ->setValue($value)
-            ->setSource('Internal flow');
+            ->setSource($this->pool->messages->getHelp('internalFlow'));
     }
 
     /**
@@ -215,7 +215,8 @@ class Config extends Fallback
                 // We must not overwrite a disabled=true with local cookie settings!
                 // Otherwise, it could get enabled locally, which might be a security
                 // issue.
-                $model->setValue($cookieSetting)->setSource('Local cookie settings');
+                $model->setValue($cookieSetting)
+                    ->setSource($this->pool->messages->getHelp('localCookieSettings'));
                 $this->settings[$name] = $model;
                 return $this;
             }

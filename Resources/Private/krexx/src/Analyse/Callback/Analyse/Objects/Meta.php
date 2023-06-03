@@ -198,22 +198,24 @@ class Meta extends AbstractObjectAnalysis
     protected function generateName(ReflectionClass $ref): string
     {
         $result = '';
+        $messages = $this->pool->messages;
+
         if ($ref->isFinal()) {
-            $result .= 'final ';
+            $result .= $messages->getHelp('final') . ' ';
         }
         if ($ref->isAbstract() && !$ref->isTrait()) {
             // Huh, traits are abstract, but you do not declare them as such.
-            $result .= 'abstract ';
+            $result .= $messages->getHelp('abstract') . ' ';
         }
         if ($ref->isInternal()) {
-            $result .= 'internal ';
+            $result .= $messages->getHelp('internal') . ' ';
         }
         if ($ref->isInterface()) {
-            $result .= 'interface ';
+            $result .= $messages->getHelp('interface') . ' ';
         } elseif ($ref->isTrait()) {
-            $result .= 'trait ';
+            $result .= $messages->getHelp('trait') . ' ';
         } else {
-            $result .= 'class ';
+            $result .= $messages->getHelp('class') . ' ';
         }
 
         return $result . $ref->getName();

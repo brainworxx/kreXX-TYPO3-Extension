@@ -66,13 +66,13 @@ class ProtectedProperties extends AbstractObjectAnalysis
             return $output;
         }
 
-        usort($refProps, [$this, 'reflectionSorting']);
+        usort($refProps, [$this, static::REFLECTION_SORTING]);
 
         return $output .
             $this->getReflectionPropertiesData(
                 $refProps,
                 $ref,
-                'Protected properties'
+                $this->pool->messages->getHelp('protectedProperties')
             );
     }
 }

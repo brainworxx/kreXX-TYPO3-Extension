@@ -50,6 +50,15 @@ use Reflector;
 abstract class AbstractObjectAnalysis extends AbstractCallback implements CallbackConstInterface
 {
     /**
+     * Name of the reflection sorting callback.
+     *
+     * (Oh boy)
+     *
+     * @var string
+     */
+    protected const REFLECTION_SORTING = 'reflectionSorting';
+
+    /**
      * Gets the properties from a reflection property of the object.
      *
      * @param \ReflectionProperty[] $refProps

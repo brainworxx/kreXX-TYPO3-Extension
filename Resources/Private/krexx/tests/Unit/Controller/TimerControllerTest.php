@@ -135,7 +135,7 @@ class TimerControllerTest extends AbstractController
                         [
                             'Total time' => 2000000.0,
                             'first->second' => '50%',
-                            'second->end' => '50%'
+                            'second->End' => '50%'
                         ],
                         $bench
                     );

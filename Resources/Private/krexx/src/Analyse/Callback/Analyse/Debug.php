@@ -64,7 +64,7 @@ class Debug extends AbstractCallback implements CallbackConstInterface
                     static::EVENT_MARKER_ANALYSES_END,
                     $this->pool->createClass(Model::class)
                         ->setData($this->parameters[static::PARAM_DATA])
-                        ->setName('result')
+                        ->setName($this->pool->messages->getHelp('result'))
                 )
             );
     }

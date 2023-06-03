@@ -89,7 +89,7 @@ class PublicProperties extends AbstractObjectAnalysis
             return $output;
         }
 
-        usort($refProps, [$this, 'reflectionSorting']);
+        usort($refProps, [$this, static::REFLECTION_SORTING]);
         // Adding an HR to reflect that the following stuff are not public
         // properties anymore.
         return $output .

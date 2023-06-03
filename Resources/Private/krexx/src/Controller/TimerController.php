@@ -102,7 +102,7 @@ class TimerController extends AbstractController
      */
     public function timerEndAction(): TimerController
     {
-        $this->timerAction('end');
+        $this->timerAction($this->pool->messages->getHelp('end'));
         // And we are done. Feedback to the user.
         $miniBench = $this->miniBenchTo(static::$timekeeping);
         $this->pool->createClass(DumpController::class)

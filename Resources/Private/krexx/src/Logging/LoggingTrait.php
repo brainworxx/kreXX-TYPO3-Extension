@@ -54,16 +54,17 @@ trait LoggingTrait
     {
         Pool::createPool();
 
+        $source = static::$pool->messages->getHelp('forcedLogging');
         // Output destination: file
         Krexx::$pool->config
             ->settings[ConfigConstInterface::SETTING_DESTINATION]
-            ->setSource('forced logging')
+            ->setSource($source)
             ->setValue(ConfigConstInterface::VALUE_FILE);
 
         // Do not care about ajax requests.
         Krexx::$pool->config
             ->settings[ConfigConstInterface::SETTING_DETECT_AJAX]
-            ->setSource('forced logging')
+            ->setSource($source)
             ->setValue(false);
 
         // Reload the disabled settings with the new ajax setting.

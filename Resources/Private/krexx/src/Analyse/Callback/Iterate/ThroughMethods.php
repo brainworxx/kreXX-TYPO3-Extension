@@ -245,17 +245,19 @@ class ThroughMethods extends AbstractCallback implements
         ReflectionClass $declaringClass,
         ReflectionClass $reflectionClass
     ): string {
+        $messages = $this->pool->messages;
         if ($reflectionMethod->isPublic()) {
-            $result = 'public';
+            $result = $messages->getHelp('public');
         } elseif ($reflectionMethod->isProtected()) {
-            $result = 'protected';
+            $result = $messages->getHelp('protected');
         } else {
-            $result = 'private';
+            $result = $messages->getHelp('private');
         }
 
-        $declaringClass->getName() === $reflectionClass->getName() ?: $result .= ' inherited';
-        $reflectionMethod->isStatic() ? $result .= ' static' : null;
-        $reflectionMethod->isFinal() ? $result .= ' final' : null;
+        $result .= $declaringClass->getName() === $reflectionClass->getName() ? '' :
+            ' ' . $messages->getHelp('inherited');
+        $result .= $reflectionMethod->isStatic() ? ' ' . $messages->getHelp('static') : '';
+        $result .= $reflectionMethod->isFinal() ? ' ' . $messages->getHelp('final') : '';
 
         return $result;
     }

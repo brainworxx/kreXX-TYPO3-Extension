@@ -81,13 +81,13 @@ class PrivateProperties extends AbstractObjectAnalysis
             return $output;
         }
 
-        usort($refProps, [$this, 'reflectionSorting']);
+        usort($refProps, [$this, static::REFLECTION_SORTING]);
 
         return $output .
             $this->getReflectionPropertiesData(
                 $refProps,
                 $ref,
-                'Private properties'
+                $this->pool->messages->getHelp('privateProperties')
             );
     }
 }
