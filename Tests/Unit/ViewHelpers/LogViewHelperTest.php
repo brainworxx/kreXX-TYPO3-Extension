@@ -85,7 +85,7 @@ class LogViewHelperTest extends AbstractTest
         $settingsDestination = $this->createMock(Model::class);
         $settingsDestination->expects($this->once())
             ->method('setSource')
-            ->with('forced logging')
+            ->with('Forced logging')
             ->will($this->returnValue($settingsDestination));
         $settingsDestination->expects($this->once())
             ->method('setValue')
@@ -93,7 +93,7 @@ class LogViewHelperTest extends AbstractTest
         $settingsAjax = $this->createMock(Model::class);
         $settingsAjax->expects($this->once())
             ->method('setSource')
-            ->with('forced logging')
+            ->with('Forced logging')
             ->will($this->returnValue($settingsAjax));
         $settingsAjax->expects($this->once())
             ->method('setValue')
