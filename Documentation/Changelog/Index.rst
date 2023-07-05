@@ -13,6 +13,7 @@ Changelog
 =============================================================
 
 4.1.10
+    - [Bugfix] Prevent a fatal in the scalar callback analysis.
 
 4.1.9
     - [Feature] TYPO3 12.4 support.

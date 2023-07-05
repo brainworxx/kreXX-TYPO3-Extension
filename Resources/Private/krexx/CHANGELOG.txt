@@ -1,3 +1,6 @@
+4.1.10
+- Bugfix: Prevent a fatal in the scalar callback analysis.
+
 4.1.9
 - Added Support for the PHP 8 cUrl handle class.
 - Bugfix: Is'er and has'er analysis will not accidentally return

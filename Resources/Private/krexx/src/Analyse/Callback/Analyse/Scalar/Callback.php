@@ -81,10 +81,16 @@ class Callback extends AbstractScalarAnalysis implements ViewConstInterface
      */
     public function canHandle($string, Model $model): bool
     {
-        if (is_callable($string)) {
-            $this->callback = $string;
-            return true;
+        try {
+            if (is_callable($string)) {
+                $this->callback = $string;
+                return true;
+            }
+        } catch (\Throwable $exception) {
+            // Do nothing.
+            // The autoload just failed.
         }
+
         return false;
     }
 
