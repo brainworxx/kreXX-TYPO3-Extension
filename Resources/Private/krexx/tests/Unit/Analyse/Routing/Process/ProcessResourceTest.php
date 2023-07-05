@@ -45,11 +45,13 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use stdClass;
+use CurlHandle;
 
 class ProcessResourceTest extends AbstractTest
 {
     const PROCESS_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\';
     const GET_RESOURCE_TYPE = 'get_resource_type';
+    const CURL_GETINFO = 'curl_getinfo';
 
     /**
      * Testing the processing of a stream resource.
@@ -92,8 +94,8 @@ class ProcessResourceTest extends AbstractTest
         $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
         $getResourceType->expects($this->once())
             ->will($this->returnValue('curl'));
-        $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'curl_getinfo');
-        $getResourceType->expects($this->once())
+        $getCurlInfo = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::CURL_GETINFO);
+        $getCurlInfo->expects($this->once())
             ->will($this->returnValue($metaResults));
 
         $this->runTheTest($resource, 1, 'resource (curl)', null, $metaResults);
@@ -165,6 +167,33 @@ class ProcessResourceTest extends AbstractTest
             ->will($this->returnValue($metaResults));
 
         $this->runTheTest($resource, 1, 'resource (process)', null, $metaResults);
+    }
+
+    /**
+     * Test the PHP 8 version of the cUrl resource
+     */
+    public function testCurlHandle()
+    {
+        if (!class_exists(CurlHandle::class)) {
+            $this->markTestSkipped('Wrong PHP version');
+        }
+
+        $this->mockEmergencyHandler();
+        $resource = 'Look at me, I\'m a cUrl handle!';
+        $isObjectMock = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'is_object');
+        $isObjectMock->expects($this->once())
+            ->will($this->returnValue(true));
+        $getClassMock = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'get_class');
+        $getClassMock->expects($this->once())
+            ->will($this->returnValue(CurlHandle::class));
+        $metaResults = [
+            'RP', 'meta', 'is', 'evil'
+        ];
+        $getCurlInfo = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::CURL_GETINFO);
+        $getCurlInfo->expects($this->once())
+            ->will($this->returnValue($metaResults));
+
+        $this->runTheTest($resource, 1, CurlHandle::class, null, $metaResults);
     }
 
     /**
