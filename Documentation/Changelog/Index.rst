@@ -12,6 +12,8 @@
 Changelog
 =============================================================
 
+4.1.10
+
 4.1.9
     - [Feature] TYPO3 12.4 support.
     - [Feature] Added Support for the PHP 8 cUrl handle class.
