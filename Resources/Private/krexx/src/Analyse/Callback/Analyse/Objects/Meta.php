@@ -188,10 +188,6 @@ class Meta extends AbstractObjectAnalysis implements CallbackConstInterface, Vie
         if ($ref->isFinal() === true) {
             $result .= 'final ';
         }
-        if ($ref->isAbstract() === true && $ref->isTrait() === false) {
-            // Huh, traits are abstract, but you do not declare them as such.
-            $result .= 'abstract ';
-        }
         if ($ref->isInternal() === true) {
             $result .= 'internal ';
         }
@@ -199,6 +195,10 @@ class Meta extends AbstractObjectAnalysis implements CallbackConstInterface, Vie
             $result .= 'interface ';
         } elseif ($ref->isTrait() === true) {
             $result .= 'trait ';
+        } elseif ($ref->isAbstract()) {
+            // Huh, traits and interfaces are abstract,
+            // but you do not declare them as such.
+            $result .= 'abstract class ';
         } else {
             $result .= 'class ';
         }
