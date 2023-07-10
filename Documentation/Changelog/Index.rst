@@ -58,8 +58,8 @@ Changelog
     - [Change] Set the nesting level to 10.
 
 4.1.10
-- Bugfix: Prevent a fatal in the scalar callback analysis.
-- Bugfix: Class meta analysis thinks that interfaces are abstract.
+    - [Bugfix] Prevent a fatal in the scalar callback analysis.
+    - [Bugfix] Class meta analysis thinks that interfaces are abstract.
 
 4.1.9
     - [Feature] TYPO3 12.4 support.
