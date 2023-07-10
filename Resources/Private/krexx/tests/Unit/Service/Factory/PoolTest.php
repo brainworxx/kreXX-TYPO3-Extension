@@ -41,7 +41,6 @@ use Brainworxx\Krexx\Analyse\Routing\Routing;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
-use Brainworxx\Krexx\Service\Config\From\Ini;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Flow\Emergency;
@@ -49,7 +48,6 @@ use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Misc\Registry;
-use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\View\AbstractRender;
@@ -180,5 +178,22 @@ class PoolTest extends AbstractTest
         $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->codegenHandler);
         $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->scope);
         $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->routing);
+    }
+
+    /**
+     * Test the renewal of the "semi-singletons" after an analysis, with
+     * simulating a new process fork.
+     *
+     * @covers \Brainworxx\Krexx\Service\Factory\Pool::reset
+     */
+    public function testResetWithNewFork()
+    {
+        $getmypidMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Factory', 'getmypid');
+        $getmypidMock->expects($this->exactly(2))
+            ->will($this->returnValue(12345));
+        Krexx::$pool->chunks = new stdClass();
+
+        Krexx::$pool->reset();
+        $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->chunks);
     }
 }

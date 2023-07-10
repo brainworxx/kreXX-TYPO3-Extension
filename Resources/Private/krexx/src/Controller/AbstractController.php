@@ -173,11 +173,11 @@ abstract class AbstractController implements ConfigConstInterface
     protected function outputCssAndJs(): string
     {
         // We only do this once per output type.
-        if (isset(static::$jsCssSend[$this->destination])) {
+        if (isset(static::$jsCssSend[$this->destination . getmypid()])) {
             // Been here, done that.
             return '';
         }
-        static::$jsCssSend[$this->destination] = true;
+        static::$jsCssSend[$this->destination . getmypid()] = true;
 
         // Adding the js to the output.
         $skinDirectory = $this->pool->config->getSkinDirectory();

@@ -211,6 +211,6 @@ class Messages
             );
         }
 
-        $this->helpArray = array_merge($helpArray['text'], $helpArray[$this->languageKey]);
+        $this->helpArray = array_merge($helpArray['text'], $helpArray[$this->languageKey] ?? []);
     }
 }

@@ -24,6 +24,7 @@ Changelog
     - [Feature] The ext filepath analysis gives feedback if the file does not exist in the first place.
     - [Feature] Added Flexform data analysis.
     - [Feature] Added Fluid ViewHelper :literal:`<krexx:timer.moment value="Render the menue" />` and :literal:`<krexx:timer.end />`.
+    - [Feature] Added PCNTL support for logging.
     - [Change] Removed deprecated code.
     - [Change] Drop PHP 7.0 support
     - [Change] Drop PHP 7.1 support
@@ -55,6 +56,10 @@ Changelog
     - [Change] Removed the reflection cache.
     - [Change] Refactored the template file loading.
     - [Change] Set the nesting level to 10.
+
+4.1.10
+- Bugfix: Prevent a fatal in the scalar callback analysis.
+- Bugfix: Class meta analysis thinks that interfaces are abstract.
 
 4.1.9
     - [Feature] TYPO3 12.4 support.

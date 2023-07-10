@@ -150,6 +150,17 @@ class Pool extends AbstractFactory
     public $eventService;
 
     /**
+     * The current id of our PHP process.
+     *
+     * We need this one to detect a new fork.
+     * And when we detect a new fork we need to make sure that we do not have
+     * file or output collisions.
+     *
+     * @var int
+     */
+    protected $processId;
+
+    /**
      * Initializes all needed classes.
      *
      * @param string[] $rewrite
@@ -194,6 +205,8 @@ class Pool extends AbstractFactory
      */
     protected function checkEnvironment(): void
     {
+        $this->processId = getmypid();
+
         // Check chunk folder is writable.
         // If not, give feedback!
         $chunkFolder = $this->config->getChunkDir();
@@ -239,6 +252,13 @@ class Pool extends AbstractFactory
 
         // Reset the routing, because they cache their settings.
         $this->createClass(Routing::class);
+
+        if ($this->processId !== getmypid()) {
+            // We just got forked!
+            // Hence, reset the chunked class to avoid file collision.
+            $this->createClass(Chunks::class);
+            $this->processId = getmypid();
+        }
 
         // We also initialize emergency handler timer.
         $this->emergencyHandler->initTimer();

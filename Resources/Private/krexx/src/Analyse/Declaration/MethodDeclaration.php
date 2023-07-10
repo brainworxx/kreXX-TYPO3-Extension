@@ -104,9 +104,7 @@ class MethodDeclaration extends AbstractDeclaration
             return '';
         }
 
-        $nullable = $namedType->allowsNull() ? '?' : '';
-
-        return $nullable . $this->retrieveNamedType($namedType);
+        return $this->retrieveNamedType($namedType);
     }
 
     /**

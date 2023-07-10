@@ -203,10 +203,6 @@ class Meta extends AbstractObjectAnalysis
         if ($ref->isFinal()) {
             $result .= $messages->getHelp('final') . ' ';
         }
-        if ($ref->isAbstract() && !$ref->isTrait()) {
-            // Huh, traits are abstract, but you do not declare them as such.
-            $result .= $messages->getHelp('abstract') . ' ';
-        }
         if ($ref->isInternal()) {
             $result .= $messages->getHelp('internal') . ' ';
         }
@@ -214,6 +210,10 @@ class Meta extends AbstractObjectAnalysis
             $result .= $messages->getHelp('interface') . ' ';
         } elseif ($ref->isTrait()) {
             $result .= $messages->getHelp('trait') . ' ';
+        } elseif ($ref->isAbstract()) {
+            // Huh, traits and interfaces are abstract,
+            // but you do not declare them as such.
+            $result .= $messages->getHelp('abstract') . ' ' . $messages->getHelp('class') . ' ';
         } else {
             $result .= $messages->getHelp('class') . ' ';
         }

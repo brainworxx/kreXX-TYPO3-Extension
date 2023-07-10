@@ -45,6 +45,7 @@ $viewOutput = '\\Brainworxx\\Krexx\\View\\Output\\';
 $view = '\\Brainworxx\\Krexx\\View\\';
 $callbackScalar = '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\';
 $caller = '\\Brainworxx\\Krexx\\Analyse\\Caller';
+$factory = '\\Brainworxx\\Krexx\\Service\\Factory';
 
 AbstractTest::defineFunctionMock($analyseRoutingProcess, 'class_exists');
 AbstractTest::defineFunctionMock($analyseRoutingProcess, 'is_object');
@@ -70,6 +71,7 @@ AbstractTest::defineFunctionMock($viewOutput, 'glob');
 AbstractTest::defineFunctionMock($view, 'php_sapi_name');
 AbstractTest::defineFunctionMock($view, 'defined');
 AbstractTest::defineFunctionMock($caller, 'time');
+AbstractTest::defineFunctionMock($factory, 'getmypid');
 
 // Register a shutdown method to die, so we get no output on the shell.
 register_shutdown_function(function () {
