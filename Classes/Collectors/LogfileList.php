@@ -78,10 +78,17 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
             return [];
         }
 
+        set_error_handler(function(int $errno, string $errstr, ?string $errfile, ?int $errline, ?array $errcontext) {});
         // The function filemtime gets cached by php btw.
-        usort($files, function ($a, $b) {
-            return filemtime($b) - filemtime($a);
-        });
+        usort(
+            $files,
+            function ($a, $b): int
+            {
+                return (int)filemtime($b) - (int)filemtime($a);
+            }
+        );
+        restore_error_handler();
+
 
         return $this->retrieveFileInfo($files);
     }
