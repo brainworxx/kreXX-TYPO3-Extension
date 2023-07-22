@@ -134,7 +134,6 @@ class Xml extends AbstractScalarAnalysis implements ViewConstInterface
         set_error_handler($this->pool->retrieveErrorCallback());
         // We try to decode it.
         $this->parseXml($this->originalXml);
-        restore_error_handler();
 
         if (empty($this->decodedXml) === false) {
             $meta[static::META_DECODED_XML] = $this->decodedXml;
@@ -147,6 +146,7 @@ class Xml extends AbstractScalarAnalysis implements ViewConstInterface
         } else {
             $meta[static::META_DECODED_XML] = 'Unable to decode the XML structure!';
         }
+        restore_error_handler();
 
         // Move the extra part into a nest, for better readability.
         if ($this->model->hasExtra()) {

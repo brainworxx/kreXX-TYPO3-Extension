@@ -16,6 +16,7 @@ Changelog
     - [Bugfix] Prevent a fatal in the scalar callback analysis.
     - [Bugfix] Class meta analysis thinks that interfaces are abstract.
     - [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
+    - [Bugfix] Prevent a warning while parsing an XML string.
 
 4.1.9
     - [Feature] TYPO3 12.4 support.
