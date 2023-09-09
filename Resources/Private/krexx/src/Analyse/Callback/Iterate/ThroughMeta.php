@@ -171,7 +171,10 @@ class ThroughMeta extends AbstractCallback implements CallbackConstInterface
     {
         $key = $model->getName();
 
-        if ($key === $this->pool->messages->getHelp('metaDecodedJson')) {
+        if (
+            $key === $this->pool->messages->getHelp('metaDecodedJson')
+            || $key === $this->pool->messages->getHelp('metaDecodedBase64')
+        ) {
             // Prepare the json code generation.
             return $this->pool->routing->analysisHub($model);
         }

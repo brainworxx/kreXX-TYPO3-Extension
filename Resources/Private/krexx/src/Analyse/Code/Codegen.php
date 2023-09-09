@@ -217,6 +217,11 @@ class Codegen implements CallbackConstInterface, CodegenConstInterface, ProcessC
                 $result = 'json_decode(;firstMarker;)';
                 break;
 
+            case static::CODEGEN_TYPE_BASE64_DECODE:
+                // Meta Base64 decoding
+                $result = 'base64_decode(;firstMarker;)';
+                break;
+
             default:
                 if ($this->pool->scope->testModelForCodegen($model)) {
                     // Test if we are inside the scope. Everything within our scope is reachable.

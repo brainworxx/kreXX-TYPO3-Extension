@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Scalar;
 
+use Brainworxx\Krexx\Analyse\Scalar\String\Base64;
 use Brainworxx\Krexx\Analyse\Scalar\String\Callback;
 use Brainworxx\Krexx\Analyse\Scalar\String\FilePath;
 use Brainworxx\Krexx\Analyse\Scalar\String\Json;
@@ -78,7 +79,8 @@ class ScalarString extends AbstractScalar
             Json::class,
             Xml::class,
             TimeStamp::class,
-            Serialized::class
+            Serialized::class,
+            Base64::class
         ];
 
         $classList = array_merge($classList, SettingsGetter::getAdditionalScalarString());

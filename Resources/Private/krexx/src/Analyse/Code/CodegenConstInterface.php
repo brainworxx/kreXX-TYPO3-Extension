@@ -73,6 +73,13 @@ interface CodegenConstInterface
     public const CODEGEN_TYPE_JSON_DECODE = 'jsonDecode';
 
     /**
+     * Wraps a base64_decode around one of the generation values.
+     *
+     * @var string
+     */
+    public const CODEGEN_TYPE_BASE64_DECODE = 'base64Decode';
+
+    /**
      * Wraps an array_values around one of the generation values.
      *
      * @var string

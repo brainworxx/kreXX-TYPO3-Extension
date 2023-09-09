@@ -10,6 +10,7 @@
   analysis events, so event listeners can actually do something
   useful.
 - Added PCNTL support for logging.
+- Added base64 analysis.
 - Change: Removed deprecated code.
 - Change: Drop PHP 7.1 support
 - Change: Streamlined the type display of strings

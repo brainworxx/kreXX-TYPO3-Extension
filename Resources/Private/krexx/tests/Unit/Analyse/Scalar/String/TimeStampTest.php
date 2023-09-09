@@ -33,10 +33,10 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Scalar;
+namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar\String;
 
-use Brainworxx\Krexx\Analyse\Scalar\String\TimeStamp;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Scalar\String\TimeStamp;
 use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 use DateTime;
 

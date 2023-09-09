@@ -123,7 +123,7 @@ class ThroughMetaTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
-    public function testcallMeDecodedJson()
+    public function testCallMeDecodedJson()
     {
         $this->mockEventService([$this->startEvent, $this->throughMeta]);
         $fixture = [
@@ -139,6 +139,31 @@ class ThroughMetaTest extends AbstractTest
         $model = $routeNothing->model[0];
         $this->assertCount(1, $routeNothing->model);
         $this->assertEquals(Codegen::CODEGEN_TYPE_JSON_DECODE, $model->getCodeGenType());
+    }
+
+    /**
+     * Test with a decoded base64 string
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
+     */
+    public function testCallMeDecodedBase64()
+    {
+        $this->mockEventService([$this->startEvent, $this->throughMeta]);
+        $fixture = [
+            $this->throughMeta::PARAM_DATA => [
+                'Decoded base64' => base64_decode('Base64 strings are stupid.')
+            ],
+            $this->throughMeta::PARAM_CODE_GEN_TYPE => Codegen::CODEGEN_TYPE_BASE64_DECODE
+        ];
+
+        $routeNothing = new RoutingNothing(\Krexx::$pool);
+        Krexx::$pool->routing = $routeNothing;
+        $this->throughMeta->setParameters($fixture)->callMe();
+        $model = $routeNothing->model[0];
+        $this->assertCount(1, $routeNothing->model);
+        $this->assertEquals(Codegen::CODEGEN_TYPE_BASE64_DECODE, $model->getCodeGenType());
     }
 
     /**

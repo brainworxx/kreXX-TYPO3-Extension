@@ -144,6 +144,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Scalar/String/Xml.php';
         include_once KREXX_DIR . 'src/Analyse/Scalar/String/TimeStamp.php';
         include_once KREXX_DIR . 'src/Analyse/Scalar/String/Serialized.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/Base64.php';
         // @deprecated
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/AbstractScalarAnalysis.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Callback.php';

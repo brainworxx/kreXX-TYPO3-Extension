@@ -331,6 +331,22 @@ class CodegenTest extends AbstractTest
     }
 
     /**
+     * Test the meta Base64 code generation.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
+     */
+    public function testGenerateMetaDecodedBase64()
+    {
+        $this->fixture->setCodeGenType($this->codegenHandler::CODEGEN_TYPE_BASE64_DECODE);
+        $this->assertEquals(
+            'base64_decode(;firstMarker;)',
+            $this->codegenHandler->generateSource($this->fixture),
+            'There should not be any connectors, so we just expect the wrapper string.'
+        );
+    }
+
+    /**
      * Test the coegeneration for unaccessible array values.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
