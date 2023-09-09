@@ -293,15 +293,22 @@ abstract class AbstractController extends ActionController implements ConstInter
         if (method_exists($this->pageRenderer, 'loadJavaScriptModule')) {
             // Doing this the TYPO3 12 way.
             $this->pageRenderer->loadJavaScriptModule('@brainworxx/includekrexx/Index.js');
+            $this->pageRenderer->addJsInlineCode(
+                'krexxajaxtrans',
+                $this->generateAjaxTranslations(),
+                false,
+                false,
+                true
+            );
         } else {
             // @deprecated
             // Will be removed as soon as we drop TYPO3 11 support.
             $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
             $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
+            $this->pageRenderer->addJsInlineCode('krexxajaxtrans', $this->generateAjaxTranslations());
         }
 
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Css/Index.css');
-        $this->pageRenderer->addJsInlineCode('krexxajaxtrans', $this->generateAjaxTranslations());
         $this->pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));
         $this->moduleTemplate->setContent($this->view->render());
         $this->moduleTemplate->setModuleName('tx_includekrexx');
@@ -324,6 +331,6 @@ abstract class AbstractController extends ActionController implements ConstInter
         $translation->updatedLoglist = static::translate('ajax.updated.loglist');
         $translation->deletedCookies = static::translate('ajax.deleted.cookies');
 
-        return 'var ajaxTranslate = ' .  json_encode($translation) . ';';
+        return 'window.ajaxTranslate = ' .  json_encode($translation) . ';';
     }
 }

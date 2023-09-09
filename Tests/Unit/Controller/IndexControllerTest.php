@@ -110,7 +110,7 @@ class IndexControllerTest extends AbstractTest
     {
         $jsCssFileContent = 'file content';
         $templateContent = 'template content';
-        $translationContent = 'var ajaxTranslate = {"deletefile":"ajax.delete.file","error":"ajax.error","in":"ajax.in","line":"ajax.line","updatedLoglist":"ajax.updated.loglist","deletedCookies":"ajax.deleted.cookies"};';
+        $translationContent = 'window.ajaxTranslate = {"deletefile":"ajax.delete.file","error":"ajax.error","in":"ajax.in","line":"ajax.line","updatedLoglist":"ajax.updated.loglist","deletedCookies":"ajax.deleted.cookies"};';
 
         $fileGetContents =  $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_get_contents');
         $fileGetContents->expects($this->any())
@@ -159,7 +159,7 @@ class IndexControllerTest extends AbstractTest
             $pageRenderer->expects($this->any())
                 ->method('addJsInlineCode')
                 ->withConsecutive(
-                    ['krexxajaxtrans', $translationContent]
+                    ['krexxajaxtrans', $translationContent, false, false, true]
                 );
         } else {
             $pageRenderer->expects($this->any())
