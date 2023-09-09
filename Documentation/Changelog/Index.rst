@@ -25,6 +25,7 @@ Changelog
     - [Feature] Added Flexform data analysis.
     - [Feature] Added Fluid ViewHelper :literal:`<krexx:timer.moment value="Render the menue" />` and :literal:`<krexx:timer.end />`.
     - [Feature] Added PCNTL support for logging.
+    - [Feature] Added base64 analysis.
     - [Change] Removed deprecated code.
     - [Change] Drop PHP 7.0 support
     - [Change] Drop PHP 7.1 support
@@ -61,6 +62,7 @@ Changelog
     - [Bugfix] Prevent a fatal in the scalar callback analysis.
     - [Bugfix] Class meta analysis thinks that interfaces are abstract.
     - [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
+    - [Bugfix] Prevent a warning while parsing an XML string.
 
 4.1.9
     - [Feature] TYPO3 12.4 support.
