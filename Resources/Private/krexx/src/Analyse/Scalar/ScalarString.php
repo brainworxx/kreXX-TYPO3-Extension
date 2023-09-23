@@ -113,8 +113,8 @@ class ScalarString extends AbstractScalar
             $scalarHandler = $this->pool->createClass($className);
 
             if ($scalarHandler->canHandle($originalData, $model)) {
-                $model->injectCallback($scalarHandler)->setDomid($this->generateDomId($originalData, $className));
-                return $model;
+                return $model->injectCallback($scalarHandler)
+                    ->setDomid($this->generateDomId($originalData, $className));
             }
         }
 

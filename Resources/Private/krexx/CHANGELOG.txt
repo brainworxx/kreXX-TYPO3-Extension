@@ -841,4 +841,3 @@
 - When clicking on a recursion, the <li> with the analysis data will
   now highlight in red.
 - Reformatted this file, to make it better readable.
-
