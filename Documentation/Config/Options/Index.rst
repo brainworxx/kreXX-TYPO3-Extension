@@ -42,8 +42,9 @@ Behavior
 | Skin                           | You can change the CSS/HTML skin. We included the Hans and Smoky-Grey skin                                                             | - hans                    |
 |                                |                                                                                                                                        | - smoky-grey              |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Destination                    | Will the output be sent to the frontend or the logfolder?                                                                              | - file                    |
-|                                |                                                                                                                                        | - frontend                |
+| Destination                    | Will the output be sent to the frontend or the logfolder?                                                                              | - Browser shutdown phase  |
+|                                |                                                                                                                                        | - File                    |
+|                                |                                                                                                                                        | - Browser immediately     |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Maximum files in the logfolder | How many files should it keep? Files will only get deleted, when a new one is created.                                                 | 10                        |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
