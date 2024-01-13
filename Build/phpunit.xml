@@ -8,4 +8,10 @@
             <directory>../Tests</directory>
         </testsuite>
     </testsuites>
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./Classes</directory>
+            <directory suffix=".php">./Resources/Private/krexx/src</directory>
+        </include>
+    </coverage>
 </phpunit>
