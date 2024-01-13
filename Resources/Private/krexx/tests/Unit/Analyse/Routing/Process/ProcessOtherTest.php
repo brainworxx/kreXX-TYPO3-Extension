@@ -39,12 +39,11 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use stdClass;
 
-class ProcessOtherTest extends AbstractTest
+class ProcessOtherTest extends AbstractHelper
 {
     /**
      * Testing of not yet handled stuff, aka 'other'.

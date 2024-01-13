@@ -1,3 +1,7 @@
+5.0.1
+- Change: Updated the unit tests to 10.5
+- Bugfix: Added a missing end-event in the ThroughGetter iterator.
+
 5.0.0
 - Added immediately browser output to the output choices.
 - Added default value analysis to the additional info.

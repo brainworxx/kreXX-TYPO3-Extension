@@ -37,11 +37,11 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Output;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\Cleanup;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Output\Chunks;
 use Brainworxx\Krexx\View\Output\File;
 
-class FileTest extends AbstractTest
+class FileTest extends AbstractHelper
 {
     /**
      * Test the creation of a file.
@@ -67,12 +67,12 @@ class FileTest extends AbstractTest
         $chunkMock = $this->createMock(Chunks::class);
         $chunkMock->expects($this->exactly(4))
             ->method('saveDechunkedToFile')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$fixture[0]],
                 [$fixture[1]],
                 [$fixture[2]],
                 [$fixture[3]]
-            );
+            ));
         Krexx::$pool->chunks = $chunkMock;
 
         $cleanupMock = $this->createMock(Cleanup::class);

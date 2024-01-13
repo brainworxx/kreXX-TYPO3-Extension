@@ -40,12 +40,12 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMetaReflections;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 
-class ThroughMetaTest extends AbstractTest
+class ThroughMetaTest extends AbstractHelper
 {
     const RENDER_EXPANDABLE_CHILD = 'renderExpandableChild';
 
@@ -74,9 +74,9 @@ class ThroughMetaTest extends AbstractTest
      */
     protected $renderNothing;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->throughMeta = new ThroughMeta(Krexx::$pool);
         // Mock the redner class, to prevent further processing.

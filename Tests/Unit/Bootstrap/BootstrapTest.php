@@ -35,18 +35,12 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Bootstrap;
 
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
-use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Package\MetaData;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use Aimeos\MShop\Exception as AimeosException;
 
-class BootstrapTest extends AbstractTest
+class BootstrapTest extends AbstractHelper
 {
     const BOOTSTRAP_NAMESPACE = '\\Brainworxx\\Includekrexx\\Bootstrap\\';
     const DEFINED = 'defined';
@@ -56,9 +50,9 @@ class BootstrapTest extends AbstractTest
      */
     protected $bootstrap;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->bootstrap = new Bootstrap();
     }
 

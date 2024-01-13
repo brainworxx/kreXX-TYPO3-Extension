@@ -36,7 +36,7 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Scalar;
 
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File;
@@ -44,12 +44,12 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-class ExtFilePathTest extends AbstractTest
+class ExtFilePathTest extends AbstractHelper
 {
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         // Load the TYPO3 language files
         Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .

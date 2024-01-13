@@ -36,10 +36,10 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Controller;
 
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Controller\AjaxController;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Core\Http\ServerRequest;
 
-class AjaxControllerTest extends AbstractTest
+class AjaxControllerTest extends AbstractHelper
 {
     /**
      * Test the retrival of the log file list.

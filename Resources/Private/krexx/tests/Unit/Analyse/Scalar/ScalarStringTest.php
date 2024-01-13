@@ -39,10 +39,10 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Scalar\ScalarString;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ScalarNothing;
 
-class ScalarStringTest extends AbstractTest
+class ScalarStringTest extends AbstractHelper
 {
     /**
      * @var ScalarString
@@ -54,17 +54,17 @@ class ScalarStringTest extends AbstractTest
      *
      * @throws \ReflectionException
      */
-    protected function krexxDown()
+    protected function tearDown(): void
     {
         ScalarNothing::$canHandle = false;
         ScalarNothing::$canHandleList = [];
         ScalarNothing::$count = 0;
-        parent::krexxDown();
+        parent::tearDown();
     }
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->scalarString = new ScalarString(Krexx::$pool);
         // Inject the scalar helper, to track the processing.

@@ -41,14 +41,14 @@ use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Validation;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use ReflectionType;
 use ReflectionGenerator;
 use Reflector;
 use stdClass;
 use SplObjectStorage;
 
-class ValidationTest extends AbstractTest
+class ValidationTest extends AbstractHelper
 {
 
     const WHATEVER = 'whatever';

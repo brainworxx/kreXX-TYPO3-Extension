@@ -40,11 +40,11 @@ use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\LoggerCallerFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use ReflectionClass;
 
-class CallerFinderTest extends AbstractTest
+class CallerFinderTest extends AbstractHelper
 {
     const FUNCTION_TO_TRACE = 'krexx';
     const HEADLINE_STRING = 'A headline';
@@ -76,9 +76,9 @@ class CallerFinderTest extends AbstractTest
      * Creating the Caller finder.
      * {@inheritdoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         // Prepare the uri.
         // The things you do, to mock an uri call . . .

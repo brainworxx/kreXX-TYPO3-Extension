@@ -38,7 +38,7 @@ use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use TYPO3\CMS\Core\Package\MetaData;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
@@ -48,7 +48,7 @@ use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen as Fluid
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
 
-class ConfigurationTest extends AbstractTest
+class ConfigurationTest extends AbstractHelper
 {
     /**
      * @var \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration
@@ -86,9 +86,9 @@ class ConfigurationTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->configuration = new Configuration();
     }
 
@@ -112,13 +112,13 @@ class ConfigurationTest extends AbstractTest
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue(AbstractTest::TYPO3_VERSION));
+            ->will($this->returnValue(AbstractHelper::TYPO3_VERSION));
         $packageMock = $this->simulatePackage(Bootstrap::EXT_KEY, 'whatever');
         $packageMock->expects($this->once())
             ->method('getPackageMetaData')
             ->will($this->returnValue($metaData));
 
-        $this->assertEquals(AbstractTest::TYPO3_VERSION, $this->configuration->getVersion());
+        $this->assertEquals(AbstractHelper::TYPO3_VERSION, $this->configuration->getVersion());
     }
 
     /**

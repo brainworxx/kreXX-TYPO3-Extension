@@ -36,15 +36,15 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Code;
 
 use Brainworxx\Krexx\Analyse\Code\Connectors;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class ConnectorsTest extends AbstractTest
+class ConnectorsTest extends AbstractHelper
 {
     const TEST_STRING = 'test me';
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->connectors = new Connectors();
     }

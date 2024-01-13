@@ -40,12 +40,12 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Scalar\String\Json;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Krexx;
 use stdClass;
 
-class JsonTest extends AbstractTest
+class JsonTest extends AbstractHelper
 {
     /**
      * Test the json extension detection.

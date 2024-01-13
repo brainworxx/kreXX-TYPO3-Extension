@@ -35,12 +35,12 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\View;
 
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Message;
 use Brainworxx\Krexx\View\Messages;
 use Krexx;
 
-class MessageTest extends AbstractTest
+class MessageTest extends AbstractHelper
 {
     /**
      * Test the setting of the pool

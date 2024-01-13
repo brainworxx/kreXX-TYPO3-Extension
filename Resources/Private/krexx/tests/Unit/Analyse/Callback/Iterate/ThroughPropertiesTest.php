@@ -43,12 +43,12 @@ use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesInheritanceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ReadOnlyFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
 
-class ThroughPropertiesTest extends AbstractTest
+class ThroughPropertiesTest extends AbstractHelper
 {
     const PUBLIC_STRING_PROPERTY = 'publicStringProperty';
     const PUBLIC_INT_PROPERTY = 'publicIntProperty';
@@ -75,9 +75,9 @@ class ThroughPropertiesTest extends AbstractTest
     /**
      * {@inheritdoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->throughProperties = new ThroughProperties(Krexx::$pool);
     }
 

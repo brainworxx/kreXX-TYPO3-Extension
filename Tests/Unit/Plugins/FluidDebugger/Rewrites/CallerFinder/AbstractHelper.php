@@ -35,11 +35,11 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\CallerFinder;
 
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest as AbstractKrexxTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper as AbstractKrexxTest;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
 
-abstract class AbstractTest extends AbstractKrexxTest
+abstract class AbstractHelper extends AbstractKrexxTest
 {
     /**
      * Create a functioning fluid instance with the provided rendering stack.

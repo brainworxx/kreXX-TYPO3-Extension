@@ -4,14 +4,11 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\OpaqueRessource;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
-use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
-use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Krexx;
 
-class OpaqueRessourceTest extends AbstractTest implements CallbackConstInterface
+class OpaqueRessourceTest extends AbstractHelper implements CallbackConstInterface
 {
      /**
      * What the method name says. Call it with a simulated wrong php version.

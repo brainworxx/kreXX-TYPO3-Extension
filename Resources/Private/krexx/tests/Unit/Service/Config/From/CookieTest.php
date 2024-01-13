@@ -39,9 +39,9 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\From\Cookie;
 use Brainworxx\Krexx\Service\Config\Validation;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class CookieTest extends AbstractTest
+class CookieTest extends AbstractHelper
 {
 
     const SETTING_01 = 'setting01';
@@ -57,9 +57,9 @@ class CookieTest extends AbstractTest
      */
     protected $fixture;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->fixture = [
             static::SETTING_01 => static::VALUE_01,
@@ -115,11 +115,10 @@ class CookieTest extends AbstractTest
         $validationMock = $this->createMock(Validation::class);
         $validationMock->expects($this->exactly(2))
             ->method('evaluateSetting')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$someGroup, static::SETTING_01, static::VALUE_01],
                 [$someGroup, static::SETTING_02, static::VALUE_02]
-            )
-            ->will(
+            ))->will(
                 $this->returnValueMap(
                     [
                         [$someGroup, static::SETTING_01, static::VALUE_01, true],

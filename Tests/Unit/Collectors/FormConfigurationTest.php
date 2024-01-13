@@ -35,12 +35,12 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
-class FormConfigurationTest extends AbstractTest
+class FormConfigurationTest extends AbstractHelper
 {
     /**
      * The the assigning of data to the view.

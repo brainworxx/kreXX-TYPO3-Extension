@@ -37,11 +37,11 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\Call
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
 
-class AbstractCallerFinderTest extends AbstractTest
+class AbstractCallerFinderTest extends AbstractHelper
 {
     const PARSED_TEMPLATE = 'parsedTemplate';
     const HAS_PROPERTY = 'hasProperty';

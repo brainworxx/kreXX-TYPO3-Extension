@@ -37,9 +37,9 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Config;
 
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class ModelTest extends AbstractTest
+class ModelTest extends AbstractHelper
 {
     const VALUE = 'some value';
 
@@ -48,9 +48,9 @@ class ModelTest extends AbstractTest
      */
     protected $model;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->model = new Model();
     }

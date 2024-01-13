@@ -46,12 +46,12 @@ use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\FileinfoDummy;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use finfo;
 
-class ProcessStringTest extends AbstractTest
+class ProcessStringTest extends AbstractHelper
 {
 
     const BUFFER_INFO = 'bufferInfo';
@@ -63,9 +63,9 @@ class ProcessStringTest extends AbstractTest
      */
     protected $processString;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->processString = new ProcessString(Krexx::$pool);
         $this->mockEmergencyHandler();
@@ -325,11 +325,10 @@ class ProcessStringTest extends AbstractTest
             $cut = substr($fixture, 0, 50);
             $encodingMock->expects($this->exactly(2))
                 ->method('encodeString')
-                ->withConsecutive(
+                ->with(...$this->withConsecutive(
                     [$cut],
                     [$fixture]
-                )
-                ->will($this->returnValueMap([
+                ))->will($this->returnValueMap([
                     [$cut, false, static::ENCODING_PREFIX . $cut],
                     [$fixture, false, static::ENCODING_PREFIX . $fixture]
                 ]));

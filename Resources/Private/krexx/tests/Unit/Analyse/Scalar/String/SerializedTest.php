@@ -40,11 +40,11 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Scalar\String\Serialized;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Krexx;
 
-class SerializedTest extends AbstractTest
+class SerializedTest extends AbstractHelper
 {
     /**
      * Test if the pretty print for the serialize is active.

@@ -41,11 +41,10 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File as Fileservice;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 
-class ProcessClosureTest extends AbstractTest
+class ProcessClosureTest extends AbstractHelper
 {
     /**
      * Test the processing of a closure.

@@ -36,9 +36,9 @@
 namespace Brainworxx\Krexx\Tests\Unit\Declaration;
 
 use Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class FunctionDeclarationTest extends AbstractTest
+class FunctionDeclarationTest extends AbstractHelper
 {
     /**
      * Test the retrieval of declaration of simple functions.

@@ -39,11 +39,11 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 use Brainworxx\Krexx\View\Skins\RenderSmokyGrey;
 
-class FallbackTest extends AbstractTest
+class FallbackTest extends AbstractHelper
 {
     /**
      * Test the construct of an abstract class. Sounds about right.

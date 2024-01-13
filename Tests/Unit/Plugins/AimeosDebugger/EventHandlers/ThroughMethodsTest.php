@@ -43,12 +43,12 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods as IterateThroughMethods;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use ReflectionMethod;
 
-class ThroughMethodsTest extends AbstractTest
+class ThroughMethodsTest extends AbstractHelper
 {
     use AimeosTestTrait;
 

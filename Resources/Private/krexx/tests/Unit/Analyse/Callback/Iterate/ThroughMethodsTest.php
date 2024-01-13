@@ -41,15 +41,14 @@ use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionMethod;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 
-class ThroughMethodsTest extends AbstractTest
+class ThroughMethodsTest extends AbstractHelper
 {
     /**
      * Our testing specimen
@@ -72,9 +71,9 @@ class ThroughMethodsTest extends AbstractTest
     /**
      * {@inheritdoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->throughMethods = new ThroughMethods(Krexx::$pool);
     }
 

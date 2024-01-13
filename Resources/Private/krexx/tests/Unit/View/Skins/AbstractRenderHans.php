@@ -39,10 +39,10 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Misc\File;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 
-abstract class AbstractRenderHans extends AbstractTest
+abstract class AbstractRenderHans extends AbstractHelper
 {
     const PATH_TO_SKIN = '/some path/';
     const GET_NAME = 'getName';
@@ -74,9 +74,9 @@ abstract class AbstractRenderHans extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->mockTemplate();
         $this->renderHans = new RenderHans(Krexx::$pool);
         $this->mockEmergencyHandler();

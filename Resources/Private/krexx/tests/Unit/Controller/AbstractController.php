@@ -42,13 +42,13 @@ use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Misc\File;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Output\Chunks;
 use PHPUnit\Framework\MockObject\MockObject;
 
-abstract class AbstractController extends AbstractTest
+abstract class AbstractController extends AbstractHelper
 {
     /**
      * Result mock from the caller finder.
@@ -57,9 +57,9 @@ abstract class AbstractController extends AbstractTest
      */
     protected $callerFinderResult;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->callerFinderResult = [
             BacktraceConstInterface::TRACE_FILE => 'just another path',
@@ -136,11 +136,11 @@ abstract class AbstractController extends AbstractTest
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->exactly(3))
             ->method('fileIsReadable')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$pathToIni],
                 [KREXX_DIR . $pathToKdt],
                 [$pathToSkin . $skinCss]
-            )->will($this->returnValueMap(
+            ))->will($this->returnValueMap(
                 [
                     [$pathToIni, true],
                     [KREXX_DIR . $pathToKdt, true],
@@ -153,11 +153,11 @@ abstract class AbstractController extends AbstractTest
             ->will($this->returnValue('filtered path'));
         $fileServiceMock->expects($this->exactly(3))
             ->method('getFileContents')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [KREXX_DIR . $pathToKdt],
                 [$pathToSkin . $skinJs],
                 [$pathToSkin . $skinCss]
-            )->will($this->returnValueMap(
+            ))->will($this->returnValueMap(
                 [
                     [KREXX_DIR . $pathToKdt, true, 'some js'],
                     [$pathToSkin . $skinCss, true, 'some styles'],

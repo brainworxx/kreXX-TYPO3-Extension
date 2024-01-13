@@ -34,13 +34,12 @@
 
 namespace Brainworxx\Includekrexx\Tests\Helpers;
 
-use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
-use Brainworxx\Krexx\Tests\Helpers\TestCompatibility;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper as KrexxAbstractHelper;
 use phpmock\phpunit\PHPMock;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Cache\CacheManager;
@@ -60,7 +59,7 @@ use TYPO3\CMS\Extbase\Service\CacheService;
 use TYPO3\CMS\Extbase\Service\ExtensionService;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
-abstract class AbstractTest extends TestCompatibility
+abstract class AbstractHelper extends KrexxAbstractHelper
 {
     use PHPMock;
 
@@ -69,11 +68,10 @@ abstract class AbstractTest extends TestCompatibility
     const TYPO3_VERSION = '1.2.3';
 
     /**
-     * Make sure, that we always havbe a working pool.
+     * Make sure, that we always have a working pool.
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        $this->resetSingletonInstances = true;
         // Reset the pool, just in case.
         Krexx::$pool = null;
         Pool::createPool();
@@ -82,9 +80,8 @@ abstract class AbstractTest extends TestCompatibility
     /**
      * {@inheritDoc}
      */
-    protected function krexxDown()
+    protected function tearDown(): void
     {
-//        $this->setValueByReflection('packageManager', null, ExtensionManagementUtility::class);
         // Reset the possible mocks in the general utility.
         $this->setValueByReflection(static::FINAL_CLASS_NAME_CACHE, [], GeneralUtility::class);
         $this->setValueByReflection(static::SINGLETON_INSTANCES, [], GeneralUtility::class);
@@ -159,63 +156,6 @@ abstract class AbstractTest extends TestCompatibility
             ->will($this->returnValue($packageMock));
 
         return $packageMock;
-    }
-
-    /**
-     * Setting a protected value in the class we are testing.
-     *
-     * @param string $name
-     *   The name of the value.
-     * @param mixed $value
-     *   The value we want to set.
-     * @param object|string $object
-     *   The instance where we want to set the value. Or the class name, when
-     *   setting static values.
-     */
-    protected function setValueByReflection($name, $value, $object)
-    {
-        try {
-            $reflectionClass = new \ReflectionClass($object);
-            $reflectionProperty = $reflectionClass->getProperty($name);
-            $reflectionProperty->setAccessible(true);
-            if (is_object($object)) {
-                $reflectionProperty->setValue($object, $value);
-            } else {
-                $reflectionProperty->setValue($value);
-            }
-        } catch (\ReflectionException $e) {
-            $this->fail($e->getMessage());
-        }
-    }
-
-    /**
-     * Getting a protected/private value by reflection.
-     *
-     * @param string $name
-     *   The name of the property.
-     * @param object|string $object
-     *   The instance from where we want to get the value. Or the class name,
-     *   when getting static values.
-     *
-     * @return mixed
-     *   The value.
-     */
-    protected function retrieveValueByReflection($name, $object)
-    {
-        try {
-            $reflectionClass = new \ReflectionClass($object);
-            $reflectionProperty = $reflectionClass->getProperty($name);
-            $reflectionProperty->setAccessible(true);
-            if (is_object($object)) {
-                return $reflectionProperty->getValue($object);
-            } else {
-                return $reflectionProperty->getValue();
-            }
-        } catch (\ReflectionException $e) {
-            $this->fail($e->getMessage());
-        }
-
-        return null;
     }
 
     /**

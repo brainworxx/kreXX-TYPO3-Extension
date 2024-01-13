@@ -46,11 +46,11 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\DebugMethodFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods as AnalyseDebugMethods;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 
-class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
+class DebugMethodsTest extends AbstractHelper implements CallbackConstInterface
 {
     use AimeosTestTrait;
 
@@ -59,9 +59,9 @@ class DebugMethodsTest extends AbstractTest implements CallbackConstInterface
      *
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         // Subscribing.
         Registration::registerEvent(

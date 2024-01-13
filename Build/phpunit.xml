@@ -1,4 +1,10 @@
-<phpunit bootstrap="../Tests/Scripts/Bootstrap.php">
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+        bootstrap="../Tests/Scripts/Bootstrap.php"
+        displayDetailsOnTestsThatTriggerDeprecations="true"
+        displayDetailsOnTestsThatTriggerErrors="true"
+        displayDetailsOnTestsThatTriggerNotices="true"
+        displayDetailsOnTestsThatTriggerWarnings="true">
     <testsuites>
         <testsuite name="krexxsuit">
             <directory>../Resources/Private/krexx/tests</directory>

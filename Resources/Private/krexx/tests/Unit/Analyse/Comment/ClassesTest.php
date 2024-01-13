@@ -38,9 +38,9 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 use Brainworxx\Krexx\Analyse\Comment\Classes;
 use Brainworxx\Krexx\Krexx;
 use ReflectionClass;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class ClassesTest extends AbstractTest
+class ClassesTest extends AbstractHelper
 {
     /**
      * Test the retrieval of a class comment from a class reflection

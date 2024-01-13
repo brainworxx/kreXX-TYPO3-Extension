@@ -38,13 +38,13 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar\String;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Scalar\String\FilePath;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use finfo;
 use Krexx;
 use TypeError;
 
-class FilePathTest extends AbstractTest
+class FilePathTest extends AbstractHelper
 {
     /**
      * Test the assigning of the finfo class.

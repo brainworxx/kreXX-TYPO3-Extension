@@ -36,9 +36,9 @@
 namespace Brainworxx\Krexx\Tests\Unit\Service\Plugin;
 
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class AbstractRegistration extends AbstractTest
+class AbstractRegistration extends AbstractHelper
 {
     const PLUGINS = 'plugins';
     const CHUNK_FOLDER = 'chunkFolder';
@@ -59,9 +59,9 @@ class AbstractRegistration extends AbstractTest
      */
     protected $registration;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->registration = new Registration();
     }
 
@@ -70,9 +70,9 @@ class AbstractRegistration extends AbstractTest
      *
      * Also reset the static values in the plugin registration.
      */
-    protected function krexxDown()
+    protected function tearDown(): void
     {
-        parent::krexxDown();
+        parent::tearDown();
 
         // Reset everything.
         $this->setValueByReflection(static::PLUGINS, [], $this->registration);

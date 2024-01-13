@@ -39,23 +39,23 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\BacktraceStep;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ProcessNothing;
 use Brainworxx\Krexx\Krexx;
 
-class BacktraceStepTest extends AbstractTest
+class BacktraceStepTest extends AbstractHelper
 {
     /**
      * Getting some test data and preventing deeper processing.
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
         // We overwrite all processing classes with the processNothing class.
         // This way we can prevent going too deep inside the rabbit hole.
         Registration::addRewrite(ProcessArray::class, ProcessNothing::class);
         Registration::addRewrite(ProcessObject::class, ProcessNothing::class);
 
-        parent::krexxUp();
+        parent::setUp();
 
         $this->mockEmergencyHandler();
     }

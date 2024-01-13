@@ -38,11 +38,11 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar\String;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Krexx;
 
-class XmlTest extends AbstractTest
+class XmlTest extends AbstractHelper
 {
     const SCALAR_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String\\';
     const TEXT_XML = 'text/xml;';

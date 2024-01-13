@@ -39,11 +39,11 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Model;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 
-class ThroughConfigTest extends AbstractTest
+class ThroughConfigTest extends AbstractHelper
 {
     /**
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig::callMe

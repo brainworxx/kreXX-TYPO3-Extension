@@ -40,14 +40,14 @@ use Brainworxx\Krexx\Controller\EditSettingsController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\View\Output\Browser;
 use Brainworxx\Krexx\View\Output\BrowserImmediately;
 use Brainworxx\Krexx\View\Output\File;
 use Brainworxx\Krexx\Service\Misc\File as FileService;
 
-class AbstractControllerTest extends AbstractTest
+class AbstractControllerTest extends AbstractHelper
 {
     /**
      * Testing the construction phase of the controller

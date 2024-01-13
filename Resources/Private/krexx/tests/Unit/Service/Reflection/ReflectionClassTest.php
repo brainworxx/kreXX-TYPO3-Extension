@@ -43,11 +43,11 @@ use Brainworxx\Krexx\Tests\Fixtures\InheritDocFixture;
 use Brainworxx\Krexx\Tests\Fixtures\InterfaceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use ReflectionClass as OriginalReflectionClass;
 use stdClass;
 
-class ReflectionClassTest extends AbstractTest
+class ReflectionClassTest extends AbstractHelper
 {
     /**
      * Testing the array casting of an object as well as creating the actual

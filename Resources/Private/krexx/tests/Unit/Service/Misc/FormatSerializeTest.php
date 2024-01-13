@@ -38,9 +38,9 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Misc;
 use Brainworxx\Krexx\Service\Misc\FormatSerialize;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexPropertiesFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SerializableFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class FormatSerializeTest extends AbstractTest
+class FormatSerializeTest extends AbstractHelper
 {
     /**
      * Test the pretty print of a serialized string.

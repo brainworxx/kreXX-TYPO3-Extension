@@ -37,21 +37,20 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Service\Flow\Recursion;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 use stdClass;
 
-class ThroughArrayTest extends AbstractTest
+class ThroughArrayTest extends AbstractHelper
 {
     /**
      * Injecting the routing nothing class.
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         Krexx::$pool->routing = new RoutingNothing(Krexx::$pool);
     }
 

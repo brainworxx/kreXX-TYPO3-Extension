@@ -36,11 +36,11 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 
 use Brainworxx\Krexx\Analyse\Comment\Functions;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use ReflectionFunction;
 
-class FunctionsTest extends AbstractTest
+class FunctionsTest extends AbstractHelper
 {
 
     /**

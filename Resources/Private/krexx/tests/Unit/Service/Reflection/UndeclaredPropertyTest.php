@@ -36,11 +36,11 @@
 namespace Brainworxx\Krexx\Tests\Unit\Service\Reflection;
 
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use stdClass;
 use ReflectionClass;
 
-class UndeclaredPropertyTest extends AbstractTest
+class UndeclaredPropertyTest extends AbstractHelper
 {
 
     /**

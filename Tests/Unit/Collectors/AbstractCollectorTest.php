@@ -36,11 +36,10 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\Configuration;
-use Brainworxx\Includekrexx\Controller\IndexController;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 
-class AbstractCollectorTest extends AbstractTest
+class AbstractCollectorTest extends AbstractHelper
 {
     /**
      * Test, if the current BE user has access and test the retrieval of the uc.

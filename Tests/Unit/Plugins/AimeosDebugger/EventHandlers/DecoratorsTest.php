@@ -51,12 +51,12 @@ use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use stdClass;
 
-class DecoratorsTest extends AbstractTest
+class DecoratorsTest extends AbstractHelper
 {
     use AimeosTestTrait;
 

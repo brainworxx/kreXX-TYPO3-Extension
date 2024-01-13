@@ -42,10 +42,10 @@ use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\GetterFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 
-class GetterWithoutGetTest extends AbstractTest implements CallbackConstInterface
+class GetterWithoutGetTest extends AbstractHelper implements CallbackConstInterface
 {
     /**
      * Test the setting of the pool.

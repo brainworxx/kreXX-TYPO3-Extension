@@ -39,12 +39,12 @@ use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use TYPO3\CMS\Core\Service\FlexFormService as FlexFromServiceCore;
 use TYPO3\CMS\Extbase\Service\FlexFormService as FlexFromServiceExtbase;
 
-class FlexFormParserTest extends AbstractTest
+class FlexFormParserTest extends AbstractHelper
 {
     /**
      * Test the assigning of the pool

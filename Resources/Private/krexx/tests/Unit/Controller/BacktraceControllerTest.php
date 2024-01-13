@@ -110,11 +110,11 @@ class BacktraceControllerTest extends AbstractController
 
         $poolMock->expects($this->exactly(3))
             ->method('createClass')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [ProcessBacktrace::class],
                 [Model::class],
                 [ThroughConfig::class]
-            )->will($this->returnValueMap(
+            ))->will($this->returnValueMap(
                 [
                     [ProcessBacktrace::class, $proccessMock],
                     [Model::class, new Model(Krexx::$pool)],

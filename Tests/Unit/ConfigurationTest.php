@@ -34,9 +34,9 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit;
 
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class ConfigurationTest extends AbstractTest
+class ConfigurationTest extends AbstractHelper
 {
     /**
      * We have several configuration files in here with redundant constrains and
@@ -77,7 +77,7 @@ class ConfigurationTest extends AbstractTest
         $t3EmConstraint = '10.4.0-12.4.99';
         $phpEmConstraint = '7.2.0-8.2.99';
         $t3ComposerConstraint = '^10.4 || ^11 || ^12';
-        $phpComposerConstraint = '^7.2 || ^7.3 || ^7.4 || ^8.0 || ^8.1 || ^8.2';
+        $phpComposerConstraint = '^7.2 || ^7.3 || ^7.4 || ^8.0 || ^8.1 || ^8.2 || ^8.3';
 
         // Test the EM configuration.
         $this->assertEquals($versionNumber, $EM_CONF[$_EXTKEY]['version']);

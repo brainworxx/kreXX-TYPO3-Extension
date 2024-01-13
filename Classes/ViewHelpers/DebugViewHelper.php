@@ -102,7 +102,7 @@ class DebugViewHelper extends AbstractViewHelper
      */
     public function initializeArguments(): void
     {
-        $this->registerArgument(static::ARGUMENT_VALUE, 'mixed', 'The variable we want to analyse.', false);
+        $this->registerArgument(static::ARGUMENT_VALUE, 'mixed', 'The variable we want to analyse.');
     }
 
     /**

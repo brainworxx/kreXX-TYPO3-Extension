@@ -35,11 +35,11 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\Configuration;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
-class ConfigurationTest extends AbstractTest
+class ConfigurationTest extends AbstractHelper
 {
     /**
      * The the assigning of data to the view.
@@ -75,7 +75,7 @@ class ConfigurationTest extends AbstractTest
         $viewMock = $this->createMock(AbstractTemplateView::class);
         $viewMock->expects($this->exactly(2))
             ->method('assign')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [
                     'config',
                     $this->callback(function ($config) {
@@ -97,7 +97,7 @@ class ConfigurationTest extends AbstractTest
                             && isset($dropdown['loglevel']);
                     })
                 ]
-            );
+            ));
         $configuration->assignData($viewMock);
     }
 }

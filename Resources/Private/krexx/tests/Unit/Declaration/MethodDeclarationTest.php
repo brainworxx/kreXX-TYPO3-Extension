@@ -40,12 +40,12 @@ use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\LoggerCallerFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodParameterFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Fixtures\ReturnTypeFixture;
 use Brainworxx\Krexx\Tests\Fixtures\UnionTypeFixture;
 use ReflectionClass;
 
-class MethodDeclarationTest extends AbstractTest
+class MethodDeclarationTest extends AbstractHelper
 {
     /**
      * Test the retrieval of declaration of simple functions.

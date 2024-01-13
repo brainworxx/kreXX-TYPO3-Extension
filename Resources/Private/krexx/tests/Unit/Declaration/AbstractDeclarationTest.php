@@ -36,9 +36,9 @@
 namespace Brainworxx\Krexx\Tests\Unit\Declaration;
 
 use Brainworxx\Krexx\Analyse\Declaration\FunctionDeclaration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class AbstractDeclarationTest extends AbstractTest
+class AbstractDeclarationTest extends AbstractHelper
 {
     /**
      * Test the injection of the pool

@@ -36,7 +36,7 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Output;
 
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Output\Browser;
 
 /**
@@ -44,7 +44,7 @@ use Brainworxx\Krexx\View\Output\Browser;
  *
  * @package Brainworxx\Krexx\Tests\View\Output
  */
-class AbstractOutputTest extends AbstractTest
+class AbstractOutputTest extends AbstractHelper
 {
     /**
      * Test the setting of the pool.

@@ -42,12 +42,12 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use stdClass;
 use CurlHandle;
 
-class ProcessResourceTest extends AbstractTest
+class ProcessResourceTest extends AbstractHelper
 {
     const PROCESS_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\';
     const GET_RESOURCE_TYPE = 'get_resource_type';

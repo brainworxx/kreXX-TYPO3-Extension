@@ -42,14 +42,13 @@ use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Config\Model;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\View\Output\CheckOutput;
 use FilesystemIterator;
 use stdClass;
 
-class KrexxTest extends AbstractTest
+class KrexxTest extends AbstractHelper
 {
 
     const KREXX_COUNT = 'krexxCount';

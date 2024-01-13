@@ -47,12 +47,12 @@ use Brainworxx\Krexx\Tests\Fixtures\InterfaceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MultitraitFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use DateTime;
 
-class MetaTest extends AbstractTest
+class MetaTest extends AbstractHelper
 {
 
     /**

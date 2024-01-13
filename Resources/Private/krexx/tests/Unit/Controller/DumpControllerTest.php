@@ -112,11 +112,11 @@ class DumpControllerTest extends AbstractController
 
         $poolMock->expects($this->exactly(3))
             ->method('createClass')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [Model::class],
                 [Model::class],
                 [ThroughConfig::class]
-            )->will($this->returnValueMap(
+            ))->will($this->returnValueMap(
                 [
                     [Model::class, new Model(Krexx::$pool)],
                     [ThroughConfig::class, new CallbackNothing(Krexx::$pool)]

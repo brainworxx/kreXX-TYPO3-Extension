@@ -36,7 +36,6 @@
 namespace Brainworxx\Krexx\Tests\Unit\Service\Plugin;
 
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
 
 /**
  * Even more static fun: . . . yay . . .

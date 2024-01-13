@@ -37,9 +37,9 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Misc;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\Registry;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class RegistryTest extends AbstractTest
+class RegistryTest extends AbstractHelper
 {
     /**
      * Test the setting of itself in the pool.

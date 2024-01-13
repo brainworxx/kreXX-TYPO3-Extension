@@ -40,7 +40,7 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Krexx;
 use stdClass;
@@ -50,7 +50,7 @@ use stdClass;
  *
  * @package Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process
  */
-class AbstractProcessNoneScalarTest extends AbstractTest
+class AbstractProcessNoneScalarTest extends AbstractHelper
 {
     /**
      * Test the handling of a too deep nesting.

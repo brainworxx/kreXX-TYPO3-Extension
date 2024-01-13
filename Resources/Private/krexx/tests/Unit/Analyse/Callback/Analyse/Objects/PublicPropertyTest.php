@@ -43,13 +43,13 @@ use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
 use DateTime;
 
-class PublicPropertyTest extends AbstractTest
+class PublicPropertyTest extends AbstractHelper
 {
     /**
      * @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties
@@ -68,9 +68,9 @@ class PublicPropertyTest extends AbstractTest
      *
      * {@inheritdoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         // Create in instance of the class to test
         $this->publicProperties = new PublicProperties(Krexx::$pool);

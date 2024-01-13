@@ -36,9 +36,9 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Caller;
 
 use Brainworxx\Krexx\Analyse\Caller\CleanUpVarName;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class CleanUpVarNameTest extends AbstractTest
+class CleanUpVarNameTest extends AbstractHelper
 {
     /**
      * Simply test stuff the cleanup of variable names from a kreXX call.

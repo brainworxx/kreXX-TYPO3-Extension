@@ -38,12 +38,12 @@ namespace Brainworxx\Krexx\Tests\Unit\View;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Message;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 
-class MessagesTest extends AbstractTest
+class MessagesTest extends AbstractHelper
 {
 
     const KEY_VARIABLE_NAME = 'messages';
@@ -57,9 +57,9 @@ class MessagesTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->messagesClass = new Messages(Krexx::$pool);
     }
@@ -67,9 +67,9 @@ class MessagesTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxDown()
+    protected function tearDown(): void
     {
-        parent::krexxDown();
+        parent::tearDown();
 
         $this->setValueByReflection('additionalLanguages', [], Registration::class);
     }

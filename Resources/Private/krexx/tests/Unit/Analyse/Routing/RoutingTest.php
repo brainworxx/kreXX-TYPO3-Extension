@@ -36,27 +36,14 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing;
 
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInteger;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessInterface;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessNull;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessString;
 use Brainworxx\Krexx\Analyse\Routing\Routing;
 use Brainworxx\Krexx\Service\Flow\Emergency;
-use Brainworxx\Krexx\Service\Flow\Recursion;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
-use ReflectionClass;
-use ReflectionProperty;
-use stdClass;
 
-class RoutingTest extends AbstractTest
+class RoutingTest extends AbstractHelper
 {
     const ROUTING_MOCK_RETURN_VALUE = 'routing mock success';
     const IS_IN_HIVE = 'isInHive';
@@ -72,9 +59,9 @@ class RoutingTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->routing = new Routing(Krexx::$pool);
         $this->mockEmergencyHandler();

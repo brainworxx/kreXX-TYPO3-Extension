@@ -38,7 +38,7 @@ use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplateFactory;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
@@ -47,7 +47,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 
-class AbstractControllerTest extends AbstractTest
+class AbstractControllerTest extends AbstractHelper
 {
     /**
      * Test the creation of the pool and its assigning to the class.

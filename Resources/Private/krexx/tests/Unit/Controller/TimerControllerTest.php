@@ -51,9 +51,9 @@ class TimerControllerTest extends AbstractController
      */
     protected $controller;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         // Create a clean timer controller.
         $this->controller = new TimerController(Krexx::$pool);

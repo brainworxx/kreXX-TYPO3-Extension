@@ -39,11 +39,10 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessFloat;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
-use Brainworxx\Krexx\View\ViewConstInterface;
 
-class ProcessFloatTest extends AbstractTest
+class ProcessFloatTest extends AbstractHelper
 {
     /**
      * Testing the float value processing.

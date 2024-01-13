@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Controller;
 
-use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
@@ -142,8 +141,12 @@ abstract class AbstractController extends ActionController implements ConstInter
     /**
      * Set the pool and do the parent constructor.
      */
-    public function __construct(Configuration $configuration, FormConfiguration $formConfiguration, Settings $settings, PageRenderer $pageRenderer)
-    {
+    public function __construct(
+        Configuration $configuration,
+        FormConfiguration $formConfiguration,
+        Settings $settings,
+        PageRenderer $pageRenderer
+    ) {
         $this->configuration = $configuration;
         $this->formConfiguration = $formConfiguration;
         $this->settingsModel = $settings;

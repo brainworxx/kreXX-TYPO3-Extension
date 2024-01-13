@@ -35,11 +35,11 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\LogfileList;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 
-class LogfileListTest extends AbstractTest
+class LogfileListTest extends AbstractHelper
 {
     /**
      * Test the retrieval of logfile infos.

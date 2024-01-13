@@ -48,7 +48,7 @@ use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Misc\Registry;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Messages;
@@ -56,7 +56,7 @@ use Brainworxx\Krexx\View\Output\Chunks;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 use stdClass;
 
-class PoolTest extends AbstractTest
+class PoolTest extends AbstractHelper
 {
     const MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
 
@@ -107,27 +107,18 @@ class PoolTest extends AbstractTest
         $filename = 'test';
         // Chunks folder is writable
         // Log folder is writable
+        /** @var \PHPUnit\Framework\MockObject\MockObject $filePutContents */
         $filePutContents = $this->getFunctionMock(static::MISC_NAMESPACE, 'file_put_contents');
         $filePutContents->expects($this->exactly(2))
-            ->will(
-                $this->returnValueMap([
-                    [Krexx::$pool->config->getChunkDir() . $filename, 'x', true],
-                    [Krexx::$pool->config->getLogDir() . $filename, 'x', true]
-                ])
-            );
+            ->will($this->returnValue(true));
         $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, 'unlink');
         $unlink->expects($this->exactly(2))
-            ->will(
-                $this->returnValueMap([
-                    [Krexx::$pool->config->getChunkDir() . $filename, true],
-                    [Krexx::$pool->config->getLogDir() . $filename, true]
-                ])
-            );
+            ->will($this->returnValue(true));
 
         Krexx::$pool = null;
         Pool::createPool();
-        $this->assertEquals(true, Krexx::$pool->chunks->isChunkAllowed());
-        $this->assertEquals(true, Krexx::$pool->chunks->isLoggingAllowed());
+        $this->assertTrue(Krexx::$pool->chunks->isChunkAllowed(), 'Chunking is NOT allowed, but it should be.');
+        $this->assertTrue(Krexx::$pool->chunks->isLoggingAllowed(), 'Logging is NOT allowed, but it should be.');
         $this->assertEmpty(Krexx::$pool->messages->getMessages());
     }
 

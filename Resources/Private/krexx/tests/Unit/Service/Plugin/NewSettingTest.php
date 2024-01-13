@@ -35,10 +35,10 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Service\Plugin;
 
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
 
-class NewSettingTest extends AbstractTest
+class NewSettingTest extends AbstractHelper
 {
     /**
      * Test the setter and getter.

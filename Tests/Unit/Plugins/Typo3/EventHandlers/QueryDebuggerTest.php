@@ -43,14 +43,14 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use StdClass;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 
-class QueryDebuggerTest extends AbstractTest implements CallbackConstInterface
+class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
 {
     const FINAL_CLASS_NAME_CACHE = 'finalClassNameCache';
     const SINGLETON_INSTANCES = 'singletonInstances';
@@ -70,9 +70,9 @@ class QueryDebuggerTest extends AbstractTest implements CallbackConstInterface
      *
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         // Subscribing.
         Registration::registerEvent(
@@ -82,9 +82,9 @@ class QueryDebuggerTest extends AbstractTest implements CallbackConstInterface
         Krexx::$pool->eventService = new Event(Krexx::$pool);
     }
 
-    public function krexxDown()
+    public function tearDown(): void
     {
-        parent::krexxDown();
+        parent::tearDown();
 
         // Reset the possible mocks in the general utility.
         $this->setValueByReflection(static::FINAL_CLASS_NAME_CACHE, [], GeneralUtility::class);

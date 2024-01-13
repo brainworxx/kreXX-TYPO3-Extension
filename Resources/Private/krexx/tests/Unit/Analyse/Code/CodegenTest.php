@@ -41,13 +41,13 @@ use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Fixtures\MethodParameterFixture;
 use Brainworxx\Krexx\Tests\Fixtures\UnionTypeFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use ReflectionParameter;
 
-class CodegenTest extends AbstractTest
+class CodegenTest extends AbstractHelper
 {
     const FIRST_RUN = 'firstRun';
     const DISABLE_COUNT = 'disableCount';
@@ -74,9 +74,9 @@ class CodegenTest extends AbstractTest
      */
     protected $connectorMock;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->codegenHandler = new Codegen(Krexx::$pool);
         $this->codegenHandler->setCodegenAllowed(true);

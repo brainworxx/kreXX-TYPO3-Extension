@@ -42,7 +42,7 @@ use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods as AnalyseMethods;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Aimeos\MW\View\Standard as StandardView;
@@ -51,7 +51,7 @@ use Aimeos\MW\View\Helper\Csrf\Standard as CsrfHelper;
 use Aimeos\Base\View\Helper\Csrf\Standard as BaseCsrfHelper;
 
 
-class ViewFactoryTest extends AbstractTest
+class ViewFactoryTest extends AbstractHelper
 {
     use AimeosTestTrait;
 

@@ -36,11 +36,11 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 
-class ThroughResourceTest extends AbstractTest
+class ThroughResourceTest extends AbstractHelper
 {
     const SOME_KEY = 'some_key';
     const SOME_VALUE = 'some_value';

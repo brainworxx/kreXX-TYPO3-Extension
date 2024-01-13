@@ -41,12 +41,12 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\DebugMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\GetterFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ReflectionMethod;
 
-class GetterTest extends AbstractTest
+class GetterTest extends AbstractHelper
 {
     const TEST_STRING = 'some name';
 
@@ -66,9 +66,9 @@ class GetterTest extends AbstractTest
      */
     protected $getter;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->getter = new Getter(Krexx::$pool);
         // Prevent getting deeper into the rabbit hole.

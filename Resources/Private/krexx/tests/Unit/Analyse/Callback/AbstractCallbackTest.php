@@ -36,10 +36,10 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Debug;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 
-class AbstractCallbackTest extends AbstractTest
+class AbstractCallbackTest extends AbstractHelper
 {
     /**
      * Test if the __construct injects the pool.

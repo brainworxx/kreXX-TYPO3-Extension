@@ -37,15 +37,13 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Brainworxx\Krexx\Tests\Fixtures\ConstantsFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ConstantsFixture71;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 
-class ThroughConstantsTest extends AbstractTest
+class ThroughConstantsTest extends AbstractHelper
 {
-    const SKIPPED_PHP_VERSION = '7.1.0';
     const SKIPPED_REASON = 'Skipped due to wrong PHP version.';
     const PUBLIC_CONSTANT = 'Public constant ';
     const STATIC_COLON_COLON = 'static::';
@@ -93,11 +91,6 @@ class ThroughConstantsTest extends AbstractTest
      */
     public function testCallMe()
     {
-        // Test for the right PHP version.
-        if (version_compare(phpversion(), static::SKIPPED_PHP_VERSION, '<')) {
-            $this->markTestSkipped(static::SKIPPED_REASON);
-        }
-
         \Krexx::$pool->scope->setScope('$somethingElse');
         $this->runTheTest(ConstantsFixture71::class);
 
@@ -126,11 +119,6 @@ class ThroughConstantsTest extends AbstractTest
      */
     public function testCallMe71InScope()
     {
-        // Test for the right PHP version.
-        if (version_compare(phpversion(), static::SKIPPED_PHP_VERSION, '<')) {
-            $this->markTestSkipped(static::SKIPPED_REASON);
-        }
-
         \Krexx::$pool->scope->setScope('$this');
         $this->runTheTest(ConstantsFixture71::class);
 

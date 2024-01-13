@@ -39,9 +39,9 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\From\File as ConfigFromFile;
 use Brainworxx\Krexx\Service\Config\Validation;
 use Brainworxx\Krexx\Service\Misc\File;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class FileTest extends AbstractTest
+class FileTest extends AbstractHelper
 {
     const SETTINGS = 'settings';
 
@@ -52,9 +52,9 @@ class FileTest extends AbstractTest
      */
     protected $fixture = [];
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->fixture = [
             ConfigFromFile::SECTION_FE_EDITING => [
                 ConfigFromFile::SETTING_SKIN => ConfigFromFile::RENDER_TYPE_CONFIG_NONE,
@@ -156,7 +156,7 @@ class FileTest extends AbstractTest
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->exactly(2))
             ->method('fileIsReadable')
-            ->withConsecutive([$somePathIni], [$somePathJson])
+            ->with(...$this->withConsecutive([$somePathIni], [$somePathJson]))
             ->will($this->returnValueMap([[$somePathIni, false], [$somePathJson, true]]));
 
         $fileServiceMock->expects($this->once())
@@ -232,11 +232,10 @@ class FileTest extends AbstractTest
         $validationMock = $this->createMock(Validation::class);
         $validationMock->expects($this->exactly(2))
             ->method('evaluateSetting')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$anotherGroup, $knownSetting, $whatever],
                 [$groupy, $wrongSetting, $wrongValue]
-            )
-            ->will($this->returnValueMap([
+            ))->will($this->returnValueMap([
                 [$anotherGroup, $knownSetting, $whatever, true],
                 [$groupy, $wrongSetting, $wrongValue, false]
             ]));

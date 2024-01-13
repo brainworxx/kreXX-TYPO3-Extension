@@ -36,10 +36,10 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Caller;
 
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 
-class AbstractCallerTest extends AbstractTest
+class AbstractCallerTest extends AbstractHelper
 {
     const TEST_PATTERN = 'some pattern';
 

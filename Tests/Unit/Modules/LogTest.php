@@ -37,14 +37,14 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Modules;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Modules\Log;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
-class LogTest extends AbstractTest
+class LogTest extends AbstractHelper
 {
     const WRONG_VERSION = 'Wrong TYPO3 version.';
     const FILES = 'files';
@@ -61,12 +61,12 @@ class LogTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
         if (class_exists(ModuleData::class) === false) {
             return;
         }
-        parent::krexxUp();
+        parent::setUp();
         $this->simulatePackage('includekrexx', 'whatever');
         $this->log = new Log();
     }
@@ -173,7 +173,7 @@ class LogTest extends AbstractTest
         $viewMock = $this->mockView();
         $viewMock->expects($this->exactly(2))
             ->method(static::ASSIGN_MULTIPLE)
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [
                     [
                         static::TEXT => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:translationkey',
@@ -186,7 +186,7 @@ class LogTest extends AbstractTest
                         static::SEVERITY => 'info',
                     ]
                 ]
-            );
+            ));
         $viewMock->expects($this->exactly(2))
             ->method(static::RENDER)
             ->will($this->returnValue('rendering'));

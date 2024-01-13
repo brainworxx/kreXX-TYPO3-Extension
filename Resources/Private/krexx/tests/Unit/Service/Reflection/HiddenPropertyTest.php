@@ -36,11 +36,11 @@
 namespace Brainworxx\Krexx\Tests\Unit\Service\Reflection;
 
 use Brainworxx\Krexx\Service\Reflection\HiddenProperty;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use DateTime;
 use ReflectionClass;
 
-class HiddenPropertyTest extends AbstractTest
+class HiddenPropertyTest extends AbstractHelper
 {
     /**
      * Test the setting of the class reflection as well as the

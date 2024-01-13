@@ -35,9 +35,9 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\Code;
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class ConnectorsTest extends AbstractTest
+class ConnectorsTest extends AbstractHelper
 {
 
     /**

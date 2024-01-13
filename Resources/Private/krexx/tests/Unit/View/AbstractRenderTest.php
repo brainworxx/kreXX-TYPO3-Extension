@@ -37,10 +37,10 @@ namespace Brainworxx\Krexx\Tests\Unit\View;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 
-class AbstractRenderTest extends AbstractTest
+class AbstractRenderTest extends AbstractHelper
 {
     /**
      * Test the initializing of the render class.

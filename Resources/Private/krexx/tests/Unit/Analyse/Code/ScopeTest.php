@@ -39,11 +39,11 @@ use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Flow\Emergency;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use stdClass;
 
-class ScopeTest extends AbstractTest
+class ScopeTest extends AbstractHelper
 {
     const SCOPE_ATTRIBUTE_NAME = 'scope';
     const TEST_STRING = 'some scope';
@@ -53,9 +53,9 @@ class ScopeTest extends AbstractTest
      */
     protected $scope;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->scope = new Scope(Krexx::$pool);
     }

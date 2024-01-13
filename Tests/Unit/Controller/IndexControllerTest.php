@@ -38,7 +38,7 @@ use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use TYPO3\CMS\Core\Http\ResponseFactory;
@@ -46,12 +46,11 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
-use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use TYPO3\CMS\Extbase\Mvc\Response;
 
-class IndexControllerTest extends AbstractTest
+class IndexControllerTest extends AbstractHelper
 {
     const NO_MORE_MESSAGES = 'No more messages here.';
     const CONTROLLER_NAMESPACE = '\\Brainworxx\\Includekrexx\\Controller\\';
@@ -62,9 +61,9 @@ class IndexControllerTest extends AbstractTest
     /**
      * Creating a new controller instance.
      */
-    public function krexxUp(): void
+    public function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $configMock = $this->createMock(Configuration::class);
         $formConfigMock = $this->createMock(FormConfiguration::class);
@@ -136,9 +135,7 @@ class IndexControllerTest extends AbstractTest
         $viewMock = $this->createMock(AbstractTemplateView::class);
         $viewMock->expects($this->exactly(1))
             ->method('assign')
-            ->withConsecutive(
-                ['settings', $settingsModel]
-            );
+            ->with(...$this->withConsecutive(['settings', $settingsModel]));
         $viewMock->expects($this->once())
             ->method('render')
             ->will($this->returnValue($templateContent));
@@ -158,16 +155,14 @@ class IndexControllerTest extends AbstractTest
         if (method_exists(PageRenderer::class, 'loadJavaScriptModule')) {
             $pageRenderer->expects($this->any())
                 ->method('addJsInlineCode')
-                ->withConsecutive(
-                    ['krexxajaxtrans', $translationContent, false, false, true]
-                );
+                ->with(...$this->withConsecutive(['krexxajaxtrans', $translationContent, false, false, true]));
         } else {
             $pageRenderer->expects($this->any())
                 ->method('addJsInlineCode')
-                ->withConsecutive(
+                ->with(...$this->withConsecutive(
                     ['krexxjs', $jsCssFileContent],
                     ['krexxajaxtrans', $translationContent]
-                );
+                ));
         }
 
         $pageRenderer->expects($this->once())

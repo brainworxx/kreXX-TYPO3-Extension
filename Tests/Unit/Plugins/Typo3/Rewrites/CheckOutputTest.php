@@ -35,15 +35,15 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Rewrites;
 
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class CheckOutputTest extends AbstractTest
+class CheckOutputTest extends AbstractHelper
 {
-    public function krexxDown()
+    public function tearDown(): void
     {
-        parent::krexxDown();
+        parent::tearDown();
 
         $this->setValueByReflection('indpEnvCache', [], GeneralUtility::class);
     }

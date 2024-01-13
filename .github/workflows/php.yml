@@ -19,7 +19,8 @@ jobs:
           - { php: 8.0, composer: 2, TYPO3: ^11.5, Aimeos: ^21, CodeClimate: no  }
           - { php: 8.1, composer: 2, TYPO3: ^11.5, Aimeos: ^22, CodeClimate: no  }
           - { php: 8.2, composer: 2, TYPO3: ^11.5, Aimeos: ^22, CodeClimate: no  }
-          - { php: 8.2, composer: 2, TYPO3: ^12.4, Aimeos: ^23, CodeClimate: yes }
+          - { php: 8.2, composer: 2, TYPO3: ^12.4, Aimeos: ^23, CodeClimate: no  }
+          - { php: 8.3, composer: 2, TYPO3: ^12.4, Aimeos: ^23, CodeClimate: yes }
 
     steps:
     - uses: actions/checkout@v3
@@ -43,13 +44,6 @@ jobs:
     - name: Install Aimeos
       run: composer require --no-update "aimeos/aimeos-typo3:${{ matrix.env.Aimeos }}"
       if: ${{ matrix.env.Aimeos != 'no' }}
-
-    - name: Remove Aimeos
-      run: composer remove --dev --no-update "aimeos/aimeos-typo3"
-      if: ${{ matrix.env.Aimeos == 'no' }}
-
-    - name: Install Admin Panel
-      run: composer require --no-update "typo3/cms-adminpanel:${{ matrix.env.TYPO3 }}"
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress

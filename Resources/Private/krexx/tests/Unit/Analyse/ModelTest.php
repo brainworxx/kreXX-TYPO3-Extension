@@ -38,14 +38,14 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use stdClass;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\View\Messages;
 
-class ModelTest extends AbstractTest
+class ModelTest extends AbstractHelper
 {
     const SOME_STRING_TO_PASS_THROUGH = 'some string to pass through';
     const CONNECTOR_SERVICE = 'connectorService';
@@ -64,9 +64,9 @@ class ModelTest extends AbstractTest
      * {@inheritdoc}
      *
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->model = new Model(Krexx::$pool);
     }
 
@@ -172,7 +172,7 @@ class ModelTest extends AbstractTest
         $messageMock = $this->createMock(Messages::class);
         $messageMock->expects($this->exactly(2))
             ->method('getHelp')
-            ->withConsecutive(['metaHelp'], ['some id'])
+            ->with(...$this->withConsecutive(['metaHelp'], ['some id']))
             ->will(
                 $this->returnValueMap(
                     [

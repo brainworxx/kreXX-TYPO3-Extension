@@ -37,11 +37,11 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Output;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\Cleanup;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Output\BrowserImmediately;
 use Brainworxx\Krexx\View\Output\Chunks;
 
-class BrowserImmediatelyTest extends AbstractTest
+class BrowserImmediatelyTest extends AbstractHelper
 {
     /**
      * @var \Brainworxx\Krexx\View\Output\Browser
@@ -51,9 +51,9 @@ class BrowserImmediatelyTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->browserImmediately = new BrowserImmediately(Krexx::$pool);
     }
@@ -73,11 +73,11 @@ class BrowserImmediatelyTest extends AbstractTest
         $chunks = $this->createMock(Chunks::class);
         $chunks->expects($this->exactly(3))
             ->method('sendDechunkedToBrowser')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$stringOne],
                 [$stringTwo],
                 [$stringThree]
-            );
+            ));
         Krexx::$pool->chunks = $chunks;
 
         $this->browserImmediately->addChunkString($stringOne);

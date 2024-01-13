@@ -37,18 +37,19 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Misc;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\Encoding;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use phpmock\generator\MockFunctionGenerator;
 
-class EncodingTest extends AbstractTest
+class EncodingTest extends AbstractHelper
 {
     /**
      * @var Encoding
      */
     protected $encoding;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->encoding = new Encoding(Krexx::$pool);
     }
 
@@ -148,11 +149,10 @@ class EncodingTest extends AbstractTest
     {
         $mbStrLen = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'mb_strlen');
         $mbStrLen->expects($this->exactly(2))
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 ['string'],
                 ['another string', 'some encoding']
-            )
-            ->will($this->returnValue(42));
+            ))->will($this->returnValue(42));
 
         $this->assertEquals(42, $this->encoding->mbStrLen('string'));
         $this->assertEquals(42, $this->encoding->mbStrLen('another string', 'some encoding'));

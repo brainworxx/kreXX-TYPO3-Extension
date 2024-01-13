@@ -42,9 +42,9 @@ use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Fixtures\TraitUsingClass;
 use Brainworxx\Krexx\Tests\Fixtures\TypeFixture;
 use Brainworxx\Krexx\Tests\Fixtures\UnionTypeFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class PropertyDeclarationTest extends AbstractTest
+class PropertyDeclarationTest extends AbstractHelper
 {
     /**
      * Test the retrieval of the declaration place of properties

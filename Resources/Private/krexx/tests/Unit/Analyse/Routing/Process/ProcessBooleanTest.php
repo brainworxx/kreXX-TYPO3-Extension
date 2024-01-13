@@ -38,11 +38,11 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBoolean;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
 
-class ProcessBooleanTest extends AbstractTest
+class ProcessBooleanTest extends AbstractHelper
 {
     /**
      * Testing the processing of booleans.

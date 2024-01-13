@@ -41,12 +41,12 @@ use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ProtectedFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
 
-class ProtectedPropertiesTest extends AbstractTest
+class ProtectedPropertiesTest extends AbstractHelper
 {
     /**
      * @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ProtectedProperties
@@ -58,9 +58,9 @@ class ProtectedPropertiesTest extends AbstractTest
      *
      * {@inheritdoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         // Create in instance of the class to test
         $this->protectedProperties = new ProtectedProperties(Krexx::$pool);

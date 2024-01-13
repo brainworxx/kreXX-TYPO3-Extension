@@ -44,10 +44,10 @@ use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 
-class VhsMethodsTest extends AbstractTest implements CallbackConstInterface
+class VhsMethodsTest extends AbstractHelper implements CallbackConstInterface
 {
     /**
      * Test the setting of the pool.

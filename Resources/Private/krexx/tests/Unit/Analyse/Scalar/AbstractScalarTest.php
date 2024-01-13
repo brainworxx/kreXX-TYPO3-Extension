@@ -37,9 +37,9 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar;
 
 use Brainworxx\Krexx\Analyse\Scalar\ScalarString;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class AbstractScalarTest extends AbstractTest
+class AbstractScalarTest extends AbstractHelper
 {
     /**
      * Simple test the setting of the pool.

@@ -35,11 +35,11 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing;
 
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ProcessNothing;
 use Brainworxx\Krexx\Krexx;
 
-class AbstractRoutingTest extends AbstractTest
+class AbstractRoutingTest extends AbstractHelper
 {
     /**
      * Test if we get the pool was set.

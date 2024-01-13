@@ -34,7 +34,6 @@
 
 namespace Brainworxx\Includekrexx\Tests\Helpers;
 
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageQueue;
 
 /**

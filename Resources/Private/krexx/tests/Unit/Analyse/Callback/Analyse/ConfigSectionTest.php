@@ -38,12 +38,12 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 
-class ConfigSectionTest extends AbstractTest
+class ConfigSectionTest extends AbstractHelper
 {
     /**
      * Testing if the configuration is rendered correctly.
@@ -102,15 +102,14 @@ class ConfigSectionTest extends AbstractTest
         $messageMock = $this->createMock(Messages::class);
         $messageMock->expects($this->exactly(6))
             ->method('getHelp')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 ['metaHelp'],
                 ['renderEditableHelp'],
                 ['renderEditableReadable'],
                 ['metaHelp'],
                 ['renderNotEditableHelp'],
                 ['renderNotEditableReadable']
-            )
-            ->will($this->returnValue('some help text'));
+            ))->will($this->returnValue('some help text'));
         Krexx::$pool->messages = $messageMock;
 
         // Test if editable or not

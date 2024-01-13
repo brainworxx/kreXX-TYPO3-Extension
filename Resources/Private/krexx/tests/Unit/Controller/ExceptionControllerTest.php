@@ -87,12 +87,12 @@ class ExceptionControllerTest extends AbstractController
 
         $poolMock->expects($this->exactly(4))
             ->method('createClass')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [ProcessBacktrace::class],
                 [ExceptionCallerFinder::class],
                 [Model::class],
                 [ThroughConfig::class]
-            )->will($this->returnValueMap(
+            ))->will($this->returnValueMap(
                 [
                     [ProcessBacktrace::class, $backtraceMock],
                     [ExceptionCallerFinder::class, new ExceptionCallerFinder(Krexx::$pool)],

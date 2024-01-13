@@ -38,11 +38,11 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\InheritDocFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 
-class MethodsTest extends AbstractTest
+class MethodsTest extends AbstractHelper
 {
     /**
      * @var \Brainworxx\Krexx\Analyse\Comment\Methods
@@ -53,9 +53,9 @@ class MethodsTest extends AbstractTest
      * {@inheritdoc}
      * Creating out class instance to test.
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->methodComment = new Methods(Krexx::$pool);
     }

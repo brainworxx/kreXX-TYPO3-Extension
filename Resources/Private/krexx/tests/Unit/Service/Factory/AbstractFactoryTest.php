@@ -40,19 +40,19 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\AbstractFactory;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use stdClass;
 
-class AbstractFactoryTest extends AbstractTest
+class AbstractFactoryTest extends AbstractHelper
 {
-    protected function krexxDown()
+    protected function tearDown(): void
     {
         // Remove a sdtClass, which may replace the pool.
         Krexx::$pool = null;
         $this->setValueByReflection('rewriteList', [], Registration::class);
         Pool::createPool();
 
-        parent::krexxDown();
+        parent::tearDown();
     }
 
     /**

@@ -40,20 +40,20 @@ use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Exception;
 
-class ErrorObjectTest extends AbstractTest
+class ErrorObjectTest extends AbstractHelper
 {
     /**
      * @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject
      */
     protected $errorObject;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->errorObject = new ErrorObject(Krexx::$pool);
         Krexx::$pool->rewrite = [
             ProcessBacktrace::class => CallbackCounter::class
@@ -91,10 +91,10 @@ class ErrorObjectTest extends AbstractTest
         $codegenMock = $this->createMock(Codegen::class);
         $codegenMock->expects($this->exactly(2))
             ->method('setCodegenAllowed')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [false],
                 [true]
-            );
+            ));
         $codegenMock->expects($this->exactly(2))
             ->method('generateSource')
             ->will($this->returnValue(''));

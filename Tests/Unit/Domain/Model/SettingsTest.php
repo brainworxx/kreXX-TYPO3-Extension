@@ -37,7 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Domain\Model;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Validation;
@@ -47,25 +47,25 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Package\MetaData;
 
-class SettingsTest extends AbstractTest implements ConstInterface
+class SettingsTest extends AbstractHelper implements ConstInterface
 {
 
     const REVERSE_PROXY = 'reverseProxyIP';
 
     protected const TYPO3_TEMP = 'typo3temp';
 
-    public function krexxUp()
+    public function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         if (isset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY]) === false) {
             $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY] = '';
         }
     }
 
-    public function krexxDown()
+    public function tearDown(): void
     {
-        parent::krexxDown();
+        parent::tearDown();
 
         unset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY]);
     }
@@ -83,19 +83,18 @@ class SettingsTest extends AbstractTest implements ConstInterface
         // Mock the is_dir method. We will not create any files.
         $isDirMock = $this->getFunctionMock($typo3Namespace, 'is_dir');
         $isDirMock->expects($this->exactly(4))
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'log'],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
-            )
-            ->will($this->returnValue(true));
+            ))->will($this->returnValue(true));
 
         // Simulating the package
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue(AbstractTest::TYPO3_VERSION));
+            ->will($this->returnValue(AbstractHelper::TYPO3_VERSION));
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/')
             ->expects($this->once())
             ->method('getPackageMetaData')

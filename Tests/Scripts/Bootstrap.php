@@ -32,14 +32,14 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 
 define('LF', chr(10));
 define('CR', chr(13));
 define('CRLF', CR . LF);
 
-AbstractTest::defineFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
-AbstractTest::defineFunctionMock(
+AbstractHelper::defineFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
+AbstractHelper::defineFunctionMock(
     '\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\EventHandlers\\QueryParser',
     'method_exists'
 );

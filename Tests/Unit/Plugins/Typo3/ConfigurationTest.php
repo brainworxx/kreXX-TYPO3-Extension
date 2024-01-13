@@ -43,7 +43,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
@@ -58,7 +58,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use Krexx;
 
-class ConfigurationTest extends AbstractTest implements ConstInterface
+class ConfigurationTest extends AbstractHelper implements ConstInterface
 {
 
     const REVERSE_PROXY = 'reverseProxyIP';
@@ -74,10 +74,10 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
     /**
      * {@inheritDoc}
      */
-    protected function krexxDown()
+    protected function tearDown(): void
     {
         unset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY]);
-        parent::krexxDown();
+        parent::tearDown();
     }
 
     /**
@@ -88,9 +88,9 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->configuration = new Configuration();
 
         if (isset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY])) {
@@ -130,13 +130,13 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue(AbstractTest::TYPO3_VERSION));
+            ->will($this->returnValue(AbstractHelper::TYPO3_VERSION));
         $packageMock = $this->simulatePackage(Bootstrap::EXT_KEY, 'whatever');
         $packageMock->expects($this->once())
             ->method('getPackageMetaData')
             ->will($this->returnValue($metaData));
 
-        $this->assertEquals(AbstractTest::TYPO3_VERSION, $this->configuration->getVersion());
+        $this->assertEquals(AbstractHelper::TYPO3_VERSION, $this->configuration->getVersion());
     }
 
     /**
@@ -163,13 +163,17 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         // Mock the is_dir method. We will not create any files.
         $isDirMock = $this->getFunctionMock($typo3Namespace, 'is_dir');
         $isDirMock->expects($this->exactly(8))
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
+                [$pathSite . DIRECTORY_SEPARATOR .  static::TX_INCLUDEKREXX],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . $log],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config'],
+                // Run a second time
                 [$pathSite . DIRECTORY_SEPARATOR .  static::TX_INCLUDEKREXX],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . $log],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
                 [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
-            )
-            ->will($this->returnValue(true));
+            ))->will($this->returnValue(true));
 
         // Simulating the package
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/');

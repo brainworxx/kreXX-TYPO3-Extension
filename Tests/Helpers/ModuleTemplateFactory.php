@@ -39,6 +39,5 @@ class ModuleTemplateFactory
 {
     public function create($whatever)
     {
-
     }
 }

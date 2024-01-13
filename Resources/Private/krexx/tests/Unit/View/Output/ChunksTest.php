@@ -43,7 +43,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\View\Output\Chunks;
 use StdClass;
@@ -54,7 +54,7 @@ use StdClass;
  *
  * @package Brainworxx\Krexx\Tests\View\Output
  */
-class ChunksTest extends AbstractTest
+class ChunksTest extends AbstractHelper
 {
     const CHUNK_DIR = 'chunkDir';
     const LOG_DIR = 'logDir';
@@ -203,12 +203,11 @@ class ChunksTest extends AbstractTest
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->exactly(3))
             ->method('getFileContents')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$chunk1File],
                 [$chunk2File],
                 [$chunk3File]
-            )
-            ->will(
+            ))->will(
                 $this->returnValueMap(
                     [
                         [$chunk1File, true, $chunk1Content],
@@ -219,11 +218,11 @@ class ChunksTest extends AbstractTest
             );
         $fileServiceMock->expects($this->exactly(3))
             ->method(static::DELETE_FILE)
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$chunk1File],
                 [$chunk2File],
                 [$chunk3File]
-            );
+            ));
         Krexx::$pool->fileService = $fileServiceMock;
 
         // Prevent any flushing, so that unit tests can intercept the output.
@@ -270,12 +269,11 @@ class ChunksTest extends AbstractTest
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->exactly(3))
             ->method('getFileContents')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$chunk1File],
                 [$chunk2File],
                 [$chunk3File]
-            )
-            ->will(
+            ))->will(
                 $this->returnValueMap(
                     [
                         [$chunk1File, true, $chunk1Content],
@@ -286,21 +284,21 @@ class ChunksTest extends AbstractTest
             );
         $fileServiceMock->expects($this->exactly(4))
             ->method(static::DELETE_FILE)
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$chunk1File],
                 [$chunk2File],
                 [$chunk3File],
                 [$metaFileName]
-            );
+            ));
         $fileServiceMock->expects($this->exactly(5))
             ->method(static::PUT_FILE_CONTENTS)
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$logFileName, 'Murry '],
                 [$logFileName, 'had '],
                 [$logFileName, 'a '],
                 [$logFileName, 'little lampp'],
                 [$metaFileName, json_encode($metaData)]
-            );
+            ));
         Krexx::$pool->fileService = $fileServiceMock;
 
         // Create the chunks class and set the simulated chunks directory.
@@ -429,11 +427,11 @@ class ChunksTest extends AbstractTest
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->exactly(count($fileList)))
             ->method(static::DELETE_FILE)
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$fileList[0]],
                 [$fileList[1]],
                 [$fileList[2]]
-            );
+            ));
         Krexx::$pool->fileService = $fileServiceMock;
 
         // We need to call this by hand, because it's a singleton, with references

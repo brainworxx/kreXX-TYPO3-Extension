@@ -37,7 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\EventHandlers\QueryPa
 
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser\Typo3DbQueryParser;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Messages;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
@@ -45,7 +45,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Query;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser as OriginalParser;
 
-class Typo3DbQueryParserTest extends AbstractTest
+class Typo3DbQueryParserTest extends AbstractHelper
 {
     /**
      * Test the creation of the query parser with nd without dependency injection

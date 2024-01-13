@@ -39,15 +39,14 @@ class ModuleTemplate
 {
     public function setModuleName($whatever)
     {
-
     }
 
     public function setContent($whatever)
     {
-
     }
 
-    public function renderContent() {
+    public function renderContent()
+    {
         return 'stuff';
     }
 }

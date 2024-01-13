@@ -37,12 +37,12 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Tests\Fixtures\ReturnTypeFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Krexx;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionFunction;
 
-class ReturnTypesTest extends AbstractTest
+class ReturnTypesTest extends AbstractHelper
 {
     /**
      * Test the retrieval of different return types from different sources.

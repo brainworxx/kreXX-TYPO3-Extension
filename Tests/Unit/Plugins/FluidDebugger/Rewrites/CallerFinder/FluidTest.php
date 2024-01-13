@@ -42,15 +42,15 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Fluid\View\TemplatePaths;
 use TYPO3Fluid\Fluid\Core\Parser\ParsedTemplateInterface;
 
-class FluidTest extends AbstractTest
+class FluidTest extends AbstractHelper
 {
     const RENDERING_CONTEXT = 'renderingContext';
     const GET_TEMPLATE_PATHS = 'getTemplatePaths';
     const VARMANE = 'varname';
 
-    public function krexxUp()
+    public function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         // Load the fluid language files
         Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
             DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 'fluid.kreXX.ini');

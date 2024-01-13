@@ -37,10 +37,10 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Scalar\String;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Scalar\String\TimeStamp;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use DateTime;
 
-class TimeStampTest extends AbstractTest
+class TimeStampTest extends AbstractHelper
 {
     /**
      * Test something, that is always true.

@@ -35,10 +35,8 @@
 
 namespace Brainworxx\Includekrexx\Tests\Helpers;
 
-use function PHPUnit\Framework\returnValue;
-
 /**
- * The things you to to unit tests static stuff.
+ * The things you do to unit tests static stuff.
  *
  * @package Brainworxx\Includekrexx\Tests\Helpers
  */

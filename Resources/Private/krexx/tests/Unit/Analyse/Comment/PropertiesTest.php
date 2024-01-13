@@ -37,11 +37,11 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 
 use Brainworxx\Krexx\Analyse\Comment\Properties;
 use Brainworxx\Krexx\Tests\Fixtures\PrivateFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
 
-class PropertiesTest extends AbstractTest
+class PropertiesTest extends AbstractHelper
 {
     /**
      * Testing the comment retrieval for properties.

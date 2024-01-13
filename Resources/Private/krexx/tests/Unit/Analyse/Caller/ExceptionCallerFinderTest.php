@@ -39,9 +39,9 @@ use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\ExceptionCallerFinder;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Logging\Model;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class ExceptionCallerFinderTest extends AbstractTest
+class ExceptionCallerFinderTest extends AbstractHelper
 {
     /**
      * Test the return array.

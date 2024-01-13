@@ -43,40 +43,26 @@ use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Unit\KrexxTest;
-use Brainworxx\Krexx\View\AbstractRender;
-use Brainworxx\Krexx\View\Output\CheckOutput;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Controller\AbstractController;
 use Brainworxx\Krexx\Krexx;
 use phpmock\phpunit\PHPMock;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\TestCase;
 use ReflectionException;
+use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Constraint\Constraint;
+use PHPUnit\Framework\Constraint\IsEqual;
+use RuntimeException;
 
-abstract class AbstractTest extends TestCompatibility
+abstract class AbstractHelper extends TestCase
 {
     use PHPMock;
 
     /**
-     * Performs assertions shared by all tests of a test case.
-     *
-     * This method is called between test and tearDown().
-     */
-    protected function krexxertPostConditions()
-    {
-    }
-
-    /**
-     * Performs assertions shared by all tests of a test case.
-     *
-     * This method is called between setUp() and test.
-     */
-    protected function krexxertPreConditions()
-    {
-    }
-
-    /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
         $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
         $this->mockPhpSapiNameStandard();
@@ -86,7 +72,7 @@ abstract class AbstractTest extends TestCompatibility
     /**
      * @throws \ReflectionException
      */
-    protected function krexxDown()
+    protected function tearDown(): void
     {
         // Reset the kreXX count.
         $emergencyRef = new \ReflectionClass(Krexx::$pool->emergencyHandler);
@@ -146,16 +132,21 @@ abstract class AbstractTest extends TestCompatibility
      *   The instance where we want to set the value. Or the class name, when
      *   setting static values.
      */
-    protected function setValueByReflection($name, $value, $object)
+    protected function setValueByReflection(string $name, $value, $object)
     {
         try {
             $reflectionClass = new \ReflectionClass($object);
             $reflectionProperty = $reflectionClass->getProperty($name);
             $reflectionProperty->setAccessible(true);
+
             if (is_object($object)) {
                 $reflectionProperty->setValue($object, $value);
             } else {
-                $reflectionProperty->setValue($value);
+                if (version_compare(phpversion(), '8.3.0', '>=')) {
+                    $reflectionClass->setStaticPropertyValue($name, $value);
+                } else {
+                    $reflectionProperty->setValue($value);
+                }
             }
         } catch (ReflectionException $e) {
             $this->fail($e->getMessage());
@@ -188,8 +179,6 @@ abstract class AbstractTest extends TestCompatibility
         } catch (ReflectionException $e) {
             $this->fail($e->getMessage());
         }
-
-        return null;
     }
 
     /**
@@ -231,10 +220,7 @@ abstract class AbstractTest extends TestCompatibility
         $invocationMocker = $eventServiceMock->expects($this->exactly(count($eventList)))
             ->method('dispatch')
             ->will($this->returnValue(''));
-
-        // The '...' is very useful, but having to use call_user_func_array to
-        // pass it is just meh.
-        call_user_func_array([$invocationMocker, 'withConsecutive'], $eventList);
+        $invocationMocker->with(...$this->withConsecutive(...$eventList));
 
         // Inject the mock.
         Krexx::$pool->eventService = $eventServiceMock;
@@ -294,7 +280,63 @@ abstract class AbstractTest extends TestCompatibility
             return $reflectionMethod->invoke($object);
         } catch (ReflectionException $e) {
             $this->fail($e->getMessage());
-            return '';
         }
+    }
+
+    /**
+     * Usage: ->with(...$this->withConsecutive(...$withCodes))
+     *
+     * @see https://gist.github.com/oleg-andreyev/85c74dbf022237b03825c7e9f4439303
+     *   (c) by Oleg Andreyev
+     *
+     * @param array $parameterGroups
+     *
+     * @return array
+     */
+    public function withConsecutive(...$parameterGroups): array
+    {
+        $result = [];
+        $parametersCount = null;
+        $groups = [];
+        $values = [];
+
+        foreach ($parameterGroups as $index => $parameters) {
+            // initial
+            $parametersCount = $parametersCount ?? count($parameters);
+
+            // prepare parameters
+            foreach ($parameters as $parameter) {
+                if (!$parameter instanceof Constraint) {
+                    $parameter = new IsEqual($parameter);
+                }
+
+                $groups[$index][] = $parameter;
+            }
+        }
+
+        // collect values
+        foreach ($groups as $parameters) {
+            foreach ($parameters as $index => $parameter) {
+                $values[$index][] = $parameter;
+            }
+        }
+
+        // build callback
+        for ($index = 0; $index < $parametersCount; ++$index) {
+            $result[$index] = Assert::callback(static function ($value) use ($values, $index) {
+                static $map = null;
+                $map = $map ?? $values[$index];
+
+                $expectedArg = array_shift($map);
+                if ($expectedArg === null) {
+                    throw new AssertionFailedError('No more expected calls');
+                }
+                $expectedArg->evaluate($value);
+
+                return true;
+            });
+        }
+
+        return $result;
     }
 }

@@ -37,13 +37,13 @@ namespace Brainworxx\Includekrexx\Tests\Unit\ViewHelpers;
 use Brainworxx\Includekrexx\ViewHelpers\LogViewHelper;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
 
-class LogViewHelperTest extends AbstractTest
+class LogViewHelperTest extends AbstractHelper
 {
     /**
      * Test the logging part of the log ViewHelper.

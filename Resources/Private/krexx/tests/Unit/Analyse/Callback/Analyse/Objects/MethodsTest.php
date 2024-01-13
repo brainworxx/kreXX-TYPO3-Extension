@@ -41,12 +41,12 @@ use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ReflectionMethod;
 
-class MethodsTest extends AbstractTest
+class MethodsTest extends AbstractHelper
 {
 
     const PRIVATE_METHOD = 'privateMethod';
@@ -92,9 +92,9 @@ class MethodsTest extends AbstractTest
      *
      * @throws \ReflectionException
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->methods = new Methods(Krexx::$pool);
         // Prevent getting deeper into the rabbit hole.

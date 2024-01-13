@@ -51,7 +51,7 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\OpaqueRessource;
 use Brainworxx\Krexx\Logging\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
@@ -59,7 +59,7 @@ use Brainworxx\Krexx\Tests\Fixtures\TraversableFixture;
 use Brainworxx\Krexx\Krexx;
 use Exception;
 
-class ObjectsTest extends AbstractTest
+class ObjectsTest extends AbstractHelper
 {
     /**
      * The class instance we are using for the tests.
@@ -73,12 +73,12 @@ class ObjectsTest extends AbstractTest
      */
     protected $objects;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
         $this->fixture[CallbackConstInterface::PARAM_DATA] = new SimpleFixture();
         $this->fixture[CallbackConstInterface::PARAM_NAME] = 'some string';
 
-        parent::krexxUp();
+        parent::setUp();
 
         // Prevent the class from going deeper!
         Krexx::$pool->rewrite = [
