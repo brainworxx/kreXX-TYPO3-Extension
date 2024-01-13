@@ -12,6 +12,11 @@
 Changelog
 =============================================================
 
+5.0.1
+    - [Feature] Updated to PHP 8.3
+    - [Change] Updated the unit tests to 10.5
+    - [Bugfix] Added a missing end-event in the ThroughGetter iterator.
+
 5.0.0
     - [Feature] Added immediate browser output to the output choices.
     - [Feature] Added default value analysis to the additional info.

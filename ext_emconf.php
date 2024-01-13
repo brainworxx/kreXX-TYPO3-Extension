@@ -36,7 +36,7 @@ $EM_CONF[$_EXTKEY] = [
     'title' => 'kreXX Debugger',
     'description' => 'Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos.',
     'category' => 'misc',
-    'version' => '5.0.0',
+    'version' => '5.0.1',
     'state' => 'stable',
     'uploadfolder' => false,
     'createDirs' => '',
@@ -46,7 +46,7 @@ $EM_CONF[$_EXTKEY] = [
     'constraints' => [
         'depends' => [
             'typo3' => '10.4.0-12.4.99',
-            'php' => '7.2.0-8.2.99',
+            'php' => '7.2.0-8.3.99',
         ],
         'conflicts' => [],
         'suggests' => [
