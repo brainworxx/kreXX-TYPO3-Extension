@@ -16,6 +16,7 @@ Changelog
     - [Feature] Updated to PHP 8.3
     - [Change] Updated the unit tests to 10.5
     - [Bugfix] Added a missing end-event in the ThroughGetter iterator.
+    - [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
 
 5.0.0
     - [Feature] Added immediate browser output to the output choices.
