@@ -35,6 +35,5 @@ Features
    Scope/Index
    Search/Index
    Skins/Index
-   Sql/Index
    Typo3/Index
 

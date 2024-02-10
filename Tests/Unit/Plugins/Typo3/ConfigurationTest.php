@@ -194,7 +194,6 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
         $this->assertEquals(
             [
                 ProcessObject::class . Configuration::START_PROCESS => [DirtyModels::class => DirtyModels::class],
-                Objects::class . Configuration::START_EVENT => [QueryDebugger::class => QueryDebugger::class],
                 Xml::class . Configuration::END_EVENT => [FlexFormParser::class => FlexFormParser::class]
             ],
             SettingsGetter::getEventList()

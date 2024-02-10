@@ -40,7 +40,6 @@ namespace Brainworxx\Includekrexx\Plugins\Typo3;
 use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser;
-use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
@@ -263,9 +262,6 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
      */
     protected function registerVersionDependantStuff(): void
     {
-        // The QueryBuilder special analysis.
-        Registration::registerEvent(Objects::class . static::START_EVENT, QueryDebugger::class);
-
         // Register our modules for the admin panel.
         if (
             isset($GLOBALS[static::TYPO3_CONF_VARS][static::EXTCONF][static::ADMIN_PANEL]
