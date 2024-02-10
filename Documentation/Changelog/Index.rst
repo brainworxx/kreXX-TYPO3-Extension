@@ -12,6 +12,8 @@
 Changelog
 =============================================================
 
+5.0.2
+
 5.0.1
     - [Feature] Updated to PHP 8.3
     - [Change] Updated the unit tests to 10.5

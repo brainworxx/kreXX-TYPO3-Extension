@@ -41,11 +41,9 @@ class ConfigurationTest extends AbstractHelper
     /**
      * We have several configuration files in here with redundant constrains and
      * version numbers, namely:
-     *   - composer.json
      *   - ext_emconf.php
      *   - changelog.rst
      *   - settings.cfg
-     *   - ext_localconf.php
      *
      * All of them contain the same fu**ing data!
      */
@@ -73,7 +71,7 @@ class ConfigurationTest extends AbstractHelper
         $changelogContent = file($changelogPath)[14];
 
         // Our expectations.
-        $versionNumber = '5.0.1';
+        $versionNumber = '5.0.2';
         $t3EmConstraint = '10.4.0-12.4.99';
         $phpEmConstraint = '7.2.0-8.3.99';
         $t3ComposerConstraint = '^10.4 || ^11 || ^12';
