@@ -60,7 +60,6 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\RepositoryInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder as DbQueryBuilder;
 use Psr\Log\LogLevel;
 use Brainworxx\Includekrexx\Log\FileWriter as KrexxFileWriter;
