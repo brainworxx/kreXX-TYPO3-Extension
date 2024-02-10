@@ -21,6 +21,7 @@ Changelog
     - [Bugfix] Add the missing "Line no." to the translation.
     - [Bugfix] Added missing return types to the return type whitelist in the ReturnType comment analysis.
     - [Bugfix] Added missing types to the blacklist of none namespaces declaration types.
+    - [Bugfix] Added a missing entry in the language files.
 
 5.0.1
     - [Feature] Updated to PHP 8.3

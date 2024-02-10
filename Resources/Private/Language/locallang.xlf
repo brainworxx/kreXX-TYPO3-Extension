@@ -10,6 +10,9 @@
 			<trans-unit id="mlang_labels_tabdescr">
 				<source>kreXX is a feature rich php debugger with a neatly arranged debug window, featuring backend access to logfiles, code generation to reach the displayed values and much more.</source>
 			</trans-unit>
+			<trans-unit id="mlang_labels_tablabel">
+				<source>kreXX Debugger</source>
+			</trans-unit>
 
 			<!-- General stuff for the configuration file -->
 			<trans-unit id="file">
