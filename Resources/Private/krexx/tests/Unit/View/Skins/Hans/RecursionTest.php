@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -47,7 +47,6 @@ class RecursionTest extends AbstractRenderHans
      * @covers \Brainworxx\Krexx\View\Skins\Hans\ConnectorRight::renderConnectorRight
      * @covers \Brainworxx\Krexx\View\AbstractRender::generateDataAttribute
      * @covers \Brainworxx\Krexx\View\Skins\Hans\Help::renderHelp
-     * @covers \Brainworxx\Krexx\View\AbstractRender::getTemplateFileContent
      * @covers \Brainworxx\Krexx\View\AbstractRender::encodeJson
      */
     public function testRenderRecursion()

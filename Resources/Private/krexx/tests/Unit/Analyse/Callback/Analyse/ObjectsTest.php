@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -47,10 +47,11 @@ use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Traversable;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\ErrorObject;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\OpaqueRessource;
 use Brainworxx\Krexx\Logging\Model;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
@@ -58,7 +59,7 @@ use Brainworxx\Krexx\Tests\Fixtures\TraversableFixture;
 use Brainworxx\Krexx\Krexx;
 use Exception;
 
-class ObjectsTest extends AbstractTest
+class ObjectsTest extends AbstractHelper
 {
     /**
      * The class instance we are using for the tests.
@@ -72,12 +73,12 @@ class ObjectsTest extends AbstractTest
      */
     protected $objects;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
         $this->fixture[CallbackConstInterface::PARAM_DATA] = new SimpleFixture();
         $this->fixture[CallbackConstInterface::PARAM_NAME] = 'some string';
 
-        parent::krexxUp();
+        parent::setUp();
 
         // Prevent the class from going deeper!
         Krexx::$pool->rewrite = [
@@ -91,6 +92,7 @@ class ObjectsTest extends AbstractTest
             DebugMethods::class => CallbackNothing::class,
             ErrorObject::class => CallbackNothing::class,
             Meta::class => CallbackNothing::class,
+            OpaqueRessource::class => CallbackNothing::class,
         ];
 
         $this->objects = new Objects(Krexx::$pool);

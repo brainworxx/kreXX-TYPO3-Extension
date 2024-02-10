@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -44,92 +44,84 @@ interface ConstInterface
      *
      * @var string
      */
-    const EXT_KEY = 'includekrexx';
+    public const EXT_KEY = 'includekrexx';
 
     /**
      * @var string
      */
-    const TYPO3_CONF_VARS = 'TYPO3_CONF_VARS';
+    public const TYPO3_CONF_VARS = 'TYPO3_CONF_VARS';
 
     /**
      * @var string
      */
-    const EXTCONF = 'EXTCONF';
+    public const EXTCONF = 'EXTCONF';
 
     /**
      * @var string
      */
-    const WRITER_CONFIGURATION = 'writerConfiguration';
+    public const WRITER_CONFIGURATION = 'writerConfiguration';
 
     /**
      * @var string
      */
-    const LOG = 'LOG';
+    public const LOG = 'LOG';
 
     /**
      * @var string
      */
-    const ADMIN_PANEL = 'adminpanel';
+    public const ADMIN_PANEL = 'adminpanel';
 
     /**
      * @var string
      */
-    const MODULES = 'modules';
+    public const MODULES = 'modules';
 
     /**
      * @var string
      */
-    const DEBUG = 'debug';
+    public const DEBUG = 'debug';
 
     /**
      * @var string
      */
-    const SUBMODULES = 'submodules';
+    public const SUBMODULES = 'submodules';
 
     /**
      * @var string
      */
-    const SYS = 'SYS';
+    public const SYS = 'SYS';
 
     /**
      * @var string
      */
-    const FLUID = 'fluid';
+    public const FLUID = 'fluid';
 
     /**
      * @var string
      */
-    const FLUID_NAMESPACE = 'namespaces';
+    public const FLUID_NAMESPACE = 'namespaces';
 
     /**
      * @var string
      */
-    const KREXX = 'krexx';
-
-    /**
-     * @var string
-     *
-     * @deprecated
-     *   Since 4.1.2. Will be removed.
-     */
-    const TYPO3_TEMP = 'typo3temp';
+    public const KREXX = 'krexx';
 
     /**
      * @var string
      */
-    const TX_INCLUDEKREXX = 'tx_includekrexx';
+    public const TX_INCLUDEKREXX = 'tx_includekrexx';
 
     /**
      * The activation setting name of our TYPO3 file writer.
      *
      * @var string
      */
-    const ACTIVATE_T3_FILE_WRITER = 'activateT3FileWriter';
+    public const ACTIVATE_T3_FILE_WRITER = 'activateT3FileWriter';
 
     /**
      * The configuration name of our TYPO3 file writer.
      *
      * @var string
      */
-    const LOG_LEVEL_T3_FILE_WRITER = 'loglevelT3FileWriter';
+    public const LOG_LEVEL_T3_FILE_WRITER = 'loglevelT3FileWriter';
 }

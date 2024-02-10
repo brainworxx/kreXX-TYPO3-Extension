@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -47,12 +47,12 @@ use Brainworxx\Krexx\Tests\Fixtures\InterfaceFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MultitraitFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use DateTime;
 
-class MetaTest extends AbstractTest
+class MetaTest extends AbstractHelper
 {
 
     /**
@@ -131,6 +131,7 @@ class MetaTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateDomIdFromClassname
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::analyseMeta
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateMetaData
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateName
      */
     public function testCallMe()
@@ -175,28 +176,29 @@ class MetaTest extends AbstractTest
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
         $model = $renderNothing->model['renderExpandableChild'][0];
         $this->assertEquals($expectedDomId, $model->getDomid());
-        $this->assertEquals($meta::META_CLASS_DATA, $model->getName());
+        $this->assertEquals('Meta class data', $model->getName());
         $this->assertEquals($meta::TYPE_INTERNALS, $model->getType());
 
         // Retrieve the parameters and test them.
         $data = $model->getParameters()[$meta::PARAM_DATA];
         $this->assertEquals(
-            'class Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture',
-            $data[$meta::META_CLASS_NAME]
+            'Class Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture',
+            $data['Classname']
         );
-        $this->assertStringContainsString('Just another meaningless class comment.', $data[$meta::META_COMMENT]);
+        $this->assertStringContainsString('Just another meaningless class comment.', $data['Comment']);
         $this->assertStringEndsWith(
             DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'Fixtures' .
-            DIRECTORY_SEPARATOR . 'ComplexMethodFixture.php, line 41',
-            $data[$meta::META_DECLARED_IN]
+            DIRECTORY_SEPARATOR . 'ComplexMethodFixture.php in line: 41',
+            $data['Declared in']
         );
-        $this->assertArrayHasKey(InterfaceFixture::class, $data[$meta::META_INTERFACES]);
-        $this->assertArrayNotHasKey(EmptyInterfaceFixture::class, $data[$meta::META_INTERFACES]);
-        $this->assertCount(1, $data[$meta::META_INTERFACES]);
-        $this->assertArrayHasKey(MultitraitFixture::class, $data[$meta::META_TRAITS]);
-        $this->assertCount(1, $data[$meta::META_TRAITS]);
-        $this->assertArrayHasKey(MethodsFixture::class, $data[$meta::META_INHERITED_CLASS]);
-        $this->assertCount(1, $data[$meta::META_INHERITED_CLASS]);
+        $metaInterfaces = 'Interfaces';
+        $this->assertArrayHasKey(InterfaceFixture::class, $data[$metaInterfaces]);
+        $this->assertArrayNotHasKey(EmptyInterfaceFixture::class, $data[$metaInterfaces]);
+        $this->assertCount(1, $data[$metaInterfaces]);
+        $this->assertArrayHasKey(MultitraitFixture::class, $data['Traits']);
+        $this->assertCount(1, $data['Traits']);
+        $this->assertArrayHasKey(MethodsFixture::class, $data['Inherited class']);
+        $this->assertCount(1, $data['Inherited class']);
     }
 
     /**
@@ -205,6 +207,7 @@ class MetaTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateDomIdFromClassname
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::analyseMeta
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateMetaData
      * @covers \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Meta::generateName
      */
     public function testCallMeOthers()
@@ -221,11 +224,11 @@ class MetaTest extends AbstractTest
         Krexx::$pool->render = $renderNothing;
 
         $testCourt = [
-            EmptyInterfaceFixture::class => 'interface ' . EmptyInterfaceFixture::class,
-            FinalFixture::class => 'final class ' . FinalFixture::class,
-            MultitraitFixture::class => 'trait ' . MultitraitFixture::class,
-            AbstractFixture::class => 'abstract class ' . AbstractFixture::class,
-            DateTime::class => 'internal class ' . DateTime::class,
+            EmptyInterfaceFixture::class => 'Interface ' . EmptyInterfaceFixture::class,
+            FinalFixture::class => 'Final Class ' . FinalFixture::class,
+            MultitraitFixture::class => 'Trait ' . MultitraitFixture::class,
+            AbstractFixture::class => 'Abstract Class ' . AbstractFixture::class,
+            DateTime::class => 'Internal Class ' . DateTime::class,
         ];
 
         $count = 0;

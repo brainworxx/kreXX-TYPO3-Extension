@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -53,10 +53,13 @@ trait Messages
     public function renderMessages(array $messages): string
     {
         $result = '';
-        $messageTemplate = $this->getTemplateFileContent(static::FILE_MESSAGE);
         /** @var \Brainworxx\Krexx\View\Message $message */
         foreach ($messages as $message) {
-            $result .= str_replace($this->markerMessages, $message->getText(), $messageTemplate);
+            $result .= str_replace(
+                $this->markerMessages,
+                $message->getText(),
+                $this->fileCache[static::FILE_MESSAGE]
+            );
         }
 
         return $result;

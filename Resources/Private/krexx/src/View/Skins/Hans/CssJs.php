@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -47,7 +47,13 @@ trait CssJs
      */
     private $markerCssJs = [
         '{css}',
-        '{js}'
+        '{js}',
+        '{tsEnterText}',
+        '{tsTooSmall}',
+        '{tsPleaseReload}',
+        '{tsConfigReset}',
+        '{tsNoDataAvailable}',
+        '{tsAdditionalData}',
     ];
 
     /**
@@ -55,10 +61,20 @@ trait CssJs
      */
     public function renderCssJs(string $css, string $javascript): string
     {
+        $messages = $this->pool->messages;
         return str_replace(
             $this->markerCssJs,
-            [$css, $javascript],
-            $this->getTemplateFileContent(static::FILE_CSSJS)
+            [
+                $css,
+                $javascript,
+                $messages->getHelp('tsEnterText'),
+                $messages->getHelp('tsTooSmall'),
+                $messages->getHelp('tsPleaseReload'),
+                $messages->getHelp('tsConfigReset'),
+                $messages->getHelp('tsNoDataAvailable'),
+                $messages->getHelp('tsAdditionalData')
+            ],
+            $this->fileCache[static::FILE_CSSJS]
         );
     }
 

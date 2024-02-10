@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -72,7 +72,7 @@ class Emergency implements ConfigConstInterface
      *
      * @var bool
      */
-    protected static $allIsOk = true;
+    protected $allIsOk = true;
 
     /**
      * Maximum runtime from the config, cached.
@@ -159,7 +159,7 @@ class Emergency implements ConfigConstInterface
      * @param bool $bool
      *  Whether it is enabled, or not.
      */
-    public function setDisable(bool $bool)
+    public function setDisable(bool $bool): void
     {
         $this->disabled = $bool;
     }
@@ -174,12 +174,12 @@ class Emergency implements ConfigConstInterface
      */
     public function checkEmergencyBreak(): bool
     {
-        if ($this->disabled === true) {
+        if ($this->disabled) {
             // Tell them, everything is OK!
             return false;
         }
 
-        if (static::$allIsOk === false) {
+        if (!$this->allIsOk) {
             // This has failed before!
             // No need to check again!
             return true;
@@ -204,7 +204,7 @@ class Emergency implements ConfigConstInterface
             $this->pool->messages->addMessage('emergencyTimer');
             Krexx::editSettings();
             Krexx::disable();
-            static::$allIsOk = false;
+            $this->allIsOk = false;
             return true;
         }
 
@@ -224,14 +224,13 @@ class Emergency implements ConfigConstInterface
         // We will only check, if we were able to determine a memory limit
         // in the first place.
         if ($this->serverMemoryLimit > 2) {
-            $left = $this->serverMemoryLimit - memory_get_usage();
             // Is more left than is configured?
-            if ($left < $this->minMemoryLeft) {
+            if (($this->serverMemoryLimit - memory_get_usage()) < $this->minMemoryLeft) {
                 $this->pool->messages->addMessage('emergencyMemory');
                 // Show settings to give the dev to repair the situation.
                 Krexx::editSettings();
                 Krexx::disable();
-                static::$allIsOk = false;
+                $this->allIsOk = false;
                 return true;
             }
         }
@@ -242,7 +241,7 @@ class Emergency implements ConfigConstInterface
     /**
      * Going up one level in the object/array hierarchy.
      */
-    public function upOneNestingLevel()
+    public function upOneNestingLevel(): void
     {
         ++$this->nestingLevel;
     }
@@ -250,7 +249,7 @@ class Emergency implements ConfigConstInterface
     /**
      * Going down one level in the object/array hierarchy.
      */
-    public function downOneNestingLevel()
+    public function downOneNestingLevel(): void
     {
         --$this->nestingLevel;
     }
@@ -286,9 +285,9 @@ class Emergency implements ConfigConstInterface
      * When coming from cli, we will reset the timer, because cli has normally
      * a much greater execution time.
      */
-    public function initTimer()
+    public function initTimer(): void
     {
-        if (empty($this->timer) === true || php_sapi_name() === 'cli') {
+        if (empty($this->timer) || php_sapi_name() === 'cli') {
             $this->timer = time() + $this->maxRuntime;
         }
     }

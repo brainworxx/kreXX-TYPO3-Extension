@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -64,9 +64,9 @@ abstract class AbstractOutput
      *        the browser.
      * [1] -> Are we ignoring local settings?
      *
-     * @var array
+     * @var string[]
      *   An array of all chunk strings.
-     *   A chunk string are be:
+     *   A chunk string are:
      *   - header
      *   - messages
      *   - data part
@@ -90,7 +90,7 @@ abstract class AbstractOutput
     /**
      * Cleanup stuff, after all is said and done.
      */
-    protected function destruct()
+    protected function destruct(): void
     {
         $this->cleanupService->cleanupOldChunks();
     }
@@ -113,5 +113,5 @@ abstract class AbstractOutput
     /**
      * Tell the output service, that we are finished.
      */
-    abstract public function finalize();
+    abstract public function finalize(): void;
 }

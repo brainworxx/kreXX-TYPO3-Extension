@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -47,26 +47,32 @@ interface PluginConstInterface
      *
      * @var string
      */
-    const IS_ACTIVE = 'isActive';
+    public const IS_ACTIVE = 'isActive';
 
     /**
      * Name of the configuration class of the plugin.
      *
      * @var string
      */
-    const CONFIG_CLASS = 'configClass';
+    public const CONFIG_CLASS = 'configClass';
 
     /**
      * Name of the plugin.
      *
+     * @deprecated since 5.0.0
+     *   Will be removed. Use the configuration class directly.
+     *
      * @var string
      */
-    const PLUGIN_NAME = 'name';
+    public const PLUGIN_NAME = 'name';
 
     /**
      * Version of the plugin.
      *
+     * @deprecated since 5.0.0
+     *   Will be removed. Use the configuration class directly.
+     *
      * @var string
      */
-    const PLUGIN_VERSION = 'ver';
+    public const PLUGIN_VERSION = 'ver';
 }

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,17 +35,17 @@
 
 namespace Brainworxx\Includekrexx\Plugins\Typo3\Scalar;
 
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\AbstractScalarAnalysis;
+use Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Throwable;
 
 /**
  * LLL string parser.
  */
-class LllString extends AbstractScalarAnalysis implements ViewConstInterface
+class LllString extends AbstractScalarAnalysis
 {
     /**
      * The name of the localisation utility.
@@ -88,27 +88,54 @@ class LllString extends AbstractScalarAnalysis implements ViewConstInterface
      */
     public function canHandle($string, Model $model): bool
     {
+        if (strpos($string, 'LLL:') === false) {
+            // Early return. Not much to do here.
+            return false;
+        }
+
         // Retrieve the EXT path from the framework.
-        set_error_handler(function () {
+        set_error_handler(function (): void {
             // Do nothing.
         });
 
         try {
             // Add the string directly to the model
-            if (strpos($string, 'LLL:') === 0) {
-                $trans = $this->localisationUtility::translate($string);
-                if (empty($trans) === false) {
-                    $model->addToJson('Translation', $trans);
-                }
+            $trans = $this->localisationUtility::translate($string);
+            if (!empty($trans)) {
+                $model->addToJson($this->pool->messages->getHelp('TYPO3Trans'), $trans);
             }
+
+            $this->resolveExtPath($string, $model);
         } catch (Throwable $e) {
             // Huh, someone messed with the translations.
         }
 
         restore_error_handler();
-
         // Always false.
         return false;
+    }
+
+    /**
+     * Try to resolve the ext path.
+     *
+     * @param string $string
+     * @param \Brainworxx\Krexx\Analyse\Model $model
+     * @return void
+     */
+    protected function resolveExtPath(string $string, Model $model): void
+    {
+        $string = preg_replace('/^LLL:(.+):[^:]+$/', "$1", $string);
+
+        if (strpos($string, 'EXT:') === 0) {
+            $string = GeneralUtility::getFileAbsFileName($string);
+            $model->addToJson($this->pool->messages->getHelp('TYPO3ResPath'), $string);
+            if (!file_exists($string)) {
+                $model->addToJson(
+                    $this->pool->messages->getHelp('TYPO3ResPathError'),
+                    $this->pool->messages->getHelp('TYPO3ResPathDoesNotExist')
+                );
+            }
+        }
     }
 
     /**
@@ -117,10 +144,10 @@ class LllString extends AbstractScalarAnalysis implements ViewConstInterface
      * @codeCoverageIgnore
      *   Who tests the tests?
      *
-     * @param $object
+     * @param \Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility $object
      *   The name of the localisation utility.
      */
-    public function setLocalisationUtility($object)
+    public function setLocalisationUtility(\Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility $object): void
     {
         $this->localisationUtility = $object;
     }

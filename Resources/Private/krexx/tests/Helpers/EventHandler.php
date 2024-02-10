@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -79,7 +79,7 @@ class EventHandler implements EventHandlerInterface
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      * @return string
      */
-    public function handle(AbstractCallback $callback = null, Model $model = null): string
+    public function handle(AbstractCallback $callback, Model $model = null): string
     {
         static::$callback = $callback;
         static::$model = $model;

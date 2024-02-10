@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -34,19 +34,19 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
-use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
-class FormConfigurationTest extends AbstractTest
+class FormConfigurationTest extends AbstractHelper
 {
     /**
      * The the assigning of data to the view.
      *
      * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::assignData
+     * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::generateSingleSetting
      * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::convertKrexxFeSetting
      * @covers \Brainworxx\Includekrexx\Collectors\FormConfiguration::generateDropdown
      */
@@ -65,7 +65,7 @@ class FormConfigurationTest extends AbstractTest
         // Point the ini reader to the fixture.
         $this->setValueByReflection(
             'directories',
-            [Config::CONFIG_FOLDER => __DIR__ . '/../../Fixtures/Config.ini'],
+            ['config' => __DIR__ . '/../../Fixtures/Config.'],
             \Krexx::$pool->config
         );
 
@@ -77,8 +77,8 @@ class FormConfigurationTest extends AbstractTest
                 $this->callback(function ($config) {
                     // @see config.ini in the fixtures.
                     return
-                        $config[Config::SETTING_SKIN][Configuration::SETTINGS_VALUE] === Fallback::RENDER_TYPE_CONFIG_NONE &&
-                        $config[Config::SETTING_SKIN][FormConfiguration::SETTINGS_OPTIONS] === [
+                        $config[Config::SETTING_SKIN]['value'] === Fallback::RENDER_TYPE_CONFIG_NONE &&
+                        $config[Config::SETTING_SKIN]['options'] === [
                             Fallback::RENDER_TYPE_CONFIG_FULL => Fallback::RENDER_TYPE_CONFIG_FULL,
                             Fallback::RENDER_TYPE_CONFIG_DISPLAY => Fallback::RENDER_TYPE_CONFIG_DISPLAY,
                             Fallback::RENDER_TYPE_CONFIG_NONE => Fallback::RENDER_TYPE_CONFIG_NONE,

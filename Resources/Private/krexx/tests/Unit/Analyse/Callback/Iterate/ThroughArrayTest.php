@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,21 +37,20 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Service\Flow\Recursion;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 use stdClass;
 
-class ThroughArrayTest extends AbstractTest
+class ThroughArrayTest extends AbstractHelper
 {
     /**
      * Injecting the routing nothing class.
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         Krexx::$pool->routing = new RoutingNothing(Krexx::$pool);
     }
 
@@ -102,11 +101,8 @@ class ThroughArrayTest extends AbstractTest
         // Test the connectors.
         $this->assertEquals('[', $models[0]->getConnectorLeft());
         $this->assertEquals(']', $models[0]->getConnectorRight());
-        $this->assertEquals('', $models[0]->getKeyType());
         $this->assertEquals('[\'', $models[1]->getConnectorLeft());
         $this->assertEquals('\']', $models[1]->getConnectorRight());
-        $this->assertEquals(ProcessConstInterface::TYPE_STRING, $models[1]->getKeyType());
-
     }
 
     /**

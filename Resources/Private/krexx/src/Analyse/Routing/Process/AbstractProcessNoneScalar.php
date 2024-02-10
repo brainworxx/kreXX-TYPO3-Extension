@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -58,12 +58,12 @@ abstract class AbstractProcessNoneScalar extends AbstractRouting implements Proc
     public function handle(Model $model): string
     {
         // Check the nesting level.
-        if ($this->pool->emergencyHandler->checkNesting() === true) {
+        if ($this->pool->emergencyHandler->checkNesting()) {
             return $this->handleNestedTooDeep($model);
         }
 
         // Render recursion.
-        if ($this->pool->recursionHandler->isInHive($model->getData()) === true) {
+        if ($this->pool->recursionHandler->isInHive($model->getData())) {
             return $this->handleRecursion($model);
         }
 
@@ -94,7 +94,7 @@ abstract class AbstractProcessNoneScalar extends AbstractRouting implements Proc
     protected function handleRecursion(Model $model): string
     {
         $data = $model->getData();
-        if (is_object($data) === true) {
+        if (is_object($data)) {
             $normal = '\\' . get_class($data);
             $domId = $this->generateDomIdFromObject($data);
         } else {
@@ -127,7 +127,7 @@ abstract class AbstractProcessNoneScalar extends AbstractRouting implements Proc
 
         $model->setData($text)
             ->setNormal($this->pool->messages->getHelp('maximumLevelReached1'))
-            ->setType((is_array($model->getData()) === true) ? static::TYPE_ARRAY : static::TYPE_OBJECT)
+            ->setType(is_array($model->getData()) ? static::TYPE_ARRAY : static::TYPE_OBJECT)
             ->setHasExtra(true);
 
         // Render it directly.

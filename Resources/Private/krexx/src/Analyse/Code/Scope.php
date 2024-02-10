@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,14 +39,13 @@ namespace Brainworxx\Krexx\Analyse\Code;
 
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Scope analysis decides if a property of method is accessible in the current
  * analysis scope.
  */
-class Scope implements CallbackConstInterface, ConfigConstInterface
+class Scope implements CallbackConstInterface
 {
     /**
      * We use this scope, when kreXX was called like kreXX($this);
@@ -56,7 +55,7 @@ class Scope implements CallbackConstInterface, ConfigConstInterface
      *
      * @var string
      */
-    const THIS_SCOPE = '$this';
+    protected const THIS_SCOPE = '$this';
 
     /**
      * Here we store all relevant data.
@@ -93,13 +92,13 @@ class Scope implements CallbackConstInterface, ConfigConstInterface
      * @param string $scope
      *   The scope ('$this' or something else) .
      */
-    public function setScope(string $scope)
+    public function setScope(string $scope): void
     {
         if ($scope !== static::UNKNOWN_VALUE) {
             $this->scope = $scope;
             // Now that we have a scope, we can actually generate code to
             // reach the variables inside the analysis.
-            $this->pool->codegenHandler->setAllowCodegen(true);
+            $this->pool->codegenHandler->setCodegenAllowed(true);
         }
     }
 
@@ -121,9 +120,8 @@ class Scope implements CallbackConstInterface, ConfigConstInterface
      */
     public function isInScope(): bool
     {
-        return  $this->pool->emergencyHandler->getNestingLevel() <= 1 &&
-            $this->scope === static::THIS_SCOPE &&
-            $this->pool->config->getSetting(static::SETTING_USE_SCOPE_ANALYSIS);
+        return $this->scope === static::THIS_SCOPE &&
+            $this->pool->emergencyHandler->getNestingLevel() <= 1;
     }
 
     /**
@@ -146,14 +144,16 @@ class Scope implements CallbackConstInterface, ConfigConstInterface
             return false;
         }
 
-        if (strpos($model->getType(), 'private inherited') !== false) {
+        $messages = $this->pool->messages;
+        $privateInherited = $messages->getHelp('private') . ' ' . $messages->getHelp('inherited');
+        if (strpos($model->getType(), $privateInherited) !== false) {
             // Inherited private properties or methods are not accessible from the
             // $this scope. We need to make sure that we do not generate any code
             // for them.
             return false;
         }
 
-        if (is_object($model->getData()) === true || is_array($model->getData()) === true) {
+        if (is_object($model->getData()) || is_array($model->getData())) {
             // When analysing a class or array, we have + 1 on our nesting level, when
             // coming from the code generation. That is, because that class is currently
             // being analysed.

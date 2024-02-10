@@ -16,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -150,8 +150,8 @@ class Search
         // Nothing to search for.
         if (config.searchtext.length === 0) {
             // Not enough chars as a searchtext!
-            element.parentNode.querySelector('.ksearch-state').textContent = '<- Please enter a search text.';
-            return
+            element.parentNode.querySelector('.ksearch-state').textContent = this.kdt.translations.translate('tsEnterText');
+            return;
         }
 
         // We only search for more than 3 chars.
@@ -160,7 +160,7 @@ class Search
 
             this.retrievePayload(config);
 
-            // We need to un-collapse everything, in case it it collapsed.
+            // We need to un-collapse everything, in case it is collapsed.
             let collapsed:NodeList = config.payload.querySelectorAll('.kcollapsed');
             for (let i:number = 0; i < collapsed.length; i++) {
                 this.eventHandler.triggerEvent((collapsed[i] as Element), 'click');
@@ -208,7 +208,7 @@ class Search
             this.results[config.instance][config.searchtext]['pointer'] = pointer;
         } else {
             // Not enough chars as a searchtext!
-            element.parentNode.querySelector('.ksearch-state').textContent = '<- must be bigger than 3 characters';
+            element.parentNode.querySelector('.ksearch-state').textContent = this.kdt.translations.translate('tsTooSmall');
         }
     };
 
@@ -297,7 +297,7 @@ class Search
         event.stopPropagation();
 
         // If this is no <RETURN> key, do nothing.
-        if (event.which !== 13) {
+        if (event.key !== 'Enter') {
             return;
         }
 

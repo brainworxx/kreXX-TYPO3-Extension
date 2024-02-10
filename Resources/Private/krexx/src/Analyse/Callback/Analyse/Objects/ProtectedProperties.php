@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use ReflectionProperty;
 
 /**
@@ -48,9 +47,8 @@ use ReflectionProperty;
  * @uses \Brainworxx\Krexx\Service\Reflection\ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class ProtectedProperties extends AbstractObjectAnalysis implements CallbackConstInterface
+class ProtectedProperties extends AbstractObjectAnalysis
 {
-
     /**
      * Dump all protected properties.
      *
@@ -64,17 +62,17 @@ class ProtectedProperties extends AbstractObjectAnalysis implements CallbackCons
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
         $refProps = $ref->getProperties(ReflectionProperty::IS_PROTECTED);
-        if (empty($refProps) === true) {
+        if (empty($refProps)) {
             return $output;
         }
 
-        usort($refProps, [$this, 'reflectionSorting']);
+        usort($refProps, [$this, static::REFLECTION_SORTING]);
 
         return $output .
             $this->getReflectionPropertiesData(
                 $refProps,
                 $ref,
-                'Protected properties'
+                $this->pool->messages->getHelp('protectedProperties')
             );
     }
 }

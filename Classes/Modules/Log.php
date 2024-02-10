@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,7 +39,7 @@ namespace Brainworxx\Includekrexx\Modules;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
-use Brainworxx\Includekrexx\Controller\AbstractController;
+use Brainworxx\Includekrexx\Controller\ControllerConstInterface;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
@@ -63,24 +63,25 @@ class Log extends AbstractSubModule implements
     DataProviderInterface,
     ContentProviderInterface,
     ResourceProviderInterface,
-    ConstInterface
+    ConstInterface,
+    ControllerConstInterface
 {
     use LanguageTrait;
 
     /**
      * @var string
      */
-    const MESSAGE_SEVERITY_ERROR = 'error';
+    protected const MESSAGE_SEVERITY_ERROR = 'error';
 
     /**
      * @var string
      */
-    const MESSAGE_SEVERITY_INFO = 'info';
+    protected const MESSAGE_SEVERITY_INFO = 'info';
 
     /**
      * @var string
      */
-    const TRANSLATION_PREFIX = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:';
+    protected const TRANSLATION_PREFIX = 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:';
 
     /**
      * The identifier for the Admin Panel Module.
@@ -108,6 +109,8 @@ class Log extends AbstractSubModule implements
      * @param \Psr\Http\Message\ServerRequestInterface $request
      *   The frontend request, which is currently not used.
      *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     *
      * @return \TYPO3\CMS\Adminpanel\ModuleApi\ModuleData
      *   The data we will assign to the admin panel.
      */
@@ -129,9 +132,9 @@ class Log extends AbstractSubModule implements
      */
     public function getContent(ModuleData $data): string
     {
-        if ($this->hasAccess() === false) {
+        if (!$this->hasAccess()) {
             return $this->renderMessage(
-                static::translate(static::TRANSLATION_PREFIX . AbstractController::ACCESS_DENIED),
+                static::translate(static::TRANSLATION_PREFIX . static::ACCESS_DENIED),
                 static::MESSAGE_SEVERITY_ERROR
             );
         }
@@ -187,8 +190,8 @@ class Log extends AbstractSubModule implements
      */
     protected function hasAccess(): bool
     {
-        return isset($GLOBALS['BE_USER']) &&
-            $GLOBALS['BE_USER']->check('modules', AbstractCollector::PLUGIN_NAME);
+        return isset($GLOBALS[static::BE_USER]) &&
+            $GLOBALS[static::BE_USER]->check(static::BE_MODULES, AbstractCollector::PLUGIN_NAME);
     }
 
     /**
@@ -237,7 +240,6 @@ class Log extends AbstractSubModule implements
             $renderedMessages .= $this->renderMessage(
                 static::translate(
                     static::TRANSLATION_PREFIX . $message->getKey(),
-                    static::EXT_KEY,
                     $message->getArguments()
                 ),
                 static::MESSAGE_SEVERITY_ERROR

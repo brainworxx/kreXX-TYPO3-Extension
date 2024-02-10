@@ -12,10 +12,74 @@
 Changelog
 =============================================================
 
+5.0.2
+    - [Change] Removed deprecated code.
+    - [Change] Some deprecations.
+    - [Change] Dropped the QueryDebugger, which is not needed anymore.
+    - [Bugfix] The event 'Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe::start' was called too late.
+    - [Bugfix] Make use of the internal error callback in the string encoding class.
+    - [Bugfix] Add the missing "Line no." to the translation.
+    - [Bugfix] Added missing return types to the return type whitelist in the ReturnType comment analysis.
+    - [Bugfix] Added missing types to the blacklist of none namespaces declaration types.
+    - [Bugfix] Added a missing entry in the language files.
+
+5.0.1
+    - [Feature] Updated to PHP 8.3
+    - [Change] Updated the unit tests to 10.5
+    - [Bugfix] Added a missing end-event in the ThroughGetter iterator.
+    - [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
+
+5.0.0
+    - [Feature] Added immediate browser output to the output choices.
+    - [Feature] Added default value analysis to the additional info.
+    - [Feature] Added the German translation.
+    - [Feature] Added serialized string pretty print.
+    - [Feature] Added static cache to the filepath scalar analysis.
+    - [Feature] Added support for the hidden properties of ext_dom classes.
+    - [Feature] Added typed property analysis.
+    - [Feature] The translation analyser gives feedback if the translation file does not exist in the first place.
+    - [Feature] The ext filepath analysis gives feedback if the file does not exist in the first place.
+    - [Feature] Added Flexform data analysis.
+    - [Feature] Added Fluid ViewHelper :literal:`<krexx:timer.moment value="Render the menue" />` and :literal:`<krexx:timer.end />`.
+    - [Feature] Added PCNTL support for logging.
+    - [Feature] Added base64 analysis.
+    - [Change] Removed deprecated code.
+    - [Change] Drop PHP 7.0 support
+    - [Change] Drop PHP 7.1 support
+    - [Change] Streamlined the type display of strings
+    - [Change] Defined visibility for all constants.
+    - [Change] Added missing PHP 7.1 return type to methods.
+    - [Change] Moved the ViewConstInterface to the translations.
+    - [Change] Moved the local declaration retrieval methods into their own API.
+    - [Change] Reworked some help texts.
+    - [Change] Input elements are now allowed to not have any eval callback.
+    - [Change] Remove the inherited constants from the kreXX main class.
+    - [Change] String and array analysis now cache their settings.
+    - [Change] The ScalarString class gets instantiated only once per run.
+    - [Change] Removed the scope analysis setting.
+    - [Change] Lots of deprecations.
+    - [Change] Removed the XML decoder.
+    - [Change] Drop TYPO3 7.6 support.
+    - [Change] Drop TYPO3 8.7 support.
+    - [Change] Drop TYPO3 9.5 support.
+    - [Change] Moved the return type retrieval by reflection to the declaration analysis classes.
+    - [Change] Moved the parameter analysis to the declaration analysis classes.
+    - [Change] Empty configuration sections are not rendered anymore.
+    - [Change] Always allow a none rendering of configuration settings.
+    - [Change] Moved the JS and CSS files to the private folder.
+    - [Change] Streamlined the return type of the retrieveDeclaringReflection of class methods.
+    - [Change] Moved the scalar analysis to a more appropriate namespace.
+    - [Change] Moved the Opaque Ressource Class analysis into its own class.
+    - [Change] The max count of analysed backtrace steps is set to 15.
+    - [Change] Removed the reflection cache.
+    - [Change] Refactored the template file loading.
+    - [Change] Set the nesting level to 10.
+
 4.1.10
     - [Bugfix] Prevent a fatal in the scalar callback analysis.
     - [Bugfix] Class meta analysis thinks that interfaces are abstract.
     - [Bugfix] Removed a warning in the backend ajax module for high traffic sites. (Please, never debug a productive site. At least make sure that the logger can only get triggered by the dev.).
+    - [Bugfix] Prevent a warning while parsing an XML string.
 
 4.1.9
     - [Feature] TYPO3 12.4 support.
@@ -49,7 +113,6 @@ Changelog
 4.1.6
     - [Bugfix] Link to the documentation of the debug preset does not work anymore in the documentation.
     - [Bugfix] Added the missing path filter to the EXT: path resolver.
-    - [Bugfix] Added the missing path filter to the real path resolver.
     - [Bugfix] Use strict encoding detection for strings for more reliable results.
     - [Bugfix] Fetch traversable data as soon as possible, because we do not want other analysis methods fetch traversable results, that are only fetchable once. DB results are a good example for this.
 

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -46,7 +46,6 @@ use TYPO3Fluid\Fluid\View\TemplatePaths;
  */
 class Fluid extends AbstractFluid
 {
-
     /**
      * {@inheritdoc}
      */
@@ -107,7 +106,7 @@ class Fluid extends AbstractFluid
     }
 
     /**
-     * @param $resolvedIdentifiers
+     * @param mixed $resolvedIdentifiers
      *   This should be an array, depending on how successful the script so far was.
      * @param string $hash
      *   The hash form the temp template path.
@@ -119,7 +118,7 @@ class Fluid extends AbstractFluid
      */
     protected function resolveTemplateName($resolvedIdentifiers, string $hash, TemplatePaths $templatePath): string
     {
-        if (isset($resolvedIdentifiers['partials']) === false) {
+        if (!isset($resolvedIdentifiers['partials'])) {
             // Unable to identify the partial.
             return static::FLUID_NOT_AVAILABLE;
         }

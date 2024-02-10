@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -48,6 +48,7 @@ trait FatalMain
     private $markerFatalMain = [
         '{errstr}',
         '{file}',
+        '{calledIn}',
         '{source}',
         '{line}',
     ];
@@ -69,10 +70,11 @@ trait FatalMain
             [
                 $errstr,
                 $errfile,
+                $this->pool->messages->getHelp('calledIn'),
                 $source,
                 $errline
             ],
-            $this->getTemplateFileContent(static::FILE_FATAL_MAIN)
+            $this->fileCache[static::FILE_FATAL_MAIN]
         );
     }
 

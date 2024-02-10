@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,11 +37,13 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Scalar;
 
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Callback;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Json;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\TimeStamp;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\Xml;
+use Brainworxx\Krexx\Analyse\Scalar\String\Base64;
+use Brainworxx\Krexx\Analyse\Scalar\String\Callback;
+use Brainworxx\Krexx\Analyse\Scalar\String\FilePath;
+use Brainworxx\Krexx\Analyse\Scalar\String\Json;
+use Brainworxx\Krexx\Analyse\Scalar\String\Serialized;
+use Brainworxx\Krexx\Analyse\Scalar\String\TimeStamp;
+use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
@@ -57,7 +59,6 @@ use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
  */
 class ScalarString extends AbstractScalar
 {
-
     /**
      * The list of analysis classes, that we use.
      *
@@ -78,12 +79,14 @@ class ScalarString extends AbstractScalar
             Json::class,
             Xml::class,
             TimeStamp::class,
+            Serialized::class,
+            Base64::class
         ];
 
         $classList = array_merge($classList, SettingsGetter::getAdditionalScalarString());
 
         foreach ($classList as $className) {
-            if ($className::isActive() === true) {
+            if ($className::isActive()) {
                 $this->classList[] = $className;
             }
         }
@@ -106,12 +109,12 @@ class ScalarString extends AbstractScalar
     public function handle(Model $model, string $originalData): Model
     {
         foreach ($this->classList as $className) {
-            /** @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\AbstractScalarAnalysis $scalarHandler */
+            /** @var \Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis $scalarHandler */
             $scalarHandler = $this->pool->createClass($className);
 
-            if ($scalarHandler->canHandle($originalData, $model) === true) {
-                $model->injectCallback($scalarHandler)->setDomid($this->generateDomId($originalData, $className));
-                return $model;
+            if ($scalarHandler->canHandle($originalData, $model)) {
+                return $model->injectCallback($scalarHandler)
+                    ->setDomid($this->generateDomId($originalData, $className));
             }
         }
 

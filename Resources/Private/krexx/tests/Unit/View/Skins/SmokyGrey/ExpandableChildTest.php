@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -62,7 +62,6 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
         $this->mockModel(static::GET_JSON, ['Voldemort' => 'noNose.']);
         $this->mockModel(static::GET_DOMID, 'passport');
         $this->mockModel(static::RENDER_ME, 'birdnest');
-        $this->mockModel(static::GET_KEY_TYPE, ProcessConstInterface::TYPE_STRING);
 
         $this->modelMock->expects($this->exactly(2))
             ->method(static::GET_TYPE)
@@ -86,7 +85,7 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
             ->method('generateWrapperRight')
             ->will($this->returnValue(''));
         $codegenMock->expects($this->once())
-            ->method('getAllowCodegen')
+            ->method('isCodegenAllowed')
             ->will($this->returnValue(true));
         Krexx::$pool->codegenHandler = $codegenMock;
 
@@ -100,6 +99,5 @@ class ExpandableChildTest extends AbstractRenderSmokyGrey
         $this->assertStringContainsString('noNose.', $result);
         $this->assertStringContainsString('passport', $result);
         $this->assertStringContainsString('birdnest', $result);
-        $this->assertStringContainsString(ProcessConstInterface::TYPE_STRING, $result);
     }
 }

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -49,7 +49,7 @@ class Event
     /**
      * Here we save the registered event handler.
      *
-     * @var string[]
+     * @var array[]
      */
     public $register = [];
 
@@ -90,7 +90,7 @@ class Event
      */
     public function dispatch(string $name, AbstractCallback $callback = null, Model $model = null): string
     {
-        if (isset($this->register[$name]) === false) {
+        if (!isset($this->register[$name])) {
             // No registered handler. Early return.
             return '';
         }

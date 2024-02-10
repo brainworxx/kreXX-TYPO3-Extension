@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -52,7 +52,7 @@ trait AnalysePrivate
     /**
      * @param string $analysePrivate
      */
-    public function setAnalysePrivate(string $analysePrivate)
+    public function setAnalysePrivate(string $analysePrivate): void
     {
         $this->analysePrivate = $analysePrivate;
     }
@@ -60,7 +60,7 @@ trait AnalysePrivate
     /**
      * @param string $formanalysePrivate
      */
-    public function setFormanalysePrivate(string $formanalysePrivate)
+    public function setFormanalysePrivate(string $formanalysePrivate): void
     {
         $this->formanalysePrivate = $formanalysePrivate;
     }

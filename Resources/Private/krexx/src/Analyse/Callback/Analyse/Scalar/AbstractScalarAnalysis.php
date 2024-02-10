@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,79 +37,15 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
-use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
-use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta;
-use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis as AbstractScalarAnalysisString;
 
 /**
- * Prepare everything for a deeper string analysis.
+ * @deprecated
+ *   Since 5.0.0. Will be removed. Use the class that we extend here.
+ *
+ * @codeCoverageIgnore
+ *   We are not testing the unit tests.
  */
-abstract class AbstractScalarAnalysis extends AbstractCallback implements CallbackConstInterface
+abstract class AbstractScalarAnalysis extends AbstractScalarAnalysisString
 {
-    /**
-     * The code generation type constant assigned to the model.
-     *
-     * @var string
-     */
-    protected $codeGenType = '';
-    /**
-     * Is this scalar deep analysis class able to do something here?
-     *
-     * @param string|int|bool $string
-     *   The scalar type for the deeper analysis.
-     * @param Model $model
-     *   The model so far.
-     *
-     * @return bool
-     *   Got this one get handled?
-     */
-    abstract public function canHandle($string, Model $model): bool;
-
-    /**
-     * Are all perquisites met for this class to do anything?
-     *
-     * If false, this class will not even get asked if it can handle something.
-     *
-     * @return bool
-     */
-    abstract public static function isActive(): bool;
-
-    /**
-     * Retrieve the meta array and render it.
-     *
-     * @return string
-     *   The rendered DOM.
-     */
-    public function callMe(): string
-    {
-        $output = $this->dispatchStartEvent();
-        $meta = $this->handle();
-
-        if (empty($meta)) {
-            // Nothing to render.
-            return '';
-        }
-
-        // Prepare the rendering.
-        /** @var Model $model */
-        $model = $this->pool->createClass(Model::class)
-            ->addParameter(static::PARAM_DATA, $meta)
-            ->addParameter(static::PARAM_CODE_GEN_TYPE, $this->codeGenType)
-            ->injectCallback($this->pool->createClass(ThroughMeta::class));
-
-        // We render the model directly. This class acts only as a proxy.
-        return $output . $this->dispatchEventWithModel(__FUNCTION__ . static::EVENT_MARKER_END, $model)->renderMe();
-    }
-
-    /**
-     * Stitch together the meta array for the rendering.
-     *
-     * @return array
-     *   The meta array.
-     */
-    protected function handle(): array
-    {
-        return [];
-    }
 }

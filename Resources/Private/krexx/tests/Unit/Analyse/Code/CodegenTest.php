@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,18 +36,18 @@
 namespace Brainworxx\Krexx\Tests\Unit\Analyse\Code;
 
 use Brainworxx\Krexx\Analyse\Code\Codegen;
-use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
-use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Code\Scope;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Fixtures\MethodParameterFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Fixtures\UnionTypeFixture;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
+use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use ReflectionParameter;
-use ReflectionType;
 
-class CodegenTest extends AbstractTest
+class CodegenTest extends AbstractHelper
 {
     const FIRST_RUN = 'firstRun';
     const DISABLE_COUNT = 'disableCount';
@@ -74,12 +74,12 @@ class CodegenTest extends AbstractTest
      */
     protected $connectorMock;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->codegenHandler = new Codegen(Krexx::$pool);
-        $this->codegenHandler->setAllowCodegen(true);
+        $this->codegenHandler->setCodegenAllowed(true);
         $this->setValueByReflection(static::DISABLE_COUNT, 0, $this->codegenHandler);
         $this->setValueByReflection(static::FIRST_RUN, false, $this->codegenHandler);
 
@@ -126,7 +126,7 @@ class CodegenTest extends AbstractTest
      */
     public function testGenerateSourceNoGen()
     {
-        $this->codegenHandler->setAllowCodegen(false);
+        $this->codegenHandler->setCodegenAllowed(false);
         $this->expectConnectorCalls(0, 0);
 
         $this->assertEquals('. . .', $this->codegenHandler->generateSource($this->fixture));
@@ -331,6 +331,22 @@ class CodegenTest extends AbstractTest
     }
 
     /**
+     * Test the meta Base64 code generation.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateComplicatedStuff
+     */
+    public function testGenerateMetaDecodedBase64()
+    {
+        $this->fixture->setCodeGenType($this->codegenHandler::CODEGEN_TYPE_BASE64_DECODE);
+        $this->assertEquals(
+            'base64_decode(;firstMarker;)',
+            $this->codegenHandler->generateSource($this->fixture),
+            'There should not be any connectors, so we just expect the wrapper string.'
+        );
+    }
+
+    /**
      * Test the coegeneration for unaccessible array values.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateSource
@@ -447,87 +463,66 @@ class CodegenTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateWrapperLeft
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::generateWrapperRight
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::setAllowCodegen
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::getAllowCodegen
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::setCodegenAllowed
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::isCodegenAllowed
      */
     public function testSimpleGetterandSetter()
     {
         $this->assertEquals('', $this->codegenHandler->generateWrapperLeft());
         $this->assertEquals('', $this->codegenHandler->generateWrapperRight());
         // This is set during the setUp
-        $this->assertEquals(true, $this->codegenHandler->getAllowCodegen());
-        $this->assertEquals(true, $this->codegenHandler->getAllowCodegen());
+        $this->assertEquals(true, $this->codegenHandler->isCodegenAllowed());
+        $this->assertEquals(true, $this->codegenHandler->isCodegenAllowed());
     }
 
     /**
      * Test the multiple enabling / disabling of the code generation.
      *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::setAllowCodegen
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::setCodegenAllowed
      */
     public function testSetAllowCodegen()
     {
-        $this->codegenHandler->setAllowCodegen(false);
+        $this->codegenHandler->setCodegenAllowed(false);
         $this->assertFalse(
-            $this->codegenHandler->getAllowCodegen(),
+            $this->codegenHandler->isCodegenAllowed(),
             'Normal getter test.'
         );
-        $this->codegenHandler->setAllowCodegen(false);
-        $this->codegenHandler->setAllowCodegen(true);
+        $this->codegenHandler->setCodegenAllowed(false);
+        $this->codegenHandler->setCodegenAllowed(true);
         $this->assertFalse(
-            $this->codegenHandler->getAllowCodegen(),
+            $this->codegenHandler->isCodegenAllowed(),
             'Should still be disabled, because we enabled it ony once.'
         );
-        $this->codegenHandler->setAllowCodegen(true);
+        $this->codegenHandler->setCodegenAllowed(true);
         $this->assertTrue(
-            $this->codegenHandler->getAllowCodegen(),
+            $this->codegenHandler->isCodegenAllowed(),
             'Should be enabled, because we enabled it twice.'
         );
 
-        $this->codegenHandler->setAllowCodegen(true);
-        $this->codegenHandler->setAllowCodegen(false);
+        $this->codegenHandler->setCodegenAllowed(true);
+        $this->codegenHandler->setCodegenAllowed(false);
         $this->assertFalse(
-            $this->codegenHandler->getAllowCodegen(),
+            $this->codegenHandler->isCodegenAllowed(),
             'Should be disabled, because we are not counting the enableding after 0.'
         );
     }
 
     /**
-     * Test the parameter analysis, with a default parameter
+     * Test the parameter analysis, with a required parameter.
+     * We use a special DateTime parameter as a fixture.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
      */
-    public function testParameterToStringWithDefaultPhpFive()
+    public function testParameterToString()
     {
-        // Create a mock with some supply data.
-        $refTypeMock = $this->createMock(ReflectionType::class);
-        $refTypeMock->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue('Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\ConfigSection'));
-        $refParamMock = $this->createMock(ReflectionParameter::class);
-        $refParamMock->expects($this->once())
-            ->method('hasType')
-            ->will($this->returnValue(true));
-        $refParamMock->expects($this->once())
-            ->method('getType')
-            ->will($this->returnValue($refTypeMock));
-        $refParamMock->expects($this->once())
-            ->method('isDefaultValueAvailable')
-            ->will($this->returnValue(true));
-        $refParamMock->expects($this->once())
-            ->method('getDefaultValue')
-            ->will($this->returnValue('<h1>Default Stuff</h1>'));
-        $refParamMock->expects($this->once())
-            ->method('isPassedByReference')
-            ->will($this->returnValue(false));
-        $refParamMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('wahtever'));
+        $fixture = function (\DateTimeZone $object){};
+        $reflectionFunction = new \ReflectionFunction($fixture);
+        $reflectionParameter = $reflectionFunction->getParameters()[0];
 
         $this->assertEquals(
-            'Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection $wahtever = &#039;&lt;h1&gt;Default Stuff&lt;/h1&gt;&#039;',
-            $this->codegenHandler->parameterToString($refParamMock)
+            '\DateTimeZone $object',
+            $this->codegenHandler->parameterToString($reflectionParameter)
         );
     }
 
@@ -558,51 +553,11 @@ class CodegenTest extends AbstractTest
     }
 
     /**
-     * Test the parameter analysis, with a required parameter.
-     * We use a special DateTime parameter as a fixture.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
-     */
-    public function testParameterToStringWithRequiredPhpSeven()
-    {
-        // Create a mock with some supply data.
-        $refTypeMock = $this->createMock(ReflectionType::class);
-        $refTypeMock->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue('DateTimeZone'));
-        $refParamMock = $this->createMock(ReflectionParameter::class);
-        $refParamMock->expects($this->once())
-            ->method('hasType')
-            ->will($this->returnValue(true));
-        $refParamMock->expects($this->once())
-            ->method('getType')
-            ->will($this->returnValue($refTypeMock));
-        $refParamMock->expects($this->once())
-            ->method('isDefaultValueAvailable')
-            ->will($this->returnValue(false));
-        $refParamMock->expects($this->never())
-            ->method('getDefaultValue');
-        $refParamMock->expects($this->once())
-            ->method('isPassedByReference')
-            ->will($this->returnValue(false));
-        $refParamMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('object'));
-
-        $this->assertEquals(
-            'DateTimeZone $object',
-            $this->codegenHandler->parameterToString($refParamMock)
-        );
-    }
-
-    /**
      * Test with a bunch of real parameters.
      *
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::parameterToString
-     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
      * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::translateDefaultValue
+     * @covers \Brainworxx\Krexx\Analyse\Code\Codegen::retrieveParameterType
      */
     public function testDefaultValueTranslation()
     {
@@ -634,5 +589,16 @@ class CodegenTest extends AbstractTest
             '$parameter = NULL',
             $this->codegenHandler->parameterToString($reflectionParameter)
         );
+
+        if (version_compare(phpversion(), '8.0.0', '>=')) {
+            // Test for union types.
+            $reflection = new \ReflectionClass(UnionTypeFixture::class);
+            $reflectionMethod = $reflection->getMethod('unionParameter');
+            $reflectionParameter = $reflectionMethod->getParameters()[0];
+            $this->assertEquals(
+                'array|int|bool $parameter',
+                $this->codegenHandler->parameterToString($reflectionParameter)
+            );
+        }
     }
 }

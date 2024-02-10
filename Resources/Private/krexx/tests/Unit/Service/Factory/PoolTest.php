@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,7 +41,6 @@ use Brainworxx\Krexx\Analyse\Routing\Routing;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
-use Brainworxx\Krexx\Service\Config\From\Ini;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Flow\Emergency;
@@ -49,8 +48,7 @@ use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Misc\Registry;
-use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\View\AbstractRender;
 use Brainworxx\Krexx\View\Messages;
@@ -58,7 +56,7 @@ use Brainworxx\Krexx\View\Output\Chunks;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 use stdClass;
 
-class PoolTest extends AbstractTest
+class PoolTest extends AbstractHelper
 {
     const MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
 
@@ -93,8 +91,7 @@ class PoolTest extends AbstractTest
         $this->assertInstanceOf(AbstractRender::class, Krexx::$pool->render);
 
         Krexx::$pool = null;
-        ConfigSupplier::$overwriteValues[Fallback::SETTING_SKIN] = Fallback::SKIN_HANS;
-        Registration::addRewrite(Ini::class, ConfigSupplier::class);
+        ConfigSupplier::$overwriteValues[Fallback::SETTING_SKIN] = 'hans';
         Pool::createPool();
         $this->assertInstanceOf(RenderHans::class, Krexx::$pool->render);
     }
@@ -110,27 +107,18 @@ class PoolTest extends AbstractTest
         $filename = 'test';
         // Chunks folder is writable
         // Log folder is writable
+        /** @var \PHPUnit\Framework\MockObject\MockObject $filePutContents */
         $filePutContents = $this->getFunctionMock(static::MISC_NAMESPACE, 'file_put_contents');
         $filePutContents->expects($this->exactly(2))
-            ->will(
-                $this->returnValueMap([
-                    [Krexx::$pool->config->getChunkDir() . $filename, 'x', true],
-                    [Krexx::$pool->config->getLogDir() . $filename, 'x', true]
-                ])
-            );
+            ->will($this->returnValue(true));
         $unlink = $this->getFunctionMock(static::MISC_NAMESPACE, 'unlink');
         $unlink->expects($this->exactly(2))
-            ->will(
-                $this->returnValueMap([
-                    [Krexx::$pool->config->getChunkDir() . $filename, true],
-                    [Krexx::$pool->config->getLogDir() . $filename, true]
-                ])
-            );
+            ->will($this->returnValue(true));
 
         Krexx::$pool = null;
         Pool::createPool();
-        $this->assertEquals(true, Krexx::$pool->chunks->getChunksAreAllowed());
-        $this->assertEquals(true, Krexx::$pool->chunks->getLoggingIsAllowed());
+        $this->assertTrue(Krexx::$pool->chunks->isChunkAllowed(), 'Chunking is NOT allowed, but it should be.');
+        $this->assertTrue(Krexx::$pool->chunks->isLoggingAllowed(), 'Logging is NOT allowed, but it should be.');
         $this->assertEmpty(Krexx::$pool->messages->getMessages());
     }
 
@@ -159,8 +147,8 @@ class PoolTest extends AbstractTest
 
         Krexx::$pool = null;
         Pool::createPool();
-        $this->assertEquals(false, Krexx::$pool->chunks->getChunksAreAllowed());
-        $this->assertEquals(false, Krexx::$pool->chunks->getLoggingIsAllowed());
+        $this->assertEquals(false, Krexx::$pool->chunks->isChunkAllowed());
+        $this->assertEquals(false, Krexx::$pool->chunks->isLoggingAllowed());
         $this->assertCount(2, Krexx::$pool->messages->getMessages());
     }
 
@@ -174,10 +162,29 @@ class PoolTest extends AbstractTest
         Krexx::$pool->recursionHandler = new stdClass();
         Krexx::$pool->codegenHandler = new stdClass();
         Krexx::$pool->scope = new stdClass();
+        Krexx::$pool->routing = new stdClass();
         Krexx::$pool->reset();
 
         $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->recursionHandler);
         $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->codegenHandler);
         $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->scope);
+        $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->routing);
+    }
+
+    /**
+     * Test the renewal of the "semi-singletons" after an analysis, with
+     * simulating a new process fork.
+     *
+     * @covers \Brainworxx\Krexx\Service\Factory\Pool::reset
+     */
+    public function testResetWithNewFork()
+    {
+        $getmypidMock = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Factory', 'getmypid');
+        $getmypidMock->expects($this->exactly(2))
+            ->will($this->returnValue(12345));
+        Krexx::$pool->chunks = new stdClass();
+
+        Krexx::$pool->reset();
+        $this->assertNotInstanceOf(stdClass::class, Krexx::$pool->chunks);
     }
 }

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -52,7 +52,7 @@ trait Disabled
     /**
      * @param string $disabled
      */
-    public function setDisabled(string $disabled)
+    public function setDisabled(string $disabled): void
     {
         $this->disabled = $disabled;
     }
@@ -60,7 +60,7 @@ trait Disabled
     /**
      * @param string $formdisabled
      */
-    public function setFormdisabled(string $formdisabled)
+    public function setFormdisabled(string $formdisabled): void
     {
         $this->formdisabled = $formdisabled;
     }

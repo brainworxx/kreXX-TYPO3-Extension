@@ -7,8 +7,7 @@
     "behavior": {
         "skin": "smokygrey",
         "destination": "browser",
-        "maxfiles": "10",
-        "useScopeAnalysis": true
+        "maxfiles": "10"
     },
     "prune": {
         "maxStepNumber": "10",
@@ -36,7 +35,6 @@
         "disabled": "full",
         "detectAjax": "full",
         "skin": "full",
-        "useScopeAnalysis": "full",
         "maxStepNumber": "full",
         "arrayCountLimit": "full",
         "level": "full",

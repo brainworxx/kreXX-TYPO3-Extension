@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -51,7 +51,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Public functions, allowing access to the kreXX debug features.
  */
-class Krexx implements ConfigConstInterface
+class Krexx
 {
     use LoggingTrait;
 
@@ -71,7 +71,7 @@ class Krexx implements ConfigConstInterface
      *   Defines a "moment" during a benchmark test.
      *   The string should be something meaningful, like "Model invoice db call".
      */
-    public static function timerMoment(string $string)
+    public static function timerMoment(string $string): void
     {
         Pool::createPool();
 
@@ -99,13 +99,13 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function timerEnd()
+    public static function timerEnd(): void
     {
         Pool::createPool();
 
         // Disabled ?
         if (
-            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -137,7 +137,7 @@ class Krexx implements ConfigConstInterface
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -165,13 +165,13 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function backtrace(array $backtrace = null)
+    public static function backtrace(array $backtrace = null): void
     {
         Pool::createPool();
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
             AbstractController::$analysisInProgress ||
             Config::$disabledByPhp
         ) {
@@ -191,7 +191,7 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function disable()
+    public static function disable(): void
     {
         Pool::createPool();
 
@@ -206,14 +206,14 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function editSettings()
+    public static function editSettings(): void
     {
         Pool::createPool();
 
         // Disabled?
         // We are ignoring local settings here.
         if (
-            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
@@ -228,13 +228,13 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function registerExceptionHandler()
+    public static function registerExceptionHandler(): void
     {
         Pool::createPool();
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
@@ -249,13 +249,13 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function unregisterExceptionHandler()
+    public static function unregisterExceptionHandler(): void
     {
         Pool::createPool();
 
         // Disabled?
         if (
-            static::$pool->config->getSetting(static::SETTING_DISABLED) ||
+            static::$pool->config->getSetting(ConfigConstInterface::SETTING_DISABLED) ||
             Config::$disabledByPhp
         ) {
             return;
@@ -291,12 +291,12 @@ class Krexx implements ConfigConstInterface
      * When there are classes found inside the backtrace,
      * they will be analysed.
      *
-     * @param array $backtrace
+     * @param array|null $backtrace
      *   an already existing backtrace
      *
      * @api
      */
-    public static function logBacktrace(array $backtrace = null)
+    public static function logBacktrace(array $backtrace = null): void
     {
         static::startForcedLog();
         static::backtrace($backtrace);
@@ -308,7 +308,7 @@ class Krexx implements ConfigConstInterface
      *
      * @api
      */
-    public static function logTimerEnd()
+    public static function logTimerEnd(): void
     {
         static::startForcedLog();
         static::timerEnd();

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,9 +38,9 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 use Brainworxx\Krexx\Analyse\Comment\Classes;
 use Brainworxx\Krexx\Krexx;
 use ReflectionClass;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class ClassesTest extends AbstractTest
+class ClassesTest extends AbstractHelper
 {
     /**
      * Test the retrieval of a class comment from a class reflection
@@ -54,28 +54,10 @@ class ClassesTest extends AbstractTest
         $cachedComment .= ' */';
         $prettifiedComment = 'was geht ab?';
 
-        $methodName = 'dubdidoo';
-
         $reflectionMock = $this->createMock(ReflectionClass::class);
-        $reflectionMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue($methodName));
-
         $reflectionMock->expects($this->once())
             ->method('getDocComment')
             ->will($this->returnValue($cachedComment));
-
-        $classComment = new Classes(Krexx::$pool);
-        $this->assertEquals($prettifiedComment, $classComment->getComment($reflectionMock));
-
-        // Now with the caching.
-        $reflectionMock = $this->createMock(ReflectionClass::class);
-        $reflectionMock->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue($methodName));
-
-        $reflectionMock->expects($this->never())
-            ->method('getDocComment');
 
         $classComment = new Classes(Krexx::$pool);
         $this->assertEquals($prettifiedComment, $classComment->getComment($reflectionMock));

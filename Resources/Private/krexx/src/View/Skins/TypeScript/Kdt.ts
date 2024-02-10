@@ -16,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,6 +37,19 @@ class Kdt
      * The jump-to implementation.
      */
     protected jumpTo:Function;
+
+    /**
+     * Our translations class.
+     */
+    public translations:Translations;
+
+    /**
+     * Init the translations.
+     */
+    constructor()
+    {
+        this.translations = new Translations('.krdata-structure.krtrans', this);
+    }
 
     /**
      * Set the currently used jump to callback.
@@ -266,28 +279,18 @@ class Kdt
      * @return {object}
      *   The value, set in the cookie.
      */
-    public readSettings(cookieName:string): string|object
+    public readSettings(cookieName:string): object
     {
-        /** @type {string} */
-        cookieName = cookieName + "=";
-        let cookieArray:string[] = document.cookie.split(';');
+        let match:RegExpMatchArray = document.cookie.match(new RegExp('(^| )' + cookieName + '=([^;]+)'));
         let result:object = {};
-        let cookieString:string;
+        if (match === null) {
+            return result;
+        }
 
-        for (let i = 0; i < cookieArray.length; i++) {
-            cookieString = cookieArray[i];
-            while (cookieString.charAt(0) === ' ') {
-                cookieString = cookieString.substring(1, cookieString.length);
-            }
-            if (cookieString.indexOf(cookieName) === 0) {
-                try {
-                    // Return json, if possible.
-                    result = JSON.parse(cookieString.substring(cookieName.length, cookieString.length));
-                }
-                catch (error) {
-                    // Do nothing, we already have a fallback.
-                }
-            }
+        try {
+            result = JSON.parse(match[2]);
+        } catch (error) {
+            // Do nothing, we already have a fallback.
         }
 
         return result;
@@ -325,7 +328,7 @@ class Kdt
 
         document.cookie = 'KrexxDebugSettings=' + JSON.stringify(settings) + '; ' + expires + '; path=/';
         // Feedback about update.
-        alert(valueName + ' --> ' + newValue + '\n\nPlease reload the page to use the new local settings.');
+        alert(valueName + ' --> ' + newValue + '\n\n' + this.translations.translate('tsPleaseReload'));
     };
 
     /**
@@ -336,7 +339,7 @@ class Kdt
      * @param {Node} element
      *   The element that was clicked.
      */
-    public resetSetting(event:Event, element:Node): void
+    public resetSetting = (event:Event, element:Node): void =>
     {
         // We do not delete the cookie, we simply remove all settings in it.
         let date:Date = new Date();
@@ -344,7 +347,7 @@ class Kdt
         let expires:string = 'expires=' + date.toUTCString();
 
         document.cookie = 'KrexxDebugSettings={}; ' + expires + '; path=/';
-        alert('All local configuration have been reset.\n\nPlease reload the page to use the these settings.');
+        alert(this.translations.translate('tsConfigReset') + '\n\n' + this.translations.translate('tsPleaseReload'));
     }
 
     /**
@@ -383,7 +386,7 @@ class Kdt
                 document.querySelector('body').appendChild(elements[i]);
             }
         }
-    };
+    }
 
     /**
      * Collapses elements for a breadcrumb

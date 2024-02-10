@@ -16,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -46,7 +46,7 @@ class Eventhandler
     protected kdt:Kdt;
 
     /**
-     * Creating an Kdt instance, and registering of our event handler
+     * Creating a Kdt instance, and registering of our event handler
      *
      * @param {string} selector
      */
@@ -62,7 +62,7 @@ class Eventhandler
     }
 
     /**
-     * Adds a event listener to a list of elements.
+     * Adds an event listener to a list of elements.
      *
      * @param {string} selector
      * @param {string} eventName
@@ -116,7 +116,7 @@ class Eventhandler
      */
     protected handle = (event:Event): void =>
     {
-        // We stop the event in it's tracks.
+        // We stop the event in its tracks.
         event.stopPropagation();
         event.stop = false;
 
@@ -128,15 +128,16 @@ class Eventhandler
         do {
             // We need to test the element on all selectors.
             for (selector in this.storage) {
-                if ((element as Element).matches(selector)) {
-                    callbackArray = this.storage[selector];
-                    // Got to call them all.
-                    for (i = 0; i < callbackArray.length; i++) {
-                        callbackArray[i](event, element);
-                        if (event.stop) {
-                            // Our "implementation" of stopPropagation().
-                            return;
-                        }
+                if ((element as Element).matches(selector) === false) {
+                    continue;
+                }
+                callbackArray = this.storage[selector];
+                // Got to call them all.
+                for (i = 0; i < callbackArray.length; i++) {
+                    callbackArray[i](event, element);
+                    if (event.stop) {
+                        // Our "implementation" of stopPropagation().
+                        return;
                     }
                 }
             }
@@ -160,8 +161,7 @@ class Eventhandler
     public triggerEvent(el:Element, eventName:string): void
     {
         /** @type {Event} */
-        let event:Event = document.createEvent('HTMLEvents');
-        event.initEvent(eventName, true, false);
+        let event:Event = new Event(eventName, {bubbles: true,cancelable: false});
         el.dispatchEvent(event);
     }
 }

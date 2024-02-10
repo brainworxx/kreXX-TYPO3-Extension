@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -49,7 +49,7 @@ class CheckOutput
      *
      * @var string
      */
-    const REMOTE_ADDRESS = 'REMOTE_ADDR';
+    protected const REMOTE_ADDRESS = 'REMOTE_ADDR';
 
     /**
      * Here we store all relevant data.
@@ -81,7 +81,7 @@ class CheckOutput
     {
         $server = $this->pool->getServer();
 
-        return isset($server['HTTP_X_REQUESTED_WITH']) === true &&
+        return isset($server['HTTP_X_REQUESTED_WITH']) &&
             strtolower($server['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
     }
 
@@ -137,15 +137,15 @@ class CheckOutput
     public function isAllowedIp(string $whitelist): bool
     {
         $server = $this->pool->getServer();
-        $remote = isset($server[static::REMOTE_ADDRESS]) === true ? (string) $server[static::REMOTE_ADDRESS] : null;
+        $remote = isset($server[static::REMOTE_ADDRESS]) ? (string) $server[static::REMOTE_ADDRESS] : null;
         $ipList = array_map('trim', explode(',', $whitelist));
         if (
             // There is no IP on the shell.
-            $this->isCli() === true
+            $this->isCli()
             // Or we allow everyone.
             || $whitelist === '*'
             // Or the IPs are matching.
-            || in_array($remote, $ipList, true) === true
+            || in_array($remote, $ipList, true)
         ) {
             return true;
         }
@@ -161,7 +161,7 @@ class CheckOutput
     /**
      * Check the wildcards.
      *
-     * @param array $ipList
+     * @param string[] $ipList
      *   The list of allowed ips
      * @param string $remote
      *   The remote address, according to the server array.

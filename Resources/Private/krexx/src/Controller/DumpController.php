@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,6 +40,7 @@ namespace Brainworxx\Krexx\Controller;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\ExceptionCallerFinder;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Logging\Model as LogModel;
 
 /**
  * "Controller" for the dump (aka analysis) "action".
@@ -64,13 +65,13 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
      */
     public function dumpAction(&$data, string $message = '', string $level = 'debug'): DumpController
     {
-        if ($this->pool->emergencyHandler->checkMaxCall() === true) {
+        if ($this->pool->emergencyHandler->checkMaxCall()) {
             // Called too often, we might get into trouble here!
             return $this;
         }
 
         // Find caller.
-        if ($data instanceof \Brainworxx\Krexx\Logging\Model) {
+        if ($data instanceof LogModel) {
             $this->callerFinder = $this->pool->createClass(ExceptionCallerFinder::class);
         }
         $caller = $this->callerFinder->findCaller($message, $data);
@@ -79,7 +80,7 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
         // We will only allow code generation, if we were able to determine the
         // variable name or if we are not in logging mode.
         $message === '' ? $this->pool->scope->setScope($caller[static::TRACE_VARNAME]) :
-            $this->pool->codegenHandler->setAllowCodegen(false);
+            $this->pool->codegenHandler->setCodegenAllowed(false);
 
         // Start the magic.
         $analysis = $this->pool->routing->analysisHub(
@@ -92,7 +93,7 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
 
         // Now that our analysis is done, we must check if there was an emergency
         // break.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
             return $this;
         }
 

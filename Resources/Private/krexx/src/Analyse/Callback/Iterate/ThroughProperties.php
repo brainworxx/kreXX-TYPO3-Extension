@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,9 +42,9 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Properties;
+use Brainworxx\Krexx\Analyse\Declaration\PropertyDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\View\ViewConstInterface;
-use ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionProperty;
 use Throwable;
 
@@ -58,10 +58,13 @@ use Throwable;
  */
 class ThroughProperties extends AbstractCallback implements
     CallbackConstInterface,
-    ViewConstInterface,
     CodegenConstInterface,
     ConnectorsConstInterface
 {
+    /**
+     * @var PropertyDeclaration
+     */
+    protected $propertyDeclaration;
 
     /**
      * Renders the properties of a class.
@@ -77,34 +80,122 @@ class ThroughProperties extends AbstractCallback implements
         // reflection property.
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref */
         $ref = $this->parameters[static::PARAM_REF];
+        $this->propertyDeclaration = $this->pool->createClass(PropertyDeclaration::class);
 
         foreach ($this->parameters[static::PARAM_DATA] as $refProperty) {
             // Check memory and runtime.
-            if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
+            if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
                 return '';
             }
 
-            // Stitch together our model.
-            $value = $ref->retrieveValue($refProperty);
             $output .= $this->pool->routing->analysisHub(
                 $this->dispatchEventWithModel(
                     __FUNCTION__ . static::EVENT_MARKER_END,
-                    $this->pool->createClass(Model::class)
-                        ->setData($value)
-                        ->setName($this->retrievePropertyName($refProperty))
-                        ->addToJson(
-                            static::META_COMMENT,
-                            $this->pool->createClass(Properties::class)->getComment($refProperty)
-                        )
-                        ->addToJson(static::META_DECLARED_IN, $this->retrieveDeclarationPlace($refProperty))
-                        ->setAdditional($this->getAdditionalData($refProperty, $ref))
-                        ->setConnectorType($this->retrieveConnector($refProperty))
-                        ->setCodeGenType($refProperty->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '')
+                    $this->prepareModel($ref->retrieveValue($refProperty), $refProperty)
                 )
             );
         }
 
         return $output;
+    }
+
+    /**
+     * Prepare the model.
+     *
+     * @param mixed $value
+     *   The retrieved value
+     * @param \ReflectionProperty $refProperty
+     *   The reflection of the property we are analysing.
+     *
+     * @return \Brainworxx\Krexx\Analyse\Model
+     *   The prepared model.
+     */
+    protected function prepareModel($value, ReflectionProperty $refProperty): Model
+    {
+        $messages = $this->pool->messages;
+
+        return $this->pool->createClass(Model::class)
+            ->setData($value)
+            ->setName($this->retrievePropertyName($refProperty))
+            ->addToJson(
+                $messages->getHelp('metaComment'),
+                $this->pool->createClass(Properties::class)->getComment($refProperty)
+            )
+            ->addToJson(
+                $messages->getHelp('metaDeclaredIn'),
+                $this->propertyDeclaration->retrieveDeclaration($refProperty)
+            )
+            ->addToJson(
+                $messages->getHelp('metaDefaultValue'),
+                $this->retrieveDefaultValue($refProperty)
+            )
+            ->addToJson(
+                $messages->getHelp('metaTypedValue'),
+                $this->propertyDeclaration->retrieveNamedPropertyType($refProperty)
+            )
+            ->setAdditional(
+                $this->getAdditionalData($refProperty, $this->parameters[static::PARAM_REF])
+            )
+            ->setConnectorType($this->retrieveConnector($refProperty))
+            ->setCodeGenType($refProperty->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '');
+    }
+
+    /**
+     * Retrieve the default value, if possible.
+     *
+     * @param ReflectionProperty $property
+     *
+     * @return string
+     */
+    protected function retrieveDefaultValue(ReflectionProperty $property): string
+    {
+        $default = null;
+
+        try {
+            // The 8.0 way of getting the default value.
+            // There is also a PHP 8.0 bug that may cause an
+            // "Internal error: Failed to retrieve the reflection object"
+            // That is not even a Reflection exception, it's an "Error".
+            $default = $property->getDefaultValue();
+        } catch (Throwable $exception) {
+            // Fallback to the 7.x way.
+            // The values of static properties are stored in the default
+            // properties of the class reflection.
+            // And we do not want these here.
+            // @deprecated
+            //   Will be removed as soon als we drop php 8.0 support.
+            if (!$property->isStatic()) {
+                // We also need to get the class that actually declared this
+                // value. The default values can only be found in there.
+                $defaultProperties = $property->getDeclaringClass()->getDefaultProperties();
+                $default = $defaultProperties[$property->getName()] ?? null;
+            }
+        }
+
+        return $default === null ? '' : $this->formatDefaultValue($default);
+    }
+
+    /**
+     * Format the default value into something readable
+     *
+     * @param string|int|float|array $default
+     * @return string
+     */
+    protected function formatDefaultValue($default): string
+    {
+        if (is_int($default) || is_float($default)) {
+            // We do not need to escape an integer or a float,
+            return (string)$default;
+        }
+
+        $result = '';
+        if (is_string($default)) {
+            $result = '\'' . $default . '\'';
+        } elseif (is_array($default)) {
+            $result = var_export($default, true);
+        }
+
+        return nl2br($this->pool->encodingService->encodeString($result));
     }
 
     /**
@@ -114,17 +205,17 @@ class ThroughProperties extends AbstractCallback implements
      *   Reflection of the property we are analysing.
      *
      * @return string
-     *   The connector type.
+     *   The connector-type.
      */
     protected function retrieveConnector(ReflectionProperty $refProperty): string
     {
         $connectorType = static::CONNECTOR_NORMAL_PROPERTY;
 
-        if ($refProperty->isStatic() === true) {
+        if ($refProperty->isStatic()) {
             $connectorType = static::CONNECTOR_STATIC_PROPERTY;
         } elseif (
-            isset($refProperty->isUndeclared) === true &&
-            $this->pool->encodingService->isPropertyNameNormal($refProperty->getName()) === false
+            !empty($refProperty->isUndeclared) &&
+            !$this->isPropertyNameNormal($refProperty->getName())
         ) {
             // This one was undeclared and does not follow the standard naming
             // conventions of PHP. Maybe something for a rest service?
@@ -147,93 +238,115 @@ class ThroughProperties extends AbstractCallback implements
     {
         $propName = $refProperty->getName();
         // Static properties are very special.
-        if ($refProperty->isStatic() === true) {
+        if ($refProperty->isStatic()) {
             // There is always a $ in front of a static property.
             $propName = '$' . $propName;
         } elseif (
-            isset($refProperty->isUndeclared) === true &&
-            $this->pool->encodingService->isPropertyNameNormal($refProperty->getName()) === false
+            !empty($refProperty->isUndeclared) &&
+            !$this->isPropertyNameNormal($refProperty->getName())
         ) {
             // There can be anything in there. We must take special preparations
             // for the code generation.
             $propName = $this->pool->encodingService->encodeString($propName);
         }
 
-        // And  encode it, just in case.
         return $propName;
     }
 
     /**
      * Adding declaration keywords to our data in the additional field.
      *
-     * @param \ReflectionProperty $refProperty
+     * @param ReflectionProperty $refProperty
      *   A reflection of the property we ara analysing.
-     * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
+     * @param ReflectionClass $ref
      *   A reflection of the class we are analysing.
      *
      * @return string
      */
     protected function getAdditionalData(ReflectionProperty $refProperty, ReflectionClass $ref): string
     {
+        $messages = $this->pool->messages;
+        $additional = $messages->getHelp('public') . ' ';
+
+        if (!empty($refProperty->isUndeclared)) {
+            // The property 'isUndeclared' is not a part of the reflectionProperty.
+            // @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
+            // A dynamically declared property is always public, and nothing else.
+            return $additional . $messages->getHelp('dynamic') . ' ';
+        }
+
         // Now that we have the key and the value, we can analyse it.
         // Stitch together our additional info about the data:
         // public access, protected access, private access, static declaration.
-        $additional = '';
-
-        if ($refProperty->isProtected() === true) {
-            $additional .= 'protected ';
-        } elseif ($refProperty->isPublic() === true) {
-            $additional .= 'public ';
-        } elseif ($refProperty->isPrivate() === true) {
-            $additional .= 'private ';
+        if ($refProperty->isProtected()) {
+            $additional = $messages->getHelp('protected') . ' ';
+        } elseif ($refProperty->isPrivate()) {
+            $additional = $messages->getHelp('private') . ' ';
         }
+
+        // Retrieve the value status of the property.
+        $additional .= $this->retrieveValueStatus($refProperty, $ref);
+
+        // Test if the property is inherited or not by testing the
+        // declaring class
+        if ($refProperty->getDeclaringClass()->getName() !== $ref->getName()) {
+            // This one got inherited fom a lower level.
+            $additional .= $messages->getHelp('inherited') . ' ';
+        }
+
+        // Add the info, if this is static.
+        if ($refProperty->isStatic()) {
+            $additional .= $messages->getHelp('static') . ' ';
+        }
+
+        return $additional;
+    }
+
+    /**
+     * Retrieve the value status of a property:
+     *   - readonly
+     *   - uninitialized (not yet with a value)
+     *   - unset (not with a value anymore)
+     *
+     * @param \ReflectionProperty $refProperty
+     *   The reflection of the property we are analysing.
+     *
+     * @return string
+     *   The human-readable result string.
+     */
+    protected function retrieveValueStatus(ReflectionProperty $refProperty, ReflectionClass $ref): string
+    {
+        $additional = '';
+        $messages = $this->pool->messages;
 
         // There are readonly properties since PHP 8.1 available.
         // In a rather buggy state. When the property is not readonly, this may
         // trigger an
         // "Error : Internal error: Failed to retrieve the reflection object".
         try {
-            if ($refProperty->isReadOnly() === true) {
-                $additional .= 'readonly ';
+            if ($refProperty->isReadOnly()) {
+                $additional .= $messages->getHelp('readonly') . ' ';
             }
         } catch (Throwable $exception) {
             // Do nothing.
             // We ignore this one.
         }
 
-        if ($ref->isPropertyUnset($refProperty)) {
-            if (method_exists($refProperty, 'hasType') === true && $refProperty->hasType() === true) {
-                // Typed properties where introduced in 7.4.
-                // This one was either unset, or never received a value in the
-                // first place. Either way, it's status is uninitialized.
-                $additional .= 'uninitialized ';
-            } else {
-                // This one was unset during runtime.
-                // We need to tell the dev. Accessing an unset property may trigger
-                // a warning.
-                $additional .= 'unset ';
-            }
+        if (!$ref->isPropertyUnset($refProperty)) {
+            return $additional;
         }
 
-        // Test if the property is inherited or not by testing the
-        // declaring class
-        if ($refProperty->getDeclaringClass()->getName() !== $ref->getName()) {
-            // This one got inherited fom a lower level.
-            $additional .= 'inherited ';
+        if (method_exists($refProperty, 'hasType') && $refProperty->hasType()) {
+            // Typed properties where introduced in 7.4.
+            // This one was either unset, or never received a value in the
+            // first place. Either way, it's status is uninitialized.
+            return $additional . $messages->getHelp('uninitialized') . ' ';
         }
 
-        // Add the info, if this is static.
-        if ($refProperty->isStatic() === true) {
-            $additional .= 'static ';
-        }
-
-        if (isset($refProperty->isUndeclared) === true) {
-            // The property 'isUndeclared' is not a part of the reflectionProperty.
-            // @see \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects
-            $additional .= 'dynamic property ';
-        }
-
-        return $additional;
+        // This one was unset during runtime.
+        // We need to tell the dev. Accessing an unset property may trigger
+        // a warning.
+        return $additional . $messages->getHelp('unset') . ' ';
     }
 
     /**
@@ -242,77 +355,47 @@ class ThroughProperties extends AbstractCallback implements
      * @param \ReflectionProperty $refProperty
      *   A reflection of the property we are analysing.
      *
+     * @deprecated since 5.0.0
+     *   Will be removed. Use PropertyDeclaration instead.
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @return string
      *   Human-readable string, where the property was declared.
      */
     protected function retrieveDeclarationPlace(ReflectionProperty $refProperty): string
     {
-        $declaringClass = $refProperty->getDeclaringClass();
-        $traits = $declaringClass->getTraits();
-
-        // Early returns for simple cases.
-        if (isset($refProperty->isUndeclared) === true) {
-            return static::META_UNDECLARED;
-        }
-        if ($declaringClass->isInternal()) {
-            return static::META_PREDECLARED;
-        }
-
-        if (empty($traits) === false) {
-            // Update the declaring class reflection from the traits.
-            $declaringClass = $this->retrieveDeclaringClassFromTraits($traits, $refProperty, $declaringClass);
-        }
-        $result = '';
-        if ($declaringClass !== null) {
-            $result = $this->pool->fileService->filterFilePath($declaringClass->getFileName()) .
-                $this->pool->render->renderLinebreak() .
-                ($declaringClass->isTrait() ? static::META_IN_TRAIT : static::META_IN_CLASS) .
-                $declaringClass->name;
-        }
-
-        return $result;
+        return $this->pool->createClass(PropertyDeclaration::class)
+            ->retrieveDeclaration($refProperty);
     }
 
     /**
-     * Retrieve the declaration name from traits.
+     * Check for special chars in properties.
      *
-     * A class can not redeclare a property from a trait that it is using.
-     * Hence, if one of the traits has the same property that we are
-     * analysing, it is probably declared there.
-     * Traits on the other hand can redeclare their properties.
-     * I'm not sure how to get the actual declaration place, when dealing
-     * with several layers of traits. We will not parse the source code
-     * for an answer.
+     * AFAIK this is only possible for dynamically declared properties
+     * or some magical stuff from __get()
      *
-     * @param \ReflectionClass[] $traits
-     *   The traits of that class.
-     * @param \ReflectionProperty $refProperty
-     *   Reflection of the property we are analysing.
-     * @param \ReflectionClass $originalRef
-     *   The original reflection class for the declaration.
+     * @see https://stackoverflow.com/questions/29019484/validate-a-php-variable
+     * @author AbraCadaver
      *
-     * @return \ReflectionClass|null
-     *   Either the reflection class of the trait, or null when we are unable to
-     *   retrieve it.
+     * @param string|int $propName
+     *   The property name we want to check.
+     * @return bool
+     *   Whether we have a special char in there, or not.
      */
-    protected function retrieveDeclaringClassFromTraits(
-        array $traits,
-        ReflectionProperty $refProperty,
-        ReflectionClass $originalRef
-    ) {
-        $propertyName = $refProperty->name;
-        foreach ($traits as $trait) {
-            if ($trait->hasProperty($propertyName)) {
-                if (count($trait->getTraitNames()) > 0) {
-                    // Multiple layers of traits!
-                    return null;
-                }
-                // From a trait.
-                return $trait;
-            }
+    public function isPropertyNameNormal($propName): bool
+    {
+        static $cache = [];
+
+        if (isset($cache[$propName])) {
+            return $cache[$propName];
         }
 
-        // Return the original reflection class.
-        return $originalRef;
+        // The first regex detects all allowed characters.
+        // For some reason, they also allow BOM characters.
+        return $cache[$propName] = (bool) preg_match(
+            "/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/",
+            (string)$propName
+        ) && !(bool) preg_match("/\xEF\xBB\xBF/", $propName);
     }
 }

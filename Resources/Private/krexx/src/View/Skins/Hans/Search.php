@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,9 +43,17 @@ namespace Brainworxx\Krexx\View\Skins\Hans;
 trait Search
 {
     /**
-     * @var string
+     * @var string[]
      */
-    private $markerSearch = '{KrexxId}';
+    private $markerSearch = [
+        '{KrexxId}',
+        '{searchHeadline}',
+        '{searchCaseSensitive}',
+        '{searchShortResults}',
+        '{searchKeys}',
+        '{searchLongResults}',
+        '{searchWholeValues}',
+    ];
 
     /**
      * Renders the search button and the search menu.
@@ -55,10 +63,19 @@ trait Search
      */
     protected function renderSearch(): string
     {
+        $messages = $this->pool->messages;
         return str_replace(
             $this->markerSearch,
-            $this->pool->recursionHandler->getMarker(),
-            $this->getTemplateFileContent(static::FILE_SEARCH)
+            [
+                $this->pool->recursionHandler->getMarker(),
+                $messages->getHelp('searchHeadline'),
+                $messages->getHelp('searchCaseSensitive'),
+                $messages->getHelp('searchShortResults'),
+                $messages->getHelp('searchKeys'),
+                $messages->getHelp('searchLongResults'),
+                $messages->getHelp('searchWholeValues'),
+            ],
+            $this->fileCache[static::FILE_SEARCH]
         );
     }
 
@@ -73,6 +90,6 @@ trait Search
      */
     public function getMarkerSearch(): array
     {
-        return [$this->markerSearch];
+        return $this->markerSearch;
     }
 }

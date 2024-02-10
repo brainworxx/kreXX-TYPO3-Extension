@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -74,13 +74,13 @@ class Routing extends AbstractRouting
 
         $this->processors[ProcessString::class] = $pool->createClass(ProcessString::class);
         $this->processors[ProcessInteger::class] = $pool->createClass(ProcessInteger::class);
-        $this->processors[ProcessNull::class] = $pool->createClass(ProcessNull::class);
         $this->processors[ProcessArray::class] = $pool->createClass(ProcessArray::class);
         $this->processors[ProcessClosure::class] = $pool->createClass(ProcessClosure::class);
-        $this->processors[ProcessResource::class] = $pool->createClass(ProcessResource::class);
         $this->processors[ProcessObject::class] = $pool->createClass(ProcessObject::class);
         $this->processors[ProcessBoolean::class] = $pool->createClass(ProcessBoolean::class);
         $this->processors[ProcessFloat::class] = $pool->createClass(ProcessFloat::class);
+        $this->processors[ProcessNull::class] = $pool->createClass(ProcessNull::class);
+        $this->processors[ProcessResource::class] = $pool->createClass(ProcessResource::class);
         $this->processors[ProcessOther::class] = $pool->createClass(ProcessOther::class);
 
         $pool->routing = $this;
@@ -101,7 +101,7 @@ class Routing extends AbstractRouting
     public function analysisHub(Model $model): string
     {
         // Check memory and runtime.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
             return '';
         }
 

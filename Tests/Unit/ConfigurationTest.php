@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -34,18 +34,16 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit;
 
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class ConfigurationTest extends AbstractTest
+class ConfigurationTest extends AbstractHelper
 {
     /**
      * We have several configuration files in here with redundant constrains and
      * version numbers, namely:
-     *   - composer.json
      *   - ext_emconf.php
      *   - changelog.rst
      *   - settings.cfg
-     *   - ext_localconf.php
      *
      * All of them contain the same fu**ing data!
      */
@@ -71,14 +69,13 @@ class ConfigurationTest extends AbstractTest
         include $extEmConfPath;
         $docSettings = parse_ini_file($docSettingsPath);
         $changelogContent = file($changelogPath)[14];
-        $extLocalConf = file_get_contents($extLocalConfPath);
 
         // Our expectations.
-        $versionNumber = '4.1.10';
-        $t3EmConstraint = '7.6.0-12.4.99';
-        $phpEmConstraint = '7.0.0-8.2.99';
-        $t3ComposerConstraint = '^7.6 || ^8 || ^9 || ^10 || ^11 || ^12';
-        $phpComposerConstraint = '^7.0 || ^7.1 || ^7.2 || ^7.3 || ^7.4 || ^8.0 || ^8.1 || ^8.2';
+        $versionNumber = '5.0.2';
+        $t3EmConstraint = '10.4.0-12.4.99';
+        $phpEmConstraint = '7.2.0-8.3.99';
+        $t3ComposerConstraint = '^10.4 || ^11 || ^12';
+        $phpComposerConstraint = '^7.2 || ^7.3 || ^7.4 || ^8.0 || ^8.1 || ^8.2 || ^8.3';
 
         // Test the EM configuration.
         $this->assertEquals($versionNumber, $EM_CONF[$_EXTKEY]['version']);
@@ -98,8 +95,5 @@ class ConfigurationTest extends AbstractTest
 
         // Test the changelog.
         $this->assertStringContainsString($versionNumber, $changelogContent);
-
-        // Test the version check in the autoExecLocalBat.php
-        $this->assertStringContainsString('\'' . $versionNumber . '\'', $extLocalConf);
     }
 }

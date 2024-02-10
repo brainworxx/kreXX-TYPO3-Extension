@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,11 +40,11 @@ use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\LoggerCallerFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use ReflectionClass;
 
-class CallerFinderTest extends AbstractTest
+class CallerFinderTest extends AbstractHelper
 {
     const FUNCTION_TO_TRACE = 'krexx';
     const HEADLINE_STRING = 'A headline';
@@ -76,9 +76,9 @@ class CallerFinderTest extends AbstractTest
      * Creating the Caller finder.
      * {@inheritdoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         // Prepare the uri.
         // The things you do, to mock an uri call . . .
@@ -167,7 +167,6 @@ class CallerFinderTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::identifyCaller
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::removeKrexxPartFromCommand
      * @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::getCurrentUrl
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::cleanupVarName
      *
      * @throws \ReflectionException
      */
@@ -193,8 +192,7 @@ class CallerFinderTest extends AbstractTest
      * Test the resolving of inline calles of kreXX.
      *
      * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::findCaller
-     * @covers \Brainworxx\Krexx\Analyse\Caller\CallerFinder::cleanupVarName
-     *  @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::getType
+     * @covers \Brainworxx\Krexx\Analyse\Caller\AbstractCaller::getType
      *
      * @throws \ReflectionException
      */

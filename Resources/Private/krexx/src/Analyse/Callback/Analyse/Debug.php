@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -49,7 +49,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class Debug extends AbstractCallback implements CallbackConstInterface
 {
-
     /**
      * Iterate though the result of the polled debug methods.
      *
@@ -65,7 +64,7 @@ class Debug extends AbstractCallback implements CallbackConstInterface
                     static::EVENT_MARKER_ANALYSES_END,
                     $this->pool->createClass(Model::class)
                         ->setData($this->parameters[static::PARAM_DATA])
-                        ->setName('result')
+                        ->setName($this->pool->messages->getHelp('result'))
                 )
             );
     }

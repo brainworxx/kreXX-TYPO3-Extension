@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -45,9 +45,9 @@ use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionException;
 use ReflectionMethod;
+use ReflectionProperty;
 
 /**
  * Getter method analysis methods.
@@ -74,7 +74,6 @@ use ReflectionMethod;
  */
 class ThroughGetter extends AbstractCallback implements
     CallbackConstInterface,
-    ViewConstInterface,
     CodegenConstInterface,
     ConnectorsConstInterface
 {
@@ -83,10 +82,13 @@ class ThroughGetter extends AbstractCallback implements
      *
      * @var string
      */
-    const CURRENT_PREFIX = 'currentPrefix';
+    public const CURRENT_PREFIX = 'currentPrefix';
 
     /**
      * Stuff we need to escape in a regex.
+     *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
      *
      * @var string[]
      */
@@ -94,6 +96,9 @@ class ThroughGetter extends AbstractCallback implements
 
     /**
      * Stuff the escaped regex stuff.
+     *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
      *
      * @var string[]
      */
@@ -134,14 +139,22 @@ class ThroughGetter extends AbstractCallback implements
     {
         $output = $this->dispatchStartEvent();
 
-        $this->parameters[static::CURRENT_PREFIX] = 'get';
-        $output .= $this->goThroughMethodList($this->parameters[static::PARAM_NORMAL_GETTER]);
+        if (!empty($this->parameters[static::PARAM_NORMAL_GETTER])) {
+            $this->parameters[static::CURRENT_PREFIX] = 'get';
+            $output .= $this->goThroughMethodList($this->parameters[static::PARAM_NORMAL_GETTER]);
+        }
 
-        $this->parameters[static::CURRENT_PREFIX] = 'is';
-        $output .= $this->goThroughMethodList($this->parameters[static::PARAM_IS_GETTER]);
+        if (!empty($this->parameters[static::PARAM_IS_GETTER])) {
+            $this->parameters[static::CURRENT_PREFIX] = 'is';
+            $output .= $this->goThroughMethodList($this->parameters[static::PARAM_IS_GETTER]);
+        }
 
-        $this->parameters[static::CURRENT_PREFIX] = 'has';
-        return $output . $this->goThroughMethodList($this->parameters[static::PARAM_HAS_GETTER]);
+        if (!empty($this->parameters[static::PARAM_HAS_GETTER])) {
+            $this->parameters[static::CURRENT_PREFIX] = 'has';
+            $output .= $this->goThroughMethodList($this->parameters[static::PARAM_HAS_GETTER]);
+        }
+
+        return $output;
     }
 
     /**
@@ -174,10 +187,10 @@ class ThroughGetter extends AbstractCallback implements
             $model = $this->pool->createClass(Model::class)
                 ->setName($reflectionMethod->getName())
                 ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
-                ->addToJson(static::META_METHOD_COMMENT, $comments);
+                ->addToJson($this->pool->messages->getHelp('metaMethodComment'), $comments);
 
             // We need to decide if we are handling static getters.
-            if ($reflectionMethod->isStatic() === true) {
+            if ($reflectionMethod->isStatic()) {
                 $model->setConnectorType(static::CONNECTOR_STATIC_METHOD);
             } else {
                 $model->setConnectorType(static::CONNECTOR_METHOD);
@@ -221,12 +234,15 @@ class ThroughGetter extends AbstractCallback implements
         $this->prepareResult($reflectionClass, $reflectionMethod, $refProp, $model);
         $this->dispatchEventWithModel(__FUNCTION__ . '::resolving', $model);
 
-        if ($this->parameters[static::PARAM_ADDITIONAL]['nothingFound'] === true) {
+        if ($this->parameters[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND]) {
             // Found nothing  :-(
             // We literally have no info. We need to tell the user.
             // We render this right away, without any routing.
             return $this->pool->render->renderExpandableChild(
-                $model->setType(static::TYPE_UNKNOWN)->setNormal(static::TYPE_UNKNOWN)
+                $this->dispatchEventWithModel(
+                    __FUNCTION__ . static::EVENT_MARKER_END,
+                    $model->setType(static::TYPE_UNKNOWN)->setNormal(static::TYPE_UNKNOWN)
+                )
             );
         }
 
@@ -253,9 +269,9 @@ class ThroughGetter extends AbstractCallback implements
     protected function prepareResult(
         ReflectionClass $reflectionClass,
         ReflectionMethod $reflectionMethod,
-        $refProp,
+        ?ReflectionProperty $refProp,
         Model $model
-    ) {
+    ): void {
         $this->parameters[static::PARAM_ADDITIONAL] = [
             static::PARAM_NOTHING_FOUND => true,
             static::PARAM_VALUE => null,
@@ -263,7 +279,7 @@ class ThroughGetter extends AbstractCallback implements
             static::PARAM_REFLECTION_METHOD => $reflectionMethod
         ];
 
-        if (empty($refProp)) {
+        if ($refProp === null) {
             return;
         }
 
@@ -271,14 +287,11 @@ class ThroughGetter extends AbstractCallback implements
         $value = $reflectionClass->retrieveValue($refProp);
         // If we are handling a getter, we retrieve the value itself
         // If we are handling an is'er of has'er, we return a boolean.
-        if (
-            $this->parameters[static::CURRENT_PREFIX] !== 'get'
-            && !is_bool($value)
-        ) {
+        if ($this->parameters[static::CURRENT_PREFIX] !== 'get' && !is_bool($value)) {
             $value = $value !== null;
         }
-
         $model->setData($value);
+
         if ($value === null) {
             // A NULL value might mean that the values does not
             // exist, until the getter computes it.
@@ -313,12 +326,14 @@ class ThroughGetter extends AbstractCallback implements
      *   Either the reflection of a possibly associated Property, or null to
      *   indicate that we have found nothing.
      */
-    protected function getReflectionProperty(ReflectionClass $classReflection, ReflectionMethod $reflectionMethod)
-    {
+    protected function getReflectionProperty(
+        ReflectionClass $classReflection,
+        ReflectionMethod $reflectionMethod
+    ): ?ReflectionProperty {
         // We may be facing different writing styles.
         // The property we want from getMyProperty() should be named myProperty,
         // but we can not rely on this.
-        // Old php 4 coders sometimes add a underscore before a protected
+        // Old php 4 coders sometimes add an underscore before a protected
         // property.
 
         // We will check:
@@ -342,13 +357,13 @@ class ThroughGetter extends AbstractCallback implements
         ];
 
         foreach ($names as $name) {
-            if ($classReflection->hasProperty($name) === true) {
+            if ($classReflection->hasProperty($name)) {
                 return $classReflection->getProperty($name);
             }
         }
 
         // Time to do some deep stuff. We parse the sourcecode via regex!
-        return $reflectionMethod->isInternal() === true ? null :
+        return $reflectionMethod->isInternal() ? null :
             $this->getReflectionPropertyDeep($classReflection, $reflectionMethod);
     }
 
@@ -397,8 +412,10 @@ class ThroughGetter extends AbstractCallback implements
      *   Either the reflection of a possibly associated Property, or null to
      *   indicate that we have found nothing.
      */
-    protected function getReflectionPropertyDeep(ReflectionClass $classReflection, ReflectionMethod $reflectionMethod)
-    {
+    protected function getReflectionPropertyDeep(
+        ReflectionClass $classReflection,
+        ReflectionMethod $reflectionMethod
+    ): ?ReflectionProperty {
         // Read the sourcecode into a string.
         $sourcecode = $this->pool->fileService->readFile(
             $reflectionMethod->getFileName(),
@@ -425,9 +442,9 @@ class ThroughGetter extends AbstractCallback implements
     /**
      * Analyse tone of the regex findings.
      *
-     * @param $propertyName
+     * @param string $propertyName
      *   The name of the property.
-     * @param $classReflection
+     * @param ReflectionClass $classReflection
      *   The current class reflection
      *
      * @throws \ReflectionException
@@ -435,7 +452,7 @@ class ThroughGetter extends AbstractCallback implements
      * @return \ReflectionProperty|null
      *   The reflection of the property, or null if we found nothing.
      */
-    protected function analyseRegexResult($propertyName, $classReflection)
+    protected function analyseRegexResult(string $propertyName, ReflectionClass $classReflection): ?ReflectionProperty
     {
         // Check if this is a property and return the first we find.
         $result = $this->retrievePropertyByName($propertyName, $classReflection);
@@ -445,7 +462,7 @@ class ThroughGetter extends AbstractCallback implements
 
         // Check if this is a method and go deeper!
         $methodName = rtrim($propertyName, '()');
-        if ($classReflection->hasMethod($methodName) === true && ++$this->deep < 3) {
+        if ($classReflection->hasMethod($methodName) && ++$this->deep < 3) {
             // We need to be careful not to goo too deep, we might end up
             // in a loop.
             return $this->getReflectionProperty($classReflection, $classReflection->getMethod($methodName));
@@ -465,12 +482,12 @@ class ThroughGetter extends AbstractCallback implements
      * @return \ReflectionProperty|null
      *   The reflection property, if found.
      */
-    protected function retrievePropertyByName(string $propertyName, \ReflectionClass $parentClass)
+    protected function retrievePropertyByName(string $propertyName, \ReflectionClass $parentClass): ?ReflectionProperty
     {
         while ($parentClass !== false) {
             // Check if it was declared somewhere deeper in the
             // class structure.
-            if ($parentClass->hasProperty($propertyName) === true) {
+            if ($parentClass->hasProperty($propertyName)) {
                 return $parentClass->getProperty($propertyName);
             }
             $parentClass = $parentClass->getParentClass();
@@ -505,25 +522,21 @@ class ThroughGetter extends AbstractCallback implements
      * @param string $haystack
      *   The haystack, obviously.
      *
-     * @return array
+     * @return string[]|int[]
      *   The findings.
      */
     protected function findIt(array $searchArray, string $haystack): array
     {
-
-        // Defining our regex.
-        $regex = '/(?<=###0###).*?(?=###1###)/';
-
-        // Regex escaping our search stuff
-        $searchArray[0] = $this->regexEscaping($searchArray[0]);
-        $searchArray[1] = $this->regexEscaping($searchArray[1]);
-
-        // Add the search stuff to the regex
-        $regex = str_replace('###0###', $searchArray[0], $regex);
-        $regex = str_replace('###1###', $searchArray[1], $regex);
-
-        // Trigger the search.
-        preg_match_all($regex, $haystack, $findings);
+        $findings = [];
+        preg_match_all(
+            str_replace(
+                ['###0###', '###1###'],
+                [preg_quote($searchArray[0]), preg_quote($searchArray[1])],
+                '/(?<=###0###).*?(?=###1###)/'
+            ),
+            $haystack,
+            $findings
+        );
 
         // Return the file name as well as stuff from the path.
         return $findings[0];
@@ -534,6 +547,12 @@ class ThroughGetter extends AbstractCallback implements
      *
      * @param string $string
      *   The string we want to escape.
+     *
+     * @deprecated
+     *   Since 5.0.0. Will be removed. Use preg_quote().
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
      *
      * @return string
      *   The escaped string.

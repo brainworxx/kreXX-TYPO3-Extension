@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,12 +42,12 @@ use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ThroughMethods;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use TYPO3\CMS\Core\Package\MetaData;
 use Aimeos\MW\DB\Statement\Base as StatementBase;
 
-class ConfigurationTest extends AbstractTest
+class ConfigurationTest extends AbstractHelper
 {
     use AimeosTestTrait;
 
@@ -59,9 +59,9 @@ class ConfigurationTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->configuraton = new Configuration();
     }
 
@@ -89,13 +89,13 @@ class ConfigurationTest extends AbstractTest
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue(AbstractTest::TYPO3_VERSION));
+            ->will($this->returnValue(AbstractHelper::TYPO3_VERSION));
         $packageMock = $this->simulatePackage(Bootstrap::EXT_KEY, 'whatever');
         $packageMock->expects($this->once())
             ->method('getPackageMetaData')
             ->will($this->returnValue($metaData));
 
-        $this->assertEquals(AbstractTest::TYPO3_VERSION, $this->configuraton->getVersion());
+        $this->assertEquals(AbstractHelper::TYPO3_VERSION, $this->configuraton->getVersion());
     }
 
     /**

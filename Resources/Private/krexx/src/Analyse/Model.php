@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -45,20 +45,15 @@ use Brainworxx\Krexx\Analyse\Model\ConnectorService;
 use Brainworxx\Krexx\Analyse\Model\Data;
 use Brainworxx\Krexx\Analyse\Model\DomId;
 use Brainworxx\Krexx\Analyse\Model\HasExtra;
-use Brainworxx\Krexx\Analyse\Model\IsCallback;
-use Brainworxx\Krexx\Analyse\Model\IsMetaConstants;
-use Brainworxx\Krexx\Analyse\Model\IsPublic;
 use Brainworxx\Krexx\Analyse\Model\Json;
 use Brainworxx\Krexx\Analyse\Model\KeyType;
-use Brainworxx\Krexx\Analyse\Model\MultiLineCodeGen;
 use Brainworxx\Krexx\Analyse\Model\Name;
 use Brainworxx\Krexx\Analyse\Model\Normal;
-use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Model for the view rendering
  */
-class Model implements ViewConstInterface, CodegenConstInterface
+class Model implements CodegenConstInterface
 {
     use ConnectorService;
     use Callback;
@@ -70,10 +65,6 @@ class Model implements ViewConstInterface, CodegenConstInterface
     use DomId;
     use HasExtra;
     use CodeGenType;
-    use KeyType;
 
-    use MultiLineCodeGen;
-    use IsPublic;
-    use IsMetaConstants;
-    use IsCallback;
+    use KeyType;
 }

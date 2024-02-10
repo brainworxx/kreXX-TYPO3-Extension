@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -52,7 +52,7 @@ trait MaxCall
     /**
      * @param string $maxCall
      */
-    public function setMaxCall(string $maxCall)
+    public function setMaxCall(string $maxCall): void
     {
         $this->maxCall = $maxCall;
     }
@@ -60,7 +60,7 @@ trait MaxCall
      /**
      * @param string $formmaxCall
      */
-    public function setFormmaxCall(string $formmaxCall)
+    public function setFormmaxCall(string $formmaxCall): void
     {
         $this->formmaxCall = $formmaxCall;
     }

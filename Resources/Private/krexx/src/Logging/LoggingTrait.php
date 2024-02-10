@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,6 +39,7 @@ namespace Brainworxx\Krexx\Logging;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -49,31 +50,32 @@ trait LoggingTrait
      /**
      * Configure everything to start the forced logging.
      */
-    protected static function startForcedLog()
+    protected static function startForcedLog(): void
     {
         Pool::createPool();
 
+        $source = Krexx::$pool->messages->getHelp('forcedLogging');
         // Output destination: file
         Krexx::$pool->config
-            ->settings[static::SETTING_DESTINATION]
-            ->setSource('forced logging')
-            ->setValue(static::VALUE_FILE);
+            ->settings[ConfigConstInterface::SETTING_DESTINATION]
+            ->setSource($source)
+            ->setValue(ConfigConstInterface::VALUE_FILE);
 
         // Do not care about ajax requests.
         Krexx::$pool->config
-            ->settings[static::SETTING_DETECT_AJAX]
-            ->setSource('forced logging')
+            ->settings[ConfigConstInterface::SETTING_DETECT_AJAX]
+            ->setSource($source)
             ->setValue(false);
 
         // Reload the disabled settings with the new ajax setting.
          Krexx::$pool->config
-            ->loadConfigValue(static::SETTING_DISABLED);
+            ->loadConfigValue(ConfigConstInterface::SETTING_DISABLED);
     }
 
     /**
      * Reset everything after the forced logging.
      */
-    protected static function endForcedLog()
+    protected static function endForcedLog(): void
     {
         // Reset everything afterwards.
         Krexx::$pool->config = Krexx::$pool

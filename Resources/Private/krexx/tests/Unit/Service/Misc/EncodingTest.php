@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,18 +37,19 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Misc;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\Encoding;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use phpmock\generator\MockFunctionGenerator;
 
-class EncodingTest extends AbstractTest
+class EncodingTest extends AbstractHelper
 {
     /**
      * @var Encoding
      */
     protected $encoding;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->encoding = new Encoding(Krexx::$pool);
     }
 
@@ -124,16 +125,16 @@ class EncodingTest extends AbstractTest
 
         $specialChars = [
             '"' => '&quot;',
-            '\'' => '\&amp;#039;',
+            '\'' => '&#039;',
             "\0" => '&#039; . &quot;\0&quot; . &#039;',
             "\xEF" => '&#039; . &quot;\xEF&quot; . &#039;',
             "\xBB" => '&#039; . &quot;\xBB&quot; . &#039;',
             "\xBF" => '&#039; . &quot;\xBF&quot; . &#039;'
         ];
 
-        foreach ($specialChars as $original => $expeced) {
+        foreach ($specialChars as $original => $expected) {
             $this->assertEquals(
-                $fixture . $expeced,
+                $fixture . $expected,
                 $this->encoding->encodeStringForCodeGeneration($fixture . $original)
             );
         }
@@ -148,27 +149,12 @@ class EncodingTest extends AbstractTest
     {
         $mbStrLen = $this->getFunctionMock('\\Brainworxx\\Krexx\\Service\\Misc\\', 'mb_strlen');
         $mbStrLen->expects($this->exactly(2))
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 ['string'],
                 ['another string', 'some encoding']
-            )
-            ->will($this->returnValue(42));
+            ))->will($this->returnValue(42));
 
         $this->assertEquals(42, $this->encoding->mbStrLen('string'));
         $this->assertEquals(42, $this->encoding->mbStrLen('another string', 'some encoding'));
-    }
-
-    /**
-     * Testing the property name analysis.
-     *
-     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::isPropertyNameNormal
-     */
-    public function testIsPropertyNameNormal()
-    {
-        $this->assertTrue($this->encoding->isPropertyNameNormal('getValue'));
-        $this->assertFalse($this->encoding->isPropertyNameNormal('get value'));
-        $this->assertTrue($this->encoding->isPropertyNameNormal('getValue'));
-        $this->assertFalse($this->encoding->isPropertyNameNormal("\xEF\xBB\xBF"));
-        $this->assertFalse($this->encoding->isPropertyNameNormal('x' . "\xEF\xBB\xBF" . 'y'));
     }
 }

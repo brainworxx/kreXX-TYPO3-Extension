@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,11 +42,10 @@ use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Config\Validation;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
-use Brainworxx\Krexx\View\Output\CheckOutput;
 
-class ConfigTest extends AbstractTest
+class ConfigTest extends AbstractHelper
 {
 
     const NOT_CLI = 'not cli';
@@ -68,16 +67,16 @@ class ConfigTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
         Pool::createPool();
     }
 
-    protected function krexxDown()
+    protected function tearDown(): void
     {
-        parent::krexxDown();
+        parent::tearDown();
         unset($_SERVER['HTTP_X_REQUESTED_WITH']);
-        unset($_SERVER[CheckOutput::REMOTE_ADDRESS]);
+        unset($_SERVER['REMOTE_ADDR']);
     }
 
     /**
@@ -134,6 +133,9 @@ class ConfigTest extends AbstractTest
 
         // kreXX should not be disabled.
         $this->assertEquals(false, $config->getSetting($config::SETTING_DISABLED));
+
+        // Test the selected language. Should be the fallback,
+        $this->assertEquals('text', $config->getSetting($config::SETTING_LANGUAGE_KEY));
     }
 
     /**
@@ -215,7 +217,7 @@ class ConfigTest extends AbstractTest
             ->will($this->returnValue(static::NOT_CLI));
 
         // Testing coming from the wrong ip
-        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '5.4.3.2.1';
+        $_SERVER['REMOTE_ADDR'] = '5.4.3.2.1';
 
         $config = new Config(Krexx::$pool);
         $this->assertEquals(
@@ -225,7 +227,7 @@ class ConfigTest extends AbstractTest
         );
 
         // Testing coming from the right ip
-        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '1.2.3.4.5';
+        $_SERVER['REMOTE_ADDR'] = '1.2.3.4.5';
 
         $config = new Config(Krexx::$pool);
         $this->assertEquals(
@@ -453,12 +455,15 @@ class ConfigTest extends AbstractTest
         $config = new Config(Krexx::$pool);
         $config->settings[$config::SETTING_SKIN]->setValue($skinName);
 
+         $expectations = [
+             'smokygrey' => 'smokygrey',
+             'hans' => 'hans',
+             $skinName => $skinName
+        ];
+
         $this->assertEquals($skinRenderClass, $config->getSkinClass());
         $this->assertEquals($skinDirectory, $config->getSkinDirectory());
-        $this->assertEquals(
-            [$config::SKIN_SMOKY_GREY, $config::SKIN_HANS, $skinName],
-            $config->getSkinList()
-        );
+        $this->assertEquals($expectations, $config->getSkinList());
     }
 
     /**
@@ -473,5 +478,20 @@ class ConfigTest extends AbstractTest
         $config = new Config(Krexx::$pool);
         $config->setPathToConfigFile($fixture);
         $this->assertEquals($fixture, $config->getPathToConfigFile());
+    }
+
+    /**
+     * Test the retrieval of the language list
+     *
+     * @covers \Brainworxx\Krexx\Service\Config\Config::getLanguageList
+     */
+    public function testGetLanguageList()
+    {
+        $expectations = [
+            'text' => 'English',
+            'de' => 'Deutsch'
+        ];
+        $config = new Config(Krexx::$pool);
+        $this->assertEquals($expectations, $config->getLanguageList());
     }
 }

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,32 +36,38 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Scalar;
 
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\LocalizationUtility;
 use Brainworxx\Krexx\Analyse\Model;
-use TYPO3\CMS\Core\Localization\LocalizationFactory;
+use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Lang\LanguageService;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 
-class LllStringTest extends AbstractTest
+class LllStringTest extends AbstractHelper
 {
     const TSFE = 'TSFE';
     const KREXX_DEBUGGER = 'kreXX Debugger';
 
     protected $originalLang;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         // We need to replace this one, because we mock the living hell out of it.
         if (isset($GLOBALS[static::TSFE])) {
             $this->originalLang = $GLOBALS[static::TSFE];
         }
+
+        // Load the TYPO3 language files
+        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
+            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 't3.kreXX.ini');
+        Krexx::$pool->messages->readHelpTexts();
     }
 
-    public function krexxDown()
+    public function tearDown(): void
     {
-        parent::krexxDown();
+        parent::tearDown();
         // Restore the language service to it's former "glory".
         if (isset($this->originalLang)) {
            $GLOBALS[static::TSFE] = $this->originalLang;
@@ -93,6 +99,7 @@ class LllStringTest extends AbstractTest
      * Testing the "glue" to the TYPO3 translation handling.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::canHandle
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::resolveExtPath
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString::__construct
      */
     public function testCanHandle()
@@ -102,8 +109,17 @@ class LllStringTest extends AbstractTest
         $lllString = new LllString(\Krexx::$pool);
         $lllString->setLocalisationUtility(new LocalizationUtility());
         LocalizationUtility::$values[$payload] = static::KREXX_DEBUGGER;
-        $lllString->canHandle($payload, $model);
+        $this->simulatePackage('includekrexx', 'some path');
 
-        $this->assertEquals(static::KREXX_DEBUGGER, $model->getJson()['Translation']);
+        $lllString->canHandle($payload, $model);
+        $result = $model->getJson();
+        $this->assertEquals(static::KREXX_DEBUGGER, $result['Translation']);
+        $this->assertEquals('The file does not exist.', $result['Error']);
+
+        // Do it again, with an early return this time.
+        $payload = 'Just a string, nothing special';
+        $model = new Model(\Krexx::$pool);
+        $lllString->canHandle($payload, $model);
+        $this->assertEmpty($model->getJson(), 'Expecting an empty array.');
     }
 }

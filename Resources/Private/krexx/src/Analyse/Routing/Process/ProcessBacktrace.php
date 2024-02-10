@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -66,37 +66,25 @@ class ProcessBacktrace extends AbstractCallback implements
     }
 
     /**
-     * Processes the model according to the type of the variable.
-     *
-     * @param array $backtrace
-     *
-     * @deprecated
-     *   Will be removed. Use $this->handle;
-     *
-     * @codeCoverageIgnore
-     *   We will not test methods that are deprecated.
-     *
-     * @return string
-     */
-    public function process(&$backtrace = []): string
-    {
-        return $this->handle($backtrace);
-    }
-
-    /**
      * Do a backtrace analysis.
      *
-     * @param array $backtrace
+     * @param array|null $backtrace
      *   The backtrace, which may (or may not) come from other sources.
      *   If omitted, a new debug_backtrace() will be retrieved.
      *
      * @return string
      *   The rendered backtrace.
      */
-    public function handle(&$backtrace = []): string
+    public function handle(?array &$backtrace = []): string
     {
-        if (empty($backtrace) === true) {
+        if (empty($backtrace)) {
             $backtrace = $this->getBacktrace();
+        }
+
+        if (empty($backtrace)) {
+            // Not sure if this is possible.
+            // But, there is no backtrace, which means there is nothing to analyse.
+            return '';
         }
 
         $output = '';
@@ -117,9 +105,7 @@ class ProcessBacktrace extends AbstractCallback implements
                     ->setName($step)
                     ->setType(static::TYPE_STACK_FRAME)
                     ->addParameter(static::PARAM_DATA, $this->filterFilePath($backtrace[$step - 1]))
-                    ->injectCallback(
-                        $this->pool->createClass(BacktraceStep::class)
-                    )
+                    ->injectCallback($this->pool->createClass(BacktraceStep::class))
             );
         }
 
@@ -139,7 +125,8 @@ class ProcessBacktrace extends AbstractCallback implements
     {
         if (isset($backtraceStep[static::TRACE_FILE])) {
             $backtraceStep[static::TRACE_ORG_FILE] = $backtraceStep[static::TRACE_FILE];
-            $backtraceStep[static::TRACE_FILE] = $this->pool->fileService->filterFilePath($backtraceStep[static::TRACE_FILE]);
+            $backtraceStep[static::TRACE_FILE] = $this->pool->fileService
+                ->filterFilePath($backtraceStep[static::TRACE_FILE]);
         }
 
         return $backtraceStep;
@@ -153,8 +140,6 @@ class ProcessBacktrace extends AbstractCallback implements
      */
     protected function getBacktrace(): array
     {
-        // Remove the fist step from the backtrace,
-        // because that is the internal function in kreXX.
         $backtrace = debug_backtrace();
 
         // We remove all steps that came from inside the kreXX lib.
@@ -165,11 +150,12 @@ class ProcessBacktrace extends AbstractCallback implements
             } else {
                 // No need to go further, because we should have passed the
                 // kreXX part.
-                break;
+                // Reset the array keys, because the 0 is now missing.
+                return array_values($backtrace);
             }
         }
 
-        // Reset the array keys, because the 0 is now missing.
-        return array_values($backtrace);
+        // Fallback to an empty array.
+        return [];
     }
 }

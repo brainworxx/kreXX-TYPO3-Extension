@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,7 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\View\ViewConstInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Displaying the meta stuff from the class analysis.
@@ -51,20 +51,45 @@ use Brainworxx\Krexx\View\ViewConstInterface;
  * @uses string codeGenType
  *   The code generation constants we want to use for none meta stuff.
  */
-class ThroughMeta extends AbstractCallback implements ViewConstInterface, CallbackConstInterface
+class ThroughMeta extends AbstractCallback implements CallbackConstInterface
 {
     /**
      * These keys are rendered with an extra.
      *
      * @var string[]
      */
-    protected $keysWithExtra = [
-        ViewConstInterface::META_COMMENT,
-        ViewConstInterface::META_DECLARED_IN,
-        ViewConstInterface::META_SOURCE,
-        ViewConstInterface::META_PRETTY_PRINT,
-        ViewConstInterface::META_CONTENT
-    ];
+    protected $keysWithExtra = [];
+
+    /**
+     * @var string[]
+     */
+    protected $stuffToProcess = [];
+
+    /**
+     * Inject the pool and init the workflow.
+     *
+     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
+     */
+    public function __construct(Pool $pool)
+    {
+        parent::__construct($pool);
+
+        $messages = $pool->messages;
+
+        $this->keysWithExtra = [
+            $messages->getHelp('metaComment'),
+            $messages->getHelp('metaDeclaredIn'),
+            $messages->getHelp('metaSource'),
+            $messages->getHelp('metaPrettyPrint'),
+            $messages->getHelp('metaContent')
+        ];
+
+        $this->stuffToProcess = [
+            $messages->getHelp('metaInheritedClass'),
+            $messages->getHelp('metaInterfaces'),
+            $messages->getHelp('metaTraits')
+        ];
+    }
 
     /**
      * Renders the metadata of a class, which is actually the same as the
@@ -76,10 +101,9 @@ class ThroughMeta extends AbstractCallback implements ViewConstInterface, Callba
     public function callMe(): string
     {
         $output = $this->dispatchStartEvent();
-        $reflectionStuff = [static::META_INHERITED_CLASS, static::META_INTERFACES, static::META_TRAITS];
 
         foreach ($this->parameters[static::PARAM_DATA] as $key => $metaData) {
-            if (in_array($key, $reflectionStuff)) {
+            if (in_array($key, $this->stuffToProcess, true)) {
                 $output .= $this->pool->render->renderExpandableChild(
                     $this->dispatchEventWithModel(
                         $key,
@@ -92,8 +116,8 @@ class ThroughMeta extends AbstractCallback implements ViewConstInterface, Callba
                             )
                     )
                 );
-            } elseif (empty($metaData) === false) {
-                $output .= $this->handleNoneReflections($key, $metaData);
+            } elseif (!empty($metaData)) {
+                $output .= $this->handleNoneReflections($this->prepareModel($key, $metaData));
             }
         }
 
@@ -101,42 +125,63 @@ class ThroughMeta extends AbstractCallback implements ViewConstInterface, Callba
     }
 
     /**
-     * The info is already here. We just need to output them.
+     * Prepare the model for the noe reflection rendering.
      *
      * @param string $key
      *   The key in the output list.
      * @param mixed $meta
-     *   The text to display.
+     *   The data to display.
      *
-     * @return string
-     *   The rendered html.
+     * @return \Brainworxx\Krexx\Analyse\Model
+     *   The prepared model.
      */
-    protected function handleNoneReflections(string $key, $meta): string
+    protected function prepareModel(string $key, $meta): Model
     {
         /** @var Model $model */
         $model = $this->pool->createClass(Model::class)
             ->setData($meta)
             ->setName($key)
-            ->setType($key === static::META_PRETTY_PRINT ? $key : static::TYPE_REFLECTION);
+            ->setType(
+                $key === $this->pool->messages->getHelp('metaPrettyPrint') ? $key : static::TYPE_REFLECTION
+            );
 
         if (isset($this->parameters[static::PARAM_CODE_GEN_TYPE])) {
             $model->setCodeGenType($this->parameters[static::PARAM_CODE_GEN_TYPE]);
         }
 
-        if (in_array($key, $this->keysWithExtra) === true) {
+        if (in_array($key, $this->keysWithExtra, true)) {
             $model->setNormal(static::UNKNOWN_VALUE)->setHasExtra(true);
         } else {
             $model->setNormal($meta);
         }
 
-        if ($key === static::META_DECODED_JSON) {
+        return $model;
+    }
+
+    /**
+     * The info is already here. We just need to output them.
+     *
+     * @param Model $model
+     *   THe model so far.
+     *
+     * @return string
+     *   The rendered html.
+     */
+    protected function handleNoneReflections(Model $model): string
+    {
+        $key = $model->getName();
+
+        if (
+            $key === $this->pool->messages->getHelp('metaDecodedJson')
+            || $key === $this->pool->messages->getHelp('metaDecodedBase64')
+        ) {
             // Prepare the json code generation.
             return $this->pool->routing->analysisHub($model);
         }
 
         // Sorry, no code generation for you guys.
-        $this->pool->codegenHandler->setAllowCodegen(false);
-        if (is_string($meta) === true) {
+        $this->pool->codegenHandler->setCodegenAllowed(false);
+        if (is_string($model->getData())) {
             // Render a single data point.
             $result = $this->pool->render->renderExpandableChild(
                 $this->dispatchEventWithModel(__FUNCTION__ . $key . static::EVENT_MARKER_END, $model)
@@ -146,7 +191,7 @@ class ThroughMeta extends AbstractCallback implements ViewConstInterface, Callba
             $result = $this->pool->routing->analysisHub($model);
         }
 
-        $this->pool->codegenHandler->setAllowCodegen(true);
+        $this->pool->codegenHandler->setCodegenAllowed(true);
         return $result;
     }
 }

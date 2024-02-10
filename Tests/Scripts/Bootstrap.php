@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -32,18 +32,14 @@
  *   Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 
-define('TYPO3_version', \Brainworxx\Includekrexx\Tests\Helpers\AbstractTest::TYPO3_VERSION);
-define('PATH_site', 'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR);
-define('TYPO3_MODE', 'FE');
 define('LF', chr(10));
 define('CR', chr(13));
 define('CRLF', CR . LF);
 
-
-AbstractTest::defineFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
-AbstractTest::defineFunctionMock(
+AbstractHelper::defineFunctionMock('\\Brainworxx\\Includekrexx\\Log\\', 'debug_backtrace');
+AbstractHelper::defineFunctionMock(
     '\\Brainworxx\\Includekrexx\\Plugins\\Typo3\\EventHandlers\\QueryParser',
     'method_exists'
 );

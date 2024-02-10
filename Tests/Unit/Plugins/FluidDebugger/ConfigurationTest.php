@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,7 +38,7 @@ use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use TYPO3\CMS\Core\Package\MetaData;
 use Brainworxx\Krexx\Analyse\Code\Connectors;
@@ -47,9 +47,8 @@ use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen as FluidCodegen;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\FluidOld as OldCallerFinderFluid;
 
-class ConfigurationTest extends AbstractTest
+class ConfigurationTest extends AbstractHelper
 {
     /**
      * @var \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration
@@ -87,9 +86,9 @@ class ConfigurationTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->configuration = new Configuration();
     }
 
@@ -113,52 +112,30 @@ class ConfigurationTest extends AbstractTest
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue(AbstractTest::TYPO3_VERSION));
+            ->will($this->returnValue(AbstractHelper::TYPO3_VERSION));
         $packageMock = $this->simulatePackage(Bootstrap::EXT_KEY, 'whatever');
         $packageMock->expects($this->once())
             ->method('getPackageMetaData')
             ->will($this->returnValue($metaData));
 
-        $this->assertEquals(AbstractTest::TYPO3_VERSION, $this->configuration->getVersion());
+        $this->assertEquals(AbstractHelper::TYPO3_VERSION, $this->configuration->getVersion());
     }
 
     /**
-     * Test the registration of all neccessary adjustments to the kreXX lib.
+     * Test the registration of all necessary adjustments to the kreXX lib.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration::exec
      */
-    public function testExecHighVersion()
+    public function testExec()
     {
-        $versionCompMock = $this->getFunctionMock(
-            '\\Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\',
-            'version_compare'
-        );
-        $versionCompMock->expects($this->exactly(1))
-            ->will($this->returnValue(true));
-
+        $this->simulatePackage(Bootstrap::EXT_KEY, 'A path/');
         $this->configuration->exec();
 
         $this->assertEquals($this->expectedRewrites, SettingsGetter::getRewriteList());
         $this->assertEquals($this->expectedEvents, SettingsGetter::getEventList());
-    }
-    /**
-     * Same as the testExecHighVersion, but with a lower TYPO3 version.
-     *
-     * @covers \Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration::exec
-     */
-    public function testExecLowVersion()
-    {
-        $versionCompMock = $this->getFunctionMock(
-            '\\Brainworxx\\Includekrexx\\Plugins\\FluidDebugger\\',
-            'version_compare'
-        );
-        $versionCompMock->expects($this->exactly(1))
-            ->will($this->returnValue(false));
-
-        $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/');
-        $this->configuration->exec();
-
-        $this->expectedRewrites[CallerFinder::class] = OldCallerFinderFluid::class;
-        $this->assertEquals($this->expectedRewrites, SettingsGetter::getRewriteList());
+        $expectedHelpFiles = [
+            'A path/Resources/Private/Language/fluid.kreXX.ini'
+        ];
+        $this->assertEquals($expectedHelpFiles, SettingsGetter::getAdditionalHelpFiles());
     }
 }

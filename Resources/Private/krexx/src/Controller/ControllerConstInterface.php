@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,31 +39,29 @@ namespace Brainworxx\Krexx\Controller;
 
 /**
  * Literals for the frontend.
+ *
+ * @deprecated since 5.0.0
+ *   Will ber removed. Use the translations.
  */
 interface ControllerConstInterface
 {
     /**
      * Headline, when used to display the fe editing dialog.
      *
-     * @var string
-     *
-     * @deprecated
-     *   Since 4.0.0. Will be removed. Use HEADLINE_COOKIE_CONF instead.
-     *
-     */
-    const HEADLINE_EDIT_SETTINGS = 'Edit local settings';
-
-    /**
-     * Headline, when used to display the fe editing dialog.
+     * @deprecated since 5.0.0
+     *   Use $pool->messages->getHelp('headlineCookieConf') instead.
      *
      * @var string
      */
-    const HEADLINE_COOKIE_CONF = 'Cookie Configuration';
+    public const HEADLINE_COOKIE_CONF = 'Cookie Configuration';
 
     /**
      * Headline for the kreXX timer.
      *
+     * @deprecated  since 5.0.0
+     *   Use $pool->messages->getHelp('headlineTimer') instead.
+     *
      * @var string
      */
-    const HEADLINE_TIMER = 'kreXX timer';
+    public const HEADLINE_TIMER = 'kreXX timer';
 }

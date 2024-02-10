@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -105,7 +105,7 @@ trait ConnectorService
      * @param string|int $params
      *   The parameters as a sting.
      *
-     * @return $this
+     * @return Model
      *   $this for chaining.
      */
     public function setConnectorParameters($params): Model
@@ -130,7 +130,7 @@ trait ConnectorService
      *
      * @param string $type
      *
-     * @return $this
+     * @return Model
      *   Return $this, for chaining.
      */
     public function setConnectorType(string $type): Model
@@ -145,7 +145,7 @@ trait ConnectorService
      *
      * @param string $string
      *
-     * @return $this
+     * @return Model
      *   Return $this for chaining.
      */
     public function setCustomConnectorLeft(string $string): Model
@@ -165,7 +165,7 @@ trait ConnectorService
     }
 
     /**
-     * Getter of the return type of a method analysis.
+     * Getter of the return type the method analysis.
      *
      * @return string
      */
@@ -180,7 +180,7 @@ trait ConnectorService
      * @param string $returnType
      *   The return type.
      *
-     * @return $this
+     * @return Model
      *   Return $this for chaining.
      */
     public function setReturnType(string $returnType): Model

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -61,9 +61,9 @@ class FooterTest extends AbstractRenderSmokyGrey
             ->will($this->returnValue(''));
 
         $result = $this->renderSmokyGrey->renderFooter([], $model, true);
-        $this->assertStringNotContainsString($this->renderSmokyGrey::STYLE_HIDDEN, $result);
+        $this->assertStringNotContainsString('khidden', $result);
 
         $result = $this->renderSmokyGrey->renderFooter([], $model, false);
-        $this->assertStringContainsString($this->renderSmokyGrey::STYLE_HIDDEN, $result);
+        $this->assertStringContainsString('khidden', $result);
     }
 }

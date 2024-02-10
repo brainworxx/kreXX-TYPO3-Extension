@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,7 +36,7 @@ $EM_CONF[$_EXTKEY] = [
     'title' => 'kreXX Debugger',
     'description' => 'Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos.',
     'category' => 'misc',
-    'version' => '4.1.10',
+    'version' => '5.0.2',
     'state' => 'stable',
     'uploadfolder' => false,
     'createDirs' => '',
@@ -45,14 +45,14 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'BRAINWORXX GmbH',
     'constraints' => [
         'depends' => [
-            'typo3' => '7.6.0-12.4.99',
-            'php' => '7.0.0-8.2.99',
+            'typo3' => '10.4.0-12.4.99',
+            'php' => '7.2.0-8.3.99',
         ],
         'conflicts' => [],
         'suggests' => [
-            'adminpanel' => '9.5.0-12.4.99',
-            'aimeos' => '18.4.0-22.99.99'
+            'adminpanel' => '10.4.0-12.4.99',
+            'aimeos' => '20.10.5-23.99.99',
+            'vhs' => '6.0.0-7.99.99'
         ],
     ],
 ];
-

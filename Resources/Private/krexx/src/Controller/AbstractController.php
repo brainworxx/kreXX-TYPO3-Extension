@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -45,6 +45,7 @@ use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\View\Output\AbstractOutput;
 use Brainworxx\Krexx\View\Output\Browser;
+use Brainworxx\Krexx\View\Output\BrowserImmediately;
 use Brainworxx\Krexx\View\Output\File;
 
 /**
@@ -71,7 +72,7 @@ abstract class AbstractController implements ConfigConstInterface
     /**
      * Have we already send the CSS and JS, depending on the destination?
      *
-     * @var array
+     * @var bool[]
      */
     protected static $jsCssSend = [];
 
@@ -112,10 +113,15 @@ abstract class AbstractController implements ConfigConstInterface
         // We get a new output service for every krexx call, because the hosting
         // cms may do their stuff in the shutdown functions as well.
         $this->destination = $pool->config->getSetting(static::SETTING_DESTINATION);
-        if ($this->destination === static::VALUE_BROWSER) {
-            $this->outputService = $pool->createClass(Browser::class);
-        } elseif ($this->destination === static::VALUE_FILE) {
-            $this->outputService = $pool->createClass(File::class);
+        switch ($this->destination) {
+            case static::VALUE_BROWSER:
+                $this->outputService = $pool->createClass(Browser::class);
+                break;
+            case static::VALUE_FILE:
+                $this->outputService = $pool->createClass(File::class);
+                break;
+            default:
+                $this->outputService = $pool->createClass(BrowserImmediately::class);
         }
 
         $this->pool->reset();
@@ -124,7 +130,7 @@ abstract class AbstractController implements ConfigConstInterface
     /**
      * Simply renders the footer and output current settings.
      *
-     * @param array $caller
+     * @param string[] $caller
      *   Where was kreXX initially invoked from.
      * @param bool $isExpanded
      *   Are we rendering an expanded footer?
@@ -138,7 +144,7 @@ abstract class AbstractController implements ConfigConstInterface
         // Now we need to stitch together the content of the configuration file
         // as well as its path.
         $pathToConfig = $this->pool->config->getPathToConfigFile();
-        if ($this->pool->fileService->fileIsReadable($pathToConfig) === true) {
+        if ($this->pool->fileService->fileIsReadable($pathToConfig)) {
             $path = $this->pool->messages->getHelp('currentConfig');
         } else {
             // Project settings are not accessible
@@ -146,17 +152,15 @@ abstract class AbstractController implements ConfigConstInterface
             $path = $this->pool->messages->getHelp('configFileNotFound');
         }
 
-        $model = $this->pool->createClass(Model::class)
-            ->setName($path)
-            ->setType($this->pool->fileService->filterFilePath($pathToConfig))
-            ->setHelpid('currentSettings')
-            ->injectCallback(
-                $this->pool->createClass(ThroughConfig::class)
-            );
-
         return $this->pool->render->renderFooter(
             $caller,
-            $model,
+            $this->pool->createClass(Model::class)
+                ->setName($path)
+                ->setType($this->pool->fileService->filterFilePath($pathToConfig))
+                ->setHelpid('currentSettings')
+                ->injectCallback(
+                    $this->pool->createClass(ThroughConfig::class)
+                ),
             $isExpanded
         );
     }
@@ -170,16 +174,15 @@ abstract class AbstractController implements ConfigConstInterface
     protected function outputCssAndJs(): string
     {
         // We only do this once per output type.
-        $result = isset(static::$jsCssSend[$this->destination]);
-        if ($result === true) {
+        if (isset(static::$jsCssSend[$this->destination . getmypid()])) {
             // Been here, done that.
             return '';
         }
-        static::$jsCssSend[$this->destination] = true;
+        static::$jsCssSend[$this->destination . getmypid()] = true;
 
         // Adding the js to the output.
         $skinDirectory = $this->pool->config->getSkinDirectory();
-        if ($this->pool->fileService->fileIsReadable(KREXX_DIR . 'resources/jsLibs/kdt.min.js') === true) {
+        if ($this->pool->fileService->fileIsReadable(KREXX_DIR . 'resources/jsLibs/kdt.min.js')) {
             // The js works only if everything is minified.
             $jsCode = $this->pool->fileService->getFileContents(KREXX_DIR . 'resources/jsLibs/kdt.min.js') .
                 $this->pool->fileService->getFileContents($skinDirectory . 'krexx.min.js');
@@ -189,7 +192,7 @@ abstract class AbstractController implements ConfigConstInterface
         }
 
         // Get the css file.
-        if ($this->pool->fileService->fileIsReadable($skinDirectory . 'skin.min.css') === true) {
+        if ($this->pool->fileService->fileIsReadable($skinDirectory . 'skin.min.css')) {
             $css = $this->pool->fileService->getFileContents($skinDirectory . 'skin.min.css');
         } else {
             $css = $this->pool->fileService->getFileContents($skinDirectory . 'skin.css');

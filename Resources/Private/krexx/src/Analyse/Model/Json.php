@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -64,7 +64,7 @@ trait Json
      */
     public function setHelpid(string $helpId): Model
     {
-        $this->addToJson(static::META_HELP, $this->pool->messages->getHelp($helpId));
+        $this->addToJson($this->pool->messages->getHelp('metaHelp'), $this->pool->messages->getHelp($helpId));
         return $this;
     }
 
@@ -84,7 +84,7 @@ trait Json
     public function addToJson(string $key, string $value): Model
     {
 
-        if (empty($value) === true) {
+        if (empty($value)) {
             unset($this->json[$key]);
         } else {
             // Remove leftover linebreaks.

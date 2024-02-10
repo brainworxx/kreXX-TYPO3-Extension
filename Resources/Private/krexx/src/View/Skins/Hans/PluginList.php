@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -62,24 +62,25 @@ trait PluginList
     protected function renderPluginList(): string
     {
         $result = '';
-        $template = $this->getTemplateFileContent(static::FILE_SI_PLUGIN);
+        $messages = $this->pool->messages;
         foreach (SettingsGetter::getPlugins() as $plugin) {
-            if ($plugin[SettingsGetter::IS_ACTIVE] === true) {
+            if ($plugin[self::IS_ACTIVE]) {
                 $activeClass = 'kisactive';
-                $activeText = 'active';
+                $activeText = $messages->getHelp('pluginActive');
             } else {
                 $activeClass = 'kisinactive';
-                $activeText = 'inactive';
+                $activeText = $messages->getHelp('pluginInactive');
             }
 
+            $configClass = $plugin[self::CONFIG_CLASS];
             $result .= str_replace(
                 $this->markerSinglePlugin,
                 [
                     $activeClass,
                     $activeText,
-                    $plugin[SettingsGetter::PLUGIN_NAME] . ' ' . $plugin[SettingsGetter::PLUGIN_VERSION]
+                    $configClass->getName() . ' ' . $configClass->getVersion()
                 ],
-                $template
+                $this->fileCache[static::FILE_SI_PLUGIN]
             );
         }
         return $result;

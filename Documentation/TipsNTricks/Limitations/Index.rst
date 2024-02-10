@@ -22,7 +22,7 @@ Such a policy is actually a very good idea, because it gives an extra level of s
 On the downside it also prevents kreXX on the frontend.
 
 .. warning::
-	**If you have such a Content Security Policy in place: Do NOT remove it.**
+	If you have such a Content Security Policy in place: Do **NOT** remove it.
 
 .. tip::
 	Instead simply switch to logging.

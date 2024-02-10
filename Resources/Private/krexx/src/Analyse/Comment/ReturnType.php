@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,6 +35,7 @@
 
 namespace Brainworxx\Krexx\Analyse\Comment;
 
+use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
 use ReflectionClass;
 use Reflector;
 
@@ -50,7 +51,7 @@ class ReturnType extends AbstractComment
      *
      * @var string[]
      */
-    protected $allowedTypes = [
+    public const ALLOWED_TYPES = [
         'int',
         'integer',
         'string',
@@ -65,7 +66,12 @@ class ReturnType extends AbstractComment
         'null',
         'float',
         'double',
-        'number'
+        'number',
+        'true',
+        'false',
+        'never',
+        'static',
+        'iterable'
     ];
 
     /**
@@ -73,7 +79,7 @@ class ReturnType extends AbstractComment
      *
      * @param \Reflector $reflection
      *   The reflection of the method we are analysing.
-     * @param \ReflectionClass $reflectionClass
+     * @param \ReflectionClass|null $reflectionClass
      *   Reflection of the hosting class. A lot of return types are $this, so
      *   we can make use of it here.
      *
@@ -83,16 +89,16 @@ class ReturnType extends AbstractComment
     public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
     {
         // Get a first impression by the reflection.
-        $result = $this->retrieveTypeByReflection($reflection);
+        $result = $this->pool->createClass(MethodDeclaration::class)
+            ->retrieveReturnType($reflection);
         if ($result !== '') {
             return $this->pool->encodingService->encodeString($result);
         }
 
         // Fallback to the comments parsing.
         $docComment = $reflection->getDocComment();
-        $result = '';
         if (
-            empty($docComment) === false
+            !empty($docComment)
             && preg_match('/(?<=@return ).*$/m', $docComment, $matches) > 0
         ) {
             $result = $this->retrieveReturnTypeFromComment($matches[0], $reflectionClass);
@@ -122,11 +128,11 @@ class ReturnType extends AbstractComment
             $result = $this->pool->encodingService->encodeString('\\' . $reflectionClass->getName());
         } elseif (
             // Inside the whitelist
-            in_array($resultToken, $this->allowedTypes) === true ||
+            in_array($resultToken, static::ALLOWED_TYPES, true)
             // Looks like a class name with namespace.
-            strpos($resultToken, '\\') === 0 ||
+            || strpos($resultToken, '\\') === 0
             // Multiple types.
-            strpos($resultToken, '|') !== false
+            || strpos($resultToken, '|') !== false
         ) {
             $result = $this->pool->encodingService->encodeString($resultToken);
         }
@@ -140,37 +146,18 @@ class ReturnType extends AbstractComment
      * @param \Reflector $refMethod
      *   The reflection of the method we are analysing
      *
+     * @deprecated since 5.0.0
+     *   Was moved to the MethodDeclaration class.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @return string
      *   The return type if possible, an empty string if not.
      */
     protected function retrieveTypeByReflection(Reflector $refMethod): string
     {
-        $result = '';
-        /** @var \ReflectionMethod $refMethod */
-        $returnType = $refMethod->getReturnType();
-        if ($returnType === null) {
-            // Nothing found, early return.
-            return $result;
-        }
-
-        if (method_exists($returnType, 'getName') === true) {
-            // 7.1 or later. We alo need to check for nullable types.
-            $nullable = $returnType->allowsNull() === true ? '?' : '';
-            $result = $returnType->getName();
-        } else {
-            // Must be 7.0.
-            // @deprecated
-            // Will be removes as soon as we drop 7.0 support.
-            $result = $returnType->__toString();
-            $nullable = '';
-        }
-
-        if (in_array($result, $this->allowedTypes) === false && strpos($result, '\\') !== 0) {
-            // Must be e un-namespaced class name.
-            $result = '\\' . $result;
-        }
-
-
-        return $nullable . $result;
+        return $this->pool->createClass(MethodDeclaration::class)
+            ->retrieveNamedType($refMethod);
     }
 }

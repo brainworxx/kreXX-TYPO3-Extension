@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,16 +41,16 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File as Fileservice;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 
-class ProcessClosureTest extends AbstractTest
+class ProcessClosureTest extends AbstractHelper
 {
     /**
      * Test the processing of a closure.
      *
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::handleNoneScalar
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveMetaData
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\AbstractProcessNoneScalar::handle
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveParameterList
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessClosure::retrieveSourceCode
@@ -113,11 +113,11 @@ class ProcessClosureTest extends AbstractTest
         $parameters = $model->getParameters()[ProcessClosure::PARAM_DATA];
 
         // Meta data inside the callback parameters
-        $this->assertStringContainsString('Just another fixture.', $parameters[ProcessClosure::META_COMMENT]);
-        $this->assertEquals($containingCode, $parameters[ProcessClosure::META_SOURCE]);
-        $this->assertStringContainsString($filePath, $parameters[ProcessClosure::META_DECLARED_IN]);
-        $this->assertEquals(__NAMESPACE__, $parameters[ProcessClosure::META_NAMESPACE]);
-        $this->assertEquals($parameter, $parameters[ProcessClosure::META_PARAM_NO . '1']);
+        $this->assertStringContainsString('Just another fixture.', $parameters['Comment']);
+        $this->assertEquals($containingCode, $parameters['Source']);
+        $this->assertStringContainsString($filePath, $parameters['Declared in']);
+        $this->assertEquals(__NAMESPACE__, $parameters['Namespace']);
+        $this->assertEquals($parameter, $parameters['Parameter #1']);
     }
 
     /**

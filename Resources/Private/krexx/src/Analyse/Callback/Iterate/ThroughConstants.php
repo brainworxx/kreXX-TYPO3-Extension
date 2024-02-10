@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -50,11 +50,6 @@ use ReflectionClassConstant;
  *   Array of constants values from the class we are analysing.
  * @uses \ReflectionClass ref
  *   Reflection of the class we are analysing.
- *
- * Deprecated:
- * @uses string classname
- *   The classname we are analysing, for code generation purpose.
- *   Deprecated since 4.0.0. Will be removed. Ask the class reflection instead.
  */
 class ThroughConstants extends AbstractCallback implements CallbackConstInterface, CodegenConstInterface
 {
@@ -79,20 +74,13 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
 
         // Setting the prefix, depending on the scope.
         $this->isInScope = $this->pool->scope->isInScope();
-        $prefix = $this->isInScope === true ? 'static' : '\\' . $ref->getName();
-
-        // Dump the constants 7.0 style.
-        // @deprecated
-        // Will be removes as soon as we drop 7.0 support.
-        if (version_compare(phpversion(), '7.1.0', '<') === true) {
-            return $this->dumpPhpSevenZero($output, $prefix);
-        }
+        $prefix = $this->isInScope ? 'static' : '\\' . $ref->getName();
 
         // Dump them with visibility infos.
         foreach ($this->parameters[static::PARAM_DATA] as $constantName => $constantValue) {
             /** @var ReflectionClassConstant $reflectionConstant */
             $reflectionConstant = $this->parameters[static::PARAM_REF]->getReflectionConstant($constantName);
-            if ($this->canDump($reflectionConstant) === true) {
+            if ($this->canDump($reflectionConstant)) {
                 $output .= $this->pool->routing->analysisHub(
                     $this->pool->createClass(Model::class)
                         ->setData($constantValue)
@@ -102,39 +90,6 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
                         ->setCustomConnectorLeft($prefix . '::')
                 );
             }
-        }
-
-        return $output;
-    }
-
-    /**
-     * Dump the constants PHP 7.0 style.
-     *
-     * @deprecated
-     *   Will be removes as soon as we drop 7.0 support.
-     * @codeCoverageIgnore
-     *   We will not test deprecated function.
-     *   Actually, we do test this one, but we do not upload the coverage
-     *   result of 7.0 to codeclimate.
-     *
-     * @param string $output
-     *   The output so far.
-     * @param string $prefix
-     *   The constants prefix we are using.
-     *
-     * @return string
-     *   The generated DOM.
-     */
-    protected function dumpPhpSevenZero(string $output, string $prefix): string
-    {
-        foreach ($this->parameters[static::PARAM_DATA] as $constantName => $constantValue) {
-            $output .= $this->pool->routing->analysisHub(
-                $this->pool->createClass(Model::class)
-                    ->setData($constantValue)
-                    ->setName($constantName)
-                    ->setCodeGenType(static::CODEGEN_TYPE_PUBLIC)
-                    ->setCustomConnectorLeft($prefix . '::')
-            );
         }
 
         return $output;
@@ -151,16 +106,16 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
      */
     protected function retrieveAdditionalData(ReflectionClassConstant $reflectionConstant): string
     {
-        if ($reflectionConstant->isPublic() === true) {
-            return 'public constant ';
+        if ($reflectionConstant->isPublic()) {
+            return $this->pool->messages->getHelp('publicConstant');
         }
 
-        if ($reflectionConstant->isProtected() === true) {
-            return 'protected constant ';
+        if ($reflectionConstant->isProtected()) {
+            return $this->pool->messages->getHelp('protectedConstant');
         }
 
         // It either is public, protected or private, and nothing else.
-        return 'private constant ';
+        return $this->pool->messages->getHelp('privateConstant');
     }
 
     /**
@@ -174,7 +129,7 @@ class ThroughConstants extends AbstractCallback implements CallbackConstInterfac
      */
     protected function canDump(ReflectionClassConstant $reflectionConstant): bool
     {
-        if ($reflectionConstant->isPublic() === true || $this->isInScope === true) {
+        if ($reflectionConstant->isPublic() || $this->isInScope) {
             // It's either public or inside the scope.
             // This includes also some private classes from the highest levels of
             // the class.

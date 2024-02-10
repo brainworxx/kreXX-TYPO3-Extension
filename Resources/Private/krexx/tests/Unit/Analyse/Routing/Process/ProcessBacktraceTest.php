@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,17 +37,17 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
 
-class ProcessBacktraceTest extends AbstractTest
+class ProcessBacktraceTest extends AbstractHelper
 {
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $data = 'data';
         $someFile = 'some file';
@@ -89,6 +89,7 @@ class ProcessBacktraceTest extends AbstractTest
     /**
      * Create a mock backtrace, and see if it is processed.
      *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::callMe
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace::handle
      */
     public function testProcessNormal()
@@ -113,13 +114,20 @@ class ProcessBacktraceTest extends AbstractTest
             ['Step 10'],
             ['Step 11'],
             ['Step 12'],
+            ['Step 13'],
+            ['Step 14'],
+            ['Step 15'],
+            ['Step 16'],
+            ['Step 17'],
         ];
+        $parameters = [ProcessBacktrace::PARAM_DATA => $fixture];
+
         $processBacktrace = new ProcessBacktrace(Krexx::$pool);
-        $processBacktrace->handle($fixture);
+        $processBacktrace->setParameters($parameters)->callMe();
 
         $message = Krexx::$pool->messages->getMessages()['omittedBacktrace'];
         $this->assertEquals('omittedBacktrace', $message->getKey(), 'Check messages for omitted steps');
-        $this->assertEquals([0 => 11, 1 => 12], $message->getArguments(), 'Check messages for omitted steps');
+        $this->assertEquals([0 => 16, 1 => 17], $message->getArguments(), 'Check messages for omitted steps');
 
         // Check the parameters
         // The standatd value is 10.

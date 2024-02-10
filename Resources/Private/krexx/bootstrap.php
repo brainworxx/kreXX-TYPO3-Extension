@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -59,15 +59,13 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Callback/CallbackConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Process/ProcessConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Caller/BacktraceConstInterface.php';
-        include_once KREXX_DIR . 'src/View/ViewConstInterface.php';
+        // deprecated
         include_once KREXX_DIR . 'src/Controller/ControllerConstInterface.php';
+        // deprecated
         include_once KREXX_DIR . 'src/Service/Config/ConfigConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Code/CodegenConstInterface.php';
         include_once KREXX_DIR . 'src/Analyse/Code/ConnectorsConstInterface.php';
         include_once KREXX_DIR . 'src/Service/Plugin/PluginConstInterface.php';
-        // Deprecated
-        include_once KREXX_DIR . 'src/Analyse/ConstInterface.php';
-        // Deprecated
         include_once KREXX_DIR . 'src/Analyse/Callback/AbstractCallback.php';
 
         include_once KREXX_DIR . 'src/Analyse/Code/Codegen.php';
@@ -85,6 +83,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/Traversable.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/ErrorObject.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/Meta.php';
+        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Objects/OpaqueRessource.php';
 
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/BacktraceStep.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/ConfigSection.php';
@@ -104,6 +103,7 @@ call_user_func(function () {
 
         include_once KREXX_DIR . 'src/Analyse/Caller/AbstractCaller.php';
         include_once KREXX_DIR . 'src/Analyse/Caller/CallerFinder.php';
+        include_once KREXX_DIR . 'src/Analyse/Caller/CleanUpVarName.php';
         include_once KREXX_DIR . 'src/Analyse/Caller/ExceptionCallerFinder.php';
 
         include_once KREXX_DIR . 'src/Analyse/Comment/AbstractComment.php';
@@ -112,6 +112,11 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Comment/Properties.php';
         include_once KREXX_DIR . 'src/Analyse/Comment/Classes.php';
         include_once KREXX_DIR . 'src/Analyse/Comment/ReturnType.php';
+
+        include_once KREXX_DIR . 'src/Analyse/Declaration/AbstractDeclaration.php';
+        include_once KREXX_DIR . 'src/Analyse/Declaration/FunctionDeclaration.php';
+        include_once KREXX_DIR . 'src/Analyse/Declaration/MethodDeclaration.php';
+        include_once KREXX_DIR . 'src/Analyse/Declaration/PropertyDeclaration.php';
 
         include_once KREXX_DIR . 'src/Analyse/Routing/AbstractRouting.php';
         include_once KREXX_DIR . 'src/Analyse/Routing/Routing.php';
@@ -132,12 +137,23 @@ call_user_func(function () {
 
         include_once KREXX_DIR . 'src/Analyse/Scalar/AbstractScalar.php';
         include_once KREXX_DIR . 'src/Analyse/Scalar/ScalarString.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/AbstractScalarAnalysis.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/Callback.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/FilePath.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/Json.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/Xml.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/TimeStamp.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/Serialized.php';
+        include_once KREXX_DIR . 'src/Analyse/Scalar/String/Base64.php';
+        // @deprecated
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/AbstractScalarAnalysis.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Callback.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/FilePath.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Json.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Xml.php';
         include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/TimeStamp.php';
+        include_once KREXX_DIR . 'src/Analyse/Callback/Analyse/Scalar/Serialized.php';
+        // @deprecated
 
         include_once KREXX_DIR . 'src/Analyse/Model/ConnectorService.php';
         include_once KREXX_DIR . 'src/Analyse/Model/Callback.php';
@@ -150,13 +166,6 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Analyse/Model/HasExtra.php';
         include_once KREXX_DIR . 'src/Analyse/Model/CodeGenType.php';
         include_once KREXX_DIR . 'src/Analyse/Model/KeyType.php';
-        // Deprecated
-        include_once KREXX_DIR . 'src/Analyse/Model/MultiLineCodeGen.php';
-        include_once KREXX_DIR . 'src/Analyse/Model/IsPublic.php';
-        include_once KREXX_DIR . 'src/Analyse/Model/IsCallback.php';
-        include_once KREXX_DIR . 'src/Analyse/Model/IsMetaConstants.php';
-        include_once KREXX_DIR . 'src/Analyse/AbstractModel.php';
-        // Deprecated
         include_once KREXX_DIR . 'src/Analyse/Model.php';
 
         include_once KREXX_DIR . 'src/Controller/AbstractController.php';
@@ -173,9 +182,6 @@ call_user_func(function () {
 
         include_once KREXX_DIR . 'src/Service/Config/From/Cookie.php';
         include_once KREXX_DIR . 'src/Service/Config/From/File.php';
-        // Deprecated
-        include_once KREXX_DIR . 'src/Service/Config/From/Ini.php';
-        //
 
         include_once KREXX_DIR . 'src/Service/Factory/EventHandlerInterface.php';
         include_once KREXX_DIR . 'src/Service/Factory/Event.php';
@@ -190,8 +196,10 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/Service/Misc/Registry.php';
         include_once KREXX_DIR . 'src/Service/Misc/FileinfoDummy.php';
         include_once KREXX_DIR . 'src/Service/Misc/Cleanup.php';
+        include_once KREXX_DIR . 'src/Service/Misc/FormatSerialize.php';
 
         include_once KREXX_DIR . 'src/Service/Reflection/UndeclaredProperty.php';
+        include_once KREXX_DIR . 'src/Service/Reflection/HiddenProperty.php';
         include_once KREXX_DIR . 'src/Service/Reflection/ReflectionClass.php';
 
         include_once KREXX_DIR . 'src/Service/Plugin/PluginConfigInterface.php';
@@ -203,6 +211,7 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/View/Output/Chunks.php';
         include_once KREXX_DIR . 'src/View/Output/File.php';
         include_once KREXX_DIR . 'src/View/Output/Browser.php';
+        include_once KREXX_DIR . 'src/View/Output/BrowserImmediately.php';
         include_once KREXX_DIR . 'src/View/Output/CheckOutput.php';
 
         include_once KREXX_DIR . 'src/View/RenderInterface.php';
@@ -212,7 +221,6 @@ call_user_func(function () {
 
         include_once KREXX_DIR . 'src/View/Skins/Hans/SingleEditableChild.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/ExpandableChild.php';
-        include_once KREXX_DIR . 'src/View/Skins/Hans/SingleChild.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/BacktraceSourceLine.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/Button.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/CssJs.php';
@@ -229,9 +237,6 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/View/Skins/Hans/ConnectorLeft.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/ConnectorRight.php';
         include_once KREXX_DIR . 'src/View/Skins/Hans/Search.php';
-        // Deprecated
-        include_once KREXX_DIR . 'src/View/Skins/Hans/ConstInterface.php';
-        // Deprecated
         include_once KREXX_DIR . 'src/View/Skins/RenderHans.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Button.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/ExpandableChild.php';
@@ -239,7 +244,6 @@ call_user_func(function () {
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Footer.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Header.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Recursion.php';
-        include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/SingleChild.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/SingleEditableChild.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/ConnectorRight.php';
         include_once KREXX_DIR . 'src/View/Skins/SmokyGrey/Help.php';
@@ -300,7 +304,7 @@ call_user_func(function () {
      *   The variable we want to analyse.
      *
      * @return mixed
-     *   Return the original anslysis value.
+     *   Return the original analysis value.
      */
     function krexxlog($data = null)
     {

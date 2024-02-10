@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,11 +42,11 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods as IterateThroughMe
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use ReflectionMethod;
 
-class ThroughMethodsTest extends AbstractTest implements CallbackConstInterface
+class ThroughMethodsTest extends AbstractHelper implements CallbackConstInterface
 {
     use AimeosTestTrait;
 

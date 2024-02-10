@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -51,6 +51,7 @@ trait Recursion
         '{name}',
         '{domId}',
         '{normal}',
+        '{type}',
         '{connectorLeft}',
         '{connectorRight}',
         '{gensource}',
@@ -68,6 +69,7 @@ trait Recursion
                 $model->getName(),
                 $model->getDomid(),
                 $model->getNormal(),
+                $this->pool->messages->getHelp('recursion'),
                 $this->renderConnectorLeft($model->getConnectorLeft()),
                 $this->renderConnectorRight($model->getConnectorRight()),
                 $this->generateDataAttribute(
@@ -76,7 +78,7 @@ trait Recursion
                 ),
                 $this->renderHelp($model),
             ],
-            $this->getTemplateFileContent(static::FILE_RECURSION)
+            $this->fileCache[static::FILE_RECURSION]
         );
     }
 

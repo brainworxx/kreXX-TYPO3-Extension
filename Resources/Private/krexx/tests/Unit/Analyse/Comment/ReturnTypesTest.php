@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,12 +37,12 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Comment;
 
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Tests\Fixtures\ReturnTypeFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Krexx;
-use ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionFunction;
 
-class ReturnTypesTest extends AbstractTest
+class ReturnTypesTest extends AbstractHelper
 {
     /**
      * Test the retrieval of different return types from different sources.
@@ -50,8 +50,6 @@ class ReturnTypesTest extends AbstractTest
      * @see \Brainworxx\Krexx\Tests\Fixtures\ReturnTypeFixture
      * @covers \Brainworxx\Krexx\Analyse\Comment\ReturnType::getComment
      * @covers \Brainworxx\Krexx\Analyse\Comment\ReturnType::retrieveReturnTypeFromComment
-     * @covers \Brainworxx\Krexx\Analyse\Comment\ReturnType::retrieveTypeByReflection
-     * @throws \ReflectionException
      */
     public function testGetComment()
     {
@@ -61,9 +59,6 @@ class ReturnTypesTest extends AbstractTest
 
         $refMethod = $refClass->getMethod('returnSelf');
         $this->assertEquals('\\' . ReturnTypeFixture::class, $returnType->getComment($refMethod, $refClass));
-
-        $refMethod = $refClass->getMethod('returnBool');
-        $this->assertEquals('bool', $returnType->getComment($refMethod, $refClass));
 
         $refMethod = $refClass->getMethod('returnThis');
         $this->assertEquals('\\' . ReturnTypeFixture::class, $returnType->getComment($refMethod, $refClass));

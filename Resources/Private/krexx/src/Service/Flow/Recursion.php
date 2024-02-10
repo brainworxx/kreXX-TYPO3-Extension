@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -50,7 +50,6 @@ use SplObjectStorage;
  */
 class Recursion
 {
-
     /**
      * pool for arrays an objects, to prevent recursions.
      *
@@ -83,16 +82,6 @@ class Recursion
     protected $globalsWereRendered = false;
 
     /**
-     * The $GLOBALS array.
-     *
-     * @deprecated since 4.1.3
-     *   Will be removed.
-     *
-     * @var array
-     */
-    protected $globals;
-
-    /**
      * Generate the recursion marker during class construction.
      *
      * @param Pool $pool
@@ -101,7 +90,6 @@ class Recursion
     {
         $this->recursionMarker = 'Krexx' . substr(str_shuffle(md5(microtime())), 0, 10);
         // Mark the $GLOBALS array.
-        $this->globals = $pool->getGlobals();
         $GLOBALS[$this->recursionMarker] = true;
         $this->recursionHive = new SplObjectStorage();
 
@@ -123,7 +111,7 @@ class Recursion
      * @param object $bee
      *   The object we want to track.
      */
-    public function addToHive($bee)
+    public function addToHive(object $bee): void
     {
         $this->recursionHive->attach($bee);
     }
@@ -140,16 +128,14 @@ class Recursion
     public function isInHive($bee): bool
     {
         // Check objects.
-        // As of PHP 7.1 and lower, PHP does not recognise an __PHP_Incomplete_Class
-        // as an object via is_object. Hence, we must test the class itself.
-        if (is_object($bee) === true || $bee instanceof __PHP_Incomplete_Class) {
+        if (is_object($bee)) {
             return $this->recursionHive->contains($bee);
         }
 
         // Check arrays (only the $GLOBAL array may apply).
-        if (isset($bee[$this->recursionMarker]) === true) {
+        if (isset($bee[$this->recursionMarker])) {
             // We render the $GLOBALS only once.
-            if ($this->globalsWereRendered === true) {
+            if ($this->globalsWereRendered) {
                 return true;
             }
 
@@ -195,7 +181,7 @@ class Recursion
      * @param string $domId
      *   The dom id we want to track.
      */
-    public function addToMetaHive(string $domId)
+    public function addToMetaHive(string $domId): void
     {
         $this->metaRecursionHive[$domId] = true;
     }

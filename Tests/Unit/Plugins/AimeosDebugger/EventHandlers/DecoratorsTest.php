@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -45,15 +45,18 @@ use Brainworxx\Includekrexx\Tests\Fixtures\FixtureJob;
 use Brainworxx\Includekrexx\Tests\Unit\Plugins\AimeosDebugger\AimeosTestTrait;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
+use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
+use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
+use stdClass;
 
-class DecoratorsTest extends AbstractTest
+class DecoratorsTest extends AbstractHelper
 {
     use AimeosTestTrait;
 
@@ -68,6 +71,34 @@ class DecoratorsTest extends AbstractTest
 
         $getter = new Decorators(Krexx::$pool);
         $this->assertEquals(Krexx::$pool, $this->retrieveValueByReflection('pool', $getter));
+    }
+
+    /**
+     * Call the handle with an invalid class instance.
+     *
+     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::handle
+     * @covers \Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators::checkClassName
+     *
+     */
+    public function testHandleEarlyReturn()
+    {
+        $this->skipIfAimeosIsNotInstalled();
+
+        $wrongClass = new stdClass();
+        $fixture = [
+            Methods::PARAM_DATA => $wrongClass,
+            Methods::PARAM_NAME => 'decorator fixture',
+            Methods::PARAM_REF => new ReflectionClass($wrongClass)
+        ];
+
+        $decorators = new Decorators(\Krexx::$pool);
+        $callback = new CallbackNothing(\Krexx::$pool);
+        $callback->setParameters($fixture);
+        $this->assertEquals(
+            '',
+            $decorators->handle($callback, new Model(\Krexx::$pool)),
+            'Empy output and no crash.'
+        );
     }
 
     /**
@@ -117,6 +148,11 @@ class DecoratorsTest extends AbstractTest
         // Short circuit the rendering process.
         Krexx::$pool->render = new RenderNothing(Krexx::$pool);
 
+        // Load the aimeos language files
+        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
+            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 'aimeos.kreXX.ini');
+        Krexx::$pool->messages->readHelpTexts();
+
         // Create the event calling class.
         $methods = new Methods(Krexx::$pool);
         $this->triggerStartEvent($methods->setParameters($fixture));
@@ -127,7 +163,7 @@ class DecoratorsTest extends AbstractTest
         /** @var \Brainworxx\Krexx\Analyse\Model $objectsModel */
         $objectsModel = Krexx::$pool->render->model['renderExpandableChild'][1];
 
-        $this->assertEquals('Undecorated Methods', $methodsModel->getName());
+        $this->assertEquals('Undecorated methods', $methodsModel->getName());
         // List of the methods of the decorated class, that are not implemented of
         // the surrounding class.
         $expectations = [
@@ -142,7 +178,7 @@ class DecoratorsTest extends AbstractTest
         }
         $this->assertEquals(1, $index, 'There should only be one method undecorated.');
 
-        $this->assertEquals('Decorated Object', $objectsModel->getName());
+        $this->assertEquals('Decorated object', $objectsModel->getName());
         $this->assertSame(
             $testJob,
             $objectsModel->getParameters()[CallbackConstInterface::PARAM_DATA][0],

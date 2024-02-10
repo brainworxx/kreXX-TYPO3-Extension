@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,7 +43,6 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionMethod;
 use Aimeos\MShop\Common\Item\Iface;
 
@@ -70,7 +69,7 @@ use Aimeos\MShop\Common\Item\Iface;
  * @uses array $additional
  *   Additional data from the event call.
  */
-class Getter extends AbstractEventHandler implements CallbackConstInterface, ViewConstInterface
+class Getter extends AbstractEventHandler implements CallbackConstInterface
 {
     /**
      * Our pool.
@@ -82,7 +81,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface, Vie
     /**
      * The names of the internal storages if Aimeos items.
      *
-     * @var array
+     * @var string[]
      */
     protected $aimeosDataStorages = [
         AimeosConstInterface::AIMEOS_B_DATA,
@@ -121,7 +120,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface, Vie
         if (
             $params[static::PARAM_ADDITIONAL][static::PARAM_NOTHING_FOUND] === false ||
             $params[ThroughGetter::CURRENT_PREFIX] !== 'get' ||
-            is_a($data, Iface::class) === false
+            !($data instanceof Iface)
         ) {
             // Early return.
             return '';
@@ -133,7 +132,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface, Vie
         /** @var \ReflectionMethod $reflectionMethod */
         $reflectionMethod = $params[static::PARAM_ADDITIONAL][static::PARAM_REFLECTION_METHOD];
         $values = $this->retrieveValueArray($params, $reflectionMethod);
-        if (empty($values) === true) {
+        if (empty($values)) {
             // There is nothing to retrieve here.
             // Not-so-Early return.
             return '';
@@ -156,7 +155,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface, Vie
      * @param \Brainworxx\Krexx\Analyse\Callback\AbstractCallback $callback
      *   Our original callback.
      */
-    protected function assignResultsToModel(array $values, Model $model, AbstractCallback $callback)
+    protected function assignResultsToModel(array $values, Model $model, AbstractCallback $callback): void
     {
         $params = $callback->getParameters();
         /** @var \ReflectionMethod $reflectionMethod */
@@ -176,7 +175,10 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface, Vie
                 if ($possibleResult === null) {
                     // A NULL value might mean that the values does not
                     // exist, until the getter computes it.
-                    $model->addToJson(static::META_HINT, $this->pool->messages->getHelp('getterNull'));
+                    $model->addToJson(
+                        $this->pool->messages->getHelp('metaHint'),
+                        $this->pool->messages->getHelp('getterNull')
+                    );
                 }
 
                 break;
@@ -218,7 +220,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface, Vie
      * @return array
      *   The values array from the class.
      */
-    protected function retrieveValueArray(array &$params, ReflectionMethod $reflectionMethod): array
+    protected function retrieveValueArray(array $params, ReflectionMethod $reflectionMethod): array
     {
         $result = [];
         // Retrieve the value array from the class.

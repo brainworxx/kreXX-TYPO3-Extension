@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,6 +38,7 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Skins\Hans;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
+use Brainworxx\Krexx\Tests\Helpers\PluginConfiguration;
 use Brainworxx\Krexx\Tests\Unit\View\Skins\AbstractRenderHans;
 
 class FooterTest extends AbstractRenderHans
@@ -65,7 +66,7 @@ class FooterTest extends AbstractRenderHans
         Krexx::$pool->fileService->expects($this->any())
             ->method('filterFilePath')
             ->will($this->returnValue(''));
-        Krexx::$pool->fileService->expects($this->exactly(1))
+        Krexx::$pool->fileService->expects($this->any())
             ->method('fileIsReadable')
             ->will($this->returnValue(true));
 
@@ -73,22 +74,41 @@ class FooterTest extends AbstractRenderHans
         // here.
         $model = new Model(Krexx::$pool);
 
+        $configMock1 = $this->createMock(PluginConfiguration::class);
+        $configMock1->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('Plugin 1'));
+        $configMock1->expects($this->once())
+            ->method('getVersion')
+            ->will($this->returnValue('1.0.0.'));
+        $configMock2 = $this->createMock(PluginConfiguration::class);
+        $configMock2->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('Plugin 2'));
+        $configMock2->expects($this->once())
+            ->method('getVersion')
+            ->will($this->returnValue('2.0.0.'));
+        $configMock3 = $this->createMock(PluginConfiguration::class);
+        $configMock3->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('Plugin 3'));
+        $configMock3->expects($this->once())
+            ->method('getVersion')
+            ->will($this->returnValue('3.0.0.'));
+
         // Mock the plugin list.
         $pluginList = [
             [
                 SettingsGetter::IS_ACTIVE => true,
-                SettingsGetter::PLUGIN_NAME => 'Plugin 1',
-                SettingsGetter::PLUGIN_VERSION => '1.0.0.',
+                SettingsGetter::CONFIG_CLASS => $configMock1
             ],
             [
                 SettingsGetter::IS_ACTIVE => false,
-                SettingsGetter::PLUGIN_NAME => 'Plugin 2',
-                SettingsGetter::PLUGIN_VERSION => '2.0.0.',
+                SettingsGetter::CONFIG_CLASS => $configMock2
             ],
             [
                 SettingsGetter::IS_ACTIVE => true,
-                SettingsGetter::PLUGIN_NAME => 'Plugin 3',
-                SettingsGetter::PLUGIN_VERSION => '3.0.0.',
+                SettingsGetter::CONFIG_CLASS => $configMock3
             ]
         ];
         $this->setValueByReflection('plugins', $pluginList, SettingsGetter::class);

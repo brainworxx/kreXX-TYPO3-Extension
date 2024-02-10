@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,14 +36,27 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Scalar;
 
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
-class ExtFilePathTest extends AbstractTest
+class ExtFilePathTest extends AbstractHelper
 {
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Load the TYPO3 language files
+        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
+            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 't3.kreXX.ini');
+        Krexx::$pool->messages->readHelpTexts();
+    }
+
     /**
      * Test the resolving of EXT: strings for their actual files.
      *
@@ -69,7 +82,6 @@ class ExtFilePathTest extends AbstractTest
             $extFilePath->canHandle($fixture, $model),
             'This should trigger a \Throwable in the GeneralUtility'
         );
-
         $this->assertEmpty($model->getJson());
 
         // The real test starts here.
@@ -84,7 +96,7 @@ class ExtFilePathTest extends AbstractTest
 
         // Get the underlying class to find the file.
         $isFileMock = $this->getFunctionMock(
-            '\\Brainworxx\\Krexx\\Analyse\\Callback\\Analyse\\Scalar',
+            '\\Brainworxx\\Krexx\\Analyse\\Scalar\\String',
             'is_file'
         );
         $isFileMock->expects($this->once())
@@ -112,10 +124,14 @@ class ExtFilePathTest extends AbstractTest
         // Look at the model.
         $jsonData = $model->getJson();
         $expectations = [
-            "Resolved EXT path" => "Tests/Fixtures/123458.Krexx.html",
-            "Real path" => "n/a",
-            "Mimetype file" => "just a file"
+            'Resolved EXT path' => 'Tests/Fixtures/123458.Krexx.html',
+            'Mimetype file' => 'just a file',
+            'Error' => 'The file does not exist.'
         ];
-        $this->assertEquals($expectations, $jsonData);
+        $this->assertEquals(
+            $expectations,
+            $jsonData,
+            'The file does exists, we just did not mock the file_exists(). We need to test the feedback about a missing file.'
+        );
     }
 }

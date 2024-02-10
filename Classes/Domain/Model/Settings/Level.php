@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -52,15 +52,15 @@ trait Level
     /**
      * @param string $level
      */
-    public function setLevel(string $level)
+    public function setLevel(string $level): void
     {
         $this->level = $level;
     }
 
-     /**
+    /**
      * @param string $formlevel
      */
-    public function setFormlevel(string $formlevel)
+    public function setFormlevel(string $formlevel): void
     {
         $this->formlevel = $formlevel;
     }

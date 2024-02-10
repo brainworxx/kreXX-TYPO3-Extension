@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,13 +37,13 @@ namespace Brainworxx\Includekrexx\Tests\Unit\ViewHelpers;
 use Brainworxx\Includekrexx\ViewHelpers\LogViewHelper;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
 
-class LogViewHelperTest extends AbstractTest
+class LogViewHelperTest extends AbstractHelper
 {
     /**
      * Test the logging part of the log ViewHelper.
@@ -85,7 +85,7 @@ class LogViewHelperTest extends AbstractTest
         $settingsDestination = $this->createMock(Model::class);
         $settingsDestination->expects($this->once())
             ->method('setSource')
-            ->with('forced logging')
+            ->with('Forced logging')
             ->will($this->returnValue($settingsDestination));
         $settingsDestination->expects($this->once())
             ->method('setValue')
@@ -93,7 +93,7 @@ class LogViewHelperTest extends AbstractTest
         $settingsAjax = $this->createMock(Model::class);
         $settingsAjax->expects($this->once())
             ->method('setSource')
-            ->with('forced logging')
+            ->with('Forced logging')
             ->will($this->returnValue($settingsAjax));
         $settingsAjax->expects($this->once())
             ->method('setValue')

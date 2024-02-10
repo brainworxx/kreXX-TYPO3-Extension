@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -55,7 +55,7 @@ class File extends Fallback
     /**
      * The content of the file we have loaded.
      *
-     * @var array
+     * @var string[][]
      */
     protected $settings = [];
 
@@ -81,51 +81,25 @@ class File extends Fallback
      */
     public function loadFile(string $path): File
     {
-        // Fallback to empty.
         $this->settings = [];
 
-        if ($this->pool->fileService->fileIsReadable($path) === false) {
-            $this->fallbackLoading($path);
-            return $this;
-        }
-
-        $content = $this->pool->fileService->getFileContents($path, false);
-        $this->settings = json_decode($content, true);
-
-        if (empty($this->settings)) {
-            // Fallback to ini.
-            $this->settings = (array)parse_ini_string($content, true);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Fallback loading of the configuration.
-     *
-     * @param string $path
-     *   The incomplete path to the possible ini file.
-     */
-    protected function fallbackLoading(string $path)
-    {
-        $fileExtensions = ['ini' => 'parse_ini_string', 'json' => 'json_decode'];
-        foreach ($fileExtensions as $extension => $decoder) {
+        foreach (['ini' => 'parse_ini_string', 'json' => 'json_decode'] as $extension => $decoder) {
             $completePath = $path . $extension;
-            if ($this->pool->fileService->fileIsReadable($completePath) === true) {
-                $content = $this->pool->fileService->getFileContents($completePath, false);
-                $this->settings = (array)$decoder($content, true);
+            if ($this->pool->fileService->fileIsReadable($completePath)) {
+                $this->settings = (array)$decoder(
+                    $this->pool->fileService->getFileContents($completePath, false),
+                    true
+                );
                 // Feedback about the file name.
                 $this->pool->config->setPathToConfigFile($completePath);
-                return;
+                return $this;
             }
         }
 
-        // Still here? Test if the path ends with a dot.
-        if (substr($path, -1) === '.') {
-            // The provided path was not a real path to begin with.
-            // Fallback to the last provided complete path.
-            $this->pool->config->setPathToConfigFile($completePath);
-        }
+        // Still here? Give feedback about the filename.
+        $this->pool->config->setPathToConfigFile($completePath);
+
+        return $this;
     }
 
     /**
@@ -137,12 +111,12 @@ class File extends Fallback
      * @return array|null
      *   The configuration (is it editable, a dropdown, a textfield, ...)
      */
-    public function getFeConfigFromFile(string $parameterName)
+    public function getFeConfigFromFile(string $parameterName): ?array
     {
         // Get the human-readable stuff from the file.
         $value = $this->getConfigFromFile(static::SECTION_FE_EDITING, $parameterName);
 
-        if (empty($value) === true) {
+        if (empty($value)) {
             // Sorry, no value stored.
             return null;
         }
@@ -182,7 +156,7 @@ class File extends Fallback
      * @param string $name
      *   The name of the setting.
      *
-     * @return string|null
+     * @return mixed
      *   The value from the file. Null, when not available or not validated.
      */
     public function getConfigFromFile(string $group, string $name)
@@ -190,8 +164,8 @@ class File extends Fallback
         // Do we have a value in the file?
         // Does it validate?
         if (
-            isset($this->settings[$group][$name]) === true &&
-            $this->validation->evaluateSetting($group, $name, $this->settings[$group][$name]) === true
+            isset($this->settings[$group][$name]) &&
+            $this->validation->evaluateSetting($group, $name, $this->settings[$group][$name])
         ) {
             return $this->settings[$group][$name];
         }

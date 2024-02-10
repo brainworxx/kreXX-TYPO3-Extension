@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,89 +37,15 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar;
 
-use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\View\ViewConstInterface;
-use finfo;
-use TypeError;
+use Brainworxx\Krexx\Analyse\Scalar\String\FilePath as FilePathString;
 
 /**
- * Identifying a string as a file path.
+ * @deprecated
+ *   Since 5.0.0. Will be removed. Use the class that we extend here.
  *
- * Adding a finfo analysis and a realpath if it differs from the given path.
+ * @codeCoverageIgnore
+ *   We are not testing the unit tests.
  */
-class FilePath extends AbstractScalarAnalysis implements ViewConstInterface
+class FilePath extends FilePathString
 {
-    /**
-     * @var \finfo
-     */
-    protected $bufferInfo;
-
-    /**
-     * No file path analysis without the finfo class.
-     *
-     * @return bool
-     *   Is the finfo class available?
-     */
-    public static function isActive(): bool
-    {
-        return class_exists(finfo::class, false);
-    }
-
-    /**
-     * Get the finfo class ready, if available.
-     *
-     * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
-     */
-    public function __construct(Pool $pool)
-    {
-        parent::__construct($pool);
-        $this->bufferInfo = new finfo(FILEINFO_MIME);
-    }
-
-    /**
-     * Is this actually a path to a file? Simple wrapper around is_file().
-     *
-     * Of course, we only act, if finfo is available.
-     *
-     * @param string $string
-     *   The string to test.
-     *
-     * @param Model $model
-     *   The model, so far.
-     *
-     * @return bool
-     *   The result, if it's callable.
-     */
-    public function canHandle($string, Model $model): bool
-    {
-        if (strlen($string) < 25) {
-            // Early return for the most values.
-            return false;
-        }
-
-        // Prevent a warning in case of open_basedir restrictions.
-        set_error_handler($this->pool->retrieveErrorCallback());
-
-        try {
-            $isFile = is_file($string);
-        } catch (TypeError $exception) {
-            $isFile = false;
-        }
-
-        if ($isFile === true) {
-            $realPath = realpath($string);
-            if ($string !== $realPath) {
-                // We only add the realpath, if it differs from the string
-                $model->addToJson(
-                    'Real path', is_string($realPath) === true ? $this->pool->fileService->filterFilePath($realPath) : 'n/a'
-                );
-            }
-            $model->addToJson(static::META_MIME_TYPE_FILE, $this->bufferInfo->file($string));
-        }
-
-        restore_error_handler();
-
-        return false;
-    }
 }

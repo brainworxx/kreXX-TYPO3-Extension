@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,9 +37,9 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Config;
 
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Config\Model;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class ModelTest extends AbstractTest
+class ModelTest extends AbstractHelper
 {
     const VALUE = 'some value';
 
@@ -48,9 +48,9 @@ class ModelTest extends AbstractTest
      */
     protected $model;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->model = new Model();
     }
@@ -61,7 +61,7 @@ class ModelTest extends AbstractTest
     public function testSetEditable()
     {
         $this->assertSame($this->model, $this->model->setEditable(true));
-        $this->assertEquals(true, $this->model->getEditable());
+        $this->assertEquals(true, $this->model->isEditable());
     }
 
     /**
@@ -91,12 +91,12 @@ class ModelTest extends AbstractTest
     }
 
     /**
-     * @covers \Brainworxx\Krexx\Service\Config\Model::getEditable
+     * @covers \Brainworxx\Krexx\Service\Config\Model::isEditable
      */
     public function testGetEditable()
     {
         $this->setValueByReflection('editable', true, $this->model);
-        $this->assertEquals(true, $this->model->getEditable());
+        $this->assertEquals(true, $this->model->isEditable());
     }
 
     /**

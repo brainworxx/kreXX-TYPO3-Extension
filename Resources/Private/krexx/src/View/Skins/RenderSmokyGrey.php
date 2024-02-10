@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\View\Skins;
 
-use Brainworxx\Krexx\Controller\ControllerConstInterface;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Button;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ConnectorRight;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\ExpandableChild;
@@ -46,15 +45,13 @@ use Brainworxx\Krexx\View\Skins\SmokyGrey\Footer;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Header;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Help;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\Recursion;
-use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleChild;
 use Brainworxx\Krexx\View\Skins\SmokyGrey\SingleEditableChild;
 
 /**
  * Individual render class for the smokey-grey skin.
  */
-class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
+class RenderSmokyGrey extends RenderHans
 {
-    use SingleChild;
     use ExpandableChild;
     use Recursion;
     use SingleEditableChild;
@@ -70,5 +67,5 @@ class RenderSmokyGrey extends RenderHans implements ControllerConstInterface
      *
      * @var string
      */
-    const DATA_ATTRIBUTE_JSON = 'addjson';
+    protected const DATA_ATTRIBUTE_JSON = 'addjson';
 }

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -81,18 +81,18 @@ class ExceptionControllerTest extends AbstractController
 
         $backtraceMock = $this->createMock(ProcessBacktrace::class);
         $backtraceMock->expects($this->once())
-            ->method('process')
+            ->method('handle')
             ->with(['some backtrace'])
             ->will($this->returnValue('HTML code'));
 
         $poolMock->expects($this->exactly(4))
             ->method('createClass')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [ProcessBacktrace::class],
                 [ExceptionCallerFinder::class],
                 [Model::class],
                 [ThroughConfig::class]
-            )->will($this->returnValueMap(
+            ))->will($this->returnValueMap(
                 [
                     [ProcessBacktrace::class, $backtraceMock],
                     [ExceptionCallerFinder::class, new ExceptionCallerFinder(Krexx::$pool)],

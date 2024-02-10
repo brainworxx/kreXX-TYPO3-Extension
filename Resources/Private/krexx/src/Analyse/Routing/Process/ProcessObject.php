@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -58,10 +58,7 @@ class ProcessObject extends AbstractProcessNoneScalar implements CallbackConstIn
      */
     public function canHandle(Model $model): bool
     {
-        // PHP 7.1 and lower does not recognise an object via is_object().
-        // Hence, we must test it by instanceof.
-        $data = $model->getData();
-        return is_object($model->getData()) || $data instanceof __PHP_Incomplete_Class;
+        return is_object($model->getData());
     }
 
     /**

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,15 +38,14 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
-use Brainworxx\Krexx\Analyse\Routing\Process\ProcessConstInterface;
 use Brainworxx\Krexx\Service\Factory\Event;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 use stdClass;
 
-class ThroughLargeArrayTest extends AbstractTest
+class ThroughLargeArrayTest extends AbstractHelper
 {
     const RENDER_EXPANDABLE_CHILD = 'renderExpandableChild';
 
@@ -65,21 +64,16 @@ class ThroughLargeArrayTest extends AbstractTest
      */
     protected $renderMock;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         // Test start event
         $this->throughLargeArray = new ThroughLargeArray(Krexx::$pool);
         $eventServiceMock = $this->createMock(Event::class);
         $eventServiceMock->expects($this->exactly(1))
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray::callMe::start',
-                    $this->throughLargeArray
-                ]
-            )
+            ->with(...$this->withConsecutive(['Brainworxx\\Krexx\\Analyse\\Callback\\Iterate\\ThroughLargeArray::callMe::start', $this->throughLargeArray]))
             ->will($this->returnValue(''));
         Krexx::$pool->eventService = $eventServiceMock;
 
@@ -153,10 +147,6 @@ class ThroughLargeArrayTest extends AbstractTest
         $this->assertEquals(
             Codegen::CODEGEN_TYPE_PUBLIC,
             $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getCodeGenType()
-        );
-        $this->assertEquals(
-            ProcessConstInterface::TYPE_STRING,
-            $this->renderMock->model[static::RENDER_EXPANDABLE_CHILD][1]->getKeyType()
         );
 
         $this->alwaysRun($fixture);

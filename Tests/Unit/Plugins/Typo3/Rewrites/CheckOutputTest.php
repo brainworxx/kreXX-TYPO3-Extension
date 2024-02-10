@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,15 +35,15 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\Typo3\Rewrites;
 
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class CheckOutputTest extends AbstractTest
+class CheckOutputTest extends AbstractHelper
 {
-    public function krexxDown()
+    public function tearDown(): void
     {
-        parent::krexxDown();
+        parent::tearDown();
 
         $this->setValueByReflection('indpEnvCache', [], GeneralUtility::class);
     }
@@ -60,7 +60,7 @@ class CheckOutputTest extends AbstractTest
         // Prepare the General Untility.
         $this->setValueByReflection(
             'indpEnvCache',
-            [CheckOutput::REMOTE_ADDRESS => '127.0.0.0'],
+            ['REMOTE_ADDR' => '127.0.0.0'],
             GeneralUtility::class
         );
         $this->assertTrue($checkOutput->isAllowedIp('*'));

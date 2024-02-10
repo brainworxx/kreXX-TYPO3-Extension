@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -99,7 +99,7 @@ trait SingleEditableChild
                 static::RENDER_EDITABLE,
                 $this->renderHelp($model),
             ],
-            $this->getTemplateFileContent(static::FILE_SI_EDIT_CHILD)
+            $this->fileCache[static::FILE_SI_EDIT_CHILD]
         );
     }
 
@@ -118,18 +118,20 @@ trait SingleEditableChild
         if ($model->getDomid() === static::SETTING_SKIN) {
             // Get a list of all skin folders.
             $valueList = $this->pool->config->getSkinList();
+        } elseif ($model->getDomid() === static::SETTING_LANGUAGE_KEY) {
+            $valueList = $this->pool->config->getLanguageList();
         } else {
-            $valueList = ['true', 'false'];
+            $valueList = ['true' => 'true', 'false' => 'false'];
         }
 
         // Paint it.
         $options = '';
-        foreach ($valueList as $value) {
+        foreach ($valueList as $value => $text) {
             $value === $model->getName() ? $selected = 'selected="selected"' : $selected = '';
             $options .= str_replace(
                 $this->markerSelectOption,
-                [$value, $value, $selected],
-                $this->getTemplateFileContent(static::FILE_SI_SELECT_OPTIONS)
+                [$text, $value, $selected],
+                $this->fileCache[static::FILE_SI_SELECT_OPTIONS]
             );
         }
 
@@ -153,7 +155,7 @@ trait SingleEditableChild
                 $model->getDomid(),
                 $model->getName()
             ],
-            $this->getTemplateFileContent('single' . $model->getType())
+            $this->fileCache['single' . $model->getType()]
         );
     }
 

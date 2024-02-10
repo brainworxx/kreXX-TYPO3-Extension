@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,21 +36,20 @@ if (!defined('TYPO3_MODE') && !defined('TYPO3')) {
     die('Access denied.');
 }
 
-$boot = function () {
-    if (class_exists(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)) {
-        try {
-            \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-                \Brainworxx\Includekrexx\Bootstrap\Bootstrap::class
-            )->checkVersionNumber('4.1.10')
-                ->run();
-        } catch (\Throwable $exception) {
-            // Do nothing.
-            // When updating the extension via ExtensionManager, there is a
-            // big chance that the cache is not cleared. And that means that
-            // the part above may not work anymore. Hence, we need to make
-            // sure that the user does not brick the system.
+call_user_func(
+    function () {
+        if (class_exists(\Brainworxx\Includekrexx\Bootstrap\Bootstrap::class)) {
+            try {
+                \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+                    \Brainworxx\Includekrexx\Bootstrap\Bootstrap::class
+                )->run();
+            } catch (\Throwable $exception) {
+                // Do nothing.
+                // When updating the extension via ExtensionManager, there is a
+                // big chance that the cache is not cleared. And that means that
+                // the part above may not work anymore. Hence, we need to make
+                // sure that the user does not brick the system.
+            }
         }
     }
-};
-$boot();
-unset($boot);
+);

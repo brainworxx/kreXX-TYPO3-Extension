@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,16 +39,14 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use DateTime;
 use Exception;
 
 /**
  * Processing of integers.
  */
-class ProcessInteger extends AbstractRouting implements ProcessInterface, ViewConstInterface, ProcessConstInterface
+class ProcessInteger extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
-
     /**
      * Is this one an integer?
      *
@@ -80,7 +78,7 @@ class ProcessInteger extends AbstractRouting implements ProcessInterface, ViewCo
             $int = $model->getData();
             if ($int > 946681200) {
                 $model->addToJson(
-                    static::META_TIMESTAMP,
+                    $this->pool->messages->getHelp('metaTimestamp'),
                     (new DateTime('@' . $int))->format('d.M Y H:i:s')
                 );
             }

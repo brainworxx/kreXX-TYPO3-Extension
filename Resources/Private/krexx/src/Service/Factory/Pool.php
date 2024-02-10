@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -54,7 +54,6 @@ use Brainworxx\Krexx\View\Output\Chunks;
  */
 class Pool extends AbstractFactory
 {
-
     /**
      * An instance of the recursion handler.
      *
@@ -151,6 +150,17 @@ class Pool extends AbstractFactory
     public $eventService;
 
     /**
+     * The current id of our PHP process.
+     *
+     * We need this one to detect a new fork.
+     * And when we detect a new fork we need to make sure that we do not have
+     * file or output collisions.
+     *
+     * @var int
+     */
+    protected $processId;
+
+    /**
      * Initializes all needed classes.
      *
      * @param string[] $rewrite
@@ -193,31 +203,33 @@ class Pool extends AbstractFactory
     /**
      * Check if the environment is as it should be.
      */
-    protected function checkEnvironment()
+    protected function checkEnvironment(): void
     {
+        $this->processId = getmypid();
+
         // Check chunk folder is writable.
         // If not, give feedback!
         $chunkFolder = $this->config->getChunkDir();
-        if ($this->fileService->isDirectoryWritable($chunkFolder) === false) {
+        if (!$this->fileService->isDirectoryWritable($chunkFolder)) {
             $this->messages->addMessage(
                 'chunksNotWritable',
                 [$this->fileService->filterFilePath($chunkFolder)]
             );
             // We can work without chunks, but this will require much more memory!
-            $this->chunks->setChunksAreAllowed(false);
+            $this->chunks->setChunkAllowed(false);
         }
 
         // Check if the log folder is writable.
         // If not, give feedback!
         $logFolder = $this->config->getLogDir();
-        if ($this->fileService->isDirectoryWritable($logFolder) === false) {
+        if (!$this->fileService->isDirectoryWritable($logFolder)) {
             $this->messages->addMessage(
                 'logNotWritable',
                 [$this->fileService->filterFilePath($logFolder)]
             );
             // Tell the chunk output that we have no write access in the logging
             // folder.
-            $this->chunks->setLoggingIsAllowed(false);
+            $this->chunks->setLoggingAllowed(false);
         }
 
         // At this point, we won't inform the dev right away. The error message
@@ -228,14 +240,26 @@ class Pool extends AbstractFactory
     /**
      * Renew the "semi-singletons" after an analysis.
      */
-    public function reset()
+    public function reset(): void
     {
         // We need to reset our recursion handler, because
         // the content of classes might change with another run.
         $this->createClass(Recursion::class);
+
         // Initialize the code generation.
         $this->createClass(Codegen::class);
         $this->createClass(Scope::class);
+
+        // Reset the routing, because they cache their settings.
+        $this->createClass(Routing::class);
+
+        if ($this->processId !== getmypid()) {
+            // We just got forked!
+            // Hence, reset the chunked class to avoid file collision.
+            $this->createClass(Chunks::class);
+            $this->processId = getmypid();
+        }
+
         // We also initialize emergency handler timer.
         $this->emergencyHandler->initTimer();
     }

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,10 +37,10 @@ namespace Brainworxx\Krexx\Tests\Unit\View\Output;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 
-class CheckOutputTest extends AbstractTest
+class CheckOutputTest extends AbstractHelper
 {
     const HTTP_X_REQUESTED_WITH = 'HTTP_X_REQUESTED_WITH';
     const OUTPUT_NAMESPACE = '\\Brainworxx\\Krexx\\View\\Output\\';
@@ -52,7 +52,7 @@ class CheckOutputTest extends AbstractTest
      *
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
         Pool::createPool();
     }
@@ -60,12 +60,12 @@ class CheckOutputTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxDown()
+    protected function tearDown(): void
     {
-        parent::krexxDown();
+        parent::tearDown();
 
         unset($_SERVER[static::HTTP_X_REQUESTED_WITH]);
-        unset($_SERVER[CheckOutput::REMOTE_ADDRESS]);
+        unset($_SERVER['REMOTE_ADDR']);
     }
 
     /**
@@ -167,7 +167,7 @@ class CheckOutputTest extends AbstractTest
         $sapiMock = $this->getFunctionMock(static::OUTPUT_NAMESPACE, static::PHP_SAPI_NAME);
         $sapiMock->expects($this->any())
             ->will($this->returnValue('browser'));
-        $_SERVER[CheckOutput::REMOTE_ADDRESS] = '1.2.3.4';
+        $_SERVER['REMOTE_ADDR'] = '1.2.3.4';
         $checkOutput = new CheckOutput(Krexx::$pool);
 
 
@@ -192,7 +192,7 @@ class CheckOutputTest extends AbstractTest
         $whitelist = '1.5.*, 1.6.*, 1.7.*';
         $this->assertFalse($checkOutput->isAllowedIp($whitelist), 'Wrong IP ranges.');
 
-        unset($_SERVER[CheckOutput::REMOTE_ADDRESS]);
+        unset($_SERVER['REMOTE_ADDR']);
         $whitelist = '1.5.*, 1.6.*, 1.7.*';
         $this->assertFalse(
             $checkOutput->isAllowedIp($whitelist),

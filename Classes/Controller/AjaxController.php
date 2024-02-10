@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -51,7 +51,7 @@ use stdClass;
 /**
  * Handles the backend ajax requests for the loglist.
  */
-class AjaxController implements ConstInterface
+class AjaxController implements ConstInterface, ControllerConstInterface
 {
     use LanguageTrait;
 
@@ -64,12 +64,15 @@ class AjaxController implements ConstInterface
      *   The prepared response object. Since 10.0, we need to create this one
      *   by ourselves.
      *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     *
      * @return \TYPO3\CMS\Core\Http\Response
      *   The response with the json string.
      */
     public function refreshLoglistAction(ServerRequest $serverRequest, Response $response = null): Response
     {
         if ($response === null) {
+            /** @var Response $response */
             $response = GeneralUtility::makeInstance(Response::class);
         }
 
@@ -88,7 +91,7 @@ class AjaxController implements ConstInterface
      *
      * @param \TYPO3\CMS\Core\Http\ServerRequest $serverRequest
      *   The current server request.
-     * @param \TYPO3\CMS\Core\Http\Response $response
+     * @param \TYPO3\CMS\Core\Http\Response|null $response
      *   The prepared response object. Since 10.0, we need to create this one
      *   by ourselves.
      *
@@ -98,14 +101,15 @@ class AjaxController implements ConstInterface
     public function deleteAction(ServerRequest $serverRequest, Response $response = null): Response
     {
         if ($response === null) {
+            /** @var Response $response */
             $response = GeneralUtility::makeInstance(Response::class);
         }
 
         $result = new stdClass();
 
-        if ($this->hasAccess() === false) {
+        if (!$this->hasAccess()) {
             $result->class  = 'error';
-            $result->text = static::translate(AbstractController::ACCESS_DENIED, static::EXT_KEY);
+            $result->text = static::translate(static::ACCESS_DENIED);
 
             $response->getBody()->write(json_encode($result));
             return $response;
@@ -120,10 +124,10 @@ class AjaxController implements ConstInterface
 
         if ($this->delete($file . '.html') && $this->delete($file . '.html.json')) {
             $result->class  = 'success';
-            $result->text = static::translate('fileDeleted', static::EXT_KEY, [$fileId]);
+            $result->text = static::translate('fileDeleted', [$fileId]);
         } else {
             $result->class  = 'error';
-            $result->text = static::translate('fileDeletedFail', static::EXT_KEY, ['n/a']);
+            $result->text = static::translate('fileDeletedFail', ['n/a']);
         }
 
         $response->getBody()->write(json_encode($result));
@@ -158,7 +162,7 @@ class AjaxController implements ConstInterface
      */
     protected function hasAccess(): bool
     {
-        return isset($GLOBALS['BE_USER']) &&
-            $GLOBALS['BE_USER']->check('modules', AbstractCollector::PLUGIN_NAME);
+        return isset($GLOBALS[static::BE_USER]) &&
+            $GLOBALS[static::BE_USER]->check(static::BE_MODULES, AbstractCollector::PLUGIN_NAME);
     }
 }

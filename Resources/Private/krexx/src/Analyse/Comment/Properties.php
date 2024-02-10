@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -54,7 +54,7 @@ class Properties extends AbstractComment
      */
     public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
     {
-        if (isset($reflection->isUndeclared) === true) {
+        if (isset($reflection->isUndeclared)) {
             return '';
         }
 
@@ -62,7 +62,7 @@ class Properties extends AbstractComment
         static $cache = [];
         /** @var \ReflectionProperty $reflection */
         $cachingKey = $reflection->getDeclaringClass()->getName() . '::' . $reflection->getName();
-        if (isset($cache[$cachingKey]) === true) {
+        if (isset($cache[$cachingKey])) {
             return $cache[$cachingKey];
         }
 

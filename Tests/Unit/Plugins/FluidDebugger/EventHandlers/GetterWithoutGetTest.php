@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,10 +42,10 @@ use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\GetterFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 
-class GetterWithoutGetTest extends AbstractTest implements CallbackConstInterface
+class GetterWithoutGetTest extends AbstractHelper implements CallbackConstInterface
 {
     /**
      * Test the setting of the pool.
@@ -63,6 +63,8 @@ class GetterWithoutGetTest extends AbstractTest implements CallbackConstInterfac
      */
     public function testHandle()
     {
+        $this->mockEmergencyHandler();
+
         $getterFixture = new GetterFixture();
         $ref = new ReflectionClass($getterFixture);
         $fixture = [
@@ -90,10 +92,15 @@ class GetterWithoutGetTest extends AbstractTest implements CallbackConstInterfac
         $routing = new RoutingNothing(Krexx::$pool);
         Krexx::$pool->routing = $routing;
 
+        // Load the fluid language files
+        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
+            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 'fluid.kreXX.ini');
+        Krexx::$pool->messages->readHelpTexts();
+
         $throughGetter = new ThroughGetter(Krexx::$pool);
         $throughGetter->setParameters($fixture)->callMe();
 
-        $methodName = 'method name';
+        $methodName = 'Method name';
         $this->assertEquals('something', $routing->model[0]->getName());
         $this->assertEquals('getSomething()', $routing->model[0]->getJson()[$methodName]);
         // We expect the getProtectedStuff to be ignored.

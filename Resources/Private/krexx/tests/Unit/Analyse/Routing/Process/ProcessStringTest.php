@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,16 +42,16 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessString;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
-use Brainworxx\Krexx\Service\Config\From\Ini;
+use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\FileinfoDummy;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use finfo;
 
-class ProcessStringTest extends AbstractTest
+class ProcessStringTest extends AbstractHelper
 {
 
     const BUFFER_INFO = 'bufferInfo';
@@ -63,9 +63,9 @@ class ProcessStringTest extends AbstractTest
      */
     protected $processString;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->processString = new ProcessString(Krexx::$pool);
         $this->mockEmergencyHandler();
@@ -89,6 +89,10 @@ class ProcessStringTest extends AbstractTest
             FileinfoDummy::class,
             $this->retrieveValueByReflection(static::BUFFER_INFO, $processor)
         );
+
+        // And while we are at it, test if the internal setting was set.
+        $this->assertNotNull($this->retrieveValueByReflection('scalarString', $processor));
+        $this->assertNotNull($this->retrieveValueByReflection('analyseScalar', $processor));
     }
 
     /**
@@ -126,11 +130,11 @@ class ProcessStringTest extends AbstractTest
             $length
         );
 
-        $this->assertEquals(ProcessConstInterface::TYPE_STRING . $length, $model->getType());
-        $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
+        $this->assertEquals(ProcessConstInterface::TYPE_STRING, $model->getType());
+        $this->assertEquals($length, $model->getJson()['Length']);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
         $this->assertEquals(false, $model->hasExtra());
-        $this->assertArrayNotHasKey($model::META_MIME_TYPE_STRING, $model->getJson());
+        $this->assertArrayNotHasKey('Mimetype', $model->getJson());
     }
 
     /**
@@ -152,12 +156,12 @@ class ProcessStringTest extends AbstractTest
             $length
         );
 
-        $this->assertEquals(ProcessConstInterface::TYPE_STRING .  $length, $model->getType());
-        $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
+        $this->assertEquals(ProcessConstInterface::TYPE_STRING, $model->getType());
+        $this->assertEquals($length, $model->getJson()['Length']);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
-        $this->assertEquals('broken', $model->getJson()[$model::META_ENCODING]);
+        $this->assertEquals('broken', $model->getJson()['Encoding']);
         $this->assertEquals(false, $model->hasExtra());
-        $this->assertArrayNotHasKey($model::META_MIME_TYPE_STRING, $model->getJson());
+        $this->assertArrayNotHasKey('Mimetype', $model->getJson());
     }
 
     /**
@@ -181,12 +185,12 @@ class ProcessStringTest extends AbstractTest
             $fileInfo
         );
 
-        $this->assertEquals(ProcessConstInterface::TYPE_STRING . $length, $model->getType());
-        $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
+        $this->assertEquals(ProcessConstInterface::TYPE_STRING, $model->getType());
+        $this->assertEquals($length, $model->getJson()['Length']);
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getNormal());
-        $this->assertEquals($fileInfo, $model->getJson()[$model::META_MIME_TYPE_STRING]);
+        $this->assertEquals($fileInfo, $model->getJson()['Mimetype string']);
         $this->assertEquals(false, $model->hasExtra());
-        $this->assertArrayNotHasKey($model::META_ENCODING, $model->getJson());
+        $this->assertArrayNotHasKey('Encoding', $model->getJson());
     }
 
     /**
@@ -210,16 +214,16 @@ class ProcessStringTest extends AbstractTest
             $fileInfo
         );
 
-        $this->assertEquals(ProcessConstInterface::TYPE_STRING . $length, $model->getType());
-        $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
+        $this->assertEquals(ProcessConstInterface::TYPE_STRING, $model->getType());
+        $this->assertEquals($length, $model->getJson()['Length']);
         $this->assertEquals(
             static::ENCODING_PREFIX . substr($fixture, 0, 50) .  CallbackConstInterface::UNKNOWN_VALUE,
             $model->getNormal()
         );
         $this->assertEquals(static::ENCODING_PREFIX . $fixture, $model->getData());
-        $this->assertEquals($fileInfo, $model->getJson()[$model::META_MIME_TYPE_STRING]);
+        $this->assertEquals($fileInfo, $model->getJson()['Mimetype string']);
         $this->assertEquals(true, $model->hasExtra());
-        $this->assertArrayNotHasKey($model::META_ENCODING, $model->getJson());
+        $this->assertArrayNotHasKey('Encoding', $model->getJson());
     }
 
     /**
@@ -241,14 +245,14 @@ class ProcessStringTest extends AbstractTest
             $length
         );
 
-        $this->assertEquals(ProcessConstInterface::TYPE_STRING . $length, $model->getType());
-        $this->assertEquals($length, $model->getJson()[$model::META_LENGTH]);
+        $this->assertEquals(ProcessConstInterface::TYPE_STRING, $model->getType());
+        $this->assertEquals($length, $model->getJson()['Length']);
         $this->assertEquals(
             static::ENCODING_PREFIX . $fixture . CallbackConstInterface::UNKNOWN_VALUE,
             $model->getNormal()
         );
         $this->assertEquals(true, $model->hasExtra());
-        $this->assertArrayNotHasKey($model::META_MIME_TYPE_STRING, $model->getJson());
+        $this->assertArrayNotHasKey('Mimetype', $model->getJson());
     }
 
     /**
@@ -260,7 +264,7 @@ class ProcessStringTest extends AbstractTest
     public function testProcessWithScalar()
     {
         // Activate the scalar analysis.
-        Krexx::$pool->rewrite[Ini::class] = ConfigSupplier::class;
+        Krexx::$pool->rewrite[File::class] = ConfigSupplier::class;
         ConfigSupplier::$overwriteValues[Fallback::SETTING_ANALYSE_SCALAR] = 'true';
 
         // To prevent a bad rating, I have to do something with the newly
@@ -321,11 +325,10 @@ class ProcessStringTest extends AbstractTest
             $cut = substr($fixture, 0, 50);
             $encodingMock->expects($this->exactly(2))
                 ->method('encodeString')
-                ->withConsecutive(
+                ->with(...$this->withConsecutive(
                     [$cut],
                     [$fixture]
-                )
-                ->will($this->returnValueMap([
+                ))->will($this->returnValueMap([
                     [$cut, false, static::ENCODING_PREFIX . $cut],
                     [$fixture, false, static::ENCODING_PREFIX . $fixture]
                 ]));

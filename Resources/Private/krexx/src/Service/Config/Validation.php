@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -54,39 +54,51 @@ class Validation extends Fallback
      *
      * @var string
      */
-    const KEY_CONFIG_ERROR = 'configError';
+    protected const KEY_CONFIG_ERROR = 'configError';
 
     /**
      * Part of a key for the messaging system.
      *
      * @var string
      */
-    const KEY_CONFIG_ERROR_BOOL = 'configErrorBool';
+    protected const KEY_CONFIG_ERROR_BOOL = 'configErrorBool';
 
     /**
      * Part of a key for the messaging system.
      *
      * @var string
      */
-    const KEY_CONFIG_ERROR_INT = 'configErrorInt';
+    protected const KEY_CONFIG_ERROR_INT = 'configErrorInt';
 
     /**
      * Part of a key for the messaging system.
      *
      * @var string
      */
-    const KEY_CONFIG_ERROR_DEBUG_INVALID = 'configErrorDebugInvalid';
+    protected const KEY_CONFIG_ERROR_DEBUG_INVALID = 'configErrorDebugInvalid';
 
     /**
-     * Preconfiguration which setting will never be editable.
+     * Part of a key for the messaging system.
+     *
+     * @var string
+     */
+    protected const KEY_CONFIG_ERROR_LANGUAGE_INVALID = 'configErrorLangInvalid';
+
+    /**
+     * Pre-configuration which setting will never be editable.
      *
      * @var string[]
      */
-    const FE_DO_NOT_EDIT = [
+    protected const FE_DO_NOT_EDIT = [
         self::SETTING_DESTINATION,
         self::SETTING_MAX_FILES,
         self::SETTING_DEBUG_METHODS,
         self::SETTING_IP_RANGE,
+    ];
+
+    protected const FE_MINIMAL_SETTINGS = [
+        self::RENDER_TYPE_CONFIG_NONE,
+        self::RENDER_TYPE_CONFIG_DISPLAY
     ];
 
     /**
@@ -102,7 +114,7 @@ class Validation extends Fallback
      * @see \Brainworxx\Krexx\Service\Config\Config::isAllowedDebugCall()
      * @see \Brainworxx\Krexx\Service\Plugin\Registration::addMethodToDebugBlacklist()
      *
-     * @var array[]
+     * @var string[][]
      */
     protected $methodBlacklist = [];
 
@@ -120,21 +132,6 @@ class Validation extends Fallback
         ReflectionType::class,
         ReflectionGenerator::class,
         Reflector::class,
-    ];
-
-    /**
-     * List of stuff who's fe-editing status can not be changed. Never.
-     *
-     * @deprecated
-     *   Since 4.0.0. Use static::FE_DO_NOT_EDIT
-     *
-     * @var string[]
-     */
-    protected $feConfigNoEdit = [
-        self::SETTING_DESTINATION,
-        self::SETTING_MAX_FILES,
-        self::SETTING_DEBUG_METHODS,
-        self::SETTING_IP_RANGE,
     ];
 
     /**
@@ -157,13 +154,12 @@ class Validation extends Fallback
 
         // Adding the new configuration options from the plugins.
         $pluginConfig = SettingsGetter::getNewSettings();
-        if (empty($pluginConfig) === true) {
+        if (empty($pluginConfig)) {
             return;
         }
 
-        /** @var \Brainworxx\Krexx\Service\Plugin\NewSetting $newSetting */
         foreach ($pluginConfig as $newSetting) {
-            if ($newSetting->isFeProtected() === true) {
+            if ($newSetting->isFeProtected()) {
                 $this->feDoNotEdit[] = $newSetting->getName();
             }
         }
@@ -186,7 +182,14 @@ class Validation extends Fallback
     {
         if ($group === static::SECTION_FE_EDITING) {
             // These settings can never be changed in the frontend.
-            return !in_array($name, $this->feDoNotEdit);
+            // But we may decide to display or hide them.
+            return !in_array($name, $this->feDoNotEdit, true) ||
+                in_array($value, static::FE_MINIMAL_SETTINGS, true);
+        }
+
+        if (empty($this->feConfigFallback[$name][static::EVALUATE])) {
+            // No evaluation method was specified.
+            return true;
         }
 
         // We simply call the configured evaluation method.
@@ -217,7 +220,7 @@ class Validation extends Fallback
                 $this->skinConfiguration[$value][static::SKIN_DIRECTORY] . 'header.html'
             );
 
-        if ($result === false) {
+        if (!$result) {
             $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR . ucfirst($name));
         }
 
@@ -237,8 +240,11 @@ class Validation extends Fallback
      */
     protected function evalDestination($value, string $name): bool
     {
-        $result = ($value === static::VALUE_BROWSER || $value === 'file');
-        if ($result === false) {
+        $result = $value === static::VALUE_BROWSER
+            || $value === static::VALUE_FILE
+            || $value === static::VALUE_BROWSER_IMMEDIATELY;
+
+        if (!$result) {
             $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR . ucfirst($name));
         }
 
@@ -259,7 +265,7 @@ class Validation extends Fallback
     protected function evalIpRange($value, string $name): bool
     {
         $result = empty($value);
-        if ($result === true) {
+        if ($result) {
             $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR . ucfirst($name));
         }
 
@@ -283,16 +289,16 @@ class Validation extends Fallback
      */
     protected function evalMaxRuntime($value, string $name, string $group): bool
     {
-        $result = true;
         $maxTime = (int)ini_get('max_execution_time');
 
         if ($maxTime <= 0) {
             // There is no max execution time set.
             // We ignore the max execution time on the shell anyway.
-            return $result;
+            return true;
         }
 
-        if ($this->evalInt($value, $name, $group) === false || $maxTime < (int)$value) {
+        $result = true;
+        if (!$this->evalInt($value, $name, $group) || $maxTime < (int)$value) {
             $this->pool->messages->addMessage(
                 static::KEY_CONFIG_ERROR . ucfirst($name) . 'Big',
                 [$maxTime]
@@ -320,8 +326,8 @@ class Validation extends Fallback
      */
     protected function evalBool($value, string $name, string $group): bool
     {
-        $result = ($value === static::VALUE_TRUE || $value === static::VALUE_FALSE || is_bool($value));
-        if ($result === false) {
+        $result = $value === static::VALUE_TRUE || $value === static::VALUE_FALSE || is_bool($value);
+        if (!$result) {
             $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR_BOOL, [$group, $name]);
         }
 
@@ -346,8 +352,8 @@ class Validation extends Fallback
      */
     protected function evalInt($value, string $name, string $group): bool
     {
-        $result = ((int) $value) > 0;
-        if ($result === false) {
+        $result = (int) $value > 0;
+        if (!$result) {
             $this->pool->messages->addMessage(static::KEY_CONFIG_ERROR_INT, [$group, $name]);
         }
 
@@ -387,6 +393,31 @@ class Validation extends Fallback
     }
 
     /**
+     * Eval if the selected language is available.
+     *
+     * @param string $value
+     *   The language key.
+     * @param string $name
+     *   The name of the value we are checking, needed for the feedback text.
+     * @param string $group
+     *   The name of the group that we are evaluating, needed for the feedback
+     *   text.
+     *
+     * @return bool
+     *   Whether it does evaluate or not.
+     */
+    protected function evalLanguage(string $value, string $name, string $group): bool
+    {
+        if (!isset($this->pool->config->getLanguageList()[$value])) {
+            $this->pool->messages
+                ->addMessage(static::KEY_CONFIG_ERROR_LANGUAGE_INVALID, [$group, $name, $value]);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Determines if the specific class is blacklisted for debug methods.
      *
      * @param object $data
@@ -397,7 +428,7 @@ class Validation extends Fallback
      * @return bool
      *   Whether the function is allowed to be called.
      */
-    public function isAllowedDebugCall($data, string $method): bool
+    public function isAllowedDebugCall(object $data, string $method): bool
     {
         // Check if the class itself is blacklisted.
         foreach ($this->classBlacklist as $classname) {
@@ -409,7 +440,7 @@ class Validation extends Fallback
 
         // Check if the combination of class and method is blacklisted.
         foreach ($this->methodBlacklist as $classname => $debugMethod) {
-            if ($data instanceof $classname && in_array($method, $debugMethod, true) === true) {
+            if ($data instanceof $classname && in_array($method, $debugMethod, true)) {
                 return false;
             }
         }

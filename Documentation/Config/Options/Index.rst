@@ -42,13 +42,14 @@ Behavior
 | Skin                           | You can change the CSS/HTML skin. We included the Hans and Smoky-Grey skin                                                             | - hans                    |
 |                                |                                                                                                                                        | - smoky-grey              |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Destination                    | Will the output be sent to the frontend or the logfolder?                                                                              | - file                    |
-|                                |                                                                                                                                        | - frontend                |
+| Destination                    | Will the output be sent to the frontend or the logfolder?                                                                              | - Browser shutdown phase  |
+|                                |                                                                                                                                        | - File                    |
+|                                |                                                                                                                                        | - Browser immediately     |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 | Maximum files in the logfolder | How many files should it keep? Files will only get deleted, when a new one is created.                                                 | 10                        |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
-| Use scope analysis             | kreXX will analyse all values and methods that can be reached from the point where the analysis was called. This will automatically    | - true                    |
-|                                | overwrite existing configurations, it can be considered the "auto config mode".                                                        | - false                   |
+| Language                       | The language of the kreXX debug output.                                                                                                | - English                 |
+|                                |                                                                                                                                        | - Deutsch                 |
 +--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------+---------------------------+
 
 

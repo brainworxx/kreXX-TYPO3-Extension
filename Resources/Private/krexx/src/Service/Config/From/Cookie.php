@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -54,7 +54,7 @@ class Cookie
     /**
      * Here we cache our cookie settings.
      *
-     * @var array
+     * @var string[]
      */
     public $settings = [];
 
@@ -68,10 +68,10 @@ class Cookie
         $this->validation = $pool->config->validation;
         $cookies = $pool->getGlobals('_COOKIE');
 
-        if (isset($cookies['KrexxDebugSettings']) === true) {
+        if (isset($cookies['KrexxDebugSettings'])) {
             // We have local settings.
             $settings = json_decode($cookies['KrexxDebugSettings'], true);
-            if (is_array($settings) === true) {
+            if (is_array($settings)) {
                 $this->settings = $settings;
             }
         }
@@ -88,12 +88,12 @@ class Cookie
      * @return string|null
      *   The value.
      */
-    public function getConfigFromCookies(string $group, string $name)
+    public function getConfigFromCookies(string $group, string $name): ?string
     {
         // Do we have a value in the cookies?
         if (
-            isset($this->settings[$name]) === true &&
-            $this->validation->evaluateSetting($group, $name, $this->settings[$name]) === true
+            isset($this->settings[$name]) &&
+            $this->validation->evaluateSetting($group, $name, $this->settings[$name])
         ) {
             // We escape them, just in case.
             return htmlspecialchars($this->settings[$name]);

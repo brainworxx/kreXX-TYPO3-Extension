@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,7 +38,6 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Comment;
 
 use ReflectionClass;
-use ReflectionException;
 use ReflectionMethod;
 use Reflector;
 
@@ -47,7 +46,6 @@ use Reflector;
  */
 class Methods extends AbstractComment
 {
-
     /**
      * The name of the method we are analysing.
      *
@@ -63,7 +61,7 @@ class Methods extends AbstractComment
      *
      * @param \Reflector $reflection
      *   An already existing reflection of the method.
-     * @param \ReflectionClass $reflectionClass
+     * @param \ReflectionClass|null $reflectionClass
      *   An already existing reflection of the original class.
      *
      * @return string
@@ -77,7 +75,7 @@ class Methods extends AbstractComment
         $this->methodName = $reflection->getName();
         $cachingKey =  $reflection->getDeclaringClass()->name . '::' . $this->methodName;
 
-        if (isset($cache[$cachingKey]) === true) {
+        if (isset($cache[$cachingKey])) {
             return $cache[$cachingKey];
         }
 
@@ -102,17 +100,23 @@ class Methods extends AbstractComment
     protected function getMethodComment(ReflectionMethod $reflectionMethod, ReflectionClass $reflectionClass): string
     {
         // Get a first impression.
-        $comment = $this->prettifyComment($reflectionMethod->getDocComment());
         // Check for interfaces.
-        $comment = $this->getInterfaceComment($comment, $reflectionClass);
         // Check for traits.
-        $comment = $this->getTraitComment($comment, $reflectionClass);
+        $comment = $this->getTraitComment(
+            $this->getInterfaceComment(
+                $this->prettifyComment(
+                    $reflectionMethod->getDocComment()
+                ),
+                $reflectionClass
+            ),
+            $reflectionClass
+        );
 
         // Nothing on this level, we need to take a look at the parents.
         $reflectionClass = $reflectionClass->getParentClass();
         if (
             $reflectionClass !== false
-            && $reflectionClass->hasMethod($this->methodName) === true
+            && $reflectionClass->hasMethod($this->methodName)
         ) {
             $comment = $this->replaceInheritComment(
                 $comment,
@@ -147,7 +151,7 @@ class Methods extends AbstractComment
         // traits in the class we are currently looking at.
         foreach ($reflection->getTraits() as $trait) {
             $originalComment = $this->retrieveComment($originalComment, $trait);
-            if ($this->checkComment($originalComment) === true) {
+            if ($this->checkComment($originalComment)) {
                 // Looks like we've resolved them all.
                 return $originalComment;
             }
@@ -175,7 +179,7 @@ class Methods extends AbstractComment
     {
         foreach ($reflectionClass->getInterfaces() as $interface) {
             $originalComment = $this->retrieveComment($originalComment, $interface);
-            if ($this->checkComment($originalComment) === true) {
+            if ($this->checkComment($originalComment)) {
                 // Looks like we've resolved them all.
                 return $originalComment;
             }
@@ -196,7 +200,7 @@ class Methods extends AbstractComment
      */
     protected function retrieveComment(string $originalComment, ReflectionClass $reflection): string
     {
-        if ($reflection->hasMethod($this->methodName) === true) {
+        if ($reflection->hasMethod($this->methodName)) {
             $newComment = $this->prettifyComment($reflection->getMethod($this->methodName)->getDocComment());
             // Replace it.
             $originalComment = $this->replaceInheritComment($originalComment, $newComment);

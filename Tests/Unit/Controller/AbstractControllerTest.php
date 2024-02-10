@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,15 +38,16 @@ use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplateFactory;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 
-class AbstractControllerTest extends AbstractTest
+class AbstractControllerTest extends AbstractHelper
 {
     /**
      * Test the creation of the pool and its assigning to the class.
@@ -55,8 +56,18 @@ class AbstractControllerTest extends AbstractTest
      */
     public function testConstruct()
     {
-        $indexController = new IndexController();
+        $configMock = $this->createMock(Configuration::class);
+        $formConfigMock = $this->createMock(FormConfiguration::class);
+        $settings = $this->createMock(Settings::class);
+        $pageRenderer = $this->createMock(PageRenderer::class);
+
+        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer);
+
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $indexController));
+        $this->assertSame($configMock, $this->retrieveValueByReflection('configuration', $indexController));
+        $this->assertSame($formConfigMock, $this->retrieveValueByReflection('formConfiguration', $indexController));
+        $this->assertSame($settings, $this->retrieveValueByReflection('settingsModel', $indexController));
+        $this->assertSame($pageRenderer, $this->retrieveValueByReflection('pageRenderer', $indexController));
     }
 
     /**
@@ -66,7 +77,13 @@ class AbstractControllerTest extends AbstractTest
      */
     public function testInitializeAction()
     {
-        $indexController = new IndexController();
+        $configMock = $this->createMock(Configuration::class);
+        $formConfigMock = $this->createMock(FormConfiguration::class);
+        $settings = $this->createMock(Settings::class);
+        $pageRenderer = $this->createMock(PageRenderer::class);
+
+        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer);
+
         $mtMock = $this->createMock(\stdClass::class);
         if (method_exists($indexController, 'injectObjectManager')) {
             // TYPO3 11 style
@@ -76,7 +93,6 @@ class AbstractControllerTest extends AbstractTest
                 ->with(ModuleTemplate::class)
                 ->will($this->returnValue($mtMock));
             $this->setValueByReflection('objectManager', $objectManagerMock, $indexController);
-            $indexController->initializeAction();
         } else {
             // TYPO3 12 style.
             // We are using the ModuleTemplateFactory.
@@ -87,47 +103,9 @@ class AbstractControllerTest extends AbstractTest
             $this->injectIntoGeneralUtility(\TYPO3\CMS\Backend\Template\ModuleTemplateFactory::class , $mtFactoryMock);
             $requestMock = $this->createMock(RequestInterface::class);
             $this->setValueByReflection('request', $requestMock, $indexController);
-            $indexController->initializeAction();
         }
-    }
 
-    /**
-     * Test the injection of the configuration.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::injectConfiguration
-     */
-    public function testInjectConfiguration()
-    {
-        $configMock = $this->createMock(Configuration::class);
-        $indexController = new IndexController();
-        $indexController->injectConfiguration($configMock);
-        $this->assertSame($configMock, $this->retrieveValueByReflection('configuration', $indexController));
-    }
-
-    /**
-     * Test the injection of the from configuration.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::injectFormConfiguration
-     */
-    public function testInjectFormConfiguration()
-    {
-        $formConfigMock = $this->createMock(FormConfiguration::class);
-        $indexController = new IndexController();
-        $indexController->injectFormConfiguration($formConfigMock);
-        $this->assertSame($formConfigMock, $this->retrieveValueByReflection('formConfiguration', $indexController));
-    }
-
-    /**
-     * Test  the injection of the settings model.
-     *
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::injectSettingsModel
-     */
-    public function testInjectSettings()
-    {
-        $settings = $this->createMock(Settings::class);
-        $indexController = new IndexController();
-        $indexController->injectSettingsModel($settings);
-        $this->assertSame($settings, $this->retrieveValueByReflection('settingsModel', $indexController));
+        $indexController->initializeAction();
     }
 
     /**
@@ -137,8 +115,14 @@ class AbstractControllerTest extends AbstractTest
      */
     public function testInjectLivePreset()
     {
+        $configMock = $this->createMock(Configuration::class);
+        $formConfigMock = $this->createMock(FormConfiguration::class);
+        $settings = $this->createMock(Settings::class);
+        $pageRenderer = $this->createMock(PageRenderer::class);
+
+        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer);
+
         $preset = $this->createMock(LivePreset::class);
-        $indexController = new IndexController();
         $indexController->injectLivePreset($preset);
         $this->assertSame($preset, $this->retrieveValueByReflection('livePreset', $indexController));
     }

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -54,6 +54,9 @@ trait Header
         '{search}',
         '{messages}',
         '{encoding}',
+        '{noJavaScript}',
+        '{callNumber}',
+        '{searchHeadline}'
     ];
 
     /**
@@ -61,6 +64,7 @@ trait Header
      */
     public function renderHeader(string $headline, string $cssJs): string
     {
+        $messages = $this->pool->messages;
         return str_replace(
             $this->markerHeader,
             [
@@ -70,10 +74,13 @@ trait Header
                 $cssJs,
                 $this->pool->recursionHandler->getMarker(),
                 $this->renderSearch(),
-                $this->pool->messages->outputMessages(),
+                $messages->outputMessages(),
                 $this->pool->chunks->getOfficialEncoding(),
+                $messages->getHelp('noJavaScript'),
+                $messages->getHelp('callNumber'),
+                $messages->getHelp('searchHeadline'),
             ],
-            $this->getTemplateFileContent(static::FILE_HEADER)
+            $this->fileCache[static::FILE_HEADER]
         );
     }
 

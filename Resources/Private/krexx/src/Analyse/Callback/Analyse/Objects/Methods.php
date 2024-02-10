@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,12 +37,10 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\View\ViewConstInterface;
-use ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use ReflectionMethod;
 
 /**
@@ -55,9 +53,8 @@ use ReflectionMethod;
  * @uses \ReflectionClass ref
  *   A reflection of the class we are currently analysing.
  */
-class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, ViewConstInterface, ConfigConstInterface
+class Methods extends AbstractObjectAnalysis implements ConfigConstInterface
 {
-
     /**
      * Decides which methods we want to analyse and then starts the dump.
      *
@@ -78,17 +75,18 @@ class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, 
         $domId = $this->generateDomIdFromClassname($ref->getName(), $doProtected, $doPrivate);
 
         // We need to check, if we have a meta recursion here.
-        if ($this->pool->recursionHandler->isInMetaHive($domId) === true) {
+        if ($this->pool->recursionHandler->isInMetaHive($domId)) {
             // We have been here before.
             // We skip this one, and leave it to the js recursion handler!
+            $metaMethods = $this->pool->messages->getHelp('metaMethods');
             return $output .
                 $this->pool->render->renderRecursion(
                     $this->dispatchEventWithModel(
                         static::EVENT_MARKER_RECURSION,
                         $this->pool->createClass(Model::class)
                             ->setDomid($domId)
-                            ->setNormal(static::META_METHODS)
-                            ->setName(static::META_METHODS)
+                            ->setNormal($metaMethods)
+                            ->setName($metaMethods)
                             ->setType(static::TYPE_INTERNALS)
                     )
                 );
@@ -115,15 +113,15 @@ class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, 
     protected function analyseMethods(ReflectionClass $ref, string $domId, bool $doProtected, bool $doPrivate): string
     {
         $methods = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
-        if ($doProtected === true) {
+        if ($doProtected) {
             $methods = array_merge($methods, $ref->getMethods(ReflectionMethod::IS_PROTECTED));
         }
-        if ($doPrivate === true) {
+        if ($doPrivate) {
             $methods = array_merge($methods, $ref->getMethods(ReflectionMethod::IS_PRIVATE));
         }
 
         // Is there anything to analyse?
-        if (empty($methods) === true) {
+        if (empty($methods)) {
             return '';
         }
 
@@ -131,13 +129,13 @@ class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, 
         $this->pool->recursionHandler->addToMetaHive($domId);
 
         // We need to sort these alphabetically.
-        usort($methods, [$this, 'reflectionSorting']);
+        usort($methods, [$this, static::REFLECTION_SORTING]);
 
         return $this->pool->render->renderExpandableChild(
             $this->dispatchEventWithModel(
                 static::EVENT_MARKER_ANALYSES_END,
                 $this->pool->createClass(Model::class)
-                    ->setName(static::META_METHODS)
+                    ->setName($this->pool->messages->getHelp('metaMethods'))
                     ->setType(static::TYPE_INTERNALS)
                     ->addParameter(static::PARAM_DATA, $methods)
                     ->addParameter(static::PARAM_REF, $ref)
@@ -166,11 +164,11 @@ class Methods extends AbstractObjectAnalysis implements CallbackConstInterface, 
     protected function generateDomIdFromClassname(string $data, bool $doProtected, bool $doPrivate): string
     {
         $string = 'k' . $this->pool->emergencyHandler->getKrexxCount() . '_m_';
-        if ($doProtected === true) {
+        if ($doProtected) {
             $string .= 'pro_';
         }
 
-        if ($doPrivate === true) {
+        if ($doPrivate) {
             $string .= 'pri_';
         }
 

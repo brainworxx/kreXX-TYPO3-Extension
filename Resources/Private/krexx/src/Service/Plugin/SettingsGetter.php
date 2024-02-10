@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -90,7 +90,7 @@ class SettingsGetter extends Registration
     /**
      * Getter for the blacklisted debug methods.
      *
-     * @return array[]
+     * @return string[][]
      *   The debug methods.
      */
     public static function getBlacklistDebugMethods(): array
@@ -126,7 +126,7 @@ class SettingsGetter extends Registration
     /**
      * Getter for the event list.
      *
-     * @return array[]
+     * @return string[][]
      *   The event list.
      */
     public static function getEventList(): array
@@ -159,7 +159,7 @@ class SettingsGetter extends Registration
     /**
      * Getter for the skins, provided by plugins.
      *
-     * @return array[]
+     * @return string[][]
      *   The configuration arrays of additional skins.
      */
     public static function getAdditionalSkinList(): array
@@ -187,5 +187,15 @@ class SettingsGetter extends Registration
     public static function getNewSettings(): array
     {
         return static::$newSettings;
+    }
+
+    /**
+     * Getter for the additional languages.
+     *
+     * @return string[][]
+     */
+    public static function getAdditionalLanguages(): array
+    {
+        return self::$additionalLanguages;
     }
 }

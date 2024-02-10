@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,11 +37,11 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Plugins\FluidDebugger\Rewrites\Call
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\AbstractFluid;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext;
 
-class AbstractCallerFinderTest extends AbstractTest
+class AbstractCallerFinderTest extends AbstractHelper
 {
     const PARSED_TEMPLATE = 'parsedTemplate';
     const HAS_PROPERTY = 'hasProperty';
@@ -91,7 +91,7 @@ class AbstractCallerFinderTest extends AbstractTest
         $newFluid = new Fluid(Krexx::$pool);
 
         // Check the injections from above.
-        $this->assertEquals(AbstractFluid::FLUID_VARIABLE, $this->retrieveValueByReflection('varname', $newFluid));
+        $this->assertEquals('fluidvar', $this->retrieveValueByReflection('varname', $newFluid));
         $this->assertSame($viewMock, $this->retrieveValueByReflection('view', $newFluid));
         $this->assertSame($reflectionMock, $this->retrieveValueByReflection(static::VIEW_REFLECTION, $newFluid));
         $this->assertSame($contextMock, $this->retrieveValueByReflection(static::RENDERING_CONTEXT, $newFluid));

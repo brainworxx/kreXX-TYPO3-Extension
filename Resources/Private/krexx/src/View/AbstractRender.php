@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,8 +43,22 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * Protected helper methods for the real render class.
  */
-abstract class AbstractRender
+abstract class AbstractRender implements RenderInterface
 {
+    /**
+     * Css class name.
+     *
+     * @var string
+     */
+    protected const STYLE_HIDDEN = 'khidden';
+
+    /**
+     * Css class name.
+     *
+     * @var string
+     */
+    protected const STYLE_ACTIVE = 'kactive';
+
     /**
      * Here we store all relevant data.
      *
@@ -55,6 +69,9 @@ abstract class AbstractRender
     /**
      * The name of the current skin.
      *
+     * @deprecated
+     *   Since 5.0.0. Will be removed
+     *
      * @var string
      */
     protected $skinPath;
@@ -64,7 +81,7 @@ abstract class AbstractRender
      *
      * @var string[]
      */
-    protected static $fileCache = [];
+    protected $fileCache = [];
 
     /**
      * Inject the pool and inject $this into the concrete render object of the
@@ -77,7 +94,11 @@ abstract class AbstractRender
     {
         $this->pool = $pool;
         $this->pool->render = $this;
-        $this->skinPath = $this->pool->config->getSkinDirectory();
+
+        // Prepare the template file cache.
+        foreach (glob(($this->skinPath = $this->pool->config->getSkinDirectory()) . '*.html') as $filePath) {
+            $this->fileCache[basename($filePath, '.html')] = $pool->fileService->getFileContents($filePath);
+        }
     }
 
     /**
@@ -86,27 +107,32 @@ abstract class AbstractRender
      * @param string $what
      *   Filename in the skin folder without the ".html" at the end.
      *
+     * @deprecated
+     *   Since 5.0.0. Access the file cache directly.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @return string
      *   The template file, without whitespaces.
      */
     protected function getTemplateFileContent(string $what): string
     {
-        if (isset(static::$fileCache[$what]) === true) {
-            return static::$fileCache[$what];
+        if (isset($this->fileCache[$what])) {
+            return $this->fileCache[$what];
         }
 
-        static::$fileCache[$what] = preg_replace(
+        return $this->fileCache[$what] = preg_replace(
             '/\s+/',
             ' ',
             $this->pool->fileService->getFileContents($this->skinPath . $what . '.html')
         );
-        return static::$fileCache[$what];
     }
 
     /**
      * Some special escaping for the json output
      *
-     * @param array $array
+     * @param string[] $array
      *   The string we want to special-escape
      * @return string
      *   The json from the array.
@@ -114,7 +140,7 @@ abstract class AbstractRender
     protected function encodeJson(array $array): string
     {
         // No data, no json!
-        if (empty($array) === true) {
+        if (empty($array)) {
             return '';
         }
 
@@ -154,10 +180,6 @@ abstract class AbstractRender
      */
     protected function generateDataAttribute(string $name, string $data): string
     {
-        if (empty($data) === true) {
-            return '';
-        }
-
         return ' data-' . $name . '="' . str_replace('"', '&#34;', $data) . '" ';
     }
 
@@ -172,7 +194,7 @@ abstract class AbstractRender
      */
     protected function retrieveTypeClasses(Model $model): string
     {
-        $typeClasses = $model->isExpandable() === true ? 'kexpand ' : ' ';
+        $typeClasses = $model->isExpandable() ? 'kexpand ' : ' ';
 
         foreach (explode(' ', $model->getType()) as $typeClass) {
             $typeClasses .= 'k' . $typeClass . ' ';

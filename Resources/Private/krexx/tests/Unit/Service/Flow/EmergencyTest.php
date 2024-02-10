@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,9 +39,9 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Flow\Emergency;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class EmergencyTest extends AbstractTest
+class EmergencyTest extends AbstractHelper
 {
 
     const ALL_IS_OK = 'allIsOk';
@@ -67,19 +67,10 @@ class EmergencyTest extends AbstractTest
     /**
      * Create the emergency class.
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->emergency = new Emergency(Krexx::$pool);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function krexxDown()
-    {
-        parent::krexxDown();
-        $this->setValueByReflection(static::ALL_IS_OK, true, Emergency::class);
     }
 
     /**
@@ -91,13 +82,12 @@ class EmergencyTest extends AbstractTest
         $configMock = $this->createMock(Config::class);
         $configMock->expects($this->exactly(4))
             ->method('getSetting')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [Fallback::SETTING_MAX_RUNTIME],
                 [Fallback::SETTING_MEMORY_LEFT],
                 [Fallback::SETTING_MAX_CALL],
                 [Fallback::SETTING_NESTING_LEVEL]
-            )
-            ->will($this->returnValueMap([
+            ))->will($this->returnValueMap([
                 [Fallback::SETTING_MAX_RUNTIME, '60'],
                 [Fallback::SETTING_MEMORY_LEFT, '64'],
                 [Fallback::SETTING_MAX_CALL, '10'],
@@ -213,7 +203,7 @@ class EmergencyTest extends AbstractTest
     public function testCheckEmergencyBreakDisabled()
     {
         $this->setValueByReflection(Fallback::SETTING_DISABLED, true, $this->emergency);
-        $this->setValueByReflection(static::ALL_IS_OK, false, Emergency::class);
+        $this->setValueByReflection(static::ALL_IS_OK, false, $this->emergency);
         $this->assertEquals(false, $this->emergency->checkEmergencyBreak());
     }
 
@@ -224,7 +214,7 @@ class EmergencyTest extends AbstractTest
      */
     public function testCheckEmergencyBreakFailedBefore()
     {
-        $this->setValueByReflection(static::ALL_IS_OK, false, Emergency::class);
+        $this->setValueByReflection(static::ALL_IS_OK, false, $this->emergency);
         $this->assertEquals(true, $this->emergency->checkEmergencyBreak());
     }
 

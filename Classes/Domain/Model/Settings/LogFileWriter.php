@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -51,7 +51,7 @@ trait LogFileWriter
     /**
      * @param string $activateT3FileWriter
      */
-    public function setActivateT3FileWriter(string $activateT3FileWriter)
+    public function setActivateT3FileWriter(string $activateT3FileWriter): void
     {
         $this->activateT3FileWriter = $activateT3FileWriter;
     }
@@ -59,7 +59,7 @@ trait LogFileWriter
     /**
      * @param string $loglevelT3FileWriter
      */
-    public function setLoglevelT3FileWriter(string $loglevelT3FileWriter)
+    public function setLoglevelT3FileWriter(string $loglevelT3FileWriter): void
     {
         $this->loglevelT3FileWriter = $loglevelT3FileWriter;
     }
@@ -67,7 +67,7 @@ trait LogFileWriter
     /**
      * Do nothing. This value will not get added to the ini.
      *
-     * @param $value
+     * @param mixed $value
      *
      * @return int
      */
@@ -81,7 +81,7 @@ trait LogFileWriter
     /**
      * Do nothing. This value will not get added to the ini.
      *
-     * @param $value
+     * @param mixed $value
      *
      * @return string
      */

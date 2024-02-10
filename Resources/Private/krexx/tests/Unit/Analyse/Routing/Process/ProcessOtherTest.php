@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,12 +39,11 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessOther;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use stdClass;
 
-class ProcessOtherTest extends AbstractTest
+class ProcessOtherTest extends AbstractHelper
 {
     /**
      * Testing of not yet handled stuff, aka 'other'.
@@ -68,7 +67,7 @@ class ProcessOtherTest extends AbstractTest
 
         $this->assertEquals('string', $model->getType());
         $this->assertEquals('Unhandled type: string', $model->getNormal());
-        $this->assertArrayHasKey(ViewConstInterface::META_HELP, $model->getJson());
+        $this->assertArrayHasKey('Help', $model->getJson());
     }
 
     /**

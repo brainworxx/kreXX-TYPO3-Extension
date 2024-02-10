@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -77,20 +77,19 @@ class Cleanup implements ConfigConstInterface
      */
     public function cleanupOldLogs(): Cleanup
     {
-        if ($this->pool->chunks->getLoggingIsAllowed() === false) {
+        if (!$this->pool->chunks->isLoggingAllowed()) {
             // We have no write access. Do nothing.
             return $this;
         }
 
         // Cleanup old logfiles to prevent an overflow.
         $logList = glob($this->pool->config->getLogDir() . '*.Krexx.html');
-        if (empty($logList) === true) {
+        if (empty($logList)) {
             return $this;
         }
 
-        $mapped = array_map([$this->pool->fileService, 'filetime'], $logList);
         array_multisort(
-            $mapped,
+            array_map([$this->pool->fileService, 'filetime'], $logList),
             SORT_DESC,
             $logList
         );
@@ -119,14 +118,14 @@ class Cleanup implements ConfigConstInterface
     public function cleanupOldChunks(): Cleanup
     {
         // Check for write access. We also do this only once.
-        if (static::$chunksDone === true || $this->pool->chunks->getChunksAreAllowed() === false) {
+        if (static::$chunksDone || !$this->pool->chunks->isChunkAllowed()) {
             return $this;
         }
 
         static::$chunksDone = true;
         // Clean up leftover files.
         $chunkList = glob($this->pool->config->getChunkDir() . '*.Krexx.tmp');
-        if (empty($chunkList) === true) {
+        if (empty($chunkList)) {
             return $this;
         }
 

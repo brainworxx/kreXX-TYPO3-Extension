@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,15 +37,16 @@ namespace Brainworxx\Krexx\Tests\Unit\View;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Misc\File;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Service\Plugin\Registration;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Message;
 use Brainworxx\Krexx\View\Messages;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 
-class MessagesTest extends AbstractTest
+class MessagesTest extends AbstractHelper
 {
 
-    const KEY_VARIABLE_NAME = 'keys';
+    const KEY_VARIABLE_NAME = 'messages';
     const PARAMS = 'params';
 
     /**
@@ -56,11 +57,21 @@ class MessagesTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->messagesClass = new Messages(Krexx::$pool);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $this->setValueByReflection('additionalLanguages', [], Registration::class);
     }
 
     /**
@@ -142,9 +153,7 @@ class MessagesTest extends AbstractTest
      */
     public function testGetHelp()
     {
-        $helpArray = [
-            'doctor' => 'Some %s string.'
-        ];
+        $helpArray = ['doctor' => 'Some %s string.'];
         $this->setValueByReflection('helpArray', $helpArray, $this->messagesClass);
 
         $this->assertEquals('', $this->messagesClass->getHelp('unknown key'));
@@ -199,6 +208,33 @@ class MessagesTest extends AbstractTest
         $this->assertEquals(
             ['someKey' => 'a string'],
             $this->retrieveValueByReflection('helpArray', $this->messagesClass)
+        );
+    }
+
+    /**
+     * Test the assignment of the language key.
+     *
+     * @covers \Brainworxx\Krexx\View\Messages::setLanguageKey
+     * @covers \Brainworxx\Krexx\View\Messages::readHelpTexts
+     * @covers \Brainworxx\Krexx\View\Messages::getHelp
+     */
+    public function testSetLanguageKey()
+    {
+        $this->messagesClass->setLanguageKey('de');
+        Registration::addLanguage('anykey', 'Any Key');
+        Registration::registerAdditionalHelpFile(KREXX_DIR . 'tests/Fixtures/Language.ini');
+        $this->messagesClass->readHelpTexts();
+
+        $this->assertEquals(
+            'a string',
+            $this->messagesClass->getHelp('someKey'),
+            'Test the usage of the language key above.'
+        );
+
+        $this->assertEquals(
+            'Gesamtzeit',
+            $this->messagesClass->getHelp('metaTotalTime'),
+            'Test if the original language is still available'
         );
     }
 }

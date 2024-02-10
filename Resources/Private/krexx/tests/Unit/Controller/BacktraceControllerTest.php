@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -94,7 +94,7 @@ class BacktraceControllerTest extends AbstractController
 
         $poolMock->codegenHandler = $this->createMock(Codegen::class);
         $poolMock->codegenHandler->expects($this->once())
-            ->method('setAllowCodegen')
+            ->method('setCodegenAllowed')
             ->with(false);
 
         $poolMock->emergencyHandler->expects($this->once())
@@ -110,11 +110,11 @@ class BacktraceControllerTest extends AbstractController
 
         $poolMock->expects($this->exactly(3))
             ->method('createClass')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [ProcessBacktrace::class],
                 [Model::class],
                 [ThroughConfig::class]
-            )->will($this->returnValueMap(
+            ))->will($this->returnValueMap(
                 [
                     [ProcessBacktrace::class, $proccessMock],
                     [Model::class, new Model(Krexx::$pool)],

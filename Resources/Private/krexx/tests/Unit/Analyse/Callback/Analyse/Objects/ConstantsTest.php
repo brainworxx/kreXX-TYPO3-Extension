@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,17 +37,17 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Constants;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\View\Skins\RenderHans;
 use ReflectionClass;
 
-class ConstantsTest extends AbstractTest
+class ConstantsTest extends AbstractHelper
 {
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         Krexx::$pool->rewrite = [
             ThroughConstants::class => CallbackCounter::class,
@@ -138,7 +138,6 @@ class ConstantsTest extends AbstractTest
         $this->assertEquals(
             [
                 Constants::PARAM_DATA => $returnConstants,
-                Constants::PARAM_CLASSNAME => '\\some classname',
                 Constants::PARAM_REF => $reflectionMock
             ],
             CallbackCounter::$staticParameters[0]

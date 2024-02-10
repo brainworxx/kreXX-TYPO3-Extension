@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -61,7 +61,6 @@ trait ExpandableChild
         '{codewrapperLeft}',
         '{codewrapperRight}',
         '{help}',
-        '{key-ktype}',
     ];
 
     /**
@@ -75,17 +74,21 @@ trait ExpandableChild
     ];
 
     /**
+     * @var string
+     */
+    private $markerSingleChildExtra = '{data}';
+
+    /**
      * {@inheritdoc}
      */
     public function renderExpandableChild(Model $model, bool $isExpanded = false): string
     {
         // Check for emergency break.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
             return '';
         }
 
         // Generating our code.
-        /** @var \Brainworxx\Krexx\Analyse\Code\Codegen $codegenHandler */
         $codegenHandler = $this->pool->codegenHandler;
         $generateSource = $codegenHandler->generateSource($model);
         return str_replace(
@@ -99,14 +102,13 @@ trait ExpandableChild
                 $this->renderConnectorRight($model->getConnectorRight(128), $model->getReturnType()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_SOURCE, $generateSource),
                 $this->renderSourceButtonWithStop($generateSource),
-                $this->retrieveOpenedClass($isExpanded),
+                $isExpanded ? 'kopened' : '',
                 $this->pool->chunks->chunkMe($this->renderNest($model, $isExpanded)),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_L, $codegenHandler->generateWrapperLeft()),
                 $this->generateDataAttribute(static::DATA_ATTRIBUTE_WRAPPER_R, $codegenHandler->generateWrapperRight()),
                 $this->renderHelp($model),
-                'key' . $model->getKeyType(),
             ],
-            $this->getTemplateFileContent(static::FILE_EX_CHILD_NORMAL)
+            $this->fileCache[static::FILE_EX_CHILD_NORMAL]
         );
     }
 
@@ -116,12 +118,18 @@ trait ExpandableChild
      * @param bool $isExpanded
      *   Well? Is it?
      *
+     * @deprecated since 5.0.0
+     *   Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @return string
      *   The css class name.
      */
     protected function retrieveOpenedClass(bool $isExpanded): string
     {
-        if ($isExpanded === true) {
+        if ($isExpanded) {
             return 'kopened';
         }
 
@@ -141,14 +149,14 @@ trait ExpandableChild
     {
         if (
             $gencode === static::CODEGEN_STOP_BIT ||
-            empty($gencode) === true ||
-            $this->pool->codegenHandler->getAllowCodegen() === false
+            empty($gencode) ||
+            !$this->pool->codegenHandler->isCodegenAllowed()
         ) {
             // Remove the button marker, because here is nothing to add.
             return '';
         } else {
             // Add the button.
-            return $this->getTemplateFileContent(static::FILE_SOURCE_BUTTON);
+            return $this->fileCache[static::FILE_SOURCE_BUTTON];
         }
     }
 
@@ -173,7 +181,7 @@ trait ExpandableChild
         }
 
         // Are we expanding this one?
-        if ($isExpanded === true) {
+        if ($isExpanded) {
             $style = '';
         } else {
             $style = static::STYLE_HIDDEN;
@@ -187,7 +195,7 @@ trait ExpandableChild
                 $domid,
                 $this->renderExtra($model),
             ],
-            $this->getTemplateFileContent(static::FILE_NEST)
+            $this->fileCache[static::FILE_NEST]
         );
     }
 
@@ -202,15 +210,29 @@ trait ExpandableChild
      */
     protected function renderExtra(Model $model): string
     {
-        if ($model->hasExtra() === true) {
+        if ($model->hasExtra()) {
             return str_replace(
                 $this->markerSingleChildExtra,
                 $model->getData(),
-                $this->getTemplateFileContent(static::FILE_SI_CHILD_EX)
+                $this->fileCache[static::FILE_SI_CHILD_EX]
             );
         }
 
         return '';
+    }
+
+    /**
+     * Getter of the extra for unit tests.
+     *
+     * @codeCoverageIgnore
+     *   We are not testing the unit tests.
+     *
+     * @return string[]
+     *   The marker array.
+     */
+    public function getMarkerSingleChildExtra(): array
+    {
+        return [$this->markerSingleChildExtra];
     }
 
     /**

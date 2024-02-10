@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -45,7 +45,6 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
  */
 class BacktraceController extends AbstractController implements BacktraceConstInterface
 {
-
     /**
      * Outputs a backtrace.
      *
@@ -57,7 +56,7 @@ class BacktraceController extends AbstractController implements BacktraceConstIn
      */
     public function backtraceAction(array $backtrace = null): BacktraceController
     {
-        if ($this->pool->emergencyHandler->checkMaxCall() === true) {
+        if ($this->pool->emergencyHandler->checkMaxCall()) {
             // Called too often, we might get into trouble here!
             return $this;
         }
@@ -65,7 +64,7 @@ class BacktraceController extends AbstractController implements BacktraceConstIn
         // Find caller.
         $caller = $this->callerFinder->findCaller(static::TRACE_BACKTRACE, []);
         $caller[static::TRACE_LEVEL] = 'backtrace';
-        $this->pool->codegenHandler->setAllowCodegen(false);
+        $this->pool->codegenHandler->setCodegenAllowed(false);
 
         $analysis = $this->pool
             ->createClass(ProcessBacktrace::class)
@@ -77,7 +76,7 @@ class BacktraceController extends AbstractController implements BacktraceConstIn
 
         // Now that our analysis is done, we must check if there was an emergency
         // break.
-        if ($this->pool->emergencyHandler->checkEmergencyBreak() === true) {
+        if ($this->pool->emergencyHandler->checkEmergencyBreak()) {
             return $this;
         }
 

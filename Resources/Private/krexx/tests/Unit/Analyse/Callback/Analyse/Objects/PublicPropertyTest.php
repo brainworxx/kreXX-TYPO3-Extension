@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,18 +37,19 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Analyse\Objects;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
+use Brainworxx\Krexx\Service\Reflection\HiddenProperty;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Service\Reflection\UndeclaredProperty;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
 use Brainworxx\Krexx\Tests\Fixtures\PublicFixture;
 use Brainworxx\Krexx\Tests\Fixtures\SimpleFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ReflectionProperty;
 use DateTime;
 
-class PublicPropertyTest extends AbstractTest
+class PublicPropertyTest extends AbstractHelper
 {
     /**
      * @var \Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties
@@ -67,9 +68,9 @@ class PublicPropertyTest extends AbstractTest
      *
      * {@inheritdoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         // Create in instance of the class to test
         $this->publicProperties = new PublicProperties(Krexx::$pool);
@@ -192,10 +193,19 @@ class PublicPropertyTest extends AbstractTest
             ->callMe();
 
         $params = CallbackCounter::$staticParameters[0];
+
+        if (version_compare('7.4', phpversion(), '<')) {
+            $propertyType = HiddenProperty::class;
+            $isPublic = false;
+        } else {
+            $propertyType = UndeclaredProperty::class;
+            $isPublic = true;
+        }
+
         $expectations = [
-            (new UndeclaredProperty($fixture['ref'], 'date'))->setIsPublic(false),
-            (new UndeclaredProperty($fixture['ref'], 'timezone'))->setIsPublic(false),
-            (new UndeclaredProperty($fixture['ref'], 'timezone_type'))->setIsPublic(false),
+            (new $propertyType($fixture['ref'], 'date'))->setIsPublic($isPublic),
+            (new $propertyType($fixture['ref'], 'timezone'))->setIsPublic($isPublic),
+            (new $propertyType($fixture['ref'], 'timezone_type'))->setIsPublic($isPublic),
         ];
 
         $this->assertEquals($expectations, $params['data']);

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,7 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Log;
 
 use Brainworxx\Includekrexx\Log\FileWriter;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\ControllerNothing;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Controller\DumpController;
@@ -49,7 +49,7 @@ use TYPO3\CMS\Core\Log\LogLevel;
 use TYPO3\CMS\Core\Log\LogRecord;
 use stdClass;
 
-class FileWriterTest extends AbstractTest implements BacktraceConstInterface, ConstInterface
+class FileWriterTest extends AbstractHelper implements BacktraceConstInterface, ConstInterface
 {
     const REQUEST_URI  = 'REQUEST_URI';
     const REQUEST_URI_VAR = 'requestURIvar';
@@ -58,9 +58,9 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
     const QUERY_STRING = 'QUERY_STRING';
     const REVERSE_PROXY_IP = 'reverseProxyIP';
 
-    public function krexxUp()
+    public function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REQUEST_URI_VAR] = '';
         $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY_IP] = '';
@@ -73,9 +73,9 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
     /**
      * {@inheritDoc}
      */
-    public function krexxDown()
+    public function tearDown(): void
     {
-        parent::krexxDown();
+        parent::tearDown();
         ControllerNothing::$count = 0;
         ControllerNothing::$data = [];
         ControllerNothing::$level = [];
@@ -112,7 +112,6 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveLogLevel
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::prepareLogModelNormal
      */
     public function testWriteLogNormal()
@@ -155,7 +154,6 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveLogLevel
      */
     public function testWriteLogWithConfig()
     {
@@ -171,7 +169,7 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
             ->will($this->returnValue($configModelMock));
         $configModelMock->expects(($this->once()))
             ->method('setSource')
-            ->with(FileWriter::KREXX_LOG_WRITER);
+            ->with('kreXX log writer');
         \Krexx::$pool->config->settings[Fallback::SETTING_ANALYSE_SCALAR] = $configModelMock;
 
         $fileWriter = new FileWriter($config);
@@ -184,7 +182,6 @@ class FileWriterTest extends AbstractTest implements BacktraceConstInterface, Co
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::applyTheConfiguration
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::writeLog
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveBacktrace
-     * @covers \Brainworxx\Includekrexx\Log\FileWriter::retrieveLogLevel
      * @covers \Brainworxx\Includekrexx\Log\FileWriter::isDisabled
      */
     public function testWriteLogDisabled()

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -58,7 +58,6 @@ class ThroughArray extends AbstractCallback implements
     ConnectorsConstInterface,
     ProcessConstInterface
 {
-
     /**
      * Renders the expendable around the array analysis.
      *
@@ -70,7 +69,7 @@ class ThroughArray extends AbstractCallback implements
         $output = $this->pool->render->renderSingeChildHr() . $this->dispatchStartEvent();
 
         // Are we dealing with multiline code generation?
-        $multilineCodeGen = $this->parameters[static::PARAM_MULTILINE] === true ?
+        $multilineCodeGen = $this->parameters[static::PARAM_MULTILINE] ?
             static::CODEGEN_TYPE_ITERATOR_TO_ARRAY : static::CODEGEN_TYPE_PUBLIC;
 
         $recursionMarker = $this->pool->recursionHandler->getMarker();
@@ -94,13 +93,22 @@ class ThroughArray extends AbstractCallback implements
     }
 
     /**
+     * Create the model and set the values that we have.
+     *
      * @param array $array
-     * @param $key
-     * @param $value
+     *   The array we are analysing.
+     * @param int|string $key
+     *   A current key that we check if the value in that array is actually
+     *   accessible. And yes, inaccessible array values do exist.
+     * @param mixed $value
+     *   The value of that key that we are analysing
      * @param string $multilineCodeGen
+     *   The prepared code generation.
+     *
      * @return \Brainworxx\Krexx\Analyse\Model
+     *   The prepared model.
      */
-    protected function prepareModel(array &$array, $key, &$value, string $multilineCodeGen): Model
+    protected function prepareModel(array $array, $key, &$value, string $multilineCodeGen): Model
     {
         /** @var Model $model */
         $model = $this->pool
@@ -108,15 +116,14 @@ class ThroughArray extends AbstractCallback implements
             ->setData($value)
             ->setCodeGenType($multilineCodeGen);
 
-        if (array_key_exists($key, $array) === false) {
+        if (!array_key_exists($key, $array)) {
             // Looks like we have an inaccessible array value here.
             $model->setCodeGenType(static::CODEGEN_TYPE_ARRAY_VALUES_ACCESS)
                 ->setConnectorParameters(array_search($key, array_keys($array)));
         }
 
-        if (is_string($key) === true) {
+        if (is_string($key)) {
             $model->setName($this->pool->encodingService->encodeString($key))
-                ->setKeyType(static::TYPE_STRING)
                 ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);
         } else {
             $model->setName($key)->setConnectorType(static::CONNECTOR_NORMAL_ARRAY);

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -47,33 +47,33 @@ interface ConstInterface
      *
      * @var string
      */
-    const PARAM_IS_FACTORY_METHOD = 'isFactoryMethod';
+    public const PARAM_IS_FACTORY_METHOD = 'isFactoryMethod';
 
     /**
      * Additional parameter key.
      *
      * @var string
      */
-    const PARAM_FACTORY_NAME = 'factoryName';
+    public const PARAM_FACTORY_NAME = 'factoryName';
 
     /**
      * Internal variable name, where Aimeos stores data.
      *
      * @var string
      */
-    const AIMEOS_B_DATA = 'bdata';
+    public const AIMEOS_B_DATA = 'bdata';
 
     /**
      * Internal variable name, where Aimeos stores data.
      *
      * @var string
      */
-    const AIMEOS_VALUES = 'values';
+    public const AIMEOS_VALUES = 'values';
 
     /**
      * Internal variable name, where Aimeos stores data.
      *
      * @var string
      */
-    const AIMEOS_DATA = 'data';
+    public const AIMEOS_DATA = 'data';
 }

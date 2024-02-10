@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,7 +41,6 @@ use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Reflector;
 
@@ -50,20 +49,14 @@ use Reflector;
  */
 abstract class AbstractObjectAnalysis extends AbstractCallback implements CallbackConstInterface
 {
-
     /**
-     * Here we store all relevant data.
+     * Name of the reflection sorting callback.
      *
-     * @var Pool
-     */
-    protected $pool;
-
-    /**
-     * The parameters from the objects callback class.
+     * (Oh boy)
      *
-     * @var array
+     * @var string
      */
-    protected $parameters = [];
+    protected const REFLECTION_SORTING = 'reflectionSorting';
 
     /**
      * Gets the properties from a reflection property of the object.
@@ -72,7 +65,7 @@ abstract class AbstractObjectAnalysis extends AbstractCallback implements Callba
      *   The list of the reflection properties.
      * @param ReflectionClass $ref
      *   The reflection of the object we are currently analysing.
-     * @param string $label
+     * @param string|null $label
      *   The additional part of the template file. If set, we will use a wrapper
      *   around the analysis output.
      *

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,7 +40,7 @@ namespace Brainworxx\Krexx\Controller;
 /**
  * "Controller" for the edit settings "action"
  */
-class EditSettingsController extends AbstractController implements ControllerConstInterface
+class EditSettingsController extends AbstractController
 {
     /**
      * Outputs the edit settings dialog, without any analysis.
@@ -50,7 +50,7 @@ class EditSettingsController extends AbstractController implements ControllerCon
      */
     public function editSettingsAction(): EditSettingsController
     {
-        if ($this->pool->emergencyHandler->checkMaxCall() === true) {
+        if ($this->pool->emergencyHandler->checkMaxCall()) {
             // Called too often, we might get into trouble here!
             return $this;
         }
@@ -60,7 +60,8 @@ class EditSettingsController extends AbstractController implements ControllerCon
         $this->pool->emergencyHandler->setDisable(true);
 
         // Find caller.
-        $caller = $this->callerFinder->findCaller(static::HEADLINE_COOKIE_CONF, []);
+        $headLine = $this->pool->messages->getHelp('headlineCookieConf');
+        $caller = $this->callerFinder->findCaller($headLine, []);
         $this->pool->chunks->addMetadata($caller);
 
         // Render it.
@@ -68,7 +69,7 @@ class EditSettingsController extends AbstractController implements ControllerCon
         $this->pool->chunks->detectEncoding($footer);
 
         $this->outputService
-            ->addChunkString($this->pool->render->renderHeader(static::HEADLINE_COOKIE_CONF, $this->outputCssAndJs()))
+            ->addChunkString($this->pool->render->renderHeader($headLine, $this->outputCssAndJs()))
             ->addChunkString($footer);
         $this->pool->emergencyHandler->setDisable(false);
         $this->outputService->finalize();

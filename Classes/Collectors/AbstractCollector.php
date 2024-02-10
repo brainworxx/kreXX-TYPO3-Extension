@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,58 +37,59 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Collectors;
 
-use Brainworxx\Includekrexx\Controller\AbstractController;
+use Brainworxx\Includekrexx\Controller\ControllerConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
 /**
  * General stuff for all data collectors.
  */
-abstract class AbstractCollector
+abstract class AbstractCollector implements ControllerConstInterface, ConfigConstInterface
 {
     use LanguageTrait;
 
     /**
      * @var string
      */
-    const MODULE_DATA = 'moduleData';
+    public const MODULE_DATA = 'moduleData';
 
     /**
      * @var string
      */
-    const PLUGIN_NAME = 'tools_IncludekrexxKrexxConfiguration';
+    public const PLUGIN_NAME = 'tools_IncludekrexxKrexxConfiguration';
 
     /**
      * @var string
      */
-    const SETTINGS_NAME = 'name';
+    protected const SETTINGS_NAME = 'name';
 
     /**
      * @var string
      */
-    const SETTINGS_VALUE = 'value';
+    protected const SETTINGS_VALUE = 'value';
 
     /**
      * @var string
      */
-    const SETTINGS_USE_FACTORY_SETTINGS = 'useFactorySettings';
+    protected const SETTINGS_USE_FACTORY_SETTINGS = 'useFactorySettings';
 
     /**
      * @var string
      */
-    const SETTINGS_FALLBACK = 'fallback';
+    protected const SETTINGS_FALLBACK = 'fallback';
 
     /**
      * @var string
      */
-    const SETTINGS_MODE = 'mode';
+    protected const SETTINGS_MODE = 'mode';
 
     /**
      * @var string
      */
-    const SETTINGS_OPTIONS = 'options';
+    protected const SETTINGS_OPTIONS = 'options';
 
     /**
      * The kreXX pool.
@@ -107,17 +108,16 @@ abstract class AbstractCollector
     /**
      * List of options, that are 'expert' only.
      *
-     * @var array
+     * @var string[]
      */
     protected $expertOnly = [
-        'detectAjax',
-        'useScopeAnalysis',
-        'maxStepNumber',
-        'arrayCountLimit',
-        'debugMethods',
-        'maxRuntime',
-        'memoryLeft',
-        'maxfiles'
+        self::SETTING_DETECT_AJAX,
+        self::SETTING_MAX_STEP_NUMBER,
+        self::SETTING_ARRAY_COUNT_LIMIT,
+        self::SETTING_DEBUG_METHODS,
+        self::SETTING_MAX_RUNTIME,
+        self::SETTING_MEMORY_LEFT,
+        self::SETTING_MAX_FILES
     ];
 
     /**
@@ -134,20 +134,20 @@ abstract class AbstractCollector
     {
         Pool::createPool();
         $this->pool = Krexx::$pool;
-        if (isset($GLOBALS['BE_USER'])) {
-            $user = $GLOBALS['BE_USER'];
+        if (isset($GLOBALS[static::BE_USER])) {
+            $user = $GLOBALS[static::BE_USER];
             $this->hasAccess = $user
-                ->check('modules', static::PLUGIN_NAME);
+                ->check(static::BE_MODULES, static::PLUGIN_NAME);
         }
-        if ($this->hasAccess && isset($user->uc[static::MODULE_DATA][AbstractController::MODULE_KEY])) {
-            $this->userUc = $user->uc[static::MODULE_DATA][AbstractController::MODULE_KEY];
+        if ($this->hasAccess && isset($user->uc[static::MODULE_DATA][static::MODULE_KEY])) {
+            $this->userUc = $user->uc[static::MODULE_DATA][static::MODULE_KEY];
         }
     }
 
     /**
      * Assigning stuff to the view.
      *
-     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView $view
+     * @param AbstractTemplateView $view
      */
-    abstract public function assignData(AbstractTemplateView $view);
+    abstract public function assignData(AbstractTemplateView $view): void;
 }

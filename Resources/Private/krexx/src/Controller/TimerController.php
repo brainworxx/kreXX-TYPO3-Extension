@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,19 +42,19 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 /**
  * "Controller" for the timer "actions".
  */
-class TimerController extends AbstractController implements ControllerConstInterface
+class TimerController extends AbstractController
 {
     /**
      * Here we save all timekeeping stuff.
      *
-     * @var array
+     * @var float[]
      */
     protected static $timekeeping = [];
 
     /**
      * More timekeeping stuff.
      *
-     * @var array
+     * @var int[]
      */
     protected static $counterCache = [];
 
@@ -81,7 +81,7 @@ class TimerController extends AbstractController implements ControllerConstInter
     public function timerAction(string $string): TimerController
     {
         // Did we use this one before?
-        if (isset(static::$counterCache[$string]) === true) {
+        if (isset(static::$counterCache[$string])) {
             // Add another to the counter.
             ++static::$counterCache[$string];
             static::$timekeeping['[' . static::$counterCache[$string] . ']' . $string] = microtime(true);
@@ -102,11 +102,11 @@ class TimerController extends AbstractController implements ControllerConstInter
      */
     public function timerEndAction(): TimerController
     {
-        $this->timerAction('end');
+        $this->timerAction($this->pool->messages->getHelp('end'));
         // And we are done. Feedback to the user.
         $miniBench = $this->miniBenchTo(static::$timekeeping);
         $this->pool->createClass(DumpController::class)
-            ->dumpAction($miniBench, static::HEADLINE_TIMER, 'timer');
+            ->dumpAction($miniBench, $this->pool->messages->getHelp('headlineTimer'), 'timer');
         // Reset the timer vars.
         static::$timekeeping = [];
         static::$counterCache = [];
@@ -120,7 +120,7 @@ class TimerController extends AbstractController implements ControllerConstInter
      * @param array $timeKeeping
      *   The timekeeping array.
      *
-     * @return array
+     * @return string[]
      *   The benchmark array.
      *
      * @see http://php.net/manual/de/function.microtime.php
@@ -131,7 +131,7 @@ class TimerController extends AbstractController implements ControllerConstInter
         // Get the very first key.
         $start = key($timeKeeping);
         $totalTime = round((end($timeKeeping) - $timeKeeping[$start]) * 1000, 4);
-        $result['total_time'] = $totalTime;
+        $result[$this->pool->messages->getHelp('metaTotalTime')] = $totalTime;
         $prevMomentName = $start;
         $prevMomentStart = $timeKeeping[$start];
 

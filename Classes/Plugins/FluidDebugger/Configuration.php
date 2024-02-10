@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
 
-use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
@@ -52,7 +51,6 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors as FluidConnectors;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen as FluidCodegen;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\FluidOld as OldCallerFinderFluid;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface as Typo3ConstInterface;
 
 /**
@@ -81,7 +79,7 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
     /**
      * Code generation for fluid.
      */
-    public function exec()
+    public function exec(): void
     {
         // Registering the fluid connector class.
         Registration::addRewrite(
@@ -91,15 +89,9 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
 
         // Registering the special source generation for methods.
         Registration::addRewrite(Codegen::class, FluidCodegen::class);
+        // Special caller finder for Fluid.
+        Registration::addRewrite(CallerFinder::class, CallerFinderFluid::class);
 
-        // Depending on the TYPO3 version, we need another fluid caller finder.
-        if (version_compare(Bootstrap::getTypo3Version(), '8.4', '>')) {
-            // Fluid 2.2 or higher
-            Registration::addRewrite(CallerFinder::class, CallerFinderFluid::class);
-        } else {
-            // Fluid 2.0 or lower.
-            Registration::addRewrite(CallerFinder::class, OldCallerFinderFluid::class);
-        }
 
         // The code generation class is a singleton.
         // We need to reset the pool.
@@ -116,5 +108,9 @@ class Configuration implements PluginConfigInterface, Typo3ConstInterface
             ThroughMethods::class . static::END_EVENT,
             VhsMethods::class
         );
+
+        // Adding additional texts.
+        $extPath = ExtensionManagementUtility::extPath(static::EXT_KEY);
+        Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/fluid.kreXX.ini');
     }
 }

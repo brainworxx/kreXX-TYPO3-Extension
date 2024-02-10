@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,10 +40,9 @@ namespace Brainworxx\Includekrexx\Controller;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use TYPO3\CMS\Core\Http\HtmlResponse;
+use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Http\ServerRequest;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 
 /**
  * Handle the backend interactions that are not ajax.
@@ -57,14 +56,14 @@ class IndexController extends AbstractController implements ConstInterface
      */
     public function indexAction()
     {
-        if ($this->hasAccess() === false) {
+        if (!$this->hasAccess()) {
             // Sorry!
             $this->addFlashMessage(
-                static::translate(static::ACCESS_DENIED, static::EXT_KEY),
-                static::translate(static::ACCESS_DENIED, static::EXT_KEY),
+                static::translate(static::ACCESS_DENIED),
+                static::translate(static::ACCESS_DENIED),
                 $this->flashMessageError
             );
-            if (method_exists($this, 'htmlResponse') === true) {
+            if (method_exists($this, 'htmlResponse')) {
                 $response = $this->responseFactory->createResponse()
                     ->withAddedHeader('Content-Type', 'text/html; charset=utf-8');
                 $response->getBody()->write('');
@@ -83,7 +82,7 @@ class IndexController extends AbstractController implements ConstInterface
         $this->view->assign('settings', $this->settingsModel);
         $this->assignCssJs();
 
-        if (method_exists($this, 'htmlResponse') === true) {
+        if (method_exists($this, 'htmlResponse')) {
             return GeneralUtility::makeInstance(HtmlResponse::class, $this->moduleTemplate->renderContent());
         }
 
@@ -100,31 +99,30 @@ class IndexController extends AbstractController implements ConstInterface
      */
     public function saveAction(Settings $settings)
     {
-        if ($this->hasAccess() === false) {
+        if (!$this->hasAccess()) {
             $this->addFlashMessage(
-                static::translate(static::ACCESS_DENIED, static::EXT_KEY),
-                static::translate(static::SAVE_FAIL_TITLE, static::EXT_KEY),
+                static::translate(static::ACCESS_DENIED),
+                static::translate(static::SAVE_FAIL_TITLE),
                 $this->flashMessageError
             );
             return $this->redirect('index');
         }
 
-        $filepath = $this->pool->config->getPathToConfigFile();
-
         // Check for writing permission.
         // Check the actual writing process.
-        if (is_writable(dirname($filepath)) && file_put_contents($filepath, $settings->generateIniContent())) {
+        $jsonPath = $settings->prepareFileName($this->pool->config->getPathToConfigFile());
+        $displayFilePath = $this->pool->fileService->filterFilePath($jsonPath);
+        if (is_writable(dirname($jsonPath)) && file_put_contents($jsonPath, $settings->generateContent())) {
             // File was saved successfully.
             $this->addFlashMessage(
-                static::translate(static::SAVE_SUCCESS_TEXT, static::EXT_KEY, [$filepath]),
-                static::translate(static::SAVE_SUCCESS_TITLE, static::EXT_KEY),
-                $this->flashMessageOk
+                static::translate(static::SAVE_SUCCESS_TEXT, [$displayFilePath]),
+                static::translate(static::SAVE_SUCCESS_TITLE)
             );
         } else {
             // Something went wrong here!
             $this->addFlashMessage(
-                static::translate(static::FILE_NOT_WRITABLE, static::EXT_KEY, [$filepath]),
-                static::translate(static::SAVE_FAIL_TITLE, static::EXT_KEY),
+                static::translate(static::FILE_NOT_WRITABLE, [$displayFilePath]),
+                static::translate(static::SAVE_FAIL_TITLE),
                 $this->flashMessageError
             );
         }
@@ -139,28 +137,22 @@ class IndexController extends AbstractController implements ConstInterface
      *
      * @param ServerRequest|null $serverRequest
      *
-     * @return \TYPO3\CMS\Extbase\Mvc\ResponseInterface|\TYPO3\CMS\Core\Http\NullResponse
+     * @return \TYPO3\CMS\Core\Http\NullResponse
      */
-    public function dispatchAction(ServerRequest $serverRequest = null)
+    public function dispatchAction(ServerRequest $serverRequest = null): NullResponse
     {
-        // And I was so happy to get rid of the 4.5 compatibility nightmare.
-        if (empty($this->request)) {
-            $rawId = $serverRequest->getQueryParams()['tx_includekrexx_tools_includekrexxkrexxconfiguration']['id'];
-        } else {
-            try {
-                $rawId = $this->request->getArgument('id');
-            } catch (NoSuchArgumentException $e) {
-                $rawId = '';
-            }
+        $response = GeneralUtility::makeInstance(NullResponse::class);
+        if (!$this->hasAccess()) {
+            return $response;
         }
 
         // No directory traversal for you!
         // Get the filepath.
+        $rawId = $serverRequest->getQueryParams()['tx_includekrexx_tools_includekrexxkrexxconfiguration']['id'];
         $file = $this->pool->config->getLogDir() . preg_replace('/[^0-9]/', '', (string) $rawId) . '.Krexx.html';
-        if ($this->hasAccess()) {
-            // We open and then send the file.
-            $this->dispatchFile($file);
-        }
-        return $this->createResponse();
+        // We open and then send the file.
+        $this->dispatchFile($file);
+
+        return GeneralUtility::makeInstance(NullResponse::class);
     }
 }

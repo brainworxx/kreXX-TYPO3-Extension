@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,12 +38,10 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 
 use ArrayAccess;
-use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use SplObjectStorage;
 use Throwable;
 
@@ -56,12 +54,8 @@ use Throwable;
  *   The variable name or key in the parent object / array where the current
  *   class is stored.
  */
-class Traversable extends AbstractObjectAnalysis implements
-    CallbackConstInterface,
-    ViewConstInterface,
-    ConfigConstInterface
+class Traversable extends AbstractObjectAnalysis implements ConfigConstInterface
 {
-
     /**
      * Checks runtime, memory and nesting level. Then trigger the actual analysis.
      *
@@ -75,8 +69,8 @@ class Traversable extends AbstractObjectAnalysis implements
         // Check nesting level, memory and runtime.
         $this->pool->emergencyHandler->upOneNestingLevel();
         if (
-            $this->pool->emergencyHandler->checkNesting() === true ||
-            $this->pool->emergencyHandler->checkEmergencyBreak() === true
+            $this->pool->emergencyHandler->checkNesting() ||
+            $this->pool->emergencyHandler->checkEmergencyBreak()
         ) {
             // We will not be doing this one, but we need to get down with our
             // nesting level again.
@@ -98,7 +92,6 @@ class Traversable extends AbstractObjectAnalysis implements
     {
         $data = $this->parameters[static::PARAM_DATA];
 
-
         // Add a try to prevent the hosting CMS from doing something stupid.
         try {
             // We need to deactivate the current error handling to
@@ -114,14 +107,7 @@ class Traversable extends AbstractObjectAnalysis implements
 
         // Reactivate whatever error handling we had previously.
         restore_error_handler();
-
-        if (is_array($parameter) === true) {
-            return $this->analyseTraversableResult($data, $parameter);
-        }
-
-        // Still here? Return an empty string.
-        $this->pool->emergencyHandler->downOneNestingLevel();
-        return '';
+        return $this->analyseTraversableResult($data, $parameter);
     }
 
     /**
@@ -135,22 +121,12 @@ class Traversable extends AbstractObjectAnalysis implements
      * @return string
      *   The rendered HTML.
      */
-    protected function analyseTraversableResult($originalClass, array $result): string
+    protected function analyseTraversableResult(object $originalClass, array $result): string
     {
-        // Special Array Access here, resulting in more complicated source
-        // generation. So we tell the callback to that.
-        $multiline = true;
-
-        // Normal ArrayAccess, direct access to the array. Nothing special
-        // SplObject pool use the object as keys, so we need some
-        // multiline stuff!
-        // A SplObject is also an ArrayAccess btw.
-        if (
-            ($originalClass instanceof ArrayAccess) &&
-            ($originalClass instanceof SplObjectStorage) === false
-        ) {
-            $multiline = false;
-        }
+        // Direct access to the iterator object,de depending on the object itself.
+        $multiline = !($originalClass instanceof ArrayAccess)
+            || $originalClass instanceof SplObjectStorage;
+        $messages = $this->pool->messages;
 
         /** @var Model $model */
         $model = $this->pool->createClass(Model::class)
@@ -158,17 +134,18 @@ class Traversable extends AbstractObjectAnalysis implements
             ->setType(static::TYPE_FOREACH)
             ->addParameter(static::PARAM_DATA, $result)
             ->addParameter(static::PARAM_MULTILINE, $multiline)
-            ->addToJson(static::META_LENGTH, (string)count($result));
+            ->addToJson($messages->getHelp('metaLength'), (string)count($result));
 
         // Check, if we are handling a huge array. Huge arrays tend to result in a huge
         // output, maybe even triggering an emergency break. to avoid this, we give them
         // a special callback.
         if (count($result) > (int) $this->pool->config->getSetting(static::SETTING_ARRAY_COUNT_LIMIT)) {
             $model->injectCallback($this->pool->createClass(ThroughLargeArray::class))
-                ->setNormal('Simplified Traversable Info')
+                ->setNormal($messages->getHelp('simplifiedTraversableInfo'))
                 ->setHelpid('simpleArray');
         } else {
-            $model->injectCallback($this->pool->createClass(ThroughArray::class))->setNormal('Traversable Info');
+            $model->injectCallback($this->pool->createClass(ThroughArray::class))
+                ->setNormal($messages->getHelp('traversableInfo'));
         }
 
         $analysisResult = $this->pool->render->renderExpandableChild(

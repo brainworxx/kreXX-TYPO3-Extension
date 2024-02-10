@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,11 +36,10 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Collectors\Configuration;
-use Brainworxx\Includekrexx\Controller\IndexController;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 
-class AbstractCollectorTest extends AbstractTest
+class AbstractCollectorTest extends AbstractHelper
 {
     /**
      * Test, if the current BE user has access and test the retrieval of the uc.
@@ -60,7 +59,7 @@ class AbstractCollectorTest extends AbstractTest
         $userMock = $this->createMock(BackendUserAuthentication::class);
         $userMock->expects($this->once())
             ->method('check')
-            ->with('modules', AbstractCollector::PLUGIN_NAME)
+            ->with('modules', 'tools_IncludekrexxKrexxConfiguration')
             ->will($this->returnValue(false));
         $GLOBALS['BE_USER'] = $userMock;
         $collector = new Configuration();
@@ -70,14 +69,14 @@ class AbstractCollectorTest extends AbstractTest
 
         // BE user with access.
         $uc = [
-            AbstractCollector::MODULE_DATA => [
-                IndexController::MODULE_KEY => ['some', 'settings']
+            'moduleData' => [
+                'IncludekrexxKrexxConfiguration' => ['some', 'settings']
             ]
         ];
         $userMock = $this->createMock(BackendUserAuthentication::class);
         $userMock->expects($this->once())
             ->method('check')
-            ->with('modules', AbstractCollector::PLUGIN_NAME)
+            ->with('modules', 'tools_IncludekrexxKrexxConfiguration')
             ->will($this->returnValue(true));
         $userMock->uc = $uc;
         $GLOBALS['BE_USER'] = $userMock;

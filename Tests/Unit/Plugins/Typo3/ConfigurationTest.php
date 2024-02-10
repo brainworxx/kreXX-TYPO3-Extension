@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,11 +39,13 @@ use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
+use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
+use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -56,10 +58,11 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use Krexx;
 
-class ConfigurationTest extends AbstractTest implements ConstInterface
+class ConfigurationTest extends AbstractHelper implements ConstInterface
 {
 
     const REVERSE_PROXY = 'reverseProxyIP';
+    protected const TYPO3_TEMP = 'typo3temp';
 
     /**
      * Do we have to reset the reverse proxy?
@@ -71,10 +74,10 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
     /**
      * {@inheritDoc}
      */
-    protected function krexxDown()
+    protected function tearDown(): void
     {
         unset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY]);
-        parent::krexxDown();
+        parent::tearDown();
     }
 
     /**
@@ -85,9 +88,9 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->configuration = new Configuration();
 
         if (isset($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::REVERSE_PROXY])) {
@@ -127,13 +130,13 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         $metaData = $this->createMock(MetaData::class);
         $metaData->expects($this->once())
             ->method('getVersion')
-            ->will($this->returnValue(AbstractTest::TYPO3_VERSION));
+            ->will($this->returnValue(AbstractHelper::TYPO3_VERSION));
         $packageMock = $this->simulatePackage(Bootstrap::EXT_KEY, 'whatever');
         $packageMock->expects($this->once())
             ->method('getPackageMetaData')
             ->will($this->returnValue($metaData));
 
-        $this->assertEquals(AbstractTest::TYPO3_VERSION, $this->configuration->getVersion());
+        $this->assertEquals(AbstractHelper::TYPO3_VERSION, $this->configuration->getVersion());
     }
 
     /**
@@ -152,31 +155,25 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         $log = 'log';
 
         // Short circuit the getting of the system path.
-        $pathSite = PATH_site;
+        $pathSite = 'somePath';
+        $this->setValueByReflection('varPath', $pathSite, Environment::class);
+
         $typo3Namespace = '\Brainworxx\\Includekrexx\\Plugins\\Typo3\\';
-
-        $versionMock = $this->getFunctionMock($typo3Namespace, 'version_compare');
-        $versionMock->expects($this->exactly(4))
-            ->withConsecutive(
-                [Bootstrap::getTypo3Version(), '8.3', '>'],
-                [Bootstrap::getTypo3Version(), '9.5', '>=']
-            )->will($this->returnValue(true));
-
-        $classExistsMock = $this->getFunctionMock($typo3Namespace, 'class_exists');
-        $classExistsMock->expects($this->exactly(2))
-            ->with(Environment::class)
-            ->will($this->returnValue(false));
 
         // Mock the is_dir method. We will not create any files.
         $isDirMock = $this->getFunctionMock($typo3Namespace, 'is_dir');
         $isDirMock->expects($this->exactly(8))
-            ->withConsecutive(
-                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR .  static::TX_INCLUDEKREXX],
-                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . $log],
-                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
-                [$pathSite . static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
-            )
-            ->will($this->returnValue(true));
+            ->with(...$this->withConsecutive(
+                [$pathSite . DIRECTORY_SEPARATOR .  static::TX_INCLUDEKREXX],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . $log],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config'],
+                // Run a second time
+                [$pathSite . DIRECTORY_SEPARATOR .  static::TX_INCLUDEKREXX],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . $log],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'chunks'],
+                [$pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR . 'config']
+            ))->will($this->returnValue(true));
 
         // Simulating the package
         $this->simulatePackage(Bootstrap::EXT_KEY, 'what/ever/');
@@ -185,7 +182,7 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
             $typo3Namespace,
             'array_replace_recursive'
         );
-        $arrayReplaceRecursiveMock->expects($this->exactly(2))
+        $arrayReplaceRecursiveMock->expects($this->any())
             ->with($this->anything(), [Configuration::KREXX => ['module' => Log::class, 'before' => [$log]]]);
         // You just have to love these large arrays inside the globals.
         $GLOBALS[Configuration::TYPO3_CONF_VARS][Configuration::EXTCONF]
@@ -197,7 +194,7 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         $this->assertEquals(
             [
                 ProcessObject::class . Configuration::START_PROCESS => [DirtyModels::class => DirtyModels::class],
-                Objects::class . Configuration::START_EVENT => [QueryDebugger::class => QueryDebugger::class]
+                Xml::class . Configuration::END_EVENT => [FlexFormParser::class => FlexFormParser::class]
             ],
             SettingsGetter::getEventList()
         );
@@ -208,10 +205,9 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
             'Test the rewrite.'
         );
 
-        $rootpath = 'some' . DIRECTORY_SEPARATOR . 'path' . DIRECTORY_SEPARATOR .
-            static::TYPO3_TEMP . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR;
+        $rootpath = $pathSite . DIRECTORY_SEPARATOR . static::TX_INCLUDEKREXX . DIRECTORY_SEPARATOR;
         $this->assertEquals(
-            $rootpath . 'config' . DIRECTORY_SEPARATOR . 'Krexx.ini',
+            $rootpath . 'config' . DIRECTORY_SEPARATOR . 'Krexx.',
             SettingsGetter::getConfigFile(),
             'Test the new location of the configuration file.'
         );
@@ -229,7 +225,6 @@ class ConfigurationTest extends AbstractTest implements ConstInterface
         $toString = '__toString';
         $this->assertEquals(
             [
-                'TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper' => [$toString],
                 'TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper' => [$toString],
                 'TYPO3\CMS\Extbase\Persistence\RepositoryInterface' => ['removeAll'],
                 'TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy' => [$toString],

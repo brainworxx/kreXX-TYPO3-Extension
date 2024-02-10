@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,18 +41,19 @@ use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Flow\Recursion;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 use ReflectionMethod;
 
-class MethodsTest extends AbstractTest
+class MethodsTest extends AbstractHelper
 {
 
     const PRIVATE_METHOD = 'privateMethod';
     const PROTECTED_METHOD = 'protectedMethod';
     const PUBLIC_METHOD = 'publicMethod';
     const TROUBLESOME_METHOD = 'troublesomeMethod';
+    const CLASS_METHOD = 'classMethod';
 
     /**
      * @var string
@@ -91,9 +92,9 @@ class MethodsTest extends AbstractTest
      *
      * @throws \ReflectionException
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->methods = new Methods(Krexx::$pool);
         // Prevent getting deeper into the rabbit hole.
@@ -171,6 +172,7 @@ class MethodsTest extends AbstractTest
             [
                 0 => [
                     'data' => [
+                        new ReflectionMethod($this->fixture['data'], static::CLASS_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PUBLIC_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::TROUBLESOME_METHOD),
                     ],
@@ -209,6 +211,7 @@ class MethodsTest extends AbstractTest
             [
                 0 => [
                     'data' => [
+                        new ReflectionMethod($this->fixture['data'], static::CLASS_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PROTECTED_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PUBLIC_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::TROUBLESOME_METHOD),
@@ -248,6 +251,7 @@ class MethodsTest extends AbstractTest
             [
                 0 => [
                     'data' => [
+                        new ReflectionMethod($this->fixture['data'], static::CLASS_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PRIVATE_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PUBLIC_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::TROUBLESOME_METHOD),
@@ -287,6 +291,7 @@ class MethodsTest extends AbstractTest
             [
                 0 => [
                     'data' => [
+                        new ReflectionMethod($this->fixture['data'], static::CLASS_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PRIVATE_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PROTECTED_METHOD),
                         new ReflectionMethod($this->fixture['data'], static::PUBLIC_METHOD),

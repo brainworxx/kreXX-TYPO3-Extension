@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -44,7 +44,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 interface ProcessInterface
 {
-
     /**
      * Decide, if the processor class is able to handle this value.
      *

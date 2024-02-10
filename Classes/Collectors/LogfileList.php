@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -50,9 +50,11 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
     /**
      * Assigning the list to the view. Used by out adminpanel logging module.
      *
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     *
      * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView $view
      */
-    public function assignData(AbstractTemplateView $view)
+    public function assignData(AbstractTemplateView $view): void
     {
         $view->assign('filelist', $this->retrieveFileList());
     }
@@ -60,35 +62,36 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
     /**
      * Retrieve the file list, like the method name says. Used by the ajax controller.
      *
-     * @return array
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     *
+     * @return string[][]
      *   The file list with the info.
      */
     public function retrieveFileList(): array
     {
         $fileList = [];
 
-        if ($this->hasAccess === false) {
+        if (!$this->hasAccess) {
             // No access.
             return $fileList;
         }
 
         // Get the log files and sort them.
         $files = glob($this->pool->config->getLogDir() . '*.Krexx.html');
-        if (empty($files) === true) {
+        if (empty($files)) {
             return [];
         }
 
-        set_error_handler(function($errno, $errstr, $errfile, $errline, $errcontext) {});
+        set_error_handler(function (int $errno, string $errstr, ?string $errfile, ?int $errline, ?array $errcontext) {
+        });
         // The function filemtime gets cached by php btw.
         usort(
             $files,
-            function ($a, $b): int
-            {
+            function ($a, $b): int {
                 return (int)filemtime($b) - (int)filemtime($a);
             }
         );
         restore_error_handler();
-
 
         return $this->retrieveFileInfo($files);
     }
@@ -96,12 +99,12 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
     /**
      * Get all the log file infos together.
      *
-     * @param array $files
+     * @param string[] $files
      *   The list of files to process.
      *
      * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
-     * @return array
+     * @return string[][]
      *   The file info in a neat array.
      */
     protected function retrieveFileInfo(array $files): array
@@ -111,18 +114,15 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
         set_error_handler(\Krexx::$pool->retrieveErrorCallback());
         $fileList = [];
         foreach ($files as $file) {
-            if (false === ($fileTime = filemtime($file))) {
-                continue;
-            }
+            $fileinfo = [];
             // Getting the basic info.
-            $fileInfo = [];
-            $fileInfo['name'] = basename($file);
-            $fileInfo['size'] = $this->fileSizeConvert((int)filesize($file));
-            $fileInfo['time'] = date("d.m.y H:i:s", $fileTime);
-            $fileInfo['id'] = str_replace('.Krexx.html', '', $fileInfo['name']);
-            $fileInfo['dispatcher'] = $this->getRoute($fileInfo['id']);
-            $fileInfo['meta'] = $this->addMetaToFileInfo($file);
-            $fileList[] = $fileInfo;
+            $fileinfo['name'] = basename($file);
+            $fileinfo['size'] = $this->fileSizeConvert((int)filesize($file));
+            $fileinfo['time'] = date("d.m.y H:i:s", (int)filemtime($file));
+            $fileinfo['id'] = str_replace('.Krexx.html', '', $fileinfo['name']);
+            $fileinfo['dispatcher'] = $this->getRoute($fileinfo['id']);
+            $fileinfo['meta'] = $this->addMetaToFileInfo($file);
+            $fileList[] = $fileinfo;
         }
         restore_error_handler();
 
@@ -137,28 +137,28 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      * @param string $file
      *   The file name for which we are retrieving the metadata.
      *
-     * @return array
+     * @return string[]
      *   The meta stuff we were able to retrieve.
      */
     protected function addMetaToFileInfo(string $file): array
     {
-        if (is_readable($file . '.json')) {
-            $metaArray = (array)json_decode(file_get_contents($file . '.json'), true);
-            if (empty($metaArray)) {
-                return [];
-            }
-
-            foreach ($metaArray as &$meta) {
-                $meta['filename'] = $meta[static::TRACE_FILE] === 'n/a' ?
-                    $meta[static::TRACE_FILE] : basename($meta[static::TRACE_FILE]);
-                // Unescape the stuff from the json, to prevent double escaping.
-                $meta[static::TRACE_VARNAME] = htmlspecialchars_decode($meta[static::TRACE_VARNAME]);
-            }
-
-            return $metaArray;
+        if (!is_readable($file . '.json')) {
+            return [];
         }
 
-        return [];
+        $metaArray = (array)json_decode(file_get_contents($file . '.json'), true);
+        if (empty($metaArray)) {
+            return [];
+        }
+
+        foreach ($metaArray as &$meta) {
+            $meta[static::PATHINFO_FILENAME] = $meta[static::TRACE_FILE] === 'n/a' ?
+                $meta[static::TRACE_FILE] : basename($meta[static::TRACE_FILE]);
+            // Unescape the stuff from the json, to prevent double escaping.
+            $meta[static::TRACE_VARNAME] = htmlspecialchars_decode($meta[static::TRACE_VARNAME]);
+        }
+
+        return $metaArray;
     }
 
     /**

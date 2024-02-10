@@ -16,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -178,7 +178,7 @@ class Hans
         this.eventHandler.addEvent(this.selectors.performSearch, 'click', this.search.performSearch);
 
         /**
-         * Register the Collapse-All functions on it's symbol
+         * Register the Collapse-All functions on its symbol
          *
          * @event click
          */
@@ -224,7 +224,7 @@ class Hans
             '.kheadnote',
             function () {
                 let searchWrapper:NodeList = document.querySelectorAll('.search-wrapper');
-                let viewportOffset:ClientRect;
+                let viewportOffset:DOMRect;
                 for (let i = 0; i < searchWrapper.length; i++) {
                     viewportOffset = (searchWrapper[i] as HTMLElement).getBoundingClientRect();
                     (searchWrapper[i] as HTMLElement).style.position = 'fixed';
@@ -508,7 +508,7 @@ class Hans
     };
 
     /**
-     * Toggle the display of t he infobox.
+     * Toggle the display of the infobox.
      *
      * @param {Event} event
      * @param {Element} element

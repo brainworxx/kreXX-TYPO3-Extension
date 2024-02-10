@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughArray;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughLargeArray;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
+use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
  * Processing of arrays.
@@ -51,6 +52,24 @@ class ProcessArray extends AbstractProcessNoneScalar implements
     CallbackConstInterface,
     ConfigConstInterface
 {
+    /**
+     * Cached setting for the array count limit before switching to the
+     * simpified version.
+     *
+     * @var int
+     */
+    protected $arrayCountLimit = 0;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __construct(Pool $pool)
+    {
+        parent::__construct($pool);
+
+        $this->arrayCountLimit = (int) $this->pool->config
+            ->getSetting(static::SETTING_ARRAY_COUNT_LIMIT);
+    }
 
     /**
      * Is this one an array?
@@ -78,10 +97,9 @@ class ProcessArray extends AbstractProcessNoneScalar implements
     protected function handleNoneScalar(Model $model): string
     {
         $this->pool->emergencyHandler->upOneNestingLevel();
-        $multiline = false;
         $count = count($model->getData());
 
-        if ($count > (int) $this->pool->config->getSetting(static::SETTING_ARRAY_COUNT_LIMIT)) {
+        if ($count > $this->arrayCountLimit) {
             // Budget array analysis.
             $model->injectCallback($this->pool->createClass(ThroughLargeArray::class))
                 ->setHelpid('simpleArray');
@@ -94,9 +112,9 @@ class ProcessArray extends AbstractProcessNoneScalar implements
         $result = $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
                 $model->setType(static::TYPE_ARRAY)
-                    ->setNormal($count . ' elements')
+                    ->setNormal($count . $this->pool->messages->getHelp('countElements'))
                     ->addParameter(static::PARAM_DATA, $model->getData())
-                    ->addParameter(static::PARAM_MULTILINE, $multiline)
+                    ->addParameter(static::PARAM_MULTILINE, false)
             )
         );
 

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -45,9 +45,13 @@ use Brainworxx\Krexx\Analyse\Model;
 trait Footer
 {
     /**
-     * @var string
+     * @var string[]
      */
-    private $markerFooter = '{kconfiguration-classes}';
+    private $markerFooter = [
+        '{kconfiguration-classes}',
+        '{additionalData}',
+        '{noDataAvailable}'
+    ];
 
     /**
      * {@inheritDoc}
@@ -57,17 +61,25 @@ trait Footer
         // Doing special stuff for smokygrey:
         // We hide the debug-tab when we are displaying the config-only and switch
         // to the config as the current payload.
-        if ($configOnly === true) {
+        if ($configOnly) {
             return str_replace(
                 $this->markerFooter,
-                '',
-                parent::renderFooter($caller, $model, $configOnly)
+                [
+                    '',
+                    $this->pool->messages->getHelp('additionalData'),
+                    $this->pool->messages->getHelp('noDataAvailable'),
+                ],
+                parent::renderFooter($caller, $model, true)
             );
         }
 
         return str_replace(
             $this->markerFooter,
-            static::STYLE_HIDDEN,
+            [
+                static::STYLE_HIDDEN,
+                $this->pool->messages->getHelp('additionalData'),
+                $this->pool->messages->getHelp('noDataAvailable'),
+            ],
             parent::renderFooter($caller, $model, $configOnly)
         );
     }
@@ -83,6 +95,6 @@ trait Footer
      */
     public function getMarkerFooter(): array
     {
-        return [$this->markerFooter];
+        return $this->markerFooter;
     }
 }

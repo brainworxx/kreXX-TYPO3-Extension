@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -47,7 +47,6 @@ use Aimeos\Base\View\Iface as BaseViewIface;
 use Aimeos\MShop\Common\Item\Iface as ItemIface;
 use Aimeos\MW\Tree\Node\Iface as NodeIface;
 use Aimeos\MW\View\Iface as ViewIface;
-use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Analysing the __get() implementation in aimeos items.
@@ -61,7 +60,6 @@ use Brainworxx\Krexx\View\ViewConstInterface;
  */
 class Properties extends AbstractEventHandler implements
     CallbackConstInterface,
-    ViewConstInterface,
     ConnectorsConstInterface,
     CodegenConstInterface
 {
@@ -100,9 +98,11 @@ class Properties extends AbstractEventHandler implements
         $data = $params[static::PARAM_DATA];
         $result = '';
 
-        if (is_a($data, ItemIface::class)) {
+        if ($data instanceof ItemIface) {
             $result .= $this->extractValues(static::AIMEOS_B_DATA, $params);
-        } elseif (is_a($data, NodeIface::class) || is_a($data, ViewIface::class) || is_a($data, BaseViewIface::class)) {
+        } elseif (
+            $data instanceof NodeIface || $data instanceof ViewIface || $data instanceof BaseViewIface
+        ) {
             $result .= $this->extractValues(static::AIMEOS_VALUES, $params);
         }
 
@@ -134,14 +134,14 @@ class Properties extends AbstractEventHandler implements
         $parentReflection = $ref;
         while (
             $parentReflection !== false
-            && empty($result) === true
+            && empty($result)
         ) {
             $result = $this->retrieveProperty($parentReflection, $name, $data);
             $parentReflection = $parentReflection->getParentClass();
         }
 
         // Huh, something went wrong here!
-        if (empty($result) === true || is_array($result) === false) {
+        if (empty($result) || !is_array($result)) {
             return '';
         }
 
@@ -164,7 +164,7 @@ class Properties extends AbstractEventHandler implements
         foreach ($array as $key => $value) {
             // Could be anything.
             // We need to route it though the analysis hub.
-            if ($this->pool->encodingService->isPropertyNameNormal($key) === true) {
+            if ($this->pool->encodingService->isPropertyNameNormal($key)) {
                 $connectorType = static::CONNECTOR_NORMAL_PROPERTY;
             } else {
                 $connectorType = static::CONNECTOR_SPECIAL_CHARS_PROP;
@@ -176,7 +176,10 @@ class Properties extends AbstractEventHandler implements
                     ->setName($key)
                     ->setConnectorType($connectorType)
                     ->setCodegenType(static::CODEGEN_TYPE_PUBLIC)
-                    ->addToJson(static::META_HINT, 'Aimeos magical property')
+                    ->addToJson(
+                        $this->pool->messages->getHelp('metaHint'),
+                        $this->pool->messages->getHelp('aimeosMagicProp')
+                    )
             );
         }
 

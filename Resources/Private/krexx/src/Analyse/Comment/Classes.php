@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -48,7 +48,7 @@ class Classes extends AbstractComment
     /**
      * Get the prettified class comment.
      *
-     * @param Reflector $reflection
+     * @param \ReflectionClass $reflection
      *   The actual reflection class.
      * @param \ReflectionClass|null $reflectionClass
      *   Not used.
@@ -58,15 +58,8 @@ class Classes extends AbstractComment
      */
     public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
     {
-        static $cache = [];
-        $name = $reflection->getName();
-
-        if (isset($cache[$name]) === false) {
-            $cache[$name] = $this->pool->encodingService->encodeString(
-                $this->prettifyComment($reflection->getDocComment())
-            );
-        }
-
-        return $cache[$name];
+        return $this->pool->encodingService->encodeString(
+            $this->prettifyComment($reflection->getDocComment())
+        );
     }
 }

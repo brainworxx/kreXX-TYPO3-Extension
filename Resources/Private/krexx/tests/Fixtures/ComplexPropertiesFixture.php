@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -57,6 +57,13 @@ class ComplexPropertiesFixture extends ComplexPropertiesInheritanceFixture
     public $publicIntProperty = 123;
 
     /**
+     * Public float property
+     *
+     * @var float
+     */
+    public $publicFloatProperty = 123.456;
+
+    /**
      * Unset property is unsettling.
      *
      * @var string
@@ -85,6 +92,16 @@ class ComplexPropertiesFixture extends ComplexPropertiesInheritanceFixture
     public $longString = 'gdgdfgonidoidsfogidfo idfsoigdofgoiudsfgoü dsfo goühisdfg ohisdfghioü sdoiühfg hoisdghoi sdfghiosdg sdfg dsg sdgsdf gdsg dsg';
 
     public static $publicStatic = 1;
+
+    /**
+     * A simple variable with a default array.
+     *
+     * @var string[]
+     */
+    public $array = [
+        'qwer',
+        'asdf'
+    ];
 
     /**
      * Unset a property and dynamically declare a new one.

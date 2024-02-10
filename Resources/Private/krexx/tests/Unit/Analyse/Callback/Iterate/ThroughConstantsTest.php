@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,17 +37,15 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Brainworxx\Krexx\Tests\Fixtures\ConstantsFixture;
 use Brainworxx\Krexx\Tests\Fixtures\ConstantsFixture71;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 use Brainworxx\Krexx\Krexx;
 
-class ThroughConstantsTest extends AbstractTest
+class ThroughConstantsTest extends AbstractHelper
 {
-    const SKIPPED_PHP_VERSION = '7.1.0';
     const SKIPPED_REASON = 'Skipped due to wrong PHP version.';
-    const PUBLIC_CONSTANT = 'public constant ';
+    const PUBLIC_CONSTANT = 'Public constant ';
     const STATIC_COLON_COLON = 'static::';
 
     /**
@@ -85,50 +83,14 @@ class ThroughConstantsTest extends AbstractTest
     }
 
     /**
-     * Testing the constants iterator.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
-     * @throws \ReflectionException
-     */
-    public function testCallMePhp70()
-    {
-        // Test for the right PHP version.
-        if (version_compare(phpversion(), static::SKIPPED_PHP_VERSION, '>=')) {
-            $this->markTestSkipped(static::SKIPPED_REASON);
-        }
-
-        $fixture = $this->runTheTest(ConstantsFixture::class);
-
-        // Check the models from the route nothing
-        $count = 0;
-        $models = Krexx::$pool->routing->model;
-
-        foreach ($fixture['data'] as $name => $value) {
-            $this->assertEquals($name, $models[$count]->getName());
-            $this->assertEquals($value, $models[$count]->getData());
-            $this->assertEquals(
-                '\\' . $fixture[ThroughConstants::PARAM_CLASSNAME] . '::',
-                $models[$count]->getConnectorLeft()
-            );
-            ++$count;
-        }
-    }
-
-    /**
      * Testing the PHP 7.1 plus constants handling.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::canDump
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::dumpPhpSevenZero
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::retrieveAdditionalData
      */
-    public function testCallMe71()
+    public function testCallMe()
     {
-        // Test for the right PHP version.
-        if (version_compare(phpversion(), static::SKIPPED_PHP_VERSION, '<')) {
-            $this->markTestSkipped(static::SKIPPED_REASON);
-        }
-
         \Krexx::$pool->scope->setScope('$somethingElse');
         $this->runTheTest(ConstantsFixture71::class);
 
@@ -153,16 +115,10 @@ class ThroughConstantsTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::canDump
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::dumpPhpSevenZero
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConstants::retrieveAdditionalData
      */
     public function testCallMe71InScope()
     {
-        // Test for the right PHP version.
-        if (version_compare(phpversion(), static::SKIPPED_PHP_VERSION, '<')) {
-            $this->markTestSkipped(static::SKIPPED_REASON);
-        }
-
         \Krexx::$pool->scope->setScope('$this');
         $this->runTheTest(ConstantsFixture71::class);
 
@@ -177,8 +133,8 @@ class ThroughConstantsTest extends AbstractTest
         $this->assertEquals(21, $models[3]->getData());
         $this->assertEquals(static::PUBLIC_CONSTANT, $models[0]->getAdditional());
         $this->assertEquals(static::PUBLIC_CONSTANT, $models[1]->getAdditional());
-        $this->assertEquals('protected constant ', $models[2]->getAdditional());
-        $this->assertEquals('private constant ', $models[3]->getAdditional());
+        $this->assertEquals('Protected constant ', $models[2]->getAdditional());
+        $this->assertEquals('Private constant ', $models[3]->getAdditional());
         $this->assertEquals('CONST_1', $models[0]->getName());
         $this->assertEquals('CONST_2', $models[1]->getName());
         $this->assertEquals('CONST_3', $models[2]->getName());

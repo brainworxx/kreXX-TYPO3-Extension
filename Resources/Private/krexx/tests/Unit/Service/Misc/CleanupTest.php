@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,15 +43,15 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\Cleanup;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\View\Output\Chunks;
 
-class CleanupTest extends AbstractTest
+class CleanupTest extends AbstractHelper
 {
     const CHUNKS_DONE = 'chunksDone';
     const MISC_NAMESPACE = '\\Brainworxx\\Krexx\\Service\\Misc\\';
-    const GET_LOGGING_IS_ALLOWED = 'getLoggingIsAllowed';
+    const GET_LOGGING_IS_ALLOWED = 'isLoggingAllowed';
 
     protected $cleanup;
 
@@ -63,15 +63,15 @@ class CleanupTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->cleanup = new Cleanup(Krexx::$pool);
     }
 
-    protected function krexxDown()
+    protected function tearDown(): void
     {
-        parent::krexxDown();
+        parent::tearDown();
         $this->setValueByReflection(static::CHUNKS_DONE, false, $this->cleanup);
     }
 
@@ -172,12 +172,11 @@ class CleanupTest extends AbstractTest
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->exactly(3))
             ->method('filetime')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$file1],
                 [$file2],
                 [$file3]
-            )
-            ->will(
+            ))->will(
                 $this->returnValueMap(
                     [
                         [$file1, 999],
@@ -190,12 +189,12 @@ class CleanupTest extends AbstractTest
         // Test the deleting of the two oldest files (2 and 3).
         $fileServiceMock->expects($this->exactly(4))
             ->method('deleteFile')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$file3],
                 [$file3 . '.json'],
                 [$file2],
                 [$file2 . '.json']
-            );
+            ));
 
         // Inject hte mock
         Krexx::$pool->fileService = $fileServiceMock;
@@ -214,7 +213,7 @@ class CleanupTest extends AbstractTest
     {
         $chunksMock = $this->createMock(Chunks::class);
         $chunksMock->expects($this->once())
-            ->method('getChunksAreAllowed')
+            ->method('isChunkAllowed')
             ->will($this->returnValue(false));
         Krexx::$pool->chunks = $chunksMock;
 
@@ -240,7 +239,7 @@ class CleanupTest extends AbstractTest
 
         $chunksMock = $this->createMock(Chunks::class);
         $chunksMock->expects($this->once())
-            ->method('getChunksAreAllowed')
+            ->method('isChunkAllowed')
             ->will($this->returnValue(true));
         Krexx::$pool->chunks = $chunksMock;
 
@@ -261,12 +260,11 @@ class CleanupTest extends AbstractTest
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->exactly(3))
             ->method('filetime')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$file1],
                 [$file2],
                 [$file3]
-            )
-            ->will(
+            ))->will(
                 $this->returnValueMap(
                     [
                         [$file1, 999999],
@@ -279,10 +277,10 @@ class CleanupTest extends AbstractTest
         // Test the deleting of the two oldest files 2 and 3, while 1 is too new.
         $fileServiceMock->expects($this->exactly(2))
             ->method('deleteFile')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$file2],
                 [$file3]
-            );
+            ));
 
         Krexx::$pool->fileService = $fileServiceMock;
 

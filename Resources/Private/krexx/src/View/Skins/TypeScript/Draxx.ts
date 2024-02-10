@@ -16,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -34,7 +34,7 @@
 class Draxx
 {
     /**
-     * The selector, where we init the draXX
+     * The selector, where we initialize the draXX
      *
      * @var {string}
      */
@@ -239,7 +239,7 @@ class Draxx
     protected getElementOffset(element:Element): Offset
     {
         let de:Element = document.documentElement;
-        let box:ClientRect = element.getBoundingClientRect();
+        let box:DOMRect = element.getBoundingClientRect();
         let top:number = box.top + window.pageYOffset - de.clientTop;
         let left:number = box.left + window.pageXOffset - de.clientLeft;
         return {top: top, left: left};

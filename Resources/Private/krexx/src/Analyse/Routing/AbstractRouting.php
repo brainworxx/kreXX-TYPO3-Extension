@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -62,24 +62,6 @@ abstract class AbstractRouting
     public function __construct(Pool $pool)
     {
          $this->pool = $pool;
-    }
-
-    /**
-     * Processes the model according to the type of the variable.
-     *
-     * @param \Brainworxx\Krexx\Analyse\Model $model
-     *
-     * @deprecated
-     *   Will be removed. Use $this->handle;
-     *
-     * @codeCoverageIgnore
-     *   We will not test methods that are deprecated.
-     *
-     * @return string
-     */
-    public function process(Model $model): string
-    {
-        return $this->handle($model);
     }
 
     /**

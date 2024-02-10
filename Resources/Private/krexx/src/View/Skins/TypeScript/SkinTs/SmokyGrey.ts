@@ -16,7 +16,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -117,7 +117,7 @@ class SmokyGrey extends Hans
     {
         let kdt:Kdt = this.kdt;
         let setPayloadMaxHeight:Function = this.setPayloadMaxHeight.bind(this);
-        // When dealing with 400MB output, or more, this one takes more time than anything else.
+        // When dealing with 400 MB output, or more, this one takes more time than anything else.
         // We will delay it, so that is does not slow down other stuff.
         setTimeout(function() {
             let wrapper:HTMLElement = (kdt.getParents(element, '.kwrapper')[0] as HTMLElement);
@@ -153,11 +153,12 @@ class SmokyGrey extends Hans
             }
             if (counter === 0) {
                 // We have no data. Tell the user that there is nothing to see.
-                html = '<tr><td class="kinfo">No data available for this item.</td><td class="kdesc">Sorry.</td></tr>';
+                html = '<tr><td class="kinfo">' + kdt.translations.translate('tsNoDataAvailable') + '</td><td class="kdesc"></td></tr>';
             }
 
             // Add it to the DOM.
-            html = '<table><caption class="kheadline">Additional data</caption><tbody class="kdatabody">' + html + '</tbody></table>';
+            html = '<table><caption class="kheadline">' + kdt.translations.translate('tsAdditionalData') +
+                '</caption><tbody class="kdatabody">' + html + '</tbody></table>';
             // Meh, IE9 does not allow me to edit the contents of a table. I have to
             // redraw the whole thing.  :-(
             (body.parentNode.parentNode as HTMLElement).innerHTML = html;

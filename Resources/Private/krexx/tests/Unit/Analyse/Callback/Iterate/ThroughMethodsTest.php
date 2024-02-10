@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,15 +41,14 @@ use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Tests\Fixtures\ComplexMethodFixture;
 use Brainworxx\Krexx\Tests\Fixtures\MethodsFixture;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionMethod;
-use ReflectionClass;
+use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
 
-class ThroughMethodsTest extends AbstractTest
+class ThroughMethodsTest extends AbstractHelper
 {
     /**
      * Our testing specimen
@@ -72,9 +71,9 @@ class ThroughMethodsTest extends AbstractTest
     /**
      * {@inheritdoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->throughMethods = new ThroughMethods(Krexx::$pool);
     }
 
@@ -121,9 +120,9 @@ class ThroughMethodsTest extends AbstractTest
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveConnectorType
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveParameters
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::getDeclarationPlace
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration::retrieveDeclaration
+     * @covers \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration::retrieveDeclaringReflection
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::getDeclarationKeywords
-     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveDeclaringReflection
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods::retrieveMethodData
      */
     public function testCallMeNormal()
@@ -179,7 +178,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[0],
             $fixture[$this->throughMethods::PARAM_DATA][0]->name,
-            'public inherited method',
+            'Public Inherited method',
             '->',
             '()',
             '',
@@ -192,7 +191,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[1],
             $fixture[$this->throughMethods::PARAM_DATA][1]->name,
-            'protected inherited method',
+            'Protected Inherited method',
             '->',
             '()',
             '',
@@ -206,7 +205,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[2],
             $fixture[$this->throughMethods::PARAM_DATA][2]->name,
-            'private method',
+            'Private method',
             '->',
             '()',
             '',
@@ -220,7 +219,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[3],
             $fixture[$this->throughMethods::PARAM_DATA][3]->name,
-            'private inherited method',
+            'Private Inherited method',
             '->',
             '()',
             '',
@@ -233,10 +232,10 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[4],
             $fixture[$this->throughMethods::PARAM_DATA][4]->name,
-            'public inherited method',
+            'Public Inherited method',
             '->',
-            '(someNotExistingClass $parameter)',
-            'someNotExistingClass $parameter',
+            '(\someNotExistingClass $parameter)',
+            '\someNotExistingClass $parameter',
             'Asking politely for trouble here',
             $methodFixtureFile,
             $methodFixtureClass
@@ -246,7 +245,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[5],
             $fixture[$this->throughMethods::PARAM_DATA][5]->name,
-            'public final method',
+            'Public Final method',
             '->',
             '()',
             '',
@@ -259,7 +258,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[6],
             $fixture[$this->throughMethods::PARAM_DATA][6]->name,
-            'public method',
+            'Public method',
             '->',
             '($parameter)',
             '$parameter',
@@ -272,7 +271,7 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertModelValues(
             $models[7],
             $fixture[$this->throughMethods::PARAM_DATA][7]->name,
-            'protected method',
+            'Protected method',
             '->',
             '()',
             '',
@@ -311,15 +310,15 @@ class ThroughMethodsTest extends AbstractTest
         $this->assertEquals($connectorParameter, $model->getConnectorParameters());
         $this->assertStringContainsString(
             $comment,
-            $model->getParameters()[$this->throughMethods::PARAM_DATA][ViewConstInterface::META_COMMENT]
+            $model->getParameters()[$this->throughMethods::PARAM_DATA]['Comment']
         );
         $this->assertStringContainsString(
             $declaredInFile,
-            $model->getParameters()[$this->throughMethods::PARAM_DATA][ViewConstInterface::META_DECLARED_IN]
+            $model->getParameters()[$this->throughMethods::PARAM_DATA]['Declared in']
         );
         $this->assertStringContainsString(
             $declaredInClass,
-            $model->getParameters()[$this->throughMethods::PARAM_DATA][ViewConstInterface::META_DECLARED_IN]
+            $model->getParameters()[$this->throughMethods::PARAM_DATA]['Declared in']
         );
         $this->assertTrue(
             $this->throughMethods->getParameters()[$this->throughMethods::PARAM_REFLECTION_METHOD] instanceof ReflectionMethod

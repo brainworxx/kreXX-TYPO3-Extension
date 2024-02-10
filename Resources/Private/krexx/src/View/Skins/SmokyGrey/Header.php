@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -48,7 +48,10 @@ trait Header
     private $markerHeader = [
         '{kdebug-classes}',
         '{kconfiguration-classes}',
-        '{plugins}'
+        '{plugins}',
+        '{debugHeadline}',
+        '{configHeadline}',
+        '{pluginsHeadline}'
     ];
 
     /**
@@ -59,7 +62,7 @@ trait Header
         // Doing special stuff for smokygrey:
         // We hide the debug-tab when we are displaying the config-only and switch
         // to the config as the current payload.
-        if ($headline === static::HEADLINE_COOKIE_CONF) {
+        if ($headline === $this->pool->messages->getHelp('headlineCookieConf')) {
             $debugClass = static::STYLE_HIDDEN;
             $configClass = static::STYLE_ACTIVE;
         } else {
@@ -67,12 +70,16 @@ trait Header
             $configClass = '';
         }
 
+        $messages = $this->pool->messages;
         return str_replace(
             $this->markerHeader,
             [
                 $debugClass,
                 $configClass,
                 $this->renderPluginList(),
+                $messages->getHelp('debugHeadline'),
+                $messages->getHelp('configHeadline'),
+                $messages->getHelp('pluginsHeadline')
             ],
             parent::renderHeader($headline, $cssJs)
         );

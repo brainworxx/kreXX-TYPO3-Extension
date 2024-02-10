@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,7 +43,7 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\Encoding;
 use Brainworxx\Krexx\Service\Misc\File;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\ConfigSupplier;
 use Brainworxx\Krexx\View\Output\Chunks;
 use StdClass;
@@ -54,14 +54,14 @@ use StdClass;
  *
  * @package Brainworxx\Krexx\Tests\View\Output
  */
-class ChunksTest extends AbstractTest
+class ChunksTest extends AbstractHelper
 {
     const CHUNK_DIR = 'chunkDir';
     const LOG_DIR = 'logDir';
     const FILE_STAMP = 'fileStamp';
     const PUT_FILE_CONTENTS = 'putFileContents';
     const DELETE_FILE = 'deleteFile';
-    const LOGGING_IS_ALLOWED = 'loggingIsAllowed';
+    const LOGGING_IS_ALLOWED = 'loggingAllowed';
     const OFFICIAL_ENCODING = 'officialEncoding';
     const META_DATA = 'metadata';
 
@@ -126,7 +126,7 @@ class ChunksTest extends AbstractTest
     public function testChunkMeLargeNochunk()
     {
         $chunks = new Chunks(Krexx::$pool);
-        $chunks->setChunksAreAllowed(false);
+        $chunks->setChunkAllowed(false);
 
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->never())
@@ -203,12 +203,11 @@ class ChunksTest extends AbstractTest
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->exactly(3))
             ->method('getFileContents')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$chunk1File],
                 [$chunk2File],
                 [$chunk3File]
-            )
-            ->will(
+            ))->will(
                 $this->returnValueMap(
                     [
                         [$chunk1File, true, $chunk1Content],
@@ -219,11 +218,11 @@ class ChunksTest extends AbstractTest
             );
         $fileServiceMock->expects($this->exactly(3))
             ->method(static::DELETE_FILE)
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$chunk1File],
                 [$chunk2File],
                 [$chunk3File]
-            );
+            ));
         Krexx::$pool->fileService = $fileServiceMock;
 
         // Prevent any flushing, so that unit tests can intercept the output.
@@ -270,12 +269,11 @@ class ChunksTest extends AbstractTest
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->exactly(3))
             ->method('getFileContents')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$chunk1File],
                 [$chunk2File],
                 [$chunk3File]
-            )
-            ->will(
+            ))->will(
                 $this->returnValueMap(
                     [
                         [$chunk1File, true, $chunk1Content],
@@ -286,21 +284,21 @@ class ChunksTest extends AbstractTest
             );
         $fileServiceMock->expects($this->exactly(4))
             ->method(static::DELETE_FILE)
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$chunk1File],
                 [$chunk2File],
                 [$chunk3File],
                 [$metaFileName]
-            );
+            ));
         $fileServiceMock->expects($this->exactly(5))
             ->method(static::PUT_FILE_CONTENTS)
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$logFileName, 'Murry '],
                 [$logFileName, 'had '],
                 [$logFileName, 'a '],
                 [$logFileName, 'little lampp'],
                 [$metaFileName, json_encode($metaData)]
-            );
+            ));
         Krexx::$pool->fileService = $fileServiceMock;
 
         // Create the chunks class and set the simulated chunks directory.
@@ -321,61 +319,61 @@ class ChunksTest extends AbstractTest
     /**
      * Test the setter for chunk allowance. Pun intended.
      *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::setChunksAreAllowed
+     * @covers \Brainworxx\Krexx\View\Output\Chunks::setChunkAllowed
      */
-    public function testSetChunksAreAllowed()
+    public function testSetChunkAllowed()
     {
         $chunks = new Chunks(Krexx::$pool);
-        $chunks->setChunksAreAllowed(true);
-        $this->assertEquals(true, $chunks->getChunksAreAllowed());
+        $chunks->setChunkAllowed(true);
+        $this->assertEquals(true, $chunks->isChunkAllowed());
 
-        $chunks->setChunksAreAllowed(false);
-        $this->assertEquals(false, $chunks->getChunksAreAllowed());
+        $chunks->setChunkAllowed(false);
+        $this->assertEquals(false, $chunks->isChunkAllowed());
     }
 
     /**
      * Test the getter for chunk allowance. Pun intended.
      *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::getChunksAreAllowed
+     * @covers \Brainworxx\Krexx\View\Output\Chunks::isChunkAllowed
      */
-    public function testGetChunksAreAllowed()
+    public function testIsChunkAllowed()
     {
         $chunks = new Chunks(Krexx::$pool);
-        $this->setValueByReflection('chunksAreAllowed', true, $chunks);
-        $this->assertTrue($chunks->getChunksAreAllowed());
+        $this->setValueByReflection('chunkAllowed', true, $chunks);
+        $this->assertTrue($chunks->isChunkAllowed());
 
-        $this->setValueByReflection('chunksAreAllowed', false, $chunks);
-        $this->assertFalse($chunks->getChunksAreAllowed());
+        $this->setValueByReflection('chunkAllowed', false, $chunks);
+        $this->assertFalse($chunks->isChunkAllowed());
     }
 
     /**
      * Test the setter fpr the logging allowance. The puns are killing me.
      *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::setLoggingIsAllowed
+     * @covers \Brainworxx\Krexx\View\Output\Chunks::setLoggingAllowed
      */
-    public function testSetLoggingIsAllowed()
+    public function testSetLoggingAllowed()
     {
         $chunks = new Chunks(Krexx::$pool);
-        $chunks->setLoggingIsAllowed(true);
-        $this->assertEquals(true, $chunks->getLoggingIsAllowed());
+        $chunks->setLoggingAllowed(true);
+        $this->assertEquals(true, $chunks->isLoggingAllowed());
 
-        $chunks->setLoggingIsAllowed(false);
-        $this->assertEquals(false, $chunks->getLoggingIsAllowed());
+        $chunks->setLoggingAllowed(false);
+        $this->assertEquals(false, $chunks->isLoggingAllowed());
     }
 
     /**
      * Test the getter fpr the logging is allowed. No pun,see?
      *
-     * @covers \Brainworxx\Krexx\View\Output\Chunks::getLoggingIsAllowed
+     * @covers \Brainworxx\Krexx\View\Output\Chunks::isLoggingAllowed
      */
-    public function testGetLoggingIsAllowed()
+    public function testIsLoggingAllowed()
     {
         $chunks = new Chunks(Krexx::$pool);
         $this->setValueByReflection(static::LOGGING_IS_ALLOWED, true, $chunks);
-        $this->assertTrue($chunks->getLoggingIsAllowed());
+        $this->assertTrue($chunks->isLoggingAllowed());
 
         $this->setValueByReflection(static::LOGGING_IS_ALLOWED, false, $chunks);
-        $this->assertFalse($chunks->getLoggingIsAllowed());
+        $this->assertFalse($chunks->isLoggingAllowed());
     }
 
     /**
@@ -429,11 +427,11 @@ class ChunksTest extends AbstractTest
         $fileServiceMock = $this->createMock(File::class);
         $fileServiceMock->expects($this->exactly(count($fileList)))
             ->method(static::DELETE_FILE)
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [$fileList[0]],
                 [$fileList[1]],
                 [$fileList[2]]
-            );
+            ));
         Krexx::$pool->fileService = $fileServiceMock;
 
         // We need to call this by hand, because it's a singleton, with references

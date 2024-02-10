@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,14 +37,14 @@ namespace Brainworxx\Includekrexx\Tests\Unit\Modules;
 use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\LogfileList;
 use Brainworxx\Includekrexx\Modules\Log;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Adminpanel\ModuleApi\ModuleData;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
-class LogTest extends AbstractTest
+class LogTest extends AbstractHelper
 {
     const WRONG_VERSION = 'Wrong TYPO3 version.';
     const FILES = 'files';
@@ -61,12 +61,12 @@ class LogTest extends AbstractTest
     /**
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
         if (class_exists(ModuleData::class) === false) {
             return;
         }
-        parent::krexxUp();
+        parent::setUp();
         $this->simulatePackage('includekrexx', 'whatever');
         $this->log = new Log();
     }
@@ -94,7 +94,10 @@ class LogTest extends AbstractTest
         if (class_exists(ModuleData::class) === false) {
             $this->markTestSkipped(static::WRONG_VERSION);
         }
-        $this->assertEquals($this->log::TRANSLATION_PREFIX . 'mlang_tabs_tab', $this->log->getLabel());
+        $this->assertEquals(
+            'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:mlang_tabs_tab',
+            $this->log->getLabel()
+        );
     }
 
     /**
@@ -137,8 +140,8 @@ class LogTest extends AbstractTest
         $viewMock->expects($this->once())
             ->method(static::ASSIGN_MULTIPLE)
             ->with([
-                static::TEXT => $this->log::TRANSLATION_PREFIX . 'accessDenied',
-                static::SEVERITY => $this->log::MESSAGE_SEVERITY_ERROR,
+                static::TEXT => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:accessDenied',
+                static::SEVERITY => 'error',
             ]);
         $viewMock->expects($this->once())
             ->method(static::RENDER)
@@ -170,20 +173,20 @@ class LogTest extends AbstractTest
         $viewMock = $this->mockView();
         $viewMock->expects($this->exactly(2))
             ->method(static::ASSIGN_MULTIPLE)
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [
                     [
-                        static::TEXT => $this->log::TRANSLATION_PREFIX . 'translationkey',
-                        static::SEVERITY => $this->log::MESSAGE_SEVERITY_ERROR,
+                        static::TEXT => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:translationkey',
+                        static::SEVERITY => 'error',
                     ]
                 ],
                 [
                     [
-                        static::TEXT => $this->log::TRANSLATION_PREFIX . 'log.noresult',
-                        static::SEVERITY => $this->log::MESSAGE_SEVERITY_INFO,
+                        static::TEXT => 'LLL:EXT:includekrexx/Resources/Private/Language/locallang.xlf:log.noresult',
+                        static::SEVERITY => 'info',
                     ]
                 ]
-            );
+            ));
         $viewMock->expects($this->exactly(2))
             ->method(static::RENDER)
             ->will($this->returnValue('rendering'));

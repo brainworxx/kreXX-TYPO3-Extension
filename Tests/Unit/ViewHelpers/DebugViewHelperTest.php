@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -34,14 +34,14 @@
 
 namespace Brainworxx\Includekrexx\Tests\Unit\ViewHelpers;
 
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\ViewHelpers\DebugViewHelper;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
 
-class DebugViewHelperTest extends AbstractTest
+class DebugViewHelperTest extends AbstractHelper
 {
     /**
      * Testing the initializing of our single argument.
@@ -54,7 +54,7 @@ class DebugViewHelperTest extends AbstractTest
         $debugViewHelper->initializeArguments();
 
         $this->assertArrayHasKey(
-            DebugViewHelper::ARGUMENT_VALUE,
+            'value',
             $this->retrieveValueByReflection('argumentDefinitions', $debugViewHelper)
         );
     }

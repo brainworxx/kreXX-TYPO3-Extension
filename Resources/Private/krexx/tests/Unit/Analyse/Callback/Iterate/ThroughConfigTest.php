@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,16 +37,18 @@ namespace Brainworxx\Krexx\Tests\Unit\Analyse\Callback\Iterate;
 
 use Brainworxx\Krexx\Analyse\Callback\Analyse\ConfigSection;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Model;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 
-class ThroughConfigTest extends AbstractTest
+class ThroughConfigTest extends AbstractHelper
 {
     /**
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig::renderAllSections
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig::hasSomethingToRender
      */
     public function testCallMe()
     {
@@ -70,11 +72,20 @@ class ThroughConfigTest extends AbstractTest
         $settingFour->expects($this->once())
             ->method($methodName)
             ->will($this->returnValue('section two'));
+        $settingFive = $this->createMock(Model::class);
+        $settingFive->expects($this->once())
+            ->method($methodName)
+            ->will($this->returnValue('section three'));
+        $settingFive->expects($this->once())
+            ->method('getType')
+            ->will($this->returnValue(ConfigConstInterface::RENDER_TYPE_NONE));
+
         $fixture = [
             'settingOne' => $settingOne,
             'settingTwo' => $settingTwo,
             'settingThree' => $settingThree,
-            'settingFour' => $settingFour
+            'settingFour' => $settingFour,
+            'settingFive' => $settingFive
         ];
 
         // Inject the fixture
@@ -95,7 +106,8 @@ class ThroughConfigTest extends AbstractTest
         $throughConfig->callMe();
 
         $this->assertEquals(2, CallbackCounter::$counter);
-
+        // The setting five should be completely ignored, because it is not
+        // renderable. Hence, there is no section involved.
         $expectation = [
             ['data' => [
                 'settingOne' => $settingOne,

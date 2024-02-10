@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -46,7 +46,6 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
  */
 class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterface
 {
-
     /**
      * Error object analysis.
      *
@@ -58,9 +57,9 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
         // Call the start event, even if this is not an error object.
         $output = $this->dispatchStartEvent() . $this->renderBacktrace();
 
-        /** @var \Throwable|\Exception $data */
+        /** @var \Throwable $data */
         $data = $this->parameters[static::PARAM_DATA];
-        $lineNo = ((int)$data->getLine()) - 1;
+        $lineNo = $data->getLine() - 1;
         $source = trim(
             $this->pool->fileService->readSourcecode(
                 $data->getFile(),
@@ -69,7 +68,7 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
                 $lineNo + 5
             )
         );
-        if (empty($source) === true) {
+        if (empty($source)) {
             $source = $this->pool->messages->getHelp('noSourceAvailable');
         }
 
@@ -78,7 +77,7 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
                 'source',
                 $this->pool->createClass(Model::class)
                     ->setData($source)
-                    ->setName('Sourcecode')
+                    ->setName($this->pool->messages->getHelp('sourceCode'))
                     ->setNormal(static::UNKNOWN_VALUE)
                     ->setHasExtra(true)
                     ->setType(static::TYPE_PHP)
@@ -97,12 +96,12 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
         $output = '';
         $trace = $this->parameters[static::PARAM_DATA]->getTrace();
         if (is_array($trace)) {
-            $this->pool->codegenHandler->setAllowCodegen(false);
+            $this->pool->codegenHandler->setCodegenAllowed(false);
             $output .= $this->pool->render->renderExpandableChild(
                 $this->dispatchEventWithModel(
                     static::TRACE_BACKTRACE,
                     $this->pool->createClass(Model::class)
-                        ->setName('Backtrace')
+                        ->setName($this->pool->messages->getHelp('backTrace'))
                         ->setType(static::TYPE_INTERNALS)
                         ->addParameter(static::PARAM_DATA, $trace)
                         ->injectCallback(
@@ -110,9 +109,9 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
                         )
                 )
             );
-            $this->pool->codegenHandler->setAllowCodegen(true);
+            $this->pool->codegenHandler->setCodegenAllowed(true);
         }
 
-        return$output;
+        return $output;
     }
 }

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -162,7 +162,7 @@ class Message
      */
     public function getText(): string
     {
-        if ($this->isThrowAway === true) {
+        if ($this->isThrowAway) {
             // Removes itself, if it is a throwaway message.
             $this->pool->messages->removeKey($this->key);
         }
@@ -179,21 +179,5 @@ class Message
     public function getKey(): string
     {
         return $this->key;
-    }
-
-    /**
-     * Wrapper around the getText, for compatibility reasons.
-     *
-     * @deprecated since 4.0.0
-     *   Will be removed. Use $this->getText().
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getText();
     }
 }

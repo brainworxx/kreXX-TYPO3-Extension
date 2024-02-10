@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -51,9 +51,9 @@ class TimerControllerTest extends AbstractController
      */
     protected $controller;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         // Create a clean timer controller.
         $this->controller = new TimerController(Krexx::$pool);
@@ -133,9 +133,9 @@ class TimerControllerTest extends AbstractController
                     $this->assertEquals('kreXX timer', $headline);
                     $this->assertEquals(
                         [
-                            'total_time' => 2000000.0,
+                            'Total time' => 2000000.0,
                             'first->second' => '50%',
-                            'second->end' => '50%'
+                            'second->End' => '50%'
                         ],
                         $bench
                     );
@@ -148,6 +148,7 @@ class TimerControllerTest extends AbstractController
             ->method('createClass')
             ->with(DumpController::class)
             ->will($this->returnValue($dumpMock));
+        $poolMock->messages = \Krexx::$pool->messages;
 
         $this->setValueByReflection('pool', $poolMock, $this->controller);
         $this->setValueByReflection(static::TIME_KEEPING, ['first' => 1000, 'second' => 2000], $this->controller);

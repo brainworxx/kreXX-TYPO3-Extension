@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,11 +41,23 @@ use Brainworxx\Krexx\Analyse\Model;
 
 /**
  * Analysis model trait with output styling information.
+ *
+ * @deprecated since 5.0.0
+ *   Will be removed
+ *
+ * @codeCoverageIgnore
+ *   We do not test deprecated methods.
  */
 trait KeyType
 {
     /**
      * The type of key that is used.
+     *
+     * @deprecated since 5.0.0
+     *   Will be removed
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
      *
      * @var string
      */
@@ -53,6 +65,12 @@ trait KeyType
 
     /**
      * Getter for the key type.
+     *
+     * @deprecated since 5.0.0
+     *   Will be removed
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
      *
      * @return string
      */
@@ -66,7 +84,13 @@ trait KeyType
      *
      * @param string $keyType
      *
-     * @return $this
+     * @deprecated since 5.0.0
+     *   Will be removed
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
+     * @return Model
      *   For chaining.
      */
     public function setKeyType(string $keyType): Model

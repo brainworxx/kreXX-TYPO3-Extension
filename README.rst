@@ -1,7 +1,3 @@
-========================================
-kreXX Debugger - TYPO3 Backend Extension
-========================================
-
 .. image:: https://github.com/brainworxx/kreXX-TYPO3-Extension/actions/workflows/php.yml/badge.svg?branch=master
    :target: https://github.com/brainworxx/kreXX-TYPO3-Extension/actions/workflows/php.yml
 .. image:: https://api.codeclimate.com/v1/badges/43c23b7d829742003dab/maintainability
@@ -12,6 +8,10 @@ kreXX Debugger - TYPO3 Backend Extension
    :target: https://packagist.org/packages/brainworxx/includekrexx
 .. image:: https://poser.pugx.org/brainworxx/includekrexx/license
    :target: https://packagist.org/packages/brainworxx/includekrexx
+
+========================================
+kreXX Debugger - TYPO3 Backend Extension
+========================================
 
 |
    

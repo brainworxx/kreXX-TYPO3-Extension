@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -77,7 +77,7 @@ class EditSettingsControllerTest extends AbstractController
 
         $poolMock->emergencyHandler->expects($this->exactly(2))
             ->method('setDisable')
-            ->withConsecutive([true], [false]);
+            ->with(...$this->withConsecutive([true], [false]));
 
         $poolMock->render->setFooter('generated HTML code');
 
@@ -90,10 +90,10 @@ class EditSettingsControllerTest extends AbstractController
 
         $poolMock->expects($this->exactly(2))
             ->method('createClass')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [Model::class],
                 [ThroughConfig::class]
-            )->will($this->returnValueMap(
+            ))->will($this->returnValueMap(
                 [
                     [Model::class, new Model(Krexx::$pool)],
                     [ThroughConfig::class, new CallbackNothing(Krexx::$pool)]

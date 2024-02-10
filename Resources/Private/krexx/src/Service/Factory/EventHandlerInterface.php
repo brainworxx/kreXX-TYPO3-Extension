@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -45,7 +45,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 interface EventHandlerInterface
 {
-
     /**
      * Inject the pool.
      *
@@ -56,7 +55,7 @@ interface EventHandlerInterface
     /**
      * Blueprint for the event handler.
      *
-     * @param AbstractCallback|null $callback
+     * @param AbstractCallback $callback
      *   The original callback. Or null, when coming from the processing.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model, if available, so far.

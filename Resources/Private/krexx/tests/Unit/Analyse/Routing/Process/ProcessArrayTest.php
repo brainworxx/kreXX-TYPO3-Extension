@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,11 +41,11 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackCounter;
 use Brainworxx\Krexx\Krexx;
 
-class ProcessArrayTest extends AbstractTest
+class ProcessArrayTest extends AbstractHelper
 {
     protected function assertResults()
     {
@@ -72,6 +72,17 @@ class ProcessArrayTest extends AbstractTest
         $this->assertEquals($fixture, CallbackCounter::$staticParameters[0][CallbackCounter::PARAM_DATA]);
         $this->assertEquals(CallbackCounter::TYPE_ARRAY, $model->getType());
         $this->assertEquals(count($fixture) . ' elements', $model->getNormal());
+    }
+
+    /**
+     * Test the reading of the settings
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray::__construct
+     */
+    public function testConstruct()
+    {
+        $processArray = new ProcessArray(\Krexx::$pool);
+        $this->assertNotEquals(0, $this->retrieveValueByReflection('arrayCountLimit', $processArray));
     }
 
     /**

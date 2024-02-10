@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,10 +41,10 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 
-class GetterTest extends AbstractTest
+class GetterTest extends AbstractHelper
 {
     use AimeosTestTrait;
 
@@ -53,9 +53,9 @@ class GetterTest extends AbstractTest
      *
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         // Subscribing.
         Registration::registerEvent(
@@ -90,6 +90,7 @@ class GetterTest extends AbstractTest
     public function testHandle()
     {
         $this->skipIfAimeosIsNotInstalled();
+        $this->mockEmergencyHandler();
 
         $values = [
             // Base class (bdata)
@@ -97,8 +98,7 @@ class GetterTest extends AbstractTest
             'log.siteid' => '42',
             'log.mtime' => 'today',
             'log.ctime' => 'yesterday',
-            // The editor was removed in 2022.
-            // 'log.editor' => null,
+            'log.timestamp' => null,
             // Standard class (values)
             'log.facility' => 'kreXX',
             'log.priority' => 'high',
@@ -118,7 +118,6 @@ class GetterTest extends AbstractTest
                 new \ReflectionMethod($item, 'getPriority'),
                 new \ReflectionMethod($item, 'getMessage'),
                 new \ReflectionMethod($item, 'getRequest'),
-                new \ReflectionMethod($item, 'getResourceType'),
                 new \ReflectionMethod($item, 'getId'),
                 new \ReflectionMethod($item, 'getSiteId'),
                 new \ReflectionMethod($item, 'getTimeModified'),

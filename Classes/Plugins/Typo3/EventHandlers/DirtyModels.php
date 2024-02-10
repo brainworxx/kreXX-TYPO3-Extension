@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -74,7 +74,7 @@ class DirtyModels implements EventHandlerInterface
     /**
      * Running three very special debug methods, on TYPO3 models.
      *
-     * @param AbstractCallback $callback
+     * @param AbstractCallback|null $callback
      *   The calling class.
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      *   The model so far.
@@ -87,20 +87,21 @@ class DirtyModels implements EventHandlerInterface
         /** @var AbstractDomainObject $data */
         $data = $model->getData();
 
-        if ($data instanceof AbstractDomainObject === false) {
+        if (!($data instanceof AbstractDomainObject)) {
             // Early return. Wrong kind of object.
             return '';
         }
 
+        $msg = $this->pool->messages;
         try {
             try {
-                $model->addToJson('Is dirty', $this->createReadableBoolean($data->_isDirty()));
+                $model->addToJson($msg->getHelp('TYPO3ModelIsDirty'), $this->createReadableBoolean($data->_isDirty()));
             } catch (TooDirtyException $e) {
-                $model->addToJson('Is dirty', 'TRUE, even the UID was modified!');
+                $model->addToJson($msg->getHelp('TYPO3ModelIsDirty'), $msg->getHelp('TYPO3ModelIsTooDirty'));
             }
 
-            $model->addToJson('Is a clone', $this->createReadableBoolean($data->_isClone()));
-            $model->addToJson('Is a new', $this->createReadableBoolean($data->_isNew()));
+            $model->addToJson($msg->getHelp('TYPO3ModelIsAClone'), $this->createReadableBoolean($data->_isClone()));
+            $model->addToJson($msg->getHelp('TYPO3ModelIsNew'), $this->createReadableBoolean($data->_isNew()));
         } catch (Throwable $e) {
             // Do nothing.
             // Somebody has messed with the models.
@@ -120,10 +121,6 @@ class DirtyModels implements EventHandlerInterface
      */
     protected function createReadableBoolean(bool $bool): string
     {
-        if ($bool === true) {
-            return 'TRUE';
-        }
-
-        return 'FALSE';
+        return $bool ? 'TRUE' : 'FALSE';
     }
 }

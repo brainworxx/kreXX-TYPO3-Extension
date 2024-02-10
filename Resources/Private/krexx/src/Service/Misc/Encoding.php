@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Misc;
 
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -59,11 +60,20 @@ class Encoding
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
+        $this->registerPolyfill();
+        $pool->encodingService = $this;
+    }
 
-        // Register some namespaced cheap polyfills, in case the mb-string
-        // extension is not available
-        if (function_exists('mb_detect_encoding') === false) {
-
+    /**
+     * Register some namespaced cheap polyfills, in case the mb-string
+     * extension is not available
+     *
+     * @codeCoverageIgnore
+     *   We will not test a cheap polyfill.
+     */
+    protected function registerPolyfill(): void
+    {
+        if (!function_exists('mb_detect_encoding')) {
             /**
              * Cheap dummy "polyfill" for mb_detect_encoding
              *
@@ -74,13 +84,10 @@ class Encoding
              * @param bool $strict
              *   Will not get used.
              *
-             * @codeCoverageIgnore
-             *   We will not test a cheap polyfill
-             *
              * @return string
              *   Always 'polyfill'.
              */
-            function mb_detect_encoding($string = '', $encodingList = null, $strict = false)
+            function mb_detect_encoding($string = '', $encodingList = null, $strict = false): string
             {
                 return 'polyfill';
             }
@@ -93,13 +100,10 @@ class Encoding
              * @param $encoding
              *   Will not get used.
              *
-             * @codeCoverageIgnore
-             *   We will not test a cheap polyfill
-             *
              * @return int
              *   The length, according to strlen();
              */
-            function mb_strlen($string, $encoding = null)
+            function mb_strlen($string, $encoding = null): int
             {
                 return strlen($string);
             }
@@ -114,13 +118,10 @@ class Encoding
              * @param $length
              *   The length we want.
              *
-             * @codeCoverageIgnore
-             *   We will not test a cheap polyfill
-             *
              * @return string
              *   The substring, according to substr().
              */
-            function mb_substr($string, $start, $length)
+            function mb_substr($string, $start, $length): string
             {
                 return substr($string, $start, $length);
             }
@@ -136,21 +137,17 @@ class Encoding
              * @param string $fromEncoding
              *   Will not get used.
              *
-             * @codeCoverageIgnore
-             *   We will not test a cheap polyfill
-             *
              * @return string
              *   Always an empty string.
              */
-            function mb_convert_encoding($string, $toEncoding, $fromEncoding)
+            function mb_convert_encoding($string, $toEncoding, $fromEncoding): string
             {
                 return '';
             }
 
             // Tell the dev, that we have a problem.
-            $pool->messages->addMessage('mbstringNotInstalled');
+            $this->pool->messages->addMessage('mbstringNotInstalled');
         }
-        $pool->encodingService = $this;
     }
 
     /**
@@ -174,7 +171,7 @@ class Encoding
         }
 
         // Initialize the encoding configuration.
-        if ($code === true) {
+        if ($code) {
             // We are encoding @, because we need them for our chunks.
             // The { are needed in the marker of the skin.
             // We also replace tabs with two nbsp's.
@@ -184,16 +181,15 @@ class Encoding
             // The { are needed in the marker of the skin.
             $search = ['@', '{', '  '];
         }
-        $replace = ['&#64;', '&#123;', '&nbsp;&nbsp;'];
 
         // There are several places here, that may throw a warning.
         set_error_handler($this->pool->retrieveErrorCallback());
 
-        $result = str_replace($search, $replace, htmlentities($data, ENT_QUOTES));
+        $result = str_replace($search, ['&#64;', '&#123;', '&nbsp;&nbsp;'], htmlentities($data, ENT_QUOTES));
 
         // Check if encoding was successful.
         // 99.99% of the time, the encoding works.
-        if (empty($result) === true) {
+        if (empty($result)) {
             $result = $this->encodeCompletely($data, $code);
         }
 
@@ -210,7 +206,7 @@ class Encoding
      * Here we have another SPOF. When the string is large enough we will run
      * out of memory!
      * We will *NOT* return the unescaped string. So we must check if it is small
-     * enough for the unpack(). 100 kb should be safe enough.
+     * enough for the unpack() method. 100 kb should be safe enough.
      *
      * @param string $data
      *   The data which needs to be sanitized.
@@ -228,7 +224,7 @@ class Encoding
 
         $encoding = mb_detect_encoding($data, 'auto', true);
         $data = mb_convert_encoding($data, 'UTF-32', $encoding === false ? null : $encoding);
-        if (empty($data) === true) {
+        if (empty($data)) {
             // Unable to convert this string into something we can completely
             // encode. Fallback to an empty string.
             return '';
@@ -237,7 +233,7 @@ class Encoding
         return implode(
             "",
             array_map(
-                $code === true ? [$this, 'arrayMapCallbackCode'] : [$this, 'arrayMapCallbackNormal'],
+                $code ? [$this, 'arrayMapCallbackCode'] : [$this, 'arrayMapCallbackNormal'],
                 unpack("N*", $data)
             )
         );
@@ -257,7 +253,7 @@ class Encoding
      * @codeCoverageIgnore
      *   We will not test simple wrappers
      *
-     * @return string|false
+     * @return string|bool
      *   The result.
      */
     public function mbDetectEncoding(string $string, string $encodinglist = 'auto', bool $strict = true)
@@ -271,7 +267,7 @@ class Encoding
      *
      * @param string $string
      *   The string we want to analyse
-     * @param string $encoding
+     * @param string|null $encoding
      *   The known encoding of the string, if known.
      *
      * @return int
@@ -334,8 +330,8 @@ class Encoding
         }
 
         $result = str_replace(
-            ['&#039;', '\'', "\0", "\xEF", "\xBB", "\xBF"],
-            ["\&#039;", "\&#039;", '\' . "\0" . \'', '\' . "\xEF" . \'', '\' . "\xBB" . \'', '\' . "\xBF" . \''],
+            ['&#039;', "\0", "\xEF", "\xBB", "\xBF"],
+            ["\&#039;", '\' . "\0" . \'', '\' . "\xEF" . \'', '\' . "\xBB" . \'', '\' . "\xBF" . \''],
             $name
         );
 
@@ -382,6 +378,11 @@ class Encoding
      * AFAIK this is only possible for dynamically declared properties
      * or some magical stuff from __get()
      *
+     * @deprecated Since 5.0.2
+     *   Use ThroughProperties->isPropertyNameNormal() instead.
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @see https://stackoverflow.com/questions/29019484/validate-a-php-variable
      * @author AbraCadaver
      *
@@ -392,15 +393,7 @@ class Encoding
      */
     public function isPropertyNameNormal($propName): bool
     {
-        static $cache = [];
-
-        if (isset($cache[$propName])) {
-            return $cache[$propName];
-        }
-
-        // The first regex detects all allowed characters.
-        // For some reason, they also allow BOM characters.
-        return $cache[$propName] = (bool) preg_match("/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/", (string)$propName) &&
-            !(bool) preg_match("/\xEF\xBB\xBF/", $propName);
+        return $this->pool->createClass(ThroughProperties::class)
+            ->isPropertyNameNormal($propName);
     }
 }

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Krexx\Service\Reflection;
 
 use ReflectionProperty;
+use ReflectionClass;
 
 /**
  * The original \ReflectionProperty may throw an error when used with
@@ -88,14 +89,21 @@ class UndeclaredProperty extends ReflectionProperty
     protected $isPublic = true;
 
     /**
-     * ReflectionUndeclaredProperty constructor.
+     * Is this property protected? Probably not.
+     *
+     * @var bool
+     */
+    protected $isProtected = false;
+
+    /**
+     * Setting the necessary property's constructor.
      *
      * @param \ReflectionClass $ref
      *   The instance of the class with the property.
      * @param string|int $name
      *   The name of the property.
      */
-    public function __construct(\ReflectionClass $ref, $name)
+    public function __construct(ReflectionClass $ref, $name)
     {
         $this->declaringClass = $ref;
         $this->propertyName = $name;
@@ -118,7 +126,7 @@ class UndeclaredProperty extends ReflectionProperty
      * @return \ReflectionClass
      *   The refection.
      */
-    public function getDeclaringClass(): \ReflectionClass
+    public function getDeclaringClass(): ReflectionClass
     {
         return $this->declaringClass;
     }
@@ -153,7 +161,7 @@ class UndeclaredProperty extends ReflectionProperty
      */
     public function isProtected(): bool
     {
-        return false;
+        return $this->isProtected;
     }
 
     /**
@@ -202,5 +210,26 @@ class UndeclaredProperty extends ReflectionProperty
     public function __toString(): string
     {
         return '';
+    }
+
+    /**
+     * Undeclared properties are not typed.
+     *
+     * @return bool
+     */
+    public function hasType(): bool
+    {
+        return false;
+    }
+
+    /**
+     * Undeclared properties have no default value.
+     *
+     * @return null
+     */
+    #[\ReturnTypeWillChange]
+    public function getDefaultValue()
+    {
+        return null;
     }
 }

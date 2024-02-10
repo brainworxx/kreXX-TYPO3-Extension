@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,9 +36,9 @@
 namespace Brainworxx\Krexx\Tests\Unit\Service\Plugin;
 
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
-class AbstractRegistration extends AbstractTest
+class AbstractRegistration extends AbstractHelper
 {
     const PLUGINS = 'plugins';
     const CHUNK_FOLDER = 'chunkFolder';
@@ -52,15 +52,16 @@ class AbstractRegistration extends AbstractTest
     const ADD_SKIN_LIST = 'additionalSkinList';
     const ADD_SCALAR_STRING = 'additionalScalarString';
     const NEW_SETTINGS = 'newSettings';
+    const ADD_LANGUAGES = 'additionalLanguages';
 
     /**
      * @var Registration
      */
     protected $registration;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
         $this->registration = new Registration();
     }
 
@@ -69,9 +70,9 @@ class AbstractRegistration extends AbstractTest
      *
      * Also reset the static values in the plugin registration.
      */
-    protected function krexxDown()
+    protected function tearDown(): void
     {
-        parent::krexxDown();
+        parent::tearDown();
 
         // Reset everything.
         $this->setValueByReflection(static::PLUGINS, [], $this->registration);
@@ -86,5 +87,6 @@ class AbstractRegistration extends AbstractTest
         $this->setValueByReflection(static::ADD_SKIN_LIST, [], $this->registration);
         $this->setValueByReflection(static::ADD_SCALAR_STRING, [], $this->registration);
         $this->setValueByReflection(static::NEW_SETTINGS, [], $this->registration);
+        $this->setValueByReflection(static::ADD_LANGUAGES, [], $this->registration);
     }
 }

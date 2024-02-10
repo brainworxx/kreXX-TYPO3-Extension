@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,23 +35,23 @@
 
 namespace Brainworxx\Krexx\Tests\Unit\Logging;
 
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 
 /**
  * Test for the logger model.
  *
  * @package Brainworxx\Krexx\Tests\Unit\Logging
  */
-class ModelTest extends AbstractTest
+class ModelTest extends AbstractHelper
 {
     /**
      * @var \Brainworxx\Krexx\Logging\Model
      */
     protected $model;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->model = new \Brainworxx\Krexx\Logging\Model();
     }

@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,11 +35,11 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\Configuration;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Service\Config\Config;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
-class ConfigurationTest extends AbstractTest
+class ConfigurationTest extends AbstractHelper
 {
     /**
      * The the assigning of data to the view.
@@ -64,7 +64,7 @@ class ConfigurationTest extends AbstractTest
         // Point the ini reader to the fixture.
         $this->setValueByReflection(
             'directories',
-            [Config::CONFIG_FOLDER => __DIR__ . '/../../Fixtures/Config.ini'],
+            ['config' => __DIR__ . '/../../Fixtures/Config.'],
             \Krexx::$pool->config
         );
 
@@ -75,16 +75,16 @@ class ConfigurationTest extends AbstractTest
         $viewMock = $this->createMock(AbstractTemplateView::class);
         $viewMock->expects($this->exactly(2))
             ->method('assign')
-            ->withConsecutive(
+            ->with(...$this->withConsecutive(
                 [
                     'config',
                     $this->callback(function ($config) {
                         // @see config.ini in the fixtures.
-                        return $config[Config::SETTING_SKIN][Configuration::SETTINGS_VALUE] === 'hans' &&
-                            $config[Config::SETTING_SKIN][Configuration::SETTINGS_USE_FACTORY_SETTINGS] === false &&
-                            $config[Config::SETTING_IP_RANGE][Configuration::SETTINGS_VALUE] === 'testing . . .' &&
-                            $config[Config::SETTING_MAX_FILES][Configuration::SETTINGS_VALUE] === '1000' &&
-                            $config[Config::SETTING_MAX_FILES][Configuration::SETTINGS_USE_FACTORY_SETTINGS] === true;
+                        return $config[Config::SETTING_SKIN]['value'] === 'hans' &&
+                            $config[Config::SETTING_SKIN]['useFactorySettings'] === false &&
+                            $config[Config::SETTING_IP_RANGE]['value'] === 'testing . . .' &&
+                            $config[Config::SETTING_MAX_FILES]['value'] === '1000' &&
+                            $config[Config::SETTING_MAX_FILES]['useFactorySettings'] === true;
                     })
                 ],
                 [
@@ -97,7 +97,7 @@ class ConfigurationTest extends AbstractTest
                             && isset($dropdown['loglevel']);
                     })
                 ]
-            );
+            ));
         $configuration->assignData($viewMock);
     }
 }

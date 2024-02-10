@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -54,7 +54,6 @@ use ReflectionMethod;
  */
 class Getter extends AbstractObjectAnalysis
 {
-
     /**
      * List of the getter methods, that start with 'get'.
      *
@@ -91,7 +90,7 @@ class Getter extends AbstractObjectAnalysis
 
         // Get all public methods.
         $this->retrieveMethodList($ref);
-        if (empty($this->normalGetter + $this->isGetter + $this->hasGetter) === true) {
+        if (empty($this->normalGetter + $this->isGetter + $this->hasGetter)) {
             // There are no getter methods in here.
             return $output;
         }
@@ -100,7 +99,7 @@ class Getter extends AbstractObjectAnalysis
             $this->dispatchEventWithModel(
                 static::EVENT_MARKER_ANALYSES_END,
                 $this->pool->createClass(Model::class)
-                    ->setName('Getter')
+                    ->setName($this->pool->messages->getHelp('getter'))
                     ->setType(static::TYPE_INTERNALS)
                     ->setHelpid('getterHelpInfo')
                     ->addParameter(static::PARAM_REF, $ref)
@@ -119,14 +118,14 @@ class Getter extends AbstractObjectAnalysis
      * @param ReflectionMethod $method
      * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
      */
-    protected function populateGetterLists(ReflectionMethod $method, ReflectionClass $ref)
+    protected function populateGetterLists(ReflectionMethod $method, ReflectionClass $ref): void
     {
         // Check, if the method is really available, inside the analysis
         // context. An inherited private method can not be called inside the
         // $this context.
         if (
-            ($method->isPrivate() === true && $method->getDeclaringClass()->getName() !== $ref->getName()) ||
-            empty($method->getParameters()) === false
+            ($method->isPrivate() && $method->getDeclaringClass()->getName() !== $ref->getName()) ||
+            !empty($method->getParameters())
         ) {
             // We skip this one. Either it's an out-of-scope private getter,
             // or it has parameters.
@@ -148,12 +147,12 @@ class Getter extends AbstractObjectAnalysis
      * @param \Brainworxx\Krexx\Service\Reflection\ReflectionClass $ref
      *   The reflection of the class we are analysing.
      */
-    protected function retrieveMethodList(ReflectionClass $ref)
+    protected function retrieveMethodList(ReflectionClass $ref): void
     {
         // Get all public methods.
         $methodList = $ref->getMethods(ReflectionMethod::IS_PUBLIC);
 
-        if ($this->pool->scope->isInScope() === true) {
+        if ($this->pool->scope->isInScope()) {
             // Looks like we also need the protected and private methods.
             $methodList = array_merge(
                 $methodList,
@@ -166,7 +165,7 @@ class Getter extends AbstractObjectAnalysis
         }
 
         // Sort them.
-        usort($methodList, [$this, 'reflectionSorting']);
+        usort($methodList, [$this, static::REFLECTION_SORTING]);
 
         /** @var \ReflectionMethod $method */
         foreach ($methodList as $method) {

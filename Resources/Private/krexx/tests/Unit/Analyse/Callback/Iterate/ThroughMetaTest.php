@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,12 +40,12 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMetaReflections;
 use Brainworxx\Krexx\Analyse\Code\Codegen;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Reflection\ReflectionClass;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Brainworxx\Krexx\Tests\Helpers\RoutingNothing;
 
-class ThroughMetaTest extends AbstractTest
+class ThroughMetaTest extends AbstractHelper
 {
     const RENDER_EXPANDABLE_CHILD = 'renderExpandableChild';
 
@@ -74,9 +74,9 @@ class ThroughMetaTest extends AbstractTest
      */
     protected $renderNothing;
 
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->throughMeta = new ThroughMeta(Krexx::$pool);
         // Mock the redner class, to prevent further processing.
@@ -87,15 +87,31 @@ class ThroughMetaTest extends AbstractTest
     }
 
     /**
+     * Test the initializing of the workflow.
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::__construct
+     */
+    public function testConstruct()
+    {
+        $keysWithExtra = $this->retrieveValueByReflection('keysWithExtra', $this->throughMeta);
+        $stuffToProcess = $this->retrieveValueByReflection('stuffToProcess', $this->throughMeta);
+
+        // We simply assuethat there is some kind of workfow in there.
+        $this->assertNotEmpty($keysWithExtra);
+        $this->assertNotEmpty($stuffToProcess);
+    }
+
+    /**
      * Test with a comment string.
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeComment()
     {
         $this->handleNoneReflections(
-            $this->throughMeta::META_COMMENT,
+            'Comment',
             'Look at me, I\'m a comment!'
         );
     }
@@ -105,13 +121,14 @@ class ThroughMetaTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
-    public function testcallMeDecodedJson()
+    public function testCallMeDecodedJson()
     {
         $this->mockEventService([$this->startEvent, $this->throughMeta]);
         $fixture = [
             $this->throughMeta::PARAM_DATA => [
-                $this->throughMeta::META_DECODED_JSON => json_decode('{"Friday": "the 13\'th"}')
+                'Decoded json' => json_decode('{"Friday": "the 13\'th"}')
             ],
             $this->throughMeta::PARAM_CODE_GEN_TYPE => Codegen::CODEGEN_TYPE_JSON_DECODE
         ];
@@ -125,15 +142,41 @@ class ThroughMetaTest extends AbstractTest
     }
 
     /**
+     * Test with a decoded base64 string
+     *
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
+     */
+    public function testCallMeDecodedBase64()
+    {
+        $this->mockEventService([$this->startEvent, $this->throughMeta]);
+        $fixture = [
+            $this->throughMeta::PARAM_DATA => [
+                'Decoded base64' => base64_decode('Base64 strings are stupid.')
+            ],
+            $this->throughMeta::PARAM_CODE_GEN_TYPE => Codegen::CODEGEN_TYPE_BASE64_DECODE
+        ];
+
+        $routeNothing = new RoutingNothing(\Krexx::$pool);
+        Krexx::$pool->routing = $routeNothing;
+        $this->throughMeta->setParameters($fixture)->callMe();
+        $model = $routeNothing->model[0];
+        $this->assertCount(1, $routeNothing->model);
+        $this->assertEquals(Codegen::CODEGEN_TYPE_BASE64_DECODE, $model->getCodeGenType());
+    }
+
+    /**
      * Test with a declared-in string
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeDeclaredIn()
     {
         $this->handleNoneReflections(
-            $this->throughMeta::META_DECLARED_IN,
+            'Declared in',
             'Some file with a line number.'
         );
     }
@@ -146,6 +189,7 @@ class ThroughMetaTest extends AbstractTest
      *
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::callMe
      * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::handleNoneReflections
+     * @covers \Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMeta::prepareModel
      */
     public function testCallMeSource()
     {
@@ -155,7 +199,7 @@ class ThroughMetaTest extends AbstractTest
         $source .= 'die();';
 
         $this->handleNoneReflections(
-            $this->throughMeta::META_SOURCE,
+            'Source',
             $source
         );
     }
@@ -200,7 +244,7 @@ class ThroughMetaTest extends AbstractTest
      */
     public function testCallMeInterfaces()
     {
-        $this->handleReflections($this->throughMeta::META_INTERFACES);
+        $this->handleReflections('Interfaces');
     }
 
     /**
@@ -212,7 +256,7 @@ class ThroughMetaTest extends AbstractTest
      */
     public function testCallMeTraits()
     {
-        $this->handleReflections($this->throughMeta::META_TRAITS);
+        $this->handleReflections('Traits');
     }
 
     /**
@@ -222,7 +266,7 @@ class ThroughMetaTest extends AbstractTest
      */
     public function testCallMeInherited()
     {
-        $this->handleReflections($this->throughMeta::META_INHERITED_CLASS);
+        $this->handleReflections('Inherited class');
     }
 
     /**

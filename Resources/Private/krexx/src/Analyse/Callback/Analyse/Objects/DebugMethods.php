@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -61,7 +61,6 @@ class DebugMethods extends AbstractObjectAnalysis implements
     ConnectorsConstInterface,
     ConfigConstInterface
 {
-
     /**
      * Calls all configured debug methods in die class.
      *
@@ -75,14 +74,15 @@ class DebugMethods extends AbstractObjectAnalysis implements
      */
     public function callMe(): string
     {
+        $output = $this->dispatchStartEvent();
+
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflectionClass */
         $reflectionClass = $this->parameters[static::PARAM_REF];
         $data = $reflectionClass->getData();
-        $output = $this->dispatchStartEvent();
 
         foreach (explode(',', $this->pool->config->getSetting(static::SETTING_DEBUG_METHODS)) as $funcName) {
             if (
-                $this->checkIfAccessible($data, $funcName, $reflectionClass) === true &&
+                $this->checkIfAccessible($data, $funcName, $reflectionClass) &&
                 // We ignore NULL values.
                 ($result = $this->retrieveValue($data, $funcName)) !== null
             ) {
@@ -115,7 +115,7 @@ class DebugMethods extends AbstractObjectAnalysis implements
      * @return mixed
      *   Whatever the method would return.
      */
-    protected function retrieveValue($object, string $methodName)
+    protected function retrieveValue(object $object, string $methodName)
     {
         $result = null;
         // Add a try to prevent the hosting CMS from doing something stupid.
@@ -152,30 +152,20 @@ class DebugMethods extends AbstractObjectAnalysis implements
         // 2. Method can be called. There may be a magical method, though.
         // 3. It's not blacklisted.
         if (
-            method_exists($data, $funcName) === false ||
-            is_callable([$data, $funcName]) === false ||
-            $this->pool->config->validation->isAllowedDebugCall($data, $funcName) === false
+            !method_exists($data, $funcName) ||
+            !is_callable([$data, $funcName]) ||
+            !$this->pool->config->validation->isAllowedDebugCall($data, $funcName)
         ) {
             return false;
         }
 
         // We need to check if the callable function requires any parameters.
         // We will not call those, because we simply can not provide them.
-        $result = true;
         try {
             $ref = $reflectionClass->getMethod($funcName);
-            foreach ($ref->getParameters() as $param) {
-                if ($param->isOptional() === false) {
-                    // We've got a required parameter!
-                    // We will not call this one.
-                    $result = false;
-                    break;
-                }
-            }
+            return $ref->getNumberOfRequiredParameters() === 0;
         } catch (ReflectionException $e) {
-            $result = false;
+            return false;
         }
-
-        return $result;
     }
 }

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,7 +40,6 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\ConstInterface as FluidConstInterface;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
@@ -91,7 +90,7 @@ class VhsMethods implements EventHandlerInterface, CallbackConstInterface, Fluid
         }
 
         // Switch to VHS Viewhelper
-        $model->setCodeGenType(Codegen::VHS_CALL_VIEWHELPER)
+        $model->setCodeGenType(static::VHS_CALL_VIEWHELPER)
             ->addParameter(static::PARAM_ARRAY, $paramArray);
 
         return '';

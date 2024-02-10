@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -44,7 +44,6 @@ use Brainworxx\Krexx\Analyse\Scalar\ScalarString;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Misc\FileinfoDummy;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use finfo;
 
 /**
@@ -52,7 +51,6 @@ use finfo;
  */
 class ProcessString extends AbstractRouting implements
     ProcessInterface,
-    ViewConstInterface,
     ProcessConstInterface,
     CallbackConstInterface,
     ConfigConstInterface
@@ -79,6 +77,13 @@ class ProcessString extends AbstractRouting implements
     protected $bufferInfoThreshold = 20;
 
     /**
+     * Caching og the setting SETTING_ANALYSE_SCALAR
+     *
+     * @var bool
+     */
+    protected $analyseScalar;
+
+    /**
      * Inject the pool and initialize the buffer-info class.
      *
      * @param \Brainworxx\Krexx\Service\Factory\Pool $pool
@@ -88,7 +93,7 @@ class ProcessString extends AbstractRouting implements
         parent::__construct($pool);
 
         // Init the fileinfo class.
-        if (class_exists(finfo::class, false) === true) {
+        if (class_exists(finfo::class, false)) {
             $this->bufferInfo = new finfo(FILEINFO_MIME);
         } else {
             // Use a "polyfill" dummy, tell the dev that we have a problem.
@@ -96,7 +101,10 @@ class ProcessString extends AbstractRouting implements
             $pool->messages->addMessage('fileinfoNotInstalled');
         }
 
-        $this->scalarString = $pool->createClass(ScalarString::class);
+        $this->analyseScalar = $this->pool->config->getSetting(static::SETTING_ANALYSE_SCALAR);
+        if ($this->analyseScalar) {
+            $this->scalarString = $pool->createClass(ScalarString::class);
+        }
     }
 
     /**
@@ -145,7 +153,7 @@ class ProcessString extends AbstractRouting implements
             $model->setNormal($this->pool->encodingService->encodeString($data));
         }
 
-        if ($this->pool->config->getSetting(static::SETTING_ANALYSE_SCALAR) === true) {
+        if ($this->analyseScalar) {
             return $this->handleStringScalar($model, $originalData);
         }
 
@@ -167,7 +175,7 @@ class ProcessString extends AbstractRouting implements
     {
         $this->scalarString->handle($model, $originalData);
         $domId = $model->getDomid();
-        if ($domId !== '' && $this->pool->recursionHandler->isInMetaHive($domId) === true) {
+        if ($domId !== '' && $this->pool->recursionHandler->isInMetaHive($domId)) {
             return $this->pool->render->renderRecursion($model);
         }
 
@@ -189,6 +197,8 @@ class ProcessString extends AbstractRouting implements
     protected function retrieveLengthAndEncoding(string $data, Model $model): int
     {
         $encoding = $this->pool->encodingService->mbDetectEncoding($data);
+        $messages = $this->pool->messages;
+
         if ($encoding === false) {
             // Looks like we have a mixed encoded string.
             $length = $this->pool->encodingService->mbStrLen($data);
@@ -200,16 +210,16 @@ class ProcessString extends AbstractRouting implements
         // Long string or with broken encoding.
         if ($length > $this->bufferInfoThreshold) {
             // Let's see, what the buffer-info can do with it.
-            $model->addToJson(static::META_MIME_TYPE_STRING, $this->bufferInfo->buffer($data));
+            $model->addToJson($messages->getHelp('metaMimeTypeString'), $this->bufferInfo->buffer($data));
         } elseif ($encoding === false) {
             // Short string with broken encoding.
-            $model->addToJson(static::META_ENCODING, 'broken');
+            $model->addToJson($messages->getHelp('metaEncoding'), 'broken');
         } else {
             // Short string with normal encoding.
-            $model->addToJson(static::META_ENCODING, $encoding);
+            $model->addToJson($messages->getHelp('metaEncoding'), $encoding);
         }
 
-        $model->setType(static::TYPE_STRING . $length)->addToJson(static::META_LENGTH, (string)$length);
+        $model->setType(static::TYPE_STRING)->addToJson($messages->getHelp('metaLength'), (string)$length);
 
         return $length;
     }

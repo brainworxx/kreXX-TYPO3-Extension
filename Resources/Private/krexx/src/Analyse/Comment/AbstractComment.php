@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -78,7 +78,7 @@ abstract class AbstractComment
      *
      * @param \Reflector $reflection
      *   An already existing reflection of the method or function.
-     * @param \ReflectionClass $reflectionClass
+     * @param \ReflectionClass|null $reflectionClass
      *   An already existing reflection of the original class.
      *
      * @return string

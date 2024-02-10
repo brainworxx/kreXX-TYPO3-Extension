@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -128,9 +128,25 @@ class Model implements ConfigConstInterface
     /**
      * Getter for the editable value.
      *
+     * @deprecated
+     *   Since 5.0.0. Use isEditable() instead.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @return bool
      */
     public function getEditable(): bool
+    {
+        return $this->isEditable();
+    }
+
+    /**
+     * Getter for the editable value.
+     *
+     * @return bool
+     */
+    public function isEditable(): bool
     {
         return $this->editable;
     }

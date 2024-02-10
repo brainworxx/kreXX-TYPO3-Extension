@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -35,12 +35,11 @@
 namespace Brainworxx\Includekrexx\Tests\Unit\Collectors;
 
 use Brainworxx\Includekrexx\Collectors\LogfileList;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
-use Brainworxx\Krexx\Service\Config\Config;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 
-class LogfileListTest extends AbstractTest
+class LogfileListTest extends AbstractHelper
 {
     /**
      * Test the retrieval of logfile infos.
@@ -76,7 +75,7 @@ class LogfileListTest extends AbstractTest
         // We are not simulating these by function mocks.
         $this->setValueByReflection(
             'directories',
-            [Config::LOG_FOLDER => __DIR__ . '/../../Fixtures/'],
+            ['log' => __DIR__ . '/../../Fixtures/'],
             \Krexx::$pool->config
         );
 

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -52,23 +52,6 @@ trait HasExtra
      * @var bool
      */
     protected $hasExtra = false;
-
-    /**
-     * Getter for the hasExtra property.
-     *
-     * @deprecated
-     *   Since 4.0.0. Use $this->hasExtra() instead.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return bool
-     *   Info for the render class, if we need to render the extras part.
-     */
-    public function getHasExtra(): bool
-    {
-        return $this->hasExtra();
-    }
 
     /**
      * Getter for the hasExtra property.

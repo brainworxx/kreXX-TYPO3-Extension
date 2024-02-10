@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -43,9 +43,9 @@ use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Comment\Methods;
 use Brainworxx\Krexx\Analyse\Comment\ReturnType;
+use Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -54,22 +54,25 @@ use ReflectionMethod;
  *
  * @uses array data
  *   Array of reflection methods.
- * @uses \reflectionClass ref
+ * @uses \ReflectionClass ref
  *   Reflection of the class we are analysing.
  */
 class ThroughMethods extends AbstractCallback implements
     CallbackConstInterface,
-    ViewConstInterface,
     CodegenConstInterface,
     ConnectorsConstInterface
 {
-
     /**
      * Analysis class for method comments.
      *
      * @var \Brainworxx\Krexx\Analyse\Comment\Methods
      */
     protected $commentAnalysis;
+
+    /**
+     * @var \Brainworxx\Krexx\Analyse\Declaration\MethodDeclaration
+     */
+    protected $methodDeclaration;
 
     /**
      * Inject the pool and get the comment analysis online.
@@ -81,6 +84,7 @@ class ThroughMethods extends AbstractCallback implements
         parent::__construct($pool);
 
         $this->commentAnalysis = $this->pool->createClass(Methods::class);
+        $this->methodDeclaration = $this->pool->createClass(MethodDeclaration::class);
     }
 
     /**
@@ -99,11 +103,11 @@ class ThroughMethods extends AbstractCallback implements
         /** @var \ReflectionMethod $refMethod */
         foreach ($this->parameters[static::PARAM_DATA] as $refMethod) {
             $declaringClass = $refMethod->getDeclaringClass();
-            $methodData = $this->retrieveMethodData($refMethod, $refClass, $declaringClass);
+            $methodData = $this->retrieveMethodData($refMethod, $refClass);
 
             // Update the reflection method, so an event subscriber can do
             // something with it.
-            $this->parameters[static::PARAM_REFLECTION_METHOD] = $this->parameters[static::PARAM_REF_METHOD] = $refMethod;
+            $this->parameters[static::PARAM_REFLECTION_METHOD] = $refMethod;
 
             // Render it!
             $result .= $this->pool->render->renderExpandableChild($this->dispatchEventWithModel(
@@ -117,7 +121,7 @@ class ThroughMethods extends AbstractCallback implements
                     )->setConnectorType($this->retrieveConnectorType($refMethod))
                     ->addParameter(static::PARAM_DATA, $methodData)
                     ->setCodeGenType($refMethod->isPublic() ? static::CODEGEN_TYPE_PUBLIC : '')
-                    ->setReturnType($methodData[static::META_RETURN_TYPE])
+                    ->setReturnType($methodData[$this->pool->messages->getHelp('metaReturnType')])
                     ->injectCallback($this->pool->createClass(ThroughMeta::class))
             ));
         }
@@ -132,31 +136,31 @@ class ThroughMethods extends AbstractCallback implements
      *   Reflection of the method that we are analysing.
      * @param \ReflectionClass $refClass
      *   Reflection of the class that we are analysing right now.
-     * @param \ReflectionClass $declaringClass
-     *   Reflection of the class, where the method is hosted.
-     *   This may or may not be the same class as the one that we are analysing.
      *
      * @return array
      *   The collected method data.
      */
     protected function retrieveMethodData(
         ReflectionMethod $refMethod,
-        ReflectionClass $refClass,
-        ReflectionClass $declaringClass
+        ReflectionClass $refClass
     ): array {
         $methodData = [];
+        $messages = $this->pool->messages;
+
         // Get the comment from the class, it's parents, interfaces or traits.
         $methodComment = $this->commentAnalysis->getComment($refMethod, $refClass);
-        if (empty($methodComment) === false) {
-            $methodData[static::META_COMMENT] = $methodComment;
+        if (!empty($methodComment)) {
+            $methodData[$messages->getHelp('metaComment')] = $methodComment;
         }
 
         // Get declaration place.
-        $methodData[static::META_DECLARED_IN] = $this->getDeclarationPlace($refMethod, $declaringClass);
+        $methodData[$messages->getHelp('metaDeclaredIn')] = $this->methodDeclaration
+            ->retrieveDeclaration($refMethod);
 
         // Get the return type.
-        $methodData[static::META_RETURN_TYPE] = $this->pool->createClass(ReturnType::class)
-            ->getComment($refMethod, $refClass);
+        /** @var ReturnType $returnType */
+        $returnType = $this->pool->createClass(ReturnType::class);
+        $methodData[$messages->getHelp('metaReturnType')] = $returnType->getComment($refMethod, $refClass);
 
         return $methodData;
     }
@@ -172,11 +176,7 @@ class ThroughMethods extends AbstractCallback implements
      */
     protected function retrieveConnectorType(ReflectionMethod $reflectionMethod): string
     {
-        if ($reflectionMethod->isStatic() === true) {
-            return static::CONNECTOR_STATIC_METHOD;
-        }
-
-        return static::CONNECTOR_METHOD;
+        return $reflectionMethod->isStatic() ? static::CONNECTOR_STATIC_METHOD : static::CONNECTOR_METHOD;
     }
 
     /**
@@ -195,7 +195,7 @@ class ThroughMethods extends AbstractCallback implements
         $paramList = '';
         foreach ($reflectionMethod->getParameters() as $key => $reflectionParameter) {
             ++$key;
-            $paramList .= $methodData[static::META_PARAM_NO . $key] = $this->pool
+            $paramList .= $methodData[$this->pool->messages->getHelp('metaParamNo') . $key] = $this->pool
                 ->codegenHandler
                 ->parameterToString($reflectionParameter);
             // We add a comma to the parameter list, to separate them for a
@@ -214,68 +214,17 @@ class ThroughMethods extends AbstractCallback implements
      * @param \ReflectionClass $declaringClass
      *   Reflection of the class we are analysing
      *
+     * @deprecated since 5.0.0
+     *   Will be removed. Use the MethodDeclaration instead.
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @return string
      *   The analysis result.
      */
     protected function getDeclarationPlace(ReflectionMethod $reflectionMethod, ReflectionClass $declaringClass): string
     {
-        if ($declaringClass->isInternal() === true) {
-            return static::META_PREDECLARED;
-        }
-
-        $filename = $this->pool->fileService->filterFilePath((string)$reflectionMethod->getFileName());
-        if (empty($filename) === true) {
-            // Not sure, if this is possible.
-            return $this->pool->messages->getHelp(static::UNKNOWN_DECLARATION);
-        }
-
-        // If the filename of the $declaringClass and the $reflectionMethod differ,
-        // we are facing a trait here.
-        $secondLine = static::META_IN_CLASS . $reflectionMethod->class . "\n";
-        if ($reflectionMethod->getFileName() !== $declaringClass->getFileName()) {
-            // There is no real clean way to get the name of the trait that we
-            // are looking at.
-            $traitName = ':: unable to get the trait name ::';
-            $trait = $this->retrieveDeclaringReflection($reflectionMethod, $declaringClass);
-            if ($trait !== false) {
-                $traitName = $trait->getName();
-            }
-
-            $secondLine = static::META_IN_TRAIT . $traitName . "\n";
-        }
-
-        return $filename . "\n" . $secondLine . static::META_IN_LINE . $reflectionMethod->getStartLine();
-    }
-
-    /**
-     * Retrieve the declaration class reflection from traits.
-     *
-     * @param \ReflectionMethod $reflectionMethod
-     *   The reflection of the method we are analysing.
-     * @param \ReflectionClass $declaringClass
-     *   The original declaring class, the one with the traits.
-     *
-     * @return bool|\ReflectionClass
-     *   false = unable to retrieve something.
-     *   Otherwise, return a reflection class.
-     */
-    protected function retrieveDeclaringReflection(ReflectionMethod $reflectionMethod, ReflectionClass $declaringClass)
-    {
-        // Get a first impression.
-        if ($reflectionMethod->getFileName() === $declaringClass->getFileName()) {
-            return $declaringClass;
-        }
-
-        // Go through the first layer of traits.
-        // No need to recheck the availability for traits. This is done above.
-        foreach ($declaringClass->getTraits() as $trait) {
-            $result = $this->retrieveDeclaringReflection($reflectionMethod, $trait);
-            if ($result !== false) {
-                return $result;
-            }
-        }
-
-        return false;
+        return $this->methodDeclaration->retrieveDeclaration($reflectionMethod);
     }
 
     /**
@@ -296,26 +245,20 @@ class ThroughMethods extends AbstractCallback implements
         ReflectionClass $declaringClass,
         ReflectionClass $reflectionClass
     ): string {
-        if ($reflectionMethod->isPublic() === true) {
-            $result = ' public';
-        } elseif ($reflectionMethod->isProtected() === true) {
-            $result = ' protected';
+        $messages = $this->pool->messages;
+        if ($reflectionMethod->isPublic()) {
+            $result = $messages->getHelp('public');
+        } elseif ($reflectionMethod->isProtected()) {
+            $result = $messages->getHelp('protected');
         } else {
-            $result = ' private';
+            $result = $messages->getHelp('private');
         }
 
-        if ($declaringClass->getName() !== $reflectionClass->getName()) {
-            $result .= ' inherited';
-        }
+        $result .= $declaringClass->getName() === $reflectionClass->getName() ? '' :
+            ' ' . $messages->getHelp('inherited');
+        $result .= $reflectionMethod->isStatic() ? ' ' . $messages->getHelp('static') : '';
+        $result .= $reflectionMethod->isFinal() ? ' ' . $messages->getHelp('final') : '';
 
-        if ($reflectionMethod->isStatic() === true) {
-            $result .= ' static';
-        }
-
-        if ($reflectionMethod->isFinal() === true) {
-            $result .= ' final';
-        }
-
-        return ltrim($result);
+        return $result;
     }
 }

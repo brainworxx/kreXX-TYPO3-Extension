@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -71,12 +71,11 @@ trait Help
         $data = $model->getJson();
 
         // Test if we have anything to display at all.
-        if (empty($data) === true) {
+        if (empty($data)) {
             return '';
         }
 
         // We have at least something to display here.
-        $helpRow = $this->getTemplateFileContent(static::FILE_HELPROW);
         $helpContent = '';
 
         // Add the stuff from the json after the help text, if any.
@@ -84,12 +83,12 @@ trait Help
             $helpContent .= str_replace(
                 $this->markerHelpRow,
                 [$title, $text],
-                $helpRow
+                $this->fileCache[static::FILE_HELPROW]
             );
         }
 
         // Add it into the wrapper.
-        return str_replace($this->markerHelp, $helpContent, $this->getTemplateFileContent(static::FILE_HELP));
+        return str_replace($this->markerHelp, $helpContent, $this->fileCache[static::FILE_HELP]);
     }
 
     /**

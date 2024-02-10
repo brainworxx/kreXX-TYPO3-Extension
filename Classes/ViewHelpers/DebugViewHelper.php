@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,19 +41,11 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use ReflectionClass;
 
 /**
  * Our fluid wrapper for kreXX.
- *
- * @namespace
- *   When using TYPO3 6.2 until 8.4, you need to declare the namespace first:
- *   {namespace krexx=Brainworxx\Includekrexx\ViewHelpers}
- *   or
- *   <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
- *         xmlns:krexx="http://typo3.org/ns/Brainworxx/Includekrexx/ViewHelpers"
- *         data-namespace-typo3-fluid="true">
- *   TYPO3 8.5 and beyond don't need to do that anymore  ;-)
  *
  * @usage
  *   <krexx:debug>{_all}</krexx:debug>
@@ -62,12 +54,27 @@ use ReflectionClass;
  *   Use this part if you don't want fluid to escape your string or if you are
  *   stitching together an array.
  */
-class DebugViewHelper extends ComptibilityViewHelper
+class DebugViewHelper extends AbstractViewHelper
 {
     /**
      * @var string
      */
-    const ARGUMENT_VALUE = 'value';
+    protected const ARGUMENT_VALUE = 'value';
+
+    /**
+     * @var string
+     */
+    public const REGISTRY_VIEW = 'view';
+
+    /**
+     * @var string
+     */
+    public const REGISTRY_VIEW_REFLECTION = 'viewReflection';
+
+    /**
+     * @var string
+     */
+    public const REGISTRY_RENDERING_CONTEXT = 'renderingContext';
 
     /**
      * No escaping for the rendered children, we want then as they are.
@@ -92,12 +99,10 @@ class DebugViewHelper extends ComptibilityViewHelper
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \TYPO3\CMS\Fluid\Core\ViewHelper\Exception
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
-        $this->registerArgument(static::ARGUMENT_VALUE, 'mixed', 'The variable we want to analyse.', false);
+        $this->registerArgument(static::ARGUMENT_VALUE, 'mixed', 'The variable we want to analyse.');
     }
 
     /**
@@ -113,9 +118,9 @@ class DebugViewHelper extends ComptibilityViewHelper
         Pool::createPool();
         $view = $this->viewHelperVariableContainer->getView();
         $pool = Krexx::$pool;
-        $pool->registry->set('view', $view);
-        $pool->registry->set('viewReflection', new ReflectionClass($view));
-        $pool->registry->set('renderingContext', $this->renderingContext);
+        $pool->registry->set(static::REGISTRY_VIEW, $view);
+        $pool->registry->set(static::REGISTRY_VIEW_REFLECTION, new ReflectionClass($view));
+        $pool->registry->set(static::REGISTRY_RENDERING_CONTEXT, $this->renderingContext);
         Registration::activatePlugin(
             FluidConfiguration::class
         );
@@ -125,9 +130,9 @@ class DebugViewHelper extends ComptibilityViewHelper
         Registration::deactivatePlugin(
             FluidConfiguration::class
         );
-        $pool->registry->set('view', null);
-        $pool->registry->set('viewReflection', null);
-        $pool->registry->set('renderingContext', null);
+        $pool->registry->set(static::REGISTRY_VIEW, null);
+        $pool->registry->set(static::REGISTRY_VIEW_REFLECTION, null);
+        $pool->registry->set(static::REGISTRY_RENDERING_CONTEXT, null);
 
         return '';
     }
@@ -135,7 +140,7 @@ class DebugViewHelper extends ComptibilityViewHelper
     /**
      * Analyse the stuff from the template.
      */
-    protected function analysis()
+    protected function analysis(): void
     {
         $type = $this->analysisType;
         $found  = false;

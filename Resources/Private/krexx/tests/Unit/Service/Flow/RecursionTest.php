@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,11 +37,11 @@ namespace Brainworxx\Krexx\Tests\Unit\Service\Flow;
 
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Flow\Recursion;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use SplObjectStorage;
 use StdClass;
 
-class RecursionTest extends AbstractTest
+class RecursionTest extends AbstractHelper
 {
 
     const RECURSION_HIVE = 'recursionHive';
@@ -53,9 +53,9 @@ class RecursionTest extends AbstractTest
     /**
      * Create a new recursion handler
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         $this->recursion = new Recursion(Krexx::$pool);
     }

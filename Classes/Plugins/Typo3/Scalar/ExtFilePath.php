@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\Typo3\Scalar;
 
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Scalar\FilePath;
+use Brainworxx\Krexx\Analyse\Scalar\String\FilePath;
 use Brainworxx\Krexx\Analyse\Model;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Throwable;
@@ -63,9 +63,7 @@ class ExtFilePath extends FilePath
         }
 
         // Retrieve the EXT path from the framework.
-        set_error_handler(function () {
-            // Do nothing.
-        });
+        set_error_handler($this->pool->retrieveErrorCallback());
         try {
             $string = GeneralUtility::getFileAbsFileName($string);
         } catch (Throwable $e) {
@@ -73,6 +71,7 @@ class ExtFilePath extends FilePath
             restore_error_handler();
             return false;
         }
+
         restore_error_handler();
 
         if (empty($string)) {
@@ -80,10 +79,13 @@ class ExtFilePath extends FilePath
         }
 
         // Preserve the result from the getFileAbsFileName.
-        $model->addToJson(
-            'Resolved EXT path',
-            $this->pool->fileService->filterFilePath($string)
-        );
+        $messages = $this->pool->messages;
+        $model->addToJson($messages->getHelp('TYPO3ResPath'), $this->pool->fileService->filterFilePath($string));
+
+        if (!file_exists($string)) {
+            $model->addToJson($messages->getHelp('TYPO3ResPathError'), $messages->getHelp('TYPO3ResPathDoesNotExist'));
+        }
+
         return parent::canHandle($string, $model);
     }
 }

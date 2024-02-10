@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -62,12 +62,12 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
     /**
      * @var string
      */
-    const KREXX_LOG_WRITER = 'kreXX log writer';
+    protected const KREXX_LOG_WRITER = 'kreXX log writer';
 
     /**
      * @var string
      */
-    const EXCEPTION = 'exception';
+    protected const EXCEPTION = 'exception';
 
     /**
      * Overwrites for the configuration.
@@ -112,7 +112,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
             ->dumpAction(
                 $logModel,
                 Krexx::$pool->encodingService->encodeString($logModel->getMessage()),
-                $this->retrieveLogLevel($record)
+                $record->getLevel()
             );
 
         AbstractController::$analysisInProgress = false;
@@ -137,7 +137,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
         unset($backtrace[0]);
         $step = 1;
         while (
-            isset($backtrace[$step + 1][static::TRACE_OBJECT]) === true
+            isset($backtrace[$step + 1][static::TRACE_OBJECT])
             && $backtrace[$step + 1][static::TRACE_OBJECT] instanceof Logger
         ) {
             // Remove the backtrace steps, until we leave the logger.
@@ -157,7 +157,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
      */
     protected function isDisabled(): bool
     {
-        $get = GeneralUtility::getIndpEnv('REQUEST_URI');
+        $get = (string)GeneralUtility::getIndpEnv('REQUEST_URI');
 
         if (
             strpos($get, '/ajax/refreshLoglist') !== false
@@ -207,8 +207,8 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
     {
         // We have to extract it from the backtrace.
         if (
-            isset($backtrace[0][static::TRACE_ARGS][1][static::EXCEPTION]) === false ||
-            $backtrace[0][static::TRACE_ARGS][1][static::EXCEPTION] instanceof Throwable === false
+            !isset($backtrace[0][static::TRACE_ARGS][1][static::EXCEPTION]) ||
+            !($backtrace[0][static::TRACE_ARGS][1][static::EXCEPTION] instanceof Throwable)
         ) {
             // Fallback to the normal handling.
             return $this->prepareLogModelNormal($backtrace, $record);
@@ -235,11 +235,11 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
             ->setCode($record->getComponent())
             ->setMessage($message);
 
-        if (isset($realBacktrace[0][static::TRACE_FILE]) === true) {
+        if (isset($realBacktrace[0][static::TRACE_FILE])) {
             $logModel->setFile((string)$realBacktrace[0][static::TRACE_FILE]);
         }
 
-        if (isset($realBacktrace[0][static::TRACE_LINE]) === true) {
+        if (isset($realBacktrace[0][static::TRACE_LINE])) {
             $logModel->setLine((int)$realBacktrace[0][static::TRACE_LINE]);
         }
 
@@ -265,10 +265,10 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
             ->setCode($record->getComponent())
             ->setMessage($record->getMessage());
 
-        if (isset($backtrace[0][static::TRACE_FILE]) === true) {
+        if (isset($backtrace[0][static::TRACE_FILE])) {
             $logModel->setFile((string)$backtrace[0][static::TRACE_FILE]);
         }
-        if (isset($backtrace[0][static::TRACE_LINE]) === true) {
+        if (isset($backtrace[0][static::TRACE_LINE])) {
             $logModel->setLine((int)$backtrace[0][static::TRACE_LINE]);
         }
 
@@ -284,6 +284,12 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
      *
      * @return string
      *   The readable string.
+     *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      */
     protected function retrieveLogLevel(LogRecord $record): string
     {
@@ -298,7 +304,7 @@ class FileWriter implements WriterInterface, ConfigConstInterface, BacktraceCons
     /**
      * Iterate through the configuration and overwrite the settings.
      */
-    protected function applyTheConfiguration()
+    protected function applyTheConfiguration(): void
     {
         // Early return. Do nothing.
         if (empty($this->localConfig)) {

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -37,7 +37,6 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Controller;
 
-use Brainworxx\Includekrexx\Bootstrap\Bootstrap;
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
@@ -52,53 +51,40 @@ use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use stdClass;
 
 /**
- * Class Tx_Includekrexx_Controller_IndexController
- *
- * This is not a real controller. It hosts all those ugly workarounds to keep
- * this extension compatible back to 4.5. This  makes the other controllers
- * (hopefully) more readable.
+ * Hosting all those ugly workarounds to keep this extension compatible back to
+ * 10.4. This  makes the other controllers (hopefully) more readable.
  */
-abstract class AbstractController extends ActionController implements ConstInterface
+abstract class AbstractController extends ActionController implements ConstInterface, ControllerConstInterface
 {
     use LanguageTrait;
 
     /**
      * @var string
      */
-    const MODULE_KEY = 'IncludekrexxKrexxConfiguration';
+    protected const SAVE_FAIL_TITLE = 'save.fail.title';
 
     /**
      * @var string
      */
-    const ACCESS_DENIED = 'accessDenied';
+    protected const SAVE_SUCCESS_TEXT = 'save.success.text';
 
     /**
      * @var string
      */
-    const SAVE_FAIL_TITLE = 'save.fail.title';
+    protected const SAVE_SUCCESS_TITLE = 'save.success.title';
 
     /**
      * @var string
      */
-    const SAVE_SUCCESS_TEXT = 'save.success.text';
-
-    /**
-     * @var string
-     */
-    const SAVE_SUCCESS_TITLE = 'save.success.title';
-
-    /**
-     * @var string
-     */
-    const FILE_NOT_WRITABLE = 'file.not.writable';
-
+    protected const FILE_NOT_WRITABLE = 'file.not.writable';
 
     /**
      * The kreXX framework.
@@ -153,24 +139,18 @@ abstract class AbstractController extends ActionController implements ConstInter
     protected $flashMessageOk = AbstractMessage::OK;
 
     /**
-     * Inject the page renderer.
-     *
-     * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer
-     */
-    public function injectPageRenderer(PageRenderer $pageRenderer)
-    {
-        $this->pageRenderer = $pageRenderer;
-    }
-
-    /**
      * Set the pool and do the parent constructor.
      */
-    public function __construct()
-    {
-        if (version_compare(Bootstrap::getTypo3Version(), '10.0.0', '<')) {
-            // The constructor was removed with 10.0.0.
-            parent::__construct();
-        }
+    public function __construct(
+        Configuration $configuration,
+        FormConfiguration $formConfiguration,
+        Settings $settings,
+        PageRenderer $pageRenderer
+    ) {
+        $this->configuration = $configuration;
+        $this->formConfiguration = $formConfiguration;
+        $this->settingsModel = $settings;
+        $this->pageRenderer = $pageRenderer;
 
         Pool::createPool();
         $this->pool = Krexx::$pool;
@@ -200,65 +180,35 @@ abstract class AbstractController extends ActionController implements ConstInter
     }
 
     /**
+     * Inject the private LivePreset.
+     *
+     * @param \TYPO3\CMS\Install\Configuration\Context\LivePreset $livePreset
+     */
+    public function injectLivePreset(LivePreset $livePreset): void
+    {
+        $this->livePreset = $livePreset;
+    }
+
+    /**
      * We check if we are running with a productive preset. If we do, we
      * will display a warning.
      */
-    protected function checkProductiveSetting()
+    protected function checkProductiveSetting(): void
     {
         if ($this->livePreset->isActive()) {
             //Display a warning, if we are in Productive / Live settings.
             $this->addFlashMessage(
-                static::translate('debugpreset.warning.message', static::EXT_KEY),
-                static::translate('debugpreset.warning.title', static::EXT_KEY),
+                static::translate('debugpreset.warning.message'),
+                static::translate('debugpreset.warning.title'),
                 $this->flashMessageWarning
             );
         }
     }
 
     /**
-     * Inject the live preset.
-     *
-     * @param \TYPO3\CMS\Install\Configuration\Context\LivePreset $livePreset
-     */
-    public function injectLivePreset(LivePreset $livePreset)
-    {
-        $this->livePreset = $livePreset;
-    }
-
-    /**
-     * Inject the configuration collector.
-     *
-     * @param \Brainworxx\Includekrexx\Collectors\Configuration $configuration
-     */
-    public function injectConfiguration(Configuration $configuration)
-    {
-        $this->configuration = $configuration;
-    }
-
-    /**
-     * Inject the form configuration collector.
-     *
-     * @param \Brainworxx\Includekrexx\Collectors\FormConfiguration $formConfiguration
-     */
-    public function injectFormConfiguration(FormConfiguration $formConfiguration)
-    {
-        $this->formConfiguration = $formConfiguration;
-    }
-
-    /**
-     * Inject the settings model.
-     *
-     * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
-     */
-    public function injectSettingsModel(Settings $settings)
-    {
-        $this->settingsModel = $settings;
-    }
-
-    /**
      * Move all messages from kreXX to the flash messages.
      */
-    protected function retrieveKrexxMessages()
+    protected function retrieveKrexxMessages(): void
     {
         // Get the keys and the args.
         $messages = $this->pool->messages->getMessages();
@@ -266,8 +216,8 @@ abstract class AbstractController extends ActionController implements ConstInter
         foreach ($messages as $message) {
             // And translate them.
             $this->addFlashMessage(
-                static::translate($message->getKey(), static::EXT_KEY, $message->getArguments()),
-                static::translate('general.error.title', static::EXT_KEY),
+                static::translate($message->getKey(), $message->getArguments()),
+                static::translate('general.error.title'),
                 $this->flashMessageError
             );
         }
@@ -279,7 +229,7 @@ abstract class AbstractController extends ActionController implements ConstInter
      * @param string $path
      *   The path of the file we want to dispatch to the browser.
      */
-    protected function dispatchFile(string $path)
+    protected function dispatchFile(string $path): void
     {
         if (is_readable($path)) {
             header('Content-Type: text/html; charset=utf-8');
@@ -304,12 +254,18 @@ abstract class AbstractController extends ActionController implements ConstInter
      */
     protected function hasAccess(): bool
     {
-        return isset($GLOBALS['BE_USER']) &&
-            $GLOBALS['BE_USER']->check('modules', AbstractCollector::PLUGIN_NAME);
+        return isset($GLOBALS[static::BE_USER]) &&
+            $GLOBALS[static::BE_USER]->check(static::BE_MODULES, AbstractCollector::PLUGIN_NAME);
     }
 
     /**
      * Create the response, depending on the calling context.
+     *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated functions.
      *
      * @return MvcResponse|NullResponse
      */
@@ -335,21 +291,49 @@ abstract class AbstractController extends ActionController implements ConstInter
      * Imho the best way to deal with this is to (again) assign the css and js
      * inline.
      */
-    protected function assignCssJs()
+    protected function assignCssJs(): void
     {
         if (method_exists($this->pageRenderer, 'loadJavaScriptModule')) {
             // Doing this the TYPO3 12 way.
             $this->pageRenderer->loadJavaScriptModule('@brainworxx/includekrexx/Index.js');
+            $this->pageRenderer->addJsInlineCode(
+                'krexxajaxtrans',
+                $this->generateAjaxTranslations(),
+                false,
+                false,
+                true
+            );
         } else {
             // @deprecated
             // Will be removed as soon as we drop TYPO3 11 support.
             $jsPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/JavaScript/Index.js');
             $this->pageRenderer->addJsInlineCode('krexxjs', file_get_contents($jsPath));
+            $this->pageRenderer->addJsInlineCode('krexxajaxtrans', $this->generateAjaxTranslations());
         }
 
-        $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Public/Css/Index.css');
+        $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Css/Index.css');
         $this->pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));
         $this->moduleTemplate->setContent($this->view->render());
         $this->moduleTemplate->setModuleName('tx_includekrexx');
+    }
+
+    /**
+     * Generate the translation JS object manually in PHP, because I do not
+     * trust Fluid enough to do this across all versions from 7.6 to 11.5.
+     *
+     * @return string
+     *   The generated javascript variable with the translations.
+     */
+    protected function generateAjaxTranslations(): string
+    {
+        $translation = new stdClass();
+        $translation->deletefile = static::translate('ajax.delete.file');
+        $translation->error = static::translate('ajax.error');
+        $translation->in = static::translate('ajax.in');
+        $translation->line = static::translate('ajax.line');
+        $translation->updatedLoglist = static::translate('ajax.updated.loglist');
+        $translation->deletedCookies = static::translate('ajax.deleted.cookies');
+
+        return 'window.ajaxTranslate = ' .  json_encode($translation) . ';';
     }
 }

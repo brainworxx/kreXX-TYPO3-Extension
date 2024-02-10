@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -41,21 +41,21 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use TYPO3\CMS\Extbase\Persistence\Generic\Exception\TooDirtyException;
 use StdClass;
 
-class DirtyModelsTest extends AbstractTest
+class DirtyModelsTest extends AbstractHelper
 {
     /**
      * Subscribing our class to test to the right event.
      *
      * {@inheritDoc}
      */
-    protected function krexxUp()
+    protected function setUp(): void
     {
-        parent::krexxUp();
+        parent::setUp();
 
         // Subscribing.
         Registration::registerEvent(
@@ -63,6 +63,11 @@ class DirtyModelsTest extends AbstractTest
             DirtyModels::class
         );
         Krexx::$pool->eventService = new Event(Krexx::$pool);
+
+        // Load the TYPO3 language files
+        Registration::registerAdditionalHelpFile(KREXX_DIR . '..' .
+            DIRECTORY_SEPARATOR . 'Language' . DIRECTORY_SEPARATOR . 't3.kreXX.ini');
+        Krexx::$pool->messages->readHelpTexts();
     }
 
     /**

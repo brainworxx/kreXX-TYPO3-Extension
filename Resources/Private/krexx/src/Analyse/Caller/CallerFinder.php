@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -54,7 +54,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
      *
      * @var string
      */
-    const CLASS_PATTERN = Krexx::class;
+    protected const CLASS_PATTERN = Krexx::class;
 
     /**
      * Pattern used to find the krexx call in the backtrace.
@@ -63,7 +63,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
      *
      * @var string
      */
-    const FUNCTION_PATTERN = 'krexx';
+    protected const FUNCTION_PATTERN = 'krexx';
 
 
     /**
@@ -96,15 +96,15 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
     {
         $backtrace = array_reverse(debug_backtrace(0, 5));
 
-        // Going from the first call of the first line up
-        // through the first debug call.
+        $caller = [];
+        // Going from the first call of the first line, up through the first debug call.
         foreach ($backtrace as $caller) {
-            if ($this->identifyCaller($caller) === true) {
+            if ($this->identifyCaller($caller)) {
                 break;
             }
         }
 
-        $varname = empty($headline) === true ?
+        $varname = empty($headline) ?
             $this->getVarName($caller[static::TRACE_FILE], $caller[static::TRACE_LINE]) :
             $headline;
 
@@ -160,31 +160,13 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
         $varname = static::UNKNOWN_VALUE;
 
         // Retrieve the call from the sourcecode file.
-        if ($this->pool->fileService->fileIsReadable($file) === false) {
+        if (!$this->pool->fileService->fileIsReadable($file)) {
             return $varname;
         }
 
-        $line--;
+        $commendLine = $this->pool->fileService->readFile($file, --$line, $line);
 
-        // Now that we have the line where it was called, we must check if
-        // we have several commands in there.
-        $possibleCommands = explode(';', $this->pool->fileService->readFile($file, $line, $line));
-        // Now we must weed out the none krexx commands.
-        foreach ($possibleCommands as $key => $command) {
-            if (strpos(strtolower($command), $this->pattern) === false) {
-                unset($possibleCommands[$key]);
-            }
-        }
-
-        // I have no idea how to determine the actual call of krexx if we
-        // are dealing with several calls per line.
-        if (count($possibleCommands) === 1) {
-            // Now that we have our actual call, we must remove the krexx-part
-            // from it.
-            return $this->removeKrexxPartFromCommand(array_shift($possibleCommands));
-        }
-
-        return $varname;
+        return $this->removeKrexxPartFromCommand($commendLine);
     }
 
     /**
@@ -202,10 +184,13 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
             // This little baby tries to resolve everything inside the
             // brackets of the kreXX call.
             preg_match('/' . $funcname . '\s*\((.*)\)\s*/u', $command, $name);
-            if (isset($name[1]) === true) {
+            if (isset($name[1])) {
                 return $this->pool
                     ->encodingService
-                    ->encodeString($this->cleanupVarName(trim($name[1], " \t\n\r\0\x0B'\"")));
+                    ->encodeString(
+                        $this->pool->createClass(CleanUpVarName::class)
+                            ->cleanup(trim($name[1], " \t\n\r\0\x0B'\""))
+                    );
             }
         }
 
@@ -220,6 +205,12 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
      * in there. Hence, we need to actually count them, and try to identify any
      * string.
      *
+     * @deprecated
+     *   Since 5.0.0. Will be removed. Use the CleanUpVarName class instead.
+     *
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @param string $name
      *   The variable name, before the cleanup.
      *
@@ -228,32 +219,6 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
      */
     protected function cleanupVarName(string $name): string
     {
-        // We start with a -1, because we need to stop right before. every opening
-        // bracket has a closing one.
-        $level = -1;
-        $singleQuoteInactive = true;
-        $doubleQuoteInactive = true;
-
-        // Counting all real round brackets, while ignoring the ones inside strings.
-        foreach (str_split($name) as $count => $char) {
-            if ($singleQuoteInactive === true && $doubleQuoteInactive === true) {
-                if ($char === '(') {
-                    --$level;
-                } elseif ($char === ')') {
-                    ++$level;
-                }
-                if ($level === 0) {
-                    $name = substr($name, 0, $count);
-                    break;
-                }
-            }
-
-            // Reassign the booleans for the next char.
-            // Nice, huh?
-            $singleQuoteInactive = $singleQuoteInactive === !($char === '\'' && $doubleQuoteInactive);
-            $doubleQuoteInactive = $doubleQuoteInactive === !($char === '"' && $singleQuoteInactive);
-        }
-
-        return $name;
+        return $this->pool->createClass(CleanUpVarName::class)->cleanup($name);
     }
 }

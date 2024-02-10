@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,7 +42,6 @@ namespace Brainworxx\Krexx\View\Output;
  */
 class Browser extends AbstractOutput
 {
-
     /**
      * The shutdown callback.
      *
@@ -50,7 +49,7 @@ class Browser extends AbstractOutput
      * out kreXX output, to guarantee minimal interference with
      * the hosting CMS.
      */
-    public function shutdownCallback()
+    public function shutdownCallback(): void
     {
         // Output our chunks.
         // Every output is split into 4 chunk strings (header, messages,
@@ -65,7 +64,7 @@ class Browser extends AbstractOutput
     /**
      * Register this one in the php shutdown phase.
      */
-    public function finalize()
+    public function finalize(): void
     {
         register_shutdown_function([$this, 'shutdownCallback']);
     }

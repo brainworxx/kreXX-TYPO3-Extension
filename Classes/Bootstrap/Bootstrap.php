@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -46,9 +46,7 @@ use Brainworxx\Krexx\Service\Plugin\Registration;
 use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
-use Aimeos\MShop\Exception as AimeosException;
 use Throwable;
-use Krexx;
 
 /**
  * There is no way to clear the cache after an extension update automatically
@@ -64,6 +62,9 @@ class Bootstrap implements ConstInterface
     /**
      * The TYPO3 version.
      *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     *
      * @var string
      */
     protected static $typo3Version;
@@ -71,15 +72,16 @@ class Bootstrap implements ConstInterface
     /**
      * Batch for the bootstrapping.
      */
-    public function run()
+    public function run(): void
     {
-        if ($this->loadKrexx() === false) {
+        if (!$this->loadKrexx()) {
             // "Autoloading" failed.
             // There is no point in continuing here.
             return;
         }
 
-        $this->retrieveTypo3Version();
+        static::$typo3Version = GeneralUtility::makeInstance(Typo3Version::class)
+            ->getVersion();
 
         // Register and activate the TYPO3 plugin.
         /** @var T3configuration $t3configuration */
@@ -94,14 +96,8 @@ class Bootstrap implements ConstInterface
         // do it inside the template. 'krexx' as a namespace should be unique enough.
         // Theoretically, this should be part of the fluid debugger plugin, but
         // activating it in the viewhelper is too late, for obvious reason.
-        if (
-            version_compare(static::getTypo3Version(), '8.5', '>=') &&
-            empty($GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
-            [static::FLUID_NAMESPACE][static::KREXX])
-        ) {
-            $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
-            [static::FLUID_NAMESPACE][static::KREXX] = [ 0 => 'Brainworxx\\Includekrexx\\ViewHelpers'];
-        }
+        $GLOBALS[static::TYPO3_CONF_VARS][static::SYS][static::FLUID]
+            [static::FLUID_NAMESPACE][static::KREXX][] = 'Brainworxx\\Includekrexx\\ViewHelpers';
 
         // Register the Aimeos Magic plugin.
         /** @var AimeosConfiguration $aimeosConfiguration */
@@ -109,7 +105,7 @@ class Bootstrap implements ConstInterface
         Registration::register($aimeosConfiguration);
 
         // Check if we have the Aimeos shop available.
-        if (class_exists(AimeosException::class) === true || ExtensionManagementUtility::isLoaded('aimeos')) {
+        if (ExtensionManagementUtility::isLoaded('aimeos')) {
             Registration::activatePlugin(get_class($aimeosConfiguration));
         }
     }
@@ -120,6 +116,11 @@ class Bootstrap implements ConstInterface
      *
      * @param string $version
      *   The version number from the ext_localconf.
+     *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
      *
      * @return $this
      *   Return $this, for chaining.
@@ -151,13 +152,13 @@ class Bootstrap implements ConstInterface
     {
         // There may be a composer version of kreXX installed.
         // We will not load the bundled one.
-        if (defined('KREXX_DIR') === true) {
+        if (defined('KREXX_DIR')) {
             return true;
         }
 
         // Simply load the main file.
         $krexxFile =  ExtensionManagementUtility::extPath(static::EXT_KEY) . 'Resources/Private/krexx/bootstrap.php';
-        if (file_exists($krexxFile) === true && class_exists(Krexx::class, false) === false) {
+        if (file_exists($krexxFile)) {
             include_once $krexxFile;
             return true;
         }
@@ -176,19 +177,26 @@ class Bootstrap implements ConstInterface
      * Wrapper around either
      *   - TYPO3_version
      *   - TYPO3\CMS\Core\Information\Typo3Version
+     *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     *
+     * @codeCoverageIgnore
+     *   We will not test deprecated methods.
      */
-    protected function retrieveTypo3Version()
+    protected function retrieveTypo3Version(): void
     {
-        if (class_exists(Typo3Version::class)) {
-            static::$typo3Version = GeneralUtility::makeInstance(Typo3Version::class)
-                ->getVersion();
-        } else {
-            static::$typo3Version = TYPO3_version;
-        }
+        static::$typo3Version = GeneralUtility::makeInstance(Typo3Version::class)
+            ->getVersion();
     }
 
     /**
      * Getter for the TYPO3 version.
+     *
+     * @deprecated
+     *   Since 5.0.0. Will be removed.
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
      *
      * @return string
      */

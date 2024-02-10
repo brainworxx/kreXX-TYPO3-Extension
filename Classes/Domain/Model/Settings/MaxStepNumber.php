@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -52,7 +52,7 @@ trait MaxStepNumber
     /**
      * @param string $maxStepNumber
      */
-    public function setMaxStepNumber(string $maxStepNumber)
+    public function setMaxStepNumber(string $maxStepNumber): void
     {
         $this->maxStepNumber = $maxStepNumber;
     }
@@ -60,7 +60,7 @@ trait MaxStepNumber
     /**
      * @param string $formmaxStepNumber
      */
-    public function setFormmaxStepNumber(string $formmaxStepNumber)
+    public function setFormmaxStepNumber(string $formmaxStepNumber): void
     {
         $this->formmaxStepNumber = $formmaxStepNumber;
     }

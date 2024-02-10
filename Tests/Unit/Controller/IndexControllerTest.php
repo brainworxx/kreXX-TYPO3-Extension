@@ -17,7 +17,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -38,25 +38,40 @@ use Brainworxx\Includekrexx\Collectors\Configuration;
 use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Controller\IndexController;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
-use Brainworxx\Includekrexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplate;
 use TYPO3\CMS\Core\Http\ResponseFactory;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
-use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 use TYPO3\CMS\Extbase\Mvc\Response;
 
-class IndexControllerTest extends AbstractTest
+class IndexControllerTest extends AbstractHelper
 {
     const NO_MORE_MESSAGES = 'No more messages here.';
     const CONTROLLER_NAMESPACE = '\\Brainworxx\\Includekrexx\\Controller\\';
     const REDIRECT_MESSAGE = 'We did have an redirect here.';
+
+    protected $indexController;
+
+    /**
+     * Creating a new controller instance.
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $configMock = $this->createMock(Configuration::class);
+        $formConfigMock = $this->createMock(FormConfiguration::class);
+        $settings = $this->createMock(Settings::class);
+        $pageRenderer = $this->createMock(PageRenderer::class);
+
+        $this->indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer);
+    }
 
     /**
      * Test the index action, without access.
@@ -66,12 +81,11 @@ class IndexControllerTest extends AbstractTest
      */
     public function testIndexActionNoAccess()
     {
-        $indexController = new IndexController();
-        $this->initFlashMessages($indexController);
-        if (method_exists($indexController, 'injectResponseFactory')) {
-            $indexController->injectResponseFactory(new ResponseFactory());
+        $this->initFlashMessages($this->indexController);
+        if (method_exists($this->indexController, 'injectResponseFactory')) {
+            $this->indexController->injectResponseFactory(new ResponseFactory());
         }
-        $indexController->indexAction();
+        $this->indexController->indexAction();
 
         $this->assertEquals(
             'accessDenied',
@@ -89,11 +103,14 @@ class IndexControllerTest extends AbstractTest
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::checkProductiveSetting
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::assignCssJs
+     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::generateAjaxTranslations
      */
     public function testIndexActionNormal()
     {
         $jsCssFileContent = 'file content';
         $templateContent = 'template content';
+        $translationContent = 'window.ajaxTranslate = {"deletefile":"ajax.delete.file","error":"ajax.error","in":"ajax.in","line":"ajax.line","updatedLoglist":"ajax.updated.loglist","deletedCookies":"ajax.deleted.cookies"};';
+
         $fileGetContents =  $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_get_contents');
         $fileGetContents->expects($this->any())
             ->will($this->returnValue($jsCssFileContent));
@@ -118,9 +135,7 @@ class IndexControllerTest extends AbstractTest
         $viewMock = $this->createMock(AbstractTemplateView::class);
         $viewMock->expects($this->exactly(1))
             ->method('assign')
-            ->withConsecutive(
-                ['settings', $settingsModel]
-            );
+            ->with(...$this->withConsecutive(['settings', $settingsModel]));
         $viewMock->expects($this->once())
             ->method('render')
             ->will($this->returnValue($templateContent));
@@ -136,9 +151,20 @@ class IndexControllerTest extends AbstractTest
             ->with($viewMock);
 
         $pageRenderer = $this->createMock(PageRenderer::class);
-        $pageRenderer->expects($this->any())
-            ->method('addJsInlineCode')
-            ->with('krexxjs', $jsCssFileContent);
+
+        if (method_exists(PageRenderer::class, 'loadJavaScriptModule')) {
+            $pageRenderer->expects($this->any())
+                ->method('addJsInlineCode')
+                ->with(...$this->withConsecutive(['krexxajaxtrans', $translationContent, false, false, true]));
+        } else {
+            $pageRenderer->expects($this->any())
+                ->method('addJsInlineCode')
+                ->with(...$this->withConsecutive(
+                    ['krexxjs', $jsCssFileContent],
+                    ['krexxajaxtrans', $translationContent]
+                ));
+        }
+
         $pageRenderer->expects($this->once())
             ->method('addCssInlineBlock')
             ->with('krexxcss', $jsCssFileContent);
@@ -155,22 +181,19 @@ class IndexControllerTest extends AbstractTest
             ->will($this->returnValue($templateContent));
 
         // Inject it, like there is no tomorrow.
-        $indexController = new IndexController();
-        $indexController->injectLivePreset($presetMock);
-        $indexController->injectSettingsModel($settingsModel);
-        $indexController->injectConfiguration($configurationMock);
-        $indexController->injectFormConfiguration($configFeMock);
-        $this->setValueByReflection('moduleTemplate', $moduleTemplateMock, $indexController);
-        $indexController->injectPageRenderer($pageRenderer);
-        if (method_exists($indexController, 'injectResponseFactory')) {
-            $indexController->injectResponseFactory(new ResponseFactory());
+        $this->indexController = new IndexController($configurationMock, $configFeMock, $settingsModel, $pageRenderer);
+        $this->indexController->injectLivePreset($presetMock);
+        $this->setValueByReflection('moduleTemplate', $moduleTemplateMock, $this->indexController);
+
+        if (method_exists($this->indexController, 'injectResponseFactory')) {
+            $this->indexController->injectResponseFactory(new ResponseFactory());
         }
-        $this->initFlashMessages($indexController);
-        $this->setValueByReflection('view', $viewMock, $indexController);
+        $this->initFlashMessages($this->indexController);
+        $this->setValueByReflection('view', $viewMock, $this->indexController);
 
         // Run it through like a tunnel on a marathon route.
         $this->simulatePackage('includekrexx', 'includekrexx/');
-        $indexController->indexAction();
+        $this->indexController->indexAction();
 
         // Test for the kreXX messages.
         $this->assertEquals(
@@ -193,14 +216,13 @@ class IndexControllerTest extends AbstractTest
      */
     public function testSaveActionNoAccess()
     {
-        $indexController = new IndexController();
-        $this->initFlashMessages($indexController);
-        $this->prepareRedirect($indexController);
+        $this->initFlashMessages($this->indexController);
+        $this->prepareRedirect($this->indexController);
 
         $settingsModel = new Settings();
 
         try {
-            $exceptionWasThrown = !empty($indexController->saveAction($settingsModel));
+            $exceptionWasThrown = !empty($this->indexController->saveAction($settingsModel));
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
@@ -223,29 +245,36 @@ class IndexControllerTest extends AbstractTest
      *
      * @covers \Brainworxx\Includekrexx\Controller\IndexController::saveAction
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::prepareFileName
      */
     public function testSaveActionNormal()
     {
         $this->mockBeUser();
 
-        $indexController = new IndexController();
-        $this->initFlashMessages($indexController);
-        $this->prepareRedirect($indexController);
+        $this->initFlashMessages($this->indexController);
+        $this->prepareRedirect($this->indexController);
 
         $iniContent = 'oh joy, even more settings . . .';
+        $pathParts = pathinfo(Krexx::$pool->config->getPathToConfigFile());
+        $configFilePath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.json';
 
         $settingsMock = $this->createMock(Settings::class);
         $settingsMock->expects($this->once())
-            ->method('generateIniContent')
+            ->method('generateContent')
             ->will($this->returnValue($iniContent));
+        $settingsMock->expects($this->once())
+            ->method('prepareFileName')
+            ->will($this->returnValue($configFilePath));
+
+
 
         $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
         $filePutContentsMock->expects($this->once())
-            ->with(Krexx::$pool->config->getPathToIniFile(), $iniContent)
+            ->with($configFilePath, $iniContent)
             ->will($this->returnValue(true));
 
         try {
-            $exceptionWasThrown = !empty($indexController->saveAction($settingsMock));
+            $exceptionWasThrown = !empty($this->indexController->saveAction($settingsMock));
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
@@ -268,29 +297,34 @@ class IndexControllerTest extends AbstractTest
      *
      * @covers \Brainworxx\Includekrexx\Controller\IndexController::saveAction
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::retrieveKrexxMessages
+     * @covers \Brainworxx\Includekrexx\Domain\Model\Settings::prepareFileName
      */
     public function testSaveActionNoWriteAccess()
     {
         $this->mockBeUser();
 
-        $indexController = new IndexController();
-        $this->initFlashMessages($indexController);
-        $this->prepareRedirect($indexController);
+        $this->initFlashMessages($this->indexController);
+        $this->prepareRedirect($this->indexController);
 
         $iniContent = 'oh joy, even more settings . . .';
+        $pathParts = pathinfo(Krexx::$pool->config->getPathToConfigFile());
+        $configFilePath = $pathParts['dirname'] . DIRECTORY_SEPARATOR . $pathParts['filename'] . '.json';
 
         $settingsMock = $this->createMock(Settings::class);
         $settingsMock->expects($this->once())
-            ->method('generateIniContent')
+            ->method('generateContent')
             ->will($this->returnValue($iniContent));
+        $settingsMock->expects($this->once())
+            ->method('prepareFileName')
+            ->will($this->returnValue($configFilePath));
 
         $filePutContentsMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'file_put_contents');
         $filePutContentsMock->expects($this->once())
-            ->with(Krexx::$pool->config->getPathToIniFile(), $iniContent)
+            ->with(Krexx::$pool->config->getPathToConfigFile(), $iniContent)
             ->will($this->returnValue(false));
 
         try {
-            $exceptionWasThrown = !empty($indexController->saveAction($settingsMock));
+            $exceptionWasThrown = !empty($this->indexController->saveAction($settingsMock));
         } catch (UnsupportedRequestTypeException $e) {
             // We expect this one.
             $exceptionWasThrown = true;
@@ -313,60 +347,38 @@ class IndexControllerTest extends AbstractTest
      * Testing the dispatching without access.
      *
      * @covers \Brainworxx\Includekrexx\Controller\IndexController::dispatchAction
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::createResponse
      */
     public function testDispatchActionNoAccess()
     {
         $serverRequestMock = $this->createMock(ServerRequest::class);
-        $request = [
-            'tx_includekrexx_tools_includekrexxkrexxconfiguration' => [
-                'id' => 123
-            ]
-        ];
-        $serverRequestMock->expects($this->once())
-            ->method('getQueryParams')
-            ->will($this->returnValue($request));
+        // Never, because we have no access.
+        $serverRequestMock->expects($this->never())
+            ->method('getQueryParams');
 
         $headerMock = $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'header');
         $headerMock->expects($this->never());
 
-        $indexController = new IndexController();
-        if (class_exists(Response::class) === true) {
-            $responseMock = $this->createMock(Response::class);
-            $responseMock->expects($this->any())
-                ->method('shutdown');
-            $this->setValueByReflection('response', $responseMock, $indexController);
-        }
-
-        $indexController->dispatchAction($serverRequestMock);
+        $this->indexController->dispatchAction($serverRequestMock);
     }
 
     /**
      * Testing the normal dispatching of a file.
      *
      * @covers \Brainworxx\Includekrexx\Controller\IndexController::dispatchAction
-     * @covers \Brainworxx\Includekrexx\Controller\AbstractController::createResponse
      * @covers \Brainworxx\Includekrexx\Controller\AbstractController::dispatchFile
      */
     public function testDispatchActionNormal()
     {
         $this->mockBeUser();
 
-        $requestMock = $this->createMock(Request::class);
-        $requestMock->expects($this->once())
-            ->method('getArgument')
-            ->with('id')
-            ->will($this->returnValue('123458'));
-
         // Use the files inside the fixture folder.
         $this->setValueByReflection(
             'directories',
-            [Config::LOG_FOLDER => __DIR__ . '/../../Fixtures/'],
+            ['log' => __DIR__ . '/../../Fixtures/'],
             \Krexx::$pool->config
         );
 
-        $controller = new IndexController();
-        $this->setValueByReflection('request', $requestMock, $controller);
+
         $this->expectOutputString('Et dico vide nec, sed in mazim phaedrum voluptatibus. Eum clita meliore tincidunt ei, sed utinam pertinax theophrastus ad. Porro quodsi detracto ea pri. Et vis mollis voluptaria. Per ut saperet intellegam.');
 
         // Prevent the dispatcher from doing something stupid.
@@ -375,12 +387,14 @@ class IndexControllerTest extends AbstractTest
         $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'ob_flush');
         $this->getFunctionMock(static::CONTROLLER_NAMESPACE, 'flush');
 
-        if (class_exists(Response::class) === true) {
-            $responseMock = $this->createMock(Response::class);
-            $responseMock->expects($this->any())->method('shutdown');
-            $this->setValueByReflection('response', $responseMock, $controller);
-        }
+        $serverRequestMock = $this->createMock(ServerRequest::class);
+        $request = [
+            'tx_includekrexx_tools_includekrexxkrexxconfiguration' => ['id' => 123458]
+        ];
+        $serverRequestMock->expects($this->once())
+            ->method('getQueryParams')
+            ->will($this->returnValue($request));
 
-        $controller->dispatchAction();
+        $this->indexController->dispatchAction($serverRequestMock);
     }
 }

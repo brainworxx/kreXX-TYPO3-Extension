@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -53,16 +53,6 @@ class Messages
     protected $messages = [];
 
     /**
-     * The translatable keys for backend integration.
-     *
-     * @deprecated
-     *   Since 4.0.0. Will be removed.
-     *
-     * @var array[]
-     */
-    protected $keys = [];
-
-    /**
      * A simple array to hold the values.
      *
      * @var string[]
@@ -77,6 +67,13 @@ class Messages
     protected $pool;
 
     /**
+     * The language key where the texts are stored.
+     *
+     * @var string
+     */
+    protected $languageKey = 'text';
+
+    /**
      * Injects the pool and reads the language file.
      *
      * @param Pool $pool
@@ -85,8 +82,25 @@ class Messages
     public function __construct(Pool $pool)
     {
         $this->pool = $pool;
-        $this->readHelpTexts();
         $pool->messages = $this;
+    }
+
+    /**
+     * Setter for the language key.
+     *
+     * Gets set by the configuration class after it was loaded.
+     *
+     * @param string $languageKey
+     *   The language key.
+     *
+     * @return $this
+     *   For chaining.
+     */
+    public function setLanguageKey(string $languageKey): Messages
+    {
+        $this->languageKey = $languageKey;
+        $this->readHelpTexts();
+        return $this;
     }
 
     /**
@@ -99,12 +113,11 @@ class Messages
      * @param bool $isThrowAway
      *   will this message remove itself after display?
      */
-    public function addMessage(string $key, array $args = [], bool $isThrowAway = false)
+    public function addMessage(string $key, array $args = [], bool $isThrowAway = false): void
     {
         // We will only display these messages once.
-        if (isset($this->messages[$key]) === false) {
+        if (!isset($this->messages[$key])) {
             // Add it to the keys, so the CMS can display it.
-            $this->keys[$key] = ['key' => $key, 'params' => $args];
             $this->messages[$key] = $this->pool->createClass(Message::class)
                 ->setKey($key)
                 ->setArguments($args)
@@ -119,27 +132,9 @@ class Messages
      * @param string $key
      *   The key we want to remove
      */
-    public function removeKey(string $key)
+    public function removeKey(string $key): void
     {
-        unset($this->keys[$key]);
         unset($this->messages[$key]);
-    }
-
-    /**
-     * Getter for the language key array.
-     *
-     * @deprecated
-     *   Since 4.0.0. Will be removed. Use $this->>getMessages() instead.
-     *
-     * @codeCoverageIgnore
-     *   We will not test deprecated methods.
-     *
-     * @return array
-     *   The language keys we added beforehand.
-     */
-    public function getKeys(): array
-    {
-        return $this->keys;
     }
 
     /**
@@ -164,8 +159,8 @@ class Messages
         // Simple Wrapper for OutputActions::$render->renderMessages
         if (
             php_sapi_name() === 'cli' &&
-            empty($this->messages) === false &&
-            defined('KREXX_TEST_IN_PROGRESS') === false
+            !empty($this->messages) &&
+            !defined('KREXX_TEST_IN_PROGRESS')
         ) {
             // Output the messages on the shell.
             $result = "\n\nkreXX messages\n";
@@ -194,21 +189,15 @@ class Messages
      */
     public function getHelp(string $key, array $args = []): string
     {
-        // Check if we can get a value, at all.
-        if (empty($this->helpArray[$key]) === true) {
-            return '';
-        }
-
-        // Return the value
-        return vsprintf($this->helpArray[$key], $args);
+        return vsprintf($this->helpArray[$key] ?? '', $args);
     }
 
     /**
      * Reset the read help texts to factory settings.
      */
-    public function readHelpTexts()
+    public function readHelpTexts(): void
     {
-        $this->helpArray = [];
+        $helpArray = [];
 
         $fileList = array_merge(
             [KREXX_DIR . 'resources/language/Help.ini'],
@@ -216,10 +205,12 @@ class Messages
         );
 
         foreach ($fileList as $filename) {
-            $this->helpArray = array_merge(
-                $this->helpArray,
-                (array)parse_ini_string($this->pool->fileService->getFileContents($filename, false))
+            $helpArray = array_replace_recursive(
+                $helpArray,
+                (array)parse_ini_string($this->pool->fileService->getFileContents($filename, false), true)
             );
         }
+
+        $this->helpArray = array_merge($helpArray['text'], $helpArray[$this->languageKey] ?? []);
     }
 }

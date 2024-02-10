@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -51,7 +51,9 @@ trait FatalHeader
         '{search}',
         '{KrexxId}',
         '{type}',
-        '{encoding}'
+        '{encoding}',
+        '{noJavaScript}',
+        '{searchHeadline}'
     ];
 
     /**
@@ -67,9 +69,11 @@ trait FatalHeader
                 $this->renderSearch(),
                 $this->pool->recursionHandler->getMarker(),
                 $errorType,
-                $this->pool->chunks->getOfficialEncoding()
+                $this->pool->chunks->getOfficialEncoding(),
+                $this->pool->messages->getHelp('noJavaScript'),
+                $this->pool->messages->getHelp('searchHeadline'),
             ],
-            $this->getTemplateFileContent(static::FILE_FATAL_HEADER)
+            $this->fileCache[static::FILE_FATAL_HEADER]
         );
     }
 

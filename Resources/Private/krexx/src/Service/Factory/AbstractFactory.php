@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -46,7 +46,6 @@ use Closure;
  */
 abstract class AbstractFactory
 {
-
     /**
      * Rewrite mapping for the getter.
      *
@@ -63,14 +62,15 @@ abstract class AbstractFactory
      * Create objects and returns them. Singletons are handled by the pool.
      *
      * @param string $classname
+     *   Name of the class we want to create.
      *
      * @return object
      *   The requested object.
      */
-    public function createClass(string $classname)
+    public function createClass(string $classname): object
     {
         // Check for possible overwrite.
-        if (isset($this->rewrite[$classname]) === true) {
+        if (isset($this->rewrite[$classname])) {
             $classname = $this->rewrite[$classname];
         }
 
@@ -83,12 +83,12 @@ abstract class AbstractFactory
      * @param string|int $what
      *   The part of the globals we want to access.
      *
-     * @return mixed
+     * @return array
      *   The part we are requesting.
      */
-    public function &getGlobals($what = '')
+    public function &getGlobals($what = ''): array
     {
-        if (empty($what) === true) {
+        if (empty($what)) {
             return $GLOBALS;
         }
 
@@ -128,7 +128,7 @@ abstract class AbstractFactory
     /**
      * Create the pool, but only if it is not already there.
      */
-    public static function createPool()
+    public static function createPool(): void
     {
         if (Krexx::$pool !== null) {
             // The pool is there, do nothing.
@@ -139,7 +139,7 @@ abstract class AbstractFactory
 
         // Create a new pool where we store all our classes.
         // We also need to check if we have an overwrite for the pool.
-        if (empty($rewrite[Pool::class]) === true) {
+        if (empty($rewrite[Pool::class])) {
             Krexx::$pool = new Pool($rewrite);
         } else {
             $classname = $rewrite[Pool::class];

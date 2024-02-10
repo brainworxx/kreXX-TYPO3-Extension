@@ -30,18 +30,12 @@ skin = "smokygrey"
 ; Where shall kreXX put it's data?
 ; Is the output the browser or the logfolder?
 ; destination = "file"
-destination = "browser"
+; destination = "browser"
+destination = "browserImmediately"
 
 ; how many logfiles will kreXX keep?
 ; Files will only get deleted, when he creates a new one.
 maxfiles = "10"
-
-; When you are using the scope analysis, kreXX will analyse everything that can
-; be reached from the point where kreXX was callen in the code. When coming from
-; the $this environment, all protected and most private values / methods are
-; reachable, and kreXX will take this into account.
-useScopeAnalysis = "true"
-; useScopeAnalysis = "false"
 
 ; ------------------------------------------------------------------------------
 [prune]
@@ -141,7 +135,6 @@ memoryLeft = "64"
 disabled = "full"
 detectAjax = "full"
 skin = "full"
-useScopeAnalysis = "full"
 maxStepNumber = "full"
 arrayCountLimit = "full"
 level = "full"

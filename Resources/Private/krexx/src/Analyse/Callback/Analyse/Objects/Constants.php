@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -49,7 +49,6 @@ use Brainworxx\Krexx\Analyse\Model;
  */
 class Constants extends AbstractObjectAnalysis implements CodegenConstInterface
 {
-
     /**
      * Dumps the constants of a class,
      *
@@ -68,7 +67,7 @@ class Constants extends AbstractObjectAnalysis implements CodegenConstInterface
         // inside the higher class structure, because these parts do not inherit
         // them.
         $listOfConstants = $ref->getConstants();
-        if (empty($listOfConstants) === true) {
+        if (empty($listOfConstants)) {
             // Nothing to see here, return an empty string.
             return '';
         }
@@ -79,13 +78,10 @@ class Constants extends AbstractObjectAnalysis implements CodegenConstInterface
             $this->dispatchEventWithModel(
                 static::EVENT_MARKER_ANALYSES_END,
                 $this->pool->createClass(Model::class)
-                    ->setName('Constants')
+                    ->setName($this->pool->messages->getHelp('metaConstants'))
                     ->setType(static::TYPE_INTERNALS)
                     ->setCodeGenType(static::CODEGEN_TYPE_META_CONSTANTS)
                     ->addParameter(static::PARAM_DATA, $listOfConstants)
-                    // Deprecated since 4.0.0
-                    ->addParameter(static::PARAM_CLASSNAME, $classname)
-                    // Deprecated since 4.0.0
                     ->addParameter(static::PARAM_REF, $ref)
                     ->injectCallback(
                         $this->pool->createClass(ThroughConstants::class)

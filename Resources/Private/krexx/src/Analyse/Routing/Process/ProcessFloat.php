@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -39,13 +39,13 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
-use Brainworxx\Krexx\View\ViewConstInterface;
 use DateTime;
+use Throwable;
 
 /**
  * Processing of floats.
  */
-class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessConstInterface, ViewConstInterface
+class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessConstInterface
 {
     /**
      * Is this one a float?
@@ -78,10 +78,10 @@ class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessC
         if ($float > 946681200) {
             try {
                 $model->addToJson(
-                    static::META_TIMESTAMP,
+                    $this->pool->messages->getHelp('metaTimestamp'),
                     (DateTime::createFromFormat('U.u', (string)$float))->format('d.M Y H:i:s.u')
                 );
-            } catch (\Throwable $exception) {
+            } catch (Throwable $exception) {
                 // Do nothing
             }
         }

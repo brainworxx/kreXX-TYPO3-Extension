@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -52,7 +52,7 @@ trait Skin
     /**
      * @param string $skin
      */
-    public function setSkin(string $skin)
+    public function setSkin(string $skin): void
     {
         $this->skin = $skin;
     }
@@ -60,7 +60,7 @@ trait Skin
     /**
      * @param string $formskin
      */
-    public function setFormskin(string $formskin)
+    public function setFormskin(string $formskin): void
     {
         $this->formskin = $formskin;
     }

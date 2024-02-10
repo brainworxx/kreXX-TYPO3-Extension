@@ -1,3 +1,71 @@
+5.0.2
+- Change: Removed deprecated code.
+- Change: Some deprecations.
+- Bugfix: The event 'Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe::start'
+  was called too late.
+- Bugfix: Make use of the internal error callback in the string
+  encoding class.
+- Bugfix: Add the missing "Line no." to the translation.
+- Bugfix: Added missing return types to the return type whitelist
+  in the ReturnType comment analysis.
+- Bugfix: Added missing types to the blacklist of none namespaces
+  declaration types.
+
+5.0.1
+- Change: Updated the unit tests to 10.5
+- Bugfix: Added a missing end-event in the ThroughGetter iterator.
+
+5.0.0
+- Added immediately browser output to the output choices.
+- Added default value analysis to the additional info.
+- Added German localisation.
+- Added serialized string pretty print.
+- Added static cache to the filepath scalar analysis.
+- Added support for the hidden properties of ext_dom classes.
+- Added typed property analysis.
+- Added the original value to the parameters of the scalar
+  analysis events, so event listeners can actually do something
+  useful.
+- Added PCNTL support for logging.
+- Added base64 analysis.
+- Change: Removed deprecated code.
+- Change: Drop PHP 7.1 support
+- Change: Streamlined the type display of strings
+- Change: Defined visibility for all constants.
+- Change: Added missing PHP 7.1 return type to methods.
+- Change: Moved the ViewConstInterface to the translations.
+- Change: Moved the local declaration retrieval methods into
+  their own API.
+- Change: Reworked some help texts.
+- Change: Input elements are now allowed to not have any eval
+  callback.
+- Change: Remove the inherited constants from the kreXX
+  main class.
+- Change: String and array analysis now cache their settings.
+- Change: The ScalarString class gets instantiated only once
+  per run.
+- Change: Removed the scope analysis setting.
+- Change: Lots of deprecations.
+- Change: Removed the XML decoder.
+- Change: Moved the return type retrieval by reflection to the
+  more appropriate AbstractDeclaration class.
+- Change: Moved the parameter analysis to the declaration
+  analysis classes.
+- Change: Empty configuration sections are not rendered anymore.
+- Change: Always allow a none rendering of configuration settings.
+- Change: Streamlined the return type of the
+  retrieveDeclaringReflection of class methods.
+- Change: Simplified the rendering of the plugin list.
+- Change: Moved the scalar analysis to a more appropriate
+  namespace.
+- Change: Split the variable name cleanup into its own class.
+- Change: Moved the Opaque Ressource Class analysis into its own
+  class.
+- Change: The max count of analysed backtrace steps is set to 15.
+- Change: Removed the reflection cache.
+- Change: Refactored the template file loading.
+- Change: Set the nesting level to 10.
+
 4.1.10
 - Bugfix: Prevent a fatal in the scalar callback analysis.
 - Bugfix: Class meta analysis thinks that interfaces are abstract.
@@ -45,8 +113,6 @@
 - Bugfix: Correctly identify uninitialized properties.
 - Bugfix: Prevent unnecessary filesystem calls in the filepath
   analysis.
-- Bugfix: Unnecessary uri encoding in the smoky grey skin prevents
-  the display of certain additional info values.
 
 4.1.3
 - Added microtime analysis to the float routing.
@@ -60,7 +126,7 @@
 - Bugfix: Comment inheritance resolving works more reliable.
 - Bugfix: Method return type comment parsing works more
   reliable.
-- Bugfix: Standard loading of the configuration file works again.
+- Bugfix: Standard Loading of the configuration file works again.
 - Bugfix: Mime type string and file do not overwrite each others
   anymore.
 - Bugfix: K-Type padding for the Hans skin is too small.
@@ -792,4 +858,3 @@
 - When clicking on a recursion, the <li> with the analysis data will
   now highlight in red.
 - Reformatted this file, to make it better readable.
-

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -59,12 +59,10 @@ class DebugMethods extends AbstractEventHandler implements
      * The 2019 version simplified much of the code, hence the configuration
      * handling here.
      *
-     * @var array
+     * @var string[][]
      */
     protected $methods = [
             'getRefItems' => [
-                // Aimeos 2018
-                \Aimeos\MShop\Common\Item\ListRef\Base::class,
                 // Aimeos 2019 & 2020
                 \Aimeos\MShop\Common\Item\ListRef\Iface::class,
                 // Aimeos 2021
@@ -155,11 +153,11 @@ class DebugMethods extends AbstractEventHandler implements
      * @return string
      *   The rendered html dom.
      */
-    protected function callDebugMethod($data, string $methodName, ReflectionClass $reflectionClass): string
+    protected function callDebugMethod(object $data, string $methodName, ReflectionClass $reflectionClass): string
     {
         $result = $data->$methodName();
         // We are expecting arrays, btw.
-        if (empty($result) === false) {
+        if (!empty($result)) {
             return $this->pool->render->renderExpandableChild(
                 $this->pool->createClass(Model::class)
                     ->setName($methodName)

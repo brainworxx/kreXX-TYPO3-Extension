@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -40,7 +40,7 @@ use Brainworxx\Krexx\Analyse\Routing\Process\ProcessArray;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Service\Flow\Recursion;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Tests\Helpers\RenderNothing;
 use Krexx;
 use stdClass;
@@ -50,7 +50,7 @@ use stdClass;
  *
  * @package Brainworxx\Krexx\Tests\Unit\Analyse\Routing\Process
  */
-class AbstractProcessNoneScalarTest extends AbstractTest
+class AbstractProcessNoneScalarTest extends AbstractHelper
 {
     /**
      * Test the handling of a too deep nesting.
@@ -80,7 +80,7 @@ class AbstractProcessNoneScalarTest extends AbstractTest
 
         // Check the model.
         $this->assertEquals(
-            'To increase this value, change the runtime => level setting.',
+            'To increase this value, change the Prune output => level setting.',
             $model->getData()
         );
         $this->assertEquals(

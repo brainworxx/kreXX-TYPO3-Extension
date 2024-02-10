@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,7 +42,6 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Model as SettingModel;
-use Brainworxx\Krexx\View\ViewConstInterface;
 
 /**
  * Configuration "analysis" methods. Meh, naming conventions suck sometimes.
@@ -50,9 +49,8 @@ use Brainworxx\Krexx\View\ViewConstInterface;
  * @uses array data
  *   The configuration section we are rendering
  */
-class ConfigSection extends AbstractCallback implements CallbackConstInterface, ViewConstInterface, ConfigConstInterface
+class ConfigSection extends AbstractCallback implements CallbackConstInterface, ConfigConstInterface
 {
-
     /**
      * Renders each section of the footer.
      *
@@ -87,15 +85,15 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
      *   The ID of the setting.
      *
      * @return string
-     *   Th rendered output.
+     *   The rendered output.
      */
     protected function generateOutput(SettingModel $setting, string $id): string
     {
         /** @var Model $model */
-        $model = $this->pool->createClass(Model::class)->setHelpid($id . static::META_HELP);
+        $model = $this->pool->createClass(Model::class)->setHelpid($id . 'Help');
         $name = $this->pool->messages->getHelp($id . 'Readable');
         $value = $this->prepareValue($setting);
-        if ($setting->getEditable() === true) {
+        if ($setting->isEditable()) {
             return $this->pool->render->renderSingleEditableChild(
                 $model->setData($name)
                     ->setName($value)
@@ -107,7 +105,6 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
         return $this->pool->render->renderExpandableChild(
             $model->setData($value)->setName($name)->setNormal($value)->setType($setting->getSource())
         );
-
     }
 
     /**
@@ -116,22 +113,19 @@ class ConfigSection extends AbstractCallback implements CallbackConstInterface, 
      * @param \Brainworxx\Krexx\Service\Config\Model $setting
      *   The setting model.
      *
-     * @return bool|int|string|null
+     * @return int|string|null
      *   The prepared value.
      */
     protected function prepareValue(SettingModel $setting)
     {
         $value = $setting->getValue();
 
+        if (!is_bool($value)) {
+            // Early return.
+            return $value;
+        }
+
         // We need to re-translate booleans to something the frontend can understand.
-        if ($value === true) {
-            $value = 'true';
-        }
-
-        if ($value === false) {
-            $value = 'false';
-        }
-
-        return $value;
+        return $value ? 'true' : 'false';
     }
 }

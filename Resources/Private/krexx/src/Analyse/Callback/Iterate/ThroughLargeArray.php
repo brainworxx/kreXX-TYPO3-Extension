@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -66,7 +66,6 @@ class ThroughLargeArray extends AbstractCallback implements
     ConnectorsConstInterface,
     ProcessConstInterface
 {
-
     /**
      * Renders the expendable around the array analysis.
      *
@@ -81,7 +80,7 @@ class ThroughLargeArray extends AbstractCallback implements
         $output .= $this->pool->render->renderSingeChildHr();
 
         // Iterate through.
-        foreach ($this->parameters[static::PARAM_DATA] as $key => &$value) {
+        foreach ($this->parameters[static::PARAM_DATA] as $key => $value) {
             // We will not output our recursion marker.
             // Meh, the only reason for the recursion marker
             // in arrays is because of the $GLOBAL array, which
@@ -92,7 +91,7 @@ class ThroughLargeArray extends AbstractCallback implements
 
             /** @var Model $model */
             $model = $this->pool->createClass(Model::class)->setCodeGenType(
-                $this->parameters[static::PARAM_MULTILINE] === true ?
+                $this->parameters[static::PARAM_MULTILINE] ?
                     static::CODEGEN_TYPE_ITERATOR_TO_ARRAY : static::CODEGEN_TYPE_PUBLIC
             );
 
@@ -114,12 +113,11 @@ class ThroughLargeArray extends AbstractCallback implements
      * @param Model $model
      *   The so far prepared model we are preparing further.
      */
-    protected function handleKey($key, Model $model)
+    protected function handleKey($key, Model $model): void
     {
-        if (is_string($key) === true) {
+        if (is_string($key)) {
             $model->setName($this->pool->encodingService->encodeString($key))
-                ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY)
-                ->setKeyType(static::TYPE_STRING);
+                ->setConnectorType(static::CONNECTOR_ASSOCIATIVE_ARRAY);
 
             return;
         }
@@ -137,9 +135,9 @@ class ThroughLargeArray extends AbstractCallback implements
      * @return string
      *   The generated markup
      */
-    protected function handleValue(&$value, Model $model): string
+    protected function handleValue($value, Model $model): string
     {
-        if (is_object($value) === true) {
+        if (is_object($value)) {
             // We will not go too deep here, and say only what it is.
             $model->setType(static::TYPE_SIMPLE_CLASS)
                 ->setNormal(get_class($value));
@@ -147,11 +145,11 @@ class ThroughLargeArray extends AbstractCallback implements
             return $this->pool->render->renderExpandableChild($model);
         }
 
-        if (is_array($value) === true) {
+        if (is_array($value)) {
             // Adding another array to the output may be as bad as a
             // complete object analysis.
             $model->setType(static::TYPE_SIMPLE_ARRAY)
-                ->setNormal('count: ' . count($value));
+                ->setNormal($this->pool->messages->getHelp('count') . count($value));
 
                 return $this->pool->render->renderExpandableChild($model);
         }

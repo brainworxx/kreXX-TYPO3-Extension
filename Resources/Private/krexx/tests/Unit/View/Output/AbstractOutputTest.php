@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -36,16 +36,15 @@
 namespace Brainworxx\Krexx\Tests\Unit\View\Output;
 
 use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Service\Misc\Cleanup;
-use Brainworxx\Krexx\Tests\Helpers\AbstractTest;
+use Brainworxx\Krexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\View\Output\Browser;
 
 /**
- * Although the name impleis an abstract class, it's just a normal one.
+ * Although the name implies an abstract class, it's just a normal one.
  *
  * @package Brainworxx\Krexx\Tests\View\Output
  */
-class AbstractOutputTest extends AbstractTest
+class AbstractOutputTest extends AbstractHelper
 {
     /**
      * Test the setting of the pool.

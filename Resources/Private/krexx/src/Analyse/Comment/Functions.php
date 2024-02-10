@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2022 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -58,19 +58,8 @@ class Functions extends AbstractComment
      */
     public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
     {
-        // Do some static caching. The comment will not change during a run.
-        static $cache = [];
-        /** @var \ReflectionFunction $reflection */
-        $cachingKey = $reflection->getName();
-
-        if (isset($cache[$cachingKey]) === true) {
-            return $cache[$cachingKey];
-        }
-
-        // Cache not found. We need to generate this one.
-        $cache[$cachingKey] = $this->pool->encodingService->encodeString(
+        return $this->pool->encodingService->encodeString(
             $this->prettifyComment($reflection->getDocComment())
         );
-        return $cache[$cachingKey];
     }
 }
