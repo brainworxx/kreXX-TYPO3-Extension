@@ -69,7 +69,7 @@ interface PluginConstInterface
     /**
      * Version of the plugin.
      *
-     * @deprecated since 5.0.
+     * @deprecated since 5.0.0
      *   Will be removed. Use the configuration class directly.
      *
      * @var string

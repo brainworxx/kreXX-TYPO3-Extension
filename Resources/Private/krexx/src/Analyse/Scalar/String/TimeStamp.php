@@ -95,7 +95,7 @@ class TimeStamp extends AbstractScalarAnalysis
 
         // The last part to check for would be a string return from the
         // microtime. In over 10 years of PHP development, I've never seen one
-        //of these, ever. So no, as of, right now, we will not check these.
+        // of these, ever. So no, as of, right now, we will not check these.
 
         // Make sure that the handle part is not called, to save time.
         return false;

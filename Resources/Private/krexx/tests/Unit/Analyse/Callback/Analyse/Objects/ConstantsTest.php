@@ -138,7 +138,6 @@ class ConstantsTest extends AbstractHelper
         $this->assertEquals(
             [
                 Constants::PARAM_DATA => $returnConstants,
-                Constants::PARAM_CLASSNAME => '\\some classname',
                 Constants::PARAM_REF => $reflectionMock
             ],
             CallbackCounter::$staticParameters[0]

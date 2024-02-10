@@ -40,6 +40,7 @@ namespace Brainworxx\Krexx\Controller;
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
 use Brainworxx\Krexx\Analyse\Caller\ExceptionCallerFinder;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Logging\Model as LogModel;
 
 /**
  * "Controller" for the dump (aka analysis) "action".
@@ -70,7 +71,7 @@ class DumpController extends AbstractController implements BacktraceConstInterfa
         }
 
         // Find caller.
-        if ($data instanceof \Brainworxx\Krexx\Logging\Model) {
+        if ($data instanceof LogModel) {
             $this->callerFinder = $this->pool->createClass(ExceptionCallerFinder::class);
         }
         $caller = $this->callerFinder->findCaller($message, $data);

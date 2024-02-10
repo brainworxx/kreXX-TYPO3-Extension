@@ -508,4 +508,18 @@ class ThroughPropertiesTest extends AbstractHelper
         $this->assertEquals($connectorRight, $model->getConnectorRight());
         $this->assertEquals($additional, $model->getAdditional(), $model->getName());
     }
+
+    /**
+     * Testing the property name analysis.
+     *
+     * @covers \Brainworxx\Krexx\Service\Misc\Encoding::isPropertyNameNormal
+     */
+    public function testIsPropertyNameNormal()
+    {
+        $this->assertTrue($this->throughProperties->isPropertyNameNormal('getValue'));
+        $this->assertFalse($this->throughProperties->isPropertyNameNormal('get value'));
+        $this->assertTrue($this->throughProperties->isPropertyNameNormal('getValue'));
+        $this->assertFalse($this->throughProperties->isPropertyNameNormal("\xEF\xBB\xBF"));
+        $this->assertFalse($this->throughProperties->isPropertyNameNormal('x' . "\xEF\xBB\xBF" . 'y'));
+    }
 }

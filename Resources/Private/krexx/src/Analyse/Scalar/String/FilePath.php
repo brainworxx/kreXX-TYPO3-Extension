@@ -140,16 +140,15 @@ class FilePath extends AbstractScalarAnalysis
         $result = [];
 
         set_error_handler($this->pool->retrieveErrorCallback());
-
         try {
             $isFile = is_file($string);
         } catch (TypeError $exception) {
             $isFile = false;
         }
+        restore_error_handler();
 
         if (!$isFile) {
             // Early return
-            restore_error_handler();
             return $result;
         }
 
@@ -159,8 +158,6 @@ class FilePath extends AbstractScalarAnalysis
             $result[static::REAL_PATH] = $this->pool->fileService->filterFilePath($realPath);
         }
         $result[static::MIME_TYPE] = $this->bufferInfo->file($string);
-
-        restore_error_handler();
 
         return $result;
     }

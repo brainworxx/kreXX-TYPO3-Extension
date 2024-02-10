@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Analyse\Declaration;
 
+use Brainworxx\Krexx\Analyse\Comment\ReturnType;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Reflector;
 use ReflectionNamedType;
@@ -50,6 +51,9 @@ abstract class AbstractDeclaration
 {
     /**
      * We will not root-namespace these.
+     *
+     * @deprecated Since 5.0.2
+     *   Will be removed.
      *
      * @var string[]
      */
@@ -133,7 +137,7 @@ abstract class AbstractDeclaration
     protected function formatNamedType(ReflectionNamedType $namedType): string
     {
         $result = $namedType->getName();
-        if (!in_array($result, static::ALLOWED_TYPES, true) && strpos($result, '\\') !== 0) {
+        if (!in_array($result, ReturnType::ALLOWED_TYPES, true) && strpos($result, '\\') !== 0) {
             // Must be e un-namespaced class name.
             $result = '\\' . $result;
         }

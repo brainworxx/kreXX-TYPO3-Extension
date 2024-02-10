@@ -58,10 +58,7 @@ class ProcessObject extends AbstractProcessNoneScalar implements CallbackConstIn
      */
     public function canHandle(Model $model): bool
     {
-        // PHP 7.1 and lower does not recognise an object via is_object().
-        // Hence, we must test it by instanceof.
-        $data = $model->getData();
-        return is_object($model->getData()) || $data instanceof __PHP_Incomplete_Class;
+        return is_object($model->getData());
     }
 
     /**

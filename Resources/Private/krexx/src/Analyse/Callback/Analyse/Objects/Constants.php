@@ -82,9 +82,6 @@ class Constants extends AbstractObjectAnalysis implements CodegenConstInterface
                     ->setType(static::TYPE_INTERNALS)
                     ->setCodeGenType(static::CODEGEN_TYPE_META_CONSTANTS)
                     ->addParameter(static::PARAM_DATA, $listOfConstants)
-                    // Deprecated since 4.0.0
-                    ->addParameter(static::PARAM_CLASSNAME, $classname)
-                    // Deprecated since 4.0.0
                     ->addParameter(static::PARAM_REF, $ref)
                     ->injectCallback(
                         $this->pool->createClass(ThroughConstants::class)

@@ -57,9 +57,9 @@ class ErrorObject extends AbstractObjectAnalysis implements BacktraceConstInterf
         // Call the start event, even if this is not an error object.
         $output = $this->dispatchStartEvent() . $this->renderBacktrace();
 
-        /** @var \Throwable|\Exception $data */
+        /** @var \Throwable $data */
         $data = $this->parameters[static::PARAM_DATA];
-        $lineNo = ($data->getLine()) - 1;
+        $lineNo = $data->getLine() - 1;
         $source = trim(
             $this->pool->fileService->readSourcecode(
                 $data->getFile(),

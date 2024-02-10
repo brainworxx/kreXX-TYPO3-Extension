@@ -215,7 +215,7 @@ class ThroughProperties extends AbstractCallback implements
             $connectorType = static::CONNECTOR_STATIC_PROPERTY;
         } elseif (
             !empty($refProperty->isUndeclared) &&
-            !$this->pool->encodingService->isPropertyNameNormal($refProperty->getName())
+            !$this->isPropertyNameNormal($refProperty->getName())
         ) {
             // This one was undeclared and does not follow the standard naming
             // conventions of PHP. Maybe something for a rest service?
@@ -243,14 +243,13 @@ class ThroughProperties extends AbstractCallback implements
             $propName = '$' . $propName;
         } elseif (
             !empty($refProperty->isUndeclared) &&
-            !$this->pool->encodingService->isPropertyNameNormal($refProperty->getName())
+            !$this->isPropertyNameNormal($refProperty->getName())
         ) {
             // There can be anything in there. We must take special preparations
             // for the code generation.
             $propName = $this->pool->encodingService->encodeString($propName);
         }
 
-        // And  encode it, just in case.
         return $propName;
     }
 
@@ -368,5 +367,35 @@ class ThroughProperties extends AbstractCallback implements
     {
         return $this->pool->createClass(PropertyDeclaration::class)
             ->retrieveDeclaration($refProperty);
+    }
+
+    /**
+     * Check for special chars in properties.
+     *
+     * AFAIK this is only possible for dynamically declared properties
+     * or some magical stuff from __get()
+     *
+     * @see https://stackoverflow.com/questions/29019484/validate-a-php-variable
+     * @author AbraCadaver
+     *
+     * @param string|int $propName
+     *   The property name we want to check.
+     * @return bool
+     *   Whether we have a special char in there, or not.
+     */
+    public function isPropertyNameNormal($propName): bool
+    {
+        static $cache = [];
+
+        if (isset($cache[$propName])) {
+            return $cache[$propName];
+        }
+
+        // The first regex detects all allowed characters.
+        // For some reason, they also allow BOM characters.
+        return $cache[$propName] = (bool) preg_match(
+            "/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/",
+            (string)$propName
+        ) && !(bool) preg_match("/\xEF\xBB\xBF/", $propName);
     }
 }

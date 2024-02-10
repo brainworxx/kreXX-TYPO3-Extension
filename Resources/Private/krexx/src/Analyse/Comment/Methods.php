@@ -100,11 +100,17 @@ class Methods extends AbstractComment
     protected function getMethodComment(ReflectionMethod $reflectionMethod, ReflectionClass $reflectionClass): string
     {
         // Get a first impression.
-        $comment = $this->prettifyComment($reflectionMethod->getDocComment());
         // Check for interfaces.
-        $comment = $this->getInterfaceComment($comment, $reflectionClass);
         // Check for traits.
-        $comment = $this->getTraitComment($comment, $reflectionClass);
+        $comment = $this->getTraitComment(
+            $this->getInterfaceComment(
+                $this->prettifyComment(
+                    $reflectionMethod->getDocComment()
+                ),
+                $reflectionClass
+            ),
+            $reflectionClass
+        );
 
         // Nothing on this level, we need to take a look at the parents.
         $reflectionClass = $reflectionClass->getParentClass();

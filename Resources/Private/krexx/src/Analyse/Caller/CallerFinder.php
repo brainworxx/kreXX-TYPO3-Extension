@@ -164,8 +164,7 @@ class CallerFinder extends AbstractCaller implements BacktraceConstInterface, Ca
             return $varname;
         }
 
-        $line--;
-        $commendLine = $this->pool->fileService->readFile($file, $line, $line);
+        $commendLine = $this->pool->fileService->readFile($file, --$line, $line);
 
         return $this->removeKrexxPartFromCommand($commendLine);
     }

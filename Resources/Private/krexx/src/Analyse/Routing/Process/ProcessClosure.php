@@ -80,11 +80,13 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
      */
     protected function handleNoneScalar(Model $model): string
     {
+        /** @var Closure $data */
+        $data = $model->getData();
         // Remember that we've been here before.
-        $this->pool->recursionHandler->addToHive($model->getData());
+        $this->pool->recursionHandler->addToHive($data);
 
         try {
-            $ref = new ReflectionFunction($model->getData());
+            $ref = new ReflectionFunction($data);
         } catch (ReflectionException $e) {
             // Not sure how this can happen.
             return '';
@@ -95,7 +97,7 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
             $model->setType(static::TYPE_CLOSURE)
                 ->setNormal(static::UNKNOWN_VALUE)
                 ->setConnectorParameters($this->retrieveParameterList($ref, $result))
-                ->setDomid($this->generateDomIdFromObject($model->getData()))
+                ->setDomid($this->generateDomIdFromObject($data))
                 ->setConnectorType(static::CONNECTOR_METHOD)
                 ->addParameter(static::PARAM_DATA, $result)
                 ->injectCallback($this->pool->createClass(ThroughMeta::class))
@@ -177,8 +179,7 @@ class ProcessClosure extends AbstractProcessNoneScalar implements
     {
         $paramList = '';
         foreach ($ref->getParameters() as $key => $reflectionParameter) {
-            ++$key;
-            $paramList .=  $result[$this->pool->messages->getHelp('metaParamNo') . $key] = $this->pool
+            $paramList .=  $result[$this->pool->messages->getHelp('metaParamNo') . ++$key] = $this->pool
                 ->codegenHandler
                 ->parameterToString($reflectionParameter);
             // We add a comma to the parameter list, to separate them for a

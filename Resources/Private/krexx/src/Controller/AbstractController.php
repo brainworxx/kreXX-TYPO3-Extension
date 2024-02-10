@@ -113,12 +113,15 @@ abstract class AbstractController implements ConfigConstInterface
         // We get a new output service for every krexx call, because the hosting
         // cms may do their stuff in the shutdown functions as well.
         $this->destination = $pool->config->getSetting(static::SETTING_DESTINATION);
-        if ($this->destination === static::VALUE_BROWSER) {
-            $this->outputService = $pool->createClass(Browser::class);
-        } elseif ($this->destination === static::VALUE_FILE) {
-            $this->outputService = $pool->createClass(File::class);
-        } elseif ($this->destination === static::VALUE_BROWSER_IMMEDIATELY) {
-            $this->outputService = $pool->createClass(BrowserImmediately::class);
+        switch ($this->destination) {
+            case static::VALUE_BROWSER:
+                $this->outputService = $pool->createClass(Browser::class);
+                break;
+            case static::VALUE_FILE:
+                $this->outputService = $pool->createClass(File::class);
+                break;
+            default:
+                $this->outputService = $pool->createClass(BrowserImmediately::class);
         }
 
         $this->pool->reset();
@@ -149,17 +152,15 @@ abstract class AbstractController implements ConfigConstInterface
             $path = $this->pool->messages->getHelp('configFileNotFound');
         }
 
-        $model = $this->pool->createClass(Model::class)
-            ->setName($path)
-            ->setType($this->pool->fileService->filterFilePath($pathToConfig))
-            ->setHelpid('currentSettings')
-            ->injectCallback(
-                $this->pool->createClass(ThroughConfig::class)
-            );
-
         return $this->pool->render->renderFooter(
             $caller,
-            $model,
+            $this->pool->createClass(Model::class)
+                ->setName($path)
+                ->setType($this->pool->fileService->filterFilePath($pathToConfig))
+                ->setHelpid('currentSettings')
+                ->injectCallback(
+                    $this->pool->createClass(ThroughConfig::class)
+                ),
             $isExpanded
         );
     }

@@ -52,6 +52,7 @@ class ProcessResourceTest extends AbstractHelper
     const PROCESS_NAMESPACE = '\\Brainworxx\\Krexx\\Analyse\\Routing\\Process\\';
     const GET_RESOURCE_TYPE = 'get_resource_type';
     const CURL_GETINFO = 'curl_getinfo';
+    const GET_TYPE = 'gettype';
 
     /**
      * Testing the processing of a stream resource.
@@ -111,7 +112,7 @@ class ProcessResourceTest extends AbstractHelper
      * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::renderUnknownOrClosed
      * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchNamedEvent
      */
-    public function testProcessOtherNotPhp72()
+    public function testProcessOther()
     {
         $this->mockEmergencyHandler();
 
@@ -119,34 +120,11 @@ class ProcessResourceTest extends AbstractHelper
         $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
         $getResourceType->expects($this->once())
             ->will($this->returnValue('whatever'));
-        $versionCompare = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'version_compare');
-        $versionCompare->expects($this->once())
-            ->will($this->returnValue(false));
+        $getType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_TYPE);
+        $getType->expects($this->once())
+            ->will($this->returnValue('Resource (whatever)'));
 
         $this->runTheTest($resource, 0, 'Resource (whatever)', $resource);
-    }
-
-    /**
-     * Testing the processing of a not yet implemented resource type analysis.
-     *
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::handle
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::retrieveTypeString
-     * @covers \Brainworxx\Krexx\Analyse\Routing\Process\ProcessResource::renderUnknownOrClosed
-     * @covers \Brainworxx\Krexx\Analyse\Routing\AbstractRouting::dispatchNamedEvent
-     */
-    public function testProcessOtherPhp72()
-    {
-        $this->mockEmergencyHandler();
-
-        $resource = 'Meh, here I might not really look like a resource at all.';
-        $getResourceType = $this->getFunctionMock(static::PROCESS_NAMESPACE, static::GET_RESOURCE_TYPE);
-        $getResourceType->expects($this->once())
-            ->will($this->returnValue('not a string'));
-        $versionCompare = $this->getFunctionMock(static::PROCESS_NAMESPACE, 'version_compare');
-        $versionCompare->expects($this->once())
-            ->will($this->returnValue(true));
-
-        $this->runTheTest($resource, 0, 'string', $resource);
     }
 
     /**

@@ -102,13 +102,12 @@ class Callback extends AbstractScalarAnalysis
         }
 
         // Stitching together the main analysis.
-        /** @var Functions $comment */
-        $comment = $this->pool->createClass(Functions::class);
         /** @var FunctionDeclaration $functionDeclaration */
         $functionDeclaration = $this->pool->createClass(FunctionDeclaration::class);
         $messages = $this->pool->messages;
         $meta = [
-            $messages->getHelp('metaComment') => $comment->getComment($reflectionFunction),
+            $messages->getHelp('metaComment') => $this->pool
+                ->createClass(Functions::class)->getComment($reflectionFunction),
             $messages->getHelp('metaDeclaredIn') => $functionDeclaration->retrieveDeclaration($reflectionFunction)
         ];
         $this->insertParameters($reflectionFunction, $meta);

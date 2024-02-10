@@ -88,9 +88,8 @@ class Cleanup implements ConfigConstInterface
             return $this;
         }
 
-        $mapped = array_map([$this->pool->fileService, 'filetime'], $logList);
         array_multisort(
-            $mapped,
+            array_map([$this->pool->fileService, 'filetime'], $logList),
             SORT_DESC,
             $logList
         );

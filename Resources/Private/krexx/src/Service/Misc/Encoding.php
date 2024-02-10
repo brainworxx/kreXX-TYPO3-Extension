@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Krexx\Service\Misc;
 
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughProperties;
 use Brainworxx\Krexx\Service\Factory\Pool;
 
 /**
@@ -180,16 +181,11 @@ class Encoding
             // The { are needed in the marker of the skin.
             $search = ['@', '{', '  '];
         }
-        $replace = ['&#64;', '&#123;', '&nbsp;&nbsp;'];
 
         // There are several places here, that may throw a warning.
-        set_error_handler(
-            function (): void {
-                // Do nothing.
-            }
-        );
+        set_error_handler($this->pool->retrieveErrorCallback());
 
-        $result = str_replace($search, $replace, htmlentities($data, ENT_QUOTES));
+        $result = str_replace($search, ['&#64;', '&#123;', '&nbsp;&nbsp;'], htmlentities($data, ENT_QUOTES));
 
         // Check if encoding was successful.
         // 99.99% of the time, the encoding works.
@@ -382,6 +378,11 @@ class Encoding
      * AFAIK this is only possible for dynamically declared properties
      * or some magical stuff from __get()
      *
+     * @deprecated Since 5.0.2
+     *   Use ThroughProperties->isPropertyNameNormal() instead.
+     * @codeCoverageIgnore
+     *   We do not test deprecated methods.
+     *
      * @see https://stackoverflow.com/questions/29019484/validate-a-php-variable
      * @author AbraCadaver
      *
@@ -392,17 +393,7 @@ class Encoding
      */
     public function isPropertyNameNormal($propName): bool
     {
-        static $cache = [];
-
-        if (isset($cache[$propName])) {
-            return $cache[$propName];
-        }
-
-        // The first regex detects all allowed characters.
-        // For some reason, they also allow BOM characters.
-        return $cache[$propName] = (bool) preg_match(
-            "/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/",
-            (string)$propName
-        ) && !(bool) preg_match("/\xEF\xBB\xBF/", $propName);
+        return $this->pool->createClass(ThroughProperties::class)
+            ->isPropertyNameNormal($propName);
     }
 }

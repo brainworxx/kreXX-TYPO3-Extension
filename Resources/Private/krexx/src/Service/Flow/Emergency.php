@@ -224,9 +224,8 @@ class Emergency implements ConfigConstInterface
         // We will only check, if we were able to determine a memory limit
         // in the first place.
         if ($this->serverMemoryLimit > 2) {
-            $left = $this->serverMemoryLimit - memory_get_usage();
             // Is more left than is configured?
-            if ($left < $this->minMemoryLeft) {
+            if (($this->serverMemoryLimit - memory_get_usage()) < $this->minMemoryLeft) {
                 $this->pool->messages->addMessage('emergencyMemory');
                 // Show settings to give the dev to repair the situation.
                 Krexx::editSettings();

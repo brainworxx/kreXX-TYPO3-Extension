@@ -68,7 +68,6 @@ class OpaqueRessource extends AbstractCallback implements CallbackConstInterface
             // Looks someone mocked the class, without having the extension installed.
         }
 
-
         $this->pool->codegenHandler->setCodegenAllowed(true);
         return $output;
     }

@@ -336,16 +336,11 @@ class Config extends Fallback
      */
     protected function prepareModelWithFeSettings(string $name): Model
     {
-        $fileFeSettings = $this->fileConfig->getFeConfigFromFile($name);
-
-        if ($fileFeSettings === null) {
-            // Use the fallback values.
-            $fileFeSettings = $this->feConfigFallback[$name][static::RENDER];
-        }
-        $section = $this->feConfigFallback[$name][static::SECTION];
+        $fileFeSettings = $this->fileConfig->getFeConfigFromFile($name) ??
+            $this->feConfigFallback[$name][static::RENDER];
 
         return $this->pool->createClass(Model::class)
-            ->setSection($section)
+            ->setSection($this->feConfigFallback[$name][static::SECTION])
             ->setEditable($fileFeSettings[static::RENDER_EDITABLE] === static::VALUE_TRUE)
             ->setType($fileFeSettings[static::RENDER_TYPE]);
     }

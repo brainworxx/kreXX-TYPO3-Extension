@@ -41,7 +41,6 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughResource;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
-use Throwable;
 use CurlHandle;
 
 /**
@@ -148,23 +147,17 @@ class ProcessResource extends AbstractRouting implements ProcessInterface, Callb
      * @param resource $resource
      *   The resource, that we are analysing.
      * @param string $typeString
-     *   The human-readable type string.
+     *   Deprecated since 5.0.0. Will be removed.
      *
      * @return string
      *   The rendered HTML.
      */
     protected function renderUnknownOrClosed(Model $model, $resource, string $typeString): string
     {
-        // If we are facing a closed resource, 'Unknown' is a little sparse.
-        // PHP 7.2 can provide more info by calling gettype().
-        if (version_compare(phpversion(), '7.2.0', '>=')) {
-            $typeString = gettype($resource);
-        }
-
         return $this->pool->render->renderExpandableChild(
             $this->dispatchNamedEvent(
                 __FUNCTION__,
-                $model->setNormal($typeString)
+                $model->setNormal(gettype($resource))
                     ->setType(static::TYPE_RESOURCE)
             )
         );

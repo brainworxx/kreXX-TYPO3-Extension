@@ -136,7 +136,7 @@ class BacktraceStep extends AbstractCallback implements
             $output = $this->pool->render->renderExpandableChild(
                 $this->pool->createClass(Model::class)
                     ->setData($stepData[static::TRACE_LINE])
-                    ->setName('Line no.')
+                    ->setName($this->pool->messages->getHelp('lineNumber'))
                     ->setNormal($stepData[static::TRACE_LINE])
                     ->setType(static::TYPE_INTEGER)
             );

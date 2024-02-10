@@ -86,8 +86,10 @@ class File extends Fallback
         foreach (['ini' => 'parse_ini_string', 'json' => 'json_decode'] as $extension => $decoder) {
             $completePath = $path . $extension;
             if ($this->pool->fileService->fileIsReadable($completePath)) {
-                $content = $this->pool->fileService->getFileContents($completePath, false);
-                $this->settings = (array)$decoder($content, true);
+                $this->settings = (array)$decoder(
+                    $this->pool->fileService->getFileContents($completePath, false),
+                    true
+                );
                 // Feedback about the file name.
                 $this->pool->config->setPathToConfigFile($completePath);
                 return $this;

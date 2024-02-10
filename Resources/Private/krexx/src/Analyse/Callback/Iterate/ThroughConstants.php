@@ -50,11 +50,6 @@ use ReflectionClassConstant;
  *   Array of constants values from the class we are analysing.
  * @uses \ReflectionClass ref
  *   Reflection of the class we are analysing.
- *
- * Deprecated:
- * @uses string classname
- *   The classname we are analysing, for code generation purpose.
- *   Deprecated since 4.0.0. Will be removed. Ask the class reflection instead.
  */
 class ThroughConstants extends AbstractCallback implements CallbackConstInterface, CodegenConstInterface
 {
