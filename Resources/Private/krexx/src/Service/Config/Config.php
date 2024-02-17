@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -191,6 +191,34 @@ class Config extends Fallback
     }
 
     /**
+     * Are we allowed to use this value for this setting from the cookies?
+     *
+     * @param \Brainworxx\Krexx\Service\Config\Model $model
+     *   The configuration model, loaded with the fe editing values.
+     * @param string $name
+     *   Name of the configuration.
+     * @param string|null $value
+     *   Value of the configuration.
+     * @return bool
+     */
+    protected function isCookieValueAllowed(Model $model, string $name, ?string $value): bool
+    {
+        if ($value === null || !$model->isEditable()) {
+            // We either have no value, or are not allowed to edit it in the first place.
+            return false;
+        }
+
+        if ($name === static::SETTING_DISABLED && $value === static::VALUE_FALSE) {
+            // We must not overwrite a disabled=true with local cookie settings!
+            // Otherwise, it could get enabled locally, which might be a security
+            // issue.
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Load values of the kreXX's configuration.
      *
      * @param string $name
@@ -203,36 +231,32 @@ class Config extends Fallback
     {
         $model = $this->prepareModelWithFeSettings($name);
         $section = $model->getSection();
+        $this->settings[$name] = $model;
 
-        // Do we accept cookie settings here?
-        if ($model->isEditable()) {
-            $cookieSetting = $this->cookieConfig->getConfigFromCookies($section, $name);
-            // Do we have a value in the cookies?
-            if (
-                $cookieSetting  !== null &&
-                !($name === static::SETTING_DISABLED && $cookieSetting === static::VALUE_FALSE)
-            ) {
-                // We must not overwrite a disabled=true with local cookie settings!
-                // Otherwise, it could get enabled locally, which might be a security
-                // issue.
-                $model->setValue($cookieSetting)
-                    ->setSource($this->pool->messages->getHelp('localCookieSettings'));
-                $this->settings[$name] = $model;
-                return $this;
-            }
-        }
-
-        // Do we have a value in the configuration file?
-        $fileSettings = $this->fileConfig->getConfigFromFile($section, $name);
-        if ($fileSettings === null) {
-            // Take the factory settings.
-            $model->setValue($this->feConfigFallback[$name][static::VALUE])->setSource('Factory settings');
-            $this->settings[$name] = $model;
+        $cookieSetting = $this->cookieConfig->getConfigFromCookies($section, $name);
+        if ($this->isCookieValueAllowed($model, $name, $cookieSetting)) {
+            $model->setValue($cookieSetting)
+                ->setSource($this->pool->messages->getHelp('localCookieSettings'));
             return $this;
         }
 
-        $model->setValue($fileSettings)->setSource('Configuration file settings');
-        $this->settings[$name] = $model;
+        // Do we have a value in the configuration file?
+        if ($this->fileConfig->getConfigFromFile($section, $name) !== null) {
+            $model->setValue($this->fileConfig->getConfigFromFile($section, $name))
+                ->setSource('Configuration file settings');
+            return $this;
+        }
+
+        // Plugin overwrites
+        if (isset(SettingsGetter::getNewFallbackValues()[$name])) {
+            $model->setValue(SettingsGetter::getNewFallbackValues()[$name])
+                ->setSource('Plugin overwrite setting');
+            return $this;
+        }
+
+        // Fallback the factory settings.
+        $model->setValue($this->feConfigFallback[$name][static::VALUE])
+            ->setSource('Factory settings');
 
         return $this;
     }

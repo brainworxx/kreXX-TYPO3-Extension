@@ -1,7 +1,10 @@
 5.0.2
+- Added the possibility for plugins to overwrite the factory
+  settings.
 - Change: Removed deprecated code.
 - Change: Some deprecations.
-- Bugfix: The event 'Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe::start'
+- Bugfix: The event
+  'Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe::start'
   was called too late.
 - Bugfix: Make use of the internal error callback in the string
   encoding class.
@@ -10,6 +13,7 @@
   in the ReturnType comment analysis.
 - Bugfix: Added missing types to the blacklist of none namespaces
   declaration types.
+- Bugfix: Added missing translations for the setting.
 
 5.0.1
 - Change: Updated the unit tests to 10.5

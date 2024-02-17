@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -217,6 +217,17 @@ class RegistrationTest extends AbstractRegistration
     }
 
     /**
+     * Test the adding of a new fallback value
+     *
+     * @covers \Brainworxx\Krexx\Service\Plugin\Registration::addNewFallbackValue
+     */
+    public function testAddNewFallbackValue()
+    {
+        Registration::addNewFallbackValue('justa', 'value');
+        $this->assertEquals('value', SettingsGetter::getNewFallbackValues()['justa']);
+    }
+
+    /**
      * Test the adding of a language.
      *
      * @covers \Brainworxx\Krexx\Service\Plugin\Registration::addLanguage
@@ -318,6 +329,7 @@ class RegistrationTest extends AbstractRegistration
         $this->setValueByReflection(static::EVENT_LIST, [987], $this->registration);
         $this->setValueByReflection(static::ADD_SKIN_LIST, [654], $this->registration);
         $this->setValueByReflection(static::ADD_SCALAR_STRING, [654], $this->registration);
+        $this->setValueByReflection(static::ADD_SCALAR_STRING, ['barf' => 'digfood'], $this->registration);
 
         // Make sure we can test the changes to the pool.
         $oldConfig = Krexx::$pool->config;
@@ -342,6 +354,7 @@ class RegistrationTest extends AbstractRegistration
         $this->assertEmpty(SettingsGetter::getEventList());
         $this->assertEmpty(SettingsGetter::getAdditionalSkinList());
         $this->assertEmpty(SettingsGetter::getAdditionalScalarString());
+        $this->assertEmpty(SettingsGetter::getNewFallbackValues());
 
         // 3. Test the changes made to the pool
         $this->assertEmpty(Krexx::$pool->rewrite);

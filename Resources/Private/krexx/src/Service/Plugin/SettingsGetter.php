@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -42,6 +42,16 @@ namespace Brainworxx\Krexx\Service\Plugin;
  */
 class SettingsGetter extends Registration
 {
+    /**
+     * Getter for the new standard fallback value for settings.
+     *
+     * @return array
+     */
+    public static function getNewFallbackValues(): array
+    {
+        return self::$newFallbackValues;
+    }
+
     /**
      * Getter for the configured configuration file
      *

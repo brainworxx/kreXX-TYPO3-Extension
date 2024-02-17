@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -116,6 +116,9 @@ abstract class AbstractHelper extends TestCase
         $this->setValueByReflection('additionalSkinList', [], Registration::class);
         $this->setValueByReflection('plugins', [], Registration::class);
         $this->setValueByReflection('additionalScalarString', [], Registration::class);
+        $this->setValueByReflection('newFallbackValues', [], Registration::class);
+        $this->setValueByReflection('additionalLanguages', [], Registration::class);
+        $this->setValueByReflection('newSettings', [], Registration::class);
 
         // Reset the cache in the ReflectionClass.
         $this->setValueByReflection('cache', [], ReflectionClass::class);

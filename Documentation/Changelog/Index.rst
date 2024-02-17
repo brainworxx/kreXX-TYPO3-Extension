@@ -13,6 +13,7 @@ Changelog
 =============================================================
 
 5.0.2
+    - [Feature] Added the possibility for plugins to overwrite the factory settings.
     - [Change] Removed deprecated code.
     - [Change] Some deprecations.
     - [Change] Dropped the QueryDebugger, which is not needed anymore.
@@ -22,6 +23,7 @@ Changelog
     - [Bugfix] Added missing return types to the return type whitelist in the ReturnType comment analysis.
     - [Bugfix] Added missing types to the blacklist of none namespaces declaration types.
     - [Bugfix] Added a missing entry in the language files.
+    - [Bugfix] Added missing translations for the setting.
 
 5.0.1
     - [Feature] Updated to PHP 8.3

@@ -18,7 +18,7 @@
  *
  *   GNU Lesser General Public License Version 2.1
  *
- *   kreXX Copyright (C) 2014-2023 Brainworxx GmbH
+ *   kreXX Copyright (C) 2014-2024 Brainworxx GmbH
  *
  *   This library is free software; you can redistribute it and/or modify it
  *   under the terms of the GNU Lesser General Public License as published by
@@ -138,6 +138,26 @@ class Registration implements ConfigConstInterface, PluginConstInterface
      * @var string[][]
      */
     protected static $additionalLanguages = [];
+
+    /**
+     * New fallback values for the settings.
+     *
+     * @var array
+     */
+    protected static $newFallbackValues = [];
+
+    /**
+     * Add a new fallback standard value for a setting
+     *
+     * @param string $name
+     *   Name of the setting.
+     * @param string|int|null $value
+     *   The new value.
+     */
+    public static function addNewFallbackValue(string $name, $value): void
+    {
+        static::$newFallbackValues[$name] = $value;
+    }
 
     /**
      * Add a new setting that is used by your plugin.
@@ -393,6 +413,7 @@ class Registration implements ConfigConstInterface, PluginConstInterface
         static::$additionalScalarString = [];
         static::$newSettings = [];
         static::$additionalLanguages = [];
+        static::$newFallbackValues = [];
 
         // Go through the remaining plugins.
         static::$plugins[$configClass][static::IS_ACTIVE] = false;
