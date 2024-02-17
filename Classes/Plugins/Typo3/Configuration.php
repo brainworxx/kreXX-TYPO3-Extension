@@ -64,6 +64,7 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder as DbQueryBuilder;
 use Psr\Log\LogLevel;
 use Brainworxx\Includekrexx\Log\FileWriter as KrexxFileWriter;
 use Closure;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Configuration file for the TYPO3 kreXX plugin.
@@ -112,14 +113,37 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
 
         // See if we must create a temp directory for kreXX.
         $tempPaths = $this->generateTempPaths();
-
         // Register it!
         Registration::setConfigFile($tempPaths[Fallback::CONFIG_FOLDER] . DIRECTORY_SEPARATOR . 'Krexx.');
         Registration::setChunksFolder($tempPaths[Fallback::CHUNKS_FOLDER] . DIRECTORY_SEPARATOR);
         Registration::setLogFolder($tempPaths[Fallback::LOG_FOLDER] . DIRECTORY_SEPARATOR);
         $this->createWorkingDirectories($tempPaths);
 
-        // Adding our debugging blacklist.
+        if (!class_exists(ObjectManager::class)) {
+            // Register the direct output as pre-configuration in TYPO3 12.
+            Registration::addNewFallbackValue(static::SETTING_DESTINATION, static::VALUE_BROWSER_IMMEDIATELY);
+        }
+
+        $this->registerBlacklisting();
+
+        // Add additional texts to the help.
+        $extPath = ExtensionManagementUtility::extPath(static::EXT_KEY);
+        Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/t3.kreXX.ini');
+
+        // Register the scalar analysis classes.
+        Registration::addScalarStringAnalyser(ExtFilePath::class);
+        Registration::addScalarStringAnalyser(LllString::class);
+
+        $this->registerFileWriterSettings();
+        $this->registerVersionDependantStuff();
+        $this->registerFileWriter();
+    }
+
+    /**
+     * Adding our debugging blacklist.
+     */
+    protected function registerBlacklisting(): void
+    {
         // TYPO3 viewhelpers dislike this function.
         // In the TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper the private
         // $viewHelperNode might not be an object, and trying to render it might
@@ -137,18 +161,6 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
 
         // We now have a better variant for the QueryBuilder analysis.
         Registration::addMethodToDebugBlacklist(DbQueryBuilder::class, $toString);
-
-        // Add additional texts to the help.
-        $extPath = ExtensionManagementUtility::extPath(static::EXT_KEY);
-        Registration::registerAdditionalHelpFile($extPath . 'Resources/Private/Language/t3.kreXX.ini');
-
-        // Register the scalar analysis classes.
-        Registration::addScalarStringAnalyser(ExtFilePath::class);
-        Registration::addScalarStringAnalyser(LllString::class);
-
-        $this->registerFileWriterSettings();
-        $this->registerVersionDependantStuff();
-        $this->registerFileWriter();
     }
 
     /**

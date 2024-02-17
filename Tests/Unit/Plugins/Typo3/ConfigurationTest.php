@@ -44,7 +44,6 @@ use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Service\Config\From\File;
@@ -57,6 +56,7 @@ use TYPO3\CMS\Core\Package\MetaData;
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use Brainworxx\Krexx\View\Output\CheckOutput;
 use Krexx;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class ConfigurationTest extends AbstractHelper implements ConstInterface
 {
@@ -143,6 +143,7 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
      * Test the adjustments done by the TYPO3 plugin.
      *
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::exec
+     * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerBlacklisting
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::createWorkingDirectories
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerVersionDependantStuff
      * @covers \Brainworxx\Includekrexx\Plugins\Typo3\Configuration::registerFileWriterSettings
@@ -220,6 +221,22 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
             $rootpath . $log . DIRECTORY_SEPARATOR,
             SettingsGetter::getLogFolder(),
             'Test the new location of the log folder.'
+        );
+
+        if (class_exists(ObjectManager::class)) {
+            $this->assertEmpty(
+                SettingsGetter::getNewFallbackValues(),
+                'An ObjectManager means TYPO3 10 or 11.'
+            );
+        } else {
+            $this->assertEquals(Configuration::VALUE_BROWSER_IMMEDIATELY,
+                SettingsGetter::getNewFallbackValues()[Configuration::SETTING_DESTINATION],
+                'Test if we registerd the new standard output method.'
+            );
+        }
+        $this->assertEquals(Configuration::VALUE_BROWSER_IMMEDIATELY,
+            SettingsGetter::getNewFallbackValues()[Configuration::SETTING_DESTINATION],
+            'Test if we registerd the new standard output method with TYPO3 12'
         );
 
         $toString = '__toString';

@@ -243,20 +243,20 @@ class Config extends Fallback
         // Do we have a value in the configuration file?
         if ($this->fileConfig->getConfigFromFile($section, $name) !== null) {
             $model->setValue($this->fileConfig->getConfigFromFile($section, $name))
-                ->setSource('Configuration file settings');
+                ->setSource($this->pool->messages->getHelp('configFileSettings'));
             return $this;
         }
 
         // Plugin overwrites
         if (isset(SettingsGetter::getNewFallbackValues()[$name])) {
             $model->setValue(SettingsGetter::getNewFallbackValues()[$name])
-                ->setSource('Plugin overwrite setting');
+                ->setSource($this->pool->messages->getHelp('pluginOverwriteSetting'));
             return $this;
         }
 
         // Fallback the factory settings.
         $model->setValue($this->feConfigFallback[$name][static::VALUE])
-            ->setSource('Factory settings');
+            ->setSource($this->pool->messages->getHelp('factorySetting'));
 
         return $this;
     }

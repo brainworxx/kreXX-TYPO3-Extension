@@ -40,6 +40,7 @@ namespace Brainworxx\Includekrexx\Collectors;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\From\File;
+use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
 use Psr\Log\LogLevel;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 
@@ -116,6 +117,8 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
         /** @var File $iniReader */
         $iniReader = $this->pool->createClass(File::class)->loadFile($filePath);
 
+        $fallbackOverwrites = SettingsGetter::getNewFallbackValues();
+
         $config = [];
         /**
          * @var string $settingsName
@@ -128,7 +131,8 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
             $config[$settingsName][static::SETTINGS_NAME] = $settingsName;
             $config[$settingsName][static::SETTINGS_VALUE] = $iniReader->getConfigFromFile($group, $settingsName);
             $config[$settingsName][static::SETTINGS_USE_FACTORY_SETTINGS] = false;
-            $config[$settingsName][static::SETTINGS_FALLBACK] = $fallback[static::SETTINGS_VALUE];
+            $config[$settingsName][static::SETTINGS_FALLBACK] =
+                $fallbackOverwrites[$settingsName] ?? $fallback[static::SETTINGS_VALUE];
             $this->applyFallbackToConfig($config, $settingsName, $fallback);
         }
 

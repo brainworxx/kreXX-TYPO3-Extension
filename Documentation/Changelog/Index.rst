@@ -14,6 +14,7 @@ Changelog
 
 5.0.2
     - [Feature] Added the possibility for plugins to overwrite the factory settings.
+    - [Feature] Use the immediate browser output for TYPO3 12 as a new standard setting.
     - [Change] Removed deprecated code.
     - [Change] Some deprecations.
     - [Change] Dropped the QueryDebugger, which is not needed anymore.
