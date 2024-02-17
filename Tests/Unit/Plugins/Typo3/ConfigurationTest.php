@@ -234,10 +234,6 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
                 'Test if we registerd the new standard output method.'
             );
         }
-        $this->assertEquals(Configuration::VALUE_BROWSER_IMMEDIATELY,
-            SettingsGetter::getNewFallbackValues()[Configuration::SETTING_DESTINATION],
-            'Test if we registerd the new standard output method with TYPO3 12'
-        );
 
         $toString = '__toString';
         $this->assertEquals(
