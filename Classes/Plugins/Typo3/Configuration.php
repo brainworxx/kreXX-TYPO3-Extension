@@ -37,35 +37,36 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\Typo3;
 
+use Brainworxx\Includekrexx\Log\FileWriter as KrexxFileWriter;
 use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
+use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
-use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
+use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Config\Fallback;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\NewSetting;
-use Brainworxx\Krexx\View\Output\CheckOutput;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
+use Brainworxx\Krexx\View\Output\CheckOutput;
+use Closure;
+use Psr\Log\LogLevel;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder as DbQueryBuilder;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\LazyLoadingProxy;
 use TYPO3\CMS\Extbase\Persistence\RepositoryInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder as DbQueryBuilder;
-use Psr\Log\LogLevel;
-use Brainworxx\Includekrexx\Log\FileWriter as KrexxFileWriter;
-use Closure;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Configuration file for the TYPO3 kreXX plugin.

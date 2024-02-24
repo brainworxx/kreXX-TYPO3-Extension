@@ -37,10 +37,10 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
-use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
-use Throwable;
+use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use ReflectionClass;
+use Throwable;
 
 /**
  * General stuff for all event handlers.

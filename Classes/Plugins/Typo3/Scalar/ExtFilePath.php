@@ -37,10 +37,10 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\Typo3\Scalar;
 
-use Brainworxx\Krexx\Analyse\Scalar\String\FilePath;
 use Brainworxx\Krexx\Analyse\Model;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Brainworxx\Krexx\Analyse\Scalar\String\FilePath;
 use Throwable;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Resolving the actual file path from strings that start with EXT:

@@ -37,16 +37,16 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Bootstrap;
 
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
+use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
+use Brainworxx\Krexx\Service\Plugin\Registration;
+use Throwable;
 use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Information\Typo3Version;
-use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Includekrexx\Plugins\Typo3\Configuration as T3configuration;
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
-use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Configuration as AimeosConfiguration;
-use Throwable;
 
 /**
  * There is no way to clear the cache after an extension update automatically

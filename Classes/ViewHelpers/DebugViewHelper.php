@@ -37,12 +37,12 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\ViewHelpers;
 
-use Brainworxx\Krexx\Krexx;
-use Brainworxx\Krexx\Service\Plugin\Registration;
-use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\Configuration as FluidConfiguration;
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
+use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Factory\Pool;
+use Brainworxx\Krexx\Service\Plugin\Registration;
 use ReflectionClass;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Our fluid wrapper for kreXX.

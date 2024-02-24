@@ -37,22 +37,22 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger;
 
+use Aimeos\MW\DB\Statement\Base as StatementBase;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\DebugMethods;
-use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ThroughMethods;
-use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Decorators;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Getter;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\Properties;
+use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ThroughMethods;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers\ViewFactory;
-use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
-use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface as Typo3ConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods as AnalyseDebugMethods;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\Methods as AnalyseMethods;
+use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\PublicProperties;
+use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods as IterateThroughMethods;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use Aimeos\MW\DB\Statement\Base as StatementBase;
-use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface as Typo3ConstInterface;
 
 /**
  * Configuration for the Aimeos Debugger plugin.

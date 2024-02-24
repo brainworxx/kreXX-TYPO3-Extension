@@ -37,6 +37,10 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
+use Aimeos\Base\View\Helper\Base as BaseHelperBase;
+use Aimeos\Base\View\Iface as BaseViewInterface;
+use Aimeos\MW\View\Helper\Base as HelperBase;
+use Aimeos\MW\View\Iface as ViewInterface;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughClassList;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\Callbacks\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
@@ -45,10 +49,6 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionClass;
 use ReflectionException;
-use Aimeos\MW\View\Helper\Base as HelperBase;
-use Aimeos\Base\View\Helper\Base as BaseHelperBase;
-use Aimeos\MW\View\Iface as ViewInterface;
-use Aimeos\Base\View\Iface as BaseViewInterface;
 
 /**
  * Resolving the Aimoes view helper factory. Not to be confused with fluid

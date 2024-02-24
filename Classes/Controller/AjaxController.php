@@ -43,10 +43,10 @@ use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use stdClass;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use stdClass;
 
 /**
  * Handles the backend ajax requests for the loglist.

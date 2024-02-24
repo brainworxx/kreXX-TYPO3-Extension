@@ -38,25 +38,25 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Controller;
 
 use Brainworxx\Includekrexx\Collectors\AbstractCollector;
+use Brainworxx\Includekrexx\Collectors\Configuration;
+use Brainworxx\Includekrexx\Collectors\FormConfiguration;
 use Brainworxx\Includekrexx\Domain\Model\Settings;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Service\LanguageTrait;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use stdClass;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Http\NullResponse;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use Brainworxx\Includekrexx\Collectors\Configuration;
-use Brainworxx\Includekrexx\Collectors\FormConfiguration;
+use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
-use TYPO3\CMS\Core\Http\NullResponse;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
-use stdClass;
 
 /**
  * Hosting all those ugly workarounds to keep this extension compatible back to

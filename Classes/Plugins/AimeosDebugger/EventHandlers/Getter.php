@@ -37,6 +37,7 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
+use Aimeos\MShop\Common\Item\Iface;
 use Brainworxx\Includekrexx\Plugins\AimeosDebugger\ConstInterface as AimeosConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
@@ -44,7 +45,6 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionMethod;
-use Aimeos\MShop\Common\Item\Iface;
 
 /**
  * Resolving the Aimeos getter:

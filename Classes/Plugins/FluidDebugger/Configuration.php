@@ -39,6 +39,10 @@ namespace Brainworxx\Includekrexx\Plugins\FluidDebugger;
 
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\GetterWithoutGet;
 use Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers\VhsMethods;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen as FluidCodegen;
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors as FluidConnectors;
+use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface as Typo3ConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughGetter;
 use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughMethods;
 use Brainworxx\Krexx\Analyse\Caller\CallerFinder;
@@ -48,10 +52,6 @@ use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Plugin\PluginConfigInterface;
 use Brainworxx\Krexx\Service\Plugin\Registration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Connectors as FluidConnectors;
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\Code\Codegen as FluidCodegen;
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\Rewrites\CallerFinder\Fluid as CallerFinderFluid;
-use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface as Typo3ConstInterface;
 
 /**
  * Special overwrites and event handlers for fluid.

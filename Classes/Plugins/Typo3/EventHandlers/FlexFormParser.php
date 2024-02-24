@@ -42,9 +42,9 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
+use Throwable;
 use TYPO3\CMS\Core\Service\FlexFormService as FlexFromServiceCore;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use Throwable;
 
 /**
  * Parsing flexforms, if possible.

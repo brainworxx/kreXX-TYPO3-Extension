@@ -37,10 +37,10 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\FluidDebugger\EventHandlers;
 
+use Brainworxx\Includekrexx\Plugins\FluidDebugger\ConstInterface as FluidConstInterface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
-use Brainworxx\Includekrexx\Plugins\FluidDebugger\ConstInterface as FluidConstInterface;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 

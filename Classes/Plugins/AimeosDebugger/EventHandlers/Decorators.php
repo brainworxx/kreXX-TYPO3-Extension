@@ -44,8 +44,8 @@ use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use ReflectionClass;
-use ReflectionMethod;
 use ReflectionException;
+use ReflectionMethod;
 
 /**
  * Resolving Aimeos magical decorator class methods.

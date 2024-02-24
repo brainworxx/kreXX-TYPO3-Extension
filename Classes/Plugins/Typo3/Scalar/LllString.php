@@ -35,12 +35,12 @@
 
 namespace Brainworxx\Includekrexx\Plugins\Typo3\Scalar;
 
-use Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Analyse\Scalar\String\AbstractScalarAnalysis;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Throwable;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * LLL string parser.

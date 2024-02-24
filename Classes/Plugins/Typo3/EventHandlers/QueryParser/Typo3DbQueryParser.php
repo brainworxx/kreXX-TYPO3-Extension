@@ -36,12 +36,12 @@
 namespace Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryParser;
 
 use Brainworxx\Krexx\Krexx;
+use Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser as OriginalParser;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
-use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
-use Exception;
 
 /**
  * Wrapper around the Typo3DbQueryParser.

@@ -37,16 +37,16 @@ declare(strict_types=1);
 
 namespace Brainworxx\Includekrexx\Plugins\AimeosDebugger\EventHandlers;
 
+use Aimeos\Base\View\Iface as BaseViewIface;
+use Aimeos\MShop\Common\Item\Iface as ItemIface;
+use Aimeos\MW\Tree\Node\Iface as NodeIface;
+use Aimeos\MW\View\Iface as ViewIface;
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Callback\CallbackConstInterface;
 use Brainworxx\Krexx\Analyse\Code\CodegenConstInterface;
 use Brainworxx\Krexx\Analyse\Code\ConnectorsConstInterface;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Service\Factory\Pool;
-use Aimeos\Base\View\Iface as BaseViewIface;
-use Aimeos\MShop\Common\Item\Iface as ItemIface;
-use Aimeos\MW\Tree\Node\Iface as NodeIface;
-use Aimeos\MW\View\Iface as ViewIface;
 
 /**
  * Analysing the __get() implementation in aimeos items.
