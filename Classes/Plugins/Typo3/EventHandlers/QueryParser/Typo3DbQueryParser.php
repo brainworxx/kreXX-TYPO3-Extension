@@ -48,6 +48,9 @@ use TYPO3\CMS\Extbase\Persistence\QueryInterface;
  *
  * Since the object manager got himself deprecated, the DI has become somewhat
  * unstable (imho) across the LTS versions.
+ *
+ * @deprecated
+ *   Will be removed as soon as we drop TYPO3 11 support.
  */
 class Typo3DbQueryParser extends OriginalParser
 {
