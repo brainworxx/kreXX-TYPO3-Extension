@@ -114,7 +114,7 @@ class LllStringTest extends AbstractHelper
         $lllString->canHandle($payload, $model);
         $result = $model->getJson();
         $this->assertEquals(static::KREXX_DEBUGGER, $result['Translation']);
-        $this->assertEquals('The file does not exist.', $result['Error']);
+        $this->assertEquals('The file or directory does not exist.', $result['Error']);
 
         // Do it again, with an early return this time.
         $payload = 'Just a string, nothing special';

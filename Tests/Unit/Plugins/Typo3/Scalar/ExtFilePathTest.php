@@ -126,7 +126,7 @@ class ExtFilePathTest extends AbstractHelper
         $expectations = [
             'Resolved EXT path' => 'Tests/Fixtures/123458.Krexx.html',
             'Mimetype file' => 'just a file',
-            'Error' => 'The file does not exist.'
+            'Error' => 'The file or directory does not exist.'
         ];
         $this->assertEquals(
             $expectations,

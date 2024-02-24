@@ -24,6 +24,7 @@ Changelog
     - [Bugfix] Added missing types to the blacklist of none namespaces declaration types.
     - [Bugfix] Added a missing entry in the language files.
     - [Bugfix] Added missing translations for the setting.
+    - [Bugfix] Made the feedback clearer when the Ext: resolver could not find a resolved file or directory.
 
 5.0.1
     - [Feature] Updated to PHP 8.3
