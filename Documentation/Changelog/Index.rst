@@ -17,7 +17,6 @@ Changelog
     - [Feature] Use the immediate browser output for TYPO3 12 as a new standard setting.
     - [Change] Removed deprecated code.
     - [Change] Some deprecations.
-    - [Change] Dropped the QueryDebugger, which is not needed anymore.
     - [Bugfix] The event 'Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe::start' was called too late.
     - [Bugfix] Make use of the internal error callback in the string encoding class.
     - [Bugfix] Add the missing "Line no." to the translation.
