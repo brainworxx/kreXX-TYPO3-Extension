@@ -142,7 +142,7 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
             ->with(str_replace('&#039;', '\'', $this->expectation));
 
         $objectAnalyser = new Objects(Krexx::$pool);
-        $objectAnalyser->setParameters($fixture)->callMe();
+        $objectAnalyser->setParameters( $fixture)->callMe();
 
         /** @var \Brainworxx\Krexx\Analyse\Model $model */
         $model = $renderNothing->model['renderExpandableChild'][0];
@@ -196,7 +196,10 @@ class QueryDebuggerTest extends AbstractHelper implements CallbackConstInterface
         $queryBuilderMock = $this->createMock(QueryBuilder::class);
         $queryBuilderMock->expects($this->once())
             ->method('getSQL')
-            ->will($this->returnValue('SELECT * FROM whatever WHERE uid=\'nothing\''));
+            ->will($this->returnValue('SELECT * FROM whatever WHERE uid=:stuff'));
+        $queryBuilderMock->expects($this->once())
+            ->method('getParameters')
+            ->will($this->returnValue(['stuff' => 'nothing']));
 
         return $queryBuilderMock;
     }

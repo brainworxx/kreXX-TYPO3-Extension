@@ -139,7 +139,17 @@ class QueryDebugger implements EventHandlerInterface, CallbackConstInterface, Pr
             }
 
             // Retrieving the SQL.
-            return $query->getSQL();
+            $sql = $query->getSQL();
+
+            // Insert the parameters into the sql
+            foreach ($query->getParameters() as $key => $parameter) {
+                if (is_string($parameter)) {
+                    $parameter = '\'' . $parameter . '\'';
+                }
+                $sql = str_replace(':' . $key, (string) $parameter, $sql);
+            }
+
+            return $sql;
         } catch (Throwable $e) {
             // Tell the dev, that there is an error in the sql.
             return $this->pool->messages->getHelp('TYPO3Error') . $e->getMessage();
