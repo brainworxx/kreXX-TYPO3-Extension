@@ -173,7 +173,7 @@ class FileTest extends AbstractHelper
                 410,
                 510
             ),
-            'The file or directory does not exist.'
+            'The file does not exist.'
         );
 
         // Now to read with really messed up line numbers.

@@ -14,6 +14,8 @@
 - Bugfix: Added missing types to the blacklist of none namespaces
   declaration types.
 - Bugfix: Added missing translations for the setting.
+- Bugfix: Do not access debug class values before their
+  initialization.
 
 5.0.1
 - Change: Updated the unit tests to 10.5

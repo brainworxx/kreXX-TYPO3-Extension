@@ -121,10 +121,15 @@ class ReflectionClass extends \ReflectionClass
             }
         }
 
-        if ($refProperty->isStatic()) {
-            // Static values are not inside the value array.
-            $refProperty->setAccessible(true);
-            return $refProperty->getValue($this->data);
+        try {
+            if ($refProperty->isStatic()) {
+                // Static values are not inside the value array.
+                $refProperty->setAccessible(true);
+                return $refProperty->getValue($this->data);
+            }
+        } catch (Throwable $throwable) {
+            // Do nothing.
+            // We ignore this one.
         }
 
         return $this->retrieveEsotericValue($refProperty);
