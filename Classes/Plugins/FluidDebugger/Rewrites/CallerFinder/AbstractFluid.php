@@ -135,8 +135,8 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
         ['<krexx:debug value="{', '}" \/>'],
         ['<krexx:debug value="{', '}"\/>'],
         ['<krexx:log>{', '}<\/krexx:log>'],
-        ['<krexx:log value="{', '}" \/>'],
-        ['<krexx:log value="{', '}"\/>']
+        ['<krexx:log value="', '" \/>'],
+        ['<krexx:log value="', '"\/>'],
     ];
 
     /**
@@ -297,8 +297,8 @@ abstract class AbstractFluid extends AbstractCaller implements BacktraceConstInt
             // Found something!
             // Check if we already have more than one.
             if (isset($name[1][0]) && count($name[1]) === 1) {
-                $this->varname =  $this->checkForComplicatedStuff(
-                    $this->pool->encodingService->encodeString(trim($name[1][0]))
+                $this->varname = $this->checkForComplicatedStuff(
+                    $this->pool->encodingService->encodeString(trim($name[1][0], ' {}'))
                 );
                 return;
             }
