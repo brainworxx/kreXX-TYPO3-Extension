@@ -53,7 +53,7 @@ jobs:
       run: composer test
 
     - name: Publish code coverage
-      uses: paambaati/codeclimate-action@v5.0.0
+      uses: paambaati/codeclimate-action@v6.0.0
       if: ${{ matrix.env.CodeClimate == 'yes' }}
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATEKEY }}
