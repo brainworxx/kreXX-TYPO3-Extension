@@ -13,6 +13,8 @@ Changelog
 =============================================================
 
 5.0.3
+    - [Bugfix] Use the Krexx error callback in the LogFileList collector.
+    - [Bugfix] Outdated link to the documentation license.
 
 5.0.2
     - [Feature] Added the possibility for plugins to overwrite the factory settings.

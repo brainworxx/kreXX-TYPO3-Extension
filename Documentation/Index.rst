@@ -45,7 +45,7 @@ kreXX Debugger
 
 	:License:
 		This document is published under the Open Content License
-		available from http://www.opencontent.org/openpub/
+		available from https://opencontent.org/openpub
 
 	:Rendered:
 		|today|

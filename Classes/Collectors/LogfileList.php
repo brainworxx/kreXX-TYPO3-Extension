@@ -38,6 +38,7 @@ declare(strict_types=1);
 namespace Brainworxx\Includekrexx\Collectors;
 
 use Brainworxx\Krexx\Analyse\Caller\BacktraceConstInterface;
+use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Backend\Routing\UriBuilder as BeUriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
@@ -82,8 +83,7 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
             return [];
         }
 
-        set_error_handler(function (int $errno, string $errstr, ?string $errfile, ?int $errline, ?array $errcontext) {
-        });
+        set_error_handler(Krexx::$pool->retrieveErrorCallback());
         // The function filemtime gets cached by php btw.
         usort(
             $files,
