@@ -86,7 +86,10 @@ class DebugMethods extends AbstractEventHandler implements
             'getAttributeItems' => [
                 // Aimeos 2020
                 \Aimeos\MShop\Order\Item\Base\Product\Base::class,
-                \Aimeos\MShop\Order\Item\Base\Service\Base::class
+                \Aimeos\MShop\Order\Item\Base\Service\Base::class,
+                // Aimeos 2023
+                \Aimeos\MShop\Order\Item\Product\Base::class,
+                \Aimeos\MShop\Order\Item\Service\Base::class
             ]
         ];
 

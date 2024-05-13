@@ -16,6 +16,7 @@ Changelog
     - [Bugfix] Use the Krexx error callback in the LogFileList collector.
     - [Bugfix] Outdated link to the documentation license.
     - [Bugfix] Prevent reading a deleted meta data json file.
+    - [Bugfix] Updated the Aimeos debug method analysis to Aimeos 23.
 
 5.0.2
     - [Feature] Added the possibility for plugins to overwrite the factory settings.
