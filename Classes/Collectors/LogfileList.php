@@ -142,11 +142,17 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      */
     protected function addMetaToFileInfo(string $file): array
     {
-        if (!is_readable($file . '.json')) {
+        set_error_handler(\Krexx::$pool->retrieveErrorCallback());
+        if (
+            !is_readable($file . '.json')
+            || empty($meta = file_get_contents($file . '.json'))
+        ) {
+            restore_error_handler();
             return [];
         }
+        restore_error_handler();
 
-        $metaArray = (array)json_decode(file_get_contents($file . '.json'), true);
+        $metaArray = (array)json_decode($meta, true);
         if (empty($metaArray)) {
             return [];
         }
