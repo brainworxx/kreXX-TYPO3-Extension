@@ -227,6 +227,27 @@ class FileTest extends AbstractHelper
     }
 
     /**
+     * Test the reading of a file that we can not open (for whatever reason.)
+     *
+     * @covers \Brainworxx\Krexx\Service\Misc\File::getFileContents
+     */
+    public function testGetFileContentsWithfailedFile()
+    {
+        $fOpenMock = $this->getFunctionMock(static::MISC_NAMESPACE, 'fopen');
+        $fOpenMock->expects($this->once())
+            ->will($this->returnValue(false));
+
+        $this->setValueByReflection(static::IS_READABLE_CACHE, ['someFile' => true], $this->file);
+        $result = $this->file->getFileContents('someFile', false);
+        $this->assertEquals('', $result, 'We do not get any content.');
+        $this->assertCount(
+            1,
+            Krexx::$pool->messages->getMessages(),
+            'We get a message that says thata reding the file failed.'
+        );
+    }
+
+    /**
      * Test the wrapper around the file_put_contents in the file handler.
      *
      * @covers \Brainworxx\Krexx\Service\Misc\File::putFileContents

@@ -61,6 +61,7 @@ AbstractHelper::defineFunctionMock($serviceMisc, 'filemtime');
 AbstractHelper::defineFunctionMock($serviceMisc, 'mb_strlen');
 AbstractHelper::defineFunctionMock($serviceMisc, 'glob');
 AbstractHelper::defineFunctionMock($serviceMisc, 'time');
+AbstractHelper::defineFunctionMock($serviceMisc, 'fopen');
 AbstractHelper::defineFunctionMock($callbackScalar, 'class_exists');
 AbstractHelper::defineFunctionMock($callbackScalar, 'is_file');
 AbstractHelper::defineFunctionMock($callbackScalar, 'function_exists');
