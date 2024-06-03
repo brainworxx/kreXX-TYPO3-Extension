@@ -1,20 +1,23 @@
-.. image:: https://github.com/brainworxx/kreXX-TYPO3-Extension/actions/workflows/php.yml/badge.svg?branch=master
+.. |build| image:: https://github.com/brainworxx/kreXX-TYPO3-Extension/actions/workflows/php.yml/badge.svg?branch=master
    :target: https://github.com/brainworxx/kreXX-TYPO3-Extension/actions/workflows/php.yml
-.. image:: https://api.codeclimate.com/v1/badges/43c23b7d829742003dab/maintainability
+.. |maintainability| image:: https://api.codeclimate.com/v1/badges/43c23b7d829742003dab/maintainability
    :target: https://codeclimate.com/github/brainworxx/kreXX-TYPO3-Extension/maintainability
-.. image:: https://api.codeclimate.com/v1/badges/43c23b7d829742003dab/test_coverage
+.. |coverage| image:: https://api.codeclimate.com/v1/badges/43c23b7d829742003dab/test_coverage
    :target: https://codeclimate.com/github/brainworxx/kreXX-TYPO3-Extension/test_coverage
-.. image:: https://poser.pugx.org/brainworxx/includekrexx/v/stable
+.. |stable| image:: https://poser.pugx.org/brainworxx/includekrexx/v/stable
    :target: https://packagist.org/packages/brainworxx/includekrexx
-.. image:: https://poser.pugx.org/brainworxx/includekrexx/license
+.. |license| image:: https://poser.pugx.org/brainworxx/includekrexx/license
    :target: https://packagist.org/packages/brainworxx/includekrexx
+
+|build| |maintainability| |coverage| |stable| |license|
+
 
 ========================================
 kreXX Debugger - TYPO3 Backend Extension
 ========================================
 
 |
-   
+
 .. figure:: https://cloud.githubusercontent.com/assets/11192910/15507768/3a5c86b6-21cd-11e6-8309-614e3afbe63c.png
    :alt: kreXX logo
 
