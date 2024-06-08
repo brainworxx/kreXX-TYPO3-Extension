@@ -68,7 +68,12 @@ class RecursionTest extends AbstractHelper
     public function testConstruct()
     {
         $this->assertStringContainsString('Krexx', $this->recursion->getMarker());
-        $this->assertTrue($GLOBALS[$this->recursion->getMarker()]);
+        if (version_compare(phpversion(), '8.1.0', '<=')) {
+            $this->assertTrue(
+                $GLOBALS[$this->recursion->getMarker()],
+                'The marker should be set in the globals.'
+            );
+        }
         $this->assertEquals(
             new SplObjectStorage(),
             $this->retrieveValueByReflection(static::RECURSION_HIVE, $this->recursion)
@@ -83,6 +88,9 @@ class RecursionTest extends AbstractHelper
      */
     public function testDestruct()
     {
+        if (version_compare(phpversion(), '8.1.0', '>=')) {
+            $this->markTestSkipped('Wrong PHP version.');
+        }
         $marker = $this->recursion->getMarker();
         unset($this->recursion);
         $this->assertTrue(isset($GLOBALS[$marker]));
@@ -124,8 +132,11 @@ class RecursionTest extends AbstractHelper
 
         $this->assertTrue($this->recursion->isInHive($fixture));
         $this->assertFalse($this->recursion->isInHive(['some', 'array']));
-        $this->assertFalse($this->recursion->isInHive($GLOBALS));
-        $this->assertTrue($this->recursion->isInHive($GLOBALS), 'Render them a second time');
+
+        if (version_compare(phpversion(), '8.1.0', '<=')) {
+            $this->assertFalse($this->recursion->isInHive($GLOBALS));
+            $this->assertTrue($this->recursion->isInHive($GLOBALS), 'Render them a second time');
+        }
     }
 
     /**

@@ -1,6 +1,8 @@
 5.0.3
 - Bugfix: Possible warning in file reader.
 - Bugfix: Possible fatals in the file reader.
+- Bugfix: Do not use the $GLOBALS recursion marker in PHP 8.1
+  or higher.
 
 5.0.2
 - Added the possibility for plugins to overwrite the factory

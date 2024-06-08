@@ -89,8 +89,10 @@ class Recursion
     public function __construct(Pool $pool)
     {
         $this->recursionMarker = 'Krexx' . substr(str_shuffle(md5(microtime())), 0, 10);
-        // Mark the $GLOBALS array.
-        $GLOBALS[$this->recursionMarker] = true;
+        if (version_compare(phpversion(), '8.1.0', '<=')) {
+            // Mark the $GLOBALS array.
+            $GLOBALS[$this->recursionMarker] = true;
+        }
         $this->recursionHive = new SplObjectStorage();
 
         $pool->recursionHandler = $this;
@@ -98,6 +100,9 @@ class Recursion
 
     /**
      * Resets all Arrays inside the recursion array.
+     *
+     * @deprecated
+     *   Will be removed as soon as we drop PHP 8.0 support.
      */
     public function __destruct()
     {

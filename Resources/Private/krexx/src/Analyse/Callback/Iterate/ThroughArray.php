@@ -72,7 +72,10 @@ class ThroughArray extends AbstractCallback implements
         $multilineCodeGen = $this->parameters[static::PARAM_MULTILINE] ?
             static::CODEGEN_TYPE_ITERATOR_TO_ARRAY : static::CODEGEN_TYPE_PUBLIC;
 
+        // @deprecated
+        // Will be removed as soon as we drop PHP 8.0 support.
         $recursionMarker = $this->pool->recursionHandler->getMarker();
+
         $array =& $this->parameters[static::PARAM_DATA];
 
         // Iterate through.
