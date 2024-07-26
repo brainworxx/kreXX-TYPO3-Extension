@@ -53,9 +53,9 @@ class LogfileList extends AbstractCollector implements BacktraceConstInterface
      *
      * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      *
-     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView $view
+     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView|\TYPO3\CMS\Backend\Template\ModuleTemplate $view
      */
-    public function assignData(AbstractTemplateView $view): void
+    public function assignData($view): void
     {
         $view->assign('filelist', $this->retrieveFileList());
     }

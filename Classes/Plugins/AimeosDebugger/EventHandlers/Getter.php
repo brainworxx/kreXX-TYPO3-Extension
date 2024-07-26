@@ -110,7 +110,7 @@ class Getter extends AbstractEventHandler implements CallbackConstInterface
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, Model $model = null): string
+    public function handle(AbstractCallback $callback, ?Model $model = null): string
     {
         // We will only act, if we have no value so far.
         // Also, we only do this for Aimeos items.

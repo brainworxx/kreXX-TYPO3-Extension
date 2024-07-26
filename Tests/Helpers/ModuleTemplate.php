@@ -49,4 +49,12 @@ class ModuleTemplate
     {
         return 'stuff';
     }
+
+    public function assignMultiple($values)
+    {
+    }
+
+    public function renderResponse()
+    {
+    }
 }

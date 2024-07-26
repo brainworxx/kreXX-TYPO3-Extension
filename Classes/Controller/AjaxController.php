@@ -69,7 +69,7 @@ class AjaxController implements ConstInterface, ControllerConstInterface
      * @return \TYPO3\CMS\Core\Http\Response
      *   The response with the json string.
      */
-    public function refreshLoglistAction(ServerRequest $serverRequest, Response $response = null): Response
+    public function refreshLoglistAction(ServerRequest $serverRequest, ?Response $response = null): Response
     {
         if ($response === null) {
             /** @var Response $response */
@@ -98,7 +98,7 @@ class AjaxController implements ConstInterface, ControllerConstInterface
      * @return \TYPO3\CMS\Core\Http\Response
      *   The response with the json string.
      */
-    public function deleteAction(ServerRequest $serverRequest, Response $response = null): Response
+    public function deleteAction(ServerRequest $serverRequest, ?Response $response = null): Response
     {
         if ($response === null) {
             /** @var Response $response */

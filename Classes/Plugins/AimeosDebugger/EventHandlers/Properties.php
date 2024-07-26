@@ -92,7 +92,7 @@ class Properties extends AbstractEventHandler implements
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, Model $model = null): string
+    public function handle(AbstractCallback $callback, ?Model $model = null): string
     {
         $params = $callback->getParameters();
         $data = $params[static::PARAM_DATA];

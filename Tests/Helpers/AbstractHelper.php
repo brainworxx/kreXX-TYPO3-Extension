@@ -44,6 +44,7 @@ use phpmock\phpunit\PHPMock;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Messaging\FlashMessageService;
 use TYPO3\CMS\Core\Package\Package;
 use TYPO3\CMS\Core\Package\UnitTestPackageManager;
@@ -294,15 +295,18 @@ abstract class AbstractHelper extends KrexxAbstractHelper
             $this->setValueByReflection('response', $response, $controller);
         }
 
-        $contentObject = $this->createMock(ContentObjectRenderer::class);
-        $contentObject->expects($this->any())
-            ->method('getUserObjectType')
-            ->will($this->returnValue(''));
-        $configurationManager = $this->createMock(ConfigurationManager::class);
-        $configurationManager->expects($this->any())
-            ->method('getContentObject')
-            ->will($this->returnValue($contentObject));
-        $this->setValueByReflection('configurationManager', $configurationManager, $controller);
+        $typo3Version = new Typo3Version();
+        if ($typo3Version->getMajorVersion() < 11) {
+            $contentObject = $this->createMock(ContentObjectRenderer::class);
+            $contentObject->expects($this->any())
+                ->method('getUserObjectType')
+                ->will($this->returnValue(''));
+            $configurationManager = $this->createMock(ConfigurationManager::class);
+            $configurationManager->expects($this->any())
+                ->method('getContentObject')
+                ->will($this->returnValue($contentObject));
+            $this->setValueByReflection('configurationManager', $configurationManager, $controller);
+        }
     }
 
     /**

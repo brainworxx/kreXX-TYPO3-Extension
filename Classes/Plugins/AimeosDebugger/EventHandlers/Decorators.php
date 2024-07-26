@@ -92,7 +92,7 @@ class Decorators extends AbstractEventHandler implements CallbackConstInterface
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, Model $model = null): string
+    public function handle(AbstractCallback $callback, ?Model $model = null): string
     {
         $result = '';
         $params = $callback->getParameters();

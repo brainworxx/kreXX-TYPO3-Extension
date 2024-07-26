@@ -77,16 +77,9 @@ class IndexController extends AbstractController implements ConstInterface
 
         // Has kreXX something to say? Maybe a write-protected logfolder?
         $this->retrieveKrexxMessages();
-        $this->configuration->assignData($this->view);
-        $this->formConfiguration->assignData($this->view);
-        $this->view->assign('settings', $this->settingsModel);
-        $this->assignCssJs();
+        $this->assignMultiple(['settings', $this->settingsModel]);
 
-        if (method_exists($this, 'htmlResponse')) {
-            return GeneralUtility::makeInstance(HtmlResponse::class, $this->moduleTemplate->renderContent());
-        }
-
-        return $this->moduleTemplate->renderContent();
+        return $this->moduleTemplateRender();
     }
 
     /**
@@ -95,7 +88,7 @@ class IndexController extends AbstractController implements ConstInterface
      * @param \Brainworxx\Includekrexx\Domain\Model\Settings $settings
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      *
-     * @return void
+     * @return void|\Psr\Http\Message\ResponseInterface
      */
     public function saveAction(Settings $settings)
     {
@@ -139,7 +132,7 @@ class IndexController extends AbstractController implements ConstInterface
      *
      * @return \TYPO3\CMS\Core\Http\NullResponse
      */
-    public function dispatchAction(ServerRequest $serverRequest = null): NullResponse
+    public function dispatchAction(?ServerRequest $serverRequest = null): NullResponse
     {
         $response = GeneralUtility::makeInstance(NullResponse::class);
         if (!$this->hasAccess()) {

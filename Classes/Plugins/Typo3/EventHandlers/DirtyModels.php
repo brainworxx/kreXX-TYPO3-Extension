@@ -82,7 +82,7 @@ class DirtyModels implements EventHandlerInterface
      * @return string
      *   Return an empty string.
      */
-    public function handle(AbstractCallback $callback = null, Model $model = null): string
+    public function handle(?AbstractCallback $callback = null, ?Model $model = null): string
     {
         /** @var AbstractDomainObject $data */
         $data = $model->getData();

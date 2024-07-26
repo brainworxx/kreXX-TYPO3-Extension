@@ -123,7 +123,7 @@ class DebugMethods extends AbstractEventHandler implements
      * @return string
      *   The generated markup.
      */
-    public function handle(AbstractCallback $callback, Model $model = null): string
+    public function handle(AbstractCallback $callback, ?Model $model = null): string
     {
         $output = '';
         /** @var \Brainworxx\Krexx\Service\Reflection\ReflectionClass $reflection */
