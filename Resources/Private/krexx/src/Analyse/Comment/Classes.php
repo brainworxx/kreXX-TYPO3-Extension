@@ -56,7 +56,7 @@ class Classes extends AbstractComment
      * @return string
      *   The comment.
      */
-    public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
+    public function getComment(Reflector $reflection, ?ReflectionClass $reflectionClass = null): string
     {
         return $this->pool->encodingService->encodeString(
             $this->prettifyComment($reflection->getDocComment())

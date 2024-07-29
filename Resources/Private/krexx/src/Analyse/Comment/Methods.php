@@ -67,7 +67,7 @@ class Methods extends AbstractComment
      * @return string
      *   The prettified and escaped comment.
      */
-    public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
+    public function getComment(Reflector $reflection, ?ReflectionClass $reflectionClass = null): string
     {
         // Do some static caching. The comment will not change during a run.
         static $cache = [];

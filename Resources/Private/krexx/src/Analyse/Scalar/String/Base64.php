@@ -84,6 +84,7 @@ class Base64 extends AbstractScalarAnalysis implements CodegenConstInterface
     {
         if (
             strlen($string) > 36
+            && preg_match('^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$^', $string)
             && base64_encode($this->decodedString = base64_decode($string, true)) === $string
         ) {
             $this->model = $model;
