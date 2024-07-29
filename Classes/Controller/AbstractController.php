@@ -48,14 +48,15 @@ use Brainworxx\Krexx\Service\Factory\Pool;
 use stdClass;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Http\NullResponse;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Response as MvcResponse;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Install\Configuration\Context\LivePreset;
 
 /**
@@ -126,17 +127,25 @@ abstract class AbstractController extends ActionController implements ConstInter
     /**
      * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
      */
-    protected $flashMessageWarning = AbstractMessage::WARNING;
+    protected $flashMessageWarning;
 
     /**
      * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
      */
-    protected $flashMessageError = AbstractMessage::ERROR;
+    protected $flashMessageError;
 
     /**
      * @var int|\TYPO3\CMS\Core\Type\ContextualFeedbackSeverity
      */
-    protected $flashMessageOk = AbstractMessage::OK;
+    protected $flashMessageOk;
+
+    /**
+     * The TYPO3 major version.
+     *
+     * @var int
+     */
+    protected $typo3Version;
+
 
     /**
      * Set the pool and do the parent constructor.
@@ -145,20 +154,26 @@ abstract class AbstractController extends ActionController implements ConstInter
         Configuration $configuration,
         FormConfiguration $formConfiguration,
         Settings $settings,
-        PageRenderer $pageRenderer
+        PageRenderer $pageRenderer,
+        Typo3Version $typo3Version
     ) {
         $this->configuration = $configuration;
         $this->formConfiguration = $formConfiguration;
         $this->settingsModel = $settings;
         $this->pageRenderer = $pageRenderer;
+        $this->typo3Version = $typo3Version->getMajorVersion();
 
         Pool::createPool();
         $this->pool = Krexx::$pool;
 
-        if (!class_exists(ObjectManager::class)) {
+        if ($this->typo3Version > 11) {
             $this->flashMessageError = ContextualFeedbackSeverity::ERROR;
             $this->flashMessageOk = ContextualFeedbackSeverity::OK;
             $this->flashMessageWarning = ContextualFeedbackSeverity::WARNING;
+        } else {
+            $this->flashMessageError = AbstractMessage::ERROR;
+            $this->flashMessageOk = AbstractMessage::OK;
+            $this->flashMessageWarning = AbstractMessage::WARNING;
         }
     }
 
@@ -167,14 +182,16 @@ abstract class AbstractController extends ActionController implements ConstInter
      *
      * @return void
      */
-    public function initializeAction()
+    public function initializeAction(): void
     {
         parent::initializeAction();
 
-        if (empty($this->objectManager)) {
+        if ($this->typo3Version > 11) {
+            // 12'er style
             $this->moduleTemplate = GeneralUtility::makeInstance(ModuleTemplateFactory::class)
                 ->create($this->request);
         } else {
+            // 11'er style
             $this->moduleTemplate = $this->objectManager->get(ModuleTemplate::class);
         }
     }
@@ -313,7 +330,6 @@ abstract class AbstractController extends ActionController implements ConstInter
 
         $cssPath = GeneralUtility::getFileAbsFileName('EXT:includekrexx/Resources/Private/Css/Index.css');
         $this->pageRenderer->addCssInlineBlock('krexxcss', file_get_contents($cssPath));
-        $this->moduleTemplate->setContent($this->view->render());
         $this->moduleTemplate->setModuleName('tx_includekrexx');
     }
 
@@ -335,5 +351,58 @@ abstract class AbstractController extends ActionController implements ConstInter
         $translation->deletedCookies = static::translate('ajax.deleted.cookies');
 
         return 'window.ajaxTranslate = ' .  json_encode($translation) . ';';
+    }
+
+    /**
+     * Compatibility wrapper around the rendering of the module template.
+     *
+     * @return \Psr\Http\Message\ResponseInterface|string
+     */
+    protected function moduleTemplateRender()
+    {
+        $this->assignCssJs();
+
+        if ($this->typo3Version > 11) {
+            // @deprecated
+            // Hardcode these as soon as we drop TYPO3 10 compatibility.
+            $this->assignMultiple(['compatibilityClasses' => 'module-body t3js-module-body']);
+
+            // 12'er style.
+            $this->configuration->assignData($this->moduleTemplate);
+            $this->formConfiguration->assignData($this->moduleTemplate);
+            return $this->moduleTemplate->renderResponse();
+        }
+
+        // 10'er and 11'er style.
+        $this->configuration->assignData($this->view);
+        $this->formConfiguration->assignData($this->view);
+        $this->moduleTemplate->setContent($this->view->render());
+
+        if ($this->typo3Version > 10) {
+            // 11'er style.
+            return GeneralUtility::makeInstance(
+                HtmlResponse::class,
+                $this->moduleTemplate->renderContent()
+            );
+        }
+
+        // 10'er style.
+        // We let the view render the template.
+        return $this->moduleTemplate->renderContent();
+    }
+
+    /**
+     * Compatibility wrapper around the assignment of multiple values.
+     *
+     * @param array $values
+     */
+    protected function assignMultiple(array $values): void
+    {
+        if ($this->typo3Version > 11) {
+            $this->moduleTemplate->assignMultiple($values);
+            return;
+        }
+
+        $this->view->assignMultiple($values);
     }
 }

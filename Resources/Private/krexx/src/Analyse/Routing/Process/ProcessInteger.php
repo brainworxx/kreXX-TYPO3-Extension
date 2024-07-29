@@ -40,7 +40,7 @@ namespace Brainworxx\Krexx\Analyse\Routing\Process;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\AbstractRouting;
 use DateTime;
-use Exception;
+use Throwable;
 
 /**
  * Processing of integers.
@@ -82,7 +82,7 @@ class ProcessInteger extends AbstractRouting implements ProcessInterface, Proces
                     (new DateTime('@' . $int))->format('d.M Y H:i:s')
                 );
             }
-        } catch (Exception $e) {
+        } catch (Throwable $e) {
             // Do nothing.
             // Not sure how this can happen.
         }

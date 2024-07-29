@@ -147,7 +147,7 @@ abstract class AbstractCollector implements ControllerConstInterface, ConfigCons
     /**
      * Assigning stuff to the view.
      *
-     * @param AbstractTemplateView $view
+     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView|\TYPO3\CMS\Backend\Template\ModuleTemplate $view
      */
-    abstract public function assignData(AbstractTemplateView $view): void;
+    abstract public function assignData($view): void;
 }

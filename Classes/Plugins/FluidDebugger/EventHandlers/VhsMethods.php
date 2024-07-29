@@ -78,7 +78,7 @@ class VhsMethods implements EventHandlerInterface, CallbackConstInterface, Fluid
      * @return string
      *   Return an empty string.
      */
-    public function handle(AbstractCallback $callback, Model $model = null): string
+    public function handle(AbstractCallback $callback, ?Model $model = null): string
     {
         $params = $callback->getParameters();
         /** @var \ReflectionMethod $reflectionMethod */

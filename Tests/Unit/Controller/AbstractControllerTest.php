@@ -42,6 +42,7 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Includekrexx\Tests\Helpers\ModuleTemplateFactory;
 use Brainworxx\Krexx\Krexx;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Core\Page\PageRenderer;
@@ -60,8 +61,9 @@ class AbstractControllerTest extends AbstractHelper
         $formConfigMock = $this->createMock(FormConfiguration::class);
         $settings = $this->createMock(Settings::class);
         $pageRenderer = $this->createMock(PageRenderer::class);
+        $typo3Version = new Typo3Version();
 
-        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer);
+        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $typo3Version);
 
         $this->assertSame(Krexx::$pool, $this->retrieveValueByReflection('pool', $indexController));
         $this->assertSame($configMock, $this->retrieveValueByReflection('configuration', $indexController));
@@ -81,8 +83,9 @@ class AbstractControllerTest extends AbstractHelper
         $formConfigMock = $this->createMock(FormConfiguration::class);
         $settings = $this->createMock(Settings::class);
         $pageRenderer = $this->createMock(PageRenderer::class);
+        $typo3Version = new Typo3Version();
 
-        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer);
+        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $typo3Version);
 
         $mtMock = $this->createMock(\stdClass::class);
         if (method_exists($indexController, 'injectObjectManager')) {
@@ -119,8 +122,9 @@ class AbstractControllerTest extends AbstractHelper
         $formConfigMock = $this->createMock(FormConfiguration::class);
         $settings = $this->createMock(Settings::class);
         $pageRenderer = $this->createMock(PageRenderer::class);
+        $typo3Version = new Typo3Version();
 
-        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer);
+        $indexController = new IndexController($configMock, $formConfigMock, $settings, $pageRenderer, $typo3Version);
 
         $preset = $this->createMock(LivePreset::class);
         $indexController->injectLivePreset($preset);

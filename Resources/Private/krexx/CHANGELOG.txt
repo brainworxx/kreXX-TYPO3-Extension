@@ -1,3 +1,8 @@
+5.0.4
+- Change: Made implicitly nullable parameter declarations explicitly nullable.
+- Bugfix: Catch a Throwable in the ProcessInteger.
+- Bugfix: Better Base64 detection.
+
 5.0.3
 - Bugfix: Possible warning in file reader.
 - Bugfix: Possible fatals in the file reader.

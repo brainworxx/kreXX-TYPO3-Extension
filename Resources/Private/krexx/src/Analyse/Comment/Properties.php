@@ -52,7 +52,7 @@ class Properties extends AbstractComment
      * @param \ReflectionClass|null $reflectionClass
      * @return string
      */
-    public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
+    public function getComment(Reflector $reflection, ?ReflectionClass $reflectionClass = null): string
     {
         if (isset($reflection->isUndeclared)) {
             return '';

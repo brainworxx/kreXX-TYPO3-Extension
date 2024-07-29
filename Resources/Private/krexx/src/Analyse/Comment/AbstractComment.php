@@ -84,7 +84,7 @@ abstract class AbstractComment
      * @return string
      *   The prettified comment.
      */
-    abstract public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string;
+    abstract public function getComment(Reflector $reflection, ?ReflectionClass $reflectionClass = null): string;
 
     /**
      * Removes the comment-chars from the comment string.

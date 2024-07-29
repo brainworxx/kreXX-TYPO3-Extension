@@ -35,7 +35,7 @@ kreXX Debugger
 		debug, developer, log, development, aimeos, fluid
 
 	:Copyright:
-		2014 - 2023
+		2014 - 2024
 
 	:Author:
 		BRAINWORXX GmbH

@@ -12,6 +12,12 @@
 Changelog
 =============================================================
 
+5.0.4
+    - [Feature] TYPO3 13.2 support.
+    - [Change] Made implicitly nullable parameter declarations explicitly nullable.
+    - [Bugfix] Catch a Throwable in the ProcessInteger.
+    - [Bugfix] Better Base64 detection.
+
 5.0.3
     - [Bugfix] Use the Krexx error callback in the LogFileList collector.
     - [Bugfix] Outdated link to the documentation license.

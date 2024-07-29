@@ -273,7 +273,7 @@ class Encoding
      * @return int
      *   The result.
      */
-    public function mbStrLen(string $string, string $encoding = null): int
+    public function mbStrLen(string $string, ?string $encoding = null): int
     {
         // Meh, the original mb_strlen interprets a null here as an empty string.
         if ($encoding === null) {

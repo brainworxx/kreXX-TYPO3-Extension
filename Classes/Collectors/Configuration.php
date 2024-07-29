@@ -52,9 +52,9 @@ class Configuration extends AbstractCollector implements ConfigConstInterface, C
     /**
      * Assign the kreXX configuration for the view.
      *
-     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView $view
+     * @param \TYPO3\CMS\Fluid\View\AbstractTemplateView|\TYPO3\CMS\Backend\Template\ModuleTemplate $view
      */
-    public function assignData(AbstractTemplateView $view): void
+    public function assignData($view): void
     {
         if (!$this->hasAccess) {
             // No access.

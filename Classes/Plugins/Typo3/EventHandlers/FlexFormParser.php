@@ -75,7 +75,7 @@ class FlexFormParser implements EventHandlerInterface, CallbackConstInterface
      * @param \Brainworxx\Krexx\Analyse\Model|null $model
      * @return string
      */
-    public function handle(AbstractCallback $callback, Model $model = null): string
+    public function handle(AbstractCallback $callback, ?Model $model = null): string
     {
         $messages = $this->pool->messages;
         $parameters = $model->getParameters();

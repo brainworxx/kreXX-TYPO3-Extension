@@ -165,7 +165,7 @@ class Krexx
      *
      * @api
      */
-    public static function backtrace(array $backtrace = null): void
+    public static function backtrace(?array $backtrace = null): void
     {
         Pool::createPool();
 
@@ -296,7 +296,7 @@ class Krexx
      *
      * @api
      */
-    public static function logBacktrace(array $backtrace = null): void
+    public static function logBacktrace(?array $backtrace = null): void
     {
         static::startForcedLog();
         static::backtrace($backtrace);

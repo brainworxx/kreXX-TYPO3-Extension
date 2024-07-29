@@ -86,7 +86,7 @@ class ReturnType extends AbstractComment
      * @return string
      *   The return type if possible, an empty string if not.
      */
-    public function getComment(Reflector $reflection, ReflectionClass $reflectionClass = null): string
+    public function getComment(Reflector $reflection, ?ReflectionClass $reflectionClass = null): string
     {
         // Get a first impression by the reflection.
         $result = $this->pool->createClass(MethodDeclaration::class)
@@ -118,7 +118,7 @@ class ReturnType extends AbstractComment
      * @return string
      *   The return type.
      */
-    protected function retrieveReturnTypeFromComment(string $comment, ReflectionClass $reflectionClass = null): string
+    protected function retrieveReturnTypeFromComment(string $comment, ?ReflectionClass $reflectionClass = null): string
     {
         $resultToken = strtok($comment . ' ', ' ');
         $result = '';

@@ -64,5 +64,5 @@ interface EventHandlerInterface
      *   The generated markup.
      *   Only the markup from start events gets dispatched.
      */
-    public function handle(AbstractCallback $callback, Model $model = null): string;
+    public function handle(AbstractCallback $callback, ?Model $model = null): string;
 }
