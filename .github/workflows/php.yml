@@ -21,7 +21,7 @@ jobs:
           - { php: 8.2, composer: 2, TYPO3: ^11.5, Aimeos: ^22, CodeClimate: no  }
           - { php: 8.2, composer: 2, TYPO3: ^12.4, Aimeos: ^23, CodeClimate: no  }
           - { php: 8.3, composer: 2, TYPO3: ^12.4, Aimeos: ^23, CodeClimate: yes }
-          - { php: 8.3, composer: 2, TYPO3: ^13.2, Aimeos: no,  CodeClimate: yes }
+          - { php: 8.3, composer: 2, TYPO3: ^13.2, Aimeos: no,  CodeClimate: no  }
 
     steps:
     - name: Checkout
