@@ -17,6 +17,7 @@ Changelog
     - [Change] Made implicitly nullable parameter declarations explicitly nullable.
     - [Bugfix] Catch a Throwable in the ProcessInteger.
     - [Bugfix] Better Base64 detection.
+    - [Bugfix] The error handler was not removed in the file reader.
 
 5.0.3
     - [Bugfix] Use the Krexx error callback in the LogFileList collector.

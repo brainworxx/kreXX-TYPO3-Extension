@@ -238,6 +238,7 @@ class File
         if ($file === false) {
             // File opening just failed!
             $this->pool->messages->addMessage('fileserviceAccess', [$this->filterFilePath($filePath)], true);
+            restore_error_handler();
             return '';
         }
         $result = fread($file, $size);

@@ -124,6 +124,11 @@ class AbstractFactoryTest extends AbstractHelper
         Krexx::$pool = null;
         AbstractFactory::createPool();
         $this->assertInstanceOf(stdClass::class, Krexx::$pool);
+
+        // Remove the rewrite.
+        $this->setValueByReflection('rewriteList', [], Registration::class);
+        Krexx::$pool = null;
+        AbstractFactory::createPool();
     }
 
     /**

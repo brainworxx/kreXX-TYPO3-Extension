@@ -342,4 +342,21 @@ abstract class AbstractHelper extends TestCase
 
         return $result;
     }
+
+    /**
+     * Test if the error callback was removed.
+     */
+    protected function assertPostConditions(): void
+    {
+        $handler = set_error_handler(
+            function () {
+            }
+        );
+        restore_error_handler();
+        $this->assertNotSame(
+            $handler,
+            Krexx::$pool->retrieveErrorCallback(),
+            'The error callback was not removed.'
+        );
+    }
 }
