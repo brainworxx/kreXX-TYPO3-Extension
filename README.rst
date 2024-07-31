@@ -8,8 +8,14 @@
    :target: https://packagist.org/packages/brainworxx/includekrexx
 .. |license| image:: https://poser.pugx.org/brainworxx/includekrexx/license
    :target: https://packagist.org/packages/brainworxx/includekrexx
+.. |t310| image:: https://img.shields.io/badge/TYPO3-10-orange.svg
+   :target: https://get.typo3.org/version/10
+.. |t311| image:: https://img.shields.io/badge/TYPO3-11-orange.svg
+   :target: https://get.typo3.org/version/11
+.. |t312| image:: https://img.shields.io/badge/TYPO3-12-orange.svg
+   :target: https://get.typo3.org/version/12
 
-|build| |maintainability| |coverage| |stable| |license|
+|build| |maintainability| |coverage| |stable| |license| |t310| |t311| |t312|
 
 
 ========================================
