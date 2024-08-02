@@ -151,6 +151,11 @@ div.kwrapper {
     font-family: Tahoma, Verdana;
 }
 
+.kwrapper .knoscript {
+    background-color: #fffda5;
+    padding: 5px;
+}
+
 .kwrapper ul.knode {
     margin: 0;
     padding: 0;

@@ -122,6 +122,9 @@
   opacity: 1;
   position: initial;
 }
+.kwrapper .knoscript, .kfatalwrapper-outer .knoscript {
+  background-color: #fffda5;
+}
 .kwrapper .krela-wrapper, .kfatalwrapper-outer .krela-wrapper {
   position: relative;
   width: 100%;
@@ -857,8 +860,7 @@
   font-weight: bold;
 }
 .kfatalwrapper-outer .kwrapper .kfatal-headnote .kstop {
-  background: #555555;
-  /* fallback */
+  background: #555555; /* fallback */
   background: -moz-linear-gradient(45deg, transparent 8px, #555555 10px), -moz-linear-gradient(135deg, transparent 8px, #555555 10px), -moz-linear-gradient(225deg, transparent 8px, #555555 10px), -moz-linear-gradient(315deg, transparent 8px, #555555 10px);
   background: -o-linear-gradient(45deg, transparent 8px, #555555 10px), -o-linear-gradient(135deg, transparent 8px, #555555 10px), -o-linear-gradient(225deg, transparent 8px, #555555 10px), -o-linear-gradient(315deg, transparent 8px, #555555 10px);
   background: -webkit-linear-gradient(45deg, transparent 8px, #555555 10px), -webkit-linear-gradient(135deg, transparent 8px, #555555 10px), -webkit-linear-gradient(225deg, transparent 8px, #555555 10px), -webkit-linear-gradient(315deg, transparent 8px, #555555 10px);
@@ -927,3 +929,5 @@
   color: #ffffff;
   font-weight: bold;
 }
+
+/*# sourceMappingURL=skin.css.map */

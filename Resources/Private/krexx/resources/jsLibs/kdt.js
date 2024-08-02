@@ -255,6 +255,7 @@ var Kdt = (function () {
             }
         };
         this.translations = new Translations('.krdata-structure.krtrans', this);
+        this.addClass('.kwrapper .knoscript', 'khidden');
     }
     Kdt.prototype.getParents = function (el, selector) {
         var result = [];

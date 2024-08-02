@@ -44,11 +44,12 @@ class Kdt
     public translations:Translations;
 
     /**
-     * Init the translations.
+     * Init the translations and tell the frontend that we are ready.
      */
     constructor()
     {
         this.translations = new Translations('.krdata-structure.krtrans', this);
+        this.addClass('.kwrapper .knoscript', 'khidden');
     }
 
     /**
