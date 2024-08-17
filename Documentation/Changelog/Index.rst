@@ -19,6 +19,8 @@ Changelog
     - [Bugfix] Better Base64 detection.
     - [Bugfix] The error handler was not removed in the file reader.
     - [Bugfix] The no-js feedback handles CSP headers.
+    - [Bugfix] The translations are located in a div in the header.
+    - [Bugfix] Missing BOM encoding in the code generation.
 
 5.0.3
     - [Bugfix] Use the Krexx error callback in the LogFileList collector.

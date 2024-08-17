@@ -336,7 +336,7 @@ class Encoding
         );
 
         // Clean it up a bit
-        return $cache[$name] = $this->encodeString(str_replace('" . \'\' . "', '', $result));
+        return $cache[$name] = $this->encodeString(str_replace('" . \'\' . "', '', $result), true);
     }
 
     /**
