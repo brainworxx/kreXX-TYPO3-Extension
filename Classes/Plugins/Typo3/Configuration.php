@@ -49,7 +49,10 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
-use Brainworxx\Krexx\Controller\AbstractController;
+use Brainworxx\Krexx\Controller\BacktraceController;
+use Brainworxx\Krexx\Controller\DumpController;
+use Brainworxx\Krexx\Controller\EditSettingsController;
+use Brainworxx\Krexx\Controller\ExceptionController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
@@ -116,7 +119,10 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
         Registration::registerEvent(Xml::class . static::END_EVENT, FlexFormParser::class);
 
         // Register the JS dispatcher.
-        Registration::registerEvent(AbstractController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
+        Registration::registerEvent(EditSettingsController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
+        Registration::registerEvent(ExceptionController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
+        Registration::registerEvent(BacktraceController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
+        Registration::registerEvent(DumpController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
 
         // See if we must create a temp directory for kreXX.
         $tempPaths = $this->generateTempPaths();

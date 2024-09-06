@@ -39,12 +39,13 @@ namespace Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers;
 
 use Brainworxx\Krexx\Analyse\Callback\AbstractCallback;
 use Brainworxx\Krexx\Analyse\Model;
+use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
 use Brainworxx\Krexx\Service\Factory\EventHandlerInterface;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class InlineJsCssDispatcher implements EventHandlerInterface
+class InlineJsCssDispatcher implements EventHandlerInterface, ConfigConstInterface
 {
     /**
      * The pool.
@@ -69,9 +70,16 @@ class InlineJsCssDispatcher implements EventHandlerInterface
         ?AbstractCallback $callback = null,
         ?Model $model = null
     ): string {
-        /** @var AssetCollector $collector */
-        $collector = GeneralUtility::makeInstance(AssetCollector::class);
-        $collector->addInlineJavaScript('krexxDomTools', $model->getData());
+        // We do this only when we are not logging.
+        if ($this->pool->config->getSetting(static::SETTING_DESTINATION) !== static::VALUE_FILE) {
+            $jsSources = $model->getData();
+            if (!empty($jsSources)) {
+                /** @var AssetCollector $collector */
+                $collector = GeneralUtility::makeInstance(AssetCollector::class);
+                $collector->addInlineJavaScript('krexxDomTools', $model->getData());
+            }
+        }
+
         return '';
     }
 }
