@@ -12,6 +12,12 @@
 Changelog
 =============================================================
 
+5.0.5
+    - [Feature] Added formatting for float values for better readability.
+    - [Feature] Added an event to the output of the inline js and css.
+    - [Bugfix] Better CSP handling.
+    - [Bugfix] Make sure that the JS only executes once.
+
 5.0.4
     - [Feature] TYPO3 13.2 support.
     - [Change] Made implicitly nullable parameter declarations explicitly nullable.
