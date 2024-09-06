@@ -104,6 +104,10 @@ class Hans
     {
         // Init our libs before usage.
         this.kdt = new Kdt();
+        if (this.kdt.beenHere()) {
+            // We only do this once.
+            return;
+        }
         this.kdt.setJumpTo(this.jumpTo);
         this.eventHandler = new Eventhandler(this.selectors.eventHandler);
         this.search = new Search(this.eventHandler, this.jumpTo);

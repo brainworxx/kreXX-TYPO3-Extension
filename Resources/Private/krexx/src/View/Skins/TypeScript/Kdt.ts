@@ -53,6 +53,19 @@ class Kdt
     }
 
     /**
+     * Make sure to execute the JS only once.
+     */
+    public beenHere(): boolean
+    {
+        if (typeof window['krexxDone'] === 'undefined') {
+            window['krexxDone'] = true;
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Set the currently used jump to callback.
      *
      * @param {Function} jumpTo

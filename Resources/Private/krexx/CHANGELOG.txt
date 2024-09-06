@@ -1,6 +1,7 @@
 5.0.5
 - Added formatting for float values for better readability.
 - Added an event to the output of the inline js and css.
+- Bugfix: Make sure that the JS only executes once.
 
 5.0.4
 - Change: Made implicitly nullable parameter declarations explicitly nullable.
