@@ -88,8 +88,38 @@ class ProcessFloat extends AbstractRouting implements ProcessInterface, ProcessC
 
         return $this->pool->render->renderExpandableChild(
             $this->dispatchProcessEvent(
-                $model->setNormal($model->getData())->setType(static::TYPE_FLOAT)
+                $model->setNormal($this->formatFloat($model))->setType(static::TYPE_FLOAT)
             )
         );
+    }
+
+    /**
+     * We format the float for better readability
+     *
+     * @param Model $model
+     *   The float to format.
+     * @return string
+     *   The formatted float as a string.
+     */
+    protected function formatFloat(Model $model): string
+    {
+        $float = $model->getData();
+        $stringFloat = (string)$float;
+
+        // We only care about negative formatted floats.
+        if (!strpos($stringFloat, 'E-')) {
+            return $stringFloat;
+        }
+        list($beforeE, $afterE) = explode("E", $stringFloat);
+
+        $model->addToJson(
+            $this->pool->messages->getHelp('metaUnformattedFloat'),
+            (string)$float
+        );
+
+        $format = "%." .
+            (strlen(explode(".", $beforeE)[1]) + (abs((int)$afterE)) - 1)
+            . "f";
+        return sprintf($format, $float);
     }
 }

@@ -39,6 +39,7 @@ use Brainworxx\Krexx\Analyse\Callback\Iterate\ThroughConfig;
 use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Controller\EditSettingsController;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\View\Output\Browser;
@@ -79,6 +80,10 @@ class EditSettingsControllerTest extends AbstractController
             ->method('setDisable')
             ->with(...$this->withConsecutive([true], [false]));
 
+        $poolMock->eventService = $this->createMock(Event::class);
+        $poolMock->eventService->expects($this->once())
+            ->method('dispatch');
+
         $poolMock->render->setFooter('generated HTML code');
 
         $outputServiceMock = $this->createMock(Browser::class);
@@ -88,11 +93,12 @@ class EditSettingsControllerTest extends AbstractController
             ->willReturnSelf();
         $this->setValueByReflection('outputService', $outputServiceMock, $controller);
 
-        $poolMock->expects($this->exactly(2))
+        $poolMock->expects($this->exactly(3))
             ->method('createClass')
             ->with(...$this->withConsecutive(
                 [Model::class],
-                [ThroughConfig::class]
+                [ThroughConfig::class],
+                [Model::class]
             ))->will($this->returnValueMap(
                 [
                     [Model::class, new Model(Krexx::$pool)],

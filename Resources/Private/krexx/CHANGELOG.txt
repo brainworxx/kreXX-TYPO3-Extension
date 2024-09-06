@@ -1,3 +1,7 @@
+5.0.5
+- Added formatting for float values for better readability.
+- Added an event to the output of the inline js and css.
+
 5.0.4
 - Change: Made implicitly nullable parameter declarations explicitly nullable.
 - Bugfix: Catch a Throwable in the ProcessInteger.
