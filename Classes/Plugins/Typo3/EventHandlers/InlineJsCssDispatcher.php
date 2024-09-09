@@ -80,7 +80,7 @@ class InlineJsCssDispatcher implements EventHandlerInterface, ConfigConstInterfa
                 // Otherwise, it may not get rendered.
                 $collector->addInlineJavaScript(
                     'krexxDomTools',
-                    $jsSources,
+                    '(function(){' . $jsSources . '})();',
                     [],
                     ['priority' => false, 'useNonce' => true]
                 );
