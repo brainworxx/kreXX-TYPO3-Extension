@@ -901,6 +901,9 @@ var SmokyGrey = (function (_super) {
     }
     SmokyGrey.prototype.run = function () {
         _super.prototype.run.call(this);
+        if (typeof this.eventHandler === 'undefined') {
+            return;
+        }
         this.setPayloadMaxHeight();
         this.eventHandler.addEvent('.ktool-tabs .ktab:not(.ksearchbutton)', 'click', this.switchTab);
         this.eventHandler.addEvent('.kwrapper .kel', 'click', this.setAdditionalData);

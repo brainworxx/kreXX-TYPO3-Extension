@@ -51,6 +51,12 @@ class SmokyGrey extends Hans
     {
         super.run.call(this);
 
+        if (typeof this.eventHandler === 'undefined') {
+            // Not sure why, but the event handler may not available when we are
+            // dispatching the script a second time.
+            return;
+        }
+
         // Get viewport height to set kreXX data payload to max 75% for debug.
         // The payload for the fatal error handler is set to the remaining space.
         this.setPayloadMaxHeight();
