@@ -76,7 +76,14 @@ class InlineJsCssDispatcher implements EventHandlerInterface, ConfigConstInterfa
             if (!empty($jsSources)) {
                 /** @var AssetCollector $collector */
                 $collector = GeneralUtility::makeInstance(AssetCollector::class);
-                $collector->addInlineJavaScript('krexxDomTools', $model->getData());
+                // We enforce a nonce and add it to the bottom.
+                // Otherwise, it may not get rendered.
+                $collector->addInlineJavaScript(
+                    'krexxDomTools',
+                    $jsSources,
+                    [],
+                    ['priority' => false, 'useNonce' => true]
+                );
             }
         }
 
