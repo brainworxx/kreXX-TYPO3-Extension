@@ -41,6 +41,7 @@ use Brainworxx\Includekrexx\Log\FileWriter as KrexxFileWriter;
 use Brainworxx\Includekrexx\Modules\Log;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser;
+use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\InlineJsCssDispatcher;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Rewrites\CheckOutput as T3CheckOutput;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
@@ -48,6 +49,10 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
 use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
+use Brainworxx\Krexx\Controller\BacktraceController;
+use Brainworxx\Krexx\Controller\DumpController;
+use Brainworxx\Krexx\Controller\EditSettingsController;
+use Brainworxx\Krexx\Controller\ExceptionController;
 use Brainworxx\Krexx\Krexx;
 use Brainworxx\Krexx\Service\Config\Config;
 use Brainworxx\Krexx\Service\Config\ConfigConstInterface;
@@ -112,6 +117,12 @@ class Configuration implements PluginConfigInterface, ConstInterface, ConfigCons
 
         // Registering the flexform parser.
         Registration::registerEvent(Xml::class . static::END_EVENT, FlexFormParser::class);
+
+        // Register the JS dispatcher.
+        Registration::registerEvent(EditSettingsController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
+        Registration::registerEvent(ExceptionController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
+        Registration::registerEvent(BacktraceController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
+        Registration::registerEvent(DumpController::class . '::outputCssAndJs', InlineJsCssDispatcher::class);
 
         // See if we must create a temp directory for kreXX.
         $tempPaths = $this->generateTempPaths();

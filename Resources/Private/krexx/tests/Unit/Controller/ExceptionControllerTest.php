@@ -42,6 +42,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 use Brainworxx\Krexx\Controller\ExceptionController;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
@@ -79,19 +80,24 @@ class ExceptionControllerTest extends AbstractController
         $poolMock = $this->mockMainOutput($exceptionController);
         $this->mockFooterHeaderOutput($poolMock);
 
+        $poolMock->eventService = $this->createMock(Event::class);
+        $poolMock->eventService->expects($this->once())
+            ->method('dispatch');
+
         $backtraceMock = $this->createMock(ProcessBacktrace::class);
         $backtraceMock->expects($this->once())
             ->method('handle')
             ->with(['some backtrace'])
             ->will($this->returnValue('HTML code'));
 
-        $poolMock->expects($this->exactly(4))
+        $poolMock->expects($this->exactly(5))
             ->method('createClass')
             ->with(...$this->withConsecutive(
                 [ProcessBacktrace::class],
                 [ExceptionCallerFinder::class],
                 [Model::class],
-                [ThroughConfig::class]
+                [ThroughConfig::class],
+                [Model::class]
             ))->will($this->returnValueMap(
                 [
                     [ProcessBacktrace::class, $backtraceMock],

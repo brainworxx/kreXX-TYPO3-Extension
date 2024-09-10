@@ -198,6 +198,10 @@ abstract class AbstractController implements ConfigConstInterface
             $css = $this->pool->fileService->getFileContents($skinDirectory . 'skin.css');
         }
 
-        return $this->pool->render->renderCssJs($css, $jsCode);
+        /** @var Model $model */
+        $model = $this->pool->createClass(Model::class);
+        $model->setData($jsCode)->setNormal($css);
+        $this->pool->eventService->dispatch(static::class . '::outputCssAndJs', null, $model);
+        return $this->pool->render->renderCssJs($model->getNormal(), $model->getData());
     }
 }

@@ -257,6 +257,13 @@ var Kdt = (function () {
         this.translations = new Translations('.krdata-structure.krtrans', this);
         this.addClass('.kwrapper .knoscript', 'khidden');
     }
+    Kdt.prototype.beenHere = function () {
+        if (typeof window['krexxDone'] === 'undefined') {
+            window['krexxDone'] = true;
+            return false;
+        }
+        return true;
+    };
     Kdt.prototype.getParents = function (el, selector) {
         var result = [];
         var parent = el.parentNode;
@@ -728,6 +735,9 @@ var Hans = (function () {
     }
     Hans.prototype.run = function () {
         this.kdt = new Kdt();
+        if (this.kdt.beenHere()) {
+            return;
+        }
         this.kdt.setJumpTo(this.jumpTo);
         this.eventHandler = new Eventhandler(this.selectors.eventHandler);
         this.search = new Search(this.eventHandler, this.jumpTo);
@@ -891,6 +901,9 @@ var SmokyGrey = (function (_super) {
     }
     SmokyGrey.prototype.run = function () {
         _super.prototype.run.call(this);
+        if (typeof this.eventHandler === 'undefined') {
+            return;
+        }
         this.setPayloadMaxHeight();
         this.eventHandler.addEvent('.ktool-tabs .ktab:not(.ksearchbutton)', 'click', this.switchTab);
         this.eventHandler.addEvent('.kwrapper .kel', 'click', this.setAdditionalData);

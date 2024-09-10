@@ -43,6 +43,7 @@ use Brainworxx\Krexx\Analyse\Model;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessBacktrace;
 use Brainworxx\Krexx\Controller\BacktraceController;
 use Brainworxx\Krexx\Krexx;
+use Brainworxx\Krexx\Service\Factory\Event;
 use Brainworxx\Krexx\Service\Flow\Emergency;
 use Brainworxx\Krexx\Tests\Helpers\CallbackNothing;
 use Brainworxx\Krexx\View\Output\Browser;
@@ -101,6 +102,10 @@ class BacktraceControllerTest extends AbstractController
             ->method('checkEmergencyBreak')
             ->will($this->returnValue(false));
 
+        $poolMock->eventService = $this->createMock(Event::class);
+        $poolMock->eventService->expects($this->once())
+            ->method('dispatch');
+
         $outputServiceMock = $this->createMock(Browser::class);
         $outputServiceMock->expects($this->exactly(3))
             ->method('addChunkString')
@@ -108,12 +113,13 @@ class BacktraceControllerTest extends AbstractController
             ->willReturnSelf();
         $this->setValueByReflection('outputService', $outputServiceMock, $backtraceController);
 
-        $poolMock->expects($this->exactly(3))
+        $poolMock->expects($this->exactly(4))
             ->method('createClass')
             ->with(...$this->withConsecutive(
                 [ProcessBacktrace::class],
                 [Model::class],
-                [ThroughConfig::class]
+                [ThroughConfig::class],
+                [Model::class]
             ))->will($this->returnValueMap(
                 [
                     [ProcessBacktrace::class, $proccessMock],

@@ -40,6 +40,7 @@ use Brainworxx\Includekrexx\Plugins\Typo3\Configuration;
 use Brainworxx\Includekrexx\Plugins\Typo3\ConstInterface;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\DirtyModels;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\FlexFormParser;
+use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\InlineJsCssDispatcher;
 use Brainworxx\Includekrexx\Plugins\Typo3\EventHandlers\QueryDebugger;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\ExtFilePath;
 use Brainworxx\Includekrexx\Plugins\Typo3\Scalar\LllString;
@@ -47,6 +48,11 @@ use Brainworxx\Includekrexx\Tests\Helpers\AbstractHelper;
 use Brainworxx\Krexx\Analyse\Callback\Analyse\Objects;
 use Brainworxx\Krexx\Analyse\Scalar\String\Xml;
 use Brainworxx\Krexx\Analyse\Routing\Process\ProcessObject;
+use Brainworxx\Krexx\Controller\AbstractController;
+use Brainworxx\Krexx\Controller\BacktraceController;
+use Brainworxx\Krexx\Controller\DumpController;
+use Brainworxx\Krexx\Controller\EditSettingsController;
+use Brainworxx\Krexx\Controller\ExceptionController;
 use Brainworxx\Krexx\Service\Config\From\File;
 use Brainworxx\Krexx\Service\Factory\Pool;
 use Brainworxx\Krexx\Service\Plugin\SettingsGetter;
@@ -197,7 +203,11 @@ class ConfigurationTest extends AbstractHelper implements ConstInterface
             [
                 ProcessObject::class . Configuration::START_PROCESS => [DirtyModels::class => DirtyModels::class],
                 Objects::class . Configuration::START_EVENT => [QueryDebugger::class => QueryDebugger::class],
-                Xml::class . Configuration::END_EVENT => [FlexFormParser::class => FlexFormParser::class]
+                Xml::class . Configuration::END_EVENT => [FlexFormParser::class => FlexFormParser::class],
+                EditSettingsController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
+                ExceptionController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
+                BacktraceController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class],
+                DumpController::class . '::outputCssAndJs' => [InlineJsCssDispatcher::class => InlineJsCssDispatcher::class]
             ],
             SettingsGetter::getEventList()
         );
