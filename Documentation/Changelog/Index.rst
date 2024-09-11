@@ -17,6 +17,7 @@ Changelog
     - [Feature] Added an event to the output of the inline js and css.
     - [Bugfix] Better CSP handling.
     - [Bugfix] Make sure that the JS only executes once.
+    - [Bugfix] Added missing fluid documentation in the backend module.
 
 5.0.4
     - [Feature] TYPO3 13.2 support.

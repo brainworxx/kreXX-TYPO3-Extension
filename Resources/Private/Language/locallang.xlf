@@ -438,6 +438,30 @@
 			<trans-unit id="usage.label.fluidvalue">
 				<source>Use this part if you don't want fluid to escape your string or if you are stitching together an array.</source>
 			</trans-unit>
+			<trans-unit id="usage.label.fluidmoment">
+				<source>kreXX measures the time between every call, and then outputs it as a benchmark.</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment">
+				<source>Take a moment</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.1">
+				<source>Start rendering</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.2">
+				<source>A lot more template code</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.3">
+				<source>Take another moment</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.4">
+				<source>Start menu rendering</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.5">
+				<source>Even more template code</source>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.6">
+				<source>Output the benchmark</source>
+			</trans-unit>
 
 			<!-- Logging -->
 			<trans-unit id="log.filename">

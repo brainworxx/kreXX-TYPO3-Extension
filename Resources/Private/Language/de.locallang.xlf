@@ -573,6 +573,38 @@
 				<source>Use this part if you don't want fluid to escape your string or if you are stitching together an array.</source>
 				<target>So kann verhindert werden dass Fluid einen String escaped, oder einen zusammengesetzten Array als Text rendert.</target>
 			</trans-unit>
+			<trans-unit id="usage.label.fluidmoment">
+				<source>kreXX measures the time between every call, and then outputs it as a benchmark.</source>
+				<target>kreXX misst die Zeit zwischen jedem Aufruf und gibt sie als Benchmark aus.</target>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment">
+				<source>Start the timer</source>
+				<target>Starte den Timer</target>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.1">
+				<source>Start rendering</source>
+				<target>Starte das Rendering</target>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.2">
+				<source>A lot more template code</source>
+				<target>Einiges an Template Code</target>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.3">
+				<source>Take another moment</source>
+				<target>Zwischenstop für den Timer festlegen</target>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.4">
+				<source>Start menu rendering</source>
+				<target>Starte das Menü Rendering</target>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.5">
+				<source>Even more template code</source>
+				<target>Noch mehr Template Code</target>
+			</trans-unit>
+			<trans-unit id="usage.code.fluidmoment.6">
+				<source>Output the benchmark</source>
+				<target>Beende den Timer, und gebe das ergebnis aus.</target>
+			</trans-unit>
 
 			<!-- Logging -->
 			<trans-unit id="log.filename">
