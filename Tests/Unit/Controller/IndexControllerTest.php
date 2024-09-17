@@ -143,7 +143,7 @@ class IndexControllerTest extends AbstractHelper
         if ($typo3Version->getMajorVersion() < 11) {
             $viewMock->expects($this->exactly(1))
                 ->method('assignMultiple')
-                ->with(['settings', $settingsModel]);
+                ->with(['settings' => $settingsModel]);
             $viewMock->expects($this->once())
                 ->method('render')
                 ->will($this->returnValue($templateContent));
