@@ -77,7 +77,7 @@ class IndexController extends AbstractController implements ConstInterface
 
         // Has kreXX something to say? Maybe a write-protected logfolder?
         $this->retrieveKrexxMessages();
-        $this->assignMultiple(['settings', $this->settingsModel]);
+        $this->assignMultiple(['settings' => $this->settingsModel]);
 
         return $this->moduleTemplateRender();
     }
