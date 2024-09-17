@@ -177,19 +177,17 @@ class Codegen extends OrgCodegen implements ConstInterface, ProcessConstInterfac
     protected function generateVhsCall(Model $model): string
     {
         $data = $model->getParameters();
-        $counter = 1;
         $args = '';
 
         foreach ($data[static::PARAM_ARRAY] as $parameter) {
-            $args .= 'arg' . $counter . ': \'' . $parameter . '\', ';
-            $counter++;
+            $args .= $parameter . ': \'' . $parameter . '\', ';
         }
 
         $firstPart = ' -> v:call(method: \'';
         $secondPart = '\', arguments: {';
         $lastPart = '})';
 
-        if ($counter >= 2) {
+        if (count($data[static::PARAM_ARRAY]) >= 1) {
             return $firstPart . $model->getName() . $secondPart . rtrim($args, ', ') . $lastPart;
         }
 

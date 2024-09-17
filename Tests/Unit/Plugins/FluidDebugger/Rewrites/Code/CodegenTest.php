@@ -97,7 +97,7 @@ class CodegenTest extends AbstractHelper
         ];
         $model->addParameter(Codegen::PARAM_ARRAY, $fixture);
         $this->assertEquals(
-            ' -> v:call(method: \'bluRay\', arguments: {arg1: \'dvd\', arg2: \'HD\', arg3: \'BetaMax\'})',
+            ' -> v:call(method: \'bluRay\', arguments: {dvd: \'dvd\', HD: \'HD\', BetaMax: \'BetaMax\'})',
             $codeGen->generateSource($model)
         );
 
