@@ -13,6 +13,7 @@ Changelog
 =============================================================
 
 5.0.6
+    - [Feature] Updated to Aimeos 24.
     - [Change] Updated the composer.json and the ex_em_conf.
     - [Bugfix] Realigned the info popups in the backend.
 
