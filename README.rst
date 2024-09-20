@@ -1,4 +1,4 @@
-.. |build| image:: https://github.com/brainworxx/kreXX-TYPO3-Extension/actions/workflows/php.yml/badge.svg?branch=master
+.. |build| image:: https://github.com/brainworxx/kreXX-TYPO3-Extension/actions/workflows/php.yml/badge.svg?branch=main
    :target: https://github.com/brainworxx/kreXX-TYPO3-Extension/actions/workflows/php.yml
 .. |maintainability| image:: https://api.codeclimate.com/v1/badges/43c23b7d829742003dab/maintainability
    :target: https://codeclimate.com/github/brainworxx/kreXX-TYPO3-Extension/maintainability
