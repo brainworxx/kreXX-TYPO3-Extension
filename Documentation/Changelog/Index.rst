@@ -12,6 +12,8 @@
 Changelog
 =============================================================
 
+5.0.6
+
 5.0.5
     - [Feature] Added formatting for float values for better readability.
     - [Feature] Added an event to the output of the inline js and css.
