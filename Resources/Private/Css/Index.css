@@ -199,16 +199,16 @@ body {
 }
 @media (max-width: 991px) {
   .krexx-backend .table-wrapper table th.time,
-.krexx-backend .table-wrapper table th.size,
-.krexx-backend .table-wrapper table td.time,
-.krexx-backend .table-wrapper table td.size {
+  .krexx-backend .table-wrapper table th.size,
+  .krexx-backend .table-wrapper table td.time,
+  .krexx-backend .table-wrapper table td.size {
     display: none;
   }
 }
 @media (max-width: 768px) {
   .krexx-backend .table-wrapper table th.meta,
-.krexx-backend .table-wrapper table td.meta,
-.krexx-backend .table-wrapper table td.td-icon {
+  .krexx-backend .table-wrapper table td.meta,
+  .krexx-backend .table-wrapper table td.td-icon {
     display: none;
   }
   .krexx-backend .table-wrapper table td.description {
@@ -387,6 +387,7 @@ body {
   border-radius: 3px;
   bottom: 10px;
   text-align: left;
+  right: -48px;
 }
 .krexx-backend .tooltip-hover .toolwrapper .tooltip-text::after {
   width: 0;
@@ -397,7 +398,7 @@ body {
   content: "";
   bottom: -6px;
   position: absolute;
-  left: 12px;
+  right: 58px;
 }
 .krexx-backend .tooltip-hover:hover .toolwrapper .tooltip-text {
   display: block;

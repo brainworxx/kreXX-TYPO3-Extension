@@ -19,6 +19,7 @@
         border-radius: 3px;
         bottom: 10px;
         text-align: left;
+        right: -48px;
 
         &::after {
           width: 0;
@@ -29,7 +30,7 @@
           content: "";
           bottom: -6px;
           position: absolute;
-          left: 12px;
+          right: 58px;
         }
       }
 

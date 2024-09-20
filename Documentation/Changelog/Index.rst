@@ -13,6 +13,8 @@ Changelog
 =============================================================
 
 5.0.6
+    - [Change] Updated the composer.json and the ex_em_conf.
+    - [Bugfix] Realigned the info popups in the backend.
 
 5.0.5
     - [Feature] Added formatting for float values for better readability.
