@@ -5,10 +5,10 @@ kreXX Debugger
 ==============
 
 .. figure:: Images/krexx.png
-	:class: with-shadow
-	:width: 270px
-	:align: left
-	:alt: kreXX logo
+    :class: with-shadow
+    :width: 270px
+    :align: left
+    :alt: kreXX logo
 
 :Extension key:
    includekrexx
@@ -33,7 +33,9 @@ kreXX Debugger
    |today|
 
 ----
+
 Fluid and PHP debugger with backend access to logfiles, code generation to reach the displayed values and much more. We added some special stuff for Aimeos.
+
 ----
 
 
@@ -66,11 +68,11 @@ Fluid and PHP debugger with backend access to logfiles, code generation to reach
 **Table of Contents**
 
 .. toctree::
-	:maxdepth: 2
-	:titlesonly:
-	:glob:
+    :maxdepth: 2
+    :titlesonly:
+    :glob:
 
-	Introduction/Index
-	Quickstart/Index
-	TipsNTricks/Index
-	Changelog/Index
+    Introduction/Index
+    Quickstart/Index
+    TipsNTricks/Index
+    Changelog/Index
