@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<guides xmlns="https://www.phpdoc.org/guides" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="https://www.phpdoc.org/guides ../vendor/phpdocumentor/guides-cli/resources/schema/guides.xsd"
+        links-are-relative="true"
+        default-code-language="php"
+>
+    <extension class="\T3Docs\Typo3DocsTheme\DependencyInjection\Typo3DocsThemeExtension"
+               project-home="https://extensions.typo3.org/extension/includekrexx/"
+               project-contact="info@brainworxx.de"
+               project-repository="https://github.com/brainworxx/kreXX-TYPO3-Extension"
+               project-issues="https://github.com/brainworxx/kreXX-TYPO3-Extension/issues"
+               edit-on-github-branch="main"
+               edit-on-github="brainworxx/kreXX-TYPO3-Extension"
+               typo3-core-preferred="12.4"
+               interlink-shortcode="brainworxx/includekrexx"
+    />
+    <project title="kreXX Debugger" version="local" copyright="2014 - 2024"/>
+</guides>
