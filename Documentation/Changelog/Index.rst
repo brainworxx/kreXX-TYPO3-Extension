@@ -1,27 +1,51 @@
-﻿.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
-.. include:: ../Includes.txt
-
-
 .. _changelog:
 
 =============================================================
 Changelog
 =============================================================
 
+5.0.5
+    - [Feature] Added formatting for float values for better readability.
+    - [Feature] Added an event to the output of the inline js and css.
+    - [Bugfix] Better CSP handling.
+    - [Bugfix] Make sure that the JS only executes once.
+    - [Bugfix] Added missing fluid documentation in the backend module.
+    - [Bugfix] Fix the code generation for the VHS call viewhelper.
+
+5.0.4
+    - [Feature] TYPO3 13.2 support.
+    - [Change] Made implicitly nullable parameter declarations explicitly nullable.
+    - [Bugfix] Catch a Throwable in the ProcessInteger.
+    - [Bugfix] Better Base64 detection.
+    - [Bugfix] The error handler was not removed in the file reader.
+    - [Bugfix] The no-js feedback handles CSP headers.
+    - [Bugfix] The translations are located in a div in the header.
+    - [Bugfix] Missing BOM encoding in the code generation.
+
+5.0.3
+    - [Bugfix] Use the Krexx error callback in the LogFileList collector.
+    - [Bugfix] Outdated link to the documentation license.
+    - [Bugfix] Prevent reading a deleted meta data json file.
+    - [Bugfix] Updated the Aimeos debug method analysis to Aimeos 23.
+    - [Bugfix] Let the fluid caller finder find simple strings.
+    - [Bugfix] Possible warning in file reader.
+    - [Bugfix] Possible fatals in the file reader.
+    - [Bugfix] Do not use the $GLOBALS recursion marker in PHP 8.1 or higher.
+
 5.0.2
+    - [Feature] Added the possibility for plugins to overwrite the factory settings.
+    - [Feature] Use the immediate browser output for TYPO3 12 as a new standard setting.
     - [Change] Removed deprecated code.
     - [Change] Some deprecations.
-    - [Change] Dropped the QueryDebugger, which is not needed anymore.
     - [Bugfix] The event 'Brainworxx\Krexx\Analyse\Callback\Analyse\Objects\DebugMethods::callMe::start' was called too late.
     - [Bugfix] Make use of the internal error callback in the string encoding class.
     - [Bugfix] Add the missing "Line no." to the translation.
     - [Bugfix] Added missing return types to the return type whitelist in the ReturnType comment analysis.
     - [Bugfix] Added missing types to the blacklist of none namespaces declaration types.
     - [Bugfix] Added a missing entry in the language files.
+    - [Bugfix] Added missing translations for the setting.
+    - [Bugfix] Made the feedback clearer when the Ext: resolver could not find a resolved file or directory.
+    - [Bugfix] Do not access debug class values before their initialization.
 
 5.0.1
     - [Feature] Updated to PHP 8.3
@@ -675,4 +699,3 @@ Changelog
     - [Bugfix] Configuration file get loaded again.
     - [Bugfix] Fatal error for a private or protected configured debug method
     - [Bugfix] Catchable error for a configured debug method with parameters
-
