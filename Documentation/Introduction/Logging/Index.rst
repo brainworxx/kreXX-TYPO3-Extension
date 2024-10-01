@@ -22,8 +22,9 @@ A file can be access by simply clicking on the filename.
 The trashcan on the right deletes the file.
 
 
-.. figure:: ../Images/AdminPanel.png
-	:width: 1178px
+.. figure:: ../../Images/AdminPanel.png
+    :class: with-shadow d-inline-block
+    :align: left
 	:alt: Logfiles in the debugbar
 
 	Alternatively, you can access the logfiles by using the TYPO3 DebugBar.

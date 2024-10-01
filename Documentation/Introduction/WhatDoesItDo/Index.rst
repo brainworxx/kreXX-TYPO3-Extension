@@ -19,7 +19,7 @@ Includekrexx gives you a good overview about the object and how to reach specifi
     <krexx:log>{_all}</krexx:log>
 
 
-.. figure:: ../Images/Fluid.png
+.. figure:: ../../Images/Fluid.png
     :class: with-shadow d-inline-block
     :align: left
     :alt: Fluid debugging with code snippet generation.
