@@ -64,8 +64,6 @@ Fluid and PHP debugger with backend access to logfiles, code generation to reach
         The changelog of this extension.
 
 
-**Table of Contents**
-
 .. toctree::
     :maxdepth: 2
     :titlesonly:
